@@ -73,6 +73,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*VJ 041217 OBSOLETE ======================
+
 //VJ 030807 adjustable cannon rounds
 //VJ 040229 also needed in new GWUT structure, if new aircraft flyable add here
 int 	rounds_comanche, 
@@ -100,6 +102,7 @@ static void initialize_rounds(void)
 	rounds_hind_AP = 130;   // wp 4
 }	
 
+VJ 041217 OBSOLETE ====================== */
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +144,8 @@ static void wide_cockpit_initialize(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*VJ 041217 OBSOLETE ======================
 
 //VJ 030807 adjustable radar ranges
 static void initialize_radar_ranges(void)
@@ -185,7 +190,7 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 030807 adjustable cannon rounds
-//VJ 040229 This becomes obsolete with new type GWUT
+//VJ 040229 This becomes OBSOLETE with new type GWUT
 void adjust_rounds(int start, int stop, int type, int value, int *rounds)
 {
 	int config_type, package;
@@ -199,6 +204,7 @@ void adjust_rounds(int start, int stop, int type, int value, int *rounds)
 		}	   
 	*rounds = value;	
 }
+VJ 041217 OBSOLETE ======================*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,11 +224,14 @@ void process_ini_file(int argc, char *argv[])
 	 wide_cockpit_initialize();
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
-	 initialize_radar_ranges();	
+/*VJ 041217 OBSOLETE ======================
+    initialize_radar_ranges();	
 
 //VJ 030807 initialize nr rounds cannons
+//VJ 041215 no longer active, now in GWUT file
 	 initialize_rounds();
 
+VJ 041217 OBSOLETE ============================ */
 		
 	 buf = malloc (255);
 	 if (buf == NULL)
@@ -515,8 +524,10 @@ void process_ini_file(int argc, char *argv[])
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}
+/*VJ 041217 OBSOLETE ======================
+
 //VJ 030807 adjustable radar ranges		
-//VJ 040229 radar ranges OBSOLETE when using new GWUT files, moved to GWUT file where they belong!
+//VJ 040229 radar ranges 
 		if (strcmp(p, "radar_comanche") == 0)
 		{
  	     p = strtok(q,",");
@@ -594,6 +605,7 @@ void process_ini_file(int argc, char *argv[])
 		
 //VJ 030807 adjustable cannon rounds	
 //VJ 040229 ammo OBSOLETE when using new GWUT files, moved to GWUT file where they belong!
+
 		if (strcmp(p, "rounds_comanche") == 0)   
 		  adjust_rounds(WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1, WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384, ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND, d1, &rounds_comanche);
 		if (strcmp(p, "rounds_apache") == 0)
@@ -612,6 +624,9 @@ void process_ini_file(int argc, char *argv[])
 		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_hind_HE);
 		if (strcmp(p, "rounds_hind_AP") == 0)
 		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hind_AP);	
+
+VJ 041217 OBSOLETE ======================*/	
+
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
 
@@ -706,6 +721,9 @@ void dump_ini_file(void)
 	fprintf(f, "hokum co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
 	fprintf(f, "apache pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
 	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
+
+/*VJ 041217 OBSOLETE ======================
+
 	fprintf(f, "[Radar]\n");  //VJ 030807 adjustable radar ranges
    fprintf(f, "radar_comanche=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges comanche (5 ranges in m, ordered small to large)\n",radar_range_comanche[0],radar_range_comanche[1],radar_range_comanche[2],radar_range_comanche[3],radar_range_comanche[4]);
    fprintf(f, "radar_apache=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges apache (5 ranges in m, ordered small to large)\n",radar_range_apache[0],radar_range_apache[1],radar_range_apache[2],radar_range_apache[3],radar_range_apache[4]);
@@ -723,6 +741,9 @@ void dump_ini_file(void)
 	fprintf(f, "rounds_blackhawk=%d  #rounds cannon BLACKHAWK M230_30MM rounds (0 - 65000)\n",rounds_blackhawk);
 	fprintf(f, "rounds_hind_AP=%d    #rounds cannon HIND 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hind_AP);
 	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
+
+VJ 041217 OBSOLETE ======================*/
+
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
