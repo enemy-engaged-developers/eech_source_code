@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="C:\Data\Projects\eech\APHAVOC\SOURCE\,C:\Data\Projects\eech\MODULES"
+				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES"
 				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
@@ -209,6 +209,9 @@
 					</File>
 					<File
 						RelativePath=".\MODULES\SYSTEM\TIMER.C">
+					</File>
+					<File
+						RelativePath="MODULES\SYSTEM\TRACKIR.C">
 					</File>
 				</Filter>
 				<Filter
