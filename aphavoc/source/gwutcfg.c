@@ -1261,7 +1261,9 @@ void ReadGWutInfo(char *fname)
 		aircraft_database[i].explosive_quality                             = IntValue(p);
 		aircraft_database[i].explosive_power                               = IntValue(p);
 		aircraft_database[i].offensive_capability                          = IntValue(p);
-		aircraft_database[i].player_controllable                           = IntValue(p);
+//VJ 010604 skip player controlable because of FAA setting in eech.ini, k acts as dummy		
+		k = IntValue(p);
+//		aircraft_database[i].player_controllable                           = IntValue(p);
 		aircraft_database[i].points_value                                  = IntValue(p);
 
 		fscanf(f,"%[^\n]\n",buf);
