@@ -73,95 +73,66 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*VJ 041217 OBSOLETE ======================
 
-
-//VJ 030807 adjustable cannon rounds
-//VJ 040229 also needed in new GWUT structure, if new aircraft flyable add here
-int 	rounds_comanche, 
-		rounds_apache, 
-		rounds_hokum_HE, 
-		rounds_hokum_AP, 
-		rounds_havoc_HE, 
-		rounds_havoc_AP, 
-		rounds_blackhawk, 
-		rounds_hind_HE,
-		rounds_hind_AP;
-
-
-static void initialize_rounds(void)
-{
-	//VJ 040229 default values
-	rounds_comanche = 500;	// wp 5
-	rounds_apache = 1200;	//wp 3
-	rounds_hokum_HE = 230;	//wp 5
-	rounds_hokum_AP = 240;	// wp 6
-	rounds_havoc_HE = 130;   // wp 3
-	rounds_havoc_AP = 130;   // wp 4
-	rounds_blackhawk = 1200; //wp 3
-	rounds_hind_HE = 130;   // wp 3
-	rounds_hind_AP = 130;   // wp 4
-}	
-
-VJ 041217 OBSOLETE ======================*/
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//VJ 030511 moved to eechini from vm_event.c, needed for intialisation of wide view cockpit
+//VJ 050207 use enum definitions from wm_data.h
 static void wide_cockpit_initialize(void)
 {
 	//VJ 050205 new wideview init settings
-		wide_cockpit_position[0].x = 0;    
-		wide_cockpit_position[0].y = 0.105; 
-		wide_cockpit_position[0].z = 0.180;
-		wide_cockpit_position[1].x = 0;    
-		wide_cockpit_position[1].y = 0.105; 
-		wide_cockpit_position[1].z = 0.180;
-		wide_cockpit_position[2].x = 0;
-		wide_cockpit_position[2].y = 0.18;
-		wide_cockpit_position[2].z = 0.300;
-		wide_cockpit_position[3].x = 0;
-		wide_cockpit_position[3].y = 0.18;
-		wide_cockpit_position[3].z = 0.300;
-		
-		
-		//wide_cockpit_position[0].x = 0;
-		//wide_cockpit_position[0].y = 1.1;
-		//wide_cockpit_position[0].z = -2.43;
-		//comanche
-		//wide_cockpit_position[1].x = 0;
-		//wide_cockpit_position[1].y = 0.8;
-		//wide_cockpit_position[1].z = -1.03;
-		//comanche co-pilot
-		
-		//wide_cockpit_position[2].x = 0.375;
-		//wide_cockpit_position[2].y = 2.075;
-		//wide_cockpit_position[2].z = -1.810;
-		//hokum
-		
-		//wide_cockpit_position[3].x = -0.375;
-		//wide_cockpit_position[3].y = 2.075;
-		//wide_cockpit_position[3].z = -1.810;
-		//hokum co-pilot
-		
-		wide_cockpit_position[4].x = 0;
-		wide_cockpit_position[4].y = 0.07;
-		wide_cockpit_position[4].z = 0.55;
-		//apache
-		
-		wide_cockpit_position[5].x = 0;
-		wide_cockpit_position[5].y = 0.095;
-		wide_cockpit_position[5].z = 0.335;			
-		//havoc
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].x = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105; 
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].p = 0;
+
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x = 0;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105; 
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p = 0;
+
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].p = 0.0;
+
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
+
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.07;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.55;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = 0.0;
+	
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = 0.200;			
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = 0.0;
 }	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 050207 cleaning up the wideview code
+void read_wideview_parameters (char *q, int i)
+{
+	char *p = strtok(q,",");         
+	if (p) 
+		wide_cockpit_position[i].x = atof(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		wide_cockpit_position[i].y = atof(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		wide_cockpit_position[i].z = atof(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		wide_cockpit_position[i].p = atof(p);
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 030807 adjustable radar ranges
 //LEAVE THESE:  even if they are not in eech.ini they need to be initialized before a wut file is read
@@ -205,27 +176,6 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*VJ 041217 OBSOLETE ======================
-
-//VJ 030807 adjustable cannon rounds
-//VJ 040229 This becomes OBSOLETE with new type GWUT
-void adjust_rounds(int start, int stop, int type, int value, int *rounds)
-{
-	int config_type, package;
-	for(config_type = start; config_type <= stop; config_type++)
-		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-		{
-			if (weapon_config_database[config_type][package].sub_type == type)
-			{
-				weapon_config_database[config_type][package].number = value;
-			}
-		}	   
-	*rounds = value;	
-}
-VJ 041217 OBSOLETE ======================*/
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void process_ini_file(int argc, char *argv[])
 {
@@ -242,14 +192,9 @@ void process_ini_file(int argc, char *argv[])
 	 wide_cockpit_initialize();
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
-//VJ 050125 chnaged back: this should always be done
+//VJ 050125 changed back: this should always be done
     initialize_radar_ranges();	
 
-//VJ 030807 initialize nr rounds cannons
-//VJ 041215 no longer active, now in GWUT file
-//	 initialize_rounds();
-
-		
 	 buf = malloc (255);
 	 if (buf == NULL)
 	 {
@@ -424,63 +369,23 @@ void process_ini_file(int argc, char *argv[])
 				command_line_wut = TRUE;
 			// wut filename checking is done elsewhere	
 		}
+		
 //WIDEVIEW
 //VJ 030511 added the wideview params to eech.ini
 //VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
- 	if (strcmp(p, "comanche_pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[0].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[0].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[0].z = atof(p);
-	}
- 	if (strcmp(p, "comanche_co-pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[1].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[1].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[1].z = atof(p);
-	}
- 	if (strcmp(p, "hokum_pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[2].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[2].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[2].z = atof(p);
-	}
- 	if (strcmp(p, "holum_co-pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[3].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[3].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[3].z = atof(p);
-	}
- 	if (strcmp(p, "apache_pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[4].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[4].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[4].z = atof(p);
-	}
- 	if (strcmp(p, "havoc_pilot")==0)
- 	{
- 	     p = strtok(q,",");
-        wide_cockpit_position[5].x = atof(p);
- 	     p = strtok(NULL,",");
-	     wide_cockpit_position[5].y = atof(p);
-	     p = strtok(NULL,",");
-	     wide_cockpit_position[5].z = atof(p);
-	}
+//VJ 050207 cleaning up the wideview code
+	 	if (strcmp(p, "comanche_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_COMANCHE_PILOT);
+	 	if (strcmp(p, "comanche_co-pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_COMANCHE_COPILOT);
+	 	if (strcmp(p, "hokum_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HOKUM_PILOT);
+	 	if (strcmp(p, "holum_co-pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HOKUM_COPILOT);
+	 	if (strcmp(p, "apache_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
+	 	if (strcmp(p, "havoc_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HAVOC_PILOT);
 		
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
@@ -540,108 +445,6 @@ void process_ini_file(int argc, char *argv[])
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}
-/*VJ 041217 OBSOLETE ======================
-
-//VJ 030807 adjustable radar ranges		
-//VJ 040229 radar ranges 
-		if (strcmp(p, "radar_comanche") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_comanche[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_comanche[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_comanche[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_comanche[3] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_comanche[4] = atof(p);
-		}
-		if (strcmp(p, "radar_apache") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_apache[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_apache[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_apache[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_apache[3] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_apache[4] = atof(p);
-		}
-		if (strcmp(p, "radar_hokum") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_hokum[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hokum[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hokum[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hokum[3] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hokum[4] = atof(p);
-		}
-		if (strcmp(p, "radar_havoc") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_havoc[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_havoc[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_havoc[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_havoc[3] = atof(p);
-		}
-		if (strcmp(p, "radar_blackhawk") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_blackhawk[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_blackhawk[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_blackhawk[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_blackhawk[3] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_blackhawk[4] = atof(p);
-		}
-		if (strcmp(p, "radar_hind") == 0)
-		{
- 	     p = strtok(q,",");
-        radar_range_hind[0] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hind[1] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hind[2] = atof(p);
- 	     p = strtok(NULL,",");
-        radar_range_hind[3] = atof(p);
-		}
-		
-//VJ 030807 adjustable cannon rounds	
-//VJ 040229 ammo OBSOLETE when using new GWUT files, moved to GWUT file where they belong!
-
-		if (strcmp(p, "rounds_comanche") == 0)   
-		  adjust_rounds(WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1, WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384, ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND, d1, &rounds_comanche);
-		if (strcmp(p, "rounds_apache") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1, WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50, ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND, d1, &rounds_apache);
-		if (strcmp(p, "rounds_blackhawk") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1, WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9, ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND, d1, &rounds_blackhawk);
-		if (strcmp(p, "rounds_hokum_HE") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1, WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, d1, &rounds_hokum_HE);
-		if (strcmp(p, "rounds_hokum_AP") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1,WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hokum_AP);
-		if (strcmp(p, "rounds_havoc_HE") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1,WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_havoc_HE);
-		if (strcmp(p, "rounds_havoc_AP") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1,WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_havoc_AP);
-		if (strcmp(p, "rounds_hind_HE") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_hind_HE);
-		if (strcmp(p, "rounds_hind_AP") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hind_AP);	
-
-VJ 041217 OBSOLETE ======================*/	
 
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
@@ -731,36 +534,12 @@ void dump_ini_file(void)
 	fprintf(f,"[WUT]\n");
 	fprintf(f,"wut=%s               # supply a filename of a wut text file here\n",WUT_filename);
 	fprintf(f,"[wideview]\n");
-//VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
-	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[0].x,wide_cockpit_position[0].y,wide_cockpit_position[0].z);
-	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f     #wideview co-pilot position\n",wide_cockpit_position[1].x,wide_cockpit_position[1].y,wide_cockpit_position[1].z);
-	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[2].x,wide_cockpit_position[2].y,wide_cockpit_position[2].z);
-	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
-	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
-	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
-
-/*VJ 041217 OBSOLETE ======================
-
-	fprintf(f, "[Radar]\n");  //VJ 030807 adjustable radar ranges
-   fprintf(f, "radar_comanche=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges comanche (5 ranges in m, ordered small to large)\n",radar_range_comanche[0],radar_range_comanche[1],radar_range_comanche[2],radar_range_comanche[3],radar_range_comanche[4]);
-   fprintf(f, "radar_apache=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges apache (5 ranges in m, ordered small to large)\n",radar_range_apache[0],radar_range_apache[1],radar_range_apache[2],radar_range_apache[3],radar_range_apache[4]);
-   fprintf(f, "radar_hokum=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges hokum (5 ranges in m, ordered small to large)\n",radar_range_hokum[0],radar_range_hokum[1],radar_range_hokum[2],radar_range_hokum[3],radar_range_hokum[4]);
-   fprintf(f, "radar_havoc=%.0f,%.0f,%.0f,%.0f   #radar ranges havoc (4 ranges in m, ordered small to large)\n",radar_range_havoc[0],radar_range_havoc[1],radar_range_havoc[2],radar_range_havoc[3]);
-   fprintf(f, "radar_blackhawk=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges blackhawk (5 ranges in m, ordered small to large)\n",radar_range_blackhawk[0],radar_range_blackhawk[1],radar_range_blackhawk[2],radar_range_blackhawk[3],radar_range_blackhawk[4]);
-   fprintf(f, "radar_hind=%.0f,%.0f,%.0f,%.0f   #radar ranges hind (4 ranges in m, ordered small to large)\n",radar_range_hind[0],radar_range_hind[1],radar_range_hind[2],radar_range_hind[3]);
-	fprintf(f, "[Cannon]\n");  //VJ 030807 adjustable cannon rounds 
-	fprintf(f, "rounds_comanche=%d   #rounds cannon COMANCHE M197_20MM rounds (0 - 65000)\n",rounds_comanche);
-	fprintf(f, "rounds_apache=%d     #rounds cannon APACHE M230_30MM rounds (0 - 65000)\n",rounds_apache);
-	fprintf(f, "rounds_hokum_AP=%d   #rounds cannon HOKUM 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hokum_AP);
-	fprintf(f, "rounds_hokum_HE=%d   #rounds cannon HOKUM 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hokum_HE);
-	fprintf(f, "rounds_havoc_AP=%d   #rounds cannon HAVOC 2A42_30MM_AP rounds (0 - 65000)\n",rounds_havoc_AP);
-	fprintf(f, "rounds_havoc_HE=%d   #rounds cannon HAVOC 2A42_30MM_HE rounds (0 - 65000)\n",rounds_havoc_HE);
-	fprintf(f, "rounds_blackhawk=%d  #rounds cannon BLACKHAWK M230_30MM rounds (0 - 65000)\n",rounds_blackhawk);
-	fprintf(f, "rounds_hind_AP=%d    #rounds cannon HIND 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hind_AP);
-	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
-
-VJ 041217 OBSOLETE ======================*/
-
+	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].x,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].y,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].z,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].p);
+	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f,%.3f  #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p);
+	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].p);
+	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f,%.3f     #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].x,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].y,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].z,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].p);
+	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f          #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
+	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].p);
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
