@@ -3,7 +3,10 @@ List of changes and major differences between the versions
 
 (please keep this up to date)
 
-Current version: 161W ongoing
+ongoing:
+
+
+Current version: 1.6.1 W
 
 	Fly_Any_Aircraft error when using GWUT-files fixed 
 	MP-changes in the following files:
@@ -14,6 +17,13 @@ Current version: 161W ongoing
 	directp.c--------------Process Direct_play_Player_Leave_Group outcommented. leaving the removal to Validate_Connection
 	
 	It's crucial that the host runs with cvc=1
+        Retractable gear on the Hind and KA-50 
+        Doors working on the Hind, KA-50 and BlackHawk 
+        New control screen in the options menu 
+        Version check functional when joining in MP 
+        Deadband around 59% throttle removed 
+        Possible to reverse pedal axis 
+
 	
 Fixes/features in 1.6.0w15
 
