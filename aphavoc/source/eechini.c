@@ -86,8 +86,9 @@ void process_ini_file(void)
     float v1;
     int d1;
    
-//vj 030409, changed to generate eech.ini when it doesn't exist
-    if (!file_exist(fname))   
+//VJ 030409, changed to generate eech.ini when it doesn't exist
+//VJ 030414, commandline /ini:0 starts up without ini file
+    if (command_line_dump_ini && !file_exist(fname))   
     {
        dump_ini_file();
     }   

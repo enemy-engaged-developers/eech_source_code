@@ -168,7 +168,7 @@ int
 	command_line_key_mapping									= FALSE;	// Retro 030322
 	command_line_no_downwash									= FALSE,	// Xhit 030328
 	command_line_wut												= FALSE,	// VJ 030330
-	command_line_dump_ini										= FALSE;	// VJ 030330
+	command_line_dump_ini										= TRUE;	// VJ 030414 changed to true
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1273,9 +1273,9 @@ void process_command_line (int argc, char *argv[])
 
 			strcpy (global_options.ip_address, command_line_ip_address);
 		}
-//VJ added for werewolf primary server setting	030403	
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "primary_server_setting")) || (s2 = strarg (s1, "pss")))
+		//VJ 030403	added for werewolf primary server setting	
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1292,9 +1292,9 @@ void process_command_line (int argc, char *argv[])
 				strcpy (command_line_primary_server_setting, "\0");
 			}
 		}
-//VJ added for werewolf seconday server setting	030403
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "secondary_server_setting")) || (s2 = strarg (s1, "sss")))
+		//VJ 030403 added for werewolf seconday server setting	
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1546,9 +1546,8 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_ground_stabilisation_available);
 			}
 		}
-//VJ framerate 24-mar-03
 		////////////////////////////////////////
-		else if ((s2 = strarg (s1, "framerate")))
+		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate 
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1559,11 +1558,9 @@ void process_command_line (int argc, char *argv[])
 			{
 				command_line_framerate = FALSE;
 			}
-		}
-		
-//VJ WUT mod 26-mar-03
+		}		
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "wut"))
+		else if (s2 = strarg (s1, "wut")) //VJ 030326 WUT mod 
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1578,10 +1575,16 @@ void process_command_line (int argc, char *argv[])
 			}
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "ini"))
+		else if (s2 = strarg (s1, "ini")) //VJ 030414 possibility to start without ini: /ini:0
 		////////////////////////////////////////
+		
+		if (*s2 == ':')
 		{
-				command_line_dump_ini = TRUE;
+			sscanf (s2 + 1, "%d", &command_line_dump_ini);
+		}
+		else
+		{
+			command_line_dump_ini = TRUE;
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "no_downwash"))	//Xhit 030328
