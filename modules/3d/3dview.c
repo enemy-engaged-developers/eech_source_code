@@ -66,6 +66,8 @@
 
 #include "3d.h"
 
+#include "project.h"	// Retro 31Oct2004 - need this to access command_line stuff
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -384,7 +386,18 @@ void realise_3d_clip_extents ( env_3d *env )
 	// Also set the viewcone stuff here
 	//
 
-	current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan ( rad ( 59.99 ) );
+	//
+	// Retro 31Oct2004 - Halloween code :O
+	// if set to FALSE, this will enable higher LODs out to farer distances, and obliterate FPS near cities..
+	//
+	if (!command_line_high_lod_hack)
+	{
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan ( rad ( 59.99 ) );
+	}
+	else	// Retro 31Oct2004 (all)
+	{
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan (rad ((float)command_line_max_fov));
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
