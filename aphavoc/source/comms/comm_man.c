@@ -1972,6 +1972,8 @@ debug_log ("HEARTBEAT: connect successfull");
 void net_heartbeat(void)
 {
     char TempStuff[512];
+	char versionBuffer[256];
+
 
 #if DEBUG_MODULE
 debug_log ("HEARTBEAT: net_heartbeat called");
@@ -1981,11 +1983,13 @@ debug_log ("HEARTBEAT: net_heartbeat called");
       return;
 
     direct_play_session_capabilities ();
-    sprintf(TempStuff, "%s %s %s %i %i %i", "Z", "127.0.0.1", //The transmitted ip is disregarded anyway...
+    sprintf(versionBuffer, "%d.%d.%d%s", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
+    sprintf(TempStuff, "%s %s %s %i %i %s", "Z", "127.0.0.1", //The transmitted ip is disregarded anyway...
                                                  localplayer,
                                                  direct_play_session_max_players(),
                                                  direct_play_get_number_of_players(),
-                                                 (( MAJOR_VERSION << 8 ) | DATA_VERSION));
+												 versionBuffer);
+
 #if DEBUG_MODULE
 debug_log ("HEARTBEAT: sending: %s", TempStuff);
 #endif
