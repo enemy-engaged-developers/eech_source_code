@@ -127,10 +127,9 @@ void process_ini_file(void)
         if (strcmp(p, "fs")==0) command_line_full_screen = d1;
         if (strcmp(p, "32bit")==0)
         {
-            if (d1 == 1)
-				 command_line_display_bpp=32;
-            else 
-       			 command_line_display_bpp=16;
+   			 command_line_display_bpp=16;       			 
+  			 if (d1 == 1)
+			 	command_line_display_bpp=32;
         }
 
         if (strcmp(p, "nrt")==0)  command_line_no_render_to_texture = d1;
