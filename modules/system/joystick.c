@@ -1028,7 +1028,11 @@ void read_joystick_values (int joystick_device_index)
 			if (joystick_device_index == command_line_cyclic_joystick_index)	// Retro 18Jul2004 FIXME
 			for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
 			{
-		
+				if (button_count > 31)	// Retro 8Jan2004 - X52 Kludge..
+				{
+					continue;
+				}
+
 				if (joystick->joystick_last_state.rgbButtons[button_count] != joystick->joystick_state.rgbButtons[button_count])
 				{
 		
