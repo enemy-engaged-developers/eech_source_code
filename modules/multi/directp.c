@@ -2272,7 +2272,7 @@ int direct_play_session_max_players (void)
 char *direct_play_session_admin_name (void)
 {
 
-	return ( ( LPDPSESSIONDESC2 ) session_capabilities )->dwUser1;
+	return (char *) ( ( LPDPSESSIONDESC2 ) session_capabilities )->dwUser1;
 }
 //-- Werewolf
 
