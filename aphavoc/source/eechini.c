@@ -207,7 +207,8 @@ void process_ini_file(int argc, char *argv[])
 {
 	 FILE *f;
 
-	 char *buf;
+//VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
+	 char *buf, *buf1;
 	 char *p, *q;
 	 char fname[12] = "eech.ini";
 	 float v1;
@@ -255,16 +256,30 @@ void process_ini_file(int argc, char *argv[])
 		 debug_fatal("Error opening eech.ini");
 		 return;
 	 }
+
+//VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
+    buf1 = malloc(255);
+    
+	 // main loop to parse eech.ini file
 	 while (!strstr(buf,"end of file"))
 	 {
-		int i = 0;
+		int i = 0, j = 0;
 		fscanf(f,"%[^\n]\n",buf);
       
 		if (!strchr(buf,'='))
 		  continue;
-      
-		p = strtok(buf,"=");
-		q = strtok(NULL,"#");
+
+//VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
+      for (i = 0; i < strlen(buf); i++)
+        if (buf[i] != ' '){        
+          buf1[j] = buf[i];
+          j++;
+      }  
+      buf1[j] = '\0';
+
+		p = strtok(buf1,"=");
+		q = strtok(NULL,"#");		
+			
 		while(q[i]!=' ')
 		 i++;
 		q[i] = '\0';
@@ -582,10 +597,13 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "rounds_hind_HE") == 0)
 		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_hind_HE);
 		if (strcmp(p, "rounds_hind_AP") == 0)
-		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hind_AP);
-	}
-
+		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hind_AP);	
+	}// while (!strstr(buf,"end of file"))
 	fclose(f);
+
+//VJ 040816 forgot these	
+   if (buf1) free(buf1);  
+   if (buf) free(buf);  
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
