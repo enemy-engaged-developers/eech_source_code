@@ -193,6 +193,7 @@ int
 	command_line_designated_targets					= 0,  // Jabberwock 031107 Designated target
 	command_line_session_filter						= 0,  // Jabberwock 031210 Session filter
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
+	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model						= FALSE, // camcom bugs removed
@@ -566,6 +567,23 @@ void process_command_line (int argc, char *argv[])
 
 			debug_log ("ARG:%s, RESPONSE:= %f", s1, command_line_smoke_effectiveness);
 		}
+		////////////////////////////////////////
+		//	Retro 17Jul2004 start
+		else if (s2 = strarg (s1, "reverse_pedal"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_reverse_pedal);
+			}
+			else
+			{
+				command_line_reverse_pedal = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_reverse_pedal);
+		}
+		//	Retro 17Jul2004 end
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "fog"))
 		////////////////////////////////////////

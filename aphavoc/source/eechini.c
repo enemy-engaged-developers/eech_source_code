@@ -470,6 +470,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
+		if (strcmp(p, "reverse_pedal") == 0)command_line_reverse_pedal = d1;	// Retro 17Jul2004
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
@@ -725,6 +726,7 @@ void dump_ini_file(void)
 	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
+	fprintf(f,"reverse_pedal=%d		# reversed pedal input\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"[end of file]\n");
 	
 	fclose(f);
