@@ -116,7 +116,6 @@ float getViewpointOffsetX (float x)
 	{
 		float tmp = TIR_GetX() / TIR_GetMaxXY();
 
-		{ FILE* fp = fopen("vector.txt", "at"); fprintf(fp,"%f %f %f\n", TIR_GetX(), TIR_GetMaxXY(), tmp); fclose(fp); }
 		if (tmp >= 0)
 			x = tmp * getMaxLeft();
 		else
