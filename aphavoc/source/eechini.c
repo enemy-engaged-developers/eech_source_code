@@ -86,11 +86,10 @@ void process_ini_file(void)
     float v1;
     int d1;
    
+//vj 030409, changed to generate eech.ini when it doesn't exist
     if (!file_exist(fname))   
     {
-//       dump_ini_file();
-       //debug_fatal("file \"eech.ini\" created for future use");   
-       return;    
+       dump_ini_file();
     }   
    
     f = fopen(fname, "r");

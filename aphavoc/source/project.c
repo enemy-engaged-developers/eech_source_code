@@ -129,7 +129,7 @@ void application_main (int argc, char **argv)
 	//
 	// process eech.ini file, call before commandline
 	//
-//vj 030403
+	//vj 030409, changed to generate eech.ini when it doesn't exist
     process_ini_file();
 
 	//
@@ -140,9 +140,6 @@ void application_main (int argc, char **argv)
 
 	process_command_line (argc, argv);
 
-//vj 030403
-    if (command_line_dump_ini)
-       dump_ini_file();
 
 	//
 	// setup the debug system
