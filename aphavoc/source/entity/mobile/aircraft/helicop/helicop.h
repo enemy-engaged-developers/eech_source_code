@@ -98,9 +98,10 @@ struct HELICOPTER
 		lock_on_after_launch		: NUM_LOCK_ON_AFTER_LAUNCH_BITS;
 
 	list_root
+		designated_target_root,	// Jabberwock 031107 Designated target
 		gunship_target_root,
 		padlock_root;
-
+		
 	vec3d
 		cover_position,
 		wait_position;

@@ -159,6 +159,21 @@ switch (type)
 
 	////////////////////////////////////////
 
+	// Jabbewock 031107 Designated targets
+	
+	#ifdef LIST_TYPE_DESIGNATED_TARGET_LINK
+
+	case LIST_TYPE_DESIGNATED_TARGET:
+	{
+		child_pred = raw->designated_target_link.child_pred;
+
+		break;
+	}
+
+	#endif
+
+	// Jabbewock 031107 ends
+
 	#ifdef LIST_TYPE_DIVISION_LINK
 
 	case LIST_TYPE_DIVISION:
@@ -169,7 +184,7 @@ switch (type)
 	}
 
 	#endif
-
+	
 	////////////////////////////////////////
 
 	#ifdef LIST_TYPE_DIVISION_HEADQUARTERS_LINK

@@ -70,6 +70,8 @@ extern void notify_session_to_main_button (ui_object *obj, void *arg);
 
 extern void notify_session_next_button (ui_object *obj, void *arg);
 
+extern void notify_session_continue_button (ui_object *obj, void *arg); // Jabberwock 031118 Server side settings
+
 extern void notify_session_back_button (ui_object *obj, void *arg);
 
 extern void session_list_function (ui_object *obj, void *arg);

@@ -155,6 +155,10 @@ extern void get_next_ground_radar_target (void);
 
 extern void get_previous_ground_radar_target (void);
 
+extern void select_next_designated_ground_radar_target (void); // Jabberwock 031108 Designated targets
+
+extern void select_previous_designated_ground_radar_target (void);
+
 extern void update_common_ground_radar (void);
 
 extern void activate_common_ground_radar (void);
@@ -174,6 +178,10 @@ extern void get_next_air_radar_target (void);
 extern void get_previous_air_radar_target (void);
 
 extern void update_common_air_radar (void);
+
+extern void select_next_designated_air_radar_target (void); // Jabberwock 031108 Designated targets
+
+extern void select_previous_designated_air_radar_target (void);
 
 extern void activate_common_air_radar (void);
 

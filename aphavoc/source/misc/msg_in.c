@@ -822,6 +822,12 @@ void set_incoming_message (entity *sender, entity *target, message_text_types ty
 	subject = format_incoming_message (new_message, sender, target, string);
 
 	num_messages ++;
+	
+	// Jabberwock 031129 Chat server log
+	if ((type == MESSAGE_TEXT_PILOT_STRING) && (get_comms_model () == COMMS_MODEL_SERVER))
+	{
+		server_log ("%s: %s", get_local_entity_string (sender, STRING_TYPE_PILOTS_NAME), string);
+	}
 
 	if ((current_message == -1) || (message_text_info [type].skip_queue))
 	{
@@ -1002,6 +1008,14 @@ void process_radio_message (entity *en, message_categories type, int value)
 
 			break;
 		}
+// Jabberwock 031119 CamCom MP compatible
+		case MESSAGE_LOCAL_BASE_CAMCOM_MESSAGE:
+		{
+			create_reaction_to_map_click (en);
+
+			break;
+		}		
+// Jabberwock 031119 ends
 	}
 }
 

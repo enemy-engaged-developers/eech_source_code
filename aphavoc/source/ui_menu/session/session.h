@@ -88,7 +88,8 @@ enum SESSION_LIST_TYPES
    SESSION_LIST_TYPE_JOIN        = 2,
    SESSION_LIST_TYPE_RESTORE     = 4,
    SESSION_LIST_TYPE_MASTER      = 8,
-   NUM_SESSION_LIST_TYPE         = 16
+   SESSION_LIST_TYPE_FILTER      = 16, // Jabberwock 031210 Session filter
+   NUM_SESSION_LIST_TYPE         = 32
 };
 
 typedef enum SESSION_LIST_TYPES session_list_types;

@@ -60,38 +60,92 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern ui_object
-	*session_screen_next_bdrop,
-   *session_screen_next_button,
-   *session_screen_continue_button, // Jabberwock 031118 Server side settings
-   *session_screen_continue_bdrop,
-   *session_screen_next_button_text,
-   *session_screen_session_parameters_button,
-   *session_screen_delete_button,
-   *session_screen_rename_button,
-   *session_info_list,
-	*session_list_area,
-	*session_list,
-   *session_briefing_overlay,
-   *session_briefing_area,
-	*session_game_delete_button,
-   *session_name_entry_area,
-   *session_name_input,
-	*session_screen;
-
-extern texture_graphic
-	*session_screen_graphic;
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void initialise_session_screen (void);
+// Jabberwock 031119 Server log
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void server_log (char *msg, ...)
+{
+
+	FILE
+		*fp;
+		
+	int
+		hours,
+		minutes,
+		seconds;
+	
+
+	static char
+		buffer[1000];
+
+	char
+		buffer2[1000];
+
+	va_list
+		args;
+
+	va_start (args, msg);
+
+	vsprintf (buffer2, msg, args);
+	
+	if ( strcmp (buffer2, "separator") != 0 )
+	{
+		get_clock_int_values (get_system_time_of_day (), &hours, &minutes, &seconds);
+	
+		sprintf (buffer, "%02d:%02d:%02d : ", hours, minutes, seconds);
+		
+		strcat (buffer, buffer2);
+	}
+	else
+	{
+		sprintf (buffer, "%s", "----------------------------------------------------------");
+	}
+
+	va_end (args);
+
+	if (!(strcmp (command_line_server_log_filename, "/0") == 0) &&
+		!(strcmp (command_line_server_log_filename, "") == 0))
+	{
+		fp = fopen (command_line_server_log_filename, "a" );
+
+		if ( fp )
+		{
+
+			fwrite ( buffer, 1, strlen ( buffer ), fp );
+
+			fwrite ( "\n", 1, 1, fp );
+
+			fclose ( fp );
+		}
+	}
+}
+
+void get_clock_int_values (int time_of_day, int *hours, int *minutes, int *seconds)
+{
+	int
+		minutes_past_midnight,
+		hours_past_midnight;
+
+//	time_of_day = bound (time_of_day, 0.0, ONE_DAY - 1.0);
+
+	hours_past_midnight = time_of_day / (60 * 60);
+
+	minutes_past_midnight = time_of_day / 60;
+
+	*hours = hours_past_midnight;
+
+	*minutes = (minutes_past_midnight - (hours_past_midnight * 60));
+
+	*seconds = (time_of_day - (minutes_past_midnight * 60));
+}
+
+// Jabberwock 031119 ends

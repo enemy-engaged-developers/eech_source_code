@@ -284,6 +284,8 @@ void validate_connections (void)
 	connection_list_type
 		*destroy_connection,
 		*this_connection;
+	int
+		timeout_limit;
 
 	this_connection = connection_list_head;
 
@@ -294,13 +296,21 @@ void validate_connections (void)
 
 		this_connection = this_connection->next;
 
-		// if (destroy_connection->pilot_entity) Jabberwock 031107 MP bug search - not needed any more
+		if (destroy_connection->pilot_entity) // Jabberwock 031204 MP bug search - reinstated
 		{
-	
-			if ((get_system_time () - destroy_connection->connection_validation_time) > command_line_comms_timeout * TIME_1_SECOND)
+			// added count_limit for connecting players
+			if (destroy_connection->pilot_entity)
 			{
-	
-				if (destroy_connection->validation_count > 3)
+				timeout_limit = command_line_comms_timeout;
+			}
+			else
+			{
+				timeout_limit = command_line_comms_timeout + 15;
+			}
+		
+			if ((get_system_time () - destroy_connection->connection_validation_time) > timeout_limit * TIME_1_SECOND)
+			{
+				if (destroy_connection->validation_count > 1) // Jabberwock 031203 Only two passes
 				{
 // Jabberwock 031107 MP bug search - this is where original crash occurs, but it's symptom, not the cause!
 /*                                 	if (destroy_connection->pilot_entity)
@@ -325,63 +335,47 @@ void validate_connections (void)
 //					debug_log ("SERVER: TIMEOUT: destroying clients pilot entity");
 //					}
 
-// Jabberwock 031107 MP bug search - end this part
-
-// Jabberwock 031108 MP bug search - temporary fix to remove pilot_entity
-
-// TEMPORARY CHANGE TO TRY OUT: DELETE IF NOT WORKING (i.e. if there is still double pilot name when reconnected
-// one:
 					if (destroy_connection->pilot_entity)
 					{
+						server_log("%s removed", get_local_entity_string (destroy_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
+
 						destroy_client_server_entity (destroy_connection->pilot_entity);
+
 						destroy_connection->pilot_entity = NULL;
 					}
-// one (a): RISKY!
-
-/*					if (destroy_connection->pilot_entity)
+					else
 					{
-						destroy_connection->pilot_entity = NULL;
+						server_log("Unknown player removed");
 					}
-*/
-// two:
-/* if the above works, this might be a better one???
-					if ((destroy_connection->pilot_entity) && (get_local_entity_type (destroy_connection->pilot_entity) == ENTITY_TYPE_PILOT)
-					{
-						destroy_client_server_entity (destroy_connection->pilot_entity);
-						destroy_connection->pilot_entity = NULL;
-					}
-*/
 
-
-// Jabberwock 031108 - end of temporary fix - delete to this part
+// Jabberwock 031108 - ends - seems to work!
 					
-					unregister_connection (destroy_connection->connection_id);
-		
 					if (get_comms_model () == COMMS_MODEL_SERVER)
 					{
 						debug_log ("SERVER: TIMEOUT: Unregistering connection %d", destroy_connection->connection_id);
 						//unregister_connection (destroy_connection->connection_id);
-						// Jabberwock 031107 MP bug search - commented out the line below - it's not used at controlled connection
-						// we don't have the destroy_connection->connection_id after unregister anyway?
-						//direct_play_remove_player_from_group (destroy_connection->connection_id);
+						// Jabberwock 0312073 MP bug search - Not working - DP timeout kills the player first....
+						direct_play_remove_player_from_group (destroy_connection->connection_id);
 					}
 					else
 					{
 						debug_log ("SERVER: TIMEOUT: Quitting game", destroy_connection->connection_id);
 						start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 					}
+
+					unregister_connection (destroy_connection->connection_id);
 				}
-				else
-				{
-	
-					debug_log ("SERVER: sending %d CONNECTION_VALIDATION", destroy_connection->connection_id);
-	
-					send_packet (destroy_connection->connection_id, PACKET_TYPE_CONNECTION_VALIDATION, NULL, 0, SEND_TYPE_PERSONAL);
-	
-					destroy_connection->connection_validation_time = get_system_time ();
-	
-					destroy_connection->validation_count ++;
-				}
+			}
+			else
+			{
+
+				debug_log ("SERVER: sending %d CONNECTION_VALIDATION", destroy_connection->connection_id);
+
+				send_packet (destroy_connection->connection_id, PACKET_TYPE_CONNECTION_VALIDATION, NULL, 0, SEND_TYPE_PERSONAL);
+
+				//destroy_connection->connection_validation_time = get_system_time ();
+
+				destroy_connection->validation_count ++;
 			}
 		}
 	}

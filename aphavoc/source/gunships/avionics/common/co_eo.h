@@ -150,6 +150,10 @@ extern void select_next_eo_target (void);
 
 extern void select_previous_eo_target (void);
 
+extern void select_next_designated_eo_target (void); // Jabberwock 031108 Designated targets
+
+extern void select_previous_designated_eo_target (void);
+
 extern float convert_linear_view_value (eo_params_dynamic_move *eo);
 
 extern float make_panning_offset_from_axis (long state);

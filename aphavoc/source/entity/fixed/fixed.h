@@ -74,6 +74,7 @@ struct FIXED
 		target_root;
 
 	list_link
+		designated_target_link, // Jabberwock - Designated targets
 		gunship_target_link,
 		sector_link;
 

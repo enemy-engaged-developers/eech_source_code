@@ -1005,6 +1005,7 @@ int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, i
 // yem 030525 - changed axis to be indexed from 0 instead of 1. renamed to get_joystick_axis.
 int get_joystick_axis (int joystick_index, int axis)
 {
+	read_joystick_values(joystick_index); // Jabberwock 031120 Some joystick values were not read at all!
 #ifdef WIN32
 	switch (axis) {
 	case 0:

@@ -75,6 +75,8 @@
 extern char WUT_filename [128];
 // commmandline WUT filename
 
+extern char session_WUT_filename[128]; // Jabberwock 031115 WUT server side - temporary string for session
+
 extern void parse_WUT_file(char *fname);
 // function to parse the WUT file
 

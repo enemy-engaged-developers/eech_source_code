@@ -132,7 +132,9 @@ int
 	single_target_acquisition_system_inc_target_priority_key,
 	single_target_acquisition_system_dec_target_priority_key,
 	single_target_acquisition_system_select_next_target_key,
-	single_target_acquisition_system_select_previous_target_key;
+	single_target_acquisition_system_select_previous_target_key,
+	single_target_acquisition_system_select_next_designated_key, // Jabberwock 031107 Designated targets
+	single_target_acquisition_system_select_previous_designated_key;
 
 int
 	continuous_target_acquisition_system_steer_left_fast_key,
@@ -232,6 +234,8 @@ void deinitialise_common_target_acquisition_systems (void)
 	set_gunship_target (NULL);
 
 	unlink_local_entity_children (get_gunship_entity (), LIST_TYPE_GUNSHIP_TARGET);
+	
+	unlink_local_entity_children (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET); // Jabberwock Designated targets
 
 	//
 	// deinitialise sensors
@@ -427,6 +431,9 @@ void reset_common_target_acquisition_system_keys (void)
 	single_target_acquisition_system_dec_target_priority_key					= 0;
 	single_target_acquisition_system_select_next_target_key					= 0;
 	single_target_acquisition_system_select_previous_target_key				= 0;
+	single_target_acquisition_system_select_next_designated_key					= 0;
+	single_target_acquisition_system_select_previous_designated_key				= 0;
+
 
 	continuous_target_acquisition_system_steer_left_fast_key					= FALSE;
 	continuous_target_acquisition_system_steer_right_fast_key				= FALSE;
@@ -1074,3 +1081,31 @@ void play_common_cpg_target_acquisition_system_speech (target_acquisition_system
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Jabberwock 031107 Designated targets
+
+void toggle_designated_target (void)
+{
+	entity
+		*current_target;
+	
+	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+	
+	if (command_line_designated_targets)
+	{
+		if (current_target)
+		{	
+			if (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET))
+			{
+				delete_local_entity_from_parents_child_list (current_target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+			else
+			{
+				insert_local_entity_into_parents_child_list (current_target, LIST_TYPE_DESIGNATED_TARGET, get_gunship_entity (), NULL);
+			}
+		}
+	}
+}
+
+// Jabberwock 031107 ends

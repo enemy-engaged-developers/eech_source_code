@@ -146,6 +146,8 @@ static void destroy_local (entity *en)
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_FOLLOWER);
 
+	delete_local_entity_from_parents_child_list (en, LIST_TYPE_DESIGNATED_TARGET); // Jabberwock 031107 Designated targets
+
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_GUNSHIP_TARGET);
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_MEMBER);

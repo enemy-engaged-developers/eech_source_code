@@ -90,6 +90,7 @@ c_object_files    += $+ &
                      $(currentdir)\vm_safe.obj &
                      $(currentdir)\vm_updt.obj &
                      $(currentdir)\vm_vckpt.obj &
+                     $(currentdir)\vm_satinfo.obj &
                      $-
 
 asm_object_files  += $+ &

@@ -387,6 +387,12 @@ static void inc_ground_radar_target_priority (void)
 	{
 		ground_radar.target_priority_type = TARGET_PRIORITY_HIGH;
 	}
+	// Jabberwock 031107 Designated targets
+	else if ((ground_radar.target_priority_type == TARGET_PRIORITY_HIGH) && command_line_designated_targets)
+	{
+		ground_radar.target_priority_type = TARGET_PRIORITY_DESIGNATED;
+	}
+	// Jabberwock 031107 ends	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,6 +422,12 @@ static void dec_ground_radar_target_priority (void)
 	{
 		ground_radar.target_priority_type = TARGET_PRIORITY_UNKNOWN;
 	}
+	// Jabberwock 031107 Designated targets
+	else if (ground_radar.target_priority_type == TARGET_PRIORITY_DESIGNATED)
+	{
+		ground_radar.target_priority_type = TARGET_PRIORITY_HIGH;
+	}
+	// Jabberwock 031107 ends	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -596,6 +608,24 @@ void update_ah64a_ground_radar (void)
 
 		single_target_acquisition_system_select_previous_target_key--;
 	}
+// Jabberwock 031107 Designated targets
+	
+	while (single_target_acquisition_system_select_next_designated_key)
+	{
+		select_next_designated_ground_radar_target ();
+
+		single_target_acquisition_system_select_next_designated_key--;
+	}
+
+	////////////////////////////////////////
+
+	while (single_target_acquisition_system_select_previous_designated_key)
+	{
+		select_next_designated_ground_radar_target ();
+
+		single_target_acquisition_system_select_previous_designated_key--;
+	}	
+// Jabberwock 031107 ends	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -978,6 +1008,24 @@ void update_ah64a_air_radar (void)
 
 		single_target_acquisition_system_select_previous_target_key--;
 	}
+// Jabberwock 031107 Designated targets
+	
+	while (single_target_acquisition_system_select_next_designated_key)
+	{
+		select_next_designated_air_radar_target ();
+
+		single_target_acquisition_system_select_next_designated_key--;
+	}
+
+	////////////////////////////////////////
+
+	while (single_target_acquisition_system_select_previous_designated_key)
+	{
+		select_next_designated_air_radar_target ();
+
+		single_target_acquisition_system_select_previous_designated_key--;
+	}	
+// Jabberwock 031107 ends	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

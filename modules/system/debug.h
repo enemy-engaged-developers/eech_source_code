@@ -159,6 +159,8 @@ extern void initialise_debug_system ( int logging );
 
 extern void debug_fatal ( char *string, ... );
 
+extern void server_log ( char *string, ... ); // Jabberwock 031119 Server log
+
 #ifdef DEBUG
 
 extern void debug_log ( char *string, ... );

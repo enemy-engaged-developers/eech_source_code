@@ -131,7 +131,7 @@ int
 	command_line_comms_guaranteed_send						= TRUE,
 	command_line_comms_dedicated_server						= FALSE,
 	command_line_comms_interpolate_gunships				= TRUE,
-	command_line_comms_validate_connections				= FALSE,
+	command_line_comms_validate_connections				= TRUE, // Jabberwock - We need validate_connections...
 	command_line_game_initialisation_phase_game_type	= GAME_TYPE_INVALID,
 	command_line_game_initialisation_phase_gunship_type= NUM_GUNSHIP_TYPES,
 	command_line_max_frame_rate								= 30,
@@ -185,8 +185,19 @@ int
 	command_line_tsd_palette									= 0,		// VJ 030511
 	command_line_green_mfd										= 0,		// loke 030517
 	command_line_maxplayers							= 4,	// Werewolf 030518
-	command_line_camcom								= FALSE;	// Jabberwock 031007 Campaign Commander
-
+	command_line_camcom								= FALSE,	// Jabberwock 031007 Campaign Commander
+	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
+	command_line_joylookh_joystick_axis				= 1,	// Jabberwock 031104 Joystick look
+	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
+	command_line_joylook_step						= 30,	// Jabberwock 031104 Joystick look
+	command_line_designated_targets					= 0,  // Jabberwock 031107 Designated target
+	command_line_session_filter					= 0,  // Jabberwock 031210 Session filter
+// Jabberwock 031118 Server side settings
+	session_planner_goto_button,
+	session_vector_flight_model,
+	session_ground_radar_ignores_infantry,
+	session_camcom;
+// Jabberwock 031118 ends
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
 	command_line_dynamics_rudder_value						= 1.0,
@@ -214,7 +225,9 @@ char
 	command_line_debug_log_name[100]									= "DEBUG.LOG",
 	command_line_ip_address[128]										= "\0",
 	command_line_primary_server_setting[128]						= "hoxdna.org",  //VJ for werewolf 030403, default value changed 111103
-	command_line_secondary_server_setting[128]					= "eech.dhs.org";  //VJ for werewolf 030403, default value changed 080403 
+	command_line_secondary_server_setting[128]					= "eech.dhs.org",  //VJ for werewolf 030403, default value changed 080403 
+	command_line_server_log_filename [128]			= "\0";	// Jabberwock 031119 Server log
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1545,6 +1558,43 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_eo_zoom_joystick_axis);
 			}
 		}
+		else if (s2 = strarg(s1, "joylook_joystick_index"))	// Jabberwock 031104
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_joylook_joystick_index);
+			}
+
+			if (command_line_joylook_joystick_index < -1)
+			{
+				command_line_joylook_joystick_index = -1;
+			}
+		}
+		else if (s2 = strarg(s1, "joylookh_joystick_axis"))	// Jabberwock 031104
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_joylookh_joystick_axis);
+			}
+		}
+		else if (s2 = strarg(s1, "joylookv_joystick_axis"))	// Jabberwock 031104
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_joylookv_joystick_axis);
+			}
+		}
+		else if (s2 = strarg(s1, "joylook_step"))	// Jabberwock 031104
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_joylook_step);
+			}
+		}
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "invisible_infantry"))	// loke 030322
 		////////////////////////////////////////
@@ -1589,6 +1639,24 @@ void process_command_line (int argc, char *argv[])
 			{
                 WUT_filename[0] = '\0';
 				command_line_wut = FALSE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "server_log_filename")) //Jabberwock 031119 Server log
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%s", &command_line_server_log_filename);
+			}
+			else
+			{
+				strcpy (command_line_server_log_filename, "\0");
+			}
+
+			if (strlen (command_line_server_log_filename) == 0)
+			{
+				strcpy (command_line_server_log_filename, "\0");
 			}
 		}
 		////////////////////////////////////////
@@ -1747,6 +1815,34 @@ void process_command_line (int argc, char *argv[])
 				command_line_camcom = FALSE;
 			}
 		}
+		////////////////////////////////////////		
+		else if (s2 = strarg (s1, "designated_targets"))		// Jabberwock 031107 Designated targets
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_designated_targets);
+			}
+			else
+			{
+				command_line_designated_targets = FALSE;
+			}
+		}
+		
+		////////////////////////////////////////		
+		else if (s2 = strarg (s1, "session_filter"))		// Jabberwock 031210 Session filter
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_session_filter);
+			}
+			else
+			{
+				command_line_session_filter = FALSE;
+			}
+		}
+				
         ////////////////////////////////////////
 		else
 		////////////////////////////////////////

@@ -1078,3 +1078,153 @@ void select_previous_hms_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Jabberwock 031108 Designated targets
+
+void select_next_designated_hms_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	hms_target_locked = FALSE;
+
+	if (get_hms_valid ())
+	{
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+		if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+		{
+			//
+			// no current target or current target has been removed from the gunship target list
+			//
+
+			target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target)
+			{
+				if (get_selectable_hms_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+		else
+		{
+			target = get_local_entity_child_succ_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target != current_target)
+			{
+				if (get_selectable_hms_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+	}
+
+	set_gunship_target (new_target);
+
+	if (new_target)
+	{
+		hms_target_locked = TRUE;
+
+		get_pilot_head_heading_and_pitch_to_target (new_target);
+
+		if (in_cockpit)
+		{
+			if (set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET))
+			{
+				set_common_target_acquisition_system_lock_target (TRUE);
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_previous_designated_hms_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	hms_target_locked = FALSE;
+
+	if (get_hms_valid ())
+	{
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+		if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+		{
+			//
+			// no current target or current target has been removed from the gunship target list
+			//
+
+			target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target)
+			{
+				if (get_selectable_hms_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+		else
+		{
+			target = get_local_entity_child_pred_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target != current_target)
+			{
+				if (get_selectable_hms_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_pred_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+	}
+
+	set_gunship_target (new_target);
+
+	if (new_target)
+	{
+		hms_target_locked = TRUE;
+
+		get_pilot_head_heading_and_pitch_to_target (new_target);
+
+		if (in_cockpit)
+		{
+			if (set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET))
+			{
+				set_common_target_acquisition_system_lock_target (TRUE);
+			}
+		}
+	}
+}
+
+// Jabberwock 031108 ends

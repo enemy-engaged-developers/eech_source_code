@@ -318,7 +318,37 @@
 	fn_get_local_entity_child_pred	[(TYPE)][LIST_TYPE_CURRENT_WAYPOINT]	= get_local_child_pred;
 
 	#endif
+	////////////////////////////////////////
+	//
+	// LIST_TYPE_DESIGNATED_TARGET Jabberwock 031107
+	//
+	////////////////////////////////////////
 
+	#ifdef LIST_TYPE_DESIGNATED_TARGET_ROOT
+
+	fn_set_local_entity_first_child	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= set_local_first_child;
+
+	fn_get_local_entity_first_child	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= get_local_first_child;
+
+	#endif
+
+	#ifdef LIST_TYPE_DESIGNATED_TARGET_LINK
+
+	fn_set_local_entity_parent			[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= set_local_parent;
+
+	fn_get_local_entity_parent			[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= get_local_parent;
+
+	fn_set_local_entity_child_succ	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= set_local_child_succ;
+
+	fn_get_local_entity_child_succ	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= get_local_child_succ;
+
+	fn_set_local_entity_child_pred	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= set_local_child_pred;
+
+	fn_get_local_entity_child_pred	[(TYPE)][LIST_TYPE_DESIGNATED_TARGET]	= get_local_child_pred;
+
+	#endif
+	// Jabberwock 031007 ends
+	
 	////////////////////////////////////////
 	//
 	// LIST_TYPE_DIVISION
@@ -1292,6 +1322,7 @@
 	fn_get_local_entity_child_pred	[(TYPE)][LIST_TYPE_VIEW]	= get_local_child_pred;
 
 	#endif
+
 
 	////////////////////////////////////////
 	//

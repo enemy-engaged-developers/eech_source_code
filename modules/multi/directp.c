@@ -1077,6 +1077,8 @@ int direct_play_enumerate_sessions (void)
 
 	current_session = session_table;
 
+	session_counter = 0; // Jabberwock 031209 Sessions not cleared properly
+
 	while ( current_session )
 	{
 
@@ -1943,6 +1945,8 @@ BOOL FAR PASCAL direct_play_enumerate_sessions_callback (LPDPSESSIONDESC2 lpThis
 
 		sprintf (new_session->session->lpszSessionNameA, lpThisSD->lpszSessionNameA);
 
+		new_session->session->guidInstance = lpThisSD->guidInstance; // Jabberwock 031209
+
 		session_counter ++;
 
 		#if DIRECT_PLAY_DEBUG
@@ -2330,6 +2334,7 @@ int direct_play_enumerate_groups (void)
 
 			group_counter = 0;
 
+			//hr = IDirectPlayX_EnumGroups ( direct_playx, NULL, ( LPDPENUMPLAYERSCALLBACK2 ) direct_play_enumerate_groups_callback, NULL, 0 );
 			hr = IDirectPlayX_EnumGroups ( direct_playx, &connection_data.this_session.session->guidInstance, ( LPDPENUMPLAYERSCALLBACK2 ) direct_play_enumerate_groups_callback, NULL, 0 );
 
 
@@ -2587,10 +2592,19 @@ int direct_play_remove_player_from_group (DPID id)
 				{
 		
 					debug_log ( "DIRECTP: DirectPlay::DeletePlayerFromGroup: %s", get_dplay_error_message ( hr ) );
+					
+					server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
 		
 					return FALSE;
 				}
 		
+				hr = IDirectPlayX_DestroyPlayer ( direct_playx, id); // Jabberwock 031209 Destroy player
+	
+				if ( hr != DP_OK )
+				{
+					return ( FALSE );
+				}
+
 				return ( TRUE );
 			}
 			else

@@ -126,6 +126,10 @@ list_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 		},
 		{
+			"LIST_TYPE_DESIGNATED_TARGET",								// name // Jabberwock 031107 Designated targets
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+		},
+		{
 			"LIST_TYPE_DIVISION",										// name
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 		},

@@ -607,6 +607,23 @@ static void mouselook_toggle (event *ev)
 	}
 }
 
+// Jabberwock 031107 Designated target
+
+static void designate_toggle_event (event *ev)
+{
+	toggle_designated_target ();
+}
+
+static void select_next_designated_target_event (event *ev)
+{
+	single_target_acquisition_system_select_next_designated_key++;
+}
+
+static void select_previous_designated_target_event (event *ev)
+{
+	single_target_acquisition_system_select_previous_designated_key++;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -731,6 +748,14 @@ void set_common_avionics_events (void)
 	set_event (DIK_DELETE, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, mouselook_toggle);
 	
 	// Jabberwock 031016 ends
+	
+	// Jabberwock 031107 Designated targets
+	
+	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, designate_toggle_event); 
+
+	set_event (DIK_NUMPAD0, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_next_designated_target_event);
+	
+	set_event (DIK_NUMPAD0, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_previous_designated_target_event);
 
 }
 

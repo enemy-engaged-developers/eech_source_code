@@ -124,7 +124,9 @@ extern int
 	single_target_acquisition_system_inc_target_priority_key,
 	single_target_acquisition_system_dec_target_priority_key,
 	single_target_acquisition_system_select_next_target_key,
-	single_target_acquisition_system_select_previous_target_key;
+	single_target_acquisition_system_select_previous_target_key,
+	single_target_acquisition_system_select_next_designated_key, // Jabberwock 031107 Designated targets
+	single_target_acquisition_system_select_previous_designated_key;
 
 extern int
 	continuous_target_acquisition_system_steer_left_fast_key,
@@ -175,6 +177,8 @@ extern void reset_common_target_acquisition_system_keys (void);
 extern void set_common_target_acquisition_system_lock_target (int lock);
 
 extern void set_gunship_target (entity *target);
+
+extern void toggle_designated_target (void); // Jabberwock 031108 Designated targets
 
 extern entity *get_local_entity_boresight_target (entity *source, vec3d *boresight_unit_vector, float range, float field_of_view);
 

@@ -570,10 +570,10 @@ void deinitialise_virtual_cockpit_view (void)
 
 void update_virtual_cockpit_view (void)
 {
-	int 
+	float 
 		ROTATE_RATE;
 	
-	ROTATE_RATE = command_line_mouse_look_speed / 6; // Jabberwock 031016 - variable POV speed
+	ROTATE_RATE = (float) command_line_mouse_look_speed / 6.0; // Jabberwock 031016 - variable POV speed
 	
 	// lfriembichler 030317 start
 	// enabled panning by mouse/trackir
@@ -581,39 +581,68 @@ void update_virtual_cockpit_view (void)
 	// loaded BEFORE EECH is started !
 
 	if (command_line_mouse_look == FALSE)	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
-	{
-		if (adjust_view_left_key || joystick_pov_left)
+	{	
+		if (command_line_joylook_joystick_index != -1) // Jabberwock 030311 Joystick look
 		{
-			pilot_head_heading += ROTATE_RATE * get_delta_time ();
+			float 
+				stp,
+				pos;
+				
+			stp = (float) command_line_joylook_step / 1000.0;
+			
+			pos = (float) get_joystick_axis (command_line_joylook_joystick_index, command_line_joylookh_joystick_axis);
+					
+			pos = ((get_rotate_right_limit ()) * pos) / 10000.0;
+			
+			if (((pilot_head_heading - (pos)) > stp) || ((pilot_head_heading - (pos) < -stp)))
+			{
+				pilot_head_heading = (pos);
+			}
 
-			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
-		}
-		else if (adjust_view_right_key || joystick_pov_right)
+			pos = (float) get_joystick_axis (command_line_joylook_joystick_index, command_line_joylookv_joystick_axis);
+					
+			pos = (get_rotate_up_limit ()) * pos / 10000.0;
+			
+			if (((pilot_head_pitch - (pos)) > stp) || ((pilot_head_pitch - (pos)) < -stp))
+			{
+				pilot_head_pitch = (pos);
+			}
+		} // Jabberwock 030311 ends
+		else
 		{
-			pilot_head_heading -= ROTATE_RATE * get_delta_time ();
+			if (adjust_view_left_key || joystick_pov_left)
+			{
+				pilot_head_heading += ROTATE_RATE * get_delta_time ();
 
-			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
-		}
+				pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
+			}
+			else if (adjust_view_right_key || joystick_pov_right)
+			{
+				pilot_head_heading -= ROTATE_RATE * get_delta_time ();
 
-		if (adjust_view_up_key || joystick_pov_up)
-		{
-			pilot_head_pitch += ROTATE_RATE * get_delta_time ();
+				pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
+			}
 
-			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
-		}
-		else if (adjust_view_down_key || joystick_pov_down)
-		{
-			pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
+			if (adjust_view_up_key || joystick_pov_up)
+			{
+				pilot_head_pitch += ROTATE_RATE * get_delta_time ();
 
-			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
+				pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
+			}
+			else if (adjust_view_down_key || joystick_pov_down)
+			{
+				pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
+
+				pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
+			}
 		}
 	}
 	else	// Use mouse/TIR, all by Retro 030317, 030318
 	{
 		float temp_p, temp_h;
-extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
-extern int getPitch ( void );
-extern int getYaw ( void );
+		extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
+		extern int getPitch ( void );
+		extern int getYaw ( void );
 		
 		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
 		{									// ..this also means it´s NOT possible to use TIR in relative mode !!

@@ -94,6 +94,7 @@ c_object_files    += $+ &
                      $(currentdir)\cmndline.obj &
                      $(currentdir)\wutcfg.obj &
                      $(currentdir)\eechini.obj &
+                     $(currentdir)\servlog.obj &
                      $-
 
 asm_object_files  += $+ &

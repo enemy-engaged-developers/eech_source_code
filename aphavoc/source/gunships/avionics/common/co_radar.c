@@ -864,7 +864,7 @@ int get_gunship_target_valid_for_ground_radar (entity *target)
 			// loke 030322
 			// infantry should never show up on ground radar
 
-			if (command_line_ground_radar_ignores_infantry)
+			if (session_ground_radar_ignores_infantry)
 			{
 				if (get_local_entity_int_value (target, INT_TYPE_VIEW_CATEGORY) == VIEW_CATEGORY_INFANTRY)
 				{
@@ -1418,6 +1418,16 @@ int get_target_matches_ground_radar_declutter_criteria (entity *target)
 	{
 		return (TRUE);
 	}
+// Jabberwock 031107 Designated targets
+
+	if (ground_radar.target_priority_type == TARGET_PRIORITY_DESIGNATED)
+	{
+		if (get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+		{
+			return (TRUE);
+		}
+	}
+// Jabberwock 031107 ends
 
 	if (ground_radar.target_priority_type == get_local_entity_int_value (target, INT_TYPE_TARGET_PRIORITY_TYPE))
 	{
@@ -2845,3 +2855,199 @@ void deactivate_common_air_radar (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Jabberwock 031108 Designated targets
+
+void select_next_designated_ground_radar_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+	{
+		target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target)
+		{
+			if (get_selectable_ground_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	else
+	{
+		target = get_local_entity_child_succ_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target != current_target)
+		{
+			if (get_selectable_ground_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+
+	set_gunship_target (new_target);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_previous_designated_ground_radar_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+	{
+		target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target)
+		{
+			if (get_selectable_ground_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	else
+	{
+		target = get_local_entity_child_pred_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target != current_target)
+		{
+			if (get_selectable_ground_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_pred_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	set_gunship_target (new_target);
+}
+
+void select_next_designated_air_radar_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+	{
+		target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target)
+		{
+			if (get_selectable_air_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	else
+	{
+		target = get_local_entity_child_succ_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target != current_target)
+		{
+			if (get_selectable_air_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+
+	set_gunship_target (new_target);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_previous_designated_air_radar_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+	{
+		target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target)
+		{
+			if (get_selectable_air_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	else
+	{
+		target = get_local_entity_child_pred_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+		while (target != current_target)
+		{
+			if (get_selectable_air_radar_target (target))
+			{
+				new_target = target;
+
+				break;
+			}
+
+			target = get_local_entity_child_pred_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+		}
+	}
+	set_gunship_target (new_target);
+}

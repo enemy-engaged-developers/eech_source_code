@@ -66,6 +66,8 @@
 
 #include "project.h"
 
+#include "uisession.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +296,45 @@ void notify_session_next_button (ui_object *obj, void *arg)
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
 }
 
+// Jabberwock 031118 Server side settings
+				
+
+void notify_session_continue_button (ui_object *obj, void *arg)
+{
+	if ((int) arg == BUTTON_STATE_DOWN)
+	{
+
+		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_SELECTED));
+
+		set_ui_object_redraw (session_screen, TRUE);
+	}
+	else if ((int) arg == BUTTON_STATE_UP)
+	{
+
+		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+
+		//if (get_valid_current_game_session ())
+		{
+			if (get_comms_model () == COMMS_MODEL_CLIENT)
+			{
+				send_packet (get_server_id (), PACKET_TYPE_SETTINGS_REQUEST, NULL, 0, SEND_TYPE_PERSONAL);
+				
+			}
+		}
+	}
+	else 
+	{
+
+		set_ui_object_graphic (obj, (unsigned short int *) get_graphics_file_data (GRAPHICS_UI_APACHE_PLANNER_FORWARD_BUTTON_UNSELECTED));
+
+		set_ui_object_redraw (session_screen, TRUE);
+	}
+
+	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
+}
+
+// Jabberwock 031118 ends
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,7 +346,7 @@ void session_list_function (ui_object *obj, void *arg)
       *current_session_list;
 
 	int selection;
-	int num_sessions;
+	//int num_sessions; // Jabberwock 031210 Session filter
 
 	if (obj->type == UI_TYPE_LIST_BOX)
 	{
@@ -427,6 +468,10 @@ void session_list_function (ui_object *obj, void *arg)
 			//set_game_initialisation_phase (GAME_INITIALISATION_PHASE_SETUP);
 
 			//process_game_initialisation_phases ();
+			
+			ui_set_user_function (session_update_session_list); // Jabberwock 031118 
+
+
 
 			break;
 		}
@@ -446,6 +491,10 @@ void session_list_function (ui_object *obj, void *arg)
 
 			ui_set_user_function (update_ui_comms);
 
+			ui_object_destroy_list_items (session_info_list); // Jabberwock 031118 MP bug - reload list
+
+			set_game_initialisation_phase (GAME_INITIALISATION_PHASE_SCENARIO); // Jabberwock 031118 MP bug - reload list
+
 			process_game_initialisation_phases ();
 
          break;
@@ -456,6 +505,21 @@ void session_list_function (ui_object *obj, void *arg)
 			debug_log ("JOININET: Setting ip to %s ...", current_session_list->ip_address);
 			//Set the IP, as if we would enter it in the options screen
 			sprintf(global_options.ip_address, current_session_list->ip_address);
+
+// Jabberwock 031126 - Empty box fix
+
+			set_direct_play_inet_address (current_session_list->ip_address);
+			
+			set_comms_model (COMMS_MODEL_CLIENT);
+			
+			session_list_rescan_function (NULL, NULL); //Jabberwock
+			
+			ui_set_user_function (session_update_session_list);
+
+			break;
+
+/*
+
 			global_options.ip_address[127] = '\0';
 
 			debug_log ("JOININET: reinitializing dplay...");
@@ -508,9 +572,21 @@ void session_list_function (ui_object *obj, void *arg)
 			process_game_initialisation_phases ();
 
 			debug_log ("JOININET: Done!");
-
-         break;
+			
+         break;*/
       }
+      
+      case SESSION_LIST_TYPE_FILTER:
+	  {
+	  		sprintf (session_filter_value, "%s", current_session_list->warzone_name);
+	  		
+	  		ui_object_destroy_list_items (session_info_list);
+	  		
+	  		session_list_rescan_function (NULL, NULL); //Jabberwock
+
+	  		break;
+	  }
+
 
       default:
       {
@@ -635,7 +711,39 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 
 		set_mouse_graphic_on ();
 	}
+
+// Jabberwock 031118 MP bug - "No Games" bug
+/*	
+	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_MASTER)
+	{
+
+		update_mouse_pointer ();
+
+		set_mouse_graphic_off ();
+
+		compile_multi_session_list (&new_session_list);
+
+		set_mouse_graphic_on ();
+	}
 	
+// Jabberwock 031118 MP bug ends
+
+// Jabberwock 031210 Session filter 
+
+	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_FILTER)
+	{
+
+		update_mouse_pointer ();
+
+		set_mouse_graphic_off ();
+
+		compile_single_session_list (&new_session_list);
+
+		set_mouse_graphic_on ();
+	}*/
+
+// Jabberwock 031210 ends
+
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_RESTORE)
 	{
 
@@ -796,6 +904,20 @@ void build_session_list (void)
 
 				set_ui_frontend_list_object_highlightable (list_item);
 			}
+			// Jabberwock 031210 Session filter
+			else if (list->type == SESSION_LIST_TYPE_FILTER)
+			{
+				col.r = 220;
+				col.g = 220;
+				col.b = 220;
+				col.a = 255;
+					
+				list_item = add_to_pop_up_list (list->displayed_title, session_list, NULL, list->list_id, UI_FONT_ARIAL_16, col);
+
+				set_ui_frontend_list_object_highlightable (list_item);
+			}			
+			// Jabberwock 031210 ends
+
 
 			list = list->next;
 		}

@@ -2161,6 +2161,24 @@ static void display_target_information (void)
 
 		print_mono_font_string (s);
 	}
+// Jabberwock 031107 Designated targets
+	
+	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+	
+	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+	{
+		s = "MARKED";
+
+		width = get_mono_font_string_width (s);
+
+		set_2d_mono_font_position (-1.0, -0.8);
+
+		set_mono_font_rel_position (1.0, 0.0);
+
+		print_mono_font_string (s);
+	}
+// Jabberwock 031107 ends
+
 
 	//
 	// weapon lock

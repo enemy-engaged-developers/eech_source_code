@@ -996,7 +996,7 @@ void set_ah64a_avionics_events (void)
 	set_event (DIK_NUMPAD1, MODIFIER_NONE, KEY_STATE_DOWN, toggle_auto_target_event);
 
 	set_event (DIK_NUMPADENTER, MODIFIER_NONE, KEY_STATE_DOWN, toggle_lock_target_event);
-	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event);
+	//set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
 
 	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);

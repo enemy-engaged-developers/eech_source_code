@@ -659,32 +659,38 @@ void process_game_initialisation_phases (void)
 
 					if ( ( this_connection->is_initialised ) && ( !this_connection->one_way_hosting_setup ) )
 					{
+						// Jabberwock 031118 MP bug - too fatal - enumerate fails on correct games
+	
 						//schorpp "fatal" errhdl
-						if (!( 
-						direct_play_join_session () &&
-
-						direct_play_session_capabilities () &&
-
-						direct_play_enumerate_groups () ))
+						if (!( direct_play_join_session () && direct_play_session_capabilities ()))
 						{
-                        start_game_exit (GAME_EXIT_KICKOUT, FALSE);
-						break;
+                        	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to join session!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+                        	//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
 						}
-
+						if (!(direct_play_enumerate_groups ()))
+						{
+						   	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to enumerate groups!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+							break;
+						}
+						
 						this_connection->this_group = direct_play_get_group_table ();
 
 						if (!(
 						direct_play_create_player () &&
 
 						direct_play_join_group () ))
-						{
-                        start_game_exit (GAME_EXIT_KICKOUT, FALSE);
-						break;
+						{					
+                        	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to join group!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+                        	//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
 						}
 					}
 
 					Sleep (command_line_comms_initial_sleep_time);
 
+					add_to_pop_up_list_with_word_wrap (get_trans ("Sending info request..."), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+// Jabberwock enhancements end
 					send_packet (DPID_ALLPLAYERS, PACKET_TYPE_SESSION_QUERY, NULL, 0, SEND_TYPE_GROUP);
 
 					break;
@@ -749,6 +755,30 @@ void process_game_initialisation_phases (void)
 				name = get_player_log_name (get_current_player_log ());
 
 				ASSERT (name);
+				
+				// Jabberwock 031118 Server side settings
+				if (command_line_wut)
+			    {
+			    	parse_WUT_file(WUT_filename);
+			    }
+			    else
+			    {
+			    	parse_WUT_file("origwut.txt");
+			    }
+			    
+			    session_planner_goto_button = command_line_planner_goto_button;
+			    
+			    session_vector_flight_model = command_line_vector_flight_model;
+			    
+			    session_ground_radar_ignores_infantry = command_line_ground_radar_ignores_infantry;
+			    
+			    session_camcom = command_line_camcom;
+			    
+				server_log ("separator"); // Jabberwock 031119 Server log
+				
+				server_log ("Campaign started: %s", session->title); // Jabberwock 031119 Server log
+				
+				// Jabberwock 031118 ends
 
 				sprintf (text, "%s's %s", name, session->title);
 

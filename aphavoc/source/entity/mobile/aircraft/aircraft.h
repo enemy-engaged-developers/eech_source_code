@@ -82,6 +82,7 @@ struct AIRCRAFT
 		movement_dependent_root;
 
 	list_link
+		designated_target_link, // Jabberwock 031107 Designated targets
 		follower_link,
 		gunship_target_link,
 		member_link,

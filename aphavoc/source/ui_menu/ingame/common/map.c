@@ -1268,7 +1268,7 @@ void map_centralise_function (ui_object *obj, void *arg)
 	
 		en = get_map_mouse_over_entity (map_dimensions);
 		
-		if ((en) && (get_local_entity_type (en) == ENTITY_TYPE_TASK) && (command_line_camcom) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+		if ((en) && (get_local_entity_type (en) == ENTITY_TYPE_TASK) && (session_camcom) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
 		{
 			if (get_local_entity_int_value (en, INT_TYPE_SIDE) == side) 
 			{
@@ -1768,7 +1768,7 @@ void map_goto_function (ui_object *obj)
 	
 		if (get_gunship_entity ())
 		{
-			if ((map_dimensions->enable_goto) || (command_line_planner_goto_button))
+			if ((map_dimensions->enable_goto) || (session_planner_goto_button))
 			{
 				pos.x = get_mouse_x ();
 				pos.z = get_mouse_y ();

@@ -81,6 +81,8 @@ ui_object
    *session_screen_next_bdrop,
    *session_screen_back_button,
    *session_screen_next_button,
+   *session_screen_continue_button, // Jabberwock 031118 Server side settings
+   *session_screen_continue_bdrop,
    *session_screen_delete_button,
    *session_screen_rename_button,
    *session_info_list,
@@ -394,6 +396,48 @@ void initialise_session_screen (void)
 			);
 			
 	set_text_option_backdrop_object (session_screen_next_bdrop, session_screen_next_button);
+
+// Jabberwock 031118 Server side settings
+	/////////////////////////////////////////////////////////////////
+	// Ok Button no. 2
+
+	session_screen_continue_bdrop = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (session_screen),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 255),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_TIME_LENGTH (500),
+		UI_ATTR_END
+	);
+
+	session_screen_continue_button = create_ui_object
+			(
+				UI_TYPE_BUTTON,
+				UI_ATTR_PARENT (session_screen),
+				UI_ATTR_VIRTUAL_POSITION (OPTIONS_OK_BUTTON_POS_X, OPTIONS_OK_BUTTON_POS_Y),
+				UI_ATTR_VIRTUAL_SIZE (OPTIONS_OK_BUTTON_X, OPTIONS_OK_BUTTON_Y),
+				UI_ATTR_TEXT (get_trans("PROCEED")),
+				UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+				UI_ATTR_FUNCTION (notify_session_continue_button),
+				UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+				UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+            UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+            UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+            UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+            UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+				UI_ATTR_HIGHLIGHTABLE (TRUE),
+				UI_ATTR_CLEAR (TRUE),
+				UI_ATTR_END
+			);
+			
+	set_text_option_backdrop_object (session_screen_continue_bdrop, session_screen_continue_button);
+
 
 	/////////////////////////////////////////////////////////////////
 	// Cancel Button

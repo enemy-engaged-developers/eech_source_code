@@ -96,6 +96,8 @@
 
 #define LIST_TYPE_LINK_FUNCTIONS_REQUIRED
 
+#define LIST_TYPE_DESIGNATED_TARGET_LINK // Jabberwock - Designated targets
+
 #define LIST_TYPE_GUNSHIP_TARGET_LINK
 
 #define LIST_TYPE_SECTOR_LINK

@@ -162,8 +162,21 @@ extern int
 	command_line_tsd_palette,									// VJ 030511
 	command_line_green_mfd,										// loke 030517
 	command_line_maxplayers,									// Werewolf 030518
-	command_line_camcom;										// Jabberwock 031007 Campaign Commander
-
+	command_line_camcom,										// Jabberwock 031007 Campaign Commander
+	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
+	command_line_joylookh_joystick_axis,						// Jabberwock 031104 Joystick look
+	command_line_joylookv_joystick_axis,						// Jabberwock 031104 Joystick look
+	command_line_joylook_step,									// Jabberwock 031104 Joystick look
+	command_line_designated_targets,							// Jabberwock 031107 Designated targets
+	command_line_session_filter,								// Jabberwock 031210 Session filter
+// Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
+	session_planner_goto_button,
+	session_vector_flight_model,
+	session_ground_radar_ignores_infantry,
+	session_camcom;
+	
+	
+	
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,
@@ -192,7 +205,8 @@ extern char
 	command_line_debug_log_name[],
 	command_line_ip_address[],
 	command_line_primary_server_setting[],	 //VJ for werewolf and eech.ini 030403
-	command_line_secondary_server_setting[]; //VJ for werewolf and eech.ini 030403 
+	command_line_secondary_server_setting[], //VJ for werewolf and eech.ini 030403 
+	command_line_server_log_filename[]; // Jabberwock 031119 Server log
 	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -817,6 +817,25 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 		single_target_acquisition_system_select_previous_target_key--;
 	}
+
+// Jabberwock 031107 Designated targets
+	
+	while (single_target_acquisition_system_select_next_designated_key)
+	{
+		select_next_designated_eo_target ();
+
+		single_target_acquisition_system_select_next_designated_key--;
+	}
+
+	////////////////////////////////////////
+
+	while (single_target_acquisition_system_select_previous_designated_key)
+	{
+		select_previous_designated_eo_target ();
+
+		single_target_acquisition_system_select_previous_designated_key--;
+	}	
+// Jabberwock 031107 ends	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

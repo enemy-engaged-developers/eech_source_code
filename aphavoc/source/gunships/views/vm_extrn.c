@@ -830,7 +830,13 @@ void draw_external_3d_view (void)
 			{
 				display_external_view_text ();
 			}
-
+			// Jabberwock 031110 Satellite info
+			if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
+			{
+			//	draw_satellite_info (); not ready yet
+			}
+			// Jabberwock 031110 ends
+			
 			if (get_global_display_hud_on_external_view ())
 			{
 				if (!get_view_menu_display_visible_status ())

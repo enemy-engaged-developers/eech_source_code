@@ -1395,6 +1395,30 @@ static void display_radar_target_details (entity *target, float target_range, ra
 
 		print_mono_font_string ("LOCKED");
 	}
+// Jabberwock 031107 Designated targets
+
+	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+	{
+		if (draw_large_mfd)
+		{
+			y_adjust = -25.0;
+		}
+		else
+		{
+			y_adjust = -12.0;
+		}
+
+		width = get_mono_font_string_width ("MARKED");
+
+		set_2d_mono_font_position (1.0, -1.0);
+
+		set_mono_font_rel_position (-width -1.0, y_adjust);
+
+		print_mono_font_string ("MARKED");		
+	}
+// Jabberwock 031107 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1902,6 +1926,14 @@ static void draw_ground_radar_mfd (void)
 
 			break;
 		}
+		// Jabberwock 031107 Designated targets
+		case TARGET_PRIORITY_DESIGNATED:
+		{
+			print_mono_font_string ("MARK");
+
+			break;
+		}
+		// Jabberwock 031107 ends	
 	}
 
 	//
@@ -3289,6 +3321,32 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 		print_mono_font_string ("LOCKED");
 	}
+
+// Jabberwock 031107 Designated targets
+	
+	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+	
+	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+	{
+		if (draw_large_mfd)
+		{
+			y_adjust = -25.0;
+		}
+		else
+		{
+			y_adjust = -12.0;
+		}
+
+		width = get_mono_font_string_width ("MARKED");
+		
+		set_2d_mono_font_position (1.0, -1.0);
+
+		set_mono_font_rel_position (-width - 1.0, y_adjust);
+		
+		print_mono_font_string ("MARKED");		
+	}
+// Jabberwock 031107 ends
+
 
 	////////////////////////////////////////
 	//

@@ -191,6 +191,21 @@ switch (type)
 
 	////////////////////////////////////////
 
+	// Jabbewock 031107 Designated targets
+		
+	#ifdef LIST_TYPE_DESIGNATED_TARGET_ROOT
+
+	case LIST_TYPE_DESIGNATED_TARGET:
+	{
+		raw->designated_target_root.first_child = first_child;
+
+		break;
+	}
+
+	#endif
+	
+	// Jabbewock 031107 ends
+
 	#ifdef LIST_TYPE_DIVISION_ROOT
 
 	case LIST_TYPE_DIVISION:
@@ -292,7 +307,7 @@ switch (type)
 	}
 
 	#endif
-
+	
 	////////////////////////////////////////
 
 	#ifdef LIST_TYPE_INDEPENDENT_GROUP_ROOT

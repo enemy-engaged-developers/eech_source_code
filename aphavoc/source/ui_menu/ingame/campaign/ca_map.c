@@ -193,9 +193,16 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 				}
 				else // Jabberwock 031007 Campaign Commander function
 				{
-					if (command_line_camcom)
+					if (session_camcom)
 					{
-						create_reaction_to_map_click (en);
+						if (get_comms_model () == COMMS_MODEL_SERVER)
+						{
+							process_radio_message (en, MESSAGE_LOCAL_BASE_CAMCOM_MESSAGE, 0);
+						}
+						else
+						{
+							transmit_entity_comms_message (ENTITY_COMMS_RADIO_MESSAGE, en, MESSAGE_LOCAL_BASE_CAMCOM_MESSAGE, 0);
+						}
 					}
 				}
 				break;
@@ -211,9 +218,17 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 				}
 				else // Jabberwock 031007 Campaign Commander function
 				{
-					if (command_line_camcom)
+					if (session_camcom)
 					{
-						create_reaction_to_map_click (en);
+						if (get_comms_model () == COMMS_MODEL_SERVER)
+						{
+							process_radio_message (en, MESSAGE_LOCAL_BASE_CAMCOM_MESSAGE, 0);
+						}
+						else
+						{
+							transmit_entity_comms_message (ENTITY_COMMS_RADIO_MESSAGE, en, MESSAGE_LOCAL_BASE_CAMCOM_MESSAGE, 0);
+						}
+
 					}
 				}
 				break;

@@ -155,7 +155,9 @@ void initialise_comms_manager (void)
     if (command_line_comms_validate_connections)
     {
 
-        add_update_function (validate_connections, command_line_comms_timeout, 1.0);
+		//add_update_function (validate_connections, command_line_comms_timeout, 1.0);
+		
+		add_update_function (validate_connections, 3.0, 1.0); // Jabberwock - VC was called to rarely if cto was high
     }
 
     tx_pack_buffer = (char *) malloc_heap_mem (sizeof (char) * command_line_comms_pack_buffer_size);
@@ -898,6 +900,225 @@ void comms_process_data (void)
 
                         break;
                     }
+                    
+// Jabberwock 031118 Server side settings
+
+                    case PACKET_TYPE_SETTINGS_REQUEST:
+					{
+                        char
+                        	buf [256],
+                            *ptr;
+
+                        int
+                            size;
+                            
+                        FILE
+                     		*fp;
+
+                        connection_list_type
+                            *new_connection;
+						
+						if (get_comms_model () == COMMS_MODEL_SERVER)
+						{
+							send_comms_data ();
+
+                            new_connection = get_connection_list_item (received_id);
+							
+         		       	    ptr = new_connection->connection_receive_buffer;
+        
+							size = 0;
+							
+							// MOTD
+							
+							strcpy (buf, "\0");
+
+							if (file_exist ("motd.txt"))
+							{
+								if (file_size ("motd.txt") < 256)
+								{
+								
+									fp = fopen ("motd.txt", "r" );
+								
+									if ( fp )
+									{
+										fscanf (fp, "%[^\n]\n", buf);
+
+										fclose ( fp );
+									}
+								}
+								else
+								{
+									server_log ("motd.txt too long!");
+								}
+							}						
+							
+							strcpy (ptr, buf);
+								
+							ptr += strlen (buf) + 1;
+								
+							size += strlen (buf) + 1;
+							// end of MOTD
+							
+							// WUT checking
+							
+							if (command_line_wut)
+							{
+								strcpy (ptr, WUT_filename);
+
+								ptr += strlen (WUT_filename) + 1;
+
+								size += strlen (WUT_filename) + 1;
+							}
+							else
+							{
+								strcpy (ptr, "NONE");
+
+								ptr += strlen ("NONE") + 1;
+
+								size += strlen ("NONE") + 1;
+							}                                    
+							
+							quick_set_list_item (ptr, int, command_line_planner_goto_button);
+							
+							size += sizeof (int);							
+							
+							quick_set_list_item (ptr, int, command_line_vector_flight_model);
+														
+							size += sizeof (int);							
+							
+							quick_set_list_item (ptr, int, command_line_ground_radar_ignores_infantry);
+														
+							size += sizeof (int);							
+							
+							quick_set_list_item (ptr, int, command_line_camcom);
+														
+							size += sizeof (int);							
+							
+							send_packet (received_id, PACKET_TYPE_SETTINGS_DATA, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
+							
+						}
+						
+						break;
+					}
+					
+					case PACKET_TYPE_SETTINGS_DATA:
+                    {
+                        int
+                            size;
+
+                        char
+                            *ptr,
+                            motd [256],
+                            buffer [256],
+                            temp_wut_filename[128];	
+
+	                   	ptr = received_data;
+
+                        size = 0;
+
+						ui_object_destroy_list_items (session_info_list);
+
+						// MOTD
+						
+						
+						strncpy (motd, ptr, sizeof (motd));
+						
+						ptr += strlen (motd) + 1;
+						
+						size += strlen (motd) + 1;
+						
+						if (strlen (motd) > 0)
+						{
+							sprintf (buffer, "%s", motd);
+
+							add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+							
+							add_to_pop_up_list_with_word_wrap (" ", session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						}
+	                    
+		                        
+                        // WUT
+              
+                        strncpy (temp_wut_filename, ptr, sizeof (temp_wut_filename));
+
+                        ptr += strlen (temp_wut_filename) + 1;
+
+                        size += strlen (temp_wut_filename) + 1;
+                           strcpy(session_WUT_filename, temp_wut_filename);
+						
+                        if (stricmp (session_WUT_filename, "NONE") != 0)
+                        {
+                       		if (!file_exist(session_WUT_filename))
+                       		{
+                       			sprintf (buffer, "%s: %s", get_trans ("Missing local WUT file"), temp_wut_filename);
+                       			
+                       			add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+                       			
+		               			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
+						
+								set_ui_object_drawable (session_screen_continue_button, FALSE);
+                        			
+	                       		break;
+	                       	}
+	                       	else
+							{
+	                       		parse_WUT_file(session_WUT_filename);
+	                       	}
+                        }
+                        else
+                        {
+                        	parse_WUT_file("origwut.txt");
+                        }
+                        
+                        sprintf (buffer, "%s: %s", get_trans ("Server WUT version"), session_WUT_filename);
+						
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+                        
+                        
+                        session_planner_goto_button = get_list_item (ptr, int);
+
+                        size += sizeof (int);
+                        
+                        sprintf (buffer, "%s: %d", get_trans ("Map GOTO button"), session_planner_goto_button);
+
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						
+						session_vector_flight_model = get_list_item (ptr, int);
+
+                        size += sizeof (int);
+                        
+                        sprintf (buffer, "%s: %d", get_trans ("Vector flight model"), session_vector_flight_model);
+
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
+						
+						session_ground_radar_ignores_infantry = get_list_item (ptr, int);
+
+                        size += sizeof (int);
+                        
+                        sprintf (buffer, "%s: %d", get_trans ("Radar ignores infantry"), session_ground_radar_ignores_infantry);
+
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
+
+						session_camcom = get_list_item (ptr, int);
+
+                        size += sizeof (int);
+                        
+                        sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
+
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
+						
+               			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
+						
+						set_ui_object_drawable (session_screen_continue_button, FALSE);
+               			
+               			set_ui_object_drawable (session_screen_next_bdrop, TRUE);
+
+						set_ui_object_drawable (session_screen_next_button, TRUE);
+						
+						break;
+
+                    }
+// Jabberwock 031118 ends 
 
                     case PACKET_TYPE_CONNECTION_VALIDATION:
                     {
@@ -918,6 +1139,8 @@ void comms_process_data (void)
                         connection = get_connection_list_item (received_id);
 
                         connection->validation_count = 0;
+                        
+                        connection->connection_validation_time = get_system_time (); // Jabberwock - Validation reset
 
                         debug_log ("COMM_MAN: received CONNECTION_RESPONSE, connection still alive");
 
@@ -977,7 +1200,10 @@ void comms_process_data (void)
                         {
 							//schorpp
                             debug_log ("COMM_MAN: Incorrect version. Server Version No. %d, Client Version No. %d", server_version_number, client_version_number);
-							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							// Jabberwock 031118 Tell version is wrong
+							ui_object_destroy_list_items (session_info_list);
+							add_to_pop_up_list_with_word_wrap (get_trans ("Incompatible game version"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+							//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
                         }
                         //
@@ -1157,7 +1383,13 @@ void comms_process_data (void)
 
                         #endif
 
-                        set_ui_object_drawable (session_screen_next_button, TRUE);
+                        // Jabberwock 031118 Server side settings
+                        
+                        set_ui_object_drawable (session_screen_continue_bdrop, TRUE);
+                        
+                        set_ui_object_drawable (session_screen_continue_button, TRUE);
+                        
+                        // Jabberwock 031118 ends
 
                         //
                         // Display game info
@@ -1176,7 +1408,7 @@ void comms_process_data (void)
 
                                 add_to_pop_up_list_with_word_wrap (get_trans ("REQUIRES_APACHE_HAVOC"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
-                                set_ui_object_drawable (session_screen_next_button, FALSE);
+                                set_ui_object_drawable (session_screen_continue_button, FALSE);
 
                                 break;
                             }
@@ -1424,6 +1656,17 @@ void comms_process_data (void)
                             }
 
                             #endif
+                            
+                            
+                            if (this_connection->pilot_entity)
+                            {
+                            	server_log ("%s is trying to join...", get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
+                           	}
+                           	else
+                           	{
+                           		server_log ("Received join request...", received_id);
+                           	}
+                           // Jabberwock 031118 ends
 
                             //
                             // flush group send buffer

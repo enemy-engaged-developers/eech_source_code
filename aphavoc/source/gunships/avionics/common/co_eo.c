@@ -1437,3 +1437,121 @@ float make_panning_offset_from_axis (long state)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Jabberwock 031107 Designated targets
+
+
+void select_next_designated_eo_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	if (!eo_low_light)
+	{
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+		if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+		{
+			target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target)
+			{
+				if (get_selectable_eo_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+		else
+		{
+			target = get_local_entity_child_succ_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target != current_target)
+			{
+				if (get_selectable_eo_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+	}
+
+	set_gunship_target (new_target);
+
+	eo_target_locked = new_target != NULL;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_previous_designated_eo_target (void)
+{
+	entity
+		*target,
+		*new_target,
+		*current_target;
+
+	new_target = NULL;
+
+	if (!eo_low_light)
+	{
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+		if ((!current_target) || (get_local_entity_parent (current_target, LIST_TYPE_DESIGNATED_TARGET) == NULL))
+		{
+			//
+			// no current target or current target has been removed from the gunship target list
+			//
+
+			target = get_local_entity_first_child (get_gunship_entity (), LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target)
+			{
+				if (get_selectable_eo_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+		else
+		{
+			target = get_local_entity_child_pred_circular (current_target, LIST_TYPE_DESIGNATED_TARGET);
+
+			while (target != current_target)
+			{
+				if (get_selectable_eo_target (target))
+				{
+					new_target = target;
+
+					break;
+				}
+
+				target = get_local_entity_child_pred_circular (target, LIST_TYPE_DESIGNATED_TARGET);
+			}
+		}
+	}
+
+	set_gunship_target (new_target);
+
+	eo_target_locked = new_target != NULL;
+}
+
+
+// Jabberwock 031107 ends

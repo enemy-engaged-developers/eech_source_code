@@ -1011,7 +1011,7 @@ void update_flight_dynamics (void)
 
 		update_pedal_pressure_inputs ();
 
-		if (command_line_vector_flight_model)
+		if (session_vector_flight_model) // Jabberwock - session settings
 		{
 
 			update_vector_flight_model ();

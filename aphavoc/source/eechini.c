@@ -327,6 +327,9 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "eufr")==0) 	command_line_entity_update_frame_rate = d1;
 		if (strcmp(p, "css")==0) 	command_line_comms_show_stats = d1;
 		if (strcmp(p, "cist")==0) 	command_line_comms_initial_sleep_time = d1;
+		if (strcmp(p, "servlog")==0) // Jabberwock 031119 Server log
+		  if (strlen(q)!=0)
+			  strcpy(command_line_server_log_filename, q); 
 		if (strcmp(p, "dedicated")==0) 	command_line_comms_dedicated_server = d1;
 		if (strcmp(p, "game_type")==0) 	command_line_game_initialisation_phase_game_type = d1;
 		if (strcmp(p, "gunship_type")==0) command_line_game_initialisation_phase_gunship_type = d1;
@@ -436,6 +439,10 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1 - 1;
 		if (strcmp(p, "eozoomn") == 0)		command_line_eo_zoom_joystick_index = d1;
 		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1 - 1;
+		if (strcmp(p, "joylookn") == 0)		command_line_joylook_joystick_index = d1; // Jabberwock 031104
+		if (strcmp(p, "joylookh") == 0)		command_line_joylookh_joystick_axis = d1 - 1; // Jabberwock 031104
+		if (strcmp(p, "joylookv") == 0)		command_line_joylookv_joystick_axis = d1 - 1; // Jabberwock 031104
+		if (strcmp(p, "joylookst") == 0)	command_line_joylook_step = d1; // Jabberwock 031104
 		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 
@@ -452,6 +459,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
+		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
+		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
@@ -625,6 +634,7 @@ void dump_ini_file(void)
 	fprintf(f,"eufr=%d              # client server entity update framerate, no. of iterations\n",command_line_entity_update_frame_rate);
 	fprintf(f,"css=%d               # show communication stats (def = 0)\n",command_line_comms_show_stats);
 	fprintf(f,"cist=%d              # comms initial sleep time\n",command_line_comms_initial_sleep_time);
+	fprintf(f,"servlog=%s           # filename for server log\n",command_line_server_log_filename);
 	fprintf(f,"dedicated=%d         # active server mode, off by default.\n",command_line_comms_dedicated_server);
 	fprintf(f,"game_type=%d         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish (def = 0)\n",command_line_game_initialisation_phase_game_type);
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
@@ -674,7 +684,7 @@ void dump_ini_file(void)
 	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present\n",command_line_mouse_look);
-	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=6,def=13,max=20)\n",command_line_mouse_look_speed);
+	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov=%d            # general field of view maximum, linked to key '9'\n",command_line_max_fov);
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
@@ -689,6 +699,10 @@ void dump_ini_file(void)
 	fprintf(f,"collectiveax=%d      # Joystick DirectX acis for the collective\n",command_line_collective_joystick_axis+1);  //VJ 030531 added +1
 	fprintf(f,"ruddern=%d           # Joystick no. for the rudder\n",command_line_rudder_joystick_index);
 	fprintf(f,"rudderax=%d          # Joystick DirectX axis for the rudder\n",command_line_rudder_joystick_axis+1);   //VJ 030531 added +1
+	fprintf(f,"joylookn=%d          # joystick no. used for joystick look\n",command_line_joylook_joystick_index); //Jabberwock 031104
+	fprintf(f,"joylookh=%d          # joystick DirectX axis used for horizontal joystick look\n",command_line_joylookh_joystick_axis+1);   //Jabberwock 031104
+	fprintf(f,"joylookv=%d          # joystick DirectX axis used for vertical joystick look\n",command_line_joylookv_joystick_axis+1); //Jabberwock 031104
+	fprintf(f,"joylookst=%d         # joystick look step (min=1,def=30,max=100)\n",command_line_joylook_step); //Jabberwock 031104
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
@@ -701,6 +715,8 @@ void dump_ini_file(void)
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);
 	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
+	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
+	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"[end of file]\n");
 	
 	fclose(f);
