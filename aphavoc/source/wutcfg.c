@@ -313,7 +313,7 @@ void parse_WUT_file(char *fname)
     			#ifdef WUT_DEBUG
                 q = buf1+41;
                 vname = strtok(q,"-");
-	    		debug_log("WUT: VEHICLE: Entity - %s [%s]; VAR %s - %f [%f]\n", vehicle_database[i].full_name, ent, vname,v2,v1);
+	    		debug_log("WUT: VEHICLE: Entity - %s [%s]; VAR %s - %f [%d]\n", vehicle_database[i].full_name, ent, vname,v2,d2);
 				
 		    	#endif
                 
@@ -404,7 +404,7 @@ void parse_WUT_file(char *fname)
 				#ifdef WUT_DEBUG
             		q = buf1+41;
             		vname = strtok(q,"-");
-					debug_log("WUT: WEAPON: Entity - %s [%s]; VAR %s - %f [%f]\n", weapon_database[i].full_name, ent, vname,v2,v1);				   
+					debug_log("WUT: WEAPON: Entity - %s [%s]; VAR %s - %f [%d]\n", weapon_database[i].full_name, ent, vname,v2,d2);
 				#endif
             }   //variable names
         }//for WEAPONS entities
@@ -492,7 +492,7 @@ void parse_WUT_file(char *fname)
                 
                 q = buf1+41;
                 vname = strtok(q,"-");
-                debug_log("WUT: KEYSITE: Entity - %s [%s]; VAR [%s] - %f [%f]\n", keysite_database[i].full_name, ent, vname,v2,v1);
+                debug_log("WUT: KEYSITE: Entity - %s [%s]; VAR [%s] - %f [%d]\n", keysite_database[i].full_name, ent, vname,v2,d2);
 				
 				#endif
             }//variable names
@@ -585,7 +585,7 @@ void parse_WUT_file(char *fname)
                   
                 q = buf1+41;
                 vname = strtok(q,"-");
-                debug_log("WUT: GROUPS: Entity - %s [%s]; VAR [%s] - %f [%f]\n", group_database[i].full_name, ent,vname,v2,v1);
+                debug_log("WUT: GROUPS: Entity - %s [%s]; VAR [%s] - %f [%d]\n", group_database[i].full_name, ent,vname,v2,d2);
 
 			    #endif
             }//variable names
@@ -742,7 +742,7 @@ void parse_WUT_file(char *fname)
                 
                 q = buf1+41;
                 vname = strtok(q,"-");
-                debug_log("WUT: TASK: Entity - %s [%s]; VAR [%s] - %f [%f]\n", task_database[i].full_name, ent, vname,v2,v1);
+                debug_log("WUT: TASK: Entity - %s [%s]; VAR [%s] - %f [%d]\n", task_database[i].full_name, ent, vname,v2,d2);
 				
 				#endif
             }//variable names
