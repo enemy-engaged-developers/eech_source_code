@@ -1572,13 +1572,12 @@ static void toggle_display_in_flight_intelligence_messages_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	lfriembichler 030317
+//	Retro 030317, 030318
 //		Events to set Low/Med/Hi Field of View, and to recenter mouseview
-//		Ideally these values should be set through a config-file...
 static void lo_fov_event(event *ev)
 {
-	full_screen_width_view_angle	= rad (20);
-	full_screen_height_view_angle	= rad (20/1.2812);
+	full_screen_width_view_angle	= rad (command_line_min_fov);
+	full_screen_height_view_angle	= rad (command_line_min_fov/1.2812);
 }
 static void std_fov_event(event *ev)
 {
@@ -1587,14 +1586,14 @@ static void std_fov_event(event *ev)
 }
 static void hi_fov_event(event *ev)
 {
-	full_screen_width_view_angle	= rad (80);
-	full_screen_height_view_angle	= rad (80/1.2812);
+	full_screen_width_view_angle	= rad (command_line_max_fov);
+	full_screen_height_view_angle	= rad (command_line_max_fov/1.2812);
 }
 static void reset_mouse_event(event* ev)
 {
 	reset_absolute_mouse ();
 }
-//(end lfriembichler)
+//(end Retro)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1694,14 +1693,14 @@ void set_view_mode_events (void)
 
 	set_event (DIK_I, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_display_in_flight_intelligence_messages_event);
 
-	// lfriembichler 030317 start
+	// Retro 030317 start
 	// see above
 	set_event (DIK_7, MODIFIER_NONE, KEY_STATE_DOWN, lo_fov_event);
 	set_event (DIK_8, MODIFIER_NONE, KEY_STATE_DOWN, std_fov_event);
 	set_event (DIK_9, MODIFIER_NONE, KEY_STATE_DOWN, hi_fov_event);
 
 	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, reset_mouse_event);
-	// lfriembichler 030317 end
+	// Retro 030317 end
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
