@@ -586,6 +586,8 @@ void exit_game_function (event *ev)
 
 		case GAME_EXIT_APACHE_HAVOC:
 		{
+			int i = 0;	// Retro 11Jul2004
+
 extern int query_TIR_active ( void );	// Retro 030318
 extern void ExitTrackIR ( void );		// Retro 030318
 
@@ -608,6 +610,14 @@ extern void ExitTrackIR ( void );		// Retro 030318
 			if (query_TIR_active() == TRUE)
 				ExitTrackIR();
 		// end Retro
+
+			// Retro 11Jul2004 - clean up the axis name strings
+			for (i = 1; i < AxisCount; i++)	// '0' is keyboard and was not created on the heap
+			{
+				free(AxisInfo[i].AxisName);
+				AxisInfo[i].AxisName = 0;
+			}
+			// Retro 11Jul2004 end
 
 			break;
 		}
