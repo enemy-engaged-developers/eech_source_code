@@ -383,11 +383,11 @@ void dump_ini_file(void)
 	fprintf(f,"chaff=%3.1f        # Effectivness of chaff where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_chaff_effectiveness);
 	fprintf(f,"flare=%3.1f        # Effectivness of flares where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_flare_effectiveness);
 	fprintf(f,"smoke=%3.1f        # Effectivness of smoke where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_smoke_effectiveness);
-	fprintf(f,"fog=%d               # Sets the time (sec) taken for the \"fog of war\" to reshroud enemy sector info (def 4 hours).\n",command_line_fog_of_war_maximum_value);
+	fprintf(f,"fog=%.0f            # Sets the time (sec) taken for the \"fog of war\" to reshroud enemy sector info (def 4 hours).\n",command_line_fog_of_war_maximum_value);
 	fprintf(f,"cpac=%d              # capture aircraft: aircraft landed at captured bases or FARPS become usable by your side.\n",command_line_capture_aircraft);
 	fprintf(f,"uit=%3.1f            # user invulnerable time (default 5 sec), when starting mission\n",command_line_user_invulnerable_time);
 	fprintf(f,"[Graphics]\n");
-	fprintf(f,"cbar=%.0f              # distance in meters that city blocks resolve\n",command_line_city_block_approximation_range);
+	fprintf(f,"cbar=%.0f            # distance in meters that city blocks resolve\n",command_line_city_block_approximation_range);
 	fprintf(f,"fs=%d                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen)\n",command_line_full_screen);
 	fprintf(f,"mfr=%d               # Max visual frame rate, (defaults = 30)\n",command_line_max_frame_rate);
 	if (command_line_display_bpp == 16)
@@ -398,7 +398,7 @@ void dump_ini_file(void)
 	fprintf(f,"notnl=%d             # Turns off GeForce \"TnL\" support for troubleshooting\n",command_line_no_hardware_tnl);
 	fprintf(f,"3dreset=0            # Reset screen resolution to 640x480 (def = 0)\n");
 	fprintf(f,"dxtm=%d              # directx texture management, should fix \"unable to allocate hardware slot\" error (def = 0)\n",command_line_d3d_use_texture_management);
-	fprintf(f,"cg=%d                # clean graphics, re-installs graphics files\n",command_line_clean_graphics);
+	fprintf(f,"cg=0                # clean graphics, re-installs graphics files (def = 0)\n");
 	fprintf(f,"[Communications]\n");
 	fprintf(f,"ipa=%s               # ip address = TCPIP address to connect to. A HOST can leave out the value.\n",command_line_ip_address);
 	fprintf(f,"pss=%s               # primary server setting (server internet address)\n",command_line_primary_server_setting);  //Werewolf: Defaults changed 080403
@@ -470,7 +470,7 @@ void dump_ini_file(void)
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
 	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
-	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash =);
+	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 0 (off)\n",command_line_high_res_mfd);
 	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
