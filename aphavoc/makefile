@@ -429,7 +429,7 @@ $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).l
 !else
 
 $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk
-                wlink @$(projectname).lnk
+                wlink library winmm library ws2_32 @$(projectname).lnk
 
 !endif
 
