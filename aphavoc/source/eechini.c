@@ -73,6 +73,35 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ 030807 adjustable cannon rounds
+int 	rounds_comanche, 
+		rounds_apache, 
+		rounds_hokum_HE, 
+		rounds_hokum_AP, 
+		rounds_havoc_HE, 
+		rounds_havoc_AP, 
+		rounds_blackhawk, 
+		rounds_hind_HE,
+		rounds_hind_AP;
+
+
+static void initialize_rounds(void)
+{
+	rounds_comanche = 500;	// wp 5
+	rounds_apache = 1200;	//wp 3
+	rounds_hokum_HE = 230;	//wp 5
+	rounds_hokum_AP = 240;	// wp 6
+	rounds_havoc_HE = 130;   // wp 3
+	rounds_havoc_AP = 130;   // wp 4
+	rounds_blackhawk = 1200; //wp 3
+	rounds_hind_HE = 130;   // wp 3
+	rounds_hind_AP = 130;   // wp 4
+}	
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 030511 moved to eechini from vm_event.c, needed for intialisation of wide view cockpit
 static void wide_cockpit_initialize(void)
@@ -153,6 +182,24 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030807 adjustable cannon rounds
+void adjust_rounds(int start, int stop, int type, int value, int *rounds)
+{
+	int config_type, package;
+	for(config_type = start; config_type <= stop; config_type++)
+		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+		{
+			if (weapon_config_database[config_type][package].sub_type == type)
+			{
+				weapon_config_database[config_type][package].number = value;
+			}
+		}	   
+	*rounds = value;	
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void process_ini_file(int argc, char *argv[])
 {
 	 FILE *f;
@@ -168,6 +215,9 @@ void process_ini_file(int argc, char *argv[])
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
 	 initialize_radar_ranges();	
+
+//VJ 030807 initialize nr rounds cannons
+	 initialize_rounds();
 		
 	 buf = malloc (255);
 	 if (buf == NULL)
@@ -487,7 +537,26 @@ void process_ini_file(int argc, char *argv[])
  	     p = strtok(NULL,",");
         radar_range_hind[3] = atof(p);
 		}
-
+		
+//VJ 030807 adjustable cannon rounds	
+		if (strcmp(p, "rounds_comanche") == 0)   
+		  adjust_rounds(WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1, WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384, ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND, d1, &rounds_comanche);
+		if (strcmp(p, "rounds_apache") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1, WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50, ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND, d1, &rounds_apache);
+		if (strcmp(p, "rounds_blackhawk") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1, WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9, ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND, d1, &rounds_blackhawk);
+		if (strcmp(p, "rounds_hokum_HE") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1, WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, d1, &rounds_hokum_HE);
+		if (strcmp(p, "rounds_hokum_AP") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1,WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hokum_AP);
+		if (strcmp(p, "rounds_havoc_HE") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1,WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_havoc_HE);
+		if (strcmp(p, "rounds_havoc_AP") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1,WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_havoc_AP);
+		if (strcmp(p, "rounds_hind_HE") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,d1, &rounds_hind_HE);
+		if (strcmp(p, "rounds_hind_AP") == 0)
+		  adjust_rounds(WEAPON_CONFIG_TYPE_MI24D_HIND_1,WEAPON_CONFIG_TYPE_MI24D_HIND_18,ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND,d1, &rounds_hind_AP);
 	}
 
 	fclose(f);
@@ -575,13 +644,23 @@ void dump_ini_file(void)
 	fprintf(f, "hokum co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
 	fprintf(f, "apache pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
 	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
-	fprintf(f, "[radar]\n");  //VJ 030807 adjustable radar ranges
+	fprintf(f, "[Radar]\n");  //VJ 030807 adjustable radar ranges
    fprintf(f, "radar_comanche=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges comanche (5 ranges in m, ordered small to large)\n",radar_range_comanche[0],radar_range_comanche[1],radar_range_comanche[2],radar_range_comanche[3],radar_range_comanche[4]);
    fprintf(f, "radar_apache=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges apache (5 ranges in m, ordered small to large)\n",radar_range_apache[0],radar_range_apache[1],radar_range_apache[2],radar_range_apache[3],radar_range_apache[4]);
    fprintf(f, "radar_hokum=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges hokum (5 ranges in m, ordered small to large)\n",radar_range_hokum[0],radar_range_hokum[1],radar_range_hokum[2],radar_range_hokum[3],radar_range_hokum[4]);
    fprintf(f, "radar_havoc=%.0f,%.0f,%.0f,%.0f   #radar ranges havoc (4 ranges in m, ordered small to large)\n",radar_range_havoc[0],radar_range_havoc[1],radar_range_havoc[2],radar_range_havoc[3]);
    fprintf(f, "radar_blackhawk=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges blackhawk (5 ranges in m, ordered small to large)\n",radar_range_blackhawk[0],radar_range_blackhawk[1],radar_range_blackhawk[2],radar_range_blackhawk[3],radar_range_blackhawk[4]);
    fprintf(f, "radar_hind=%.0f,%.0f,%.0f,%.0f   #radar ranges hind (4 ranges in m, ordered small to large)\n",radar_range_hind[0],radar_range_hind[1],radar_range_hind[2],radar_range_hind[3]);
+	fprintf(f, "[Cannon]\n");  //VJ 030807 adjustable cannon rounds 
+	fprintf(f, "rounds_comanche=%d   #rounds cannon COMANCHE M197_20MM rounds (0 - 65000)\n",rounds_comanche);
+	fprintf(f, "rounds_apache=%d     #rounds cannon APACHE M230_30MM rounds (0 - 65000)\n",rounds_apache);
+	fprintf(f, "rounds_hokum_AP=%d   #rounds cannon HOKUM 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hokum_AP);
+	fprintf(f, "rounds_hokum_HE=%d   #rounds cannon HOKUM 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hokum_HE);
+	fprintf(f, "rounds_havoc_AP=%d   #rounds cannon HAVOC 2A42_30MM_AP rounds (0 - 65000)\n",rounds_havoc_AP);
+	fprintf(f, "rounds_havoc_HE=%d   #rounds cannon HAVOC 2A42_30MM_HE rounds (0 - 65000)\n",rounds_havoc_HE);
+	fprintf(f, "rounds_blackhawk=%d  #rounds cannon BLACKHAWK M230_30MM rounds (0 - 65000)\n",rounds_blackhawk);
+	fprintf(f, "rounds_hind_AP=%d    #rounds cannon HIND 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hind_AP);
+	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0)\n",command_line_mouse_look_speed);
