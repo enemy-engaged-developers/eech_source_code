@@ -2969,8 +2969,17 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	}
 #else
 	{
-		int level = eo->zoom * 100;
-		sprintf( buffer, "%d%%", level );
+		float level = 1.0 / convert_linear_view_value (eo);
+
+		if (level < 10)
+		{
+			sprintf (buffer, "%.1f", level);
+		}
+		else
+		{
+			sprintf (buffer, "%d", (int)level);
+		}
+
 		s = buffer;
 	}
 #endif
@@ -3073,6 +3082,31 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		set_mono_font_rel_position (1.0, y_adjust);
 
 		print_mono_font_string ("LOCKED");
+	}
+
+	//
+	// 030418 loke
+	// draw an indication if ground stablisation is enabled
+	//
+
+	if (eo_ground_stabilised)
+	{
+		if (draw_large_mfd)
+		{
+			y_adjust = -25.0;
+		}
+		else
+		{
+			y_adjust = -12.0;
+		}
+
+		width = get_mono_font_string_width ("S");
+
+		set_2d_mono_font_position (1.0, -1.0);
+
+		set_mono_font_rel_position (-width, y_adjust);
+
+		print_mono_font_string ("S");
 	}
 
 	////////////////////////////////////////
