@@ -774,6 +774,7 @@ void draw_view (void)
 
 	if (begin_3d_scene ())
 	{
+
 		set_full_screen_viewport ();
 
 		display_in_flight_messages ();
@@ -786,7 +787,7 @@ void draw_view (void)
 
 //VJ framerate 24-mar-03
     	if (command_line_framerate)
-		   ShowFrameRate();
+		   ShowFramerate();
 
 		end_3d_scene ();
 	}
