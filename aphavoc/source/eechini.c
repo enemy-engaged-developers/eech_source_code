@@ -236,7 +236,7 @@ void dump_ini_file(void)
 	fprintf(f,"cpac=0              # capture aircraft: aircraft landed at captured bases or FARPS become usable by your side.\n");
 	fprintf(f,"uit=5.0             # user invulnerable time (default 5 sec), when starting mission (?)\n");
 	fprintf(f,"[Graphics]\n");
-	fprintf(f,"cbar=500            # city_block_approximation_range            n = distance in meters that city blocks resolve\n");
+	fprintf(f,"cbar=500            # distance in meters that city blocks resolve\n");
 	fprintf(f,"fs=1                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen)\n");
 	fprintf(f,"mfr=30              # Max visual frame rate, (defaults = 30)\n");
 	fprintf(f,"32bit=0             # Activates 32bit rendering if your video card supports it\n");
@@ -253,11 +253,11 @@ void dump_ini_file(void)
 	fprintf(f,"cdrs=204800         # data record size, similar to above…\n");
 	fprintf(f,"cpbs=204800         # pack buffer size, similar to above…\n");
 	fprintf(f,"cpds=512            # packet data size (edf = 512)\n");
-	fprintf(f,"cgs=0               # guaranteed send, force the comms to use DirectPlay guaranteed send instead of its own (def=0).\n");
+	fprintf(f,"cgs=0               # force the comms to use DirectPlay guaranteed send instead of its own (def=0).\n");
 	fprintf(f,"crls=1000           # packet history list size, increase if client keeps getting kicked out by server (default = 1000)\n");        
-	fprintf(f,"crl=10              # number of times a client can re-request the same packet. Increase for poor connections (def=10)\n");      
+	fprintf(f,"crl=10              # number of times a client can re-request the same packet, increase for poor connections (def=10)\n");      
 	fprintf(f,"cpt=5               # time delay in seconds the comms will wait for a packet before re-requesting it. (default = 5s)\n");     
-	fprintf(f,"crto=2              # resend timeout n=time comms will wait before assuming re-requested packets was lost (default = 2s)\n");            
+	fprintf(f,"crto=2              # time comms will wait before assuming re-requested packets was lost (default = 2s)\n");            
 	fprintf(f,"mur=15              # max update framerate for a server, na for a client (default = 5fps for TCPIP, 15fps for IPX)\n");    
 	fprintf(f,"cig=1               # interpolate helicopter position for smoother visuals\n");
 	fprintf(f,"cvc=1               # validate connection, removes dead player husks when client crashes\n");
@@ -289,7 +289,7 @@ void dump_ini_file(void)
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=0               # activates mouselook\n");
 	fprintf(f,"msls=15             # mouselook speed when activated\n");
-	fprintf(f,"minfov=20           # general field of view minimum, linked to key '7', normal fov = key '8'\n");
+	fprintf(f,"minfov=20           # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n");
 	fprintf(f,"maxfov=80           # general field of view maximum, linked to key '9'\n");
 	fprintf(f,"eopann=-1           # joystick no. used for FLIR panning\n");
 	fprintf(f,"eopanv=6            # joystick DirectX axis used for vertical FLIR panning\n");
