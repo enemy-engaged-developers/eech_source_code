@@ -4460,29 +4460,26 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
 		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
-		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
-		set_rgb_colour (MFD_COLOUR7,   96, 96, 96, 255);
 
 		if (tsd_render_palette == 0)
 		{
-			set_rgb_colour (MFD_COLOUR8,    48, 48, 48, 255);
 			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
-		}
+		}	
 		else
-		if (tsd_render_palette == 1)
-		{
-		//VJ 030511 treat enemy colours as cheat and make optional in eech.ini
-			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
-			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
-		}
-		else
-		{
-		//VJ 030511 treat enemy colours as cheat and make optional in eech.ini
-			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
-			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
-		}
+			if (tsd_render_palette == 1)
+			{
+				set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
+			}	
+			else
+			{
+				set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
+			}	
 
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
+		//VJ 030530 colour tweaks: black and dark gray are best
+		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
+		set_rgb_colour (MFD_COLOUR8,    0,0,0, 255);
 
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
 	}
@@ -4751,10 +4748,14 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 
 //VJ 030423 TSD render mod, enemy of comanche so red
 //VJ 030511 TSD render mod, enemy optional in eech.ini
-							if (command_line_tsd_enemy_colours)
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-							else				
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
+//VJ 030530 TSD render mod, corrected colour vor original view MFD_COLOUR2
+							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE) 
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+							else	
+								if (command_line_tsd_enemy_colours)
+									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
+								else				
+									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
 						}
 					}
 				}
