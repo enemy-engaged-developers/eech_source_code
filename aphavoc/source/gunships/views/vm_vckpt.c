@@ -3448,8 +3448,8 @@ entity *get_inset (void)
 		{
 			case PADLOCK_MODE_NONE:
 			{
-				target = get_gunship_entity();
-
+				target = get_local_entity_parent (source, LIST_TYPE_TARGET); 
+				// Jabberwock 031027 not working :( target = get_gunship_entity();
 				break;
 			}
 			case PADLOCK_MODE_WINGMAN:
@@ -3486,8 +3486,6 @@ entity *get_inset (void)
 			}
 			case PADLOCK_MODE_WAYPOINT:
 			{
-				target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-				
 				if (!target)
 				{
 					if (source == get_gunship_entity())
@@ -3531,8 +3529,6 @@ entity *get_players_padlock (void)
 			{
 				debug_fatal ("Invalid padlock mode = PADLOCK_MODE_NONE");
 				
-				target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET); // Jabberwock 031016
-
 				break;
 			}
 			////////////////////////////////////////
