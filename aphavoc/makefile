@@ -40,9 +40,9 @@ application_name = Enemy Engaged RAH66 Comanche Vs KA52 Hokum
 
 major_revision = 1
 
-data_revision = 4
+data_revision = 6
 
-minor_revision = 7
+minor_revision = 0
 
 #
 # Build types:
