@@ -70,6 +70,8 @@
 
 #include "cmndline.h"	// Retro 030317, need this for mouse_look and mouse_look_speed
 
+#include "flight.h"	// Retro 25Jul2004 for mouse in-game mode thingie
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -707,18 +709,21 @@ void move_mouse ( int dx, int dy )
 	// This works regardless of mouse_on or mouse_off... we might change that though..
 	// EVENTS assigned to mouse buttons work ONLY when mouse is ON !
 
-	abs_mouse_x += (command_line_mouse_look_speed * dx);  // minimum value of dx/dy is 8, with a '10' scaling is 80.. makes 1/400 of max movement
-	abs_mouse_y += (command_line_mouse_look_speed * dy);
+	if (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_SIMULATOR)	// Retro 25Jul2004 - only do this while in the 3d
+	{
+		abs_mouse_x += (command_line_mouse_look_speed * dx);  // minimum value of dx/dy is 8, with a '10' scaling is 80.. makes 1/400 of max movement
+		abs_mouse_y += (command_line_mouse_look_speed * dy);
 
-	if (abs_mouse_x >= 16383)
-		abs_mouse_x = 16383;
-	else if (abs_mouse_x <= -16383)
-		abs_mouse_x = -16383;
+		if (abs_mouse_x >= 16383)
+			abs_mouse_x = 16383;
+		else if (abs_mouse_x <= -16383)
+			abs_mouse_x = -16383;
 
-	if (abs_mouse_y >= 16383)
-		abs_mouse_y = 16383;
-	else if (abs_mouse_y <= -16383)
-		abs_mouse_y = -16383;
+		if (abs_mouse_y >= 16383)
+			abs_mouse_y = 16383;
+		else if (abs_mouse_y <= -16383)
+			abs_mouse_y = -16383;
+	}
 	// Retro 030317 ends
 }
 
