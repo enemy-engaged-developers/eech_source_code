@@ -1261,26 +1261,26 @@ void initialise_smoke_list_database (void)
 
 		// START COLOUR
 		item->red_start			=	120;	// red
-		item->green_start			=	110;	// green
-		item->blue_start 			=	75;	// blue
+		item->green_start			=	100;	// green
+		item->blue_start 			=	40;	// blue
 		item->alpha_start 		=	200;	// alpha
 		item->radius_start		=	6.0;	// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;	// colour change 1 lifescale
 		item->red_1					=	120;	// red
-		item->green_1 				=	110;	// green
-		item->blue_1 				=	75;	// blue
-		item->alpha_1 				=	100;	// alpha
-		item->radius_1 			=	10.0;	// radius
+		item->green_1 				=	100;	// green
+		item->blue_1 				=	40;	// blue
+		item->alpha_1 				=	140;	// alpha
+		item->radius_1 			=	12.0;	// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;	// colour change 2 lifescale
 		item->red_2					=	120;	// red
-		item->green_2				=	110;	// green
-		item->blue_2				=	75;	// blue
-		item->alpha_2				=	50;	// alpha
-		item->radius_2				=	18.0;	// radius
+		item->green_2				=	100;	// green
+		item->blue_2				=	40;	// blue
+		item->alpha_2				=	100;	// alpha
+		item->radius_2				=	17.0;	// radius
 
 		// END COLOUR
 		item->red_end				=	0;		// red
@@ -1316,27 +1316,27 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_DOWNWASH_SAND]);
 
 		// START COLOUR
-		item->red_start			=	80;	// red
-		item->green_start			=	60;	// green
-		item->blue_start 			=	20;	// blue
-		item->alpha_start 		=	40;	// alpha
-		item->radius_start		=	2.0;	// radius
+		item->red_start			=	120;	// red
+		item->green_start			=	100;	// green
+		item->blue_start 			=	40;	// blue
+		item->alpha_start 		=	120;	// alpha
+		item->radius_start		=	4.0;	// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;	// colour change 1 lifescale
-		item->red_1					=	80;	// red
-		item->green_1 				=	60;	// green
-		item->blue_1 				=	20;	// blue
-		item->alpha_1 				=	20;	// alpha
-		item->radius_1 			=	4.0;	// radius
+		item->red_1					=	120;	// red
+		item->green_1 				=	100;	// green
+		item->blue_1 				=	40;	// blue
+		item->alpha_1 				=	60;	// alpha
+		item->radius_1 			=	8.0;	// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;	// colour change 2 lifescale
-		item->red_2					=	60;	// red
-		item->green_2				=	20;	// green
-		item->blue_2				=	20;	// blue
-		item->alpha_2				=	10;	// alpha
-		item->radius_2				=	8.0;	// radius
+		item->red_2					=	120;	// red
+		item->green_2				=	100;	// green
+		item->blue_2				=	40;	// blue
+		item->alpha_2				=	30;	// alpha
+		item->radius_2				=	16.0;	// radius
 
 		// END COLOUR
 		item->red_end				=	0;		// red
