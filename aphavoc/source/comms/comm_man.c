@@ -1044,7 +1044,8 @@ void comms_process_data (void)
                         ptr += strlen (temp_wut_filename) + 1;
 
                         size += strlen (temp_wut_filename) + 1;
-                           strcpy(session_WUT_filename, temp_wut_filename);
+                        
+                        strcpy(session_WUT_filename, temp_wut_filename);
 						
                         if (stricmp (session_WUT_filename, "NONE") != 0)
                         {
@@ -1056,18 +1057,23 @@ void comms_process_data (void)
                        			
 		               			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 						
-								set_ui_object_drawable (session_screen_continue_button, FALSE);
+										set_ui_object_drawable (session_screen_continue_button, FALSE);
                         			
 	                       		break;
 	                       	}
 	                       	else
-							{
+									{
 	                       		parse_WUT_file(session_WUT_filename);
 	                       	}
                         }
                         else
+//VJ 050110 check for origwut.txt or gwut146x.csv
                         {
-                        	parse_WUT_file("origwut.txt");
+                        	if (file_exist("origwut.txt"))
+                        		parse_WUT_file("origwut.txt");
+                        	else 
+                        	if (file_exist("gwut146x.csv"))
+                        		parse_WUT_file("gwut146x.csv");
                         }
                         
                         sprintf (buffer, "%s: %s", get_trans ("Server WUT version"), session_WUT_filename);
