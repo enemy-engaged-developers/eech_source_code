@@ -177,7 +177,8 @@ void initialise_mouse ( void )
 
 		// JB 030311 from Andrew
 		// Sometimes a double mouse is visible (when the resilution in EECH is different from the desktop)
-		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
+		// VJ 030430 Double mouse problem, Changed last param to NONEXCLUSIVE
+		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );	
 		
 		if ( ret != DI_OK )
 		{
