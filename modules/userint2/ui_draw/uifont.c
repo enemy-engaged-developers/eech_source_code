@@ -71,7 +71,9 @@
 //
 // For the russian version (Remake and generate correct fonts if changed)
 //
-
+//if these are set to 1 then in combination with the language setting in the registry
+//the font is set to cyrillic. If set to 1 and language in the registry is set to english the user 
+//may or may not get a "create font returned null [120]" error, depending on his list of fonts I guess
 #define RUSSIAN_VERSION	0
 
 #define POLISH_VERSION  0
