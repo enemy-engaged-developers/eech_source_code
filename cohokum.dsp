@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="cohokum" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=cohokum - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak" CFG="cohokum - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "cohokum - Win32 Release" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "cohokum - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -43,8 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /w /W0 /GX /O2 /I "C:\Data\Projects\eech\APHAVOC\SOURCE\\" /I "C:\Data\Projects\eech\MODULES" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# SUBTRACT CPP /Fr
+# ADD CPP /nologo /w /W0 /GX /O2 /I "C:\Data\Projects\eech\APHAVOC\SOURCE\\" /I "C:\Data\Projects\eech\MODULES" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Fr /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "NDEBUG"
@@ -5029,6 +5028,10 @@ SOURCE=.\APHAVOC\SOURCE\TEST.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\UPDATE.C
+# End Source File
+# Begin Source File
+
+SOURCE=.\APHAVOC\SOURCE\WUTcfg.c
 # End Source File
 # End Group
 # End Group
