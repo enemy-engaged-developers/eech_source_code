@@ -153,8 +153,10 @@ int
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
 	command_line_no_mission_complete_music					= FALSE,
-	command_line_mouse_look									= FALSE,	// lfriembichler 030317
-	command_line_mouse_look_speed							= 15;		// lfriembichler 030317
+	command_line_mouse_look									= FALSE,	// Retro 030317
+	command_line_mouse_look_speed							= 15,		// Retro 030317
+	command_line_min_fov									= 20,		// Retro 030318
+	command_line_max_fov									= 80;		// Retro 030318
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1365,7 +1367,7 @@ void process_command_line (int argc, char *argv[])
 			debug_log ("ARG:%s, RESPONSE:command_line_no_mission_complete_music = %d", s1, command_line_no_mission_complete_music);
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg(s1, "mouselook"))	// all by lfriembichler 030317
+		else if (s2 = strarg(s1, "mouselook"))	// all by Retro 030317
 		////////////////////////////////////////
 		{
 
@@ -1375,13 +1377,37 @@ void process_command_line (int argc, char *argv[])
 			}
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg(s1, "mousespeed"))	// all by lfriembichler 030317
+		else if (s2 = strarg(s1, "mousespeed"))	// all by Retro 030317
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
 			{
 				sscanf (s2 + 1, "%d", &command_line_mouse_look_speed);
 			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "minfov"))		//all by Retro 030318
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_min_fov);
+			}
+
+			if ((command_line_min_fov <= 10)||(command_line_min_fov >= 120))
+				command_line_min_fov = 20;
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "maxfov"))		//all by Retro 030318
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_max_fov);
+			}
+			
+			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
+				command_line_max_fov = 80;
 		}
 		////////////////////////////////////////
 		else
