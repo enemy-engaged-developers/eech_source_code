@@ -104,6 +104,7 @@ void pretouch_memory ( char *memory, int size )
 void initialise_memory_totals ( void )
 {
 
+#ifdef WIN32
 	MEMORYSTATUS
 		status;
 
@@ -120,6 +121,8 @@ void initialise_memory_totals ( void )
 	virtual_memory_available = status.dwTotalPageFile - status.dwAvailPageFile;
 
 	initial_total_memory_available = physical_memory_available + virtual_memory_available;
+#endif
+	// TODO: implement on non-win32 (if necessary)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +132,7 @@ void initialise_memory_totals ( void )
 void report_memory_totals ( char *string )
 {
 
+#ifdef WIN32
 	MEMORYSTATUS
 		status;
 
@@ -153,6 +157,10 @@ void report_memory_totals ( char *string )
 
 	debug_log ( "Total Virtual memory: %d", status.dwTotalPageFile );
 	debug_log ( "Virtual memory available: %d", status.dwAvailPageFile );
+#else
+	// TODO: implement on non-win32
+	debug_log ( "TODO: implement report_memory_totals(char *) on non-win32.") ;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +170,10 @@ void report_memory_totals ( char *string )
 void walk_memory_heap ( void )
 {
 
+#ifdef WIN32
 	struct _heapinfo
 		heap;
+#endif
 
 	int
 		heap_status;
@@ -181,6 +191,7 @@ void walk_memory_heap ( void )
 	if ( fp )
 	{
 	
+#ifdef WIN32
 		heap._pentry = NULL;
 	
 		for(;;)
@@ -241,9 +252,14 @@ void walk_memory_heap ( void )
 		}
 
 		fprintf ( fp, "Total memory_allocated = %d", memory_allocated );
+#else
+		// TODO: implement on non-win32
+		fprintf ( fp, "TODO: implement walk_memory_heap() on non-win32.\n" );
+#endif
 
 		fclose ( fp );
 	}
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
