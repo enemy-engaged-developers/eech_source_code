@@ -1,0 +1,29 @@
+RGB files are the raw data format used for memory mapped files.
+Basically the format is the first 2 short ints contain the x_size and
+the y_size of the image, and the rest of the file is the raw data. stored
+as screen_values. These maybe mapped directly into the video memory, hence 
+the name!
+
+sample code - just copies the rgb file to the screen :-
+
+        unsigned short int
+                *screen_ptr,
+                *image,
+                x_size,
+                y_size;
+
+   image = (unsigned short int *) mopen ("picture.rgb");
+
+   x_size = *image;
+
+   image ++;
+
+   y_size = *image;
+
+   image ++;
+
+   screen_ptr = (unsigned short int *) get_screen_data (active_screen);
+
+   memcpy (screen_ptr, image, x_size * y_size * sizeof (short int));
+   
+        

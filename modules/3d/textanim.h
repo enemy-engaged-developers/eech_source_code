@@ -1,0 +1,194 @@
+// 
+// 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
+// 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
+// 	 677 High Road, North Finchley, London N12 0DA
+// 
+// 	 Please see the document LICENSE.TXT for the full licence agreement
+// 
+// 2. LICENCE
+//  2.1 	
+//  	Subject to the provisions of this Agreement we now grant to you the 
+//  	following rights in respect of the Source Code:
+//   2.1.1 
+//   	the non-exclusive right to Exploit  the Source Code and Executable 
+//   	Code on any medium; and 
+//   2.1.2 
+//   	the non-exclusive right to create and distribute Derivative Works.
+//  2.2 	
+//  	Subject to the provisions of this Agreement we now grant you the
+// 	following rights in respect of the Object Code:
+//   2.2.1 
+// 	the non-exclusive right to Exploit the Object Code on the same
+// 	terms and conditions set out in clause 3, provided that any
+// 	distribution is done so on the terms of this Agreement and is
+// 	accompanied by the Source Code and Executable Code (as
+// 	applicable).
+// 
+// 3. GENERAL OBLIGATIONS
+//  3.1 
+//  	In consideration of the licence granted in clause 2.1 you now agree:
+//   3.1.1 
+// 	that when you distribute the Source Code or Executable Code or
+// 	any Derivative Works to Recipients you will also include the
+// 	terms of this Agreement;
+//   3.1.2 
+// 	that when you make the Source Code, Executable Code or any
+// 	Derivative Works ("Materials") available to download, you will
+// 	ensure that Recipients must accept the terms of this Agreement
+// 	before being allowed to download such Materials;
+//   3.1.3 
+// 	that by Exploiting the Source Code or Executable Code you may
+// 	not impose any further restrictions on a Recipient's subsequent
+// 	Exploitation of the Source Code or Executable Code other than
+// 	those contained in the terms and conditions of this Agreement;
+//   3.1.4 
+// 	not (and not to allow any third party) to profit or make any
+// 	charge for the Source Code, or Executable Code, any
+// 	Exploitation of the Source Code or Executable Code, or for any
+// 	Derivative Works;
+//   3.1.5 
+// 	not to place any restrictions on the operability of the Source 
+// 	Code;
+//   3.1.6 
+// 	to attach prominent notices to any Derivative Works stating
+// 	that you have changed the Source Code or Executable Code and to
+// 	include the details anddate of such change; and
+//   3.1.7 
+//   	not to Exploit the Source Code or Executable Code otherwise than
+// 	as expressly permitted by  this Agreement.
+// 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum TEXTURE_ANIMATION_INDICES
+{
+
+	TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003,
+	TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002,
+	TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004,
+	TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002,
+	TEXTURE_ANIMATION_INDEX_USA_AC_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_USA_AC_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_CIS_AC_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_CIS_AC_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_USA_AC_DIGIT__002,
+	TEXTURE_ANIMATION_INDEX_USA_AC_DIGIT__003,
+	TEXTURE_ANIMATION_INDEX_LEBANON_FLAG__000,
+	TEXTURE_ANIMATION_INDEX_TAIWAN_FLAG__000,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__033,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__032,
+	TEXTURE_ANIMATION_INDEX_66_GEAR_LAMP__040,
+	TEXTURE_ANIMATION_INDEX_66_GEAR_LIGHT_034,
+	TEXTURE_ANIMATION_INDEX_66_GEAR_LAMP__041,
+	TEXTURE_ANIMATION_INDEX_66_GEAR_LIGHT_035,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__029,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__020,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__028,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__019,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__027,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__025,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__023,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__024,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__021,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__026,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__022,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__042,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__006,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__012,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__011,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__010,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__005,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__008,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__009,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__004,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__017,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__018,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__015,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__016,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__013,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__014,
+	TEXTURE_ANIMATION_INDEX_GENERIC_LAMP__036,
+	TEXTURE_ANIMATION_INDEX_GENERIC_LAMP__037,
+	TEXTURE_ANIMATION_INDEX_GENERIC_LAMP__038,
+	TEXTURE_ANIMATION_INDEX_GENERIC_LAMP__039,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__000,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__002,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__001,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__003,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__031,
+	TEXTURE_ANIMATION_INDEX_COCKPIT_LAMP__030,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__025,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__026,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__018,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__021,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__022,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__019,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__020,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__024,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_GEAR__029,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__023,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__017,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__005,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__011,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__012,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__000,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__006,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__003,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__015,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__009,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__002,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__014,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__008,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__001,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__013,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__007,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__016,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__004,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__010,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__027,
+	TEXTURE_ANIMATION_INDEX_HOKUM_COCKPIT_LAMP__028,
+	TEXTURE_ANIMATION_INDEX_ADDITIVE_SMOKE_TRAIL,
+	TEXTURE_ANIMATION_INDEX_CANNON_FLARE,
+	TEXTURE_ANIMATION_INDEX_BOMB_C,
+	TEXTURE_ANIMATION_INDEX_FLARE,
+	TEXTURE_ANIMATION_INDEX_GUN,
+	TEXTURE_ANIMATION_INDEX_GUN_FLARE,
+	TEXTURE_ANIMATION_INDEX_GUN_SMOKE,
+	TEXTURE_ANIMATION_INDEX_GUN_SMOKE_FRONT,
+	TEXTURE_ANIMATION_INDEX_LIGHTNING,
+	TEXTURE_ANIMATION_INDEX_MISSILE_FLARE,
+	TEXTURE_ANIMATION_INDEX_SHIP_WAKE,
+	TEXTURE_ANIMATION_INDEX_SMOKE,
+	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL,
+	TEXTURE_ANIMATION_INDEX_USA_NAVY__002,
+	TEXTURE_ANIMATION_INDEX_USA_NAVY__000,
+	TEXTURE_ANIMATION_INDEX_USA_NAVY__001,
+	TEXTURE_ANIMATION_INDEX_CIS_PENNANT__000,
+	TEXTURE_ANIMATION_INDEX_CIS_PENNANT__002,
+	TEXTURE_ANIMATION_INDEX_CIS_PENNANT__001,
+	TEXTURE_ANIMATION_INDEX_USA_TANK_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_USA_TANK_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_TRAK0,
+	TEXTURE_ANIMATION_INDEX_CIS_TANK_DIGIT__000,
+	TEXTURE_ANIMATION_INDEX_CIS_TANK_DIGIT__001,
+	TEXTURE_ANIMATION_INDEX_CIS_TANK_DIGIT__002,
+	TEXTURE_ANIMATION_INDEX_USA_TANK_DIGIT__002,
+
+	TEXTURE_ANIMATION_INDEX_LAST,
+};
+
+//typedef enum TEXTURE_ANIMATION_INDICES texture_animation_indices;
+typedef int texture_animation_indices;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

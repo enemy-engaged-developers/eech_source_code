@@ -1,0 +1,11 @@
+The viewport settings and origin are always in screen coordinates. Any UI
+drawing functions are in viewport coordinates, ie 0, 0 is the top left of
+the current viewport. The ui_create_window sets up the viewport and moves
+the ui_origin to the top left automatically. It creates a window 1 pixels
+thinner than requested because it draws a border around the area first. 
+The ui_origin may be moved to any position in or outside of the viewport.
+The display_text function will display text in the currently initialised 
+font, returning the exact length in pixels of the text drawn. Unknown 
+characters are ignored. The ui_clip function takes pointers to four values,
+top left and bottom right, and clips to the current viewport. The values
+are modified to the clipped values.
