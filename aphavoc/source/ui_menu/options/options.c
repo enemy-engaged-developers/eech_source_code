@@ -275,6 +275,12 @@ void display_options_page (options_pages page)
 
 void notify_options_page (options_pages page)
 {
+	// Retro 12Dez2004 - apply new stick deadzone settings..
+	if (current_options_page == OPTIONS_PAGE_CONTROLLER)
+	{
+		change_joystick_properties ();
+	}
+
 	switch (page)
 	{
 		case OPTIONS_PAGE_CONTROLLER:

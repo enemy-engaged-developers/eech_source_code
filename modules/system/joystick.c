@@ -116,6 +116,32 @@ int setup_sdl_joysticks( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Retro 12Dez2004 - however this solution is only a bandaid as it is only applied in the initialise routine
+// ...the user has to restart the sim for the settings to take effect !!
+static BOOL axis_has_deadzone ( const int deviceIndex, const int deviceAxis )
+{
+	BOOL retval;
+
+	if ((deviceIndex == command_line_eo_zoom_joystick_index) && (deviceAxis == command_line_eo_zoom_joystick_axis))
+	{
+		retval = FALSE;
+	}
+	else if ((deviceIndex == command_line_collective_joystick_index) && (deviceAxis == command_line_collective_joystick_axis))
+	{
+		retval = FALSE;
+	}
+	else
+	{
+		retval = TRUE;
+	}
+
+	return retval;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_joysticks (void)
 {
 
@@ -471,8 +497,14 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+#else
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 0))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
+#endif
 
 		joystick_devices[number_of_joystick_devices].joystick_xaxis_valid = TRUE;
 
@@ -502,8 +534,14 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+#else
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 1))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
+#endif
 
 		joystick_devices[number_of_joystick_devices].joystick_yaxis_valid = TRUE;
 
@@ -538,7 +576,14 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// The Z axis required a dead zone of ZERO (its the collective)
 		//
 
-		device_property.dwData = (int) 0;
+#if 0	// Retro 12Dez2004
+		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+#else
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 2))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
+#endif
 
 		joystick_devices[number_of_joystick_devices].joystick_zaxis_valid = TRUE;
 
@@ -568,10 +613,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-#if 0	// Retro 23Jul2004
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 #else
-		device_property.dwData = (int) 0;
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 3))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
 #endif
 
 		joystick_devices[number_of_joystick_devices].joystick_rxaxis_valid = TRUE;
@@ -602,10 +650,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-#if 0	// Retro 23Jul2004
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 #else
-		device_property.dwData = (int) 0;
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 4))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
 #endif
 		joystick_devices[number_of_joystick_devices].joystick_ryaxis_valid = TRUE;
 
@@ -635,10 +686,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-#if 0	// Retro 23Jul2004
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 #else
-		device_property.dwData = (int) 0;
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 5))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
 #endif
 		joystick_devices[number_of_joystick_devices].joystick_rzaxis_valid = TRUE;
 
@@ -668,10 +722,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-#if 0	// Retro 23Jul2004
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 #else
-		device_property.dwData = (int) 0;
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 6))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
 #endif
 		joystick_devices[number_of_joystick_devices].joystick_slider0axis_valid = TRUE;
 
@@ -701,10 +758,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-#if 0	// Retro 23Jul2004
+#if 0	// Retro 12Dez2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
 #else
-		device_property.dwData = (int) 0;
+		if ( TRUE == axis_has_deadzone (number_of_joystick_devices, 7))
+			device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+		else
+			device_property.dwData = 0;
 #endif
 		joystick_devices[number_of_joystick_devices].joystick_slider1axis_valid = TRUE;
 
@@ -792,6 +852,79 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	return (DIENUM_CONTINUE);
 }
 #endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 12Dez2004 - only applies deadzones according to axis use for now..
+// this routine should be called when the user leaves the controller ui.. or (worst case) after EVERY change in that ui..
+extern void change_joystick_properties ( void )
+{
+	int
+		i, j, axisCount;
+
+	HRESULT
+		di_err;
+
+	LPDIRECTINPUTDEVICE7
+		device;
+
+	DIDEVICEOBJECTINSTANCE
+		device_part;
+
+	DIPROPDWORD
+		device_property;
+
+	int offsets[] = { DIJOFS_X, DIJOFS_Y, DIJOFS_Z, DIJOFS_RX, DIJOFS_RY, DIJOFS_RZ, DIJOFS_SLIDER(0), DIJOFS_SLIDER(1) };
+	const int numOffsets = sizeof(offsets)/sizeof(offsets[0]);
+
+	//
+	// Initialise the device part for the next lot of queries
+	//
+
+	device_part.dwSize = sizeof (DIDEVICEOBJECTINSTANCE);
+
+	//
+	// Set the dead zones for all the axis to be the same (for now).
+	// Note: when setting the deadzone, units are specified in the thousandths, so 20% = 2000/10000
+	//
+
+	device_property.diph.dwSize = sizeof (device_property);
+	device_property.diph.dwHeaderSize = sizeof(device_property.diph);
+	device_property.diph.dwHow = DIPH_BYOFFSET;
+	device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+
+	axisCount = 0;
+
+	for (i = 0; i < number_of_joystick_devices; i++)
+	{
+		device = joystick_devices[i].input_device;
+
+		for (j = 0; j < numOffsets; j++)
+		{
+			//
+			// Check if there is an axis with the given offset, if yes then look if it should have a deadzone and apply
+			//
+
+			di_err = IDirectInputDevice7_GetObjectInfo (device, &device_part, offsets[j], DIPH_BYOFFSET);
+
+			if (di_err == DI_OK)
+			{
+				if ( TRUE == axis_has_deadzone (i, j))
+					device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+				else
+					device_property.dwData = 0;
+
+				device_property.diph.dwObj = offsets[j];
+				IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+				axisCount++;
+			}
+		}
+	}
+	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1354,6 +1487,10 @@ void GetGUIDString(const int iDevice, char* theString)
 #endif
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void ShutdownAxisInformation()
 {
 	int i = 0;
@@ -1364,3 +1501,6 @@ void ShutdownAxisInformation()
 		AxisInfo[i].AxisName = 0;
 	}
 }
+
+
+
