@@ -94,6 +94,8 @@ extern int get_absolute_mouse_x ( void );				// Retro 030317
 extern int get_absolute_mouse_y ( void );				// Retro 030317
 
 extern void reset_absolute_mouse ( void );				// Retro 030317
+extern void set_absolute_mouse_x ( const int pos );		// Retro 31Oct2004
+extern void set_absolute_mouse_y ( const int pos );		// Retro 31Oct2004
 
 extern int get_mouse_on ( void );
 
