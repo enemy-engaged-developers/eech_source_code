@@ -73,7 +73,7 @@
 char
 	mem_total_value;
 
-static unsigned
+static unsigned long
 	initial_total_memory_available;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +121,22 @@ void initialise_memory_totals ( void )
 	virtual_memory_available = status.dwTotalPageFile - status.dwAvailPageFile;
 
 	initial_total_memory_available = physical_memory_available + virtual_memory_available;
+
+#elsif LINUX
+
+	struct sysinfo sinfo;
+
+	if( sysinfo( &sinfo ) == 0 ) {
+		initial_total_memory_available = sinfo.freeram;
+	}
+	else {
+		debug_log("sysinfo(2) call failed: %s\n", strerror(errno));
+	}
+
+#else
+	// TODO: Implement for operating systems that aren't Linux or Windows
+	debug_log ( "TODO: implement initialise_memory_totals() on this platform.") ;
 #endif
-	// TODO: implement on non-win32 (if necessary)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,6 +171,26 @@ void report_memory_totals ( char *string )
 
 	debug_log ( "Total Virtual memory: %d", status.dwTotalPageFile );
 	debug_log ( "Virtual memory available: %d", status.dwAvailPageFile );
+
+#elsif LINUX
+
+	// NOTE: This requires the new sysinfo structure only available in Linux 2.3.23 (i386), 2.3.48 (all architectures)
+
+	struct sysinfo sinfo;
+
+	if( sysinfo( &sinfo ) == 0 ) {
+		debug_log ( "MEMORY USED %s - %d", string, sinfo.freeram - initial_total_memory_available );
+
+		debug_log ( "Total Physical memory: %d", sinfo.totalhigh );
+		debug_log ( "Physical memory available: %d", sinfo.freehigh );
+		
+		debug_log ( "Total Virtual memory: %d", sinfo.totalswap );
+		debug_log ( "Virtual memory available: %d", sinfo.freeswap );
+	}
+	else {
+		debug_log("sysinfo(2) call failed: %s\n", strerror(errno));
+	}
+
 #else
 	// TODO: implement on non-win32
 	debug_log ( "TODO: implement report_memory_totals(char *) on non-win32.") ;
