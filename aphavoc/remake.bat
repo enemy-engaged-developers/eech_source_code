@@ -1,6 +1,6 @@
 @echo off
 
-	cd \Projects\EECH\aphavoc
+	cd %EECH_ROOTDIR%\aphavoc
 
 	del *.exe
 
@@ -8,12 +8,12 @@
 
 	del *.pch
 
-	cd \Projects\EECH\aphavoc\source
+	cd %EECH_ROOTDIR%\aphavoc\source
 
 	del /s *.obj
 
-	cd \Projects\EECH\modules
+	cd %EECH_ROOTDIR%\modules
 
 	del /s *.obj
 
-	cd \Projects\EECH\aphavoc
+	cd %EECH_ROOTDIR%\aphavoc
