@@ -122,6 +122,8 @@ void damage_virtual_cockpit_main_rotors (int seed)
 {
 	switch (get_global_gunship_type ())
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			damage_apache_virtual_cockpit_main_rotors (seed);
@@ -157,6 +159,8 @@ void restore_virtual_cockpit_main_rotors (void)
 {
 	switch (get_global_gunship_type ())
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			restore_apache_virtual_cockpit_main_rotors ();

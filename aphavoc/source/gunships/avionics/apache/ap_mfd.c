@@ -4542,6 +4542,10 @@ static void draw_sprite (int x, int y, int u, int v, int width, int height)
 
 	weapon_sprite.height = height;
 
+	// JB 030311 Disable EEAH check
+	if (!weapon_sprite_data)
+		return;
+
 	if (weapon_draw_on_texture)
 	{
 		blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (weapon_sprite_data, weapon_mask_data, &weapon_sprite, video_screen);

@@ -121,7 +121,8 @@ int load_lbm_image ( char *filename, lbm_image *lbm )
 		*ilbm_data = NULL,
 		*body = NULL;
 
-	if ( ( fp_in = fopen ( filename, "rb" ) ) == NULL )
+	// JB 030311 Enable running out of separate directories
+	if ( ( fp_in = safe_fopen ( filename, "rb" ) ) == NULL )
 	{
 
 		debug_log ( "Unable to open file %s during load_lbm_image", filename );

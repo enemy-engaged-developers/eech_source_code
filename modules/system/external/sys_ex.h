@@ -95,7 +95,8 @@
 
 #include "system\debug.h"
 
-#include "system\input.h"
+// JB 030311 VC rename source files
+#include "system\sysinput.h"
 
 #include "system\keyboard.h"
 

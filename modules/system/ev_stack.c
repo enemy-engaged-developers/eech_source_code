@@ -204,10 +204,13 @@ void push_event (void ((*this_function) (void)), char *name)
 
 					#endif
 
+					// JB 030311 From Frank_Murphy
+					stack_search = stack_search->prev; // needed because stack_search can be freed in pop_event()
+
 					pop_event (NULL);
 				}
-
-				stack_search = stack_search->prev;
+				else // JB 030311 else statement from Frank_Murphy
+					stack_search = stack_search->prev;
 			}
 
 			#if DEBUG_MODULE
@@ -342,8 +345,6 @@ void push_event_overlay (void ((*this_function) (void)), char *name)
 
 			while (stack_search->function != this_function)
 			{
-			    if (!stack_search->overlay)
-			    {
 
 				#if DEBUG_MODULE
 
@@ -351,15 +352,9 @@ void push_event_overlay (void ((*this_function) (void)), char *name)
 
 				#endif
 
-				stack_search = stack_search->prev;	// needed because stack_search can be freed in pop_event()
-
 				pop_event (NULL);
 
-			    } else {
-
 				stack_search = stack_search->prev;
-
-			    }
 			}
 
 			#if DEBUG_MODULE

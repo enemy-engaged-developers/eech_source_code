@@ -929,6 +929,18 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 
 	directory_listing = get_first_directory_file (directory_search_path);
 
+	// JB 030313 Enable running out of separate directories
+	if (!directory_listing)
+	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\common\\");
+		strcat(fn, directory_search_path);
+
+		directory_listing = get_first_directory_file ( fn );
+	}
+
 	if (directory_listing)
 	{
 
@@ -1212,6 +1224,18 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 	sprintf (directory_search_path, "%s\\*", directory);
 
 	directory_listing = get_first_directory_file (directory_search_path);
+
+	// JB 030313 Enable running out of separate directories
+	if (!directory_listing)
+	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\common\\");
+		strcat(fn, directory_search_path);
+
+		directory_listing = get_first_directory_file ( fn );
+	}
 
 	if (directory_listing)
 	{

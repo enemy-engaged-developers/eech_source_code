@@ -1152,6 +1152,8 @@ static void enter_view_mode (view_modes mode)
 		{
 			switch (get_global_gunship_type ())
 			{
+				// JB 030313 Fly any aircraft
+				default:
 				case GUNSHIP_TYPE_APACHE:
 				{
 					pilot_head_heading = pilot_head_heading_values[mode];

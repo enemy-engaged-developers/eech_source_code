@@ -303,8 +303,12 @@ BOOL mclose ( void *data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// JB 030311 Enable running out of separate directories
+extern char comanche_hokum_installation_path[];
+
 int file_exist (char *filename)
 {
+	char fn[1024];
 
 	FILE
 		*file_ptr;
@@ -312,6 +316,31 @@ int file_exist (char *filename)
 	if (file_ptr = fopen (filename, "r"))
 	{
 
+		fclose (file_ptr);
+
+		return TRUE;
+	}
+
+	// JB 030311 Enable running out of separate directories
+	fn[0] = 0;
+	strcpy(fn, comanche_hokum_installation_path);
+	strcat(fn, "\\cohokum\\");
+	strcat(fn, filename);
+
+	if (file_ptr = fopen (fn, "r"))
+	{
+		fclose (file_ptr);
+
+		return TRUE;
+	}
+
+	fn[0] = 0;
+	strcpy(fn, comanche_hokum_installation_path);
+	strcat(fn, "\\common\\");
+	strcat(fn, filename);
+
+	if (file_ptr = fopen (fn, "r"))
+	{
 		fclose (file_ptr);
 
 		return TRUE;
@@ -326,6 +355,7 @@ int file_exist (char *filename)
 
 int file_size ( char *filename )
 {
+	char fn[1024];
 
 	FILE
 		*fp;
@@ -343,9 +373,43 @@ int file_size ( char *filename )
 		size = ftell ( fp );
 
 		fclose ( fp );
+		return ( size );
 	}
 
-	return ( size );
+	// JB 030311 Enable running out of separate directories
+	fn[0] = 0;
+	strcpy(fn, comanche_hokum_installation_path);
+	strcat(fn, "\\cohokum\\");
+	strcat(fn, filename);
+
+	if ( fp = fopen ( fn, "r" ) )
+	{
+
+		fseek ( fp, 0, SEEK_END );
+
+		size = ftell ( fp );
+
+		fclose ( fp );
+		return ( size );
+	}
+
+	fn[0] = 0;
+	strcpy(fn, comanche_hokum_installation_path);
+	strcat(fn, "\\common\\");
+	strcat(fn, filename);
+
+	if ( fp = fopen ( fn, "r" ) )
+	{
+
+		fseek ( fp, 0, SEEK_END );
+
+		size = ftell ( fp );
+
+		fclose ( fp );
+		return ( size );
+	}
+
+	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,6 +443,9 @@ void check_safe_memory_mapped_file_counter (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// JB 030311 Enable running out of separate directories
+extern char comanche_hokum_installation_path[];
+
 void *safe_mopen (char *filename)
 {
 	void
@@ -388,18 +455,40 @@ void *safe_mopen (char *filename)
 
 	ptr = mopen (filename);
 
-	if ( !ptr )
+	// JB 030311 Enable running out of separate directories
+	if (!ptr)
 	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\cohokum\\");
+		strcat(fn, filename);
 
-		if ( file_exist ( filename ) )
-		{
-	
-			debug_fatal ( "Unable to map file %s\n\nThis may be due to lack of virtual memory", filename );
-		}
-		else
-		{
+		ptr = mopen (fn);
 
-			debug_fatal ( "Unable to load file %s", filename );
+		if ( !ptr )
+		{
+			fn[0] = 0;
+			strcpy(fn, comanche_hokum_installation_path);
+			strcat(fn, "\\common\\");
+			strcat(fn, filename);
+
+			ptr = mopen (fn);
+
+			if ( !ptr )
+			{
+
+				if ( file_exist ( fn ) )
+				{
+			
+					debug_fatal ( "Unable to map file %s\n\nThis may be due to lack of virtual memory", fn );
+				}
+				else
+				{
+
+					debug_fatal ( "Unable to load file %s", fn );
+				}
+			}
 		}
 	}
 
@@ -443,23 +532,45 @@ FILE *safe_fopen( char *filename, char *mode )
 
 	fp = fopen( filename, mode );
 
-	if ( !fp )
+	// JB 030311 Enable running out of separate directories
+	if (!fp)
 	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\cohokum\\");
+		strcat(fn, filename);
 
-		if ( ( *mode == 'r' ) || ( *mode == 'R' ) )
+		fp = fopen( fn, mode );
+
+		if ( !fp )
 		{
-	
-			debug_fatal("Error opening file for reading: %s", filename );
-		}
-		else if ( ( *mode == 'w' ) || ( *mode == 'W' ) )
-		{
-	
-			debug_fatal("Error opening file for writing: %s", filename );
-		}
-		else
-		{
-	
-			debug_fatal("Error opening file %s", filename );
+			fn[0] = 0;
+			strcpy(fn, comanche_hokum_installation_path);
+			strcat(fn, "\\common\\");
+			strcat(fn, filename);
+
+			fp = fopen( fn, mode );
+
+			if ( !fp )
+			{
+
+				if ( ( *mode == 'r' ) || ( *mode == 'R' ) )
+				{
+			
+					debug_fatal("Error opening file for reading: %s", fn );
+				}
+				else if ( ( *mode == 'w' ) || ( *mode == 'W' ) )
+				{
+			
+					debug_fatal("Error opening file for writing: %s", fn );
+				}
+				else
+				{
+			
+					debug_fatal("Error opening file %s", fn );
+				}
+			}
 		}
 	}
 

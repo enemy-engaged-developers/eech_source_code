@@ -103,7 +103,7 @@ BOOL initialise_direct_sound ( void )
 		if ( dsound_initialise () )
 		{
 	
-			register_exit_function ( (void *)dsound_release_objects );
+			register_exit_function ( dsound_release_objects );
 
 			register_post_activate_message_function ( dsound_restore_objects );
 		
@@ -142,6 +142,7 @@ BOOL dsound_initialise ( void )
 
 	dsrval = DirectSoundCreate (NULL, &dsound, NULL);
 	
+	// JB 030311 compile fix
 	if ( dsrval != DS_OK )
 	{
 
@@ -152,6 +153,7 @@ BOOL dsound_initialise ( void )
 
 	dsrval = IDirectSound_SetCooperativeLevel ( dsound, application_window, DSSCL_PRIORITY );
 
+	// JB 030311 compile fix
 	if ( dsrval != DS_OK )
 	{
 

@@ -143,6 +143,8 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 	{
 		switch (get_global_gunship_type ())
 		{
+			// JB 030313 Fly any aircraft
+			default:
 			case GUNSHIP_TYPE_APACHE:
 			case GUNSHIP_TYPE_COMANCHE:
 			{

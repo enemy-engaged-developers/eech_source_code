@@ -168,7 +168,8 @@ typedef struct SMOKE_LIST smoke_list;
 
 #include	"sl_float.h"
 
-#include	"sl_funcs.h"
+// JB 030311 VC rename source files
+#include	"sl_smokefuncs.h"
 
 #include	"sl_int.h"
 

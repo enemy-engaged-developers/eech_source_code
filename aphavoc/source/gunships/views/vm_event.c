@@ -155,6 +155,8 @@ static void set_special1_view_mode (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -254,6 +256,8 @@ static void set_special2_view_mode (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -822,6 +826,8 @@ static void special_cockpit_toggle_event (event *ev)
 {
 	switch (get_global_gunship_type ())
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		case GUNSHIP_TYPE_HAVOC:
 		{
@@ -1566,6 +1572,32 @@ static void toggle_display_in_flight_intelligence_messages_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	lfriembichler 030317
+//		Events to set Low/Med/Hi Field of View, and to recenter mouseview
+//		Ideally these values should be set through a config-file...
+static void lo_fov_event(event *ev)
+{
+	full_screen_width_view_angle	= rad (20);
+	full_screen_height_view_angle	= rad (20/1.2812);
+}
+static void std_fov_event(event *ev)
+{
+	full_screen_width_view_angle	= rad (59.99);
+	full_screen_height_view_angle	= rad (46.82);
+}
+static void hi_fov_event(event *ev)
+{
+	full_screen_width_view_angle	= rad (80);
+	full_screen_height_view_angle	= rad (80/1.2812);
+}
+static void reset_mouse_event(event* ev)
+{
+	reset_absolute_mouse ();
+}
+//(end lfriembichler)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // SET EVENTS
 //
@@ -1661,6 +1693,15 @@ void set_view_mode_events (void)
 	set_event (DIK_F12, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_inset_target_event);
 
 	set_event (DIK_I, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_display_in_flight_intelligence_messages_event);
+
+	// lfriembichler 030317 start
+	// see above
+	set_event (DIK_7, MODIFIER_NONE, KEY_STATE_DOWN, lo_fov_event);
+	set_event (DIK_8, MODIFIER_NONE, KEY_STATE_DOWN, std_fov_event);
+	set_event (DIK_9, MODIFIER_NONE, KEY_STATE_DOWN, hi_fov_event);
+
+	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, reset_mouse_event);
+	// lfriembichler 030317 end
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

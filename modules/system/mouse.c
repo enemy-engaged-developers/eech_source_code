@@ -68,6 +68,8 @@
 
 #include "graphics.h"
 
+#include "cmndline.h"	// lfriembichler 030317, need this for mouse_look and mouse_look_speed
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +97,8 @@ static DIDEVICEOBJECTDATA
 static int
 	mouse_position_x = 0,
 	mouse_position_y = 0,
+	abs_mouse_x = 0,		// lfriembichler 030317
+	abs_mouse_y = 0,		// lfriembichler 030317
 	mouse_on;
 
 static POINT
@@ -171,8 +175,10 @@ void initialise_mouse ( void )
 			return;
 		}
 
-		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );
-	
+		// JB 030311 from Andrew
+		// Sometimes a double mouse is visible (when the resilution in EECH is different from the desktop)
+		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_EXCLUSIVE );	
+		
 		if ( ret != DI_OK )
 		{
 	
@@ -230,6 +236,8 @@ void initialise_mouse ( void )
 		register_system_message_function ( WM_RBUTTONDOWN, windows_right_button_down_routine );
 		register_system_message_function ( WM_RBUTTONUP, windows_right_button_up_routine );
 	}
+
+	ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,7 +447,6 @@ void generate_mouse_events ( void )
 
 int process_mouse_event (event *ev)
 {
-
 	int
 		loop,
 		modifier,
@@ -448,6 +455,14 @@ int process_mouse_event (event *ev)
 
 	int
 		function_flag = FALSE;
+
+	// JB 030311 From Gotcha (Victor Jetten)
+	// Solves the problem with lack of mouse click in 2D until a keyboard key is pressed
+	if ((current_modifier_states & (1 << MODIFIER_LEFT_ALT)) ||
+		(current_modifier_states & (1 << MODIFIER_RIGHT_ALT)))
+	{
+		current_modifier_states = MODIFIER_NONE;
+	}
 
 	for (loop = MODIFIER_NONE; loop < NUM_MODIFIER_TYPES; loop ++)
 	{
@@ -612,6 +627,28 @@ void move_mouse ( int dx, int dy )
 		mouse_position_x = bound ( mouse_position_x, 0, (application_video_width -1) );
 		mouse_position_y = bound ( mouse_position_y, 0, (application_video_height -1) );
 	}
+
+	// lfriembichler 030317 starts
+	// OK what´s happening here... I need an absolute rather than a relative mouse, so I add/dec the mouse movements
+	// to two variables that have a 'hard ceiling'
+	// There are 2 access methods (below) through which I can get to this data
+	// There´s also a reset function to recenter the view
+	// This works regardless of mouse_on or mouse_off... we might change that though..
+	// EVENTS assigned to mouse buttons work ONLY when mouse is ON !
+
+	abs_mouse_x += (command_line_mouse_look_speed * dx);  // minimum value of dx/dy is 8, with a '10' scaling is 80.. makes 1/400 of max movement
+	abs_mouse_y += (command_line_mouse_look_speed * dy);
+
+	if (abs_mouse_x >= 16383)
+		abs_mouse_x = 16383;
+	else if (abs_mouse_x <= -16383)
+		abs_mouse_x = -16383;
+
+	if (abs_mouse_y >= 16383)
+		abs_mouse_y = 16383;
+	else if (abs_mouse_y <= -16383)
+		abs_mouse_y = -16383;
+	// lfriembichler 030317 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,13 +676,16 @@ void set_mouse_on ( void )
 void set_mouse_off ( void )
 {
 
-	#if MOUSE_DEBUG
+	if (command_line_mouse_look == FALSE)	// Clause by lfriembichler 030317, to enable mouse_events in 3d
+	{
+		#if MOUSE_DEBUG
 
-	debug_log ("MOUSE: OFF");
+		debug_log ("MOUSE: OFF");
 
-	#endif
+		#endif
 
-	mouse_on = FALSE;
+		mouse_on = FALSE;
+	}
 
 	set_mouse_graphic_off ();
 }
@@ -700,6 +740,24 @@ void set_mouse_y ( int y )
 	mouse_position_y = y;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int get_absolute_mouse_x ( void )	// lfriembichler 030317
+{
+
+	return ( abs_mouse_x );
+}
+int get_absolute_mouse_y ( void )	// lfriembichler 030317
+{
+
+	return ( abs_mouse_y );
+}
+void reset_absolute_mouse ( void )	// lfriembichler 030317
+{
+	abs_mouse_x = abs_mouse_y = 0;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

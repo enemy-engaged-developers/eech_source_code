@@ -134,7 +134,9 @@ static float get_rotate_left_limit (void)
 		default:
 		////////////////////////////////////////
 		{
-			limit = rad (0.0);
+			// JB 030313 Fly any aircraft
+			limit = rad (135.0);
+			// limit = rad (0.0);
 
 			break;
 		}
@@ -190,7 +192,9 @@ static float get_rotate_right_limit (void)
 		default:
 		////////////////////////////////////////
 		{
-			limit = rad (0.0);
+			// JB 030313 Fly any aircraft
+			limit = rad (-135.0);
+			//limit = rad (-90.0);
 
 			break;
 		}
@@ -246,7 +250,9 @@ static float get_rotate_up_limit (void)
 		default:
 		////////////////////////////////////////
 		{
-			limit = rad (0.0);
+			// JB 030313 Fly any aircraft
+			limit = rad (90.0);
+			//limit = rad (0.0);
 
 			break;
 		}
@@ -302,7 +308,9 @@ static float get_rotate_down_limit (void)
 		default:
 		////////////////////////////////////////
 		{
-			limit = rad (0.0);
+			// JB 030313 Fly any aircraft
+			limit = rad (-20.0);
+			//limit = rad (0.0);
 
 			break;
 		}
@@ -408,31 +416,72 @@ void deinitialise_virtual_cockpit_view (void)
 
 void update_virtual_cockpit_view (void)
 {
-	if (adjust_view_left_key || joystick_pov_left)
+	// lfriembichler 030317 start
+	if (command_line_mouse_look == FALSE)	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
 	{
-		pilot_head_heading += ROTATE_RATE * get_delta_time ();
+		if (adjust_view_left_key || joystick_pov_left)
+		{
+			pilot_head_heading += ROTATE_RATE * get_delta_time ();
+
+			pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
+		}
+		else if (adjust_view_right_key || joystick_pov_right)
+		{
+			pilot_head_heading -= ROTATE_RATE * get_delta_time ();
+
+			pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
+		}
+
+		if (adjust_view_up_key || joystick_pov_up)
+		{
+			pilot_head_pitch += ROTATE_RATE * get_delta_time ();
+
+			pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
+		}
+		else if (adjust_view_down_key || joystick_pov_down)
+		{
+			pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
+
+			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
+		}
+	}
+	else	// Use mouse/TIR, all by lfriembichler 030317
+	{
+		float temp_p, temp_h;
+		
+//		if (User_Config.TrackIR_IsRunning == FALSE) // No TIR window, use mouse; this means it´s NOT possible to use TIR in relative mode !!
+		if (TRUE)
+		{
+			temp_h = get_absolute_mouse_x ();
+			temp_p = get_absolute_mouse_y ();
+
+			temp_h = -90*temp_h/16383;	// seems left <-> right are swapped with the mouse ?
+			temp_p = -45*temp_p/16383;	// Those are the max-restricted values
+			
+			pilot_head_pitch = rad(temp_p);
+			pilot_head_heading = rad(temp_h);
+		}
+#ifdef TRACKIR
+		else	// TIR
+		{
+			GetData ();
+			temp_p = User_Config.TrackIR_Pitch;
+			temp_h = User_Config.TrackIR_Hdg;
+
+			temp_p = -45*temp_p/16383;	// Those are the max-restricted values
+			temp_h = 90*temp_h/16383;
+
+			pilot_head_pitch = rad(temp_p);
+			pilot_head_heading = rad(temp_h);
+		}
+#endif
 
 		pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
-	}
-	else if (adjust_view_right_key || joystick_pov_right)
-	{
-		pilot_head_heading -= ROTATE_RATE * get_delta_time ();
-
 		pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
-	}
-
-	if (adjust_view_up_key || joystick_pov_up)
-	{
-		pilot_head_pitch += ROTATE_RATE * get_delta_time ();
 
 		pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
-	}
-	else if (adjust_view_down_key || joystick_pov_down)
-	{
-		pilot_head_pitch -= (ROTATE_RATE * get_delta_time ());
-
 		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
-	}
+	} // end lfriembichler 030317
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -543,6 +592,8 @@ void get_pilot_head_viewpoint (void)
 		switch (get_global_gunship_type ())
 		{
 			////////////////////////////////////////
+			// JB 030313 Fly any aircraft
+			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -755,6 +806,8 @@ void draw_virtual_cockpit_3d_view (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -1154,6 +1207,8 @@ void draw_virtual_cockpit_3d_display_view (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{

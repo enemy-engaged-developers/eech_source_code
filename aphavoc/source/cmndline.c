@@ -152,7 +152,9 @@ int
 	command_line_no_hardware_tnl								= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
-	command_line_no_mission_complete_music					= FALSE;
+	command_line_no_mission_complete_music					= FALSE,
+	command_line_mouse_look									= FALSE,	// lfriembichler 030317
+	command_line_mouse_look_speed							= 15;		// lfriembichler 030317
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1361,6 +1363,25 @@ void process_command_line (int argc, char *argv[])
 			command_line_no_mission_complete_music = TRUE;
 
 			debug_log ("ARG:%s, RESPONSE:command_line_no_mission_complete_music = %d", s1, command_line_no_mission_complete_music);
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "mouselook"))	// all by lfriembichler 030317
+		////////////////////////////////////////
+		{
+
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_mouse_look);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "mousespeed"))	// all by lfriembichler 030317
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_mouse_look_speed);
+			}
 		}
 		////////////////////////////////////////
 		else

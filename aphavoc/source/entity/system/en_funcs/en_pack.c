@@ -351,42 +351,65 @@ int get_current_pack_buffer_bit_size (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// JB 030311 From Gotcha (Victor Jetten)
+// Bug makes it impossible to load saved campaigns with builds made with VC/gcc or anything that is not watcom.
+// Faulty function is unpack_bit and pack_bit
+
 #ifdef __WATCOMC__
 
 void pack_bit (int *unpacked_data, unsigned char *pack_ptr);
 
-#pragma aux pack_bit =			\
-	"shr	dword ptr [eax],1"	\
-	"rcl	byte ptr [edx],1"		\
-parm [eax] [edx]					\
+#pragma aux pack_bit = \
+"shr dword ptr [eax],1" \
+"rcl byte ptr [edx],1" \
+parm [eax] [edx] \
 modify exact [];
 
 #else
 
-void pack_bit (int *unpacked_data, unsigned char *pack_ptr)
+// VC Intel version
+#if defined(_MSC_VER) && defined(_M_IX86)
+
+static __inline void pack_bit (int *unpacked_data, unsigned char *pack_ptr)
 {
-	int
-		unpacked_value;
-
-	unsigned char
-		packed_value;
-
-	packed_value = *pack_ptr;
-
-	packed_value <<= 1;
-
-	unpacked_value = *unpacked_data;
-
-	packed_value |= (unpacked_value & 1);
-
-	unpacked_value >>= 1;
-
-	*unpacked_data = unpacked_value;
-
-	*pack_ptr = packed_value;
+__asm
+{
+mov eax, unpacked_data
+shr dword ptr[eax],1
+mov eax, pack_ptr
+rcl byte ptr[eax],1
+}
 }
 
+#else
+
+// generic C version
+
+void pack_bit (int *unpacked_data, unsigned char *pack_ptr)
+{
+int
+unpacked_value;
+
+unsigned char
+packed_value;
+
+packed_value = *pack_ptr;
+
+packed_value <<= 1;
+
+unpacked_value = *unpacked_data;
+
+packed_value |= (unpacked_value & 1);
+
+unpacked_value >>= 1;
+
+*unpacked_data = unpacked_value;
+
+*pack_ptr = packed_value;
+}
 #endif
+
+#endif 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -661,49 +684,71 @@ void close_unpack_buffer (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// JB 030311 From Gotcha (Victor Jetten)
+// Bug makes it impossible to load saved campaigns with builds made with VC/gcc or anything that is not watcom.
+// Faulty function is unpack_bit and pack_bit
+
 #ifdef __WATCOMC__
 
 void unpack_bit (int *unpacked_data, unsigned char *unpack_ptr);
 
-#pragma aux unpack_bit = 		\
-	"shl	byte ptr [edx],1"		\
-	"rcr	dword ptr [eax],1"	\
-parm [eax] [edx]					\
+#pragma aux unpack_bit = \
+"shl byte ptr [edx],1" \
+"rcr dword ptr [eax],1" \
+parm [eax] [edx] \
 modify exact [];
 
 #else
 
+// VC Intel version
+#if defined(_MSC_VER) && defined(_M_IX86)
+
+static __inline void unpack_bit (int *unpacked_data, unsigned char *unpack_ptr)
+{
+__asm
+{
+mov eax, [unpack_ptr]
+shl byte ptr [eax],1
+mov eax, [unpacked_data]
+rcr dword ptr [eax],1
+}
+}
+
+#else
+
+// generic C version
 void unpack_bit (int *unpacked_data, unsigned char *unpack_ptr)
 {
-	int
-		unpacked_value,
-		temp;
+unsigned int // changed from RW's signed
+unpacked_value,
+temp;
 
-	unsigned char
-		packed_value;
+unsigned char
+packed_value;
 
-	packed_value = *unpack_ptr;
+packed_value = *unpack_ptr;
 
-	temp = packed_value;
+temp = packed_value;
 
-	temp <<= 23;
+temp <<= 24; // changed from RW's 23
 
-	temp &= 0x80000000;
+temp &= 0x80000000;
 
-	unpacked_value = *unpacked_data;
+unpacked_value = *unpacked_data;
 
-	unpacked_value >>= 1;
+unpacked_value >>= 1;
 
-	unpacked_value |= temp;
+unpacked_value |= temp;
 
-	packed_value <<= 1;
+packed_value <<= 1;
 
-	*unpacked_data = unpacked_value;
+*unpacked_data = unpacked_value;
 
-	*unpack_ptr = packed_value;
+*unpack_ptr = packed_value;
 }
 #endif
 
+#endif 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

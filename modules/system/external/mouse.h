@@ -90,6 +90,11 @@ extern int get_mouse_y ( void );
 
 extern void set_mouse_y ( int y );
 
+extern int get_absolute_mouse_x ( void );				// lfriembichler 030317
+extern int get_absolute_mouse_y ( void );				// lfriembichler 030317
+
+extern void reset_absolute_mouse ( void );				// lfriembichler 030317
+
 extern int get_mouse_on ( void );
 
 extern void set_remove_mouse_graphic_function ( void ( *fn )  ( const int x, const int y ) );

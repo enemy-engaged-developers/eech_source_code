@@ -96,6 +96,8 @@ void initialise_avionics (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -274,6 +276,8 @@ void deinitialise_avionics (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -462,6 +466,8 @@ void update_avionics (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{

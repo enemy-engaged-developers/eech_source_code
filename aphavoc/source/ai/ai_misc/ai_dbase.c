@@ -129,7 +129,8 @@ void load_ai_sector_data (char *sector_filename)
 	FILE
 		*file_ptr;
 
-	file_ptr = fopen (sector_filename, "rb");
+	// JB 030311 Enable running out of separate directories
+	file_ptr = safe_fopen (sector_filename, "rb");
 
 	if (!file_ptr)
 	{
@@ -189,7 +190,8 @@ void initialise_population_name_database (void)
 
 	sprintf (temp_filename, "%s\\%s", current_session->data_path, AI_POPULATION_NAME_FILENAME);
 
-	file_ptr = fopen (temp_filename, "r");
+	// JB 030311 Enable running out of separate directories
+	file_ptr = safe_fopen (temp_filename, "r");
 
 	if (!file_ptr)
 	{

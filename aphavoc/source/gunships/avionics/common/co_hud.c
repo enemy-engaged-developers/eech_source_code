@@ -204,6 +204,8 @@ void display_hud_on_external_view (void)
 		switch (get_global_gunship_type ())
 		{
 			////////////////////////////////////////
+			// JB 030313 Fly any aircraft
+			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{

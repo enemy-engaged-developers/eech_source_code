@@ -92,7 +92,8 @@
 
 #include "task\task.h"
 
-#include "update\update.h"
+// JB 030311 VC rename source files
+#include "update\up_update.h"
 
 #include "waypoint\waypoint.h"
 

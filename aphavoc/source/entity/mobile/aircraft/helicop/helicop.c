@@ -1155,7 +1155,8 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 
 	if (get_local_entity_type (en) != ENTITY_TYPE_HELICOPTER)
 	{
-		return FALSE;
+		// JB 030313 Fly any aircraft
+		//return FALSE;
 	}
 
 	//
@@ -1186,7 +1187,8 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 		{
 			if (!get_global_apache_havoc_installed())
 			{
-				return FALSE;
+				// JB 030311 Disable EEAH check
+				//return FALSE;
 			}
 
 			break;
@@ -1198,7 +1200,8 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 		}
 		default:
 		{
-			debug_fatal ("HELICOP: Player Controllable Flag Set For Invalid Aircraft (%s)", get_local_entity_string (en, STRING_TYPE_FULL_NAME));
+			// JB 030311 Fly any aircraft
+			//debug_fatal ("HELICOP: Player Controllable Flag Set For Invalid Aircraft (%s)", get_local_entity_string (en, STRING_TYPE_FULL_NAME));
 		}
 	}
 
@@ -1233,6 +1236,8 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 	// check that gunship isn't landing
 	//
 
+	// JB 030313 Enable control of aircraft while landing and taxiing.
+	/*
 	switch (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE))
 	{
 
@@ -1244,6 +1249,7 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 			return FALSE;
 		}
 	}
+	*/
 
 	//
 	// If the entity is doing a task, only allow player to join it if task incomplete

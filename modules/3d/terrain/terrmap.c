@@ -1217,7 +1217,8 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 	// Read in the river nodes
 	//
 
-	fp = fopen ( nodes_filename, "rb" );
+	// JB 030311 Enable running out of separate directories
+	fp = safe_fopen ( nodes_filename, "rb" );
 
 	if ( !fp )
 	{
@@ -1318,7 +1319,8 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 	// Read in the nodes
 	//
 
-	fp = fopen ( nodes_filename, "rb" );
+	// JB 030311 Enable running out of separate directories
+	fp = safe_fopen ( nodes_filename, "rb" );
 
 	if ( !fp )
 	{

@@ -102,7 +102,8 @@ LPDIRECTSOUNDBUFFER create_and_load_sound_buffer ( char *filename, sample_types 
 
 		data = dsound_lock_sound_buffer ( buffer, 0, size );
 
-		fp = fopen ( filename, "rb" );
+		// JB 030311 Enable running out of separate directories
+		fp = safe_fopen ( filename, "rb" );
 
 		if ( fp )
 		{

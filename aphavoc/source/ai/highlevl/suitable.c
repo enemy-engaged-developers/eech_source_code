@@ -209,7 +209,9 @@ static float calculate_group_to_task_suitability (entity_sub_types group_type, e
 
 float get_group_to_task_suitability (entity_sub_types group_type, entity_sub_types task_type)
 {
-	return group_task_array [group_type][task_type];
+	// JB 030313 Fly any aircraft
+	return 1;
+	//return group_task_array [group_type][task_type];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -88,6 +88,8 @@ void fully_repair_gunship_damage (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -131,6 +133,8 @@ void partially_repair_gunship_damage (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -174,6 +178,8 @@ void repair_gunship_weapon_damage (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -217,6 +223,8 @@ void damage_gunship (gunship_damage_levels damage_level)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -316,6 +324,8 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -384,6 +394,8 @@ void fully_repair_local_entity_avionics (entity *en)
 		switch (get_global_gunship_type ())
 		{
 			////////////////////////////////////////
+			// JB 030313 Fly any aircraft
+			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -440,6 +452,8 @@ void partially_repair_local_entity_avionics (entity *en)
 		switch (get_global_gunship_type ())
 		{
 			////////////////////////////////////////
+			// JB 030313 Fly any aircraft
+			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -494,6 +508,8 @@ void load_gunship_avionics_damage (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -553,6 +569,8 @@ void save_gunship_avionics_damage (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{

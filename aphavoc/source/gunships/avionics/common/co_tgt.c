@@ -444,6 +444,8 @@ void set_common_target_acquisition_system_lock_target (int lock)
 
 	switch (get_global_gunship_type ())
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			set_apache_lock_target (lock);
@@ -834,6 +836,8 @@ void select_simple_avionics_target_acquisition_system (void)
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{

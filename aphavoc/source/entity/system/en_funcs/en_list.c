@@ -306,7 +306,8 @@ static void default_set_entity_first_child (entity *en, list_types type, entity 
 
 static entity *default_get_entity_first_child (entity *en, list_types type)
 {
-	debug_fatal_invalid_list_type (en, type);
+	// JB 030313 Fly any aircraft
+	// debug_fatal_invalid_list_type (en, type);
 
 	return (NULL);
 }

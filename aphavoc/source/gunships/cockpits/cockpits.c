@@ -102,6 +102,8 @@ void initialise_cockpits (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -192,6 +194,8 @@ void deinitialise_cockpits (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -264,6 +268,8 @@ void update_cockpits (void)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -335,6 +341,8 @@ void draw_cockpit (cockpit_panels panel)
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{

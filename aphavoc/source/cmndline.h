@@ -129,7 +129,9 @@ extern int
 	command_line_no_hardware_tnl,
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
-	command_line_no_mission_complete_music;
+	command_line_no_mission_complete_music,
+	command_line_mouse_look,				// lfriembichler 030317
+	command_line_mouse_look_speed;			// lfriembichler 030317
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

@@ -6508,9 +6508,29 @@ void uninstall_graphics_files (void)
 			{
 				failed = unlink (installation_file);
 
+				// JB 030311 Enable running out of separate directories
 				if (failed)
 				{
-					debug_fatal ("Failed to delete %s", installation_file);
+					char fn[1024];
+					fn[0] = 0;
+					strcpy(fn, comanche_hokum_installation_path);
+					strcat(fn, "\\cohokum\\");
+					strcat(fn, installation_file);
+
+					failed = unlink (fn);
+					
+					if (failed)
+					{
+						fn[0] = 0;
+						strcpy(fn, comanche_hokum_installation_path);
+						strcat(fn, "\\common\\");
+						strcat(fn, installation_file);
+
+						failed = unlink (fn);
+						
+						if (failed)
+							debug_fatal ("Failed to delete %s", installation_file);
+					}
 				}
 			}
 		}

@@ -827,6 +827,8 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 
 	switch (gunship_type)
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			get_apache_weapons_from_weapon_config
@@ -921,6 +923,8 @@ void weapon_loading_reload_all_weapons (entity *en)
 
 	switch (gunship_type)
 	{
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);

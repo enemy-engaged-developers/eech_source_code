@@ -58,10 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-// local changes
-//
-// because we're running the DX9 SDK
-#define DIRECTINPUT_VERSION 0x0700
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,6 +67,22 @@
 #ifndef _SYSTEM_INCLUDED_
 
 #define _SYSTEM_INCLUDED_
+
+// JB 030311 VC compile fix
+#define DIRECTINPUT_VERSION 0x0700
+
+#define ENV_NAME """COMANCHE_HOKUM"""
+
+#define MAJOR_VERSION 1
+
+#define DATA_VERSION 4
+
+#define MINOR_VERSION 7
+
+#define BUILD_TYPE """X"""
+
+#define APP_NAME """Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.4.7X"""
+// EECH VC fix
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,7 +386,7 @@ typedef struct tagKERNINGPAIR {
 #define NOPROFILER
 #define NODEFERWINDOWPOS
 
-// typedef unsigned int FOURCC;         /* a four character code */
+typedef unsigned int FOURCC;         /* a four character code */
 
 #include <windows.h>
 #include <windowsx.h>
@@ -381,7 +394,7 @@ typedef struct tagKERNINGPAIR {
 #include <winnls.h>
 #include <dinput.h>
 #include <objbase.h>
-// #include <vfw.h>
+#include <vfw.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -408,7 +421,7 @@ typedef struct tagKERNINGPAIR {
 
 #include "system\debug.h"
 
-#include "system\input.h"
+#include "system\sysinput.h"
 
 #include "system\keyboard.h"
 

@@ -198,7 +198,8 @@ void initialise_flight_dynamics (entity *en)
 
          switch (get_global_gunship_type ())
          {
-
+						// JB 030313 Fly any aircraft
+						default:
             case GUNSHIP_TYPE_APACHE:
             {
 
@@ -421,7 +422,16 @@ void initialise_flight_dynamics_collision_points (void)
 
 	raw = get_local_entity_data (get_gunship_entity ());
 
-	temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
+	// JB 030313 Fly any aircraft HACK HACK HACK
+	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
+		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
+		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
+		raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+	{
+		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
+	}
+	else
+		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 
 	temp_inst3d->vp.attitude [0][0] = 1.0;
 	temp_inst3d->vp.attitude [1][1] = 1.0;
@@ -993,6 +1003,8 @@ void update_gunship_dynamics (void)
 	switch (get_global_gunship_type ())
 	{
 
+		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 
@@ -1458,7 +1470,8 @@ void load_dynamics_model (event *ev)
 	FILE
 		*file_ptr;
 
-	file_ptr = fopen (current_flight_dynamics->filename, "r");
+	// JB 030313 Enable running out of separate directories
+	file_ptr = safe_fopen (current_flight_dynamics->filename, "r");
 
 	if (file_ptr)
 	{

@@ -98,6 +98,9 @@ int
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// JB 030311 Enable running out of separate directories
+extern char comanche_hokum_installation_path[];
+
 void initialise_3d_objects_info ( char *directory )
 {
 
@@ -117,6 +120,18 @@ void initialise_3d_objects_info ( char *directory )
 	sprintf ( filename, "%s\\bininfo.bin", directory );
 
 	fp = fopen ( filename, "rb" );
+
+	// JB 030311 Enable running out of separate directories
+	if (!fp)
+	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\cohokum\\");
+		strcat(fn, filename);
+
+		fp = fopen ( fn, "rb" );
+	}
 
 	ASSERT ( fp );
 

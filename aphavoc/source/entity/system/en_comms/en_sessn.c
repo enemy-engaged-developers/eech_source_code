@@ -1391,9 +1391,13 @@ void process_entity_smoke_list_creation (void)
 			set_infinite_smoke_list_generating_state (this_smoke_list_creation->en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE, INFINITE_SMOKE_OFF);
 		}
 
-		free_mem (this_smoke_list_creation);
+		// JB 030311 From Gotcha (Victor Jetten)
+		// Bug makes it impossible to load saved campaigns with builds made with VC/gcc or anything that is not watcom.
+		// Swap the followting two lines to fix exception
 
 		entity_smoke_list_creation = entity_smoke_list_creation->next;
+
+		free_mem (this_smoke_list_creation);
 	}
 }
 
@@ -1439,9 +1443,13 @@ void process_entity_sound_effect_creation (void)
 			&sample_index									// sample index list
 		);
 
-		free_mem (this_sound_effect_creation);
+		// JB 030311 From Gotcha (Victor Jetten)
+		// Bug makes it impossible to load saved campaigns with builds made with VC/gcc or anything that is not watcom.
+		// Swap the followting two lines to fix exception
 
 		entity_sound_effect_creation = entity_sound_effect_creation->next;
+
+		free_mem (this_sound_effect_creation);
 	}
 }
 

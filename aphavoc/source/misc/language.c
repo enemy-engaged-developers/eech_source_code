@@ -503,6 +503,18 @@ void initialise_language_database (void)
 
 	directory_listing = get_first_directory_file ( directory_search_path );
 
+	// JB 030313 Enable running out of separate directories
+	if (!directory_listing)
+	{
+		char fn[1024];
+		fn[0] = 0;
+		strcpy(fn, comanche_hokum_installation_path);
+		strcat(fn, "\\common\\");
+		strcat(fn, directory_search_path);
+
+		directory_listing = get_first_directory_file ( fn );
+	}
+
 	ASSERT (directory_listing);
 
 	valid_file = TRUE;

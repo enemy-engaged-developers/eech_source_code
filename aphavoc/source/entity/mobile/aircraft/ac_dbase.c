@@ -447,7 +447,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -522,7 +522,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -597,7 +597,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -672,7 +672,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -747,7 +747,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -822,7 +822,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -897,7 +897,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -972,7 +972,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1654,7 +1654,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1729,7 +1729,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1804,7 +1804,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1879,7 +1879,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			FALSE,			 														// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1954,7 +1954,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2029,7 +2029,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2104,7 +2104,7 @@ const aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index

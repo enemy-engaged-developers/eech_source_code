@@ -3057,7 +3057,8 @@ void ai_log (char *string, ...)
 
 	sprintf (time_info, "Day %d %02d:%02d:%02d :- ", elapsed_days, hours, minutes, seconds);
 
-	ai_log_file = fopen (AI_LOG_FILENAME, "a");
+	// JB 030311 Enable running out of separate directories
+	ai_log_file = safe_fopen (AI_LOG_FILENAME, "a");
 
 	if (ai_log_file)
 	{
