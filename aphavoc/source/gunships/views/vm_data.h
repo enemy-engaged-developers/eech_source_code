@@ -213,6 +213,16 @@ enum WIDEVIEW_NRS
 };
 typedef enum WIDEVIEW_NRS wideview_nrs;
 
+#define BASE_X_APACHE  0.0
+#define BASE_Y_APACHE  0.05
+#define BASE_Z_APACHE  0.20
+#define BASE_P_APACHE  -7.0
+
+#define BASE_X_HAVOC  0.0 
+#define BASE_Y_HAVOC  0.05
+#define BASE_Z_HAVOC  0.20
+#define BASE_P_HAVOC  -5.0
+
 extern cockpit_position current_custom_cockpit_viewpoint;				// Retro 6Feb2005
 
 //VJ 030324 framerate
