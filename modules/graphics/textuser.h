@@ -88,6 +88,10 @@ extern struct SCREEN
 extern char
 	system_texture_names[MAX_TEXTURES][128];
 
+//VJ
+extern char
+	system_texture_override_names[MAX_TEXTURES][128];
+
 extern int
 	system_textures_referenced[MAX_TEXTURES];
 
@@ -122,6 +126,10 @@ extern struct TEXTURE_GRAPHIC *create_texture_graphic ( char *filename );
 extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
+
+//VJ 041213 made external non-static, to be used from gameflow.c
+extern void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
+extern void load_texture_override ( char *this_texture_name, int this_texture_index, char *mapname );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
