@@ -171,7 +171,7 @@
 
 #include "ui_menu/ui_menu.h"
 
-#include "WUTcfg.h"   //VJ 030326
+#include "wutcfg.h"   //VJ 030326
 
 #include "eechini.h"  //VJ 030403
 
