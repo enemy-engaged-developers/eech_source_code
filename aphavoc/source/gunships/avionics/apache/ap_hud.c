@@ -808,7 +808,7 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	//VJ 050204 bug fix scale not correct
 	if (get_global_unscaled_displays ())
-		scalefactor = global_hud_size;
+		scalefactor = global_hud_size/2.0;
 	else
 		scalefactor = 1.0;
 
@@ -2801,12 +2801,21 @@ void draw_apache_hud (void)
 	}
 	else
 	{
+		//VJ 050210 scaling factor for hud > 1.0
+		float factor = -5*global_hud_size2 + 9.0;
+		
+		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * factor )) * full_screen_width);
+		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * factor )) * full_screen_height);
+
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * factor )) * full_screen_width) - 0.001;
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * factor )) * full_screen_height) - 0.001;
+/*
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
 		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
-
+*/
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
 	}
