@@ -195,6 +195,7 @@ int
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
+	command_line_external_trackir_direction			= 0,	// Retro 31Jan2005
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
@@ -607,6 +608,22 @@ void process_command_line (int argc, char *argv[])
 			}
 
 			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_external_trackir);
+		}
+		////////////////////////////////////////
+		//	Retro 31Jan2005 start
+		else if (s2 = strarg (s1, "external_trackir_direction"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_external_trackir_direction);
+			}
+			else
+			{
+				command_line_external_trackir_direction = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_external_trackir_direction);
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "high_lod_hack"))
