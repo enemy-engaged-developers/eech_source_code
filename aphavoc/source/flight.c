@@ -312,8 +312,10 @@ void flight (void)
 			
 			if (command_line_pause_server) // 040220 Pause server - is it safe?
 			{
-				receive_comms_data (); 
-			}
+                                receive_comms_data ();
+                                update_update_functions (); // 040621 Jabberwock cvc active during pause to remove pilot entry
+ 
+			}                              // 040621 Moje added -only expl. Pause server ends
 		}
 		else
 		{
