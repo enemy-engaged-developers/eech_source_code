@@ -2027,7 +2027,7 @@ void net_handle_heartbeat(void)
 	{
   	  #if DEBUG_MODULE
 	  debug_log ("HEARTBEAT: Time for another heartbeat!");
-	  #endif`
+	  #endif
 	  //Check whether we're a server AND whether the mission is running
 	  if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_game_status () == GAME_STATUS_INITIALISED))
 	  {
