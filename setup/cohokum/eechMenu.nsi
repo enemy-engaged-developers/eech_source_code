@@ -39,6 +39,7 @@
   !insertmacro MUI_PAGE_COMPONENTS  	
   		!define MUI_DIRECTORYPAGE_TEXT_TOP "Please select the Razorworks root folder. This installer will place the files in the correct directories."
   !insertmacro MUI_PAGE_DIRECTORY
+  !insertmacro MUI_PAGE_INSTFILES
   		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\readme.html"
   !insertmacro MUI_PAGE_FINISH
   
