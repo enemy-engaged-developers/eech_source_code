@@ -465,7 +465,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -542,7 +542,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -619,7 +619,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -696,7 +696,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -773,7 +773,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -850,7 +850,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -927,7 +927,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1004,7 +1004,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1704,7 +1704,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1781,7 +1781,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1858,7 +1858,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1935,7 +1935,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			FALSE,			 														// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2012,7 +2012,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2089,7 +2089,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2166,7 +2166,7 @@ aircraft_data
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			FALSE,																	// player_controllable
+			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
