@@ -629,7 +629,7 @@ static void draw_aircraft_datum (void)
 
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-	set_2d_window_rotation (hud_env, roll);
+	set_2d_window_rotation (hud_env, -roll);
 
 	draw_2d_line (-0.35, +0.00, -0.15, +0.00, hud_colour);
 	draw_2d_line (+0.35, +0.00, +0.15, +0.00, hud_colour);
