@@ -2185,6 +2185,11 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 							current_object_3d_point_list++;
 							point_count++;
+							
+							//-- Werewolf: Sanity check, 4 Apr 2003
+							if (point_count>510)
+							  break;
+							//-- Werewolf
 						}
 	
 						ASSERT ( point_count < 512 );
