@@ -755,7 +755,8 @@ void initialise_message_database (void)
 							loop ++;
 						}
 
-						member = get_local_entity_child_pred (member, LIST_TYPE_MEMBER);
+						//VJ for JvS 030411, change order of wingman to facilitate joystick programming
+						member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 					}
 
 					ASSERT (loop == count);
