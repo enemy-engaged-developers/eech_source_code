@@ -295,6 +295,7 @@ extern void direct_play_set_group (DPID this_group);
 extern service_provider_table_type *direct_play_get_service_provider (void);
 extern session_table_type *direct_play_get_session (void);
 extern connection_data_type *direct_play_get_connection_data (void);
+extern int direct_play_session_max_players ( void );
 
 extern int direct_play_get_connection_baudrate ( void );
 
@@ -584,6 +585,7 @@ extern connection_data_type *direct_play_get_connection_data (void);
 
 extern int direct_play_remove_player_from_group (DPID id);
 extern int direct_play_get_connection_baudrate ( void );
+extern int direct_play_session_max_players ( void );
 
 extern int direct_play_refresh_modem_session ( void );
 
