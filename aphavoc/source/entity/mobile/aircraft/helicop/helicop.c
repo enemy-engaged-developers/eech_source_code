@@ -1195,6 +1195,9 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 		}
 		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		////Moje 030606 Fly the Black-Hawk, 030612 Hind
+		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
 		{
 			break;
 		}
@@ -1261,7 +1264,7 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 	{
 		if (get_local_entity_int_value (task, INT_TYPE_TASK_COMPLETED) != TASK_INCOMPLETE)
 		{
-			return FALSE;
+			return TRUE;	////Moje 030606 Changed FALSE to TRUE, makes choppers flyable after mission complete
 		}
 	}
 

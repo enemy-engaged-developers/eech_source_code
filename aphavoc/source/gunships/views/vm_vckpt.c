@@ -130,6 +130,26 @@ static float get_rotate_left_limit (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			limit = rad (90.0);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			limit = rad (90.0);
+
+			break;
+		}
+		////Moje 030612 End
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
@@ -188,6 +208,26 @@ static float get_rotate_right_limit (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			limit = rad (-90.0);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 03061 2Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			limit = rad (-90.0);
+
+			break;
+		}
+		////Moje 030612 End
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
@@ -246,6 +286,26 @@ static float get_rotate_up_limit (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			limit = rad (45.0);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			limit = rad (40.0);
+
+			break;
+		}
+		////Moje 030612 End
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
@@ -304,6 +364,26 @@ static float get_rotate_down_limit (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			limit = rad (-20.0);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			limit = rad (-20.0);
+
+			break;
+		}
+		////Moje 030612 End
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
@@ -717,6 +797,104 @@ void get_pilot_head_viewpoint (void)
 
 				break;
 			}
+			////Moje 030518 Start
+			case GUNSHIP_TYPE_BLACKHAWK:
+			////////////////////////////////////////
+			{
+				matrix3x3
+					m;
+
+				vec3d
+					relative_position,
+					world_relative_position;
+
+				//
+				// get aircraft position and attitude
+				//
+
+				get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
+
+				get_local_entity_attitude_matrix (get_gunship_entity (), pilot_head_vp.attitude);
+
+				relative_position.x = 0.0;
+				relative_position.y = -1.2705;
+				relative_position.z = 1.2325;
+
+				multiply_matrix3x3_vec3d (&world_relative_position, pilot_head_vp.attitude, &relative_position);
+
+				pilot_head_vp.position.x += world_relative_position.x;
+				pilot_head_vp.position.y += world_relative_position.y;
+				pilot_head_vp.position.z += world_relative_position.z;
+
+				//
+				// rotate view wrt pilot's head heading and pitch
+				//
+
+				get_arbitrary_rotation_matrix (m, &pilot_head_vp.yv, pilot_head_heading);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.xv, m, &pilot_head_vp.xv);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
+
+				get_arbitrary_rotation_matrix (m, &pilot_head_vp.xv, pilot_head_pitch);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.yv, m, &pilot_head_vp.yv);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
+
+				break;
+			}
+
+			////Moje 030518 End
+			////Moje 030612 Start
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_HIND:
+			////////////////////////////////////////
+			{
+				matrix3x3
+					m;
+
+				vec3d
+					relative_position,
+					world_relative_position;
+
+				//
+				// get aircraft position and attitude
+				//
+
+				get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
+
+				get_local_entity_attitude_matrix (get_gunship_entity (), pilot_head_vp.attitude);
+
+				relative_position.x = 0.0;
+				relative_position.y = -0.86575;
+				relative_position.z = 1.252;
+
+				multiply_matrix3x3_vec3d (&world_relative_position, pilot_head_vp.attitude, &relative_position);
+
+				pilot_head_vp.position.x += world_relative_position.x;
+				pilot_head_vp.position.y += world_relative_position.y;
+				pilot_head_vp.position.z += world_relative_position.z;
+
+				//
+				// rotate view wrt pilot's head heading and pitch
+				//
+
+				get_arbitrary_rotation_matrix (m, &pilot_head_vp.yv, pilot_head_heading);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.xv, m, &pilot_head_vp.xv);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
+
+				get_arbitrary_rotation_matrix (m, &pilot_head_vp.xv, pilot_head_pitch);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.yv, m, &pilot_head_vp.yv);
+
+				multiply_matrix3x3_vec3d (&pilot_head_vp.zv, m, &pilot_head_vp.zv);
+
+				break;
+			}
+			////Moje 030612 End
 		}
 	}
 	else
@@ -949,6 +1127,99 @@ void draw_virtual_cockpit_3d_view (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			if (get_global_draw_cockpit_graphics ())
+			{
+				set_pilots_full_screen_params (FALSE);
+
+				draw_blackhawk_external_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_STOWED_WIPER |
+					VIRTUAL_COCKPIT_MOVING_WIPER |
+					VIRTUAL_COCKPIT_ADI |
+					VIRTUAL_COCKPIT_COMPASS |
+					VIRTUAL_COCKPIT_RAIN_EFFECT |
+					VIRTUAL_COCKPIT_MAIN_ROTOR,
+					NULL
+				);
+
+				draw_blackhawk_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+				);
+			}
+			else
+			{
+				if (get_global_draw_overlaid_instruments ())
+				{
+					draw_overlaid_blackhawk_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
+
+					draw_overlaid_blackhawk_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+				}
+			}
+
+			draw_blackhawk_hud ();
+
+			break;
+		}
+
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			if (get_global_draw_cockpit_graphics ())
+			{
+				set_pilots_full_screen_params (FALSE);
+
+				draw_hind_external_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_STOWED_WIPER |
+					VIRTUAL_COCKPIT_MOVING_WIPER |
+					VIRTUAL_COCKPIT_ADI |
+					VIRTUAL_COCKPIT_HSI |
+					VIRTUAL_COCKPIT_COMPASS |
+					VIRTUAL_COCKPIT_RAIN_EFFECT |
+					VIRTUAL_COCKPIT_MAIN_ROTOR,
+					NULL
+				);
+
+				draw_hind_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_HUD_GLASS |
+					VIRTUAL_COCKPIT_HUD_DISPLAY |
+					VIRTUAL_COCKPIT_CRT_DISPLAY |
+					VIRTUAL_COCKPIT_EKRAN_DISPLAY |
+					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+				);
+			}
+			else
+			{
+				draw_external_hind_hud ();
+
+				if (get_global_draw_overlaid_instruments ())
+				{
+					draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
+
+					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+				}
+			}
+
+			draw_hind_hms ();
+
+			break;
+		}
+		////Moje 030612 End
+
 	}
 
 	//
@@ -1180,6 +1451,51 @@ void draw_virtual_cockpit_3d_hud_view (void)
 
 			break;
 		}
+		////moje 030615 think I missed out a section here. This code isn't in the 030615 exe
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (night_vision_system_active);
+
+			draw_main_3d_scene (&main_vp);
+
+			if (get_global_draw_cockpit_graphics ())
+			{
+				set_pilots_full_screen_params (FALSE);
+
+				draw_hind_external_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_STOWED_WIPER |
+					VIRTUAL_COCKPIT_MOVING_WIPER |
+					VIRTUAL_COCKPIT_RAIN_EFFECT |
+					VIRTUAL_COCKPIT_MAIN_ROTOR,
+					NULL
+				);
+
+				draw_hind_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_HUD_GLASS
+				);
+			}
+			else
+			{
+				if (get_global_draw_overlaid_instruments ())
+				{
+					draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
+
+					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+				}
+			}
+
+			draw_external_hind_hud ();
+
+			draw_hind_hms ();
+
+			break;
+		}
+		////Moje 030615 end
 	}
 
 	//
@@ -1285,6 +1601,40 @@ void draw_virtual_cockpit_3d_display_view (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_blackhawk_internal_virtual_cockpit
+			(
+				VIRTUAL_COCKPIT_DISPLAY_VIEW |
+				VIRTUAL_COCKPIT_COCKPIT |
+				VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+				VIRTUAL_COCKPIT_RHS_MFD_DISPLAY
+			);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_hind_internal_virtual_cockpit
+			(
+				VIRTUAL_COCKPIT_COCKPIT |
+				VIRTUAL_COCKPIT_CRT_DISPLAY |
+				VIRTUAL_COCKPIT_EKRAN_DISPLAY
+			);
+
+			break;
+		}
+		////Moje 030612 End
 	}
 
 	//

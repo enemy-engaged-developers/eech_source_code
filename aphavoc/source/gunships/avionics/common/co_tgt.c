@@ -475,6 +475,22 @@ void set_common_target_acquisition_system_lock_target (int lock)
 
 			break;
 		}
+		////Moje 030519 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			set_blackhawk_lock_target (lock);
+
+			break;
+		}
+		////Moje 030519 End
+		////Moje 030612 start
+		case GUNSHIP_TYPE_HIND:
+		{
+			set_hind_lock_target (lock);
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 
@@ -874,6 +890,23 @@ void select_simple_avionics_target_acquisition_system (void)
 
 			break;
 		}
+		////Moje 030519 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			select_blackhawk_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
+			break;
+		}
+		////Moje 030519 End
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 

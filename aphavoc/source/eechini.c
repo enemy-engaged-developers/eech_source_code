@@ -358,10 +358,11 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
+			////Moje 030609 Changed k-valuse from 4 to 6 Blackhawk and Hind is always flyable now
 			command_line_fly_any_airplane = d1;
 			if (command_line_fly_any_airplane == 0)
 			{
-				for (k=4; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
+				for (k=6; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}

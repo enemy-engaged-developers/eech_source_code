@@ -116,6 +116,25 @@ void activate_common_threat_warning_system (entity *threat)
 
 			break;
 		}
+		////Moje 030519 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			activate_blackhawk_threat_warning_system (threat);
+
+			break;
+		}
+		////Moje 030519 End
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			activate_hind_threat_warning_system (threat);
+
+			break;
+		}
+		////Moje 030612 end
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
 /*

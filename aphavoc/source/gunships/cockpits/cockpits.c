@@ -175,6 +175,46 @@ void initialise_cockpits (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_blackhawk_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_blackhawk_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_hind_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_hind_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 
@@ -251,6 +291,35 @@ void deinitialise_cockpits (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+
+			deinitialise_common_virtual_cockpit ();
+
+			deinitialise_blackhawk_cockpits ();
+
+			deinitialise_blackhawk_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+			deinitialise_common_virtual_cockpit ();
+			deinitialise_hind_cockpits ();
+			deinitialise_hind_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 
@@ -325,6 +394,38 @@ void update_cockpits (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_blackhawk_cockpits ();
+
+			update_blackhawk_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_hind_cockpits ();
+
+			update_hind_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 
@@ -378,6 +479,30 @@ void draw_cockpit (cockpit_panels panel)
 
 			break;
 		}
+		////////////////////////////////////////
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_blackhawk_cockpit (panel);
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_hind_cockpit (panel);
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 

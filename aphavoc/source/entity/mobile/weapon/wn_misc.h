@@ -98,7 +98,21 @@ extern weapon_config_types get_hokum_weapon_config
 	entity_sub_types inner_hardpoint_weapon,
 	entity_sub_types outer_hardpoint_weapon
 );
-
+////Moje 030525 Start
+extern weapon_config_types get_blackhawk_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon
+);
+////Moje 030525 End
+////Moje 030612 start
+extern weapon_config_types get_hind_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon,
+	entity_sub_types wing_tip_weapon
+);
+////Moje030612 end
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +147,24 @@ extern void get_hokum_weapons_from_weapon_config
 	entity_sub_types *inner_hardpoint_weapon,
 	entity_sub_types *outer_hardpoint_weapon
 );
+////Moje 030525 Start
 
+extern void get_blackhawk_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon
+);
+////Moje 030525 End
+////Moje 030612 start
+extern void get_hind_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon,
+	entity_sub_types *wing_tip_weapon
+);
+////Moje 030612 end
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -66,9 +66,9 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		#define TURRET							(0)
+		#define TURRET						(0)
 
-		#define LAUNCHER						(0)
+		#define LAUNCHER					(0)
 
 		#define NUM_ROCKETS					(40)
 
@@ -87,22 +87,22 @@
 		{
 			// WEAPON PACKAGE 1
 			{
-				ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET,	 			// sub_type
-				NUM_ROCKETS,		 											// number
-				TURRET,			 	 											// heading_depth
-				LAUNCHER,	 	 	 											// pitch_depth
-				0,						  				 							// muzzle_depth
-				FALSE,				  				 							// make_weapon_system_ready
-				TRUE,		 														// rotate
-				1,																	// salvo_size
-				TURRET_HEADING_RATE,											// heading_rate
-				TURRET_MIN_HEADING_LIMIT,									// min_heading_limit
-				TURRET_MAX_HEADING_LIMIT,									// max_heading_limit
-				LAUNCHER_PITCH_RATE,											// pitch_rate
-				LAUNCHER_MIN_PITCH_LIMIT,									// min_pitch_limit
-				LAUNCHER_MAX_PITCH_LIMIT,									// max_pitch_limit
-				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET,	 		// sub_type
+				NUM_ROCKETS,		 					// number
+				TURRET,			 	 				// heading_depth
+				LAUNCHER,	 	 	 				// pitch_depth
+				0,								// muzzle_depth
+				FALSE,								// make_weapon_system_ready
+				TRUE,		 						// rotate
+				1,								// salvo_size
+				TURRET_HEADING_RATE,						// heading_rate
+				TURRET_MIN_HEADING_LIMIT,					// min_heading_limit
+				TURRET_MAX_HEADING_LIMIT,					// max_heading_limit
+				LAUNCHER_PITCH_RATE,						// pitch_rate
+				LAUNCHER_MIN_PITCH_LIMIT,					// min_pitch_limit
+				LAUNCHER_MAX_PITCH_LIMIT,					// max_pitch_limit
+				rad (0.0),							// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),			  	// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type

@@ -121,6 +121,25 @@ void fully_repair_gunship_damage (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			fully_repair_blackhawk_damage ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			fully_repair_hind_damage ();
+
+			break;
+		}
+		////Moje 020612 End
 	}
 }
 

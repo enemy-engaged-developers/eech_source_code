@@ -859,6 +859,41 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
 
+	////Moje 030519 Start
+	/////////////////////////////////////////////////////////////////
+	// BLACKHAWK PAGE 
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_BLACKHAWK;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\paybla.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+	////Moje 030519 End
+	////Moje 030613 start
+	/////////////////////////////////////////////////////////////////
+	// HIND PAGE 
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_HIND;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payhin.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
+	////Moje 030613 end
+	
 	/////////////////////////////////////////////////////////////////
 	// Member List Box
 

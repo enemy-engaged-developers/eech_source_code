@@ -241,6 +241,27 @@ void display_hud_on_external_view (void)
 
 				break;
 			}
+			////Moje 030518 Start
+			case GUNSHIP_TYPE_BLACKHAWK:
+			////////////////////////////////////////
+			{
+				draw_blackhawk_hud ();
+
+				break;
+			}
+			////Moje 030518 End
+			////Moje 030612 start
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_HIND:
+			////////////////////////////////////////
+			{
+				draw_external_hind_hud ();
+
+				draw_hind_hms ();
+
+				break;
+			}
+			////Moje 030612 end
 		}
 	}
 }

@@ -302,6 +302,26 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 
 			break;
 		}
+		////Moje 030519 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			get_blackhawk_eo_centred_viewpoint (vp);
+
+			break;
+		}
+		////Moje 030519 End
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			get_hind_eo_centred_viewpoint (vp);
+
+			break;
+		}
+		////Moje 030612 end
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
 		default:

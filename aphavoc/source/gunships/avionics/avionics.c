@@ -257,6 +257,92 @@ void initialise_avionics (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		//////Moje 030517 Whole case inserted 3 times Start 1st time
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_blackhawk_hud ();
+
+			initialise_blackhawk_mfd ();
+
+			initialise_blackhawk_weapon_systems ();
+
+			initialise_blackhawk_upfront_display ();
+
+			initialise_blackhawk_target_acquisition_systems ();
+
+			initialise_blackhawk_lamp_avionics ();
+
+			initialise_blackhawk_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_blackhawk_avionics_events, "blackhawk avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+		////Moje 030517 End of insertion 1
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_hind_hud ();
+
+			initialise_hind_mfd ();
+
+			initialise_hind_ekran_display ();
+
+			initialise_hind_target_acquisition_systems ();
+
+			initialise_hind_lamp_avionics ();
+
+			initialise_hind_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_hind_avionics_events, "hind avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 
@@ -449,6 +535,98 @@ void deinitialise_avionics (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		//// Moje 030517 start insertion 2
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_blackhawk_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_blackhawk_hud ();
+
+			deinitialise_blackhawk_mfd ();
+
+			deinitialise_blackhawk_upfront_display ();
+
+			deinitialise_blackhawk_target_acquisition_systems ();
+
+			deinitialise_blackhawk_lamp_avionics ();
+
+			deinitialise_blackhawk_threat_warning_system ();
+
+			break;
+		}
+		//// Moje 030517 End of insertion 2
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_hind_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_hind_hud ();
+
+			deinitialise_hind_mfd ();
+
+			deinitialise_hind_ekran_display ();
+
+			deinitialise_hind_target_acquisition_systems ();
+
+			deinitialise_hind_lamp_avionics ();
+
+			deinitialise_hind_threat_warning_system ();
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 
@@ -535,6 +713,46 @@ void update_avionics (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		////Moje 030517 start of 3rd insertion
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_blackhawk_target_acquisition_system ();
+
+			update_blackhawk_weapon_systems ();
+
+			update_blackhawk_lamp_avionics ();
+
+			update_blackhawk_threat_warning_system ();
+
+			update_blackhawk_upfront_display ();
+
+			break;
+		}
+		////Moje 030517 End of 3rd insertion
+		////Moje 030612 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_hind_target_acquisition_system ();
+
+			update_hind_weapon_systems ();
+
+			update_hind_lamp_avionics ();
+
+			update_hind_threat_warning_system ();
+
+			update_hind_ekran_display ();
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 

@@ -128,11 +128,12 @@
 
 //VJ WUT mod bug, date: 26-mar-03
 //remove "const" from definition
+
 weapon_data
 	weapon_database[NUM_ENTITY_SUB_TYPE_WEAPONS] =
 	{
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_NO_WEAPON
 		//
 		////////////////////////////////////////
@@ -199,7 +200,7 @@ weapon_data
 		////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND
 		//
 		////////////////////////////////////////
@@ -261,7 +262,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M61A1_20MM_ROUND
 		//
 		////////////////////////////////////////
@@ -325,7 +326,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND
 		//
 		////////////////////////////////////////
@@ -387,7 +388,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_GAU12U_25MM_ROUND
 		//
 		////////////////////////////////////////
@@ -449,7 +450,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M242_25MM_ROUND
 		//
 		////////////////////////////////////////
@@ -511,7 +512,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_GAU8A_30MM_ROUND
 		//
 		////////////////////////////////////////
@@ -573,7 +574,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND
 		//
 		////////////////////////////////////////
@@ -635,7 +636,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND
 		//
 		////////////////////////////////////////
@@ -700,7 +701,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M256_120MM_ROUND
 		//
 		////////////////////////////////////////
@@ -765,7 +766,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M284_155MM_ROUND
 		//
 		////////////////////////////////////////
@@ -826,7 +827,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET
 		//
 		////////////////////////////////////////
@@ -891,7 +892,7 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND
 		//
 		////////////////////////////////////////
@@ -953,16 +954,16 @@ weapon_data
 			rad (1.0),															// max_launch_angle_error
 		},
 		////////////////////////////////////////
-		//
+		//	 
 		// ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND
 		//
 		////////////////////////////////////////
 		{
 			"9-A-624 12.7mm Round",				  							// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"9-A-624 12.7mm Round",																	// hud_name
+			"9-A-624 12.7mm Round",																	// mfd_name
+			"12.7mm Round",																	// weapon_loading_list_name
+			"12.7mm Round",																	// weapon_loading_name_text
 
 			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
@@ -2203,10 +2204,10 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"S-5",	  							  								// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"S-5",																	// hud_name
+			"S-5",																	// mfd_name
+			"S-5",																	// weapon_loading_list_name
+			"S-5",																	// weapon_loading_name_text
 
 			OBJECT_3D_S5_MISSILE,		  									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
@@ -2233,7 +2234,7 @@ weapon_data
 			FALSE,																// survive_ground_impact
 			TRUE,	 																// in_flight_collision_check
 			TRUE,				  													// viewable_weapon
-			FALSE,																// boresight_weapon
+			FALSE,					// boresight_weapon
 			FALSE,																// hellfire_flight_profile
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
@@ -2289,14 +2290,14 @@ weapon_data
 			600,																	// soft_damage_capability
 			400,																	// hard_damage_capability
 			META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL,				// smoke_trail_type
-			TRUE,																	// acquire_parent_forward_velocity
-			TRUE,		  															// ignore_gravity
-			FALSE,																// survive_ground_impact
-			TRUE,	 																// in_flight_collision_check
-			TRUE,			  														// viewable_weapon
-			TRUE,																	// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
+			TRUE,							// acquire_parent_forward_velocity
+			TRUE,		  					// ignore_gravity
+			FALSE,							// survive_ground_impact
+			TRUE,	 						// in_flight_collision_check
+			TRUE,			  				// viewable_weapon
+			TRUE,							// boresight_weapon
+			FALSE,							// hellfire_flight_profile
+			WEAPON_CLASS_AIR_TO_SURFACE,				// weapon_class
 
 			11.3,																	// weight
 			100.0,																// min_range
@@ -3315,10 +3316,10 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"AT-6 Spiral",				 				 						// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"AT-6 Spiral",																	// hud_name
+			"AT-6 Spiral",																	// mfd_name
+			"AT-6 Spiral",																	// weapon_loading_list_name
+			"AT-6 Spiral",																	// weapon_loading_name_text
 
 			OBJECT_3D_AT6_MISSILE,	  										// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_RADIO_COMMAND,							// guidance_type
@@ -3330,44 +3331,44 @@ weapon_data
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
-			-1,																	// weapon_selected_cpg_speech
-			-1,																	// weapon_low_cpg_speech
-			-1,																	// weapon_out_cpg_speech
-			-1,																	// weapon_launched_cpg_speech
-			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,						// weapon_launched_wingman_speech
-			0,																		// report_weapon_low_count
-			FALSE,																// gun_shake
-			744,																	// soft_damage_capability
-			744,																	// hard_damage_capability
+			-1,								// weapon_selected_cpg_speech
+			-1,									// weapon_low_cpg_speech
+			-1,								// weapon_out_cpg_speech
+			-1,								// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,				// weapon_launched_wingman_speech
+			0,								// report_weapon_low_count
+			FALSE,								// gun_shake
+			744,								// soft_damage_capability
+			744,								// hard_damage_capability
 			META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL,				// smoke_trail_type
-			TRUE,																	// acquire_parent_forward_velocity
-			FALSE,	  															// ignore_gravity
-			FALSE,																// survive_ground_impact
-			TRUE,	 																// in_flight_collision_check
-			TRUE,			  														// viewable_weapon
-			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
+			TRUE,								// acquire_parent_forward_velocity
+			FALSE,	  							// ignore_gravity
+			FALSE,								// survive_ground_impact
+			TRUE,	 							// in_flight_collision_check
+			TRUE,			  					// viewable_weapon
+			FALSE,								// boresight_weapon
+			FALSE,								// hellfire_flight_profile
+			WEAPON_CLASS_AIR_TO_SURFACE,					// weapon_class
 
-			0.0,																	// weight
-			500.0,																// min_range
-			7000.0,																// max_range
-			3000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			7000.0,		  														// max_range_loal
-			0.0,																	// max_range_error_ratio
-			50.0,																	// muzzle_velocity
-			0.0,																	// muzzle_velocity_max_error
-			340.0,																// cruise_velocity
-			10.0 * G,															// g_max
-			2.956,																// burn_time
-			18.893,																// cruise_time
-			0.0,																	// cruise_time_max_error
-			1.0,		 															// inhibit_time
-			0.0,																	// burst_duration
-			FIRE_SINGLE_WEAPON,												// rate_of_fire
-			0.0,																	// reload_time
-			rad (20.0),															// max_launch_angle_error
+			0.0,								// weight
+			500.0,								// min_range
+			7000.0,								// max_range
+			3000.0,								// effective_range
+			500.0,		 						// min_range_loal
+			7000.0,		  						// max_range_loal
+			0.0,							// max_range_error_ratio
+			50.0,								// muzzle_velocity
+			0.0,							// muzzle_velocity_max_error
+			340.0,							// cruise_velocity
+			10.0 * G,							// g_max
+			2.956,							// burn_time
+			18.893,							// cruise_time
+			0.0,							// cruise_time_max_error
+			1.0,		 					// inhibit_time
+			0.0,							// burst_duration
+			FIRE_SINGLE_WEAPON,					// rate_of_fire
+			0.0,							// reload_time
+			rad (20.0),						// max_launch_angle_error
 		},
 		////////////////////////////////////////
 		//

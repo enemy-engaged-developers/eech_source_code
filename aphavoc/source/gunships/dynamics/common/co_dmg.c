@@ -1287,6 +1287,24 @@ void dynamics_restore_damage_values (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+
+			blackhawk_restore_damage_values ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 start
+		case GUNSHIP_TYPE_HIND:
+		{
+
+			hind_restore_damage_values ();
+
+			break;
+		}
+		////Moje 030612 end
 	}
 }
 
@@ -1493,6 +1511,25 @@ void repair_damage_model (unsigned int damage)
 
 							break;
 						}
+					////Moje 030527 Start
+
+						case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+						{
+
+							blackhawk_restore_damage_values ();
+
+							break;
+						}
+					////Moje 030527 End
+					////moje 030612 start
+						case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+						{
+
+							hind_restore_damage_values ();
+
+							break;
+						}
+					////Moje 030612 end
 					}
 
 					#if DYNAMICS_DEBUG

@@ -551,6 +551,161 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_S13;
 	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
 	hardpoint_data->valid_weapon_types [5] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+////Moje 030519 Start
+	//////////////////////////
+	//
+	// BLACK-HAWK
+	//
+	//////////////////////////
+
+	gunship_data = &weapon_loading_gunship_database [GUNSHIP_TYPE_BLACKHAWK];
+
+	for (loop = 0; loop < NUM_WEAPON_LOADING_HARDPOINT_TYPES; loop ++)
+	{
+		memset (&(gunship_data->hardpoint_list [loop]), 0, sizeof (weapon_loading_hardpoint_type));
+	}
+
+	// INNER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = BLACKHAWK_LHS_INNER_PYLON;
+	hardpoint_data->sub_object_depth2 = BLACKHAWK_RHS_INNER_PYLON;
+
+	hardpoint_data->number_of_valid_weapon_types = 3;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	// OUTER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = BLACKHAWK_LHS_OUTER_PYLON;
+	hardpoint_data->sub_object_depth2 = BLACKHAWK_RHS_OUTER_PYLON;
+
+	hardpoint_data->number_of_valid_weapon_types = 3;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+////Moje 030519 End
+////Moje 030613 start
+	//////////////////////////
+	//
+	// HIND
+	//
+	//////////////////////////
+
+	gunship_data = &weapon_loading_gunship_database [GUNSHIP_TYPE_HIND];
+
+	for (loop = 0; loop < NUM_WEAPON_LOADING_HARDPOINT_TYPES; loop ++)
+	{
+		memset (&(gunship_data->hardpoint_list [loop]), 0, sizeof (weapon_loading_hardpoint_type));
+	}
+
+	// GUN 1
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_GUN1]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = TRUE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = HIND_CANNON_TURRET;
+	hardpoint_data->sub_object_depth2 = -1;
+
+	hardpoint_data->number_of_valid_weapon_types = 1;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND;
+
+	// INNER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = HIND_LHS_INNER_PYLON;
+	hardpoint_data->sub_object_depth2 = HIND_RHS_INNER_PYLON;
+
+	hardpoint_data->number_of_valid_weapon_types = 3;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_S8;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S5;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	// OUTER HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = HIND_LHS_OUTER_PYLON;
+	hardpoint_data->sub_object_depth2 = HIND_RHS_OUTER_PYLON;
+
+	hardpoint_data->number_of_valid_weapon_types = 3;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_S8;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S5;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	// WINGTIP HARDPOINT
+
+	hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
+
+	hardpoint_data->valid = TRUE;
+
+	hardpoint_data->fixed = FALSE;
+
+	hardpoint_data->current_weapon_index = 0;
+
+	hardpoint_data->sub_object_depth1 = HIND_LHS_WING_TIP_MOUNT;
+	hardpoint_data->sub_object_depth2 = HIND_RHS_WING_TIP_MOUNT;
+
+	hardpoint_data->number_of_valid_weapon_types = 2;
+
+	hardpoint_data->valid_weapon_types = safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
+
+	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+////moje 030613 end
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -891,6 +1046,41 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 
 			break;
 		}
+////Moje 030519 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			get_blackhawk_weapons_from_weapon_config
+			(
+				get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
+				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
+			);
+
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
+			
+			break;
+		}
+
+////Moje 030519 End
+////Moje 036013 start
+		case GUNSHIP_TYPE_HIND:
+		{
+			get_hind_weapons_from_weapon_config
+			(
+				get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
+				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+				&current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
+				&current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
+			);
+
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_INNER, current_weapon [WEAPON_LOADING_HARDPOINT_INNER]);
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_OUTER, current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]);
+			weapon_loading_set_current_hardpoint_weapon (gunship_type, WEAPON_LOADING_HARDPOINT_WINGTIP, current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]);
+
+			break;
+		}
+////moje 030613 end
 	}
 }
 
@@ -1009,6 +1199,51 @@ void weapon_loading_reload_all_weapons (entity *en)
 
 			break;
 		}
+////Moje 030519 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			new_config_type = get_blackhawk_weapon_config
+									(
+										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER]
+									);
+
+			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
+
+			break;
+		}
+
+////Moje 030519 End
+////Moje 030613 start
+		case GUNSHIP_TYPE_HIND:
+		{
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_INNER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_INNER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_OUTER]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_OUTER] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			hardpoint_data = &(gunship_data->hardpoint_list [WEAPON_LOADING_HARDPOINT_WINGTIP]);
+			current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP] = hardpoint_data->valid_weapon_types [hardpoint_data->current_weapon_index];
+
+			new_config_type = get_hind_weapon_config
+									(
+										current_weapon [WEAPON_LOADING_HARDPOINT_INNER],
+										current_weapon [WEAPON_LOADING_HARDPOINT_OUTER],
+										current_weapon [WEAPON_LOADING_HARDPOINT_WINGTIP]
+									);
+
+			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, new_config_type);
+
+			break;
+		}
+////Moje 030613 end
 	}
 
 	if (en == get_gunship_entity ())

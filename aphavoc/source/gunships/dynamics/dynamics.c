@@ -231,6 +231,24 @@ void initialise_flight_dynamics (entity *en)
 
                break;
             }
+////Moje 030518 Start
+            case GUNSHIP_TYPE_BLACKHAWK:
+            {
+
+               initialise_blackhawk_advanced_dynamics (en);
+
+               break;
+            }
+////Moje 030518 End
+////Moje 030612 Start
+            case GUNSHIP_TYPE_HIND:
+            {
+
+               initialise_hind_advanced_dynamics (en);
+
+               break;
+            }
+////Moje 020612 End
          }
 
          break;
@@ -423,10 +441,14 @@ void initialise_flight_dynamics_collision_points (void)
 	raw = get_local_entity_data (get_gunship_entity ());
 
 	// JB 030313 Fly any aircraft HACK HACK HACK
+        ////Moje 030518 Last line added for B-H, changed to AH64D to avoid sinking -bug
+        ////Moje 030612 Last line added for Hind, changed to HAVOC test for sink-bug, changed Hind to Havoc
 	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
 		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
 		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
-		raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+		raw->ac.object_3d_shape == OBJECT_3D_KA_52 ||
+                raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
+                raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC)
 	{
 		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
 	}
@@ -1073,6 +1095,46 @@ void update_gunship_dynamics (void)
 
 			break;
 		}
+////Moje 030518 Start 
+
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+
+			while (current_flight_dynamics->model_iterations --)
+			{
+
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
+				update_blackhawk_advanced_dynamics ();
+			}
+
+			update_collision_dynamics ();
+
+			update_dynamics_external_values ();
+
+			break;
+		}
+
+////Moje 030518 End
+////Moje 030612 Start
+		case GUNSHIP_TYPE_HIND:
+		{
+
+			while (current_flight_dynamics->model_iterations --)
+			{
+
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
+				update_hind_advanced_dynamics ();
+			}
+
+			update_collision_dynamics ();
+
+			update_dynamics_external_values ();
+
+			break;
+		}
+////Moje 030612 End
 	}
 
 	if (get_gunship_entity ())

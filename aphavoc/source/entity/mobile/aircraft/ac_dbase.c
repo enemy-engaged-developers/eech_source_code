@@ -400,75 +400,76 @@ aircraft_data
       // ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK
       //
       ////////////////////////////////////////
+      ////Moje 030524 1st line under "OBJECT_3D_UH60_BLACKHAWK" changed from "NUM_GUNSHIP_TYPES"
       {
-         "UH-60 Black Hawk",													// full_name
-         "UH-60 BLACK HAWK",	 												// long_display_name
-         "UH-60",	  																// short_display_name
-			"HELICOPTER",															// easy_display_name
+         "UH-60 Black Hawk",									// full_name
+         "UH-60 BLACK HAWK",	 								// long_display_name
+         "UH-60",	  									// short_display_name
+			"HELICOPTER",								// easy_display_name
 
-         OBJECT_3D_UH60_BLACKHAWK,											// default_3d_shape
-			NUM_GUNSHIP_TYPES,													// gunship_type
-			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// default_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,							// scout_weapon_config_type
+         OBJECT_3D_UH60_BLACKHAWK,							// default_3d_shape
+			GUNSHIP_TYPE_BLACKHAWK,							// gunship_type
+			ENTITY_FORCE_AIR,							// force
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,			// default_weapon_type
-			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
-			TARGET_PRIORITY_MEDIUM,												// target_priority_type
-			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,							// force_info_catagory
-			THREAT_TYPE_AIRBORNE_RADAR,										// threat_type
-			VIEW_CATEGORY_COMBAT_HELICOPTERS,								// view_category
-			VIEW_TYPE_UH60_BLACK_HAWK,											// view_type
-			MAP_ICON_HELICOPTER,													// map icon
+			TARGET_SYMBOL_HELICOPTER,						// target_symbol_type
+			TARGET_PRIORITY_MEDIUM,							// target_priority_type
+			FORCE_INFO_CATAGORY_ARMED_HELICOPTER,					// force_info_catagory
+			THREAT_TYPE_AIRBORNE_RADAR,						// threat_type
+			VIEW_CATEGORY_COMBAT_HELICOPTERS,					// view_category
+			VIEW_TYPE_UH60_BLACK_HAWK,						// view_type
+			MAP_ICON_HELICOPTER,							// map icon
 
-         3.5154,																	// centre_of_gravity_to_ground_distance
-         3.35,																		// centre_of_gravity_to_ground_distance_destroyed
-         15.0,																		// chase_view_min_distance
-         100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
-         2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (85.0),								// cruise_velocity
-         24.0,																		// cruise_altitude
-         12.0,																		// attack_altitude
-			0.0,																		// destroyed_bank_offset
-			rad (6.9),																// destroyed_pitch_offset
-			rad (1.7),																// fuselage_angle
-			0.0,																		// liftoff_velocity
-			rad (2.5),																// main_rotor_shaft_angle
-			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
-			0.0,																		// propellor_direction
-			rad (80),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
-			1.0,																		// max_vertical_turn_allowance
-			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			12.6,																		// power_output
-			-1.0,																		// tail_rotor_direction
-			5000.0,																	// recon_radius
-			10.0,																		// target_scan_delay
-			0.0,																		// air_scan_range
-			4000.0,		 															// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
-			1.0,																		// potential_air_to_surface_threat
-			10.0,																		// Ammo_economy
-			1136.0,																	// Fuel_default_weight
-			10.0,																		// Fuel_economy
-			1.0,																	// number_of_main_rotors
-			8.18,																	// main_rotor_radius
+         3.5154,										// centre_of_gravity_to_ground_distance
+         3.35,											// centre_of_gravity_to_ground_distance_destroyed
+         15.0,											// chase_view_min_distance
+         100.0,	  										// chase_view_max_distance
+			0.5,									// chase_view_min_distance_test
+         2.0 * KILOMETRE,									// chase_view_max_distance_test
+         knots_to_metres_per_second (85.0),							// cruise_velocity
+         24.0,											// cruise_altitude
+         12.0,											// attack_altitude
+			0.0,									// destroyed_bank_offset
+			rad (6.9),								// destroyed_pitch_offset
+			rad (1.7),								// fuselage_angle
+			0.0,									// liftoff_velocity
+			rad (2.5),								// main_rotor_shaft_angle
+			-1.0,									// main_rotor_direction
+			rad (-4.0),								// main_rotor_blade_droop_angle
+			0.0,									// propellor_direction
+			rad (80),								// max_turn_rate (deg / sec)
+			rad (180.0),								// max_roll
+			1.0,									// max_vertical_turn_allowance
+			15.0,									// avoidance_radius
+			6.0 * G,								// g_max
+			12.6,									// power_output
+			-1.0,									// tail_rotor_direction
+			5000.0,									// recon_radius
+			10.0,									// target_scan_delay
+			0.0,									// air_scan_range
+			4000.0,		 							// surface_scan_range
+			0.8,									// potential_air_to_air_threat
+			1.0,									// potential_air_to_surface_threat
+			10.0,									// Ammo_economy
+			1136.0,									// Fuel_default_weight
+			10.0,									// Fuel_economy
+			1.0,									// number_of_main_rotors
+			8.18,									// main_rotor_radius
 
-			650,																		// initial_damage_level
+			650,								// initial_damage_level
 
-			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
-			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
-			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable JB 030408 Fly any aircraft
-			150,																		// points value
+			EXPLOSIVE_QUALITY_EXPLOSIVE,					// explosive_quality
+			EXPLOSIVE_POWER_MEDIUM,						// explosive_power
+			TRUE,								// offensive_capability
+			TRUE,								// player_controllable JB 030408 Fly any aircraft
+			150,								// points value
 
-			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,			// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_UP,		// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -477,6 +478,8 @@ aircraft_data
       // ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND
       //
       ////////////////////////////////////////
+      ////Moje 030524 1st line under "OBJECT_3D_MI24_HIND" changed from "NUM_GUNSHIP_TYPES"
+
       {
          "Mi-24D Hind",															// full_name
          "Mi-24D HIND",		 													// long_display_name
@@ -484,7 +487,7 @@ aircraft_data
 			"HELICOPTER",															// easy_display_name
 
          OBJECT_3D_MI24_HIND,													// default_3d_shape
-			NUM_GUNSHIP_TYPES,													// gunship_type
+			GUNSHIP_TYPE_HIND,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// min_weapon_config_type

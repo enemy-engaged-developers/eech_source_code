@@ -148,6 +148,23 @@ void damage_virtual_cockpit_main_rotors (int seed)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			damage_blackhawk_virtual_cockpit_main_rotors (seed);
+
+			break;
+		}
+
+		////Moje 030518 End
+		////Moje 030612 Start
+		case GUNSHIP_TYPE_HIND:
+		{
+			damage_hind_virtual_cockpit_main_rotors (seed);
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 
@@ -185,6 +202,22 @@ void restore_virtual_cockpit_main_rotors (void)
 
 			break;
 		}
+		////Moje 030518 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		{
+			restore_blackhawk_virtual_cockpit_main_rotors ();
+
+			break;
+		}
+		////Moje 030518 End
+		////Moje 030612 Start
+		case GUNSHIP_TYPE_HIND:
+		{
+			restore_hind_virtual_cockpit_main_rotors ();
+
+			break;
+		}
+		////Moje 030612 End
 	}
 }
 

@@ -194,6 +194,9 @@ void process_game_initialisation_phases (void)
 					default:
 					case GUNSHIP_TYPE_APACHE:
 					case GUNSHIP_TYPE_COMANCHE:
+					////Moje 030518 Start
+					case GUNSHIP_TYPE_BLACKHAWK:
+					////Moje 030518 End
 					{
 
 						set_global_gunship_side (ENTITY_SIDE_BLUE_FORCE);
@@ -203,6 +206,9 @@ void process_game_initialisation_phases (void)
 
 					case GUNSHIP_TYPE_HAVOC:
 					case GUNSHIP_TYPE_HOKUM:
+					////Moje 030612 Start
+					case GUNSHIP_TYPE_HIND:
+					////Moje 030612 End
 					{
 
 						set_global_gunship_side (ENTITY_SIDE_RED_FORCE);
