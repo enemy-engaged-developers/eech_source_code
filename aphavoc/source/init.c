@@ -854,7 +854,8 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
-	initialise_entity_system (125000);
+	//Xhit: added another 10000 enities (prev. 125000) that are reserved no comms local entities (030428)
+	initialise_entity_system (135000);
 
 	////////////////////////////////////////
 	//

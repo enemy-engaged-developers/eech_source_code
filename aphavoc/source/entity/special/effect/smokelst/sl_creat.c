@@ -100,9 +100,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
   	//
 	////////////////////////////////////////
 
-// Check removed by Werewolf 080403
-// TODO: Fix downwash effect to work on client AND server without requiring this hack
-//	validate_local_create_entity_index (index);
+	validate_local_create_entity_index (index);
 
 	#if DEBUG_MODULE
 
@@ -110,7 +108,14 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 	#endif
 
-	en = get_free_entity (index);
+	//Xhit: if this is a downwash smoke effect then it should be placed in the local enity heap (030428)
+	if(index == ENTITY_INDEX_CREATE_LOCAL)
+	{
+		en = get_free_local_entity (index);
+	} else
+	{
+		en = get_free_entity (index);
+	}
 
 	if (en)
 	{

@@ -98,7 +98,11 @@ static void update_server (entity *en)
 
 static void update_client (entity *en)
 {
-	update_smoke( en );
+	//Xhit: if this is a local created entity then it should also be destroyed localy. (030428)
+	if ( !update_smoke( en ) && (get_local_entity_index( en ) >= start_of_local_entity_heap))
+	{
+		destroy_client_server_entity_family( en );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
-//	Filename	: DOWNWASH.C
+//	Filename		: DOWNWASH.C
 //	Authors		: Xhit (Ingemar Persson)
-//	Date		: 2003-03-28
+//	Date			: 2003-03-28
 //	Update		:
 //
-//	Description	: Checks if downwash effect is needed and creates one accordingly
-//				  The external function (draw_downwash_effect) call is made by HC_DRAW.C	
+//	Description	:	Checks if downwash effect is needed and creates one accordingly
+//						The external function (draw_downwash_effect) call is made by HC_DRAW.C	
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -67,9 +67,12 @@ int create_downwash_effect(downwash_types type, vec3d *position, float main_roto
 
 	entity_index_list = malloc_fast_mem (sizeof (int) * count);
 
+	//Xhit replaced ENTITY_INDEX_DONT_CARE with ENTITY_INDEX_CREATE_LOCAL (030428)
+	//This and the changes made to the entity heap and some smoke functions
+	//clears the MP-bug caused by that local entities were not allowed to be created on a client
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{
-		entity_index_list [loop] = ENTITY_INDEX_DONT_CARE;
+		entity_index_list [loop] = ENTITY_INDEX_CREATE_LOCAL;
 	}
 
 	index_counter = 0;
@@ -94,17 +97,17 @@ int create_downwash_effect(downwash_types type, vec3d *position, float main_roto
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-//	Function	: create_downwash_effect_component
+//	Function		: create_downwash_effect_component
 //	Authors		: Xhit (Ingemar Persson)
-//	Date		: 2003-03-28
+//	Date			: 2003-03-28
 //	Update		:
 //
-//	Description	: The effects position(x,z), height(y), scale, lifetime and alpha percentage is
-//				  decided here. The position is randomly set and height is set depending on the 
-//				  position. Normally there are 4 smoke list effects created for every downwash
-//				  per frame with one smoke list per quadrant around the helicopter. 
-//				  If the helicopter got 2 main rotors on different axis then 2 additional 
-//				  smoke list are created at the side of the helicopter.
+//	Description	:	The effects position(x,z), height(y), scale, lifetime and alpha percentage is
+//						decided here. The position is randomly set and height is set depending on the 
+//						position. Normally there are 4 smoke list effects created for every downwash
+//						per frame with one smoke list per quadrant around the helicopter. 
+//						If the helicopter got 2 main rotors on different axis then 2 additional 
+//						smoke list are created at the side of the helicopter.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -147,8 +150,7 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 		terrain_info;
 
 	entity
-		*new_entity,
-		*effect_list_parent;
+		*new_entity;
 
 	memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
@@ -158,12 +160,6 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 	{
 		return 0;
 	}
-
-	//
-	// some smoke lists should not be linked to a parent, even though a parent entity is passed across ( for position ref etc.. )
-	//
-
-	effect_list_parent = NULL;
 
 	// Xhit: This is the altitude of the helicopter relative to the ground level. (030328)
 	altitude = position->y - min_altitude;
@@ -177,7 +173,7 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 	lifetime_min = this_downwash_component->lifetime_min;
 	lifetime_max = this_downwash_component->lifetime_max;
 
-	// Xhit: regardless if we are making sprites in the four quadrants or not. (030328)
+	// Xhit: initialising quadrant variables (030328)
 	quadrant_x = 1;
 	quadrant_z = 1;
 
@@ -259,7 +255,7 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 
 		}else
 		//Xhit:	If scattered downwash effect and if the heli got more than one main rotor (on different axis) then 
-		//		add two more trails at the sides of the heli. (030328)
+		//			add two more trails at the sides of the heli. (030328)
 		if((this_downwash_component->create_in_all_quadrants) && (loop >= 4) && (count == 6))
 		{
 			//Xhit: loop = 4 -> x=	1; loop = 5 -> x=	-1; (030328)
@@ -315,7 +311,6 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 		(
 			ENTITY_TYPE_SMOKE_LIST,
 			entity_index_list[ loop ],
-			ENTITY_ATTR_PARENT (LIST_TYPE_SPECIAL_EFFECT, effect_list_parent),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_DOWNWASH),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_SMOKE_TYPE, trail_type),
 			ENTITY_ATTR_INT_VALUE (INT_TYPE_COLOUR_ALPHA, alpha_percentage),
@@ -375,14 +370,14 @@ int count_entities_in_downwash( downwash_types type )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-//	Function	: draw_downwash_effect
+//	Function		: draw_downwash_effect
 //	Authors		: Xhit (Ingemar Persson)
-//	Date		: 2003-03-28
+//	Date			: 2003-03-28
 //	Update		:
 //
-//	Description	: Checks if downwash effect is going to be drawed (depending on helictoper
-//				  altitude and helicopter main rotor rpm). If it's going to be drawn the type 
-//				  of downwash effect is set depending on if it's land or water beneath the helicopter.
+//	Description	:	Checks if downwash effect is going to be drawed (depending on helictoper
+//						altitude and helicopter main rotor rpm). If it's going to be drawn the type 
+//						of downwash effect is set depending on if it's land or water beneath the helicopter.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -427,11 +422,6 @@ void draw_downwash_effect(entity *en)
 
 	if (get_time_acceleration () == TIME_ACCELERATION_PAUSE)
 	{
-		return;
-	}
-
-	if (get_comms_model () != COMMS_MODEL_SERVER) // Only create on server. Werewolf 080403
-	{					      // TODO: Find a solution that works on both client and server
 		return;
 	}
 

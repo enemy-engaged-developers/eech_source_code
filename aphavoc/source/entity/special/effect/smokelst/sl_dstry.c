@@ -135,7 +135,14 @@ static void destroy_local (entity *en)
 
 	free_mem (raw);
 
-	set_free_entity (en);
+	//Xhit. If this is a local only entity then set it free using the local entity heap function. (030428)
+	if(get_local_entity_index( en ) >= start_of_local_entity_heap)
+	{
+		set_free_local_entity (en);
+	} else
+	{
+		set_free_entity (en);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,15 +166,19 @@ static void destroy_remote (entity *en)
 
 static void destroy_server (entity *en)
 {
-	//
-	// destroy remote entity first (keeping local entity valid)
-	//
+	//Xhit: Only send destroy entity to remote if this is not a local only created entity. (030428)
+	if(get_local_entity_index( en ) < start_of_local_entity_heap)
+	{
+		//
+		// destroy remote entity first (keeping local entity valid)
+		//
 
-	validate_client_server_remote_fn ();
+		validate_client_server_remote_fn ();
 
-	destroy_remote (en);
+		destroy_remote (en);
 
-	validate_client_server_local_fn ();
+		validate_client_server_local_fn ();
+	}
 
 	//
 	// destroy local using 'full' function
@@ -182,21 +193,28 @@ static void destroy_server (entity *en)
 
 static void destroy_client (entity *en)
 {
-	if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
+	//Xhit: If this is a local entity only then call the destroy local entity. (030428)
+	if(get_local_entity_index( en ) >= start_of_local_entity_heap)
 	{
-		validate_client_server_remote_fn ();
-
-		destroy_remote (en);
-	}
-	else
+		destroy_local_entity(en);	
+	} else
 	{
-		validate_client_server_local_fn ();
-
-		//
-		// destroy local using 'full' function
-		//
-
-		destroy_local_entity (en);
+		if (get_comms_data_flow () == COMMS_DATA_FLOW_TX)
+		{
+			validate_client_server_remote_fn ();
+		
+			destroy_remote (en);
+		}
+		else
+		{
+			validate_client_server_local_fn ();
+	
+			//
+			// destroy local using 'full' function
+			//
+	
+			destroy_local_entity (en);
+		}
 	}
 }
 

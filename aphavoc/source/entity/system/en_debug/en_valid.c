@@ -113,6 +113,12 @@ int assert_client_server_remote_fn (void)
 
 int assert_local_create_entity_index (int index)
 {
+	//Xhit: Added so that ENTITY_INDEX_CREATE_LOCAL are also accepted (030428)
+	if (index == ENTITY_INDEX_CREATE_LOCAL)
+	{
+		return (TRUE);	
+	}
+	
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		return (index == ENTITY_INDEX_DONT_CARE);
