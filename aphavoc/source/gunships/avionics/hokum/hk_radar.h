@@ -63,12 +63,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/* VJ 030807 radar range adjustable 
 #define HOKUM_RADAR_SCAN_RANGE_1000						((float) 1000.0)
 #define HOKUM_RADAR_SCAN_RANGE_2000		  				((float) 2000.0)
 #define HOKUM_RADAR_SCAN_RANGE_4000	  					((float) 4000.0)
 #define HOKUM_RADAR_SCAN_RANGE_6000		  				((float) 6000.0)
 #define HOKUM_RADAR_SCAN_RANGE_10000		  			((float) 10000.0)
+*/
+//VJ 030807 radar range adjustable                 
+extern float radar_range_hokum[5];                
+
+extern float  	HOKUM_RADAR_SCAN_RANGE_1000,
+					HOKUM_RADAR_SCAN_RANGE_2000,
+					HOKUM_RADAR_SCAN_RANGE_4000,
+					HOKUM_RADAR_SCAN_RANGE_6000,
+					HOKUM_RADAR_SCAN_RANGE_10000;
 
 #define HOKUM_RADAR_SCAN_ARC_SIZE_360			  		(RADAR_SCAN_ARC_SIZE_360)
 #define HOKUM_RADAR_SCAN_ARC_SIZE_180	  		  		((float) rad (180.0))

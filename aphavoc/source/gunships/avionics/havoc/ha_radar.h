@@ -63,11 +63,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/* VJ 030807 radar range adjustable 
 #define HAVOC_RADAR_SCAN_RANGE_1000						((float) 1000.0)
 #define HAVOC_RADAR_SCAN_RANGE_2000		  				((float) 2000.0)
 #define HAVOC_RADAR_SCAN_RANGE_4000	  					((float) 4000.0)
 #define HAVOC_RADAR_SCAN_RANGE_6000		  				((float) 6000.0)
+*/
+//VJ 030807 radar range adjustable                 
+extern float radar_range_havoc[4];                
+
+extern float  	HAVOC_RADAR_SCAN_RANGE_1000,
+					HAVOC_RADAR_SCAN_RANGE_2000,
+					HAVOC_RADAR_SCAN_RANGE_4000,
+					HAVOC_RADAR_SCAN_RANGE_6000;
 
 #define HAVOC_RADAR_SCAN_ARC_SIZE_360			  		(RADAR_SCAN_ARC_SIZE_360)
 #define HAVOC_RADAR_SCAN_ARC_SIZE_180	  		  		((float) rad (180.0))

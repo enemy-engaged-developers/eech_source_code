@@ -1026,8 +1026,10 @@ static void draw_field_of_regard_and_view_boxes (void)
 
 static void display_radar_scan_range (float scan_range)
 {
+//VJ 030807 radar range adjustable
 	char
-		*s;
+		s[8];
+//		*s;
 
 	float
 		width,
@@ -1035,27 +1037,33 @@ static void display_radar_scan_range (float scan_range)
 
 	if (scan_range == APACHE_RADAR_SCAN_RANGE_500)
 	{
-		s = "500m";
+//		s = "500m";
+		sprintf(s,"%.0fm",APACHE_RADAR_SCAN_RANGE_500);
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_1000)
 	{
-		s = "1Km";
+		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_1000/1000);
+//		s = "1Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_2000)
 	{
-		s = "2Km";
+		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_2000/1000);
+//		s = "2Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_4000)
 	{
-		s = "4Km";
+		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_4000/1000);
+//		s = "4Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_8000)
 	{
-		s = "8Km";
+		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_8000/1000);
+//		s = "8Km";
 	}
 	else
 	{
-		s = "XXX";
+		sprintf(s,"XXX");
+//		s = "XXX";
 	}
 
 	width = get_mono_font_string_width (s);

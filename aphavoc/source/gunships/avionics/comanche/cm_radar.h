@@ -64,11 +64,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/* VJ 030807 radar range adjustable 
 #define COMANCHE_RADAR_SCAN_RANGE_500						((float) 500.0)
 #define COMANCHE_RADAR_SCAN_RANGE_1000						((float) 1000.0)
 #define COMANCHE_RADAR_SCAN_RANGE_2000						((float) 2000.0)
 #define COMANCHE_RADAR_SCAN_RANGE_4000						((float) 4000.0)
 #define COMANCHE_RADAR_SCAN_RANGE_8000						((float) 8000.0)
+*/ 
+                                                
+//VJ 030807 radar range adjustable                 
+extern float radar_range_comanche[5];                
+                                                   
+extern float  	COMANCHE_RADAR_SCAN_RANGE_500,
+					COMANCHE_RADAR_SCAN_RANGE_1000,
+					COMANCHE_RADAR_SCAN_RANGE_2000,
+					COMANCHE_RADAR_SCAN_RANGE_4000,
+					COMANCHE_RADAR_SCAN_RANGE_8000;
 
 #define COMANCHE_RADAR_SCAN_ARC_SIZE_360					(RADAR_SCAN_ARC_SIZE_360)
 #define COMANCHE_RADAR_SCAN_ARC_SIZE_180					((float) rad (180.0))

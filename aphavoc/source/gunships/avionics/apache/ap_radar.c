@@ -70,8 +70,25 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030807 radar range adjustable 
+float  	APACHE_RADAR_SCAN_RANGE_500,	
+			APACHE_RADAR_SCAN_RANGE_1000,
+			APACHE_RADAR_SCAN_RANGE_2000,			
+			APACHE_RADAR_SCAN_RANGE_4000,			
+			APACHE_RADAR_SCAN_RANGE_8000;			
+			
+float radar_range_apache[5];
+
+
 void initialise_apache_radar (void)
 {
+//VJ 030807 radar range adjustable 	
+   APACHE_RADAR_SCAN_RANGE_500 = radar_range_apache[0];	
+	APACHE_RADAR_SCAN_RANGE_1000 = radar_range_apache[1];
+	APACHE_RADAR_SCAN_RANGE_2000 = radar_range_apache[2];		
+	APACHE_RADAR_SCAN_RANGE_4000 = radar_range_apache[3];		
+	APACHE_RADAR_SCAN_RANGE_8000 = radar_range_apache[4];			
+	
 	ground_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_8000;
 	ground_radar.scan_datum	  				= rad (0.0);
 	ground_radar.scan_arc_size	  			= APACHE_RADAR_SCAN_ARC_SIZE_90;

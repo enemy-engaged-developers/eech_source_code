@@ -352,31 +352,38 @@ static void draw_damaged_mfd (void)
 
 static void display_radar_scan_range (float scan_range)
 {
+//VJ 030807 radar range adjustable
 	char
-		*s;
+		s[8];
+//		*s;
 
 	float
 		width;
 
 	if (scan_range == HAVOC_RADAR_SCAN_RANGE_1000)
 	{
-		s = "1Km";
+//		s = "1Km";
+		sprintf(s,"%.0fKm",HAVOC_RADAR_SCAN_RANGE_1000/1000);	
 	}
 	else if (scan_range == HAVOC_RADAR_SCAN_RANGE_2000)
 	{
-		s = "2Km";
+//		s = "2Km";
+		sprintf(s,"%.0fKm",HAVOC_RADAR_SCAN_RANGE_2000/1000);	
 	}
 	else if (scan_range == HAVOC_RADAR_SCAN_RANGE_4000)
 	{
-		s = "4Km";
+//		s = "4Km";
+		sprintf(s,"%.0fKm",HAVOC_RADAR_SCAN_RANGE_4000/1000);	
 	}
 	else if (scan_range == HAVOC_RADAR_SCAN_RANGE_6000)
 	{
-		s = "6Km";
+//		s = "6Km";
+		sprintf(s,"%.0fKm",HAVOC_RADAR_SCAN_RANGE_6000/1000);	
 	}
 	else
 	{
-		s = "XXX";
+//		s = "XXX";
+		sprintf(s,"XXX");		
 	}
 
 	width = get_mono_font_string_width (s);
