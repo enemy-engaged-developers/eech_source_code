@@ -339,6 +339,8 @@ BOOL mclose ( void *data )
 	CloseHandle ( file_maps[count].hFile );
 #else
 	munmap( file_maps[count].data, file_maps[count].length );
+
+	close( file_maps[count].fd );
 #endif
 
 
