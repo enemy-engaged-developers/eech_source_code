@@ -135,6 +135,9 @@ void initialise_comanche_virtual_cockpit (void)
 		
 //VJ wideview mod, date: 18-mar-03	
 	wide_cockpit_nr = 0;
+//VJ wideview mod, date: 20-mar-03
+//start up in normal view because when you switch to wideview the parameters are read	
+	set_global_wide_cockpit(FALSE);		
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
