@@ -74,6 +74,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VJ 030807 adjustable cannon rounds
+//VJ 040229 also needed in new GWUT structure, if new aircraft flyable add here
 int 	rounds_comanche, 
 		rounds_apache, 
 		rounds_hokum_HE, 
@@ -87,6 +88,7 @@ int 	rounds_comanche,
 
 static void initialize_rounds(void)
 {
+	//VJ 040229 default values
 	rounds_comanche = 500;	// wp 5
 	rounds_apache = 1200;	//wp 3
 	rounds_hokum_HE = 230;	//wp 5
@@ -183,6 +185,7 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 030807 adjustable cannon rounds
+//VJ 040229 This becomes obsolete with new type GWUT
 void adjust_rounds(int start, int stop, int type, int value, int *rounds)
 {
 	int config_type, package;
@@ -218,6 +221,7 @@ void process_ini_file(int argc, char *argv[])
 
 //VJ 030807 initialize nr rounds cannons
 	 initialize_rounds();
+
 		
 	 buf = malloc (255);
 	 if (buf == NULL)
@@ -365,7 +369,7 @@ void process_ini_file(int argc, char *argv[])
 
 			if (WUT_filename[0] != 0 && file_exist(WUT_filename))
 				command_line_wut = TRUE;
-			// wut filename checking is done elsewhere
+			// wut filename checking is done elsewhere	
 		}
 //WIDEVIEW
 //VJ 030511 added the wideview params to eech.ini
@@ -482,6 +486,7 @@ void process_ini_file(int argc, char *argv[])
 			}
 		}
 //VJ 030807 adjustable radar ranges		
+//VJ 040229 radar ranges OBSOLETE when using new GWUT files, moved to GWUT file where they belong!
 		if (strcmp(p, "radar_comanche") == 0)
 		{
  	     p = strtok(q,",");
@@ -558,6 +563,7 @@ void process_ini_file(int argc, char *argv[])
 		}
 		
 //VJ 030807 adjustable cannon rounds	
+//VJ 040229 ammo OBSOLETE when using new GWUT files, moved to GWUT file where they belong!
 		if (strcmp(p, "rounds_comanche") == 0)   
 		  adjust_rounds(WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1, WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384, ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND, d1, &rounds_comanche);
 		if (strcmp(p, "rounds_apache") == 0)
