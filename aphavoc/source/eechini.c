@@ -90,7 +90,7 @@ void process_ini_file(int argc, char *argv[])
 	if (buf == NULL)
 	{
 		debug_fatal ("Could not allocate buffer");
-		return
+		return;
 	}
 
 //VJ 030414, commandline /ini:0 starts up without ini file
