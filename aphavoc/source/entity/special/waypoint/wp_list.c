@@ -113,7 +113,7 @@ static void set_local_first_child (entity *en, list_types type, entity *first_ch
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\set_frst.h"
+	#include "entity/system/en_funcs/en_list/set_frst.h"
 }
 
 #endif
@@ -134,7 +134,7 @@ static entity *get_local_first_child (entity *en, list_types type)
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\get_frst.h"
+	#include "entity/system/en_funcs/en_list/get_frst.h"
 
 	return (first_child);
 }
@@ -154,7 +154,7 @@ static void set_local_parent (entity *en, list_types type, entity *parent)
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\set_prnt.h"
+	#include "entity/system/en_funcs/en_list/set_prnt.h"
 }
 
 #endif
@@ -175,7 +175,7 @@ static entity *get_local_parent (entity *en, list_types type)
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\get_prnt.h"
+	#include "entity/system/en_funcs/en_list/get_prnt.h"
 
 	return (parent);
 }
@@ -195,7 +195,7 @@ static void set_local_child_succ (entity *en, list_types type, entity *child_suc
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\set_succ.h"
+	#include "entity/system/en_funcs/en_list/set_succ.h"
 }
 
 #endif
@@ -216,7 +216,7 @@ static entity *get_local_child_succ (entity *en, list_types type)
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\get_succ.h"
+	#include "entity/system/en_funcs/en_list/get_succ.h"
 
 	return (child_succ);
 }
@@ -236,7 +236,7 @@ static void set_local_child_pred (entity *en, list_types type, entity *child_pre
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\set_pred.h"
+	#include "entity/system/en_funcs/en_list/set_pred.h"
 }
 
 #endif
@@ -257,7 +257,7 @@ static entity *get_local_child_pred (entity *en, list_types type)
 
 	raw = get_local_entity_data (en);
 
-	#include "entity\system\en_funcs\en_list\get_pred.h"
+	#include "entity/system/en_funcs/en_list/get_pred.h"
 
 	return (child_pred);
 }
@@ -272,7 +272,7 @@ void overload_waypoint_list_functions (void)
 {
 	#define TYPE (ENTITY_TYPE_WAYPOINT)
 
-	#include "entity\system\en_funcs\en_list\fn_list.h"
+	#include "entity/system/en_funcs/en_list/fn_list.h"
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -83,7 +83,7 @@
 #include <time.h>
 #include <malloc.h>
 #include <string.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 #include <assert.h>
 #include <ctype.h>
 
@@ -272,55 +272,55 @@ typedef struct tagKERNINGPAIR {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "system2\external\assert.h"
+#include "system2/external/assert.h"
 
-#include "system2\external\cdrom.h"
+#include "system2/external/cdrom.h"
 
-#include "system2\external\cpuclock.h"
+#include "system2/external/cpuclock.h"
 
-#include "system2\external\startup.h"
+#include "system2/external/startup.h"
 
-#include "system2\external\filedir.h"
+#include "system2/external/filedir.h"
 
-#include "system2\external\fpu.h"
+#include "system2/external/fpu.h"
 
-#include "system2\external\debug.h"
+#include "system2/external/debug.h"
 
-#include "system2\external\input.h"
+#include "system2/external/input.h"
 
-#include "system2\external\keyboard.h"
+#include "system2/external/keyboard.h"
 
-#include "system2\external\mouse.h"
+#include "system2/external/mouse.h"
 
-#include "system2\external\event.h"
+#include "system2/external/event.h"
 
-#include "system2\external\joyevent.h"
+#include "system2/external/joyevent.h"
 
-#include "system2\external\joystick.h"
+#include "system2/external/joystick.h"
 
-#include "system2\external\ev_stack.h"
+#include "system2/external/ev_stack.h"
 
-#include "system2\external\ev_alpha.h"
+#include "system2/external/ev_alpha.h"
 
-#include "system2\external\keyevent.h"
+#include "system2/external/keyevent.h"
 
-#include "system2\external\time.h"
+#include "system2/external/time.h"
 
-#include "system2\external\timer.h"
+#include "system2/external/timer.h"
 
-#include "system2\external\safemem.h"
+#include "system2/external/safemem.h"
 
-#include "system2\external\files.h"
+#include "system2/external/files.h"
 
-#include "system2\external\memblock.h"
+#include "system2/external/memblock.h"
 
-#include "system2\external\memcmp.h"
+#include "system2/external/memcmp.h"
 
-#include "system2\external\memory.h"
+#include "system2/external/memory.h"
 
-#include "system2\external\sysmess.h"
+#include "system2/external/sysmess.h"
 
-#include "system2\external\ascii.h"
+#include "system2/external/ascii.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,59 +387,59 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <io.h>
 #include <time.h>
 #include <malloc.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 
 #pragma PACK (4)
 
-#include "system2\assert.h"
+#include "system2/assert.h"
 
-#include "system2\cdrom.h"
+#include "system2/cdrom.h"
 
-#include "system2\cpuclock.h"
+#include "system2/cpuclock.h"
 
-#include "system2\startup.h"
+#include "system2/startup.h"
 
-#include "system2\filedir.h"
+#include "system2/filedir.h"
 
-#include "system2\fpu.h"
+#include "system2/fpu.h"
 
-#include "system2\debug.h"
+#include "system2/debug.h"
 
-#include "system2\input.h"
+#include "system2/input.h"
 
-#include "system2\keyboard.h"
+#include "system2/keyboard.h"
 
-#include "system2\mouse.h"
+#include "system2/mouse.h"
 
-#include "system2\event.h"
+#include "system2/event.h"
 
-#include "system2\joyevent.h"
+#include "system2/joyevent.h"
 
-#include "system2\joystick.h"
+#include "system2/joystick.h"
 
-#include "system2\ev_stack.h"
+#include "system2/ev_stack.h"
 
-#include "system2\ev_alpha.h"
+#include "system2/ev_alpha.h"
 
-#include "system2\keyevent.h"
+#include "system2/keyevent.h"
 
-#include "system2\time.h"
+#include "system2/time.h"
 
-#include "system2\timer.h"
+#include "system2/timer.h"
 
-#include "system2\safemem.h"
+#include "system2/safemem.h"
 
-#include "system2\files.h"
+#include "system2/files.h"
 
-#include "system2\memblock.h"
+#include "system2/memblock.h"
 
-#include "system2\memcmp.h"
+#include "system2/memcmp.h"
 
-#include "system2\memory.h"
+#include "system2/memory.h"
 
-#include "system2\sysmess.h"
+#include "system2/sysmess.h"
 
-#include "system2\ascii.h"
+#include "system2/ascii.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -78,29 +78,29 @@
 
 #ifdef NO_INTERNAL_MODULES
 
-#include "sound\external\dirsound.h"
+#include "sound/external/dirsound.h"
 
-#include "sound\external\dsound.h"
+#include "sound/external/dsound.h"
 
-#include "sound\external\dsound3d.h"
+#include "sound/external/dsound3d.h"
 
-#include "sound\external\soundhlp.h"
+#include "sound/external/soundhlp.h"
 
-#include "sound\external\soundman.h"
+#include "sound/external/soundman.h"
 
 #else /* NO_INTERNAL_MODULES */
 
 #include <dsound.h>
 
-#include "sound\dirsound.h"
+#include "sound/dirsound.h"
 
-#include "sound\dsound.h"
+#include "sound/dsound.h"
 
-#include "sound\dsound3d.h"
+#include "sound/dsound3d.h"
 
-#include "sound\soundhlp.h"
+#include "sound/soundhlp.h"
 
-#include "sound\soundman.h"
+#include "sound/soundman.h"
 
 #endif /* NO_INTERNAL_MODULES */
 

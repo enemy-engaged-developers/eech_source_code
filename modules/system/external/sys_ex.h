@@ -79,58 +79,58 @@
 #include <io.h>
 #include <time.h>
 #include <malloc.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 
-#include "system\assert.h"
+#include "system/assert.h"
 
-#include "system\cdrom.h"
+#include "system/cdrom.h"
 
-#include "system\cpuclock.h"
+#include "system/cpuclock.h"
 
-#include "system\startup.h"
+#include "system/startup.h"
 
-#include "system\filedir.h"
+#include "system/filedir.h"
 
-#include "system\fpu.h"
+#include "system/fpu.h"
 
-#include "system\debug.h"
+#include "system/debug.h"
 
 // JB 030311 VC rename source files
-#include "system\sysinput.h"
+#include "system/sysinput.h"
 
-#include "system\keyboard.h"
+#include "system/keyboard.h"
 
-#include "system\mouse.h"
+#include "system/mouse.h"
 
-#include "system\event.h"
+#include "system/event.h"
 
-#include "system\joyevent.h"
+#include "system/joyevent.h"
 
-#include "system\joystick.h"
+#include "system/joystick.h"
 
-#include "system\ev_stack.h"
+#include "system/ev_stack.h"
 
-#include "system\ev_alpha.h"
+#include "system/ev_alpha.h"
 
-#include "system\keyevent.h"
+#include "system/keyevent.h"
 
-#include "system\time.h"
+#include "system/time.h"
 
-#include "system\timer.h"
+#include "system/timer.h"
 
-#include "system\safemem.h"
+#include "system/safemem.h"
 
-#include "system\files.h"
+#include "system/files.h"
 
-#include "system\memblock.h"
+#include "system/memblock.h"
 
-#include "system\memcmp.h"
+#include "system/memcmp.h"
 
-#include "system\memory.h"
+#include "system/memory.h"
 
-#include "system\sysmess.h"
+#include "system/sysmess.h"
 
-#include "system\ascii.h"
+#include "system/ascii.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

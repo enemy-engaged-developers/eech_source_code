@@ -151,25 +151,25 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "appsound\appsound.h"
+#include "appsound/appsound.h"
 
-#include "comms\comms.h"
+#include "comms/comms.h"
 
-#include "entity\entity.h"
+#include "entity/entity.h"
 
-#include "ai\ai.h"
+#include "ai/ai.h"
 
-#include "app3d\app3d.h"
+#include "app3d/app3d.h"
 
-#include "events\events.h"
+#include "events/events.h"
 
-#include "gameflow\gameflow.h"
+#include "gameflow/gameflow.h"
 
-#include "gunships\gunships.h"
+#include "gunships/gunships.h"
 
-#include "misc\miscell.h"
+#include "misc/miscell.h"
 
-#include "ui_menu\ui_menu.h"
+#include "ui_menu/ui_menu.h"
 
 #include "WUTcfg.h"   //VJ 030326
 

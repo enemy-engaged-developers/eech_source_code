@@ -78,25 +78,25 @@
 
 #include "graphics.h"
 
-#include "3d\3dmodels.h"
+#include "3d/3dmodels.h"
 
-#include "3d\textname.h"
+#include "3d/textname.h"
 
-#include "3d\textanim.h"
+#include "3d/textanim.h"
 
-#include "3d\displace.h"
+#include "3d/displace.h"
 
-#include "3d\3danim.h"
+#include "3d/3danim.h"
 
-#include "3d\3denv.h"
+#include "3d/3denv.h"
 
-#include "3d\3dview.h"
+#include "3d/3dview.h"
 
-#include "3d\objects.h"
+#include "3d/objects.h"
 
-#include "3d\3dobjdb.h"
+#include "3d/3dobjdb.h"
 
-#include "3d\3dobjid.h"
+#include "3d/3dobjid.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,75 +104,75 @@
 
 #ifdef NO_INTERNAL_MODULES
 
-#include "3d\external\3dexplos.h"
+#include "3d/external/3dexplos.h"
 
-#include "3d\external\3ddisp.h"
+#include "3d/external/3ddisp.h"
 
-#include "3d\external\3dclip.h"
+#include "3d/external/3dclip.h"
 
-#include "3d\external\3dfclip.h"
+#include "3d/external/3dfclip.h"
 
-#include "3d\external\3dconfig.h"
+#include "3d/external/3dconfig.h"
 
-#include "3d\external\3dconstr.h"
+#include "3d/external/3dconstr.h"
 
-#include "3d\external\3dscon.h"
+#include "3d/external/3dscon.h"
 
-#include "3d\external\3dfaces.h"
+#include "3d/external/3dfaces.h"
 
-#include "3d\external\3dwfaces.h"
+#include "3d/external/3dwfaces.h"
 
-#include "3d\external\3dline.h"
+#include "3d/external/3dline.h"
 
-#include "3d\external\3dhoriz.h"
+#include "3d/external/3dhoriz.h"
 
-#include "3d\external\3dkeyfr.h"
+#include "3d/external/3dkeyfr.h"
 
-#include "3d\external\3dsun.h"
+#include "3d/external/3dsun.h"
 
-#include "3d\external\3dmoon.h"
+#include "3d/external/3dmoon.h"
 
-#include "3d\external\3dstrail.h"
+#include "3d/external/3dstrail.h"
 
-#include "3d\external\3dsprite.h"
+#include "3d/external/3dsprite.h"
 
-#include "3d\external\3dstrike.h"
+#include "3d/external/3dstrike.h"
 
-#include "3d\external\3dscene.h"
+#include "3d/external/3dscene.h"
 
-#include "3d\external\3dlight.h"
+#include "3d/external/3dlight.h"
 
-#include "3d\external\3dobjbuf.h"
+#include "3d/external/3dobjbuf.h"
 
-#include "3d\external\3dobjvb.h"
+#include "3d/external/3dobjvb.h"
 
-#include "3d\external\3dsubobj.h"
+#include "3d/external/3dsubobj.h"
 
-#include "3d\external\3dobject.h"
+#include "3d/external/3dobject.h"
 
-#include "3d\external\3dobjdrh.h"
+#include "3d/external/3dobjdrh.h"
 
-#include "3d\external\3dobjdrw.h"
+#include "3d/external/3dobjdrw.h"
 
-#include "3d\external\3dobjdrz.h"
+#include "3d/external/3dobjdrz.h"
 
-#include "3d\external\3dobjzdr.h"
+#include "3d/external/3dobjzdr.h"
 
-#include "3d\external\3dobjvis.h"
+#include "3d/external/3dobjvis.h"
 
-#include "3d\external\3dobjzdr.h"
+#include "3d/external/3dobjzdr.h"
 
-#include "3d\external\3dshadow.h"
+#include "3d/external/3dshadow.h"
 
-#include "3d\external\3dpixel.h"
+#include "3d/external/3dpixel.h"
 
-#include "3d\external\3dtemp.h"
+#include "3d/external/3dtemp.h"
 
-#include "3d\external\3dtrans.h"
+#include "3d/external/3dtrans.h"
 
-#include "3d\external\3drain.h"
+#include "3d/external/3drain.h"
 
-#include "3d\external\3dstars.h"
+#include "3d/external/3dstars.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,81 +180,81 @@
 
 #else /* NO_INTERNAL_MODULES */
 
-#include "3d\3dexplos.h"
+#include "3d/3dexplos.h"
 
-#include "3d\3ddisp.h"
+#include "3d/3ddisp.h"
 
-#include "3d\3dclip.h"
+#include "3d/3dclip.h"
 
-#include "3d\3dfclip.h"
+#include "3d/3dfclip.h"
 
-#include "3d\3dconfig.h"
+#include "3d/3dconfig.h"
 
-#include "3d\3dconstr.h"
+#include "3d/3dconstr.h"
 
-#include "3d\3dscon.h"
+#include "3d/3dscon.h"
 
-#include "3d\3dfaces.h"
+#include "3d/3dfaces.h"
 
-#include "3d\3dwfaces.h"
+#include "3d/3dwfaces.h"
 
-#include "3d\3dline.h"
+#include "3d/3dline.h"
 
-#include "3d\3dhoriz.h"
+#include "3d/3dhoriz.h"
 
-#include "3d\3dkeyfr.h"
+#include "3d/3dkeyfr.h"
 
-#include "3d\3dsun.h"
+#include "3d/3dsun.h"
 
-#include "3d\3dmoon.h"
+#include "3d/3dmoon.h"
 
-#include "3d\3dstrail.h"
+#include "3d/3dstrail.h"
 
-#include "3d\3dsprite.h"
+#include "3d/3dsprite.h"
 
-#include "3d\3dstrike.h"
+#include "3d/3dstrike.h"
 
-#include "3d\3dscene.h"
+#include "3d/3dscene.h"
 
-#include "3d\3dlight.h"
+#include "3d/3dlight.h"
 
-#include "3d\3dobjbuf.h"
+#include "3d/3dobjbuf.h"
 
-#include "3d\3dobjvb.h"
+#include "3d/3dobjvb.h"
 
-#include "3d\3dsubobj.h"
+#include "3d/3dsubobj.h"
 
-#include "3d\3dobject.h"
+#include "3d/3dobject.h"
 
-#include "3d\3dobjdrh.h"
+#include "3d/3dobjdrh.h"
 
-#include "3d\3dobjdrw.h"
+#include "3d/3dobjdrw.h"
 
-#include "3d\3dobjdrz.h"
+#include "3d/3dobjdrz.h"
 
-#include "3d\3dobjzdr.h"
+#include "3d/3dobjzdr.h"
 
-#include "3d\3dobjvis.h"
+#include "3d/3dobjvis.h"
 
-#include "3d\3dobjzdr.h"
+#include "3d/3dobjzdr.h"
 
-#include "3d\3dshadow.h"
+#include "3d/3dshadow.h"
 
-#include "3d\3dpixel.h"
+#include "3d/3dpixel.h"
 
-#include "3d\3dtemp.h"
+#include "3d/3dtemp.h"
 
-#include "3d\3dtrans.h"
+#include "3d/3dtrans.h"
 
-#include "3d\3drain.h"
+#include "3d/3drain.h"
 
-#include "3d\3dstars.h"
+#include "3d/3dstars.h"
 
 #endif /* NO_INTERNAL_MODULES */
 
-#include "3d\clouds\clouds.h"
+#include "3d/clouds/clouds.h"
 
-#include "3d\terrain\terrain.h"
+#include "3d/terrain/terrain.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

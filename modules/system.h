@@ -86,7 +86,7 @@
 #include <time.h>
 #include <malloc.h>
 #include <string.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 #include <assert.h>
 #include <ctype.h>
 
@@ -275,58 +275,58 @@ typedef struct tagKERNINGPAIR {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "system\external\assert.h"
+#include "system/external/assert.h"
 
-#include "system\external\cdrom.h"
+#include "system/external/cdrom.h"
 
-#include "system\external\cpuclock.h"
+#include "system/external/cpuclock.h"
 
-#include "system\external\startup.h"
+#include "system/external/startup.h"
 
-#include "system\external\filedir.h"
+#include "system/external/filedir.h"
 
-#include "system\external\fpu.h"
+#include "system/external/fpu.h"
 
-#include "system\external\debug.h"
+#include "system/external/debug.h"
 
-#include "system\external\input.h"
+#include "system/external/input.h"
 
-#include "system\external\keyboard.h"
+#include "system/external/keyboard.h"
 
-#include "system\external\mouse.h"
+#include "system/external/mouse.h"
 
-#include "system\external\event.h"
+#include "system/external/event.h"
 
-#include "system\external\joyevent.h"
+#include "system/external/joyevent.h"
 
-#include "system\external\joystick.h"
+#include "system/external/joystick.h"
 
 // crh 030320 quick hack to provide prototypes
-#include "system\external\trackir.h"
+#include "system/external/trackir.h"
 
-#include "system\external\ev_stack.h"
+#include "system/external/ev_stack.h"
 
-#include "system\external\ev_alpha.h"
+#include "system/external/ev_alpha.h"
 
-#include "system\external\keyevent.h"
+#include "system/external/keyevent.h"
 
-#include "system\external\time.h"
+#include "system/external/time.h"
 
-#include "system\external\timer.h"
+#include "system/external/timer.h"
 
-#include "system\external\safemem.h"
+#include "system/external/safemem.h"
 
-#include "system\external\files.h"
+#include "system/external/files.h"
 
-#include "system\external\memblock.h"
+#include "system/external/memblock.h"
 
-#include "system\external\memcmp.h"
+#include "system/external/memcmp.h"
 
-#include "system\external\memory.h"
+#include "system/external/memory.h"
 
-#include "system\external\sysmess.h"
+#include "system/external/sysmess.h"
 
-#include "system\external\ascii.h"
+#include "system/external/ascii.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,62 +401,62 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <io.h>
 #include <time.h>
 #include <malloc.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 
 #pragma pack (4)
 
-#include "system\assert.h"
+#include "system/assert.h"
 
-#include "system\cdrom.h"
+#include "system/cdrom.h"
 
-#include "system\cpuclock.h"
+#include "system/cpuclock.h"
 
-#include "system\startup.h"
+#include "system/startup.h"
 
-#include "system\filedir.h"
+#include "system/filedir.h"
 
-#include "system\fpu.h"
+#include "system/fpu.h"
 
-#include "system\debug.h"
+#include "system/debug.h"
 
-#include "system\sysinput.h"
+#include "system/sysinput.h"
 
-#include "system\keyboard.h"
+#include "system/keyboard.h"
 
-#include "system\mouse.h"
+#include "system/mouse.h"
 
-#include "system\event.h"
+#include "system/event.h"
 
-#include "system\joyevent.h"
+#include "system/joyevent.h"
 
-#include "system\joystick.h"
+#include "system/joystick.h"
 
 // crh 030320 quick hack to provide prototypes
-#include "system\trackir.h"
+#include "system/trackir.h"
 
-#include "system\ev_stack.h"
+#include "system/ev_stack.h"
 
-#include "system\ev_alpha.h"
+#include "system/ev_alpha.h"
 
-#include "system\keyevent.h"
+#include "system/keyevent.h"
 
-#include "system\time.h"
+#include "system/time.h"
 
-#include "system\timer.h"
+#include "system/timer.h"
 
-#include "system\safemem.h"
+#include "system/safemem.h"
 
-#include "system\files.h"
+#include "system/files.h"
 
-#include "system\memblock.h"
+#include "system/memblock.h"
 
-#include "system\memcmp.h"
+#include "system/memcmp.h"
 
-#include "system\memory.h"
+#include "system/memory.h"
 
-#include "system\sysmess.h"
+#include "system/sysmess.h"
 
-#include "system\ascii.h"
+#include "system/ascii.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

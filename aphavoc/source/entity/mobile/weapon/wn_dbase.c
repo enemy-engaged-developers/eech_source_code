@@ -5015,62 +5015,62 @@ weapon_package
 		//
 		////////////////////////////////////////
 
-		#include "configs\unarmed.h"
+		#include "configs/unarmed.h"
 
 		////////////////////////////////////////
 
-		#include "configs\apache.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW
-		#include "configs\havoc.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B
-		#include "configs\comanche.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE
-		#include "configs\hokum.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B
-		#include "configs\blckhawk.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK
-		#include "configs\hind.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND
-		#include "configs\seaknght.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT
-		#include "configs\helix.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B
-		#include "configs\jolly.h"		 		// ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT
-		#include "configs\hip.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP
-		#include "configs\chinook.h"			// ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK
-		#include "configs\hook.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK
-		#include "configs\thndrblt.h"			// ENTITY_SUB_TYPE_AIRCRAFT_A10A_THUNDERBOLT
-		#include "configs\frogfoot.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_SU25_FROGFOOT
-		#include "configs\falcon.h"			// ENTITY_SUB_TYPE_AIRCRAFT_F16_FIGHTING_FALCON
-		#include "configs\fulcrum.h"			// ENTITY_SUB_TYPE_AIRCRAFT_MIG29_FULCRUM
-		#include "configs\harrier.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AV8B_HARRIER
-		#include "configs\freestyl.h"			// ENTITY_SUB_TYPE_AIRCRAFT_YAK41_FREESTYLE
-		#include "configs\hornet.h"			// ENTITY_SUB_TYPE_AIRCRAFT_FA18_HORNET
-		#include "configs\flanker.h"			// ENTITY_SUB_TYPE_AIRCRAFT_SU33_FLANKER
-		#include "configs\apache_a.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE
-		#include "configs\werewolf.h"			// ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM
-		#include "configs\kiowa.h"				// ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR
-		#include "configs\osprey.h"			// ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY
-		#include "configs\seacobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA
-		#include "configs\supcobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA
-		#include "configs\stallion.h"			// ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION
-		#include "configs\globe.h"				// ENTITY_SUB_TYPE_AIRCRAFT_C17_GLOBEMASTER_III
-		#include "configs\candid.h"			// ENTITY_SUB_TYPE_AIRCRAFT_IL76MD_CANDID_B
-		#include "configs\hercules.h"			// ENTITY_SUB_TYPE_AIRCRAFT_C130J_HERCULES_II
-		#include "configs\cub.h"	 			// ENTITY_SUB_TYPE_AIRCRAFT_AN12B_CUB
+		#include "configs/apache.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW
+		#include "configs/havoc.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B
+		#include "configs/comanche.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE
+		#include "configs/hokum.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B
+		#include "configs/blckhawk.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK
+		#include "configs/hind.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND
+		#include "configs/seaknght.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT
+		#include "configs/helix.h"		  		// ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B
+		#include "configs/jolly.h"		 		// ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT
+		#include "configs/hip.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP
+		#include "configs/chinook.h"			// ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK
+		#include "configs/hook.h"				// ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK
+		#include "configs/thndrblt.h"			// ENTITY_SUB_TYPE_AIRCRAFT_A10A_THUNDERBOLT
+		#include "configs/frogfoot.h"	  		// ENTITY_SUB_TYPE_AIRCRAFT_SU25_FROGFOOT
+		#include "configs/falcon.h"			// ENTITY_SUB_TYPE_AIRCRAFT_F16_FIGHTING_FALCON
+		#include "configs/fulcrum.h"			// ENTITY_SUB_TYPE_AIRCRAFT_MIG29_FULCRUM
+		#include "configs/harrier.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AV8B_HARRIER
+		#include "configs/freestyl.h"			// ENTITY_SUB_TYPE_AIRCRAFT_YAK41_FREESTYLE
+		#include "configs/hornet.h"			// ENTITY_SUB_TYPE_AIRCRAFT_FA18_HORNET
+		#include "configs/flanker.h"			// ENTITY_SUB_TYPE_AIRCRAFT_SU33_FLANKER
+		#include "configs/apache_a.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE
+		#include "configs/werewolf.h"			// ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM
+		#include "configs/kiowa.h"				// ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR
+		#include "configs/osprey.h"			// ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY
+		#include "configs/seacobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA
+		#include "configs/supcobra.h"			// ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA
+		#include "configs/stallion.h"			// ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION
+		#include "configs/globe.h"				// ENTITY_SUB_TYPE_AIRCRAFT_C17_GLOBEMASTER_III
+		#include "configs/candid.h"			// ENTITY_SUB_TYPE_AIRCRAFT_IL76MD_CANDID_B
+		#include "configs/hercules.h"			// ENTITY_SUB_TYPE_AIRCRAFT_C130J_HERCULES_II
+		#include "configs/cub.h"	 			// ENTITY_SUB_TYPE_AIRCRAFT_AN12B_CUB
 
 		////////////////////////////////////////
 
-		#include "configs\abrams.h"			// ENTITY_SUB_TYPE_VEHICLE_M1A2_ABRAMS
-		#include "configs\t80u.h"	  			// ENTITY_SUB_TYPE_VEHICLE_T80U
-		#include "configs\bradley.h"			// ENTITY_SUB_TYPE_VEHICLE_M2A2_BRADLEY
-		#include "configs\bmp2.h"	  			// ENTITY_SUB_TYPE_VEHICLE_BMP2
-		#include "configs\bmp3.h"		 		// ENTITY_SUB_TYPE_VEHICLE_BMP3
-		#include "configs\m113a2.h"			// ENTITY_SUB_TYPE_VEHICLE_M113A2
-		#include "configs\btr80.h"	 			// ENTITY_SUB_TYPE_VEHICLE_BTR80
+		#include "configs/abrams.h"			// ENTITY_SUB_TYPE_VEHICLE_M1A2_ABRAMS
+		#include "configs/t80u.h"	  			// ENTITY_SUB_TYPE_VEHICLE_T80U
+		#include "configs/bradley.h"			// ENTITY_SUB_TYPE_VEHICLE_M2A2_BRADLEY
+		#include "configs/bmp2.h"	  			// ENTITY_SUB_TYPE_VEHICLE_BMP2
+		#include "configs/bmp3.h"		 		// ENTITY_SUB_TYPE_VEHICLE_BMP3
+		#include "configs/m113a2.h"			// ENTITY_SUB_TYPE_VEHICLE_M113A2
+		#include "configs/btr80.h"	 			// ENTITY_SUB_TYPE_VEHICLE_BTR80
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_M1025_HUMVEE
-		#include "configs\brdm2.h"				// ENTITY_SUB_TYPE_VEHICLE_BRDM2
-		#include "configs\m109a2.h"			// ENTITY_SUB_TYPE_VEHICLE_M109A2
-		#include "configs\2s19.h"				// ENTITY_SUB_TYPE_VEHICLE_2S19
-		#include "configs\mlrs.h"	  			// ENTITY_SUB_TYPE_VEHICLE_M270_MLRS
-		#include "configs\grad.h"		 		// ENTITY_SUB_TYPE_VEHICLE_BM21_GRAD
-		#include "configs\vulcan.h"			// ENTITY_SUB_TYPE_VEHICLE_M163_VULCAN
-		#include "configs\grison.h"			// ENTITY_SUB_TYPE_VEHICLE_SA19_GRISON
-		#include "configs\avenger.h"			// ENTITY_SUB_TYPE_VEHICLE_M1037_AVENGER
-		#include "configs\chaparrl.h"  		// ENTITY_SUB_TYPE_VEHICLE_M48A1_CHAPARRAL
-		#include "configs\gopher.h"			// ENTITY_SUB_TYPE_VEHICLE_SA13_GOPHER
+		#include "configs/brdm2.h"				// ENTITY_SUB_TYPE_VEHICLE_BRDM2
+		#include "configs/m109a2.h"			// ENTITY_SUB_TYPE_VEHICLE_M109A2
+		#include "configs/2s19.h"				// ENTITY_SUB_TYPE_VEHICLE_2S19
+		#include "configs/mlrs.h"	  			// ENTITY_SUB_TYPE_VEHICLE_M270_MLRS
+		#include "configs/grad.h"		 		// ENTITY_SUB_TYPE_VEHICLE_BM21_GRAD
+		#include "configs/vulcan.h"			// ENTITY_SUB_TYPE_VEHICLE_M163_VULCAN
+		#include "configs/grison.h"			// ENTITY_SUB_TYPE_VEHICLE_SA19_GRISON
+		#include "configs/avenger.h"			// ENTITY_SUB_TYPE_VEHICLE_M1037_AVENGER
+		#include "configs/chaparrl.h"  		// ENTITY_SUB_TYPE_VEHICLE_M48A1_CHAPARRAL
+		#include "configs/gopher.h"			// ENTITY_SUB_TYPE_VEHICLE_SA13_GOPHER
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_M998_HUMVEE
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_UAZ469B
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_M923A1_BIG_FOOT
@@ -5078,17 +5078,17 @@ weapon_package
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_URAL_4320
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_M978_HEMTT
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_URAL_FUEL_TANKER
-		#include "configs\tarawa.h"			// ENTITY_SUB_TYPE_VEHICLE_TARAWA_CLASS
-		#include "configs\kiev.h"				// ENTITY_SUB_TYPE_VEHICLE_KIEV_CLASS
-		#include "configs\ohp.h"				// ENTITY_SUB_TYPE_VEHICLE_OLIVER_HAZARD_PERRY_CLASS
-		#include "configs\krivak.h"			// ENTITY_SUB_TYPE_VEHICLE_KRIVAK_II_CLASS
+		#include "configs/tarawa.h"			// ENTITY_SUB_TYPE_VEHICLE_TARAWA_CLASS
+		#include "configs/kiev.h"				// ENTITY_SUB_TYPE_VEHICLE_KIEV_CLASS
+		#include "configs/ohp.h"				// ENTITY_SUB_TYPE_VEHICLE_OLIVER_HAZARD_PERRY_CLASS
+		#include "configs/krivak.h"			// ENTITY_SUB_TYPE_VEHICLE_KRIVAK_II_CLASS
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_LCU
 		// unarmed									// ENTITY_SUB_TYPE_VEHICLE_LCAC
-		#include "configs\aist.h"				// ENTITY_SUB_TYPE_VEHICLE_AIST_CLASS
-		#include "configs\us_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_STANDING
-		#include "configs\us_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_KNEELING
-		#include "configs\rs_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_STANDING
-		#include "configs\rs_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_KNEELING
+		#include "configs/aist.h"				// ENTITY_SUB_TYPE_VEHICLE_AIST_CLASS
+		#include "configs/us_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_STANDING
+		#include "configs/us_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_US_INFANTRY_SAM_KNEELING
+		#include "configs/rs_inf_s.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_STANDING
+		#include "configs/rs_inf_k.h"			// ENTITY_SUB_TYPE_VEHICLE_CIS_INFANTRY_SAM_KNEELING
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -74,35 +74,35 @@
 
 #include "3d.h"
 
-#include "terrain\terrtype.h"
+#include "terrain/terrtype.h"
 
-#include "terrain\terrdata.h"
+#include "terrain/terrdata.h"
 
-#include "terrain\terrelev.h"
+#include "terrain/terrelev.h"
 
-#include "terrain\terrgeom.h"
+#include "terrain/terrgeom.h"
 
-#include "terrain\terrcons.h"
+#include "terrain/terrcons.h"
 
-#include "terrain\terrdr.h"
+#include "terrain/terrdr.h"
 
-#include "terrain\terrdrcl.h"
+#include "terrain/terrdrcl.h"
 
-#include "terrain\terrre.h"
+#include "terrain/terrre.h"
 
-#include "terrain\terrmap.h"
+#include "terrain/terrmap.h"
 
-#include "terrain\terrobjs.h"
+#include "terrain/terrobjs.h"
 
-#include "terrain\terrsel.h"
+#include "terrain/terrsel.h"
 
 #ifdef NO_INTERNAL_MODULES
 
-#include "terrain\external\terrbuf.h"
+#include "terrain/external/terrbuf.h"
 
 #else
 
-#include "terrain\terrbuf.h"
+#include "terrain/terrbuf.h"
 
 #endif
 

@@ -70,39 +70,39 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "dedicate\dedicate.h"
+#include "dedicate/dedicate.h"
 
-#include "title\title.h"
+#include "title/title.h"
 
-#include "advert\advert.h"
+#include "advert/advert.h"
 
-#include "main\main.h"
+#include "main/main.h"
 
-#include "player\player.h"
+#include "player/player.h"
 
-#include "multiop\multiop.h"
+#include "multiop/multiop.h"
 
-#include "gametype\gametype.h"
+#include "gametype/gametype.h"
 
-#include "exit\exit.h"
+#include "exit/exit.h"
 
-#include "session\session.h"
+#include "session/session.h"
 
-#include "gunships\gunships.h"
+#include "gunships/gunships.h"
 
-#include "initsc\initsc.h"
+#include "initsc/initsc.h"
 
-#include "czone\czone.h"
+#include "czone/czone.h"
 
-#include "loading\loading.h"
+#include "loading/loading.h"
 
-#include "sessparm\sessparm.h"
+#include "sessparm/sessparm.h"
 
-#include "ingame\ingame.h"
+#include "ingame/ingame.h"
 
-#include "options\options.h"
+#include "options/options.h"
 
-#include "credits\credits.h"
+#include "credits/credits.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

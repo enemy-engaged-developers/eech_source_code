@@ -76,35 +76,35 @@
 
 #include <math.h>
 
-#include "maths\constant.h"
+#include "maths/constant.h"
 
-#include "maths\convert.h"
+#include "maths/convert.h"
 
-#include "maths\fixedpt.h"
+#include "maths/fixedpt.h"
 
-#include "maths\vector.h"
+#include "maths/vector.h"
 
-#include "maths\matrix.h"
+#include "maths/matrix.h"
 
-#include "maths\qternion.h"
+#include "maths/qternion.h"
 
-#include "maths\random.h"
+#include "maths/random.h"
 
-#include "maths\range.h"
+#include "maths/range.h"
 
-#include "maths\reciptab.h"
+#include "maths/reciptab.h"
 
-#include "maths\tevent.h"
+#include "maths/tevent.h"
 
-#include "maths\trig.h"
+#include "maths/trig.h"
 
-#include "maths\initmath.h"
+#include "maths/initmath.h"
 
-#include "maths\invsqrt.h"
+#include "maths/invsqrt.h"
 
-#include "maths\miscmath.h"
+#include "maths/miscmath.h"
 
-#include "maths\projtile.h"
+#include "maths/projtile.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

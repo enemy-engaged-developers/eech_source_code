@@ -93,103 +93,103 @@ typedef struct tagPALETTEENTRY {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "graphics\external\dirdraw.h"
+#include "graphics/external/dirdraw.h"
 
-#include "graphics\external\d3d.h"
+#include "graphics/external/d3d.h"
 
-#include "graphics\external\scrnstr.h"
+#include "graphics/external/scrnstr.h"
 
-#include "graphics\external\colour.h"
+#include "graphics/external/colour.h"
 
-#include "graphics\external\vertex.h"
+#include "graphics/external/vertex.h"
 
-#include "graphics\external\viewport.h"
+#include "graphics/external/viewport.h"
 
-#include "graphics\external\clip.h"
+#include "graphics/external/clip.h"
 
-#include "graphics\external\dither.h"
+#include "graphics/external/dither.h"
 
-#include "graphics\external\dassess.h"
+#include "graphics/external/dassess.h"
 
-#include "graphics\external\dresol.h"
+#include "graphics/external/dresol.h"
 
-#include "graphics\external\screens.h"
+#include "graphics/external/screens.h"
 
-#include "graphics\external\palette.h"
+#include "graphics/external/palette.h"
 
-#include "graphics\external\lbm.h"
+#include "graphics/external/lbm.h"
 
-#include "graphics\external\heckfill.h"
+#include "graphics/external/heckfill.h"
 
-#include "graphics\external\line.h"
+#include "graphics/external/line.h"
 
-#include "graphics\external\block.h"
+#include "graphics/external/block.h"
 
-#include "graphics\external\circle.h"
+#include "graphics/external/circle.h"
 
-#include "graphics\external\mouseptr.h"
+#include "graphics/external/mouseptr.h"
 
-#include "graphics\external\pixel.h"
+#include "graphics/external/pixel.h"
 
-#include "graphics\external\shadfill.h"
+#include "graphics/external/shadfill.h"
 
-#include "graphics\external\pixeltxt.h"
+#include "graphics/external/pixeltxt.h"
 
-#include "graphics\external\polyfill.h"
+#include "graphics/external/polyfill.h"
 
-#include "graphics\external\polyline.h"
+#include "graphics/external/polyline.h"
 
-#include "graphics\external\polyscan.h"
+#include "graphics/external/polyscan.h"
 
-#include "graphics\external\polysoft.h"
+#include "graphics/external/polysoft.h"
 
-#include "graphics\external\d3dfog.h"
+#include "graphics/external/d3dfog.h"
 
-#include "graphics\external\d3dpoly.h"
+#include "graphics/external/d3dpoly.h"
 
-#include "graphics\external\d3dstate.h"
+#include "graphics/external/d3dstate.h"
 
-#include "graphics\external\d3dvert.h"
+#include "graphics/external/d3dvert.h"
 
-#include "graphics\external\gfxzoom.h"
+#include "graphics/external/gfxzoom.h"
 
-#include "graphics\external\polyd3d.h"
+#include "graphics/external/polyd3d.h"
 
-#include "graphics\external\tranbuf.h"
+#include "graphics/external/tranbuf.h"
 
-#include "graphics\external\tempbuf.h"
+#include "graphics/external/tempbuf.h"
 
-#include "graphics\external\render.h"
+#include "graphics/external/render.h"
 
-#include "graphics\external\bin.h"
+#include "graphics/external/bin.h"
 
-#include "graphics\external\tga.h"
+#include "graphics/external/tga.h"
 
-#include "graphics\external\psdread.h"
+#include "graphics/external/psdread.h"
 
-#include "graphics\external\psdwrite.h"
+#include "graphics/external/psdwrite.h"
 
-#include "graphics\external\textsys.h"
+#include "graphics/external/textsys.h"
 
-#include "graphics\external\textuser.h"
+#include "graphics/external/textuser.h"
 
-#include "graphics\external\textures.h"
+#include "graphics/external/textures.h"
 
-#include "graphics\external\textscrn.h"
+#include "graphics/external/textscrn.h"
 
-#include "graphics\external\mipmap.h"
+#include "graphics/external/mipmap.h"
 
-#include "graphics\external\rle.h"
+#include "graphics/external/rle.h"
 
-#include "graphics\external\rgb.h"
+#include "graphics/external/rgb.h"
 
-#include "graphics\external\monofont.h"
+#include "graphics/external/monofont.h"
 
-#include "graphics\external\monosprt.h"
+#include "graphics/external/monosprt.h"
 
-#include "graphics\external\vcache.h"
+#include "graphics/external/vcache.h"
 
-#include "graphics\external\zbuffer.h"
+#include "graphics/external/zbuffer.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,103 +206,103 @@ typedef struct tagPALETTEENTRY {
 
 #pragma pack (4)
 
-#include "graphics\dirdraw.h"
+#include "graphics/dirdraw.h"
 
-#include "graphics\d3d.h"
+#include "graphics/d3d.h"
 
-#include "graphics\scrnstr.h"
+#include "graphics/scrnstr.h"
 
-#include "graphics\colour.h"
+#include "graphics/colour.h"
 
-#include "graphics\vertex.h"
+#include "graphics/vertex.h"
 
-#include "graphics\viewport.h"
+#include "graphics/viewport.h"
 
-#include "graphics\clip.h"
+#include "graphics/clip.h"
 
-#include "graphics\dither.h"
+#include "graphics/dither.h"
 
-#include "graphics\dassess.h"
+#include "graphics/dassess.h"
 
-#include "graphics\dresol.h"
+#include "graphics/dresol.h"
 
-#include "graphics\screens.h"
+#include "graphics/screens.h"
 
-#include "graphics\palette.h"
+#include "graphics/palette.h"
 
-#include "graphics\lbm.h"
+#include "graphics/lbm.h"
 
-#include "graphics\heckfill.h"
+#include "graphics/heckfill.h"
 
-#include "graphics\line.h"
+#include "graphics/line.h"
 
-#include "graphics\block.h"
+#include "graphics/block.h"
 
-#include "graphics\circle.h"
+#include "graphics/circle.h"
 
-#include "graphics\mouseptr.h"
+#include "graphics/mouseptr.h"
 
-#include "graphics\pixel.h"
+#include "graphics/pixel.h"
 
-#include "graphics\shadfill.h"
+#include "graphics/shadfill.h"
 
-#include "graphics\pixeltxt.h"
+#include "graphics/pixeltxt.h"
 
-#include "graphics\polyfill.h"
+#include "graphics/polyfill.h"
 
-#include "graphics\polyline.h"
+#include "graphics/polyline.h"
 
-#include "graphics\polyscan.h"
+#include "graphics/polyscan.h"
 
-#include "graphics\polysoft.h"
+#include "graphics/polysoft.h"
 
-#include "graphics\d3dfog.h"
+#include "graphics/d3dfog.h"
 
-#include "graphics\d3dpoly.h"
+#include "graphics/d3dpoly.h"
 
-#include "graphics\d3dstate.h"
+#include "graphics/d3dstate.h"
 
-#include "graphics\d3dvert.h"
+#include "graphics/d3dvert.h"
 
-#include "graphics\gfxzoom.h"
+#include "graphics/gfxzoom.h"
 
-#include "graphics\polyd3d.h"
+#include "graphics/polyd3d.h"
 
-#include "graphics\tranbuf.h"
+#include "graphics/tranbuf.h"
 
-#include "graphics\tempbuf.h"
+#include "graphics/tempbuf.h"
 
-#include "graphics\render.h"
+#include "graphics/render.h"
 
-#include "graphics\bin.h"
+#include "graphics/bin.h"
 
-#include "graphics\tga.h"
+#include "graphics/tga.h"
 
-#include "graphics\psdread.h"
+#include "graphics/psdread.h"
 
-#include "graphics\psdwrite.h"
+#include "graphics/psdwrite.h"
 
-#include "graphics\textsys.h"
+#include "graphics/textsys.h"
 
-#include "graphics\textuser.h"
+#include "graphics/textuser.h"
 
-#include "graphics\textures.h"
+#include "graphics/textures.h"
 
-#include "graphics\textscrn.h"
+#include "graphics/textscrn.h"
 
-#include "graphics\mipmap.h"
+#include "graphics/mipmap.h"
 
-#include "graphics\rle.h"
+#include "graphics/rle.h"
 
-#include "graphics\rgb.h"
+#include "graphics/rgb.h"
 
-#include "graphics\monofont.h"
+#include "graphics/monofont.h"
 
-#include "graphics\monosprt.h"
+#include "graphics/monosprt.h"
 
-#include "graphics\vcache.h"
+#include "graphics/vcache.h"
 
-#include "graphics\zbuffer.h"
+#include "graphics/zbuffer.h"
 
 #endif /*NO_INTERNAL_MODULES */
 

@@ -78,15 +78,15 @@ extern void update_avionics (void);
 // ORDER IS CRITICAL
 //
 
-#include "common\co_avion.h"
+#include "common/co_avion.h"
 
-#include "apache\ap_avion.h"
+#include "apache/ap_avion.h"
 
-#include "comanche\cm_avion.h"
+#include "comanche/cm_avion.h"
 
-#include "havoc\ha_avion.h"
+#include "havoc/ha_avion.h"
 
-#include "hokum\hk_avion.h"
+#include "hokum/hk_avion.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
