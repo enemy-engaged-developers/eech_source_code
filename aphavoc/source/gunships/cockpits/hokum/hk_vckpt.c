@@ -696,6 +696,8 @@ void draw_hokum_virtual_cockpit (void)
 
 	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 
+//VJ 050131 update on wideview mod, much better movement
+/*
 //VJ wideview mod, date: 18-mar-03	
 	if (get_global_wide_cockpit () &&
 	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
@@ -708,10 +710,10 @@ void draw_hokum_virtual_cockpit (void)
 		virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 		virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 	
-       	set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
+     	set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
         	
     }
-        
+*/        
 	realise_3d_clip_extents (main_3d_env);
 
 	recalculate_3d_environment_settings (main_3d_env);
@@ -734,6 +736,24 @@ void draw_hokum_virtual_cockpit (void)
 		matrix3x3
 			m1,
 			m2;
+
+//VJ 050131 update on wideview mod, much better movement
+	if (get_global_wide_cockpit () &&
+	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
+	   )
+		{
+			get_hokum_crew_viewpoint ();
+		
+			virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].x;
+			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
+			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;
+		
+		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		     	
+		}
 
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 		{
@@ -781,17 +801,16 @@ void draw_hokum_virtual_cockpit (void)
 
 				draw_3d_scene ();
 
-//VJ wideview mod, date: 18-mar-03	
-                if (edit_wide_cockpit)
-	            {
+				//VJ wideview mod, date: 18-mar-03	
+				if (edit_wide_cockpit)
+				{  
 					sprintf(buffer,"HOKUM wide cockpit mod edit:"); 
-                    ui_display_text (buffer, 10, 40);
+				   ui_display_text (buffer, 10, 40);
 					sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
-                    ui_display_text (buffer, 10, 60);
-                    sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
-                    ui_display_text (buffer, 10, 100);
-                }
-
+				   ui_display_text (buffer, 10, 60);
+				   sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+				   ui_display_text (buffer, 10, 100);
+				}
 				
 				end_3d_scene ();
 			}
@@ -847,16 +866,16 @@ void draw_hokum_virtual_cockpit (void)
 
 			draw_3d_scene ();
 
-//VJ wideview mod, date: 18-mar-03	
-            if (edit_wide_cockpit)
-            {
+			//VJ wideview mod, date: 18-mar-03	
+			if (edit_wide_cockpit)
+			{
 				sprintf(buffer,"HOKUM wide cockpit mod edit:"); 
-                ui_display_text (buffer, 10, 40);
+			   ui_display_text (buffer, 10, 40);
 				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
-                ui_display_text (buffer, 10, 60);
-                sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
-                ui_display_text (buffer, 10, 100);
-            }
+			   ui_display_text (buffer, 10, 60);
+			   sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+			   ui_display_text (buffer, 10, 100);
+			}
 
 
 			end_3d_scene ();
@@ -905,8 +924,13 @@ void draw_hokum_virtual_cockpit (void)
             wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
         }  
 
+//VJ 050131 update on wideview mod, much better movement
 		if (check_key(DIK_NUMPAD0))
 		{
+			wide_cockpit_position[wide_cockpit_nr].x = 0;
+			wide_cockpit_position[wide_cockpit_nr].y = 0.18;
+			wide_cockpit_position[wide_cockpit_nr].z = 0.300;
+			/*
 			if (wide_cockpit_nr==2)
 			{
 				wide_cockpit_position[2].x = 0.375;
@@ -919,7 +943,8 @@ void draw_hokum_virtual_cockpit (void)
 				wide_cockpit_position[3].y = 2.075;
 				wide_cockpit_position[3].z = -1.810;
 			}	
-        }  
+			*/
+        }     
     }            	
 
 
@@ -1017,7 +1042,7 @@ void get_hokum_crew_viewpoint (void)
 		vp.z = -vp.z;
 
 		multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, pilot_head_vp.attitude, &vp.position);
-
+/*
 //VJ wideview mod, date: 18-mar-03		
 		if (get_global_wide_cockpit ())
 		{	
@@ -1025,7 +1050,7 @@ void get_hokum_crew_viewpoint (void)
 			virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y-0.1;
 			virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.1;
 		}
-		
+*/		
 	}
 	else
 	{

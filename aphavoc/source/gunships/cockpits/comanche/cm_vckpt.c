@@ -666,7 +666,12 @@ void draw_comanche_virtual_cockpit (void)
 			m2;
 
 //VJ 050131 update on wideview mod, much better movement
-		if (get_global_wide_cockpit ()) 
+	if (get_global_wide_cockpit () &&
+	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
+        get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY ) 
+      )
 		{
 				get_comanche_crew_viewpoint ();
 			   

@@ -676,15 +676,18 @@ void update_virtual_cockpit_view (void)
 
 
 //VJ wideview mod, date: 27-mar-03	
-
-	if (get_global_wide_cockpit ())
+//VJ 050131 wideview mod, better
+	if (get_global_wide_cockpit () &&
+		 !command_line_3d_cockpit &&
+		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
+		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
+		) 
 	{		
          float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
 	       
    		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
-	}		
-	
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3758,15 +3761,17 @@ void update_virtual_cockpit_padlock_view (void)
 		}
 	}
 
-//VJ wideview mod, date: 18-mar-03	
-	if (get_global_wide_cockpit ())
-	{
-		float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
-		
-//VJ 050108 3d cockpit mod, do not limit head movement		
-	//	if (get_global_gunship_type () != GUNSHIP_TYPE_APACHE)
-		   pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
-		
+//VJ wideview mod, date: 27-mar-03	
+//VJ 050131 wideview mod, better
+	if (get_global_wide_cockpit () &&
+		 !command_line_3d_cockpit &&
+		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
+		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
+		) 
+	{		
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
+	       
+   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}
 }
