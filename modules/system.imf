@@ -97,6 +97,7 @@ c_module_object_files   += $+ &
 										$(currentdir)\cpuclock.obj &
 										$(currentdir)\joyevent.obj &
 										$(currentdir)\joystick.obj &
+										$(currentdir)\trackir.obj &
 										$(currentdir)\time.obj &
 										$(currentdir)\timer.obj &
 										$(currentdir)\safemem.obj &
