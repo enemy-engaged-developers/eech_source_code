@@ -506,6 +506,7 @@ VJ 041217 OBSOLETE ============================ */
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod		
 		if (strcmp(p, "aphavoc") == 0) command_line_aphavoc = d1;	// VJ 050118 aphavoc install hack
+		if (strcmp(p, "cannontrack") == 0) command_line_cannontrack = d1;	// Jabberwock 050120 Cannon tracking
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
@@ -782,6 +783,7 @@ VJ 041217 OBSOLETE ======================*/
 	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"3d_cockpit=%d        # EXPERIMENTAL! Draws a 3d apache cockpit (wide_view and MFD close-up (F3 and F4) disabled)\n",command_line_3d_cockpit);	// VJ 050101
 	fprintf(f,"aphavoc=%d           # Set to 1 if you want to run aphavoc maps but do not have EEAH \n",command_line_aphavoc);	// VJ 050118 aphavoc install hack
+	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 	fprintf(f,"[end of file]\n");
 	
 	fclose(f);
