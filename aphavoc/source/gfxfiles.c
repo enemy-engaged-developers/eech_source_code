@@ -6552,11 +6552,12 @@ static void mclose_pre_installed_apache_havoc_cockpit_graphics (void)
 		installation_file[1024],
 		apache_havoc_installation_file[2048];
 
-	debug_assert (get_global_apache_havoc_installed ());
+// VJ 050118 aphavoc install hack
+	debug_assert (get_global_apache_havoc_installed () || command_line_aphavoc);
 
-	debug_assert (apache_havoc_installation_path_valid);
+	debug_assert (apache_havoc_installation_path_valid || command_line_aphavoc);
 
-	debug_assert (strlen (apache_havoc_installation_path) > 0);
+	debug_assert (strlen (apache_havoc_installation_path) > 0 || command_line_aphavoc);
 
 	for (i = 0; i < NUM_FILES; i++)
 	{
@@ -6596,11 +6597,11 @@ static void mopen_pre_installed_apache_havoc_cockpit_graphics (void)
 		installation_file[1024],
 		apache_havoc_installation_file[2048];
 
-	debug_assert (get_global_apache_havoc_installed ());
+	debug_assert (get_global_apache_havoc_installed ()  || command_line_aphavoc);
 
-	debug_assert (apache_havoc_installation_path_valid);
+	debug_assert (apache_havoc_installation_path_valid  || command_line_aphavoc);
 
-	debug_assert (strlen (apache_havoc_installation_path) > 0);
+	debug_assert (strlen (apache_havoc_installation_path) > 0  || command_line_aphavoc);
 
 	failed = FALSE;
 
@@ -6633,7 +6634,8 @@ static void mopen_pre_installed_apache_havoc_cockpit_graphics (void)
 	{
 		mclose_pre_installed_apache_havoc_cockpit_graphics ();
 
-		set_global_apache_havoc_installed (FALSE);
+		if (!command_line_aphavoc)
+			set_global_apache_havoc_installed (FALSE);
 
 		debug_colour_log (DEBUG_COLOUR_AMBER, "Apache Havoc is NOT installed");
 	}
@@ -6664,9 +6666,10 @@ void mopen_all_graphics_files (int pass_conversion)
 		}
 	}
 
+// VJ 050118 aphavoc install hack
 	if (pass_conversion == GRAPHICS_CONVERSION_SECOND_PASS)
 	{
-		if (get_global_apache_havoc_installed ())
+		if (get_global_apache_havoc_installed () && !command_line_aphavoc)
 		{
 			mopen_pre_installed_apache_havoc_cockpit_graphics ();
 		}

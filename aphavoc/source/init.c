@@ -644,7 +644,8 @@ void full_initialise_game (void)
 	////////////////////////////////////////
 
 	#if !DEMO_VERSION	
-		if (get_global_apache_havoc_installed ())
+// VJ 050118 aphavoc install hack
+		if (get_global_apache_havoc_installed () || command_line_aphavoc)
 		{
 			char
 				buffer [256];
@@ -978,8 +979,8 @@ int check_apache_havoc_ffp_files (void)
 
 	int
 		flag;
-
-	if (get_global_apache_havoc_installed ())
+// VJ 050118 aphavoc install hack
+	if (get_global_apache_havoc_installed () || command_line_aphavoc)
 	{
 	
 		flag = TRUE;

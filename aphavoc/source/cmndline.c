@@ -78,8 +78,8 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-	command_line_dynamics_advanced_flight_model			= FALSE,  //Werewolf 3 Jan 04
-	command_line_report_to_masterserver						= TRUE,  //Werewolf 2 Jan 04
+	command_line_dynamics_advanced_flight_model					= FALSE,  //Werewolf 3 Jan 04
+	command_line_report_to_masterserver						= FALSE, // VJ 050107 on-line gaming should not be the default; TRUE,  //Werewolf 2 Jan 04
 	command_line_debug_input									= FALSE,
 	command_line_debug_log_timing_info						= TRUE,
 	command_line_dump_session									= FALSE,
@@ -196,7 +196,8 @@ int
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
-	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod ongoing
+	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
+	command_line_aphavoc								= 0,	// VJ 050118 aphavoc install hack
 	
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
@@ -1928,6 +1929,19 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_3d_cockpit = FALSE;
+			}
+		}		
+		////////////////////////////////////////		
+		else if (s2 = strarg (s1, "aphavoc"))		// VJ 050118 aphavoc install hack
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_aphavoc);
+			}
+			else
+			{
+				command_line_aphavoc = FALSE;
 			}
 		}		
       ////////////////////////////////////////
