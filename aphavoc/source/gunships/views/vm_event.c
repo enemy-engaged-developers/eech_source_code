@@ -157,8 +157,11 @@ void initialise_view_events (void)
   	edit_wide_cockpit = FALSE;
 	set_global_wide_cockpit(FALSE);		
 
-	tsd_render_mode = TSD_RENDER_CONTOUR_MODE;
-	tsd_render_palette = 0;
+//VJ 030511 TSD render mod, linked to eech.ini
+//	tsd_render_mode = TSD_RENDER_CONTOUR_MODE;
+//	tsd_render_palette = 0;
+	tsd_render_mode = command_line_tsd_render_mode+1;
+	tsd_render_palette = command_line_tsd_palette;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -844,10 +847,19 @@ static void TSD_render_event (event *ev)
 		case TSD_RENDER_CONTOUR_RELIEF_MODE :
 	   	set_TSD_render_mode(TSD_RENDER_RELIEF_MODE);
 	   	break;
+		case TSD_RENDER_RELIEF_MODE :
+	   	set_TSD_render_mode(TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE);
+	   	break;
+		case TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE:
+	   	set_TSD_render_mode(TSD_RENDER_SHADED_RELIEF_MODE);
+	   	break;	   		   	
+		case TSD_RENDER_SHADED_RELIEF_MODE:
+	   	set_TSD_render_mode(TSD_RENDER_CONTOUR_MODE);
+	   	break;	   		   	
 	   default:	
 	      set_TSD_render_mode(TSD_RENDER_CONTOUR_MODE);
 	}      
-	   
+	command_line_tsd_render_mode = tsd_render_mode-1;	   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -859,7 +871,9 @@ static void TSD_render_palette_event (event *ev)
 {
 	tsd_render_palette++;
 	if (tsd_render_palette == 3)
-	   tsd_render_palette = 0;    
+	   tsd_render_palette = 0; 
+// update commandline option	
+	command_line_tsd_palette = tsd_render_palette;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -876,7 +890,7 @@ static void wide_cockpit_toggle_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 static void wide_cockpit_initialize(void)
 {
 		wide_cockpit_position[0].x = 0;
@@ -908,7 +922,7 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[5].z = 0.335;			
 		//havoc
 }	
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -916,19 +930,22 @@ static void wide_cockpit_initialize(void)
 //VJ wideview mod, date: 18-mar-03	
 static void wide_cockpit_edit_event (event *ev)
 {
+/*	
 	FILE *f;
 	char buf[128];
 	char *p;
 	// crh 030323 - variable "i" is not used
 	// int i, j;
 	int j;
-	
- 	   
+*/	
+
+//VJ 030511 moved save of cockpit parameters to eech.ini
  	if (!get_global_wide_cockpit ())
  	   set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
 
 	edit_wide_cockpit = TRUE;
 	
+/*	VJ 030511 moved to eechini.c
 	f = fopen("widemod.cfg","r");
     // if somehow fails
 	if (!f)
@@ -942,7 +959,7 @@ static void wide_cockpit_edit_event (event *ev)
       	f = fopen("widemod.cfg","r");
       	// open it again
  	}  
-		 	 	   
+
  	fscanf(f,"%[^\n]\n",buf);
  	// read header
  	
@@ -969,7 +986,7 @@ static void wide_cockpit_edit_event (event *ev)
 	
 	if (f) 
 	   fclose(f);
-
+*/		 	 	   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -979,6 +996,7 @@ static void wide_cockpit_edit_event (event *ev)
 //VJ wideview mod, date: 18-mar-03	
 static void wide_cockpit_save_event (event *ev)
 {
+/*	VJ 030511 moved to eechini.c
 	FILE *f = fopen("widemod.cfg","w");
 
 	fprintf(f, "==========Wideview Cockpit MOD version 1.2===========\n");
@@ -990,7 +1008,7 @@ static void wide_cockpit_save_event (event *ev)
 	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
     
 	fclose(f);   
-
+*/
 	edit_wide_cockpit = FALSE;
 
 }
@@ -1197,6 +1215,10 @@ static void decrease_3d_resolutions_event (event *ev)
 		{
 			if (in_cockpit)
 			{
+//VJ				
+set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
+             set_view_mode (get_nearest_fixed_cockpit_view (pilot_head_heading, pilot_head_pitch));
+/*
 				if (get_apache_havoc_gunship_fixed_cockpit ())
 				{
 					if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT)
@@ -1212,6 +1234,7 @@ static void decrease_3d_resolutions_event (event *ev)
 				{
 					set_view_mode (get_view_mode ());
 				}
+*/				
 			}
 		}
 	}
@@ -1233,6 +1256,10 @@ static void increase_3d_resolutions_event (event *ev)
 		{
 			if (in_cockpit)
 			{
+//VJ
+set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
+						set_view_mode (get_nearest_fixed_cockpit_view (pilot_head_heading, pilot_head_pitch));
+/*				
 				if (get_apache_havoc_gunship_fixed_cockpit ())
 				{
 					if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT)
@@ -1248,6 +1275,7 @@ static void increase_3d_resolutions_event (event *ev)
 				{
 					set_view_mode (get_view_mode ());
 				}
+*/				
 			}
 		}
 	}
