@@ -1990,7 +1990,7 @@ int direct_play_create_session ( int value )
 		}
 
 		sessionDesc.guidApplication = TEST_GUID;
-		sessionDesc.dwMaxPlayers = MAXPLAYERS;
+		sessionDesc.dwMaxPlayers = command_line_maxplayers;
 		sessionDesc.lpszSessionName = ( LPWSTR ) connection_data.session_name;
 		sessionDesc.dwReserved1 = 0;
 		sessionDesc.dwReserved2 = 0;

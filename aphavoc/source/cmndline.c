@@ -181,7 +181,8 @@ int
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
-	command_line_green_mfd										= 0;		// loke 030517
+	command_line_green_mfd										= 0,		// loke 030517
+	command_line_maxplayers							= 4;	// Werewolf 030518
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1702,6 +1703,19 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_high_res_mfd = TRUE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "maxplayers"))		// loke 030420
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_maxplayers);
+			}
+			else
+			{
+				command_line_maxplayers = 4;
 			}
 		}
 		////////////////////////////////////////

@@ -350,6 +350,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1;
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
+		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
@@ -401,6 +402,7 @@ void dump_ini_file(void)
 	fprintf(f,"dxtm=%d              # directx texture management, should fix \"unable to allocate hardware slot\" error (def = 0)\n",command_line_d3d_use_texture_management);
 	fprintf(f,"cg=0                # clean graphics, re-installs graphics files (def = 0)\n");
 	fprintf(f,"[Communications]\n");
+	fprintf(f,"maxplayers=%d        # maximum number of players in a multiplayer game, def = 4\n",command_line_maxplayers);
 	fprintf(f,"ipa=%s               # ip address = TCPIP address to connect to. A HOST can leave out the value.\n",command_line_ip_address);
 	fprintf(f,"pss=%s               # primary server setting (server internet address)\n",command_line_primary_server_setting);  //Werewolf: Defaults changed 080403
 	fprintf(f,"sss=%s               # secondary server setting (server internet address)\n",command_line_secondary_server_setting);
