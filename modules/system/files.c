@@ -91,9 +91,17 @@ struct FILEMAP
 
 #endif
 
+#ifdef WIN32
 	HANDLE
 		hFile,
 		hMap;
+#else
+	int
+		fd;
+
+	long
+		length;
+#endif
 
 	void
 		*data;
@@ -133,8 +141,13 @@ BOOL initialise_file_system ( void )
 	{
 
 		file_maps[count].used = FALSE;
+#ifdef WIN32
 		file_maps[count].hFile = 0;
 		file_maps[count].hMap = 0;
+#else
+		file_maps[count].fd = 0;
+		file_maps[count].length = 0;
+#endif
 		file_maps[count].data = NULL;
 	}
 
@@ -175,11 +188,20 @@ void deinitialise_file_system ( void )
 
 void * mopen ( char *filename )
 {
-
+#ifdef WIN32
 	HANDLE
 		hFile,
 		hMap;
+#else
+	int
+		fd;
 
+	long
+		length;
+
+	struct stat filestat;
+#endif
+	
 	void
 		*data;
 
@@ -204,6 +226,7 @@ void * mopen ( char *filename )
 	else
 	{
 
+#ifdef WIN32
 		hFile = CreateFile ( filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( !hFile )
@@ -213,9 +236,20 @@ void * mopen ( char *filename )
 
 			return ( NULL );
 		}
+#else
+		fd = open ( filename, O_RDONLY );
+
+		if ( !fd )
+		{
+			debug_log ( "Unable to open file %s prior to mmap: %s", filename, strerror(errno) );
+
+			return ( NULL );
+		}
+#endif
 
 		sprintf ( mapping_name, "%08x%04dFileMapping", timeGetTime (), count );
 
+#ifdef WIN32
 		hMap = CreateFileMapping ( hFile, NULL, PAGE_READONLY, 0, 0, mapping_name );
 
 		if ( ! hMap )
@@ -229,23 +263,38 @@ void * mopen ( char *filename )
 		}
 
 		data = MapViewOfFile ( hMap, FILE_MAP_READ, 0, 0, 0 );
+#else
+		// set length to size of file
+		fstat( fd, &filestat );
+		length = filestat.st_size;
 
+		data = mmap(0, length, PROT_READ, MAP_SHARED, fd, 0);
+#endif
 		if ( ! data )
 		{
 
+#ifdef WIN32
 			CloseHandle ( hMap );
 
 			CloseHandle ( hFile );
 
 			debug_log ( "Unable to create file mapping for memory mapped file %s", filename );
+#else
+			close(fd);
+
+			debug_log ( "Unable to create file mapping for memory mapped file %s: %s", filename, strerror(errno) );
+#endif
 
 			return ( NULL );
 		}
 
+#ifdef WIN32
 		file_maps[count].hFile = hFile;
-
 		file_maps[count].hMap = hMap;
-
+#else
+		file_maps[count].fd = fd;
+		file_maps[count].length = length;
+#endif
 		file_maps[count].data = data;
 
 #if DEBUG_MODULE
@@ -282,19 +331,26 @@ BOOL mclose ( void *data )
 		return ( FALSE );
 	}
 
+#ifdef WIN32
 	UnmapViewOfFile ( file_maps[count].data );
 
 	CloseHandle ( file_maps[count].hMap );
 
 	CloseHandle ( file_maps[count].hFile );
+#else
+	munmap( file_maps[count].data, file_maps[count].length );
+#endif
 
-	file_maps[count].data = NULL;
-
-	file_maps[count].hMap = 0;
-
-	file_maps[count].hFile = 0;
 
 	file_maps[count].used = FALSE;
+#ifdef WIN32
+	file_maps[count].hFile = 0;
+	file_maps[count].hMap = 0;
+#else
+	file_maps[count].fd = 0;
+	file_maps[count].length = 0;
+#endif
+	file_maps[count].data = NULL;
 
 	return ( TRUE );
 }
