@@ -1369,7 +1369,9 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
 
-							if (!get_global_apache_havoc_installed ())
+							if (!command_line_aphavoc)
+							{ 								
+							if (!get_global_apache_havoc_installed ()) 
 							{
 
 								end_flag = TRUE;
@@ -1378,6 +1380,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 
 								break;
 							}
+						}
 						}
 
 						case FILE_TAG_END:
