@@ -708,6 +708,23 @@ void full_initialise_game (void)
 
 	////////////////////////////////////////
 	//
+	// INITIALISE TRACKIR
+	//	Retro 030317
+	//	THIS IS NOT LOCALIZED YET !!
+	//	(well.. doesn´t have to be)
+	////////////////////////////////////////
+
+	debug_log ( "Initialising trackIR" );
+	sprintf (buffer, "%s...%s", get_trans ("Loading"), "TrackIR");
+
+	set_ui_object_text (initialising_text, buffer);
+
+	ui_force_update ();
+
+	InitTrackIR ();
+
+	////////////////////////////////////////
+	//
 	// INITIALISE UPDATE FUNCTIONS
 	//
 	////////////////////////////////////////

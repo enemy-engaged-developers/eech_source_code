@@ -586,6 +586,8 @@ void exit_game_function (event *ev)
 
 		case GAME_EXIT_APACHE_HAVOC:
 		{
+extern int query_TIR_active ( void );	// Retro 030318
+extern void ExitTrackIR ( void );		// Retro 030318
 
 			push_ui_screen (exit_screen);
 
@@ -600,6 +602,12 @@ void exit_game_function (event *ev)
 			set_exit_flight_loop (TRUE);
 
 			set_exit_ui (TRUE);
+
+		// By Retro.. 030318
+		// ..if TrackIR is active, tell it to stop transmitting before closing down..
+			if (query_TIR_active() == TRUE)
+				ExitTrackIR();
+		// end Retro
 
 			break;
 		}
