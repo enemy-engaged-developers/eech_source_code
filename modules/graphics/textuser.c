@@ -83,6 +83,8 @@
 // repaired this code so that it reads the camoflaged textures correctly, assuming they have "_DESERT" or "-D" in their name
 // VJ 04/12/17
 // adapted the code to read 8 bit bmps, but they are put in the same overall structure, check if this works
+// VJ 050106 
+// warzones can have file with names of texture dirs
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,6 +265,7 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 04/12/12 comment: set = 0 for default or 1 for desert
+//this is called from modules/3d/3dobjid.c and then terrtype.c
 void set_texture_camoflage ( int set )
 {
 		
@@ -529,6 +532,7 @@ BOOL load_texturemap_data ( char *path )
 // Start - Have_Quick
 // 12/5/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ 050106 added NULL parameter which is used if called from gameflow.c, warzone specific textures
 
 	initialize_texture_override_names ( system_texture_override_names, NULL );
 
@@ -536,8 +540,6 @@ BOOL load_texturemap_data ( char *path )
 // End Have_Quick
 // 12/5/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 	//
 	// First integer is the number of palettes the textures use in total.
@@ -3479,7 +3481,7 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 	FILE
 		*fp;
 
-// VJ 041217 header info: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_5f8y.asp
+// VJ 041217 bitmap header info: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_5f8y.asp
 	BITMAPFILEHEADER
 		bmfh;
 
@@ -3513,6 +3515,7 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 
 //VJ mapname used to load map specific textures in file
 //C:\gms\Razorworks\eech-new\aphavoc\source\gameflow\gameflow.c 
+// variable is called session->warzone_name
 //line 395
 
 	if (mapname == NULL)
@@ -3530,7 +3533,7 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 	if ( !file_exist ( full_override_texture_filename ) )
 		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO, this_texture_name );
 	}
-	else
+	else //warzone specific textures
 	{
 	if ( !file_exist ( full_override_texture_filename ) )
 		sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, this_texture_name );
@@ -3684,7 +3687,8 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//VJ 041213 fucntion also called from file eech-new\aphavoc\source\gameflow\gameflow.c, line 384
+//VJ 041213 fucntion also called from file eech-new\aphavoc\source\gameflow\gameflow.c, about line 384
+// using texture dir names specified in standard file
 void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
 {
    
@@ -3732,7 +3736,7 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 				}	
 				valid_file = get_next_directory_file ( directory_listing );
 			}
-		}
+		} 
 		
 	//VJ 041212 add cockpit textures	
 		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
@@ -3818,12 +3822,12 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 			}
 		}
 	}
-	else
+	else // this part is executed when called from gameflow.c, warzone specific textures
 	{
-		sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY,mapname);
-	
+		sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+
 		directory_listing = get_first_directory_file ( directory_search_path );
-	
+
 		//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
 		if ( directory_listing )
 		{
@@ -3836,12 +3840,12 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 					filename = strupr(get_directory_file_filename ( directory_listing ));
 		
 					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-		
+
 					//we don't want the .bmp in the overides index
 					tmp = strtok( filename, "." );
 						
 					strcpy ( system_texture_override_names[index], tmp );
-	
+   	
 					index++;
 				}	
 				valid_file = get_next_directory_file ( directory_listing );
