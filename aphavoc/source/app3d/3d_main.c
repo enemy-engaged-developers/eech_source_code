@@ -147,15 +147,10 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			default:
 			case GUNSHIP_TYPE_APACHE:
 			case GUNSHIP_TYPE_COMANCHE:
-			{
-				set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
-
-				break;
-			}
 			case GUNSHIP_TYPE_HAVOC:
 			case GUNSHIP_TYPE_HOKUM:
 			{
-				set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
+				set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
 
 				break;
 			}
