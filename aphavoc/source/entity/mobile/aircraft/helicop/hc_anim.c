@@ -977,22 +977,32 @@ void animate_helicopter_wipers (entity *en)
 		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_52)
 		{
 			animate_hokum_wipers (raw->ac.inst3d);
-
-/*		////Moje 030602 Start
+		}
+		////Moje 030602 Start
 
 		else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK)
 		{
-			animate_apache_external_wipers (raw->ac.inst3d);
-
+			animate_blackhawk_external_wipers (raw->ac.inst3d);
+		}
 		////Moje 030602 End
 		////Moje 030619 Start
 		else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
 		{
-			animate_havoc_external_wipers (raw->ac.inst3d);
+			animate_hind_external_wipers (raw->ac.inst3d);
 		}
 		////Moje 030619 End
-*/
+		////Moje 030816 Start
+
+		else if (raw->ac.object_3d_shape == OBJECT_3D_AH_64A)
+		{
+			animate_ah64a_external_wipers (raw->ac.inst3d);
 		}
+		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+		{
+			animate_ka50_external_wipers (raw->ac.inst3d);
+		}
+		////Moje 030619 End
+
 	}
 }
 
@@ -1036,18 +1046,30 @@ void animate_helicopter_eo (entity *en)
 		{
 			animate_hokum_eo (raw->ac.inst3d);
 		}
-/*		////Moje 030602 Start
+		////Moje 030602 Start
 		else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK)
 		{
-			animate_apache_eo (raw->ac.inst3d);
+			animate_blackhawk_eo (raw->ac.inst3d);
 		}
 		////Moje 030602 End
 		////Moje 030619 Start
 		else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
 		{
-			animate_havoc_eo (raw->ac.inst3d);
+			animate_hind_eo (raw->ac.inst3d);
+		}
 		////Moje 030619 End
-*/
+
+		////Moje 030816 Start
+		else if (raw->ac.object_3d_shape == OBJECT_3D_AH_64A)
+		{
+			animate_ah64a_eo (raw->ac.inst3d);
+		}
+		else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+		{
+			animate_ka50_eo (raw->ac.inst3d);
+		}
+		////Moje 030816 End
+
 	}
 }
 

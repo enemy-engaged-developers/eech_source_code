@@ -113,6 +113,8 @@ typedef enum GAME_TYPES game_types;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030519 Added GUNSHIP_TYPE_BLACKHAWK, below
 ////Moje 030612 Added GUNSHIP_TYPE_HIND, below
+////Moje 030816 Added GUNSHIP_TYPE_AH64A, and GUNSHIP_TYPE_KA50, below
+
 enum GUNSHIP_TYPES
 {
 	GUNSHIP_TYPE_APACHE,
@@ -121,6 +123,8 @@ enum GUNSHIP_TYPES
 	GUNSHIP_TYPE_HOKUM,
 	GUNSHIP_TYPE_BLACKHAWK,
 	GUNSHIP_TYPE_HIND,
+	GUNSHIP_TYPE_AH64A,
+ 	GUNSHIP_TYPE_KA50,
 	NUM_GUNSHIP_TYPES
 };
 
@@ -956,9 +960,9 @@ extern int get_localisation_y_size (game_text_translation_type *list, int button
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////Moje 030521 Added Blackhawk 030612 Hind
+////Moje 030521 Added Blackhawk 030612 Hind 030816 AH64A and KA50
 
-#define get_apache_havoc_gunship() ((get_global_gunship_type () == GUNSHIP_TYPE_APACHE) || (get_global_gunship_type () == GUNSHIP_TYPE_HAVOC) || (get_global_gunship_type () == GUNSHIP_TYPE_BLACKHAWK) || (get_global_gunship_type () == GUNSHIP_TYPE_HIND))
+#define get_apache_havoc_gunship() ((get_global_gunship_type () == GUNSHIP_TYPE_APACHE) || (get_global_gunship_type () == GUNSHIP_TYPE_HAVOC) || (get_global_gunship_type () == GUNSHIP_TYPE_BLACKHAWK) || (get_global_gunship_type () == GUNSHIP_TYPE_HIND) || (get_global_gunship_type () == GUNSHIP_TYPE_AH64A) || (get_global_gunship_type () == GUNSHIP_TYPE_KA50))
 
 #define get_comanche_hokum_gunship() ((get_global_gunship_type () == GUNSHIP_TYPE_COMANCHE) || (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM))
 

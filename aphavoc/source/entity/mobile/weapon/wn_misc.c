@@ -569,7 +569,119 @@ weapon_config_types get_hind_weapon_config
 	return (WEAPON_CONFIG_TYPE_UNARMED);
 }
 ////Moje 030613 end
+////Moje 030817 start
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+weapon_config_types get_ah64a_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon,
+	entity_sub_types wing_tip_weapon
+)
+{
+	weapon_config_types
+		config_type;
+
+	int
+		ok;
+
+	for (config_type = WEAPON_CONFIG_TYPE_AH64A_APACHE_1; config_type <= WEAPON_CONFIG_TYPE_AH64A_APACHE_32; config_type++)
+	{
+		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			ok = check_hardpoint_clean (config_type, AH64A_LHS_INNER_PYLON);
+		}
+		else
+		{
+			ok = check_weapon_on_hardpoint (config_type, inner_hardpoint_weapon, AH64A_LHS_INNER_PYLON);
+		}
+
+		if (ok)
+		{
+			if (outer_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				ok = check_hardpoint_clean (config_type, AH64A_LHS_OUTER_PYLON);
+			}
+			else
+			{
+				ok = check_weapon_on_hardpoint (config_type, outer_hardpoint_weapon, AH64A_LHS_OUTER_PYLON);
+			}
+
+			if (ok)
+			{
+				if (wing_tip_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				{
+					ok = check_hardpoint_clean (config_type, AH64A_LHS_WING_TIP_MOUNT);
+				}
+				else
+				{
+					ok = check_weapon_on_hardpoint (config_type, wing_tip_weapon, AH64A_LHS_WING_TIP_MOUNT);
+				}
+
+				if (ok)
+				{
+					return (config_type);
+				}
+			}
+		}
+	}
+
+	return (WEAPON_CONFIG_TYPE_UNARMED);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+weapon_config_types get_ka50_weapon_config
+(
+	entity_sub_types inner_hardpoint_weapon,
+	entity_sub_types outer_hardpoint_weapon
+)
+{
+	weapon_config_types
+		config_type;
+
+	int
+		ok;
+
+	for (config_type = WEAPON_CONFIG_TYPE_KA50_HOKUM_1; config_type <= WEAPON_CONFIG_TYPE_KA50_HOKUM_30; config_type++)
+	{
+		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			ok = check_hardpoint_clean (config_type, KA50_LHS_INNER_PYLON);
+		}
+		else
+		{
+			ok = check_weapon_on_hardpoint (config_type, inner_hardpoint_weapon, KA50_LHS_INNER_PYLON);
+		}
+
+		if (ok)
+		{
+			if (outer_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			{
+				ok = check_hardpoint_clean (config_type, KA50_LHS_OUTER_PYLON);
+			}
+			else
+			{
+				ok = check_weapon_on_hardpoint (config_type, outer_hardpoint_weapon, KA50_LHS_OUTER_PYLON);
+			}
+
+			if (ok)
+			{
+				return (config_type);
+			}
+		}
+	}
+
+	return (WEAPON_CONFIG_TYPE_UNARMED);
+}
+////Moje 030817 end
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -890,6 +1002,107 @@ void get_hind_weapons_from_weapon_config
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030613 end
+////Moje 030817 start
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void get_ah64a_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon,
+	entity_sub_types *wing_tip_weapon
+)
+{
+	int
+		package;
+
+	ASSERT
+	(
+		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
+		(
+			(weapon_config_type >= WEAPON_CONFIG_TYPE_AH64A_APACHE_1) &&
+			(weapon_config_type <= WEAPON_CONFIG_TYPE_AH64A_APACHE_32)
+		)
+	);
+
+	ASSERT (inner_hardpoint_weapon);
+	ASSERT (outer_hardpoint_weapon);
+	ASSERT (wing_tip_weapon);
+
+	*inner_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*outer_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*wing_tip_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		if (weapon_config_database[weapon_config_type][package].heading_depth == AH64A_LHS_INNER_PYLON)
+		{
+			*inner_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+		else if (weapon_config_database[weapon_config_type][package].heading_depth == AH64A_LHS_OUTER_PYLON)
+		{
+			*outer_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+		else if (weapon_config_database[weapon_config_type][package].heading_depth == AH64A_LHS_WING_TIP_MOUNT)
+		{
+			*wing_tip_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void get_ka50_weapons_from_weapon_config
+(
+	weapon_config_types weapon_config_type,
+	entity_sub_types *inner_hardpoint_weapon,
+	entity_sub_types *outer_hardpoint_weapon
+)
+{
+	int
+		package;
+
+	ASSERT
+	(
+		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
+		(
+			(weapon_config_type >= WEAPON_CONFIG_TYPE_KA50_HOKUM_1) &&
+			(weapon_config_type <= WEAPON_CONFIG_TYPE_KA50_HOKUM_30)
+		)
+	);
+
+	ASSERT (inner_hardpoint_weapon);
+	ASSERT (outer_hardpoint_weapon);
+
+	*inner_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	*outer_hardpoint_weapon = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[weapon_config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		if (weapon_config_database[weapon_config_type][package].heading_depth == KA50_LHS_INNER_PYLON)
+		{
+			*inner_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+		else if (weapon_config_database[weapon_config_type][package].heading_depth == KA50_LHS_OUTER_PYLON)
+		{
+			*outer_hardpoint_weapon = weapon_config_database[weapon_config_type][package].sub_type;
+		}
+	}
+}
+////Moje 030817 end
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

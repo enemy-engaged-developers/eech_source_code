@@ -149,6 +149,9 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			case GUNSHIP_TYPE_COMANCHE:
 			////Moje 030519 Start
 			case GUNSHIP_TYPE_BLACKHAWK:
+			////Moje 030816 Start
+			case GUNSHIP_TYPE_AH64A:
+			////Moje 030816 end
 			{
 				set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
 
@@ -159,6 +162,9 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			////Moje 030612 Start
 			case GUNSHIP_TYPE_HIND:
 			////Moje 030612 End
+			////Moje 030816 Start
+			case GUNSHIP_TYPE_KA50:
+			////Moje 030816 End
 			{
 				set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
 

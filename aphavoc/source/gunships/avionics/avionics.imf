@@ -109,6 +109,13 @@ asm_object_files	+=	$+ &
 !include $(projectdir)\source\gunships\avionics\hind\hi_avion.imf
 
 #////Moje 0300612 End
+#////Moje 030815 Start
+
+!include $(projectdir)\source\gunships\avionics\ah64a\ah_avion.imf
+
+!include $(projectdir)\source\gunships\avionics\ka50\hm_avion.imf
+
+#////Moje 030815 End
 
 #################################################################################################################################
 #################################################################################################################################

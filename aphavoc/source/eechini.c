@@ -454,11 +454,15 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
-			////Moje 030609 Changed k-valuse from 4 to 6 Blackhawk and Hind is always flyable now
+			////Moje 030609 Changed k-value from 4 to 6 Blackhawk and Hind is always flyable now
+			////Moje 030816 Changed the next expression to get the AH64A and KA50 always flyable
+			////            number 21 and 22 in ac_dbase.c
+			//// 030820 On a 2nd thought, I put back the orginal. Not everyone want's the new choppers
+
 			command_line_fly_any_airplane = d1;
 			if (command_line_fly_any_airplane == 0)
 			{
-				for (k=6; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
+				for (k=4; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}

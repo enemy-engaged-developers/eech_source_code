@@ -490,6 +490,9 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 		////Moje 030527 start
 			case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 		////Moje 030527 End
+		////Moje 030816 start
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+		////Moje 030816 End
 			{
 				mca_effect_index = SOUND_SAMPLE_INDEX_APACHE_MCA;
 				lock_on_effect_index = SOUND_SAMPLE_INDEX_APACHE_LOCK_ON;
@@ -503,7 +506,8 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 			case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 			////Moje 030612 line below added
 			case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
-
+			////Moje 030816 line below added
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 			{
 				mca_effect_index = SOUND_SAMPLE_INDEX_HAVOC_MCA;
 				lock_on_effect_index = SOUND_SAMPLE_INDEX_HAVOC_LOCK_ON;

@@ -1305,6 +1305,20 @@ void dynamics_restore_damage_values (void)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		{
+
+			ah64a_restore_damage_values ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		{
+			ka50_restore_damage_values ();
+			break;
+		}
+		////Moje 030816 end
 	}
 }
 
@@ -1530,6 +1544,21 @@ void repair_damage_model (unsigned int damage)
 							break;
 						}
 					////Moje 030612 end
+					////Moje 030816 Start
+
+						case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+						{
+
+							ah64a_restore_damage_values ();
+
+							break;
+						}
+						case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+						{
+							ka50_restore_damage_values ();
+							break;
+						}
+					////Moje 030816 end
 					}
 
 					#if DYNAMICS_DEBUG

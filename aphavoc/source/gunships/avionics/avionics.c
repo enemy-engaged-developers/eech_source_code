@@ -343,6 +343,88 @@ void initialise_avionics (void)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030815 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_ah64a_hud ();
+
+			initialise_ah64a_mfd ();
+
+			initialise_ah64a_weapon_systems ();
+
+			initialise_ah64a_upfront_display ();
+
+			initialise_ah64a_target_acquisition_systems ();
+
+			initialise_ah64a_lamp_avionics ();
+
+			initialise_ah64a_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_ah64a_avionics_events, "ah64a avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_ka50_hud ();
+
+			initialise_ka50_mfd ();
+
+			initialise_ka50_ekran_display ();
+
+			initialise_ka50_target_acquisition_systems ();
+
+			initialise_ka50_lamp_avionics ();
+
+			initialise_ka50_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_ka50_avionics_events, "ka50 avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+		////Moje 030815 End
 	}
 }
 
@@ -627,6 +709,94 @@ void deinitialise_avionics (void)
 			break;
 		}
 		////Moje 030612 end
+		//// Moje 030815 start insertion 2
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_ah64a_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_ah64a_hud ();
+
+			deinitialise_ah64a_mfd ();
+
+			deinitialise_ah64a_upfront_display ();
+
+			deinitialise_ah64a_target_acquisition_systems ();
+
+			deinitialise_ah64a_lamp_avionics ();
+
+			deinitialise_ah64a_threat_warning_system ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_ka50_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_ka50_hud ();
+
+			deinitialise_ka50_mfd ();
+
+			deinitialise_ka50_ekran_display ();
+
+			deinitialise_ka50_target_acquisition_systems ();
+
+			deinitialise_ka50_lamp_avionics ();
+
+			deinitialise_ka50_threat_warning_system ();
+
+			break;
+		}
+		//// Moje 030517 End of insertion 2
 	}
 }
 
@@ -753,6 +923,45 @@ void update_avionics (void)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030815 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_ah64a_target_acquisition_system ();
+
+			update_ah64a_weapon_systems ();
+
+			update_ah64a_lamp_avionics ();
+
+			update_ah64a_threat_warning_system ();
+
+			update_ah64a_upfront_display ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_ka50_target_acquisition_system ();
+
+			update_ka50_weapon_systems ();
+
+			update_ka50_lamp_avionics ();
+
+			update_ka50_threat_warning_system ();
+
+			update_ka50_ekran_display ();
+
+			update_ka50_ekran_display ();
+
+			break;
+		}
+		////Moje 030815 End of 3rd insertion
+
 	}
 }
 

@@ -249,6 +249,22 @@ void initialise_flight_dynamics (entity *en)
                break;
             }
 ////Moje 020612 End
+////Moje 030816 Start
+            case GUNSHIP_TYPE_AH64A:
+            {
+
+               initialise_ah64a_advanced_dynamics (en);
+
+               break;
+            }
+
+            case GUNSHIP_TYPE_KA50:
+            {
+               initialise_ka50_advanced_dynamics (en);
+
+               break;
+            }
+////Moje 020816 End
          }
 
          break;
@@ -441,15 +457,19 @@ void initialise_flight_dynamics_collision_points (void)
 	raw = get_local_entity_data (get_gunship_entity ());
 
 	// JB 030313 Fly any aircraft HACK HACK HACK
-/*      ////Moje030713 The code should look like the following lines, but then the added choppers sink through the ground
-			The reason could be incomplete 3D-model in the database-files
+/*     ////Moje030713 The code should look like the following lines, but then the added choppers sink through the ground
+	////		The reason could be incomplete 3D-model in the database-files
+
 	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
 		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
 		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
 		raw->ac.object_3d_shape == OBJECT_3D_KA_52 ||
                 raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK ||
-                raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
-////Moje 030713 */
+                raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND ||
+		raw->ac.object_3d_shape == OBJECT_3D_AH_64A ||
+                raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+////Moje 030713 next line 
+*/
 	
 	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
 		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
@@ -1142,6 +1162,37 @@ void update_gunship_dynamics (void)
 			break;
 		}
 ////Moje 030612 End
+////Moje 030816 Start 
+
+		case GUNSHIP_TYPE_AH64A:
+		{
+
+			while (current_flight_dynamics->model_iterations --)
+			{
+
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+
+				update_ah64a_advanced_dynamics ();
+			}
+
+			update_collision_dynamics ();
+
+			update_dynamics_external_values ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		{
+			while (current_flight_dynamics->model_iterations --)
+			{
+				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
+				update_ka50_advanced_dynamics ();
+			}
+			update_collision_dynamics ();
+			update_dynamics_external_values ();
+			break;
+		}
+////Moje 030816 End
 	}
 
 	if (get_gunship_entity ())

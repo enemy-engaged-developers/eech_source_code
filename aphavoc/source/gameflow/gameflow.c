@@ -197,6 +197,9 @@ void process_game_initialisation_phases (void)
 					////Moje 030518 Start
 					case GUNSHIP_TYPE_BLACKHAWK:
 					////Moje 030518 End
+					////Moje 030816 Start
+					case GUNSHIP_TYPE_AH64A:
+					////Moje 030816 End
 					{
 
 						set_global_gunship_side (ENTITY_SIDE_BLUE_FORCE);
@@ -209,6 +212,9 @@ void process_game_initialisation_phases (void)
 					////Moje 030612 Start
 					case GUNSHIP_TYPE_HIND:
 					////Moje 030612 End
+					////Moje 030816 Start
+					case GUNSHIP_TYPE_KA50:
+					////Moje 0300816 End
 					{
 
 						set_global_gunship_side (ENTITY_SIDE_RED_FORCE);

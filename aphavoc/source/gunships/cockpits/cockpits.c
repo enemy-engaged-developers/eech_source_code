@@ -215,6 +215,44 @@ void initialise_cockpits (void)
 			break;
 		}
 		////Moje 030612 End
+		////////////////////////////////////////
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_ah64a_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_ah64a_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_ka50_cockpits ();
+
+			//
+			// order is critical
+			//
+
+			initialise_ka50_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 
@@ -320,6 +358,33 @@ void deinitialise_cockpits (void)
 			break;
 		}
 		////Moje 030612 End
+		////////////////////////////////////////
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+
+			deinitialise_common_virtual_cockpit ();
+
+			deinitialise_ah64a_cockpits ();
+
+			deinitialise_ah64a_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+			deinitialise_common_virtual_cockpit ();
+			deinitialise_ka50_cockpits ();
+			deinitialise_ka50_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 
@@ -426,6 +491,36 @@ void update_cockpits (void)
 			break;
 		}
 		////Moje 030612 End
+		////////////////////////////////////////
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_ah64a_cockpits ();
+
+			update_ah64a_virtual_cockpit ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_ka50_cockpits ();
+
+			update_ka50_virtual_cockpit ();
+
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 
@@ -503,6 +598,29 @@ void draw_cockpit (cockpit_panels panel)
 			break;
 		}
 		////Moje 030612 End
+		////////////////////////////////////////
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_ah64a_cockpit (panel);
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_ka50_cockpit (panel);
+
+			break;
+		}
+
+		////Moje 030816 End
 	}
 }
 

@@ -464,6 +464,12 @@ int set_guide_new_waypoint (entity *en, entity *wp)
 	{
 		get_local_entity_vec3d (wp, VEC3D_TYPE_POSITION, &new_pos);
 
+////Moje 030923 Todd's suggestion to solve the FARP bug Start
+
+////Moje 030924 -didn't help                 new_pos.y = get_3d_terrain_elevation (new_pos.x, new_pos.z);
+
+////Moje 030923 Todd's suggestion to solve the FARP bug End
+
 		set_client_server_guide_entity_new_position (en, &new_pos, NULL);
 	}
 

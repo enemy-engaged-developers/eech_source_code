@@ -136,10 +136,24 @@ void fully_repair_gunship_damage (void)
 		////////////////////////////////////////
 		{
 			fully_repair_hind_damage ();
-
 			break;
 		}
 		////Moje 020612 End
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			fully_repair_ah64a_damage ();
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			fully_repair_ka50_damage ();
+			break;
+		}
+		////Moje 020816 End
 	}
 }
 
@@ -201,6 +215,21 @@ void partially_repair_gunship_damage (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			partially_repair_ah64a_damage ();
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			partially_repair_ka50_damage ();
+			break;
+		}
+		////////////////////////////////////////
 		////Moje 020817 End
 	}
 }
@@ -262,6 +291,19 @@ void repair_gunship_weapon_damage (void)
 
 			break;
 		}
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			repair_ah64a_weapon_damage ();
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			repair_ka50_weapon_damage ();
+			break;
+		}
 		////Moje 030817 end
 	}
 }
@@ -321,6 +363,20 @@ void damage_gunship (gunship_damage_levels damage_level)
 		{
 			damage_hind (damage_level);
 
+			break;
+		}
+
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			damage_ah64a (damage_level);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			damage_ka50 (damage_level);
 			break;
 		}
 		////Moje 030817 end
@@ -385,6 +441,20 @@ int get_gunship_comms_equipment_ok (void)
 		{
 			status = !hind_damage.communications;
 
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			status = !ah64a_damage.communications;
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			status = !ka50_damage.communications;
 			break;
 		}
 		////Moje 030817 end
@@ -456,6 +526,19 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 		{
 			notify_hind_avionics_of_dynamics_fault (damage);
 
+			break;
+		}
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			notify_ah64a_avionics_of_dynamics_fault (damage);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			notify_ka50_avionics_of_dynamics_fault (damage);
 			break;
 		}
 		////Moje 030817 end
@@ -556,6 +639,21 @@ void fully_repair_local_entity_avionics (entity *en)
 
 				break;
 			}
+			case GUNSHIP_TYPE_AH64A:
+			////////////////////////////////////////
+			{
+				fully_repair_ah64a_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ah64a_damage.flags);
+				break;
+			}
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_KA50:
+			////////////////////////////////////////
+			{
+				fully_repair_ka50_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ka50_damage.flags);
+				break;
+			}
 			////Moje 030817 end
 		}
 	}
@@ -632,6 +730,21 @@ void partially_repair_local_entity_avionics (entity *en)
 
 				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
 
+				break;
+			}
+			case GUNSHIP_TYPE_AH64A:
+			////////////////////////////////////////
+			{
+				partially_repair_ah64a_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ah64a_damage.flags);
+				break;
+			}
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_KA50:
+			////////////////////////////////////////
+			{
+				partially_repair_ka50_damage ();
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ka50_damage.flags);
 				break;
 			}
 			////Moje 030817 end
@@ -722,6 +835,26 @@ void load_gunship_avionics_damage (void)
 
 			break;
 		}
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			ah64a_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+			set_ah64a_weapon_damage_status ();
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load ah64a damage: %x", ah64a_damage.flags);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			ka50_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_ka50_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load ka50 damage: %x", ka50_damage.flags);
+
+			break;
+		}
 		////Moje 030817 end
 	}
 }
@@ -792,6 +925,23 @@ void save_gunship_avionics_damage (void)
 			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
 
 			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hind damage: %x", hind_damage);
+
+			break;
+		}
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ah64a_damage.flags);
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ah64a damage: %x", ah64a_damage);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, ka50_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save ka50 damage: %x", ka50_damage);
 
 			break;
 		}

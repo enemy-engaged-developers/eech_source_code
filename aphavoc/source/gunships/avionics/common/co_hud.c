@@ -262,6 +262,22 @@ void display_hud_on_external_view (void)
 				break;
 			}
 			////Moje 030612 end
+			////Moje 030816 Start
+			case GUNSHIP_TYPE_AH64A:
+			////////////////////////////////////////
+			{
+				draw_ah64a_hud ();
+				break;
+			}
+			////////////////////////////////////////
+			case GUNSHIP_TYPE_KA50:
+			////////////////////////////////////////
+			{
+				draw_external_ka50_hud ();
+				draw_ka50_hms ();
+				break;
+			}
+			////Moje 030816 end
 		}
 	}
 }

@@ -1001,7 +1001,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1025,7 +1025,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1049,7 +1049,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1073,7 +1073,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1097,7 +1097,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1121,7 +1121,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_CANNON_TURRET, ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1145,7 +1145,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_LHS_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{
@@ -1162,7 +1162,7 @@ static void update_weapon_status_lamps (void)
 
 	////////////////////////////////////////
 
-	if (get_local_entity_weapon_hardpoint_info (en, HAVOC_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, &weapon_sub_type, &number, &damaged))
+	if (get_local_entity_weapon_hardpoint_info (en, HIND_LHS_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, &weapon_sub_type, &number, &damaged))
 	{
 		if (damaged)
 		{

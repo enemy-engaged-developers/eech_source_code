@@ -1195,9 +1195,11 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 		}
 		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-		////Moje 030606 Fly the Black-Hawk, 030612 Hind
+		////Moje 030606 Fly the Black-Hawk, 030612 Hind 030816 AH64A and KA50
 		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 		{
 			break;
 		}

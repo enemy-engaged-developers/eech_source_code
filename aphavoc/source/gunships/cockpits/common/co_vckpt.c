@@ -165,6 +165,19 @@ void damage_virtual_cockpit_main_rotors (int seed)
 			break;
 		}
 		////Moje 030612 End
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		{
+			damage_ah64a_virtual_cockpit_main_rotors (seed);
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		{
+			damage_ka50_virtual_cockpit_main_rotors (seed);
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 
@@ -218,6 +231,19 @@ void restore_virtual_cockpit_main_rotors (void)
 			break;
 		}
 		////Moje 030612 End
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		{
+			restore_ah64a_virtual_cockpit_main_rotors ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		{
+			restore_ka50_virtual_cockpit_main_rotors ();
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 

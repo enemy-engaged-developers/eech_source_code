@@ -104,7 +104,9 @@ char *game_status_names [] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030519 "Blackhawk Gunship", added below
-////Moje 0300612 "Hind Gunship", added below
+////Moje 030612 "Hind Gunship", added below
+////Moje 030816 "AH64A Gunship", and "KA50 Gunship", added below
+
 char
 	*gunship_type_names [] =
 	{
@@ -114,6 +116,8 @@ char
 		"Hokum Gunship",
 		"Blackhawk Gunship",
 		"Hind Gunship",
+		"AH64A Gunship",
+		"KA50 GUnship",
 		"NUM_GUNSHIP_TYPES"
 	};
 
@@ -144,7 +148,9 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030519 Added ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK, below
-////Moje 0300612 Added ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND, below
+////Moje 030612 Added ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND, below
+////Moje 030816 Added ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE, ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM,and below
+
 entity_sub_types
 	gunship_sub_types [] =
 	{
@@ -154,16 +160,22 @@ entity_sub_types
 		ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B,
 		ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK,
 		ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND,
+		ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE,
+		ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM,
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030521 added ENTITY_SIDE_BLUE_FORCE,last line below
-////Moje 0300612 added ENTITY_SIDE_RED_FORCE,last line below
+////Moje 030612 added ENTITY_SIDE_RED_FORCE,last line below
+////Moje 030816 added ENTITY_SIDE_BLUE_FORCE, and ENTITY_SIDE_RED_FORCE at the end below
+
 entity_sides
 	gunship_sides [] =
 	{
+		ENTITY_SIDE_BLUE_FORCE,
+		ENTITY_SIDE_RED_FORCE,
 		ENTITY_SIDE_BLUE_FORCE,
 		ENTITY_SIDE_RED_FORCE,
 		ENTITY_SIDE_BLUE_FORCE,

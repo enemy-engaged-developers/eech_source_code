@@ -984,19 +984,76 @@ enum WEAPON_CONFIG_TYPES
 	// ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE
 	//
 	////////////////////////////////////////
-
+////Moje 030817 start Added number 3 to 32
 	WEAPON_CONFIG_TYPE_AH64A_APACHE_1,
 	WEAPON_CONFIG_TYPE_AH64A_APACHE_2,
-
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_3,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_4,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_5,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_6,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_7,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_8,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_9,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_10,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_11,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_12,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_13,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_14,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_15,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_16,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_17,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_18,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_19,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_20,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_21,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_22,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_23,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_24,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_25,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_26,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_27,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_28,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_29,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_30,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_31,
+	WEAPON_CONFIG_TYPE_AH64A_APACHE_32,
 	////////////////////////////////////////
 	//
 	// ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM
 	//
 	////////////////////////////////////////
-
+////Moje 030817 Added number 3 to 30
 	WEAPON_CONFIG_TYPE_KA50_HOKUM_1,
 	WEAPON_CONFIG_TYPE_KA50_HOKUM_2,
-
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_3,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_4,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_5,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_6,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_7,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_8,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_9,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_10,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_11,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_12,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_13,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_14,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_15,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_16,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_17,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_18,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_19,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_20,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_21,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_22,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_23,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_24,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_25,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_26,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_27,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_28,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_29,
+	WEAPON_CONFIG_TYPE_KA50_HOKUM_30,
+////Moje 030817 end
 	////////////////////////////////////////
 	//
 	// ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR
@@ -1478,6 +1535,40 @@ typedef int weapon_config_types;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////Moje 030613 end
+////Moje 030817 start
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define AH64A_LHS_INNER_PYLON	  		(0)
+#define AH64A_RHS_INNER_PYLON	  		(1)
+#define AH64A_LHS_OUTER_PYLON	  		(2)
+#define AH64A_RHS_OUTER_PYLON	  		(3)
+#define AH64A_LHS_WING_TIP_MOUNT  		(4)
+#define AH64A_RHS_WING_TIP_MOUNT  		(5)
+#define AH64A_CHAIN_GUN_TURRET	  		(6)
+#define AH64A_CHAFF_DISPENSER	  		(7)
+#define AH64A_FLARE_DISPENSER	  		(7)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define KA50_LHS_INNER_PYLON				(1)
+#define KA50_RHS_INNER_PYLON				(2)
+#define KA50_LHS_OUTER_PYLON				(3)
+#define KA50_RHS_OUTER_PYLON				(4)
+#define KA50_CANNON_TURRET				(0)
+#define KA50_LHS_CHAFF_DISPENSER		(5)
+#define KA50_RHS_CHAFF_DISPENSER		(6)
+#define KA50_LHS_FLARE_DISPENSER		(5)
+#define KA50_RHS_FLARE_DISPENSER		(6)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Moje 030817 end
 
 struct WEAPON_PACKAGE
 {

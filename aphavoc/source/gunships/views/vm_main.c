@@ -1230,6 +1230,34 @@ static void enter_view_mode (view_modes mode)
 					break;
 				}
 				////Moje 030612 End
+				////Moje 030816 Start
+				case GUNSHIP_TYPE_AH64A:
+				{
+					pilot_head_heading = pilot_head_heading_values[mode];
+
+					pilot_head_pitch = pilot_head_pitch_values[mode];
+
+					if (!get_apache_havoc_gunship_fixed_cockpit ())
+					{
+						mode = VIEW_MODE_VIRTUAL_COCKPIT;
+					}
+
+					break;
+				}
+				case GUNSHIP_TYPE_KA50:
+				{
+					pilot_head_heading = pilot_head_heading_values[mode];
+
+					pilot_head_pitch = pilot_head_pitch_values[mode];
+
+					if (!get_apache_havoc_gunship_fixed_cockpit ())
+					{
+						mode = VIEW_MODE_VIRTUAL_COCKPIT;
+					}
+
+					break;
+				}
+				////Moje 030816 End
 			}
 
 			break;

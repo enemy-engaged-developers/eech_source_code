@@ -135,6 +135,23 @@ void activate_common_threat_warning_system (entity *threat)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			activate_ah64a_threat_warning_system (threat);
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			activate_ka50_threat_warning_system (threat);
+
+			break;
+		}
+		////Moje 030816 end
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
 /*

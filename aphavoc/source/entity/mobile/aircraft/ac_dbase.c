@@ -1642,6 +1642,7 @@ aircraft_data
 		// ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE
 		//
 		////////////////////////////////////////
+      ////Moje 030816 1st line under "OBJECT_3D_AH_64A" changed from "NUM_GUNSHIP_TYPES"
       {
          "AH-64A Apache",														// full_name
          "AH-64A APACHE",		  												// long_display_name
@@ -1649,14 +1650,14 @@ aircraft_data
 			"HELICOPTER",															// easy_display_name
 
          OBJECT_3D_AH_64A,														// default_3d_shape
-			NUM_GUNSHIP_TYPES,													// gunship_type
+			GUNSHIP_TYPE_AH64A,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_1,								// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_1,								// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_2,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_26,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_30,								// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_30,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
@@ -1719,6 +1720,7 @@ aircraft_data
 		// ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM
 		//
 		////////////////////////////////////////
+      ////Moje 030816 1st line under "OBJECT_3D_KA_50" changed from "NUM_GUNSHIP_TYPES"
       {
          "Ka-50 Hokum",															// full_name
          "Ka-50 HOKUM",		  													// long_display_name
@@ -1726,14 +1728,14 @@ aircraft_data
 			"HELICOPTER",															// easy_display_name
 
          OBJECT_3D_KA_50,														// default_3d_shape
-			NUM_GUNSHIP_TYPES,													// gunship_type
+			GUNSHIP_TYPE_KA50,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_2,									// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_KA50_HOKUM_1,									// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_2,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_1,									// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_2,									// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_KA50_HOKUM_2,									// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_30,									// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_12,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_KA50_HOKUM_7,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type

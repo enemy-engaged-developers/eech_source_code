@@ -301,6 +301,37 @@ static void set_special1_view_mode (void)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD);
+			}
+			else
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV)
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV);
+			}
+			else
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+			}
+
+			break;
+		}
+		////Moje 030816 end
 	}
 }
 
@@ -435,6 +466,37 @@ static void set_special2_view_mode (void)
 			break;
 		}
 		////Moje 03061 2end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD);
+			}
+			else
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_DOWN20_AHEAD);
+			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD);
+			}
+			else
+			{
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
+			}
+
+			break;
+		}
+		////Moje 030816 end
 	}
 }
 
@@ -1106,6 +1168,10 @@ static void special_cockpit_toggle_event (event *ev)
 	////Moje 030612 start
 		case GUNSHIP_TYPE_HIND:
 	////Moje 030612 end
+	////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		case GUNSHIP_TYPE_KA50:
+	////Moje 030816 end
 		{
 			set_global_draw_cockpit_graphics (get_global_draw_cockpit_graphics () ^ 1);
 

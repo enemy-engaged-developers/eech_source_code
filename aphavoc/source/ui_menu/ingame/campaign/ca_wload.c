@@ -893,6 +893,45 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
 	////Moje 030613 end
+
+	////Moje 030817 start
+	/////////////////////////////////////////////////////////////////
+	// AH64A PAGE 
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_AH64A;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payah6.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.705, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.818, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.959, gunship, WEAPON_LOADING_HARDPOINT_WINGTIP);
+
+	/////////////////////////////////////////////////////////////////
+	// KA50 PAGE
+	/////////////////////////////////////////////////////////////////
+
+	gunship = GUNSHIP_TYPE_KA50;
+
+	gunship_page = weapon_loading_page [gunship];
+
+	set_ui_object_texture_graphic (gunship_page, create_texture_graphic ("graphics\\ui\\cohokum\\map\\payka5.psd"));
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.650, gunship, WEAPON_LOADING_HARDPOINT_GUN1);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.699, gunship, WEAPON_LOADING_HARDPOINT_GUN2);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.814, gunship, WEAPON_LOADING_HARDPOINT_INNER);
+
+	define_weapon_loading_button_object (gunship_page, 0.5, 0.888, gunship, WEAPON_LOADING_HARDPOINT_OUTER);
+
+	////Moje 030816 end
 	
 	/////////////////////////////////////////////////////////////////
 	// Member List Box

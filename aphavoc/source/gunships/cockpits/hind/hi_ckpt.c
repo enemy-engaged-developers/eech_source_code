@@ -161,7 +161,7 @@ void draw_hind_cockpit (cockpit_panels panel)
 			{
 				draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
 
-				draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+				draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
 			}
 		}
 	}

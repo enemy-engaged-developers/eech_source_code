@@ -322,6 +322,22 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			get_ah64a_eo_centred_viewpoint (vp);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			get_ka50_eo_centred_viewpoint (vp);
+			break;
+		}
+		////Moje 030816 end
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
 		default:

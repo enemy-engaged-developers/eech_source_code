@@ -491,6 +491,19 @@ void set_common_target_acquisition_system_lock_target (int lock)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		{
+			set_ah64a_lock_target (lock);
+
+			break;
+		}
+		case GUNSHIP_TYPE_KA50:
+		{
+			set_ka50_lock_target (lock);
+			break;
+		}
+		////Moje 030816 end
 	}
 }
 
@@ -907,6 +920,20 @@ void select_simple_avionics_target_acquisition_system (void)
 			break;
 		}
 		////Moje 030612 end
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		{
+			select_ah64a_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_HMS);
+			break;
+		}
+		////Moje 030816 end
 	}
 }
 

@@ -342,10 +342,30 @@ static void weapons_safe_event (event *ev)
 			{
 				select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
 			}
-
 			break;
 		}
 		////Moje 030612 End
+		////Moje 030816 Start
+		case GUNSHIP_TYPE_AH64A:
+		////////////////////////////////////////
+		{
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS)
+			{
+				select_ah64a_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
+			}
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_KA50:
+		////////////////////////////////////////
+		{
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
+			{
+				select_ka50_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
+			}
+			break;
+		}
+		////Moje 030816 End
 	}
 }
 
