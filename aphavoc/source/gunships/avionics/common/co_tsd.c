@@ -81,10 +81,11 @@ static int
 static int
 	contour_spacing,
 	contour_samples;
+	
+//VJ 030424 TSD render mod default to on
+#define OPTIMISE_CONTOURS	1
 
-#define OPTIMISE_CONTOURS	0
-
-#define OPTIMISE_PATHS		0
+#define OPTIMISE_PATHS		1
 
 
 #if OPTIMISE_CONTOURS
@@ -93,8 +94,6 @@ static int
 	num_contour_lines;
 #endif
 
-
-#define elevation_factor terrain_3d_map_maximum_height
 
 #define colour_base 32
 #define colour_scale(a) min(colour_base,(int)(colour_base*a/elevation_factor)+1);			   	   			   
@@ -135,8 +134,7 @@ void set_tsd_colours(void)
 	
 		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
 		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
-//		set_rgb_colour (MFD_ROAD_COLOUR,        255, 220,   0, 255);
-		set_rgb_colour (MFD_ROAD_COLOUR,        64,64,64, 255);
+		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,64, 255);
 		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
 }	
 
@@ -168,40 +166,40 @@ void Initialise_TSD_render_terrain(void)
 	draw_large_mfd = TRUE;
 	
 	set_tsd_colours();
-	
 	set_rgb_colour(terrain_colour[0	],100,	150,	240,	255);	
-	set_rgb_colour(terrain_colour[1	],	70	,	208,	106,	255);
-	set_rgb_colour(terrain_colour[2	],	92	,	213,	115,	255);
-	set_rgb_colour(terrain_colour[3	],	114,	219,	124,	255);
-	set_rgb_colour(terrain_colour[4	],	135,	224,	133,	255);
-	set_rgb_colour(terrain_colour[5	],	157,	230,	142,	255);
-	set_rgb_colour(terrain_colour[6	],	179,	235,	151,	255);
-	set_rgb_colour(terrain_colour[7	],	201,	241,	160,	255);
-	set_rgb_colour(terrain_colour[8	],	222,	246,	169,	255);
-	set_rgb_colour(terrain_colour[9	],	244,	252,	178,	255);
-	set_rgb_colour(terrain_colour[10	],	251,	246,	190,	255);
-	set_rgb_colour(terrain_colour[11	],	248,	241,	182,	255);
-	set_rgb_colour(terrain_colour[12	],	244,	237,	173,	255);
-	set_rgb_colour(terrain_colour[13	],	241,	232,	165,	255);
-	set_rgb_colour(terrain_colour[14	],	238,	228,	157,	255);
-	set_rgb_colour(terrain_colour[15	],	235,	223,	149,	255);
-	set_rgb_colour(terrain_colour[16	],	232,	219,	141,	255);
-	set_rgb_colour(terrain_colour[17	],	229,	214,	133,	255);
-	set_rgb_colour(terrain_colour[18	],	225,	210,	125,	255);
-	set_rgb_colour(terrain_colour[19	],	222,	205,	117,	255);
-	set_rgb_colour(terrain_colour[20	],	219,	201,	109,	255);
-	set_rgb_colour(terrain_colour[21	],	216,	196,	101,	255);
-	set_rgb_colour(terrain_colour[22	],	213,	192,	93,	255);
-	set_rgb_colour(terrain_colour[23	],	210,	187,	85,	255);
-	set_rgb_colour(terrain_colour[24	],	206,	183,	77,	255);
-	set_rgb_colour(terrain_colour[25	],	203,	178,	69,	255);
-	set_rgb_colour(terrain_colour[26	],	200,	174,	61,	255);
-	set_rgb_colour(terrain_colour[27	],	197,	169,	53,	255);
-	set_rgb_colour(terrain_colour[28	],	194,	164,	45,	255);
-	set_rgb_colour(terrain_colour[29	],	191,	160,	37,	255);
-	set_rgb_colour(terrain_colour[30	],	187,	155,	29,	255);
-	set_rgb_colour(terrain_colour[31	],	184,	151,	21,	255);
-	set_rgb_colour(terrain_colour[32	],	181,	146,	13,	255);
+	set_rgb_colour(terrain_colour[1],227,205,175,255);
+	set_rgb_colour(terrain_colour[2],227,206,170,255);
+	set_rgb_colour(terrain_colour[3],228,206,165,255);
+	set_rgb_colour(terrain_colour[4],228,206,161,255);
+	set_rgb_colour(terrain_colour[5],229,205,157,255);
+	set_rgb_colour(terrain_colour[6],229,204,153,255);
+	set_rgb_colour(terrain_colour[7],230,203,149,255);
+	set_rgb_colour(terrain_colour[8],231,201,146,255);
+	set_rgb_colour(terrain_colour[9],231,198,142,255);
+	set_rgb_colour(terrain_colour[10],232,195,139,255);
+	set_rgb_colour(terrain_colour[11],232,192,136,255);
+	set_rgb_colour(terrain_colour[12],232,188,133,255);
+	set_rgb_colour(terrain_colour[13],231,183,130,255);
+	set_rgb_colour(terrain_colour[14],231,179,126,255);
+	set_rgb_colour(terrain_colour[15],229,174,123,255);
+	set_rgb_colour(terrain_colour[16],227,168,120,255);
+	set_rgb_colour(terrain_colour[17],225,162,116,255);
+	set_rgb_colour(terrain_colour[18],222,156,112,255);
+	set_rgb_colour(terrain_colour[19],218,150,108,255);
+	set_rgb_colour(terrain_colour[20],214,143,104,255);
+	set_rgb_colour(terrain_colour[21],208,136,99,255);
+	set_rgb_colour(terrain_colour[22],202,128,94,255);
+	set_rgb_colour(terrain_colour[23],195,120,88,255);
+	set_rgb_colour(terrain_colour[24],187,112,82,255);
+	set_rgb_colour(terrain_colour[25],177,104,76,255);
+	set_rgb_colour(terrain_colour[26],167,95,68,255);
+	set_rgb_colour(terrain_colour[27],155,86,61,255);
+	set_rgb_colour(terrain_colour[28],142,77,52,255);
+	set_rgb_colour(terrain_colour[29],128,67,43,255);
+	set_rgb_colour(terrain_colour[30],112,58,34,255);
+	set_rgb_colour(terrain_colour[31],95,48,23,255);
+	set_rgb_colour(terrain_colour[32],77,38,12,255);
+	
 }	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -782,7 +780,9 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		*next_row_start_ptr;
 
 		float 
-			terrain_elev=0;
+			terrain_elev=0,
+         elevation_factor=terrain_3d_map_maximum_height*0.95;
+         
 		rgb_colour 
 			terrain_col;
 
@@ -1178,133 +1178,136 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 	{
 		debug_fatal ("Unknown TSD/ASE range %.2f", range);
 	}
-
-
-if (tsd_render_mode != TSD_RENDER_RELIEF_MODE)
-{	
-
-
-	contour_spacing /= contour_samples;
-
-	contour_granularity_mask = ~(contour_granularity - 1);
-
-	//
-	// scan map
-	//
-
-	x_min_index &= contour_granularity_mask;
-	z_min_index &= contour_granularity_mask;
-
-	x_max_index += contour_granularity - 1;
-	z_max_index += contour_granularity - 1;
-
-	x_max_index &= contour_granularity_mask;
-	z_max_index &= contour_granularity_mask;
-
-	if (x_max_index >= terrain_3d_simple_elevation_width)
-	{
-		x_max_index = terrain_3d_simple_elevation_width & contour_granularity_mask;
-	}
-
-	if (z_max_index >= terrain_3d_simple_elevation_height)
-	{
-		z_max_index = terrain_3d_simple_elevation_height & contour_granularity_mask;
-	}
-
-	if ((x_min_index < x_max_index) && (z_min_index < z_max_index))
-	{		
-		this_row_start_ptr = &terrain_3d_simple_elevation_grid[(z_min_index * terrain_3d_simple_elevation_width) + x_min_index];
-
-		row_add_on = terrain_3d_simple_elevation_width * contour_granularity;
-
-		next_row_start_ptr = this_row_start_ptr + row_add_on;
-
-		dx_start = ((((float) x_min_index) * terrain_3d_simple_elevation_x_grid_size) - x_mid) * scale;
-		dz_start = ((((float) z_min_index) * terrain_3d_simple_elevation_z_grid_size) - z_mid) * scale;
-
-		dx_grid = terrain_3d_simple_elevation_x_grid_size * (float) contour_granularity * scale;
-		dz_grid = terrain_3d_simple_elevation_z_grid_size * (float) contour_granularity * scale;
-
-		dz0 = dz_start;
-		dz1 = dz_start + dz_grid;
-
-		for (z_index = z_min_index; z_index < z_max_index; z_index += contour_granularity)
-		{			
-			dx0 = dx_start;
-			dx1 = dx_start + dx_grid;
-
-			this_row_ptr = this_row_start_ptr;
-			next_row_ptr = next_row_start_ptr;
-
-			for (x_index = x_min_index; x_index < x_max_index; x_index += contour_granularity)
-			{
-				//
-				// offset [z=0][x=0]
-				//
-
-				p1.x = dx0;
-				p1.y = this_row_ptr[0];
-				p1.z = dz0;
-
-				//
-				// offset [z=0][x=1]
-				//
-
-				p2.x = dx1;
-				p2.y = this_row_ptr[contour_granularity];
-				p2.z = dz0;
-
-				//
-				// offset [z=1][x=0]
-				//
-
-				p3.x = dx0;
-				p3.y = next_row_ptr[0];
-				p3.z = dz1;
-
-            
-				draw_contour_lines (&p1, &p2, &p3);
-
-				//
-				// offset [z=1][x=1]
-				//
-
-				p1.x = dx1;
-				p1.y = next_row_ptr[contour_granularity];
-				p1.z = dz1;
-
-
-				draw_contour_lines (&p1, &p2, &p3);
-
-				//
-				// next column
-				//
-
-				dx0 += dx_grid;
-				dx1 += dx_grid;
-
-				this_row_ptr += contour_granularity;
-				next_row_ptr += contour_granularity;
-			}
-
-			//
-			// next row
-			//
-
-			dz0 += dz_grid;
-			dz1 += dz_grid;
-
-			this_row_start_ptr += row_add_on;
-			next_row_start_ptr += row_add_on;
+	//VJ 030423 TSD render mod
+	if (tsd_render_mode != TSD_RENDER_RELIEF_MODE)
+	{	
+	
+		contour_spacing /= contour_samples;
+	
+		contour_granularity_mask = ~(contour_granularity - 1);
+	
+		//
+		// scan map
+		//
+	
+		x_min_index &= contour_granularity_mask;
+		z_min_index &= contour_granularity_mask;
+	
+		x_max_index += contour_granularity - 1;
+		z_max_index += contour_granularity - 1;
+	
+		x_max_index &= contour_granularity_mask;
+		z_max_index &= contour_granularity_mask;
+	
+		if (x_max_index >= terrain_3d_simple_elevation_width)
+		{
+			x_max_index = terrain_3d_simple_elevation_width & contour_granularity_mask;
 		}
-	}
+	
+		if (z_max_index >= terrain_3d_simple_elevation_height)
+		{
+			z_max_index = terrain_3d_simple_elevation_height & contour_granularity_mask;
+		}
+	
+		if ((x_min_index < x_max_index) && (z_min_index < z_max_index))
+		{		
+			this_row_start_ptr = &terrain_3d_simple_elevation_grid[(z_min_index * terrain_3d_simple_elevation_width) + x_min_index];
+	
+			row_add_on = terrain_3d_simple_elevation_width * contour_granularity;
+	
+			next_row_start_ptr = this_row_start_ptr + row_add_on;
+	
+			dx_start = ((((float) x_min_index) * terrain_3d_simple_elevation_x_grid_size) - x_mid) * scale;
+			dz_start = ((((float) z_min_index) * terrain_3d_simple_elevation_z_grid_size) - z_mid) * scale;
+	
+			dx_grid = terrain_3d_simple_elevation_x_grid_size * (float) contour_granularity * scale;
+			dz_grid = terrain_3d_simple_elevation_z_grid_size * (float) contour_granularity * scale;
+	
+			dz0 = dz_start;
+			dz1 = dz_start + dz_grid;
+	
+			for (z_index = z_min_index; z_index < z_max_index; z_index += contour_granularity)
+			{			
+				dx0 = dx_start;
+				dx1 = dx_start + dx_grid;
+	
+				this_row_ptr = this_row_start_ptr;
+				next_row_ptr = next_row_start_ptr;
+	
+				for (x_index = x_min_index; x_index < x_max_index; x_index += contour_granularity)
+				{
+					//
+					// offset [z=0][x=0]
+					//
+	
+					p1.x = dx0;
+					p1.y = this_row_ptr[0];
+					p1.z = dz0;
+	
+					//
+					// offset [z=0][x=1]
+					//
+	
+					p2.x = dx1;
+					p2.y = this_row_ptr[contour_granularity];
+					p2.z = dz0;
+	
+					//
+					// offset [z=1][x=0]
+					//
+	
+					p3.x = dx0;
+					p3.y = next_row_ptr[0];
+					p3.z = dz1;
+	
+	            
+					draw_contour_lines (&p1, &p2, &p3);
+	
+					//
+					// offset [z=1][x=1]
+					//
+	
+					p1.x = dx1;
+					p1.y = next_row_ptr[contour_granularity];
+					p1.z = dz1;
+	
+	
+					draw_contour_lines (&p1, &p2, &p3);
+	
+					//
+					// next column
+					//
+	
+					dx0 += dx_grid;
+					dx1 += dx_grid;
+	
+					this_row_ptr += contour_granularity;
+					next_row_ptr += contour_granularity;
+				}
+	
+				//
+				// next row
+				//
+	
+				dz0 += dz_grid;
+				dz1 += dz_grid;
+	
+				this_row_start_ptr += row_add_on;
+				next_row_start_ptr += row_add_on;
+			}
+		}
+	
+		#if OPTIMISE_CONTOURS
+	
+		debug_filtered_log ("num_contour_loops = %d, num_contour_lines = %d", num_contour_loops, num_contour_lines);
+	
+		#endif
+		
+	}//tsd_render_mode != TSD_RENDER_RELIEF_MODE
 
-	#if OPTIMISE_CONTOURS
+   path_detail_level = max(0, path_detail_level-1);
+   //VJ 030423 TSD render mod, increase path detail level
 
-	debug_filtered_log ("num_contour_loops = %d, num_contour_lines = %d", num_contour_loops, num_contour_lines);
-
-	#endif
-}
 	////////////////////////////////////////
 	//
 	// DRAW RIVERS
@@ -1349,7 +1352,8 @@ if (tsd_render_mode != TSD_RENDER_RELIEF_MODE)
 		x_max,
 		z_max,
 		scale,
-		FALSE,
+		//FALSE,
+		TRUE, //VJ 030423 TSD render mod, roads were not very visible
 		draw_large_mfd
 	);
 
