@@ -194,10 +194,10 @@ int
 	command_line_session_filter						= 0,  // Jabberwock 031210 Session filter
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 // Jabberwock 031118 Server side settings
-	session_planner_goto_button,
-	session_vector_flight_model,
-	session_ground_radar_ignores_infantry,
-	session_camcom;
+	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
+	session_vector_flight_model						= FALSE, // camcom bugs removed
+	session_ground_radar_ignores_infantry			= 1,
+	session_camcom									= 0;
 // Jabberwock 031118 ends
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
