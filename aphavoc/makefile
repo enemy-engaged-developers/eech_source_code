@@ -32,17 +32,21 @@ projectdir = $(rootdir)\aphavoc
 
 modulesdir = $(rootdir)\modules
 
-!ifdef visualc
-application_name = Enemy_Engaged_RAH66_Comanche_Vs_KA52_Hokum
-!else
-application_name = Enemy Engaged RAH66 Comanche Vs KA52 Hokum
-!endif
+############################################################################
+# All the version definitions have been moved to \aphavoc\source\version.h #
+############################################################################
 
-major_revision = 1
-
-data_revision = 6
-
-minor_revision = 0
+# !ifdef visualc
+# application_name = Enemy_Engaged_RAH66_Comanche_Vs_KA52_Hokum
+# !else
+# application_name = Enemy Engaged RAH66 Comanche Vs KA52 Hokum
+# !endif
+#
+# major_revision = 1
+#
+# data_revision = 6
+#
+# minor_revision = 0
 
 #
 # Build types:
@@ -53,8 +57,7 @@ minor_revision = 0
 #       E: Electronic Distribution (Commercial make minus CD protection)
 #       X: Experimental patch (although same as Commercial build)
 #
-
-build_type = W7
+# build_type = W7
 
 #################################################################################################################################
 #################################################################################################################################
@@ -115,49 +118,49 @@ asm_args =
 # APPLICATION NAME
 #
 
-!ifdef visualc
-
-cc_args += /DAPP_NAME="""$(application_name)_v$(major_revision).$(data_revision).$(minor_revision)$(build_type)"""
-
-!else
-
-cc_args += /DAPP_NAME="$(application_name) v$(major_revision).$(data_revision).$(minor_revision)$(build_type)"
-
-!endif
+# !ifdef visualc
+#
+# cc_args += /DAPP_NAME="""$(application_name)_v$(major_revision).$(data_revision).$(minor_revision)$(build_type)"""
+#
+# !else
+#
+# cc_args += /DAPP_NAME="$(application_name) v$(major_revision).$(data_revision).$(minor_revision)$(build_type)"
+#
+# !endif
 
 #
 # APPLICATION VERSION
 #
 
-cc_args += /DMAJOR_VERSION=$(major_revision)
+# cc_args += /DMAJOR_VERSION=$(major_revision)
 
-cc_args += /DDATA_VERSION=$(data_revision)
+# cc_args += /DDATA_VERSION=$(data_revision)
 
-cc_args += /DMINOR_VERSION=$(minor_revision)
+# cc_args += /DMINOR_VERSION=$(minor_revision)
 
-!ifdef visualc
-
-cc_args += /DBUILD_TYPE="""$(build_type)"""
-
-!else
-
-cc_args += /DBUILD_TYPE="$(build_type)"
-
-!endif
+# !ifdef visualc
+#
+# cc_args += /DBUILD_TYPE="""$(build_type)"""
+#
+# !else
+#
+# cc_args += /DBUILD_TYPE="$(build_type)"
+#
+# !endif
 
 #
 # ENVIRONMENT VARIABLE NAME
 #
 
-!ifdef visualc
-
-cc_args += /DENV_NAME="""COMANCHE_HOKUM"""
-
-!else
-
-cc_args += /DENV_NAME="COMANCHE_HOKUM"
-
-!endif
+# !ifdef visualc
+#
+# cc_args += /DENV_NAME="""COMANCHE_HOKUM"""
+#
+# !else
+#
+# cc_args += /DENV_NAME="COMANCHE_HOKUM"
+#
+# !endif
 
 #
 # NO ENTITY OPTION
@@ -392,7 +395,7 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files) linkcl
         @ %append $^@ OPTION MAP
         @ %append $^@ NAME $^&
                 @ %append $^@ OPTION INCREMENTAL=$(project).ilk
-                @ %append $^@ OPTION VERSION=$(major_revision).$(data_revision).$(minor_revision)
+                @ %append $^@ OPTION VERSION=1.6
                 @ %append $^@ OPTION STATICS
                 @ %append $^@ OPTION RESOURCE=cohokum.res
 #               @ %append $^@ OPTION ELIMINATE
