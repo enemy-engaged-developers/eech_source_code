@@ -97,7 +97,9 @@ void initialise_entity_databases (void)
 	initialise_fixed_3d_object_database ();
 
 // Xhit: added for downwash effect (030328)
-	initialise_downwash_database ();
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+		initialise_downwash_database ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +127,9 @@ void deinitialise_entity_databases (void)
 	report_non_entries_in_fixed_3d_object_database ();
 
 // Xhit: added for downwash effect (030328)
-	deinitialise_downwash_database ();
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+		deinitialise_downwash_database ();
 
 }
 

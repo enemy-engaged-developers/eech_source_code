@@ -113,28 +113,52 @@ static void reset_entity_heap (void)
 
 	memset (entities, 0, number_of_entities * sizeof (entity));
 
-	for (i = 0; i < number_of_entities; i++)
+	//VJ 030508 if downwash num entities is 135000 else 125000
+	if (command_line_downwash)
 	{
-		//Xhit: split the heap into two parts, normal entity heap and local created only heap. (030428)
-		if ( (i < start_of_local_entity_heap - 1) || ( (i >= start_of_local_entity_heap) && (i < number_of_entities - 1) ) )
+		for (i = 0; i < number_of_entities; i++)
 		{
-			entities[i].succ = &entities[i + 1];
+			//Xhit: split the heap into two parts, normal entity heap and local created only heap. (030428)
+			if ( (i < start_of_local_entity_heap - 1) || ( (i >= start_of_local_entity_heap) && (i < number_of_entities - 1) ) )
+			{
+				entities[i].succ = &entities[i + 1];
+			}
+			
+			//Xhit: split the heap into two parts, normal entity heap and local created only heap. (030428)
+			if ( ( (i > 0) && (i < start_of_local_entity_heap) ) || (i > start_of_local_entity_heap) )
+			{
+				entities[i].pred = &entities[i - 1];
+			}
 		}
-		
-		//Xhit: split the heap into two parts, normal entity heap and local created only heap. (030428)
-		if ( ( (i > 0) && (i < start_of_local_entity_heap) ) || (i > start_of_local_entity_heap) )
-		{
-			entities[i].pred = &entities[i - 1];
-		}
+	
+		first_free_entity = entities;
+	
+		first_used_entity = NULL;
+
+		//Xhit: Mark the start of the local only entity heap. (030428)
+		first_free_local_entity = &entities[start_of_local_entity_heap];
+		first_used_local_entity = NULL;
 	}
+	else
+	{
+		for (i = 0; i < number_of_entities; i++)
+		{
+			if (i < number_of_entities - 1)
+			{
+				entities[i].succ = &entities[i + 1];
+			}
+	
+			if (i > 0)
+			{
+				entities[i].pred = &entities[i - 1];
+			}
+		}	
+		
+		first_free_entity = entities;
+	
+		first_used_entity = NULL;
 
-	first_free_entity = entities;
-
-	first_used_entity = NULL;
-
-	//Xhit: Mark the start of the local only entity heap. (030428)
-	first_free_local_entity = &entities[start_of_local_entity_heap];
-	first_used_local_entity = NULL;
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,9 +229,12 @@ void initialise_entity_heap (int num_entities)
 	number_of_entities = num_entities;
 
 	//Xhit: The last 10000 entities in the heap is local only. (030428)
-	start_of_local_entity_heap = number_of_entities - 10000;
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+		start_of_local_entity_heap = number_of_entities - 10000;
 
 	entities = malloc_heap_mem (number_of_entities * sizeof (entity));
+	//VJ 050308 if not downwash than number_of_entities = 125000 (original)
 
 	reset_entity_heap ();
 }
@@ -221,7 +248,9 @@ void reinitialise_entity_heap (void)
 	check_no_entities_in_use ();
 
 	//Xhit: Check the local entity heap space also. (030428)
-	check_no_local_entities_in_use ();
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+		check_no_local_entities_in_use ();
 
 	reset_entity_heap ();
 }
@@ -235,7 +264,9 @@ void deinitialise_entity_heap (void)
 	check_no_entities_in_use ();
 
 	//Xhit: Check the local entity heap space also. (030428)
-	check_no_local_entities_in_use ();
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+		check_no_local_entities_in_use ();
 
 	free_mem (entities);
 
@@ -248,8 +279,12 @@ void deinitialise_entity_heap (void)
 	first_used_entity = NULL;
 
 	//Xhit: Set the local entity heap pointers to NULL. (030428)
-	first_free_local_entity = NULL;
-	first_used_local_entity = NULL;
+	//VJ 030508 if downwash 
+	if (command_line_downwash)
+	{
+		first_free_local_entity = NULL;
+		first_used_local_entity = NULL;
+	}	
 
 }
 

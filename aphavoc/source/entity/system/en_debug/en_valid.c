@@ -114,7 +114,8 @@ int assert_client_server_remote_fn (void)
 int assert_local_create_entity_index (int index)
 {
 	//Xhit: Added so that ENTITY_INDEX_CREATE_LOCAL are also accepted (030428)
-	if (index == ENTITY_INDEX_CREATE_LOCAL)
+	//VJ 030508 if downwash 
+	if (command_line_downwash && index == ENTITY_INDEX_CREATE_LOCAL)
 	{
 		return (TRUE);	
 	}

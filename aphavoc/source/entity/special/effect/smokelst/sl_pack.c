@@ -118,8 +118,12 @@ static void pack_local_data (entity *en, pack_modes mode)
 			pack_float_value (en, FLOAT_TYPE_GENERATOR_LIFETIME, raw->generator_lifetime);
 
 			// Xhit: added scale and alpha_percentage for downwash effect. (030328)
-			pack_float_value (en, FLOAT_TYPE_SCALE, raw->scale);
-			pack_int_value (en, INT_TYPE_COLOUR_ALPHA, raw->alpha_percentage);
+			//VJ 030508 if downwash 
+			if (command_line_downwash)
+			{
+				pack_float_value (en, FLOAT_TYPE_SCALE, raw->scale);
+				pack_int_value (en, INT_TYPE_COLOUR_ALPHA, raw->alpha_percentage);
+			}	
 
 			// smoke_sleep
 
@@ -226,8 +230,12 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			raw->generator_lifetime = unpack_float_value (en, FLOAT_TYPE_GENERATOR_LIFETIME);
 
 			// Xhit: added scale and alpha_percentage for downwash effect. (030328)
-			raw->scale = unpack_float_value (en, FLOAT_TYPE_SCALE);
-			raw->alpha_percentage = unpack_int_value (en, INT_TYPE_COLOUR_ALPHA);
+			//VJ 030508 if downwash 
+			if (command_line_downwash)
+			{			
+				raw->scale = unpack_float_value (en, FLOAT_TYPE_SCALE);
+				raw->alpha_percentage = unpack_int_value (en, INT_TYPE_COLOUR_ALPHA);
+			}	
 
 			// smoke_sleep
 

@@ -109,10 +109,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 	#endif
 
 	//Xhit: if this is a downwash smoke effect then it should be placed in the local enity heap (030428)
-	if(index == ENTITY_INDEX_CREATE_LOCAL)
+	//VJ 030608 if downwash	
+	if( command_line_downwash && index == ENTITY_INDEX_CREATE_LOCAL)
 	{
 		en = get_free_local_entity (index);
-	} else
+	}
+	else
 	{
 		en = get_free_entity (index);
 	}
@@ -188,11 +190,14 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		ASSERT (raw->smoke_lifetime);
 
 		// Xhit: Check to ensure that scale and alpha is not NULL and not zero (030328)
-		ASSERT (raw->scale);
-		ASSERT (raw->scale > 0);
-		ASSERT (raw->alpha_percentage);
-		ASSERT (raw->alpha_percentage > 0);
-
+		//VJ 030508 if downwash 
+		if (command_line_downwash)
+		{	
+			ASSERT (raw->scale);
+			ASSERT (raw->scale > 0);
+			ASSERT (raw->alpha_percentage);
+			ASSERT (raw->alpha_percentage > 0);
+		}
 		////////////////////////////////////////
 		//
 		// RESOLVE DEFAULT VALUES
