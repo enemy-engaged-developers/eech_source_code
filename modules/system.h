@@ -82,7 +82,7 @@
 
 #define MINOR_VERSION 0
 
-#define BUILD_TYPE """X"""
+#define BUILD_TYPE """W5"""
 
 #define APP_NAME """Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.0X"""
 
