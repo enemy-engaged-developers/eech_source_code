@@ -101,6 +101,7 @@ href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz<
         <li>If you don't like the heavy black bars in front of your face in the old Apache cockpit, you can switch to wideview and make it partly disappear by pressing: first Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine tune. The bar starts to disappear if X reaches a value of about -8.200.</li>
         <li>A <strong>high LOD hack</strong>, more detail, less fps. Set high_lod_hack=1 in <a href="#eechini">eech.ini</a>. </li>
         <li>The radar ranges and ammo tweaks have disappeared from the eech.ini file. Use the <a href="#wut">GWUT </a>editor to add those to your WUT file.</li>
+        <li>Cannon may follow the viewpoint without autolocking the targets. This works when acqusition systems are off or when IHADSS/HIDSS/HMS is used - depending on ini setting.</li>
         <li>Some smaller bug fixes</li>
       </ol>
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation</span></h2>
@@ -505,6 +506,12 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td width="190" class="style43"> aphavoc=0</td>
           <td class="Normal"> This enables reading the Apache Havoc warzones: Geogria <span lang=EN-GB>, Thailand, Cuba if you don't own Apache Havoc. </span></td>
         </tr>
+        <td colspan="2" class="Normal"> <strong>Cannon tracking boresight </strong></td>
+        </tr>
+        <tr valign="top">
+          <td width="190" class="style43"> cannontrack=1</td>
+          <td class="Normal"> Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is on (Ctrl-Del), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </span></td>
+        </tr>
       </table>
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span></p>
@@ -711,6 +718,7 @@ lang=EN-GB><a href="#top">[top ^]</a></span></span>
         <li>Reading wideview from eech.ini file fixed </li>
         <li>Apache 3d cockpit beginnings</li>
         <li>Make cockpit bar in apache cockpit disappear using wideview </li>
+        <li>Cannon tracking boresight </li>
       </ul>
       <p class="style44"><span lang=EN-GB><span lang=EN-GB>Fixes/features in </span>1.6.1w3:</span></p>
       <ul class="style44">
