@@ -114,24 +114,31 @@ void parse_WUT_file(char *fname)
 	 FILE *f;
 	 char buf[255];
 	 
-	if (!file_exist(fname))
+	 
+	if (fname[0] == '\0')
 	{
-		debug_fatal("WUT filename error",fname);
+	  	return;  
+	} 
+	if (fname[0] != '\0' && !file_exist(fname))
+	{
+		debug_fatal("WUT file cannot be found: [%s]",fname);
 		return;
 	}
 
 	f = fopen(fname, "r");
 	if (!f)
 	{
-		debug_fatal("Error opening GWUT file: [ %s ]",fname);
-		return;
-	}
-
+		debug_fatal("Error opening WUT file: [%s]",fname);   
+		return;    
+	}   
 	fscanf(f,"%[^\n]\n",buf);
 	fclose(f);
 	
-	if (!strcmp(buf,"[GWUT file, version 1.0]"))
+//VJ 040321 relaxed crterium for checking GWUT file
+	if (!strstr(buf,"GWUT") == 0)
+	{
 		ReadGWutInfo(fname);
+	}	
 	else
 		ReadWutFile(fname);
 }
@@ -152,20 +159,23 @@ void ReadWutFile(char *fname)
 	#ifdef WUT_DEBUG
 	  FILE *fout = fopen("dumpwut.txt","w");;
 	#endif  
-	
-	 if (!file_exist(fname))   
+
+/*
+//VJ 040322 moved to the function parse_WUT_file
+
+	 if (fname[0] != '\0' && !file_exist(fname))   
 	 {
 		debug_fatal("WUT filename error",fname);   
 		 return;    
 	 }   
+*/
 	 
 	 f = fopen(fname, "r");
 	 if (!f)
 	 {
-		debug_fatal("Error opening WUT file: [ %s ]",fname);   
+		 debug_fatal("Error opening WUT file: [%s]",fname);   
 		 return;    
 	 }   
-
 
 
 	 //########################################################################
