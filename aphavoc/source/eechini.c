@@ -80,12 +80,19 @@ void process_ini_file(int argc, char *argv[])
 {
     FILE *f;
 
-    char *buf = (char *)malloc(255);
+    char *buf;
     char *p, *q;
     char fname[12] = "eech.ini";
     float v1;
     int d1;
    
+	buf = malloc (255);
+	if (buf == NULL)
+	{
+		debug_fatal ("Could not allocate buffer");
+		return
+	}
+
 //VJ 030414, commandline /ini:0 starts up without ini file
     while(argc--)
     {
