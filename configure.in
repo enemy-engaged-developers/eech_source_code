@@ -39,6 +39,10 @@ AC_ARG_ENABLE(debug,
 ])
 AC_MSG_RESULT($ARG_ENABLE_VALUE)
 
+dnl Define LINUX for few OS-specific sections (eg memory reporting)
+if test `uname -o | grep -c Linux` -gt 0; then
+  AC_DEFINE(LINUX)
+fi
 
 AC_OUTPUT(	Makefile
 		modules/Makefile

@@ -409,6 +409,10 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
+#ifdef LINUX
+#include <sys/sysinfo.h>
+#endif
+
 #include <sys/types.h>
 #include <unistd.h>
 #include <dirent.h>
