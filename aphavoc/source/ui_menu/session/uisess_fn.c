@@ -208,11 +208,11 @@ void notify_session_back_button (ui_object *obj, void *arg)
 		#if DEBUG_MODULE
 	
 		debug_log ("SESS_FN: closing pack buffer");
-	
+		
 		#endif
 	
 		set_game_initialisation_phase (GAME_INITIALISATION_PHASE_GAME_TYPE);
-
+		
 		game_type_hilight_selection (NULL);
 	
 		pop_ui_screen (SCREEN_POP_ACTUAL);
@@ -224,7 +224,7 @@ void notify_session_back_button (ui_object *obj, void *arg)
 	
 		set_ui_object_redraw (session_screen, TRUE);
 	}
-
+	
 	set_ui_object_graphic_type (obj, UI_OBJECT_ALPHA_GRAPHIC);
 }
 
@@ -469,10 +469,6 @@ void session_list_function (ui_object *obj, void *arg)
 
 			//process_game_initialisation_phases ();
 			
-			ui_set_user_function (session_update_session_list); // Jabberwock 031118 
-
-
-
 			break;
 		}
 
@@ -578,7 +574,14 @@ void session_list_function (ui_object *obj, void *arg)
       
       case SESSION_LIST_TYPE_FILTER:
 	  {
-	  		sprintf (session_filter_value, "%s", current_session_list->warzone_name);
+	  		if (strcmp(session_filter_value, "root") == 0)
+			{
+				sprintf (session_filter_value, "%s", current_session_list->data_path);
+			}
+			else
+			{
+				sprintf (session_filter_value, "%s", "root");
+			}
 	  		
 	  		ui_object_destroy_list_items (session_info_list);
 	  		
@@ -586,7 +589,6 @@ void session_list_function (ui_object *obj, void *arg)
 
 	  		break;
 	  }
-
 
       default:
       {
@@ -713,7 +715,7 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	}
 
 // Jabberwock 031118 MP bug - "No Games" bug
-/*	
+	
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_MASTER)
 	{
 
@@ -727,7 +729,7 @@ void session_list_rescan_function (ui_object *obj, void *arg)
 	}
 	
 // Jabberwock 031118 MP bug ends
-
+/*
 // Jabberwock 031210 Session filter 
 
 	if (session_filter [get_game_type ()] & SESSION_LIST_TYPE_FILTER)

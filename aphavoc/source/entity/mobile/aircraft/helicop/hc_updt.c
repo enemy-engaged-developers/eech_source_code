@@ -312,7 +312,7 @@ static void update_server (entity *en)
 				{
 					if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
 					{
-						if (en == get_gunship_entity ())
+						if ((en == get_gunship_entity ()) && (get_game_type () != GAME_TYPE_FREE_FLIGHT)) // Jabberwock 030201 - but not in free flight
 						{
 							set_gunship_entity (NULL);
 						}
@@ -640,7 +640,7 @@ static void update_client (entity *en)
 				{
 					if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
 					{
-						if (en == get_gunship_entity ())
+						if ((en == get_gunship_entity ()) && (get_game_type () != GAME_TYPE_FREE_FLIGHT)) // Jabberwock 040201 - but not in free flight
 						{
 							set_gunship_entity (NULL);
 						}

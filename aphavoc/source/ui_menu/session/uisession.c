@@ -87,7 +87,7 @@ entity
    *players_group;
    
 char // Jabberwock 031210 Session filter
-	session_filter_value [] = {"-Multiplayer-"}; 
+	session_filter_value [256] = "root"; 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,9 @@ void initialise_session_list (void)
    session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
    // Jabberwock 031210 ends
    session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
-
+	
+	sprintf (session_filter_value, "%s", "root"); // Jabberwock 040201 Session filter
+	
 	destroy_session_list (&session_list_head);
 }
 
@@ -331,32 +333,32 @@ session_list_data_type *add_session (char *title, session_list_types type, int t
 		// unique sessions
 		//
 
-// Jabberwock 031210 Session filter
-		if (session_item->type != SESSION_LIST_TYPE_FILTER)
+// Jabberwock 040201 Session filter
+		if (session_item->type == SESSION_LIST_TYPE_FILTER)
 		{
-            if (type != SESSION_LIST_TYPE_FILTER)
-            {
+            if (type == SESSION_LIST_TYPE_FILTER)
+			{
             	if ((strcmp (new_session->displayed_title, session_item->displayed_title) < 0))
 				{
 					break;
 				}
 			}
-			else
-			{
-				if (strcmp (warzone_name, session_item->warzone_name) <= 0)
-				{
-					break;
-				}
-	
-			}
 		}
 		else
 		{
-			if (strcmp (warzone_name, session_item->warzone_name) < 0)
+           	if (type == SESSION_LIST_TYPE_FILTER)
 			{
 				break;
 			}
+			else
+			{
+				if ((strcmp (new_session->displayed_title, session_item->displayed_title) < 0))
+				{
+					break;
+				}
+			}
 		}
+
 // Jabberwock ends
 	 	insert_position = session_item;
 
@@ -369,25 +371,24 @@ session_list_data_type *add_session (char *title, session_list_types type, int t
 
    list_id ++;
 
+   sprintf (new_session->data_path, "%s", path);
+
    if (filename)
    {
 
-      sprintf (new_session->data_path, "%s", path);
-
-      sprintf (new_session->campaign_directory, "%s", directory);
+         sprintf (new_session->campaign_directory, "%s", directory);
 
       sprintf (new_session->campaign_filename, "%s", filename);
    }
 
-	
-	// Jabberwock 031210 Session filter
-	
+	if (warzone_name)
+	{
 
 	new_session->warzone_name = (char *) malloc_heap_mem (strlen (warzone_name) + 1);
 
 	sprintf (new_session->warzone_name, "%s", warzone_name);
-
-	/*else
+	}
+	else
 	{
 
 		char
@@ -422,7 +423,7 @@ session_list_data_type *add_session (char *title, session_list_types type, int t
 		new_session->warzone_name = (char *) malloc_heap_mem (strlen (last_ptr) + 1);
 
 		sprintf (new_session->warzone_name, "%s", last_ptr);
-	}*/
+	}
 
    sprintf (new_session->title, "%s", title);
 
@@ -493,8 +494,20 @@ void compile_single_session_list (session_list_data_type **list)
 		}
 	}
 
-	recursive_check_campaign_files ("..\\common\\maps", list, game_type_extensions [get_game_type ()]);
+// Jabberwock 040201 Session filter
+	if (!command_line_session_filter || (strcmp (session_filter_value, "root") == 0))
+	{
+		recursive_check_campaign_files ("..\\common\\maps", list, game_type_extensions [get_game_type ()]);
+	}
+	else
+	{
+		if ((strcmp (session_filter_value, "-Multiplayer-") != 0))
+		{
+			recursive_check_campaign_files (session_filter_value, list, game_type_extensions [get_game_type ()]);
+		}
+	}
 }
+// Jabberwock 040201 ends
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -524,10 +537,13 @@ void compile_multi_session_list (session_list_data_type **list)
 		int number_of_sessions;
 		int currentServer;
 		
-		// Jabberwock 031210 Session filter
+		// Jabberwock 040201 Session filter
 		if (command_line_session_filter)
 		{
-			add_session ("-Multiplayer-", SESSION_LIST_TYPE_FILTER, 1, NULL, NULL, NULL, NULL, "-Multiplayer-", list, NULL);
+			if ((strcmp(session_filter_value, "root") == 0) || (strcmp(session_filter_value, "-Multiplayer-") == 0))
+			{
+				add_session ("-Multiplayer-", SESSION_LIST_TYPE_FILTER, 1, NULL, "-Multiplayer-", NULL, NULL, "-Multiplayer-", list, NULL);
+			}
 		}
 		
 		if ( !this_connection->one_way_hosting_setup )
@@ -580,7 +596,7 @@ void compile_multi_session_list (session_list_data_type **list)
 			if ((!command_line_session_filter) || (strcmp ("-Multiplayer-", session_filter_value) == 0)) // Jabberwock 031210 Session filter
 			{
 				sprintf (text, "%s (%i/%i) %s", Servers[currentServer].Name, Servers[currentServer].CurClients, Servers[currentServer].MaxClients, Servers[currentServer].Version);
-				
+
 				session_number ++;
 
 				add_session (text, SESSION_LIST_TYPE_MASTER, session_number, NULL, NULL, NULL, NULL, "-Multiplayer-", list, Servers[currentServer].Adress); // Jabberwock 031210 Session filter
@@ -591,7 +607,7 @@ void compile_multi_session_list (session_list_data_type **list)
 	#endif
 }
 
-
+/*
 void get_first_multi_session (session_list_data_type **list)
 {
 	#if !DEMO_VERSION
@@ -665,7 +681,7 @@ void get_first_multi_session (session_list_data_type **list)
 	}
 	#endif
 	return;
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -698,8 +714,20 @@ void compile_restore_session_list (session_list_data_type **list)
 	extension [1] = extension [0];
 	extension [0] = 'S';
 
-	recursive_check_campaign_files ("..\\common\\maps", list, &extension);
+// Jabberwock 040201 Session filter
+	if (!command_line_session_filter || (strcmp (session_filter_value, "root") == 0))
+	{
+		recursive_check_campaign_files ("..\\common\\maps", list, &extension);
+	}
+	else
+	{
+		if ((strcmp (session_filter_value, "-Multiplayer-") != 0))
+		{
+			recursive_check_campaign_files (session_filter_value, list, &extension);
+		}
+	}
 }
+// Jabberwock 040201 ends
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1037,9 +1065,11 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 		session_type;
 
 	directory_file_list
+		*warzone_file,
 		*directory_listing;
 
 	int
+		i,
 		value,
 		valid_file;
 
@@ -1048,6 +1078,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 		variable [64],
 		temp_warzone_name [128],
 		*warzone_name,
+		warzone_path [1024],
 		directory_search_path [1024];
 
 	//
@@ -1055,6 +1086,42 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 	//
 
 	sprintf (directory_search_path, "%s\\*.%s", directory, extension);
+
+	// Jabberwock 0400201 Session filter revised
+
+	if (strstr(directory, "camp01") && command_line_session_filter)
+	{
+		sprintf(warzone_path, "%s\\*.chc", directory);
+
+		warzone_file = get_first_directory_file(warzone_path);
+
+		sprintf(temp_warzone_name, "%s", get_directory_file_filename (warzone_file));
+
+		for (i = 0; i < (strlen (temp_warzone_name) - 4); i++)
+		{
+			if (i == 0)
+			{
+				temp_warzone_name[i] = toupper (temp_warzone_name[i]);
+			}
+			else
+			{
+				temp_warzone_name[i] = tolower (temp_warzone_name[i]);
+			}
+		}
+
+		temp_warzone_name[i] = '\0';
+		
+		for (i = 0; i < (strlen (directory) - 7); i++)
+		{
+			warzone_path[i] = directory[i];
+		}
+		
+		warzone_path[i] = '\0';
+		
+
+		add_session (temp_warzone_name, SESSION_LIST_TYPE_FILTER, 1, NULL, warzone_path, NULL, NULL, temp_warzone_name, list, NULL);
+	}
+	
 
 	directory_listing = get_first_directory_file (directory_search_path);
 
@@ -1144,9 +1211,9 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 							strcpy (path, directory);
 
 							ptr = strstr (path, "\\maps\\");
-
+							
 							ptr += strlen ("\\maps\\");
-
+							
 							while (ptr = strstr (ptr, "\\"))
 							{
 
@@ -1156,7 +1223,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 							}
 		
 							sprintf (campaign_directory, "%s", last_ptr);
-
+							
 							sprintf (campaign_filename, "%s", get_directory_file_filename (directory_listing));
 
 							last_ptr -= strlen ("\\");
@@ -1317,58 +1384,10 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 						case FILE_TAG_UNKNOWN:
 						{
 
-// Jabberwock 031210 Session filter
-							int i;
-							static unsigned char
-								temp_directory [128];
-							
 							end_flag = TRUE;
 							
-						
-							if (!warzone_name)
+							if ((!command_line_session_filter) || (strcmp(session_filter_value, "root") != 0))
 							{
-
-								sprintf (temp_directory, "%s", directory);
-								
-								sprintf (directory_search_path, "%s", strrev(strstr(strrev(temp_directory), "\\")));
-								
-								sprintf (directory_search_path, "%s\\camp01\\*.%s", directory_search_path, "sid");
-
-								directory_listing = get_first_directory_file (directory_search_path);
-
-								sprintf (temp_warzone_name, "%s", get_directory_file_filename (directory_listing));
-								
-								for (i = 0; i < (strlen (temp_warzone_name) - 4); i++)
-								{
-									if (i == 0)
-									{
-										temp_warzone_name[i] = toupper (temp_warzone_name[i]);
-									}
-									else
-									{
-										temp_warzone_name[i] = tolower (temp_warzone_name[i]);
-									}
-								}
-
-								temp_warzone_name[i] = '\0';
-
-								warzone_name = temp_warzone_name;
-							}
-							
-							sprintf (temp_warzone_name, "%s", warzone_name);
-							
-							sprintf(temp_directory, "%s%s", temp_warzone_name, ".chc");
-							
-							server_log ("%s - %s:%s", campaign_directory, temp_directory, campaign_filename);
-							
-							if (strstr(campaign_directory, "camp01") && (stricmp(campaign_filename, temp_directory) == 0) && command_line_session_filter)
-							{
-								add_session (warzone_name, SESSION_LIST_TYPE_FILTER, 1, NULL, NULL, NULL, NULL, warzone_name, list, NULL);
-							}
-							
-							if ((!command_line_session_filter) || (stricmp (temp_warzone_name, session_filter_value) == 0))
-							{
-// Jabberwock 031210 ends
 								if (session_type == SESSION_LIST_TYPE_HOST)
 								{
 
@@ -1382,6 +1401,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 									add_session (campaign_title, session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL);
 								}
 							}
+							// Jabberwock 0400201 ends
 
 							break;
 						}

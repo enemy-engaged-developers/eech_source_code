@@ -496,8 +496,11 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 
 	entity
 		*en,
+		*pilot,
 		*task;
 
+	pilot = get_pilot_entity ();
+	
 	if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 	{
 		en = get_external_view_entity ();
@@ -507,7 +510,7 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 			if (get_local_entity_suitable_for_player (en, get_pilot_entity ()))
 			{
 				task = get_local_entity_primary_task (en);
-
+				
 				if (task)
 				{
 					// Should be TRUE through "get_local_entity_suitable_for_player"
@@ -518,11 +521,26 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 					//
 
 					set_gunship_entity (NULL);
-
+					
 					set_currently_selected_member (get_local_entity_safe_index (en));
 
 					player_assigned_new_task (en, task);
 				}
+				// Jabberwock 040201 - No tasks needed for Free flight
+				else
+				{
+					if (get_game_type () == GAME_TYPE_FREE_FLIGHT)
+					{
+						set_gunship_entity (en);
+					}
+				}
+				
+				if (get_local_entity_int_value (pilot, INT_TYPE_SIDE) != get_local_entity_int_value (en, INT_TYPE_SIDE))
+				{
+					set_local_entity_int_value (en, INT_TYPE_SIDE, get_local_entity_int_value (pilot, INT_TYPE_SIDE));
+				}
+				
+				// Jabberwock 040201 ends
 			}
 		}
 	}
@@ -1161,11 +1179,11 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 
 	//
 	// don't allow user to set gunship to wrong side helicopter
-	//
+	// Jabberwock 040202 - unless we're in free flight
 
 	if (pilot)
 	{
-		if (get_local_entity_int_value (pilot, INT_TYPE_SIDE) != get_local_entity_int_value (en, INT_TYPE_SIDE))
+		if ((get_local_entity_int_value (pilot, INT_TYPE_SIDE) != get_local_entity_int_value (en, INT_TYPE_SIDE)) && (get_game_type () != GAME_TYPE_FREE_FLIGHT))
 		{
 			return FALSE;
 		}
@@ -1213,7 +1231,7 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 	//
 	// check that new gunship entity is not already being flown by another human
 	//
-
+	
 	if (get_local_entity_int_value (en, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 	{
 		return FALSE;

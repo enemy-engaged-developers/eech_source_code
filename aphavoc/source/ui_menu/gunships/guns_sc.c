@@ -160,7 +160,7 @@ void initialise_gunships_screen (void)
 					UI_ATTR_OFFSET_TIME (0),
                UI_ATTR_VIRTUAL_POSITION (TITLE_TEXT_POSITION_X, TITLE_TEXT_POSITION_Y),
 					UI_ATTR_VIRTUAL_SIZE (TITLE_TEXT_WIDTH, TITLE_TEXT_HEIGHT),
-					UI_ATTR_TEXT (get_trans ("Gunship")),
+					UI_ATTR_TEXT (get_trans ("Side")),
 					UI_ATTR_FONT_TYPE (UI_FONT_IMPACT_22),
 					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_BOTTOM),
                UI_ATTR_FONT_COLOUR_START (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 0),
@@ -214,7 +214,7 @@ void initialise_gunships_screen (void)
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (0.910, 0.133),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-		UI_ATTR_TEXT (get_trans ("Gunship")),
+		UI_ATTR_TEXT (get_trans ("Side")),
 		UI_ATTR_END
 	);
 
@@ -448,9 +448,9 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 	
 		if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
 		{
-			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("RAH-66 Comanche"));
+			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
 
-			set_ui_object_text (side_selected_area, get_trans ("Blue Force"));
+			set_ui_object_text (side_selected_area, get_trans (""));
 
 			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
 
@@ -458,9 +458,9 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 		}
 		else
 		{
-			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("KA-52 Hokum B"));
+			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
 
-			set_ui_object_text (side_selected_area, get_trans ("Red Force"));
+			set_ui_object_text (side_selected_area, get_trans (""));
 
 			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
 
@@ -531,9 +531,9 @@ void gunships_button_function (ui_object *obj, void *arg)
 
 	if ((gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE) || (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL))
 	{
-		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("KA-52 Hokum B"));
+		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
 
-		set_ui_object_text (side_selected_area, get_trans ("Red Force"));
+		set_ui_object_text (side_selected_area, get_trans (""));
 
 		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
 
@@ -541,9 +541,9 @@ void gunships_button_function (ui_object *obj, void *arg)
 	}
 	else
 	{
-		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("RAH-66 Comanche"));
+		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
 
-		set_ui_object_text (side_selected_area, get_trans ("Blue Force"));
+		set_ui_object_text (side_selected_area, get_trans (""));
 
 		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
 

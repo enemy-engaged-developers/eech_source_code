@@ -101,10 +101,6 @@ static void build_chat_message_list (void);
 
 static int add_message_to_campaign_log (int index);
 
-// Jabberwock 031206 Chat shortcuts
-
-static void chat_events (void);
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,11 +110,6 @@ void show_chat_page (ui_object *obj)
 	//
 	// Build Target List
 	//
-	
-	// Jabberwock 031206 Chat shortcuts
-	
-	push_event_overlay (chat_events, "chat_events");
-
 	
 	build_chat_target_list ();
 
@@ -189,6 +180,9 @@ void chat_enter_message_function (ui_object *obj, void *arg)
 
 static void chat_input_function (ui_object *obj, void *arg)
 {
+	entity 	// Jabberwock 040213 Chat send after Enter
+		*target;
+		
 	unsigned char
 		*text;
 		
@@ -199,6 +193,15 @@ static void chat_input_function (ui_object *obj, void *arg)
 		if (strlen (text) > 0)
 		{
 			set_ui_object_text (chat_current_text, get_ui_object_text (chat_input));
+
+			// Jabberwock 040213 Chat send after Enter
+			target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
+		
+			if (target)
+			{
+				send_text_message (get_pilot_entity (), target, MESSAGE_TEXT_PILOT_STRING, text);
+			}
+			// Jabberwock 040202 ends
 		}
 	}
 
@@ -240,36 +243,6 @@ static void notify_send_message (ui_object *obj, void *arg)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Jabberwock 031206 Chat shortcuts
-
-static void keyboard_send_message ()
-{
-	entity
-		*target;
-		
-	unsigned char
-		*text;
-		
-	target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
-
-	if (target)
-	{
-		text = get_ui_object_text (chat_current_text);
-
-		if (text)
-		{
-			if (strlen (text) > 0)
-			{
-				send_text_message (get_pilot_entity (), target, MESSAGE_TEXT_PILOT_STRING, text);
-
-				return;
-			}
-		}
-	}
-}
-
-// Jabberwock 031206 ends
 
 void notify_target_list (ui_object *obj, void *arg)
 {
@@ -976,14 +949,4 @@ void overload_chat_page_message_responses (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Jabberwock 031206 Chat shortcuts
-
-void chat_events (void)
-{
-   set_event (DIK_RETURN, MODIFIER_NONE, KEY_STATE_DOWN, keyboard_send_message);
-   
-   
-   
-}
 

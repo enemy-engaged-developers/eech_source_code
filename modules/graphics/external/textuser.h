@@ -66,7 +66,7 @@
 
 #define MAX_TEXTURES 2048
 
-#define MAX_TEXTURES_PALETTES 32
+#define MAX_TEXTURES_PALETTES 128 // Jabberwock 040213 - Testing for texture related CTDs
 
 #define MAX_HARDWARE_TEXTURES 512
 

@@ -209,7 +209,7 @@ void set_game_status (game_status_types status)
 void initialise_global_options_data (void)
 {
 	set_global_version_number (application_version_number);
-
+	
 	set_global_gunship_type (GUNSHIP_TYPE_COMANCHE);
 
 	set_global_dynamics_model (DEFAULT_DYNAMICS_MODEL);
