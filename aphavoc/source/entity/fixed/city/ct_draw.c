@@ -86,6 +86,8 @@ static void draw_local_3d_object (entity *en, float range)
 
 	object_3d_instance
 		*inst3d;
+		
+	float rangefactor; //Werewolf 16Apr03
 
 	raw = get_local_entity_data (en);
 
@@ -94,14 +96,18 @@ static void draw_local_3d_object (entity *en, float range)
 	//
 
 	range *= current_3d_viewangle_distance_conversion_factor;
+	
+	//Werewolf 16Apr03
+	//rangefactor is 1 for default cbar value
+	rangefactor = (command_line_city_block_approximation_range / 500.0);
 
-	if ((range < command_line_city_block_approximation_range * METRE) || (raw->approximation_object_3d_shape == OBJECT_3D_INVALID_OBJECT_INDEX))
+	if ((range < command_line_city_block_approximation_range * METRE * rangefactor) || (raw->approximation_object_3d_shape == OBJECT_3D_INVALID_OBJECT_INDEX))
 	{
 
 		if ( raw->fix.object_3d_shape != OBJECT_3D_INVALID_OBJECT_INDEX )
 		{
 
-			if ( range < object_3d_information_database[raw->fix.object_3d_shape].maximum_distance )
+			if ( range < object_3d_information_database[raw->fix.object_3d_shape].maximum_distance*rangefactor )
 			{
 		
 				inst3d = construct_temporary_3d_object (raw->fix.object_3d_shape, FALSE);

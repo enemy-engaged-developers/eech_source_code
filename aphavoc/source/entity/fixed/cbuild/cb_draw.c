@@ -88,9 +88,15 @@ void draw_local_city_building_object (entity *en, float range)
 	vec3d
 		face_normal;
 
+	float rangefactor; //Werewolf 16Apr03
+
 	raw = get_local_entity_data (en);
 
-	if ( range < object_3d_information_database[raw->fix.object_3d_shape].maximum_distance )
+	//Werewolf 16Apr03
+	//rangefactor is 1 for default cbar value
+	rangefactor = (command_line_city_block_approximation_range / 500.0);
+
+	if ( range < object_3d_information_database[raw->fix.object_3d_shape].maximum_distance*rangefactor )
 	{
 
 		inst3d = construct_temporary_3d_object (raw->fix.object_3d_shape, FALSE);
@@ -109,7 +115,7 @@ void draw_local_city_building_object (entity *en, float range)
 			{
 				get_3d_transformation_heading_matrix (inst3d->vp.attitude, raw->fix.heading);
 			}
-
+	
 			inst3d->object_has_shadow = FALSE;
 	
 			insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, inst3d);
