@@ -860,3 +860,91 @@ int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// loke 030319
+// this function returns the value of a joystick axis
+
+int get_joystick_value (int joystick_index, int axis)
+{
+	switch (axis)
+	{
+	case 1:
+		{
+			if (joystick_devices[joystick_index].joystick_xaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lX;
+			}
+		}
+		break;
+
+	case 2:
+		{
+			if (joystick_devices[joystick_index].joystick_yaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lY;
+			}
+		}
+		break;
+
+	case 3:
+		{
+			if (joystick_devices[joystick_index].joystick_zaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lZ;
+			}
+		}
+		break;
+
+	case 4:
+		{
+			if (joystick_devices[joystick_index].joystick_rxaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lRx;
+			}
+		}
+		break;
+
+	case 5:
+		{
+			if (joystick_devices[joystick_index].joystick_ryaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lRy;
+			}
+		}
+		break;
+
+	case 6:
+		{
+			if (joystick_devices[joystick_index].joystick_rzaxis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.lRz;
+			}
+		}
+		break;
+
+	case 7:
+		{
+			if (joystick_devices[joystick_index].joystick_slider0axis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.rglSlider[0];
+			}
+		}
+		break;
+
+	case 8:
+		{
+			if (joystick_devices[joystick_index].joystick_slider1axis_valid)
+			{
+				return joystick_devices[joystick_index].joystick_state.rglSlider[1];
+			}
+		}
+		break;
+
+	}
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
