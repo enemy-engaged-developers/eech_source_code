@@ -86,12 +86,12 @@ void process_ini_file(int argc, char *argv[])
     float v1;
     int d1;
    
-	buf = malloc (255);
-	if (buf == NULL)
-	{
-		debug_fatal ("Could not allocate buffer");
-		return;
-	}
+    buf = malloc (255);
+    if (buf == NULL)
+    {
+        debug_fatal ("Could not allocate buffer");
+        return;
+    }
 
 //VJ 030414, commandline /ini:0 starts up without ini file
     while(argc--)
@@ -222,6 +222,13 @@ void process_ini_file(int argc, char *argv[])
         if (strcmp(p, "dfr") == 0) command_line_framerate = d1;
         if (strcmp(p, "keymap") == 0) command_line_key_mapping = d1;
         if (strcmp(p, "dwash") == 0) command_line_no_downwash = d1;
+        if (strcmp(p, "cyclicn") == 0) command_line_cyclic_joystick_index = d1;
+        if (strcmp(p, "cyclich") == 0) command_line_cyclic_joystick_x_axis = d1;
+        if (strcmp(p, "cyclicv") == 0) command_line_cyclic_joystick_y_axis = d1;
+        if (strcmp(p, "collectiven") == 0) command_line_collective_joystick_index = d1;
+        if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1;
+        if (strcmp(p, "ruddern") == 0) command_line_rudder_joystick_index = d1;
+        if (strcmp(p, "rudderax") == 0) command_line_rudder_joystick_axis = d1;
         if (strcmp(p, "wut") == 0) 
         {
             if (strlen(q)!=0) 
@@ -316,6 +323,13 @@ void dump_ini_file(void)
 	fprintf(f,"eopanh=8            # joystick DirectX axis used for horizontal FLIR panning\n");
 	fprintf(f,"eozoomn=-1          # joystick no. used for FLIR zoom\n");
 	fprintf(f,"eozoomax=7          # joystick DirextX axis used for FLIR zoom\n");
+	fprintf(f,"cyclicn=-1          # Joystick no. for the cyclic\n");
+	fprintf(f,"cyclich=1           # Joystick DirectX axis for cyclic horizontal\n");
+	fprintf(f,"cyclicv=2           # Joystick DirectX axis for cyclic vertical\n");
+	fprintf(f,"collectiven=-1      # Joystick no. for the collective\n");
+	fprintf(f,"collectiveax=3      # Joystick DirectX acis for the collective\n");
+	fprintf(f,"ruddern=-1          # Joystick no. for the rudder\n");
+	fprintf(f,"rudderax=6          # Joystick DirectX axis for the rudder\n");
 	fprintf(f,"radarinf=1          # infantry no longer visible on radar (def = 1)\n");
 	fprintf(f,"grstab=1            # ground stabilisation of FLIR (def = 1)\n");
 	fprintf(f,"dfr=0               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n");

@@ -108,8 +108,16 @@ void set_flight_dynamics_events (void)
 
 			case JOYSTICK_INPUT:
 			{
-
-				current_flight_dynamics->input_data.cyclic_joystick_device = joystick_devices [0];
+				// 030418 loke
+				// implemented multiple joystick device selection
+				if (command_line_cyclic_joystick_index == -1)
+				{
+					current_flight_dynamics->input_data.cyclic_joystick_device = joystick_devices [0];
+				}
+				else
+				{
+					current_flight_dynamics->input_data.cyclic_joystick_device = joystick_devices [command_line_cyclic_joystick_index];
+				}
 
 				break;
 			}

@@ -2949,9 +2949,26 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 			// if joystic is not centered don't engage
 			if (get_global_cyclic_input () == JOYSTICK_INPUT)
 			{
+				// 030418 loke
+				// implemented multiple joystick device selection
 
-				if (((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
-					((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0))
+				int
+					joystick_x_pos,
+					joystick_y_pos;
+
+				if (command_line_cyclic_joystick_index == -1)
+				{
+					joystick_x_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
+					joystick_y_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+				}
+				else 
+				{
+					joystick_x_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+					joystick_y_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
+				}
+
+				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
+					((float) fabs (200.0 * joystick_y_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0))
 				{
 
 					flag = FALSE;

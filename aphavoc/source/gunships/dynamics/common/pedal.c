@@ -256,7 +256,16 @@ void update_pedal_pressure_inputs (void)
 			float
 				lag;
 
-			joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lRz;
+			// 030418 loke
+			// implemented multiple joystick device selection
+			if (command_line_rudder_joystick_index == -1)
+			{
+				joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lRz;
+			}
+			else
+			{
+				joyval = get_joystick_value (command_line_rudder_joystick_index, command_line_rudder_joystick_axis);
+			}
 
 			current_flight_dynamics->input_data.pedal.delta = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 

@@ -482,9 +482,19 @@ void update_cyclic_pressure_inputs (void)
 			float
 				input;
 
+			// 030418 loke
+			// implemented multiple joystick device selection
+
 			// x
 
-			joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
+			if (command_line_cyclic_joystick_index == -1)
+			{
+				joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
+			}
+			else
+			{
+				joyval = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+			}
 
 			input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 
@@ -500,7 +510,14 @@ void update_cyclic_pressure_inputs (void)
 
 			// y
 
-			joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+			if (command_line_cyclic_joystick_index == -1)
+			{
+				joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+			}
+			else
+			{
+				joyval = get_joystick_value (command_line_collective_joystick_index, command_line_cyclic_joystick_y_axis);
+			}
 
 			input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
 
@@ -519,16 +536,36 @@ void update_cyclic_pressure_inputs (void)
 				((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
 			*/
 
-			if (((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
-				((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0))
 			{
-	
-				if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
-					(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
+				// 030418 loke
+				// implemented multiple joystick device selection
+
+				int
+					joystick_x_pos,
+					joystick_y_pos;
+
+				if (command_line_cyclic_joystick_index == -1)
 				{
-	
-					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
-					set_current_flight_dynamics_auto_pilot (FALSE);
+					joystick_x_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
+					joystick_y_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+				}
+				else
+				{
+					joystick_x_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+					joystick_y_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
+				}
+
+				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
+					((float) fabs (200.0 * joystick_y_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0))
+				{
+		
+					if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) ||
+						(current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
+					{
+		
+						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
+						set_current_flight_dynamics_auto_pilot (FALSE);
+					}
 				}
 			}
 

@@ -141,11 +141,18 @@ extern int
 	command_line_eo_zoom_joystick_axis,						// loke 030319
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322	
-	command_line_framerate,									//VJ 030324
-	command_line_key_mapping,								// Retro 030322
-	command_line_no_downwash,								// Xhit 030328
-	command_line_wut,										// VJ 030330
-	command_line_dump_ini;									// VJ 030403
+	command_line_framerate,										// VJ 030324
+	command_line_key_mapping,									// Retro 030322
+	command_line_no_downwash,									// Xhit 030328
+	command_line_wut,												// VJ 030330
+	command_line_dump_ini,										// VJ 030403
+	command_line_cyclic_joystick_index,						// loke 030418
+	command_line_cyclic_joystick_x_axis,					// loke 030418
+	command_line_cyclic_joystick_y_axis,					// loke 030418
+	command_line_collective_joystick_index,				// loke 030418
+	command_line_collective_joystick_axis,					// loke 030418
+	command_line_rudder_joystick_index,						// loke 030418
+	command_line_rudder_joystick_axis;						// loke 030418
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

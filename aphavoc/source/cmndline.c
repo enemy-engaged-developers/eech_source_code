@@ -164,11 +164,18 @@ int
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
-    command_line_framerate 									= FALSE,	// VJ 030326
-	command_line_key_mapping									= FALSE;	// Retro 030322
+	command_line_framerate										= FALSE,	// VJ 030326
+	command_line_key_mapping									= FALSE,	// Retro 030322
 	command_line_no_downwash									= FALSE,	// Xhit 030328
 	command_line_wut												= FALSE,	// VJ 030330
-	command_line_dump_ini										= TRUE;	// VJ 030414 changed to true
+	command_line_dump_ini										= TRUE,	// VJ 030414 changed to true
+	command_line_cyclic_joystick_index						= -1,		// loke 030418
+	command_line_cyclic_joystick_x_axis						= 1,		// loke 030418
+	command_line_cyclic_joystick_y_axis						= 2,		// loke 030418
+	command_line_collective_joystick_index					= -1,		// loke 030418
+	command_line_collective_joystick_axis					= 3,		// loke 030418
+	command_line_rudder_joystick_index						= -1,		// loke 030418
+	command_line_rudder_joystick_axis						= 6;		// loke 030418
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1593,6 +1600,86 @@ void process_command_line (int argc, char *argv[])
 			command_line_no_downwash = TRUE;
 
 			debug_log ("ARG:%s, RESPONSE:command_line_no_downwash = %d", s1, command_line_no_downwash);
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "cyclic_joystick_index"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_cyclic_joystick_index);
+			}
+
+			if (command_line_cyclic_joystick_index < -1)
+			{
+				command_line_cyclic_joystick_index = -1;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "cyclic_joystick_x_axis"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_cyclic_joystick_x_axis);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "cyclic_joystick_y_axis"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_cyclic_joystick_y_axis);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "collective_joystick_index"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_collective_joystick_index);
+			}
+
+			if (command_line_collective_joystick_index < -1)
+			{
+				command_line_collective_joystick_index = -1;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "collective_joystick_axis"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_collective_joystick_axis);
+			}
+
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "rudder_joystick_index"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_rudder_joystick_index);
+			}
+
+			if (command_line_rudder_joystick_index < -1)
+			{
+				command_line_rudder_joystick_index = -1;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "rudder_joystick_axis"))		// loke 030418
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_rudder_joystick_axis);
+			}
+
 		}
 		////////////////////////////////////////
 		else
