@@ -128,7 +128,7 @@ int
 	command_line_comms_timeout									= (5.0),
 	command_line_comms_pack_buffer_size						= (200 * 1024),
 	command_line_comms_initial_sleep_time					= 500,
-	command_line_comms_guaranteed_send						= TRUE,
+	command_line_comms_guaranteed_send						= FALSE,  ////Moje 040304 Could be slightly better...
 	command_line_comms_dedicated_server						= FALSE,
 	command_line_comms_interpolate_gunships				= TRUE,
 	command_line_comms_validate_connections				= TRUE, // Jabberwock - We need validate_connections...
@@ -143,7 +143,7 @@ int
 	command_line_no_pilot_rejection							= FALSE,
 	command_line_planner_goto_button							= FALSE,
 	command_line_cheats_on										= FALSE,
-	command_line_capture_aircraft								= FALSE,
+	command_line_capture_aircraft								= TRUE,  ////Moje 040304 customizing a bit..
 	command_line_dynamics_sonic_buildup 					= TRUE,
 	command_line_player_start_rank							= PILOT_RANK_LIEUTENANT,
 	command_line_3d_visual_screen_width						= 640,
