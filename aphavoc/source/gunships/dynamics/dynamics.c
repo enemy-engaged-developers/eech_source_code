@@ -441,14 +441,21 @@ void initialise_flight_dynamics_collision_points (void)
 	raw = get_local_entity_data (get_gunship_entity ());
 
 	// JB 030313 Fly any aircraft HACK HACK HACK
-        ////Moje 030518 Last line added for B-H, changed to AH64D to avoid sinking -bug
-        ////Moje 030612 Last line added for Hind, changed to HAVOC test for sink-bug, changed Hind to Havoc
+/*      ////Moje030713 The code should look like the following lines, but then the added choppers sink through the ground
+			The reason could be incomplete 3D-model in the database-files
 	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
 		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
 		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
 		raw->ac.object_3d_shape == OBJECT_3D_KA_52 ||
-                raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
-                raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC)
+                raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK ||
+                raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
+////Moje 030713 */
+	
+	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
+		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
+		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
+		raw->ac.object_3d_shape == OBJECT_3D_KA_52)
+
 	{
 		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
 	}
