@@ -259,6 +259,22 @@ void flight (void)
 	if (global_options.cyclic_input == JOYSTICK_INPUT)
 	{
 		read_joystick_values (get_global_joystick_device_index ());
+
+		//-seeker 2003.04.20  multiple joystick hack
+		if (command_line_rudder_joystick_index != -1)
+		{
+			read_joystick_values (command_line_rudder_joystick_index);
+		}
+
+		if (command_line_cyclic_joystick_index != -1)
+		{
+			read_joystick_values (command_line_cyclic_joystick_index);
+		}
+
+		if (command_line_collective_joystick_index != -1)
+		{
+			read_joystick_values (command_line_cyclic_joystick_index);
+		}
 	}
 
 	while (!get_exit_flight_loop ())
@@ -422,6 +438,22 @@ void flight (void)
 		{
 
 			read_joystick_values (get_global_joystick_device_index());
+			
+			//-seeker 2003.04.20  multiple joystick hack
+			if (command_line_rudder_joystick_index != -1)
+			{
+				read_joystick_values (command_line_rudder_joystick_index);
+			}
+
+			if (command_line_cyclic_joystick_index != -1)
+			{
+				read_joystick_values (command_line_cyclic_joystick_index);
+			}
+
+			if (command_line_collective_joystick_index != -1)
+			{
+				read_joystick_values (command_line_cyclic_joystick_index);
+			}
 		}
 	}
 
