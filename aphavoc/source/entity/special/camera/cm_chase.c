@@ -151,37 +151,89 @@ void update_chase_camera (camera *raw)
 
 	en = raw->external_view_entity;
 
-	//
-	// adjust camera heading
-	//
-
-	if (adjust_view_left_key || joystick_pov_left)
+	if ((command_line_mouse_look == MOUSELOOK_OFF)||	// Retro 31Oct2004.. if keyboard/POV panning.. (by me, stuff inside is (C) RW)
+		(command_line_mouse_look == MOUSELOOK_INTERNAL))
 	{
-		raw->chase_camera_heading += CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+
+		//
+		// adjust camera heading
+		//
+
+		if (adjust_view_left_key || joystick_pov_left)
+		{
+			raw->chase_camera_heading += CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+		}
+		else if (adjust_view_right_key || joystick_pov_right)
+		{
+			raw->chase_camera_heading -= CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+		}
+
+		raw->chase_camera_heading = wrap_angle (raw->chase_camera_heading);
+
+		//
+		// adjust camera pitch
+		//
+
+		if (adjust_view_up_key || joystick_pov_up)
+		{
+			raw->chase_camera_pitch -= CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+
+			raw->chase_camera_pitch = max (CHASE_CAMERA_ROTATE_DOWN_LIMIT, raw->chase_camera_pitch);
+		}
+		else if (adjust_view_down_key || joystick_pov_down)
+		{
+			raw->chase_camera_pitch += CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+
+			raw->chase_camera_pitch = min (CHASE_CAMERA_ROTATE_UP_LIMIT, raw->chase_camera_pitch);
+		}
 	}
-	else if (adjust_view_right_key || joystick_pov_right)
+	else // Retro 31Oct2004 - mouse or TrackIR control
 	{
-		raw->chase_camera_heading -= CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
-	}
+		float
+			temp_p,
+			temp_h;
 
-	raw->chase_camera_heading = wrap_angle (raw->chase_camera_heading);
+		// No TIR window, use mouse;
+		// OR trackir active, but user doesn't want this in outside view
 
-	//
-	// adjust camera pitch
-	//
+		if ((query_TIR_active() == FALSE)||
+			(!command_line_external_trackir))
+		{
+			temp_h = get_absolute_mouse_x ();
+			temp_p = get_absolute_mouse_y ();
 
-	if (adjust_view_up_key || joystick_pov_up)
-	{
-		raw->chase_camera_pitch -= CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
+			temp_h = -180*temp_h/16383;
+			temp_p = -90*temp_p/16383;
+			
+			raw->chase_camera_pitch = rad(temp_p);
+			raw->chase_camera_heading = rad(temp_h);
+
+			// wrap horizontal pan.. vertical is limited to +- 180 degree
+			// it is 179 because of rounding.. it never gets 180 but 179.999...
+			if (temp_h <= -179)
+			{
+				set_absolute_mouse_x(-16383);
+			}
+			else if (temp_h >= 179)
+			{
+				set_absolute_mouse_x(16383);
+			}
+		}
+		else	// TrackIR - TIR is am absolute device and hence can not wrap. Vertical pan is limited as above
+		{
+			temp_h = (float) GetYaw();
+			temp_p = (float) GetPitch();
+
+			temp_h = 180*temp_h/16383;
+			temp_p = -90*temp_p/16383;
+
+			raw->chase_camera_pitch = rad(temp_p);
+			raw->chase_camera_heading = rad(temp_h);
+		}
 
 		raw->chase_camera_pitch = max (CHASE_CAMERA_ROTATE_DOWN_LIMIT, raw->chase_camera_pitch);
-	}
-	else if (adjust_view_down_key || joystick_pov_down)
-	{
-		raw->chase_camera_pitch += CHASE_CAMERA_ROTATE_RATE * get_delta_time ();
-
 		raw->chase_camera_pitch = min (CHASE_CAMERA_ROTATE_UP_LIMIT, raw->chase_camera_pitch);
-	}
+	} // Retro 31Oct2004 end
 
 	if (adjust_view_zoom_in_key)
 	{
