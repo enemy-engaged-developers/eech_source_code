@@ -113,23 +113,38 @@ VJ 041217 OBSOLETE ======================*/
 //VJ 030511 moved to eechini from vm_event.c, needed for intialisation of wide view cockpit
 static void wide_cockpit_initialize(void)
 {
-		wide_cockpit_position[0].x = 0;
-		wide_cockpit_position[0].y = 1.1;
-		wide_cockpit_position[0].z = -2.43;
+	//VJ 050205 new wideview init settings
+		wide_cockpit_position[0].x = 0;    
+		wide_cockpit_position[0].y = 0.105; 
+		wide_cockpit_position[0].z = 0.180;
+		wide_cockpit_position[1].x = 0;    
+		wide_cockpit_position[1].y = 0.105; 
+		wide_cockpit_position[1].z = 0.180;
+		wide_cockpit_position[2].x = 0;
+		wide_cockpit_position[2].y = 0.18;
+		wide_cockpit_position[2].z = 0.300;
+		wide_cockpit_position[3].x = 0;
+		wide_cockpit_position[3].y = 0.18;
+		wide_cockpit_position[3].z = 0.300;
+		
+		
+		//wide_cockpit_position[0].x = 0;
+		//wide_cockpit_position[0].y = 1.1;
+		//wide_cockpit_position[0].z = -2.43;
 		//comanche
-		wide_cockpit_position[1].x = 0;
-		wide_cockpit_position[1].y = 0.8;
-		wide_cockpit_position[1].z = -1.03;
+		//wide_cockpit_position[1].x = 0;
+		//wide_cockpit_position[1].y = 0.8;
+		//wide_cockpit_position[1].z = -1.03;
 		//comanche co-pilot
 		
-		wide_cockpit_position[2].x = 0.375;
-		wide_cockpit_position[2].y = 2.075;
-		wide_cockpit_position[2].z = -1.810;
+		//wide_cockpit_position[2].x = 0.375;
+		//wide_cockpit_position[2].y = 2.075;
+		//wide_cockpit_position[2].z = -1.810;
 		//hokum
 		
-		wide_cockpit_position[3].x = -0.375;
-		wide_cockpit_position[3].y = 2.075;
-		wide_cockpit_position[3].z = -1.810;
+		//wide_cockpit_position[3].x = -0.375;
+		//wide_cockpit_position[3].y = 2.075;
+		//wide_cockpit_position[3].z = -1.810;
 		//hokum co-pilot
 		
 		wide_cockpit_position[4].x = 0;
