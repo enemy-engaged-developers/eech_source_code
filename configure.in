@@ -28,6 +28,18 @@ dnl Checks for library functions.
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(open close)
 
+dnl --enable-debug
+AC_MSG_CHECKING("whether debug is enabled")
+AC_ARG_ENABLE(debug,
+[  --enable-debug         Build a DEBUG version.],[
+  AC_DEFINE(DEBUG)
+  ARG_ENABLE_VALUE="yes"
+],[
+  ARG_ENABLE_VALUE="no"
+])
+AC_MSG_RESULT($ARG_ENABLE_VALUE)
+
+
 AC_OUTPUT(	Makefile
 		modules/Makefile
 		modules/2d/Makefile
@@ -175,3 +187,5 @@ AC_OUTPUT(	Makefile
 		aphavoc/source/ui_menu/title/Makefile
 		aphavoc/source/ui_menu/loading/Makefile
 		aphavoc/source/ui_menu/dedicate/Makefile	)
+
+rm -f aphavoc/makefile
