@@ -58,12 +58,23 @@
 // 	as expressly permitted by  this Agreement.
 //
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VJ 050118
+// this unit contains all function necessary for custom texture handling
+// the defult textures are read from the texture.bin/pal files, 
+// then the default override texture are read in 3d_init.c
+// a list of pointers is stored in these structures
+//    *backup_system_textures[MAX_TEXTURES];
+//    backup_system_texture_info[MAX_TEXTURES];
+// in flight.c the warzone specific textures are loaded and 
+// in flight.c the default textures are restored after the flight
+// warzone textures are created and destroyed, the default custom textures are created but never destroyed.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Have_Quick - 12/5/2003
 //
-// This will look in TEXTURE_OVERRIDE_DIRECTORY and subdirectories for any 24bit .bmp files
+// This will look in TEXTURE_OVERRIDE_DIRECTORY for any 24bit .bmp files
 // If it finds any of these files and the file name matches an existing
 // texture name, it will create a screen for the bmp and set the system_textures
 // pointer to point to the new screen.
@@ -74,16 +85,6 @@
 // TODO - add support for Alpha channels
 //
 // TODO - add support for mipmapping
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// VJ 04/12/12
-// repaired this code so that it reads the camoflaged textures correctly, assuming they have "_DESERT" or "-D" in their name
-// VJ 04/12/17
-// adapted the code to read 8 bit bmps, but they are put in the same overall structure, check if this works
-// VJ 050106
-// warzones can have file with names of texture dirs
-// VJ 050116, 050118: all texture functions are in this file, works now for MP and SP
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3764,7 +3765,7 @@ void load_warzone_override_textures (char *warzone_name)
 
 	if ( file_exist ( directory_textdir_path ) )
 	{
-		int count;
+		//int count;
 		FILE *ftextdir;
 		char buf[256];
 		char *p;
@@ -3794,13 +3795,12 @@ void load_warzone_override_textures (char *warzone_name)
 				while (p[0] == ' ')
 				  p++;
 
-				debug_log("VJ === warzone texture override dir: %s",p);
-
 				// get override texture names in array
 				initialize_texture_override_names ( system_texture_override_names, p );
 
 				override_present = TRUE;
 
+				#if DEBUG_MODULE
 				for (count = 0; count < number_of_system_textures; count++ )
 				{
 					int retrieved_index;			
@@ -3810,6 +3810,7 @@ void load_warzone_override_textures (char *warzone_name)
 						debug_log("Texture override +++ warzone screen %d (%d) : %s",retrieved_index,count,system_texture_override_names[count]);
 					}
 				}
+				#endif
 			}
 			// get the next specified dir
 			fscanf(ftextdir,"%[^\n]\n",buf);

@@ -119,6 +119,15 @@ void flight (void)
 
 	ASSERT (get_current_game_session ());
 
+/////////////////////////////////////////
+//VJ 050116 custom texture mod
+
+	load_warzone_override_textures (get_current_game_session ()->data_path);
+	
+	//repaint the screen to show the textures are loaded
+	ui_repaint ();
+/////////////////////////////////////////
+
 	set_exit_flight_loop (FALSE);
 
 	push_event_stop ();
@@ -126,6 +135,7 @@ void flight (void)
 	push_event (flight_events, "flight_events");
 
 	initialise_views ();
+	
 
 	if (command_line_comms_dedicated_server)
 	{
@@ -525,8 +535,10 @@ void flight (void)
 
 	deinitialise_views ();
 
+	////////////////////////////////////////////////////////////////////////////////////
 	//VJ 050116 custom texture mod: destroy override textures and restore default ones
 	restore_default_textures();
+	////////////////////////////////////////////////////////////////////////////////////
 
 	//
 	// Everything is destroyed now so close pack buffer

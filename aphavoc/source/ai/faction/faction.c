@@ -136,11 +136,6 @@ void create_campaign (session_list_data_type *session)
 
 	sprintf (filename, "%s\\%s\\%s", session->data_path, session->campaign_directory, session->campaign_filename);
 
-/////////////////////////////////////////
-//VJ 050116 custom texture mod
-	load_warzone_override_textures (session->data_path);
-/////////////////////////////////////////
-
 	parser_campaign_file (filename, &offset);
 
 	ASSERT (get_session_entity ());
