@@ -22,7 +22,7 @@
 #################################################################################################################################
 
 # define EECH_ROOTDIR in your environment to specify location of the main EECH SRC directory (added by crh@outpost.co.nz)   
-# eg EECH_ROOTDIR=y:\Projects\EECH
+# eg EECH_ROOTDIR=y:\Projects\EECH  
 
 projectname = project
 
