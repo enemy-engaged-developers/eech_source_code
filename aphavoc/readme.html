@@ -13,7 +13,7 @@
 </head>
 <body bgcolor="#FFFFFF" link=blue vlink=blue class="Normal"> 
 <div class=Section1> 
-  <h1><span>EECH Community Release Version 1.6.0W14</span></h1> 
+  <h1><span>EECH Community Release Version 1.6.0W15</span></h1> 
   <div align=center style='text-align:center'> 
     <hr size=2 width="100%" align=center> 
   </div> 
@@ -24,7 +24,7 @@
   </div> 
   <p><span>This file is a summary of the new features provided with this release of COHOKUM.EXE. This document is partly taken from the Wiki pages at the EECH DevZone (</span><a
 href="http://eech.bollocks.net.nz"><span>http://eech.bollocks.net.nz</span></a><span >). Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from that website. </span></p>
-  <p align="right" class="style36">Last edited: 24 April 2004 </p>
+  <p align="right" class="style36">Last edited: 8 may 2004 </p>
   <h2><span>Contents</span></h2> 
   <ul type=disc> 
     <li><a href="#installation"><span
@@ -70,6 +70,13 @@ href="http://oldsite.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_top
     <li>For version 1.6.0W10 and later you need some <strong>extra files</strong> to fly blackhawk, hind etc: see <a href="#addonfiles">here</a> for more info </li>
     <li>Add-ons and more information can be found on the <a href="#fan">fan sites</a> </li>
   </ol>
+  <p>NOTE: There's a very good short-cut in the installation procedure, after
+  you've patched to 141c, d/l the &quot;superpatchw14&quot; from <a href="http://hoxdna.org/eech/files/">werewolfs
+  site</a> It holds all current add-on campaigns and skirmishes. At the same
+  place you can d/l textures for the Alaska and Kuwait theatres. After d/l and
+  extracting that to your RAzorworks folder (assuming you've used the default
+  tree for an eech-installation), you can change to a newer exe-version by
+  replacing cohokum.exe.</p>
   <h2><a name=choppers id=choppers></a><span >Flyable choppers</span></h2> 
   <p><span >As of version W12 you can fly, change the loadout and repair the following choppers: Comanche, Apache Longbow, HokumB, Havoc, Blackhawk, Hind, AH64-A (Apache), and KA50 (Hokum). The cockpits and the flight behaviour of the new blue choppers default to the Apache Longbow, of the red choppers to the Havok. Make sure you download and install the additional download screens here: </span><a
 href="http://eech.bollocks.net.nz" target="_blank"><span >http://eech.bollocks.net.nz</span></a><span
@@ -97,10 +104,10 @@ href="http://eech.bollocks.net.nz" target="_blank"><span >http://eech.bollocks.n
   <p><span > If you intend to join a MP-game all three profiles are needed, you&#8217;re not aware of the hosts profile until you&#8217;re connecting and if the host is running with one of the 1_6_xxx-profiles your game will look for a similar one in your cohokum-folder.    1_6_13.txt is in all essential parts a replica of the old famous 151D-profile that was common before the source code was released. 
     the file &quot;1_6_13h.txt&quot; is a bit harder version of 1_6_13.txt, adding aggressive enemy choppers. They will perform active scanning for you even if they&#8217;re on a recon or transfer mission and attack w/o provocation from your side :). The file &quot;
     origwut.txt&quot; is needed if you intend to play on-line and the host uses one of the other profiles. Origwut.txt restores the original settings when you leave a game with one of the other profiles.</span></p>
-  <p>NOTE: there is a new type of WUT file as of version 161W14 of cohokum but the old ones are also still operational. </p>
+  <p>NOTE: there is a new type of WUT file as of version 161W15 of cohokum but the old ones are also still operational. </p>
   <h2><span ><a name=whatsnew></a>What's NEW in EECH?</span></h2> 
   <p><span >Text in <span
-class=style31 style37 style37>red </span>describes the additions to version W14 </span></p> 
+class=style31 style37 style37>red </span>describes the additions to version W15</span></p> 
   <table border=1 cellpadding=0> 
     <tr> 
       <td width=145 class="Normal"> <p><b><span >eech.ini parameter</span></b></p></td> 
@@ -108,54 +115,56 @@ class=style31 style37 style37>red </span>describes the additions to version W14 
     </tr>
     <tr class="style37">
       <td colspan=2 class="Normal">
-        <p class=style37 style3 style37><strong>Look for master server </strong></p></td>
+        <p class=style37 style3 style37><strong><font color="#000000">Look for master server</font> </strong></p></td>
     </tr>
     <tr class="style37">
-      <td class="Normal"> usemaster=0</td>
-      <td class="Normal"> When starting the game it reports to the master server and gets info from it (value = 1), when set to 0 the master server is ignored (default = 0) </td>
+      <td class="Normal"> <font color="#000000"> usemaster=0</font></td>
+      <td class="Normal"> <font color="#000000"> When starting the game it reports to the master server and gets info from it (value = 1), when set to 0 the master server is ignored (default = 0)</font> </td>
     </tr>
     <tr class="style37">
       <td colspan=2 class="Normal">
-        <p class=style37 style3 style37><strong>GWUT and WUT files </strong></p></td>
+        <p class=style37 style3 style37><strong><font color="#000000">GWUT and WUT files</font> </strong></p></td>
     </tr>
     <tr class="style37">
-      <td class="Normal"> wut=[filename]</td>
-      <td class="Normal"> WUT files are text files with Weapons and Units tweaks to make the game harder. As of version 161W14 a new version of the WUT file can be read as well as old style WUT files.  For more information visit <a
+      <td class="Normal"> <font color="#000000"> wut=[filename]</font></td>
+      <td class="Normal"> <font color="#000000"> WUT files are text files with Weapons and Units tweaks to make the game harder. As of version
+        160W15 a new version of the WUT file can be read as well as old style WUT files.  For more information visit
+        </font> <a
   href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073/gotcha</span></a> </td>
     </tr>
     <tr class="style37">
       <td colspan=2 class="Normal">
-        <p class=style37 style3 style37><strong>Server pause when client connects</strong></p></td>
+        <p class=style37 style3 style37><strong><font color="#000000">Server pause when client connects</font></strong></p></td>
     </tr>
     <tr class="style37">
-      <td class="Normal"> pauseserv=1</td>
-      <td class="Normal"> When a host starts a game, he/she can hit "pause" and the game will resume when a client connects. When the (last) client leaves the game returns to "pause"-state and resumes again when a  client connects (default=0, off). </td>
+      <td class="Normal"> <font color="#000000"> pauseserv=1</font></td>
+      <td class="Normal"> <font color="#000000"> When a host starts a game, he/she can hit "pause" and the game will resume when a client connects. When the (last) client leaves the game returns to "pause"-state and resumes again when a  client connects (default=0, off).</font> </td>
     </tr> 
     <tr class="style37"> 
-      <td colspan=2 class="Normal"> <p class=style37 style3 style37><strong>Advanced Flight Model</strong></p></td> 
+      <td colspan=2 class="Normal"> <p class=style37 style3 style37><strong><font color="#000000">Advanced Flight Model</font></strong></p></td> 
     </tr> 
     <tr class="style37"> 
-      <td class="Normal"> advancedfm=0</td> 
-      <td class="Normal"> If enabled, this setting switches to a more complicated flight model. Pedal mixing will be disabled, which means that you will have to use the pedals to turn the chopper. This makes it possible to fly sideways to track and attack moving vehicles, for example.(default=0, off) .        </td> 
+      <td class="Normal"> <font color="#000000"> advancedfm=0</font></td> 
+      <td class="Normal"> <font color="#000000"> If enabled, this setting switches to a more complicated flight model. Pedal mixing will be disabled, which means that you will have to use the pedals to turn the chopper. This makes it possible to fly sideways to track and attack moving vehicles, for example.(default=0, off) .</font>        </td> 
     </tr> 
     <tr class="style37">
       <td class="Normal">
-      <p class=style37 style3 style37><strong>Session filtering</strong></p></td>
+      <p class=style37 style3 style37><strong><font color="#000000">Session filtering</font></strong></p></td>
       <td class="Normal style37">&nbsp; </td>
     </tr>
     <tr class="style37">
       <td class="Normal">
-        <p class="style37"><span style=''>filter=0</span></p></td>
+        <p class="style37"><span style=''><font color="#000000">filter=0</font></span></p></td>
       <td class="Normal">
-        <p class="style37"><span  style=''>You can filter the campaign screen to sort the campaign names according to their warzones. </span></p></td>
+        <p class="style37"><span  style=''><font color="#000000">You can filter the campaign screen to sort the campaign names according to their warzones.</font> </span></p></td>
     </tr>
     <tr class="style37">
-      <td class="style32 Normal"><span class="style37"><strong>Designated target list </strong></span></td>
+      <td class="style32 Normal"><span class="style37"><strong><font color="#000000">Designated target list</font> </strong></span></td>
       <td class="Normal style32 style37">&nbsp;</td>
     </tr>
     <tr class="style37">
-      <td class="Normal style32 style37"> destgt=0</td>
-      <td class="Normal style32 style37"> Actvate target list (default =0). Make a list of targets to attack: Alt-NumEnter to add/remove targets to the list. You can select a special MFD filter (added to the low, medium, high that already exist), where you can select the targets with the regular keys. There are also two keypresses: Alt-Num0 and Ctrl-Num0, which allow to select designated targets even outside the filter (default =0, off). </td>
+      <td class="Normal style32 style37"> <font color="#000000"> destgt=0</font></td>
+      <td class="Normal style32 style37"> <font color="#000000"> Actvate target list (default =0). Make a list of targets to attack: Alt-NumEnter to add/remove targets to the list. You can select a special MFD filter (added to the low, medium, high that already exist), where you can select the targets with the regular keys. There are also two keypresses: Alt-Num0 and Ctrl-Num0, which allow to select designated targets even outside the filter (default =0, off).</font> </td>
     </tr>
     <tr> 
       <td colspan=2 class="Normal"> <p><b><span >Downwash effect</span></b></p></td> 
@@ -379,6 +388,11 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
   <p><span >Note: two bugs have been more or less solved: the &quot;FARP&quot; bug that caused helicopters to cue at landing pads, and the &quot;double mouse&quot; bug. </span></p>
   <p><span >A new bug appeared with the test-versions after W12. It seems to origin from erroneous entries in the WUT-files. Therefore new WUT-files are packed together with this exe. All should be put in the cohokum-folder. origwut.txt is for restoring the default game-profile after joining a game with tweaked profile. 1_6_13.txt is the essential parts of the old 151D-profile except for the weapons part. Weapons can now be tweaked in the eech.ini-file. 1_6_13H.txt is an even harder version of the 151D-profile &#8211;enemy choppers will actively search for you and attack.</span></p>
   <h2><a name=history></a><span >History</span></h2> 
+  <p>FIxes/features in 1.6.0w15</p> 
+  <ul>
+    <li>Default values of cpac, cgs, cpds changed</li>
+    <li>Comanche loadout-error in GWUT fixed</li>
+  </ul>
   <p><span >Fixes/features in 1.6.0W14</span></p> 
   <ul type=disc> 
     <li><span
@@ -477,7 +491,8 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
     <li><a href="http://home.planet.nl/%7Ejette073/gotcha">Gotcha's EECH goodies</a>: hi-res cockpit textures, GWUT info, mod info, set up the source code</li>
     <li><a href="http://hoxdna.org/eech/" target="_blank">http://hoxdna.org/eech/</a> - EECH Multiplayer Master Server web frontend</li>
     <li><a href="http://hoxdna.org/eech/files/">http://hoxdna.org/eech/files/</a>
-      -Resources: The Superpatch (includes everything you need). Texture packs
+      -Resources: The Superpatch (includes everything you need up to version
+      160w14). Texture packs
       for Winter and Kuwait maps</li>
     <li><a href="http://www.helosim.com/" target="_blank">helosim.com</a> - general site with sim news including EECH </li>
     <li><a href="http://kimchoceech.homestead.com/index.html" target="_blank">Kimchocs eech website </a>- Missions and files </li>
