@@ -180,9 +180,10 @@ extern int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ wideview mod, date: 18-mar-03	
+     
+//VJ 030318 wideview mod
 extern int 
-        wide_cockpit;
+        wide_cockpit;        
 
 extern int 
         edit_wide_cockpit;
@@ -196,11 +197,26 @@ typedef struct COCKPIT_POSITION cockpit_position;
 extern cockpit_position wide_cockpit_position[6]; 
 // 4 helicopters with 2 copilots
 
+//VJ 030318 wideview mod
 extern int wide_cockpit_nr;
 
-//VJ framerate 24-mar-03
+//VJ 030324 framerate 
 extern float framerate, framerate_avg;
 extern int doframerate;
+
+//VJ 030423 TSD render mod
+enum TSD_RENDER_MODES
+{
+	TSD_RENDER_NONE_MODE,
+	TSD_RENDER_CONTOUR_MODE,
+	TSD_RENDER_CONTOUR_RELIEF_MODE,
+	TSD_RENDER_RELIEF_MODE,
+	TSD_RENDER_SHADED_RELIEF_MODE,
+	TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE
+};
+
+typedef enum TSD_RENDER_MODES tsd_render_modes;
+extern tsd_render_modes tsd_render_mode;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
