@@ -7,6 +7,10 @@
 	del *.lnk
 
 	del *.pch
+	
+	del project.map
+	
+	del project.sym
 
 	cd %EECH_ROOTDIR%\aphavoc\source
 
