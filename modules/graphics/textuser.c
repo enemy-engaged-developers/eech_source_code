@@ -83,7 +83,7 @@
 // repaired this code so that it reads the camoflaged textures correctly, assuming they have "_DESERT" or "-D" in their name
 // VJ 04/12/17
 // adapted the code to read 8 bit bmps, but they are put in the same overall structure, check if this works
-// VJ 050106 
+// VJ 050106
 // warzones can have file with names of texture dirs
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -191,7 +191,11 @@ int
 
 screen
 	*system_textures[MAX_TEXTURES],
-	*application_textures[MAX_TEXTURES];
+	//VJ 050116 custom texture mod: backup textures to restore default
+   *backup_system_textures[MAX_TEXTURES];
+
+	//this does not seem to be used
+	//*application_textures[MAX_TEXTURES];
 
 system_texture_information
 	system_texture_info[MAX_TEXTURES];
@@ -226,9 +230,9 @@ unsigned char
 
 //VJ 041212 organization of texture directory
 #define TEXTURE_OVERRIDE_DIRECTORY "..\\cohokum\\graphics\\textures"
-#define TEXTURE_OVERRIDE_DIRECTORY_COCKPIT "..\\cohokum\\graphics\\textures\\cockpit"
-#define TEXTURE_OVERRIDE_DIRECTORY_TERRAIN "..\\cohokum\\graphics\\textures\\terrain"
-#define TEXTURE_OVERRIDE_DIRECTORY_CAMO "..\\cohokum\\graphics\\textures\\camo"
+#define TEXTURE_OVERRIDE_DIRECTORY_COCKPIT "cockpit"
+#define TEXTURE_OVERRIDE_DIRECTORY_TERRAIN "terrain"
+#define TEXTURE_OVERRIDE_DIRECTORY_CAMO "camo"
 
 #define BITMAP_ID		(0x4D42)
 
@@ -265,10 +269,9 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 04/12/12 comment: set = 0 for default or 1 for desert
-//this is called from modules/3d/3dobjid.c and then terrtype.c
 void set_texture_camoflage ( int set )
 {
-		
+
 	int
 		count;
 
@@ -303,7 +306,7 @@ void set_texture_camoflage ( int set )
 			}
 		}
 	}
-	
+
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
 		if ( system_texture_info[count].flags.main_texture )
@@ -479,7 +482,7 @@ int get_system_texture_index ( char *name )
 
 BOOL load_texturemap_data ( char *path )
 {
-   
+
 	int
 		count;
 
@@ -525,21 +528,6 @@ BOOL load_texturemap_data ( char *path )
 	}
 
 	fp = safe_fopen ( filename, "rb" );
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Start - Have_Quick
-// 12/5/2003
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 050106 added NULL parameter which is used if called from gameflow.c, warzone specific textures
-
-	initialize_texture_override_names ( system_texture_override_names, NULL );
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End Have_Quick
-// 12/5/2003
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//
 	// First integer is the number of palettes the textures use in total.
@@ -843,7 +831,7 @@ BOOL load_texturemap_data ( char *path )
 			}
 		}
 	}
-	else // 24 bit: !d3d_paletted_textures_supported 
+	else // 24 bit: !d3d_paletted_textures_supported
 	{
 	/*
 		for ( count = 0; count < number_of_system_textures; count++ )
@@ -1346,36 +1334,6 @@ BOOL load_texturemap_data ( char *path )
 			}
 		}
 	}
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Start - Have_Quick
-// 12/5/2003
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	   
-	// Now that all the screens are loaded we check to see if there is are any overrides
-	for( count=0; count < MAX_TEXTURES; count++ )
-	{
-		int retrieved_index;
-      
-		retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
-      
-		if( retrieved_index > 0)
-		{
-			// there is so load it
-			load_texture_override (system_texture_override_names[count],retrieved_index, NULL);
-		}		
-	}
-	
-	
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// end Have_Quick
-// 12/5/2003
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 	return ( TRUE );
 }
@@ -2567,7 +2525,7 @@ int match_system_texture_name ( char *name )
 		count, camo = 0;
 
 	ptr = real_name;
-	
+
 	while ( ( *name != '\0' ) && ( *name != '.' ) )
 	{
 
@@ -2575,23 +2533,23 @@ int match_system_texture_name ( char *name )
 	}
 
 	*ptr++ = '\0';
-	
+
 //VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
 	if (strstr(real_name, "-BIN"))
 	{
 		char *p = strstr(real_name, "-BIN");
-      real_name[strlen(real_name)-strlen(p)] = '\0';		
-	}	
+      real_name[strlen(real_name)-strlen(p)] = '\0';
+	}
 
 //VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
 	if (strstr(real_name, "-PAL"))
 	{
 		char *p = strstr(real_name, "-PAL");
-      real_name[strlen(real_name)-strlen(p)] = '\0';		
-	}	
+      real_name[strlen(real_name)-strlen(p)] = '\0';
+	}
 
 
-//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture	
+//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
    if (strstr(real_name, DESERTIND_1))
    {
        real_name[strlen(real_name)-strlen(DESERTIND_1)] = '\0';
@@ -2603,7 +2561,7 @@ int match_system_texture_name ( char *name )
        real_name[strlen(real_name)-strlen(DESERTIND_2)] = '\0';
        camo = 1;
    }
-   
+
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
 		if ( strcmp ( system_texture_names[count], real_name ) == 0 )
@@ -3468,14 +3426,79 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Start VJ and Have_Quick
+// 12/2/2003, 05/01/15
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void clear_texture_override_names ( void )
+{
+	int count;
+	for ( count = 0; count < MAX_TEXTURES; count++ )
+   	system_texture_override_names[count][0] = '\0';
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Start Have_Quick
-// 12/2/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//static 
-void load_texture_override ( char *this_texture_name, int this_texture_index, char *mapname )
+	//restore pointers to default + startup override textures                                 
+void restore_default_textures( void )
+{
+	int count;	
+	for (count = 0; count < number_of_system_textures; count++ )   
+	{                                                               				
+	   	if (system_texture_override_names[count][0] != '\0'){
+				destroy_screen ( system_textures[count] );
+				debug_log("Texture override +++ destroyed ccreen: %s",system_texture_override_names[count]);
+			}	
+			
+			system_textures[count] = backup_system_textures[count];
+			system_texture_info[count].texture_screen = backup_system_textures[count];
+	}                                                               
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// this function is called from \aphavoc\source\app3d\3d_init.c, line 123
+void load_custom_textures ( void )
+{
+	int
+		count;
+//NOTE: if the name name occurs twice in different directory the texture screens are created twice but 
+// used only once (the pointer to the last screen is set). The screen is not released but stays in memory
+	clear_texture_override_names ();
+
+	initialize_texture_override_names ( system_texture_override_names, "." );
+	load_texture_override ( system_texture_override_names, ".");
+
+	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
+	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
+
+	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
+	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
+
+	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
+	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
+	
+	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
+	
+	//make a backup of the pointers
+	for ( count = 0; count < number_of_system_textures; count++ )
+	{
+				backup_system_textures[count] = system_textures[count];
+	}
+	
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
 {
 
 	FILE
@@ -3496,6 +3519,7 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 		full_override_texture_filename[128];
 
 	int
+		count,
 		buffer_size,
 		x,
 		y;
@@ -3505,193 +3529,182 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 
 	//VJ 041217 palette for 8 bit textures
 	rgb_colour pal[256];
-
+//VJ# ???????/static ?????????????
 	static screen
 				*override_screen;
 
-	ASSERT (this_texture_name);
-
-	ASSERT (this_texture_index);
-
 //VJ mapname used to load map specific textures in file
-//C:\gms\Razorworks\eech-new\aphavoc\source\gameflow\gameflow.c 
+//C:\gms\Razorworks\eech-new\aphavoc\source\gameflow\gameflow.c
 // variable is called session->warzone_name
 //line 395
 
-	if (mapname == NULL)
+	// Now that all the screens are loaded we check to see if there is are any overrides
+	for( count=0; count < MAX_TEXTURES; count++ )
 	{
-//VJ 041212 get file in graphics\textures
-	sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, this_texture_name );
-	
-//VJ 041212 get file in graphics\textures\ subdirs
-	if ( !file_exist ( full_override_texture_filename ) )
-		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT, this_texture_name );
+		int retrieved_index;
 
-	if ( !file_exist ( full_override_texture_filename ) )
-		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, this_texture_name );
+		retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
 
-	if ( !file_exist ( full_override_texture_filename ) )
-		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO, this_texture_name );
-	}
-	else //warzone specific textures
-	{
-	if ( !file_exist ( full_override_texture_filename ) )
-		sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, this_texture_name );
-	}		
-
-	if ( !file_exist ( full_override_texture_filename ) )
-		return;
-
-	debug_log ("++OVERRIDES++ Loading file %s",full_override_texture_filename);
-
-	fp = safe_fopen (full_override_texture_filename, "rb");
-
-	//
-	// check if the file header is correct
-	//
-
-	fread (&bmfh, sizeof (bmfh), 1, fp);
-
-	if (bmfh.bfType != BITMAP_ID)
-	{
-		safe_fclose (fp);
-
-		debug_log ("%s is not a real bitmap",full_override_texture_filename);
-
-		return;
-	}
-
-	//
-	// check if the info header is correct
-	//
-
-	fread (&bmih, sizeof (bmih), 1, fp);
-
-//VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
-   if (bmih.biBitCount == 8){
- 	   fread (&pal, sizeof (pal), 1, fp);
- 	}   
- 	   
-	if (bmih.biCompression != BI_RGB)
-	{
-		safe_fclose (fp);
-
-		debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
-
-		return;
-	}
-	//VJ only 8 and 24 bit uncompressed bitmaps are read
-	if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
-	{
-		safe_fclose (fp);
-
-		debug_log ("%s is not 24 bit!", full_override_texture_filename );
-
-		return;
-	}
-
-	if (bmih.biHeight > MAX_TEXTURE_WIDTH)
-	{
-		safe_fclose (fp);
-
-		debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
-
-		return;
-	}
-
-	if (bmih.biWidth > MAX_TEXTURE_WIDTH)
-	{
-		safe_fclose (fp);
-
-		debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
-
-		return;
-	}
-
-	// create a screen for this texture. This does not load the data into the screen
-	// it just creates it and sets it's attributes
-
-	// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
-	// It also assumes that there are no mipmaps. This will not cause problems, but
-	// it will look cruddy under certain circumstances
-
-//VJ 041217 create the same screen for 8 bit or 24 bit ?????????	
-	override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-
-	//
-	// texture
-	//
-  if (bmih.biBitCount == 24)   
-	  buffer_size = bmih.biWidth * bmih.biHeight * 3;
-	// note color depth is assumed here
-
-   if (bmih.biBitCount == 8)   
-      buffer_size = bmih.biWidth * bmih.biHeight;
-	
-	buffer = safe_malloc (buffer_size);
-
-	fread (buffer, buffer_size, 1, fp);
-
-	set_active_screen (override_screen);
-
-	if (lock_screen (override_screen))
-	{
-		p = buffer;
-
-  if (bmih.biBitCount == 24){
-		for (y = bmih.biHeight - 1; y >= 0; y--)
+		if( retrieved_index > 0)
 		{
-			for (x = 0; x < bmih.biWidth; x++)
+			
+			sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, system_texture_override_names[count] );
+
+			if ( !file_exist ( full_override_texture_filename ) )
+				continue;
+
+			debug_log ("++OVERRIDES++ Loading file %s",full_override_texture_filename);
+
+			fp = safe_fopen (full_override_texture_filename, "rb");
+
+			//
+			// check if the file header is correct
+			//
+
+			fread (&bmfh, sizeof (bmfh), 1, fp);
+
+			if (bmfh.bfType != BITMAP_ID)
 			{
-				
-				col.b = *p++;
-				col.g = *p++;
-				col.r = *p++;
-				col.a = 255;
+				safe_fclose (fp);
 
-				set_pixel (x, y, col);
+				debug_log ("%s is not a real bitmap",full_override_texture_filename);
+
+				return;
 			}
+
+			//
+			// check if the info header is correct
+			//
+
+			fread (&bmih, sizeof (bmih), 1, fp);
+
+		   //VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
+		   if (bmih.biBitCount == 8){
+		 	   fread (&pal, sizeof (pal), 1, fp);
+		 	}
+
+			if (bmih.biCompression != BI_RGB)
+			{
+				safe_fclose (fp);
+
+				debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
+
+				return;
+			}
+			
+			//VJ only 8 and 24 bit uncompressed bitmaps are read
+			if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
+			{
+				safe_fclose (fp);
+
+				debug_log ("%s is not 24 bit!", full_override_texture_filename );
+
+				return;
+			}
+
+			if (bmih.biHeight > MAX_TEXTURE_WIDTH)
+			{
+				safe_fclose (fp);
+
+				debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
+
+				return;
+			}
+
+			if (bmih.biWidth > MAX_TEXTURE_WIDTH)
+			{
+				safe_fclose (fp);
+
+				debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
+
+				return;
+			}
+
+			// create a screen for this texture. This does not load the data into the screen
+			// it just creates it and sets it's attributes
+
+			// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
+			// It also assumes that there are no mipmaps. This will not cause problems, but
+			// it will look cruddy under certain circumstances
+			
+			override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
+
+			//
+			// texture
+			//
+			
+		   if (bmih.biBitCount == 24)
+			   buffer_size = bmih.biWidth * bmih.biHeight * 3;
+			// note color depth is assumed here
+
+		   if (bmih.biBitCount == 8)
+		      buffer_size = bmih.biWidth * bmih.biHeight;
+
+			buffer = safe_malloc (buffer_size);
+
+			fread (buffer, buffer_size, 1, fp);
+
+			set_active_screen (override_screen);
+
+			if (lock_screen (override_screen))
+			{
+				p = buffer;
+
+		      if (bmih.biBitCount == 24)
+		      {
+					for (y = bmih.biHeight - 1; y >= 0; y--)
+					{
+						for (x = 0; x < bmih.biWidth; x++)
+						{
+            	
+							col.b = *p++;
+							col.g = *p++;
+							col.r = *p++;
+							col.a = 255;
+            	
+							set_pixel (x, y, col);
+						}
+					}
+				}
+		   	
+		   	if (bmih.biBitCount == 8)
+		   	{
+					for (y = bmih.biHeight - 1; y >= 0; y--){
+						for (x = 0; x < bmih.biWidth; x++){
+		   	 			set_pixel (x, y, pal[*p++]);
+						}
+					}
+         	
+				}
+
+				unlock_screen (override_screen);
+			}
+
+			set_active_screen (video_screen);
+
+			safe_free (buffer);
+
+			safe_fclose (fp);
+
+			// now we set the pointer in the system textxures array to point to this
+			// screen rather than the original screen
+			set_system_texture_screen (override_screen, retrieved_index);
+
+			//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+			system_texture_info[retrieved_index].texture_screen = override_screen;
 		}
 	}
-   if (bmih.biBitCount == 8){
-		for (y = bmih.biHeight - 1; y >= 0; y--){
-			for (x = 0; x < bmih.biWidth; x++){
-    			set_pixel (x, y, pal[*p++]);
-			}
-		}
-	
-	}
-
-		unlock_screen (override_screen);
-	}
-
-	set_active_screen (video_screen);
-
-	safe_free (buffer);
-
-	safe_fclose (fp);
-
-	// now we set the pointer in the system textxures array to point to this
-	// screen rather than the original screen
-	set_system_texture_screen (override_screen, this_texture_index);
-	
-//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
-	system_texture_info[this_texture_index].texture_screen = override_screen;
-
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//VJ 041213 fucntion also called from file eech-new\aphavoc\source\gameflow\gameflow.c, about line 384
+//VJ 041213 function also called from file aphavoc\source\ai\faction\faction.c line 138
 // using texture dir names specified in standard file
 void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
 {
-   
+
 	directory_file_list
 		*directory_listing;
 
@@ -3708,155 +3721,108 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 
 	index = 0;
 
-	if (mapname == NULL)
+	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+
+	directory_listing = get_first_directory_file ( directory_search_path );
+
+	//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
+	if ( directory_listing )
 	{
-		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY);
-	
-		directory_listing = get_first_directory_file ( directory_search_path );
-	
-		//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
-		if ( directory_listing )
-		{
-			valid_file = TRUE;	
-			
-			while ( valid_file )
-			{
-				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-				{
-					filename = strupr(get_directory_file_filename ( directory_listing ));
-		
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-		
-					//we don't want the .bmp in the overides index
-					tmp = strtok( filename, "." );
-						
-					strcpy ( system_texture_override_names[index], tmp );
-	
-					index++;
-				}	
-				valid_file = get_next_directory_file ( directory_listing );
-			}
-		} 
-		
-	//VJ 041212 add cockpit textures	
-		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
-	
-		directory_listing = get_first_directory_file ( directory_search_path );
-	
-		if ( directory_listing )
-		{
-			valid_file = TRUE;	
-			
-			while ( valid_file )
-			{
-				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-				{
-					filename = strupr(get_directory_file_filename ( directory_listing ));
-		
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-		
-					//we don't want the .bmp in the overides index
-					tmp = strtok( filename, "." );
-	
-					strcpy ( system_texture_override_names[index], tmp );
-	
-					index++;
-				}	
-				valid_file = get_next_directory_file ( directory_listing );
-			}
-		}
-		
-	//VJ 041212 add custom terrain textures	
-		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		
-		directory_listing = get_first_directory_file ( directory_search_path );
-		
-		if ( directory_listing )
-		{
-			valid_file = TRUE;	
-			
-			while ( valid_file )
-			{
-				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-				{
-					filename = strupr(get_directory_file_filename ( directory_listing ));
-		
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-		
-					//we don't want the .bmp in the overides index
-					tmp = strtok( filename, "." );
-	
-					strcpy ( system_texture_override_names[index], tmp );
-	
-					index++;
-				}	
-				valid_file = get_next_directory_file ( directory_listing );
-			}
-		}
-		
-	//VJ 041212 add custom camouflage textures	
-		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO);
-	
-		directory_listing = get_first_directory_file ( directory_search_path );
-	
-		if ( directory_listing )
-		{
-			valid_file = TRUE;	
-			
-			while ( valid_file )
-			{
-				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-				{
-					filename = strupr(get_directory_file_filename ( directory_listing ));
-		
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-		
-					//we don't want the .bmp in the overides index
-					tmp = strtok( filename, "." );
-	
-					strcpy ( system_texture_override_names[index], tmp );
-	
-					index++;
-				}	
-				valid_file = get_next_directory_file ( directory_listing );
-			}
-		}
-	}
-	else // this part is executed when called from gameflow.c, warzone specific textures
-	{
-		sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+		valid_file = TRUE;
 
-		directory_listing = get_first_directory_file ( directory_search_path );
-
-		//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
-		if ( directory_listing )
+		while ( valid_file )
 		{
-			valid_file = TRUE;	
-			
-			while ( valid_file )
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
-				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-				{
-					filename = strupr(get_directory_file_filename ( directory_listing ));
-		
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+				filename = strupr(get_directory_file_filename ( directory_listing ));
 
-					//we don't want the .bmp in the overides index
-					tmp = strtok( filename, "." );
-						
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+
+				//we don't want the .bmp in the overides index
+				tmp = strtok( filename, "." );
+
+				if (index < number_of_system_textures)
 					strcpy ( system_texture_override_names[index], tmp );
-   	
-					index++;
-				}	
-				valid_file = get_next_directory_file ( directory_listing );
+				//avoid overflow, not likely	
+
+				index++;
 			}
+			valid_file = get_next_directory_file ( directory_listing );
 		}
 	}
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End Have_Quick
-// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////
+//VJ 041213 load the map specific custom textures
+//session->warzone_name = map name e.g. "map3"
+// in this directory one can have a textfile with directory names 
+//to look for custom textures
+//VJ 050106 changed to read text file with directory names
+/////////////////////////////////////////////////////////////////////
+
+void load_warzone_override_textures (char *warzone_name)
+{				
+	char directory_textdir_path[256];
+
+	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
+	
+	debug_log("Overide dir warzone name %s", warzone_name);
+	
+	if ( file_exist ( directory_textdir_path ) )
+	{
+		//int count;
+		FILE *ftextdir;
+		char buf[256];
+		char *p;
+
+		ftextdir = fopen(directory_textdir_path,"r");
+
+		// skip comment lines
+		fscanf(ftextdir,"%[^\n]\n",buf);
+		while (buf[0] == '#')
+				fscanf(ftextdir,"%[^\n]\n",buf);
+
+		// get directory names, can be more than one
+		while (strchr(buf,'='))
+		{
+			//format: dir1=[name] etc.
+			p = strtok(buf,"=");
+			p = strtok(NULL,"#");
+
+			if (p)
+			{
+				int i;
+				//strip leading and trailing spaces
+				i = strlen(p)-1;
+				while (i > 0 && p[i] == ' ')
+					i--;
+				p[i+1]='\0';
+				while (p[0] == ' ')
+				  p++;
+				  
+				debug_log("warzone texture override dir: %s",p);  
+
+				// get override texture names in array	
+				initialize_texture_override_names ( system_texture_override_names, p );
+				
+				// load and replace the default texures and all the textures that were loaded at startup (in textuser.c)
+				load_texture_override ( system_texture_override_names, p);
+			}	
+			// get the next specified dir		
+			fscanf(ftextdir,"%[^\n]\n",buf);
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// End VJ and Have_Quick
+// 12/5/2003, 050115, 050116 custom texture mod
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -525,6 +525,9 @@ void flight (void)
 
 	deinitialise_views ();
 
+	//VJ 050116 custom texture mod: destroy override textures and restore default ones
+	restore_default_textures();
+
 	//
 	// Everything is destroyed now so close pack buffer
 	//

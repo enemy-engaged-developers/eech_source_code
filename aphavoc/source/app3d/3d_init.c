@@ -119,6 +119,9 @@ void initialise_application_3d_system (void)
 	debug_log ( "Loading textures" );
 
 	load_texturemap_data ( "3ddata" );
+	
+	//VJ 050116 custom texture mod
+	load_custom_textures ();
 
 	initialise_3d_system ();
 
@@ -139,7 +142,9 @@ void initialise_application_3d_system (void)
 	//
 
 	set_3d_terrain_detail_blend_parameters ( 0.7 );
+//set_3d_terrain_detail_blend_parameters ( 0 );
 
+	//set_terrain_3d_sector_scan_radius ( 10 );
 	set_terrain_3d_sector_scan_radius ( 5 );
 
 	//

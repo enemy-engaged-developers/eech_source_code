@@ -83,7 +83,10 @@ extern PALETTEENTRY
 
 extern struct SCREEN 
 	*system_textures[MAX_TEXTURES],
-	*application_textures[MAX_TEXTURES];
+	//VJ 050116 custom texture mod: backup textures to restore default
+	*backup_system_textures[MAX_TEXTURES];
+	// this does not seem to be used!
+	//*application_textures[MAX_TEXTURES];
 
 extern char
 	system_texture_names[MAX_TEXTURES][128];
@@ -127,10 +130,13 @@ extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
 
-//VJ 041213 made external non-static, to be used from gameflow.c
+//VJ 050116 custom texture mod: functions needed 
+extern void load_custom_textures( void );
 extern void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
-extern void load_texture_override ( char *this_texture_name, int this_texture_index, char *mapname );
-
+extern void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
+extern void clear_texture_override_names ( void );
+extern void restore_default_textures( void );
+extern void load_warzone_override_textures (char *warzone_name);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
