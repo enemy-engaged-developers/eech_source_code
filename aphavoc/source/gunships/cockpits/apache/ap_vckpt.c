@@ -1075,7 +1075,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
       }
   		if (check_key(DIK_NUMPAD5))
 		{
-			clipx = -8.0;
+			wide_cockpit_position[wide_cockpit_nr].x = -8.0;
 		}
 
 		if (check_key(DIK_NUMPAD0))

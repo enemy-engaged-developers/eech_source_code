@@ -1074,7 +1074,7 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
       }
 		if (check_key(DIK_NUMPAD5))
 		{
-			clipx = -8.0;
+			wide_cockpit_position[wide_cockpit_nr].x = -8.0;
 		}
 		if (check_key(DIK_NUMPAD0))
 		{
@@ -1162,7 +1162,6 @@ void draw_ah64a_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 
 //VJ 050108 wideview x coord used to clip apache cockpit
 		set_3d_view_distances (main_3d_env, 10.0+clipx, 0.1, 1.0, 0.0);
-
 
 		realise_3d_clip_extents (main_3d_env);
 
