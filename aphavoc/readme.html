@@ -53,16 +53,12 @@
   Read also the next paragraph for loadout screens.</p>
     <p><a name="choppers" id="choppers"></a>    </p>
   <h2>Flyable choppers</h2>
-    <p>As of version W12 you can fly,  change the loadout  and repair the following choppers: Comanche, Apache, Hokum, Hokum, Blackhawk, Hind, AH64-A, and KA50. The cockpits and the flight behaviour of the new blue choppers default to the Apache, of the red choppers to the Havok. 
+    <p>As of version W12 you can fly,  change the loadout  and repair the following choppers: Comanche, Apache, Hokum, Havoc, Blackhawk, Hind, AH64-A, and KA50. The cockpits and the flight behaviour of the new blue choppers default to the Apache, of the red choppers to the Havok. 
   Make sure you download and install the additional download screens here: <a href="http://eech.bollocks.net.nz" target="_blank">http://eech.bollocks.net.nz</a> (in the addon download area). These zips have the full installation path , the files should go here: &quot;\Razorworks\cohokum\graphics\ui\cohokum\Map\&quot;.</p>
     <p>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). </p>
     <p><a name="MP" id="MP"></a> </p>
     <h2>Multiplayer status </h2>
-  <p>There are minor changes to make the code more stable. The indications so far: if a client leaves controlled (quit mission or campaign) all is well, but 
-if a client crashes he'll leave a &quot;ghost chopper&quot; in the game. It's controlled by the AI but 
-can't be choosen for another mission. Other choppers in the group are free to take. 
-The ghost-chopper can be shot down by anyone, so it isn't THAT big problem. 
-It appears to save the host from CTD (Crash To Desktop) when a client CTDs. If a host restarts all choppers are back to normal.</p>
+  <p>No changes compared to 160w11. Bug hunting conitnues</p>
     <a name="bugs"></a>
     <h2>Bugs</h2>
 
@@ -447,7 +443,8 @@ are much easier to win.</span></td>
 	  </tr>
 	<tr>
 	  <td height="61"><span class="style1"> </span></td>
-	  <td height="61"><span class="style1">You can select the inset view (Alt-F12) now also in the cockpit. The default view (0 key) shows your own gunship, the keys 2-5 select the same views as corresponding padlock commands, 6 selects either target or waypoint if no target is selected.</span></td>
+	  <td height="61"><span class="style1">Now you can select inset view (Alt-F12) also in the cockpit. 0 key selects target (default). The keys 2-6 select 
+the same views as corresponding padlock commands.</span></td>
 	</tr>
 	<tr>
 	  <td height="23">&nbsp;</td>
@@ -479,12 +476,12 @@ Look in the Wiki to find details on how to download and set up the code. </p>
       <li>Sattelite view (in cockpit and in map window) 
       <li>Mouse controlled map screen (zoom, panning)                          
       <li>Configurable radar ranges and cannon ammo amount
-      <li>Possibly more stable MP
+      <li>Blackhawk and Hind returned to not flyable w/o faa=1
       <li>AH64-A and KA50 added as configurable choppers. Install the download screens (see above)
     </ul>
     <p>Fixes/features in 1.6.0W10,11: </p>
     <ul>
-      <li> Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). 
+      <li> Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select and off you go (you can't choose it from the mission or group list since it has no task). 
         
       <li>Blackhawk and Hind flyable, regardless of the faa-setting in eech.ini.       
       <li>Blackhawk and Hind loadout configuration enabled.
