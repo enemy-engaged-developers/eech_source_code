@@ -197,7 +197,7 @@ static char *get_local_string (entity *en, string_types type)
 		case STRING_TYPE_KEYSITE_NAME:
 		////////////////////////////////////////
 		{
-			s = &raw->keysite_name;
+			s = raw->keysite_name;
 
 			break;
 		}
