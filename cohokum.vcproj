@@ -3624,6 +3624,9 @@
 							RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\VIEWS\VM_FIXED.C">
 						</File>
 						<File
+							RelativePath=".\aphavoc\source\gunships\views\vm_headmovement.c">
+						</File>
+						<File
 							RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\VIEWS\VM_INIT.C">
 						</File>
 						<File
