@@ -74,16 +74,16 @@
 
 #define DATA_VERSION	6
 
-#define MINOR_VERSION	0
+#define MINOR_VERSION	1
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME
  * whenever you build a release executable.
  */
 
-#define BUILD_TYPE	"W15"
+#define BUILD_TYPE	"W"
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.0W15"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.1W"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *
