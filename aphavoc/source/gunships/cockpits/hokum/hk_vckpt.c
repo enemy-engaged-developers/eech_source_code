@@ -735,7 +735,7 @@ void draw_hokum_virtual_cockpit (void)
 			m2;
 
 //VJ 050131 update on wideview mod, much better movement
-	if (get_global_wide_cockpit () &&
+		if (get_global_wide_cockpit () &&
 	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
 	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
 	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
@@ -747,9 +747,13 @@ void draw_hokum_virtual_cockpit (void)
 			virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].x;
 			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
 			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;	
-	   	pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 
-		  	set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);    	
+		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT)
+	   		pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT)
+	   		co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+
+		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);    	
 		}
 
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)

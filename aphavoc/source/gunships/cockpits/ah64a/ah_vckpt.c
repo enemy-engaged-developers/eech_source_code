@@ -525,7 +525,9 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
 		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 		   //VJ 050207 included head pitch in fixed view setting
-	   	pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );		    
+			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+			if (edit_wide_cockpit)
+				pilot_head_pitch = pilot_head_pitch_datum;
 		}
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
@@ -1095,10 +1097,10 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
 		}
 		if (check_key(DIK_NUMPAD0))
 		{
-				wide_cockpit_position[wide_cockpit_nr].x = 0;
-				wide_cockpit_position[wide_cockpit_nr].y = 0.07;
-				wide_cockpit_position[wide_cockpit_nr].z = 0.3;
-				wide_cockpit_position[wide_cockpit_nr].p = -4;			
+				wide_cockpit_position[wide_cockpit_nr].x = BASE_X_APACHE;
+				wide_cockpit_position[wide_cockpit_nr].y = BASE_Y_APACHE;
+				wide_cockpit_position[wide_cockpit_nr].z = BASE_Z_APACHE;
+				wide_cockpit_position[wide_cockpit_nr].p = BASE_P_APACHE;		
 		}
 	}
 
