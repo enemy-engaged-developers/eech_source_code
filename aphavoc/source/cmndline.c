@@ -211,7 +211,7 @@ char
 	command_line_game_initialisation_phase_filename [128]		= "\0",
 	command_line_debug_log_name[100]									= "DEBUG.LOG",
 	command_line_ip_address[128]										= "\0",
-	command_line_primary_server_setting[128]						= "hox.dhs.org",  //VJ for werewolf 030403, default value changed 080403
+	command_line_primary_server_setting[128]						= "hoxdna.org",  //VJ for werewolf 030403, default value changed 111103
 	command_line_secondary_server_setting[128]					= "eech.dhs.org";  //VJ for werewolf 030403, default value changed 080403 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
