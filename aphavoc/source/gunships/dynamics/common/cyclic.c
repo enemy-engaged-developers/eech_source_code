@@ -472,7 +472,7 @@ void update_cyclic_pressure_inputs (void)
 			}
 			else
 			{
-				joyval = get_joystick_axis (command_line_collective_joystick_index, command_line_cyclic_joystick_y_axis);
+				joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 			}
 
 			input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
