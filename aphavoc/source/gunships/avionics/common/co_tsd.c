@@ -925,15 +925,15 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		*aspectrow,
 		*old_aspectrow;
 
-		float
-			terrain_elev=0,
-         elevation_factor=terrain_3d_map_maximum_height*0.97;
+	float
+		terrain_elev=0,
+		elevation_factor=terrain_3d_map_maximum_height*0.97;
 
-		rgb_colour
-			terrain_col;
+	rgb_colour
+		terrain_col;
 
-      int step = 1, aspect_index, nr_aspect_steps;
-      int stepmask;
+	int step = 1, aspect_index, nr_aspect_steps;
+	int stepmask;
 
 	ASSERT (position);
 
