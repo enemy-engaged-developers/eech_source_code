@@ -2995,8 +2995,17 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	}
 #else
 	{
-		int level = eo->zoom * 100;
-		sprintf( buffer, "%d%%", level );
+		float level = 1.0 / convert_linear_view_value (eo);
+
+		if (level < 10)
+		{
+			sprintf (buffer, "%.1f", level);
+		}
+		else
+		{
+			sprintf (buffer, "%d", (int)level);
+		}
+
 		s = buffer;
 	}
 #endif
