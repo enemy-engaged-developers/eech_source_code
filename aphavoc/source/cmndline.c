@@ -1489,7 +1489,7 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_ground_stabilisation_available);
 			}
 		}
-//VJ WUT mod 18-mar-03 
+//VJ WUT mod 26-mar-03 
 		//////////////////////////////////////// 
 		else if (s2 = strarg (s1, "wut")) 
 		//////////////////////////////////////// 
@@ -1502,9 +1502,7 @@ void process_command_line (int argc, char *argv[])
 			{ 
                 WUT_filename[0] = '\0'; 
 			} 
- 
-			debug_log ("ARG:%s, RESPONSE:WUT file name = %s", s1, WUT_filename); 
-		
+		}
 		////////////////////////////////////////
 		else
 		////////////////////////////////////////
