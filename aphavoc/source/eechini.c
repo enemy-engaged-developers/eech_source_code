@@ -209,7 +209,10 @@ void process_ini_file(void)
         {
             if (strlen(q)!=0) 
                strcpy(WUT_filename, q);
-            if (strlen(WUT_filename) != 0) 
+               
+			debug_log("wutfile ini [%s]",WUT_filename);               
+
+            if (file_exist(WUT_filename)) 
                command_line_wut = TRUE; 
             // wut filename checking is done elsewhere
         }    
@@ -267,7 +270,7 @@ void dump_ini_file(void)
 	fprintf(f,"css=0               # show communication stats (def = 0)\n");
 	fprintf(f,"cist=500            # comms initial sleep time\n");
 	fprintf(f,"dedicated=0         # active server mode, off by default.\n");                                 
-	fprintf(f,"game_type=2         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish\n");
+	fprintf(f,"game_type=0         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish (def = 0)\n");
 	fprintf(f,"gunship_type=0      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Havoc\n");
 	fprintf(f,"path=               # Path to map, campaign, skirmish\n");                                                               
 	fprintf(f,"[Dynamics]\n");
