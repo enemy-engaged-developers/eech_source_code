@@ -144,7 +144,7 @@ extern int
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322	
 	command_line_framerate,										// VJ 030324
-	command_line_key_mapping,									// Retro 030322
+//Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
 	command_line_downwash,										// Xhit 030328, VJ 030512 changed
 	command_line_wut,												// VJ 030330
 	command_line_dump_ini,										// VJ 030403
@@ -171,6 +171,8 @@ extern int
 	command_line_session_filter,								// Jabberwock 031210 Session filter
 	command_line_pause_server,									// Jabberwock 040220 Pause server
 	command_line_reverse_pedal,									// Retro 17Jul2004
+	command_line_external_trackir,								// Retro 31Oct2004
+	command_line_high_lod_hack,									// Retro 31Oct2004
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
 	session_vector_flight_model,
@@ -220,6 +222,20 @@ enum RUN_MODES
 
 	RUN_MODE_NORMAL,
 	RUN_MODE_AITOOL,
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 27Nov2004 - final resting place ?
+enum MOUSELOOK_CONTROL_TYPE
+{
+	MOUSELOOK_OFF = 0,
+	MOUSELOOK_INTERNAL,
+	MOUSELOOK_EXTERNAL,
+	MOUSELOOK_ON,			// internal+external
+	MOUSELOOK_MAX
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -479,7 +479,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
-		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;		
+////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;		
 		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1; 
 		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
 		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1 - 1;
@@ -498,6 +498,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
 		if (strcmp(p, "reverse_pedal") == 0)command_line_reverse_pedal = d1;	// Retro 17Jul2004
+		if (strcmp(p, "external_trackir") == 0) command_line_external_trackir = d1;	// Retro 31Oct2004
+		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
@@ -722,7 +724,7 @@ void dump_ini_file(void)
 	fprintf(f, "rounds_hind_AP=%d    #rounds cannon HIND 2A42_30MM_AP rounds (0 - 65000)\n",rounds_hind_AP);
 	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
 	fprintf(f,"[Mods]\n");
-	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present\n",command_line_mouse_look);
+	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov=%d            # general field of view maximum, linked to key '9'\n",command_line_max_fov);
@@ -745,7 +747,7 @@ void dump_ini_file(void)
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
-	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
+//Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 0 (off)\n",command_line_high_res_mfd);
 	fprintf(f,"greenmfd=%d          # mfd's are green (def = 0 (off), 1 = on)\n",command_line_green_mfd);
@@ -757,6 +759,8 @@ void dump_ini_file(void)
 	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input\n",command_line_reverse_pedal);	// Retro 17Jul2004
+	fprintf(f,"external_trackir=%d  # if TrackIR is active, let it control external view too\n",command_line_external_trackir); // Retro 31Oct2004
+	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"[end of file]\n");
 	
 	fclose(f);

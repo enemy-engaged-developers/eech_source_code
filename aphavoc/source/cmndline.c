@@ -155,7 +155,7 @@ int
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
 	command_line_no_mission_complete_music					= FALSE,
-	command_line_mouse_look										= FALSE,	// Retro 030317
+	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
 	command_line_mouse_look_speed								= 15,		// Retro 030317
 	command_line_min_fov											= 20,		// Retro 030318
 	command_line_max_fov											= 80,		// Retro 030318
@@ -167,7 +167,7 @@ int
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_framerate										= FALSE,	// VJ 030326
-	command_line_key_mapping									= FALSE,	// Retro 030322
+//Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
 	command_line_downwash										= TRUE,	// Xhit 030328, VJ 030512 changed
 	command_line_wut												= FALSE,	// VJ 030330
 	command_line_dump_ini										= TRUE,	// VJ 030414 changed to true
@@ -194,6 +194,8 @@ int
 	command_line_session_filter						= 0,  // Jabberwock 031210 Session filter
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
+	command_line_external_trackir					= 0,	// Retro 31Oct2004
+	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model						= FALSE, // camcom bugs removed
@@ -584,6 +586,38 @@ void process_command_line (int argc, char *argv[])
 			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_reverse_pedal);
 		}
 		//	Retro 17Jul2004 end
+		////////////////////////////////////////
+		//	Retro 31Oct2004 start
+		else if (s2 = strarg (s1, "external_trackir"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_external_trackir);
+			}
+			else
+			{
+				command_line_external_trackir = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_external_trackir);
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "high_lod_hack"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_high_lod_hack);
+			}
+			else
+			{
+				command_line_high_lod_hack = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_high_lod_hack);
+		}
+		//	Retro 31Oct2004 end
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "fog"))
 		////////////////////////////////////////
@@ -1476,6 +1510,10 @@ void process_command_line (int argc, char *argv[])
 			{
 				sscanf (s2 + 1, "%d", &command_line_mouse_look);
 			}
+
+			// Retro 27Nov2004 - this is not a BOOL anymore..
+			if ((command_line_mouse_look < MOUSELOOK_OFF)||(command_line_mouse_look >= MOUSELOOK_MAX))
+				command_line_mouse_look = MOUSELOOK_OFF;
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "mousespeed"))	// all by Retro 030317
@@ -1513,6 +1551,7 @@ void process_command_line (int argc, char *argv[])
 			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
 				command_line_max_fov = 80;
 		}
+#if 0 //Retro27NovDEAD
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "keymapping"))		//all by Retro 030322
 		////////////////////////////////////////
@@ -1522,6 +1561,7 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_key_mapping);
 			}
 		}
+#endif
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "pan_joystick_index"))	// loke 030319
 		////////////////////////////////////////
