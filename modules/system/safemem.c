@@ -65,6 +65,10 @@
 
 #include "system.h"
 
+#ifndef WIN32
+#include <errno.h>
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,6 +273,7 @@ void *safe_malloc_memory (size_t size)
 	if (!ptr)
 	{
 
+#ifdef WIN32
 		MEMORYSTATUS
 			status;
 	
@@ -288,6 +293,10 @@ void *safe_malloc_memory (size_t size)
 		total_memory_available = physical_memory_available + virtual_memory_available;
 	
 		debug_fatal ( "Unable to allocate memory size %d - Windows reports there is only %d memory available", size, total_memory_available );
+#else
+		// TODO: print some more useful memory information here.
+		debug_fatal ( "Unable to allocate memory size %d - %s", size, strerror(errno) );		
+#endif
 	}
 
 	safe_memory_counter++;
