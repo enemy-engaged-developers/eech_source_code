@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
-	Name="cohokum"
-	SccProjectName="&quot;$/eech-new&quot;, BAAAAAAA"
-	SccAuxPath=""
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
+	Version="7.10"
+	Name="cohokum">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -51,7 +47,7 @@
 				AdditionalOptions="/MACHINE:I386 /FORCE:MULTIPLE"
 				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
 				ShowProgress="2"
-				OutputFile="\Razorworks\cohokum\cohokummsc6r.exe"
+				OutputFile="\Razorworks\cohokum\cohokummsc7r.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="\DXSDK\Lib"
 				GenerateDebugInformation="TRUE"
@@ -79,7 +75,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -92,7 +94,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES,\DXSDK\Include"
+				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES,\DXSDK\Include,.\APHAVOC\"
 				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS,DEBUG"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -117,7 +119,7 @@
 				AdditionalOptions="/MACHINE:I386 /FORCE:MULTIPLE"
 				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
 				ShowProgress="2"
-				OutputFile="\Razorworks\cohokum\cohokummsc6d.exe"
+				OutputFile="\Razorworks\cohokum\cohokummsc7d.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="\DXSDK\Lib"
 				GenerateDebugInformation="TRUE"
@@ -145,9 +147,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -174,13 +184,13 @@
 						RelativePath=".\MODULES\SYSTEM\DEBUG.C">
 					</File>
 					<File
-						RelativePath=".\MODULES\SYSTEM\EVENT.C">
-					</File>
-					<File
 						RelativePath=".\MODULES\SYSTEM\EV_ALPHA.C">
 					</File>
 					<File
 						RelativePath=".\MODULES\SYSTEM\EV_STACK.C">
+					</File>
+					<File
+						RelativePath=".\MODULES\SYSTEM\EVENT.C">
 					</File>
 					<File
 						RelativePath=".\MODULES\SYSTEM\FILEDIR.C">
@@ -577,9 +587,6 @@
 							Name="AREA"
 							Filter="">
 							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\AREA\AREA.C">
-							</File>
-							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\AREA\AR_COL.C">
 							</File>
 							<File
@@ -627,6 +634,9 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\AREA\AR_UPDT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\AREA\AREA.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="BUTTON"
@@ -645,9 +655,6 @@
 							Name="CLOSE"
 							Filter="">
 							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\CLOSE\CLOSE.C">
-							</File>
-							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\CLOSE\CL_CREAT.C">
 							</File>
 							<File
@@ -656,13 +663,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\CLOSE\CL_FUNCS.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\CLOSE\CLOSE.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="INPUT"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\INPUT\INPUT.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\INPUT\IN_CREAT.C">
 							</File>
@@ -678,13 +685,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\INPUT\IN_UPDT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\INPUT\INPUT.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="LIST"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\LIST\LIST.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\LIST\LI_CREAT.C">
 							</File>
@@ -703,13 +710,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\LIST\LI_UPDT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\LIST\LIST.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="MENU"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\MENU\MENU.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\MENU\ME_CREAT.C">
 							</File>
@@ -722,13 +729,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\MENU\ME_UPDT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\MENU\MENU.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="NUMBER"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\NUMBER\NUMBER.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\NUMBER\NU_CREAT.C">
 							</File>
@@ -747,13 +754,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\NUMBER\NU_TXT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\NUMBER\NUMBER.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="RADIO"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\RADIO\RADIO.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\RADIO\RA_CREAT.C">
 							</File>
@@ -766,13 +773,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\RADIO\RA_FUNCS.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\RADIO\RADIO.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="SCREEN"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\SCREEN\SCREEN.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SCREEN\SC_CREAT.C">
 							</File>
@@ -785,13 +792,13 @@
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SCREEN\SC_UPDT.C">
 							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\SCREEN\SCREEN.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="SLIDER"
 							Filter="">
-							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\MSLIDER.C">
-							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\MS_CREAT.C">
 							</File>
@@ -808,7 +815,7 @@
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\MS_UPDT.C">
 							</File>
 							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\SLIDER.C">
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\MSLIDER.C">
 							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\SL_FUNCS.C">
@@ -817,7 +824,7 @@
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\SL_SLID.C">
 							</File>
 							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\VSLIDER.C">
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\SLIDER.C">
 							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\VS_CREAT.C">
@@ -830,6 +837,9 @@
 							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\VS_UPDT.C">
+							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\SLIDER\VSLIDER.C">
 							</File>
 						</Filter>
 						<Filter
@@ -861,9 +871,6 @@
 							Name="TOGGLE"
 							Filter="">
 							<File
-								RelativePath=".\MODULES\USERINT2\UI_OBJ\TOGGLE\TOGGLE.C">
-							</File>
-							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\TOGGLE\TO_FLAGS.C">
 							</File>
 							<File
@@ -871,6 +878,9 @@
 							</File>
 							<File
 								RelativePath=".\MODULES\USERINT2\UI_OBJ\TOGGLE\TO_FUNCS.C">
+							</File>
+							<File
+								RelativePath=".\MODULES\USERINT2\UI_OBJ\TOGGLE\TOGGLE.C">
 							</File>
 						</Filter>
 					</Filter>
@@ -1107,6 +1117,9 @@
 					RelativePath=".\APHAVOC\SOURCE\DEINIT.C">
 				</File>
 				<File
+					RelativePath=".\aphavoc\source\eechini.c">
+				</File>
+				<File
 					RelativePath=".\APHAVOC\SOURCE\FLIGHT.C">
 				</File>
 				<File
@@ -1119,6 +1132,9 @@
 					RelativePath=".\APHAVOC\SOURCE\GLOBAL.C">
 				</File>
 				<File
+					RelativePath=".\aphavoc\source\gwutcfg.c">
+				</File>
+				<File
 					RelativePath=".\APHAVOC\SOURCE\INIT.C">
 				</File>
 				<File
@@ -1128,6 +1144,9 @@
 					RelativePath=".\APHAVOC\SOURCE\PROJECT.C">
 				</File>
 				<File
+					RelativePath=".\aphavoc\source\servlog.c">
+				</File>
+				<File
 					RelativePath=".\APHAVOC\SOURCE\TEST.C">
 				</File>
 				<File
@@ -1135,9 +1154,6 @@
 				</File>
 				<File
 					RelativePath=".\APHAVOC\SOURCE\WUTcfg.c">
-				</File>
-				<File
-					RelativePath=".\aphavoc\source\eechini.c">
 				</File>
 				<Filter
 					Name="AI"
@@ -1259,13 +1275,13 @@
 					Name="COMMS"
 					Filter="">
 					<File
+						RelativePath=".\APHAVOC\SOURCE\COMMS\COMM_MAN.C">
+					</File>
+					<File
 						RelativePath=".\APHAVOC\SOURCE\COMMS\COMMS.C">
 					</File>
 					<File
 						RelativePath=".\APHAVOC\SOURCE\COMMS\COMMSSERVER.C">
-					</File>
-					<File
-						RelativePath=".\APHAVOC\SOURCE\COMMS\COMM_MAN.C">
 					</File>
 				</Filter>
 				<Filter
@@ -1531,9 +1547,6 @@
 							Name="PYLON"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\ENTITY\FIXED\PYLON\PYLON.C">
-							</File>
-							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\FIXED\PYLON\PY_CREAT.C">
 							</File>
 							<File
@@ -1562,6 +1575,9 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\FIXED\PYLON\PY_PTR.C">
+							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\ENTITY\FIXED\PYLON\PYLON.C">
 							</File>
 						</Filter>
 						<Filter
@@ -2093,9 +2109,6 @@
 								Name="SHIP"
 								Filter="">
 								<File
-									RelativePath=".\APHAVOC\SOURCE\ENTITY\MOBILE\VEHICLE\SHIP\SHIP.C">
-								</File>
-								<File
 									RelativePath=".\APHAVOC\SOURCE\ENTITY\MOBILE\VEHICLE\SHIP\SH_ANIM.C">
 								</File>
 								<File
@@ -2133,6 +2146,9 @@
 								</File>
 								<File
 									RelativePath=".\APHAVOC\SOURCE\ENTITY\MOBILE\VEHICLE\SHIP\SH_UPDT.C">
+								</File>
+								<File
+									RelativePath=".\APHAVOC\SOURCE\ENTITY\MOBILE\VEHICLE\SHIP\SHIP.C">
 								</File>
 							</Filter>
 						</Filter>
@@ -2372,9 +2388,6 @@
 							Name="BRIDGE"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\BRIDGE\BRIDGE.C">
-							</File>
-							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\BRIDGE\BR_CREAT.C">
 							</File>
 							<File
@@ -2406,6 +2419,9 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\BRIDGE\BR_VEC3D.C">
+							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\BRIDGE\BRIDGE.C">
 							</File>
 						</Filter>
 						<Filter
@@ -2490,6 +2506,9 @@
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_RVRS.C">
 							</File>
 							<File
+								RelativePath="aphavoc\source\entity\special\camera\cm_satel.c">
+							</File>
+							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_STAT.C">
 							</File>
 							<File
@@ -2503,9 +2522,6 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_WPN.C">
-							</File>
-							<File
-								RelativePath="aphavoc\source\entity\special\camera\cm_satel.c">
 							</File>
 						</Filter>
 						<Filter
@@ -2741,9 +2757,6 @@
 								Name="SPRITE"
 								Filter="">
 								<File
-									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SPRITE.C">
-								</File>
-								<File
 									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SP_CREAT.C">
 								</File>
 								<File
@@ -2775,6 +2788,9 @@
 								</File>
 								<File
 									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SP_VEC3D.C">
+								</File>
+								<File
+									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SPRITE.C">
 								</File>
 							</Filter>
 							<Filter
@@ -3053,9 +3069,6 @@
 							Name="PILOT"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\PILOT\PILOT.C">
-							</File>
-							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\PILOT\PI_CREAT.C">
 							</File>
 							<File
@@ -3084,6 +3097,9 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\PILOT\PI_STR.C">
+							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\PILOT\PILOT.C">
 							</File>
 						</Filter>
 						<Filter
@@ -3161,10 +3177,10 @@
 							Name="SESSION"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\SESSION\SESSION.C">
+								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\SESSION\SESS_FN.C">
 							</File>
 							<File
-								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\SESSION\SESS_FN.C">
+								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\SESSION\SESSION.C">
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\SESSION\SS_CREAT.C">
@@ -3360,9 +3376,6 @@
 						Name="PLAYER"
 						Filter="">
 						<File
-							RelativePath=".\APHAVOC\SOURCE\UI_MENU\PLAYER\PLAYER.C">
-						</File>
-						<File
 							RelativePath=".\APHAVOC\SOURCE\UI_MENU\PLAYER\PLAY_GN.C">
 						</File>
 						<File
@@ -3373,6 +3386,9 @@
 						</File>
 						<File
 							RelativePath=".\APHAVOC\SOURCE\UI_MENU\PLAYER\PLAY_WP.C">
+						</File>
+						<File
+							RelativePath=".\APHAVOC\SOURCE\UI_MENU\PLAYER\PLAYER.C">
 						</File>
 					</Filter>
 					<Filter
@@ -3412,10 +3428,10 @@
 							RelativePath=".\APHAVOC\SOURCE\UI_MENU\SESSION\SESS_SC.C">
 						</File>
 						<File
-							RelativePath=".\APHAVOC\SOURCE\UI_MENU\SESSION\UISESSION.C">
+							RelativePath=".\APHAVOC\SOURCE\UI_MENU\SESSION\UISESS_FN.C">
 						</File>
 						<File
-							RelativePath=".\APHAVOC\SOURCE\UI_MENU\SESSION\UISESS_FN.C">
+							RelativePath=".\APHAVOC\SOURCE\UI_MENU\SESSION\UISESSION.C">
 						</File>
 					</Filter>
 					<Filter
@@ -3473,9 +3489,6 @@
 							Name="CAMPAIGN"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\CAMPAIGN\CAMPAIGN.C">
-							</File>
-							<File
 								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\CAMPAIGN\CA_3D.C">
 							</File>
 							<File
@@ -3532,13 +3545,13 @@
 							<File
 								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\CAMPAIGN\CA_WLOAD.C">
 							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\CAMPAIGN\CAMPAIGN.C">
+							</File>
 						</Filter>
 						<Filter
 							Name="FFLIGHT"
 							Filter="">
-							<File
-								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\FFLIGHT\FFLIGHT.C">
-							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\FFLIGHT\FF_INFO.C">
 							</File>
@@ -3548,14 +3561,14 @@
 							<File
 								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\FFLIGHT\FF_SELCT.C">
 							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\UI_MENU\INGAME\FFLIGHT\FFLIGHT.C">
+							</File>
 						</Filter>
 					</Filter>
 					<Filter
 						Name="OPTIONS"
 						Filter="">
-						<File
-							RelativePath=".\APHAVOC\SOURCE\UI_MENU\OPTIONS\OPTIONS.C">
-						</File>
 						<File
 							RelativePath=".\APHAVOC\SOURCE\UI_MENU\OPTIONS\OP_COMMN.C">
 						</File>
@@ -3576,6 +3589,9 @@
 						</File>
 						<File
 							RelativePath=".\APHAVOC\SOURCE\UI_MENU\OPTIONS\OP_SND.C">
+						</File>
+						<File
+							RelativePath=".\APHAVOC\SOURCE\UI_MENU\OPTIONS\OPTIONS.C">
 						</File>
 					</Filter>
 					<Filter
@@ -3746,13 +3762,13 @@
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_THRT.C">
 							</File>
 							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\common\co_tsd.c">
+							</File>
+							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_WP.C">
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_WPN.C">
-							</File>
-							<File
-								RelativePath=".\aphavoc\source\gunships\avionics\common\co_tsd.c">
 							</File>
 						</Filter>
 						<Filter
@@ -4003,6 +4019,9 @@
 							Name="APACHE No. 1"
 							Filter="">
 							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\apache\ap3d_vckpt.c">
+							</File>
+							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\APACHE\AP_CKPT.C">
 							</File>
 							<File
@@ -4213,9 +4232,6 @@
 							Name="COMMON No. 3"
 							Filter="">
 							<File
-								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\COMMON\COLLECT.C">
-							</File>
-							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\COMMON\CO_DMG.C">
 							</File>
 							<File
@@ -4226,6 +4242,9 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\COMMON\CO_FORCE.C">
+							</File>
+							<File
+								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\COMMON\COLLECT.C">
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\COMMON\CYCLIC.C">
@@ -4284,10 +4303,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath=".\MODULES\SYSTEM.H">
+				RelativePath=".\aphavoc\source\eechini.h">
 			</File>
 			<File
-				RelativePath=".\aphavoc\source\eechini.h">
+				RelativePath=".\MODULES\SYSTEM.H">
 			</File>
 		</Filter>
 		<Filter

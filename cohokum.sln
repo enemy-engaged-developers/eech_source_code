@@ -1,23 +1,12 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cohokum", "cohokum.vcproj", "{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccProjectUniqueName0 = cohokum.vcproj
-		SccLocalPath0 = .
-		CanCheckoutShared = false
-		SccProjectName1 = \u0022$/eech-new\u0022,\u0020BAAAAAAA
-		SccLocalPath1 = .
-		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
-		SolutionUniqueID = {2FDA7909-5BF5-4C86-A22A-447C541FB63E}
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
+		Debug = Debug
+		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}.Debug.ActiveCfg = Debug|Win32
