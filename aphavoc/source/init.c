@@ -553,7 +553,7 @@ void full_initialise_game (void)
 #if ( OEM_3DLABS_VERSION )
 		sprintf ( buffer, "3DLabs Demonstration version" );
 #else
-		sprintf ( buffer, "%s: %d. %d. %d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
+		sprintf ( buffer, "%s: %d.%d.%d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
 #endif
 
 		set_ui_object_text (version_text, buffer);
@@ -613,9 +613,9 @@ void full_initialise_game (void)
 	
 //VJ 030807 added wut file name display for startup screen
    if (command_line_wut)
-		sprintf ( buffer, "%s: %s", get_trans ("WUT"), WUT_filename);
+		sprintf ( buffer, "%s: %s", "WUT", WUT_filename);
 	else
-		sprintf ( buffer, "%s: %s", get_trans ("WUT"), get_trans ("NONE"));
+		sprintf ( buffer, "%s: %s", "WUT", "NONE");
 		
 	set_ui_object_text (WUT_text, buffer);
 
@@ -651,7 +651,7 @@ void full_initialise_game (void)
 				buffer [256];
 
 // VJ 050123 aphavoc install hack
-			if (global_aphavoc_maps)
+			if (global_aphavoc_maps && !get_global_apache_havoc_installed ())
 				sprintf (buffer, "Apache Havoc: %s", "Maps enabled");
 			else			
 				sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));
