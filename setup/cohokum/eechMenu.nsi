@@ -40,7 +40,7 @@
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
 	   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\readme.html"
+  		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\${VERSION}readme.html"
   !insertmacro MUI_PAGE_FINISH
   
 ;--------------------------------
@@ -58,8 +58,9 @@ Section "cohokum.exe" SectionExe
   
   ;ADD YOUR OWN FILES HERE...
   File "..\..\aphavoc\cohokum.exe"
-  File readme.html
+  File ${VERSION}readme.html
   File motd.txt
+  File TrackIR.dll	
 
   SetOutPath "$INSTDIR\common\data\language\"
   File ..\common\data\language\tlate6.dat
