@@ -175,7 +175,8 @@ int
 	command_line_collective_joystick_index					= -1,		// loke 030418
 	command_line_collective_joystick_axis					= 3,		// loke 030418
 	command_line_rudder_joystick_index						= -1,		// loke 030418
-	command_line_rudder_joystick_axis						= 6;		// loke 030418
+	command_line_rudder_joystick_axis						= 6,		// loke 030418
+	command_line_high_res_mfd									= 0;		// loke 030420
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1682,6 +1683,19 @@ void process_command_line (int argc, char *argv[])
 
 		}
 		////////////////////////////////////////
+		else if (s2 = strarg (s1, "high_res_mfd"))		// loke 030420
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_high_res_mfd);
+			}
+			else
+			{
+				command_line_high_res_mfd = TRUE;
+			}
+		}
+      ////////////////////////////////////////
 		else
 		////////////////////////////////////////
 		{

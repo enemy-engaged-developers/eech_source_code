@@ -9635,43 +9635,66 @@ void draw_hokum_mfd (void)
 	//
 	////////////////////////////////////////
 
-	switch (get_view_mode ())
+	// loke 030420
+	// support for high resolution mfd's
+	int
+		large_mfd;
+
+	if (!command_line_high_res_mfd)
 	{
-		////////////////////////////////////////
-		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
-		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
-		////////////////////////////////////////
+		switch (get_view_mode ())
 		{
-			draw_large_mfd = TRUE;
+			////////////////////////////////////////
+			case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
+			case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
+			case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
+			case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+			////////////////////////////////////////
+			{
+				
+				large_mfd = 1;
+		
+				break;
+			}		
+			////////////////////////////////////////
+			default:
+			////////////////////////////////////////
+			{
 
-			pilot_lhs_mfd_texture_screen = large_pilot_lhs_mfd_texture_screen;
-			pilot_rhs_mfd_texture_screen = large_pilot_rhs_mfd_texture_screen;
-			co_pilot_lhs_mfd_texture_screen = large_co_pilot_lhs_mfd_texture_screen;
-			co_pilot_rhs_mfd_texture_screen = large_co_pilot_rhs_mfd_texture_screen;
-			ekran_display_texture_screen = large_ekran_display_texture_screen;
+				large_mfd = 0;
 
-			eo_3d_texture_screen = large_eo_3d_texture_screen;
-
-			break;
+				break;
+			}
 		}
-		////////////////////////////////////////
-		default:
-		////////////////////////////////////////
-		{
-			draw_large_mfd = FALSE;
+	}
+	else
+	{
+		large_mfd = 1;
+	}
 
-			pilot_lhs_mfd_texture_screen = small_pilot_lhs_mfd_texture_screen;
-			pilot_rhs_mfd_texture_screen = small_pilot_rhs_mfd_texture_screen;
-			co_pilot_lhs_mfd_texture_screen = small_co_pilot_lhs_mfd_texture_screen;
-			co_pilot_rhs_mfd_texture_screen = small_co_pilot_rhs_mfd_texture_screen;
-			ekran_display_texture_screen = small_ekran_display_texture_screen;
+	if (large_mfd)
+	{
+		draw_large_mfd = TRUE;
 
-			eo_3d_texture_screen = small_eo_3d_texture_screen;
+		pilot_lhs_mfd_texture_screen = large_pilot_lhs_mfd_texture_screen;
+		pilot_rhs_mfd_texture_screen = large_pilot_rhs_mfd_texture_screen;
+		co_pilot_lhs_mfd_texture_screen = large_co_pilot_lhs_mfd_texture_screen;
+		co_pilot_rhs_mfd_texture_screen = large_co_pilot_rhs_mfd_texture_screen;
+		ekran_display_texture_screen = large_ekran_display_texture_screen;
 
-			break;
-		}
+		eo_3d_texture_screen = large_eo_3d_texture_screen;
+	}
+	else
+	{
+		draw_large_mfd = FALSE;
+
+		pilot_lhs_mfd_texture_screen = small_pilot_lhs_mfd_texture_screen;
+		pilot_rhs_mfd_texture_screen = small_pilot_rhs_mfd_texture_screen;
+		co_pilot_lhs_mfd_texture_screen = small_co_pilot_lhs_mfd_texture_screen;
+		co_pilot_rhs_mfd_texture_screen = small_co_pilot_rhs_mfd_texture_screen;
+		ekran_display_texture_screen = small_ekran_display_texture_screen;
+
+		eo_3d_texture_screen = small_eo_3d_texture_screen;
 	}
 
 	set_system_texture_screen (pilot_lhs_mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_2);

@@ -229,6 +229,7 @@ void process_ini_file(int argc, char *argv[])
         if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1;
         if (strcmp(p, "ruddern") == 0) command_line_rudder_joystick_index = d1;
         if (strcmp(p, "rudderax") == 0) command_line_rudder_joystick_axis = d1;
+		  if (strcmp(p, "highresmfd") == 0) command_line_high_res_mfd = d1;
         if (strcmp(p, "wut") == 0) 
         {
             if (strlen(q)!=0) 
@@ -336,6 +337,7 @@ void dump_ini_file(void)
 	fprintf(f,"keymap=0            # key mapping (def = 0)\n");
 	fprintf(f,"dwash=0             # rotor downwash (dust), def = 0 (downwash visible)\n");
 	fprintf(f,"wut=                # supply a filename of a wut text file here\n");
+	fprintf(f,"highresmfd=0        # high resolution mfd's\n");
 	fprintf(f,"[end of file]\n");    
 
 	fclose(f);
