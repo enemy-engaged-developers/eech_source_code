@@ -206,7 +206,7 @@ cc_args += /I=$(projectdir)\source
 
 !ifndef relaxed
 
-cc_args += /we
+#cc_args += /we
 
 !endif
 
