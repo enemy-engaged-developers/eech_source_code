@@ -72,6 +72,10 @@
 
 #define DELTA_TIME_HISTORY_SIZE 200
 
+#ifndef WIN32
+#define timeGetTime SDL_GetTicks
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +98,13 @@ static float
 static int
 	system_delta_time_history_position;
 
+#ifdef WIN32
 static DWORD
 	last_time_value = 0;
+#else
+static long
+	last_time_value = 0;
+#endif
 
 static float
 	locked_delta_time = 1.0 / 25.0,
@@ -133,9 +142,15 @@ void reset_delta_time ( void )
 void set_delta_time ( void )
 {
 
+#ifdef WIN32
 	DWORD
 		this_time_value,
 		difference;
+#else
+	long
+		this_time_value,
+		difference;
+#endif
 
 	if ( !locked_frame_rate )
 	{
@@ -234,27 +249,26 @@ void debug_watch_delta_time (void)
 int get_system_time_of_day (void)
 {
 
-	SYSTEMTIME
-		time;
-
 	int
 		hours,
 		minutes,
 		seconds;
+
+#ifdef WIN32
+	SYSTEMTIME
+		time;
 
 	GetSystemTime ( &time );
 
 	hours = time.wHour;
 	minutes = time.wMinute;
 	seconds = time.wSecond;
-
-	return ( ( hours * 60 * 60 ) + ( minutes * 60 ) + ( seconds ) );
-/*
+#else
 	time_t
 		timer;
 
 	struct tm
-		tmbuf;
+		*tmbuf;
 
 	//
 	// get number of seconds past midnight
@@ -262,10 +276,14 @@ int get_system_time_of_day (void)
 	
 	time ( &timer );
 
-	_localtime ( &timer, &tmbuf );
+	tmbuf = gmtime ( &timer );
 
-	return ( ( tmbuf.tm_hour * 60 * 60 ) + ( tmbuf.tm_min * 60 ) + tmbuf.tm_sec );
-	*/
+	hours = tmbuf->tm_hour;
+	minutes = tmbuf->tm_min;
+	seconds = tmbuf->tm_sec;
+#endif
+
+	return ( ( hours * 60 * 60 ) + ( minutes * 60 ) + ( seconds ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
