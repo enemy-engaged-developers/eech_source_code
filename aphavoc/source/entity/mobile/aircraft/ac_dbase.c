@@ -401,6 +401,7 @@ aircraft_data
       //
       ////////////////////////////////////////
       ////Moje 030524 1st line under "OBJECT_3D_UH60_BLACKHAWK" changed from "NUM_GUNSHIP_TYPES"
+      ////Moje 040209 CHanged loadout schemes
       {
          "UH-60 Black Hawk",									// full_name
          "UH-60 BLACK HAWK",	 								// long_display_name
@@ -412,8 +413,8 @@ aircraft_data
 			ENTITY_FORCE_AIR,							// force
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9,					// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_3,					// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1,					// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,			// default_weapon_type
@@ -479,7 +480,7 @@ aircraft_data
       //
       ////////////////////////////////////////
       ////Moje 030524 1st line under "OBJECT_3D_MI24_HIND" changed from "NUM_GUNSHIP_TYPES"
-
+      ////Moje 040209 CHanged loadout schemes
       {
          "Mi-24D Hind",															// full_name
          "Mi-24D HIND",		 													// long_display_name
@@ -489,10 +490,10 @@ aircraft_data
          OBJECT_3D_MI24_HIND,													// default_3d_shape
 			GUNSHIP_TYPE_HIND,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_4,									// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_18,									// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_4,									// air_to_air_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// air_to_surface_weapon_config_type
 			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND,					// default_weapon_type
@@ -1643,6 +1644,7 @@ aircraft_data
 		//
 		////////////////////////////////////////
       ////Moje 030816 1st line under "OBJECT_3D_AH_64A" changed from "NUM_GUNSHIP_TYPES"
+      ////Moje 040209 CHanged loadout schemes
       {
          "AH-64A Apache",														// full_name
          "AH-64A APACHE",		  												// long_display_name
@@ -1655,9 +1657,9 @@ aircraft_data
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// default_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_1,								// min_weapon_config_type
 			WEAPON_CONFIG_TYPE_AH64A_APACHE_32,								// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_26,								// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_30,								// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_AH64A_APACHE_30,								// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_22,								// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_24,								// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_AH64A_APACHE_23,								// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND,						// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
