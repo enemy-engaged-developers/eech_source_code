@@ -620,12 +620,12 @@ void initialise_message_database (void)
 
 					member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
-					// reverse wingman list
+/*					// reverse wingman list
 					while (get_local_entity_child_succ (member, LIST_TYPE_MEMBER))
 					{
 						member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 					}
-
+Commented out by Retro because of change '//VJ for JvS 030411' below */
 					while (member)
 					{
 						if (member != get_gunship_entity ())
