@@ -81,7 +81,7 @@
  * whenever you build a release executable.
  */
 
-#define BUILD_TYPE	"W"
+#define BUILD_TYPE	"W4"
 
 #define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.1W"
 

@@ -114,8 +114,11 @@ void initialise_cockpits (void)
 			//
 			// order is critical
 			//
-
-			initialise_apache_virtual_cockpit ();
+//VJ 050101 3d cockpit mod
+			if (command_line_3d_cockpit)
+				initialise_apache_virtual_cockpit_3d ();
+			else
+				initialise_apache_virtual_cockpit ();
 
 			initialise_common_virtual_cockpit ();
 
@@ -188,7 +191,11 @@ void initialise_cockpits (void)
 			// order is critical
 			//
 
-			initialise_blackhawk_virtual_cockpit ();
+//VJ 050101 3d cockpit mod
+//			if (command_line_3d_cockpit)
+//				initialise_blackhawk_virtual_cockpit_3d ();
+//			else
+				initialise_blackhawk_virtual_cockpit ();
 
 			initialise_common_virtual_cockpit ();
 
@@ -282,7 +289,7 @@ void deinitialise_cockpits (void)
 			deinitialise_common_virtual_cockpit ();
 
 			deinitialise_apache_cockpits ();
-
+			
 			deinitialise_apache_virtual_cockpit ();
 
 			break;

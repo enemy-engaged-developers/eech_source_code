@@ -173,6 +173,7 @@ extern int
 	command_line_reverse_pedal,									// Retro 17Jul2004
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_high_lod_hack,									// Retro 31Oct2004
+	command_line_3d_cockpit,									//VJ 050101 3d cpckpit mod
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
 	session_vector_flight_model,

@@ -676,11 +676,12 @@ void update_virtual_cockpit_view (void)
 
 
 //VJ wideview mod, date: 27-mar-03	
+
 	if (get_global_wide_cockpit ())
 	{		
-        float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
 	       
-		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}		
 	
@@ -813,7 +814,7 @@ void get_pilot_head_viewpoint (void)
 				get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pilot_head_vp.position);
 
 				get_local_entity_attitude_matrix (get_gunship_entity (), pilot_head_vp.attitude);
-
+//VJ#
 				relative_position.x = 0.0;
 				relative_position.y = -1.2705;
 				relative_position.z = 1.2325;
@@ -893,6 +894,7 @@ void get_pilot_head_viewpoint (void)
 			case GUNSHIP_TYPE_COMANCHE:
 			////////////////////////////////////////
 			{
+//VJ#	this does the proper viepoint?			
 				get_comanche_crew_viewpoint ();
 
 				break;
@@ -1212,25 +1214,49 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				draw_apache_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_ADI |
-					VIRTUAL_COCKPIT_COMPASS |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
-
-				draw_apache_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
-					VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
-					VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
-					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-				);
+				if (command_line_3d_cockpit)
+				{
+					draw_apache_external_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR//,NULL
+					);
+      
+					draw_apache_internal_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES 
+					);
+				}
+				else
+				{
+					draw_apache_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
+            	
+					draw_apache_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+					);
+				}
 			}
 			else
 			{
@@ -1253,7 +1279,6 @@ void draw_virtual_cockpit_3d_view (void)
 			if (get_global_draw_cockpit_graphics ())
 			{
 				set_pilots_full_screen_params (FALSE);
-
 				draw_havoc_external_virtual_cockpit
 				(
 					VIRTUAL_COCKPIT_STOWED_WIPER |
@@ -1340,25 +1365,52 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				draw_blackhawk_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_ADI |
-					VIRTUAL_COCKPIT_COMPASS |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
+				if (command_line_3d_cockpit)
+				{
+					draw_blackhawk_external_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR
+					);
+//VJ#
 
-				draw_blackhawk_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
-					VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
-					VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
-					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-				);
+					draw_blackhawk_internal_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+					);
+					
+				}
+				else
+				{
+					draw_blackhawk_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
+	
+					draw_blackhawk_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+					);
+				}
+
 			}
 			else
 			{
@@ -1548,7 +1600,8 @@ void draw_virtual_cockpit_3d_view (void)
 
 			restore_reverse_tactical_camera_values ();
 
-			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+//			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREY, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 		}
 	}
 	// Jabberwock 031016 ends
@@ -1911,6 +1964,9 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 
 void draw_virtual_cockpit_3d_display_view (void)
 {
+	//VJ# THIS CODE IS ONLY REACHED WHEN CLOSEUP F3 or F4!!!!!!!
+	//
+
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
@@ -1953,7 +2009,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 			pre_render_comanche_virtual_cockpit_displays ();
 
 			set_pilots_full_screen_params (FALSE);
-
+//VJ#
 			get_comanche_display_viewpoint (get_view_mode ());
 
 			draw_comanche_virtual_cockpit ();
@@ -3708,7 +3764,10 @@ void update_virtual_cockpit_padlock_view (void)
 	{
 		float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
 		
-		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+//VJ 050108 3d cockpit mod, do not limit head movement		
+	//	if (get_global_gunship_type () != GUNSHIP_TYPE_APACHE)
+		   pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}
 }
