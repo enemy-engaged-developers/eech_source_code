@@ -1396,10 +1396,11 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
             wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
         }                                                      
 		if (check_key(DIK_NUMPAD0))                            
-		{                                                      
-			wide_cockpit_position[5].x = 0;                
-			wide_cockpit_position[5].y = 0.095;             
-			wide_cockpit_position[5].z = 0.335;            
+		{                        
+//VJ 030812 fixed a small bug here			                              
+			wide_cockpit_position[wide_cockpit_nr].x = 0;                
+			wide_cockpit_position[wide_cockpit_nr].y = 0.095;             
+			wide_cockpit_position[wide_cockpit_nr].z = 0.335;            
         }                                                      
     }            	                                           
 
