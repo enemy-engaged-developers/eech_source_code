@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /MTd /W4 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
+# ADD CPP /MTd /W2 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
 # SUBTRACT CPP /nologo /X
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -4992,6 +4992,10 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\AVIONICS.C
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\aphavoc\source\gunships\cockpits\apache\ap3d_vckpt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\APACHE\AP_CKPT.C
 # End Source File
 # Begin Source File
@@ -5372,6 +5376,10 @@ SOURCE=.\APHAVOC\SOURCE\GFXFILES.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GLOBAL.C
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gwutcfg.c
 # End Source File
 # Begin Source File
 
