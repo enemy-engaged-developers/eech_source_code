@@ -290,7 +290,7 @@ int i;
 	if (Servers[i].isUsed != -1)
 	    if (Servers[i].Age > MaxServerAge)
 	    {
-		sprintf(tempstring, "REMOVE: %s %s\n", Servers[i].Address, Servers[i].Name);
+		sprintf(tempstring, "REMOVE: %s [%s] after %ih %im\n", Servers[i].Address, Servers[i].Name, abs(Servers[i].TotalAge / 3600), abs((Servers[i].TotalAge%3600) / 60));
 		WriteLog(tempstring);
 	    	Servers[i].isUsed=-1;
 		WriteServerList();
@@ -328,10 +328,16 @@ void ProcessServerHeartbeat(void)
     if ((Servers[i].isUsed!=-1) && (strcmp(Servers[i].Address,TempAddress)==0))
     {
 //	printf("UPDATE: Server %i\n", i);
+
+	if (Servers[i].CurClients != TempCurClients)
+	{
+	    sprintf(tempstring, "Player count changed: %s [%s] %i Clients\n", Servers[i].Address, Servers[i].Name, Servers[i].CurClients);
+	    WriteLog(tempstring);
+	}
+	
         sprintf(Servers[i].Name, "%s", TempName);
 	Servers[i].MaxClients = TempMaxClients;
 	Servers[i].CurClients = TempCurClients;
-	sprintf(Servers[i].Version, "%s", TempVersion);
 	Servers[i].Age = 0;
 	found = 1;
 	WriteServerList();
@@ -346,14 +352,14 @@ void ProcessServerHeartbeat(void)
         {
 	    sprintf(Servers[i].Name, "%s", TempName);
             sprintf(Servers[i].Address, "%s", TempAddress);
-	    sprintf(tempstring, "ADD: %s %s\n", Servers[i].Address, Servers[i].Name);
-	    WriteLog(tempstring);
 	    Servers[i].MaxClients = TempMaxClients;
 	    Servers[i].CurClients = TempCurClients;
 	    sprintf(Servers[i].Version, "%s", TempVersion);
 	    Servers[i].Age = 0;
 	    Servers[i].TotalAge = 0;
 	    Servers[i].isUsed = 1;
+	    sprintf(tempstring, "ADD: %s [%s] Version %s\n", Servers[i].Address, Servers[i].Name, Servers[i].Version);
+	    WriteLog(tempstring);
 	    found = 1;
 	    if (i>=maxservers)
 		maxservers=i;
