@@ -17,7 +17,7 @@ a:link {
 }
 a:visited {
 	text-decoration: none;
-	color: #663399;
+	color: #3300CC;
 }
 a:hover {
 	text-decoration: underline;
@@ -58,7 +58,7 @@ body {
 </style>
 </head>
 <body class="Normal" lang=SV>
-<table width="800" border="0" cellpadding="8" bordercolor="#000000">
+<table width="800" border="1" cellpadding="8" cellspacing="0" bordercolor="#000000">
   <tr>
     <td width="800" bgcolor="#FFFFFF"><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.1 W4</span></h1>
       <div align=center style='text-align:center'>
@@ -71,7 +71,7 @@ body {
       </div>
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE. This document is partly taken from the Wiki pages at the EECH DevZone (</span><a
 href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a><span lang=EN-GB>). Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from that website. </span></p>
-      <p align=right style='text-align:right'><span lang=EN-GB>Last edited: 19 jan 2005</span></p>
+      <p align=right style='text-align:right'><span lang=EN-GB>Last edited: 23 jan 2005</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><a href="#installation"><span
@@ -89,19 +89,20 @@ href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz<
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 161W3 and 161W4?</span></h2>
+      <h2><span lang=EN-GB>What's NEW in EECH 161W4?</span></h2>
       <ol>
         <li>A fix for the new <strong>Saitek X52</strong> controller (your mouse button cannot be defined as axes and the limit is 32 buttons but it works).</li>
         <li>With this version you can use the <strong>Apache Havoc maps</strong> (Georgia, Thailand, Cuba) without having installed Enemy Engaged Apache Havoc <a
-     href="http://eech.bollocks.net.nz/" target="_blank"><span lang=EN-GB></span></a> (we have permission from Razorworks). However, the maps are 149 MByte zipped and they are not online for the time being (maybe via a P2P network). </li>
+     href="http://eech.bollocks.net.nz/" target="_blank"><span lang=EN-GB></span></a> (we have permission from Razorworks, thanks Todd Gibbs for intervening). This feature is automatic. The maps can be downloaded from <a
+     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB></span> (thanks werewolf). Note that the setup file is ~120 Mbyte ! </li>
+        <li>The <strong>Cannon</strong> may follow the viewpoint without autolocking the targets. This works when acqusition systems are off or when IHADSS/HIDSS/HMS is used - depending on the <a href="#eechini">eech.ini </a>setting. Works with TrackIR! You switch in-game with Ctrl-NumDel.</li>
+        <li><strong>Custom made textures</strong>: textures can now be read from a texture directory and its subdirectories, instead of having to import them in the texture.bin or texture.pal files. Campaigns can have warzone specific textures in special directories. You can add directories with your own textures if you want. You need the file texturesetup.exe from <a href="http://www.planet.nl/%7Ejette073/gotcha">Gotcha's site</a>. (Note: no alpha blending in textures yet) </li>
         <li>The <strong>UI control</strong> page has been extended with a lot of features: automatic joystick recognition, mouselook, TrackIR etc.</li>
         <li>Joystick <strong>deadzone</strong> fix and new mouselook handling.</li>
-        <li><strong>Custom made textures</strong>: textures can now be read from a texture directory and its subdirectories, instead of having to import them in the texture.bin or texture.pal files. Campaigns can have warzone specific textures in special directories. You need the file texturesetup.exe from <a href="http://www.planet.nl/%7Ejette073/gotcha">Gotcha's site</a>.</li>
         <li>A first attempt at a <strong>3D Apache cockpit</strong> in-game. It uses only in game models and its ugly but its a start. Set 3d_cockpit=1 in <a href="#eechini">eech.ini</a>.</li>
-        <li>If you don't like the heavy black bars in front of your face in the old Apache cockpit, you can switch to wideview and make it partly disappear by pressing: first Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine tune. The bar starts to disappear if X reaches a value of about -8.200.</li>
+        <li>If you don't like the heavy black bars in front of your face in the old <strong>Apache cockpit</strong>, you can switch to wideview and make it partly disappear by pressing: first Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine tune. The bar starts to disappear if X reaches a value of about -8.200.</li>
         <li>A <strong>high LOD hack</strong>, more detail, less fps. Set high_lod_hack=1 in <a href="#eechini">eech.ini</a>. </li>
         <li>The radar ranges and ammo tweaks have disappeared from the eech.ini file. Use the <a href="#wut">GWUT </a>editor to add those to your WUT file.</li>
-        <li>Cannon may follow the viewpoint without autolocking the targets. This works when acqusition systems are off or when IHADSS/HIDSS/HMS is used - depending on ini setting.</li>
         <li>Some smaller bug fixes</li>
       </ol>
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation</span></h2>
@@ -135,15 +136,22 @@ lang=EN-GB>DevZone</span></a><span lang=EN-GB> or one of the fan sites. </span><
         <li><span lang=EN-GB>Add-ons and more information can be found on the </span><a href="#fan"><span lang=EN-GB>fan sites</span></a>. </li>
       </ol>
       <h3 class="style38"><span lang=EN-GB>Additional files needed for version 1.6.0W12 and later versions </span></h3>
-      <span lang=EN-GB>If you have used <span lang=EN-GB><em>eechsetup161Wx.exe</em></span> these are included, otherwise you need:</span>
+      <ol>
+        <li><span lang=EN-GB>If you have not used <span lang=EN-GB><em>eechsetup161Wx.exe</em></span> you need:</span>        </li>
+      </ol>
       <ul type=disc>
-        <li>The <span lang=EN-GB>4 payload screens for flyable choppers: look <a href="#choppers" target="_self">here</a> </span></li>
-        <li><span lang=EN-GB>WUT files: Weapons and Units Tweaker files (these are optional) : look <a href="#wut">here</a> </span></li>
-        <li><span lang=EN-GB>The file &quot;motd.txt&quot; if you host a game. It&#8217;s a file used to display a short message to a client joining a host. Keep the message on one line, don&#8217;t exceed 256 characters.</span></li>
+        <ul>
+          <li>The <span lang=EN-GB>4 payload screens for flyable choppers: look <a href="#choppers" target="_self">here</a> </span></li>
+          <li><span lang=EN-GB>WUT files: Weapons and Units Tweaker files (these are optional) : look <a href="#wut">here</a> </span></li>
+          <li><span lang=EN-GB>The file &quot;motd.txt&quot; if you host a game. It&#8217;s a file used to display a short message to a client joining a host. Keep the message on one line, don&#8217;t exceed 256 characters.</span></li>
+        </ul>
       </ul>
-      <p><span lang=EN-GB>NOTE: there is a <em>superpatch</em> which you can download from </span><a href="http://hoxdna.org/eech/files/"><span
+      <ol start="2">
+        <li><span lang=EN-GB>The <strong><em>superpatch2</em></strong> which you can download from </span><a href="http://hoxdna.org/eech/files/"><span
 lang=EN-GB>werewolfs site</span></a><span
-lang=EN-GB>. It holds all current add-on campaigns and skirmishes and the files mentioned above. It also has the replacement textures for the Alaska and Kuwait warzones if you run a cohokum version prior to 161W4. After d/l and extracting the superpatch to your Razorworks folder, you can run the <span lang=EN-GB><em>eechsetup161W.exe</em></span> again. </span></p>
+lang=EN-GB>. It holds all current add-on campaigns and skirmishes and the files mentioned above. This site also has the replacement textures for the Alaska and Kuwait warzones if you run a cohokum version prior to 161W4. Extract the superpatch to your razorworks folder, the path names are included.</span></li>
+        <li>The <strong>texturesetup</strong> file from <a href="http://www.planet.nl/%7Ejette073/gotcha" target="_blank">Gotcha's site</a> which contains all the custom made textures needed for Alaska and Aleut campaigns, Kuwait and Lybia campaigns (from the superpatch2), and some exmaple camoflage textures, hi-res cockpit and terrain textures. </li>
+      </ol>      
       <div align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span>
       </div>
@@ -499,13 +507,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal"> EXPERIMENTAL! Draws a 3D apache cockpit using an in game <span lang=EN-GB>apache model. Very ugly but fun. <br>
       Default = 0; </span></td>
         </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Apache Havoc maps </strong></td>
-        </tr>
-        <tr valign="top">
-          <td width="190" class="style43"> aphavoc=0</td>
-          <td class="Normal"> This enables reading the Apache Havoc warzones: Geogria <span lang=EN-GB>, Thailand, Cuba if you don't own Apache Havoc. </span></td>
-        </tr>
         <td colspan="2" class="Normal"> <strong>Cannon tracking boresight </strong></td>
         </tr>
         <tr valign="top">
@@ -521,18 +522,17 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB style='color:black;'>Designated target list</span></strong><strong></strong></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span lang=EN-GB><span lang=EN-GB style='color:black;'>Alt-Num0<br>
-          </span></span><span lang=EN-GB><span lang=EN-GB style='color:black;'>Ctrl-Num0</span></span></p></td>
-          <td width="756" class="Normal">
+          <td width="190" class="style43">            <div align="center">Alt-Num0<br>
+          Ctrl-Num0</div></td>
+          <td class="Normal">
             <p><span lang=EN-GB><span class="MsoNormal"><span lang=EN-GB style='color:black;'>Allows you to select designated targets even outside the target filter (see designated target list mod above) </span></span></span></p></td>
         </tr>
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Enhanced inset view </span></strong></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB> Alt-F12</span></p></td>
+          <td width="190" class="Normal">
+            <p align="center" class="style43"><span lang=EN-GB> Alt-F12</span></p></td>
           <td class="Normal">
             <p><span lang=EN-GB>Inset view in the cockpit. Pressing 0 selects the target (default). Pressing keys 2-6 select the same views as corresponding padlock commands.</span></p></td>
         </tr>
@@ -541,9 +541,9 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
             <p><b><span lang=EN-GB>Field of view</span></b></p></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB>7,8,9<br>
-          </span></p></td>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">7,8,9</span><br>
+          </p></td>
           <td class="Normal">
             <p><span lang=EN-GB>Activates near, normal, wide field of view (FOV) </span></p></td>
         </tr>
@@ -552,8 +552,8 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
             <p><b><span lang=EN-GB>Ground stabilised FLIR (Comanche only) </span></b></p></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB><span class="MsoNormal"><span lang=EN-GB><span lang=EN-GB><span lang=EN-GB>Ctrl-S</span></span></span></span></span></p></td>
+          <td width="190" class="Normal">
+            <p align="center"><span lang=EN-GB><span class="style43"><span lang=EN-GB><span lang=EN-GB><span lang=EN-GB>Ctrl-S</span></span></span></span></span></p></td>
           <td class="Normal">
             <p><span lang=EN-GB>Toggles ground stabilized FLIR on/off. </span></p></td>
         </tr>
@@ -562,9 +562,9 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
             <p class=style33><span class=style341><strong>Mouse controlled view panning </strong></span></p></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center" class=style33><span lang=EN-GB> </span><span lang=EN-GB>Middle mouse<br>
-        / (Ctrl-Del)</span></p></td>
+          <td width="190" class="Normal">
+            <p align="center" class=style33><span lang=EN-GB> </span><span class="style43" lang=EN-GB>Middle mouse<br>
+        / Ctrl-Del</span></p></td>
           <td class="Normal">
             <p class=style33><span lang=EN-GB>Switches between mouselook for panning and fixed view (whre F1 and F2 work). Fixed view means that the mouse can be used for the FLIR. </span></p></td>
         </tr>
@@ -573,19 +573,26 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
             <p class=style33><span class=style341><strong>Mouse controlled FLIR</strong></span> </p></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center" class=style33><span lang=EN-GB>Left-mouse<br>
-              </span><span lang=EN-GB>Right-mouse<br>
-              </span><span lang=EN-GB>Middle mouse / (Ctrl-Del)</span></p></td>
+          <td width="190" class="Normal">
+            <p align="center" class=style43>Left-mouse<br>
+              Right-mouse<br>
+              Middle mouse/Ctrl-Del</p></td>
           <td class="Normal">
             <p class=style33><span lang=EN-GB>When mouselook is off (msl=0), you can use mouse for <strong>FLIR</strong> panning. Additionally, when you press <em>left </em>mouse button you <em>lock/unlock</em> target, with <em>right </em>button you can <em>select next target </em>and with mouse <em>wheel</em> you control <em>zoom </em>level. It is also possible to switch mouselook on/off with<strong> ctrl-delete </strong>key combination or with a middle mouse button. </span></p></td>
+        </tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong><span lang=EN-GB>Cannon tracking </span></strong></td>
+        </tr>
+        <tr>
+          <td class="style43"><div align="center">Ctrl-Num Del</div></td>
+          <td class="Normal"><span class="style33">Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is turned off (Ctrl-NumDel), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </span> </td>
         </tr>
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Mouse map control</span></strong></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB> Mouse wheel </span></p></td>
+          <td width="190" class="Normal">
+            <p align="center" class="style43"><span lang=EN-GB> Mouse wheel </span></p></td>
           <td valign=top class="Normal">
             <p><span lang=EN-GB>The map view may be zoomed in/out with a mouse wheel. It is also possible to pan the map when the right button is pressed (it needs some improvement still). When the small 3d preview window is selected, mouse movements and wheel with <em>ctrl </em>pressed will pan/zoom the camera.</span></p></td>
         </tr>
@@ -594,8 +601,8 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
             <p><strong><span lang=EN-GB>Satellite view</span></strong></p></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB><span lang=EN-GB>Ctrl-F9</span></span></p></td>
+          <td width="190" class="Normal">
+            <p align="center" class="style43"><span lang=EN-GB><span lang=EN-GB>Ctrl-F9</span></span></p></td>
           <td valign=top class="Normal">
             <p><span lang=EN-GB> Pressing Ctrl-F9 gives you satellite view, both for your own gunship and for other groups. Moreover, pressing Space on the map view when a site is selected switches the view to satellite camera. When a group is selected you can zoom satellite view with default controls, for keysites it is also possible to pan view. Note that at the moment for debugging purposes the level of interference is selected randomly each time the satellite view is select ed. In the future it will be linked to weather/daytime.</span></p></td>
         </tr>
@@ -603,8 +610,8 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
           <td colspan=2 class="Normal"> <span lang=EN-GB><b>Special TSD render</b></span></td>
         </tr>
         <tr>
-          <td class="Normal">
-            <p align="center"><span lang=EN-GB><span lang=EN-GB><span lang=EN-GB>Ctrl-D<br>
+          <td width="190" class="Normal">
+            <p align="center" class="style43"><span lang=EN-GB><span lang=EN-GB><span lang=EN-GB>Ctrl-D<br>
           </span></span></span><span lang=EN-GB><span lang=EN-GB><span lang=EN-GB>Alt-D</span></span></span></p></td>
           <td class="Normal">
             <p><span lang=EN-GB><span class="MsoNormal"><span lang=EN-GB>Ctrl-D (as in Declutter) cycles through the TSD render options: old TSD screen, the terrain map with/without contours, shaded relief with/without contours. Alt-D cycles through the elevation colour palettes (0-2).</span></span></span></p></td>
@@ -613,20 +620,20 @@ lang=EN-GB><a href="#top">[top ^]</a></span></p>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Wideview editing </span></strong></td>
         </tr>
         <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span lang=EN-GB> <span class="style43">\ <br>
+              </span></span><span class="style43" lang=EN-GB>Crtl-\<br>
+              Alt-\<br>
+        numpad keys 1-9</span><span class="style43" lang=EN-GB></span> </p></td>
           <td class="Normal">
-            <p align="center"><span lang=EN-GB> \ <br>
-              </span><span lang=EN-GB>Crtl-\<br>
-              </span><span lang=EN-GB>Alt-\<br>
-        numpad keys 1-9 </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Switch between normal view and wideview by pressing &quot;\&quot;, edit the view position by pressing &quot;Ctrl-/&quot; and then the numpad keys and save the new position with &quot;Alt-\&quot;. The values are stored in eech.ini. Note that on non-English keyboards a different key may be needed (in stead of &quot;\&quot;). Numpad keys can be used to shift the viewpoint: num-8 and num-2 for the vertical, num-4 and num-6 for the distance. </span></p>
+            <p><span lang=EN-GB>Switch between normal view and wideview by pressing &quot;\&quot;, edit the view position by pressing &quot;Ctrl-\&quot; and then the numpad keys and save the new position with &quot;Alt-\&quot;. The values are stored in eech.ini. Note that on non-English keyboards a different key may be needed (in stead of &quot;\&quot;). Numpad keys can be used to shift the viewpoint: num-8 and num-2 for the vertical, num-4 and num-6 for the distance. </span></p>
             <p>Note: when you fly the Apache and you don't like the heavy black bars in front of your face, you can switch to wideview and make it partly disappear by pressing: first Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine tune. The bar starts to disappear if X reaches a value of about -8.200.</p></td>
         </tr>
         <tr>
           <td colspan=2 class="Normal"><strong><span lang=EN-GB>Campaign commander </span></strong> </td>
         </tr>
         <tr>
-          <td class="Normal">Left and right Mouse</td>
+          <td width="190" class="style43"><div align="center">Left and right Mouse</div></td>
           <td class="Normal"><span class="style33"><span lang=EN-GB>Just select the enemy target and press left mouse button: a new task is created. When you press right mouse button over a task, it is immediately terminated. Works when option camcom=1 in the eech.ini file. </span></span> </td>
         </tr>
       </table>
@@ -712,7 +719,7 @@ lang=EN-GB><a href="#top">[top ^]</a></span></span>
       <h3><a name=history></a>Version h<span lang=EN-GB>istory</span></h3>
       <p class="style44"><span lang=EN-GB><span lang=EN-GB>Fixes/features in </span>1.6.1w4:</span></p>
       <ul class="style44">
-        <li>apache havoc maps can be read without owning EEAH </li>
+        <li>Apache havoc maps can be read without owning EEAH </li>
         <li>Texture mod: read custom textures from user defined directories</li>
         <li><span lang=EN-GB>Disappearing objects at high FOV fixed</span></li>
         <li>Reading wideview from eech.ini file fixed </li>
@@ -829,6 +836,9 @@ lang=EN-GB><a href="#top">[top ^]</a></span></span>
       <p class="style44"><span lang=EN-GB>1.6.0W0-1.6.0W4: undocumented test releases </span></p>
     <p align="right"><span lang=EN-GB>&nbsp;<span
 lang=EN-GB><a href="#top">[top ^]</a></span></span></p></td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFFFFF">&nbsp;</td>
   </tr>
 </table>
 </body>
