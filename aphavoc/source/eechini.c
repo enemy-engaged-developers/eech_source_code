@@ -458,17 +458,17 @@ void dump_ini_file(void)
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov=%d            # general field of view maximum, linked to key '9'\n",command_line_max_fov);
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
-	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis);
-	fprintf(f,"eopanh=%d            # joystick DirectX axis used for horizontal FLIR panning\n",command_line_eo_pan_horizontal_joystick_axis);
+	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1
+	fprintf(f,"eopanh=%d            # joystick DirectX axis used for horizontal FLIR panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1
 	fprintf(f,"eozoomn=%d           # joystick no. used for FLIR zoom\n",command_line_eo_zoom_joystick_index);
-	fprintf(f,"eozoomax=%d          # joystick DirextX axis used for FLIR zoom\n",command_line_eo_zoom_joystick_axis);
+	fprintf(f,"eozoomax=%d          # joystick DirextX axis used for FLIR zoom\n",command_line_eo_zoom_joystick_axis+1);  //VJ 030531 added +1
 	fprintf(f,"cyclicn=%d           # Joystick no. for the cyclic\n",command_line_cyclic_joystick_index);
-	fprintf(f,"cyclich=%d           # Joystick DirectX axis for cyclic horizontal\n",command_line_cyclic_joystick_x_axis);
-	fprintf(f,"cyclicv=%d           # Joystick DirectX axis for cyclic vertical\n",command_line_cyclic_joystick_y_axis);
+	fprintf(f,"cyclich=%d           # Joystick DirectX axis for cyclic horizontal\n",command_line_cyclic_joystick_x_axis+1);  //VJ 030531 added +1
+	fprintf(f,"cyclicv=%d           # Joystick DirectX axis for cyclic vertical\n",command_line_cyclic_joystick_y_axis+1);   //VJ 030531 added +1
 	fprintf(f,"collectiven=%d       # Joystick no. for the collective\n",command_line_collective_joystick_index);
-	fprintf(f,"collectiveax=%d      # Joystick DirectX acis for the collective\n",command_line_collective_joystick_axis);
+	fprintf(f,"collectiveax=%d      # Joystick DirectX acis for the collective\n",command_line_collective_joystick_axis+1);  //VJ 030531 added +1
 	fprintf(f,"ruddern=%d           # Joystick no. for the rudder\n",command_line_rudder_joystick_index);
-	fprintf(f,"rudderax=%d          # Joystick DirectX axis for the rudder\n",command_line_rudder_joystick_axis);
+	fprintf(f,"rudderax=%d          # Joystick DirectX axis for the rudder\n",command_line_rudder_joystick_axis+1);   //VJ 030531 added +1
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
