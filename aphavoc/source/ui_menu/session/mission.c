@@ -97,7 +97,7 @@ void leave_mission (void)
 
 	#endif
 
-	if (get_valid_current_game_session ())
+        if (get_valid_current_game_session ())
 	{
 
 		//
@@ -114,8 +114,10 @@ void leave_mission (void)
 			debug_log ("MISSION: Sending END GAME to server");
 
 			#endif
+ 
+                        
+////Moje 040618	Leave the player removal to cvc ;)		send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
 
-			send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
 		}
 
       connection = get_connection_list_head ();
@@ -134,6 +136,8 @@ void leave_mission (void)
          }
 
          unregister_connection (destroy_connection->connection_id);
+
+
       }
 	
 		comms_connection = direct_play_get_connection_data ();
