@@ -76,9 +76,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void process_ini_file(void)
+void process_ini_file(int argc, char *argv[])
 {
-    FILE *f;//, *fo = fopen("try.txt","w");
+    FILE *f;
 
     char *buf = (char *)malloc(255);
     char *p, *q;
@@ -86,8 +86,18 @@ void process_ini_file(void)
     float v1;
     int d1;
    
-//VJ 030409, changed to generate eech.ini when it doesn't exist
 //VJ 030414, commandline /ini:0 starts up without ini file
+    while(argc--)
+    {
+    	 p = *argv++;
+       debug_log("eech.ini %s",p);
+       if( strstr(p, "ini:0"))
+       {
+         free(buf);
+         return;        	
+       }
+    }   
+//VJ 030409, changed to generate eech.ini when it doesn't exist
     if (command_line_dump_ini && !file_exist(fname))   
     {
        dump_ini_file();
@@ -96,7 +106,8 @@ void process_ini_file(void)
     f = fopen(fname, "r");
     if (!f)
     {
-       debug_fatal("Error opening eech.ini");
+       free(buf);
+       debug_fatal("Error opening eech.ini");       
        return;    
     }   
     while (!strstr(buf,"end of file"))
