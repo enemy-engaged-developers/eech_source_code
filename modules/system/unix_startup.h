@@ -58,24 +58,14 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-#ifndef WIN32
 
-#include "unix_startup.h"
-
-#else
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern HWND
-	application_window;
-
-extern HINSTANCE
-	application_instance;
-
-extern CRITICAL_SECTION
-	application_critical_section;
+extern SDL_Surface
+	*application_window;
 
 extern BOOL
 	application_active,
@@ -89,10 +79,10 @@ extern char
 extern char
 	application_debug_fatal_string[];
 
-extern RECT
+extern SDL_Rect
 	application_window_position;
 
-extern DWORD
+extern Uint32
 	system_thread_id;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,13 +93,13 @@ extern void deinitialise_windows ( void );
 
 extern void process_all_waiting_window_messages ( void );
 
-extern BOOL initialise_windows ( HINSTANCE hInstance, int nCmdShow );
+extern BOOL initialise_windows ( int nCmdShow );
 
 extern void register_exit_function ( void ( *fn ) ( void ) );
 
 extern BOOL register_user_message_function ( int parm, long ( *fn ) ( void * ) );
 
-extern BOOL register_system_message_function ( int parm, long ( *fn ) ( HWND, UINT, WPARAM, LPARAM ) );
+extern BOOL register_system_message_function ( int parm, long ( *fn ) ( void * ) );
 
 extern BOOL register_pre_activate_message_function ( void ( ( *fn ) ( int ) ) );
 
@@ -121,4 +111,3 @@ extern void end_application ( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif

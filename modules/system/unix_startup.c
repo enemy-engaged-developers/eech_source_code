@@ -58,11 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-#ifndef WIN32
 
-#include "unix_startup.c"
-
-#else
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,11 +75,11 @@
 
 #define MAX_SYSTEM_MESSAGE_FUNCTIONS 256
 
-#define MAX_ACTIVATE_MESSAGE_FUNCTIONS 256
-
 #define MAX_USER_MESSAGE_FUNCTIONS 256
 
 #define MAX_EXIT_FUNCTIONS 256
+
+#define INPUT_EVENT_BUFFER_SIZE 16
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +96,7 @@ struct system_message_struct
     int
         parameter;
 
-    long ( * function ) ( HWND, UINT, WPARAM, LPARAM );
+    long ( * function ) ( void * );
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,15 +127,13 @@ struct exit_struct
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HWND
-	application_window;
+SDL_Surface
+	*application_window;
 
-HINSTANCE
-	application_instance,
-	previous_application_instance;
-
-LPSTR
-	lpCmdLine;
+int
+	argc;
+char
+	**argv;
 
 int
 	nCmdShow;
@@ -150,18 +144,12 @@ BOOL
 	bExiting = FALSE,
 	application_debug_fatal;
 
-DWORD
+Uint32
 	application_thread_id = 0,
 	system_thread_id = 0;
 
-HANDLE
-	application_thread_handle;
-
-CRITICAL_SECTION
-	application_critical_section;
-
-char
-	*main_command_line;
+SDL_Thread
+	*application_thread_handle;
 
 char
 	application_current_directory[1024];
@@ -169,14 +157,12 @@ char
 char
 	application_debug_fatal_string[256];
 
-RECT
+SDL_Rect
 	application_window_position;
 
 int
 	number_system_message_functions = 0,
 	number_user_message_functions = 0,
-	number_pre_activate_message_functions = 0,
-	number_post_activate_message_functions = 0,
 	number_exit_functions = 0;
 
 struct system_message_struct
@@ -184,12 +170,6 @@ struct system_message_struct
 
 struct user_message_struct
 	user_message_functions[MAX_USER_MESSAGE_FUNCTIONS];
-
-void
-	( ( *pre_activate_message_functions [MAX_ACTIVATE_MESSAGE_FUNCTIONS] ) ( int active ) );
-
-void
-	( ( *post_activate_message_functions [MAX_ACTIVATE_MESSAGE_FUNCTIONS] ) ( int active ) );
 
 struct exit_struct
 	exit_functions[MAX_EXIT_FUNCTIONS];
@@ -201,7 +181,9 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void start_application ( void );
+int start_application ( void *data );
+
+BOOL create_application_window ( int nCmdShow );
 
 static void initialise_application_exception_handler ( void );
 
@@ -209,60 +191,64 @@ static void set_application_current_directory ( void );
 
 BOOL register_user_message_function ( int parm, long ( * fn ) ( void * ) );
 
-BOOL register_system_messsage_function ( int parm, long ( * fn ) ( HWND, UINT, WPARAM, LPARAM ) );
+BOOL register_system_messsage_function ( int parm, long ( * fn ) ( void * ) );
 
-static long call_pre_activate_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
-
-static long call_post_activate_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
-
-static long call_user_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long call_user_function_routine ( void *data );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static long FAR PASCAL application_window_proc ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long application_window_proc ( void *data );
 
-static long windows_sizemove_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_sizemove_routine ( void *data );
 
-static long windows_keydown_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_keydown_routine ( void *data );
 
-static long windows_cursor_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_cursor_routine ( void *data );
 
-static long windows_close_request_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_close_request_routine ( void *data );
 
-static long windows_activate_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_paint_routine ( void *data );
 
-static long windows_paint_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_systemcommand_routine ( void *data );
 
-static long windows_systemcommand_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
-
-static long windows_destroy_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+static long windows_destroy_routine ( void *data );
 
 static long windows_exit_routine ( void *data );
 
 static void do_registered_exits ( void );
 
-static LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData );
+// static application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int main(int m_argc, char **m_argv)
 {
-
-	MSG
-		msg;
 
 	int
 		terminated;
 
+	SDL_Event
+		*input_events;
+
+	argc = m_argc;
+	argv = m_argv;
+
 	//
-	// Initialise DCOM
+	// Initialise SDL
 	//
 
-	CoInitializeEx ( NULL, COINIT_MULTITHREADED );
+	atexit(SDL_Quit);
+
+	if( SDL_Init(SDL_INIT_EVERYTHING) != 0 ) {
+		debug_fatal("Unable to initialise SDL: %s", SDL_GetError());
+		return 1;
+	}
+
+	input_events = safe_malloc( sizeof( SDL_Event ) * INPUT_EVENT_BUFFER_SIZE );
 
 	//
 	// Install our own exception handler!
@@ -282,7 +268,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	unlink ( "debug.log" );
 
-	system_thread_id = GetCurrentThreadId ();
+	system_thread_id = SDL_ThreadID ();
 
 	application_debug_fatal = FALSE;
 
@@ -294,7 +280,7 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	initialise_memory_totals ();
 
-	if ( !initialise_windows ( hInstance, nCmdShow ) )
+	if ( !initialise_windows ( 1 ) )
 	{
 
 		deinitialise_windows ();
@@ -302,31 +288,21 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return ( FALSE );
 	}
 
-	application_instance = hInstance;
-
-   number_user_message_functions = 0;
+	number_user_message_functions = 0;
 
 	number_system_message_functions = 0;
 
-	number_pre_activate_message_functions = 0;
+	// register_system_message_function ( WM_USER, call_user_function_routine );
 
-	number_post_activate_message_functions = 0;
+	// register_system_message_function ( WM_SETCURSOR, windows_cursor_routine );
 
-	register_system_message_function ( WM_USER, call_user_function_routine );
+	register_system_message_function ( SDL_VIDEOEXPOSE, windows_paint_routine  );
 
-	register_system_message_function ( WM_SETCURSOR, windows_cursor_routine );
+	register_system_message_function ( SDL_VIDEORESIZE, windows_sizemove_routine );
 
-	register_system_message_function ( WM_ACTIVATE, call_pre_activate_function_routine );
+	register_system_message_function ( SDL_SYSWMEVENT, windows_systemcommand_routine );
 
-	register_system_message_function ( WM_ACTIVATEAPP, call_post_activate_function_routine );
-
-	register_system_message_function ( WM_PAINT, windows_paint_routine  );
-
-	register_system_message_function ( WM_MOVE, windows_sizemove_routine );
-
-	register_system_message_function ( WM_SYSCOMMAND, windows_systemcommand_routine );
-
-	register_system_message_function ( WM_CLOSE, windows_close_request_routine );
+	register_system_message_function ( SDL_QUIT, windows_close_request_routine );
 
 	initialise_cdrom_system ();
 
@@ -350,96 +326,24 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	initialise_file_system ();
 
-	main_command_line = lpCmdLine;
-
 	terminated = FALSE;
 
-	application_thread_handle = CreateThread
-	(
-		(LPSECURITY_ATTRIBUTES) NULL,
-		0,
-		(LPTHREAD_START_ROUTINE) start_application,
-		0,
-		0,
-		&application_thread_id
-	);
+	application_thread_handle = (SDL_Thread *) SDL_CreateThread ( start_application, NULL );
+											  
+	application_thread_id = SDL_GetThreadID ( application_thread_handle );
 
-	SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_ABOVE_NORMAL );
+	// SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_ABOVE_NORMAL );
 
 	while ( !terminated )
 	{
 
-		DWORD
-			message_index,
-			object_count;
-
-		HANDLE
-			handle_array[2];
-
-		object_count = 0;
-
-		if ( keyboard_handle )
-		{
-
-			handle_array[object_count] = keyboard_handle;
-
-			object_count++;
-		}
-
-		if ( mouse_handle )
-		{
-
-			handle_array[object_count] = mouse_handle;
-
-			object_count++;
-		}
-
-		message_index = MsgWaitForMultipleObjects( object_count, handle_array, 0, INFINITE, QS_ALLINPUT);
-//		message_index = MsgWaitForMultipleObjects( object_count, handle_array, 0, 100, QS_ALLINPUT);
-
-		if ( ( message_index >= object_count ) || ( message_index == WAIT_TIMEOUT ) )
-		{
-
-			//
-			// Default windows messaging
-			//
-
-			while ( PeekMessage ( &msg, NULL, 0, 0, PM_REMOVE ) )
-			{
-
-				if ( msg.message == WM_QUIT )
-				{
-
-					terminated = TRUE;
-				}
-				else
-				{
-
-					TranslateMessage(&msg);
-
-					DispatchMessage(&msg);
-				}
-			}
-		}
-		else
-		{
-
-			if ( handle_array[message_index] == keyboard_handle )
-			{
-
-				generate_keyboard_events ();
-			}
-			else if ( handle_array[message_index] == mouse_handle )
-			{
-
-				generate_mouse_events ();
-			}
-		}
+		generate_keyboard_events ();
+		generate_mouse_events ();
 	}
 
-	CoUninitialize ();
+	free(input_events);
 
-	return ( msg.wParam );
+	return ( 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -452,8 +356,8 @@ void set_application_current_directory ( void )
 	char
 		*ptr;
 
-	GetModuleFileName ( NULL, application_current_directory, sizeof ( application_current_directory ) );
-
+	getcwd ( application_current_directory, sizeof ( application_current_directory ) );
+/*
 	ptr = application_current_directory;
 
 	ptr += strlen ( application_current_directory );
@@ -471,13 +375,15 @@ void set_application_current_directory ( void )
 
 		SetCurrentDirectory ( application_current_directory );
 	}
+*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long FAR PASCAL application_window_proc ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+/*
+long application_window_proc ( void *data )
 {
 
 	int
@@ -502,17 +408,14 @@ long FAR PASCAL application_window_proc ( HWND hWnd, UINT message, WPARAM wParam
 				{
 
 					return ( FALSE );
-
-//					return DefWindowProc(hWnd, message, wParam, lParam);
 				}
 			}
 		}
 	}
 
-//	return ( FALSE );
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return 0;
 }
-
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -526,11 +429,13 @@ void deinitialise_windows ( void )
 
 		#ifdef COMMERCIAL
 
-		MessageBox ( application_window, application_debug_fatal_string, "ERROR", MB_OK );
+		// MessageBox ( application_window, application_debug_fatal_string, "ERROR", MB_OK );
+		fprintf(stderr, "ERROR: %s\n", application_debug_fatal_string );
 
 		#else
 
-		MessageBox ( application_window, application_debug_fatal_string, "DEBUG FATAL", MB_OK );
+		// MessageBox ( application_window, application_debug_fatal_string, "DEBUG FATAL", MB_OK );
+		fprintf(stderr, "DEBUG FATAL: %s\n", application_debug_fatal_string );
 
 		#endif
 	}
@@ -541,10 +446,10 @@ void deinitialise_windows ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL initialise_windows ( HINSTANCE hInstance, int nCmdShow )
+BOOL initialise_windows ( int nCmdShow )
 {
 
-    if ( !create_application_window ( hInstance, nCmdShow ) )
+    if ( !create_application_window ( nCmdShow ) )
     {
 
         return ( FALSE );
@@ -560,20 +465,19 @@ BOOL initialise_windows ( HINSTANCE hInstance, int nCmdShow )
 void end_application ( void )
 {
 
-	SendMessage ( application_window, WM_USER, exit_message_id, 0 );
+	// SendMessage ( application_window, WM_USER, exit_message_id, 0 );
 
-	Sleep ( INFINITE );
+	// Sleep ( INFINITE );
+
+    exit(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
+BOOL create_application_window ( int nCmdShow )
 {
-
-	WNDCLASS
-		wc;
 
 	char
 		application_title[1024];
@@ -582,6 +486,7 @@ BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
 	// set up and register window class
 	//
 
+/*
 	wc.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;	// | CCS_NORESIZE;
 	wc.lpfnWndProc = application_window_proc;
 	wc.cbClsExtra = 0;
@@ -592,8 +497,7 @@ BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
 	wc.hbrBackground = ( HBRUSH ) GetStockObject ( BLACK_BRUSH );
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = "HELLO";	//NAME;
-
-	RegisterClass ( &wc );
+*/
 
 	//
 	// create a window
@@ -601,32 +505,15 @@ BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
 
 	sprintf ( application_title, "%s %s", TITLE, __DATE__ );
 
-	application_window = CreateWindowEx
-	(
+	application_window = (SDL_Surface *) SDL_SetVideo ( 640, 480, 32, SDL_OPENGL );
 
-		0,
-		"HELLO",	//NAME,
-		application_title,	//TITLE,
-		WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_VISIBLE,
-		0,
-		0,
-		200,
-		20,
-		NULL,
-		NULL,
-		hInstance,
-		NULL
-	);
+	SDL_WM_SetCaption( application_title, NULL );
 
 	if ( !application_window )
 	{
 
 		return ( FALSE );
 	}
-
-	ShowWindow ( application_window, nCmdShow );
-
-	UpdateWindow ( application_window );
 
 	return ( TRUE );
 }
@@ -635,58 +522,10 @@ BOOL create_application_window ( HINSTANCE hInstance, int nCmdShow )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void start_application ( void )
+int start_application ( void *data )
 {
 
-	int
-		string,
-		count,
-		argc;
-
-	char
-		strings[32][64],
-		*argv[32],
-		*ptr;
-
-
-	SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_NORMAL );
-
-	strcpy ( &strings[0][0], "APPLICATION" );
-
-	argv[0] = &strings[0][0];
-
-	ptr = main_command_line;
-
-	count = 0;
-
-	string = 1;
-
-	while ( *ptr != '\0' )
-	{
-
-		while ( ( *ptr != ' ' ) && ( *ptr != '\0' ) )
-		{
-
-			strings[string][count] = *ptr;
-
-			count++;
-			ptr++;
-		}
-
-		if ( *ptr == ' ' )
-		{
-
-			ptr++;
-		}
-
-		strings[string][count] = '\0';
-		argv[string] = &strings[string][0];
-
-		count = 0;
-		string++;
-	}
-
-	argc = string;
+	// SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_NORMAL );
 
 	//
 	// The graphics / 3d / 2d systems need the maths fpu to round to zero
@@ -703,7 +542,7 @@ void start_application ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL register_system_message_function ( int parm, long ( * fn ) ( HWND, UINT, WPARAM, LPARAM ) )
+BOOL register_system_message_function ( int parm, long ( * fn ) ( void *data ) )
 {
 
     int
@@ -777,76 +616,6 @@ BOOL register_user_message_function ( int parm, long ( * fn ) ( void * ) )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL register_pre_activate_message_function ( void ( ( *fn ) ( int ) ) )
-{
-
-	int
-		count;
-
-	//
-	// Check to see if we already have registered this message.
-	//
-
-	for ( count = 0; count < number_pre_activate_message_functions; count++ )
-	{
-
-		if ( pre_activate_message_functions[count] == fn )
-		{
-
-			return ( FALSE );
-		}
-	}
-
-	//
-	// Insert the function into the table
-	//
-
-	pre_activate_message_functions[number_pre_activate_message_functions] = fn;
-
-	number_pre_activate_message_functions ++;
-
-	return ( TRUE );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-BOOL register_post_activate_message_function ( void ( ( *fn ) ( int ) ) )
-{
-
-	int
-		count;
-
-	//
-	// Check to see if we already have registered this message.
-	//
-
-	for ( count = 0; count < number_post_activate_message_functions; count++ )
-	{
-
-		if ( post_activate_message_functions[count] == fn )
-		{
-
-			return ( FALSE );
-		}
-	}
-
-	//
-	// Insert the function into the table
-	//
-
-	post_activate_message_functions[number_post_activate_message_functions] = fn;
-
-	number_post_activate_message_functions ++;
-
-	return ( TRUE );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void register_exit_function ( void ( * fn ) ( void ) )
 {
 
@@ -882,19 +651,21 @@ void register_exit_function ( void ( * fn ) ( void ) )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long call_user_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long call_user_function_routine ( void *data )
 {
 
     int
         count;
 
+	SDL_Event *event = (SDL_Event *) data;
+
     for ( count=0; count<number_user_message_functions; count++ )
     {
 
-        if ( user_message_functions[count].parameter == wParam )
+        if ( user_message_functions[count].parameter == event->type )
         {
 
-            return ( user_message_functions[count].function ( ( void * ) lParam ) );
+            return ( user_message_functions[count].function ( event ) );
         }
     }
 
@@ -907,14 +678,15 @@ long call_user_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long windows_sizemove_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long windows_sizemove_routine ( void *data )
 {
-
+  /*
 	GetClientRect ( application_window, &application_window_position );
 
 	ClientToScreen ( application_window, (LPPOINT)&application_window_position );
 
 	ClientToScreen ( application_window, (LPPOINT)&application_window_position+1 );
+  */
 
 	return ( FALSE );
 }
@@ -923,10 +695,11 @@ long windows_sizemove_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long windows_cursor_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long windows_cursor_routine ( void *data )
 {
-
+  /*
     SetCursor ( NULL );
+  */
 
     return ( TRUE );
 }
@@ -935,7 +708,7 @@ long windows_cursor_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long windows_close_request_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long windows_close_request_routine ( void *data )
 {
 
 	//
@@ -949,135 +722,16 @@ long windows_close_request_routine ( HWND hWnd, UINT message, WPARAM wParam, LPA
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long call_pre_activate_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long windows_paint_routine ( void *data )
 {
-
-	int
-		count,
-		active;
-
-	active = LOWORD ( wParam );
-
-	if ( active == WA_INACTIVE )
-	{
-
-		//
-		// Application becoming inactive
-		//
-
-		active = FALSE;
-	}
-	else
-	{
-
-		//
-		// Application becoming active
-		//
-
-		active = TRUE;
-	}
-
-	//
-	// Call any routine thats interested in the program becoming active
-	//
-
-	for ( count = 0; count < number_pre_activate_message_functions; count++ )
-	{
-
-		if ( pre_activate_message_functions[count] )
-		{
-
-			pre_activate_message_functions[count] ( active );
-		}
-	}
-
-	application_active = active;
-
-	//
-	// Set the window to be the top window if we're becoming active
-	//
-
-	if ( active )
-	{
-
-		SetActiveWindow ( application_window );
-	}
-
-	return ( 0 );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-long call_post_activate_function_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
-{
-
-	int
-		count,
-		active;
-
-	active = LOWORD ( wParam );
-
-	if ( active == WA_INACTIVE )
-	{
-
-		//
-		// Application becoming inactive
-		//
-
-		active = FALSE;
-	}
-	else
-	{
-
-		//
-		// Application becoming active
-		//
-
-		active = TRUE;
-	}
-
-	//
-	// Call any routine thats interested in the program becoming active
-	//
-
-	for ( count = 0; count < number_post_activate_message_functions; count++ )
-	{
-
-		if ( post_activate_message_functions[count] )
-		{
-
-			post_activate_message_functions[count] ( active );
-		}
-	}
-
-	if ( active )
-	{
-
-		//
-		// If we're becoming active, do that NOW
-		//
-
-		application_active = TRUE;
-	}
-
-	return ( 0 );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-long windows_paint_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
-{
-
+  /*
 	PAINTSTRUCT
 		ps;
 
 	BeginPaint ( hWnd, &ps );
 
 	EndPaint ( hWnd, &ps );
+  */
 
 	return ( TRUE );
 }
@@ -1086,9 +740,9 @@ long windows_paint_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-long windows_systemcommand_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+long windows_systemcommand_routine ( void *data )
 {
-
+  /*
 	LRESULT
 		lRc;
 
@@ -1111,8 +765,9 @@ long windows_systemcommand_routine ( HWND hWnd, UINT message, WPARAM wParam, LPA
 			break;
 		}
 	}
+  */
 
-	return ( lRc );
+	return ( 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1133,18 +788,20 @@ long windows_exit_routine ( void *data )
 
 		#ifdef COMMERCIAL
 
-		MessageBox ( application_window, application_debug_fatal_string, "ERROR", MB_OK );
+		// MessageBox ( application_window, application_debug_fatal_string, "ERROR", MB_OK );
+		fprintf(stderr, "ERROR: %s\n", application_debug_fatal_string);
 
 		#else
 
-		MessageBox ( application_window, application_debug_fatal_string, "DEBUG FATAL", MB_OK );
+		// MessageBox ( application_window, application_debug_fatal_string, "DEBUG FATAL", MB_OK );
+		fprintf(stderr, "DEBUG FATAL: %s\n", application_debug_fatal_string);
 
 		#endif
 	}
 
-	PostMessage ( application_window, WM_QUIT, 0, 0 );
+	// PostMessage ( application_window, WM_QUIT, 0, 0 );
 
-	PostQuitMessage ( 0 );
+	// PostQuitMessage ( 0 );
 
 	return ( 0 );
 }
@@ -1165,7 +822,7 @@ void do_registered_exits ( void )
 	// In System thread - so disable the user thread.
 	//
 
-	SetThreadPriority ( application_thread_handle, THREAD_PRIORITY_IDLE );
+	// SetThreadPriority ( application_thread_handle, THREAD_PRIORITY_IDLE );
 
 	//
 	// Do the registered exit routines
@@ -1194,14 +851,16 @@ void do_registered_exits ( void )
 
 void initialise_application_exception_handler ( void )
 {
-
+  /*
 	SetUnhandledExceptionFilter ( application_exception_handler );
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 struct EXCEPTION_DETAILS
 {
 
@@ -1213,11 +872,13 @@ struct EXCEPTION_DETAILS
 };
 
 typedef struct EXCEPTION_DETAILS exception_details;
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 exception_details
 	exception_codes[] =
 	{
@@ -1243,12 +904,14 @@ exception_details
 		{ EXCEPTION_SINGLE_STEP,					"Single step" },
 		{ EXCEPTION_STACK_OVERFLOW,				"Stack overflow" },
 	};
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData )
+/*
+long application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData )
 {
 
 	EXCEPTION_RECORD
@@ -1394,9 +1057,9 @@ LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData
 
 	return ( EXCEPTION_CONTINUE_SEARCH );
 }
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif
