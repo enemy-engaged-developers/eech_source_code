@@ -111,6 +111,48 @@ static void wide_cockpit_initialize(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030807 adjustable radar ranges
+static void initialize_radar_ranges(void)
+{
+		radar_range_apache[0] = 500;
+		radar_range_apache[1] = 1000;
+		radar_range_apache[2] = 2000;
+		radar_range_apache[3] = 4000;
+		radar_range_apache[4] = 8000;
+
+		radar_range_comanche[0] = 500;
+		radar_range_comanche[1] = 1000;
+		radar_range_comanche[2] = 2000;
+		radar_range_comanche[3] = 4000;
+		radar_range_comanche[4] = 8000;
+
+		radar_range_blackhawk[0] = 500;
+		radar_range_blackhawk[1] = 1000;
+		radar_range_blackhawk[2] = 2000;
+		radar_range_blackhawk[3] = 4000;
+		radar_range_blackhawk[4] = 8000;
+
+		radar_range_havoc[0] = 1000;
+		radar_range_havoc[1] = 2000;
+		radar_range_havoc[2] = 4000;
+		radar_range_havoc[3] = 6000;
+
+		radar_range_hokum[0] = 1000;
+		radar_range_hokum[1] = 2000;
+		radar_range_hokum[2] = 4000;
+		radar_range_hokum[3] = 6000;
+		radar_range_hokum[4] = 10000;
+		
+		radar_range_hind[0] = 1000;
+		radar_range_hind[1] = 2000;
+		radar_range_hind[2] = 4000;
+		radar_range_hind[3] = 6000;		
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void process_ini_file(int argc, char *argv[])
 {
 	 FILE *f;
@@ -121,6 +163,12 @@ void process_ini_file(int argc, char *argv[])
 	 float v1;
 	 int d1, k;
 
+//VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
+	 wide_cockpit_initialize();
+
+//VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
+	 initialize_radar_ranges();	
+		
 	 buf = malloc (255);
 	 if (buf == NULL)
 	 {
@@ -139,8 +187,6 @@ void process_ini_file(int argc, char *argv[])
 			return;
 		 }
 	 }
-//VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
-	 wide_cockpit_initialize();
 	 
 //VJ 030409, changed to generate eech.ini when it doesn't exist
 	 if (command_line_dump_ini && !file_exist(fname))
@@ -366,6 +412,82 @@ void process_ini_file(int argc, char *argv[])
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}
+//VJ 030807 adjustable radar ranges		
+		if (strcmp(p, "radar_comanche") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_comanche[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_comanche[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_comanche[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_comanche[3] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_comanche[4] = atof(p);
+		}
+		if (strcmp(p, "radar_apache") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_apache[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_apache[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_apache[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_apache[3] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_apache[4] = atof(p);
+		}
+		if (strcmp(p, "radar_hokum") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_hokum[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hokum[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hokum[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hokum[3] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hokum[4] = atof(p);
+		}
+		if (strcmp(p, "radar_havoc") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_havoc[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_havoc[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_havoc[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_havoc[3] = atof(p);
+		}
+		if (strcmp(p, "radar_blackhawk") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_blackhawk[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_blackhawk[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_blackhawk[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_blackhawk[3] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_blackhawk[4] = atof(p);
+		}
+		if (strcmp(p, "radar_hind") == 0)
+		{
+ 	     p = strtok(q,",");
+        radar_range_hind[0] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hind[1] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hind[2] = atof(p);
+ 	     p = strtok(NULL,",");
+        radar_range_hind[3] = atof(p);
+		}
+
 	}
 
 	fclose(f);
@@ -426,7 +548,7 @@ void dump_ini_file(void)
 	fprintf(f,"cist=%d              # comms initial sleep time\n",command_line_comms_initial_sleep_time);
 	fprintf(f,"dedicated=%d         # active server mode, off by default.\n",command_line_comms_dedicated_server);
 	fprintf(f,"game_type=%d         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish (def = 0)\n",command_line_game_initialisation_phase_game_type);
-	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Havoc\n",command_line_game_initialisation_phase_gunship_type);
+	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
 	fprintf(f,"path=%s              # Path to map, campaign, skirmish\n",command_line_game_initialisation_phase_path);
 	fprintf(f,"[Dynamics]\n");
 	fprintf(f,"drbs=%3.1f         # retreating blade stall, floating point scaling factor for RBS effect (default = 1.0)\n",command_line_dynamics_retreating_blade_stall_effect);
@@ -453,6 +575,13 @@ void dump_ini_file(void)
 	fprintf(f, "hokum co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
 	fprintf(f, "apache pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
 	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
+	fprintf(f, "[radar]\n");  //VJ 030807 adjustable radar ranges
+   fprintf(f, "radar_comanche=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges comanche (5 ranges in m, ordered small to large)\n",radar_range_comanche[0],radar_range_comanche[1],radar_range_comanche[2],radar_range_comanche[3],radar_range_comanche[4]);
+   fprintf(f, "radar_apache=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges apache (5 ranges in m, ordered small to large)\n",radar_range_apache[0],radar_range_apache[1],radar_range_apache[2],radar_range_apache[3],radar_range_apache[4]);
+   fprintf(f, "radar_hokum=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges hokum (5 ranges in m, ordered small to large)\n",radar_range_hokum[0],radar_range_hokum[1],radar_range_hokum[2],radar_range_hokum[3],radar_range_hokum[4]);
+   fprintf(f, "radar_havoc=%.0f,%.0f,%.0f,%.0f   #radar ranges havoc (4 ranges in m, ordered small to large)\n",radar_range_havoc[0],radar_range_havoc[1],radar_range_havoc[2],radar_range_havoc[3]);
+   fprintf(f, "radar_blackhawk=%.0f,%.0f,%.0f,%.0f,%.0f   #radar ranges blackhawk (5 ranges in m, ordered small to large)\n",radar_range_blackhawk[0],radar_range_blackhawk[1],radar_range_blackhawk[2],radar_range_blackhawk[3],radar_range_blackhawk[4]);
+   fprintf(f, "radar_hind=%.0f,%.0f,%.0f,%.0f   #radar ranges hind (4 ranges in m, ordered small to large)\n",radar_range_hind[0],radar_range_hind[1],radar_range_hind[2],radar_range_hind[3]);
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0)\n",command_line_mouse_look_speed);
