@@ -2,10 +2,10 @@
 <html>
   <head>
     <title>EECH Community Release Version 1.6.0W9</title>
-  </head>
+        </head>
 
   <body>
-    <h1>EECH Community Release Version 1.6.0W9</h1>
+    <h1>EECH Community Release Version 1.6.0W12</h1>
 
     <hr>
     
@@ -28,6 +28,7 @@
 
     <ul>
       <li><a href="#installation">Installation</a>
+      <li><a href="http://eech.bollocks.net.nz">Flyable choppers             </a>
       <li><a href="#bugs">Bugs</a>
       <li><a href="#whatsnew">Whats new in EECH</a>
       
@@ -36,24 +37,29 @@
     </ul>
 
     <a name="installation"></a>
-    <h2>INSTALLATION</h2>
+    <h2>Installation</h2>
 
     <p>
       Simply copy the file cohokum.exe into your /razorwroks/cohokum
       directory. You may want to rename your old cohokum.exe to save
-      it.
-    </p>
-
+      it. <br>
+      Note that if the eech.ini file does not exist it will be generated automatically. If you run into trouble it may be a good idea to delete the eech.ini file. <br>
+      If you have trouble configuring your joystick in eech.ini you can use a tool made by Retro (eechmap.exe). <br>
+    Read also the next paragraph for loadout screens.</p>
+    <p><a name="choppers" id="choppers"></a>    </p>
+  <h2>Flyable choppers</h2>
+    <p>In the current version can fly and change the loadout of: Comanche, Apache, Hokum, Hokum, Balckhawk, Hind, AH64-A, and KA50. Make sure you load and install the additional download screens here: <a href="http://eech.bollocks.net.nz" target="_blank">http://eech.bollocks.net.nz</a> (in the addon download area). <br>
+  You can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). </p>
     <a name="bugs"></a>
-    <h2>BUGS</h2>
+    <h2>Bugs</h2>
 
     
-<p> This version seems to be pretty stable, both as single and multiplayer. If 
+    <p> This version seems to be pretty stable, both as single and multiplayer. If 
   you find any bugs/odd behaviour please report them at one of the forums:<br>
       <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30">http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30</a><br>
       <a href="http://forum.biohazcentral.com/viewforum.php?f=42">http://forum.biohazcentral.com/viewforum.php?f=42</a><br>
       <a href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&forumid=27">http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&forumid=27</a>
-    </p>
+  </p>
 
     <p>
       Note: two infamous bugs have been more or less solved: the "FARP" bug
@@ -66,8 +72,8 @@
 
     <table border="1">
 	<tr>
-	  <th width="198" align="left">eech.ini parameter</th>
-	  <th width="541" align="left">Description</th>
+	  <th width="163" align="left">eech.ini parameter</th>
+	  <th width="580" align="left">Description</th>
 	</tr>
 
 	<tr>
@@ -361,12 +367,39 @@
       </p>
       </td>
 	</tr>
+	<tr>
+	  <td height="23" colspan="2"><strong>Radar ranges</strong></td>
+	  </tr>
+	<tr>
+	  <td height="127">radar_comanche = a,b,c,d,e<br>
+	    radar_apache = etc. <br>
+	    radar_hokum = etc.
+	    radar_havoc = etc.<br>
+	    radar_blackhawk = etc.<br>
+      radar_hind = etc.<br></td>
+	  <td valign="top">Adjustable radar ranges, just like in the old WUT program. a,b,c,d,e are the ranges, default are for instance: 500,1000,2000,4000,8000 for the Comanche. Note that the Havoc and Hind have only 4 ranges. If you consider this a cheat use the default ranges. </td>
+	  </tr>
+	<tr>
+	  <td height="23" colspan="2"><strong>Amount of cannon ammo </strong></td>
+	  </tr>
+	<tr>
+	  <td height="133">rounds_comanche = x <br>
+	    rounds_apache = x <br>
+	    rounds_hokum_AP = x <br>
+	    rounds_hokum_HE = x<br>
+	    rounds_havoc_AP = x<br>
+	    rounds_havoc_HE = x<br>
+	    rounds_blackhawk = x<br>
+	    rounds_hind_AP = x<br>
+      rounds_hind_HE = x<br></td>
+	  <td valign="top">500 rounds of 20 mm M197 ammo? Common... be serious! Put in an amount that seems reasonable to you (max 65000). You can give each chopper its own amount. Leave the values at default if you consider this a cheat . </td>
+	  </tr>
 
     </table>
 
     <a name="sourceandversion"></a>
     
-<h2>SOURCE CODE</h2>
+<h2>Source code </h2>
 
     <p>
       If you want to give the source code a try you can find all the
@@ -379,10 +412,36 @@
     <a name="history"></a>
     <h2>History</h2>
 
-    <p>
-      Fixes/features in 1.6.0W8:
+    <p>Fixes/features in 1.6.0W12: </p>
+    <ul>
+      <li> Mouse wheel zoom and mouse movement of FLIR 
+      <li> Configurable radar ranges and cannon ammo amount in eech.ini. 
+      <li>Possibly more stable MP.
+      <li>AH64-A and KA50 added as configurable choppers. Install download screens (see above).              
+    </ul>
+    <p>&nbsp;</p>
+    <p>Fixes/features in 1.6.0W10,11: </p>
+    <ul>
+      <li> Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). 
+        
+      <li>Blackhawk and Hind flyable, regardless of the faa-setting in eech.ini.       
+      <li>Blackhawk and Hind loadout configuration enabled.
+      <li>W11 is possibly more stable in MP.       
+    </ul>
+    <p>Fixes/features in 1.6.0W9: </p>
+    <ul>
+      <li> 
+In-game multiplayer server browser       
+      <li>        Ability to limit the number of players in a multiplayer game (default is 4)       
+      <li>        New realistic looking moving map display (elevation colours or relief)       
+      <li>        High-resolution MFD's       
+      <li>        The Comanche and Apache FLIR displays are now black&amp;white.       
+      <li>        Thicker downwash effect       
+      <li>  CBAR values works for EECH campaigns now (they previously only worked for EEAH campaign)       
+      <li>"tab-2" CTD fix
+  </ul>
+    <p>Fixes/features in 1.6.0W8:
     </p>
-
     <ul>
       <li>TrackIR included
       <li>Joystick mappable, rudder pedals included
