@@ -64,11 +64,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern int initialise_file_system ( void );
+extern BOOL initialise_file_system ( void );
 
 extern void * mopen ( char *filename );
 
-extern int mclose ( void *data );
+extern BOOL mclose ( void *data );
 
 extern int file_exist (char *filename);
 
@@ -80,7 +80,7 @@ extern void check_safe_memory_mapped_file_counter (void);
 
 extern void *safe_mopen (char *filename);
 
-extern int safe_mclose (void *data);
+extern BOOL safe_mclose (void *data);
 
 extern FILE *safe_fopen( char *filename, char *mode );
 
