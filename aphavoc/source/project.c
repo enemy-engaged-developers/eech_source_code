@@ -124,12 +124,22 @@ void application_main (int argc, char **argv)
 	set_registry_language_settings ();
 
 	//
+	// process eech.ini file, call before commandline
+	//
+//vj 030403
+    process_ini_file();
+
+	//
 	// process command line
 	//
 
 	process_environment_variable (ENV_NAME);
 
 	process_command_line (argc, argv);
+
+//vj 030403
+    if (command_line_dump_ini)
+       dump_ini_file();
 
 	//
 	// setup the debug system
