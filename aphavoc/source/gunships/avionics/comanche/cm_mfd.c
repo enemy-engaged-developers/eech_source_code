@@ -2450,7 +2450,7 @@ static int get_undamaged_eo_display_mode (comanche_main_mfd_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system)
+static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system)
 {
 	float
 		zoom;
@@ -2474,6 +2474,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	ASSERT (eo_3d_texture_screen);
 
+#ifdef OLD_EO
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
@@ -2501,6 +2502,9 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 			break;
 		}
 	}
+#else
+	zoom = convert_linear_view_value (eo);
+#endif
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -2610,7 +2614,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_full_screen_3d_eo_display (eo_params *eo, target_acquisition_systems system)
+static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system)
 {
 	float
 		zoom;
@@ -2632,6 +2636,7 @@ static void draw_full_screen_3d_eo_display (eo_params *eo, target_acquisition_sy
 
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
@@ -2659,6 +2664,9 @@ static void draw_full_screen_3d_eo_display (eo_params *eo, target_acquisition_sy
 			break;
 		}
 	}
+#else
+	zoom = convert_linear_view_value (eo);
+#endif
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -2769,7 +2777,7 @@ static void draw_full_screen_3d_eo_display (eo_params *eo, target_acquisition_sy
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d)
+static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_systems system, int damaged, int valid_3d)
 {
 	char
 		*s,
@@ -2917,6 +2925,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// field of view
 	//
 
+#ifdef OLD_EO
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
@@ -2958,6 +2967,13 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 			break;
 		}
 	}
+#else
+	{
+		int level = eo->zoom * 100;
+		sprintf( buffer, "%d%%", level );
+		s = buffer;
+	}
+#endif
 
 	width = get_mono_font_string_width (s);
 

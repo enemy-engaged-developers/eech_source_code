@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-eo_params
+eo_params_dynamic_move
 	hokum_flir,
 	hokum_llltv,
 	hokum_periscope;
@@ -91,6 +91,7 @@ void initialise_hokum_eo (void)
 	eo_max_elevation							= rad (10.0);
 	eo_max_visual_range						= 5000.0;
 
+#ifdef OLD_EO
 	hokum_flir.field_of_view				= EO_FOV_WIDE;
 	hokum_flir.min_field_of_view			= EO_FOV_NARROW;
 	hokum_flir.max_field_of_view			= EO_FOV_WIDE;
@@ -102,6 +103,19 @@ void initialise_hokum_eo (void)
    hokum_periscope.field_of_view       = EO_FOV_WIDE;
 	hokum_periscope.min_field_of_view	= EO_FOV_NARROW;
    hokum_periscope.max_field_of_view   = EO_FOV_WIDE;
+#else
+	hokum_flir.zoom							= 1.0;
+	hokum_flir.min_zoom						= 1.0;
+	hokum_flir.max_zoom						= 1.0 / 128.0;
+
+	hokum_llltv.zoom							= 1.0;
+	hokum_llltv.min_zoom						= 1.0 / 128.0;
+	hokum_llltv.max_zoom						= 1.0 / 128.0;
+
+	hokum_periscope.zoom						= 1.0;
+	hokum_periscope.min_zoom				= 1.0;
+	hokum_periscope.max_zoom				= 1.0 / 128.0;
+#endif
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,57 +284,83 @@ void get_hokum_eo_relative_centred_viewpoint (viewpoint *vp)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void inc_eo_field_of_view (eo_params *eo)
+static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	if (eo->field_of_view < eo->max_field_of_view)
 	{
 		eo->field_of_view++;
 	}
+#else
+	eo->zoom += 0.2;
+
+	if (eo->zoom > 1.0)
+	{
+		eo->zoom = 1.0;
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void fast_inc_eo_field_of_view (eo_params *eo)
+static void fast_inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	eo->field_of_view = eo->max_field_of_view;
+#else
+	eo->zoom = 1.0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void dec_eo_field_of_view (eo_params *eo)
+static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	if (eo->field_of_view > eo->min_field_of_view)
 	{
 		eo->field_of_view--;
 	}
+#else
+	eo->zoom -= 0.2;
+
+	if (eo->zoom < 0.0)
+	{
+		eo->zoom = 0.0;
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void fast_dec_eo_field_of_view (eo_params *eo)
+static void fast_dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	eo->field_of_view = eo->min_field_of_view;
+#else
+	eo->zoom = 0.0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_hokum_eo (eo_params *eo)
+void update_hokum_eo (eo_params_dynamic_move *eo)
 {
 	float
 		fine_slew_rate,
@@ -366,11 +406,21 @@ void update_hokum_eo (eo_params *eo)
 	}
 
 	////////////////////////////////////////
+
+	if (command_line_eo_zoom_joystick_index != -1)
+	{
+		long pos = get_joystick_value (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
+		
+		eo->zoom = (pos + 10000) / 20000.0;
+	}
+
+	////////////////////////////////////////
 	//
 	// slew optics
 	//
 	////////////////////////////////////////
 
+#ifdef OLD_EO
 	switch (eo->field_of_view)
 	{
 		////////////////////////////////////////
@@ -418,6 +468,17 @@ void update_hokum_eo (eo_params *eo)
 			break;
 		}
 	}
+#else
+	{
+		float exp_zoom_value = convert_linear_view_value (eo);
+
+		fine_slew_rate = rad (4.0) * exp_zoom_value * get_delta_time ();
+
+		medium_slew_rate = rad (20.0) * exp_zoom_value * get_delta_time ();
+
+		coarse_slew_rate = rad (80.0) * exp_zoom_value * get_delta_time ();
+	}
+#endif
 
 	////////////////////////////////////////
 
@@ -501,6 +562,52 @@ void update_hokum_eo (eo_params *eo)
 		eo_elevation -= medium_slew_rate;
 
 		eo_elevation = max (eo_elevation, eo_min_elevation);
+	}
+
+	////////////////////////////////////////
+	// loke 030315
+	// added code to allow the user to slew the eo device using joystick axes
+
+	if (command_line_eo_pan_joystick_index != -1)
+	{
+		float
+			panning_offset_horiz,
+			panning_offset_vert;
+
+		int
+			horizontal_value,
+			vertical_value;
+		
+		horizontal_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
+
+		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
+
+		eo_azimuth += panning_offset_horiz * coarse_slew_rate;
+
+		if (panning_offset_horiz > 0)
+		{
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+		else
+		{
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+
+
+		vertical_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
+
+		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
+
+		eo_elevation -= panning_offset_vert * coarse_slew_rate;
+
+		if (panning_offset_vert < 0)
+		{
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+		else
+		{
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
 	}
 
 	////////////////////////////////////////
@@ -639,19 +746,31 @@ void slave_hokum_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
+#ifdef OLD_EO
 				hokum_flir.field_of_view = hokum_flir.min_field_of_view;
+#else
+				hokum_flir.zoom = 0.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_LLLTV:
 			{
+#ifdef OLD_EO
 				hokum_llltv.field_of_view = hokum_llltv.min_field_of_view;
+#else
+				hokum_llltv.zoom = 0.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 			{
+#ifdef OLD_EO
 				hokum_periscope.field_of_view = hokum_periscope.min_field_of_view;
+#else
+				hokum_periscope.zoom = 0.0;
+#endif
 
 				break;
 			}
@@ -663,19 +782,31 @@ void slave_hokum_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
+#ifdef OLD_EO
 				hokum_flir.field_of_view = hokum_flir.max_field_of_view;
+#else
+				hokum_flir.zoom = 1.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_LLLTV:
 			{
+#ifdef OLD_EO
 				hokum_llltv.field_of_view = hokum_llltv.max_field_of_view;
+#else
+				hokum_llltv.zoom = 1.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 			{
+#ifdef OLD_EO
 				hokum_periscope.field_of_view = hokum_periscope.max_field_of_view;
+#else
+				hokum_periscope.zoom = 1.0;
+#endif
 
 				break;
 			}

@@ -153,10 +153,15 @@ int
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
 	command_line_no_mission_complete_music					= FALSE,
-	command_line_mouse_look									= FALSE,	// Retro 030317
-	command_line_mouse_look_speed							= 15,		// Retro 030317
-	command_line_min_fov									= 20,		// Retro 030318
-	command_line_max_fov									= 80;		// Retro 030318
+	command_line_mouse_look										= FALSE,	// Retro 030317
+	command_line_mouse_look_speed								= 15,		// Retro 030317
+	command_line_min_fov											= 20,		// Retro 030318
+	command_line_max_fov											= 80;		// Retro 030318
+	command_line_eo_pan_joystick_index						= -1;		// loke 030319
+	command_line_eo_pan_vertical_joystick_axis			= 6;		// loke 030319
+	command_line_eo_pan_horizontal_joystick_axis			= 8;		// loke 030319
+	command_line_eo_zoom_joystick_index						= -1;		// loke 030319
+	command_line_eo_zoom_joystick_axis						= 7;		// loke 030319
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1408,6 +1413,61 @@ void process_command_line (int argc, char *argv[])
 			
 			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
 				command_line_max_fov = 80;
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "pan_joystick_index"))	// loke 030319
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_pan_joystick_index);
+			}
+
+			if (command_line_eo_pan_joystick_index < -1)
+			{
+				command_line_eo_pan_joystick_index = -1;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "pan_joystick_vertical_axis"))	// loke 030319
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_pan_vertical_joystick_axis);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "pan_joystick_horizontal_axis"))	// loke 030319
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_pan_horizontal_joystick_axis);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "zoom_joystick_index"))	// loke 030319
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_zoom_joystick_index);
+			}
+
+			if (command_line_eo_zoom_joystick_index < -1)
+			{
+				command_line_eo_zoom_joystick_index = -1;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "zoom_joystick_axis"))	// loke 030319
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_zoom_joystick_axis);
+			}
 		}
 		////////////////////////////////////////
 		else

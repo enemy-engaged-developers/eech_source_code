@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-eo_params
+eo_params_dynamic_move
 	comanche_flir,
 	comanche_dtv,
 	comanche_dvo;
@@ -91,6 +91,7 @@ void initialise_comanche_eo (void)
 	eo_max_elevation						= rad (30.0);
 	eo_max_visual_range					= 5000.0;
 
+#ifdef OLD_EO
 	comanche_flir.field_of_view		= EO_FOV_WIDE;
 	comanche_flir.min_field_of_view	= EO_FOV_NARROW;
 	comanche_flir.max_field_of_view	= EO_FOV_WIDE;
@@ -102,6 +103,19 @@ void initialise_comanche_eo (void)
 	comanche_dvo.field_of_view			= EO_FOV_MEDIUM;
 	comanche_dvo.min_field_of_view	= EO_FOV_NARROW;
 	comanche_dvo.max_field_of_view	= EO_FOV_MEDIUM;
+#else
+	comanche_flir.zoom					= 1.0;
+	comanche_flir.min_zoom				= 1.0;
+	comanche_flir.max_zoom				= 1.0 / 128.0;
+
+	comanche_dtv.zoom						= 1.0;
+	comanche_dtv.min_zoom				= 1.0 / 128.0;
+	comanche_dtv.max_zoom				= 1.0 / 128.0;
+
+	comanche_dvo.zoom						= 1.0;
+	comanche_dvo.min_zoom				= 1.0 / 8.0;
+	comanche_dvo.max_zoom				= 1.0 / 128.0;
+#endif
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,57 +236,83 @@ void get_comanche_eo_relative_centred_viewpoint (viewpoint *vp)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void inc_eo_field_of_view (eo_params *eo)
+static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	if (eo->field_of_view < eo->max_field_of_view)
 	{
 		eo->field_of_view++;
 	}
+#else
+	eo->zoom += 0.2;
+
+	if (eo->zoom > 1.0)
+	{
+		eo->zoom = 1.0;
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void fast_inc_eo_field_of_view (eo_params *eo)
+static void fast_inc_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	eo->field_of_view = eo->max_field_of_view;
+#else
+	eo->zoom = 1.0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void dec_eo_field_of_view (eo_params *eo)
+static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	if (eo->field_of_view > eo->min_field_of_view)
 	{
 		eo->field_of_view--;
 	}
+#else
+	eo->zoom -= 0.2;
+
+	if (eo->zoom < 0.0)
+	{
+		eo->zoom = 0.0;
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void fast_dec_eo_field_of_view (eo_params *eo)
+static void fast_dec_eo_field_of_view (eo_params_dynamic_move *eo)
 {
 	ASSERT (eo);
 
+#ifdef OLD_EO
 	eo->field_of_view = eo->min_field_of_view;
+#else
+	eo->zoom = 0.0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_comanche_eo (eo_params *eo)
+void update_comanche_eo (eo_params_dynamic_move *eo)
 {
 	float
 		fine_slew_rate,
@@ -318,11 +358,21 @@ void update_comanche_eo (eo_params *eo)
 	}
 
 	////////////////////////////////////////
+
+	if (command_line_eo_zoom_joystick_index != -1)
+	{
+		long pos = get_joystick_value (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
+		
+		eo->zoom = (pos + 10000) / 20000.0;
+	}
+
+	////////////////////////////////////////
 	//
 	// slew optics
 	//
 	////////////////////////////////////////
 
+#ifdef OLD_EO
 	switch (eo->field_of_view)
 	{
 		////////////////////////////////////////
@@ -370,6 +420,17 @@ void update_comanche_eo (eo_params *eo)
 			break;
 		}
 	}
+#else
+	{
+		float exp_zoom_value = convert_linear_view_value (eo);
+
+		fine_slew_rate = rad (4.0) * exp_zoom_value * get_delta_time ();
+
+		medium_slew_rate = rad (20.0) * exp_zoom_value * get_delta_time ();
+
+		coarse_slew_rate = rad (80.0) * exp_zoom_value * get_delta_time ();
+	}
+#endif
 
 	////////////////////////////////////////
 
@@ -457,6 +518,53 @@ void update_comanche_eo (eo_params *eo)
 
 	////////////////////////////////////////
 
+	// loke 030315
+	// added code to allow the user to slew the eo device using joystick axes
+
+	if (command_line_eo_pan_joystick_index != -1)
+	{
+		float
+			panning_offset_horiz,
+			panning_offset_vert;
+
+		int
+			horizontal_value,
+			vertical_value;
+		
+		horizontal_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
+
+		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
+
+		eo_azimuth += panning_offset_horiz * coarse_slew_rate;
+
+		if (panning_offset_horiz > 0)
+		{
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+		else
+		{
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+
+
+		vertical_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
+
+		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
+
+		eo_elevation -= panning_offset_vert * coarse_slew_rate;
+
+		if (panning_offset_vert < 0)
+		{
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+		else
+		{
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+	}
+
+	////////////////////////////////////////
+
 	while (single_target_acquisition_system_select_next_target_key)
 	{
 		select_next_eo_target ();
@@ -535,19 +643,31 @@ void slave_comanche_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
+#ifdef OLD_EO
 				comanche_flir.field_of_view = comanche_flir.min_field_of_view;
+#else
+				comanche_flir.zoom = 0.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DTV:
 			{
+#ifdef OLD_EO
 				comanche_dtv.field_of_view = comanche_dtv.min_field_of_view;
+#else
+				comanche_dtv.zoom = 0.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DVO:
 			{
+#ifdef OLD_EO
 				comanche_dvo.field_of_view = comanche_dvo.min_field_of_view;
+#else
+				comanche_dvo.zoom = 0.0;
+#endif
 
 				break;
 			}
@@ -559,19 +679,31 @@ void slave_comanche_eo_to_current_target (void)
 		{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
+#ifdef OLD_EO
 				comanche_flir.field_of_view = comanche_flir.max_field_of_view;
+#else
+				comanche_flir.zoom = 1.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DTV:
 			{
+#ifdef OLD_EO
 				comanche_dtv.field_of_view = comanche_dtv.max_field_of_view;
+#else
+				comanche_dtv.zoom = 1.0;
+#endif
 
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DVO:
 			{
+#ifdef OLD_EO
 				comanche_dvo.field_of_view = comanche_dvo.max_field_of_view;
+#else
+				comanche_dvo.zoom = 1.0;
+#endif
 
 				break;
 			}

@@ -130,10 +130,15 @@ extern int
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
 	command_line_no_mission_complete_music,
-	command_line_mouse_look,				// Retro 030317
-	command_line_mouse_look_speed,			// Retro 030317
-	command_line_min_fov,					// Retro 030318
-	command_line_max_fov;					// Retro 030318
+	command_line_mouse_look,									// Retro 030317
+	command_line_mouse_look_speed,							// Retro 030317
+	command_line_min_fov,										// Retro 030318
+	command_line_max_fov;										// Retro 030318
+	command_line_eo_pan_joystick_index,						// loke 030319
+	command_line_eo_pan_vertical_joystick_axis,			// loke 030319
+	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
+	command_line_eo_zoom_joystick_index,					// loke 030319
+	command_line_eo_zoom_joystick_axis;						// loke 030319
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern eo_params
+extern eo_params_dynamic_move
 	comanche_flir,
 	comanche_dtv,
 	comanche_dvo;
@@ -81,7 +81,7 @@ extern void get_comanche_eo_centred_viewpoint (viewpoint *vp);
 
 extern void get_comanche_eo_relative_centred_viewpoint (viewpoint *vp);
 
-extern void update_comanche_eo (eo_params *eo);
+extern void update_comanche_eo (eo_params_dynamic_move *eo);
 
 extern void centre_comanche_eo (void);
 

@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern eo_params
+extern eo_params_dynamic_move
 	hokum_flir,
 	hokum_llltv,
 	hokum_periscope;
@@ -81,7 +81,7 @@ extern void get_hokum_eo_centred_viewpoint (viewpoint *vp);
 
 extern void get_hokum_eo_relative_centred_viewpoint (viewpoint *vp);
 
-extern void update_hokum_eo (eo_params *eo);
+extern void update_hokum_eo (eo_params_dynamic_move *eo);
 
 extern void centre_hokum_eo (void);
 
