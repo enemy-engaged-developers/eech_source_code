@@ -1,0 +1,48 @@
+A:link {
+	COLOR: #0000aa; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #000055; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: red
+}
+A:active {
+	COLOR: green
+}
+.t1 {
+	BACKGROUND: #a0a0a0; BORDER-BOTTOM: #111111 1px solid; BORDER-LEFT: #eeeeee 1px solid; BORDER-RIGHT: #111111 1px solid; BORDER-TOP: #eeeeee 1px solid
+}
+.t2 {
+	BACKGROUND: #326496; BORDER-BOTTOM: #222222 1px solid; BORDER-LEFT: white 1px solid; BORDER-RIGHT: #222222 1px solid; BORDER-TOP: white 1px solid
+}
+.t3 {
+	BACKGROUND: #c0c0c0; BORDER-BOTTOM: #222222 1px solid; BORDER-LEFT: white 1px solid; BORDER-RIGHT: #222222 1px solid; BORDER-TOP: white 1px solid
+}
+.t4 {
+	BACKGROUND: #808080; BORDER-BOTTOM: black 1px solid; BORDER-LEFT: black 1px solid; BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid
+}
+.t5 {
+	BACKGROUND: #64c8ff; BORDER-BOTTOM: #222222 1px solid; BORDER-LEFT: white 1px solid; BORDER-RIGHT: #222222 1px solid; BORDER-TOP: white 1px solid
+}
+.ti1 {
+	BACKGROUND: #104070; BORDER-BOTTOM: white 1px solid; BORDER-LEFT: #222222 1px solid; BORDER-RIGHT: white 1px solid; BORDER-TOP: #222222 1px solid; TEXT-ALIGN: center
+}
+.ti2 {
+	BACKGROUND: #0078b8; BORDER-BOTTOM: black 1px solid; BORDER-LEFT: black 1px solid; BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid; COLOR: #ffff00; FONT-FAMILY: Tahoma; FONT-SIZE: 10pt; FONT-WEIGHT: bold; TEXT-ALIGN: center
+}
+.t1p {
+	MARGIN: 0px; PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px
+}
+TD.1 {
+	BACKGROUND: #c0c0c0; COLOR: black; FONT-FAMILY: Tahoma; FONT-SIZE: 10pt; PADDING-BOTTOM: 4px; PADDING-LEFT: 4px; PADDING-RIGHT: 4px; PADDING-TOP: 4px
+}
+TD.2 {
+	COLOR: #ffff00; FONT-FAMILY: Tahoma; FONT-SIZE: 18pt; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px; TEXT-ALIGN: center
+}
+TD.3 {
+	COLOR: black; FONT-FAMILY: Arial; FONT-SIZE: 18pt; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px; TEXT-ALIGN: center
+}
+TD.4 {
+	BACKGROUND: #c0c0c0; BORDER-BOTTOM: #222222 1px solid; BORDER-LEFT: white 1px solid; BORDER-RIGHT: #222222 1px solid; BORDER-TOP: white 1px solid; COLOR: black; FONT-FAMILY: Arial; FONT-SIZE: 12pt; FONT-WEIGHT: bold; MARGIN: 2px; PADDING-BOTTOM: 2px; PADDING-LEFT: 2px; PADDING-RIGHT: 2px; PADDING-TOP: 2px; TEXT-ALIGN: center
+}
