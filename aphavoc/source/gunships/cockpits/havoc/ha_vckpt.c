@@ -184,6 +184,9 @@ void initialise_havoc_virtual_cockpit (void)
 	//
 
 	initialise_common_virtual_cockpit_cameras ();
+	
+//VJ wideview mod, date: 18-mar-03	
+	wide_cockpit_nr = 5;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -486,6 +489,9 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 	object_3d_instance
 		*virtual_cockpit_inst3d;
 
+//VJ wideview mod, date: 18-mar-03	
+    char buffer[128];
+
 	////////////////////////////////////////
 	//
 	// virtual cockpit viewpoint is placed at the main object origin
@@ -505,6 +511,13 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		vp.x = 0.0;
 		vp.y = 0.0;
 		vp.z = 0.0;
+
+//VJ wideview mod, date: 18-mar-03	
+		if (get_global_wide_cockpit ())
+		{
+		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		}    
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
@@ -543,6 +556,15 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		set_3d_active_environment (main_3d_single_light_env);
 
 		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+
+//VJ wideview mod, date: 18-mar-03	
+		if (get_global_wide_cockpit ()&&
+	         !(flags & (VIRTUAL_COCKPIT_HUD_GLASS | VIRTUAL_COCKPIT_HUD_DISPLAY | VIRTUAL_COCKPIT_EKRAN_DISPLAY | VIRTUAL_COCKPIT_CRT_DISPLAY))
+	         )
+		{
+		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		}    
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -671,10 +693,27 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					memcpy (&virtual_cockpit_hsi_drift_inst3d->vp, &vp, sizeof (viewpoint));
 
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_drift_inst3d->vp.position, virtual_cockpit_hsi_drift_inst3d);
+
+//VJ wideview mod, date: 18-mar-03	
+// re-insert compass here (internal is draw after external
+					if (get_global_wide_cockpit ())
+					{					
+					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);				}
 				}
 			}
 
 			draw_3d_scene ();
+
+//VJ wideview mod, date: 18-mar-03	
+            if (edit_wide_cockpit)
+         	{
+				sprintf(buffer,"HAVOC wide cockpit mod edit:"); 
+                ui_display_text (buffer, 10, 40);
+				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
+                ui_display_text (buffer, 10, 60);
+                sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+                ui_display_text (buffer, 10, 100);
+            }
 
 			end_3d_scene ();
 		}
@@ -981,6 +1020,12 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		vp.x = 0.0;
 		vp.y = 0.0;
 		vp.z = 0.0;
+//VJ wideview mod, date: 18-mar-03			
+		if (get_global_wide_cockpit ())
+		{
+		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		}    
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
@@ -1120,6 +1165,13 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 					search.result_sub_object->relative_roll = -roll;
 				}
 
+//VJ wideview mod, date: 18-mar-03	
+				if (get_global_wide_cockpit ())
+				{
+				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
+				    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+				}    
+				
 				memcpy (&virtual_cockpit_adi_inst3d->vp, &vp, sizeof (viewpoint));
 
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_adi_inst3d->vp.position, virtual_cockpit_adi_inst3d);
@@ -1306,6 +1358,49 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 			}
 		}
 	}
+
+//VJ wideview mod, date: 18-mar-03	
+	////////////////////////////////////////
+	//
+	// wide cockpit position edit
+	//
+	////////////////////////////////////////
+	//vj
+	if (edit_wide_cockpit)                                     
+	{                                                          
+		if (check_key(DIK_NUMPAD6))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD4))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD8))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD2))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD1))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD3))                            
+		{                                                      
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
+        }                                                      
+		if (check_key(DIK_NUMPAD0))                            
+		{                                                      
+			wide_cockpit_position[5].x = 0;                
+			wide_cockpit_position[5].y = 0.095;             
+			wide_cockpit_position[5].z = 0.335;            
+        }                                                      
+    }            	                                           
+
+
 
 	////////////////////////////////////////
 	//

@@ -70,6 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 #define DEBUG_MODULE					 										0
 
 #define DEBUG_MODULE_FINE_DISPLAY_CAMERA_POSITION_ADJUSTMENT	0
@@ -131,6 +132,9 @@ void initialise_comanche_virtual_cockpit (void)
 	//
 
 	initialise_common_virtual_cockpit_cameras ();
+		
+//VJ wideview mod, date: 18-mar-03	
+	wide_cockpit_nr = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +174,8 @@ void deinitialise_comanche_virtual_cockpit (void)
 	//
 
 	deinitialise_common_virtual_cockpit_cameras ();
+	
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,6 +324,12 @@ void update_comanche_virtual_cockpit (void)
 	//
 
 	depth = 0;
+
+//VJ wideview mod, date: 18-mar-03	
+	if (get_global_wide_cockpit ())
+	{
+  		draw_crew = FALSE;
+	}
 
 	while (TRUE)
 	{
@@ -506,6 +518,9 @@ void pre_render_comanche_virtual_cockpit_displays (void)
 
 void draw_comanche_virtual_cockpit (void)
 {
+//VJ wideview mod, date: 18-mar-03	
+	char buffer[128];
+
 	int
 		draw_main_rotors;
 
@@ -607,6 +622,20 @@ void draw_comanche_virtual_cockpit (void)
 
 	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 
+//VJ wideview mod, date: 18-mar-03	
+	if (get_global_wide_cockpit () &&
+	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
+	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
+         get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY ) )
+	    {
+			virtual_cockpit_inst3d->vp.x = wide_cockpit_position[wide_cockpit_nr].x;
+			virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+			virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		
+        	set_3d_view_distances (main_3d_env, 10.0, 0.2, 1.0, 0.0);
+        }	
+
 	realise_3d_clip_extents (main_3d_env);
 
 	recalculate_3d_environment_settings (main_3d_env);
@@ -676,6 +705,17 @@ void draw_comanche_virtual_cockpit (void)
 
 				draw_3d_scene ();
 
+//VJ wideview mod, date: 18-mar-03	
+                if (edit_wide_cockpit)
+	            {
+					sprintf(buffer,"COMANCHE wide cockpit mod edit:"); 
+                    ui_display_text (buffer, 10, 40);
+					sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
+                    ui_display_text (buffer, 10, 60);
+                    sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+                    ui_display_text (buffer, 10, 100);
+                }
+
 				end_3d_scene ();
 			}
 		}
@@ -730,6 +770,17 @@ void draw_comanche_virtual_cockpit (void)
 
 			draw_3d_scene ();
 
+//VJ wideview mod, date: 18-mar-03	
+            if (edit_wide_cockpit)
+	        {
+				sprintf(buffer,"COMANCHE wide cockpit mod edit:"); 
+                ui_display_text (buffer, 10, 40);
+				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
+                ui_display_text (buffer, 10, 60);
+                sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+                ui_display_text (buffer, 10, 100);
+            }
+
 			end_3d_scene ();
 
 			remove_light_3d_source_from_3d_scene (display_backlight);
@@ -741,6 +792,57 @@ void draw_comanche_virtual_cockpit (void)
 			destroy_light_3d_source (cockpit_light);
 		}
 	}
+
+//VJ wideview mod, date: 18-mar-03	
+	////////////////////////////////////////
+	//
+	// wide cockpit position edit
+	//
+	////////////////////////////////////////
+
+	if (edit_wide_cockpit)
+	{
+		if (check_key(DIK_NUMPAD6))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+        }  
+		if (check_key(DIK_NUMPAD4))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+        }  
+		if (check_key(DIK_NUMPAD8))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+        }  
+		if (check_key(DIK_NUMPAD2))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+        }  
+		if (check_key(DIK_NUMPAD3))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+        }  
+		if (check_key(DIK_NUMPAD1))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+        }  
+		if (check_key(DIK_NUMPAD0))
+		{
+			if (wide_cockpit_nr==0)
+			{
+  		      	wide_cockpit_position[0].x = 0;    
+				wide_cockpit_position[0].y = 1.15; 
+				wide_cockpit_position[0].z = -2.43;
+			}	
+			if (wide_cockpit_nr==1)
+			{
+				wide_cockpit_position[1].x = 0;    
+				wide_cockpit_position[1].y = 0.85; 
+				wide_cockpit_position[1].z = -1.03;
+			}	
+        }  
+    }            	
+
 
 #if RECOGNITION_GUIDE
 	set_3d_view_distances (main_3d_env, 10000.0, 100.0, 1.0, 0.0);
@@ -836,6 +938,19 @@ void get_comanche_crew_viewpoint (void)
 		vp.z = -vp.z;
 
 		multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, pilot_head_vp.attitude, &vp.position);
+/*		
+		debug_log("pilot vp: %f %f %f  ",virtual_cockpit_inst3d->vp.x,virtual_cockpit_inst3d->vp.y,virtual_cockpit_inst3d->vp.z);
+
+//VJ wideview mod, date: 18-mar-03	
+	
+		if (get_global_wide_cockpit ())
+		{	
+			virtual_cockpit_inst3d->vp.x = wide_cockpit_position[wide_cockpit_nr].x;
+			virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+			virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		//debug_log("pilot vp: %f %f %f  ",virtual_cockpit_inst3d->vp.x,virtual_cockpit_inst3d->vp.y,virtual_cockpit_inst3d->vp.z);				
+		}
+*/		
 	}
 	else
 	{

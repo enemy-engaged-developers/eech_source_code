@@ -138,6 +138,11 @@ void initialise_view_events (void)
 	joystick_pov_up = FALSE;
 
 	joystick_pov_down = FALSE;
+	
+//VJ wideview mod, date: 18-mar-03	
+    wide_cockpit_edit_event(NULL);
+   	edit_wide_cockpit = FALSE;
+	set_global_wide_cockpit(FALSE);	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -807,6 +812,137 @@ static void increase_cockpit_detail_event (event *ev)
 	}
 
 	set_global_cockpit_detail_level (level);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ wideview mod, date: 18-mar-03	
+static void wide_cockpit_toggle_event (event *ev)
+{
+	set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
+   	edit_wide_cockpit = FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void wide_cockpit_initialize(void)
+{
+		wide_cockpit_position[0].x = 0;
+		wide_cockpit_position[0].y = 1.15;
+		wide_cockpit_position[0].z = -2.43;
+		//comanche
+		wide_cockpit_position[1].x = 0;
+		wide_cockpit_position[1].y = 0.85;
+		wide_cockpit_position[1].z = -1.03;
+		//comanche co-pilot
+		
+		wide_cockpit_position[2].x = 0.375;
+		wide_cockpit_position[2].y = 2.075;
+		wide_cockpit_position[2].z = -1.810;
+		//hokum
+		
+		wide_cockpit_position[3].x = -0.375;
+		wide_cockpit_position[3].y = 2.075;
+		wide_cockpit_position[3].z = -1.810;
+		//hokum co-pilot
+		
+		wide_cockpit_position[4].x = 0;
+		wide_cockpit_position[4].y = 0.07;
+		wide_cockpit_position[4].z = 0.55;
+		//apache
+		
+		wide_cockpit_position[5].x = 0;
+		wide_cockpit_position[5].y = 0.095;
+		wide_cockpit_position[5].z = 0.335;			
+		//havoc
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ wideview mod, date: 18-mar-03	
+static void wide_cockpit_edit_event (event *ev)
+{
+	FILE *f;
+	char buf[128];
+	char *p;
+	int i, j;
+	
+ 	   
+ 	if (!get_global_wide_cockpit ())
+ 	   set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
+
+	edit_wide_cockpit = TRUE;
+	
+	f = fopen("widemod.cfg","r");
+    // if somehow fails
+	if (!f)
+	{
+		wide_cockpit_initialize();
+		// init positions
+
+ 	    wide_cockpit_save_event (ev);  
+ 	    // make the cfg file
+ 	    
+      	f = fopen("widemod.cfg","r");
+      	// open it again
+ 	}  
+		 	 	   
+ 	fscanf(f,"%[^\n]\n",buf);
+ 	// read header
+ 	
+ 	for(j = 0; j < 6; j++)
+ 	{
+ 	     fscanf(f,"%[^\n]\n",buf);
+ 	     
+	     debug_log("WIDE reading: %s",buf); 
+
+ 	     
+ 	     p = strtok(buf,"=");
+	     debug_log("WIDE reading: %s",p); 
+	     
+ 	     p = strtok(NULL,",");
+ 	     wide_cockpit_position[j].x = atof(p);
+	     debug_log("WIDE reading: %s : f",p,wide_cockpit_position[j].x); 
+ 	     p = strtok(NULL,",");
+	     wide_cockpit_position[j].y = atof(p);
+	     debug_log("WIDE reading: %s : %f",p,wide_cockpit_position[j].y); 
+	     p = strtok(NULL,",");
+	     wide_cockpit_position[j].z = atof(p);
+	     debug_log("WIDE reading: %s : %f",p,wide_cockpit_position[j].z); 
+	}
+	
+	if (f) 
+	   fclose(f);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ wideview mod, date: 18-mar-03	
+static void wide_cockpit_save_event (event *ev)
+{
+	FILE *f = fopen("widemod.cfg","w");
+
+	fprintf(f, "==========Wideview Cockpit MOD version 1.2===========\n");
+	fprintf(f, "commanche pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[0].x,wide_cockpit_position[0].y,wide_cockpit_position[0].z);
+	fprintf(f, "commanche co-pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[1].x,wide_cockpit_position[1].y,wide_cockpit_position[1].z);
+	fprintf(f, "hokum pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[2].x,wide_cockpit_position[2].y,wide_cockpit_position[2].z);
+	fprintf(f, "hokum co-pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
+	fprintf(f, "apache pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
+	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
+    
+	fclose(f);   
+
+	edit_wide_cockpit = FALSE;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1789,6 +1925,11 @@ void set_gunship_view_mode_events (void)
 	}
 
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
+
+//VJ wideview mod, date: 18-mar-03	
+	set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, wide_cockpit_toggle_event);
+	set_event (DIK_BACKSLASH, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, wide_cockpit_edit_event);
+	set_event (DIK_BACKSLASH, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, wide_cockpit_save_event);
 
 	if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
 	{

@@ -448,6 +448,15 @@ void update_virtual_cockpit_view (void)
 
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
+		
+//VJ wideview mod, date: 18-mar-03	
+		if (get_global_wide_cockpit ())
+		{		
+		       float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
+		       
+			pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+			//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
+		}		
 	}
 	else	// Use mouse/TIR, all by Retro 030317, 030318
 	{
@@ -1460,6 +1469,12 @@ void switch_seat_position (void)
 		store_pilot_seat_values ();
 
 		restore_co_pilot_seat_values ();
+
+//VJ wideview mod, date: 18-mar-03	
+        if (wide_cockpit_nr	== 0) 
+           wide_cockpit_nr = 1;	
+        if (wide_cockpit_nr	== 2) 
+           wide_cockpit_nr = 3;	
 	}
 	else
 	{
@@ -1474,6 +1489,12 @@ void switch_seat_position (void)
 		store_co_pilot_seat_values ();
 
 		restore_pilot_seat_values ();
+
+//VJ wideview mod, date: 18-mar-03	
+        if (wide_cockpit_nr	== 1) 
+           wide_cockpit_nr = 0;	
+        if (wide_cockpit_nr	== 3) 
+           wide_cockpit_nr = 2;	
 	}
 }
 
@@ -2839,6 +2860,15 @@ void update_virtual_cockpit_padlock_view (void)
 
 			set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
 		}
+	}
+
+//VJ wideview mod, date: 18-mar-03	
+	if (get_global_wide_cockpit ())
+	{
+		float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
+		
+		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}
 }
 
