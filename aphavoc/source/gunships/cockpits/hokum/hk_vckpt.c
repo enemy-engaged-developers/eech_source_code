@@ -194,8 +194,9 @@ void update_hokum_virtual_cockpit (void)
 	object_3d_sub_object_search_data
 		search;
 
-//VJ wideview mod, date: 18-mar-03	
-	char buffer[128];
+//VJ wideview mod, date: 18-mar-03
+// crh 030323 this buffer isn't used, and causes a warning with open watcom
+//	char buffer[128];
 	
 	////////////////////////////////////////
 	//
@@ -566,7 +567,7 @@ void pre_render_hokum_virtual_cockpit_displays (void)
 void draw_hokum_virtual_cockpit (void)
 {
 //VJ wideview mod, date: 18-mar-03	
-    char buffer[128];
+	char buffer[128];
         
 	int
 		draw_main_rotors;
