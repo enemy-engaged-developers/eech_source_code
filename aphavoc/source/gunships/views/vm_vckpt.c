@@ -80,6 +80,13 @@
 
 // #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
 
+//VJ 050208 gives the possibility to look behind you (since you can't turn your body) 
+#define MAX_LOOK_ANGLE_LEFT_RIGHT  120.0   //all choppers, was 90 degrees
+#define MAX_LOOK_ANGLE_UP1  60.0	//comanche, hokum   //was 45
+#define MAX_LOOK_ANGLE_UP2  60.0 //rest              //was 40
+#define MAX_LOOK_ANGLE_DOWN1  60.0 //comanche, hokum //was 45
+#define MAX_LOOK_ANGLE_DOWN2  40.0 //rest            //was 20
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +111,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -112,7 +119,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_HAVOC:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -120,7 +127,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_COMANCHE:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -128,7 +135,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_HOKUM:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -137,7 +144,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_BLACKHAWK:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -147,7 +154,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -157,7 +164,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_AH64A:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -165,7 +172,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -200,7 +207,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -208,7 +215,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_HAVOC:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -216,7 +223,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_COMANCHE:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -224,7 +231,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_HOKUM:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -233,7 +240,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_BLACKHAWK:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -243,7 +250,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -253,7 +260,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_AH64A:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -261,7 +268,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (-90.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -272,7 +279,7 @@ static float get_rotate_right_limit (void)
 		{
 			// JB 030313 Fly any aircraft
 			limit = rad (-135.0);
-			//limit = rad (-90.0);
+			//limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -296,7 +303,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
-			limit = rad (40.0);
+			limit = rad (MAX_LOOK_ANGLE_UP2);
 
 			break;
 		}
@@ -304,7 +311,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_HAVOC:
 		////////////////////////////////////////
 		{
-			limit = rad (40.0);
+			limit = rad (MAX_LOOK_ANGLE_UP2);
 
 			break;
 		}
@@ -312,7 +319,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_COMANCHE:
 		////////////////////////////////////////
 		{
-			limit = rad (45.0);
+			limit = rad (MAX_LOOK_ANGLE_UP1);
 
 			break;
 		}
@@ -320,7 +327,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_HOKUM:
 		////////////////////////////////////////
 		{
-			limit = rad (45.0);
+			limit = rad (MAX_LOOK_ANGLE_UP1);
 
 			break;
 		}
@@ -329,7 +336,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_BLACKHAWK:
 		////////////////////////////////////////
 		{
-			limit = rad (45.0);
+			limit = rad (MAX_LOOK_ANGLE_UP1);
 
 			break;
 		}
@@ -339,7 +346,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (40.0);
+			limit = rad (MAX_LOOK_ANGLE_UP2);
 
 			break;
 		}
@@ -349,7 +356,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_AH64A:
 		////////////////////////////////////////
 		{
-			limit = rad (45.0);
+			limit = rad (MAX_LOOK_ANGLE_UP1);
 
 			break;
 		}
@@ -357,7 +364,7 @@ static float get_rotate_up_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (40.0);
+			limit = rad (MAX_LOOK_ANGLE_UP2);
 
 			break;
 		}
@@ -367,7 +374,7 @@ static float get_rotate_up_limit (void)
 		////////////////////////////////////////
 		{
 			// JB 030313 Fly any aircraft
-			limit = rad (90.0);
+			limit = rad (MAX_LOOK_ANGLE_UP1);
 			//limit = rad (0.0);
 
 			break;
@@ -392,7 +399,10 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			if (command_line_3d_cockpit)
+				limit = rad (-MAX_LOOK_ANGLE_DOWN1);
+			else
+				limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -400,7 +410,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_HAVOC:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -408,7 +418,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_COMANCHE:
 		////////////////////////////////////////
 		{
-			limit = rad (-45.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
 
 			break;
 		}
@@ -416,7 +426,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_HOKUM:
 		////////////////////////////////////////
 		{
-			limit = rad (-45.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
 
 			break;
 		}
@@ -425,7 +435,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_BLACKHAWK:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -435,7 +445,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -445,7 +455,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_AH64A:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -453,7 +463,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_KA50:
 		////////////////////////////////////////
 		{
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 
 			break;
 		}
@@ -463,7 +473,7 @@ static float get_rotate_down_limit (void)
 		////////////////////////////////////////
 		{
 			// JB 030313 Fly any aircraft
-			limit = rad (-20.0);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
 			//limit = rad (0.0);
 
 			break;
@@ -649,7 +659,7 @@ void update_virtual_cockpit_view (void)
 			temp_h = get_absolute_mouse_x ();
 			temp_p = get_absolute_mouse_y ();
 
-			temp_h = -90*temp_h/16383;	// seems left <-> right are swapped with the mouse ?
+			temp_h = -MAX_LOOK_ANGLE_LEFT_RIGHT*temp_h/16383;	// seems left <-> right are swapped with the mouse ?
 			temp_p = -45*temp_p/16383;	// Those are the max-possible values as they are restriced above in this file
 			
 			pilot_head_pitch = rad(temp_p);
@@ -661,7 +671,7 @@ void update_virtual_cockpit_view (void)
 			temp_h = TIR_GetYaw();
 
 			temp_p = -45. * temp_p / 16383.;	// Those are the max-possible values as they are restriced above in this file
-			temp_h = 90. * temp_h / 16383.;
+			temp_h = MAX_LOOK_ANGLE_LEFT_RIGHT * temp_h / 16383.;
 
 			pilot_head_pitch = rad(temp_p);
 			pilot_head_heading = rad(temp_h);
