@@ -213,7 +213,8 @@ void initialise_apache_virtual_cockpit_3d (void)
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read
    set_global_wide_cockpit(FALSE);
-   
+   edit_wide_cockpit = FALSE;
+
 	subnr = 0;
 	dx = 0; dy = 0; dz = 0;
 
@@ -422,9 +423,10 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
     char buffer[128];
 
 
-#ifndef DEBUG_WIDEVIEW
+//#ifndef DEBUG_WIDEVIEW
    set_global_wide_cockpit(FALSE);
-#endif
+   edit_wide_cockpit = FALSE;
+//#endif
 	////////////////////////////////////////
 	//
 	// virtual cockpit viewpoint is placed at the main object origin
@@ -617,10 +619,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 		vp.x = BASE_DX;
 		vp.y = BASE_DY - 0.0800;
 		vp.z = BASE_DZ;
-		vp.x += wide_cockpit_position[wide_cockpit_nr].x;
-		vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-		vp.z += wide_cockpit_position[wide_cockpit_nr].z;
-
+		
 		clear_zbuffer_screen ();
 
 		if (begin_3d_scene ())
@@ -982,10 +981,6 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 			vp.x = BASE_DX;
 			vp.y = BASE_DY - 0.086 - _DY;
 			vp.z = BASE_DZ-0.010;
-		vp.x += wide_cockpit_position[wide_cockpit_nr].x;
-		vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-		vp.z += wide_cockpit_position[wide_cockpit_nr].z;
-
 
 			memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
 
@@ -1145,9 +1140,11 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 	////////////////////////////////////////
 
 //NO wideview for 3d cockpit
-#ifndef DEBUG_WIDEVIEW
+//#ifndef DEBUG_WIDEVIEW
 	set_global_wide_cockpit(FALSE);
-#endif
+   edit_wide_cockpit = FALSE;
+
+//#endif
 
 
 		vp.x = 0.0;
@@ -1185,10 +1182,6 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 			vp.x = BASE_DX;
 			vp.y = BASE_DY - 0.164;
 			vp.z = BASE_DZ;
-		vp.x += wide_cockpit_position[wide_cockpit_nr].x;
-		vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-		vp.z += wide_cockpit_position[wide_cockpit_nr].z;
-//VJ#
 
 		if (begin_3d_scene ())
 		{
@@ -1266,12 +1259,9 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 
 		clear_zbuffer_screen ();
 
-		vp.x = BASE_DX;//+dx;
-		vp.y = BASE_DY;//+dy;
-		vp.z = BASE_DZ-0.1;//+dz;
-		vp.x += wide_cockpit_position[wide_cockpit_nr].x;
-		vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-		vp.z += wide_cockpit_position[wide_cockpit_nr].z;
+		vp.x = BASE_DX;
+		vp.y = BASE_DY;
+		vp.z = BASE_DZ-0.1;
 /*
 		vp.x = BASE_DX+dx;
 		vp.y = BASE_DY+dy;
@@ -1280,9 +1270,6 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 			vp.x = wide_cockpit_position[wide_cockpit_nr].x;
 			vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 			vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-			vp.x += 0.0;
-			vp.y += 0.22;
-			vp.z += 0.18;
 */
 //VJ#
 

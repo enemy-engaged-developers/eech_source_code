@@ -521,7 +521,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 			//VJ 050207 included head pitch in fixed view setting
-			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );		    
+			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );		    
 		}
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
@@ -560,7 +560,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.3, 1.0, 0.0);
 
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ()&&
@@ -735,7 +735,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1411,7 +1411,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		{
 			wide_cockpit_position[wide_cockpit_nr].x = 0;
 			wide_cockpit_position[wide_cockpit_nr].y = 0;
-			wide_cockpit_position[wide_cockpit_nr].z = 0.2;
+			wide_cockpit_position[wide_cockpit_nr].z = 0.3;
 			wide_cockpit_position[wide_cockpit_nr].x = 0;
       }
    }
