@@ -519,8 +519,9 @@ static void draw_local_3d_object (entity *en, float range)
 
 	////////////////////////////////////////
 	// Xhit: added for downwash effect. (030328)
+	// VJ 030512 changed from no_downbwash to downwash
 	////////////////////////////////////////
-	if(!command_line_no_downwash)
+	if(command_line_downwash)
 	{
 		draw_downwash_effect(en);
 	}

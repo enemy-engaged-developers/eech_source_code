@@ -143,7 +143,7 @@ extern int
 	command_line_ground_stabilisation_available,			// loke 030322	
 	command_line_framerate,										// VJ 030324
 	command_line_key_mapping,									// Retro 030322
-	command_line_no_downwash,									// Xhit 030328
+	command_line_downwash,										// Xhit 030328, VJ 030512 changed
 	command_line_wut,												// VJ 030330
 	command_line_dump_ini,										// VJ 030403
 	command_line_cyclic_joystick_index,						// loke 030418

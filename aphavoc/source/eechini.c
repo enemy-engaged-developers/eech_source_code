@@ -341,14 +341,7 @@ void process_ini_file(int argc, char *argv[])
 
 		if (strcmp(p, "dfr") == 0) 		command_line_framerate = d1;
 		if (strcmp(p, "keymap") == 0) 	command_line_key_mapping = d1;		
-		if (strcmp(p, "dwash") == 0)
-		{
-			if (d1 == 0) 
-				command_line_no_downwash = TRUE;
-			else 
-				command_line_no_downwash = FALSE;
-		}	
-
+		if (strcmp(p, "dwash") == 0)     command_line_downwash = d1; 
 		if (strcmp(p, "cyclicn") == 0) command_line_cyclic_joystick_index = d1;
 		if (strcmp(p, "cyclich") == 0) command_line_cyclic_joystick_x_axis = d1;
 		if (strcmp(p, "cyclicv") == 0) command_line_cyclic_joystick_y_axis = d1;
@@ -476,11 +469,8 @@ void dump_ini_file(void)
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar (def = 1)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR (def = 1)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
-	fprintf(f,"keymap=%d            # key mapping (def = 0)\n",command_line_key_mapping);
-	if (command_line_no_downwash)
-		fprintf(f,"dwash=0             # rotor downwash (dust), def = 1 (downwash visible)\n");
-   else
-		fprintf(f,"dwash=1             # rotor downwash (dust), def = 1 (downwash visible)\n");
+	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
+	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash =);
 	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 0 (off)\n",command_line_high_res_mfd);
 	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4)def = 0 (contours only)\n",command_line_tsd_render_mode);

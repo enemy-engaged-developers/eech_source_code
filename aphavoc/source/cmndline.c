@@ -166,7 +166,7 @@ int
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_framerate										= FALSE,	// VJ 030326
 	command_line_key_mapping									= FALSE,	// Retro 030322
-	command_line_no_downwash									= FALSE,	// Xhit 030328
+	command_line_downwash										= TRUE,	// Xhit 030328, VJ 030512 changed
 	command_line_wut												= FALSE,	// VJ 030330
 	command_line_dump_ini										= TRUE,	// VJ 030414 changed to true
 	command_line_cyclic_joystick_index						= -1,		// loke 030418
@@ -1588,8 +1588,7 @@ void process_command_line (int argc, char *argv[])
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "ini")) //VJ 030414 possibility to start without ini: /ini:0
-		////////////////////////////////////////
-		
+		////////////////////////////////////////		
 		if (*s2 == ':')
 		{
 			sscanf (s2 + 1, "%d", &command_line_dump_ini);
@@ -1599,12 +1598,17 @@ void process_command_line (int argc, char *argv[])
 			command_line_dump_ini = TRUE;
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "no_downwash"))	//Xhit 030328
+		else if (s2 = strarg (s1, "downwash"))	//Xhit 030328, VJ 030512 changed 
 		////////////////////////////////////////
+		if (*s2 == ':')
 		{
-			command_line_no_downwash = TRUE;
+			sscanf (s2 + 1, "%d", &command_line_downwash);
+		}
+		else
+		{
+			command_line_downwash = TRUE;
 
-			debug_log ("ARG:%s, RESPONSE:command_line_no_downwash = %d", s1, command_line_no_downwash);
+			debug_log ("ARG:%s, RESPONSE:command_line_downwash = %d", s1, command_line_downwash);
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "cyclic_joystick_index"))		// loke 030418
