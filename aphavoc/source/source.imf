@@ -92,6 +92,7 @@ c_object_files    += $+ &
                      $(currentdir)\install.obj &
                      $(currentdir)\cdmusic.obj &
                      $(currentdir)\cmndline.obj &
+                     $(currentdir)\WUTcfg.obj &
                      $-
 
 asm_object_files  += $+ &
