@@ -529,6 +529,72 @@ static void load_scout_weapons_event (event *ev)
 	#endif
 }
 
+// Jabberwock 030930 FLIR mouse control
+
+static void mouse_next_target_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		single_target_acquisition_system_select_next_target_key++;
+	}
+}
+
+
+static void mouse_lock_target_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		toggle_comanche_lock_target ();
+	}
+}
+
+static void mouse_left_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		mouse_move_left++;
+	}
+}
+	
+static void mouse_right_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		mouse_move_right++;
+	}
+}
+
+static void mouse_up_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		mouse_move_down++;
+	}
+}
+
+static void mouse_down_event (event *ev)
+{
+	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	{
+		mouse_move_up++;
+	}
+}
+
+static void mouse_wheel_down_event (event *ev)
+{
+	mouse_wheel_down++;
+}
+
+static void mouse_wheel_up_event (event *ev)
+{
+	mouse_wheel_up++;
+}
+
+
+
+// Jabberwock 030930 ends
+
+
 static void mouselook_toggle (event *ev)
 {
 	if (command_line_mouse_look)
@@ -541,7 +607,7 @@ static void mouselook_toggle (event *ev)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -638,6 +704,26 @@ void set_common_avionics_events (void)
 
 	set_event ((JOYSTICK_BUTTON + 2), MODIFIER_NONE, KEY_STATE_DOWN, select_next_weapon_event);
 	
+	// Jabberwock 030930 Mouse FLIR control
+
+	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_lock_target_event);
+
+	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_next_target_event);
+
+	set_event (MOUSE_MOVE_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_up_event);
+
+	set_event (MOUSE_MOVE_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_down_event);
+
+	set_event (MOUSE_MOVE_LEFT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_left_event);
+
+	set_event (MOUSE_MOVE_RIGHT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_right_event);
+
+	set_event (MOUSE_WHEEL_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_up_event);
+
+	set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_down_event);
+
+	// Jabberwock 030930 ends
+	
 	// Jabberwock 031016 Mouselook toggle
 	
 	set_event (MOUSE_MIDDLE_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouselook_toggle);
@@ -651,3 +737,4 @@ void set_common_avionics_events (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
