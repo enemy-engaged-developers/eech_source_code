@@ -100,7 +100,9 @@ static entity *create_local (entity_types type, int index, char *pargs)
   	//
 	////////////////////////////////////////
 
-	validate_local_create_entity_index (index);
+// Check removed by Werewolf 080403
+// TODO: Fix downwash effect to work on client AND server without requiring this hack
+//	validate_local_create_entity_index (index);
 
 	#if DEBUG_MODULE
 

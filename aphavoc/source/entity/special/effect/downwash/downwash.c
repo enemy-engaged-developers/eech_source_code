@@ -430,6 +430,11 @@ void draw_downwash_effect(entity *en)
 		return;
 	}
 
+	if (get_comms_model () != COMMS_MODEL_SERVER) // Only create on server. Werewolf 080403
+	{					      // TODO: Find a solution that works on both client and server
+		return;
+	}
+
 	memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 
 	main_rotor_rpm = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
