@@ -40,6 +40,7 @@
   		!define MUI_DIRECTORYPAGE_TEXT_TOP "Please select the Razorworks root folder. This installer will place the files in the correct directories."
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+	   !define MUI_FINISHPAGE_NOAUTOCLOSE
   		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\readme.html"
   !insertmacro MUI_PAGE_FINISH
   
@@ -60,6 +61,7 @@ Section "cohokum.exe" SectionExe
   File "${EECH-NEW}\aphavoc\cohokum.exe"
   File "${EECH-NEW}\setup\cohokum\readme.html"
   File "${EECH-NEW}\setup\cohokum\motd.txt"
+  File "${EECH-NEW}\setup\common\data\language\tlate6.dat"
  
 SectionEnd
 
@@ -90,7 +92,7 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_SectionExe ${LANG_ENGLISH} "Install executable and readme.html"
+  LangString DESC_SectionExe ${LANG_ENGLISH} "Install cohokum.exe, readme.html, motd.txt and tlate6.dat language file"
   LangString DESC_SecPayload ${LANG_ENGLISH} "Extra Payload screens AH64, Hind, BlackHawk, KA50"
   LangString DESC_SecGWUT ${LANG_ENGLISH} "Weapons and Units Tweaker files"
 
