@@ -97,16 +97,16 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].y = 0.0;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
-
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.07;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.3;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = -4.0;
+//VJ 050210 defined in vm_data.h
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = BASE_X_APACHE;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = BASE_Y_APACHE;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = BASE_Z_APACHE;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = BASE_P_APACHE;
 	
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = 0.0;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = 0.300;			
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = 0.0;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = BASE_X_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = BASE_Y_HAVOC;
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;			
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = BASE_P_HAVOC;
 }	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
