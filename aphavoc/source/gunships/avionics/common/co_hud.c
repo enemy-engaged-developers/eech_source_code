@@ -121,6 +121,9 @@ void initialise_common_hud (void)
 	set_rgb_colour (hud_colour_table[HUD_COL_BLACK],     0,   0,   0, 255);
 
 	hud_colour = hud_colour_table[get_global_hud_colour ()];
+
+//VJ hud size mod
+	set_global_unscaled_displays (TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

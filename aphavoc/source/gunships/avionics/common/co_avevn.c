@@ -692,10 +692,10 @@ void set_common_avionics_events (void)
 
 	set_event (DIK_K, MODIFIER_NONE, KEY_STATE_DOWN, set_next_hud_colour_event);
 
-	set_event (DIK_K, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_prev_hud_colour_event);
+//	set_event (DIK_K, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_prev_hud_colour_event);
+//VJ 050205 hijacked this key for HUD background colour
+	set_event (DIK_K, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_next_hud_alpha_event);
 
-	set_event (DIK_K, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, set_next_hud_alpha_event);
-	
 	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_hud_enlarge_event);
 
 	////////////////////////////////////////
