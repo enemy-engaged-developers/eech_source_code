@@ -327,32 +327,33 @@ void process_ini_file(int argc, char *argv[])
 	}
 		
 //MODS
-		if (strcmp(p, "msl") == 0) 	command_line_mouse_look = d1;
-		if (strcmp(p, "msls") == 0) command_line_mouse_look_speed = d1;
-		if (strcmp(p, "minfov") == 0) 	command_line_min_fov = d1;
-		if (strcmp(p, "maxfov") == 0) 	command_line_max_fov = d1;
-		if (strcmp(p, "eopann") == 0) 	command_line_eo_pan_joystick_index = d1;
-		if (strcmp(p, "eopanv") == 0) 	command_line_eo_pan_vertical_joystick_axis = d1;
-		if (strcmp(p, "eopanh") == 0) 	command_line_eo_pan_horizontal_joystick_axis = d1;
-		if (strcmp(p, "eozoomn") == 0) command_line_eo_zoom_joystick_index = d1;
-		if (strcmp(p, "eozoomax") == 0)command_line_eo_zoom_joystick_axis = d1;
-		if (strcmp(p, "radarinf") == 0)command_line_ground_radar_ignores_infantry = d1;
-		if (strcmp(p, "grstab") == 0) 	command_line_ground_stabilisation_available = d1;
+		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
+		if (strcmp(p, "msls") == 0)			command_line_mouse_look_speed = d1;
+		if (strcmp(p, "minfov") == 0) 		command_line_min_fov = d1;
+		if (strcmp(p, "maxfov") == 0) 		command_line_max_fov = d1;
+		if (strcmp(p, "eopann") == 0) 		command_line_eo_pan_joystick_index = d1;
+		if (strcmp(p, "eopanv") == 0) 		command_line_eo_pan_vertical_joystick_axis = d1;
+		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1;
+		if (strcmp(p, "eozoomn") == 0)		command_line_eo_zoom_joystick_index = d1;
+		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1;
+		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
+		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 
-		if (strcmp(p, "dfr") == 0) 		command_line_framerate = d1;
-		if (strcmp(p, "keymap") == 0) 	command_line_key_mapping = d1;		
-		if (strcmp(p, "dwash") == 0)     command_line_downwash = d1; 
-		if (strcmp(p, "cyclicn") == 0) command_line_cyclic_joystick_index = d1;
-		if (strcmp(p, "cyclich") == 0) command_line_cyclic_joystick_x_axis = d1;
-		if (strcmp(p, "cyclicv") == 0) command_line_cyclic_joystick_y_axis = d1;
-		if (strcmp(p, "collectiven") == 0) command_line_collective_joystick_index = d1;
+		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
+		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;		
+		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1; 
+		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
+		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1;
+		if (strcmp(p, "cyclicv") == 0)		command_line_cyclic_joystick_y_axis = d1;
+		if (strcmp(p, "collectiven") == 0)	command_line_collective_joystick_index = d1;
 		if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1;
-		if (strcmp(p, "ruddern") == 0) command_line_rudder_joystick_index = d1;
-		if (strcmp(p, "rudderax") == 0) command_line_rudder_joystick_axis = d1;
-		if (strcmp(p, "highresmfd") == 0) command_line_high_res_mfd = d1; // loke 030420
-		if (strcmp(p, "tsdrender") == 0) command_line_tsd_render_mode = d1; // VJ 030511
-		if (strcmp(p, "tsdpalette") == 0) command_line_tsd_palette = d1; // VJ 030511
-		if (strcmp(p, "tsdenemy") == 0) command_line_tsd_enemy_colours = d1; // VJ 030511
+		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
+		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1;
+		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
+		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
+		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
+		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
+		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
 		if (strcmp(p, "faa") == 0)
 		{
 			// VJ 030424 fly any aircraft optional, default on
@@ -472,6 +473,7 @@ void dump_ini_file(void)
 	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 0 (off)\n",command_line_high_res_mfd);
+	fprintf(f,"greenmfd=%d          # mfd's are green (def = 0 (off), 1 = on)\n",command_line_green_mfd);
 	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
