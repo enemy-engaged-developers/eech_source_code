@@ -13,7 +13,9 @@ AC_ISC_POSIX
 dnl Checks for libraries.
 AC_CHECK_LIB(GL, glBegin)
 AM_PATH_SDL(1.2.0,
-            CFLAGS="$CFLAGS $SDL_CFLAGS"; LIBS="$LIBS $SDL_LIBS",
+              CFLAGS="$CFLAGS $SDL_CFLAGS";
+              LIBS="$LIBS $SDL_LIBS";
+              AC_DEFINE(USE_SDL),
             AC_MSG_ERROR(SDL is not installed))
 
 dnl Checks for header files.
