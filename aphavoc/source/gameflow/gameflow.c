@@ -668,8 +668,7 @@ void process_game_initialisation_phases (void)
                         	//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
 						}
-						// Jabberwock 050303 Remove DP groups
-						/* if (!(direct_play_enumerate_groups ()))
+						if (!(direct_play_enumerate_groups ()))
 						{
 						   	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to enumerate groups!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 							break;
@@ -678,13 +677,11 @@ void process_game_initialisation_phases (void)
 						this_connection->this_group = direct_play_get_group_table ();
 
 						if (!(
-						direct_play_create_player () ) &&
+						direct_play_create_player () &&
 
-						direct_play_join_group () ))*/
-						if (!(direct_play_create_player () ))
-						// Jabberwock 050303 ends
+						direct_play_join_group () ))
 						{
-                        	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to create player!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+                        	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to join group!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
                         	//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
 						}
@@ -769,7 +766,7 @@ void process_game_initialisation_phases (void)
 			    {
               	if (file_exist("origwut.txt"))
               		parse_WUT_file("origwut.txt");
-              	else
+              	else 
               	if (file_exist("gwut146x.csv"))
               		parse_WUT_file("gwut146x.csv");
 			    }
@@ -794,8 +791,7 @@ void process_game_initialisation_phases (void)
 
 				sprintf (text, "%s's group", name);
 
-				// Jabberwock 050303 Remove DP groups
-				// direct_play_set_group_name (text);
+				direct_play_set_group_name (text);
 
 				ui_set_user_function (NULL);
 
