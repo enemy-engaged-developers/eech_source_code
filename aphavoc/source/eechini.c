@@ -627,7 +627,7 @@ void dump_ini_file(void)
 	fprintf(f,"ccrs=%d              # connection receive size, initial guess of campaign data size (default = 200k)\n",command_line_comms_connection_receive_size);
 	fprintf(f,"cdrs=%d              # data record size, similar to above…\n",command_line_comms_data_record_size);
 	fprintf(f,"cpbs=%d              # pack buffer size, similar to above…\n",command_line_comms_pack_buffer_size);
-	fprintf(f,"cpds=%d              # packet data size (edf = 512)\n",command_line_comms_packet_data_size);
+	fprintf(f,"cpds=%d              # packet data size (def = 512)\n",command_line_comms_packet_data_size);
 	fprintf(f,"cgs=%d               # force the comms to use DirectPlay guaranteed send instead of its own (def=0).\n",command_line_comms_guaranteed_send);
 	fprintf(f,"crls=%d              # packet history list size, increase if client keeps getting kicked out by server (default = 1000)\n",command_line_comms_resend_list_size);
 	fprintf(f,"crl=%d               # number of times a client can re-request the same packet, increase for poor connections (def=10)\n",command_line_comms_packet_rerequest_limit);
