@@ -1,64 +1,87 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Have_Quick - 12/5/2003
+//
+// TEXTUSER.C VERSION 1.2 - Added support for a texture override directory.
+//
+// This will look in TEXTURE_OVERRIDE_DIRECTORY for any 24bit .bmp files
+// If it finds any of these files and the file name matches an existing
+// texture name, it will create a screen for the bmp and set the system_textures
+// pointer to point to the new screen.
+//
+// Any questions or comments please send an email to the EECHdev mailing list or
+// post your question on the SimHQ EECH forum
+//
+// TODO - add support for Alpha channels
+//
+// TODO - add support for mipmapping
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VJ 04/12/12
+// repaired this code so that it reads the camoflaged textures correctly, assuming they have "_DESERT" or "-D" in their name
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +104,10 @@
 int
 	half_texture_graphics = FALSE;
 
+// VJ 04/12/12 desert camouflage texture name indicator
+#define DESERTIND_1 "_DESERT"
+#define DESERTIND_2 "-D"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +120,7 @@ struct TEXTURE_FLAGS
 
 		struct
 		{
-	
+
 			unsigned short int
 				reserved_texture:1,
 				vertically_inverted:1,
@@ -186,6 +213,31 @@ int
 unsigned char
 	texture_image_data[MAX_TEXTURE_WIDTH*MAX_TEXTURE_HEIGHT*4];
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Start Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ 041212 organization of texture directory
+#define TEXTURE_OVERRIDE_DIRECTORY "..\\cohokum\\graphics\\textures"
+#define TEXTURE_OVERRIDE_DIRECTORY_COCKPIT "..\\cohokum\\graphics\\textures\\cockpit"
+#define TEXTURE_OVERRIDE_DIRECTORY_TERRAIN "..\\cohokum\\graphics\\textures\\terrain"
+#define TEXTURE_OVERRIDE_DIRECTORY_CAMO "..\\cohokum\\graphics\\textures\\camo"
+
+#define BITMAP_ID		(0x4D42)
+
+char
+	system_texture_override_names[MAX_TEXTURES][128];
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// end Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,9 +260,10 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 04/12/12 comment: set = 0 for default or 1 for desert
 void set_texture_camoflage ( int set )
 {
-
+		
 	int
 		count;
 
@@ -245,19 +298,16 @@ void set_texture_camoflage ( int set )
 			}
 		}
 	}
-
+	
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
-
 		if ( system_texture_info[count].flags.main_texture )
 		{
 
 			if ( system_texture_info[count].flags.number_of_camoflage_textures )
 			{
-
 				if ( set == 0 )
 				{
-
 					system_textures[count] = system_texture_info[count].texture_screen;
 				}
 				else
@@ -271,12 +321,9 @@ void set_texture_camoflage ( int set )
 
 						if ( system_texture_info[count+index].flags.camoflage_texture )
 						{
-
 							if ( system_texture_info[count+index].flags.camoflage_index == set )
 							{
-
 								system_textures[count] = system_texture_info[count+index].texture_screen;
-
 								break;
 							}
 						}
@@ -339,7 +386,7 @@ void release_system_textures ( void )
 
 		if ( system_texture_palettes[count] )
 		{
-	
+
 			ddrval = IDirectDrawPalette_Release ( system_texture_palettes[count] );
 
 			if ( ddrval < DD_OK )
@@ -357,7 +404,7 @@ void release_system_textures ( void )
 
 				debug_log ( "Released palette!" );
 			}
-	
+
 			system_texture_palettes[count] = NULL;
 		}
 	}
@@ -427,7 +474,7 @@ int get_system_texture_index ( char *name )
 
 BOOL load_texturemap_data ( char *path )
 {
-
+   
 	int
 		count;
 
@@ -474,6 +521,22 @@ BOOL load_texturemap_data ( char *path )
 
 	fp = safe_fopen ( filename, "rb" );
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Start - Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	initialize_texture_override_names ( system_texture_override_names );
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// End Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	//
 	// First integer is the number of palettes the textures use in total.
 	//
@@ -505,12 +568,13 @@ BOOL load_texturemap_data ( char *path )
 
 	debug_log ( "Reading in %d textures", number_of_system_textures );
 
+
 	if ( d3d_paletted_textures_supported )
 	{
 
 		for ( count = 0; count < number_of_system_textures; count++ )
 		{
-	
+
 			int
 				temp,
 				length,
@@ -518,33 +582,33 @@ BOOL load_texturemap_data ( char *path )
 				hash,
 				hash_index,
 				number_of_mipmaps;
-	
+
 			unsigned int
 				value;
-	
+
 			screen
 				*this_texture;
-	
+
 			texture_flags
 				flags;
-	
+
 			fread ( &value, sizeof ( unsigned int ), 1, fp );
-	
+
 			flags.flags = value;
-	
+
 			system_texture_info[count].flags.flags = flags.flags;
-	
+
 			system_texture_info[count].texture_screen = NULL;
-	
+
 			memset ( system_texture_names[count], 0, 128 );
-	
+
 			fread ( &length, sizeof ( length ), 1, fp );
-	
+
 			fread ( system_texture_names[count], length, 1, fp );
-	
+
 			for ( letter = 0; letter < 128; letter++ )
 			{
-	
+
 				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
 			}
 
@@ -564,22 +628,22 @@ BOOL load_texturemap_data ( char *path )
 			system_texture_name_hashes[count].texture_index = count;
 			system_texture_name_hashes[count].succ = system_texture_name_hash_table[hash_index];
 			system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[count];
-	
+
 			if ( flags.reserved_texture )
 			{
-	
+
 				//
 				// Reserve this texture slot
 				//
-	
+
 				system_textures[count] = NULL;
 			}
 			else
 			{
-	
+
 				int
 					palette_index;
-	
+
 				fread ( &type, sizeof ( type ), 1, fp );
 				fread ( &number_of_mipmaps, sizeof ( int ), 1, fp );
 				fread ( &width, sizeof ( int ), 1, fp );
@@ -590,66 +654,66 @@ BOOL load_texturemap_data ( char *path )
 
 				ASSERT ( width <= MAX_TEXTURE_WIDTH );
 				ASSERT ( height <= MAX_TEXTURE_HEIGHT );
-	
+
 				//
 				// If we compress the textures, skip over the first level texture
 				//
-	
+
 				if ( compress_system_textures )
 				{
-	
+
 					width >>= 1;
 					height >>= 1;
 					number_of_mipmaps--;
 
 					switch ( type )
 					{
-				
+
 						case TEXTURE_TYPE_NOALPHA:
 						case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 						case TEXTURE_TYPE_SINGLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 4 ), SEEK_CUR );
-	
+
 							break;
 						}
-	
+
 						case TEXTURE_TYPE_MULTIPLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 8 ), SEEK_CUR );
-	
+
 							break;
 						}
 					}
 				}
-	
+
 				while ( ( width > d3d_maximum_texture_width ) || ( height > d3d_maximum_texture_height ) )
 				{
-	
+
 					width >>= 1;
 					height >>= 1;
 					number_of_mipmaps--;
 
 					switch ( type )
 					{
-				
+
 						case TEXTURE_TYPE_NOALPHA:
 						case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 						case TEXTURE_TYPE_SINGLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 4 ), SEEK_CUR );
-	
+
 							break;
 						}
-	
+
 						case TEXTURE_TYPE_MULTIPLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 8 ), SEEK_CUR );
-	
+
 							break;
 						}
 					}
@@ -657,119 +721,119 @@ BOOL load_texturemap_data ( char *path )
 
 				if ( ( width != height ) && ( d3d_square_only_textures ) )
 				{
-	
+
 					//
 					// All textures have width >= height
 					//
-	
+
 					this_texture = create_texture_map ( width, width, texture_format_type, number_of_mipmaps + 1,
 																		system_texture_palettes[palette_index], system_texture_colour_tables[palette_index] );
 				}
 				else
 				{
-		
+
 					this_texture = create_texture_map ( width, height, texture_format_type, number_of_mipmaps + 1,
 																		system_texture_palettes[palette_index], system_texture_colour_tables[palette_index] );
 				}
-	
+
 				system_textures[count] = this_texture;
-	
+
 				system_texture_info[count].texture_screen = this_texture;
-	
+
 				//
 				// Now fill the data in
 				//
-		
+
 				for ( temp = 0; temp <= number_of_mipmaps; temp++ )
 				{
-	
-	
+
+
 					if ( ( temp == 0 ) || ( d3d_mipmap_textures ) )
 					{
-		
+
 #if ( ALLOW_TEXTURE_CREATION )
 						while ( !lock_texture ( this_texture, temp ) )
 						{
-	
+
 							Sleep ( 100 );
 						}
 #endif
-	
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							{
-	
+
 								fread ( texture_image_data, ( width * height ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_no_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_single_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height * 2 ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_multiple_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
 						}
-		
+
 #if ( ALLOW_TEXTURE_CREATION )
 						unlock_texture ( this_texture );
 #endif
 					}
 					else
 					{
-	
+
 						//
 						// Skip over the mipmap data
 						//
-	
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height ), SEEK_CUR );
-		
+
 								break;
 							}
-	
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height * 2 ), SEEK_CUR );
-		
+
 								break;
 							}
 						}
 					}
-			
+
 					width >>= 1;
-		
+
 					height >>= 1;
 				}
 			}
@@ -780,218 +844,218 @@ BOOL load_texturemap_data ( char *path )
 	/*
 		for ( count = 0; count < number_of_system_textures; count++ )
 		{
-	
+
 			int
 				temp,
 				letter,
 				number_of_mipmaps;
-	
+
 			screen
 				*this_texture;
-	
+
 			memset ( system_texture_names[count], 0, 128 );
-	
+
 			fread ( system_texture_names[count], 128, 1, fp );
-	
+
 			for ( letter = 0; letter < 128; letter++ )
 			{
-	
+
 				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
 			}
-	
+
 			fread ( &type, 4, 1, fp );
-	
+
 			//
 			// If the texture is a SCREEN texture, just leave it alone.
 			//
-	
+
 			if ( type == TEXTURE_TYPE_SCREEN )
 			{
-	
+
 				//
 				// Reserve this texture slot
 				//
-	
+
 				reserve_texture_map ();
 			}
 			else
 			{
-	
+
 				int
 					vertically_inverted;
-	
+
 				fread ( &palette_index, 4, 1, fp );
 				fread ( &width, 4, 1, fp );
 				fread ( &height, 4, 1, fp );
 				fread ( &vertically_inverted, 4, 1, fp );
 				fread ( &number_of_mipmaps, 4, 1, fp );
-	
+
 				texture_format_type = type;
-	
+
 				if ( compress_system_textures )
 				{
-	
+
 					width >>= 1;
 					height >>= 1;
 					number_of_mipmaps--;
 				}
-	
+
 				if ( ( width != height ) && ( d3d_square_only_textures ) )
 				{
-	
+
 					//
 					// All textures have width >= height
 					//
-	
+
 					this_texture = create_texture_map ( width, width, texture_format_type, number_of_mipmaps,
 																		system_texture_palettes[palette_index], system_texture_colour_tables[palette_index] );
 				}
 				else
 				{
-		
+
 					this_texture = create_texture_map ( width, height, texture_format_type, number_of_mipmaps,
 																		system_texture_palettes[palette_index], system_texture_colour_tables[palette_index] );
 				}
-	
+
 				//
 				// If we compress the textures, skip over the first level texture
 				//
-	
+
 				if ( compress_system_textures )
 				{
-	
+
 					switch ( type )
 					{
-				
+
 						case TEXTURE_TYPE_NOALPHA:
 						case TEXTURE_TYPE_SINGLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 4 ), SEEK_CUR );
-	
+
 							break;
 						}
-			
+
 						case TEXTURE_TYPE_MULTIPLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 8 ), SEEK_CUR );
-	
+
 							break;
 						}
 					}
 				}
-	
+
 				//
 				// Now fill the data in
 				//
-		
+
 				for ( temp = 0; temp < number_of_mipmaps; temp++ )
 				{
-	
-	
+
+
 					int
 						file_position;
-	
+
 					if ( ( temp == 0 ) || ( d3d_mipmap_textures ) )
 					{
-		
+
 	#if ( ALLOW_TEXTURE_CREATION )
 						while ( !lock_texture ( this_texture, temp ) )
 						{
-	
+
 							Sleep ( 100 );
 						}
 	#endif
-	
+
 						file_position = ftell ( fp );
-			
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							{
-	
+
 								fread ( texture_image_data, ( width * height ), 1, fp );
-	
+
 	#if ( ALLOW_TEXTURE_CREATION )
 								convert_no_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 	#endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height ), 1, fp );
-	
+
 	#if ( ALLOW_TEXTURE_CREATION )
 								convert_single_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 	#endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height * 2 ), 1, fp );
-	
+
 	#if ( ALLOW_TEXTURE_CREATION )
 								convert_multiple_alpha_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 	#endif
-		
+
 								break;
 							}
 						}
-		
+
 	#if ( ALLOW_TEXTURE_CREATION )
 						unlock_texture ( this_texture );
 	#endif
 					}
 					else
 					{
-	
+
 						//
 						// Skip over the mipmap data
 						//
-	
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height ), SEEK_CUR );
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height * 2 ), SEEK_CUR );
-		
+
 								break;
 							}
 						}
 					}
-			
+
 					width >>= 1;
-		
+
 					height >>= 1;
 				}
-		
+
 				width = ftell ( fp );
 			}
 		}
 		*/
-	
+
 		for ( count = 0; count < number_of_system_textures; count++ )
 		{
-	
+
 			int
 				temp,
 				length,
@@ -999,36 +1063,36 @@ BOOL load_texturemap_data ( char *path )
 				hash,
 				hash_index,
 				number_of_mipmaps;
-	
+
 			unsigned int
 				value;
-	
+
 			screen
 				*this_texture;
-	
+
 			texture_flags
 				flags;
-	
+
 			fread ( &value, sizeof ( unsigned int ), 1, fp );
-	
+
 			flags.flags = value;
-	
+
 			system_texture_info[count].flags.flags = flags.flags;
-	
+
 			system_texture_info[count].texture_screen = NULL;
-	
+
 			memset ( system_texture_names[count], 0, 128 );
-	
+
 			fread ( &length, sizeof ( length ), 1, fp );
-	
+
 			fread ( system_texture_names[count], length, 1, fp );
-	
+
 			for ( letter = 0; letter < 128; letter++ )
 			{
-	
+
 				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
 			}
-	
+
 			hash = strlen ( system_texture_names[count] );
 
 			for ( letter = 0; letter < strlen ( system_texture_names[count] ); letter++ )
@@ -1045,19 +1109,19 @@ BOOL load_texturemap_data ( char *path )
 			system_texture_name_hashes[count].texture_index = count;
 			system_texture_name_hashes[count].succ = system_texture_name_hash_table[hash_index];
 			system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[count];
-	
+
 			if ( flags.reserved_texture )
 			{
-	
+
 				//
 				// Reserve this texture slot
 				//
-	
+
 				system_textures[count] = NULL;
 			}
 			else
 			{
-	
+
 				fread ( &type, sizeof ( type ), 1, fp );
 				fread ( &number_of_mipmaps, 4, 1, fp );
 				fread ( &width, 4, 1, fp );
@@ -1065,48 +1129,48 @@ BOOL load_texturemap_data ( char *path )
 
 				if ( type == TEXTURE_TYPE_NOALPHA )
 				{
-	
+
 					type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
 				}
-	
+
 				texture_format_type = type;
-	
+
 				//
 				// If we compress the textures, skip over the first level texture
 				//
-	
+
 				if ( compress_system_textures )
 				{
-	
+
 					width >>= 1;
 					height >>= 1;
 					number_of_mipmaps--;
 
 					switch ( type )
 					{
-				
+
 						case TEXTURE_TYPE_NOALPHA:
 						case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 						{
-	
+
 							fseek ( fp, ( width * height * 12 ), SEEK_CUR );
-	
+
 							break;
 						}
-	
+
 						case TEXTURE_TYPE_SINGLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 16 ), SEEK_CUR );
-	
+
 							break;
 						}
-			
+
 						case TEXTURE_TYPE_MULTIPLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 16 ), SEEK_CUR );
-	
+
 							break;
 						}
 					}
@@ -1121,29 +1185,29 @@ BOOL load_texturemap_data ( char *path )
 
 					switch ( type )
 					{
-				
+
 						case TEXTURE_TYPE_NOALPHA:
 						case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 						{
-	
+
 							fseek ( fp, ( width * height * 12 ), SEEK_CUR );
-	
+
 							break;
 						}
-	
+
 						case TEXTURE_TYPE_SINGLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 16 ), SEEK_CUR );
-	
+
 							break;
 						}
-			
+
 						case TEXTURE_TYPE_MULTIPLEALPHA:
 						{
-	
+
 							fseek ( fp, ( width * height * 16 ), SEEK_CUR );
-	
+
 							break;
 						}
 					}
@@ -1151,133 +1215,163 @@ BOOL load_texturemap_data ( char *path )
 
 				if ( ( width != height ) && ( d3d_square_only_textures ) )
 				{
-	
+
 					//
 					// All textures have width >= height
 					//
-	
+
 					this_texture = create_texture_map ( width, width, texture_format_type, number_of_mipmaps + 1,
 																		system_texture_palettes[0], system_texture_colour_tables[0] );
 				}
 				else
 				{
-		
+
 					this_texture = create_texture_map ( width, height, texture_format_type, number_of_mipmaps + 1,
 																		system_texture_palettes[0], system_texture_colour_tables[0] );
 				}
-	
+
 				system_textures[count] = this_texture;
-	
+
 				system_texture_info[count].texture_screen = this_texture;
-	
+
 				//
 				// Now fill the data in
 				//
-		
+
 				for ( temp = 0; temp <= number_of_mipmaps; temp++ )
 				{
-	
-	
+
+
 					if ( ( temp == 0 ) || ( d3d_mipmap_textures ) )
 					{
-		
+
 #if ( ALLOW_TEXTURE_CREATION )
 						while ( !lock_texture ( this_texture, temp ) )
 						{
-	
+
 							Sleep ( 100 );
 						}
 #endif
-			
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 							{
-	
+
 								fread ( texture_image_data, ( width * height * 3 ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_no_alpha_24bit_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height * 4 ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_single_alpha_32bit_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-				
+
 								fread ( texture_image_data, ( width * height * 4 ), 1, fp );
-	
+
 #if ( ALLOW_TEXTURE_CREATION )
 								convert_multiple_alpha_32bit_texture_map_data ( texture_image_data, width, height, this_texture, fp );
 #endif
-		
+
 								break;
 							}
 						}
-		
+
 #if ( ALLOW_TEXTURE_CREATION )
 						unlock_texture ( this_texture );
 #endif
 					}
 					else
 					{
-	
+
 						//
 						// Skip over the mipmap data
 						//
-	
+
 						switch ( type )
 						{
-					
+
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 							{
-	
+
 								fseek ( fp, ( width * height * 3 ), SEEK_CUR );
-		
+
 								break;
 							}
-	
+
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height * 4 ), SEEK_CUR );
-		
+
 								break;
 							}
-				
+
 							case TEXTURE_TYPE_MULTIPLEALPHA:
 							{
-	
+
 								fseek ( fp, ( width * height * 4 ), SEEK_CUR );
-		
+
 								break;
 							}
 						}
 					}
-			
+
 					width >>= 1;
-		
+
 					height >>= 1;
 				}
 			}
 		}
 	}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Start - Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	   
+	// Now that all the screens are loaded we check to see if there is are any overrides
+	for( count=0; count < MAX_TEXTURES; count++ )
+	{
+		int retrieved_index;
+      
+		retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+      
+		if( retrieved_index > 0)
+		{
+			// there is so load it
+			load_texture_override (system_texture_override_names[count],retrieved_index);
+		}
+	}
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// end Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 	return ( TRUE );
 }
@@ -1317,7 +1411,7 @@ void convert_no_alpha_texture_map_data ( unsigned char *data, int width, int hei
 		//
 		// We're dealing with a 8bit texture format - paletted
 		//
-	
+
 		unsigned char
 			*ptr;
 
@@ -1349,89 +1443,89 @@ void convert_no_alpha_texture_map_data ( unsigned char *data, int width, int hei
 
 		if ( colour_texture_pixel_width <= 16 )
 		{
-	
+
 			unsigned char
 				*ptr;
-	
+
 			int
 				pitch;
-	
+
 			unsigned short int
 				pixel_value;
-	
+
 			//
 			// We're dealing with a 16bit texture format.
 			//
-		
+
 			initialise_set_texture_pixel_lookup_table ( this_texture );
-	
+
 			ptr = get_screen_data ( this_texture );
-	
+
 			pitch = get_screen_pitch ( this_texture );
-	
+
 			for ( y = 0; y < height; y++ )
 			{
-			
+
 				for ( x = 0; x < width; x++ )
 				{
-	
+
 					value = *data++;
-	
+
 					pixel_value = set_texture_pixel_lookup_table[value];
-	
+
 					*( ( unsigned short int * ) &ptr[( x * 2 )] ) = pixel_value;
-	
+
 					for ( y_count = 0; y_count < y_repeat; y_count++ )
 					{
-	
+
 						*( ( unsigned short int * ) &ptr[( y_count * pitch ) + ( x * 2 )] ) = pixel_value;
 					}
 				}
-	
+
 				ptr += ( y_repeat * pitch );
 			}
 		}
 		else
 		{
-	
+
 			unsigned char
 				*ptr;
-	
+
 			int
 				pitch;
-	
+
 			unsigned int
 				pixel_value;
-	
+
 			//
 			// We're dealing with a 32 texture format.
 			//
-		
+
 			initialise_set_texture_pixel_lookup_table ( this_texture );
-	
+
 			ptr = get_screen_data ( this_texture );
-	
+
 			pitch = get_screen_pitch ( this_texture );
-	
+
 			for ( y = 0; y < height; y++ )
 			{
-			
+
 				for ( x = 0; x < width; x++ )
 				{
-	
+
 					value = *data++;
-	
+
 					pixel_value = set_texture_pixel_32bit_lookup_table[value];
-	
+
 					*( ( unsigned int * ) &ptr[( x * 4 )] ) = pixel_value;
-	
+
 					for ( y_count = 0; y_count < y_repeat; y_count++ )
 					{
-	
+
 						*( ( unsigned int * ) &ptr[( y_count * pitch ) + ( x * 4 )] ) = pixel_value;
 					}
 				}
-	
+
 				ptr += ( y_repeat * pitch );
 			}
 		}
@@ -1470,16 +1564,16 @@ void convert_single_alpha_texture_map_data ( unsigned char *data, int width, int
 
 		for ( y = 0; y < height; y++ )
 		{
-	
+
 			for ( x = 0; x < width; x++ )
 			{
-	
+
 				unsigned char
 					value,
 					alpha;
 
 				value = *data++;
-	
+
 				if ( value )
 				{
 
@@ -1503,18 +1597,18 @@ void convert_single_alpha_texture_map_data ( unsigned char *data, int width, int
 	}
 	else
 	{
-	
+
 		for ( y = 0; y < height; y++ )
 		{
-	
+
 			for ( x = 0; x < width; x++ )
 			{
-	
+
 				unsigned char
 					value;
 
 				value = *data++;
-	
+
 				for ( y_count = 0; y_count < y_repeat; y_count++ )
 				{
 
@@ -1557,76 +1651,76 @@ void convert_multiple_alpha_texture_map_data ( unsigned char *data, int width, i
 
 			unsigned char
 				*ptr;
-	
+
 			int
 				pitch;
-	
+
 			initialise_set_texture_pixel_lookup_table ( this_texture );
-	
+
 			ptr = get_screen_data ( this_texture );
-	
+
 			pitch = get_screen_pitch ( this_texture );
-	
+
 			//
 			// Performance tuned texture loader.
 			//
-	
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				unsigned short int
 					*line_ptr;
-	
+
 				unsigned char
 					*source_ptr;
-	
+
 				line_ptr = ( unsigned short int * ) ptr;
-	
+
 				source_ptr = data;
-	
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					unsigned char
 						colour,
 						alpha;
-	
+
 					unsigned short int
 						pixel_value;
-	
+
 					unsigned int
 						texture_alpha;
-	
+
 					alpha = *source_ptr++;
 					colour = *source_ptr++;
-	
+
 					pixel_value = set_texture_pixel_lookup_table[colour];
-	
+
 					texture_alpha = ( 255 - alpha );
-	
+
 					texture_alpha <<= 24;
-	
+
 					texture_alpha &= texture_multiple_alpha_alpha_mask;
-	
+
 					texture_alpha >>= texture_multiple_alpha_alpha_shift;
-	
+
 					pixel_value |= texture_alpha;
-	
+
 					*line_ptr++ = pixel_value;
 				}
-	
+
 				//
 				// Now copy that line of data
 				//
-	
+
 				for ( y_count = 1; y_count < y_repeat; y_count++ )
 				{
-	
+
 					memcpy ( &ptr[ ( y_count * pitch ) ], ptr, ( width * 2 ) );
 				}
-	
+
 				ptr += ( y_repeat * pitch );
-	
+
 				data += ( width * 2 );
 			}
 		}
@@ -1635,92 +1729,92 @@ void convert_multiple_alpha_texture_map_data ( unsigned char *data, int width, i
 
 			unsigned char
 				*ptr;
-	
+
 			int
 				pitch;
-	
+
 			initialise_set_texture_pixel_lookup_table ( this_texture );
-	
+
 			ptr = get_screen_data ( this_texture );
-	
+
 			pitch = get_screen_pitch ( this_texture );
-	
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				unsigned int
 					*line_ptr;
-	
+
 				unsigned char
 					*source_ptr;
-	
+
 				line_ptr = ( unsigned int * ) ptr;
-	
+
 				source_ptr = data;
-	
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					unsigned char
 						colour,
 						alpha;
-	
+
 					unsigned int
 						pixel_value;
-	
+
 					unsigned int
 						texture_alpha;
-	
+
 					alpha = *source_ptr++;
 					colour = *source_ptr++;
-	
+
 					pixel_value = set_texture_pixel_32bit_lookup_table[colour];
-	
+
 					texture_alpha = ( 255 - alpha );
-	
+
 					texture_alpha <<= 24;
-	
+
 					texture_alpha &= texture_multiple_alpha_alpha_mask;
-	
+
 					texture_alpha >>= texture_multiple_alpha_alpha_shift;
-	
+
 					pixel_value |= texture_alpha;
-	
+
 					*line_ptr++ = pixel_value;
 				}
-	
+
 				//
 				// Now copy that line of data
 				//
-	
+
 				for ( y_count = 1; y_count < y_repeat; y_count++ )
 				{
-	
+
 					memcpy ( &ptr[ ( y_count * pitch ) ], ptr, ( width * 4 ) );
 				}
-	
+
 				ptr += ( y_repeat * pitch );
-	
+
 				data += ( width * 2 );
 			}
 		}
 	}
 	else
 	{
-	
+
 		for ( y = 0; y < height; y++ )
 		{
-	
+
 			for ( x = 0; x < width; x++ )
 			{
-	
+
 				unsigned char
 					value,
 					alpha;
 
 				alpha = *data++;
 				value = *data++;
-	
+
 				if ( alpha )
 				{
 
@@ -1728,7 +1822,7 @@ void convert_multiple_alpha_texture_map_data ( unsigned char *data, int width, i
 				}
 				else
 				{
-	
+
 					alpha = 255;
 				}
 
@@ -1788,14 +1882,14 @@ void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, i
 		//
 		// We're dealing with a 16bit texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -1844,14 +1938,14 @@ void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, i
 		//
 		// We're dealing with a 32 texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -1934,14 +2028,14 @@ void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int widt
 		//
 		// We're dealing with a 16bit texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -1955,17 +2049,17 @@ void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int widt
 				green <<= 24;
 				blue <<= 24;
 				alpha <<= 24;
-			
+
 				red &= texture_single_alpha_red_mask;
 				green &= texture_single_alpha_green_mask;
 				blue &= texture_single_alpha_blue_mask;
 				alpha &= texture_single_alpha_alpha_mask;
-			
+
 				red >>= texture_single_alpha_red_shift;
 				green >>= texture_single_alpha_green_shift;
 				blue >>= texture_single_alpha_blue_shift;
 				alpha >>= texture_single_alpha_alpha_shift;
-			
+
 				pixel_value = ( red | green | blue | alpha );
 
 				*( ( unsigned short int * ) &ptr[( x * 2 )] ) = pixel_value;
@@ -1995,14 +2089,14 @@ void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int widt
 		//
 		// We're dealing with a 32 texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -2016,17 +2110,17 @@ void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int widt
 				green <<= 24;
 				blue <<= 24;
 				alpha <<= 24;
-			
+
 				red &= texture_single_alpha_red_mask;
 				green &= texture_single_alpha_green_mask;
 				blue &= texture_single_alpha_blue_mask;
 				alpha &= texture_single_alpha_alpha_mask;
-			
+
 				red >>= texture_single_alpha_red_shift;
 				green >>= texture_single_alpha_green_shift;
 				blue >>= texture_single_alpha_blue_shift;
 				alpha >>= texture_single_alpha_alpha_shift;
-			
+
 				pixel_value = ( red | green | blue | alpha );
 
 				*( ( unsigned int * ) &ptr[( x * 4 )] ) = pixel_value;
@@ -2090,14 +2184,14 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 		//
 		// We're dealing with a 16bit texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -2111,17 +2205,17 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 				green <<= 24;
 				blue <<= 24;
 				alpha <<= 24;
-			
+
 				red &= texture_multiple_alpha_red_mask;
 				green &= texture_multiple_alpha_green_mask;
 				blue &= texture_multiple_alpha_blue_mask;
 				alpha &= texture_multiple_alpha_alpha_mask;
-			
+
 				red >>= texture_multiple_alpha_red_shift;
 				green >>= texture_multiple_alpha_green_shift;
 				blue >>= texture_multiple_alpha_blue_shift;
 				alpha >>= texture_multiple_alpha_alpha_shift;
-			
+
 				pixel_value = ( red | green | blue | alpha );
 
 				*( ( unsigned short int * ) &ptr[( x * 2 )] ) = pixel_value;
@@ -2151,14 +2245,14 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 		//
 		// We're dealing with a 32 texture format.
 		//
-	
+
 		ptr = get_screen_data ( this_texture );
 
 		pitch = get_screen_pitch ( this_texture );
 
 		for ( y = 0; y < height; y++ )
 		{
-		
+
 			for ( x = 0; x < width; x++ )
 			{
 
@@ -2172,17 +2266,17 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 				green <<= 24;
 				blue <<= 24;
 				alpha <<= 24;
-			
+
 				red &= texture_multiple_alpha_red_mask;
 				green &= texture_multiple_alpha_green_mask;
 				blue &= texture_multiple_alpha_blue_mask;
 				alpha &= texture_multiple_alpha_alpha_mask;
-			
+
 				red >>= texture_multiple_alpha_red_shift;
 				green >>= texture_multiple_alpha_green_shift;
 				blue >>= texture_multiple_alpha_blue_shift;
 				alpha >>= texture_multiple_alpha_alpha_shift;
-			
+
 				pixel_value = ( red | green | blue | alpha );
 
 				*( ( unsigned int * ) &ptr[( x * 4 )] ) = pixel_value;
@@ -2247,7 +2341,7 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 	DDSURFACEDESC2
 		ddsd;
-	
+
 	screen
 		*texture;
 
@@ -2281,7 +2375,7 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 	if ( ( d3d_mipmap_textures ) && ( number_of_mipmaps > 1 ) )
 	{
-		
+
 		ddsd.dwFlags |= DDSD_MIPMAPCOUNT;
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_COMPLEX | DDSCAPS_MIPMAP;
 		ddsd.dwMipMapCount = number_of_mipmaps;
@@ -2293,66 +2387,66 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 #if ( ALLOW_TEXTURE_CREATION )
 	{
-	
+
 		HRESULT
 			ddrval;
-	
+
 		ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->surface, NULL );
-	
+
 		if ( ddrval != DD_OK )
 		{
-	
+
 			debug_fatal ( "Unable to create texture surface: %s ( %d, %d )", get_ddraw_error_message ( ddrval ), width, height );
 		}
-	
+
 		//
 		// Get the surface description to check the texture
 		//
-	
+
 		ddsd.dwSize = sizeof ( ddsd );
-	
+
 		ddrval = IDirectDrawSurface7_GetSurfaceDesc ( texture->surface, &ddsd );
-	
+
 		if ( ddrval != DD_OK )
 		{
-	
+
 			debug_fatal ( "Unable to get texture surface description: %s", get_ddraw_error_message ( ddrval ) );
 		}
-	
+
 		//
 		//
 		//
-	
+
 		if ( ( d3d_mipmap_textures ) && ( number_of_mipmaps > 1 ) )
 		{
-	
+
 			if ( ddsd.dwMipMapCount != number_of_mipmaps )
 			{
-	
+
 				debug_log ( "CREATED TEXTURE WITH INCORRECT NUMBER OF MIPMAPS!" );
 			}
 		}
-	
+
 		//
 		// Attach the palette now ( if necessary )
 		//
-	
+
 		if ( texture_paletted )
 		{
-	
+
 			ddrval = IDirectDrawSurface7_SetPalette ( texture->surface, texture_palette );
-			
+
 			if ( ddrval != DD_OK )
 			{
-		
+
 				debug_fatal ( "Unable to set palette on texture: %s", get_ddraw_error_message ( ddrval ) );
 			}
-	
+
 			texture->palette = texture_palette;
 		}
 		else
 		{
-	
+
 			texture->palette = NULL;
 		}
 	}
@@ -2375,7 +2469,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 
 	DDSURFACEDESC2
 		ddsd;
-	
+
 	HRESULT
 		ddrval;
 
@@ -2391,7 +2485,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 
 	switch ( type )
 	{
-	
+
 		case SCREEN_FORMAT_TYPE_NOALPHA:
 		case SCREEN_FORMAT_TYPE_VIDEOSCREEN:
 		case SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE:
@@ -2420,11 +2514,11 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 	memcpy ( &ddsd.ddpfPixelFormat, &texture_formats[type].format, sizeof ( DDPIXELFORMAT ) );
 
 	ddsd.dwSize = sizeof ( ddsd );
-	
+
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 
 	ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
-		
+
 	ddsd.dwHeight = height;
 
 	ddsd.dwWidth = width;
@@ -2439,7 +2533,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 	{
 
 		debug_log ( "Unable to create texture surface: %s", get_ddraw_error_message ( ddrval ) );
-		
+
 		return ( FALSE );
 	}
 
@@ -2466,10 +2560,10 @@ int match_system_texture_name ( char *name )
 		*ptr;
 
 	int
-		count;
+		count, camo = 0;
 
 	ptr = real_name;
-
+	
 	while ( ( *name != '\0' ) && ( *name != '.' ) )
 	{
 
@@ -2477,16 +2571,36 @@ int match_system_texture_name ( char *name )
 	}
 
 	*ptr++ = '\0';
+	
+//VJ 04/12/12 if textimpex name then delete -bin-etc	
+	if (strstr(real_name, "-BIN"))
+	{
+		char *p = strstr(real_name, "-BIN");
+      real_name[strlen(real_name)-strlen(p)] = '\0';		
+	}	
 
+
+//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture	
+   if (strstr(real_name, DESERTIND_1))
+   {
+       real_name[strlen(real_name)-strlen(DESERTIND_1)] = '\0';
+       camo = 1;
+   }
+   else
+   if (strstr(real_name, DESERTIND_2))
+   {
+       real_name[strlen(real_name)-strlen(DESERTIND_2)] = '\0';
+       camo = 1;
+   }
+   
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
-
 		if ( strcmp ( system_texture_names[count], real_name ) == 0 )
 		{
 
 			system_textures_referenced[count] = TRUE;
 
-			return ( count );
+			return ( count + camo );
 		}
 	}
 
@@ -2561,7 +2675,7 @@ void report_system_texture_stats ( void )
 
 				for ( count = 0; count < number_of_system_textures; count++ )
 				{
-	
+
 					if (	( system_textures[count]->type == type ) &&
 							( system_textures[count]->width == width ) &&
 							( system_textures[count]->height == height ) )
@@ -2598,7 +2712,7 @@ void report_system_texture_stats ( void )
 
 			if ( total )
 			{
-	
+
 				debug_log ( "TYPE: SINGLEALPHA ( %d, %d ) %d", width, height, total );
 			}
 
@@ -2607,7 +2721,7 @@ void report_system_texture_stats ( void )
 
 				for ( count = 0; count < number_of_system_textures; count++ )
 				{
-	
+
 					if (	( system_textures[count]->type == type ) &&
 							( system_textures[count]->width == width ) &&
 							( system_textures[count]->height == height ) )
@@ -2644,7 +2758,7 @@ void report_system_texture_stats ( void )
 
 			if ( total )
 			{
-		
+
 				debug_log ( "TYPE: MULTIPLEALPHA ( %d, %d ) %d", width, height, total );
 			}
 
@@ -2653,7 +2767,7 @@ void report_system_texture_stats ( void )
 
 				for ( count = 0; count < number_of_system_textures; count++ )
 				{
-	
+
 					if (	( system_textures[count]->type == type ) &&
 							( system_textures[count]->width == width ) &&
 							( system_textures[count]->height == height ) )
@@ -2809,7 +2923,7 @@ texture_graphic *create_texture_graphic ( char *filename )
 		texture_width = 16;
 		texture_height = 16;
 		finished = FALSE;
-	
+
 		while ( !finished )
 		{
 
@@ -2820,22 +2934,22 @@ texture_graphic *create_texture_graphic ( char *filename )
 			}
 			else
 			{
-	
+
 				if ( ( texture_width >= width ) && ( texture_height >= height ) )
 				{
-	
+
 					finished = TRUE;
 				}
-	
+
 				if ( texture_width < width )
 				{
-	
+
 					texture_width *= 2;
 				}
-	
+
 				if ( texture_height < height )
 				{
-	
+
 					texture_height *= 2;
 				}
 			}
@@ -3015,126 +3129,126 @@ texture_graphic *create_texture_graphic ( char *filename )
 
 	if ( channels == 3 )
 	{
-	
+
 		psd_rgb
 			*ptr;
-	
+
 		ptr = ( psd_rgb * ) data;
 
 		if ( get_screen_pixel_width ( active_screen ) == 2 )
 		{
-		
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				texture_y = y >> texture_height_power;
-	
+
 				base_texture_index = texture_y * graphic->number_of_textures_wide;
-		
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					int
 						pixel_x;
-	
+
 					unsigned int
 						red,
 						green,
 						blue;
-	
+
 					unsigned short int
 						*pixels;
-	
+
 					unsigned short int
 						value;
-				
+
 					texture_x = x >> texture_width_power;
-	
+
 					pixel_x = x & texture_width_mask;
-	
+
 					pixels = ( unsigned short int * ) texture_data[base_texture_index + texture_x];
-	
+
 					red = ( ( unsigned int ) ptr->r ) << 24;
 					green = ( ( unsigned int ) ptr->g ) << 24;
 					blue = ( ( unsigned int ) ptr->b ) << 24;
-				
+
 					red &= active_screen_red_mask;
 					green &= active_screen_green_mask;
 					blue &= active_screen_blue_mask;
-				
+
 					red >>= active_screen_red_shift;
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
-				
+
 					value =  ( red | green | blue );
-	
+
 					pixels[pixel_x] = value;
-		
+
 					ptr++;
 				}
-	
+
 				for ( count = 0; count < graphic->number_of_textures_wide; count++ )
 				{
-	
+
 					texture_data[base_texture_index + count] += texture_pitch[base_texture_index + count];
 				}
 			}
 		}
 		else
 		{
-		
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				texture_y = y >> texture_height_power;
-	
+
 				base_texture_index = texture_y * graphic->number_of_textures_wide;
-		
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					int
 						pixel_x;
-	
+
 					unsigned int
 						red,
 						green,
 						blue;
-	
+
 					unsigned int
 						*pixels;
-	
+
 					unsigned int
 						value;
-				
+
 					texture_x = x >> texture_width_power;
-	
+
 					pixel_x = x & texture_width_mask;
-	
+
 					pixels = ( unsigned int * ) texture_data[base_texture_index + texture_x];
-	
+
 					red = ( ( unsigned int ) ptr->r ) << 24;
 					green = ( ( unsigned int ) ptr->g ) << 24;
 					blue = ( ( unsigned int ) ptr->b ) << 24;
-				
+
 					red &= active_screen_red_mask;
 					green &= active_screen_green_mask;
 					blue &= active_screen_blue_mask;
-				
+
 					red >>= active_screen_red_shift;
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
-				
+
 					value =  ( red | green | blue );
-	
+
 					pixels[pixel_x] = value;
-		
+
 					ptr++;
 				}
-	
+
 				for ( count = 0; count < graphic->number_of_textures_wide; count++ )
 				{
-	
+
 					texture_data[base_texture_index + count] += texture_pitch[base_texture_index + count];
 				}
 			}
@@ -3142,134 +3256,134 @@ texture_graphic *create_texture_graphic ( char *filename )
 	}
 	else
 	{
-	
+
 		psd_rgba
 			*ptr;
-	
+
 		ptr = ( psd_rgba * ) data;
 
 		if ( get_screen_pixel_width ( active_screen ) == 2 )
 		{
-		
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				texture_y = y >> texture_height_power;
-	
+
 				base_texture_index = texture_y * graphic->number_of_textures_wide;
-		
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					int
 						pixel_x;
-	
+
 					unsigned int
 						red,
 						green,
 						blue,
 						alpha;
-	
+
 					unsigned short int
 						*pixels;
-	
+
 					unsigned short int
 						value;
-				
+
 					texture_x = x >> texture_width_power;
-	
+
 					pixel_x = x & texture_width_mask;
-	
+
 					pixels = ( unsigned short int * ) texture_data[base_texture_index + texture_x];
-	
+
 					red = ( ( unsigned int ) ptr->r ) << 24;
 					green = ( ( unsigned int ) ptr->g ) << 24;
 					blue = ( ( unsigned int ) ptr->b ) << 24;
 					alpha = ( ( unsigned int ) ptr->a ) << 24;
-				
+
 					red &= active_screen_red_mask;
 					green &= active_screen_green_mask;
 					blue &= active_screen_blue_mask;
 					alpha &= active_screen_alpha_mask;
-				
+
 					red >>= active_screen_red_shift;
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
 					alpha >>= active_screen_alpha_shift;
-				
+
 					value =  ( red | green | blue | alpha );
-	
+
 					pixels[pixel_x] = value;
-		
+
 					ptr++;
 				}
-	
+
 				for ( count = 0; count < graphic->number_of_textures_wide; count++ )
 				{
-	
+
 					texture_data[base_texture_index + count] += texture_pitch[base_texture_index + count];
 				}
 			}
 		}
 		else
 		{
-		
+
 			for ( y = 0; y < height; y++ )
 			{
-	
+
 				texture_y = y >> texture_height_power;
-	
+
 				base_texture_index = texture_y * graphic->number_of_textures_wide;
-		
+
 				for ( x = 0; x < width; x++ )
 				{
-		
+
 					int
 						pixel_x;
-	
+
 					unsigned int
 						red,
 						green,
 						blue,
 						alpha;
-	
+
 					unsigned int
 						*pixels;
-	
+
 					unsigned int
 						value;
-				
+
 					texture_x = x >> texture_width_power;
-	
+
 					pixel_x = x & texture_width_mask;
-	
+
 					pixels = ( unsigned int * ) texture_data[base_texture_index + texture_x];
-	
+
 					red = ( ( unsigned int ) ptr->r ) << 24;
 					green = ( ( unsigned int ) ptr->g ) << 24;
 					blue = ( ( unsigned int ) ptr->b ) << 24;
 					alpha = ( ( unsigned int ) ptr->a ) << 24;
-				
+
 					red &= active_screen_red_mask;
 					green &= active_screen_green_mask;
 					blue &= active_screen_blue_mask;
 					alpha &= active_screen_alpha_mask;
-				
+
 					red >>= active_screen_red_shift;
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
 					alpha >>= active_screen_alpha_shift;
-				
+
 					value =  ( red | green | blue | alpha );
-	
+
 					pixels[pixel_x] = value;
-		
+
 					ptr++;
 				}
-	
+
 				for ( count = 0; count < graphic->number_of_textures_wide; count++ )
 				{
-	
+
 					texture_data[base_texture_index + count] += texture_pitch[base_texture_index + count];
 				}
 			}
@@ -3339,3 +3453,327 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Start Have_Quick
+// 12/2/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void load_texture_override ( char *this_texture_name, int this_texture_index )
+{
+
+	FILE
+		*fp;
+
+	BITMAPFILEHEADER
+		bmfh;
+
+	BITMAPINFOHEADER
+		bmih;
+
+	char
+		*buffer,
+		*p;
+
+	char
+		full_override_texture_filename[128];
+
+	int
+		buffer_size,
+		x,
+		y;
+
+	rgb_colour
+		col;
+
+	static screen
+				*override_screen;
+
+	ASSERT (this_texture_name);
+
+	ASSERT (this_texture_index);
+
+//VJ 041212 get file in graphics\textures
+	sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, this_texture_name );
+	
+//VJ 041212 get file in graphics\textures\ subdirs
+	if ( !file_exist ( full_override_texture_filename ) )
+		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT, this_texture_name );
+
+	if ( !file_exist ( full_override_texture_filename ) )
+		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, this_texture_name );
+
+	if ( !file_exist ( full_override_texture_filename ) )
+		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO, this_texture_name );
+
+	if ( !file_exist ( full_override_texture_filename ) )
+		return;
+
+//VJ
+	debug_log ("++OVERRIDES++ Loading file %s",full_override_texture_filename);
+
+	fp = safe_fopen (full_override_texture_filename, "rb");
+
+	//
+	// check if the file header is correct
+	//
+
+	fread (&bmfh, sizeof (bmfh), 1, fp);
+
+	if (bmfh.bfType != BITMAP_ID)
+	{
+		safe_fclose (fp);
+
+		debug_log ("%s is not a real bitmap",full_override_texture_filename);
+
+		return;
+	}
+
+	//
+	// check if the info header is correct
+	//
+
+	fread (&bmih, sizeof (bmih), 1, fp);
+
+	if (bmih.biCompression != BI_RGB)
+	{
+		safe_fclose (fp);
+
+		debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
+
+		return;
+	}
+
+	if (bmih.biBitCount != 24)
+	{
+		safe_fclose (fp);
+
+		debug_log ("%s is not 24 bit!", full_override_texture_filename );
+
+		return;
+	}
+
+	if (bmih.biHeight > MAX_TEXTURE_WIDTH)
+	{
+		safe_fclose (fp);
+
+		debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
+
+		return;
+	}
+
+	if (bmih.biWidth > MAX_TEXTURE_WIDTH)
+	{
+		safe_fclose (fp);
+
+		debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
+
+		return;
+	}
+
+	// create a screen for this texture. This does not load the data into the screen
+	// it just creates it and sets it's attributes
+
+	// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
+	// It also assumes that there are no mipmaps. This will not cause problems, but
+	// it will look cruddy under certain circumstances
+	override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
+
+	//
+	// texture
+	//
+
+	// note color depth is assumed here
+	buffer_size = bmih.biWidth * bmih.biHeight * 3;
+
+	buffer = safe_malloc (buffer_size);
+
+	fread (buffer, buffer_size, 1, fp);
+
+	set_active_screen (override_screen);
+
+	if (lock_screen (override_screen))
+	{
+		p = buffer;
+
+		for (y = bmih.biHeight - 1; y >= 0; y--)
+		{
+			for (x = 0; x < bmih.biWidth; x++)
+			{
+				col.b = *p++;
+				col.g = *p++;
+				col.r = *p++;
+				col.a = 255;
+
+				set_pixel (x, y, col);
+			}
+		}
+
+		unlock_screen (override_screen);
+	}
+
+	set_active_screen (video_screen);
+
+	safe_free (buffer);
+
+	safe_fclose (fp);
+
+	// now we set the pointer in the system textxures array to point to this
+	// screen rather than the original screen
+	set_system_texture_screen (override_screen, this_texture_index);
+	
+//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+	system_texture_info[this_texture_index].texture_screen = override_screen;
+
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+static void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128] )
+{
+   
+	directory_file_list
+		*directory_listing;
+
+	int
+		valid_file,
+		index;
+
+	unsigned char
+		directory_search_path[256],
+		*filename;
+
+	char
+		*tmp;
+
+	index = 0;
+
+	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY);
+
+	directory_listing = get_first_directory_file ( directory_search_path );
+
+	//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
+	if ( directory_listing )
+	{
+		valid_file = TRUE;	
+		
+		while ( valid_file )
+		{
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				filename = strupr(get_directory_file_filename ( directory_listing ));
+	
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+	
+				//we don't want the .bmp in the overides index
+				tmp = strtok( filename, "." );
+					
+				strcpy ( system_texture_override_names[index], tmp );
+
+				index++;
+			}	
+			valid_file = get_next_directory_file ( directory_listing );
+		}
+	}
+	
+//VJ 041212 add cockpit textures	
+	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
+
+	directory_listing = get_first_directory_file ( directory_search_path );
+
+	if ( directory_listing )
+	{
+		valid_file = TRUE;	
+		
+		while ( valid_file )
+		{
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				filename = strupr(get_directory_file_filename ( directory_listing ));
+	
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+	
+				//we don't want the .bmp in the overides index
+				tmp = strtok( filename, "." );
+
+				strcpy ( system_texture_override_names[index], tmp );
+
+				index++;
+			}	
+			valid_file = get_next_directory_file ( directory_listing );
+		}
+	}
+	
+//VJ 041212 add custom terrain textures	
+	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+	
+	directory_listing = get_first_directory_file ( directory_search_path );
+	
+	if ( directory_listing )
+	{
+		valid_file = TRUE;	
+		
+		while ( valid_file )
+		{
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				filename = strupr(get_directory_file_filename ( directory_listing ));
+	
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+	
+				//we don't want the .bmp in the overides index
+				tmp = strtok( filename, "." );
+
+				strcpy ( system_texture_override_names[index], tmp );
+
+				index++;
+			}	
+			valid_file = get_next_directory_file ( directory_listing );
+		}
+	}
+	
+//VJ 041212 add custom camouflage textures	
+	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO);
+
+	directory_listing = get_first_directory_file ( directory_search_path );
+
+	if ( directory_listing )
+	{
+		valid_file = TRUE;	
+		
+		while ( valid_file )
+		{
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				filename = strupr(get_directory_file_filename ( directory_listing ));
+	
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+	
+				//we don't want the .bmp in the overides index
+				tmp = strtok( filename, "." );
+
+				strcpy ( system_texture_override_names[index], tmp );
+
+				index++;
+			}	
+			valid_file = get_next_directory_file ( directory_listing );
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// End Have_Quick
+// 12/5/2003
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
