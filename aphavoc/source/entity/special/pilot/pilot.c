@@ -145,6 +145,13 @@ void set_pilot_entity (entity *en)
 			// turn on only the gunship_next button
 			set_ui_object_drawable (gunship_screen_next_button, TRUE);
 		}
+		//-- Werewolf
+		else
+		{
+			// If we're the server, remember our player name. This will be sent out in the heartbeat packets.
+			net_set_hostname( get_local_entity_string (en, STRING_TYPE_PILOTS_NAME) );
+		}
+		//-- Werewolf
 	}
 	else
 	{
