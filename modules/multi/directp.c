@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define DIRECT_PLAY_DEBUG 0
+#define DIRECT_PLAY_DEBUG 1 // schorpp mp debug "0"
 
 #define DEBUG_DUMP_PACKET_DATA 0
 
@@ -250,7 +250,7 @@ void create_direct_play_interface ( void )
 
 	if ( ret != 0 )
 	{
-
+		// must!
 		debug_fatal ( "DIRECTP: Unable to create DirectPlay4A" );
 	}
 }
@@ -471,8 +471,8 @@ void direct_play_register_application ( char *app_name, char *filename )
 
 	if ( ret != DP_OK )
 	{
-
-		debug_fatal ( "Unable to register %s : %s", app_name, get_dplay_error_message ( ret ) );
+		// schorpp "must register"
+		debug_fatal ( "Unable to register to DirectPlay %s : %s", app_name, get_dplay_error_message ( ret ) );
 	}
 	else
 	{
@@ -482,7 +482,7 @@ void direct_play_register_application ( char *app_name, char *filename )
 		if ( ret != DP_OK )
 		{
 
-			debug_fatal ( "Unable to register %s : %s", app_name, get_dplay_error_message ( ret ) );
+			debug_fatal ( "Unable to register to DirectPlay %s : %s", app_name, get_dplay_error_message ( ret ) );
 		}
 
 		IDirectPlayLobby_Release ( dp_lobby3 );
@@ -2131,6 +2131,14 @@ int direct_play_join_session (void)
 
 		return ( TRUE );
 	}
+
+	#if DIRECT_PLAY_DEBUG
+	
+			debug_log ( "DIRECTP: Joining Session: Undefined State" );
+	
+	#endif
+	return ( FALSE ); // schorpp - default handling undefined state
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2207,11 +2215,9 @@ int direct_play_session_capabilities (void)
 	int
 		size;
 
-	if ( direct_play_get_comms_mode () != DIRECT_PLAY_COMMS_MODE_MULTI )
+	if ( direct_play_get_comms_mode () == DIRECT_PLAY_COMMS_MODE_MULTI ) //schorpp
 	{
 
-		return FALSE;
-	}
 
 	hr = IDirectPlayX_GetSessionDesc ( direct_playx, NULL, ( LPDWORD ) &size );
 
@@ -2219,13 +2225,13 @@ int direct_play_session_capabilities (void)
 
 	hr = IDirectPlayX_GetSessionDesc ( direct_playx, ( LPVOID ) session_capabilities, ( LPDWORD ) &size );
 
-	if ( hr != DP_OK )
-	{
+		if ( hr != DP_OK )
+		{
 
-		debug_log ( "DIRECTP: DirectPlay::GetSessionDesc : %s", get_dplay_error_message ( hr ) );
+			debug_log ( "DIRECTP: DirectPlay::GetSessionDesc : %s", get_dplay_error_message ( hr ) );
 
-		return ( FALSE );
-	}
+			return ( FALSE );
+		}
 
 	#if DIRECT_PLAY_DEBUG
 
@@ -2238,6 +2244,16 @@ int direct_play_session_capabilities (void)
 	#endif
 
 	return TRUE;
+	
+	}
+
+	#if DIRECT_PLAY_DEBUG
+	
+	debug_log ( "DIRECTP: direct_play_session_capabilities: Undefined State" );
+	
+	#endif
+	
+	return ( FALSE ); // schorpp - default handling undefined state
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2300,39 +2316,38 @@ int direct_play_enumerate_groups (void)
 	HRESULT
 		hr;
 
-	#if DIRECT_PLAY_DEBUG
 
-	debug_log ("DIRECTP: enumerate groups");
-
-	#endif
-
-	if ( direct_play_get_comms_mode () != DIRECT_PLAY_COMMS_MODE_MULTI )
+	if ( direct_play_get_comms_mode () == DIRECT_PLAY_COMMS_MODE_MULTI )
 	{
 
-		return ( FALSE );
-	}
 
 	//
 	// enumerate avaliable groups
 	//
 
-	if ( connection_data.this_session.session )
-	{
-
-		group_counter = 0;
-
-		hr = IDirectPlayX_EnumGroups ( direct_playx, &connection_data.this_session.session->guidInstance, ( LPDPENUMPLAYERSCALLBACK2 ) direct_play_enumerate_groups_callback, NULL, 0 );
-
-		if ( hr != DP_OK )
+		if ( connection_data.this_session.session )
 		{
+
+			group_counter = 0;
+
+			hr = IDirectPlayX_EnumGroups ( direct_playx, &connection_data.this_session.session->guidInstance, ( LPDPENUMPLAYERSCALLBACK2 ) direct_play_enumerate_groups_callback, NULL, 0 );
+
+
+			#if DIRECT_PLAY_DEBUG
 
 			debug_log ( "DIRECTP: DirectPlay::EnumGroups : %s", get_dplay_error_message ( hr ) );
 
-			return ( FALSE );
+			#endif
+
+			if ( hr == DP_OK )
+				return ( group_counter ); 
+
 		}
 	}
 
-	return ( group_counter );
+
+	return ( FALSE ); //schorpp
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2454,7 +2469,7 @@ int direct_play_join_group (void)
 
 		hr = IDirectPlayX_AddPlayerToGroup ( direct_playx, direct_play_get_group_id (), direct_play_get_player_id () );
 
-		if ( hr == DP_OK )
+		if ( hr != DP_OK ) // schorpp mp bugfix01 "==" 7/17/03
 		{
 
 			debug_log ( "DIRECTP: DirectPlay::AddPlayerToGroup: %s", get_dplay_error_message ( hr ) );
@@ -2479,6 +2494,8 @@ int direct_play_join_group (void)
 
 		return ( FALSE );
 	}
+
+	return ( FALSE ); //schorpp
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

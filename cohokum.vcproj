@@ -3,8 +3,10 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="cohokum"
-	SccProjectName=""
-	SccLocalPath="">
+	SccProjectName="&quot;$/eech-new&quot;, BAAAAAAA"
+	SccAuxPath=""
+	SccLocalPath="."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -21,30 +23,42 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES"
-				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS,COMMERCIAL"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES,\DXSDK\Include"
+				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS,RELEASE"
 				StringPooling="TRUE"
-				RuntimeLibrary="4"
+				MinimalRebuild="TRUE"
+				RuntimeLibrary="0"
+				StructMemberAlignment="4"
+				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Output/Release/cohokum.pch"
 				AssemblerListingLocation=".\Output/Release/"
 				ObjectFile=".\Output/Release/"
 				ProgramDataBaseFileName=".\Output/Release/"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				BrowseInformation="1"
+				WarningLevel="1"
+				SuppressStartupBanner="FALSE"
+				DebugInformationFormat="3"
+				CompileAs="1"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
+				AdditionalOptions="/MACHINE:I386 /FORCE:MULTIPLE"
 				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
-				OutputFile=".\Output/Release/cohokum.exe"
+				ShowProgress="2"
+				OutputFile="\Razorworks\cohokum\cohokummsc6r.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="C:\Data\Projects\eech\APHAVOC\SOURCE\,C:\Data\Projects\eech\MODULES"
-				ProgramDatabaseFile=".\Output/Release/cohokum.pdb"
-				SubSystem="2"/>
+				AdditionalLibraryDirectories="\DXSDK\Lib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\Output/Release/cohokummsc6r.pdb"
+				SubSystem="2"
+				OptimizeForWindows98="1"
+				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -61,7 +75,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				Culture="1053"/>
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -78,30 +92,39 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\APHAVOC\SOURCE,.\MODULES"
+				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES,\DXSDK\Include"
 				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS,DEBUG"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="1"
+				StructMemberAlignment="4"
+				BufferSecurityCheck="TRUE"
+				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderFile=".\Output/Debug/cohokum.pch"
 				AssemblerListingLocation=".\Output/Debug/"
 				ObjectFile=".\Output/Debug/"
 				ProgramDataBaseFileName=".\Output/Debug/"
-				SuppressStartupBanner="TRUE"
+				BrowseInformation="1"
+				WarningLevel="1"
+				SuppressStartupBanner="FALSE"
 				DebugInformationFormat="4"
-				CompileAs="0"/>
+				CompileAs="1"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
+				AdditionalOptions="/MACHINE:I386 /FORCE:MULTIPLE"
 				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
-				OutputFile=".\Output/Debug/cohokum.exe"
+				ShowProgress="2"
+				OutputFile="\Razorworks\cohokum\cohokummsc6d.exe"
 				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="\DXSDK\Lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Output/Debug/cohokum.pdb"
-				SubSystem="2"/>
+				ProgramDatabaseFile=".\Output/Debug/cohokummsc6d.pdb"
+				SubSystem="2"
+				OptimizeForWindows98="1"
+				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -118,7 +141,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
-				Culture="1053"/>
+				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -181,9 +204,6 @@
 						RelativePath=".\MODULES\SYSTEM\KEYEVENT.C">
 					</File>
 					<File
-						RelativePath="MODULES\SYSTEM\KEYMAPPING.C">
-					</File>
-					<File
 						RelativePath=".\MODULES\SYSTEM\MEMBLOCK.C">
 					</File>
 					<File
@@ -214,7 +234,7 @@
 						RelativePath=".\MODULES\SYSTEM\TIMER.C">
 					</File>
 					<File
-						RelativePath="MODULES\SYSTEM\TRACKIR.C">
+						RelativePath=".\MODULES\SYSTEM\trackir.C">
 					</File>
 				</Filter>
 				<Filter
@@ -1114,10 +1134,10 @@
 					RelativePath=".\APHAVOC\SOURCE\UPDATE.C">
 				</File>
 				<File
-					RelativePath="APHAVOC\SOURCE\WUTcfg.c">
+					RelativePath=".\APHAVOC\SOURCE\WUTcfg.c">
 				</File>
 				<File
-					RelativePath="aphavoc\source\eechini.c">
+					RelativePath=".\aphavoc\source\eechini.c">
 				</File>
 				<Filter
 					Name="AI"
@@ -2758,10 +2778,10 @@
 								Name="DOWNWASH"
 								Filter="">
 								<File
-									RelativePath="APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DOWNWASH.C">
+									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DOWNWASH.C">
 								</File>
 								<File
-									RelativePath="APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DW_DBASE.C">
+									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DW_DBASE.C">
 								</File>
 							</Filter>
 						</Filter>
@@ -3729,7 +3749,7 @@
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_WPN.C">
 							</File>
 							<File
-								RelativePath="aphavoc\source\gunships\avionics\common\co_tsd.c">
+								RelativePath=".\aphavoc\source\gunships\avionics\common\co_tsd.c">
 							</File>
 						</Filter>
 						<Filter
@@ -3807,6 +3827,86 @@
 							</File>
 							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\HOKUM\HK_WPN.C">
+							</File>
+						</Filter>
+						<Filter
+							Name="hind"
+							Filter="*.c">
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_avevn.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_avlmp.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_dam.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_ekran.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_eo.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_hms.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_hud.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_mfd.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_radar.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_tgt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_thrt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\hind\hi_wpn.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="blackhawk"
+							Filter="*.c">
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_avevn.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_avlmp.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_dam.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_eo.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_front.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_hms.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_hud.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_mfd.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_radar.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_tgt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_thrt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_wpn.c">
 							</File>
 						</Filter>
 					</Filter>
@@ -3929,6 +4029,44 @@
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\HOKUM\HK_WIPER.C">
 							</File>
 						</Filter>
+						<Filter
+							Name="hind No. 1"
+							Filter="">
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\hind\hi_ckpt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\hind\hi_instr.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\hind\hi_lamps.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\hind\hi_vckpt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\hind\hi_wiper.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="blackhawk No. 1"
+							Filter="">
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_ckpt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_instr.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_lamps.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_vckpt.c">
+							</File>
+							<File
+								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_wiper.c">
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="DYNAMICS"
@@ -3989,6 +4127,20 @@
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\HOKUM\HO_DYN.C">
 							</File>
 						</Filter>
+						<Filter
+							Name="blackhawk No. 2"
+							Filter="">
+							<File
+								RelativePath=".\aphavoc\source\gunships\dynamics\blackhawk\bh_dyn.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="hind No. 2"
+							Filter="">
+							<File
+								RelativePath=".\aphavoc\source\gunships\dynamics\hind\hi_dyn.c">
+							</File>
+						</Filter>
 					</Filter>
 				</Filter>
 			</Filter>
@@ -3998,6 +4150,9 @@
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath=".\MODULES\SYSTEM.H">
+			</File>
+			<File
+				RelativePath=".\aphavoc\source\eechini.h">
 			</File>
 		</Filter>
 		<Filter

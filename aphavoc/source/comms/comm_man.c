@@ -975,8 +975,10 @@ void comms_process_data (void)
 
                         if (client_version_number != server_version_number)
                         {
-
-                            debug_fatal ("COMM_MAN: Incorrect version. Server Version No. %d, Client Version No. %d", server_version_number, client_version_number);
+							//schorpp
+                            debug_log ("COMM_MAN: Incorrect version. Server Version No. %d, Client Version No. %d", server_version_number, client_version_number);
+							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
                         }
                         //
                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1128,8 +1130,10 @@ void comms_process_data (void)
                         if (unpack_session (ptr, received_size, PACK_MODE_BROWSE_SESSION))
                         {
 
-                            debug_fatal ("COMMS MAN: browse: received size overflow");
-                        }
+                            debug_log ("COMMS MAN: browse: received size overflow"); // schorpp 
+ 							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
+                       }
 
                         #if DEBUG_MODULE
 
@@ -1679,7 +1683,9 @@ void comms_process_data (void)
                         if (unpack_session (received_data, received_size - 4, PACK_MODE_CLIENT_SESSION))
                         {
 
-                            debug_fatal ("COMMS MAN: received size overflow");
+                            debug_log ("COMMS MAN: received size overflow");
+							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
                         }
 /*
                         force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
@@ -1850,7 +1856,7 @@ void comms_process_data (void)
                     default:
                     {
 
-                        debug_fatal ("ERROR: Data Exchange, unknown packet type %d", type);
+                        debug_log ("ERROR: Data Exchange, unknown packet type %d", type); //schorpp "trying ignore, kickout would open door for dos-attacks"
 
                         break;
                     }

@@ -653,22 +653,28 @@ void process_game_initialisation_phases (void)
 
 					if ( ( this_connection->is_initialised ) && ( !this_connection->one_way_hosting_setup ) )
 					{
+						//schorpp "fatal" errhdl
+						if (!( 
+						direct_play_join_session () &&
 
-						direct_play_join_session ();
+						direct_play_session_capabilities () &&
 
-						direct_play_session_capabilities ();
-
-						if (!direct_play_enumerate_groups ())
+						direct_play_enumerate_groups () ))
 						{
-
-							debug_fatal ("SESSION: Client can't enumerate any groups, restart machine");
+                        start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+						break;
 						}
 
 						this_connection->this_group = direct_play_get_group_table ();
 
-						direct_play_create_player ();
+						if (!(
+						direct_play_create_player () &&
 
-						direct_play_join_group ();
+						direct_play_join_group () ))
+						{
+                        start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+						break;
+						}
 					}
 
 					Sleep (command_line_comms_initial_sleep_time);
@@ -789,8 +795,10 @@ void process_game_initialisation_phases (void)
 				case SESSION_LIST_TYPE_INVALID:
 				default:
 				{
-
-					debug_fatal ("DEDICATE: unknown game type");
+					//schorpp
+					debug_log ("DEDICATE: unknown game type");
+                    start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+					break;
 				}
 			}
 

@@ -23,8 +23,8 @@ CFG=cohokum - Win32 Debug
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName ""$/eech-new", BAAAAAAA"
+# PROP Scc_LocalPath "."
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
@@ -43,17 +43,19 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /w /W0 /GX /O1 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
+# ADD CPP /MT /Ze /W1 /Gm /GX /Zi /O2 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
+# SUBTRACT CPP /nologo
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "NDEBUG"
 # ADD RSC /l 0x41d /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+# SUBTRACT BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /nologo /subsystem:windows /machine:I386 /libpath:"C:\Data\Projects\eech\APHAVOC\SOURCE\\" /libpath:"C:\Data\Projects\eech\MODULES"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /debug /machine:I386 /force /out:"\Razorworks\cohokum\cohokummsc6r.exe" /libpath:"\DXSDK\Lib"
+# SUBTRACT LINK32 /nologo
 
 !ELSEIF  "$(CFG)" == "cohokum - Win32 Debug"
 
@@ -69,17 +71,19 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /YX /FD /GZ /c
+# ADD CPP /MTd /Ze /W4 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
+# SUBTRACT CPP /nologo /X
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "_DEBUG"
 # ADD RSC /l 0x41d /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
+# SUBTRACT BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /debug /machine:I386 /force /out:"\Razorworks\cohokum\cohokummsc6d.exe" /pdbtype:sept /libpath:"\DXSDK\Lib"
+# SUBTRACT LINK32 /nologo
 
 !ENDIF 
 
@@ -4763,6 +4767,110 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\HOKUM\HK_THRT.C
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\HOKUM\HK_WPN.C
 # End Source File
 # End Group
+# Begin Group "hind"
+
+# PROP Default_Filter "*.c"
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_avevn.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_avlmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_dam.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_ekran.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_eo.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_hms.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_hud.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_mfd.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_radar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_tgt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_thrt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\hind\hi_wpn.c
+# End Source File
+# End Group
+# Begin Group "blackhawk"
+
+# PROP Default_Filter "*.c"
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_avevn.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_avlmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_dam.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_eo.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_front.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_hms.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_hud.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_mfd.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_radar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_tgt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_thrt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_wpn.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\AVIONICS.C
@@ -4915,6 +5023,54 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\HOKUM\HK_VCKPT.C
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\HOKUM\HK_WIPER.C
 # End Source File
 # End Group
+# Begin Group "hind No. 1"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\hind\hi_ckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\hind\hi_instr.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\hind\hi_lamps.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\hind\hi_vckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\hind\hi_wiper.c
+# End Source File
+# End Group
+# Begin Group "blackhawk No. 1"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_ckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_instr.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_lamps.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_vckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_wiper.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\COCKPITS.C
@@ -4985,6 +5141,22 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\HAVOC\HA_DYN.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\HOKUM\HO_DYN.C
+# End Source File
+# End Group
+# Begin Group "blackhawk No. 2"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\dynamics\blackhawk\bh_dyn.c
+# End Source File
+# End Group
+# Begin Group "hind No. 2"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\dynamics\hind\hi_dyn.c
 # End Source File
 # End Group
 # Begin Source File

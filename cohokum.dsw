@@ -7,6 +7,10 @@ Project: "cohokum"=".\cohokum.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
+    begin source code control
+    "$/eech-new", BAAAAAAA
+    .
+    end source code control
 }}}
 
 Package=<4>
@@ -19,6 +23,10 @@ Global:
 
 Package=<5>
 {{{
+    begin source code control
+    "$/eech-new", BAAAAAAA
+    .
+    end source code control
 }}}
 
 Package=<3>

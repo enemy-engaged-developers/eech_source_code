@@ -1,7 +1,18 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cohokum", "cohokum.vcproj", "{199A8071-0652-4DDA-97A9-768A96F0F53D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cohokum", "cohokum.vcproj", "{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}"
 EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccProjectUniqueName0 = cohokum.vcproj
+		SccLocalPath0 = .
+		CanCheckoutShared = false
+		SccProjectName1 = \u0022$/eech-new\u0022,\u0020BAAAAAAA
+		SccLocalPath1 = .
+		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SolutionUniqueID = {2FDA7909-5BF5-4C86-A22A-447C541FB63E}
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
 		ConfigName.1 = Release
@@ -9,10 +20,10 @@ Global
 	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{199A8071-0652-4DDA-97A9-768A96F0F53D}.Debug.ActiveCfg = Debug|Win32
-		{199A8071-0652-4DDA-97A9-768A96F0F53D}.Debug.Build.0 = Debug|Win32
-		{199A8071-0652-4DDA-97A9-768A96F0F53D}.Release.ActiveCfg = Release|Win32
-		{199A8071-0652-4DDA-97A9-768A96F0F53D}.Release.Build.0 = Release|Win32
+		{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}.Debug.ActiveCfg = Debug|Win32
+		{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}.Debug.Build.0 = Debug|Win32
+		{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}.Release.ActiveCfg = Release|Win32
+		{1BB17E87-B5B9-4582-B6D4-B565D9BB96F2}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

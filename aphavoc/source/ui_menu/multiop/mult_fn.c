@@ -655,35 +655,62 @@ void multiplayer_modem_dial_update_function ( void )
 		
 					sprintf (text_buffer, "%s: %s", get_trans ("MP_STATUS"), get_trans ("MP_JOINING_GAMES"));
 				
-					direct_play_join_session ();
-		
-					direct_play_session_capabilities ();
-		
-					if (!direct_play_enumerate_groups ())
+
+					if ( //schorpp "fatal" errhdl , maybe outdated, who uses modem to modem nowadays?
+
+					direct_play_join_session () &&
+
+					direct_play_session_capabilities () &&
+
+					direct_play_enumerate_groups () )
 					{
+
+						this_connection->this_group = direct_play_get_group_table ();
+
+						if (
+			
+						direct_play_create_player () &&
+
+						direct_play_join_group () )
+						{
+
+						baudrate = direct_play_get_connection_baudrate ();
 		
-						debug_fatal ("SESSION: Client can't enumerate any groups - but connected someway");
+						sprintf (text_buffer, "%s: %s %d", get_trans ("MP_STATUS"), get_trans ("MP_CONNECTED_AT"), baudrate * 100);
+					
+						set_ui_object_text (modem_status_text, text_buffer);
+
+	//					set_ui_object_drawable ( multi_player_back_button, UI_OBJECT_STATE_ON );
+
+						ghost_ui_objects_for_modem (NULL, FALSE);
+
+						modem_state = MODEM_DIALLED_CONNECTED;
+
+						ui_set_user_function ( multiplayer_modem_connection_update_function );
+
+						}
+
 					}
-		
-					this_connection->this_group = direct_play_get_group_table ();
-		
-					direct_play_create_player ();
+					else
+					{
 
-					direct_play_join_group ();
 
-					baudrate = direct_play_get_connection_baudrate ();
-	
-					sprintf (text_buffer, "%s: %s %d", get_trans ("MP_STATUS"), get_trans ("MP_CONNECTED_AT"), baudrate * 100);
+					// schorpp mp errhd01 "fatal" 7/17/03
+					debug_log ("SESSION: Server has got a problem, request campaing restart. ");
+					sprintf (text_buffer, "Server has got a problem, request campaing restart.  %s", get_trans ("MP_UNCONNECTED"));
 				
-					set_ui_object_text (modem_status_text, text_buffer);
+					set_ui_object_text ( modem_status_text, text_buffer );
 
-//					set_ui_object_drawable ( multi_player_back_button, UI_OBJECT_STATE_ON );
+					modem_state = MODEM_NOT_CONNECTED;
+
+	//				set_ui_object_drawable ( multi_player_back_button, UI_OBJECT_STATE_ON );
 
 					ghost_ui_objects_for_modem (NULL, FALSE);
 
-					modem_state = MODEM_DIALLED_CONNECTED;
+					ui_set_user_function ( NULL );
 
-					ui_set_user_function ( multiplayer_modem_connection_update_function );
+		
+					}
 				}
 			}
 		}
