@@ -89,6 +89,10 @@ vec3d
 hud_modes
 	hud_mode;
 
+//VJ 050126 hud mod 
+hud_screen_data 
+	hsd;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,6 +231,7 @@ void display_hud_on_external_view (void)
 			case GUNSHIP_TYPE_COMANCHE:
 			////////////////////////////////////////
 			{
+				
 				draw_comanche_hud ();
 
 				break;
@@ -279,6 +284,133 @@ void display_hud_on_external_view (void)
 			}
 			////Moje 030816 end
 		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ 050126 hud mod background colour
+void draw_hud_background (hud_screen_data *hd, int alpha )
+{
+	vertex
+		quad[4];
+	
+	real_colour
+		clear_hud_colour, 
+		colour,
+		specular;
+	
+	set_active_screen (hd->hud_texture_screen);
+
+	if (lock_screen (hd->hud_texture_screen))
+	{
+		set_rgb_colour (clear_hud_colour, 255,255,255,255);
+
+		set_block (hd->hud_viewport_x_min, hd->hud_viewport_y_min, hd->hud_viewport_x_max, hd->hud_viewport_y_max, clear_hud_colour);  
+
+		flush_screen_texture_graphics (hd->hud_texture_screen);
+
+		unlock_screen (hd->hud_texture_screen);
+	}
+
+	set_active_screen (video_screen);
+
+	////////////////////////////////////////
+	//
+	// render HUD to screen
+	//
+	////////////////////////////////////////
+
+	set_3d_active_environment (main_3d_env);
+
+	if (begin_3d_scene ())
+	{
+		set_d3d_transparency_on ();
+
+		set_d3d_zbuffer_comparison (FALSE);
+
+		set_d3d_culling (FALSE);
+
+		set_d3d_texture_wrapping (0, FALSE);
+
+		if ((application_video_width == 640) || (get_global_unscaled_displays ()))
+		{
+			set_d3d_texture_mag_filtering (FALSE);
+			set_d3d_texture_min_filtering (FALSE);
+			set_d3d_texture_mip_filtering (FALSE);
+		}
+		else
+		{
+			set_d3d_texture_mag_filtering (TRUE);
+			set_d3d_texture_min_filtering (TRUE);
+			set_d3d_texture_mip_filtering (FALSE);
+		}
+		
+		if (get_global_gunship_type () == GUNSHIP_TYPE_COMANCHE)
+			set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD));
+		else
+			set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_COMANCHE_MFD2));
+
+		////////////////////////////////////////
+		//
+
+		colour.red	 			= 48;
+		colour.green			= 48;
+		colour.blue	 			= 16;
+		colour.alpha  			= min(alpha, global_hud_alpha);
+		
+		specular.red 			= 0;
+		specular.green	 		= 0;
+		specular.blue 			= 0;
+		specular.alpha	  		= 255;
+
+		quad[0].i 				= hd->hud_screen_x_min;
+		quad[0].j  				= hd->hud_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.0;
+		quad[0].v				= 0.0;
+
+		quad[1].i  				= hd->hud_screen_x_max;
+		quad[1].j  				= hd->hud_screen_y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 1.0;
+		quad[1].v  				= 0.0;
+
+		quad[2].i				= hd->hud_screen_x_max;
+		quad[2].j  				= hd->hud_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 1.0;
+		quad[2].v  				= 1.0;
+
+		quad[3].i  				= hd->hud_screen_x_min;
+		quad[3].j  				= hd->hud_screen_y_max;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		//
+		////////////////////////////////////////
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		set_d3d_transparency_off ();
+
+		set_d3d_zbuffer_comparison (TRUE);
+
+		set_d3d_culling (TRUE);
+
+		end_3d_scene ();
 	}
 }
 

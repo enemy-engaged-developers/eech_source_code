@@ -197,7 +197,8 @@ int
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
-	command_line_aphavoc								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
+	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
+	global_hud_alpha									= 0,  // VJ 050126 hud mod: background 
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
 
 // Jabberwock 031118 Server side settings
@@ -224,7 +225,8 @@ float
 	command_line_fog_of_war_maximum_value 					= DEFAULT_FOG_OF_WAR_MAXIMUM_VALUE,
 	command_line_chaff_effectiveness							= 1.0,
 	command_line_flare_effectiveness							= 1.0,
-	command_line_smoke_effectiveness							= 1.0;
+	command_line_smoke_effectiveness							= 1.0,
+	global_hud_size												= 1.0;	// VJ 050126 hud mod: background 
 
 char
 	command_line_game_initialisation_phase_path [128]			= "\0",

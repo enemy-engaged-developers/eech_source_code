@@ -636,7 +636,7 @@ void full_initialise_game (void)
 	//
 
 // VJ 050123 aphavoc install hack: this function gives true or false depending on presence of terrain.ffp files in EEAH map dirs
-	command_line_aphavoc = check_apache_havoc_ffp_files ();
+	global_aphavoc_maps = check_apache_havoc_ffp_files ();
 
 	////////////////////////////////////////
 	//
@@ -645,13 +645,13 @@ void full_initialise_game (void)
 	////////////////////////////////////////
 
 	#if !DEMO_VERSION	
-		if (get_global_apache_havoc_installed () || command_line_aphavoc)
+		if (get_global_apache_havoc_installed () || global_aphavoc_maps)
 		{
 			char
 				buffer [256];
 
 // VJ 050123 aphavoc install hack
-			if (command_line_aphavoc)
+			if (global_aphavoc_maps)
 				sprintf (buffer, "Apache Havoc: %s", "Maps enabled");
 			else			
 				sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));

@@ -113,7 +113,7 @@ int
 
 // 030318 JB&VJ wideview mod
 static void wide_cockpit_edit_event (event *ev);
-static void wide_cockpit_save_event (event *ev);
+//static void wide_cockpit_save_event (event *ev);
 
 //VJ 030423 TSD render mod
 static void TSD_render_event (event *ev);
@@ -910,7 +910,20 @@ static void toggle_display_hud_on_external_view_event (event *ev)
 
 static void toggle_unscaled_displays_event (event *ev)
 {
-	set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
+	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
+	
+	if (!get_global_unscaled_displays ())
+	{
+		set_global_unscaled_displays (TRUE);	
+		global_hud_size = 0.70;
+	}
+	else		
+	 global_hud_size += 0.1;	   
+	if (global_hud_size > 1.0)
+	{
+		set_global_unscaled_displays (FALSE);
+		global_hud_size = 1.0;
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1020,24 +1033,26 @@ static void wide_cockpit_toggle_event (event *ev)
 //VJ wideview mod, date: 18-mar-03	
 static void wide_cockpit_edit_event (event *ev)
 {
-//VJ 030511 moved save of cockpit parameters to eech.ini
-// 	if (!get_global_wide_cockpit ())
-// 	   set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
-
-	set_global_wide_cockpit (TRUE);
-	edit_wide_cockpit = TRUE;	
+//VJ 050126 save_wide no longer needed, this can toggle
+	if (get_global_wide_cockpit ())
+	{
+		if (edit_wide_cockpit)
+		   edit_wide_cockpit = FALSE;	
+		else   
+		   edit_wide_cockpit = TRUE;	
+	}	   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 //VJ wideview mod, date: 18-mar-03	
 static void wide_cockpit_save_event (event *ev)
 {
-	edit_wide_cockpit = FALSE;
+	//edit_wide_cockpit = FALSE;
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2170,7 +2185,8 @@ void set_gunship_view_mode_events (void)
 //VJ wideview mod, date: 18-mar-03	
 	set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, wide_cockpit_toggle_event);
 	set_event (DIK_BACKSLASH, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, wide_cockpit_edit_event);
-	set_event (DIK_BACKSLASH, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, wide_cockpit_save_event);
+//VJ 050127 no longer needed	
+	//set_event (DIK_BACKSLASH, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, wide_cockpit_save_event);
 
 	if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
 	{

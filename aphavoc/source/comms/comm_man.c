@@ -1410,7 +1410,7 @@ void comms_process_data (void)
                             // check it is...
 
 									// VJ 050118 aphavoc install hack
-                            if (!get_global_apache_havoc_installed () && !command_line_aphavoc)
+                            if (!get_global_apache_havoc_installed () && !global_aphavoc_maps)
                             {
 
                                 add_to_pop_up_list_with_word_wrap (get_trans ("REQUIRES_APACHE_HAVOC"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);

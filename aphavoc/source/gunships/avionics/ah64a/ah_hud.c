@@ -107,6 +107,9 @@ static float
 //
 
 static float
+//VJ 050126 hud mod start
+	hud_viewport_size,
+//VJ 050126 hud mod end
 	hud_screen_x_min,
 	hud_screen_y_min,
 	hud_screen_x_max,
@@ -148,7 +151,7 @@ static rgb_colour
 #define HDG_WINDOW_Y_MAX		(HUD_WINDOW_Y_MAX)
 
 #define HDG_WINDOW_X_ORG		(0.0)
-#define HDG_WINDOW_Y_ORG		(0.93)
+#define HDG_WINDOW_Y_ORG		(0.9)  //VJ 050126 hud mod size, was (0.93)
 
 //
 // draw heading tape ticks +/-90 degs of centre (plus an extra bit to keep three cardinal points visible (N,S,E,W))
@@ -473,13 +476,23 @@ static void draw_heading_scale (void)
 
 	set_2d_window (hud_env, HDG_WINDOW_X_MIN, HDG_WINDOW_Y_MIN, HDG_WINDOW_X_MAX, HDG_WINDOW_Y_MAX);
 
-	hdg_viewport_x_min = (hud_viewport_x_org - (HUD_VIEWPORT_SIZE * HDG_WIDTH_RATIO * 0.5));
+/*	VJ 050126 hud mod start
+	hdg_viewport_x_min = (hud_viewport_x_org - (hud_viewport_size * HDG_WIDTH_RATIO * 0.5));
 
-	hdg_viewport_y_min = (hud_viewport_y_org - (HUD_VIEWPORT_SIZE * 0.5));
+	hdg_viewport_y_min = (hud_viewport_y_org - (hud_viewport_size * 0.5));
 
-	hdg_viewport_x_max = (hud_viewport_x_org + (HUD_VIEWPORT_SIZE * HDG_WIDTH_RATIO * 0.5) - 0.001);
+	hdg_viewport_x_max = (hud_viewport_x_org + (hud_viewport_size * HDG_WIDTH_RATIO * 0.5) - 0.001);
 
-	hdg_viewport_y_max = (hud_viewport_y_org + (HUD_VIEWPORT_SIZE * 0.5) - 0.001);
+	hdg_viewport_y_max = (hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001);
+*/
+	hdg_viewport_x_min = hud_viewport_x_min + (hud_viewport_size * (1-HDG_WIDTH_RATIO) * 0.5);
+
+	hdg_viewport_y_min = hud_viewport_y_min;
+
+	hdg_viewport_x_max = hud_viewport_x_max - (hud_viewport_size * (1-HDG_WIDTH_RATIO) * 0.5) - 0.001;
+
+	hdg_viewport_y_max = hud_viewport_y_max;
+//VJ 050126 hud mod end
 
 	set_2d_viewport (hud_env, hdg_viewport_x_min, hdg_viewport_y_min, hdg_viewport_x_max, hdg_viewport_y_max);
 
@@ -1045,6 +1058,7 @@ static void draw_bank_scale (void)
 
 	set_2d_window (hud_env, BANK_SCALE_WINDOW_X_MIN, BANK_SCALE_WINDOW_Y_MIN, BANK_SCALE_WINDOW_X_MAX, BANK_SCALE_WINDOW_Y_MAX);
 
+/*
 	bank_scale_viewport_x_min = (hud_viewport_x_org - (HUD_VIEWPORT_SIZE * 0.5));
 
 	bank_scale_viewport_y_min = (hud_viewport_y_org - (HUD_VIEWPORT_SIZE * 0.5 * 0.8));
@@ -1052,6 +1066,15 @@ static void draw_bank_scale (void)
 	bank_scale_viewport_x_max = (hud_viewport_x_org + (HUD_VIEWPORT_SIZE * 0.5) - 0.001);
 
 	bank_scale_viewport_y_max = (hud_viewport_y_org - (HUD_VIEWPORT_SIZE * 0.5 * 0.5) - 0.001);
+*/
+//VJ 050126 hud mod start
+	bank_scale_viewport_x_min = hud_viewport_x_min;
+                                                 
+	bank_scale_viewport_y_min = hud_viewport_y_min + (hud_viewport_size * 0.1);
+                                                 
+	bank_scale_viewport_x_max = hud_viewport_x_max;
+                                                 
+	bank_scale_viewport_y_max = hud_viewport_y_min + (hud_viewport_size * 0.25) - 0.001;
 
 	set_2d_viewport (hud_env, bank_scale_viewport_x_min, bank_scale_viewport_y_min, bank_scale_viewport_x_max, bank_scale_viewport_y_max);
 
@@ -2713,8 +2736,7 @@ void draw_ah64a_hud (void)
 
 	set_2d_active_environment (hud_env);
 
-	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
-
+/*
 	hud_viewport_x_org = HUD_VIEWPORT_SIZE * 0.5;
 
 	hud_viewport_y_org = HUD_VIEWPORT_SIZE * 0.5;
@@ -2726,6 +2748,24 @@ void draw_ah64a_hud (void)
 	hud_viewport_x_max = HUD_VIEWPORT_SIZE - 0.001;
 
 	hud_viewport_y_max = HUD_VIEWPORT_SIZE - 0.001;
+*/
+//VJ 050126 hud mod start
+
+	hud_viewport_size = HUD_VIEWPORT_SIZE * global_hud_size;
+   
+	hud_viewport_x_org = hud_viewport_size * 0.5;
+   
+	hud_viewport_y_org = hud_viewport_size * 0.5;
+
+	hud_viewport_x_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
+
+	hud_viewport_y_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
+
+	hud_viewport_x_max = HUD_VIEWPORT_SIZE - hud_viewport_x_min-0.001;
+   
+	hud_viewport_y_max = HUD_VIEWPORT_SIZE - hud_viewport_y_min-0.001;
+
+//VJ 050126 hud mod end
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -2755,6 +2795,23 @@ void draw_ah64a_hud (void)
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
 	}
+
+//VJ 050126 hud mod start 
+	hud_screen_x_scale = global_hud_size;
+	hud_screen_y_scale = global_hud_size;
+	hsd.hud_viewport_x_min = hud_viewport_x_min; 
+	hsd.hud_viewport_y_min = hud_viewport_y_min; 
+	hsd.hud_viewport_x_max = hud_viewport_x_max; 
+	hsd.hud_viewport_y_max = hud_viewport_y_max; 
+	hsd.hud_screen_x_min = hud_screen_x_min;   
+	hsd.hud_screen_y_min = hud_screen_y_min;   
+	hsd.hud_screen_x_max = hud_screen_x_max;   
+	hsd.hud_screen_y_max = hud_screen_y_max;   
+	hsd.hud_texture_screen = hud_texture_screen;
+	
+   draw_hud_background (&hsd, alpha );
+//VJ 050126 hud mod end
+
 
 	////////////////////////////////////////
 	//

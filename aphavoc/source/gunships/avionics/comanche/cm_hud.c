@@ -155,7 +155,7 @@ static rgb_colour
 #define HDG_WINDOW_Y_MAX		(HUD_WINDOW_Y_MAX)
 
 #define HDG_WINDOW_X_ORG		(0.0)
-#define HDG_WINDOW_Y_ORG		(0.93)
+#define HDG_WINDOW_Y_ORG		(0.9)  //VJ 050126 hud mod size was: (0.93)
 
 //
 // draw heading tape ticks +/-90 degs of centre (plus an extra bit to keep three cardinal points visible (N,S,E,W))
@@ -361,6 +361,9 @@ static char rate_of_climb_scale_pointer[] =
 	1,1,0,0,0,
 	1,0,0,0,0,
 };
+
+static int dc;
+static float df, _dx, _dy;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,6 +573,7 @@ static void draw_heading_scale (void)
 
 	set_2d_window (hud_env, HDG_WINDOW_X_MIN, HDG_WINDOW_Y_MIN, HDG_WINDOW_X_MAX, HDG_WINDOW_Y_MAX);
 
+/*	VJ 050126 hud mod start
 	hdg_viewport_x_min = (hud_viewport_x_org - (hud_viewport_size * HDG_WIDTH_RATIO * 0.5));
 
 	hdg_viewport_y_min = (hud_viewport_y_org - (hud_viewport_size * 0.5));
@@ -577,6 +581,15 @@ static void draw_heading_scale (void)
 	hdg_viewport_x_max = (hud_viewport_x_org + (hud_viewport_size * HDG_WIDTH_RATIO * 0.5) - 0.001);
 
 	hdg_viewport_y_max = (hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001);
+*/
+	hdg_viewport_x_min = hud_viewport_x_min + (hud_viewport_size * (1-HDG_WIDTH_RATIO) * 0.5);
+
+	hdg_viewport_y_min = hud_viewport_y_min;
+
+	hdg_viewport_x_max = hud_viewport_x_max - (hud_viewport_size * (1-HDG_WIDTH_RATIO) * 0.5) - 0.001;
+
+	hdg_viewport_y_max = hud_viewport_y_max;
+//VJ 050126 hud mod end
 
 	set_2d_viewport (hud_env, hdg_viewport_x_min, hdg_viewport_y_min, hdg_viewport_x_max, hdg_viewport_y_max);
 
@@ -1143,7 +1156,7 @@ static void draw_bank_scale (void)
 	//
 
 	set_2d_window (hud_env, BANK_SCALE_WINDOW_X_MIN, BANK_SCALE_WINDOW_Y_MIN, BANK_SCALE_WINDOW_X_MAX, BANK_SCALE_WINDOW_Y_MAX);
-
+/*
 	bank_scale_viewport_x_min = (hud_viewport_x_org - (hud_viewport_size * 0.5));
 
 	bank_scale_viewport_y_min = (hud_viewport_y_org - (hud_viewport_size * 0.5 * 0.8));
@@ -1151,8 +1164,18 @@ static void draw_bank_scale (void)
 	bank_scale_viewport_x_max = (hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001);
 
 	bank_scale_viewport_y_max = (hud_viewport_y_org - (hud_viewport_size * 0.5 * 0.5) - 0.001);
+*/
+//VJ 050126 hud mod start
+	bank_scale_viewport_x_min = hud_viewport_x_min;
+                                                 
+	bank_scale_viewport_y_min = hud_viewport_y_min + (hud_viewport_size * 0.1);
+                                                 
+	bank_scale_viewport_x_max = hud_viewport_x_max;
+                                                 
+	bank_scale_viewport_y_max = hud_viewport_y_min + (hud_viewport_size * 0.25) - 0.001;
 
 	set_2d_viewport (hud_env, bank_scale_viewport_x_min, bank_scale_viewport_y_min, bank_scale_viewport_x_max, bank_scale_viewport_y_max);
+//VJ 050126 hud mod end
 
 	//
 	// draw bank scale
@@ -2692,11 +2715,16 @@ void initialise_comanche_hud (void)
 	clear_hud_colour.g = 255;
 	clear_hud_colour.b = 255;
 	clear_hud_colour.a = 0;
-
+//VJ#
 	clear_lens_hud_colour.r = 63;
 	clear_lens_hud_colour.g = 99;
 	clear_lens_hud_colour.b = 65;
 	clear_lens_hud_colour.a = 255;
+	
+	dc = 0;
+	df = 1.0;
+	_dx = 0;
+	_dy = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2737,7 +2765,47 @@ void draw_comanche_hud (void)
 	real_colour
 		colour,
 		specular;
+/*
+char buffer[255];
 
+		if (check_key(DIK_NUMPAD7))
+		{
+			system_sleep(20);
+			_dx -= 0.001;
+		}
+		if (check_key(DIK_NUMPAD9))
+		{
+			system_sleep(20);
+			_dx += 0.001;
+		}
+		if (check_key(DIK_NUMPAD1))
+		{
+			system_sleep(20);
+			_dy -= 0.001;
+		}
+		if (check_key(DIK_NUMPAD3))
+		{
+			system_sleep(20);
+			_dy += 0.001;
+		}
+		if (check_key(DIK_Q))
+		{
+			system_sleep(20);
+			dc += 16;
+			df = 1.0;
+			_dx = 0;
+			_dy = 0;
+		}
+		if (check_key(DIK_A))
+		{
+			system_sleep(20);
+			df += 0.05;
+		}
+		if (dc > 160) dc = 0;
+		//if (dc < 0) dc = 160;
+		if (df > 1.0) df = 0.65;
+		//if (df < 0.65) df = 1.0;
+*/
 	////////////////////////////////////////
 	//
 	// do not draw damaged HUD
@@ -2813,24 +2881,28 @@ void draw_comanche_hud (void)
 	////////////////////////////////////////
 
 	set_2d_active_environment (hud_env);
-
+ 
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	draw_hud_on_lens = FALSE;
 
-	hud_viewport_size = HUD_VIEWPORT_SIZE;
+//VJ 050126 hud mod start
 
-	hud_viewport_x_org = HUD_VIEWPORT_SIZE * 0.5;
+	hud_viewport_size = HUD_VIEWPORT_SIZE * global_hud_size;
+   
+	hud_viewport_x_org = hud_viewport_size * 0.5;
+   
+	hud_viewport_y_org = hud_viewport_size * 0.5;
 
-	hud_viewport_y_org = HUD_VIEWPORT_SIZE * 0.5;
+	hud_viewport_x_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
 
-	hud_viewport_x_min = 0.0;
+	hud_viewport_y_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
 
-	hud_viewport_y_min = 0.0;
+	hud_viewport_x_max = HUD_VIEWPORT_SIZE - hud_viewport_x_min-0.001;
+   
+	hud_viewport_y_max = HUD_VIEWPORT_SIZE - hud_viewport_y_min-0.001;
 
-	hud_viewport_x_max = HUD_VIEWPORT_SIZE - 0.001;
-
-	hud_viewport_y_max = HUD_VIEWPORT_SIZE - 0.001;
+//VJ 050126 hud mod end
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -2857,10 +2929,27 @@ void draw_comanche_hud (void)
 		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
 		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
 
+//VJ 050126 hud mod 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
 	}
-
+	
+//VJ 050126 hud mod start 
+	hud_screen_x_scale = global_hud_size;
+	hud_screen_y_scale = global_hud_size;
+	hsd.hud_viewport_x_min = hud_viewport_x_min; 
+	hsd.hud_viewport_y_min = hud_viewport_y_min; 
+	hsd.hud_viewport_x_max = hud_viewport_x_max; 
+	hsd.hud_viewport_y_max = hud_viewport_y_max; 
+	hsd.hud_screen_x_min = hud_screen_x_min;   
+	hsd.hud_screen_y_min = hud_screen_y_min;   
+	hsd.hud_screen_x_max = hud_screen_x_max;   
+	hsd.hud_screen_y_max = hud_screen_y_max;   
+	hsd.hud_texture_screen = hud_texture_screen;
+	
+   draw_hud_background (&hsd, alpha );
+//VJ 050126 hud mod end
+  
 	////////////////////////////////////////
 	//
 	// draw HUD on texture
@@ -2876,7 +2965,8 @@ void draw_comanche_hud (void)
 		set_rgb_colour (hud_colour, 255, 255, 255, 255);
 
 		set_mono_font_colour (hud_colour);
-
+      
+		//clear max block because between two clear size can have changed
 		set_block (0, 0, HUD_VIEWPORT_SIZE - 1, HUD_VIEWPORT_SIZE - 1, clear_hud_colour);
 
 		draw_layout_grid ();
@@ -2946,7 +3036,7 @@ void draw_comanche_hud (void)
 		colour.green			= hud_colour_table[get_global_hud_colour ()].g;
 		colour.blue	 			= hud_colour_table[get_global_hud_colour ()].b;
 		colour.alpha  			= alpha;
-
+		
 		specular.red 			= 0;
 		specular.green	 		= 0;
 		specular.blue 			= 0;
@@ -2995,6 +3085,9 @@ void draw_comanche_hud (void)
 		set_d3d_zbuffer_comparison (TRUE);
 
 		set_d3d_culling (TRUE);
+
+//		sprintf(buffer,"ghs %f",global_hud_size );
+//      ui_display_text (buffer, 10, 40);
 
 		end_3d_scene ();
 	}

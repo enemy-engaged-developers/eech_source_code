@@ -174,7 +174,8 @@ extern int
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_high_lod_hack,									// Retro 31Oct2004
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
-	command_line_aphavoc,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
+	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
+	global_hud_alpha, // VJ 050126 hud mod: background 
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
@@ -202,8 +203,8 @@ extern float
 	command_line_fog_of_war_maximum_value,
 	command_line_chaff_effectiveness,
 	command_line_flare_effectiveness,
-	command_line_smoke_effectiveness;
-
+	command_line_smoke_effectiveness,
+	global_hud_size;	// VJ 050126 hud mod: background 
 
 extern char
 	command_line_game_initialisation_phase_path [],
