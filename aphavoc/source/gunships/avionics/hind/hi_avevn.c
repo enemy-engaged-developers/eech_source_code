@@ -81,10 +81,12 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
+#if 0	// Retro 18Jul2004 - no radar in hind
 	if (!get_global_simple_avionics ())
 	{
 		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +95,12 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 
 static void select_target_acquisition_system_air_radar_event (event *ev)
 {
+#if 0	// Retro 18Jul2004 - no radar in hind
 	if (!get_global_simple_avionics ())
 	{
 		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -604,6 +608,40 @@ static void toggle_navigation_lights_event (event *ev)
 	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_LIGHTS_ON, status);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 18Jul2004
+static void toggle_gear_event (event *ev)
+{
+	int
+		state;
+
+	if (!get_dynamics_damage_type (DYNAMICS_DAMAGE_UNDERCARRIAGE))
+	{
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		{
+			state = get_local_entity_undercarriage_state (get_gunship_entity ());
+
+			if ((state == AIRCRAFT_UNDERCARRIAGE_UP) || (state == AIRCRAFT_UNDERCARRIAGE_RAISING))
+			{
+				lower_client_server_entity_undercarriage (get_gunship_entity ());
+				open_client_server_entity_loading_doors (get_gunship_entity ());
+			}
+			else if ((state == AIRCRAFT_UNDERCARRIAGE_DOWN) || (state == AIRCRAFT_UNDERCARRIAGE_LOWERING))
+			{
+				raise_client_server_entity_undercarriage (get_gunship_entity ());
+				close_client_server_entity_loading_doors (get_gunship_entity ());
+			}
+			else
+			{
+				debug_fatal ("Invalid undercarriage state = %d", state);
+			}
+		}
+	}
+}
+// Retro 18Jul2004 end
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,6 +659,9 @@ void set_hind_avionics_events (void)
 	// KEYBOARD EVENTS
 	//
 	////////////////////////////////////////
+
+	// Retro 18Jul2004
+	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
 
 	//
 	// select target acquisition system
