@@ -58,7 +58,9 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
+#ifndef APHAVOC_ASM_FPU_H
 
+#define APHAVOC_ASM_FPU_H
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,22 +109,26 @@ __inline void asm_convert_double_to_int ( double value, int *integer )
 }
 
 #endif
-#else
+#elif LINUX
 
 /* Linux ASM portage by Colin Bayer <vogon@icculus.org> */
 
-__inline void asm_convert_float_to_int ( float value, int *integer )
+inline static void asm_convert_float_to_int ( float value, int *integer ) __attribute__((always_inline));
+inline static void asm_convert_float_to_int ( float value, int *integer )
 {
   __asm__ __volatile__ ("fistp (%1);"
 						: /* no outputs */ : "t" (value), "d" (integer) : "memory" );
 }
 
-__inline void asm_convert_double_to_int ( double value, int *integer )
+inline static void asm_convert_double_to_int ( double value, int *integer ) __attribute__((always_inline));
+inline static void asm_convert_double_to_int ( double value, int *integer )
 {
   __asm__ __volatile__ ("fistp (%1);"
 						: /* no outputs */ : "t" (value), "d" (integer) : "memory" );
 }
 
+#else
+# error Unknown architecture
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,3 +165,4 @@ extern void set_fpu_precision_mode_extended ( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#endif /*APHAVOC_ASM_FPU_H*/
