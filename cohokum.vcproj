@@ -22,7 +22,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=".\APHAVOC\SOURCE\,.\MODULES"
-				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS"
+				PreprocessorDefinitions="WIN32,NDEBUG,_WINDOWS,COMMERCIAL"
 				StringPooling="TRUE"
 				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
@@ -79,7 +79,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\APHAVOC\SOURCE,.\MODULES"
-				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS"
+				PreprocessorDefinitions="WIN32,_DEBUG,_WINDOWS,DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="2"
@@ -179,6 +179,9 @@
 					</File>
 					<File
 						RelativePath=".\MODULES\SYSTEM\KEYEVENT.C">
+					</File>
+					<File
+						RelativePath="MODULES\SYSTEM\KEYMAPPING.C">
 					</File>
 					<File
 						RelativePath=".\MODULES\SYSTEM\MEMBLOCK.C">
