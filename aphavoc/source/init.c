@@ -926,6 +926,17 @@ void full_initialise_game (void)
 
 	ui_force_update ();
 
+//VJ WUT mod 26-mar-03	
+
+	////////////////////////////////////////
+	//
+	// Parse the WUT text file 
+	//
+	////////////////////////////////////////
+
+    parse_WUT_file(WUT_filename);
+
+
 //	play_avi ( "wenesday.avi", 0 );
 }
 
