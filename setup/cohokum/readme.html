@@ -92,9 +92,11 @@ href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz<
       <h2><span lang=EN-GB>What's NEW in EECH 161W4?</span></h2>
       <ol>
         <li>A fix for the new <strong>Saitek X52</strong> controller (your mouse button cannot be defined as axes and the limit is 32 buttons but it works).</li>
-        <li>With this version you can use the <strong>Apache Havoc maps</strong> (Georgia, Thailand, Cuba) without having installed Enemy Engaged Apache Havoc <a
-     href="http://eech.bollocks.net.nz/" target="_blank"><span lang=EN-GB></span></a> (we have permission from Razorworks, thanks Todd Gibbs for intervening). This feature is automatic. The maps can be downloaded from <a
-     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB></span> (thanks werewolf). Note that the setup file is ~120 Mbyte ! </li>
+        <li>With this version you can use the <strong>Apache Havoc maps</strong> (Georgia, Thailand, Cuba) without having installed Enemy Engaged Apache Havoc  (we have permission from Razorworks, thanks Todd Gibbs for intervening). This feature is automatic. The maps are available as 
+
+ 
+        <em>eeahmapssetup1.0.exe</em>  (117 MByte !) and can be downloaded from <a
+     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>Werewolf's site</span></a>.</li>
         <li>The <strong>Cannon</strong> may follow the viewpoint without autolocking the targets. This works when acqusition systems are off or when IHADSS/HIDSS/HMS is used - depending on the <a href="#eechini">eech.ini </a>setting. Works with TrackIR! You switch in-game with Ctrl-NumDel.</li>
         <li><strong>Custom made textures</strong>: textures can now be read from a texture directory and its subdirectories, instead of having to import them in the texture.bin or texture.pal files. Campaigns can have warzone specific textures in special directories. You can add directories with your own textures if you want. You need the file texturesetup.exe from <a href="http://www.planet.nl/%7Ejette073/gotcha">Gotcha's site</a>. (Note: no alpha blending in textures yet) </li>
         <li>The <strong>UI control</strong> page has been extended with a lot of features: automatic joystick recognition, mouselook, TrackIR etc.</li>
@@ -105,11 +107,32 @@ href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz<
         <li>The radar ranges and ammo tweaks have disappeared from the eech.ini file. Use the <a href="#wut">GWUT </a>editor to add those to your WUT file.</li>
         <li>Some smaller bug fixes</li>
       </ol>
-      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation</span></h2>
+      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and additional files </span></h2>
       <ul>
-        <li>If you used <span lang=EN-GB><em>eechsetup161Wx.exe</em></span> installed then you are set. If you go online you will need to edit eech.ini manually and probably add a WUT filename if the host wants it. </li>
-        <li>If you experience problems, delete <em>eech.ini </em>and <em>game.cfg</em> and let the game generate them again. You will have to reset the ingame settings (graphics, sound, difficulty etc). </li>
-        <li>If you didn't use the installer, s<span lang=EN-GB>imply copy the file <em>cohokum.exe</em> into your <em>/razorworks/cohokum</em> directory. You may want to rename your old cohokum.exe to save it. </span></li>
+        <li>If you used <span lang=EN-GB><em>eechsetup161Wx.exe</em></span> then you are set. If you go online you will need to edit <a href="#choppers">eech.ini </a>manually and probably add a <a href="#wut">WUT filename</a> if the host wants it. <br>
+          </li>
+        <li><span lang=EN-GB>If you have <strong>not</strong> used eechsetup161Wx.exe you should:</span> 
+            <ul>
+                    <li><span lang=EN-GB>copy the file <em>cohokum.exe</em> into your <em>/razorworks/cohokum</em> directory. </span> </li>
+                    <li>download the  <span lang=EN-GB>4 aditional payload screens for flyable choppers: look <a href="#choppers" target="_self">here</a>. </span></li>
+                    <li>download WUT files: Weapons and Units Tweaker files (these are optional): look <a href="#wut">here</a>. </li>
+                    <li><span lang=EN-GB>make a text file &quot;motd.txt&quot; if you host a game. It&#8217;s a text file used to display a short message to a client joining a host. Keep the message on one line, don&#8217;t exceed 256 characters.</span><span lang=EN-GB><br>
+                    </span></li>
+          </ul>
+        </li>
+        <li><span lang=EN-GB>The <strong><em>superpatch2</em></strong> which you can download from </span><a href="http://hoxdna.org/eech/files/"><span
+lang=EN-GB>Werewolfs site</span></a><span
+lang=EN-GB>. It holds all current add-on warzones, campaigns and skirmishes and the files mentioned above. This site also has the replacement textures for the Alaska and Kuwait warzones if you run a cohokum version <em>prior to 161W4</em>. Note that the names in superpatch2 are the complete filenames, including the main directory &quot;<em>Razorworks</em>&quot;. <br>
+        </span></li>
+        <li>The <strong>texturesetup</strong> file from <a href="http://www.planet.nl/%7Ejette073/gotcha" target="_blank">Gotcha's site</a> which contains all the custom made textures needed for Alaska and Aleut campaigns, Kuwait and Lybia campaigns (included in the superpatch2), and some exmaple camoflage textures, hi-res cockpit and terrain textures. <br>
+        </li>
+        <li>The <strong>Apache havoc campaign files</strong> (if you do not have Enemy Engaged Apache Havoc) that you can download from <span lang=EN-GB> </span><a href="http://hoxdna.org/eech/files/"><span
+lang=EN-GB>Werewolfs site</span></a><span
+lang=EN-GB></span>. They will be recognized automatically (by version 161W4 and higher). </li>
+      </ul>
+      <ul>
+        <li>If you experience <strong>problems</strong>, delete <em>eech.ini </em>and <em>game.cfg</em> and let the game generate them again. You will have to reset the ingame settings (graphics, sound, difficulty etc). <br>
+        </li>
         <li><span lang=EN-GB>If you have joystick problems, Retro has made a good little utility to make your joystick work with the current exe&#8217;s (you need to set the joystick axes in eech.ini). It can be downloaded from </span><a
 href="http://kimchoceech.homestead.com/index.html"><span lang=EN-GB>Kimchoc's site</span></a><span lang=EN-GB> or </span><a
 href="http://oldsite.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_topic;f=30;t=003350"><span
@@ -123,48 +146,40 @@ lang=EN-GB> . Some recent add-ons can be found at </span><a
 href="http://eech.bollocks.net.nz/modules.php?op=modload&amp;name=UpDownload&amp;file=index&amp;reg=getit&amp;lid=16"><span
 lang=EN-GB>DevZone</span></a><span lang=EN-GB> or one of the fan sites. </span></p>
       <ol start=1 type=1>
-        <li><span lang=EN-GB>Install Enemy Engaged Apache Havoc and run once to unpack graphics files </span></li>
+        <li><span lang=EN-GB>If you own Enemy Engaged - Apache Havoc, install it and run once to unpack the graphics files . </span></li>
         <li><span lang=EN-GB>Patch EEAH up to 1.1E (patch can be found at </span><a href="http://www.razorworks.com/enemyengaged/index.html"><span
      lang=EN-GB>Razorworks</span></a><span
-     lang=EN-GB>), run once </span></li>
-        <li><span lang=EN-GB>Install Enemy Engaged Comanche Hokum </span></li>
+     lang=EN-GB>), run once. </span></li>
+        <li><span lang=EN-GB>Install Enemy Engaged Comanche Hokum. </span></li>
         <li><span lang=EN-GB>Patch to version 1.4.1C (patch can be found </span><a
-     href="http://www.razorworks.com/enemyengaged/index.html"><span lang=EN-GB>Razorworks</span></a><span lang=EN-GB>)</span></li>
-        <li><span lang=EN-GB>All versions newer than 1.4.1C are just replacement files for the executable <em>cohokum.exe</em> and can be copied into the &quot;<em>\razorworks\cohokum</em>&quot; directory, replacing the original. This is true for the offcial replcaments 1.4.6X and 1.4.7X<b>, </b>and for all the modded ones created since the source code was released. The moded exes are numbered 1.6.0Wxx until 1.6.1Wxx.</span></li>
-        <li><span lang=EN-GB>The file <em>game.cfg</em> which contains the user settings (graphics, difficulty etc) may be changed when running a new version. In case of odd behaviour <strong>delete this file</strong> and re-configure the game to your liking. </span></li>
-        <li><span lang=EN-GB>From version 1.6.0W5 onward cohokum .exe uses a configuration file <em>eech.ini </em>to control the game. This is a text file that can be altered by the user to confuigure the game. It is <strong>generated automatically </strong>if it doesn't exist. New mods and options are added automatically with each new version.</span></li>
+     href="http://www.razorworks.com/enemyengaged/index.html"><span lang=EN-GB>Razorworks</span></a><span lang=EN-GB>).</span></li>
+        <li><span lang=EN-GB>Replace the executable <em>cohokum.exe</em> in the directory &quot;<em>\razorworks\cohokum</em>&quot;, with any of the newer executables. There are two offcial replcaments 1.4.6X and 1.4.7X from razorworks (for USB joystick and Radeon cards)<b>, </b>and a series of modded executables, numbered 1.6.0Wxx to 1.6.1Wxx (these can be found on the <a
+     href="http://eech.bollocks.net.nz/" target="_blank"><span lang=EN-GB>EECH DevZone</span></a><span lang=EN-GB></span>). </span></li>
+        <li>If you experience problems, delete <em>eech.ini </em>and <em>game.cfg</em> and let the game generate them again. You will have to reset the ingame settings (graphics, sound, difficulty etc). </li>
         <li><span lang=EN-GB>Add-ons and more information can be found on the </span><a href="#fan"><span lang=EN-GB>fan sites</span></a>. </li>
       </ol>
-      <h3 class="style38"><span lang=EN-GB>Additional files needed for version 1.6.0W12 and later versions </span></h3>
-      <ol>
-        <li><span lang=EN-GB>If you have not used <span lang=EN-GB><em>eechsetup161Wx.exe</em></span> you need:</span>        </li>
-      </ol>
-      <ul type=disc>
-        <ul>
-          <li>The <span lang=EN-GB>4 payload screens for flyable choppers: look <a href="#choppers" target="_self">here</a> </span></li>
-          <li><span lang=EN-GB>WUT files: Weapons and Units Tweaker files (these are optional) : look <a href="#wut">here</a> </span></li>
-          <li><span lang=EN-GB>The file &quot;motd.txt&quot; if you host a game. It&#8217;s a file used to display a short message to a client joining a host. Keep the message on one line, don&#8217;t exceed 256 characters.</span></li>
-        </ul>
-      </ul>
-      <ol start="2">
-        <li><span lang=EN-GB>The <strong><em>superpatch2</em></strong> which you can download from </span><a href="http://hoxdna.org/eech/files/"><span
-lang=EN-GB>werewolfs site</span></a><span
-lang=EN-GB>. It holds all current add-on campaigns and skirmishes and the files mentioned above. This site also has the replacement textures for the Alaska and Kuwait warzones if you run a cohokum version prior to 161W4. Extract the superpatch to your razorworks folder, the path names are included.</span></li>
-        <li>The <strong>texturesetup</strong> file from <a href="http://www.planet.nl/%7Ejette073/gotcha" target="_blank">Gotcha's site</a> which contains all the custom made textures needed for Alaska and Aleut campaigns, Kuwait and Lybia campaigns (from the superpatch2), and some exmaple camoflage textures, hi-res cockpit and terrain textures. </li>
-      </ol>      
       <div align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span>
       </div>
       <h2><span class="style37" lang=EN-GB><a name="gameinfo"></a>Game info </span></h2>
+      <p>There are a number of ways to play this game:</p>
+      <ol>
+        <li>As is, default settings, default graphics. Great game.</li>
+        <li>Download the superpatch2 with tons of custom made warzones/campaigns/skirmishes</li>
+        <li>Use a <a href="#wut">WUT</a> file to change the behaviour of vehicles and aircraft all in the game , increased difficulty (some say more realistic)</li>
+        <li>Use custom textures to improve the looks of the game.</li>
+        <li>Browse through the <a href="#eechini">eech.ini</a> and activate for instance &quot;faa=1&quot; (fly any aircraft, jump in returning choppers and have a field day) or for instance &quot;camcom=1&quot;, the campaign commander which lets you create missions and give you a greater control of the campaign. </li>
+        <li>Play online with MP (look <a href="http://hoxdna.org/eech/" target="_blank">here</a> to see what's up). </li>
+      </ol>      
       <h3><span class="style37" lang=EN-GB><a name=choppers id=choppers></a>Flyable choppers</span></h3>
       <p><span lang=EN-GB>As of version 1.6.0.W12 you can fly, change the loadout and repair the following choppers: Comanche, Apache Longbow, HokumB, Havoc, Blackhawk, Hind, AH64-A (Apache), and KA50 (Hokum). The cockpits and the flight behaviour of the new blue choppers default to the Apache Longbow, of the red choppers to the Havok. </span></p>
       <p><span lang=EN-GB>If you didn't use the <em>eechsetup161W.exe</em> make sure you download and install the additional download screens here: </span><a
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a><span
 lang=EN-GB> (in the addon download area). These zips have the full installation path, the files should go here: &quot;\Razorworks\cohokum\graphics\ui\cohokum\Map\&quot;.</span></p>
-      <p><span lang=EN-GB>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select (mission), confirm and off you go (you can't choose it from the mission or group list since it has no task). You can only do this if the option &quot;faa&quot; in eech.ini is set to &quot;1&quot; (see below). </span></p>
-      <p><span lang=EN-GB>Jabberwock made any chopper flyable in free-flight mode. Just be sure you activate the &#8220;fly any aircraft&#8221; switch in eech.ini. Then use F12-key and scroll through to spot the chopper you want to train on. Hit F12 again to clear the screen and &#8220;u&#8221; and you&#8217;re in the cockpit of the choosen chopper.</span></p>
+      <p><span lang=EN-GB>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select (mission), confirm and off you go (you can't choose it from the mission or group list since it has no task). You can only do this if the option &quot;faa&quot; in eech.ini is set to &quot;1&quot; (see <a href="#eechini">eech.ini</a>). </span></p>
+      <p><span lang=EN-GB>Jabberwock made any chopper flyable in free-flight mode. Just be sure you activate the &#8220;fly any aircraft&#8221; switch in eech.ini. Then use F12-key and scroll through to spot the chopper you want to train on. Hit F12 again to clear the screen and &#8220;u&#8221; and you&#8217;re in the cockpit of the chosen chopper.</span></p>
       <h3><a name=MP id=MP></a><span class="style37" lang=EN-GB>Multiplayer status </span></h3>
-      <p><span lang=EN-GB>Jabberwock, with the support from Todd Gibbs, has made some changes to the server-part of the code. Tested out OK by Moje, but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><span lang=EN-GB><b>It's crucial that the host runs with cvc=1</b></span></span>.</span></p>
+      <p><span lang=EN-GB>Jabberwock, with the support from Todd Gibbs, has made some changes to the server-part of the code. Tested out OK by Moje, but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><span lang=EN-GB><b>It's crucial that the host runs with cvc=1</b></span></span>. Its also a good idea to touch only the other variables if you know what you are doing. </span></p>
       <h3><a name=wut></a><span class="style37" lang=EN-GB>What&#8217;s a WUT file?</span></h3>
       <p><span lang=EN-GB>Most people fly with a WUT file. A WUT-profile (Weapons and Units Tweaker file) is a text file that alters some critical parameters in the game to make it more &quot;realistic&quot; and harder. The text file name can be added to the file <a href="#eechini">eech.ini </a>and all parameters are read by cohokum.exe at startup. The most used WUT file is <strong>gwut151D.csv</strong> which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons (increasing gameplay difficulty). Furthermore there is <span lang=EN-GB><strong>gwut1613H.csv</strong> which adds enemy chopper aggressiveness (all enemy choppers behave as if they are on a strike mission), and </span><span lang=EN-GB><span><strong>gwut146X.csv </strong>which is needed when playing multiplayer and has the game's default values (identical to playing without a WUT file). </span></span></span></p>
       <p><span lang=EN-GB><span lang=EN-GB><span>You can edit these files with the GWUT editor, downloadable from </span></span></span><a
