@@ -852,9 +852,9 @@ void draw_comanche_virtual_cockpit (void)
 		if (check_key(DIK_NUMPAD0))
 		{
 			//VJ 050131 update on wideview mod, much better movement
-  		   wide_cockpit_position[0].x = 0;    
-			wide_cockpit_position[0].y = 0.105; 
-			wide_cockpit_position[0].z = 0.180;
+  		   wide_cockpit_position[wide_cockpit_nr].x = 0;    
+			wide_cockpit_position[wide_cockpit_nr].y = 0.105; 
+			wide_cockpit_position[wide_cockpit_nr].z = 0.180;
 			/*
 			if (wide_cockpit_nr==0)
 			{
