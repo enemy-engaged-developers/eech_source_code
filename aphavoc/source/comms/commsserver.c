@@ -294,7 +294,7 @@ void validate_connections (void)
 
 		this_connection = this_connection->next;
 
-		if (destroy_connection->pilot_entity)
+		// if (destroy_connection->pilot_entity) Jabberwock 031107 MP bug search - not needed any more
 		{
 	
 			if ((get_system_time () - destroy_connection->connection_validation_time) > command_line_comms_timeout * TIME_1_SECOND)
@@ -302,7 +302,8 @@ void validate_connections (void)
 	
 				if (destroy_connection->validation_count > 3)
 				{
-                                 	if (destroy_connection->pilot_entity)
+// Jabberwock 031107 MP bug search - this is where original crash occurs, but it's symptom, not the cause!
+/*                                 	if (destroy_connection->pilot_entity)
 					{
  					     entity
  						*gunship;
@@ -313,18 +314,56 @@ void validate_connections (void)
 							set_client_server_entity_int_value (gunship, INT_TYPE_PLAYER, ENTITY_PLAYER_AI);
 							debug_log ("SERVER: TIMEOUT: Resetting clients gunship to AI");
 						}
-
-					destroy_client_server_entity (destroy_connection->pilot_entity);
-					debug_log ("SERVER: TIMEOUT: destroying clients pilot entity");
+*/
+// below is the replacement code for the above: sets back the helo to AI - OK
+					if (destroy_connection->gunship_entity)
+					{
+						set_client_server_entity_int_value (destroy_connection->gunship_entity, INT_TYPE_PLAYER, ENTITY_PLAYER_AI);
 					}
+// the original destroy pilot_entity - may cause invalid assignment? (random entity)
+//					destroy_client_server_entity (destroy_connection->pilot_entity);
+//					debug_log ("SERVER: TIMEOUT: destroying clients pilot entity");
+//					}
 
+// Jabberwock 031107 MP bug search - end this part
+
+// Jabberwock 031108 MP bug search - temporary fix to remove pilot_entity
+
+// TEMPORARY CHANGE TO TRY OUT: DELETE IF NOT WORKING (i.e. if there is still double pilot name when reconnected
+// one:
+					if (destroy_connection->pilot_entity)
+					{
+						destroy_client_server_entity (destroy_connection->pilot_entity);
+						destroy_connection->pilot_entity = NULL;
+					}
+// one (a): RISKY!
+
+/*					if (destroy_connection->pilot_entity)
+					{
+						destroy_connection->pilot_entity = NULL;
+					}
+*/
+// two:
+/* if the above works, this might be a better one???
+					if ((destroy_connection->pilot_entity) && (get_local_entity_type (destroy_connection->pilot_entity) == ENTITY_TYPE_PILOT)
+					{
+						destroy_client_server_entity (destroy_connection->pilot_entity);
+						destroy_connection->pilot_entity = NULL;
+					}
+*/
+
+
+// Jabberwock 031108 - end of temporary fix - delete to this part
+					
 					unregister_connection (destroy_connection->connection_id);
 		
 					if (get_comms_model () == COMMS_MODEL_SERVER)
 					{
 						debug_log ("SERVER: TIMEOUT: Unregistering connection %d", destroy_connection->connection_id);
 						//unregister_connection (destroy_connection->connection_id);
-						direct_play_remove_player_from_group (destroy_connection->connection_id);
+						// Jabberwock 031107 MP bug search - commented out the line below - it's not used at controlled connection
+						// we don't have the destroy_connection->connection_id after unregister anyway?
+						//direct_play_remove_player_from_group (destroy_connection->connection_id);
 					}
 					else
 					{
