@@ -300,7 +300,7 @@ VJ 041217 OBSOLETE ============================ */
   			p = strtok(buf1,"=");
 			q = strtok(NULL,"#");	
 		}   
-		
+
 		while(q[i]!=' ')
 		 i++;
 		q[i] = '\0';
@@ -409,9 +409,9 @@ VJ 041217 OBSOLETE ============================ */
 		}
 //WIDEVIEW
 //VJ 030511 added the wideview params to eech.ini
- 	if (strcmp(p, "commanche pilot")==0)
+//VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
+ 	if (strcmp(p, "comanche_pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[0].x = atof(p);
  	     p = strtok(NULL,",");
@@ -419,9 +419,8 @@ VJ 041217 OBSOLETE ============================ */
 	     p = strtok(NULL,",");
 	     wide_cockpit_position[0].z = atof(p);
 	}
- 	if (strcmp(p, "commanche co-pilot")==0)
+ 	if (strcmp(p, "comanche_co-pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[1].x = atof(p);
  	     p = strtok(NULL,",");
@@ -429,9 +428,8 @@ VJ 041217 OBSOLETE ============================ */
 	     p = strtok(NULL,",");
 	     wide_cockpit_position[1].z = atof(p);
 	}
- 	if (strcmp(p, "hokum pilot")==0)
+ 	if (strcmp(p, "hokum_pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[2].x = atof(p);
  	     p = strtok(NULL,",");
@@ -439,9 +437,8 @@ VJ 041217 OBSOLETE ============================ */
 	     p = strtok(NULL,",");
 	     wide_cockpit_position[2].z = atof(p);
 	}
- 	if (strcmp(p, "holum co-pilot")==0)
+ 	if (strcmp(p, "holum_co-pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[3].x = atof(p);
  	     p = strtok(NULL,",");
@@ -449,9 +446,8 @@ VJ 041217 OBSOLETE ============================ */
 	     p = strtok(NULL,",");
 	     wide_cockpit_position[3].z = atof(p);
 	}
- 	if (strcmp(p, "apache pilot")==0)
+ 	if (strcmp(p, "apache_pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[4].x = atof(p);
  	     p = strtok(NULL,",");
@@ -459,9 +455,8 @@ VJ 041217 OBSOLETE ============================ */
 	     p = strtok(NULL,",");
 	     wide_cockpit_position[4].z = atof(p);
 	}
- 	if (strcmp(p, "havoc pilot")==0)
+ 	if (strcmp(p, "havoc_pilot")==0)
  	{
-    	     
  	     p = strtok(q,",");
         wide_cockpit_position[5].x = atof(p);
  	     p = strtok(NULL,",");
@@ -715,12 +710,13 @@ void dump_ini_file(void)
 	fprintf(f,"[WUT]\n");
 	fprintf(f,"wut=%s               # supply a filename of a wut text file here\n",WUT_filename);
 	fprintf(f,"[wideview]\n");
-	fprintf(f, "commanche pilot=%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[0].x,wide_cockpit_position[0].y,wide_cockpit_position[0].z);
-	fprintf(f, "commanche co-pilot=%.3f,%.3f,%.3f     #wideview co-pilot position\n",wide_cockpit_position[1].x,wide_cockpit_position[1].y,wide_cockpit_position[1].z);
-	fprintf(f, "hokum pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[2].x,wide_cockpit_position[2].y,wide_cockpit_position[2].z);
-	fprintf(f, "hokum co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
-	fprintf(f, "apache pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
-	fprintf(f, "havoc pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
+//VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
+	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[0].x,wide_cockpit_position[0].y,wide_cockpit_position[0].z);
+	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f     #wideview co-pilot position\n",wide_cockpit_position[1].x,wide_cockpit_position[1].y,wide_cockpit_position[1].z);
+	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[2].x,wide_cockpit_position[2].y,wide_cockpit_position[2].z);
+	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f        #wideview co-pilot position\n",wide_cockpit_position[3].x,wide_cockpit_position[3].y,wide_cockpit_position[3].z);
+	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f            #wideview pilot position\n",wide_cockpit_position[4].x,wide_cockpit_position[4].y,wide_cockpit_position[4].z);
+	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f             #wideview pilot position\n",wide_cockpit_position[5].x,wide_cockpit_position[5].y,wide_cockpit_position[5].z);
 
 /*VJ 041217 OBSOLETE ======================
 
