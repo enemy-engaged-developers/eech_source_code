@@ -1066,10 +1066,11 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
             wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
         }                                                                                       
 		if (check_key(DIK_NUMPAD0))                            
-		{                                                      
-				wide_cockpit_position[1].x = 0;                
-				wide_cockpit_position[1].y = 0.07;             
-				wide_cockpit_position[1].z = 0.55;            
+		{                
+//VJ 030812 fixed a small bug here			                                      
+				wide_cockpit_position[wide_cockpit_nr].x = 0;                
+				wide_cockpit_position[wide_cockpit_nr].y = 0.07;             
+				wide_cockpit_position[wide_cockpit_nr].z = 0.55;            
 		}
 	}
 
