@@ -503,6 +503,54 @@ void update_apache_eo (eo_params *eo)
 	}
 
 	// Jabberwock 030930 ends
+
+	////////////////////////////////////////
+
+	// Retro 31Oct2004 - copy+paste of loke's comanche EO slew code
+	// loke 030315
+	// added code to allow the user to slew the eo device using joystick axes
+
+	if (command_line_eo_pan_joystick_index != -1)
+	{
+		float
+			panning_offset_horiz,
+			panning_offset_vert;
+
+		int
+			horizontal_value,
+			vertical_value;
+		
+		horizontal_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
+
+		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
+
+		eo_azimuth += panning_offset_horiz * coarse_slew_rate;
+
+		if (panning_offset_horiz > 0)
+		{
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+		else
+		{
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+
+
+		vertical_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
+
+		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
+
+		eo_elevation -= panning_offset_vert * coarse_slew_rate;
+
+		if (panning_offset_vert < 0)
+		{
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+		else
+		{
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,19 +624,16 @@ void slave_apache_eo_to_current_target (void)
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
 				apache_flir.field_of_view = apache_flir.min_field_of_view;
-
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DTV:
 			{
 				apache_dtv.field_of_view = apache_dtv.min_field_of_view;
-
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DVO:
 			{
 				apache_dvo.field_of_view = apache_dvo.min_field_of_view;
-
 				break;
 			}
 		}
@@ -600,19 +645,16 @@ void slave_apache_eo_to_current_target (void)
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 			{
 				apache_flir.field_of_view = apache_flir.max_field_of_view;
-
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DTV:
 			{
 				apache_dtv.field_of_view = apache_dtv.max_field_of_view;
-
 				break;
 			}
 			case TARGET_ACQUISITION_SYSTEM_DVO:
 			{
 				apache_dvo.field_of_view = apache_dvo.max_field_of_view;
-
 				break;
 			}
 		}
