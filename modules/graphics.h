@@ -195,6 +195,61 @@ typedef struct tagPALETTEENTRY {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#elif USE_SDL
+
+#include "graphics/SDL/SDL_draw.h"
+
+/* Not yet implemented */
+
+//#include "graphics/scrnstr.h"
+//#include "graphics/colour.h"
+//#include "graphics/vertex.h"
+//#include "graphics/viewport.h"
+//#include "graphics/clip.h"
+//#include "graphics/dither.h"
+//#include "graphics/dassess.h"
+//#include "graphics/dresol.h"
+//#include "graphics/screens.h"
+//#include "graphics/palette.h"
+//#include "graphics/lbm.h"
+//#include "graphics/heckfill.h"
+//#include "graphics/line.h"
+//#include "graphics/block.h"
+//#include "graphics/circle.h"
+//#include "graphics/mouseptr.h"
+//#include "graphics/pixel.h"
+//#include "graphics/shadfill.h"
+//#include "graphics/pixeltxt.h"
+//#include "graphics/polyfill.h"
+//#include "graphics/polyline.h"
+//#include "graphics/polyscan.h"
+//#include "graphics/polysoft.h"
+
+//#include "graphics/gfxzoom.h"
+//#include "graphics/polyd3d.h"
+//#include "graphics/tranbuf.h"
+//#include "graphics/tempbuf.h"
+//#include "graphics/render.h"
+//#include "graphics/bin.h"
+//#include "graphics/tga.h"
+//#include "graphics/psdread.h"
+//#include "graphics/psdwrite.h"
+//#include "graphics/textsys.h"
+//#include "graphics/textuser.h"
+//#include "graphics/textures.h"
+//#include "graphics/textscrn.h"
+//#include "graphics/mipmap.h"
+//#include "graphics/rle.h"
+//#include "graphics/rgb.h"
+//#include "graphics/monofont.h"
+//#include "graphics/monosprt.h"
+//#include "graphics/vcache.h"
+//#include "graphics/zbuffer.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #else /* NO_INTERNAL_MODULES */
 
 #pragma pack (8)
