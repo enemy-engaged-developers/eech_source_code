@@ -148,7 +148,7 @@ int
 	command_line_3d_visual_screen_height					= 480,
 	command_line_3d_visual_clear_edges						= FALSE,
 	command_line_cpu_blit_textures							= FALSE,
-	command_line_d3d_use_texture_management				= TRUE,
+	command_line_d3d_use_texture_management				= FALSE, //VJ 030511 changed to FALSE, was TRUE,
 	command_line_no_hardware_tnl								= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
@@ -176,8 +176,11 @@ int
 	command_line_collective_joystick_axis					= 3,		// loke 030418
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
-	command_line_high_res_mfd									= 0,	// loke 030420
-	command_line_fly_any_airplane								= 1;     // VJ 030424
+	command_line_high_res_mfd									= 0,		// loke 030420
+	command_line_fly_any_airplane								= 1,     // VJ 030424
+	command_line_tsd_enemy_colours							= 0,		// VJ 030511
+	command_line_tsd_render_mode								= 0,			// VJ 030511
+	command_line_tsd_palette									= 0;			// VJ 030511
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
