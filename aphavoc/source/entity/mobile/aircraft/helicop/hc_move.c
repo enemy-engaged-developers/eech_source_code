@@ -140,7 +140,7 @@ void helicopter_movement (entity *en)
 		*member;
 
 	float
-		max,
+		maxx,
 		lift,
 		speed,
 		current_pitch,
@@ -373,9 +373,9 @@ void helicopter_movement (entity *en)
 		delta_heading -= PI2;
 	}
 
-	max = get_local_entity_float_value (en, FLOAT_TYPE_MAX_TURN_RATE);
+	maxx = get_local_entity_float_value (en, FLOAT_TYPE_MAX_TURN_RATE);
 
-	delta_heading = bound (delta_heading, -max, max);
+	delta_heading = bound (delta_heading, -maxx, maxx);
 
 	new_heading = current_heading + (delta_heading * get_entity_movement_delta_time ());
 
