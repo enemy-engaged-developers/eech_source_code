@@ -3,7 +3,7 @@ Note that distribution and use of this source code is subject to the rules that
 are specified in each of the source code files.
 
 1)	Unpack the source code in a directory of your own choice, for instance 
-   ..\razorworks. This will create a directory tree called "\razorwokrs\eech-new" 
+   ..\razorworks. This will create a directory tree called "\razorworks\eech-new" 
    with the subdirectories:
    eech-new\aphavoc       => the main game code
    eech-new\masterserver  => master server code
@@ -11,21 +11,22 @@ are specified in each of the source code files.
    eech-new\setup         => replica of the cohokum game directory, used for creating setup files
 
 2)	Download and install the watcom open source compiler: http://www.openwatcom.org/
+	Please see appendix A if you want to compile the source using MS Visual Studio
 
 3)	Download and install the DirectX: www.windows.com/directx. Click on the 
-   download in the menu untill you find the SDK, soft ware development kit. You can 
+   download in the menu untill you find the SDK, software development kit. You can 
    download and use DX9 although cohokum will actually use the DX7 libraries.
 
 Now you have to do 5 things and then you are set to go:
--	Go to eech-new\modules and make a directory "linklib". Copy all DX libraries 
-   form the directx SDK directory \dsdsk\lib into the directory \eech-
-   new\modules\linklib (you can ignore the directory dssdk\lib\x64).
--	Copy all header files from the directx SDK directory \dsdsk\include into the 
+-	Go to eech-new\modules and create a directory called "linklib". Copy all DX libraries 
+   form the directx SDK directory \dxdsk\lib into the directory \eech-
+   new\modules\linklib (you can ignore the directory dxsdk\lib\x64).
+-	Copy all header files from the directx SDK directory \dxdsk\include into the 
    watcom header diectory: \watcom\h\nt\ (you can ignore the directory 
-   \dsdsk\include\DShowIDL).
+   \dxdsk\include\DShowIDL).
 -	Copy the file dsound.lib from watcom\lib386\nt\ to the directory 
    \modules\linklib and overwrite the version from dx9.
--	Find the file float.h in the directory \watcom\h and find the variable 
+-	Find the file float.h in the directory \watcom\h , find the variable 
    FLT_MAX (around line 99)  and decrease its value a bit: #define FLT_MAX 3.402823e+38f 
 -	You have to set an environment variable called EECH_ROOTDIR with the path to 
    your eech-new directory. You can do this as follows: go to the eech-new\aphavoc 
@@ -38,7 +39,9 @@ Now you have to do 5 things and then you are set to go:
 
 You are ready to compile cohokum. This is done by running the "cmake.bat" batch file 
 for the regular version, the dmake.bat batch file for a debug version, or you can run 
-remake.bat to delete all temporary files and cleaning the eech-new dirs. 
+remake.bat to delete all temporary files and cleaning the eech-new dirs.
+
+For some additional information see the file readme.txt in the /eech-new/aphavoc directory
 
 A final note: we kindly ask you not to distribute any executables without some 
 concensus from everyone working on the source code. This avoids a lot of 
@@ -49,3 +52,18 @@ the eech forum at www.simhq.com.
 thanks and have fun.
 
 The dev-team
+
+Appendix A: Compiling using Visual Studio
+We provide workspace files for MSVC6 (cohokum.dsw and cohokum.dsp) and MSVC7.1
+(cohokum.sln and cohokum.vcproj). Please note that MSVC70 will not open the .sln and .vcproj files
+from MSVC71, it should however be possible to convert the MSVC6 files to be used with MSVC7
+
+You will need about 1.3GB of free HDD space for each configuration (debug and release), compilation with
+MSVC7 takes 1hour+, MSVC6 takes about 30 minutes. In contrast, Open Watcom does it in about 15 minutes
+
+A Warning level of less than 2 is not recommended as you will end up with 30000+ warnings !
+
+Output files will be created in the /Razorworks/cohokum directory, you can change this in the linker->output
+tab of the project properties.
+
+Usage of open watcom is (at least with the current state of the MS workspaces) strongly recommended !
