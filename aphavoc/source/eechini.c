@@ -100,12 +100,12 @@ static void wide_cockpit_initialize(void)
 
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.07;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.55;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.3;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = -4.0;
 	
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = 0.0;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = 0.200;			
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = 0.300;			
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = 0.0;
 }	
 
