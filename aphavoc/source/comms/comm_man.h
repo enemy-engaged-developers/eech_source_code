@@ -101,6 +101,7 @@ extern server_response_types
 	
 //-- Werewolf
 extern int mastersocket;
+extern int mastersocket2;
 extern short MasterPort;
 extern int last_heartbeat_time;
 //-- Werewolf

@@ -106,7 +106,9 @@ server_response_types
 
 //-- Werewolf
 SOCKADDR_IN Master;
+SOCKADDR_IN Master2;
 int mastersocket = -1;
+int mastersocket2 = -1;
 short MasterPort = 1375;
 int last_heartbeat_time = 0;
 char localplayer[256];
@@ -1925,9 +1927,18 @@ void net_set_hostname (char *data)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Send a UDP packet to the masterserver
-void net_sendDataToMaster (char *data, int sock)
+void net_sendDataToMaster (char *data, int servernum)
 {
-        sendto (sock, data, strlen (data), 0, (SOCKADDR *)&Master, sizeof (SOCKADDR));
+	if (servernum == 1)
+	{
+          debug_log ("HEARTBEAT: sending heartbeat to primary server");
+          sendto (mastersocket, data, strlen (data), 0, (SOCKADDR *)&Master, sizeof (SOCKADDR));
+        }
+        else
+        {
+          debug_log ("HEARTBEAT: sending heartbeat to secondary server");
+          sendto (mastersocket2, data, strlen (data), 0, (SOCKADDR *)&Master2, sizeof (SOCKADDR));
+        }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1935,31 +1946,44 @@ void net_sendDataToMaster (char *data, int sock)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Opens a socket to the masterserver. Returns -1 if unsuccessfull
-int net_connectToMaster (char *serverName, short port) 
+int net_connectToMaster (char *serverName, short port, int servernum) 
 {
         int sock;
         u_long ulServerAddr;
-#if DEBUG_MODULE
-debug_log ("HEARTBEAT: Connecting to master");
-#endif
+
+        if (servernum==1)
+	  debug_log ("HEARTBEAT: Connecting to primary master");
+	else
+	  debug_log ("HEARTBEAT: Connecting to secondary master");
 
         ulServerAddr = LookUpIPAddress(serverName);
 
         sock = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         if (sock == INVALID_SOCKET)
         {
-#if DEBUG_MODULE
-debug_log ("HEARTBEAT: ERROR connecting to master!");
-#endif
+
+        if (servernum==1)
+	  debug_log ("HEARTBEAT: ERROR connecting to primary master!");
+        else
+	  debug_log ("HEARTBEAT: ERROR connecting to secondary master!");
                 return -1;
         }
+        if (servernum==1)
+	{
+    		Master.sin_family = AF_INET;
+    		Master.sin_addr.s_addr = ulServerAddr;
+    		Master.sin_port = htons (port);
+	}
+	else
+	{
+    		Master2.sin_family = AF_INET;
+    		Master2.sin_addr.s_addr = ulServerAddr;
+    		Master2.sin_port = htons (port);
+	}
 
-    Master.sin_family = AF_INET;
-    Master.sin_addr.s_addr = ulServerAddr;
-    Master.sin_port = htons (port);
-#if DEBUG_MODULE
-debug_log ("HEARTBEAT: connect successfull");
-#endif
+	#if DEBUG_MODULE
+	debug_log ("HEARTBEAT: connect successfull");
+	#endif
 
         return sock;
 }
@@ -1979,9 +2003,6 @@ void net_heartbeat(void)
 debug_log ("HEARTBEAT: net_heartbeat called");
 #endif
 
-    if (mastersocket <=0 )
-      return;
-
     direct_play_session_capabilities ();
     sprintf(versionBuffer, "%d.%d.%d%s", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
     sprintf(TempStuff, "%s %s %s %i %i %s", "Z", "127.0.0.1", //The transmitted ip is disregarded anyway...
@@ -1990,11 +2011,12 @@ debug_log ("HEARTBEAT: net_heartbeat called");
                                                  direct_play_get_number_of_players(),
 												 versionBuffer);
 
-#if DEBUG_MODULE
 debug_log ("HEARTBEAT: sending: %s", TempStuff);
-#endif
 
-    net_sendDataToMaster (TempStuff, mastersocket);
+    if (mastersocket > 0 )
+      net_sendDataToMaster (TempStuff, 1);
+    if (mastersocket2 > 0 )
+      net_sendDataToMaster (TempStuff, 2);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2005,10 +2027,9 @@ debug_log ("HEARTBEAT: sending: %s", TempStuff);
 // TODO: Replace hardcoded address with .ini-aware parameter.
 void net_init_heartbeat(void)
 {
-        mastersocket = net_connectToMaster ("hox.dhs.org", MasterPort);
-	#if DEBUG_MODULE
+        mastersocket = net_connectToMaster (command_line_primary_server_setting, MasterPort, 1);
+        mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
 	debug_log ("HEARTBEAT: after heartbeat initialisation");
-	#endif
 	
 }
 
@@ -2025,9 +2046,7 @@ void net_handle_heartbeat(void)
         // Time for another heartbeat?
 	if (last_heartbeat_time < get_system_time ())
 	{
-  	  #if DEBUG_MODULE
 	  debug_log ("HEARTBEAT: Time for another heartbeat!");
-	  #endif
 	  //Check whether we're a server AND whether the mission is running
 	  if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_game_status () == GAME_STATUS_INITIALISED))
 	  {
@@ -2060,6 +2079,9 @@ void net_uninit_heartbeat(void)
 	if (mastersocket >= 0)
        	  closesocket (mastersocket);
        	mastersocket = -1;	
+	if (mastersocket2 >= 0)
+       	  closesocket (mastersocket2);
+       	mastersocket2 = -1;	
 }
 //-- Werewolf
 

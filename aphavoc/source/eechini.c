@@ -249,8 +249,8 @@ void dump_ini_file(void)
 	fprintf(f,"cg=0                # clean graphics, re-installs graphics files\n");
 	fprintf(f,"[Communications]\n");
 	fprintf(f,"ipa=                # ip address = TCPIP address to connect to. A HOST can leave out the value.\n");
-	fprintf(f,"pss=                # primary server setting (server internet address)\n");
-	fprintf(f,"sss=                # secondary server setting (server internet address)\n");
+	fprintf(f,"pss=hox.dhs.org     # primary server setting (server internet address)\n");  //Werewolf: Defaults changed 080403
+	fprintf(f,"sss=eech.dhs.org    # secondary server setting (server internet address)\n");
 	fprintf(f,"ccrs=204800         # connection receive size, initial guess of campaign data size (default = 200k)\n");
 	fprintf(f,"cdrs=204800         # data record size, similar to above…\n");
 	fprintf(f,"cpbs=204800         # pack buffer size, similar to above…\n");
