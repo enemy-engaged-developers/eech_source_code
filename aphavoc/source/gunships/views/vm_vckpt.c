@@ -417,6 +417,10 @@ void deinitialise_virtual_cockpit_view (void)
 void update_virtual_cockpit_view (void)
 {
 	// lfriembichler 030317 start
+	// enabled panning by mouse/trackir
+	// trackir only works with mousepanning enabled AND the naturalpoint window
+	// loaded BEFORE EECH is started !
+
 	if (command_line_mouse_look == FALSE)	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
 	{
 		if (adjust_view_left_key || joystick_pov_left)
@@ -445,43 +449,42 @@ void update_virtual_cockpit_view (void)
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
 	}
-	else	// Use mouse/TIR, all by lfriembichler 030317
+	else	// Use mouse/TIR, all by Retro 030317, 030318
 	{
 		float temp_p, temp_h;
+extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
+extern int getPitch ( void );
+extern int getYaw ( void );
 		
-//		if (User_Config.TrackIR_IsRunning == FALSE) // No TIR window, use mouse; this means it´s NOT possible to use TIR in relative mode !!
-		if (TRUE)
-		{
+		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
+		{									// ..this also means it´s NOT possible to use TIR in relative mode !!
 			temp_h = get_absolute_mouse_x ();
 			temp_p = get_absolute_mouse_y ();
 
 			temp_h = -90*temp_h/16383;	// seems left <-> right are swapped with the mouse ?
-			temp_p = -45*temp_p/16383;	// Those are the max-restricted values
+			temp_p = -45*temp_p/16383;	// Those are the max-possible values as they are restriced above in this file
 			
 			pilot_head_pitch = rad(temp_p);
 			pilot_head_heading = rad(temp_h);
 		}
-#ifdef TRACKIR
 		else	// TIR
 		{
-			GetData ();
-			temp_p = User_Config.TrackIR_Pitch;
-			temp_h = User_Config.TrackIR_Hdg;
+			temp_p = (float) GetPitch();
+			temp_h = (float) GetYaw();
 
-			temp_p = -45*temp_p/16383;	// Those are the max-restricted values
+			temp_p = -45*temp_p/16383;	// Those are the max-possible values as they are restriced above in this file
 			temp_h = 90*temp_h/16383;
 
 			pilot_head_pitch = rad(temp_p);
 			pilot_head_heading = rad(temp_h);
 		}
-#endif
 
 		pilot_head_heading = min (get_rotate_left_limit (), pilot_head_heading);
 		pilot_head_heading = max (get_rotate_right_limit (), pilot_head_heading);
 
 		pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
 		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
-	} // end lfriembichler 030317
+	} // end Retro 030317
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
