@@ -202,7 +202,8 @@ struct REGISTERED_EVENT_TYPE
       notify_state;
 
    void
-      ((*function) (void *arg));
+      // ((*function) (void *arg));
+      ((*function) (event *arg));
 };
 
 typedef struct REGISTERED_EVENT_TYPE registered_event_type;

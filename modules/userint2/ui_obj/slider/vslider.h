@@ -66,7 +66,7 @@
 
 extern void ui_object_vslider_function (ui_object *obj, void *ev);
 
-extern void vslider_move_function (void *ev);
+extern void vslider_move_function (event *ev);
 
 extern void ui_object_vslider_decrease_function (ui_object *obj, void *ev);
 

@@ -58,7 +58,10 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-
+// local changes
+//
+// because we're running the DX9 SDK
+#define DIRECTINPUT_VERSION 0x0700
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +373,7 @@ typedef struct tagKERNINGPAIR {
 #define NOPROFILER
 #define NODEFERWINDOWPOS
 
-typedef unsigned int FOURCC;         /* a four character code */
+// typedef unsigned int FOURCC;         /* a four character code */
 
 #include <windows.h>
 #include <windowsx.h>
@@ -378,7 +381,7 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <winnls.h>
 #include <dinput.h>
 #include <objbase.h>
-#include <vfw.h>
+// #include <vfw.h>
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -103,7 +103,7 @@ BOOL initialise_direct_sound ( void )
 		if ( dsound_initialise () )
 		{
 	
-			register_exit_function ( dsound_release_objects );
+			register_exit_function ( (void *)dsound_release_objects );
 
 			register_post_activate_message_function ( dsound_restore_objects );
 		
@@ -142,7 +142,7 @@ BOOL dsound_initialise ( void )
 
 	dsrval = DirectSoundCreate (NULL, &dsound, NULL);
 	
-	if ( dsrval != DD_OK )
+	if ( dsrval != DS_OK )
 	{
 
 		debug_log ( "Unable to create direct sound object: %s", get_dsound_error_message ( dsrval ) );
@@ -152,7 +152,7 @@ BOOL dsound_initialise ( void )
 
 	dsrval = IDirectSound_SetCooperativeLevel ( dsound, application_window, DSSCL_PRIORITY );
 
-	if ( dsrval != DD_OK )
+	if ( dsrval != DS_OK )
 	{
 
 		debug_log ( "Unable to set direct sound cooperative level: %s", get_dsound_error_message ( dsrval ) );

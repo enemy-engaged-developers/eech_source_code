@@ -23,7 +23,7 @@
 
 projectname = project
 
-rootdir =
+rootdir = y:\Projects\EECH
 
 projectdir = $(rootdir)\aphavoc
 
@@ -213,7 +213,7 @@ cc_args += /ze
 cc_args += /e10
 cc_args += /ei
 cc_args += /zp4
-cc_args += /fh
+#cc_args += /fh
 cc_args += /6r
 cc_args += /zw
 cc_args += /zq

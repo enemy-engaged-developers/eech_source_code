@@ -240,7 +240,7 @@ void initialise_flight_dynamics (entity *en)
 	//
 	//
 
-	load_dynamics_model ();
+	load_dynamics_model (NULL);
 
 	//
 	//
@@ -1343,7 +1343,7 @@ void move_cog (void *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void save_dynamics_model (void)
+void save_dynamics_model (event *ev)
 {
 
 	FILE
@@ -1449,7 +1449,7 @@ void save_dynamics_model (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_dynamics_model (void)
+void load_dynamics_model (event *ev)
 {
 
 	int
@@ -1472,7 +1472,7 @@ void load_dynamics_model (void)
 
 			fclose (file_ptr);
 
-			save_dynamics_model ();
+			save_dynamics_model (NULL);
 
 			return;
 		}
@@ -1570,7 +1570,7 @@ void load_dynamics_model (void)
 
 		debug_log ("DYNAMICS: Can't load dynamics file. Creating new dynamics file");
 
-		save_dynamics_model ();
+		save_dynamics_model (NULL);
 	}
 }
 

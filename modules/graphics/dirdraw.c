@@ -204,7 +204,7 @@ BOOL initialise_graphics_system ( GUID *device_guid )
 
 	initialise_graphics_colours ();
 
-	register_exit_function ( ddraw_release_objects );
+	register_exit_function ((void *)ddraw_release_objects );
 
 	initialise_system_graphics_screens ();
 

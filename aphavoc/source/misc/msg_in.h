@@ -111,7 +111,7 @@ extern int get_incoming_in_flight_message_flag (void);
 
 extern void display_in_flight_incoming_messages (void);
 
-extern void display_last_received_message (void);
+extern void display_last_received_message (event *arg);
 
 extern void set_incoming_message (entity *sender, entity *target, message_text_types type, char *string);
 

@@ -529,9 +529,9 @@ extern void flight_model_pause (event *ev);
 
 extern void move_cog (void *ev);
 
-extern void save_dynamics_model (void);
+extern void save_dynamics_model (event *ev);
 
-extern void load_dynamics_model (void);
+extern void load_dynamics_model (event *ev);
 
 extern void update_dynamics_external_values (void);
 

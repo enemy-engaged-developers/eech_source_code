@@ -113,9 +113,9 @@ extern int get_ui_redraw (void);
 
 extern ui_object *check_ui_object_for_selection (ui_object *obj, int mouse_x, int mouse_y);
 
-extern void ui_left_mouse_button (void *arg);
+extern void ui_left_mouse_button (event *arg);
 
-extern void ui_right_mouse_button (void *arg);
+extern void ui_right_mouse_button (event *arg);
 
 extern void set_exit_ui (int flag);
 
@@ -127,7 +127,7 @@ extern void ui_set_user_redraw_function (int (*fn) (void));
 
 extern event *get_ui_last_event (void);
 
-extern void save_ui_screen (void *arg);
+extern void save_ui_screen (event *arg);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -354,16 +354,18 @@ ui_object *check_ui_object_for_selection (ui_object *obj, int mouse_x, int mouse
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ui_left_mouse_button (void *ev)
+void ui_left_mouse_button (event *ev)
 {
 
-	memcpy (&ui_last_event, (event *) ev, sizeof (event));
+	// memcpy (&ui_last_event, (event *) ev, sizeof (event));
+	memcpy (&ui_last_event, ev, sizeof (event));
 
 	mouse_button_function = call_function;
 
 	captured_object = &left_captured_object;
 
-	if (((event *) ev)->state == BUTTON_STATE_DOWN)
+	// if (((event *) ev)->state == BUTTON_STATE_DOWN)
+	if (ev->state == BUTTON_STATE_DOWN)
 	{
 
 		#if DEBUG_USERINT
@@ -390,16 +392,18 @@ void ui_left_mouse_button (void *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ui_right_mouse_button (void *ev)
+void ui_right_mouse_button (event *ev)
 {
 
-	memcpy (&ui_last_event, (event *) ev, sizeof (event));
+	// memcpy (&ui_last_event, (event *) ev, sizeof (event));
+	memcpy (&ui_last_event, ev, sizeof (event));
 
 	mouse_button_function = call_right_function;
 
 	captured_object = &right_captured_object;
 
-	if (((event *) ev)->state == BUTTON_STATE_DOWN)
+	// if (((event *) ev)->state == BUTTON_STATE_DOWN)
+	if (ev->state == BUTTON_STATE_DOWN)
 	{
 
 		#if DEBUG_USERINT
@@ -638,7 +642,7 @@ event *get_ui_last_event (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void save_ui_screen (void *arg)
+void save_ui_screen (event *arg)
 {
 
 	int
