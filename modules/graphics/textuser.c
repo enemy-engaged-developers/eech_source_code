@@ -63,9 +63,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Have_Quick - 12/5/2003
 //
-// TEXTUSER.C VERSION 1.2 - Added support for a texture override directory.
-//
-// This will look in TEXTURE_OVERRIDE_DIRECTORY for any 24bit .bmp files
+// This will look in TEXTURE_OVERRIDE_DIRECTORY and subdirectories for any 24bit .bmp files
 // If it finds any of these files and the file name matches an existing
 // texture name, it will create a screen for the bmp and set the system_textures
 // pointer to point to the new screen.
@@ -85,6 +83,7 @@
 // adapted the code to read 8 bit bmps, but they are put in the same overall structure, check if this works
 // VJ 050106
 // warzones can have file with names of texture dirs
+// VJ 050116, 050118: all texture functions are in this file, works now for MP and SP
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,12 +192,15 @@ screen
 	*system_textures[MAX_TEXTURES],
 	//VJ 050116 custom texture mod: backup textures to restore default
    *backup_system_textures[MAX_TEXTURES];
-
 	//this does not seem to be used
 	//*application_textures[MAX_TEXTURES];
 
+static BOOL override_present;
+
 system_texture_information
-	system_texture_info[MAX_TEXTURES];
+	system_texture_info[MAX_TEXTURES],
+	//VJ 050116 custom texture mod: backup textures to restore default
+	backup_system_texture_info[MAX_TEXTURES];
 
 LPDIRECTDRAWPALETTE
 	system_texture_palettes[MAX_TEXTURES_PALETTES];
@@ -2519,6 +2521,7 @@ int match_system_texture_name ( char *name )
 		real_name[128];
 
 	char
+		*p,
 		*ptr;
 
 	int
@@ -2526,38 +2529,52 @@ int match_system_texture_name ( char *name )
 
 	ptr = real_name;
 
+	// convert to uppercase
 	while ( ( *name != '\0' ) && ( *name != '.' ) )
 	{
 
 		*ptr++ = toupper ( *name++ );
 	}
-
 	*ptr++ = '\0';
 
-//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
+	// throw away the first part of the name = the sub-directory of cohokum\graphics\textures
+	p = strchr(real_name,'\\');
+	p++;
+
+	strcpy(real_name, p);
+
+	//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
 	if (strstr(real_name, "-BIN"))
 	{
-		char *p = strstr(real_name, "-BIN");
-      real_name[strlen(real_name)-strlen(p)] = '\0';
+		p = strstr(real_name, "-BIN");
+	   real_name[strlen(real_name)-strlen(p)] = '\0';
 	}
 
-//VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
+	//VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
 	if (strstr(real_name, "-PAL"))
 	{
-		char *p = strstr(real_name, "-PAL");
-      real_name[strlen(real_name)-strlen(p)] = '\0';
+		p = strstr(real_name, "-PAL");
+	   real_name[strlen(real_name)-strlen(p)] = '\0';
 	}
 
-
 //VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
+	if (strstr(real_name, "BREEZE_BLOCKS_DESERT_CAMO"))
+	{
+		// this is the only name with _DESERT_ inside its name, must be an overview 
+		// treat as an exception
+		 return (385);
+	}
+	else
    if (strstr(real_name, DESERTIND_1))
    {
+		//check for _DESERT
        real_name[strlen(real_name)-strlen(DESERTIND_1)] = '\0';
        camo = 1;
    }
    else
    if (strstr(real_name, DESERTIND_2))
    {
+		//check for -D
        real_name[strlen(real_name)-strlen(DESERTIND_2)] = '\0';
        camo = 1;
    }
@@ -2572,7 +2589,8 @@ int match_system_texture_name ( char *name )
 			return ( count + camo );
 		}
 	}
-
+	
+	// this crashes the game in an assert somewhere
 	return ( -1 );
 }
 
@@ -3427,8 +3445,9 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Start VJ and Have_Quick
-// 12/2/2003, 05/01/15
+// Start VJ custom texture mod
+// based on work by Have_Quick 12/2/2003
+// 05/01/15, 050116, 050118
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void clear_texture_override_names ( void )
@@ -3436,28 +3455,9 @@ void clear_texture_override_names ( void )
 	int count;
 	for ( count = 0; count < MAX_TEXTURES; count++ )
    	system_texture_override_names[count][0] = '\0';
+  	override_present = FALSE;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	//restore pointers to default + startup override textures                                 
-void restore_default_textures( void )
-{
-	int count;	
-	for (count = 0; count < number_of_system_textures; count++ )   
-	{                                                               				
-	   	if (system_texture_override_names[count][0] != '\0'){
-				destroy_screen ( system_textures[count] );
-				debug_log("Texture override +++ destroyed ccreen: %s",system_texture_override_names[count]);
-			}	
-			
-			system_textures[count] = backup_system_textures[count];
-			system_texture_info[count].texture_screen = backup_system_textures[count];
-	}                                                               
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3466,39 +3466,39 @@ void restore_default_textures( void )
 // this function is called from \aphavoc\source\app3d\3d_init.c, line 123
 void load_custom_textures ( void )
 {
-	int
-		count;
-//NOTE: if the name name occurs twice in different directory the texture screens are created twice but 
-// used only once (the pointer to the last screen is set). The screen is not released but stays in memory
+	int count = 0;
+
+	// empty all the strings
 	clear_texture_override_names ();
 
 	initialize_texture_override_names ( system_texture_override_names, "." );
-	load_texture_override ( system_texture_override_names, ".");
 
 	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
-	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
 
 	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
-	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
 
 	initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
-	load_texture_override ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
-	
+
+	load_texture_override ( system_texture_override_names );
+
 	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
-	
+
 	//make a backup of the pointers
-	for ( count = 0; count < number_of_system_textures; count++ )
+	//while (system_texture_override_names[count][0] != '\0' && count < MAX_TEXTURES)
+	for (count = 0; count < number_of_system_textures; count++)
 	{
-				backup_system_textures[count] = system_textures[count];
+		backup_system_textures[count] = system_textures[count];
+		backup_system_texture_info[count] = system_texture_info[count];
+		
+		//count++;
 	}
-	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
+void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128] )//, char *mapname )
 {
 
 	FILE
@@ -3529,26 +3529,24 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 
 	//VJ 041217 palette for 8 bit textures
 	rgb_colour pal[256];
-//VJ# ???????/static ?????????????
-	static screen
-				*override_screen;
 
-//VJ mapname used to load map specific textures in file
-//C:\gms\Razorworks\eech-new\aphavoc\source\gameflow\gameflow.c
-// variable is called session->warzone_name
-//line 395
+	//static
+	screen
+				*override_screen;
 
 	// Now that all the screens are loaded we check to see if there is are any overrides
 	for( count=0; count < MAX_TEXTURES; count++ )
 	{
-		int retrieved_index;
+		int retrieved_index = 0;
 
-		retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+		if (system_texture_override_names[count][0] != '\0')		   
+			retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
 
 		if( retrieved_index > 0)
 		{
-			
-			sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, system_texture_override_names[count] );
+
+//			sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, system_texture_override_names[count] );
+			sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count] );
 
 			if ( !file_exist ( full_override_texture_filename ) )
 				continue;
@@ -3591,7 +3589,7 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 
 				return;
 			}
-			
+
 			//VJ only 8 and 24 bit uncompressed bitmaps are read
 			if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
 			{
@@ -3626,13 +3624,13 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 			// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
 			// It also assumes that there are no mipmaps. This will not cause problems, but
 			// it will look cruddy under certain circumstances
-			
+
 			override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
 
 			//
 			// texture
 			//
-			
+
 		   if (bmih.biBitCount == 24)
 			   buffer_size = bmih.biWidth * bmih.biHeight * 3;
 			// note color depth is assumed here
@@ -3656,17 +3654,17 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 					{
 						for (x = 0; x < bmih.biWidth; x++)
 						{
-            	
+
 							col.b = *p++;
 							col.g = *p++;
 							col.r = *p++;
 							col.a = 255;
-            	
+
 							set_pixel (x, y, col);
 						}
 					}
 				}
-		   	
+
 		   	if (bmih.biBitCount == 8)
 		   	{
 					for (y = bmih.biHeight - 1; y >= 0; y--){
@@ -3674,7 +3672,7 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 		   	 			set_pixel (x, y, pal[*p++]);
 						}
 					}
-         	
+
 				}
 
 				unlock_screen (override_screen);
@@ -3700,8 +3698,6 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ 041213 function also called from file aphavoc\source\ai\faction\faction.c line 138
-// using texture dir names specified in standard file
 void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
 {
 
@@ -3710,22 +3706,20 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 
 	int
 		valid_file,
-		index;
+		index = 0;
 
 	unsigned char
 		directory_search_path[256],
 		*filename;
 
-	char
-		*tmp;
-
-	index = 0;
+	// go to place where no names are stored yet, more dirs can be read in one go
+	while (system_texture_override_names[index][0] != '\0' && index < MAX_TEXTURES) 
+	   index++;
 
 	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
 	directory_listing = get_first_directory_file ( directory_search_path );
-
-	//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
+	
 	if ( directory_listing )
 	{
 		valid_file = TRUE;
@@ -3736,15 +3730,15 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 			{
 				filename = strupr(get_directory_file_filename ( directory_listing ));
 
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
 
 				//we don't want the .bmp in the overides index
-				tmp = strtok( filename, "." );
+				filename[strlen(filename) - 4] = '\0';
 
-				if (index < number_of_system_textures)
-					strcpy ( system_texture_override_names[index], tmp );
-				//avoid overflow, not likely	
-
+				if (index < MAX_TEXTURES)
+					sprintf (system_texture_override_names[index], "%s\\%s", mapname, filename);
+				//avoid overflow, not likely because of fixed name list
+				
 				index++;
 			}
 			valid_file = get_next_directory_file ( directory_listing );
@@ -3756,25 +3750,21 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////
-//VJ 041213 load the map specific custom textures
-//session->warzone_name = map name e.g. "map3"
-// in this directory one can have a textfile with directory names 
-//to look for custom textures
-//VJ 050106 changed to read text file with directory names
-/////////////////////////////////////////////////////////////////////
-
+//load warzone specific textures, called from \aphavoc\source\ai\faction\faction.c line 142
 void load_warzone_override_textures (char *warzone_name)
-{				
+{
 	char directory_textdir_path[256];
 
+	// empty name database
+	clear_texture_override_names ();
+
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
-	
+
 	debug_log("Overide dir warzone name %s", warzone_name);
-	
+
 	if ( file_exist ( directory_textdir_path ) )
 	{
-		//int count;
+		int count;
 		FILE *ftextdir;
 		char buf[256];
 		char *p;
@@ -3803,17 +3793,61 @@ void load_warzone_override_textures (char *warzone_name)
 				p[i+1]='\0';
 				while (p[0] == ' ')
 				  p++;
-				  
-				debug_log("warzone texture override dir: %s",p);  
 
-				// get override texture names in array	
+				debug_log("VJ === warzone texture override dir: %s",p);
+
+				// get override texture names in array
 				initialize_texture_override_names ( system_texture_override_names, p );
-				
-				// load and replace the default texures and all the textures that were loaded at startup (in textuser.c)
-				load_texture_override ( system_texture_override_names, p);
-			}	
-			// get the next specified dir		
+
+				override_present = TRUE;
+
+				for (count = 0; count < number_of_system_textures; count++ )
+				{
+					int retrieved_index;			
+			   	if (system_texture_override_names[count][0] != '\0')
+			   	{
+						retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+						debug_log("Texture override +++ warzone screen %d (%d) : %s",retrieved_index,count,system_texture_override_names[count]);
+					}
+				}
+			}
+			// get the next specified dir
 			fscanf(ftextdir,"%[^\n]\n",buf);
+		}
+   
+   
+   	// load and replace the default texures and all the textures that were loaded at startup (in textuser.c)
+   	if (override_present)
+			load_texture_override ( system_texture_override_names );//, p);
+
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//restore pointers to default + startup override textures
+void restore_default_textures ( void )
+{
+	int count = 0;
+
+
+ 	if (override_present)
+ 	{
+	   while (system_texture_override_names[count][0] != '\0' && count < MAX_TEXTURES)
+	   {
+			int retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+	
+			debug_log("Texture override +++ destroyed screen %d (%d) : %s",retrieved_index,count,system_texture_override_names[count]);
+		
+			if (system_textures[ retrieved_index] && system_textures[ retrieved_index]->surface)
+			   destroy_screen ( system_textures[ retrieved_index] );
+	
+			system_textures[retrieved_index] = backup_system_textures[retrieved_index];
+			system_texture_info[retrieved_index] = backup_system_texture_info[retrieved_index];
+	
+			count++;
 		}
 	}
 }
@@ -3823,6 +3857,7 @@ void load_warzone_override_textures (char *warzone_name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End VJ and Have_Quick
-// 12/5/2003, 050115, 050116 custom texture mod
+// End VJ custom texture mod
+// based on work by Have_Quick 12/2/2003
+// 05/01/15, 050116, 050118
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

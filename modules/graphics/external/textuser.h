@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_TEXTURES 2048
+#define MAX_TEXTURES 8192 //was 2048
 
 #define MAX_TEXTURES_PALETTES 128 // Jabberwock 040213 - Testing for texture related CTDs
 
@@ -123,7 +123,7 @@ extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *grap
 //VJ 050116 custom texture mod: functions needed 
 extern void load_custom_textures( void );
 extern void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
-extern void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
+extern void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128] );//, char *mapname );
 extern void clear_texture_override_names ( void );
 extern void restore_default_textures( void );
 extern void load_warzone_override_textures (char *warzone_name);
