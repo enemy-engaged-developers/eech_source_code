@@ -911,19 +911,20 @@ static void toggle_display_hud_on_external_view_event (event *ev)
 static void toggle_unscaled_displays_event (event *ev)
 {
 	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
-	//VJ 050205 hud scaling mod
-	if (!get_global_unscaled_displays ())
-	{
-		set_global_unscaled_displays (TRUE);	
-		global_hud_size = 0.7;
-	}
-	else		
-	 global_hud_size += 0.1;	   
-	if (global_hud_size > 1.0)
-	{
-		set_global_unscaled_displays (FALSE);
-		global_hud_size = 1.0;
-	}	
+	//VJ 050205, 050210 hud scaling mod
+   global_hud_size2 += 0.1;
+   if (global_hud_size2 > 1.4)
+   	global_hud_size2 = 0.7;
+   	
+   if (global_hud_size2 <= 1.0)
+   {
+   	set_global_unscaled_displays (TRUE);
+   	global_hud_size = global_hud_size2;
+   }	
+   else
+   {
+   	set_global_unscaled_displays (FALSE);
+	}	   	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -679,11 +679,8 @@ void draw_comanche_virtual_cockpit (void)
 			   virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
 			   virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;
 			   
-				if (wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT)
-			   	pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-				if (wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT)
-			   	co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-	
+		   	pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+
 	        	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 			   
 		}
@@ -802,11 +799,11 @@ void draw_comanche_virtual_cockpit (void)
 //VJ wideview mod, date: 18-mar-03	
 			if (edit_wide_cockpit)
 			{
-				sprintf(buffer,"COMANCHE wide cockpit mod edit:"); 
+				sprintf(buffer,"COMANCHE wide cockpit mod edit (set freelook off):"); 
 			   ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
-				ui_display_text (buffer, 10, 60);
-			   sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+				sprintf(buffer,"X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave edit");
+			   ui_display_text (buffer, 10, 60);
+			   sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
 			   ui_display_text (buffer, 10, 100);
 			}
 

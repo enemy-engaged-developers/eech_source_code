@@ -104,6 +104,10 @@ static int hokum_periscope_box_check ( void )	// Retro 6Feb2005 (whole block)
 	return FALSE;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int hokum_periscope_check ( int currentlyUsingPeriscope )	// Retro 6Feb2005 (whole block)
 {
 	// later I plan to use hysteresis (hence the argument) but not right now
@@ -111,6 +115,10 @@ int hokum_periscope_check ( int currentlyUsingPeriscope )	// Retro 6Feb2005 (who
 	// check if we are in the periscope box.. if yes, return TRUE
 	return hokum_periscope_box_check ();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void initialise_hokum_virtual_cockpit (void)
 {
@@ -158,9 +166,10 @@ void initialise_hokum_virtual_cockpit (void)
 
 //VJ 050208 cleaing up wideview
 	wide_cockpit_nr = WIDEVIEW_HOKUM_PILOT;
+	
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read	
-	set_global_wide_cockpit(FALSE);		
+	set_global_wide_cockpit (FALSE);		
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +219,7 @@ void update_hokum_virtual_cockpit (void)
 {
 	int
 		draw_glass_cockpit,
-		draw_controls,
+		draw_controls, tmp_draw_controls,
 		draw_crew,
 		draw_seats;
 
@@ -219,10 +228,6 @@ void update_hokum_virtual_cockpit (void)
 
 	object_3d_sub_object_search_data
 		search;
-
-//VJ wideview mod, date: 18-mar-03
-// crh 030323 this buffer isn't used, and causes a warning with open watcom
-//	char buffer[128];
 	
 	////////////////////////////////////////
 	//
@@ -338,11 +343,6 @@ void update_hokum_virtual_cockpit (void)
 	// HUD view
 	//
 
-	if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_HUD)
-	{
-		draw_crew = FALSE;
-	}
-
 	//
 	// ejected
 	//
@@ -418,7 +418,8 @@ void update_hokum_virtual_cockpit (void)
 	//
 
 //VJ 050206 wideview improvement
-	//draw_controls = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT);
+	tmp_draw_controls = draw_controls;
+	draw_controls = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT);
 
 	search.search_depth = 0;
 	search.search_object = virtual_cockpit_inst3d;
@@ -430,7 +431,7 @@ void update_hokum_virtual_cockpit (void)
 	}
 
 //VJ 050206 wideview improvement
-	//draw_controls = (get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT);
+	draw_controls = tmp_draw_controls;
 
 	search.search_depth = 0;
 	search.search_object = virtual_cockpit_inst3d;
@@ -519,12 +520,6 @@ void update_hokum_virtual_cockpit (void)
 	//
 	////////////////////////////////////////
 
-//VJ wideview mod, date: 18-mar-03	
-	if (get_global_wide_cockpit ())
-	{
-	  draw_crew = FALSE;
-	}
-
 	if (!draw_crew)
 	{
 		search.search_depth = 0;
@@ -594,7 +589,7 @@ void draw_hokum_virtual_cockpit (void)
 
 	float
 		theta;
-
+		
 	object_3d_instance
 		*inst3d;
 
@@ -716,24 +711,6 @@ void draw_hokum_virtual_cockpit (void)
 
 	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 
-//VJ 050131 update on wideview mod, much better movement
-/*
-//VJ wideview mod, date: 18-mar-03	
-	if (get_global_wide_cockpit () &&
-	    (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
-	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
-	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
-	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
-	     )
-    {
-		virtual_cockpit_inst3d->vp.x = wide_cockpit_position[wide_cockpit_nr].x;
-		virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-	
-     	set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
-        	
-    }
-*/        
 	realise_3d_clip_extents (main_3d_env);
 
 	recalculate_3d_environment_settings (main_3d_env);
@@ -769,10 +746,10 @@ void draw_hokum_virtual_cockpit (void)
 		
 			virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].x;
 			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
-			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;
-		
-		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
-		     	
+			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;	
+	   	pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+
+		  	set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);    	
 		}
 
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
@@ -890,11 +867,11 @@ void draw_hokum_virtual_cockpit (void)
 			//VJ wideview mod, date: 18-mar-03	
 			if (edit_wide_cockpit)
 			{
-				sprintf(buffer,"HOKUM wide cockpit mod edit:"); 
+				sprintf(buffer,"HOKUM wide cockpit mod edit (set freelook off):"); 
 			   ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
+				sprintf(buffer,"X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
 			   ui_display_text (buffer, 10, 60);
-			   sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+			   sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
 			   ui_display_text (buffer, 10, 100);
 			}
 
@@ -1112,15 +1089,6 @@ void get_hokum_crew_viewpoint (void)
 			virtual_cockpit_inst3d->vp.y += current_custom_cockpit_viewpoint.y;
 			virtual_cockpit_inst3d->vp.z += current_custom_cockpit_viewpoint.z;
 		}
-/*
-//VJ wideview mod, date: 18-mar-03		
-		if (get_global_wide_cockpit ())
-		{	
-			virtual_cockpit_inst3d->vp.x = wide_cockpit_position[wide_cockpit_nr].x;
-			virtual_cockpit_inst3d->vp.y = wide_cockpit_position[wide_cockpit_nr].y-0.1;
-			virtual_cockpit_inst3d->vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.1;
-		}
-*/		
 	}
 	else
 	{
