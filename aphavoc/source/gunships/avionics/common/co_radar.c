@@ -860,6 +860,18 @@ int get_gunship_target_valid_for_ground_radar (entity *target)
 		case TARGET_TYPE_GROUND:
 		////////////////////////////////////////
 		{
+
+			// loke 030322
+			// infantry should never show up on ground radar
+
+			if (command_line_ground_radar_ignores_infantry)
+			{
+				if (get_local_entity_int_value (target, INT_TYPE_VIEW_CATEGORY) == VIEW_CATEGORY_INFANTRY)
+				{
+					return (FALSE);
+				}
+			}
+
 			return (TRUE);
 
 			break;

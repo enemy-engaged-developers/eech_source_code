@@ -138,7 +138,8 @@ extern int
 	command_line_eo_pan_vertical_joystick_axis,			// loke 030319
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
 	command_line_eo_zoom_joystick_index,					// loke 030319
-	command_line_eo_zoom_joystick_axis;						// loke 030319
+	command_line_eo_zoom_joystick_axis,						// loke 030319
+	command_line_ground_radar_ignores_infantry;			// loke 030322
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
