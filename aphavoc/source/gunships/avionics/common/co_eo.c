@@ -89,7 +89,8 @@
 int
 	eo_target_locked,
 	eo_on_target,
-	eo_low_light;
+	eo_low_light,
+	eo_ground_stabilised;
 
 target_acquisition_systems
 	eo_sensor;
