@@ -113,11 +113,11 @@ extern void display_in_flight_incoming_messages (void);
 
 extern void display_last_received_message (event *arg);
 
-extern void set_incoming_message (entity *sender, entity *target, message_text_types type, char *string);
+extern void set_incoming_message (entity *sender, entity *target, message_text_types type, unsigned char *string);
 
 extern void update_message_log (void);
 
-extern void process_radio_message (entity *en, int type, int value);
+extern void process_radio_message (entity *en, message_categories type, int value);
 
 extern void play_client_server_radio_message_response (entity *en, int speech_index, float priority, float expire_time);
 
