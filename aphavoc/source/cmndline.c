@@ -168,7 +168,7 @@ int
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
-	command_line_downwash										= TRUE,	// Xhit 030328, VJ 030512 changed
+	command_line_downwash										= FALSE,	//VJ 050308 changed to false for MP, // Xhit 030328, VJ 030512 changed
 	command_line_wut												= FALSE,	// VJ 030330
 	command_line_dump_ini										= TRUE,	// VJ 030414 changed to true
 	command_line_cyclic_joystick_index						= -1,		// loke 030418
@@ -191,7 +191,7 @@ int
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
 	command_line_joylook_step						= 30,	// Jabberwock 031104 Joystick look
 	command_line_designated_targets					= 0,  // Jabberwock 031107 Designated target
-	command_line_session_filter						= 0,  // Jabberwock 031210 Session filter
+	command_line_session_filter						= 1,  //VJ 050308 changed to true!!! // Jabberwock 031210 Session filter
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
