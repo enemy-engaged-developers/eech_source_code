@@ -156,7 +156,8 @@ void ReadWutFile(char *fname)
 	 char *p;
 	 char ent[64];
 	 
-	#ifdef WUT_DEBUG
+	#if WUT_DEBUG
+		char *vname;
 	  FILE *fout = fopen("dumpwut.txt","w");;
 	#endif  
 
@@ -214,7 +215,7 @@ void ReadWutFile(char *fname)
 				{
 					 float v2=0;
 					 int d2 = 0;
-					 char *vname, *q = buf1+83;
+					 char *q = buf1+83;
 
 					 get_values(q, &v2, &d2);
 
@@ -257,7 +258,7 @@ void ReadWutFile(char *fname)
 					 if (strstr(buf1 , "Structure Points")) { aircraft_database[i].initial_damage_level=d2;}
 
 
-				  #ifdef WUT_DEBUG
+				  #if WUT_DEBUG
 
 					 q = buf1+41;
 					 vname = strtok(q,"-");
@@ -322,7 +323,7 @@ void ReadWutFile(char *fname)
 				{
 					 float v2=0;
 					 int d2 = 0;
-					 char *vname, *q = buf1+83;
+					 char *q = buf1+83;
 
 					 if (strstr(ent,"Infantry") &&  vehicle_database[i].default_weapon_config_type != infnr)
 						 break;
@@ -363,7 +364,7 @@ void ReadWutFile(char *fname)
 					 if (strstr(buf1 , "Structure Points")) {  vehicle_database[i].initial_damage_level=d2;}
 
 
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 					 q = buf1+41;
 					 vname = strtok(q,"-");
 				debug_log("WUT: VEHICLE: Entity - %s [%s]; VAR %s - %f [%d]\n", vehicle_database[i].full_name, ent, vname,v2,d2);
@@ -403,7 +404,7 @@ void ReadWutFile(char *fname)
 			  {
 					float v2 = 0;
 					int d2 = 0;
-					char *vname, *q = buf1+83;
+					char *q = buf1+83;
 
 					get_values(q, &v2, &d2);
 				//VJ 030603 changed "Guidance Type" to "Guidance" for WUT 3.5
@@ -454,7 +455,7 @@ void ReadWutFile(char *fname)
 				if ( strstr(buf1, "Reload Time {s}"                     )) { weapon_database[i].reload_time = v2; }                                
 				if ( strstr(buf1, "Seeker Field Of View {rad}"          )) { weapon_database[i].max_launch_angle_error = v2; }                     
 
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 						q = buf1+41;
 						vname = strtok(q,"-");
 					debug_log("WUT: WEAPON: Entity - %s [%s]; VAR %s - %f [%d]\n", weapon_database[i].full_name, ent, vname,v2,d2);
@@ -495,7 +496,7 @@ void ReadWutFile(char *fname)
 				{
 					float v2 = 0;
 					int d2 = 0;
-					char *vname, *q = buf1+83;
+					char *q = buf1+83;
 
 					 get_values(q, &v2, &d2);
 					 
@@ -575,7 +576,7 @@ Specifies whether the site can be a target of the listed mission types
 [Bit 14] Campaign Objective
 Whether or not the site type can be considered a potential campaign objective                       
 */
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 						 debug_log("1 [%s]: %d\n","requires_cap",keysite_database[i].requires_cap			);    
 						 debug_log("2 [%s]: %d\n","requires_barcap",keysite_database[i].requires_barcap		);    
 						 debug_log("3 [%s]: %d\n","repairable",keysite_database[i].repairable			);    
@@ -601,7 +602,7 @@ Whether or not the site type can be considered a potential campaign objective
 					 #endif   
 					 }
 					 
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 					 
 					 q = buf1+41;
 					 vname = strtok(q,"-");
@@ -641,7 +642,7 @@ Whether or not the site type can be considered a potential campaign objective
 				{
 					 float v2=0;
 					 int d2 = 0;
-					 char *vname, *q = buf1+83;
+					 char *q = buf1+83;
 					 
 					 get_values(q, &v2, &d2);
 			  
@@ -667,7 +668,7 @@ Whether or not the site type can be considered a potential campaign objective
 						if (d2 == 6709496) group_database[i].platoon_name = strdup("%c Company");
 						if (d2 == 6709428) group_database[i].platoon_name = strdup("%s Battalion");
 						
-					#ifdef WUT_DEBUG
+					#if WUT_DEBUG
 							debug_log("WUT: platoon: %s",group_database[i].platoon_name);
 						#endif    
 					 }
@@ -694,7 +695,7 @@ Whether or not the site type can be considered a potential campaign objective
 					 if (strstr(buf1,"Cargo Space"                )) { group_database[i].ai_stats.cargo_space            = d2; }
 					 if (strstr(buf1,"Troop Space"                )) { group_database[i].ai_stats.troop_space            = d2; }
 					 
-				 #ifdef WUT_DEBUG
+				 #if WUT_DEBUG
 						
 					 q = buf1+41;
 					 vname = strtok(q,"-");
@@ -735,7 +736,7 @@ Whether or not the site type can be considered a potential campaign objective
 				{
 					 float v2=0;
 					 int d2 = 0;
-					 char *vname, *q = buf1+83;
+					 char *q = buf1+83;
 	 
 					 if (strcmp(ent,"Transfer"))
 					 { 
@@ -851,7 +852,7 @@ Whether or not the site type can be considered a potential campaign objective
 					 if (strstr(buf1,"Cargo Space"           )) { task_database[i].ai_stats.cargo_space = d2; }             
 					 if (strstr(buf1,"Troop Space"           )) { task_database[i].ai_stats.troop_space = d2; }             
 
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 					 
 					 q = buf1+41;
 					 vname = strtok(q,"-");
@@ -894,7 +895,7 @@ Whether or not the site type can be considered a potential campaign objective
 				{
 					 float v1=0, v2=0;
 					 int j;
-					 char *vname, *q = buf1+83;
+					 char *q = buf1+83;
 
 					 for (j = 0; j < strlen(q); j++)
 						 if (q[j] == ',') q[j] = '.';
@@ -919,7 +920,7 @@ Whether or not the site type can be considered a potential campaign objective
 					 if (strstr(buf1,"Sea Reached Radius {m}"                            )) {waypoint_database[i].sh_reached_radius                     = v2; }   
 					 if (strstr(buf1,"Sea Velocity {m}"                                  )) {waypoint_database[i].sh_velocity                           = v2; }   
 
-				#ifdef WUT_DEBUG
+				#if WUT_DEBUG
 					 
 					 q = buf1+41;
 					 vname = strtok(q,"-");
@@ -949,7 +950,7 @@ Whether or not the site type can be considered a potential campaign objective
 		  float v1=0, v2=0;
 		  int d1 = 0, d2 = 0;
 		  int j;
-		  char *vname, *q = buf1+83;
+		  char *q = buf1+83;
 
 		  fscanf(f,"%[^\n]\n",buf);
 		  // read a line
@@ -1004,7 +1005,7 @@ Whether or not the site type can be considered a potential campaign objective
 		  if (strstr(buf1, "15 {rad}"                           )) {weapon_config_database[entnr][wcp].muzzle_rotate_rate = v2;}
 		 // if (strstr(buf1, "16"                                 )) {weapon_config_database[entnr][wcp].rotate_inhibit_velocity = v2;}
 				  
-		  #ifdef WUT_DEBUG
+		  #if WUT_DEBUG
 				  
 				if(entnr == 495) strcpy(vname,"UH60_BLACK_HAWK          ");                
 				if(entnr == 496) strcpy(vname,"MI24D_HIND               ");                
@@ -1078,7 +1079,7 @@ Whether or not the site type can be considered a potential campaign objective
 	 }//while WEAPON CONFIG  
 */
 
-		#ifdef WUT_DEBUG
+		#if WUT_DEBUG
 			debug_log("WUT: DONE!!!\n");
 			fclose(fout);		
 		#endif
