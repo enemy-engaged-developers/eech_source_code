@@ -81,6 +81,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // VJ 04/12/12
 // repaired this code so that it reads the camoflaged textures correctly, assuming they have "_DESERT" or "-D" in their name
+// VJ 04/12/17
+// adapted the code to read 8 bit bmps, but they are put in the same overall structure, check if this works
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -839,7 +841,7 @@ BOOL load_texturemap_data ( char *path )
 			}
 		}
 	}
-	else
+	else // 24 bit: !d3d_paletted_textures_supported 
 	{
 	/*
 		for ( count = 0; count < number_of_system_textures; count++ )
@@ -2572,10 +2574,17 @@ int match_system_texture_name ( char *name )
 
 	*ptr++ = '\0';
 	
-//VJ 04/12/12 if textimpex name then delete -bin-etc	
+//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
 	if (strstr(real_name, "-BIN"))
 	{
 		char *p = strstr(real_name, "-BIN");
+      real_name[strlen(real_name)-strlen(p)] = '\0';		
+	}	
+
+//VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
+	if (strstr(real_name, "-PAL"))
+	{
+		char *p = strstr(real_name, "-PAL");
       real_name[strlen(real_name)-strlen(p)] = '\0';		
 	}	
 
@@ -3462,6 +3471,7 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 // Start Have_Quick
 // 12/2/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //static 
 void load_texture_override ( char *this_texture_name, int this_texture_index, char *mapname )
 {
@@ -3469,6 +3479,7 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 	FILE
 		*fp;
 
+// VJ 041217 header info: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_5f8y.asp
 	BITMAPFILEHEADER
 		bmfh;
 
@@ -3489,6 +3500,9 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 
 	rgb_colour
 		col;
+
+	//VJ 041217 palette for 8 bit textures
+	rgb_colour pal[256];
 
 	static screen
 				*override_screen;
@@ -3550,6 +3564,11 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 
 	fread (&bmih, sizeof (bmih), 1, fp);
 
+//VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
+   if (bmih.biBitCount == 8){
+ 	   fread (&pal, sizeof (pal), 1, fp);
+ 	}   
+ 	   
 	if (bmih.biCompression != BI_RGB)
 	{
 		safe_fclose (fp);
@@ -3558,8 +3577,8 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 
 		return;
 	}
-
-	if (bmih.biBitCount != 24)
+	//VJ only 8 and 24 bit uncompressed bitmaps are read
+	if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
 	{
 		safe_fclose (fp);
 
@@ -3592,15 +3611,20 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 	// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
 	// It also assumes that there are no mipmaps. This will not cause problems, but
 	// it will look cruddy under certain circumstances
+
+//VJ 041217 create the same screen for 8 bit or 24 bit ?????????	
 	override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
 
 	//
 	// texture
 	//
-
+  if (bmih.biBitCount == 24)   
+	  buffer_size = bmih.biWidth * bmih.biHeight * 3;
 	// note color depth is assumed here
-	buffer_size = bmih.biWidth * bmih.biHeight * 3;
 
+   if (bmih.biBitCount == 8)   
+      buffer_size = bmih.biWidth * bmih.biHeight;
+	
 	buffer = safe_malloc (buffer_size);
 
 	fread (buffer, buffer_size, 1, fp);
@@ -3611,10 +3635,12 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 	{
 		p = buffer;
 
+  if (bmih.biBitCount == 24){
 		for (y = bmih.biHeight - 1; y >= 0; y--)
 		{
 			for (x = 0; x < bmih.biWidth; x++)
 			{
+				
 				col.b = *p++;
 				col.g = *p++;
 				col.r = *p++;
@@ -3623,6 +3649,15 @@ void load_texture_override ( char *this_texture_name, int this_texture_index, ch
 				set_pixel (x, y, col);
 			}
 		}
+	}
+   if (bmih.biBitCount == 8){
+		for (y = bmih.biHeight - 1; y >= 0; y--){
+			for (x = 0; x < bmih.biWidth; x++){
+    			set_pixel (x, y, pal[*p++]);
+			}
+		}
+	
+	}
 
 		unlock_screen (override_screen);
 	}
