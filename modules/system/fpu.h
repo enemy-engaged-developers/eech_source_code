@@ -64,6 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
 #ifdef __WATCOMC__
 
 void asm_convert_float_to_int ( float value, int *ptr );
@@ -103,6 +104,23 @@ __inline void asm_convert_double_to_int ( double value, int *integer )
 		mov edx, integer
 		fistp dword ptr [edx]
 	}
+}
+
+#endif
+#else
+
+/* Linux ASM portage by Colin Bayer <vogon@icculus.org> */
+
+__inline void asm_convert_float_to_int ( float value, int *integer )
+{
+  __asm__ __volatile__ ("fistp (%1);"
+						: /* no outputs */ : "t" (value), "d" (integer) : "memory" );
+}
+
+__inline void asm_convert_double_to_int ( double value, int *integer )
+{
+  __asm__ __volatile__ ("fistp (%1);"
+						: /* no outputs */ : "t" (value), "d" (integer) : "memory" );
 }
 
 #endif
