@@ -185,8 +185,8 @@ void initialise_hind_virtual_cockpit (void)
 
 	initialise_common_virtual_cockpit_cameras ();
 	
-//VJ wideview mod, date: 18-mar-03	
-	wide_cockpit_nr = 5;
+//VJ 050208 cleaing up wideview
+	wide_cockpit_nr = WIDEVIEW_HAVOC_PILOT;
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read	
 	set_global_wide_cockpit(FALSE);		
@@ -518,8 +518,10 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 //VJ wideview mod, date: 18-mar-03	
 		if (get_global_wide_cockpit ())
 		{
-		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+			//VJ 050207 included head pitch in fixed view setting
+ 		   pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );		    
 		}    
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
@@ -562,11 +564,11 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 
 //VJ wideview mod, date: 18-mar-03	
 		if (get_global_wide_cockpit ()&&
-	         !(flags & (VIRTUAL_COCKPIT_HUD_GLASS | VIRTUAL_COCKPIT_HUD_DISPLAY | VIRTUAL_COCKPIT_EKRAN_DISPLAY | VIRTUAL_COCKPIT_CRT_DISPLAY))
-	         )
+	      !(flags & (VIRTUAL_COCKPIT_HUD_GLASS | VIRTUAL_COCKPIT_HUD_DISPLAY | VIRTUAL_COCKPIT_EKRAN_DISPLAY | VIRTUAL_COCKPIT_CRT_DISPLAY))
+	   )
 		{
-		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 		}    
 
 		realise_3d_clip_extents (main_3d_single_light_env);
@@ -708,15 +710,15 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 			draw_3d_scene ();
 
 //VJ wideview mod, date: 18-mar-03	
-            if (edit_wide_cockpit)
-         	{
-				sprintf(buffer,"HAVOC wide cockpit mod edit:"); 
-                ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
-                ui_display_text (buffer, 10, 60);
-                sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
-                ui_display_text (buffer, 10, 100);
-            }
+         if (edit_wide_cockpit)
+       	{
+				sprintf(buffer,"HAVOC wide cockpit mod edit (set freelook off):");
+				ui_display_text (buffer, 10, 40);
+				sprintf(buffer,"Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
+				ui_display_text (buffer, 10, 60);
+				sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
+				ui_display_text (buffer, 10, 100);
+         }
 
 			end_3d_scene ();
 		}
@@ -1362,47 +1364,56 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 		}
 	}
 
-//VJ wideview mod, date: 18-mar-03	
+	//VJ wideview mod, date: 18-mar-03	
 	////////////////////////////////////////
 	//
 	// wide cockpit position edit
 	//
 	////////////////////////////////////////
-	//vj
+	
 	if (edit_wide_cockpit)                                     
 	{                                                          
+		//VJ 50208 added pilot head pitch
+		if (check_key(DIK_NUMPAD7))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
+      }
+		if (check_key(DIK_NUMPAD9))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
+      }
 		if (check_key(DIK_NUMPAD6))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].z += 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD4))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].z -= 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD8))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].y += 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD2))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].y -= 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD1))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].x -= 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD3))                            
 		{                                                      
             wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
-        }                                                      
+      }                                                      
 		if (check_key(DIK_NUMPAD0))                            
 		{                                       
-//VJ 030812 fixed a small bug here			    			               
-			wide_cockpit_position[wide_cockpit_nr].x = 0;                
-			wide_cockpit_position[wide_cockpit_nr].y = 0.095;             
-			wide_cockpit_position[wide_cockpit_nr].z = 0.335;            
-        }                                                      
-    }            	                                           
+			wide_cockpit_position[wide_cockpit_nr].x = 0;
+			wide_cockpit_position[wide_cockpit_nr].y = 0;
+			wide_cockpit_position[wide_cockpit_nr].z = 0.2;
+			wide_cockpit_position[wide_cockpit_nr].x = 0;
+      }                                                      
+   }            	                                           
 
 
 

@@ -133,8 +133,8 @@ void initialise_comanche_virtual_cockpit (void)
 
 	initialise_common_virtual_cockpit_cameras ();
 		
-//VJ wideview mod, date: 18-mar-03	
-	wide_cockpit_nr = 0;
+//VJ 050208 cleaing up wideview
+	wide_cockpit_nr = WIDEVIEW_COMANCHE_PILOT;
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read	
 	set_global_wide_cockpit(FALSE);		
@@ -328,12 +328,6 @@ void update_comanche_virtual_cockpit (void)
 
 	depth = 0;
 
-//VJ wideview mod, date: 18-mar-03	
-	if (get_global_wide_cockpit ())
-	{
-  		draw_crew = FALSE;
-	}
-
 	while (TRUE)
 	{
 		search.search_depth = depth;
@@ -376,6 +370,9 @@ void update_comanche_virtual_cockpit (void)
 	// draw crew
 	//
 
+//VJ 050206: wideview improvement show other pilot when in wideview
+	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT);
+
 	search.search_depth = 0;
 	search.search_object = virtual_cockpit_inst3d;
 	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COMANCHE_PILOT_VISIBLE;
@@ -384,7 +381,10 @@ void update_comanche_virtual_cockpit (void)
 	{
 		search.result_sub_object->visible_object = draw_crew;
 	}
-
+	
+//VJ 050206: wideview improvement show other pilot when in wideview
+	draw_crew = !(get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT);
+	
 	search.search_depth = 0;
 	search.search_object = virtual_cockpit_inst3d;
 	search.sub_object_index = OBJECT_3D_SUB_OBJECT_COMANCHE_WSO_VISIBLE;
@@ -678,7 +678,12 @@ void draw_comanche_virtual_cockpit (void)
 			   virtual_cockpit_inst3d->vp.x += wide_cockpit_position[wide_cockpit_nr].x;
 			   virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
 			   virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;
-
+			   
+				if (wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT)
+			   	pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+				if (wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT)
+			   	co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+	
 	        	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
 			   
 		}
@@ -729,13 +734,14 @@ void draw_comanche_virtual_cockpit (void)
 				draw_3d_scene ();
 
 				//VJ wideview mod, date: 18-mar-03	
+				//VJ 50208 added pilot head pitch
 				if (edit_wide_cockpit)
 				{
-					sprintf(buffer,"COMANCHE wide cockpit mod edit:"); 
+					sprintf(buffer,"COMANCHE wide cockpit mod edit (set freelook off):"); 
 				   ui_display_text (buffer, 10, 40);
-					sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\"); 
+					sprintf(buffer,"X: num1/3; Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
 				   ui_display_text (buffer, 10, 60);
-				   sprintf(buffer,"x=%.3f y=%.3f z=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z);
+				   sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p);
 				   ui_display_text (buffer, 10, 100);
 				}
 
@@ -825,52 +831,48 @@ void draw_comanche_virtual_cockpit (void)
 
 	if (edit_wide_cockpit)
 	{
+		//VJ 50208 added pilot head pitch
+		if (check_key(DIK_NUMPAD7))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
+      }  
+		if (check_key(DIK_NUMPAD9))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
+      }  
 		if (check_key(DIK_NUMPAD6))
 		{
             wide_cockpit_position[wide_cockpit_nr].z += 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD4))
 		{
             wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD8))
 		{
             wide_cockpit_position[wide_cockpit_nr].y += 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD2))
 		{
             wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD3))
 		{
             wide_cockpit_position[wide_cockpit_nr].x += 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD1))
 		{
             wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
-        }  
+      }  
 		if (check_key(DIK_NUMPAD0))
 		{
 			//VJ 050131 update on wideview mod, much better movement
   		   wide_cockpit_position[wide_cockpit_nr].x = 0;    
 			wide_cockpit_position[wide_cockpit_nr].y = 0.105; 
 			wide_cockpit_position[wide_cockpit_nr].z = 0.180;
-			/*
-			if (wide_cockpit_nr==0)
-			{
-  		     	wide_cockpit_position[0].x = 0;    
-				wide_cockpit_position[0].y = 1.15; 
-				wide_cockpit_position[0].z = -2.43;
-			}	
-			if (wide_cockpit_nr==1)
-			{
-				wide_cockpit_position[1].x = 0;    
-				wide_cockpit_position[1].y = 0.85; 
-				wide_cockpit_position[1].z = -1.03;
-			}	
-			*/
-        }  
-    }            	
+			wide_cockpit_position[wide_cockpit_nr].p = 0;
+      }  
+   }            	
 
 
 #if RECOGNITION_GUIDE
