@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#define DEBUG_MODULE 0
+#define DEBUG_MODULE 1
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,9 @@ object_3d_instance
 	*virtual_cockpit_display_view_mfd_inst3d;
 
 static float clipx;
-
+#if DEBUG_MODULE
+static float dx, dy, dz;
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +166,10 @@ void initialise_apache_virtual_cockpit (void)
 //VJ wideview mod, date: 20-mar-03
 //start up in normal view because when you switch to wideview the parameters are read
 	set_global_wide_cockpit(FALSE);
-
+	
+#if DEBUG_MODULE
+	dx = 0; dy = 0; dz = 0;
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -635,12 +640,17 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 //VJ wideview mod, date: 18-mar-03
             if (edit_wide_cockpit)
          	{
-				sprintf(buffer,"APACHE wide cockpit mod edit:");
-                ui_display_text (buffer, 10, 40);
-				sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\");
-                ui_display_text (buffer, 10, 60);
-                sprintf(buffer,"x=%.3f y=%.3f z=%.3f clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z,clipx);
-                ui_display_text (buffer, 10, 100);
+					sprintf(buffer,"APACHE wide cockpit mod edit:");
+               ui_display_text (buffer, 10, 40);
+					sprintf(buffer,"X: numpad 1/3; Y: numpad 8/2; Z: numpad 4/6; Restore: numpad 0; Save: Alt-\\");
+               ui_display_text (buffer, 10, 60);
+               sprintf(buffer,"x=%.3f y=%.3f z=%.3f clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z,clipx);
+               ui_display_text (buffer, 10, 80);
+					#if DEBUG_MODULE
+               sprintf(buffer,"x=%.3f y=%.3f z=%.3f clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, dx, dy, dz);
+               ui_display_text (buffer, 10, 100);
+					#endif               
+               
             }
 
 			end_3d_scene ();
@@ -920,9 +930,11 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_upfront_display_inst3d->vp.position, virtual_cockpit_upfront_display_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03
-	          	if (get_global_wide_cockpit ())
-                     vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.02;
+//VJ wideview mod, date: 18-mar-03, 050123
+         	if (get_global_wide_cockpit ()){
+                  vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.008;
+                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005;
+            }      
 
 				//
 				// lhs mfd
@@ -946,10 +958,12 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rhs_mfd_inst3d->vp.position, virtual_cockpit_rhs_mfd_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03
-	        	if (get_global_wide_cockpit ())
-                   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-
+//VJ wideview mod, date: 18-mar-03, 050123
+	        	if (get_global_wide_cockpit ()){
+                vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+                vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+				}
+				
 				draw_3d_scene ();
 
 				end_3d_scene ();
@@ -970,7 +984,8 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	if
 	(
 		(d3d_can_render_to_texture) &&
-		(get_apache_tads_display_visible ()) &&
+		//always draw fillet not only with tads
+		//(get_apache_tads_display_visible ()) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
 		(flags & (VIRTUAL_COCKPIT_LHS_MFD_DISPLAY)) &&
 		(flags & (VIRTUAL_COCKPIT_RHS_MFD_DISPLAY))
@@ -1049,6 +1064,39 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 	if (edit_wide_cockpit)
 	{
+#if DEBUG_MODULE
+		if (check_key(DIK_NUMPAD7))
+		{
+		system_sleep(20);
+			  dy+= 0.001;
+		}
+		if (check_key(DIK_NUMPAD9))
+		{
+		system_sleep(20);
+			  dy-= 0.001;
+		}
+		if (check_key(DIK_NUMPADSLASH))
+		{
+		system_sleep(20);
+			  dx+= 0.001;
+		}
+		if (check_key(DIK_NUMPADSTAR))
+		{
+		system_sleep(20);
+			  dx-= 0.001;
+		}
+		if (check_key(DIK_NUMPADMINUS))
+		{
+		system_sleep(20);
+			  dz+= 0.001;
+		}
+		if (check_key(DIK_NUMPADPLUS))
+		{
+		system_sleep(20);
+			  dz-= 0.001;
+		}
+#endif		
+		
 		if (check_key(DIK_NUMPAD6))
 		{
             wide_cockpit_position[wide_cockpit_nr].z += 0.01;

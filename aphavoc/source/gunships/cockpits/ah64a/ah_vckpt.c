@@ -919,9 +919,11 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_upfront_display_inst3d->vp.position, virtual_cockpit_upfront_display_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03
-	          	if (get_global_wide_cockpit ())
-                     vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.025;
+//VJ wideview mod, date: 18-mar-03, 050123
+         	if (get_global_wide_cockpit ()){
+                  vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.008;
+                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005;
+            }      
 
 				//
 				// lhs mfd
@@ -945,9 +947,11 @@ void draw_ah64a_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rhs_mfd_inst3d->vp.position, virtual_cockpit_rhs_mfd_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03
-	        	if (get_global_wide_cockpit ())
-                   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+//VJ wideview mod, date: 18-mar-03, 050123
+	        	if (get_global_wide_cockpit ()){
+                vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+                vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+				}
 
 				draw_3d_scene ();
 

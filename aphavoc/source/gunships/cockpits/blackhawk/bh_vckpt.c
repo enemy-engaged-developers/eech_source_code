@@ -920,9 +920,11 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_upfront_display_inst3d->vp.position, virtual_cockpit_upfront_display_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03	
-	          	if (get_global_wide_cockpit ())
-                     vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.02;
+//VJ wideview mod, date: 18-mar-03, 050123
+          	if (get_global_wide_cockpit ()){
+                  vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.008;
+                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005;
+            }      
 
 				//
 				// lhs mfd
@@ -946,9 +948,11 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rhs_mfd_inst3d->vp.position, virtual_cockpit_rhs_mfd_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03	
-	        	if (get_global_wide_cockpit ())
-                   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+//VJ wideview mod, date: 18-mar-03, 050123
+	        	if (get_global_wide_cockpit ()){
+                vp.y = wide_cockpit_position[wide_cockpit_nr].y;
+                vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+				}
 
 				draw_3d_scene ();
 
@@ -970,7 +974,8 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 	if
 	(
 		(d3d_can_render_to_texture) &&
-		(get_blackhawk_tads_display_visible ()) &&
+		//always draw fillet not only with tads
+		//(get_blackhawk_tads_display_visible ()) &&
 		(flags & (VIRTUAL_COCKPIT_COCKPIT)) &&
 		(flags & (VIRTUAL_COCKPIT_LHS_MFD_DISPLAY)) &&
 		(flags & (VIRTUAL_COCKPIT_RHS_MFD_DISPLAY))
@@ -1035,7 +1040,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
 
 			draw_3d_scene ();
-//VJ 300303 bug fix: the following line was omitted from the source accidently
+
 			end_3d_scene ();
 		}
 	}
