@@ -207,9 +207,9 @@ void process_ini_file(int argc, char *argv[])
 {
 	 FILE *f;
 
-//VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
+//VJ 040816 (and 041002) bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
 	 char *buf, *buf1;
-	 char *p, *q;
+	 char *p, *q, *r;
 	 char fname[12] = "eech.ini";
 	 float v1;
 	 int d1, k;
@@ -270,16 +270,28 @@ void process_ini_file(int argc, char *argv[])
 		  continue;
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
-      for (i = 0; i < strlen(buf); i++)
-        if (buf[i] != ' '){        
-          buf1[j] = buf[i];
-          j++;
-      }  
+		j=0;
+      for (i = 0; i < strlen(buf); i++){
+      	if (buf[i] != ' '){
+      		buf1[j] = buf[i];
+	   		j++;
+      	}  
+      }	
       buf1[j] = '\0';
-
-		p = strtok(buf1,"=");
-		q = strtok(NULL,"#");		
-			
+      
+//VJ 041002 bug fix: if variable is empty so # follows = the # is overwritten by NULL 
+//after the first call to strtok, this causes an error because q then contains the comment 
+//without spaces. fix: empty q when that is the case.
+		r = strchr(buf1, '=');
+		r++;
+		if (r[0] == '#'){       		
+  			p = strtok(buf1,"=");
+			q[0] = '\0';	
+		}else{		
+  			p = strtok(buf1,"=");
+			q = strtok(NULL,"#");	
+		}   
+		
 		while(q[i]!=' ')
 		 i++;
 		q[i] = '\0';
