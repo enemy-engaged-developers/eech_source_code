@@ -2418,6 +2418,9 @@ static HRESULT CALLBACK ddraw_enum_modes ( LPDDSURFACEDESC2 lpddsd, LPVOID Conte
 	// Assess the format
 	//
 
+	debug_log ( "Graphics adapter supports resolution %i x %i", lpddsd->dwWidth, lpddsd->dwHeight );
+
+
 	if ( lpddsd->ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8 )
 	{
 
@@ -2431,6 +2434,7 @@ static HRESULT CALLBACK ddraw_enum_modes ( LPDDSURFACEDESC2 lpddsd, LPVOID Conte
 
 		number_display_modes ++;
 		*/
+		debug_log ( "Resolution %i x %i skipped because it's 8 bit", lpddsd->dwWidth, lpddsd->dwHeight );
 
 		return ( DDENUMRET_OK );
 	}
@@ -2441,6 +2445,8 @@ static HRESULT CALLBACK ddraw_enum_modes ( LPDDSURFACEDESC2 lpddsd, LPVOID Conte
 		// We are NOT going to render to 4bit displays!
 		//
 
+		debug_log ( "Resolution %i x %i skipped because it's 4 bit", lpddsd->dwWidth, lpddsd->dwHeight );
+
 		return ( DDENUMRET_OK );
 	}
 	else if ( lpddsd->ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS)
@@ -2449,6 +2455,7 @@ static HRESULT CALLBACK ddraw_enum_modes ( LPDDSURFACEDESC2 lpddsd, LPVOID Conte
 		//
 		// Unknown display, ignore
 		//
+		debug_log ( "Resolution %i x %i skipped because alpha flag was set", lpddsd->dwWidth, lpddsd->dwHeight );
 
 		return ( DDENUMRET_OK );
 	}
@@ -2492,12 +2499,12 @@ static HRESULT CALLBACK ddraw_enum_modes ( LPDDSURFACEDESC2 lpddsd, LPVOID Conte
 		display_modes[number_display_modes].bpp_green = g;
 		display_modes[number_display_modes].bpp_blue = b;
 
-		if ( ( r + g + b ) <= 16 )
+		if ( ( r + g + b ) <= 32 )
 		{
 
 			if ( ( lpddsd->dwWidth >= 640 ) && ( lpddsd->dwHeight >= 480 ) )
 			{
-	
+				debug_log ( "Resolution %i x %i accepted", lpddsd->dwWidth, lpddsd->dwHeight );
 				number_display_modes++;
 			}
 		}

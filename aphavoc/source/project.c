@@ -432,7 +432,8 @@ void application_main (int argc, char **argv)
 				graphics_resolution_modes_available[index] = global_options.graphics_card_resolutions[index];
 
 				debug_log ( "Enabling mode: %d x %d", graphics_resolution_modes_available[index].width, graphics_resolution_modes_available[index].height );
-			}
+			}			
+			
 		}
 	}
 	else
@@ -442,7 +443,7 @@ void application_main (int argc, char **argv)
 		// We're running in a window - that means 640x480 only
 		//
 
-		number_of_graphics_resolution_modes_available = 5;
+		number_of_graphics_resolution_modes_available = 8;
 
 		graphics_resolution_modes_available[0].width = 640;
 		graphics_resolution_modes_available[0].height = 480;
@@ -456,13 +457,25 @@ void application_main (int argc, char **argv)
 		graphics_resolution_modes_available[2].height = 768;
 		graphics_resolution_modes_available[2].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[3].width = 1280;
-		graphics_resolution_modes_available[3].height = 960;
+		graphics_resolution_modes_available[3].width = 1280; //Werewolf
+		graphics_resolution_modes_available[3].height = 800;
 		graphics_resolution_modes_available[3].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[4].width = 1600;
-		graphics_resolution_modes_available[4].height = 1200;
+		graphics_resolution_modes_available[4].width = 1280;
+		graphics_resolution_modes_available[4].height = 960;
 		graphics_resolution_modes_available[4].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[5].width = 1280; //Werewolf
+		graphics_resolution_modes_available[5].height = 1024;
+		graphics_resolution_modes_available[5].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[6].width = 1680; //Werewolf
+		graphics_resolution_modes_available[6].height = 1050;
+		graphics_resolution_modes_available[6].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[7].width = 1600;
+		graphics_resolution_modes_available[7].height = 1200;
+		graphics_resolution_modes_available[7].compressed_texture_mode = FALSE;
 	}
 
 	//

@@ -102,7 +102,10 @@ resolution_info resolutions_supported[] =
 		{ 640, 480 },
 		{ 800, 600 },
 		{ 1024, 768 },
+		{ 1280, 800 }, //Werewolf
 		{ 1280, 960 },
+		{ 1280, 1024 }, //Werewolf
+		{ 1680, 1050 }, //Werewolf
 		{ 1600, 1200 },
 	};
 
@@ -252,7 +255,6 @@ int assess_graphic_device_resolutions ( void )
 	
 						if ( test_video_resolution ( width, height, ddraw.application_display_depth ) )
 						{
-	
 							debug_log ( "Graphics mode: %d x %d enabled", width, height );
 
 							graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].width = width;
@@ -299,7 +301,12 @@ int assess_graphic_device_resolutions ( void )
 							release_test_d3d_device ();
 							*/
 						}
+						else
+							debug_log ( "%d x %d failed video resolution test!", width, height );
 					}
+					else
+						debug_log ( "%d x %d is not in supported modes list!", width, height );
+
 				}
 			}
 		}
