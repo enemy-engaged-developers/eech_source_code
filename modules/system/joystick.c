@@ -96,7 +96,11 @@ joystick_device_info
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
 static BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device, LPVOID user_data);
+#else
+int setup_sdl_joysticks( void );
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,8 +109,10 @@ static BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device, L
 void initialise_joysticks (void)
 {
 
+#ifdef WIN32
 	HRESULT
 		di_err;
+#endif
 
 	//
 	// Allocate joystick device array
@@ -120,6 +126,7 @@ void initialise_joysticks (void)
 
 	number_of_joystick_devices = 0;
 
+#ifdef WIN32
 	if (direct_input)
 	{
 
@@ -131,12 +138,85 @@ void initialise_joysticks (void)
 			debug_log ("Unable to enumerate any joystick devices");
 		}
 	}
+
+#else
+
+	if( setup_sdl_joysticks() != 0 ) {
+		debug_log ("No joystick devices found");
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef WIN32
+int setup_sdl_joysticks( void ) {
+
+	int
+		i, j, n;
+
+	int
+		number_of_joysticks_detected;
+
+	number_of_joysticks_detected = SDL_NumJoysticks();
+
+	if(number_of_joysticks_detected < 1)
+		return -1;
+
+	n = 0;
+
+	for(i = 0; i < number_of_joysticks_detected; i++) {
+
+		joystick_devices[ n ].input_device = SDL_JoystickOpen( i );
+
+		if( joystick_devices[ n ].input_device ) {
+
+			joystick_devices[ n ].number_of_buttons = SDL_JoystickNumButtons( joystick_devices[ n ].input_device );
+			joystick_devices[ n ].number_of_axes = SDL_JoystickNumAxes( joystick_devices[ n ].input_device );
+			joystick_devices[ n ].number_of_hats = SDL_JoystickNumHats( joystick_devices[ n ].input_device );
+			
+			for(j = 0; j < joystick_devices[ n ].number_of_buttons; j++) {
+				joystick_devices[ n ].joystick_last_state.buttons[ j ] = SDL_JoystickButton( joystick_devices[ n ].input_device );
+			}
+
+			for(j = 0; j < joystick_devices[ n ].number_of_axes; j++) {
+				joystick_devices[ n ].joystick_last_state.axes[ j ] = SDL_JoystickAxis( joystick_devices[ n ].input_device );
+			}
+
+			for(j = 0; j < joystick_devices[ n ].number_of_hats; j++) {
+				joystick_devices[ n ].joystick_last_state.hats[ j ] = SDL_JoystickHat( joystick_devices[ n ].input_device );
+			}
+		
+			strncpy( joystick_devices[ n ].device_name, SDL_JoystickName( i ), 1023 );
+			
+			strcpy( joystick_devices[ n ].device_product_name, "Unknown" );
+
+#if DEBUG_MODULE
+
+			debug_log ("Got joystick device %s (SDL device %d, Game device %d)", joystick_devices[ n ].device_name, i, n);
+
+#endif
+
+			n++;
+		}
+		else {
+			debug_log("Unable to open joystick device %d, skipped.", i);
+		}
+	}
+
+	number_of_joystick_devices = n;
+
+	return 0;
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef WIN32
 BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance, LPVOID user_data)
 {
 
@@ -594,6 +674,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	return (DIENUM_CONTINUE);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -602,8 +683,13 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 void read_joystick_values (int joystick_device_index)
 {
 
+#ifdef WIN32
 	HRESULT
 		di_err;
+#else
+	int
+		i;
+#endif
 
 	joystick_device_info
 		*joystick;
@@ -633,6 +719,7 @@ void read_joystick_values (int joystick_device_index)
 			// Now, poll the device
 			//
 		
+#ifdef WIN32
 			di_err = IDirectInputDevice7_Poll (joystick->input_device);
 		
 			if ((di_err == DIERR_INPUTLOST) || (di_err == DIERR_NOTACQUIRED))
@@ -709,8 +796,57 @@ void read_joystick_values (int joystick_device_index)
 					}
 				}
 			}
+
+#else
+		
+			//
+			// Read the state
+			//
+		
+			for(i = 0; i < joystick->number_of_buttons; i++)
+				joystick->joystick_state.buttons[ i ] = SDL_JoystickGetButton(joystick->input_device, i);
+
+			for(i = 0; i < joystick->number_of_axes; i++)
+				joystick->joystick_state.axes[ i ] = SDL_JoystickGetAxis(joystick->input_device, i);
+
+			for(i = 0; i < joystick->number_of_buttons; i++)
+				joystick->joystick_state.hats[ i ] = SDL_JoystickGetHat(joystick->input_device, i);
+
+			//
+			// Generate any button events
+			//
+		
+			for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
+			{
+		
+				if (joystick->joystick_last_state.buttons[button_count] != joystick->joystick_state.buttons[button_count])
+				{
+		
+					if (joystick->joystick_state.buttons[button_count] == 1)
+					{
+		
+						//
+						// Generate a button pressed event
+						//
+		
+						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_DOWN);
+					}
+					else
+					{
+		
+						//
+						// Generate a button released event
+						//
+		
+						create_joystick_event (joystick_device_index, button_count, BUTTON_STATE_UP);
+					}
+				}
+			}
+#endif
+
 		}
 
+#ifdef WIN32
 		//
 		// Hack for Win2k problems of putting the Z axis data into Slider0 member
 		//
@@ -720,6 +856,7 @@ void read_joystick_values (int joystick_device_index)
 
 			joystick->joystick_state.lZ = joystick->joystick_state.rglSlider[0];
 		}
+#endif
 
 		//
 		// Values are in here!
@@ -744,7 +881,8 @@ void read_joystick_values (int joystick_device_index)
 
 int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, int yforce)
 {
-	
+
+#ifdef WIN32
 	HRESULT
 		di_err;
 	
@@ -855,6 +993,7 @@ int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, i
 	}
 
 	return (TRUE);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -863,86 +1002,157 @@ int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, i
 
 // loke 030319
 // this function returns the value of a joystick axis
-
-int get_joystick_value (int joystick_index, int axis)
+// yem 030525 - changed axis to be indexed from 0 instead of 1. renamed to get_joystick_axis.
+int get_joystick_axis (int joystick_index, int axis)
 {
-	switch (axis)
-	{
+#ifdef WIN32
+	switch (axis) {
+	case 0:
+		if (joystick_devices[joystick_index].joystick_xaxis_valid)
+		{
+			return joystick_devices[joystick_index].joystick_state.lX;
+		}
+		break;
+				
 	case 1:
+		if (joystick_devices[joystick_index].joystick_yaxis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_xaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lX;
-			}
+			return joystick_devices[joystick_index].joystick_state.lY;
 		}
 		break;
-
+				
 	case 2:
+		if (joystick_devices[joystick_index].joystick_zaxis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_yaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lY;
-			}
+			return joystick_devices[joystick_index].joystick_state.lZ;
 		}
 		break;
-
+				
 	case 3:
+		if (joystick_devices[joystick_index].joystick_rxaxis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_zaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lZ;
-			}
+			return joystick_devices[joystick_index].joystick_state.lRx;
 		}
 		break;
-
+				
 	case 4:
+		if (joystick_devices[joystick_index].joystick_ryaxis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_rxaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lRx;
-			}
+			return joystick_devices[joystick_index].joystick_state.lRy;
 		}
 		break;
-
+				
 	case 5:
+		if (joystick_devices[joystick_index].joystick_rzaxis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_ryaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lRy;
-			}
+			return joystick_devices[joystick_index].joystick_state.lRz;
 		}
 		break;
 
 	case 6:
+		if (joystick_devices[joystick_index].joystick_slider0axis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_rzaxis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.lRz;
-			}
+			return joystick_devices[joystick_index].joystick_state.rglSlider[0];
 		}
 		break;
 
 	case 7:
+		if (joystick_devices[joystick_index].joystick_slider1axis_valid)
 		{
-			if (joystick_devices[joystick_index].joystick_slider0axis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.rglSlider[0];
-			}
+			return joystick_devices[joystick_index].joystick_state.rglSlider[1];
 		}
 		break;
-
-	case 8:
-		{
-			if (joystick_devices[joystick_index].joystick_slider1axis_valid)
-			{
-				return joystick_devices[joystick_index].joystick_state.rglSlider[1];
-			}
-		}
-		break;
-
 	}
 
+#else
+
+	if( joystick_index >= 0 && joystick_index < number_of_joystick_devices
+		  && axis >= 0 && axis < joystick_devices[joystick_index].number_of_axes ) {
+
+		return joystick_devices[joystick_index].joystick_state.axes[ axis ];
+	}
+	
+#endif
+
 	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Added 2003-05-25 (yem) Use this function instead of referencing DIJOYSTATE.rgdwPOV[] directly
+joystick_hat_position get_joystick_hat(joystick_device_info *stick, int index) {
+	// TODO: Add support for diagonal directions
+
+#ifdef WIN32
+
+	DWORD
+		pos;
+
+	if( stick->joystick_has_pov && index >= 0 && index < 4 ) {
+		pos = stick->joystick_state.rgdwPOV[ index ];
+
+		if (LOWORD (pos) == 0xFFFF)
+			return HAT_CENTERED;
+		else if (pos < 45 * DI_DEGREES)
+			return HAT_UP;
+		else if (pos < 135 * DI_DEGREES)
+			return HAT_RIGHT;
+		else if (pos < 225 * DI_DEGREES)
+			return HAT_DOWN;
+		else if (pos < 315 * DI_DEGREES)
+			return HAT_LEFT;
+	}
+
+#else
+
+	Uint8
+		pos;
+
+	if( index >= 0 && index < stick->number_of_hats ) {
+		pos = stick->joystick_state.hats[ index ];
+
+		switch( pos ) {
+		case SDL_HAT_UP:
+			return HAT_UP;
+		case SDL_HAT_LEFT:
+			return HAT_LEFT;
+		case SDL_HAT_DOWN:
+			return HAT_DOWN;
+		case SDL_HAT_RIGHT:
+			return HAT_RIGHT;
+		default:
+		case SDL_HAT_CENTERED:
+			return HAT_CENTERED;
+		}			
+	}
+#endif
+
+	return HAT_CENTERED;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Added 2003-05-25 (yem) Use this function instead of referencing DIJOYSTATE.rgbButtons[] directly
+int get_joystick_button(joystick_device_info *stick, int index) {
+
+#ifdef WIN32
+
+	if( index >= 0 && index < 32 )
+		return stick->joystick_state.rgbButtons[ index ];
+
+#else
+
+	if( index >= 0 && index < stick->number_of_buttons )
+		return stick->joystick_state.buttons[ index ];
+
+#endif
+
+	else
+		return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -489,11 +489,11 @@ void update_cyclic_pressure_inputs (void)
 
 			if (command_line_cyclic_joystick_index == -1)
 			{
-				joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
+				joyval = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL);
 			}
 			else
 			{
-				joyval = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+				joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
 			}
 
 			input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
@@ -512,11 +512,11 @@ void update_cyclic_pressure_inputs (void)
 
 			if (command_line_cyclic_joystick_index == -1)
 			{
-				joyval = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+				joyval = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH);
 			}
 			else
 			{
-				joyval = get_joystick_value (command_line_collective_joystick_index, command_line_cyclic_joystick_y_axis);
+				joyval = get_joystick_axis (command_line_collective_joystick_index, command_line_cyclic_joystick_y_axis);
 			}
 
 			input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
@@ -532,8 +532,8 @@ void update_cyclic_pressure_inputs (void)
 			current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
 
 			/*
-			debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),
-				((float) fabs (200.0 * joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
+			debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),
+				((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH)) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
 			*/
 
 			{
@@ -546,13 +546,13 @@ void update_cyclic_pressure_inputs (void)
 
 				if (command_line_cyclic_joystick_index == -1)
 				{
-					joystick_x_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
-					joystick_y_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+					joystick_x_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL);
+					joystick_y_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH);
 				}
 				else
 				{
-					joystick_x_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
-					joystick_y_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
+					joystick_x_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+					joystick_y_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 				}
 
 				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||
@@ -579,35 +579,41 @@ void update_cyclic_pressure_inputs (void)
 	#if 0
 	{
 
-		unsigned int
+		joystick_hat_position
 			coolie_position;
 
-		coolie_position = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.rgdwPOV [0];
+		coolie_position = get_joystick_hat( &joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index], 0 );
 
-		if (LOWORD(coolie_position) == 0xFFFF)
-		{
-
+		switch( coolie_position ) {
+		case HAT_CENTERED:
 			debug_log ("CYCLIC: coolie centered");
-		}
-		else if (coolie_position == 0)
-		{
-
+			break;
+		case HAT_UP:
 			debug_log ("CYCLIC: coolie up");
-		}
-		else if (coolie_position == 9000)
-		{
-
+			break;
+		case HAT_LEFT:
 			debug_log ("CYCLIC: coolie left");
-		}
-		else if (coolie_position == 18000)
-		{
-			
+			break;
+		case HAT_DOWN:
 			debug_log ("CYCLIC: coolie down");
-		}
-		else if (coolie_position == 27000)
-		{
-			
+			break;
+		case HAT_RIGHT:
 			debug_log ("CYCLIC: coolie right");
+			break;
+		case HAT_LEFTUP:
+			debug_log ("CYCLIC: coolie left+up");
+			break;
+		case HAT_LEFTDOWN:
+			debug_log ("CYCLIC: coolie left+down");
+			break;
+		case HAT_RIGHTUP:
+			debug_log ("CYCLIC: coolie right+up");
+			break;
+		case HAT_RIGHTDOWN:
+			debug_log ("CYCLIC: coolie right+down");
+			break;
+		default:
+			debug_log ("CYCLIC: coolie is on fire");
 		}
 	}
 	#endif

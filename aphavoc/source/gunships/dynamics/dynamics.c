@@ -2958,13 +2958,13 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 				if (command_line_cyclic_joystick_index == -1)
 				{
-					joystick_x_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lX;
-					joystick_y_pos = joystick_devices [current_flight_dynamics->input_data.cyclic_joystick_device_index].joystick_state.lY;
+					joystick_x_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL);
+					joystick_y_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH);
 				}
 				else 
 				{
-					joystick_x_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
-					joystick_y_pos = get_joystick_value (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
+					joystick_x_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
+					joystick_y_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 				}
 
 				if (((float) fabs (200.0 * joystick_x_pos) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM) > 10.0) ||

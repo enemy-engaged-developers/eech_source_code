@@ -332,10 +332,10 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "minfov") == 0) 		command_line_min_fov = d1;
 		if (strcmp(p, "maxfov") == 0) 		command_line_max_fov = d1;
 		if (strcmp(p, "eopann") == 0) 		command_line_eo_pan_joystick_index = d1;
-		if (strcmp(p, "eopanv") == 0) 		command_line_eo_pan_vertical_joystick_axis = d1;
-		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1;
+		if (strcmp(p, "eopanv") == 0) 		command_line_eo_pan_vertical_joystick_axis = d1 - 1;
+		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1 - 1;
 		if (strcmp(p, "eozoomn") == 0)		command_line_eo_zoom_joystick_index = d1;
-		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1;
+		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1 - 1;
 		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 
@@ -343,12 +343,12 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;		
 		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1; 
 		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
-		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1;
-		if (strcmp(p, "cyclicv") == 0)		command_line_cyclic_joystick_y_axis = d1;
+		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1 - 1;
+		if (strcmp(p, "cyclicv") == 0)		command_line_cyclic_joystick_y_axis = d1 - 1;
 		if (strcmp(p, "collectiven") == 0)	command_line_collective_joystick_index = d1;
-		if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1;
+		if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1 - 1;
 		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
-		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1;
+		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518

@@ -2137,7 +2137,7 @@ void pop_numpad_cockpit_view_events_overlay (void)
 
 void update_joystick_pov_position (void)
 {
-	unsigned int
+	joystick_hat_position
 		joystick_pov_position;
 
 	int
@@ -2161,32 +2161,31 @@ void update_joystick_pov_position (void)
 
 	if (get_global_cyclic_input () == JOYSTICK_INPUT)
 	{
+#ifdef WIN32
 		if (joystick_devices[global_options.joystick_device_index].joystick_has_pov)
+#else
+		if (joystick_devices[global_options.joystick_device_index].number_of_hats > 0)
+#endif
 		{
-			joystick_pov_position = joystick_devices[global_options.joystick_device_index].joystick_state.rgdwPOV[0];
+			joystick_pov_position = get_joystick_hat( &joystick_devices[global_options.joystick_device_index], 0 );
 
-			if (LOWORD (joystick_pov_position) == 0xFFFF)
-			{
+			switch(joystick_pov_position) {
+			case HAT_CENTERED:
 				joystick_pov_centred = TRUE;
-			}
-			else if (joystick_pov_position < 45 * DI_DEGREES)
-			{
+				break;
+			case HAT_UP:
 				joystick_pov_up = TRUE;
-			}
-			else if (joystick_pov_position < 135 * DI_DEGREES)
-			{
+				break;
+			case HAT_RIGHT:
 				joystick_pov_right = TRUE;
-			}
-			else if (joystick_pov_position < 225 * DI_DEGREES)
-			{
+				break;
+			case HAT_DOWN:
 				joystick_pov_down = TRUE;
-			}
-			else if (joystick_pov_position < 315 * DI_DEGREES)
-			{
+				break;
+			case HAT_LEFT:
 				joystick_pov_left = TRUE;
-			}
-			else
-			{
+				break;
+			default:
 				joystick_pov_up = TRUE;
 			}
 

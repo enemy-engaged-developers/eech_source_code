@@ -409,7 +409,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 	if (command_line_eo_zoom_joystick_index != -1)
 	{
-		long pos = get_joystick_value (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
+		long pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
 		
 		eo->zoom = (pos + 10000) / 20000.0;
 	}
@@ -579,7 +579,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 			horizontal_value,
 			vertical_value;
 		
-		horizontal_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
+		horizontal_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
 
 		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
 
@@ -595,7 +595,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 		}
 
 
-		vertical_value = get_joystick_value (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
+		vertical_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
 
 		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
 
