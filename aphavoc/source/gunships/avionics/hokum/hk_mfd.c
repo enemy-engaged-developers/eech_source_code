@@ -2723,7 +2723,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 		get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
 
-		multiply_matrix3x3_matrix3x3 (&rotated_eo_vp.attitude, m, &centered_eo_vp.attitude);
+		multiply_matrix3x3_matrix3x3 (rotated_eo_vp.attitude, m, centered_eo_vp.attitude);
 
 		position.x = -rotated_eo_vp.x;
 		position.y = -rotated_eo_vp.y;
@@ -2892,7 +2892,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 
 		get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
 
-		multiply_matrix3x3_matrix3x3 (&rotated_eo_vp.attitude, m, &centered_eo_vp.attitude);
+		multiply_matrix3x3_matrix3x3 (rotated_eo_vp.attitude, m, centered_eo_vp.attitude);
 
 		position.x = -rotated_eo_vp.x;
 		position.y = -rotated_eo_vp.y;
@@ -10545,7 +10545,7 @@ void draw_hokum_virtual_cockpit_periscope_view (void)
 
 		get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
 
-		multiply_matrix3x3_matrix3x3 (&rotated_eo_vp.attitude, m, &centered_eo_vp.attitude);
+		multiply_matrix3x3_matrix3x3 (rotated_eo_vp.attitude, m, centered_eo_vp.attitude);
 
 		position.x = -rotated_eo_vp.x;
 		position.y = -rotated_eo_vp.y;
