@@ -79,7 +79,7 @@ static mfd_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VJ 030423 TSD render mod
 static rgb_colour
-	mfd_colours[11];
+	mfd_colours[13];
 
 #define MFD_COLOUR1 		  		(mfd_colours[0])
 #define MFD_COLOUR2 		  		(mfd_colours[1])
@@ -92,6 +92,8 @@ static rgb_colour
 #define MFD_ROAD_COLOUR			(mfd_colours[8])
 #define MFD_BACKGROUND_COLOUR	(mfd_colours[9])
 #define MFD_CLEAR_COLOUR		(mfd_colours[10])
+#define MFD_COLOUR7				(mfd_colours[11])
+#define MFD_COLOUR8				(mfd_colours[12])
 
 static rgb_colour
 	text_display_colours[2];
@@ -99,17 +101,7 @@ static rgb_colour
 #define TEXT_COLOUR1					(text_display_colours[0])
 #define TEXT_BACKGROUND_COLOUR	(text_display_colours[1])
 
-/*
-static rgb_colour
-	mfd_colours[6];
 
-#define MFD_COLOUR1 (mfd_colours[0])
-#define MFD_COLOUR2 (mfd_colours[1])
-#define MFD_COLOUR3 (mfd_colours[2])
-#define MFD_COLOUR4 (mfd_colours[3])
-#define MFD_COLOUR5 (mfd_colours[4])
-#define MFD_COLOUR6 (mfd_colours[5])
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1317,10 +1309,18 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR2;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR2;
+				else
+					target_symbol_colour = MFD_COLOUR4;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR4;			
+			{
+					target_symbol_colour = MFD_COLOUR7;
+			}
 		}		
 		else
 			target_symbol_colour = MFD_COLOUR1;
@@ -1330,10 +1330,18 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR1;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR1;
+				else
+					target_symbol_colour = MFD_COLOUR3;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR3;			
+			{
+					target_symbol_colour = MFD_COLOUR8;
+			}
 		}		
 		else
 			target_symbol_colour = MFD_COLOUR2;
@@ -3162,17 +3170,23 @@ static void draw_tactical_situation_display_mfd (void)
 	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
 		set_rgb_colour (MFD_COLOUR3,	240, 64,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4,	148, 32,   0, 255);//dark red
+
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini		
+		set_rgb_colour (MFD_COLOUR7,   96, 96, 96, 255);
 		if (tsd_render_palette == 0)
 		{
+			set_rgb_colour (MFD_COLOUR8,    48, 48, 48, 255);
 			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
 		}	
 		else
 		if (tsd_render_palette == 1)
 		{
+			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
 			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
 		}	
 		else
 		{
+			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
 			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
 		}	
 		set_rgb_colour (MFD_COLOUR6,	255, 255,  0, 255);
@@ -3442,8 +3456,11 @@ static void draw_tactical_situation_display_mfd (void)
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
 //VJ 030423 TSD render mod, enemy of comanche so red
-							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-							
+//VJ 030511 TSD render mod, enemy optional in eech.ini
+							if (command_line_tsd_enemy_colours)
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
+							else				
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);							
 						}
 					}
 				}

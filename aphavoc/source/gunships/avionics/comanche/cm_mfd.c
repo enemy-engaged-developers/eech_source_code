@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -200,7 +200,7 @@ static comanche_side_mfd_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[11];
+	mfd_colours[13];
 
 #define MFD_COLOUR1 		  		(mfd_colours[0])
 #define MFD_COLOUR2 		  		(mfd_colours[1])
@@ -213,6 +213,8 @@ static rgb_colour
 #define MFD_ROAD_COLOUR			(mfd_colours[8])
 #define MFD_BACKGROUND_COLOUR	(mfd_colours[9])
 #define MFD_CLEAR_COLOUR		(mfd_colours[10])
+#define MFD_COLOUR7				(mfd_colours[11])
+#define MFD_COLOUR8				(mfd_colours[12])
 
 static rgb_colour
    clear_mfd_colour;
@@ -1459,9 +1461,9 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 	entity_sides
 		source_side;
-	entity	
+	entity
 		*source;
-		
+
 	float
 		dx,
 		dy;
@@ -1478,7 +1480,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 	source = get_gunship_entity ();
 	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
-	
+
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 	dx = (target_position->x - source_position->x) * scale;
@@ -1493,11 +1495,19 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR1;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR1;
+				else
+					target_symbol_colour = MFD_COLOUR3;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR3;			
-		}		
+			{
+					target_symbol_colour = MFD_COLOUR8;
+			}
+		}
 		else
 			target_symbol_colour = MFD_COLOUR2;
 	}
@@ -1506,11 +1516,19 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR2;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR2;
+				else
+					target_symbol_colour = MFD_COLOUR4;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR4;			
-		}		
+			{
+					target_symbol_colour = MFD_COLOUR7;
+			}
+		}
 		else
 			target_symbol_colour = MFD_COLOUR1;
 	}
@@ -4428,25 +4446,33 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
 		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
+		set_rgb_colour (MFD_COLOUR7,   96, 96, 96, 255);
+
 		if (tsd_render_palette == 0)
 		{
+			set_rgb_colour (MFD_COLOUR8,    48, 48, 48, 255);
 			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
-		}	
+		}
 		else
 		if (tsd_render_palette == 1)
 		{
+		//VJ 030511 treat enemy colours as cheat and make optional in eech.ini
+			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
 			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
-		}	
+		}
 		else
 		{
+		//VJ 030511 treat enemy colours as cheat and make optional in eech.ini
+			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
 			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
-		}	
+		}
 
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
-			
+
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
 	}
-	
+
 	////////////////////////////////////////
 	//
 	// contour map
@@ -4697,7 +4723,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 				if (!get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER))
 				{
 					if (source_side != get_local_entity_int_value (target, INT_TYPE_SIDE))
-					{  				      
+					{
 						threat_type = get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
 
 						if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA))
@@ -4710,7 +4736,11 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
 //VJ 030423 TSD render mod, enemy of comanche so red
-							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
+//VJ 030511 TSD render mod, enemy optional in eech.ini
+							if (command_line_tsd_enemy_colours)
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
+							else				
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
 						}
 					}
 				}
@@ -5230,7 +5260,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 		}
 	}
 
-//VJ 030423 TSD render mod	
+//VJ 030423 TSD render mod
 	set_rgb_colour (MFD_COLOUR1,              0, 255,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,              0, 200,   0, 255);
 	set_rgb_colour (MFD_COLOUR3,              0, 176,   0, 255);
@@ -11516,7 +11546,7 @@ void initialise_comanche_mfd (void)
 //VJ 030423 TSd render mod
 
    Initialise_TSD_render_terrain();
-   
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
