@@ -122,7 +122,7 @@ void initialise_memory_totals ( void )
 
 	initial_total_memory_available = physical_memory_available + virtual_memory_available;
 
-#elsif LINUX
+#elif LINUX
 
 	struct sysinfo sinfo;
 
@@ -172,7 +172,7 @@ void report_memory_totals ( char *string )
 	debug_log ( "Total Virtual memory: %d", status.dwTotalPageFile );
 	debug_log ( "Virtual memory available: %d", status.dwAvailPageFile );
 
-#elsif LINUX
+#elif LINUX
 
 	// NOTE: This requires the new sysinfo structure only available in Linux 2.3.23 (i386), 2.3.48 (all architectures)
 
