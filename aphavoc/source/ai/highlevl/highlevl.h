@@ -92,7 +92,11 @@ extern void ai_log (char *string, ...);
 
 #else
 
+#ifdef WIN32
 #define ai_log();
+#else
+#define ai_log(a, x...) do { } while(0);
+#endif
 
 #endif
 
