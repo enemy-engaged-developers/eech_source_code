@@ -580,7 +580,8 @@ void update_virtual_cockpit_view (void)
 	// trackir only works with mousepanning enabled AND the naturalpoint window
 	// loaded BEFORE EECH is started !
 
-	if (command_line_mouse_look == FALSE)	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
+	if ((command_line_mouse_look == MOUSELOOK_OFF)||	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
+		(command_line_mouse_look == MOUSELOOK_EXTERNAL))
 	{	
 		if (command_line_joylook_joystick_index != -1) // Jabberwock 030311 Joystick look
 		{
@@ -639,11 +640,10 @@ void update_virtual_cockpit_view (void)
 	}
 	else	// Use mouse/TIR, all by Retro 030317, 030318
 	{
-		float temp_p, temp_h;
-		extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
-		extern int getPitch ( void );
-		extern int getYaw ( void );
-		
+		float
+			temp_p,
+			temp_h;
+	
 		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
 		{									// ..this also means it´s NOT possible to use TIR in relative mode !!
 			temp_h = get_absolute_mouse_x ();

@@ -530,10 +530,12 @@ static void load_scout_weapons_event (event *ev)
 }
 
 // Jabberwock 030930 FLIR mouse control
+// Retro 27Nov2004 - new mouselook enum
 
 static void mouse_next_target_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		single_target_acquisition_system_select_next_target_key++;
 	}
@@ -542,7 +544,8 @@ static void mouse_next_target_event (event *ev)
 
 static void mouse_lock_target_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		toggle_comanche_lock_target ();
 	}
@@ -550,7 +553,8 @@ static void mouse_lock_target_event (event *ev)
 
 static void mouse_left_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		mouse_move_left++;
 	}
@@ -558,7 +562,8 @@ static void mouse_left_event (event *ev)
 	
 static void mouse_right_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		mouse_move_right++;
 	}
@@ -566,7 +571,8 @@ static void mouse_right_event (event *ev)
 
 static void mouse_up_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		mouse_move_down++;
 	}
@@ -574,7 +580,8 @@ static void mouse_up_event (event *ev)
 
 static void mouse_down_event (event *ev)
 {
-	if ((command_line_mouse_look == FALSE) || (query_TIR_active() == TRUE))
+	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
+		(query_TIR_active() == TRUE))
 	{
 		mouse_move_up++;
 	}
@@ -597,13 +604,14 @@ static void mouse_wheel_up_event (event *ev)
 
 static void mouselook_toggle (event *ev)
 {
-	if (command_line_mouse_look)
+	// Retro 27Nov2004 - FIXME: cycle through all modes ?
+	if (command_line_mouse_look != MOUSELOOK_OFF)
 	{
-		command_line_mouse_look = FALSE;
+		command_line_mouse_look = MOUSELOOK_OFF;
 	}
 	else
 	{
-		command_line_mouse_look = TRUE;		
+		command_line_mouse_look = MOUSELOOK_ON;		
 	}
 }
 

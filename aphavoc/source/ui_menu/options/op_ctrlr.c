@@ -126,6 +126,7 @@ static unsigned char
 	*option_throttle_text[2],
 	*option_pedal_text[2],
 	*option_boolean_text[2],
+	*option_mouselook_text[MOUSELOOK_MAX],	// Retro 27Nov2004
 	*no_joystick_text;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -619,8 +620,6 @@ void notify_show_controller_page (void)
 
 #else	// Retro 10Jul2004
 
-	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
-
 	// cyclic x/y
 
 	if (command_line_cyclic_joystick_index != -1)
@@ -804,17 +803,17 @@ void notify_show_controller_page (void)
 	}
 
 	// mouselook
-
-	set_ui_object_text (mouselook_option_button, option_boolean_text [command_line_mouse_look]);
+	// Retro 27Nov2004 - may be either OFF-INTERNAL-EXTERNAL-ON (both)
+	set_ui_object_text (mouselook_option_button, option_mouselook_text [command_line_mouse_look]);
 
 	// trackIR (depending on mouselook)
 
 	if (query_TIR_active() == TRUE)
 	{
-		if (command_line_mouse_look == TRUE)
-			set_ui_object_text (trackir_option_button, "Running");
+		if (command_line_mouse_look != MOUSELOOK_OFF)
+			set_ui_object_text (trackir_option_button, get_trans ("Running") );
 		else
-			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+			set_ui_object_text (trackir_option_button, get_trans ("Enable Mouselook") );
 	}
 	else
 		set_ui_object_text (trackir_option_button, option_boolean_text [0]);	// nailed to FALSE for now
@@ -881,6 +880,13 @@ void define_options_screen_controller_page_objects (void)
 	
 	option_boolean_text [0] = get_trans ("Off");
 	option_boolean_text [1] = get_trans ("On");
+
+	// Retro 27Nov2004
+	option_mouselook_text[MOUSELOOK_OFF] = get_trans("Off");
+	option_mouselook_text[MOUSELOOK_INTERNAL] = get_trans("Internal");
+	option_mouselook_text[MOUSELOOK_EXTERNAL] = get_trans("External");
+	option_mouselook_text[MOUSELOOK_ON] = get_trans("On");
+	// Retro 27Nov2004 end
 
 	/////////////////////////////////////////////////////////////////
 	// Controller Area
@@ -2887,10 +2893,11 @@ void notify_joylook_x_option_button ( ui_object *obj, void *arg )
 	}
 
 	// mouselook would override joystick look, so deactivate that
-	if ((command_line_mouse_look == TRUE)&&(command_line_joylook_joystick_index != -1))
+	if ((command_line_mouse_look != MOUSELOOK_OFF)&&(command_line_joylook_joystick_index != -1))
 	{
-		command_line_mouse_look = FALSE;
-		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		command_line_mouse_look = MOUSELOOK_OFF;
+//		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		set_ui_object_text (mouselook_option_button, option_mouselook_text [command_line_mouse_look]);
 		setTrackIRButton (FALSE);
 	}
 
@@ -2922,10 +2929,11 @@ void notify_joylook_x_option_button_right ( ui_object *obj, void *arg )	// Retro
 	}
 
 	// mouselook would override joystick look, so deactivate that
-	if ((command_line_mouse_look == TRUE)&&(command_line_joylook_joystick_index != -1))
+	if ((command_line_mouse_look != MOUSELOOK_OFF)&&(command_line_joylook_joystick_index != -1))
 	{
-		command_line_mouse_look = FALSE;
-		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		command_line_mouse_look = MOUSELOOK_OFF;
+//		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		set_ui_object_text (mouselook_option_button, option_mouselook_text [command_line_mouse_look]);
 		setTrackIRButton (FALSE);
 	}
 
@@ -2980,14 +2988,12 @@ void notify_joylook_y_option_button_right ( ui_object *obj, void *arg )	// Retro
 
 void setTrackIRButton ( int selection )
 {
-	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
-
 #if 0
 	if (selection == TRUE)	// set to ON
 	{
 		if (query_TIR_active () == TRUE)
 		{
-			set_ui_object_text (trackir_option_button, "Running");
+			set_ui_object_text (trackir_option_button, get_trans ("Running") ) ;
 		}
 		else
 			set_ui_object_text (trackir_option_button, option_boolean_text [0]);
@@ -2996,7 +3002,7 @@ void setTrackIRButton ( int selection )
 	{
 		if (query_TIR_active () == TRUE)
 		{
-			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+			set_ui_object_text (trackir_option_button, get_trans ("Enable Mouselook") );
 		}
 		else
 			set_ui_object_text (trackir_option_button, option_boolean_text [0]);
@@ -3005,9 +3011,9 @@ void setTrackIRButton ( int selection )
 	if (query_TIR_active() == TRUE)
 	{
 		if (selection == TRUE)
-			set_ui_object_text (trackir_option_button, "Running");
+			set_ui_object_text (trackir_option_button, get_trans ("Running") );
 		else
-			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+			set_ui_object_text (trackir_option_button, get_trans ("Enable Mouselook") );
 	}
 	else
 		set_ui_object_text (trackir_option_button, option_boolean_text [0]);
@@ -3020,10 +3026,9 @@ void setTrackIRButton ( int selection )
 
 void notify_mouselook_option_button ( ui_object *obj, void *arg )
 {
+#if 0
 	int
 		selection;
-
-	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
 
 	selection = !command_line_mouse_look;
 
@@ -3048,7 +3053,29 @@ void notify_mouselook_option_button ( ui_object *obj, void *arg )
 		setTrackIRButton (FALSE);
 
 	set_ui_object_text (mouselook_option_button, option_boolean_text [selection]);
+#else
+	command_line_mouse_look++;
+	command_line_mouse_look %= MOUSELOOK_MAX;
 
+	if (command_line_mouse_look != MOUSELOOK_OFF)
+	{
+		set_ui_object_text (joylook_x_option_button, option_joystick_text[0]);
+		set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+
+		setAxisUnused(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
+		setAxisUnused(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
+
+		command_line_joylook_joystick_index = -1;
+		command_line_joylookv_joystick_axis = -1;
+		command_line_joylookh_joystick_axis = -1;
+
+		setTrackIRButton (TRUE);
+	}
+	else
+		setTrackIRButton (FALSE);
+
+	set_ui_object_text (mouselook_option_button, option_mouselook_text [command_line_mouse_look]);
+#endif
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
