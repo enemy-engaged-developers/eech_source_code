@@ -1,0 +1,741 @@
+// 
+// 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
+// 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
+// 	 677 High Road, North Finchley, London N12 0DA
+// 
+// 	 Please see the document LICENSE.TXT for the full licence agreement
+// 
+// 2. LICENCE
+//  2.1 	
+//  	Subject to the provisions of this Agreement we now grant to you the 
+//  	following rights in respect of the Source Code:
+//   2.1.1 
+//   	the non-exclusive right to Exploit  the Source Code and Executable 
+//   	Code on any medium; and 
+//   2.1.2 
+//   	the non-exclusive right to create and distribute Derivative Works.
+//  2.2 	
+//  	Subject to the provisions of this Agreement we now grant you the
+// 	following rights in respect of the Object Code:
+//   2.2.1 
+// 	the non-exclusive right to Exploit the Object Code on the same
+// 	terms and conditions set out in clause 3, provided that any
+// 	distribution is done so on the terms of this Agreement and is
+// 	accompanied by the Source Code and Executable Code (as
+// 	applicable).
+// 
+// 3. GENERAL OBLIGATIONS
+//  3.1 
+//  	In consideration of the licence granted in clause 2.1 you now agree:
+//   3.1.1 
+// 	that when you distribute the Source Code or Executable Code or
+// 	any Derivative Works to Recipients you will also include the
+// 	terms of this Agreement;
+//   3.1.2 
+// 	that when you make the Source Code, Executable Code or any
+// 	Derivative Works ("Materials") available to download, you will
+// 	ensure that Recipients must accept the terms of this Agreement
+// 	before being allowed to download such Materials;
+//   3.1.3 
+// 	that by Exploiting the Source Code or Executable Code you may
+// 	not impose any further restrictions on a Recipient's subsequent
+// 	Exploitation of the Source Code or Executable Code other than
+// 	those contained in the terms and conditions of this Agreement;
+//   3.1.4 
+// 	not (and not to allow any third party) to profit or make any
+// 	charge for the Source Code, or Executable Code, any
+// 	Exploitation of the Source Code or Executable Code, or for any
+// 	Derivative Works;
+//   3.1.5 
+// 	not to place any restrictions on the operability of the Source 
+// 	Code;
+//   3.1.6 
+// 	to attach prominent notices to any Derivative Works stating
+// 	that you have changed the Source Code or Executable Code and to
+// 	include the details anddate of such change; and
+//   3.1.7 
+//   	not to Exploit the Source Code or Executable Code otherwise than
+// 	as expressly permitted by  this Agreement.
+// 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "3d.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+texture_animation_information
+	texture_animations[] = 
+	{
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_COPTER_DIGIT_000,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_001,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_002,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_003,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_004,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_005,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_006,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_007,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_008,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_COPTER_DIGIT_000,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_001,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_002,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_003,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_004,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_005,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_006,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_007,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_008,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_COPTER_DIGIT_000,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_001,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_002,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_003,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_004,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_005,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_006,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_007,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_008,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_COPTER_DIGIT_000,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_001,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_002,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_003,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_004,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_005,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_006,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_007,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_008,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_COPTER_DIGIT_000,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_001,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_002,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_003,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_004,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_005,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_006,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_007,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_008,
+					TEXTURE_INDEX_USA_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_000,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_001,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_002,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_003,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_004,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_005,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_006,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_007,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_008,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_000,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_001,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_002,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_003,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_004,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_005,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_006,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_007,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_008,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_000,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_001,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_002,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_003,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_004,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_005,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_006,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_007,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_008,
+					TEXTURE_INDEX_CIS_COPTER_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_AC_DIGIT_000,
+					TEXTURE_INDEX_USA_AC_DIGIT_001,
+					TEXTURE_INDEX_USA_AC_DIGIT_002,
+					TEXTURE_INDEX_USA_AC_DIGIT_003,
+					TEXTURE_INDEX_USA_AC_DIGIT_004,
+					TEXTURE_INDEX_USA_AC_DIGIT_005,
+					TEXTURE_INDEX_USA_AC_DIGIT_006,
+					TEXTURE_INDEX_USA_AC_DIGIT_007,
+					TEXTURE_INDEX_USA_AC_DIGIT_008,
+					TEXTURE_INDEX_USA_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_AC_DIGIT_000,
+					TEXTURE_INDEX_USA_AC_DIGIT_001,
+					TEXTURE_INDEX_USA_AC_DIGIT_002,
+					TEXTURE_INDEX_USA_AC_DIGIT_003,
+					TEXTURE_INDEX_USA_AC_DIGIT_004,
+					TEXTURE_INDEX_USA_AC_DIGIT_005,
+					TEXTURE_INDEX_USA_AC_DIGIT_006,
+					TEXTURE_INDEX_USA_AC_DIGIT_007,
+					TEXTURE_INDEX_USA_AC_DIGIT_008,
+					TEXTURE_INDEX_USA_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_AC_DIGIT_000,
+					TEXTURE_INDEX_CIS_AC_DIGIT_001,
+					TEXTURE_INDEX_CIS_AC_DIGIT_002,
+					TEXTURE_INDEX_CIS_AC_DIGIT_003,
+					TEXTURE_INDEX_CIS_AC_DIGIT_004,
+					TEXTURE_INDEX_CIS_AC_DIGIT_005,
+					TEXTURE_INDEX_CIS_AC_DIGIT_006,
+					TEXTURE_INDEX_CIS_AC_DIGIT_007,
+					TEXTURE_INDEX_CIS_AC_DIGIT_008,
+					TEXTURE_INDEX_CIS_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_AC_DIGIT_000,
+					TEXTURE_INDEX_CIS_AC_DIGIT_001,
+					TEXTURE_INDEX_CIS_AC_DIGIT_002,
+					TEXTURE_INDEX_CIS_AC_DIGIT_003,
+					TEXTURE_INDEX_CIS_AC_DIGIT_004,
+					TEXTURE_INDEX_CIS_AC_DIGIT_005,
+					TEXTURE_INDEX_CIS_AC_DIGIT_006,
+					TEXTURE_INDEX_CIS_AC_DIGIT_007,
+					TEXTURE_INDEX_CIS_AC_DIGIT_008,
+					TEXTURE_INDEX_CIS_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA2_AC_DIGIT_000,
+					TEXTURE_INDEX_USA2_AC_DIGIT_001,
+					TEXTURE_INDEX_USA2_AC_DIGIT_002,
+					TEXTURE_INDEX_USA2_AC_DIGIT_003,
+					TEXTURE_INDEX_USA2_AC_DIGIT_004,
+					TEXTURE_INDEX_USA2_AC_DIGIT_005,
+					TEXTURE_INDEX_USA2_AC_DIGIT_006,
+					TEXTURE_INDEX_USA2_AC_DIGIT_007,
+					TEXTURE_INDEX_USA2_AC_DIGIT_008,
+					TEXTURE_INDEX_USA2_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA2_AC_DIGIT_000,
+					TEXTURE_INDEX_USA2_AC_DIGIT_001,
+					TEXTURE_INDEX_USA2_AC_DIGIT_002,
+					TEXTURE_INDEX_USA2_AC_DIGIT_003,
+					TEXTURE_INDEX_USA2_AC_DIGIT_004,
+					TEXTURE_INDEX_USA2_AC_DIGIT_005,
+					TEXTURE_INDEX_USA2_AC_DIGIT_006,
+					TEXTURE_INDEX_USA2_AC_DIGIT_007,
+					TEXTURE_INDEX_USA2_AC_DIGIT_008,
+					TEXTURE_INDEX_USA2_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA2_AC_DIGIT_000,
+					TEXTURE_INDEX_USA2_AC_DIGIT_001,
+					TEXTURE_INDEX_USA2_AC_DIGIT_002,
+					TEXTURE_INDEX_USA2_AC_DIGIT_003,
+					TEXTURE_INDEX_USA2_AC_DIGIT_004,
+					TEXTURE_INDEX_USA2_AC_DIGIT_005,
+					TEXTURE_INDEX_USA2_AC_DIGIT_006,
+					TEXTURE_INDEX_USA2_AC_DIGIT_007,
+					TEXTURE_INDEX_USA2_AC_DIGIT_008,
+					TEXTURE_INDEX_USA2_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA2_AC_DIGIT_000,
+					TEXTURE_INDEX_USA2_AC_DIGIT_001,
+					TEXTURE_INDEX_USA2_AC_DIGIT_002,
+					TEXTURE_INDEX_USA2_AC_DIGIT_003,
+					TEXTURE_INDEX_USA2_AC_DIGIT_004,
+					TEXTURE_INDEX_USA2_AC_DIGIT_005,
+					TEXTURE_INDEX_USA2_AC_DIGIT_006,
+					TEXTURE_INDEX_USA2_AC_DIGIT_007,
+					TEXTURE_INDEX_USA2_AC_DIGIT_008,
+					TEXTURE_INDEX_USA2_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA2_AC_DIGIT_000,
+					TEXTURE_INDEX_USA2_AC_DIGIT_001,
+					TEXTURE_INDEX_USA2_AC_DIGIT_002,
+					TEXTURE_INDEX_USA2_AC_DIGIT_003,
+					TEXTURE_INDEX_USA2_AC_DIGIT_004,
+					TEXTURE_INDEX_USA2_AC_DIGIT_005,
+					TEXTURE_INDEX_USA2_AC_DIGIT_006,
+					TEXTURE_INDEX_USA2_AC_DIGIT_007,
+					TEXTURE_INDEX_USA2_AC_DIGIT_008,
+					TEXTURE_INDEX_USA2_AC_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_000,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_001,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_002,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_003,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_004,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_005,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_006,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_007,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_008,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_000,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_001,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_002,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_003,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_004,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_005,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_006,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_007,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_008,
+					TEXTURE_INDEX_CIS_BLUE_DIGIT_009
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_ADDITIVE_SMOKE_TRAIL001
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_CANNON_FLARE001
+			}
+		},
+
+		{
+
+			6, 0,
+			{
+					TEXTURE_INDEX_BOMB_C001,
+					TEXTURE_INDEX_BOMB_C002,
+					TEXTURE_INDEX_BOMB_C003,
+					TEXTURE_INDEX_BOMB_C004,
+					TEXTURE_INDEX_BOMB_C005,
+					TEXTURE_INDEX_BOMB_C006
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_FLARE001
+			}
+		},
+
+		{
+
+			5, 0,
+			{
+					TEXTURE_INDEX_GUN001,
+					TEXTURE_INDEX_GUN002,
+					TEXTURE_INDEX_GUN003,
+					TEXTURE_INDEX_GUN004,
+					TEXTURE_INDEX_GUN005
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_GUN_FLARE001
+			}
+		},
+
+		{
+
+			4, 0,
+			{
+					TEXTURE_INDEX_GUN_SMOKE001,
+					TEXTURE_INDEX_GUN_SMOKE002,
+					TEXTURE_INDEX_GUN_SMOKE003,
+					TEXTURE_INDEX_GUN_SMOKE004
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_GUN_SMOKE_FRONT001
+			}
+		},
+
+		{
+
+			3, 0,
+			{
+					TEXTURE_INDEX_LIGHTNING001,
+					TEXTURE_INDEX_LIGHTNING002,
+					TEXTURE_INDEX_LIGHTNING003
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_MISSILE_FLARE001
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_SHIP_WAKE001
+			}
+		},
+
+		{
+
+			5, 0,
+			{
+					TEXTURE_INDEX_SMOKE001,
+					TEXTURE_INDEX_SMOKE002,
+					TEXTURE_INDEX_SMOKE003,
+					TEXTURE_INDEX_SMOKE004,
+					TEXTURE_INDEX_SMOKE005
+			}
+		},
+
+		{
+
+			1, 0,
+			{
+					TEXTURE_INDEX_SMOKE_TRAIL001
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_NAVY_000,
+					TEXTURE_INDEX_USA_NAVY_001,
+					TEXTURE_INDEX_USA_NAVY_002,
+					TEXTURE_INDEX_USA_NAVY_003,
+					TEXTURE_INDEX_USA_NAVY_004,
+					TEXTURE_INDEX_USA_NAVY_005,
+					TEXTURE_INDEX_USA_NAVY_006,
+					TEXTURE_INDEX_USA_NAVY_007,
+					TEXTURE_INDEX_USA_NAVY_008,
+					TEXTURE_INDEX_USA_NAVY_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_NAVY_000,
+					TEXTURE_INDEX_USA_NAVY_001,
+					TEXTURE_INDEX_USA_NAVY_002,
+					TEXTURE_INDEX_USA_NAVY_003,
+					TEXTURE_INDEX_USA_NAVY_004,
+					TEXTURE_INDEX_USA_NAVY_005,
+					TEXTURE_INDEX_USA_NAVY_006,
+					TEXTURE_INDEX_USA_NAVY_007,
+					TEXTURE_INDEX_USA_NAVY_008,
+					TEXTURE_INDEX_USA_NAVY_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_NAVY_000,
+					TEXTURE_INDEX_USA_NAVY_001,
+					TEXTURE_INDEX_USA_NAVY_002,
+					TEXTURE_INDEX_USA_NAVY_003,
+					TEXTURE_INDEX_USA_NAVY_004,
+					TEXTURE_INDEX_USA_NAVY_005,
+					TEXTURE_INDEX_USA_NAVY_006,
+					TEXTURE_INDEX_USA_NAVY_007,
+					TEXTURE_INDEX_USA_NAVY_008,
+					TEXTURE_INDEX_USA_NAVY_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_PENNANT_000,
+					TEXTURE_INDEX_CIS_PENNANT_001,
+					TEXTURE_INDEX_CIS_PENNANT_002,
+					TEXTURE_INDEX_CIS_PENNANT_003,
+					TEXTURE_INDEX_CIS_PENNANT_004,
+					TEXTURE_INDEX_CIS_PENNANT_005,
+					TEXTURE_INDEX_CIS_PENNANT_006,
+					TEXTURE_INDEX_CIS_PENNANT_007,
+					TEXTURE_INDEX_CIS_PENNANT_008,
+					TEXTURE_INDEX_CIS_PENNANT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_PENNANT_000,
+					TEXTURE_INDEX_CIS_PENNANT_001,
+					TEXTURE_INDEX_CIS_PENNANT_002,
+					TEXTURE_INDEX_CIS_PENNANT_003,
+					TEXTURE_INDEX_CIS_PENNANT_004,
+					TEXTURE_INDEX_CIS_PENNANT_005,
+					TEXTURE_INDEX_CIS_PENNANT_006,
+					TEXTURE_INDEX_CIS_PENNANT_007,
+					TEXTURE_INDEX_CIS_PENNANT_008,
+					TEXTURE_INDEX_CIS_PENNANT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_PENNANT_000,
+					TEXTURE_INDEX_CIS_PENNANT_001,
+					TEXTURE_INDEX_CIS_PENNANT_002,
+					TEXTURE_INDEX_CIS_PENNANT_003,
+					TEXTURE_INDEX_CIS_PENNANT_004,
+					TEXTURE_INDEX_CIS_PENNANT_005,
+					TEXTURE_INDEX_CIS_PENNANT_006,
+					TEXTURE_INDEX_CIS_PENNANT_007,
+					TEXTURE_INDEX_CIS_PENNANT_008,
+					TEXTURE_INDEX_CIS_PENNANT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_TANK_DIGIT_000,
+					TEXTURE_INDEX_USA_TANK_DIGIT_001,
+					TEXTURE_INDEX_USA_TANK_DIGIT_002,
+					TEXTURE_INDEX_USA_TANK_DIGIT_003,
+					TEXTURE_INDEX_USA_TANK_DIGIT_004,
+					TEXTURE_INDEX_USA_TANK_DIGIT_005,
+					TEXTURE_INDEX_USA_TANK_DIGIT_006,
+					TEXTURE_INDEX_USA_TANK_DIGIT_007,
+					TEXTURE_INDEX_USA_TANK_DIGIT_008,
+					TEXTURE_INDEX_USA_TANK_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_TANK_DIGIT_000,
+					TEXTURE_INDEX_USA_TANK_DIGIT_001,
+					TEXTURE_INDEX_USA_TANK_DIGIT_002,
+					TEXTURE_INDEX_USA_TANK_DIGIT_003,
+					TEXTURE_INDEX_USA_TANK_DIGIT_004,
+					TEXTURE_INDEX_USA_TANK_DIGIT_005,
+					TEXTURE_INDEX_USA_TANK_DIGIT_006,
+					TEXTURE_INDEX_USA_TANK_DIGIT_007,
+					TEXTURE_INDEX_USA_TANK_DIGIT_008,
+					TEXTURE_INDEX_USA_TANK_DIGIT_009
+			}
+		},
+
+		{
+
+			3, 0,
+			{
+					TEXTURE_INDEX_TRAK0001,
+					TEXTURE_INDEX_TRAK0002,
+					TEXTURE_INDEX_TRAK0003
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_TANK_DIGIT_000,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_001,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_002,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_003,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_004,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_005,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_006,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_007,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_008,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_TANK_DIGIT_000,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_001,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_002,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_003,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_004,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_005,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_006,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_007,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_008,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_CIS_TANK_DIGIT_000,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_001,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_002,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_003,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_004,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_005,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_006,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_007,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_008,
+					TEXTURE_INDEX_CIS_TANK_DIGIT_009
+			}
+		},
+
+		{
+
+			10, 0,
+			{
+					TEXTURE_INDEX_USA_TANK_DIGIT_000,
+					TEXTURE_INDEX_USA_TANK_DIGIT_001,
+					TEXTURE_INDEX_USA_TANK_DIGIT_002,
+					TEXTURE_INDEX_USA_TANK_DIGIT_003,
+					TEXTURE_INDEX_USA_TANK_DIGIT_004,
+					TEXTURE_INDEX_USA_TANK_DIGIT_005,
+					TEXTURE_INDEX_USA_TANK_DIGIT_006,
+					TEXTURE_INDEX_USA_TANK_DIGIT_007,
+					TEXTURE_INDEX_USA_TANK_DIGIT_008,
+					TEXTURE_INDEX_USA_TANK_DIGIT_009
+			}
+		},
+
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
