@@ -1,0 +1,100 @@
+List of changes and major differences between the versions
+==========================================================
+
+(please keep this up to date)
+
+Current version: 161W ongoing
+
+	Fly_Any_Aircraft error when using GWUT-files fixed 
+	MP-changes in the following files:
+	Changes are made so that the process Validate_Connection ALWAYS removes a player, no matter how he left. 
+	mission.c-------------Player_Leave is outcommented. Validate_Connection takes care of the removal
+	commsserver.c-------Process Validate_Connection changed so it's active only when the game runs as host
+	flight.c----------------Pauseserver changed so Validate_Connection is active even when the game is paused, otherwise the last client leaving would not be removed
+	directp.c--------------Process Direct_play_Player_Leave_Group outcommented. leaving the removal to Validate_Connection
+	
+	It's crucial that the host runs with cvc=1
+	
+Fixes/features in 1.6.0w15
+
+	Default values of cpac, cgs, cpds changed 
+	Comanche loadout-error in GWUT fixed 
+
+Fixes/features in 1.6.0W14
+
+	Some bugs of 1.6.0W13 fixed 
+	Advanced flight model, should bring the helicopter closer to (assumed) reality :) 
+	Designated target list 
+	Able to read new style WUT files (Gotcha's GWUT tool) 
+
+Fixes/features in 1.6.0W13:
+
+	More changes in the MP-code 
+	Session filter, if active it will suppress any host that runs a map  you don’t have 
+	Session filter buggy 
+	Satellite view inactive 
+
+Fixes/features in 1.6.0W12: 
+
+	Changes in the MP server code 
+	Full TrackIR support 
+	Mouse controlled FLIR 
+	Cockpit inset window 
+	Campaign commander in map screen 
+	Sattelite view (in cockpit and in map window) 
+	Mouse controlled map screen (zoom, panning) 
+	Configurable radar ranges and cannon ammo amount 
+	Blackhawk and Hind returned to not flyable w/o faa=1 
+	AH64-A and KA50 added as configurable choppers. Install the payload screens (see above) 
+
+Fixes/features in 1.6.0W10,11: 
+
+	Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select and off you go (you can't choose it from the mission or group list since it has no task). 
+	Blackhawk and Hind flyable, regardless of the faa-setting in eech.ini. 
+	Blackhawk and Hind loadout configuration enabled. 
+	W11 is possibly more stable in MP. 
+
+Fixes/features in 1.6.0W9: 
+
+	In-game multiplayer server browser 
+	Ability to limit the number of players in a multiplayer game (default is 4) 
+	New realistic looking moving map display (elevation colours or relief) 
+	High-resolution MFD's 
+	The Comanche and Apache FLIR displays are now black&white. 
+	Thicker downwash effect 
+	CBAR values works for EECH campaigns now (they previously only worked for EEAH campaign) 
+	"tab-2" CTD fix 
+
+Fixes/features in 1.6.0W8: 
+
+	TrackIR included 
+	Joystick mappable, rudder pedals included 
+	Multiplayer more or less stable 
+
+Fixes/features in 1.6.0W7: 
+
+	Multiplayer is sort of stable 
+	downwash fixes, and a hack that allows multiplayer at the cost of the client's downwash effect 
+	experimental multiplayer "fix" that should result in more stable games. 
+	dual-redundant masterserver ping. 
+	primary and secondary masterserver ini settings & command line options work. New default values added. 
+	Fly any aircraft fixes. 
+	Please reset your .INI file if you created one. 
+
+Fixes/features in 1.6.0W6: 
+
+	random task assignments that mess up the gameplay fixed 
+	small eech.ini fixes that caused crashes (please remake eech.ini) 
+	keyboard behaviour back to normal 
+	TrackIR not included 
+	multiplayer buggy 
+
+Fixes/features in 1.6.0W5: 
+
+	"eech.ini" use included 
+	downwash effect included 
+	TrackIR not included 
+	multiplayer buggy 
+
+1.6.0W0-1.6.0W4: 
+	undocumented test releases 
