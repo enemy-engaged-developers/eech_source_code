@@ -1,448 +1,463 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<title>EECH readme</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
+  <head>
+    <title>EECH Community Release Version 1.6.0W#</title>
+  </head>
 
-<body>
-<table border="0" cellpadding="0" cellspacing="0">
-  <tr> 
-    <td width="630" height="2837" valign="top"> <h2><font face="Verdana, Arial, Helvetica, sans-serif">EECH 
-        Community Release Version 1.6.0W#</font></h2>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Build Date: 
-        __/__/__</font></p>
-      <p align="left">=============================================================================</p>
-      <p align="center"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">THIS 
-        IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS <br>
-        BACKUP YOUR EXISTING COHOKUM.EXE BEFORE USING THIS FILE</font></p>
-      <p align="left">=============================================================================</p>
-      <p align="left"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">This 
-        file is a summary of the new features provided with this release of COHOKUM.EXE. 
-        This document was mostly taken from the Wiki at the EECH DevZone (<a href="http://eech.bollocks.net.nz" target="_blank">http://eech.bollocks.net.nz</a>). 
-        Further information about the EECH Community Development Program and new 
-        releases of COHOKUM.EXE are available from that website.</font></p>
-      <h3 align="left"><font face="Verdana, Arial, Helvetica, sans-serif">Contents</font></h3>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif" align="left"><a href="#installation" target="_top">Installation</a></font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><a href="#bugs" target="_self">Bugs</a></font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><a href="#new" target="_self">What's 
-          new in EECH</a></font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><a href="#versions" target="_self">Source 
-          code and version numbers</a></font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><a href="#history" target="_self">History</a></font></li>
-      </ul>
-      <p align="left">&nbsp;</p>
-      <h3><font face="Verdana, Arial, Helvetica, sans-serif"><a name="installation"></a>INSTALLATION</font></h3>
-      <font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> Simply copy 
-      the file cohokum.exe into your /razorwroks/cohokum directory. You may want 
-      to rename your old cohokum.exe to save it.</font> 
-      <h3><font face="Verdana, Arial, Helvetica, sans-serif"><a name="bugs"></a>BUGS</font></h3>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> This versions 
-        seems to be pretty stable, both as single and multiplayer. If you find 
-        any bugs/odd behaviour please report them at one of the forums:<br>
-        <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30</a><br>
-        <a href="http://forum.biohazcentral.com/viewforum.php?f=42" target="_blank">http://forum.biohazcentral.com/viewforum.php?f=42</a><br>
-        <a href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&forumid=27" target="_blank">http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27</a></font></p>
-      <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Note: two infamous 
-      bugs have been more or less solved: the &quot;FARP&quot; bug that caused 
-      helicopters to cue at landing pads, and the &quot;double mouse&quot; bug.</font> 
-      <h3><font face="Verdana, Arial, Helvetica, sans-serif"><a name="new"></a>What 
-        's NEW in EECH ?</font></h3>
-      <table width="100%" border="1" mm_noconvert="TRUE">
-        <tr> 
-          <td height="35"> <h5><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong><em>eech.ini 
-              parameter </em></strong></font></h5></td>
-          <td><h5><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong><em>Description</em></strong></font></h5></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Downwash 
-              effect</font></h6></td>
-        </tr>
-        <tr> 
-          <td height="32"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">dwash=1</font></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">rotor 
-              downwash (dust) effect. It makes you see clouds of dust when the 
-              chopper gets close to the ground! (default =1, on)</font></p></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Mouselook 
-                and TrackIR support </strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td width="42%" height="202"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">msl=0<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">msls=15</font></p></td>
-          <td width="58%"><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">You 
-              can now control you view using the mouse or by using TrackIR. The 
-              TrackIR support uses enhanced mode which means that you will not 
-              have to bother about centering you view all the time. A check will 
-              be made for a TrackIR upon startup, and if it is found it will be 
-              used to control the view. Otherwise the mouse is used. (default 
-              = 0, off)</font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Pressing 
-              the left mouse button will recenter the view to forward. </font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">You 
-              can set the speed of the mouselookwich should be a value greater 
-              than 0 (default = 15). </font></p></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Field 
-                of View </strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="84"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">minfov=20<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">maxfov=80</font></p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              user can specify different field-of-view values, which can be activated 
-              by the '7','8' and '9' keys. 7 switches min FOV, 8 switches to (fixed) 
-              standard FOV, 8 switched to wide FOV. Please note that higher FOVs 
-              currently mean lower LODs. </font></p></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>FLIR 
-                panning and zoom </strong> (Comanche only)</font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="429"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">eopann=-1 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">eopanv=6 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">eopanh=8 
-              </font></p>
-            <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">eozoomn=-1 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">eozoomax=7 
-              </font><br>
-            </p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">You 
-              can now use joystick axis to pan the FLIR display. You specify the 
-              joystick number and which axis to use for this feature. </font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              old FLIR code only allowed three levels of zoom. This code has been 
-              updated to support any zoom levels. When using the keyboard, you 
-              still use the same keys to zoom, but you now have 5 levels instead. 
-              If you have an extra joystick axis available you can map one of 
-              them to the zoom and using for zooming. </font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">DirectX 
-              numbers and names:<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">1 
-              &nbsp;X-axis <br>
-              2 &nbsp;Y-axis <br>
-              3 &nbsp;Z-axis <br>
-              4 &nbsp;rx-axis <br>
-              5 &nbsp;ry-axis <br>
-              6 &nbsp;rz-axis <br>
-              7 &nbsp;slider 1<br>
-              8 &nbsp;slider 2</font> </p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Numbers 
-              and names for the Saitek X36usb/X45:<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">X 
-              Axis - DX axis: X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
-              Y Axis - DX axis: Y &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
-              Throttle - DX axis: Slider0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7<br>
-              Rudder - DX axis: Rz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6<br>
-              Rotary1 - DX axis: Slider1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8<br>
-              Rotary2 - DX axis: Rx &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4<br>
-              </font></p></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Mappable 
-                joystick axes</font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="169"> <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">cyclicn=-1<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">cyclich=1 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">cyclicv=2 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><br>
-              collectiven=-1<br>
-              </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">collectiveax=3 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><br>
-              </font> <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">ruddern=-1 
-              </font><br>
-              <font size="-1" face="Verdana, Arial, Helvetica, sans-serif">rudderax=6 
-              </font><br>
-            </p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">You 
-              can now choose exactly which joystick and which axis on that joystick 
-              that should be used for cyclic, collective and throttle. <br>
-              </font></p></td>
-        </tr>
-        <tr> 
-          <td colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Ground 
-                stabilised FLIR (Comanche only)</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="36"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">grstab=1</font></p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              Comanche now supports ground stabilisation for the FLIR. You toggle 
-              this feature in flight using Control-S.</font></p></td>
-        </tr>
-        <tr> 
-          <td height="20" colspan="2"> <h6 align="left"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Infantry</strong></font></h6></td>
-        </tr>
-        <tr> 
-          <td height="52"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">radarinf=1</font><br>
-            </p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Infantry 
-              does not show up on ground radar anymore <br>
-              Infantry can never be seen on the ground radar now. Default = 1 
-              (on). To restore set to 0. </font></p></td>
-        </tr>
-        <tr> 
-          <td height="20" colspan="2"> <h6 align="left"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Fly 
-              any aircraft</strong></font></h6></td>
-        </tr>
-        <tr> 
-          <td height="50"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">faa:1</font></p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fly 
-              any aircraft: all helicopters available now for the user. Fly your 
-              own insertions. The cockpit defaults to the Apache when choosing 
-              anything else than CHAH (default = on)</font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Wideview 
-                cockpit</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="36"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">commanche 
-              pilot=<em>x,y,z</em><br>
-              commanche co-pilot=<em>x,y,z</em><br>
-              hokum pilot=<em>x,y,z</em><br>
-              hokum co-pilot=<em>x,y,z</em><br>
-              apache pilot=<em>x,y,z</em><br>
-              havoc pilot=<em>x,y,z</em></font><br>
-            </p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Retreating 
-              the pilots head causes the player to have a wider field of view 
-              without distortion. No more F1 / F2 pressing! The values can be 
-              edited by pressing Ctrl-\ in the game and using the numpad keys 
-              to move the viewpoint: 4 and 6 distance to dashboard; 2 and 8 vertical; 
-              1 and 3 horizontal. Alt-\ quits editing and saves the values in 
-              the eech.ini file. (Note: the file widemod.cfg is no longer needed). 
-              </font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Note: 
-              for some keyboards the keys are not Ctrl-\ and Alt-\ but something 
-              else. You just have to try for yourself on the right hand side of 
-              the keyboard. For more info: <a href="http://home.planet.nl/%7Ejette073">http://home.planet.nl/~jette073</a></font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>WUT</strong></font></h6></td>
-        </tr>
-        <tr> 
-          <td height="20" class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">wut=<em>[filename]</em></font></td>
-          <td height="20"> <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">WUT 
-              = Weapons and Units Tweaker by DeStRo (Daniel Blazevic) <a href="http://www.aplus.ba/dblazev/wut/" target="_blank">http://www.aplus.ba/dblazev/wut/</a>, 
-              a program to tweak loadout and behaviour of all 'entities' in the 
-              game. Most multiplayer games are done with <em>wut 1.5.1D</em> a 
-              series of reality tweaks that make life nice and difficult in EECH. 
-              With the WUT program you can save all your tweaks in a text file. 
-              The name of this file can be added to the eech.ini (e.g. 151_D.txt). 
-              More info here: <a href="http://home.planet.nl/%7Ejette073">http://home.planet.nl/~jette073</a></font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>eech.ini</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="22" class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">automatically 
-            generated at startup</font></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">All 
-              game parameters (command line) in one file with a short description. 
-              You can edit the parameter values if you leave a blank space between 
-              a value and the comment '#'.</font></p></td>
-        </tr>
-        <tr> 
-          <td height="20" colspan="2"> <h6 align="left"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Fly 
-              any aircraft</strong></font></h6></td>
-        </tr>
-        <tr> 
-          <td height="50"> <p class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">faa=1</font></p></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fly 
-              any aircraft: all helicopters available now for the user. Fly your 
-              own insertions. The loadout is correct for the helicopter type but 
-              unchangeable. The cockpit defaults to the Apache when choosing anything 
-              else than C-H-A-H, default = 1 (on)</font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Show 
-                framerate</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="36" class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">dfr=0</font></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              framerate is displayed in the top left corner and updates about 
-              once a second. The average of 30 readings is shown for stability. 
-              Values: 0 = off; 1 = on; 2 write the framerate to a file framerate,txt 
-              in the cohokum directory</font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>Multiplayer 
-                master server</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="36" class="code"><br></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">At 
-              <a href="http://hox.dhs.org/eech">http://hox.dhs.org/eech</a> there 
-              is a masterserver for EECH, listing all running games along with 
-              total players and IP addresses. EECH versions newer than 1.6.0W1 
-              report to the masterserver if you play a game with Networking set 
-              to TCP/IP in the options menu. To join a game, just copy&amp;paste 
-              an active IP from the serverlist into GSS (Ground Support System) 
-              or EECH itself. </font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>High 
-                resolution MFD</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="52" class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">highresmfd=0</font><br></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              resolution of the Comanche and Hokum MFD's will be doubled. Remember 
-              that there is a small framerate hit when activating this feature. 
-              </font></p></td>
-        </tr>
-        <tr> 
-          <td height="22" colspan="2"><div align="left"> 
-              <h6><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"><strong>TSD 
-                render mod</strong></font></h6>
-            </div></td>
-        </tr>
-        <tr> 
-          <td height="295" class="code"><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">tsdrender=1 
-            <br>
-            tsdpalette=2<br>
-            tsdenemy=0 </font><br></td>
-          <td><p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">This 
-              mod adds a relief map background to the TSD of the Comanche, Hokum 
-              and Apache (the Havoc is not included yet). </font><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The 
-              map is shown as elevation colours in several colour palettes: green/yellow/brownish 
-              colours and water is blue. The maximum elevation of the map is used 
-              to scale the colours. Shaded relief is also added as an option. 
-              </font></p>
-            <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">- 
-              The Apache now has the same TSD as the Comanche. <br>
-              - Optional: the friendlies and enemies are shown in red and blue 
-              colours (including detection circles of SAMs). If you don't want 
-              this option set the eech.ini variable &quot;tsdenemy&quot; to 0. 
-              <br>
-              - The configuration is automatically saved in the eech.ini file 
-              when you leave the game. <br>
-              Pressing Ctrl-D (as in Declutter) cycles through the options: old 
-              TSD screen, the terrain map with/without contours, shaded relief 
-              with/without contours. Alt-D cycles through a 3 colour palettes. 
-              </font></p></td>
-        </tr>
-      </table>
-      <h3>&nbsp;</h3>
-      <h3><font face="Verdana, Arial, Helvetica, sans-serif"><a name="versions"></a>SOURCE 
-        CODE and VERSION NUMBERS </font></h3>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> If you 
-        want to give the source code a try you can find all the necessary details 
-        at the EECH DevZone: <a href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>. 
-        You can aslo subscribe (free) to a developers mailing list.</font></p>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">The versions 
-          are named as follows: for instance 1.6.0W8 means </font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">1 = major 
-          version (will probably never change)</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> 6 = 
-          data version, was officially 4, then the weapons and units tweaks created 
-          a version 5 and the source code version has been called 6</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> 0 = 
-          minor version number, currently at 0, will be chnaged to 1 when the 
-          first stable version is released</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> W = 
-          build type: 'C' is commercial; 'X' means experimental release, 'W' compiled 
-          with Watcom Open Source, 'V' means compiled with Visual C</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> 8 = 
-          developers number</font></li>
-      </ul>
-      <h3><a name="history"></a><font face="Verdana, Arial, Helvetica, sans-serif">History</font></h3>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fixes/features 
-        in 1.6.0W8</font></p>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">TrackIR 
-          included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Joystick 
-          mappable, rudder pedals included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Multiplayer 
-          more or less stable</font></li>
-      </ul>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fixes/features 
-        in 1.6.0W7: </font></p>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> Multiplayer 
-          is sort of stable</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">downwash 
-          fixes, and a hack that allows multiplayer at the cost of the client's 
-          downwash effect</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">experimental 
-          multiplayer &quot;fix&quot; that should result in more stable games.</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> dual-redundant 
-          masterserver ping.</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> primary 
-          and secondary masterserver ini settings &amp; command line options work. 
-          New default values added.</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> Fly 
-          any aircraft fixes.</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Please 
-          reset your .INI file if you created one. </font></li>
-      </ul>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fixes/features 
-        in 1.6.0W6:</font></p>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">random 
-          task assignments that mess up the gameplay fixed</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif"> small 
-          eech.ini fixes that caused crashes (please remake eech.ini)</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">keyboard 
-          behaviour back to normal</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">TrackIR 
-          not included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">multiplayer 
-          buggy</font></li>
-      </ul>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">Fixes/features 
-        in 1.6.0W5:</font></p>
-      <ul>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">&quot;eech.ini&quot; 
-          use included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">downwash 
-          effect included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">TrackIR 
-          not included</font></li>
-        <li><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">multiplayer 
-          buggy</font></li>
-      </ul>
-      <p><font size="-1" face="Verdana, Arial, Helvetica, sans-serif">1.6.0W0-1.6.0W4: 
-        undocumented test releases</font></p>
-      <p>&nbsp;</p></td>
-  </tr>
-  <tr> 
-    <td width="630" height="1" valign="top"><img src="transparent.gif" alt="" width="630" height="1"></td>
-  </tr>
-</table>
-</body>
+  <body>
+    <h1>EECH Community Release Version 1.6.0W#</h1>
+
+    <hr>
+    
+    <div align="center">
+      THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
+      BACKUP YOUR EXISTING COHOKUM.EXE BEFORE USING THIS FILE
+    </div>
+
+    <hr>
+
+    <p>
+      This file is a summary of the new features provided with this
+      release of COHOKUM.EXE. This document was mostly taken from the
+      Wiki at the EECH DevZone (<a href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>). Further
+      information about the EECH Community Development Program and new
+      releases of COHOKUM.EXE are available from that website.
+    </p>
+
+    <h2>Contents</h2>
+
+    <ul>
+      <li><a href="#installation">Installation</a>
+      <li><a href="#bugs">Bugs</a>
+      <li><a href="#whatsnew">Whats new in EECH</a>
+      <li><a href="#sourceandversion">Source code and version
+	  numbers</a>
+      <li><a href="#history">History</a>
+    </ul>
+
+    <a name="installation"></a>
+    <h2>INSTALLATION</h2>
+
+    <p>
+      Simply copy the file cohokum.exe into your /razorwroks/cohokum
+      directory. You may want to rename your old cohokum.exe to save
+      it.
+    </p>
+
+    <a name="bugs"></a>
+    <h2>BUGS</h2>
+
+    <p>
+       This versions seems to be pretty stable, both as single and
+      multiplayer. If you find any bugs/odd behaviour please report
+      them at one of the forums:<br>
+      <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30">http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30</a><br>
+      <a href="http://forum.biohazcentral.com/viewforum.php?f=42">http://forum.biohazcentral.com/viewforum.php?f=42</a>
+      <a href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&forumid=27">http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&forumid=27</a>
+    </p>
+
+    <p>
+      Note: two infamous bugs have been more or less solved: the "FARP" bug
+      that caused helicopters to cue at landing pads, and the "double
+      mouse" bug.
+    </p>
+
+    <a name="whatsnew"></a>
+    <h2>What's NEW in EECH?</h2>
+
+    <table border="1">
+	<tr>
+	  <th align="left">eech.ini parameter</th>
+	  <th align="left">Description</th>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">Downwash effect</th>
+	</tr>
+
+	<tr>
+	  <td>dwash=1</td>
+	  <td>
+	    rotor downwash (dust) effect. It makes you see clouds of
+	    dust when the chopper gets close to the ground!
+	    (default=1, on)
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Mouselook and TrackIR support
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    msl=0<br>
+	    msls=15
+	  </td>
+	  <td>
+	    You can now control you view using the mouse or by using
+	    TrackIR. The TrackIR support uses enhanced mode which
+	    means that you will not have to bother about centering you
+	    view all the time. A check will be made for a TrackIR upon
+	    startup, and if it is found it will be used to control the
+	    view. Otherwise the mouse is used. (default = 0, off)
+
+	    <p>
+	      Pressing the left mouse button will recenter the view to
+	      forward.
+
+	    <p>
+	      You can set the speed of the mouselookwich should be a
+	      value greater than 0 (default = 15).
+ 	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">Field of view</th>
+	</tr>
+
+	<tr>
+	  <td>
+	    minfov=20<br>
+	    maxfov=80
+	  </td>
+	  <td>
+	    The user can specify different field-of-view values, which
+	    can be activated by the '7','8' and '9' keys. 7 switches
+	    min FOV, 8 switches to (fixed) standard FOV, 8 switched to
+	    wide FOV. Please note that higher FOVs currently mean
+	    lower LODs.
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    FLIR panning and zoom  (Comanche and Hokum only)
+	  <th>
+	</tr>
+
+	<tr>
+	  <td>
+	    eopann=-1<br>
+	    eopanv=6<br>
+	    eopanh=8
+	    <p>
+	      eozoomn=-1<br>
+	      eozoomax=7
+	  </td>
+	  <td>
+	    You can now use joystick axis to pan the FLIR display. You
+	    specify the joystick number and which axis to use for this
+	    feature.
+
+	    <p>
+	      The old FLIR code only allowed three levels of
+	      zoom. This code has been updated to support any zoom
+	      levels. When using the keyboard, you still use the same
+	      keys to zoom, but you now have 5 levels instead. If you
+	      have an extra joystick axis available you can map one of
+	      them to the zoom and using for zooming.
+
+	    <p>
+	      DirectX numbers and names:<br>
+	      1  X-axis<br>
+	      2  Y-axis<br>
+	      3  Z-axis<br>
+	      4  rx-axis<br>
+	      5  ry-axis<br>
+	      6  rz-axis<br>
+	      7  slider 1<br>
+	      8  slider 2<br>
+
+	    <p>
+	      Numbers and names for the Saitek X36usb/X45:
+	      X Axis - DX axis: X - 1
+	      Y Axis - DX axis: Y - 2
+	      Throttle - DX axis: Slider0 - 7
+	      Rudder - DX axis: Rz - 6
+	      Rotary1 - DX axis: Slider1 - 8
+	      Rotary2 - DX axis: Rx - 4
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Mappable joystick axes
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    cyclicn=-1<br>
+	    cyclich=1<br>
+	    cyclicv=2
+
+	    <p>
+	      collectiven=-1<br>
+	      collectiveax=3
+
+	    <p>
+	      ruddern=-1<br>
+	      rudderax=6
+	  </td>
+	  <td>
+	    You can now choose exactly which joystick and which axis
+	    on that joystick that should be used for cyclic,
+	    collective and throttle.
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Ground stabilised FLIR (Comanche only)
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    grstab=1
+	  </td>
+	  <td>
+	    The Comanche now supports ground stabilisation for the
+	    FLIR. You toggle this feature in flight using Control-S.
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Fly any aircraft
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    faa=1
+	  </td>
+	  <td>
+	    Fly any aircraft: all helicopters available now for the
+	    user. Fly your own insertions. The cockpit defaults to the
+	    Apache when choosing anything else than CHAH (default =
+	    on)
+	  </td>
+	</tr>
+
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Wideview cockpit
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    commanche pilot=x,y,z<br>
+	    commanche co-pilot=x,y,z<br>
+	    hokum pilot=x,y,z<br>
+	    hokum co-pilot=x,y,z<br>
+	    apache pilot=x,y,z<br>
+	    havoc pilot=x,y,z
+	  </td>
+	  <td>
+	    Retreating the pilots head causes the player to have a
+	    wider field of view without distortion. No more F1 / F2
+	    pressing! The values can be edited by pressing Ctrl-\ in
+	    the game and using the numpad keys to move the viewpoint:
+	    4 and 6 distance to dashboard; 2 and 8 vertical; 1 and 3
+	    horizontal. Alt-\ quits editing and saves the values in
+	    the eech.ini file. (Note: the file widemod.cfg is no
+	    longer needed).
+
+	    <p>
+	      Note: for some keyboards the keys are not Ctrl-\ and Alt-\ but
+	      something else. You just have to try for yourself on the
+	      right hand side of the keyboard. For more info:
+	      <a href="http://home.planet.nl/~jette073">http://home.planet.nl/~jette073</a>
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    WUT
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    wut=[filename]
+	  </td>
+	  <td>
+	    WUT = Weapons and Units Tweaker by DeStRo (Daniel
+	    Blazevic) http://www.aplus.ba/dblazev/wut/, a program to
+	    tweak loadout and behaviour of all 'entities' in the
+	    game. Most multiplayer games are done with wut 1.5.1D a
+	    series of reality tweaks that make life nice and difficult
+	    in EECH. With the WUT program you can save all your tweaks
+	    in a text file. The name of this file can be added to the
+	    eech.ini (e.g. 151_D.txt). More info here:
+	    <a href="http://home.planet.nl/~jette073">http://home.planet.nl/~jette073</a>
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">Show framerate</th>
+	</tr>
+
+	<tr>
+	  <td>
+	    dfr=0
+	  </td>
+	  <td>
+	    The framerate is displayed in the top left corner and
+	    updates about once a second. The average of 30 readings is
+	    shown for stability. Values: 0 = off; 1 = on; 2 write the
+	    framerate to a file framerate,txt in the cohokum directory
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    Multiplayer master server
+	  </th>
+	</tr>
+
+	<tr>
+	  <td></td>
+	  <td>
+	    At <a href="http://hox.dhs.org/eech">http://hox.dhs.org/eech</a>
+	    there is a masterserver for
+	    EECH, listing all running games along with total players
+	    and IP addresses. EECH versions newer than 1.6.0W1 report
+	    to the masterserver if you play a game with Networking set
+	    to TCP/IP in the options menu. To join a game, just
+	    copy&paste an active IP from the serverlist into GSS
+	    (Ground Support System) or EECH itself.
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    High resolution MFD
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    highresmfd=0
+	  </td>
+	  <td>
+	    The resolution of the Comanche and Hokum MFD's will be
+	    doubled. Remember that there is a small framerate hit when
+	    activating this feature.
+	  </td>
+	</tr>
+
+	<tr>
+	  <th align="left" colspan="2">
+	    TSD render mod
+	  </th>
+	</tr>
+
+	<tr>
+	  <td>
+	    tsdrender=1<br>
+	    tsdpalette=2<br>
+	    tsdenemy=0 
+	  </td>
+	  <td>
+	    This mod adds a relief map background to the TSD of the
+	    Comanche, Hokum and Apache (the Havoc is not included
+	    yet). The map is shown as elevation colours in several
+	    colour palettes: green/yellow/brownish colours and water
+	    is blue. The maximum elevation of the map is used to scale
+	    the colours. Shaded relief is also added as an option.
+
+	    <p>
+	    <ul>
+	      <li>The Apache now has the same TSD as the Comanche.
+	      <li>Optional: the friendlies and enemies are shown in red
+	      and blue colours (including detection circles of
+	      SAMs). If you don't want this option set the eech.ini
+	      variable "tsdenemy" to 0.
+	      <li>The configuration is automatically saved in the
+		eech.ini file when you leave the game.
+	    </ul>
+
+	    Pressing Ctrl-D (as in Declutter) cycles through the
+	    options: old TSD screen, the terrain map with/without
+	    contours, shaded relief with/without contours. Alt-D
+	    cycles through a 3 colour palettes.
+	  </td>
+	</tr>
+
+    </table>
+
+    <a name="sourceandversion"></a>
+    <h2>SOURCE CODE and VERSION NUMBERS</h2>
+
+    <p>
+      If you want to give the source code a try you can find all the
+      necessary details at the EECH DevZone:
+      <a href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>.
+      You can aslo subscribe (free) to a
+      developers mailing list.
+    </p>
+
+    <a name="history"></a>
+    <h2>History</h2>
+
+    <p>
+      Fixes/features in 1.6.0W8:
+    </p>
+
+    <ul>
+      <li>TrackIR included
+      <li>Joystick mappable, rudder pedals included
+      <li>Multiplayer more or less stable
+    </ul>
+
+    <p>
+      Fixes/features in 1.6.0W7:
+    </p>
+
+    <ul>
+      <li>Multiplayer is sort of stable
+      <li>downwash fixes, and a hack that allows multiplayer at the
+	cost of the client's downwash effect
+      <li>experimental multiplayer "fix" that should result in more stable games.
+      <li>dual-redundant masterserver ping.
+      <li>primary and secondary masterserver ini settings & command
+	line options work. New default values added.
+      <li>Fly any aircraft fixes.
+      <li>Please reset your .INI file if you created one.
+    </ul>
+
+    <p>
+      Fixes/features in 1.6.0W6:
+    </p>
+
+    <ul>
+      <li>random task assignments that mess up the gameplay fixed
+      <li>small eech.ini fixes that caused crashes (please remake eech.ini)
+      <li>keyboard behaviour back to normal
+      <li>TrackIR not included
+      <li>multiplayer buggy
+    </ul>
+
+    <p>
+      Fixes/features in 1.6.0W5:
+    </p>
+
+    <ul>
+      <li>"eech.ini" use included
+      <li>downwash effect included
+      <li>TrackIR not included
+      <li>multiplayer buggy
+    </ul>
+
+    <p>
+      1.6.0W0-1.6.0W4: undocumented test releases
+    </p>
+      
+  </body>
 </html>
