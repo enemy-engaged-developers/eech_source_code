@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 //VJ 030429 TSD render mod
 // common functions used by all choppers
@@ -75,18 +75,19 @@
 static rgb_colour
 		terrain_colour[3][33];
 
-static int 
+static int
 	draw_large_mfd;
 
 static int
 	contour_spacing,
 	contour_samples;
-	
+
 //VJ 030424 TSD render mod default to on
 #define OPTIMISE_CONTOURS	1
 
 #define OPTIMISE_PATHS		1
 
+#define DEBUG_ASPECT 0
 
 #if OPTIMISE_CONTOURS
 static int
@@ -96,7 +97,15 @@ static int
 
 
 #define colour_base 32
-#define colour_scale(a) min(colour_base,(int)(colour_base*a/elevation_factor)+1);			   	   			   
+#define colour_scale(a)    min(colour_base,(int)(colour_base*a/elevation_factor)+1)
+#define get_terrain_colour(a, c, f) if (terrain_elev > 0)\
+			   								{\
+			   									a = terrain_colour[tsd_render_palette][c];\
+													a.r *= f; a.g *= f; a.b *= f;\
+												}\
+			   								else\
+			   									a = terrain_colour[tsd_render_palette][0]
+
 
 #define TSD_ASE_RANGE_2000		((float) 2000.0)
 #define TSD_ASE_RANGE_5000		((float) 5000.0)
@@ -131,20 +140,21 @@ void set_tsd_colours(void)
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
 		set_rgb_colour (MFD_COLOUR5,   0, 128,   192, 255);
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
-	
+
 		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
 		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
+
 if (tsd_render_palette == 1)
 {
 		set_rgb_colour (MFD_ROAD_COLOUR,        96,96,96, 255);
-}		
+}
 else
 {
 		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,132, 255);
 		//set_rgb_colour (MFD_ROAD_COLOUR,        248,248,248, 255);
-}		
+}
 		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +173,7 @@ void reset_tsd_colours(void)
 	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
 	set_rgb_colour (MFD_ROAD_COLOUR,        255, 200,   0, 255);
 	set_rgb_colour (clear_mfd_colour,        255,255,255,0);
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,11 +182,11 @@ void reset_tsd_colours(void)
 void Initialise_TSD_render_terrain(void)
 {
 	draw_large_mfd = TRUE;
-	
+
 	set_tsd_colours();
-	
-	set_rgb_colour(terrain_colour[0][0],100, 150, 240, 255); 
-//colours as atlas: green yellow red white, strong	
+
+	set_rgb_colour(terrain_colour[0][0],100, 150, 240, 255);
+//colours as atlas: green yellow red white, strong
 	set_rgb_colour(terrain_colour[0][1],89,152,41,255);
 	set_rgb_colour(terrain_colour[0][2],93,142,41,255);
 	set_rgb_colour(terrain_colour[0][3],97,132,41,255);
@@ -210,8 +220,8 @@ void Initialise_TSD_render_terrain(void)
 	set_rgb_colour(terrain_colour[0][31],176,162,148,255);
 	set_rgb_colour(terrain_colour[0][32],184,174,163,255);
 
-//yellow to brown		
-	set_rgb_colour(terrain_colour[1][0],100, 150, 240, 255); 
+//yellow to brown
+	set_rgb_colour(terrain_colour[1][0],100, 150, 240, 255);
 	set_rgb_colour(terrain_colour[1][1],254,230,175,255);
 	set_rgb_colour(terrain_colour[1][2],254,231,170,255);
 	set_rgb_colour(terrain_colour[1][3],254,232,165,255);
@@ -243,8 +253,8 @@ void Initialise_TSD_render_terrain(void)
 	set_rgb_colour(terrain_colour[1][29],143,76,43,255);
 	set_rgb_colour(terrain_colour[1][30],125,65,34,255);
 	set_rgb_colour(terrain_colour[1][31],106,53,23,255);
-	set_rgb_colour(terrain_colour[1][32],86,42,12,255);	
-	                                                  
+	set_rgb_colour(terrain_colour[1][32],86,42,12,255);
+
 //colours as atlas but washed
 	set_rgb_colour(terrain_colour[2][32],90,59,27,255);
 	set_rgb_colour(terrain_colour[2][31],105,59,27,255);
@@ -278,9 +288,9 @@ void Initialise_TSD_render_terrain(void)
 	set_rgb_colour(terrain_colour[2][3],88,177,142,255);
 	set_rgb_colour(terrain_colour[2][2],65,170,130,255);
 	set_rgb_colour(terrain_colour[2][1],42,162,114,255);
-	set_rgb_colour(terrain_colour[2][0],100, 150, 240, 255); 
+	set_rgb_colour(terrain_colour[2][0],100, 150, 240, 255);
 
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -826,6 +836,61 @@ static void draw_path_lines
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030511 added a simple shader based on the aspect of a gridcell
+float get_aspect(float z1, float z2, float z3, float z4)
+{
+//z1, z2 in x direction, z3, z4 in z direction
+	float _b, _c, aspect, asp_corr;
+
+   if (tsd_render_mode != TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE &&
+	   tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE)
+	return (1.0);
+
+	// dx/dy = horizontal derivative
+	_b = z3+z4 - (z1+z2);
+	// dz/dy = vertical derivative
+	_c = z2+z4 - (z1+z3);
+	aspect = (_c != 0 ? atan(_b/_c): 0);   //y/x
+	if (_b <= 0 && _c <= 0)  asp_corr =   4.7124;//270/360*(6.2832);
+	if (_b > 0 && _c <= 0)  asp_corr =  -1.5708;//-90/360*(6.2832);
+	if (_b <= 0 && _c > 0)  asp_corr =  -4.7124;//-270/360*(6.2832);
+	if (_b > 0 && _c > 0)  asp_corr =   1.5708;//90/360*(6.2832);
+	// simple shader
+	aspect = 0.6+0.2*(cos(aspect+asp_corr)+1);
+	return (aspect);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* VJ 030511 not used, for debug!
+float get_aspect_tri(float z1, float z2, float z3, float z4)
+{
+//z1, z2 in x direction, z3, z4 in z direction
+	float _b, _c, aspect, asp_corr;
+
+   if (tsd_render_mode != TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE &&
+	   tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE)
+	return (1.0);
+
+	// dx/dy = horizontal derivative
+	_b = z2-z1;
+	// dz/dy = vertical derivative
+	_c = z4-z3;
+	aspect = (_c != 0 ? atan(_b/_c): 0);   //y/x
+	if (_b <= 0 && _c <= 0)  asp_corr =   4.7124;//270/360*(6.2832);
+	if (_b > 0 && _c <= 0)  asp_corr =  -1.5708;//-90/360*(6.2832);
+	if (_b <= 0 && _c > 0)  asp_corr =  -4.7124;//-270/360*(6.2832);
+	if (_b > 0 && _c > 0)  asp_corr =   1.5708;//90/360*(6.2832);
+	// simple shader
+	aspect = 0.6+0.2*(cos(aspect+asp_corr)+1);
+	return (aspect);
+}
+*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading)
 {
@@ -858,22 +923,21 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		*this_row_ptr,
 		*next_row_ptr,
 		*this_row_start_ptr,
-		*next_row_start_ptr;
-		
+		*next_row_start_ptr,
+		*aspectrow,
+		*old_aspectrow;
 
-		float 
+		float
 			terrain_elev=0,
          elevation_factor=terrain_3d_map_maximum_height*0.97;
-         
-		rgb_colour 
+
+		rgb_colour
 			terrain_col;
 
-      int step = 1;
+      int step = 1, aspect_index, nr_aspect_steps;
       int stepmask;
 
 	ASSERT (position);
-
-
 
 
 	//
@@ -896,7 +960,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	//
 
 	radius = range + terrain_3d_simple_elevation_x_grid_size + terrain_3d_simple_elevation_z_grid_size;
-	
+
 	x_min = x_mid - radius;
 	z_min = z_mid - radius;
 
@@ -952,7 +1016,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	}
 
 	if ((x_min_index < x_max_index) && (z_min_index < z_max_index))
-	{		
+	{
 		this_row_start_ptr = &terrain_3d_simple_elevation_grid[(z_min_index * terrain_3d_simple_elevation_width) + x_min_index];
 
 		row_add_on = terrain_3d_simple_elevation_width * step;
@@ -968,9 +1032,14 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		dz0 = dz_start;
 		dz1 = dz_start + dz_grid;
 
+		//VJ 030511 store shade of pixels above and to the left for averaging
+		nr_aspect_steps = (int)((z_max_index-z_min_index)/dz_grid);
+		aspectrow = (float*)malloc(sizeof(float)*nr_aspect_steps);
+		old_aspectrow = (float*)malloc(sizeof(float)*nr_aspect_steps);
+
 		for (z_index = z_min_index; z_index < z_max_index; z_index += step)
-		{			
-			float mid_x, mid_z, mid_y;			
+		{
+			float mid_x, mid_z, mid_y, mid_yz;
 
 			dx0 = dx_start;
 			dx1 = dx_start + dx_grid;
@@ -980,66 +1049,100 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			this_row_ptr = this_row_start_ptr;
 			next_row_ptr = next_row_start_ptr;
 
+	      aspect_index = 0;
 			for (x_index = x_min_index; x_index < x_max_index; x_index += step)
 			{
-				int c = 0;		
-				
+				int c = 0;
+				float aspect=1.0, old_aspect_x=1.0;
+
+				//VJ 030511 aspect is in fact a shade factor beteen 0.6 and 1.0
+				aspect = get_aspect(this_row_ptr[0],this_row_ptr[1],next_row_ptr[0],next_row_ptr[1]);
+			   if (x_index > x_min_index && z_index == z_min_index)
+            {
+            	aspect = (aspect+old_aspect_x)/2.0;
+            }
+			   if (z_index > z_min_index && z_index > z_min_index)
+            {
+            	aspect = (aspect+old_aspect_x+old_aspectrow[aspect_index]+old_aspectrow[aspect_index-1])/4.0;
+            }
+            #if DEBUG_ASPECT
+					terrain_col.r = (int)(aspect*255);
+					terrain_col.g = (int)(aspect*255);
+					terrain_col.b = 0;//(int)aspect*255;
+					terrain_col.a = 255;
+			   	draw_2d_filled_triangle (dx0,dz0,dx0,dz1,dx1,dz1,terrain_col);
+			   	draw_2d_filled_triangle (dx0,dz0,dx1,dz1,dx1,dz0,terrain_col);
+			   #endif
+
+
 				mid_x = 0.5*(dx0+dx1);
 			   mid_y = (this_row_ptr[0]+this_row_ptr[1]+next_row_ptr[0]+next_row_ptr[1])/4.0;
-
-			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+mid_y)/3.0;			   
+			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
-			   else
-			   	terrain_col = terrain_colour[tsd_render_palette][0];
+			   mid_yz = (this_row_ptr[0]+this_row_ptr[1])/2.0;
+//				aspect = get_aspect_tri(this_row_ptr[0],this_row_ptr[1],mid_yz,mid_y);
+		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,mid_x,mid_z,dx1,dz0,terrain_col);
-			                                                                 
-			   terrain_elev = (this_row_ptr[1]+next_row_ptr[1]+mid_y)/3.0;   
+
+			   terrain_elev = (this_row_ptr[1]+next_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
-			   else
-			   	terrain_col = terrain_colour[tsd_render_palette][0];
+			   mid_yz = (this_row_ptr[1]+next_row_ptr[1])/2.0;
+//				aspect = get_aspect_tri(mid_y,mid_yz,this_row_ptr[1],next_row_ptr[1]);
+		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx1,dz0,mid_x,mid_z,dx1,dz1,terrain_col);
-                                                                          
-			   terrain_elev = (this_row_ptr[0]+next_row_ptr[0]+mid_y)/3.0;   
+
+			   terrain_elev = (this_row_ptr[0]+next_row_ptr[0]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
-			   else
-			   	terrain_col = terrain_colour[tsd_render_palette][0];
+			   mid_yz = (this_row_ptr[0]+next_row_ptr[0])/2.0;
+//				aspect = get_aspect_tri(mid_yz,mid_y,this_row_ptr[0],next_row_ptr[0]);
+		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,dx0,dz1,mid_x,mid_z,terrain_col);
-                                                                          
-			   terrain_elev = (next_row_ptr[0]+next_row_ptr[1]+mid_y)/3.0;   
+
+			   terrain_elev = (next_row_ptr[0]+next_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
-			   else
-			   	terrain_col = terrain_colour[tsd_render_palette][0];
-			   draw_2d_filled_triangle (dx0,dz1,dx1,dz1,mid_x,mid_z,terrain_col);			   
-			                                                                                       
-				//                                  
-				// next column                      
-				//                                  
-                                                
-				dx0 += dx_grid;                     
-				dx1 += dx_grid;                     
-                                                
-				this_row_ptr += step;                  
-				next_row_ptr += step;                  
-			}                                      
-                                                
-			//                                     
-			// next row                            
-			//                                     
-                                                
-			dz0 += dz_grid;                        
-			dz1 += dz_grid;                        
+			   mid_yz = (next_row_ptr[0]+next_row_ptr[1])/2.0;
+//				aspect = get_aspect_tri(next_row_ptr[0],next_row_ptr[1],mid_y,mid_yz);
+		   	get_terrain_colour(terrain_col, c, aspect);
+			   draw_2d_filled_triangle (dx0,dz1,dx1,dz1,mid_x,mid_z,terrain_col);
+
+				//
+				// next column
+				//
+
+				dx0 += dx_grid;
+				dx1 += dx_grid;
+
+				this_row_ptr += step;
+				next_row_ptr += step;
+
+				//
+				// save old aspect for averaging
+				//
+            old_aspect_x = aspect;            
+				aspectrow[aspect_index] = aspect;
+			}
+
+			for (aspect_index = 0; aspect_index < nr_aspect_steps; aspect_index++)
+				old_aspectrow[aspect_index] = aspectrow[aspect_index];
+			// copy all the old stuff	
+
+			//
+			// next row
+			//
+
+			dz0 += dz_grid;
+			dz1 += dz_grid;
 
 			this_row_start_ptr += row_add_on;
 			next_row_start_ptr += row_add_on;
 		}
+
+		//VJ 030511 free rows
+		free(aspectrow);
+		aspectrow = NULL;
+		free(old_aspectrow);
+		old_aspectrow = NULL;
+
 	}
 
 	set_2d_window_rotation (mfd_env, 0.0);
@@ -1102,7 +1205,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 
 	if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
 	  reset_tsd_colours();
-	else  
+	else
 	  set_tsd_colours();
 
 	//
@@ -1232,7 +1335,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 
 		contour_spacing = 100;
 	}
-	
+
 	////////////////////////////////////////
 	else if (range == TSD_ASE_RANGE_25000)
 	////////////////////////////////////////
@@ -1256,7 +1359,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 
 		contour_spacing = 250;
 	}
-	
+
 	////////////////////////////////////////
 	else
 	///////////////////////////////////////
@@ -1264,130 +1367,130 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 		debug_fatal ("Unknown TSD/ASE range %.2f", range);
 	}
 	//VJ 030423 TSD render mod
-	if (tsd_render_mode != TSD_RENDER_RELIEF_MODE)
-	{	
-	
+	if (tsd_render_mode != TSD_RENDER_RELIEF_MODE && tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE)
+	{
+
 		contour_spacing /= contour_samples;
-	
+
 		contour_granularity_mask = ~(contour_granularity - 1);
-	
+
 		//
 		// scan map
 		//
-	
+
 		x_min_index &= contour_granularity_mask;
 		z_min_index &= contour_granularity_mask;
-	
+
 		x_max_index += contour_granularity - 1;
 		z_max_index += contour_granularity - 1;
-	
+
 		x_max_index &= contour_granularity_mask;
 		z_max_index &= contour_granularity_mask;
-	
+
 		if (x_max_index >= terrain_3d_simple_elevation_width)
 		{
 			x_max_index = terrain_3d_simple_elevation_width & contour_granularity_mask;
 		}
-	
+
 		if (z_max_index >= terrain_3d_simple_elevation_height)
 		{
 			z_max_index = terrain_3d_simple_elevation_height & contour_granularity_mask;
 		}
-	
+
 		if ((x_min_index < x_max_index) && (z_min_index < z_max_index))
-		{		
+		{
 			this_row_start_ptr = &terrain_3d_simple_elevation_grid[(z_min_index * terrain_3d_simple_elevation_width) + x_min_index];
-	
+
 			row_add_on = terrain_3d_simple_elevation_width * contour_granularity;
-	
+
 			next_row_start_ptr = this_row_start_ptr + row_add_on;
-	
+
 			dx_start = ((((float) x_min_index) * terrain_3d_simple_elevation_x_grid_size) - x_mid) * scale;
 			dz_start = ((((float) z_min_index) * terrain_3d_simple_elevation_z_grid_size) - z_mid) * scale;
-	
+
 			dx_grid = terrain_3d_simple_elevation_x_grid_size * (float) contour_granularity * scale;
 			dz_grid = terrain_3d_simple_elevation_z_grid_size * (float) contour_granularity * scale;
-	
+
 			dz0 = dz_start;
 			dz1 = dz_start + dz_grid;
-	
+
 			for (z_index = z_min_index; z_index < z_max_index; z_index += contour_granularity)
-			{			
+			{
 				dx0 = dx_start;
 				dx1 = dx_start + dx_grid;
-	
+
 				this_row_ptr = this_row_start_ptr;
 				next_row_ptr = next_row_start_ptr;
-	
+
 				for (x_index = x_min_index; x_index < x_max_index; x_index += contour_granularity)
 				{
 					//
 					// offset [z=0][x=0]
 					//
-	
+
 					p1.x = dx0;
 					p1.y = this_row_ptr[0];
 					p1.z = dz0;
-	
+
 					//
 					// offset [z=0][x=1]
 					//
-	
+
 					p2.x = dx1;
 					p2.y = this_row_ptr[contour_granularity];
 					p2.z = dz0;
-	
+
 					//
 					// offset [z=1][x=0]
 					//
-	
+
 					p3.x = dx0;
 					p3.y = next_row_ptr[0];
 					p3.z = dz1;
-	
-	            
+
+
 					draw_contour_lines (&p1, &p2, &p3);
-	
+
 					//
 					// offset [z=1][x=1]
 					//
-	
+
 					p1.x = dx1;
 					p1.y = next_row_ptr[contour_granularity];
 					p1.z = dz1;
-	
-	
+
+
 					draw_contour_lines (&p1, &p2, &p3);
-	
+
 					//
 					// next column
 					//
-	
+
 					dx0 += dx_grid;
 					dx1 += dx_grid;
-	
+
 					this_row_ptr += contour_granularity;
 					next_row_ptr += contour_granularity;
 				}
-	
+
 				//
 				// next row
 				//
-	
+
 				dz0 += dz_grid;
 				dz1 += dz_grid;
-	
+
 				this_row_start_ptr += row_add_on;
 				next_row_start_ptr += row_add_on;
 			}
 		}
-	
+
 		#if OPTIMISE_CONTOURS
-	
+
 		debug_filtered_log ("num_contour_loops = %d, num_contour_lines = %d", num_contour_loops, num_contour_lines);
-	
+
 		#endif
-		
+
 	}//tsd_render_mode != TSD_RENDER_RELIEF_MODE
 
    path_detail_level = max(0, path_detail_level-1);
