@@ -137,7 +137,7 @@ void get_apache_eo_centred_viewpoint (viewpoint *vp)
 
 	get_local_entity_vec3d (source, VEC3D_TYPE_POSITION, &inst3d->vp.position);
 
-	get_local_entity_attitude_matrix (source, &inst3d->vp.attitude);
+	get_local_entity_attitude_matrix (source, inst3d->vp.attitude);
 
 	search.search_depth = 0;
 	search.search_object = inst3d;

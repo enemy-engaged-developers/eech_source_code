@@ -941,7 +941,7 @@ void update_common_eo (void)
 
 	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
 
-	multiply_matrix3x3_matrix3x3 (&eo_vp.attitude, m, &vp.attitude);
+	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
 
 	//
 	// update target
@@ -1077,7 +1077,7 @@ void slave_common_eo_to_current_target (void)
 
 	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
 
-	multiply_matrix3x3_matrix3x3 (&eo_vp.attitude, m, &vp.attitude);
+	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
 
 	//
 	// flag eo on target for "CP/G IDENTIFYING..." message
@@ -1210,7 +1210,7 @@ static int get_selectable_eo_target (entity *target)
 
 	get_3d_transformation_matrix (m, azimuth, elevation, 0.0);
 
-	multiply_matrix3x3_matrix3x3 (&eo_vp.attitude, m, &vp.attitude);
+	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
 
 	boresight_target = get_eo_boresight_target ();
 
