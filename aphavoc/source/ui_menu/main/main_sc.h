@@ -98,8 +98,11 @@
 // area for buttons & titles
 
 #define OPTION_AREA_HEIGHT 					0.058
+#define OPTION_SMALL_AREA_HEIGHT			0.040	// Retro 10Jul2004 for the controller option screen
 
 #define OPTION_AREA_WIDTH 						1.0
+
+#define SECOND_OPTION_START					0.55		// Retro 17Jul2004
 
 
 // title box sizes & offsets
@@ -112,6 +115,10 @@
 
 #define OPTION_TITLE_OFFSET_Y					0.260
 
+// Retro 10Jul2004 - those Input Device Names can get bloody long
+#define CONTROLLER_OPTION_TITLE_OFFSET_X		0.01
+#define CONTROLLER_OPTION_TITLE_OFFSET_Y		0.260
+
 
 // button sizes
 
@@ -122,7 +129,6 @@
 #define OPTION_BOX_LARGE_WIDTH 				0.298
 
 #define OPTION_BOX_EXTRA_LARGE_WIDTH 		0.45
-
 
 // gaps between buttons
 
@@ -143,7 +149,7 @@
 #define OPTION_BUTTON_TEXT_OFFSET_X 		0.008
 
 #define OPTION_AREA_OFFSET_Y (OPTION_AREA_HEIGHT + OPTION_BOX_GAP_HEIGHT)
-
+#define OPTION_SMALL_AREA_OFFSET_Y (OPTION_SMALL_AREA_HEIGHT + OPTION_BOX_GAP_HEIGHT)	// Retro 10Jul2004 for the controller option screen
 
 
 // area for buttons & titles

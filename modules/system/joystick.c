@@ -68,6 +68,8 @@
 
 #include "maths.h"
 
+#include "cmndline.h"	// Retro 18Jul2004
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +93,14 @@ int
 
 joystick_device_info
 	*joystick_devices;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 10Jul2004
+int AxisCount = 0;
+AxisInfo_t AxisInfo[MAXIMUM_JOYSTICK_DEVICES*8];	// 8 axis per device in DIJOYSTATE, I don´t know why razorworks choose 32 (!!!) (DIJOYSTATE2 I guess, but that´s been never implemented)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +135,14 @@ void initialise_joysticks (void)
 	//
 
 	number_of_joystick_devices = 0;
+
+	// Retro 10Jul2004
+	AxisInfo[AxisCount].axis = -1;
+	AxisInfo[AxisCount].device = -1;
+	AxisInfo[AxisCount].AxisName = "Keyboard";
+	AxisInfo[AxisCount].inUse = FALSE;	// keyboard is ALWAYS 'not in use' for our purposes
+	AxisCount++;
+	// Retro 10Jul2004 end
 
 #ifdef WIN32
 	if (direct_input)
@@ -463,6 +481,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 0;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": X-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": X-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -483,6 +511,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 1;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Y-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": Y-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -507,6 +545,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 2;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Z-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": Z-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -517,8 +565,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 23Jul2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
+#else
+		device_property.dwData = (int) 0;
+#endif
 
 		joystick_devices[number_of_joystick_devices].joystick_rxaxis_valid = TRUE;
 
@@ -527,6 +578,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 3;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rX-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": rX-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -537,9 +598,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 23Jul2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-
+#else
+		device_property.dwData = (int) 0;
+#endif
 		joystick_devices[number_of_joystick_devices].joystick_ryaxis_valid = TRUE;
 
 		device_range.diph.dwObj = DIJOFS_RY;
@@ -547,6 +610,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 4;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rY-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": rY-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -557,9 +630,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 23Jul2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-
+#else
+		device_property.dwData = (int) 0;
+#endif
 		joystick_devices[number_of_joystick_devices].joystick_rzaxis_valid = TRUE;
 
 		device_range.diph.dwObj = DIJOFS_RZ;
@@ -567,6 +642,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 5;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rZ-Axis")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": rZ-Axis");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -577,9 +662,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 23Jul2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-
+#else
+		device_property.dwData = (int) 0;
+#endif
 		joystick_devices[number_of_joystick_devices].joystick_slider0axis_valid = TRUE;
 
 		device_range.diph.dwObj = DIJOFS_SLIDER(0);
@@ -587,6 +674,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 6;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Slider0")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": Slider0");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -597,9 +694,11 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 
 	if (di_err == DI_OK)
 	{
-
+#if 0	// Retro 23Jul2004
 		device_property.dwData = (int) (JOYSTICK_AXIS_DEADZONE * 10000.0);
-
+#else
+		device_property.dwData = (int) 0;
+#endif
 		joystick_devices[number_of_joystick_devices].joystick_slider1axis_valid = TRUE;
 
 		device_range.diph.dwObj = DIJOFS_SLIDER(1);
@@ -607,6 +706,16 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	
 		IDirectInputDevice7_SetProperty (device, DIPROP_RANGE, &device_range.diph);
 		IDirectInputDevice7_SetProperty (device, DIPROP_DEADZONE, &device_property.diph);
+
+		// Retro 10Jul2004 start
+		AxisInfo[AxisCount].axis = 7;
+		AxisInfo[AxisCount].device = number_of_joystick_devices;
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Slider1")+1);
+		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
+		strcat(AxisInfo[AxisCount].AxisName,": Slider1");
+		AxisInfo[AxisCount].inUse = FALSE;
+		AxisCount++;
+		// Retro 10Jul2004 end
 	}
 
 	//
@@ -697,7 +806,12 @@ void read_joystick_values (int joystick_device_index)
 	int
 		button_count;
 
-	if ((joystick_device_index >= 0) && (joystick_device_index < number_of_joystick_devices))
+#if 0
+	FILE* fp;
+#endif
+
+//	if ((joystick_device_index >= 0) && (joystick_device_index < number_of_joystick_devices))
+	for (joystick_device_index = 0; joystick_device_index < number_of_joystick_devices; joystick_device_index++)
 	{
 	
 		joystick = &joystick_devices[joystick_device_index];
@@ -769,7 +883,8 @@ void read_joystick_values (int joystick_device_index)
 			//
 			// Generate any button events
 			//
-		
+			if (command_line_cyclic_joystick_index != -1)	// Retro 18Jul2004 FIXME
+			if (joystick_device_index == command_line_cyclic_joystick_index)	// Retro 18Jul2004 FIXME
 			for (button_count = 0; button_count < joystick->number_of_buttons; button_count++)
 			{
 		
@@ -845,7 +960,7 @@ void read_joystick_values (int joystick_device_index)
 #endif
 
 		}
-
+#if 0
 #ifdef WIN32
 		//
 		// Hack for Win2k problems of putting the Z axis data into Slider0 member
@@ -857,7 +972,7 @@ void read_joystick_values (int joystick_device_index)
 			joystick->joystick_state.lZ = joystick->joystick_state.rglSlider[0];
 		}
 #endif
-
+#endif
 		//
 		// Values are in here!
 		//
@@ -873,6 +988,30 @@ void read_joystick_values (int joystick_device_index)
 	
 #endif
 	}
+
+#if 0
+	fp = fopen("stickresult.txt","at");
+	{
+		int i = 0;
+
+		for (i = 0; i < number_of_joystick_devices; i++)
+		{
+			fprintf(fp,"--> %i\n",i);
+
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lX);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lY);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lZ);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lRx);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lRy);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.lRz);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.rglSlider[0]);
+			fprintf(fp,"%i\n",joystick_devices[i].joystick_state.rglSlider[1]);
+			
+			fprintf(fp,"-----------------------\n");
+		}
+	}
+	fclose(fp);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1005,7 +1144,15 @@ int set_joystick_force_feedback_forces (int joystick_device_index, int xforce, i
 // yem 030525 - changed axis to be indexed from 0 instead of 1. renamed to get_joystick_axis.
 int get_joystick_axis (int joystick_index, int axis)
 {
-	read_joystick_values(joystick_index); // Jabberwock 031120 Some joystick values were not read at all!
+//	read_joystick_values(joystick_index); // Jabberwock 031120 Some joystick values were not read at all!
+
+	// Retro 10Jul2004
+	if ((joystick_index < 0)||(joystick_index > number_of_joystick_devices))
+		return 0;
+	if ((axis < 0)||(axis > 7))
+		return 0;
+	// Retro 10Jul2004 end
+
 #ifdef WIN32
 	switch (axis) {
 	case 0:

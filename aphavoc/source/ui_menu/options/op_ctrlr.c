@@ -82,18 +82,42 @@ ui_object
 
 ui_object
 	*cyclic_area,
+	*cyclic_y_area,		// Retro 10Jul2004
 	*collective_area,
 	*pedal_area,
-	*device_area,
+//Retro10Jul2004_dead	*device_area,
 	*reverse_throttle_area,
 	*keyboard_assist_area,
+	*eo_pan_x_area,		// Retro 10Jul2004
+	*eo_pan_y_area,		// Retro 10Jul2004
+	*eo_zoom_area,		// Retro 10Jul2004
+	*joylook_x_area,	// Retro 10Jul2004
+	*joylook_y_area,	// Retro 10Jul2004
+	*mouselook_area,	// Retro 10Jul2004
+	*trackir_area,		// Retro 10Jul2004
+	*reverse_pedal_area,// Retro 17Jul2004
+	*mouselook_sensitivity_area,// Retro 17Jul2004 - this is for mouse if mouselook is enabled, POV else - check the eech.ini
+	*joylook_sensitivity_area,	// Retro 17Jul2004
 	*cyclic_option_button,
+	*cyclic_y_option_button,	// Retro 10Jul2004
 	*collective_option_button,
 	*pedal_option_button,
-	*device_option_button,
-	*device_graphic_area,
+//Retro10Jul2004_dead	*device_option_button,
+//Retro10Jul2004_dead	*device_graphic_area,
 	*reverse_throttle_button,
-	*keyboard_assist_option_button;
+	*keyboard_assist_option_button,
+	*eo_pan_x_option_button,	// Retro 10Jul2004
+	*eo_pan_y_option_button,	// Retro 10Jul2004
+	*eo_zoom_option_button,		// Retro 10Jul2004
+	*joylook_x_option_button,	// Retro 10Jul2004
+	*joylook_y_option_button,	// Retro 10Jul2004
+	*mouselook_option_button,	// Retro 10Jul2004
+	*trackir_option_button,		// Retro 10Jul2004
+	*reverse_pedal_option_button,		// Retro 17Jul2004
+	*mouselook_sensitivity_up_button,	// Retro 17Jul2004
+	*mouselook_sensitivity_down_button,	// Retro 17Jul2004
+	*joylook_sensitivity_up_button,		// Retro 17Jul2004
+	*joylook_sensitivity_down_button;	// Retro 17Jul2004
 
 static unsigned char
 	*option_joystick_text[2],
@@ -114,11 +138,32 @@ void notify_collective_option_button ( ui_object *obj, void *arg );
 
 void notify_pedal_option_button ( ui_object *obj, void *arg );
 
-void notify_device_option_button ( ui_object *obj, void *arg );
+ //Retro10Jul2004_dead void notify_device_option_button ( ui_object *obj, void *arg );
 
 void notify_reverse_throttle_option_button ( ui_object *obj, void *arg );
 
 void notify_keyboard_assist_option_button ( ui_object *obj, void *arg );
+
+// Retro 10Jul2004 start
+void notify_cyclic_y_option_button ( ui_object *obj, void *arg );
+void notify_eo_pan_x_option_button ( ui_object *obj, void *arg );
+void notify_eo_pan_y_option_button ( ui_object *obj, void *arg );
+void notify_eo_zoom_option_button ( ui_object *obj, void *arg );
+void notify_joylook_x_option_button ( ui_object *obj, void *arg );
+void notify_joylook_y_option_button ( ui_object *obj, void *arg );
+void notify_mouselook_option_button ( ui_object *obj, void *arg );
+void notify_trackir_option_button ( ui_object *obj, void *arg );
+// Retro 10Jul2004 end
+
+// Retro 17Jul2004 start
+void notify_reverse_pedal_option_button ( ui_object *obj, void *arg );
+void notify_mouselook_sensitivity_up_button ( ui_object *obj, void *arg );
+void notify_mouselook_sensitivity_down_button ( ui_object *obj, void *arg );
+void notify_joylook_sensitivity_up_button ( ui_object *obj, void *arg );
+void notify_joylook_sensitivity_down_button ( ui_object *obj, void *arg );
+void draw_joylook_sensitivity ( ui_object *obj, void *arg );
+void draw_mouselook_sensitivity ( ui_object *obj, void *arg );
+// Retro 17Jul2004 end
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,9 +171,9 @@ void notify_keyboard_assist_option_button ( ui_object *obj, void *arg );
 
 void initialise_joystick_selection (void)
 {
-
+#if 0	// Retro 10Jul2004
 	// adjust selected joystick
-	if ( get_global_joystick_device_index () == -1 )
+	if ( get_global_joystick_device_index () == -1 ) 
 	{
 
 		// We had no joysticks installed last time - adjust now if we do have
@@ -137,7 +182,7 @@ void initialise_joystick_selection (void)
 		{
 
 			set_global_joystick_device_index ( 0 );
-		}
+		} 
 		else
 		{
 
@@ -170,7 +215,142 @@ void initialise_joystick_selection (void)
 			set_global_joystick_device_index ( 0 );
 		}
 	}
+#else	// Retro 17Jul2004
+	// Check if the number of enumerated joysticks changed compared to last time
+	// If it does, nuke everything
+	if (( get_global_joystick_device_index () == -1 )||
+		( number_of_joystick_devices != get_global_joystick_device_index ()))
+	{
+		set_global_collective_input ( KEYBOARD_INPUT );
 
+		set_global_cyclic_input ( KEYBOARD_INPUT );
+
+		set_global_pedal_input ( KEYBOARD_INPUT );
+
+		set_global_joystick_device_index (-1);
+
+		command_line_cyclic_joystick_index = -1;
+		command_line_cyclic_joystick_x_axis = -1;
+		command_line_cyclic_joystick_y_axis =- 1;
+
+		command_line_collective_joystick_index = -1;
+		command_line_collective_joystick_axis = -1;
+
+		command_line_rudder_joystick_index = -1;
+		command_line_rudder_joystick_axis = -1;
+
+		command_line_eo_pan_joystick_index = -1;
+		command_line_eo_pan_vertical_joystick_axis = -1;
+		command_line_eo_pan_horizontal_joystick_axis = -1;
+
+		command_line_eo_zoom_joystick_index = -1;
+		command_line_eo_zoom_joystick_axis = -1;
+
+		command_line_joylook_joystick_index = -1;
+		command_line_joylookh_joystick_axis = -1;
+		command_line_joylookv_joystick_axis = -1;
+
+#if DEBUG_MODULE
+		debug_log ("Number of joysticks changed from %i to %i - resetting everything\n",get_global_joystick_device_index(),number_of_joystick_devices);
+#endif
+
+		// Now save the new number
+		// For this I recycled an old function, in order to not touch the options-file layout - hence the strange name
+		set_global_joystick_device_index ( number_of_joystick_devices );
+	}
+#endif	// Retro 10Jul2004
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 10Jul2004 - on enumerating, each axis is entered into an array of axis
+//	This function fins an axis described by its device and DX-type in this array
+int findAxisInArray (int device, int axis)
+{
+	int
+		i;
+
+	for (i = 0; i < AxisCount; i++)
+	{
+		if ((AxisInfo[i].device == device)&&(AxisInfo[i].axis == axis))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 10Jul2004 - sets the 'used' flag of an axis described by its devices and DX-type to 'false'
+void setAxisUnused(int device, int axis)
+{
+	int
+		retAxisIndex;
+
+	retAxisIndex = findAxisInArray(device,axis);
+	if (retAxisIndex > 0)
+		AxisInfo[retAxisIndex].inUse = FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 10Jul2004 - on enumerating, each axis is entered into an array of axis
+//	This function fins an UNUSED axis described by its device and DX-type in this array
+int findNextUnusedAxis(int device, int axis)
+{
+	int
+		retAxisIndex;
+
+	retAxisIndex = findAxisInArray(device,axis);
+	if (retAxisIndex != -1)	// set old deviceaxis to 'unused'
+		AxisInfo[retAxisIndex].inUse = FALSE;
+
+	do {
+		if ((retAxisIndex != -1)&&(retAxisIndex < AxisCount-1))
+			retAxisIndex ++;
+		else
+			retAxisIndex = 0;
+	} while (AxisInfo[retAxisIndex].inUse == TRUE);
+
+	if (retAxisIndex != 0)	// keyboard is always 'not in use' for our purposes
+		AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+	return retAxisIndex;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 10Jul2004
+// same as above, but with the additional restriction that the new axis has to be no the same device as the old one
+// this means that keyboard is NEVER considered !
+// This is used for cyclic pitch/bank, eo x/y and joystick look x/y axis
+int findNextUnusedDeviceAxis(int device, int axis)
+{
+	int
+		retAxisIndex;
+
+	retAxisIndex = findAxisInArray(device,axis);
+	if (retAxisIndex != -1)	// set old deviceaxis to 'unused'
+		AxisInfo[retAxisIndex].inUse = FALSE;
+
+	do {
+		if ((retAxisIndex != -1)&&(retAxisIndex < AxisCount-1))
+			retAxisIndex ++;
+		else
+			retAxisIndex = 1;	// no keyboard in this selection, thanks
+
+	} while ((AxisInfo[retAxisIndex].device != device)||(AxisInfo[retAxisIndex].inUse == TRUE));
+
+	AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+	return retAxisIndex;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +359,7 @@ void initialise_joystick_selection (void)
 
 void notify_show_controller_page (void)
 {
-
+#if 0	// Retro 10Jul2004
 	// initialise button text
 
 	if ( (get_global_cyclic_input () == JOYSTICK_INPUT) && (number_of_joystick_devices) )
@@ -228,8 +408,215 @@ void notify_show_controller_page (void)
 		
 		preprocess_translation_object_size (device_graphic_area, device_option_button, name, 1, RESIZE_OPTION_CYCLE_BUTTON);
 	}
-	
+
+#else	// Retro 10Jul2004
+
+	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
+
+	// cyclic x/y
+
+	if (command_line_cyclic_joystick_index != -1)
+	{
+		int AxisInfoIndex;
+		
+		AxisInfoIndex = findAxisInArray(command_line_cyclic_joystick_index,command_line_cyclic_joystick_x_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (cyclic_option_button, AxisInfo[AxisInfoIndex].AxisName);
+			set_global_cyclic_input ( JOYSTICK_INPUT );
+		}
+		else
+		{
+			set_ui_object_text (cyclic_option_button, option_joystick_text[0]);
+			set_global_cyclic_input ( KEYBOARD_INPUT );
+		}
+
+		AxisInfoIndex = findAxisInArray(command_line_cyclic_joystick_index,command_line_cyclic_joystick_y_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (cyclic_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+			set_global_cyclic_input ( JOYSTICK_INPUT );
+		}
+		else
+		{
+			set_ui_object_text (cyclic_y_option_button, option_joystick_text[0]);
+			set_global_cyclic_input ( KEYBOARD_INPUT );
+		}
+	}
+	else
+	{
+		set_ui_object_text (cyclic_option_button, option_joystick_text[0]);
+		set_ui_object_text (cyclic_y_option_button, option_joystick_text[0]);
+		set_global_cyclic_input ( KEYBOARD_INPUT );
+	}
+
+	// collective
+
+	if (command_line_collective_joystick_index != -1)
+	{
+		int AxisIndex;
+		
+		AxisIndex = findAxisInArray(command_line_collective_joystick_index,command_line_collective_joystick_axis);
+		if (AxisIndex != -1)
+		{
+			AxisInfo[AxisIndex].inUse = TRUE;
+			set_ui_object_text (collective_option_button, AxisInfo[AxisIndex].AxisName);
+			set_global_collective_input ( THROTTLE_INPUT );
+		}
+		else
+		{
+			set_ui_object_text (collective_option_button, option_throttle_text[0]);
+			set_global_collective_input ( KEYBOARD_INPUT );
+		}
+	}
+	else
+	{
+		set_ui_object_text (collective_option_button, option_throttle_text[0]);
+		set_global_collective_input ( KEYBOARD_INPUT );
+	}
+
+	// pedal (+ reverse button)
+
+	if (command_line_rudder_joystick_index != -1)
+	{
+		int AxisIndex;
+		
+		AxisIndex = findAxisInArray(command_line_rudder_joystick_index,command_line_rudder_joystick_axis);
+		if (AxisIndex != -1)
+		{
+			AxisInfo[AxisIndex].inUse = TRUE;
+			set_ui_object_text (pedal_option_button, AxisInfo[AxisIndex].AxisName);
+			set_global_pedal_input (RUDDER_INPUT);
+			set_ui_object_text (reverse_pedal_option_button, option_boolean_text [command_line_reverse_pedal]);	// Retro 17Jul2004
+		}
+		else
+		{
+			set_ui_object_text (pedal_option_button, option_throttle_text[0]);
+			set_global_pedal_input (KEYBOARD_INPUT);
+			set_ui_object_text (reverse_pedal_option_button, option_boolean_text [FALSE]);	// Retro 17Jul2004
+		}
+	}
+	else
+	{
+		set_ui_object_text (pedal_option_button, option_throttle_text[0]);
+		set_global_pedal_input (KEYBOARD_INPUT);
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [FALSE]);	// Retro 17Jul2004
+	}
+
+	// EO x/y
+
+	if (command_line_eo_pan_joystick_index != -1)
+	{
+		int AxisInfoIndex;
+		
+		AxisInfoIndex = findAxisInArray(command_line_eo_pan_joystick_index,command_line_eo_pan_horizontal_joystick_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (eo_pan_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+		}
+		else
+		{
+			set_ui_object_text (eo_pan_x_option_button, option_joystick_text[0]);
+		}
+
+		AxisInfoIndex = findAxisInArray(command_line_eo_pan_joystick_index,command_line_eo_pan_vertical_joystick_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (eo_pan_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+		}
+		else
+		{
+			set_ui_object_text (eo_pan_y_option_button, option_joystick_text[0]);
+		}
+	}
+	else
+	{
+		set_ui_object_text (eo_pan_x_option_button, option_joystick_text[0]);
+		set_ui_object_text (eo_pan_y_option_button, option_joystick_text[0]);
+	}
+
+	// EO Zoom
+
+	if (command_line_eo_zoom_joystick_index != -1)
+	{
+		int AxisIndex;
+		
+		AxisIndex = findAxisInArray(command_line_eo_zoom_joystick_index,command_line_eo_zoom_joystick_axis);
+		if (AxisIndex != -1)
+		{
+			AxisInfo[AxisIndex].inUse = TRUE;
+			set_ui_object_text (eo_zoom_option_button, AxisInfo[AxisIndex].AxisName);
+		}
+		else
+		{
+			set_ui_object_text (eo_zoom_option_button, option_throttle_text[0]);
+		}
+	}
+	else
+	{
+		set_ui_object_text (eo_zoom_option_button, option_throttle_text[0]);
+	}
+
+	// joystick look x/y
+
+	if (command_line_joylook_joystick_index != -1)
+	{
+		int AxisInfoIndex;
+		
+		AxisInfoIndex = findAxisInArray(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (joylook_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+		}
+		else
+		{
+			set_ui_object_text (joylook_x_option_button, option_joystick_text[0]);
+		}
+
+		AxisInfoIndex = findAxisInArray(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
+		if (AxisInfoIndex != -1)
+		{
+			AxisInfo[AxisInfoIndex].inUse = TRUE;
+			set_ui_object_text (joylook_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+		}
+		else
+		{
+			set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+		}
+	}
+	else
+	{
+		set_ui_object_text (joylook_x_option_button, option_joystick_text[0]);
+		set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+	}
+
+	// mouselook
+
+	set_ui_object_text (mouselook_option_button, option_boolean_text [command_line_mouse_look]);
+
+	// trackIR (depending on mouselook)
+
+	if (query_TIR_active() == TRUE)
+	{
+		if (command_line_mouse_look == TRUE)
+			set_ui_object_text (trackir_option_button, "Running");
+		else
+			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+	}
+	else
+		set_ui_object_text (trackir_option_button, option_boolean_text [0]);	// nailed to FALSE for now
+#endif	// Retro 10Jul2004
+
+	// reverse throttle
+
 	set_ui_object_text (reverse_throttle_button, option_boolean_text [get_global_dynamics_options_reverse_throttle_input ()]);
+
+	// keyboard assistant
 
 	set_ui_object_text (keyboard_assist_option_button, option_boolean_text [get_global_dynamics_options_keyboard_assistance ()]);
 
@@ -238,6 +625,7 @@ void notify_show_controller_page (void)
 	#if DEBUG_MODULE
 		debug_filtered_log("Inside show_controller_page");
 	#endif
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,9 +647,9 @@ void define_options_screen_controller_page_objects (void)
 		*page;
 
 	ui_object
-		*title_change_array [6],
-		*check_array [6],
-		*change_array [6];
+		*title_change_array [14],
+		*check_array [14],
+		*change_array [14];
 
 	/////////////////////////////////////////////////////////////////
 	// Initialise Button Strings
@@ -307,19 +695,19 @@ void define_options_screen_controller_page_objects (void)
 	// cyclic
 
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
 
    cyclic_area = create_ui_object
 									(
 										UI_TYPE_AREA,
 										UI_ATTR_PARENT (page),
 										UI_ATTR_VIRTUAL_POSITION (x1, y1),
-										UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+										UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 										UI_ATTR_CLEAR (TRUE),
 										UI_ATTR_END
 									);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -338,34 +726,83 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array [i]),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-		UI_ATTR_TEXT (get_trans ("UI_CYCLIC")),
+//		UI_ATTR_TEXT (get_trans ("UI_CYCLIC")),
+		UI_ATTR_TEXT (get_trans ("Cyclic Roll")),
 		UI_ATTR_END
 	);
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
+	// Retro 10Jul2004
+	// cyclic y axis
+
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   cyclic_y_area = create_ui_object
+									(
+										UI_TYPE_AREA,
+										UI_ATTR_PARENT (page),
+										UI_ATTR_VIRTUAL_POSITION (x1, y1),
+										UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+										UI_ATTR_CLEAR (TRUE),
+										UI_ATTR_END
+									);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (cyclic_y_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Cyclic Pitch")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
 	// collective
 
 	i++;
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
 
    collective_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT ( page ),
 									UI_ATTR_VIRTUAL_POSITION (x1, y1),
-									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 									UI_ATTR_CLEAR (TRUE),
 									UI_ATTR_END
 								);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -384,7 +821,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array [i]),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
@@ -399,19 +836,19 @@ void define_options_screen_controller_page_objects (void)
 	
 	i++;
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
 
    pedal_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT ( page ),
 									UI_ATTR_VIRTUAL_POSITION (x1, y1),
-									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 									UI_ATTR_CLEAR (TRUE),
 									UI_ATTR_END
 								);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -430,7 +867,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array [i]),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
@@ -441,23 +878,24 @@ void define_options_screen_controller_page_objects (void)
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
+#if 0 //Retro10Jul2004_dead
 	//device area
 
 	i++;
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
 
    device_area = create_ui_object
 										(
 											UI_TYPE_AREA,
 											UI_ATTR_PARENT (page),
 											UI_ATTR_VIRTUAL_POSITION (x1, y1),
-											UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+											UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 											UI_ATTR_CLEAR (TRUE),
 											UI_ATTR_END
 										);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -476,7 +914,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array [i]),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
@@ -486,24 +924,265 @@ void define_options_screen_controller_page_objects (void)
 	);
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+#endif //Retro10Jul2004_dead
+
+	// Retro 10Jul2004
+	// eo pan x area
+	
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   eo_pan_x_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_pan_x_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("EO Pan X")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// eo panning y area
+	
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   eo_pan_y_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_pan_y_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("EO Pan Y")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// eo zoom area
+	
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   eo_zoom_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_zoom_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("EO Zoom")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// joylook x area
+	
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   joylook_x_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_x_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Joystick Look X")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// joylook y area
+	
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
+
+   joylook_y_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_y_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Joystick Look Y")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
 
 	//reverse throttle area
 
 	i++;
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i);
 
    reverse_throttle_area = create_ui_object
 										(
 											UI_TYPE_AREA,
 											UI_ATTR_PARENT (page),
 											UI_ATTR_VIRTUAL_POSITION (x1, y1),
-											UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+											UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 											UI_ATTR_CLEAR (TRUE),
 											UI_ATTR_END
 										);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -522,7 +1201,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array [i]),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
@@ -533,23 +1212,206 @@ void define_options_screen_controller_page_objects (void)
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
+	// Retro 17Jul2004
+	// Reverse Pedal Option area
+
+	i++;
+//	x1 = 0.0; 
+//	x1 = 0.5; 
+	x1 = SECOND_OPTION_START;
+//	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i;
+	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * (i-1);
+
+   reverse_pedal_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (reverse_pedal_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array[i]),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Reverse Pedal")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 17Jul2004 end
+
+	// Retro 10Jul2004
+	//mouselook area
+
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (/*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * (i-1));
+
+   mouselook_area = create_ui_object
+										(
+											UI_TYPE_AREA,
+											UI_ATTR_PARENT (page),
+											UI_ATTR_VIRTUAL_POSITION (x1, y1),
+											UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+											UI_ATTR_CLEAR (TRUE),
+											UI_ATTR_END
+										);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Mouselook")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	//trackir area
+
+	i++;
+//	x1 = 0.0; 
+//	x1 = 0.5; 
+	x1 = SECOND_OPTION_START;
+//	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i;
+	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * (i-2);
+
+   trackir_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT ( page ),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (trackir_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array[i]),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("TrackIR")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+	// Retro 10Jul2004 end
+
+	// Retro 17Jul2004 - joylook sensitivity area
+
+	joylook_sensitivity_area = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_x_area),
+		UI_ATTR_VIRTUAL_POSITION (0.8, 0),	// FIXME - no absolute coding !
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+	// Retro 17Jul2004 end
+
+	// Retro 17Jul2004 - mouselook sensitivity area
+	
+	mouselook_sensitivity_area = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_area),
+		UI_ATTR_VIRTUAL_POSITION (0.42, 0),	// FIXME - no absolute coding!
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+	// Retro 17Jul2004 end
+
 	//keyboard_assist area
 
 	i++;
 	x1 = 0.0; 
-	y1 = OPTION_TITLE_OFFSET_Y + OPTION_AREA_OFFSET_Y * i;
+//	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * i;
+	y1 = OPTION_TITLE_OFFSET_Y + /*OPTION_AREA_OFFSET_Y*/OPTION_SMALL_AREA_OFFSET_Y * (i-2);
 
    keyboard_assist_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT ( page ),
 									UI_ATTR_VIRTUAL_POSITION (x1, y1),
-									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, /*OPTION_AREA_HEIGHT*/OPTION_SMALL_AREA_HEIGHT),
 									UI_ATTR_CLEAR (TRUE),
 									UI_ATTR_END
 								);
 
-	x1 = OPTION_TITLE_OFFSET_X;
+	x1 = CONTROLLER_OPTION_TITLE_OFFSET_X;	// Retro 10Jul2004
 	y1 = 0.0; 
 
 	title_change_array[i] = create_ui_object
@@ -569,7 +1431,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (title_change_array[i]),
 		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
       UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
       UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
@@ -578,7 +1440,6 @@ void define_options_screen_controller_page_objects (void)
 	);
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
-
 
 	/////////////////////////////////////////////////////////////////
 	// buttons
@@ -592,7 +1453,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (cyclic_area),
 		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
-		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_MEDIUM_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
 		UI_ATTR_COLOUR_START (255, 255, 255, 0),
 		UI_ATTR_COLOUR_END (255, 255, 255, 255),
 		UI_ATTR_TEXTURE_GRAPHIC (options_box_medium),
@@ -603,7 +1464,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (cyclic_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -622,6 +1483,47 @@ void define_options_screen_controller_page_objects (void)
 
 	preprocess_translation_object_size (change_array [i], cyclic_option_button, option_joystick_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
+	// Retro 10Jul2004
+	// cyclic y axis
+
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (cyclic_y_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_medium),
+		UI_ATTR_END
+	);
+
+	cyclic_y_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (cyclic_y_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_STATE (UI_OBJECT_STATE_OFF),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_cyclic_y_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], cyclic_y_option_button, option_joystick_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
 	// collective
 	
 	i++;
@@ -631,7 +1533,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (collective_area),
 		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
-		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_MEDIUM_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
 		UI_ATTR_COLOUR_START (255, 255, 255, 0),
 		UI_ATTR_COLOUR_END (255, 255, 255, 255),
 		UI_ATTR_TEXTURE_GRAPHIC (options_box_medium),
@@ -642,7 +1544,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (collective_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -669,7 +1571,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (pedal_area),
 		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
-		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
 		UI_ATTR_COLOUR_START (255, 255, 255, 0),
 		UI_ATTR_COLOUR_END (255, 255, 255, 255),
 		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
@@ -680,7 +1582,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (pedal_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -698,6 +1600,7 @@ void define_options_screen_controller_page_objects (void)
 
 	preprocess_translation_object_size (change_array [i], pedal_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
+#if 0  //Retro10Jul2004_dead
 	//device button
 	
 	i++;
@@ -718,7 +1621,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (device_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -733,6 +1636,207 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_FUNCTION (notify_device_option_button),
 		UI_ATTR_END
 	);
+#endif  //Retro10Jul2004_dead
+
+   // Retro 10Jul2004
+   // eo pan x button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_pan_x_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   eo_pan_x_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (eo_pan_x_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_eo_pan_x_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], eo_pan_x_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// eo pan y button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_pan_y_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   eo_pan_y_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (eo_pan_y_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_eo_pan_y_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], eo_pan_y_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// eo zoom button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (eo_zoom_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   eo_zoom_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (eo_zoom_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_eo_zoom_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], eo_zoom_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// joylook x button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_x_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   joylook_x_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (joylook_x_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_joylook_x_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], joylook_x_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	// joylook y button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_y_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_EXTRA_LARGE_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   joylook_y_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (joylook_y_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_joylook_y_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], joylook_y_option_button, option_pedal_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
 
 	//reverse throttle button
 	
@@ -754,7 +1858,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (reverse_throttle_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -772,7 +1876,243 @@ void define_options_screen_controller_page_objects (void)
 
 	preprocess_translation_object_size (change_array [i], reverse_throttle_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
-	// keyboard_assist
+	// Retro 17Jul2004
+	// reverse pedal button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (reverse_pedal_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_small),
+		UI_ATTR_END
+	);
+
+   reverse_pedal_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (reverse_pedal_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_reverse_pedal_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], keyboard_assist_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 17Jul2004 end
+
+	// Retro 10Jul2004
+	//mouselook button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_small),
+		UI_ATTR_END
+	);
+
+   mouselook_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (mouselook_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_mouselook_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], mouselook_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 10Jul2004
+	//trackir button
+	
+	i++;
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (trackir_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_small),
+		UI_ATTR_END
+	);
+
+   trackir_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (trackir_area),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_trackir_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], trackir_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
+	// Retro 10Jul2004 end
+
+	// Retro 17 Jul2004
+	// Shamelessly copied from OP_INSND.C
+	// Joystick Look Sensitivity Controls ( "+ 30 -" or such)
+	//
+	
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_TEXT ("-"),
+		UI_ATTR_FUNCTION (notify_joylook_sensitivity_down_button),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.67, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_TEXT ("+"),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_FUNCTION (notify_joylook_sensitivity_up_button),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (joylook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.33, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.34, 1.0),
+		UI_ATTR_TEXT (""),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_DRAW_FUNCTION (draw_joylook_sensitivity),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	// Retro 17Jul2004 end
+
+	// Retro 17 Jul2004
+	// Shamelessly copied from OP_INSND.C
+	// Mouselook Sensitivity Controls ( "+ 30 -" or such)
+	//
+	
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_TEXT ("-"),
+		UI_ATTR_FUNCTION (notify_mouselook_sensitivity_down_button),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.67, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_TEXT ("+"),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_FUNCTION (notify_mouselook_sensitivity_up_button),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (mouselook_sensitivity_area),
+		UI_ATTR_VIRTUAL_POSITION (0.33, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.34, 1.0),
+		UI_ATTR_TEXT (""),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_DRAW_FUNCTION (draw_mouselook_sensitivity),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+
+	// Retro 17Jul2004 end
+
+	// keyboard_assist button
 	
 	i++;
 
@@ -792,7 +2132,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (keyboard_assist_area),
-		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ITALIC_ARIAL_18*/UI_FONT_ITALIC_ARIAL_14),
 		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
 		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
@@ -820,7 +2160,7 @@ void define_options_screen_controller_page_objects (void)
 
 void notify_cyclic_option_button ( ui_object *obj, void *arg )
 {
-
+#if 0 // Retro 10Jul2004
 	if ( (number_of_joystick_devices) && (get_global_cyclic_input () == KEYBOARD_INPUT) )
 	{
 			set_global_cyclic_input (JOYSTICK_INPUT);
@@ -833,6 +2173,59 @@ void notify_cyclic_option_button ( ui_object *obj, void *arg )
 
 		set_ui_object_text (cyclic_option_button, option_joystick_text[0]);
 	}
+#else
+	int AxisInfoIndex;
+	int oldCyclicDevice = command_line_cyclic_joystick_index;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_cyclic_joystick_index,command_line_cyclic_joystick_x_axis);
+
+	command_line_cyclic_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_cyclic_joystick_x_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_cyclic_joystick_index == -1)
+	{
+		set_global_cyclic_input (KEYBOARD_INPUT);
+//R		set_global_joystick_device_index(-1);
+	}
+	else
+	{
+		set_global_cyclic_input (JOYSTICK_INPUT);
+//R		set_global_joystick_device_index(command_line_cyclic_joystick_index);
+	}
+
+	set_ui_object_text (cyclic_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	if (command_line_cyclic_joystick_index != oldCyclicDevice)
+	{
+		set_ui_object_text (cyclic_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldCyclicDevice,command_line_cyclic_joystick_y_axis);
+		command_line_cyclic_joystick_y_axis = -1;
+	}
+#endif  // Retro 10Jul2004
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_cyclic_y_option_button ( ui_object *obj, void *arg )
+{
+	int AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedDeviceAxis(command_line_cyclic_joystick_index,command_line_cyclic_joystick_y_axis);
+
+	command_line_cyclic_joystick_y_axis = AxisInfo[AxisInfoIndex].axis;
+
+/*	if (command_line_cyclic_joystick_index == -1)
+		set_global_cyclic_input (KEYBOARD_INPUT);
+	else
+		set_global_cyclic_input (JOYSTICK_INPUT);*/
+
+	set_ui_object_text (cyclic_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
 
 	// don't leave text selected
 
@@ -845,7 +2238,7 @@ void notify_cyclic_option_button ( ui_object *obj, void *arg )
 
 void notify_collective_option_button ( ui_object *obj, void *arg )
 {
-
+#if 0 // Retro 10Jul2004
 	if ( (number_of_joystick_devices) && (get_global_collective_input () == KEYBOARD_INPUT) )
 	{
 			set_global_collective_input (THROTTLE_INPUT);
@@ -858,6 +2251,23 @@ void notify_collective_option_button ( ui_object *obj, void *arg )
 		
 		set_ui_object_text (collective_option_button, option_throttle_text[0]);
 	}
+#else // Retro 10Jul2004
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_collective_joystick_index,command_line_collective_joystick_axis);
+
+	command_line_collective_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_collective_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_collective_joystick_index == -1)
+		set_global_collective_input (KEYBOARD_INPUT);
+	else
+		set_global_collective_input (THROTTLE_INPUT);
+
+	set_ui_object_text (collective_option_button, AxisInfo[AxisInfoIndex].AxisName);
+	
+#endif // Retro 10Jul2004
 
 	// don't leave text selected
 
@@ -870,7 +2280,7 @@ void notify_collective_option_button ( ui_object *obj, void *arg )
 
 void notify_pedal_option_button ( ui_object *obj, void *arg )
 {
-
+#if 0 // Retro 10Jul2004
 	if ( (number_of_joystick_devices) && (get_global_pedal_input () == KEYBOARD_INPUT) )
 	{
 			set_global_pedal_input (RUDDER_INPUT);
@@ -883,6 +2293,28 @@ void notify_pedal_option_button ( ui_object *obj, void *arg )
 		
 		set_ui_object_text (pedal_option_button, option_pedal_text[0]);
 	}
+#else // Retro 10Jul2004
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_rudder_joystick_index,command_line_rudder_joystick_axis);
+
+	command_line_rudder_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_rudder_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_rudder_joystick_index == -1)
+	{
+		set_global_pedal_input (KEYBOARD_INPUT);
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [FALSE]);
+	}
+	else
+	{
+		set_global_pedal_input (RUDDER_INPUT);
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [command_line_reverse_pedal]);
+	}
+
+	set_ui_object_text (pedal_option_button, AxisInfo[AxisInfoIndex].AxisName);
+#endif // Retro 10Jul2004
 
 	// don't leave text selected
 
@@ -893,6 +2325,7 @@ void notify_pedal_option_button ( ui_object *obj, void *arg )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0  //Retro10Jul2004_dead
 void notify_device_option_button ( ui_object *obj, void *arg )
 {
 	unsigned char
@@ -924,6 +2357,273 @@ void notify_device_option_button ( ui_object *obj, void *arg )
 		debug_filtered_log ("no. jd's:%d  jd index:%d", number_of_joystick_devices, get_global_joystick_device_index ());
 	#endif
 	
+}
+#endif  //Retro10Jul2004_dead
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_eo_pan_x_option_button ( ui_object *obj, void *arg )
+{
+	int AxisInfoIndex;
+	int oldEOPanDevice = command_line_eo_pan_joystick_index;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_horizontal_joystick_axis);
+
+	command_line_eo_pan_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_eo_pan_horizontal_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_pan_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	if (command_line_eo_pan_joystick_index != oldEOPanDevice)
+	{
+		set_ui_object_text (eo_pan_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldEOPanDevice,command_line_eo_pan_vertical_joystick_axis);
+		command_line_eo_pan_vertical_joystick_axis = -1;
+	}
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_eo_pan_y_option_button ( ui_object *obj, void *arg )
+{
+	int AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedDeviceAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_vertical_joystick_axis);
+
+	command_line_eo_pan_vertical_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_pan_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_eo_zoom_option_button ( ui_object *obj, void *arg )
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_eo_zoom_joystick_index,command_line_eo_zoom_joystick_axis);
+
+	command_line_eo_zoom_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_eo_zoom_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_zoom_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_joylook_x_option_button ( ui_object *obj, void *arg )
+{
+	int AxisInfoIndex;
+	int oldJoyLookDevice = command_line_joylook_joystick_index;
+
+	AxisInfoIndex = findNextUnusedAxis(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
+
+	command_line_joylook_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_joylookh_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (joylook_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	if (command_line_joylook_joystick_index != oldJoyLookDevice)
+	{
+		set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldJoyLookDevice,command_line_joylookv_joystick_axis);
+		command_line_joylookv_joystick_axis = -1;
+	}
+
+	// mouselook would override joystick look, so deactivate that
+	if ((command_line_mouse_look == TRUE)&&(command_line_joylook_joystick_index != -1))
+	{
+		command_line_mouse_look = FALSE;
+		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		setTrackIRButton (FALSE);
+	}
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_joylook_y_option_button ( ui_object *obj, void *arg )
+{
+	int AxisInfoIndex;
+
+	AxisInfoIndex = findNextUnusedDeviceAxis(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
+
+	command_line_joylookv_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (joylook_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void setTrackIRButton ( int selection )
+{
+	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
+
+#if 0
+	if (selection == TRUE)	// set to ON
+	{
+		if (query_TIR_active () == TRUE)
+		{
+			set_ui_object_text (trackir_option_button, "Running");
+		}
+		else
+			set_ui_object_text (trackir_option_button, option_boolean_text [0]);
+	}
+	else
+	{
+		if (query_TIR_active () == TRUE)
+		{
+			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+		}
+		else
+			set_ui_object_text (trackir_option_button, option_boolean_text [0]);
+	}
+#else
+	if (query_TIR_active() == TRUE)
+	{
+		if (selection == TRUE)
+			set_ui_object_text (trackir_option_button, "Running");
+		else
+			set_ui_object_text (trackir_option_button, "Enable Mouselook");
+	}
+	else
+		set_ui_object_text (trackir_option_button, option_boolean_text [0]);
+#endif
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_mouselook_option_button ( ui_object *obj, void *arg )
+{
+	int
+		selection;
+
+	extern int query_TIR_active ( void );	// returns '0' on FALSE, '1' on TRUE
+
+	selection = !command_line_mouse_look;
+
+	command_line_mouse_look = !command_line_mouse_look;
+
+	// mouselook overrides joystick look, so deactivate this
+	if (command_line_mouse_look == TRUE)
+	{
+		set_ui_object_text (joylook_x_option_button, option_joystick_text[0]);
+		set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+
+		setAxisUnused(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
+		setAxisUnused(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
+
+		command_line_joylook_joystick_index = -1;
+		command_line_joylookv_joystick_axis = -1;
+		command_line_joylookh_joystick_axis = -1;
+
+		setTrackIRButton (TRUE);
+	}
+	else
+		setTrackIRButton (FALSE);
+
+	set_ui_object_text (mouselook_option_button, option_boolean_text [selection]);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+
+	#ifdef DEBUG_MODULE
+		debug_filtered_log ("mouselook: %d", command_line_mouse_look);
+	#endif
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_trackir_option_button ( ui_object *obj, void *arg )
+{
+#if 0	// Retro 11Jul2004 - debug stuff
+	int i = 0;
+	FILE* fp = fopen("stick.txt","wt");
+
+	for (i = 0; i < AxisCount; i++)
+	{
+		fprintf(fp,"%i %i %i %s\n",AxisInfo[i].device, AxisInfo[i].axis, AxisInfo[i].inUse, AxisInfo[i].AxisName);
+	}
+	fprintf(fp,"\n");
+	fprintf(fp,"%i\n",command_line_cyclic_joystick_index);
+	fprintf(fp,"%i\n",command_line_cyclic_joystick_x_axis);
+	fprintf(fp,"%i\n",command_line_cyclic_joystick_y_axis);
+	fprintf(fp,"%i\n",command_line_collective_joystick_index);
+	fprintf(fp,"%i\n",command_line_collective_joystick_axis);
+	fprintf(fp,"%i\n",command_line_rudder_joystick_index);
+	fprintf(fp,"%i\n",command_line_rudder_joystick_axis);
+	fprintf(fp,"%i\n",command_line_joylook_joystick_index);
+	fprintf(fp,"%i\n",command_line_joylookh_joystick_axis);
+	fprintf(fp,"%i\n",command_line_joylookv_joystick_axis);
+	fprintf(fp,"%i\n",command_line_eo_pan_joystick_index);
+	fprintf(fp,"%i\n",command_line_eo_pan_vertical_joystick_axis);
+	fprintf(fp,"%i\n",command_line_eo_pan_horizontal_joystick_axis);
+	fprintf(fp,"%i\n",command_line_eo_zoom_joystick_index);
+	fprintf(fp,"%i\n",command_line_eo_zoom_joystick_axis);
+	fprintf(fp,"\n");
+	fprintf(fp,"%i\n",get_global_joystick_device_index ());	// should be same as number_of_joystick_devices
+	fprintf(fp,"%i\n",number_of_joystick_devices);
+	fprintf(fp,"%i\n",global_options.cyclic_input);
+	fprintf(fp,"%i\n",global_options.collective_input);
+	fprintf(fp,"%i\n",global_options.pedal_input);
+	fprintf(fp,"\n");
+
+	for (i = 0; i < number_of_joystick_devices; i++)
+	{
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_xaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_yaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_zaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_rxaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_ryaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_rzaxis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_slider0axis_valid);
+		fprintf(fp,"%i\n",joystick_devices[i].joystick_slider1axis_valid);
+		fprintf(fp,"--\n");
+	}
+
+	fclose(fp);
+#endif	// Retro 11Jul2004
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -974,4 +2674,86 @@ void notify_keyboard_assist_option_button ( ui_object *obj, void *arg )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void notify_joylook_sensitivity_up_button ( ui_object *obj, void *arg )
+{
+	if (command_line_joylook_joystick_index == -1)
+		return;
 
+	if (command_line_joylook_step < 100)
+		command_line_joylook_step++;
+}
+void notify_joylook_sensitivity_down_button ( ui_object *obj, void *arg )
+{
+	if (command_line_joylook_joystick_index == -1)
+		return;
+
+	if (command_line_joylook_step > 1)
+		command_line_joylook_step--;
+}
+
+void draw_joylook_sensitivity ( ui_object *obj, void *arg )
+{
+	unsigned char
+		s [8];
+
+	ASSERT ((command_line_joylook_step > 0) && (command_line_joylook_step <= 100));
+
+	sprintf (s, "%i", command_line_joylook_step);
+
+	set_ui_object_text (obj, s);
+
+	if (command_line_joylook_joystick_index == -1)
+	{
+		set_ui_object_font_colour (obj, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, ui_option_text_default_colour.a);
+	}
+	else
+	{
+		set_ui_object_font_colour (obj, ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, ui_option_title_text_colour.a);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// These controls do not get grayed out when mouselook is disabled, as they then control POV sensitivity
+void notify_mouselook_sensitivity_up_button ( ui_object *obj, void *arg )
+{
+	if (command_line_mouse_look_speed < 20)
+		command_line_mouse_look_speed++;
+}
+void notify_mouselook_sensitivity_down_button ( ui_object *obj, void *arg )
+{
+	if (command_line_mouse_look_speed > 1)
+		command_line_mouse_look_speed--;
+}
+
+void draw_mouselook_sensitivity ( ui_object *obj, void *arg )
+{
+	unsigned char
+		s [8];
+
+	ASSERT ((command_line_mouse_look_speed > 0) && (command_line_mouse_look_speed <= 20));
+
+	sprintf (s, "%i", command_line_mouse_look_speed);
+
+	set_ui_object_text (obj, s);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_reverse_pedal_option_button ( ui_object *obj, void *arg )
+{
+	if (command_line_rudder_joystick_index != -1)
+	{
+		command_line_reverse_pedal = !command_line_reverse_pedal;
+
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [command_line_reverse_pedal]);
+	}
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}

@@ -156,10 +156,12 @@ void preprocess_translation_object_size (ui_object *change_obj, ui_object *check
 	// option box titles
 	if (flag == RESIZE_OPTION_BOX_TITLE)
 	{
+#if 0	// Retro 17Jul2004 - FIXME
 		if (get_global_current_language () != LANGUAGE_ENGLISH)
 		{
 			x2 = OPTION_BOX_EXTRA_LARGE_WIDTH;
 		}
+#endif
 	}
 	else
 	{

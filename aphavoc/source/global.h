@@ -662,6 +662,7 @@ extern global_options_data
 
 ////////////////////////////////////////
 
+// Retro 17Jul2004 - this variable has a new meaning now: total number of enumerated joystick devices
 #define set_global_joystick_device_index(INDEX) (global_options.joystick_device_index = (INDEX))
 
 #define get_global_joystick_device_index() (global_options.joystick_device_index)

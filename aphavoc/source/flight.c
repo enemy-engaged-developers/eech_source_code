@@ -255,7 +255,8 @@ void flight (void)
 	//
 	// initialise joystick
 	//
-
+	read_joystick_values(0);	// Retro 10Jul2004
+#if 0	// Retro 10Jul2004
 	if (global_options.cyclic_input == JOYSTICK_INPUT)
 	{
 		read_joystick_values (get_global_joystick_device_index ());
@@ -276,6 +277,7 @@ void flight (void)
 			read_joystick_values (command_line_cyclic_joystick_index);
 		}
 	}
+#endif	// Retro 10Jul2004
 
 	while (!get_exit_flight_loop ())
 	{
@@ -440,12 +442,13 @@ void flight (void)
 		//
 
 		process_events ();
-
+		read_joystick_values(0);	// Retro 10Jul2004
+#if 0	// Retro 10Jul2004
 		if (global_options.cyclic_input == JOYSTICK_INPUT)
 		{
 
 			read_joystick_values (get_global_joystick_device_index());
-			
+
 			//-seeker 2003.04.20  multiple joystick hack
 			if (command_line_rudder_joystick_index != -1)
 			{
@@ -462,6 +465,7 @@ void flight (void)
 				read_joystick_values (command_line_cyclic_joystick_index);
 			}
 		}
+#endif	// Retro 10Jul2004
 	}
 
 	ASSERT ((get_ui_screen_stack_head () != campaign_screen) && (get_ui_screen_stack_head () != options_screen));
