@@ -163,7 +163,9 @@ int
 	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
-	command_line_ground_stabilisation_available			= 1;		// loke 030322
+	command_line_ground_stabilisation_available			= 1,		// loke 030322
+//VJ framerate 24-mar-03
+    command_line_framerate 									= FALSE;
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1487,6 +1489,20 @@ void process_command_line (int argc, char *argv[])
 			if (*s2 == ':')
 			{
 				sscanf (s2 + 1, "%d", &command_line_ground_stabilisation_available);
+			}
+		}
+//VJ framerate 24-mar-03
+		////////////////////////////////////////
+		else if ((s2 = strarg (s1, "framerate")))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_framerate);
+			}
+			else
+			{
+				command_line_framerate = FALSE;
 			}
 		}
 //VJ WUT mod 26-mar-03 

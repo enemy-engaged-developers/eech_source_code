@@ -448,15 +448,6 @@ void update_virtual_cockpit_view (void)
 
 			pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 		}
-		
-//VJ wideview mod, date: 18-mar-03	
-		if (get_global_wide_cockpit ())
-		{		
-		       float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
-		       
-			pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
-			//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
-		}		
 	}
 	else	// Use mouse/TIR, all by Retro 030317, 030318
 	{
@@ -494,6 +485,16 @@ extern int getYaw ( void );
 		pilot_head_pitch = min (get_rotate_up_limit (), pilot_head_pitch);
 		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 	} // end Retro 030317
+
+//VJ wideview mod, date: 26-mar-03	
+	if (get_global_wide_cockpit ())
+	{		
+        float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
+	       
+		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
+	}		
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

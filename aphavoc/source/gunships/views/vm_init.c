@@ -113,6 +113,12 @@ void initialise_views (void)
 	initialise_view_events ();
 
 	push_event_overlay (set_view_mode_events, "view mode events");
+	
+//VJ framerate 24-mar-03	
+	framerate = get_one_over_delta_time ();
+	framerate_avg = 0;
+	doframerate = 0;	
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -446,3 +446,9 @@ cockpit_position
 
 int 
        wide_cockpit_nr;       
+
+//VJ framerate 24-mar-03       
+float
+    framerate, framerate_avg;
+int 
+    doframerate;           

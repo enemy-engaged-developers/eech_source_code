@@ -784,6 +784,10 @@ void draw_view (void)
 
 		display_eject_message ();
 
+//VJ framerate 24-mar-03
+    	if (command_line_framerate)
+		   ShowFrameRate();
+
 		end_3d_scene ();
 	}
 }
@@ -791,3 +795,26 @@ void draw_view (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ framerate 24-mar-03
+void ShowFramerate(void)
+{
+	char buf[12];
+	float dummy = 0;
+	
+	if (doframerate > 30)
+	{			   
+		framerate = framerate_avg /(doframerate+1);
+		framerate_avg = 0;
+    	doframerate = 0;
+    }   
+    dummy = get_one_over_delta_time ();
+    if (dummy < framerate*2)
+    {
+    	framerate_avg += dummy; 
+    	doframerate++; 
+	}
+	
+	sprintf (buf, "%6.1f", framerate);
+    ui_display_text (buf, 10, 10);               
+		
+}	

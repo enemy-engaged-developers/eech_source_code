@@ -140,7 +140,9 @@ extern int
 	command_line_eo_zoom_joystick_index,					// loke 030319
 	command_line_eo_zoom_joystick_axis,						// loke 030319
 	command_line_ground_radar_ignores_infantry,			// loke 030322
-	command_line_ground_stabilisation_available;			// loke 030322
+	command_line_ground_stabilisation_available,			// loke 030322
+//VJ framerate 24-mar-03	
+	command_line_framerate;
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
