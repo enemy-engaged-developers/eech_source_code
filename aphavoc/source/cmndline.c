@@ -78,8 +78,8 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-	command_line_dynamics_advanced_flight_model					= FALSE,  //Werewolf 3 Jan 04
-	command_line_report_to_masterserver						= FALSE, // VJ 050107 on-line gaming should not be the default; TRUE,  //Werewolf 2 Jan 04
+	command_line_dynamics_advanced_flight_model			= FALSE,  //Werewolf 3 Jan 04
+	command_line_report_to_masterserver						= TRUE,  //Werewolf 2 Jan 04
 	command_line_debug_input									= FALSE,
 	command_line_debug_log_timing_info						= TRUE,
 	command_line_dump_session									= FALSE,
@@ -228,7 +228,8 @@ float
 	command_line_chaff_effectiveness							= 1.0,
 	command_line_flare_effectiveness							= 1.0,
 	command_line_smoke_effectiveness							= 1.0,
-	global_hud_size												= 1.0;	// VJ 050126 hud mod: background 
+	global_hud_size												= 1.0,	// VJ 050126 hud mod: background 
+	global_hud_size2												= 1.0;	// VJ 050126 hud mod: background 
 
 char
 	command_line_game_initialisation_phase_path [128]			= "\0",
