@@ -168,6 +168,9 @@ static void set_special1_view_mode (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
+			//VJ 050301 add this to prevent crash when in 3D cockpit
+			if (command_line_3d_cockpit)
+				break;
 			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
 			{
 				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD);
@@ -333,6 +336,9 @@ static void set_special2_view_mode (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
+			//VJ 050301 add this to prevent crash when in 3D cockpit
+			if (command_line_3d_cockpit)
+				break;			
 			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
 			{
 				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD);
