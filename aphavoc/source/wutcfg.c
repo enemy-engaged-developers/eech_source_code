@@ -114,13 +114,17 @@ void parse_WUT_file(char *fname)
     char *p;
     char ent[64];
     
+   
+    if (!file_exist(fname))   
+    {
+	   debug_fatal("WUT filename error",fname);   
+       return;    
+    }   
+    
     f = fopen(fname, "r");
     if (!f)
     {
-	   #ifdef WUT_DEBUG
-          debug_log("Cannot open file: %s",fname);
-       #endif
-       
+	   debug_fatal("Error opening WUT file: [ %s ]",fname);   
        return;    
     }   
 
