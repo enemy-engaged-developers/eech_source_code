@@ -157,6 +157,25 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		
+		// Jabberwock 050310 MP Cannon bug
+		case FLOAT_TYPE_PLAYER_WEAPON_HEADING:
+		////////////////////////////////////////
+		{
+			raw->player_weapon_heading = value;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_PLAYER_WEAPON_PITCH:
+		////////////////////////////////////////
+		{
+			raw->player_weapon_pitch = value;
+
+			break;
+		}
+		// Jabberwock 050310 ends
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -324,6 +343,25 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		
+		// Jabberwock 050310 MP Cannon bug
+		case FLOAT_TYPE_PLAYER_WEAPON_HEADING:
+		////////////////////////////////////////
+		{
+			value = raw->player_weapon_heading;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_PLAYER_WEAPON_PITCH:
+		////////////////////////////////////////
+		{
+			value = raw->player_weapon_pitch;
+
+			break;
+		}
+		// Jabberwock 050310 ends
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -391,6 +429,20 @@ void overload_helicopter_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_TAIL_ROTOR_RPM][COMMS_MODEL_SERVER]		= set_server_float_value;
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_TAIL_ROTOR_RPM][COMMS_MODEL_CLIENT]		= set_client_float_value;
 	fn_get_local_entity_float_value				[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_TAIL_ROTOR_RPM]					  			= get_local_float_value;
+	
+	// Jabberwock 050310 MP Cannon bug
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_HEADING]					 			= set_local_float_value;
+	fn_set_local_entity_float_value				[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_HEADING]								= set_local_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_HEADING][COMMS_MODEL_SERVER]		= set_server_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_HEADING][COMMS_MODEL_CLIENT]		= set_client_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_HEADING]					  			= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_PITCH]					 			= set_local_float_value;
+	fn_set_local_entity_float_value				[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_PITCH]								= set_local_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_PITCH][COMMS_MODEL_SERVER]		= set_server_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_PITCH][COMMS_MODEL_CLIENT]		= set_client_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_HELICOPTER][FLOAT_TYPE_PLAYER_WEAPON_PITCH]					  			= get_local_float_value;
+	// Jabberwock 050310 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

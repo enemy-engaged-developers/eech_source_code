@@ -191,7 +191,8 @@ int direct_play_initialise_system (void)
 
 		memset ( &connection_data, 0, sizeof ( connection_data_type ) );
 
-		direct_play_set_group_name ( "Unnamed Group" );
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_set_group_name ( "Unnamed Group" );
 
 		direct_play_set_session_name ( "Unnamed Session" );
 
@@ -542,11 +543,13 @@ void direct_play_deinitialise_system ( void )
 		// check all of these...
 		//
 
-		direct_play_leave_group ();
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_leave_group ();
 
 		direct_play_destroy_player ();
 
-		direct_play_destroy_group ();
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_destroy_group ();
 
 		direct_play_close_session ();
 
@@ -2509,6 +2512,7 @@ int direct_play_join_group (void)
 
 int direct_play_leave_group (void)
 {
+	return ( TRUE ); // Jabberwock 050320 - Proc not used; value for compiler
 /* ////Moje 040616 BUg Hunt
 	HRESULT
 		hr;

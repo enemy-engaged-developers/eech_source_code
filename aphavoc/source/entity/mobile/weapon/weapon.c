@@ -1310,34 +1310,56 @@ void update_entity_weapon_systems (entity *source)
 							set_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY, FALSE);
 						}
 
-						// 050121 Jabberwock - Cannon tracking with limits - thanks, Loke!
-
-						if ((command_line_cannontrack) && (source == get_gunship_entity())) // Jabberwock 050128 Bug removed!
+						// 050320 Jabberwock - Cannon tracking - major restructuring for MP
+						
+						if (get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 						{
-							switch (command_line_cannontrack)
+							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
 							{
-								case 1:
+								switch (command_line_cannontrack)
 								{
-									if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+									case 1:
 									{
-										required_heading_offset = -pilot_head_heading;
+										if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+										{
+											required_heading_offset = -pilot_head_heading;
 
-										required_pitch_offset = pilot_head_pitch;
+											required_pitch_offset = pilot_head_pitch;
+											
+											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
+																				
+											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
+
+										}
+										break;
 									}
-									break;
-								}
 
-								case 2:
+									case 2:
+									{
+										if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
+										{
+											required_heading_offset = -pilot_head_heading;
+
+											required_pitch_offset = pilot_head_pitch;
+											
+											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
+																				
+											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
+
+										}
+										break;
+									}
+								}
+								
+										}
+							else
+							{	
+								if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING) || get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH)))
 								{
-									if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
-									{
-										required_heading_offset = -pilot_head_heading;
+									required_heading_offset = get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING);
 
-										required_pitch_offset = pilot_head_pitch;
-									}
-									break;
+									required_pitch_offset = get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH);
 								}
-
 							}
 							required_heading_offset = bound
 							(
@@ -1354,7 +1376,7 @@ void update_entity_weapon_systems (entity *source)
 							);
 
 						}
-					// 050121 Jabberwock ends
+					// 050320 Jabberwock ends
 					}
 
 						//set_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY, FALSE);

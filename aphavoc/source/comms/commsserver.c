@@ -357,7 +357,7 @@ void validate_connections (void)
 						free_connection_packets (destroy_connection->connection_id); // Jabberwock 040602 Maybe this will clear DP groups... 
 						// Jabberwock 0312073 MP bug search - Not working - DP timeout kills the player first....
 
-						direct_play_remove_player_from_group (destroy_connection->connection_id);
+						//direct_play_remove_player_from_group (destroy_connection->connection_id);
 						unregister_connection (destroy_connection->connection_id);
 					}
 					else
@@ -411,8 +411,8 @@ int server_create_session (void)
 			
 				if ( direct_play_session_capabilities () )
 				{
-				
-					if ( direct_play_create_group () )
+				// Jabberwock 050303 Remove DP groups
+				//	if ( direct_play_create_group () )
 					{
 					
 						if ( direct_play_create_player () )

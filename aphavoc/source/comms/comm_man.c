@@ -724,8 +724,12 @@ void comms_process_data (void)
                                     //
                                     // Check both client and server are running same campaign data
                                     //
-                                    server_version_number = get_local_entity_int_value (get_session_entity (), INT_TYPE_VERSION_NUMBER);
-        
+                                    
+                                    // Jabberwock 050301 Hardcoded version number
+                                    
+                                    // please put in the date of the version! check it is changed twice!
+                                    server_version_number = 1621; // Jabberwock 050322 
+                                                                         
                                     quick_set_list_item (ptr, int, server_version_number);
         
                                     size += sizeof (int);
@@ -978,6 +982,113 @@ void comms_process_data (void)
 								size += strlen ("NONE") + 1;
 							}                                    
 							
+							// Jabberwock 050129 WUT transfer - server side
+							// with great help from Gotcha
+
+							// Aircraft
+
+							memcpy (ptr, aircraft_database, sizeof(aircraft_database));
+
+							ptr += sizeof(aircraft_database);
+
+							size += sizeof(aircraft_database);
+
+							// Vehicle
+
+							memcpy (ptr, vehicle_database, sizeof(vehicle_database));
+
+							ptr += sizeof(vehicle_database);
+
+							size += sizeof(vehicle_database);
+
+							// Weapon
+
+							memcpy (ptr, weapon_database, sizeof(weapon_database));
+
+							ptr += sizeof(weapon_database);
+
+							size += sizeof(weapon_database);
+
+							// Keysite
+
+							memcpy (ptr, keysite_database, sizeof(keysite_database));
+
+							ptr += sizeof(keysite_database);
+
+							size += sizeof(keysite_database);
+
+							// Group
+
+							memcpy (ptr, group_database, sizeof(group_database));
+
+							ptr += sizeof(group_database);
+
+							size += sizeof(group_database);
+
+							// Task
+
+							memcpy (ptr, task_database, sizeof(task_database));
+
+							ptr += sizeof(task_database);
+
+							size += sizeof(task_database);
+
+							// Waypoint
+
+							memcpy (ptr, waypoint_database, sizeof(waypoint_database));
+
+							ptr += sizeof(waypoint_database);
+
+							size += sizeof(waypoint_database);
+
+							// Guide
+
+							memcpy (ptr, guide_database, sizeof(guide_database));
+
+							ptr += sizeof(guide_database);
+
+							size += sizeof(guide_database);
+
+							// Radar
+
+							memcpy (ptr, radar_range_apache, sizeof(radar_range_apache));
+
+							ptr += sizeof(radar_range_apache);
+
+							size += sizeof(radar_range_apache);
+
+							memcpy (ptr, radar_range_comanche, sizeof(radar_range_comanche));
+
+							ptr += sizeof(radar_range_comanche);
+
+							size += sizeof(radar_range_comanche);
+
+							memcpy (ptr, radar_range_blackhawk, sizeof(radar_range_blackhawk));
+
+							ptr += sizeof(radar_range_blackhawk);
+
+							size += sizeof(radar_range_blackhawk);
+
+							memcpy (ptr, radar_range_hokum, sizeof(radar_range_hokum));
+
+							ptr += sizeof(radar_range_hokum);
+
+							size += sizeof(radar_range_hokum);
+
+							memcpy (ptr, radar_range_havoc, sizeof(radar_range_havoc));
+
+							ptr += sizeof(radar_range_havoc);
+
+							size += sizeof(radar_range_havoc);
+
+							memcpy (ptr, radar_range_hind, sizeof(radar_range_hind));
+
+							ptr += sizeof(radar_range_hind);
+
+							size += sizeof(radar_range_hind);
+
+							// Jabberwock 050129 ends
+
 							quick_set_list_item (ptr, int, command_line_planner_goto_button);
 							
 							size += sizeof (int);							
@@ -1046,7 +1157,11 @@ void comms_process_data (void)
                         size += strlen (temp_wut_filename) + 1;
                         
                         strcpy(session_WUT_filename, temp_wut_filename);
-						
+
+                     //   { Jabberwock 050129 WUT transfer - client side
+                     // with great help from Gotcha
+
+					 /*	not needed anymore, hopefully!
                         if (stricmp (session_WUT_filename, "NONE") != 0)
                         {
                        		if (!file_exist(session_WUT_filename))
@@ -1075,12 +1190,116 @@ void comms_process_data (void)
                         	if (file_exist("gwut146x.csv"))
                         		parse_WUT_file("gwut146x.csv");
                         }
-                        
+						*/ 
+
                         sprintf (buffer, "%s: %s", get_trans ("Server WUT version"), session_WUT_filename);
 						
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
-                        
-                        
+
+						// Aircraft
+
+						memcpy (aircraft_database, ptr, sizeof(aircraft_database));
+
+						ptr += sizeof(aircraft_database);
+
+						size += sizeof(aircraft_database);
+
+						// Vehicle
+
+						memcpy (vehicle_database, ptr, sizeof(vehicle_database));
+
+						ptr += sizeof(vehicle_database);
+
+						size += sizeof(vehicle_database);
+
+						// Weapon
+
+						memcpy (weapon_database, ptr, sizeof(weapon_database));
+
+						ptr += sizeof(weapon_database);
+
+						size += sizeof(weapon_database);
+
+						// Keysite
+
+						memcpy (keysite_database, ptr, sizeof(keysite_database));
+
+						ptr += sizeof(keysite_database);
+
+						size += sizeof(keysite_database);
+
+						// Group
+
+						memcpy (group_database, ptr, sizeof(group_database));
+
+						ptr += sizeof(group_database);
+
+						size += sizeof(group_database);
+
+						// Task
+
+						memcpy (task_database, ptr, sizeof(task_database));
+
+						ptr += sizeof(task_database);
+
+						size += sizeof(task_database);
+
+						// Waypoint
+
+						memcpy (waypoint_database, ptr, sizeof(waypoint_database));
+
+						ptr += sizeof(waypoint_database);
+
+						size += sizeof(waypoint_database);
+
+						// Guide
+
+						memcpy (guide_database, ptr, sizeof(guide_database));
+
+						ptr += sizeof(guide_database);
+
+						size += sizeof(guide_database);
+
+						// Radar
+
+						memcpy (radar_range_apache, ptr, sizeof(radar_range_apache));
+
+						ptr += sizeof(radar_range_apache);
+
+						size += sizeof(radar_range_apache);
+
+						memcpy (radar_range_comanche, ptr , sizeof(radar_range_comanche));
+
+						ptr += sizeof(radar_range_comanche);
+
+						size += sizeof(radar_range_comanche);
+
+						memcpy (radar_range_blackhawk, ptr, sizeof(radar_range_blackhawk));
+
+						ptr += sizeof(radar_range_blackhawk);
+
+						size += sizeof(radar_range_blackhawk);
+
+						memcpy (radar_range_hokum, ptr, sizeof(radar_range_hokum));
+
+						ptr += sizeof(radar_range_hokum);
+
+						size += sizeof(radar_range_hokum);
+
+						memcpy (radar_range_havoc, ptr, sizeof(radar_range_havoc));
+
+						ptr += sizeof(radar_range_havoc);
+
+						size += sizeof(radar_range_havoc);
+
+						memcpy (radar_range_hind, ptr, sizeof(radar_range_hind));
+
+						ptr += sizeof(radar_range_hind);
+
+						size += sizeof(radar_range_hind);
+
+						// Jabberwock 050129 ends
+
                         session_planner_goto_button = get_list_item (ptr, int);
 
                         size += sizeof (int);
@@ -1196,7 +1415,12 @@ void comms_process_data (void)
                         //
                         // Check both client and server are running same campaign data
                         //
-                        client_version_number = get_global_version_number ();
+                        
+                        // Jabberwock 050301 Hardcoded version number
+                                    
+                        // please put in the date of the version! check it is changed twice!                        
+                        
+                        client_version_number = 1621; // Jabberwock 050322 
 
                         server_version_number = get_list_item (ptr, int);
 
@@ -1214,7 +1438,17 @@ void comms_process_data (void)
                         }
                         //
                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+						
+						// Jabberwock 050320 Downwash MP check
+						if (command_line_downwash)
+						{
+							ui_object_destroy_list_items (session_info_list);
+							add_to_pop_up_list_with_word_wrap (get_trans ("Downwash has to be turned off for multiplayer. Change the setting in the ini file (dwash=0) and restart the game."), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+							//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
+							break;
+                        }
+                        // Jabberwock 050320 ends
+						
                         // map details
 
                         x_size = get_list_item (ptr, int);
@@ -1968,7 +2202,7 @@ void comms_process_data (void)
 
                         session_data = TRUE;
 
-                        //direct_play_join_group ();
+                        //direct_play_join_group (); // Jabberwock 050303 Remove DP groups
 
                         set_gunship_waiting_for_connection ( FALSE );
 

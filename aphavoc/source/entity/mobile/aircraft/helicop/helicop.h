@@ -80,6 +80,10 @@ struct HELICOPTER
 		main_rotor_roll,
 		main_rotor_blade_coning_angle,
 		main_rotor_spin_up_timer,
+		// Jabberwock 050310 MP Cannon bug
+		player_weapon_heading,
+		player_weapon_pitch,
+		// Jabberwock 050310 ends
 		tail_rotor_rpm;
 
 	unsigned int

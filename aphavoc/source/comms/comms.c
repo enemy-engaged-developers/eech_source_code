@@ -1370,9 +1370,10 @@ DPID get_packet_destination (void)
 		
 		case COMMS_MODEL_SERVER:
 		{
-			
-			id = direct_play_get_group_id ();
-			
+			// Jabberwock 050303 Remove DP groups
+			//id = direct_play_get_group_id ();
+			id = DPID_ALLPLAYERS;
+
 			break;
 		}
 		case COMMS_MODEL_CLIENT:

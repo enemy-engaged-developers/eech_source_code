@@ -755,6 +755,24 @@ float_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
+// Jabberwock 050310 MP Cannon bug
+		{
+			"FLOAT_TYPE_PLAYER_WEAPON_HEADING",                                // name
+			FLOAT_PACK_TYPE_SIGNED_ANGLE,	 							// pack_type
+			3,																	// pack_num_whole_bits (excluding sign bit)
+			8,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PLAYER_WEAPON_PITCH",                                // name
+			FLOAT_PACK_TYPE_SIGNED_ANGLE,	 							// pack_type
+			3,																	// pack_num_whole_bits (excluding sign bit)
+			8,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+// Jabberwock 050310 ends
 		{
 			"FLOAT_TYPE_POPULATION_X_MIN",                     // name
 			FLOAT_PACK_TYPE_UNPACKED,		 							// pack_type

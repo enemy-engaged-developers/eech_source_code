@@ -116,8 +116,9 @@ void leave_mission (void)
 			#endif
  
                         
-////Moje 040618	Leave the player removal to cvc ;)		send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
-
+////Moje 040618	Leave the player removal to cvc ;)		
+	send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
+// Jabberwock 050320 - Restored, should work now
 		}
 
       connection = get_connection_list_head ();
@@ -147,15 +148,15 @@ void leave_mission (void)
 	
 			if ( !comms_connection->one_way_hosting_setup )
 			{
-		
-				direct_play_leave_group ();
-		
+			// Jabberwock 050303 Remove DP groups
+			//	direct_play_leave_group ();
+
 				direct_play_destroy_player ();
 		
 				if (get_comms_model () == COMMS_MODEL_SERVER)
 				{
-		
-					direct_play_destroy_group ();
+				// Jabberwock 050303 Remove DP groups
+				//	direct_play_destroy_group ();
 				}
 		
 				direct_play_close_session ();
