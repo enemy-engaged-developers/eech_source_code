@@ -164,11 +164,11 @@ int
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
-    command_line_framerate 									= FALSE,    // VJ 030326
-	command_line_key_mapping								= FALSE;	// Retro 030322
-	command_line_no_downwash								= FALSE,	// Xhit 030328
-	command_line_wut										= FALSE,	// VJ 030330
-	command_line_dump_ini									= FALSE;	// VJ 030330
+    command_line_framerate 									= FALSE,	// VJ 030326
+	command_line_key_mapping									= FALSE;	// Retro 030322
+	command_line_no_downwash									= FALSE,	// Xhit 030328
+	command_line_wut												= FALSE,	// VJ 030330
+	command_line_dump_ini										= FALSE;	// VJ 030330
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -191,12 +191,12 @@ float
 	command_line_smoke_effectiveness							= 1.0;
 
 char
-	command_line_game_initialisation_phase_path [128]	= "\0",
+	command_line_game_initialisation_phase_path [128]			= "\0",
 	command_line_game_initialisation_phase_directory [128]	= "\0",
-	command_line_game_initialisation_phase_filename [128]	= "\0",
-	command_line_debug_log_name[100]							= "DEBUG.LOG",
-	command_line_ip_address[128]								= "\0",
-	command_line_primary_server_setting[128]					= "hox.dhs.org",  //VJ for werewolf 030403, default value changed 080403
+	command_line_game_initialisation_phase_filename [128]		= "\0",
+	command_line_debug_log_name[100]									= "DEBUG.LOG",
+	command_line_ip_address[128]										= "\0",
+	command_line_primary_server_setting[128]						= "hox.dhs.org",  //VJ for werewolf 030403, default value changed 080403
 	command_line_secondary_server_setting[128]					= "eech.dhs.org";  //VJ for werewolf 030403, default value changed 080403 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
