@@ -136,6 +136,18 @@ void create_campaign (session_list_data_type *session)
 
 	sprintf (filename, "%s\\%s\\%s", session->data_path, session->campaign_directory, session->campaign_filename);
 
+/////////////////////////////////////////
+//VJ 050116 custom texture mod
+
+   //VJ 050116 custom texture mod: do this always to avoid clearing of default textures
+	clear_texture_override_names ();
+   
+   //VJ 050106 custom texture mod: read custom textures, SP game
+	load_warzone_override_textures (session->data_path);
+
+//VJ 050116 custom texture mod
+/////////////////////////////////////////
+
 	parser_campaign_file (filename, &offset);
 
 	ASSERT (get_session_entity ());
@@ -185,6 +197,7 @@ void destroy_campaign (void)
 	initialise_route_data ();
 
 	deinitialise_division_database ();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
