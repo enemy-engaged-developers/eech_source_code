@@ -549,10 +549,11 @@ void full_initialise_game (void)
 		char
 			buffer[256];
 
+
 #if ( OEM_3DLABS_VERSION )
 		sprintf ( buffer, "3DLabs Demonstration version" );
 #else
-		sprintf ( buffer, "%s: %d. %d. %d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE );
+		sprintf ( buffer, "%s: %d. %d. %d %s", get_trans ("Version"), MAJOR_VERSION, DATA_VERSION, MINOR_VERSION, BUILD_TYPE);
 #endif
 
 		set_ui_object_text (version_text, buffer);
@@ -609,6 +610,16 @@ void full_initialise_game (void)
 	}
 
 	save_global_options_data ();
+	
+//VJ 030807 added wut file name display for startup screen
+   if (command_line_wut)
+		sprintf ( buffer, "%s: %s", get_trans ("WUT"), WUT_filename);
+	else
+		sprintf ( buffer, "%s: %s", get_trans ("WUT"), get_trans ("NONE"));
+		
+	set_ui_object_text (WUT_text, buffer);
+
+	ui_force_update ();
 
 	debug_log ( "Opening graphics files" );
 
@@ -937,16 +948,18 @@ void full_initialise_game (void)
 	// Parse the WUT text file 
 	//
 	////////////////////////////////////////
+	
     if (command_line_wut)
     {
-	debug_log ( "reading WUT file %s",WUT_filename );
-
+		debug_log ( "reading WUT file %s",WUT_filename );
+/*
+//VJ 030807 moved to beginning of this function as separate ui_object
 	sprintf (buffer, "%s...%s: %s", get_trans ("Loading"), get_trans ("WUT file"), WUT_filename);
 
 	set_ui_object_text (initialising_text, buffer);
 
 	ui_force_update ();
-
+*/
     	parse_WUT_file(WUT_filename);
     }
     

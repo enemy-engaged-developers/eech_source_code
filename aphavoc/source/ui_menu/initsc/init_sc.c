@@ -70,7 +70,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030807 added wut file name display for startup screen
 ui_object
+	*WUT_text,
 	*version_text,
 	*copyright_text,
 	*ah_installed_text,
@@ -163,6 +165,26 @@ void initialise_init_screen (void)
 			UI_ATTR_VIRTUAL_SIZE (x2, y2),
 			UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_16),
       	UI_ATTR_FONT_COLOUR (ui_init_screen_text_colour.r, ui_init_screen_text_colour.g, ui_init_screen_text_colour.b, 255),
+			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_CENTRE),
+			UI_ATTR_TEXT (""),
+			UI_ATTR_CLEAR (TRUE),
+			UI_ATTR_END
+		);
+
+//VJ 030807 added wut file name display for startup screen
+	x1 = 0.820;
+	y1 = 0.88;
+	x2 = 0.3;
+	y2 = 0.0625;
+	
+	WUT_text = create_ui_object
+		(
+			UI_TYPE_TEXT,
+			UI_ATTR_PARENT (init_screen),
+			UI_ATTR_VIRTUAL_POSITION (x1, y1),
+			UI_ATTR_VIRTUAL_SIZE (x2, y2),
+			UI_ATTR_FONT_TYPE (UI_FONT_ARIAL_16),
+      	UI_ATTR_FONT_COLOUR (255,255,255,255),
 			UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_CENTRE),
 			UI_ATTR_TEXT (""),
 			UI_ATTR_CLEAR (TRUE),
