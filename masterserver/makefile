@@ -1,7 +1,7 @@
 
 CC=gcc
 #CC=egcs
-CFLAGS=-Wall
+#CFLAGS=-Wall
 
 all: eechmaster
 eechmaster: eechmaster.o
