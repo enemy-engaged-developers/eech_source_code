@@ -120,7 +120,7 @@ c_module_object_files   += $+ &
 lib_files += $(modulesdir)\linklib\dinput.lib
 lib_files += $(modulesdir)\linklib\dplayx.lib
 lib_files += $(modulesdir)\linklib\dxguid.lib
-lib_files += $(modulesdir)\linklib\guids.lib
+#lib_files += $(modulesdir)\linklib\guids.lib
 
 #################################################################################################################################
 #################################################################################################################################
