@@ -3728,6 +3728,9 @@
 							<File
 								RelativePath=".\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_WPN.C">
 							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\common\co_tsd.c">
+							</File>
 						</Filter>
 						<Filter
 							Name="HAVOC"
