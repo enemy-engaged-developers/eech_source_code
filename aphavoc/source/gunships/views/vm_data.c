@@ -458,3 +458,6 @@ int
 //VJ 030423 TSD render mod
 tsd_render_modes 	
 	tsd_render_mode;
+	
+//VJ 030429 TSD render mod
+int tsd_render_palette;	

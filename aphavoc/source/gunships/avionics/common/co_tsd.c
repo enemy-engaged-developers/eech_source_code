@@ -58,7 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-//VJ 030423 TSD render mod
+//VJ 030429 TSD render mod
 // common functions used by all choppers
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@
 
 
 static rgb_colour
-		terrain_colour[33];
+		terrain_colour[3][33];
 
 static int 
 	draw_large_mfd;
@@ -135,6 +135,7 @@ void set_tsd_colours(void)
 		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
 		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
 		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,96, 255);
+		set_rgb_colour (MFD_ROAD_COLOUR,        248,248,248, 255);
 		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
 }	
 
@@ -166,40 +167,112 @@ void Initialise_TSD_render_terrain(void)
 	draw_large_mfd = TRUE;
 	
 	set_tsd_colours();
-	set_rgb_colour(terrain_colour[0 ],100, 150, 240, 255); 
+	
+	set_rgb_colour(terrain_colour[0][0],100, 150, 240, 255); 
 //colours as atlas: green yellow red white, strong	
-	set_rgb_colour(terrain_colour[1],89,152,41,255);
-	set_rgb_colour(terrain_colour[2],93,142,41,255);
-	set_rgb_colour(terrain_colour[3],97,132,41,255);
-	set_rgb_colour(terrain_colour[4],100,122,41,255);
-	set_rgb_colour(terrain_colour[5],104,122,41,255);
-	set_rgb_colour(terrain_colour[6],108,122,41,255);
-	set_rgb_colour(terrain_colour[7],112,122,41,255);
-	set_rgb_colour(terrain_colour[8],115,122,41,255);
-	set_rgb_colour(terrain_colour[9],133,133,46,255);
-	set_rgb_colour(terrain_colour[10],143,143,51,255);
-	set_rgb_colour(terrain_colour[11],153,153,56,255);
-	set_rgb_colour(terrain_colour[12],163,163,61,255);
-	set_rgb_colour(terrain_colour[13],173,173,66,255);
-	set_rgb_colour(terrain_colour[14],184,184,71,255);
-	set_rgb_colour(terrain_colour[15],194,194,77,255);
-	set_rgb_colour(terrain_colour[16],204,204,82,255);
-	set_rgb_colour(terrain_colour[17],194,189,77,255);
-	set_rgb_colour(terrain_colour[18],184,173,71,255);
-	set_rgb_colour(terrain_colour[19],173,158,66,255);
-	set_rgb_colour(terrain_colour[20],163,143,61,255);
-	set_rgb_colour(terrain_colour[21],153,128,56,255);
-	set_rgb_colour(terrain_colour[22],143,112,51,255);
-	set_rgb_colour(terrain_colour[23],133,97,46,255);
-	set_rgb_colour(terrain_colour[24],122,82,41,255);
-	set_rgb_colour(terrain_colour[25],130,93,56,255);
-	set_rgb_colour(terrain_colour[26],138,105,71,255);
-	set_rgb_colour(terrain_colour[27],146,116,87,255);
-	set_rgb_colour(terrain_colour[28],153,128,102,255);
-	set_rgb_colour(terrain_colour[29],161,139,117,255);
-	set_rgb_colour(terrain_colour[30],169,151,133,255);
-	set_rgb_colour(terrain_colour[31],176,162,148,255);
-	set_rgb_colour(terrain_colour[32],184,174,163,255);
+	set_rgb_colour(terrain_colour[0][1],89,152,41,255);
+	set_rgb_colour(terrain_colour[0][2],93,142,41,255);
+	set_rgb_colour(terrain_colour[0][3],97,132,41,255);
+	set_rgb_colour(terrain_colour[0][4],100,122,41,255);
+	set_rgb_colour(terrain_colour[0][5],104,122,41,255);
+	set_rgb_colour(terrain_colour[0][6],108,122,41,255);
+	set_rgb_colour(terrain_colour[0][7],112,122,41,255);
+	set_rgb_colour(terrain_colour[0][8],115,122,41,255);
+	set_rgb_colour(terrain_colour[0][9],133,133,46,255);
+	set_rgb_colour(terrain_colour[0][10],143,143,51,255);
+	set_rgb_colour(terrain_colour[0][11],153,153,56,255);
+	set_rgb_colour(terrain_colour[0][12],163,163,61,255);
+	set_rgb_colour(terrain_colour[0][13],173,173,66,255);
+	set_rgb_colour(terrain_colour[0][14],184,184,71,255);
+	set_rgb_colour(terrain_colour[0][15],194,194,77,255);
+	set_rgb_colour(terrain_colour[0][16],204,204,82,255);
+	set_rgb_colour(terrain_colour[0][17],194,189,77,255);
+	set_rgb_colour(terrain_colour[0][18],184,173,71,255);
+	set_rgb_colour(terrain_colour[0][19],173,158,66,255);
+	set_rgb_colour(terrain_colour[0][20],163,143,61,255);
+	set_rgb_colour(terrain_colour[0][21],153,128,56,255);
+	set_rgb_colour(terrain_colour[0][22],143,112,51,255);
+	set_rgb_colour(terrain_colour[0][23],133,97,46,255);
+	set_rgb_colour(terrain_colour[0][24],122,82,41,255);
+	set_rgb_colour(terrain_colour[0][25],130,93,56,255);
+	set_rgb_colour(terrain_colour[0][26],138,105,71,255);
+	set_rgb_colour(terrain_colour[0][27],146,116,87,255);
+	set_rgb_colour(terrain_colour[0][28],153,128,102,255);
+	set_rgb_colour(terrain_colour[0][29],161,139,117,255);
+	set_rgb_colour(terrain_colour[0][30],169,151,133,255);
+	set_rgb_colour(terrain_colour[0][31],176,162,148,255);
+	set_rgb_colour(terrain_colour[0][32],184,174,163,255);
+
+//yellow to brown		
+	set_rgb_colour(terrain_colour[1][0],100, 150, 240, 255); 
+	set_rgb_colour(terrain_colour[1][1],254,230,175,255);
+	set_rgb_colour(terrain_colour[1][2],254,231,170,255);
+	set_rgb_colour(terrain_colour[1][3],254,232,165,255);
+	set_rgb_colour(terrain_colour[1][4],254,231,161,255);
+	set_rgb_colour(terrain_colour[1][5],255,231,156,255);
+	set_rgb_colour(terrain_colour[1][6],255,229,153,255);
+	set_rgb_colour(terrain_colour[1][7],255,228,149,255);
+	set_rgb_colour(terrain_colour[1][8],255,225,145,255);
+	set_rgb_colour(terrain_colour[1][9],255,222,142,255);
+	set_rgb_colour(terrain_colour[1][10],255,219,139,255);
+	set_rgb_colour(terrain_colour[1][11],255,215,136,255);
+	set_rgb_colour(terrain_colour[1][12],255,211,133,255);
+	set_rgb_colour(terrain_colour[1][13],255,206,129,255);
+	set_rgb_colour(terrain_colour[1][14],255,201,126,255);
+	set_rgb_colour(terrain_colour[1][15],255,195,123,255);
+	set_rgb_colour(terrain_colour[1][16],253,189,120,255);
+	set_rgb_colour(terrain_colour[1][17],251,183,116,255);
+	set_rgb_colour(terrain_colour[1][18],247,176,112,255);
+	set_rgb_colour(terrain_colour[1][19],243,168,108,255);
+	set_rgb_colour(terrain_colour[1][20],238,161,103,255);
+	set_rgb_colour(terrain_colour[1][21],232,152,99,255);
+	set_rgb_colour(terrain_colour[1][22],225,144,94,255);
+	set_rgb_colour(terrain_colour[1][23],217,135,88,255);
+	set_rgb_colour(terrain_colour[1][24],208,126,82,255);
+	set_rgb_colour(terrain_colour[1][25],198,117,75,255);
+	set_rgb_colour(terrain_colour[1][26],186,107,68,255);
+	set_rgb_colour(terrain_colour[1][27],173,97,61,255);
+	set_rgb_colour(terrain_colour[1][28],159,86,52,255);
+	set_rgb_colour(terrain_colour[1][29],143,76,43,255);
+	set_rgb_colour(terrain_colour[1][30],125,65,34,255);
+	set_rgb_colour(terrain_colour[1][31],106,53,23,255);
+	set_rgb_colour(terrain_colour[1][32],86,42,12,255);	
+	                                                  
+//colours as atlas but washed
+	set_rgb_colour(terrain_colour[2][32],90,59,27,255);
+	set_rgb_colour(terrain_colour[2][31],105,59,27,255);
+	set_rgb_colour(terrain_colour[2][30],119,61,28,255);
+	set_rgb_colour(terrain_colour[2][29],131,65,30,255);
+	set_rgb_colour(terrain_colour[2][28],141,70,34,255);
+	set_rgb_colour(terrain_colour[2][27],150,77,39,255);
+	set_rgb_colour(terrain_colour[2][26],157,85,44,255);
+	set_rgb_colour(terrain_colour[2][25],163,94,50,255);
+	set_rgb_colour(terrain_colour[2][24],169,102,57,255);
+	set_rgb_colour(terrain_colour[2][23],173,111,63,255);
+	set_rgb_colour(terrain_colour[2][22],176,119,70,255);
+	set_rgb_colour(terrain_colour[2][21],179,127,76,255);
+	set_rgb_colour(terrain_colour[2][20],182,134,81,255);
+	set_rgb_colour(terrain_colour[2][19],184,139,85,255);
+	set_rgb_colour(terrain_colour[2][18],186,143,89,255);
+	set_rgb_colour(terrain_colour[2][17],188,144,91,255);
+	set_rgb_colour(terrain_colour[2][16],191,144,91,255);
+	set_rgb_colour(terrain_colour[2][15],207,159,102,255);
+	set_rgb_colour(terrain_colour[2][14],214,169,110,255);
+	set_rgb_colour(terrain_colour[2][13],217,177,119,255);
+	set_rgb_colour(terrain_colour[2][12],216,183,128,255);
+	set_rgb_colour(terrain_colour[2][11],212,188,136,255);
+	set_rgb_colour(terrain_colour[2][10],205,192,143,255);
+	set_rgb_colour(terrain_colour[2][9],194,194,149,255);
+	set_rgb_colour(terrain_colour[2][8],181,194,154,255);
+	set_rgb_colour(terrain_colour[2][7],166,193,156,255);
+	set_rgb_colour(terrain_colour[2][6],149,191,157,255);
+	set_rgb_colour(terrain_colour[2][5],130,188,155,255);
+	set_rgb_colour(terrain_colour[2][4],110,183,150,255);
+	set_rgb_colour(terrain_colour[2][3],88,177,142,255);
+	set_rgb_colour(terrain_colour[2][2],65,170,130,255);
+	set_rgb_colour(terrain_colour[2][1],42,162,114,255);
+	set_rgb_colour(terrain_colour[2][0],100, 150, 240, 255); 
+
 }	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -794,6 +867,8 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	ASSERT (position);
 
 
+
+
 	//
 	// rotate map
 	//
@@ -908,33 +983,33 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+mid_y)/3.0;			   
 		   	c = colour_scale(terrain_elev);
 			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[c];			   	
+			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
 			   else
-			   	terrain_col = terrain_colour[0];
+			   	terrain_col = terrain_colour[tsd_render_palette][0];
 			   draw_2d_filled_triangle (dx0,dz0,mid_x,mid_z,dx1,dz0,terrain_col);
 			                                                                 
 			   terrain_elev = (this_row_ptr[1]+next_row_ptr[1]+mid_y)/3.0;   
 		   	c = colour_scale(terrain_elev);
 			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[c];			   	
+			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
 			   else
-			   	terrain_col = terrain_colour[0];
+			   	terrain_col = terrain_colour[tsd_render_palette][0];
 			   draw_2d_filled_triangle (dx1,dz0,mid_x,mid_z,dx1,dz1,terrain_col);
                                                                           
 			   terrain_elev = (this_row_ptr[0]+next_row_ptr[0]+mid_y)/3.0;   
 		   	c = colour_scale(terrain_elev);
 			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[c];			   	
+			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
 			   else
-			   	terrain_col = terrain_colour[0];
+			   	terrain_col = terrain_colour[tsd_render_palette][0];
 			   draw_2d_filled_triangle (dx0,dz0,dx0,dz1,mid_x,mid_z,terrain_col);
                                                                           
 			   terrain_elev = (next_row_ptr[0]+next_row_ptr[1]+mid_y)/3.0;   
 		   	c = colour_scale(terrain_elev);
 			   if (terrain_elev > 0)
-			   	terrain_col = terrain_colour[c];			   	
+			   	terrain_col = terrain_colour[tsd_render_palette][c];			   	
 			   else
-			   	terrain_col = terrain_colour[0];
+			   	terrain_col = terrain_colour[tsd_render_palette][0];
 			   draw_2d_filled_triangle (dx0,dz1,dx1,dz1,mid_x,mid_z,terrain_col);			   
 			                                                                                       
 				//                                  
