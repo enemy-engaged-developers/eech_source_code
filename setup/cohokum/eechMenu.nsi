@@ -11,7 +11,6 @@
   
   ;define these variable 
   !define VERSION "161W4"
-  !define EECH-NEW "c:\gms\razorworks\eech-new"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -30,11 +29,11 @@
 
 ;--------------------------------
 ;Pages
-		!define MUI_ICON "${EECH-NEW}\setup\cohokum\eech.ico"
-  		!define MUI_WELCOMEFINISHPAGE_BITMAP ${EECH-NEW}\setup\cohokum\enemyengagedlogo.bmp
+		!define MUI_ICON eech.ico
+  		!define MUI_WELCOMEFINISHPAGE_BITMAP enemyengagedlogo.bmp
   		!define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
 
-  !insertmacro MUI_PAGE_LICENSE "${EECH-NEW}\setup\cohokum\licenceeech.txt"	
+  !insertmacro MUI_PAGE_LICENSE licenceeech.txt
 		!define MUI_COMPONENTSPAGE_TEXT_TOP "Check/Uncheck the components you want to install. CAREFUL: files will be overwritten!"
   !insertmacro MUI_PAGE_COMPONENTS  	
   		!define MUI_DIRECTORYPAGE_TEXT_TOP "Please select the Razorworks root folder. This installer will place the files in the correct directories."
@@ -58,23 +57,19 @@ Section "cohokum.exe" SectionExe
   SetOutPath "$INSTDIR\cohokum"
   
   ;ADD YOUR OWN FILES HERE...
-  File "${EECH-NEW}\aphavoc\cohokum.exe"
-  File "${EECH-NEW}\setup\cohokum\readme.html"
-  File "${EECH-NEW}\setup\cohokum\motd.txt"
-  File "${EECH-NEW}\setup\common\data\language\tlate6.dat"
- 
-SectionEnd
+  File "..\..\aphavoc\cohokum.exe"
+  File readme.html
+  File motd.txt
 
-Section "Payload screens" SecPayload
+  SetOutPath "$INSTDIR\common\data\language\"
+  File ..\common\data\language\tlate6.dat
 
   SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\Map"
-  
-  ;ADD YOUR OWN FILES HERE...
-  File ${EECH-NEW}\setup\cohokum\graphics\ui\cohokum\Map\PayAh6.psd
-  File ${EECH-NEW}\setup\cohokum\graphics\ui\cohokum\Map\PayBla.psd
-  File ${EECH-NEW}\setup\cohokum\graphics\ui\cohokum\Map\PayHin.psd
-  File ${EECH-NEW}\setup\cohokum\graphics\ui\cohokum\Map\PayKa5.psd
-
+  File graphics\ui\cohokum\Map\PayAh6.psd
+  File graphics\ui\cohokum\Map\PayBla.psd
+  File graphics\ui\cohokum\Map\PayHin.psd
+  File graphics\ui\cohokum\Map\PayKa5.psd
+ 
 SectionEnd
 
 Section "WUT files" SecGWUT
@@ -82,9 +77,9 @@ Section "WUT files" SecGWUT
   SetOutPath "$INSTDIR\cohokum"
   
   ;ADD YOUR OWN FILES HERE...
-  File ${EECH-NEW}\setup\cohokum\GWUT146X.csv
-  File ${EECH-NEW}\setup\cohokum\GWUT151D.csv
-  File ${EECH-NEW}\setup\cohokum\GWUT1613H.csv  
+  File GWUT146X.csv
+  File GWUT151D.csv
+  File GWUT1613H.csv  
 
 SectionEnd
 
@@ -92,14 +87,12 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_SectionExe ${LANG_ENGLISH} "Install cohokum.exe, readme.html, motd.txt and tlate6.dat language file"
-  LangString DESC_SecPayload ${LANG_ENGLISH} "Extra Payload screens AH64, Hind, BlackHawk, KA50"
+  LangString DESC_SectionExe ${LANG_ENGLISH} "Install cohokum.exe, readme.html, additional payload screens, motd.txt and tlate6.dat language file"
   LangString DESC_SecGWUT ${LANG_ENGLISH} "Weapons and Units Tweaker files"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SectionExe} $(DESC_SectionExe)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecPayload} $(DESC_SecPayload)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGWUT} $(DESC_SecGWUT)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
