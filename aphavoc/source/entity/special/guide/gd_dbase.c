@@ -189,15 +189,18 @@ const guide_data
 			TRUE,															// follow formation
 			GUIDE_POSITION_WAYPOINT,								// position type
 			GUIDE_TERRAIN_FOLLOW_NONE,								// terrain check
-
+//VJ FARP bug, date: 18-mar-03
 			{
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_RADIUS
-				{ TRUE,		rad (1.0) },							// GUIDE_CRITERIA_HEADING
-				{ TRUE,		0.005 },									// GUIDE_CRITERIA_ALTITUDE
+//VJ FARP bug: changed heading from 1 to 30, additional movement seems to stop bunny hopping 
+				{ TRUE,		rad (30.0) },							// GUIDE_CRITERIA_HEADING				
+//VJ FARP bug: changed altitude boundary from 0.005 to 0.5 m stops bunny hopping 
+				{ TRUE,		0.5 },									// GUIDE_CRITERIA_ALTITUDE
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_TRANSMIT_DATA
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_LAST_TO_REACH
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_WEAPON_VECTOR
 			}
+//VJ FARP bug, date: 18-mar-03, end
       },
       ////////////////////////////////////////
       //
