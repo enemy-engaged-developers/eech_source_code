@@ -608,6 +608,41 @@ static void toggle_navigation_lights_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Retro 18Jul2004
+static void toggle_gear_event (event *ev)
+{
+	int
+		state;
+
+	if (!get_dynamics_damage_type (DYNAMICS_DAMAGE_UNDERCARRIAGE))
+	{
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		{
+			state = get_local_entity_undercarriage_state (get_gunship_entity ());
+
+			if ((state == AIRCRAFT_UNDERCARRIAGE_UP) || (state == AIRCRAFT_UNDERCARRIAGE_RAISING))
+			{
+				lower_client_server_entity_undercarriage (get_gunship_entity ());
+				open_client_server_entity_loading_doors (get_gunship_entity ());
+			}
+			else if ((state == AIRCRAFT_UNDERCARRIAGE_DOWN) || (state == AIRCRAFT_UNDERCARRIAGE_LOWERING))
+			{
+				raise_client_server_entity_undercarriage (get_gunship_entity ());
+				close_client_server_entity_loading_doors (get_gunship_entity ());
+			}
+			else
+			{
+				debug_fatal ("Invalid undercarriage state = %d", state);
+			}
+		}
+	}
+}
+// Retro 18Jul2004 end
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void set_ka50_avionics_events (void)
 {
 	if (!get_gunship_entity ())
@@ -620,6 +655,9 @@ void set_ka50_avionics_events (void)
 	// KEYBOARD EVENTS
 	//
 	////////////////////////////////////////
+
+	// Retro 18Jul2004
+	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
 
 	//
 	// select target acquisition system
