@@ -30,7 +30,7 @@
 
 ;--------------------------------
 ;Pages
-	!define MUI_ICON "c:\gms\razorworks\cohokum\eech.ico"
+		!define MUI_ICON "${EECH-NEW}\setup\cohokum\eech.ico"
   		!define MUI_WELCOMEFINISHPAGE_BITMAP ${EECH-NEW}\setup\cohokum\enemyengagedlogo.bmp
   		!define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
 
