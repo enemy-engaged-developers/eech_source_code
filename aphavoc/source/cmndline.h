@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -142,7 +142,7 @@ extern int
 	command_line_eo_zoom_joystick_index,					// loke 030319
 	command_line_eo_zoom_joystick_axis,						// loke 030319
 	command_line_ground_radar_ignores_infantry,			// loke 030322
-	command_line_ground_stabilisation_available,			// loke 030322	
+	command_line_ground_stabilisation_available,			// loke 030322
 	command_line_framerate,										// VJ 030324
 //Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
 	command_line_downwash,										// Xhit 030328, VJ 030512 changed
@@ -156,7 +156,7 @@ extern int
 	command_line_rudder_joystick_index,						// loke 030418
 	command_line_rudder_joystick_axis,						// loke 030418
 	command_line_high_res_mfd,									// loke 030420
-	command_line_fly_any_airplane,							// VJ 030424	
+	command_line_fly_any_airplane,							// VJ 030424
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511
 	command_line_tsd_palette,									// VJ 030511
@@ -175,14 +175,15 @@ extern int
 	command_line_high_lod_hack,									// Retro 31Oct2004
 	command_line_3d_cockpit,									//VJ 050101 3d cpckpit mod
 	command_line_aphavoc,									//VJ 050101 aphavoc install hack
+	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
 	session_vector_flight_model,
 	session_ground_radar_ignores_infantry,
 	session_camcom;
-	
-	
-	
+
+
+
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,
@@ -211,9 +212,9 @@ extern char
 	command_line_debug_log_name[],
 	command_line_ip_address[],
 	command_line_primary_server_setting[],	 //VJ for werewolf and eech.ini 030403
-	command_line_secondary_server_setting[], //VJ for werewolf and eech.ini 030403 
+	command_line_secondary_server_setting[], //VJ for werewolf and eech.ini 030403
 	command_line_server_log_filename[]; // Jabberwock 031119 Server log
-	
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

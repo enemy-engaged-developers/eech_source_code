@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -198,7 +198,8 @@ int
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	command_line_aphavoc								= 0,	// VJ 050118 aphavoc install hack
-	
+	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
+
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model						= FALSE, // camcom bugs removed
@@ -232,7 +233,7 @@ char
 	command_line_debug_log_name[100]									= "DEBUG.LOG",
 	command_line_ip_address[128]										= "\0",
 	command_line_primary_server_setting[128]						= "hoxdna.org",  //VJ for werewolf 030403, default value changed 111103
-	command_line_secondary_server_setting[128]					= "eech.dhs.org",  //VJ for werewolf 030403, default value changed 080403 
+	command_line_secondary_server_setting[128]					= "eech.dhs.org",  //VJ for werewolf 030403, default value changed 080403
 	command_line_server_log_filename [128]			= "\0";	// Jabberwock 031119 Server log
 
 
@@ -1361,7 +1362,7 @@ void process_command_line (int argc, char *argv[])
 		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "primary_server_setting")) || (s2 = strarg (s1, "pss")))
-		//VJ 030403	added for werewolf primary server setting	
+		//VJ 030403	added for werewolf primary server setting
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1380,7 +1381,7 @@ void process_command_line (int argc, char *argv[])
 		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "secondary_server_setting")) || (s2 = strarg (s1, "sss")))
-		//VJ 030403 added for werewolf seconday server setting	
+		//VJ 030403 added for werewolf seconday server setting
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1550,7 +1551,7 @@ void process_command_line (int argc, char *argv[])
 			{
 				sscanf (s2 + 1, "%d", &command_line_max_fov);
 			}
-			
+
 			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
 				command_line_max_fov = 80;
 		}
@@ -1676,7 +1677,7 @@ void process_command_line (int argc, char *argv[])
 			}
 		}
 		////////////////////////////////////////
-		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate 
+		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1687,9 +1688,9 @@ void process_command_line (int argc, char *argv[])
 			{
 				command_line_framerate = FALSE;
 			}
-		}		
+		}
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "wut")) //VJ 030326 WUT mod 
+		else if (s2 = strarg (s1, "wut")) //VJ 030326 WUT mod
 		////////////////////////////////////////
 		{
 			if (*s2 == ':')
@@ -1723,7 +1724,7 @@ void process_command_line (int argc, char *argv[])
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "ini")) //VJ 030414 possibility to start without ini: /ini:0
-		////////////////////////////////////////		
+		////////////////////////////////////////
 		if (*s2 == ':')
 		{
 			sscanf (s2 + 1, "%d", &command_line_dump_ini);
@@ -1733,7 +1734,7 @@ void process_command_line (int argc, char *argv[])
 			command_line_dump_ini = TRUE;
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "downwash"))	//Xhit 030328, VJ 030512 changed 
+		else if (s2 = strarg (s1, "downwash"))	//Xhit 030328, VJ 030512 changed
 		////////////////////////////////////////
 		if (*s2 == ':')
 		{
@@ -1864,7 +1865,7 @@ void process_command_line (int argc, char *argv[])
 				command_line_green_mfd = TRUE;
 			}
 		}
-		////////////////////////////////////////		
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "camcom"))		// Jabberwock 031007 Campaign Commander
 		////////////////////////////////////////
 		{
@@ -1877,7 +1878,7 @@ void process_command_line (int argc, char *argv[])
 				command_line_camcom = FALSE;
 			}
 		}
-		////////////////////////////////////////		
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "designated_targets"))		// Jabberwock 031107 Designated targets
 		////////////////////////////////////////
 		{
@@ -1890,8 +1891,8 @@ void process_command_line (int argc, char *argv[])
 				command_line_designated_targets = FALSE;
 			}
 		}
-		
-		////////////////////////////////////////		
+
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "session_filter"))		// Jabberwock 031210 Session filter
 		////////////////////////////////////////
 		{
@@ -1904,8 +1905,8 @@ void process_command_line (int argc, char *argv[])
 				command_line_session_filter = FALSE;
 			}
 		}
-		
-		////////////////////////////////////////		
+
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "pause_server"))		// Jabberwock 040220 Pause server
 		////////////////////////////////////////
 		{
@@ -1918,7 +1919,7 @@ void process_command_line (int argc, char *argv[])
 				command_line_pause_server = FALSE;
 			}
 		}
-		////////////////////////////////////////		
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "3d_cockpit"))		// VJ 050101 3d cockpit mod
 		////////////////////////////////////////
 		{
@@ -1930,8 +1931,8 @@ void process_command_line (int argc, char *argv[])
 			{
 				command_line_3d_cockpit = FALSE;
 			}
-		}		
-		////////////////////////////////////////		
+		}
+		////////////////////////////////////////
 		else if (s2 = strarg (s1, "aphavoc"))		// VJ 050118 aphavoc install hack
 		////////////////////////////////////////
 		{
@@ -1943,7 +1944,20 @@ void process_command_line (int argc, char *argv[])
 			{
 				command_line_aphavoc = FALSE;
 			}
-		}		
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "cannontrack"))		// Jabberwock 050120 Cannon tracking
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_cannontrack);
+			}
+			else
+			{
+				command_line_cannontrack = FALSE;
+			}
+		}
       ////////////////////////////////////////
 		else
 		////////////////////////////////////////

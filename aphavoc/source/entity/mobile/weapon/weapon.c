@@ -1311,6 +1311,38 @@ void update_entity_weapon_systems (entity *source)
 						}
 					}
 
+
+						// 050120 Jabberwock - Cannon tracking
+
+						switch (command_line_cannontrack)
+						{
+							case 1:
+							{
+								if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+								{
+									required_heading_offset = -pilot_head_heading;
+
+									required_pitch_offset = pilot_head_pitch;
+								}
+								break;
+							}
+
+							case 2:
+							{
+								if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
+								{
+									required_heading_offset = -pilot_head_heading;
+
+									required_pitch_offset = pilot_head_pitch;
+								}
+								break;
+							}
+					}
+					// 050120 Jabberwock ends
+
+						//set_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY, FALSE);
+
+
 					if ((required_heading_offset != package_status[package].weapon_system_heading) || (required_pitch_offset != package_status[package].weapon_system_pitch))
 					{
 						if (!located_heading_and_pitch_devices)
