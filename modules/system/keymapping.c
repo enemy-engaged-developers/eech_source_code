@@ -5,16 +5,32 @@
 //	Update:
 //
 //	Description:	Well.. hmm... uuuug... rrrriiight...
+//					New user-configurable keymapping
+//	Developers!:	if you add a key, use set_configurable_event
+//					instead of set_event, you can use whatever string you
+//					want to 'name' that function (well... please keep it short,
+//					50 chars at max) - that´s all you have to do, it might
+//					be a good idea telling the users this string, so that
+//					they can map it..
 //*********************************************************************/
 #include "system.h"
 
 #include "cmndline.h"
 
-//#define SHOW_UNKNOWNS	// if there´s a command registerd (by using set_configurable_event () that is NOT in
+#include "keymapping.h"
+
+//#define SHOW_COMMENT_LINES	// prints comment-lines into "comment.txt"
+
+//#define TELL_ME_WHAT_YOU_SEE	// prints other lines into "echo.txt"
+
+//#define TIGHT_ARSE_DEBUG	// less forgiving version...
+
+#define SHOW_UNKNOWNS	// if there´s a command registered (by using set_configurable_event () that is NOT in
 						// the keymaps.cfg file, I get an error-output file (hopefully)
-//#define TIGHT_ARSE_DEBUG
 
 #define MAXMAPPINGS 300		// Max number of mappings, no real reason for 300 (just a number)
+
+#define MAX_LINE_LENGTH 1024
 
 #define SLIZE 50	// max length one command, keycombo or modifier can have.. (I´m still unconfortable using malloc())
 
@@ -199,7 +215,7 @@ static int number_of_commands = 0;	// number of keymappings in the above array
 //
 // Description:		Should check for duplicate key+modifier combos,
 //					and also for typos (?)
-//					not yet implemented
+//					not yet used
 //
 //*********************************************************************/
 int check_for_validity ( void )
@@ -330,6 +346,30 @@ int get_key_state_from_string ( char* statestring )
 
 //**********************************************************************
 //
+// Function:    CleanUpString
+// Date:		24.4.2003
+// Author:		Wolfram "Osram" Kuss (Retro took this from the
+//					Battle of Britain Source)
+//
+// Description:		removes trailing white space.
+//					returns pointer to first non-whitespace char
+//
+//*********************************************************************/
+char * CleanUpString(char *s)
+{ char *ret = s, *t; 
+  while ((*ret != 0) && ((*ret == ' ') || (*ret == 9 /* Tab */)))
+	  ret++;
+  t = &ret[ strlen(ret) ]; // t points to the 0 now
+  t--;
+  while ( (t >= ret) && ((*t == ' ') || (*t == 9 /* Tab */) || (*t == 10) || (*t == 13)))
+  { *t = 0;
+    t--;
+  }
+  return ret;
+}
+
+//**********************************************************************
+//
 // Function:    read_mapping_from_file
 // Date:		21.3.2003
 // Author:		Retro
@@ -344,89 +384,98 @@ void read_mapping_from_file ( char* filename )
 	//**********************************************************************
 	//	temp strings..
 	//*********************************************************************/
-	char	buffer[SLIZE*2],
-			command[SLIZE],
+	char	command[SLIZE],
 			key[SLIZE],
 			modifier[SLIZE],
 			state[SLIZE];
 
 	FILE* fp;
 
-	int i = 0;		// represents number of read strings (3 strings per line)
 	int line = 0;	// represents number of read lines
+	char myString [ MAX_LINE_LENGTH ], *myStrPtr, *res = 0;
 
 	assert ( filename );
 
 	fp = fopen(filename, "r");
 
-	assert ( fp );
-
 	if (fp == NULL)
 	{
-//		command_line_key_mapping = FALSE;	// pointless, as we don´t go any further anyway..
-		debug_fatal ( "Could not open file %s",filename );
+		//**********************************************************************
+		//	No Keymapping file is present, create one
+		//*********************************************************************/
+		fp = fopen(filename, "w");
+		if (fp != NULL)
+		{
+			int i;
+
+			for (i = 0; i < origcount; i++)
+			{
+				fprintf(fp,"%s",standard_key_mapping[i]);
+			}
+		
+		}
+		//**********************************************************************
+		//	Ooops..
+		//*********************************************************************/
+		else
+		{
+//			command_line_key_mapping = FALSE;	// pointless, as we don´t go any further anyway..
+			debug_fatal ( "Could not open or create file %s",filename );
+		}
 	}
 	else
 	{
 
-		fseek(fp,0,SEEK_SET);	// got to begin of file..
+		fseek(fp,0,SEEK_SET);	// go to begin of file..
 
 		//**********************************************************************
-		//	main loop.. I read 4 strings per line
+		//	main loop.. I read one line, then 4 strings from this line
 		//*********************************************************************/
-		while (i%4 < MAXMAPPINGS)
+		while ((!feof(fp))&&(line < MAXMAPPINGS))
 		{
-			if ((fscanf(fp,"%s",buffer) != EOF)&&(strlen(buffer) > 0))
-			{
-				if (strlen(buffer) < SLIZE)
-				{
-					//**********************************************************************
-					//	file-syntax: command \t key \t modifier \n
-					//*********************************************************************/
-					switch(i%4)
-					{
-						case 0: sprintf(command,"%s",buffer);break;
-						case 1: sprintf(key,"%s",buffer);break;
-						case 2: sprintf(modifier,"%s",buffer);break;
-						case 3: sprintf(state,"%s",buffer);break;
-						default: 
-#ifdef TIGHT_ARSE_DEBUG
-							debug_fatal ( "switch defaulted" );break;
-#else
-							assert ( 0 );break;
-#endif
-					}
-					//**********************************************************************
-					//	i%4 == 3 means 'end of line'; copying the data into the struct
-					//*********************************************************************/
-					if (i%4 == 3)
-					{
-						sprintf((keymaps[line]).functionID,"%s",command);
-						(keymaps[line]).key = get_DIK_from_string(key);
-						(keymaps[line]).modifier = get_modifier_from_string(modifier);
-						(keymaps[line]).state = get_key_state_from_string(state);
-						line++;
-					}
-				}
-				else	// a read string is bigger than SLIZE
-				{
-#ifdef TIGHT_ARSE_DEBUG
-					debug_fatal ( "a read string is bigger than SLIZE" );
-#else
-					assert ( 0 );
-#endif
-					break;
-				}
-			}
-			else	// EOF or fscanf error.. (nothing read)
-			{
-#ifdef TIGHT_ARSE_DEBUG
-				if (strlen(buffer) == 0)
-					debug_fatal ( "a read string is of zero length" );
-#endif
+			res = fgets(myString, 1024, fp);
+			if ( res == NULL )
 				break;
+			myStrPtr = CleanUpString ( myString );
+			if (myStrPtr[0] != 0)
+			{
+				if (myStrPtr[0] != '#')
+				// found non-empty, non-comment line. Parse it
+				{
+					//**********************************************************************
+					//	file-syntax: command \t key \t modifier \t state\n
+					//*********************************************************************/
+					if (sscanf(myStrPtr,"%s %s %s %s",command,key,modifier,state) != 4)
+					{
+#ifdef TIGHT_ARSE_DEBUG
+						debug_fatal ( "Remember to salt the fries: less than 4 strings in a line" );
+#else
+						continue;	// This makes us just disregard that line..
+#endif
+					}
+
+					sprintf((keymaps[line]).functionID,"%s",command);
+					(keymaps[line]).key = get_DIK_from_string(key);
+					(keymaps[line]).modifier = get_modifier_from_string(modifier);
+					(keymaps[line]).state = get_key_state_from_string(state);
+#ifdef TELL_ME_WHAT_YOU_SEE
+					{
+						FILE* fp = fopen("echo.txt","at");
+						fprintf(fp,"%s %i %i %i\n",(keymaps[line]).functionID,(keymaps[line]).key,(keymaps[line]).modifier,(keymaps[line]).state);
+						fclose(fp);
+					}
+#endif
+					line++;
+				}
+#ifdef SHOW_COMMENT_LINES
+				else
+				{
+					FILE* fp = fopen("comment.txt","at");
+					fprintf(fp,"comment: %s\n",myStrPtr);
+					fclose(fp);
+				}
+#endif
 			}
-			i++;
 		}
 		fclose(fp);
 
@@ -438,7 +487,7 @@ void read_mapping_from_file ( char* filename )
 
 //**********************************************************************
 //
-// Function:    my_new_set_event
+// Function:    configurable_event
 // Date:		21.3.2003
 // Author:		Retro
 //
@@ -449,7 +498,7 @@ void read_mapping_from_file ( char* filename )
 //					key combination specified in the array..
 //
 //*********************************************************************/
-void my_new_set_event (char* functionID, void (*func) ( struct EVENT *ev))
+void configurable_event (char* functionID, void (*func) ( struct EVENT *ev))
 {
 	int i = 0;
 #ifdef SHOW_UNKNOWNS
@@ -481,7 +530,7 @@ void my_new_set_event (char* functionID, void (*func) ( struct EVENT *ev))
 		{
 			if (number_of_matches == 0)
 			{
-				FILE* fp = fopen("keyerr.txt","at");
+				FILE* fp = fopen("unknown.txt","at");
 				fprintf(fp,"dunno %s\n",functionID);
 				fclose(fp);
 			}
