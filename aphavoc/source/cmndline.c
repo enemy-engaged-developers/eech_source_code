@@ -165,7 +165,8 @@ int
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 //VJ framerate 24-mar-03
-    command_line_framerate 									= FALSE;
+    command_line_framerate 									= FALSE,
+	command_line_key_mapping								= FALSE;	// Retro 030322
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1393,6 +1394,9 @@ void process_command_line (int argc, char *argv[])
 			{
 				sscanf (s2 + 1, "%d", &command_line_mouse_look_speed);
 			}
+
+			if (command_line_mouse_look_speed <= 0)
+				command_line_mouse_look_speed = 1;
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "minfov"))		//all by Retro 030318
@@ -1417,6 +1421,15 @@ void process_command_line (int argc, char *argv[])
 			
 			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
 				command_line_max_fov = 80;
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg(s1, "keymapping"))		//all by Retro 030322
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_key_mapping);
+			}
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg(s1, "pan_joystick_index"))	// loke 030319
