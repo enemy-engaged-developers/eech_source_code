@@ -661,8 +661,8 @@ void send_packet (DPID player_id, packet_types type, char *data, int size, send_
 	
 					//setup_campaign_over_screen (get_local_force_entity (get_global_gunship_side ()), CAMPAIGN_RESULT_SERVER_REJECTED);
 	
-					// Jabberwock 031118 MP bug search II - more telling error message
-					debug_fatal ("DirectPlay Error");
+					// Jabberwock 040518 Even more telling error message
+					debug_fatal ( "DirectPlay error: %d",  hr );
 					//start_game_exit (GAME_EXIT_KICKOUT, FALSE); 
 				}
 			}
