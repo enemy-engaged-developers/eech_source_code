@@ -88,6 +88,8 @@ extern void install_global_options_service_provider (void);
 
 extern void store_multiplayer_options (void);
 
+extern void initialise_service_provider_connection (void);
+
 extern modem_names
 	*current_modem;
 	

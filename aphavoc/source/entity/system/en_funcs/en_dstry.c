@@ -96,7 +96,8 @@ void (*fn_kill_client_server_entity[NUM_ENTITY_TYPES][NUM_COMMS_MODEL_TYPES]) (e
 
 static void default_destroy_entity (entity *en)
 {
-	debug_fatal ("default_destroy_entity invoked: %s (index = %d)", get_local_entity_type_name (en), get_local_entity_index (en));
+//Werewolf 14 May 2003
+//	debug_fatal ("default_destroy_entity invoked: %s (index = %d)", get_local_entity_type_name (en), get_local_entity_index (en));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

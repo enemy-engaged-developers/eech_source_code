@@ -304,8 +304,8 @@ void session_list_function (ui_object *obj, void *arg)
    session_list_data_type
       *current_session_list;
 
-	int
-		selection;
+	int selection;
+	int num_sessions;
 
 	if (obj->type == UI_TYPE_LIST_BOX)
 	{
@@ -451,6 +451,67 @@ void session_list_function (ui_object *obj, void *arg)
          break;
       }
 
+      case SESSION_LIST_TYPE_MASTER:
+      {
+			debug_log ("JOININET: Setting ip to %s ...", current_session_list->ip_address);
+			//Set the IP, as if we would enter it in the options screen
+			sprintf(global_options.ip_address, current_session_list->ip_address);
+			global_options.ip_address[127] = '\0';
+
+			debug_log ("JOININET: reinitializing dplay...");
+
+			//Re-Activate DirectPlay
+			if (!get_current_game_session ())
+			{
+				initialise_service_provider_connection ();
+			}
+
+			debug_log ("JOININET: flushing session list...");
+//			initialise_session_list();
+			current_session_list = NULL;
+			
+			//bail out if we don't find any sessions
+			num_sessions = direct_play_enumerate_sessions();
+			debug_log ("JOININET: Sessions found: %i", num_sessions);
+
+			if (num_sessions <= 0)
+			  break;
+			
+			debug_log ("JOININET: getting first session on server...");
+			get_first_multi_session(&current_session_list);
+
+			if (!current_session_list)
+			{
+			  debug_log ("JOININET: current_session_list is still NULL!");
+			  break;
+			}
+			
+//			debug_log ("JOININET: resetting current session type...");
+//			current_session_list->type = SESSION_LIST_TYPE_JOIN;
+
+//			debug_log ("JOININET: setting list = list->next ...");
+//			current_session_list = current_session_list->next;
+
+			debug_log ("JOININET: setting head = current ...");
+			session_child_head = current_session_list;
+
+			debug_log ("JOININET: setting comms model...");
+			set_comms_model (COMMS_MODEL_CLIENT);
+
+			debug_log ("JOININET: setting current session...");
+			set_current_game_session (current_session_list); // debug, should join actual session..
+
+			debug_log ("JOININET: update ui comms...");
+			ui_set_user_function (update_ui_comms);
+
+			debug_log ("JOININET: processing game initialisation phases...");
+			process_game_initialisation_phases ();
+
+			debug_log ("JOININET: Done!");
+
+         break;
+      }
+
       default:
       {
 
@@ -478,7 +539,7 @@ void session_update_session_list (void)
 		open_pack_buffer (tx_pack_buffer, command_line_comms_pack_buffer_size);
 	}
 
-	game_update_time = TIME_2_SECOND;
+	game_update_time = TIME_2_SECOND * 5;
 
 	if (update_ticks < get_system_time ())
 	{
@@ -697,6 +758,17 @@ void build_session_list (void)
 			if (list->type == SESSION_LIST_TYPE_HOST)
 			{
 				list_item = add_to_pop_up_list (list->displayed_title, session_list, NULL, list->list_id, UI_FONT_ARIAL_16, ui_list_text_default_colour);
+
+				set_ui_frontend_list_object_highlightable (list_item);
+			}
+			else if (list->type == SESSION_LIST_TYPE_MASTER)
+			{
+				col.r = 240;
+				col.g = 73;
+				col.b = 89;
+				col.a = 255;
+
+				list_item = add_to_pop_up_list (list->displayed_title, session_list, NULL, list->list_id, UI_FONT_ARIAL_16, col);
 
 				set_ui_frontend_list_object_highlightable (list_item);
 			}

@@ -115,6 +115,12 @@ int mastersocket2 = -1;
 short MasterPort = 1375;
 int last_heartbeat_time = 0;
 char localplayer[256];
+char ReceiveBuffer[65535];
+char SendBuffer[65535];
+int PACKET_SIZE = 4096; // This should be set from network.cpp
+SOCKADDR from;
+ServerData Servers[1000];
+int numServers;
 //-- Werewolf
 
 
@@ -1929,6 +1935,36 @@ void net_set_hostname (char *data)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int net_CheckForDataOnSocket (int p1, int p2)
+{
+	fd_set rread;
+	struct timeval to;
+	int sr;
+	int p;
+	
+	if (p2 > 0)
+	  p = p2;
+	if (p1 > 0)
+	  p = p1;
+
+	FD_ZERO (&rread);
+	FD_SET (p, &rread);	
+
+	memset (&to, 0, sizeof (to));
+
+	to.tv_usec = 1;
+	sr = select (1, &rread, NULL, NULL, &to);
+ 
+	if (sr < 0) /* There was an error */
+    	return FALSE;
+
+	if (sr > 0)
+		if (FD_ISSET (p,&rread))
+			return 1;
+
+	return -1;
+}
+
 // Send a UDP packet to the masterserver
 void net_sendDataToMaster (char *data, int servernum)
 {
@@ -1942,6 +1978,20 @@ void net_sendDataToMaster (char *data, int servernum)
           debug_log ("HEARTBEAT: sending heartbeat to secondary server");
           sendto (mastersocket2, data, strlen (data), 0, (SOCKADDR *)&Master2, sizeof (SOCKADDR));
         }
+}
+
+//This is a special function because the received data is stored in ReceiveBuffer!!
+void net_receiveData (int s1, int s2)
+{
+	int socket;
+	int len = sizeof (SOCKADDR);
+	if (s2 > 0)
+	  socket = s2;
+	if (s1 > 0)
+	  socket = s1;
+	  
+	memset (ReceiveBuffer, '\0', PACKET_SIZE);
+	recvfrom (socket, ReceiveBuffer, PACKET_SIZE, 0, &from, &len);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2030,6 +2080,64 @@ debug_log ("HEARTBEAT: sending: %s", TempStuff);
       net_sendDataToMaster (TempStuff, 2);
 }
 
+//--------------------------------------------------------------------------------
+// Retrieve a list of available internet game servers
+//--------------------------------------------------------------------------------
+void net_getServerList(void)
+{
+    char header[80];
+    int index = 0;
+    long timeout = 0;
+
+
+    net_init_heartbeat();
+
+    debug_log ("GETSERVERLIST: Init");
+    
+    if ((mastersocket <=0) && (mastersocket2 <=0))
+	return;
+
+    //Request a list of servers
+    sprintf(SendBuffer, "Y");
+    if (mastersocket > 0 )
+      net_sendDataToMaster (SendBuffer, 1);
+    if (mastersocket2 > 0 )
+      net_sendDataToMaster (SendBuffer, 2);
+
+    debug_log ("GETSERVERLIST: Request sent");
+
+		do {
+		timeout++;
+		} while ((net_CheckForDataOnSocket (mastersocket, mastersocket2)!=1) && (timeout < 6000000));
+		if (timeout<6000000)
+		{
+			do
+			{
+				net_receiveData (mastersocket, mastersocket2); //The received data is in ReceiveBuffer!!
+    debug_log ("GETSERVERLIST: Received: %s", ReceiveBuffer);
+
+				if (ReceiveBuffer[0] == 'W')
+				{
+				    sscanf(ReceiveBuffer, "%s %s %s %i %i %s", header, Servers[index].Adress, 
+										Servers[index].Name, 
+										&Servers[index].MaxClients, 
+										&Servers[index].CurClients,
+										Servers[index].Version);
+					index++;
+				}
+			} while (strcmp(ReceiveBuffer, "X Done!") != 0);
+		}
+		else
+			index=-1;
+
+		numServers = index;
+		sprintf(Servers[index+1].Version, "");
+		net_uninit_heartbeat();
+}
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2039,7 +2147,8 @@ debug_log ("HEARTBEAT: sending: %s", TempStuff);
 void net_init_heartbeat(void)
 {
         mastersocket = net_connectToMaster (command_line_primary_server_setting, MasterPort, 1);
-        mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
+        if (mastersocket <= 0)
+          mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
     debug_log ("HEARTBEAT: after heartbeat initialisation");
     
 }

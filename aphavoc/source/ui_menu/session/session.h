@@ -87,7 +87,8 @@ enum SESSION_LIST_TYPES
    SESSION_LIST_TYPE_HOST        = 1,
    SESSION_LIST_TYPE_JOIN        = 2,
    SESSION_LIST_TYPE_RESTORE     = 4,
-   NUM_SESSION_LIST_TYPE         = 8
+   SESSION_LIST_TYPE_MASTER      = 8,
+   NUM_SESSION_LIST_TYPE         = 16
 };
 
 typedef enum SESSION_LIST_TYPES session_list_types;
@@ -118,6 +119,9 @@ struct SESSION_LIST_DATA_TYPE
       data_path [256],
       campaign_directory [64],
       campaign_filename [64];
+
+   char ip_address [256];
+
 
    struct SESSION_LIST_DATA_TYPE
 		*child,									// next non-unique session (ie same name, different map)
@@ -187,6 +191,8 @@ extern void compile_multi_session_list (session_list_data_type **list);
 extern void compile_restore_session_list (session_list_data_type **list);
 
 extern session_list_data_type *get_session_list (void);
+
+extern void get_first_multi_session (session_list_data_type **list);
 
 extern void restore_session (session_list_data_type *session);
 

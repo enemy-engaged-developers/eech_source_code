@@ -104,6 +104,19 @@ extern int mastersocket;
 extern int mastersocket2;
 extern short MasterPort;
 extern int last_heartbeat_time;
+typedef struct
+{
+    char Adress[100];
+    char Name[256];
+    int MaxClients;
+    int CurClients;
+    char Version[256];
+    int isActive;
+    int isClient;
+    int Dedicated;
+} ServerData;
+extern ServerData Servers[1000];
+extern int numServers;
 //-- Werewolf
 
 
@@ -156,6 +169,8 @@ extern void net_handle_heartbeat(void);
 extern void net_uninit_heartbeat(void);
 
 extern void net_set_hostname (char *data);
+
+extern void net_getServerList(void);
 //-- Werewolf
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

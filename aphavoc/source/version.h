@@ -81,9 +81,9 @@
  * whenever you build a release executable.
  */
 
-#define BUILD_TYPE	"W8"
+#define BUILD_TYPE	"W9"
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.0W7"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.0W9"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *

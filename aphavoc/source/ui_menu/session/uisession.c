@@ -97,7 +97,7 @@ session_info_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list);
+static session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, char *address);
 
 static void recursive_check_campaign_files (char *directory, session_list_data_type **list, char *extension);
 
@@ -110,8 +110,8 @@ void initialise_session_list (void)
 
    session_filter [GAME_TYPE_INVALID] = SESSION_LIST_TYPE_INVALID;
    session_filter [GAME_TYPE_FREE_FLIGHT] = SESSION_LIST_TYPE_HOST;
-   session_filter [GAME_TYPE_CAMPAIGN] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE;
-   session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE;
+   session_filter [GAME_TYPE_CAMPAIGN] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER;
+   session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER;
    session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
 
 	destroy_session_list (&session_list_head);
@@ -216,7 +216,7 @@ void destroy_session_list (session_list_data_type **list)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list)
+session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, char *address)
 {
 
 	char
@@ -237,6 +237,8 @@ session_list_data_type *add_session (char *title, session_list_types type, int t
 	memset (new_session, 0, sizeof (session_list_data_type));
 
    new_session->title = (char *) malloc_heap_mem (strlen (title) + 1);
+   if (address)
+     sprintf (new_session->ip_address, "%s", address);
 
 	// test
 	if (type == SESSION_LIST_TYPE_RESTORE)
@@ -492,8 +494,8 @@ void compile_multi_session_list (session_list_data_type **list)
 	if ( ( this_connection ) && ( this_connection->is_initialised ) )
 	{
 
-		int
-			number_of_sessions;
+		int number_of_sessions;
+		int currentServer;
 
 		if ( !this_connection->one_way_hosting_setup )
 		{
@@ -527,15 +529,101 @@ void compile_multi_session_list (session_list_data_type **list)
 
 					session_number ++;
 
-					add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "Multiplayer", list);
+					add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "Multiplayer", list, NULL);
 				}
 
 				this_session = this_session->next_session;
 			}
 		}
+		
+		//Werewolf 14 May 2003
+		//Fetch active servers from masterserver
+		net_getServerList();
+		for (currentServer=0; currentServer<numServers; currentServer++)
+		{
+			sprintf (text, "%s (%i/%i) %s", Servers[currentServer].Name, Servers[currentServer].CurClients, Servers[currentServer].MaxClients, Servers[currentServer].Version);
+			session_number ++;
+			add_session (text, SESSION_LIST_TYPE_MASTER, session_number, NULL, NULL, NULL, NULL, "Multiplayer", list, Servers[currentServer].Adress);
+		}
 	}
 
 	#endif
+}
+
+
+void get_first_multi_session (session_list_data_type **list)
+{
+	#if !DEMO_VERSION
+
+	int session_number = 0;
+
+	session_table_type
+		*this_session;
+
+	connection_data_type
+		*this_connection;
+
+	session_list_data_type
+		*this_session_list;
+
+	unsigned char
+		text [128];
+
+	this_connection = direct_play_get_connection_data ();
+
+	if ( ( this_connection ) && ( this_connection->is_initialised ) )
+	{
+
+		int
+			number_of_sessions;
+
+		if ( !this_connection->one_way_hosting_setup )
+		{
+
+			number_of_sessions =  direct_play_enumerate_sessions ();
+		}
+		else
+		{
+
+			validate_modem_connection ();
+
+			if ( this_connection->is_initialised )
+			{
+
+				number_of_sessions = direct_play_refresh_modem_session ();
+			}
+		}
+
+		debug_log ("GETFIRSTSESSION: Number of sessions: %i", number_of_sessions);
+
+		if ( number_of_sessions )
+		{
+
+			this_session = direct_play_get_session_table ();
+			
+			if (!this_session)
+			  debug_log ("GETFIRSTSESSION: direct_play_get_session_table() returned ZERO :(");
+
+
+			if (this_session)
+			{
+
+				sprintf (text, "%s", this_session->session->lpszSessionNameA);
+
+				debug_log ("GETFIRSTSESSION: First session is: %s", text);
+
+				session_number ++;
+
+				list = add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "Multiplayer", &this_session_list, NULL);
+
+				return;
+
+//				this_session = this_session->next_session;
+			}
+		}
+	}
+	#endif
+	return;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1194,13 +1282,13 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 							{
 
 								// if host get the Translated campaign name
-								add_session (get_trans (campaign_title), session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list);
+								add_session (get_trans (campaign_title), session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL);
 							}
 							else
 							{
 
 								// not hosted game so just use the name
-								add_session (campaign_title, session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list);
+								add_session (campaign_title, session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL);
 							}
 
 							break;
@@ -1366,6 +1454,20 @@ void start_campaign (void)
 		case SESSION_LIST_TYPE_JOIN:
 		{
 
+			if (!get_session_entity ())
+			{
+
+				return;
+			}
+
+			break;
+		}
+		case SESSION_LIST_TYPE_MASTER:
+		{
+                        current_game_session->type = SESSION_LIST_TYPE_JOIN;
+                        
+                        //TODO: Setup dplay connection, then get first active session.
+                                               
 			if (!get_session_entity ())
 			{
 
