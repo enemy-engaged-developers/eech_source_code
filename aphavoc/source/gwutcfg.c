@@ -552,7 +552,14 @@ void DumpGWutInfo(char *filename)
 	for (i = 0; i < NUM_ENTITY_SUB_TYPE_GROUPS; i++)
 	{
 		fprintf(fout,"%d,",i);
-		fprintf(fout,"%s,",group_database[i].full_name);
+		if (strstr(group_database[i].full_name,"Infantry") != 0)
+		{
+			if (i == 19) fprintf(fout,"%s %s,",group_database[i].full_name,"(static)");
+			if (i == 20) fprintf(fout,"%s %s,",group_database[i].full_name,"(group)");
+			if (i == 21) fprintf(fout,"%s %s,",group_database[i].full_name,"(patrol)");
+		}	
+		else
+			fprintf(fout,"%s,",group_database[i].full_name);
 		fprintf(fout,"%d,",group_database[i].group_category);
 		fprintf(fout,"%d,",group_database[i].registry_list_type);
 		fprintf(fout,"%d,",group_database[i].group_list_type);
