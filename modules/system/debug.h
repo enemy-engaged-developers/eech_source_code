@@ -191,37 +191,45 @@ extern void update_debug_windows ( void );
 
 #else
 
-#define debug_log();
-
-#define debug_colour_log();
-
-#define debug_filtered_log();
-
-#define debug_colour_filtered_log();
-
-#define debug_watch();
-
-#define debug_colour_watch();
-
-#define debug_watch2();
-
-#define debug_colour_watch2();
-
-#define debug_watch3();
-
-#define debug_colour_watch3();
-
-#define debug_watch4();
-
-#define debug_colour_watch4();
-
-#define BREAKOUT();
+#ifdef WIN32
+# define debug_log();
+# define debug_colour_log();
+# define debug_filtered_log();
+# define debug_colour_filtered_log();
+# define debug_watch();
+# define debug_colour_watch();
+# define debug_watch2();
+# define debug_colour_watch2();
+# define debug_watch3();
+# define debug_colour_watch3();
+# define debug_watch4();
+# define debug_colour_watch4();
+# define BREAKOUT();
+#else
+# define debug_log(a, x...) do { } while(0);
+# define debug_colour_log(a, b, x...) do { } while(0);
+# define debug_filtered_log(a, x...) do { } while(0);
+# define debug_colour_filtered_log(a, b, x...) do { } while(0);
+# define debug_watch(a, b, c) do { } while(0);
+# define debug_colour_watch(a, b, c, d) do { } while(0);
+# define debug_watch2(a, b, c, d) do { } while(0);
+# define debug_colour_watch2(a, b, c, d, e) do { } while(0);
+# define debug_watch3(a, b, c, d, e) do { } while(0);
+# define debug_colour_watch3(a, b, c, d, e, f) do { } while(0);
+# define debug_watch4(a, b, c, d, e, f) do { } while(0);
+# define debug_colour_watch4(a, b, c, d, e, f, g) do { } while(0);
+# define BREAKOUT(a) do { } while(0);
+#endif
 
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* forward declarations for types used below */
+struct EVENT;
+/*********************************************/
 
 extern void breakout ( struct EVENT *ev );
 
