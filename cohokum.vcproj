@@ -2504,6 +2504,9 @@
 							<File
 								RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_WPN.C">
 							</File>
+							<File
+								RelativePath="aphavoc\source\entity\special\camera\cm_satel.c">
+							</File>
 						</Filter>
 						<Filter
 							Name="EFFECT"
@@ -3909,6 +3912,86 @@
 								RelativePath=".\aphavoc\source\gunships\avionics\blackhawk\bh_wpn.c">
 							</File>
 						</Filter>
+						<Filter
+							Name="ka50"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_avevn.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_avlmp.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_dam.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_ekran.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_eo.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_hms.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_hud.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_mfd.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_radar.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_tgt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_thrt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ka50\hm_wpn.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="ah64a No. 1"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_avevn.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_avlmp.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_dam.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_eo.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_front.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_hms.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_hud.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_mfd.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_radar.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_tgt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_thrt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\avionics\ah64a\ah_wpn.c">
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="COCKPITS"
@@ -4067,6 +4150,44 @@
 								RelativePath=".\aphavoc\source\gunships\cockpits\blackhawk\bh_wiper.c">
 							</File>
 						</Filter>
+						<Filter
+							Name="ka50 No. 1"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ka50\hm_ckpt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ka50\hm_instr.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ka50\hm_lamps.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ka50\hm_vckpt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ka50\hm_wiper.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="ah64a No. 1"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ah64a\ah_ckpt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ah64a\ah_instr.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ah64a\ah_lamps.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ah64a\ah_vckpt.c">
+							</File>
+							<File
+								RelativePath="aphavoc\source\gunships\cockpits\ah64a\ah_wiper.c">
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="DYNAMICS"
@@ -4139,6 +4260,20 @@
 							Filter="">
 							<File
 								RelativePath=".\aphavoc\source\gunships\dynamics\hind\hi_dyn.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="ka50 No. 2"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\dynamics\ka50\hm_dyn.c">
+							</File>
+						</Filter>
+						<Filter
+							Name="ah64a No. 2"
+							Filter="">
+							<File
+								RelativePath="aphavoc\source\gunships\dynamics\ah64a\ah_dyn.c">
 							</File>
 						</Filter>
 					</Filter>
