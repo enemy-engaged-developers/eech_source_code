@@ -81,12 +81,10 @@ static void select_target_acquisition_system_off_event (event *ev)
 
 static void select_target_acquisition_system_ground_radar_event (event *ev)
 {
-#if 0	// Retro 18Jul2004 - no radar in hind
 	if (!get_global_simple_avionics ())
 	{
 		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,12 +93,10 @@ static void select_target_acquisition_system_ground_radar_event (event *ev)
 
 static void select_target_acquisition_system_air_radar_event (event *ev)
 {
-#if 0	// Retro 18Jul2004 - no radar in hind
 	if (!get_global_simple_avionics ())
 	{
 		select_hind_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
