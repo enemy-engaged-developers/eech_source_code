@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="cohokum" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=cohokum - Win32 Debug
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak" CFG="cohokum - Win32 Debug"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "cohokum - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "cohokum - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Release" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Debug" (basierend auf  "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /MT /Ze /W1 /Gm /GX /Zi /O2 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
+# ADD CPP /MT /Gm /GX /Zi /O2 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
 # SUBTRACT CPP /nologo
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /MTd /Ze /W4 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
+# ADD CPP /MTd /W4 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
 # SUBTRACT CPP /nologo /X
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -3052,6 +3052,10 @@ SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_RVRS.C
 # End Source File
 # Begin Source File
 
+SOURCE=.\aphavoc\source\entity\special\camera\cm_satel.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\CAMERA\CM_STAT.C
 # End Source File
 # Begin Source File
@@ -4871,6 +4875,110 @@ SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_thrt.c
 SOURCE=.\aphavoc\source\gunships\avionics\blackhawk\bh_wpn.c
 # End Source File
 # End Group
+# Begin Group "ka50 Nr. 1"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_avevn.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_avlmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_dam.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_ekran.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_eo.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_hms.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_hud.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_mfd.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_radar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_tgt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_thrt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ka50\hm_wpn.c
+# End Source File
+# End Group
+# Begin Group "ah64a Nr. 1"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_avevn.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_avlmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_dam.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_eo.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_front.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_hms.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_hud.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_mfd.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_radar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_tgt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_thrt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\avionics\ah64a\ah_wpn.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\AVIONICS.C
@@ -5071,6 +5179,54 @@ SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_vckpt.c
 SOURCE=.\aphavoc\source\gunships\cockpits\blackhawk\bh_wiper.c
 # End Source File
 # End Group
+# Begin Group "ka50"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ka50\hm_ckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ka50\hm_instr.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ka50\hm_lamps.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ka50\hm_vckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ka50\hm_wiper.c
+# End Source File
+# End Group
+# Begin Group "ah64a"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ah64a\ah_ckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ah64a\ah_instr.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ah64a\ah_lamps.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ah64a\ah_vckpt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\cockpits\ah64a\ah_wiper.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\COCKPITS\COCKPITS.C
@@ -5159,6 +5315,22 @@ SOURCE=.\aphavoc\source\gunships\dynamics\blackhawk\bh_dyn.c
 SOURCE=.\aphavoc\source\gunships\dynamics\hind\hi_dyn.c
 # End Source File
 # End Group
+# Begin Group "ka50 Nr. 2"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\dynamics\ka50\hm_dyn.c
+# End Source File
+# End Group
+# Begin Group "ah64a Nr. 2"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\aphavoc\source\gunships\dynamics\ah64a\ah_dyn.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\DYNAMICS\DYNAMICS.C
@@ -5212,6 +5384,10 @@ SOURCE=.\APHAVOC\SOURCE\INSTALL.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\PROJECT.C
+# End Source File
+# Begin Source File
+
+SOURCE=.\aphavoc\source\servlog.c
 # End Source File
 # Begin Source File
 
