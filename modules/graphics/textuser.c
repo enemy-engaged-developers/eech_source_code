@@ -528,7 +528,7 @@ BOOL load_texturemap_data ( char *path )
 // 12/5/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	initialize_texture_override_names ( system_texture_override_names );
+	initialize_texture_override_names ( system_texture_override_names, NULL );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // End Have_Quick
@@ -1361,8 +1361,8 @@ BOOL load_texturemap_data ( char *path )
 		if( retrieved_index > 0)
 		{
 			// there is so load it
-			load_texture_override (system_texture_override_names[count],retrieved_index);
-		}
+			load_texture_override (system_texture_override_names[count],retrieved_index, NULL);
+		}		
 	}
 	
 	
@@ -3462,8 +3462,8 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 // Start Have_Quick
 // 12/2/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void load_texture_override ( char *this_texture_name, int this_texture_index )
+//static 
+void load_texture_override ( char *this_texture_name, int this_texture_index, char *mapname )
 {
 
 	FILE
@@ -3497,6 +3497,12 @@ static void load_texture_override ( char *this_texture_name, int this_texture_in
 
 	ASSERT (this_texture_index);
 
+//VJ mapname used to load map specific textures in file
+//C:\gms\Razorworks\eech-new\aphavoc\source\gameflow\gameflow.c 
+//line 395
+
+	if (mapname == NULL)
+	{
 //VJ 041212 get file in graphics\textures
 	sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, this_texture_name );
 	
@@ -3509,11 +3515,16 @@ static void load_texture_override ( char *this_texture_name, int this_texture_in
 
 	if ( !file_exist ( full_override_texture_filename ) )
 		sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO, this_texture_name );
+	}
+	else
+	{
+	if ( !file_exist ( full_override_texture_filename ) )
+		sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, this_texture_name );
+	}		
 
 	if ( !file_exist ( full_override_texture_filename ) )
 		return;
 
-//VJ
 	debug_log ("++OVERRIDES++ Loading file %s",full_override_texture_filename);
 
 	fp = safe_fopen (full_override_texture_filename, "rb");
@@ -3638,8 +3649,8 @@ static void load_texture_override ( char *this_texture_name, int this_texture_in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-static void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128] )
+//VJ 041213 fucntion also called from file eech-new\aphavoc\source\gameflow\gameflow.c, line 384
+void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname )
 {
    
 	directory_file_list
@@ -3658,122 +3669,155 @@ static void initialize_texture_override_names ( char system_texture_override_nam
 
 	index = 0;
 
-	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY);
-
-	directory_listing = get_first_directory_file ( directory_search_path );
-
-	//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
-	if ( directory_listing )
+	if (mapname == NULL)
 	{
-		valid_file = TRUE;	
-		
-		while ( valid_file )
+		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY);
+	
+		directory_listing = get_first_directory_file ( directory_search_path );
+	
+		//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
+		if ( directory_listing )
 		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			valid_file = TRUE;	
+			
+			while ( valid_file )
 			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
+				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+				{
+					filename = strupr(get_directory_file_filename ( directory_listing ));
+		
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+		
+					//we don't want the .bmp in the overides index
+					tmp = strtok( filename, "." );
+						
+					strcpy ( system_texture_override_names[index], tmp );
 	
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+					index++;
+				}	
+				valid_file = get_next_directory_file ( directory_listing );
+			}
+		}
+		
+	//VJ 041212 add cockpit textures	
+		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
 	
-				//we don't want the .bmp in the overides index
-				tmp = strtok( filename, "." );
-					
-				strcpy ( system_texture_override_names[index], tmp );
-
-				index++;
-			}	
-			valid_file = get_next_directory_file ( directory_listing );
+		directory_listing = get_first_directory_file ( directory_search_path );
+	
+		if ( directory_listing )
+		{
+			valid_file = TRUE;	
+			
+			while ( valid_file )
+			{
+				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+				{
+					filename = strupr(get_directory_file_filename ( directory_listing ));
+		
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+		
+					//we don't want the .bmp in the overides index
+					tmp = strtok( filename, "." );
+	
+					strcpy ( system_texture_override_names[index], tmp );
+	
+					index++;
+				}	
+				valid_file = get_next_directory_file ( directory_listing );
+			}
+		}
+		
+	//VJ 041212 add custom terrain textures	
+		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		
+		directory_listing = get_first_directory_file ( directory_search_path );
+		
+		if ( directory_listing )
+		{
+			valid_file = TRUE;	
+			
+			while ( valid_file )
+			{
+				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+				{
+					filename = strupr(get_directory_file_filename ( directory_listing ));
+		
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+		
+					//we don't want the .bmp in the overides index
+					tmp = strtok( filename, "." );
+	
+					strcpy ( system_texture_override_names[index], tmp );
+	
+					index++;
+				}	
+				valid_file = get_next_directory_file ( directory_listing );
+			}
+		}
+		
+	//VJ 041212 add custom camouflage textures	
+		sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO);
+	
+		directory_listing = get_first_directory_file ( directory_search_path );
+	
+		if ( directory_listing )
+		{
+			valid_file = TRUE;	
+			
+			while ( valid_file )
+			{
+				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+				{
+					filename = strupr(get_directory_file_filename ( directory_listing ));
+		
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
+		
+					//we don't want the .bmp in the overides index
+					tmp = strtok( filename, "." );
+	
+					strcpy ( system_texture_override_names[index], tmp );
+	
+					index++;
+				}	
+				valid_file = get_next_directory_file ( directory_listing );
+			}
 		}
 	}
-	
-//VJ 041212 add cockpit textures	
-	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_COCKPIT);
-
-	directory_listing = get_first_directory_file ( directory_search_path );
-
-	if ( directory_listing )
+	else
 	{
-		valid_file = TRUE;	
-		
-		while ( valid_file )
+		sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY,mapname);
+	
+		directory_listing = get_first_directory_file ( directory_search_path );
+	
+		//VJ 041212 names are changed to uppercase in function "match_system_texture_name"
+		if ( directory_listing )
 		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			valid_file = TRUE;	
+			
+			while ( valid_file )
 			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
-	
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-	
-				//we don't want the .bmp in the overides index
-				tmp = strtok( filename, "." );
-
-				strcpy ( system_texture_override_names[index], tmp );
-
-				index++;
-			}	
-			valid_file = get_next_directory_file ( directory_listing );
-		}
-	}
-	
-//VJ 041212 add custom terrain textures	
-	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-	
-	directory_listing = get_first_directory_file ( directory_search_path );
-	
-	if ( directory_listing )
-	{
-		valid_file = TRUE;	
+				if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+				{
+					filename = strupr(get_directory_file_filename ( directory_listing ));
 		
-		while ( valid_file )
-		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
-	
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-	
-				//we don't want the .bmp in the overides index
-				tmp = strtok( filename, "." );
-
-				strcpy ( system_texture_override_names[index], tmp );
-
-				index++;
-			}	
-			valid_file = get_next_directory_file ( directory_listing );
-		}
-	}
-	
-//VJ 041212 add custom camouflage textures	
-	sprintf (directory_search_path, "%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY_CAMO);
-
-	directory_listing = get_first_directory_file ( directory_search_path );
-
-	if ( directory_listing )
-	{
-		valid_file = TRUE;	
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
 		
-		while ( valid_file )
-		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
+					//we don't want the .bmp in the overides index
+					tmp = strtok( filename, "." );
+						
+					strcpy ( system_texture_override_names[index], tmp );
 	
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s", filename );
-	
-				//we don't want the .bmp in the overides index
-				tmp = strtok( filename, "." );
-
-				strcpy ( system_texture_override_names[index], tmp );
-
-				index++;
-			}	
-			valid_file = get_next_directory_file ( directory_listing );
+					index++;
+				}	
+				valid_file = get_next_directory_file ( directory_listing );
+			}
 		}
 	}
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // End Have_Quick
 // 12/5/2003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 

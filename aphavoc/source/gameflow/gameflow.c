@@ -153,7 +153,7 @@ void process_game_initialisation_phases (void)
 	char
 		operator [64],
 		variable [64];
-
+			
 	switch (game_initialisation_phase)
 	{
 
@@ -370,6 +370,31 @@ void process_game_initialisation_phases (void)
 
 			if (session)
 			{
+				
+//VJ 041213 load the map specific custom textures				
+				int count;
+				
+				//VJ here goes session->warzone_name = map name e.g. "map3"
+				
+				for( count=0; count < MAX_TEXTURES; count++ )
+				{
+					system_texture_override_names[count][0]='\0';
+				}
+				
+				initialize_texture_override_names ( system_texture_override_names,  session->warzone_name );
+				
+				// Now that all the screens are loaded we check to see if there is are any overrides
+				for( count=0; count < MAX_TEXTURES; count++ )
+				{
+					int retrieved_index;
+				     
+					retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+				     
+					if( retrieved_index > 0)
+					{
+						load_texture_override ( system_texture_override_names[count], retrieved_index, session->warzone_name);				        
+					}		
+				}
 
 				if (get_comms_model () == COMMS_MODEL_SERVER)
 				{
