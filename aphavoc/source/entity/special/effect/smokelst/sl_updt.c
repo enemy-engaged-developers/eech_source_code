@@ -365,6 +365,13 @@ int update_smoke( entity *en )
 	// texture animation
 	//
 
+	//-- Werewolf: Sanity check to fix a crash 4 Apr 2003
+	// Sometimes, smoke_list_texture (smoke_type) is undefined, because smoke_list_database[smoke_type] is invalid
+	// I suspect that a smoke_type value of 21 is too high, or that the smoke_list_database becomes corrupted sometimes.
+	// What we would need to do are lots of sanity checks instead of blindly accessing arrays.
+    number_of_frames = 0;
+    if (smoke_list_database[smoke_type].texture>=0)
+	//-- Werewolf
 	number_of_frames = get_texture_animation_number_of_frames (smoke_list_texture (smoke_type));
 
 	if ((number_of_frames > 1) && (smoke_list_animation_rate (smoke_type) > 0.0))
