@@ -557,7 +557,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 	if (flags & (VIRTUAL_COCKPIT_COCKPIT))
 	{
-		set_cockpit_white_lighting (*vp.attitude);
+		set_cockpit_white_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -647,7 +647,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 	if (flags & (VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES | VIRTUAL_COCKPIT_INSTRUMENT_LARGE_NEEDLES))
 	{
-		set_cockpit_lighting (*vp.attitude);
+		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -968,7 +968,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		(flags & (VIRTUAL_COCKPIT_RHS_MFD_DISPLAY))
 	)
 	{
-		set_cockpit_white_lighting (*vp.attitude);
+		set_cockpit_white_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -1223,7 +1223,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 
 	if (flags & (VIRTUAL_COCKPIT_COMPASS | VIRTUAL_COCKPIT_ADI | VIRTUAL_COCKPIT_LARGE_ADI))
 	{
-		set_cockpit_lighting (*vp.attitude);
+		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -1280,7 +1280,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 						pitch,
 						roll;
 
-					get_apache_virtual_cockpit_adi_angles (*vp.attitude, &heading, &pitch, &roll);
+					get_apache_virtual_cockpit_adi_angles (vp.attitude, &heading, &pitch, &roll);
 
 					search.result_sub_object->relative_heading = -heading;
 
@@ -1318,7 +1318,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 						pitch,
 						roll;
 
-					get_apache_virtual_cockpit_adi_angles (*vp.attitude, &heading, &pitch, &roll);
+					get_apache_virtual_cockpit_adi_angles (vp.attitude, &heading, &pitch, &roll);
 
 					search.result_sub_object->relative_heading = -heading;
 

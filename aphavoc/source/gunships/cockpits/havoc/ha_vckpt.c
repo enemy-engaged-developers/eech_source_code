@@ -554,7 +554,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 	if (flags & (VIRTUAL_COCKPIT_COCKPIT | VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES))
 	{
-		set_cockpit_lighting (*vp.attitude);
+		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -903,7 +903,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		(flags & (VIRTUAL_COCKPIT_CRT_DISPLAY))
 	)
 	{
-		set_cockpit_lighting (*vp.attitude);
+		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -1130,7 +1130,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 
 	if (flags & (VIRTUAL_COCKPIT_ADI | VIRTUAL_COCKPIT_HSI | VIRTUAL_COCKPIT_COMPASS))
 	{
-		set_cockpit_lighting (*vp.attitude);
+		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
 
@@ -1159,7 +1159,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 						pitch,
 						roll;
 
-					get_havoc_virtual_cockpit_adi_angles (*vp.attitude, &heading, &pitch, &roll);
+					get_havoc_virtual_cockpit_adi_angles (vp.attitude, &heading, &pitch, &roll);
 
 					search.result_sub_object->relative_heading = -heading;
 
