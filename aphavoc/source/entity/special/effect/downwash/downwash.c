@@ -223,7 +223,8 @@ int create_downwash_effect_component(downwash_component *this_downwash_component
 					radius = relative_radius + main_rotor_radius_minus_altitude;
 				}
 
-				height =  main_rotor_radius * frand1();
+				// Xhit: Changed to 2 instead of main_rotor_radius so smoke is created just over water level (030515)
+				height =  2 * frand1();
 				break;
 			}
 			default:

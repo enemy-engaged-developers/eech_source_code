@@ -175,12 +175,15 @@ typedef int terrain_types;	//enum TERRAIN_TYPES terrain_types;
 //			tell what kind of surface the terrain_type is. 
 //			(for example: TERRAIN_TYPE_LAND can be desert or grass depending of campaign)
 //
+//	Xhit: added SURFACE_TYPE_DESERT for desert campaigns (030515)
+//
 //////////////////////////////////////////////////////////////////////////////////////////
 
 enum SURFACE_TYPES
 {
 	SURFACE_TYPE_NONE,
 
+	SURFACE_TYPE_DESERT,
 	SURFACE_TYPE_SAND,
 	SURFACE_TYPE_GRASS,
 	SURFACE_TYPE_ASPHALT,

@@ -966,21 +966,21 @@ void initialise_3d_thailand_terrain_types ( void )
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_GRASS;
+	terrain_surface_land										= SURFACE_TYPE_GRASS;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
 	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_road									= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
@@ -999,7 +999,7 @@ void initialise_3d_thailand_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_GRASS;
 	terrain_surface_altered_land3							= SURFACE_TYPE_GRASS;
 	terrain_surface_hedge									= SURFACE_TYPE_GRASS;
-	terrain_surface_wall									= SURFACE_TYPE_ROCK;
+	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
@@ -1124,21 +1124,21 @@ void initialise_3d_cuba_terrain_types ( void )
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_GRASS;
+	terrain_surface_land										= SURFACE_TYPE_GRASS;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
 	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_road									= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
@@ -1157,7 +1157,7 @@ void initialise_3d_cuba_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_ROCK;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
 	terrain_surface_hedge									= SURFACE_TYPE_GRASS;
-	terrain_surface_wall									= SURFACE_TYPE_GRASS;
+	terrain_surface_wall										= SURFACE_TYPE_GRASS;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 
@@ -1283,21 +1283,21 @@ void initialise_3d_georgia_terrain_types ( void )
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_GRASS;
+	terrain_surface_land										= SURFACE_TYPE_GRASS;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
 	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_road									= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
@@ -1316,7 +1316,7 @@ void initialise_3d_georgia_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_ROCK;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
 	terrain_surface_hedge									= SURFACE_TYPE_GRASS;
-	terrain_surface_wall									= SURFACE_TYPE_GRASS;
+	terrain_surface_wall										= SURFACE_TYPE_GRASS;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
@@ -1437,25 +1437,25 @@ void initialise_3d_lebanon_terrain_types ( void )
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
-	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_SAND;
+	terrain_surface_beach									= SURFACE_TYPE_DESERT;
+	terrain_surface_land										= SURFACE_TYPE_DESERT;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
-	terrain_surface_builtup_area1							= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area2							= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area3							= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area4							= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_road									= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area1							= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area2							= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area3							= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area4							= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_DESERT;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_DESERT;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
-	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
-	terrain_surface_rail_bank								= SURFACE_TYPE_SAND;
+	terrain_surface_river_bank								= SURFACE_TYPE_DESERT;
+	terrain_surface_rail_bank								= SURFACE_TYPE_DESERT;
 	terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
 	terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
 	terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
@@ -1467,11 +1467,11 @@ void initialise_3d_lebanon_terrain_types ( void )
 	terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
 	terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
 	terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_altered_land1							= SURFACE_TYPE_SAND;
-	terrain_surface_altered_land2							= SURFACE_TYPE_SAND;
+	terrain_surface_altered_land1							= SURFACE_TYPE_DESERT;
+	terrain_surface_altered_land2							= SURFACE_TYPE_DESERT;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
-	terrain_surface_hedge									= SURFACE_TYPE_SAND;
-	terrain_surface_wall									= SURFACE_TYPE_SAND;
+	terrain_surface_hedge									= SURFACE_TYPE_DESERT;
+	terrain_surface_wall										= SURFACE_TYPE_DESERT;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 
@@ -1598,21 +1598,21 @@ void initialise_3d_yemen_terrain_types ( void )
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_SAND;
+	terrain_surface_land										= SURFACE_TYPE_SAND;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
 	terrain_surface_builtup_area1							= SURFACE_TYPE_SAND;
 	terrain_surface_builtup_area2							= SURFACE_TYPE_SAND;
 	terrain_surface_builtup_area3							= SURFACE_TYPE_SAND;
 	terrain_surface_builtup_area4							= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_SAND;
-	terrain_surface_road									= SURFACE_TYPE_SAND;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_SAND;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_SAND;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_SAND;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_SAND;
+	terrain_surface_road										= SURFACE_TYPE_SAND;
 	terrain_surface_track									= SURFACE_TYPE_SAND;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SAND;
+	terrain_surface_rail										= SURFACE_TYPE_SAND;
 	terrain_surface_road_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SAND;
@@ -1631,7 +1631,7 @@ void initialise_3d_yemen_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SAND;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
 	terrain_surface_hedge									= SURFACE_TYPE_SAND;
-	terrain_surface_wall									= SURFACE_TYPE_SAND;
+	terrain_surface_wall										= SURFACE_TYPE_SAND;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
@@ -1755,21 +1755,21 @@ void initialise_3d_taiwan_terrain_types ( void )
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
-	terrain_surface_land									= SURFACE_TYPE_GRASS;
+	terrain_surface_land										= SURFACE_TYPE_GRASS;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
 	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
 	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared					= SURFACE_TYPE_ASPHALT;
-	terrain_surface_road									= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
 	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
@@ -1788,7 +1788,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_GRASS;
 	terrain_surface_altered_land3							= SURFACE_TYPE_GRASS;
 	terrain_surface_hedge									= SURFACE_TYPE_GRASS;
-	terrain_surface_wall									= SURFACE_TYPE_ROCK;
+	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
