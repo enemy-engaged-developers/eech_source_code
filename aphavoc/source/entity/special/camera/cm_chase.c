@@ -224,6 +224,11 @@ void update_chase_camera (camera *raw)
 			temp_h = (float) GetYaw();
 			temp_p = (float) GetPitch();
 
+			if (command_line_external_trackir_direction)	// Retro 31Jan2005
+			{
+				temp_h *= -1;
+			}
+
 			temp_h = 180*temp_h/16383;
 			temp_p = -90*temp_p/16383;
 
