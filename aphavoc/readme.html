@@ -2,7 +2,13 @@
 <html>
   <head>
     <title>EECH Community Release Version 1.6.0W9</title>
-        </head>
+    <style type="text/css">
+<!--
+.style1 {color: #FF0000}
+.style3 {color: #FF0000; font-weight: bold; }
+-->
+    </style>
+  </head>
 
   <body>
     <h1>EECH Community Release Version 1.6.0W12</h1>
@@ -28,11 +34,10 @@
 
     <ul>
       <li><a href="#installation">Installation</a>
-      <li><a href="http://eech.bollocks.net.nz">Flyable choppers             </a>
+      <li><a href="http://eech.bollocks.net.nz">Flyable choppers             </a>      
+      <li><a href="#MP">Multiplayer status</a> 
       <li><a href="#bugs">Bugs</a>
-      <li><a href="#whatsnew">Whats new in EECH</a>
-      
-  <li><a href="#sourceandversion">Source code</a>
+      <li><a href="#whatsnew">Whats new in EECH ?</a><li><a href="#sourceandversion">Source code</a>
 <li><a href="#history">History</a>
     </ul>
 
@@ -42,14 +47,22 @@
     <p>
       Simply copy the file cohokum.exe into your /razorwroks/cohokum
       directory. You may want to rename your old cohokum.exe to save
-      it. <br>
+      it. 
       Note that if the eech.ini file does not exist it will be generated automatically. If you run into trouble it may be a good idea to delete the eech.ini file. <br>
       If you have trouble configuring your joystick in eech.ini you can use a tool made by Retro (eechmap.exe). <br>
-    Read also the next paragraph for loadout screens.</p>
+  Read also the next paragraph for loadout screens.</p>
     <p><a name="choppers" id="choppers"></a>    </p>
   <h2>Flyable choppers</h2>
-    <p>In the current version can fly and change the loadout of: Comanche, Apache, Hokum, Hokum, Balckhawk, Hind, AH64-A, and KA50. Make sure you load and install the additional download screens here: <a href="http://eech.bollocks.net.nz" target="_blank">http://eech.bollocks.net.nz</a> (in the addon download area). <br>
-  You can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). </p>
+    <p>As of version W12 you can fly,  change the loadout  and repair the following choppers: Comanche, Apache, Hokum, Hokum, Blackhawk, Hind, AH64-A, and KA50. The cockpits and the flight behaviour of the new blue choppers default to the Apache, of the red choppers to the Havok. 
+  Make sure you download and install the additional download screens here: <a href="http://eech.bollocks.net.nz" target="_blank">http://eech.bollocks.net.nz</a> (in the addon download area). These zips have the full installation path , the files should go here: &quot;\Razorworks\cohokum\graphics\ui\cohokum\Map\&quot;.</p>
+    <p>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). </p>
+    <p><a name="MP" id="MP"></a> </p>
+    <h2>Multiplayer status </h2>
+  <p>There are minor changes to make the code more stable. The indications so far: if a client leaves controlled (quit mission or campaign) all is well, but 
+if a client crashes he'll leave a &quot;ghost chopper&quot; in the game. It's controlled by the AI but 
+can't be choosen for another mission. Other choppers in the group are free to take. 
+The ghost-chopper can be shot down by anyone, so it isn't THAT big problem. 
+It appears to save the host from CTD (Crash To Desktop) when a client CTDs. If a host restarts all choppers are back to normal.</p>
     <a name="bugs"></a>
     <h2>Bugs</h2>
 
@@ -69,7 +82,7 @@
 
     <a name="whatsnew"></a>
     <h2>What's NEW in EECH?</h2>
-
+    <p>Text in <span class="style3">red </span>describes additions to version W12 </p>
     <table border="1">
 	<tr>
 	  <th width="163" align="left">eech.ini parameter</th>
@@ -89,13 +102,12 @@
 
 	<tr>
 	  <th align="left" colspan="2">
-	    Mouselook and TrackIR support
-	  </th>
+	    Mouselook and TrackIR support</th>
 	</tr>
 
 	<tr>
 	  <td>
-	    msl=0<br>
+	    msl=1<br>
 	    msls=15
 	  </td>
 	  <td>
@@ -104,17 +116,21 @@
 	    means that you will not have to bother about centering you
 	    view all the time. A check will be made for a TrackIR upon
 	    startup, and if it is found it will be used to control the
-	    view. Otherwise the mouse is used. (default = 0, off)
-
-	    <p>
-	      Pressing the left mouse button will recenter the view to
+	    view. Otherwise the mouse is used. (default = 0, off). Pressing the left mouse button will recenter the view to
 	      forward.
-
-	    <p>
-	      You can set the speed of the mouselookwich should be a
-	      value greater than 0 (default = 15).
- 	  </td>
+          <br>    
+              If mouselook is on, the msls setting controls the speed of the mouselook (6-20, default 15).</td>
 	</tr>
+	<tr>
+	  <td colspan="2"><span class="style3">Mouse controlled FLIR</span> </td>
+	  </tr>
+	<tr>
+	  <td><span class="style1">msl=0<br>
+msls=15 </span></td>
+	  <td><span class="style1">When mouselook is off (msl=0), you can use mouse for <strong>FLIR</strong> panning. Additionally, when you press <em>left </em>mouse button you <em>lock/unlock</em> target, with <em>right </em>button you can <em>select next target </em>and with mouse <em>wheel</em> you control <em>zoom </em>level. <br>
+It is also possible to switch mouselook on/off with<strong> ctrl-delete </strong>key combination or with a middle mouse button. <br>
+If mouselook is off, the msls setting controls the POV rotation speed (6-20, default 15).</span></td>
+	  </tr>
 
 	<tr>
 	  <th align="left" colspan="2">Field of view</th>
@@ -136,7 +152,7 @@
 
 	<tr>
 	  <th align="left" colspan="2">
-	    FLIR panning and zoom  (Comanche and Hokum only)
+	    Joystick controlled FLIR panning and zoom  (Comanche and Hokum only)
 	  <th width="1">
 	</tr>
 
@@ -162,7 +178,7 @@
 	      have an extra joystick axis available you can map one of
 	      them to the zoom and using for zooming.
 
-	     <p> DirectX numbers, general names, Saitek X36USB/X45 names:<br>
+        <p> DirectX numbers, general names, Saitek X36USB/X45 names:<br>
         1 -&nbsp;X-axis -&nbsp;&nbsp;X-axis<br>
         2 -&nbsp;Y-axis -&nbsp;&nbsp;Y-axis<br>
         3 -&nbsp;Z-axis<br>
@@ -368,32 +384,75 @@
       </td>
 	</tr>
 	<tr>
-	  <td height="23" colspan="2"><strong>Radar ranges</strong></td>
+	  <td height="23" colspan="2"><span class="style1"><strong>Radar ranges</strong></span></td>
 	  </tr>
 	<tr>
-	  <td height="127">radar_comanche = a,b,c,d,e<br>
-	    radar_apache = etc. <br>
-	    radar_hokum = etc.
-	    radar_havoc = etc.<br>
-	    radar_blackhawk = etc.<br>
-      radar_hind = etc.<br></td>
-	  <td valign="top">Adjustable radar ranges, just like in the old WUT program. a,b,c,d,e are the ranges, default are for instance: 500,1000,2000,4000,8000 for the Comanche. Note that the Havoc and Hind have only 4 ranges. If you consider this a cheat use the default ranges. </td>
+	  <td height="127"><span class="style1">radar_comanche = a,b,c,d,e<br>
+      radar_apache = a,b,c,d,e<br>
+      radar_hokum = a,b,c,d,e	    radar_havoc = a,b,c,d <br>
+      radar_blackhawk = a,b,c,d,e<br>
+      radar_hind = a,b,c,d </span><br></td>
+	  <td valign="top"><span class="style1">Adjustable radar ranges: a,b,c,d,e are the ranges, default are for instance: 500, 1000, 2000, 4000, 8000 for the Comanche. Note that the Havoc and Hind have only 4 ranges. If you consider this a cheat use the default ranges. </span></td>
 	  </tr>
 	<tr>
-	  <td height="23" colspan="2"><strong>Amount of cannon ammo </strong></td>
+	  <td height="23" colspan="2"><span class="style1"><strong>Amount of cannon ammo </strong></span></td>
 	  </tr>
 	<tr>
-	  <td height="133">rounds_comanche = x <br>
-	    rounds_apache = x <br>
-	    rounds_hokum_AP = x <br>
-	    rounds_hokum_HE = x<br>
-	    rounds_havoc_AP = x<br>
-	    rounds_havoc_HE = x<br>
-	    rounds_blackhawk = x<br>
-	    rounds_hind_AP = x<br>
-      rounds_hind_HE = x<br></td>
-	  <td valign="top">500 rounds of 20 mm M197 ammo? Common... be serious! Put in an amount that seems reasonable to you (max 65000). You can give each chopper its own amount. Leave the values at default if you consider this a cheat . </td>
+	  <td height="133"><span class="style1">rounds_comanche = x <br>
+rounds_apache = x <br>
+rounds_hokum_AP = x <br>
+rounds_hokum_HE = x<br>
+rounds_havoc_AP = x<br>
+rounds_havoc_HE = x<br>
+rounds_blackhawk = x<br>
+rounds_hind_AP = x<br>
+rounds_hind_HE = x</span></td>
+	  <td valign="top"><span class="style1">500 rounds of 20 mm M197 ammo? Common... be serious! Put in an amount that seems reasonable to you (max 65000). You can give each chopper its own amount. Leave the values at default if you consider this a cheat . </span></td>
 	  </tr>
+	<tr>
+	  <td colspan="2"><span class="style1"><strong>Satellite view </strong></span> </td>
+	  </tr>
+	<tr>
+	  <td height="80">&nbsp;</td>
+	  <td valign="top"><span class="style1"> Ctrl-F9 in game gives you another camera view: satellite, both for your own gunship and for other groups. Moreover, 
+pressing Space on the map view when a site is selected switches the view to satellite camera. 
+When a group is selected you can zoom satellite view with default controls, for keysites it is also possible 
+to pan view. Note that at the moment for debugging purposes the level of interference is selected randomly 
+each time the satellite view is selected. In the future it will be linked to weather/daytime.</span></td>
+	  </tr>
+	<tr>
+	  <td height="23" colspan="2"><span class="style3">Mouse map control </span></td>
+	  </tr>
+	<tr>
+	  <td height="61">&nbsp;</td>
+	  <td valign="top"><span class="style1">The map view may be zoomed in/out with a mouse wheel. It is also possible to pan the map when the right 
+button is pressed (it needs some improvement still). When the small 3d preview window is selected, mouse 
+movements and wheel with <em>ctrl </em>pressed will pan/zoom the camera.</span></td>
+	  </tr>
+	<tr>
+	  <td height="23" colspan="2"><span class="style3">Campaign commander </span></td>
+	  </tr>
+	<tr>
+	  <td height="133"><span class="style1">camcom=1</span></td>
+	  <td valign="top"><span class="style1">When the camcom setting is set to 1 (def = 0), it is possible to designate targets on the main campaign map. 
+Just select the enemy target and press left mouse button:  a new task is created. New tasks work the same 
+as other tasks:  they may not be executed right away, may expire etc. When you press right mouse button over 
+a task, it is immediately terminated. If it was assigned to any group, the group is sent home.<br>
+<br>
+Note that Campaign Commander greatly influences the gameplay balance: with the right planning the campaigns 
+are much easier to win.</span></td>
+	  </tr>
+	<tr>
+	  <td height="23" colspan="2"><span class="style1"><strong>Enhanced inset view </strong></span></td>
+	  </tr>
+	<tr>
+	  <td height="61"><span class="style1"> </span></td>
+	  <td height="61"><span class="style1">You can select the inset view (Alt-F12) now also in the cockpit. The default view (0 key) shows your own gunship, the keys 2-5 select the same views as corresponding padlock commands, 6 selects either target or waypoint if no target is selected.</span></td>
+	</tr>
+	<tr>
+	  <td height="23">&nbsp;</td>
+	  <td height="23">&nbsp;</td>
+	</tr>
 
     </table>
 
@@ -407,19 +466,22 @@
       <a href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>.
       You can aslo subscribe (free) to a
       developers mailing list.
-    </p>
+Look in the Wiki to find details on how to download and set up the code. </p>
 
     <a name="history"></a>
     <h2>History</h2>
 
     <p>Fixes/features in 1.6.0W12: </p>
     <ul>
-      <li> Mouse wheel zoom and mouse movement of FLIR 
-      <li> Configurable radar ranges and cannon ammo amount in eech.ini. 
-      <li>Possibly more stable MP.
-      <li>AH64-A and KA50 added as configurable choppers. Install download screens (see above).              
+      <li> Mouse controlled FLIR
+      <li> Cockpit inset window 
+      <li>Campaign commander in map screen
+      <li>Sattelite view (in cockpit and in map window) 
+      <li>Mouse controlled map screen (zoom, panning)                          
+      <li>Configurable radar ranges and cannon ammo amount
+      <li>Possibly more stable MP
+      <li>AH64-A and KA50 added as configurable choppers. Install the download screens (see above)
     </ul>
-    <p>&nbsp;</p>
     <p>Fixes/features in 1.6.0W10,11: </p>
     <ul>
       <li> Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept,confirm and off you go (you can't choose it from the mission or group list since it has no task). 
