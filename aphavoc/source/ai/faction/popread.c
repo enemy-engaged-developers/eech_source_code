@@ -909,13 +909,13 @@ void read_population_city_placements ( FILE *fp )
 		*closest_keysite,
 		*sector,
 		*keysite,
-		*keysite_group;
+		*keysite_group = NULL;
 
    int
 		keysite_totals[NUM_ENTITY_SUB_TYPE_KEYSITES];
 
 	entity_sides
-		keysite_side;
+		keysite_side = ENTITY_SIDE_NEUTRAL;
 
 	vec3d
 		keysite_pos;

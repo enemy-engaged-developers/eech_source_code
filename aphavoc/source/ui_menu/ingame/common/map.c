@@ -4305,14 +4305,14 @@ void map_draw_grid (ui_object *obj)
 	float
 		wxmin,
 		wzmin,
-		wxmax,
-		wzmax,
+		wxmax = 0,
+		wzmax = 0,
 		width,
 		number_of_grid_lines,
 		one_over_sector_side_length;
 
 	int
-		grid_spacing,
+		grid_spacing = 0,
 		inew_wxmin,
 		inew_wzmin,
 		inew_wxmax,

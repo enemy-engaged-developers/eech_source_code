@@ -797,7 +797,7 @@ void do_highlighting (void)
 		*last_obj = NULL;
 
 	int
-		arg;
+		arg = 0;
 
 	highlighted_object = check_ui_object_for_selection (current_screen, get_mouse_x (), get_mouse_y ());
 

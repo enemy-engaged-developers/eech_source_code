@@ -236,7 +236,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	float
 		mb_vel,
 		height,
-		flight_time,
+		flight_time = 0,
 		terrain_elevation;
 
 	entity

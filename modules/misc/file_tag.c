@@ -482,7 +482,7 @@ int check_next_file_tag (FILE *file_ptr, char *application_enums [], int last_ap
 
    int
 		c_count,
-      last_c,
+      last_c = 0,
       c;
 
    char
