@@ -2509,7 +2509,7 @@ int direct_play_join_group (void)
 
 int direct_play_leave_group (void)
 {
-
+/* ////Moje 040616 BUg Hunt
 	HRESULT
 		hr;
 
@@ -2559,8 +2559,9 @@ int direct_play_leave_group (void)
 
 		return ( FALSE );
 	}
+////Moje 040616 Bug Hunt End next line
+*/
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2586,14 +2587,15 @@ int direct_play_remove_player_from_group (DPID id)
 		
 				#endif
 		
-				hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, id );
+	 			hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, id );
 		
 				if ( hr != DP_OK )
 				{
 		
 					debug_log ( "DIRECTP: DirectPlay::DeletePlayerFromGroup: %s", get_dplay_error_message ( hr ) );
-					
-					server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
+                                ////Moje 040624 Removed next line. We know that this fails most of the time, but despite that
+                                ////            cvc manages to clear the client-data and the server survives
+	 			////	server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
 		
 					return FALSE;
 				}
@@ -2602,9 +2604,13 @@ int direct_play_remove_player_from_group (DPID id)
 	
 				if ( hr != DP_OK )
 				{
+					server_log ("Error: Failed to destroy player %d", id); // Jabberwock 040609 - Expanded log
+
 					return ( FALSE );
 				}
 
+				server_log ("Success: player %d removed", id); // Jabberwock 040609 - Expanded log
+				
 				return ( TRUE );
 			}
 			else
