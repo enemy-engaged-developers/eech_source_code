@@ -293,9 +293,10 @@ void *safe_malloc_memory (size_t size)
 		total_memory_available = physical_memory_available + virtual_memory_available;
 	
 		debug_fatal ( "Unable to allocate memory size %d - Windows reports there is only %d memory available", size, total_memory_available );
-#else
+#elif LINUX
 		// TODO: print some more useful memory information here.
-		debug_fatal ( "Unable to allocate memory size %d - %s", size, strerror(errno) );		
+		//struct mallinfo mallinfo (void)
+		debug_fatal ( "Unable to allocate memory size %d - %s", size, strerror(errno) );
 #endif
 	}
 
@@ -333,7 +334,11 @@ void *safe_malloc_memory (size_t size)
 	// Add this to the total safe memory allocated
 	//
 
+#ifdef LINUX
+	total_safe_memory_allocated += (malloc_usable_size (ptr));
+#else
 	total_safe_memory_allocated += size;
+#endif
 
 	if (total_safe_memory_allocated > maximum_safe_memory_allocated)
 	{
@@ -353,8 +358,11 @@ void safe_free (void *ptr)
 {
 	ASSERT (ptr);
 
+#ifdef LINUX
+	total_safe_memory_allocated -= (malloc_usable_size (ptr));
+#else
 	total_safe_memory_allocated -= (_msize (ptr));
-
+#endif
 	free (ptr);
 
 	safe_memory_counter--;
