@@ -1249,6 +1249,91 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			break;
 		}
+
+		case DISPLAY_3D_TINT_GREY:
+		{
+
+			//
+			// Set the light modes
+			//
+
+			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
+
+			set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+
+			//
+			// Set the light in the scene
+			//
+
+			switch ( current_3d_light_level )
+			{
+
+				case DISPLAY_3D_LIGHT_LEVEL_LOW:
+				{
+
+					ambient_light.red = 0.48;
+					ambient_light.green = 0.48;
+					ambient_light.blue = 0.48;
+
+					main_light.red = 0.12;
+					main_light.green = 0.12;
+					main_light.blue = 0.12;
+
+					break;
+				}
+
+				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
+				{
+
+					ambient_light.red = 0.64;
+					ambient_light.green = 0.64;
+					ambient_light.blue = 0.64;
+
+					main_light.red = 0.16;
+					main_light.green = 0.16;
+					main_light.blue = 0.16;
+
+					break;
+				}
+
+				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
+				{
+
+					ambient_light.red = 0.8;
+					ambient_light.green = 0.8;
+					ambient_light.blue = 0.8;
+
+					main_light.red = 0.2;
+					main_light.green = 0.2;
+					main_light.blue = 0.2;
+
+					break;
+				}
+			}
+
+			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
+
+			direction.x = -visual_3d_vp->zv.x;
+			direction.y = -visual_3d_vp->zv.y;
+			direction.z = -visual_3d_vp->zv.z;
+
+			set_3d_main_light_source ( main_3d_env, &main_light, &direction, FALSE );
+
+			//
+			// Set the fogmode
+			//
+
+			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
+
+			fog_colour.r = ambient_light.red * 128;
+			fog_colour.g = ambient_light.green * 128;
+			fog_colour.b = ambient_light.blue * 128;
+			fog_colour.a = 0;
+
+			set_3d_fog_colour ( main_3d_env, fog_colour );
+
+			break;
+		}
 	}
 }
 

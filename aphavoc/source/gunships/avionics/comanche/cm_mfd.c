@@ -2628,7 +2628,21 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	set_active_screen (eo_3d_texture_screen);
 
-	set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	{
+		int
+			tint;
+
+		if (command_line_green_mfd)
+		{
+			tint = DISPLAY_3D_TINT_GREEN;
+		}
+		else
+		{
+			tint = DISPLAY_3D_TINT_GREY;
+		}
+
+		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	}
 
 	//
 	// draw 3D scene (temporarily adjust the virtual cockpit position relative to EO sensor position)
