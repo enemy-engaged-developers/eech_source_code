@@ -671,8 +671,11 @@ void initialise_flight_dynamics_collision_points (void)
 
 void initialise_flight_dynamics_input_devices (void)
 {
-
+#if 0	// Retro 18Jul2004
 	current_flight_dynamics->input_data.cyclic_joystick_device_index = global_options.joystick_device_index;
+#else
+	current_flight_dynamics->input_data.cyclic_joystick_device_index = command_line_cyclic_joystick_index;
+#endif	// Retro 18Jul2004 end
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
