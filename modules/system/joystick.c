@@ -485,9 +485,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 0;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": X-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": X-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -515,9 +516,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 1;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Y-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": Y-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -549,9 +551,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 2;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Z-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": Z-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -582,9 +585,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 3;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rX-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": rX-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -614,9 +618,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 4;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rY-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": rY-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -646,9 +651,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 5;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": rZ-Axis")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": rZ-Axis");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -678,9 +684,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 6;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Slider0")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": Slider0");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -710,9 +717,10 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Retro 10Jul2004 start
 		AxisInfo[AxisCount].axis = 7;
 		AxisInfo[AxisCount].device = number_of_joystick_devices;
-		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": Slider1")+1);
+		AxisInfo[AxisCount].AxisName = (char*) malloc(strlen(device_instance->tszProductName)+strlen(": ")+strlen(device_part.tszName)+1);
 		strcpy(AxisInfo[AxisCount].AxisName,device_instance->tszProductName);
-		strcat(AxisInfo[AxisCount].AxisName,": Slider1");
+		strcat(AxisInfo[AxisCount].AxisName,": ");
+		strcat(AxisInfo[AxisCount].AxisName,device_part.tszName);
 		AxisInfo[AxisCount].inUse = FALSE;
 		AxisCount++;
 		// Retro 10Jul2004 end
@@ -1306,3 +1314,42 @@ int get_joystick_button(joystick_device_info *stick, int index) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Retro 28Aug2004 - theString has to be allocated !
+
+void GetGUIDString(const int iDevice, char* theString)
+{
+#ifdef WIN32
+	DIDEVICEINSTANCE devInst;
+	char strTemp[MAX_PATH];
+	char strTemp2[MAX_PATH];
+	int i;
+
+	if ((iDevice < 0)||(iDevice >= number_of_joystick_devices))
+		return;
+
+	if (!theString)
+		return;
+
+	devInst.dwSize = sizeof(DIDEVICEINSTANCE);
+	IDirectInputDevice7_GetDeviceInfo(joystick_devices[iDevice].input_device, &devInst);
+
+	sprintf(strTemp,"{%8.8X-%4.4X-%4.4X-",	devInst.guidProduct.Data1,
+											devInst.guidProduct.Data2,
+											devInst.guidProduct.Data3);
+
+	for (i = 0; i < 2; i++)
+	{
+		sprintf(strTemp2,"%2.2X",devInst.guidProduct.Data4[i]);
+		strcat(strTemp,strTemp2);
+	}
+	strcat(strTemp,"-");
+	for (i = 2; i < 8; i++)
+	{
+		sprintf(strTemp2,"%2.2X",devInst.guidProduct.Data4[i]);
+		strcat(strTemp,strTemp2);
+	}
+	strcat(strTemp,"}");
+
+	strcpy(theString,strTemp);
+#endif
+}
