@@ -1364,7 +1364,7 @@ void draw_virtual_cockpit_3d_view (void)
 			if (get_global_draw_cockpit_graphics ())
 			{
 				set_pilots_full_screen_params (FALSE);
-
+/* VJ 050114 doesn't work yet
 				if (command_line_3d_cockpit)
 				{
 					draw_blackhawk_external_virtual_cockpit_3d
@@ -1376,7 +1376,6 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_RAIN_EFFECT |
 						VIRTUAL_COCKPIT_MAIN_ROTOR
 					);
-//VJ#
 
 					draw_blackhawk_internal_virtual_cockpit_3d
 					(
@@ -1390,6 +1389,7 @@ void draw_virtual_cockpit_3d_view (void)
 				}
 				else
 				{
+*/
 					draw_blackhawk_external_virtual_cockpit
 					(
 						VIRTUAL_COCKPIT_STOWED_WIPER |
@@ -1409,7 +1409,7 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
 						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
 					);
-				}
+//				}
 
 			}
 			else
