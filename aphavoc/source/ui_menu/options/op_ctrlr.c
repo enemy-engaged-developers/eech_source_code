@@ -117,7 +117,9 @@ ui_object
 	*mouselook_sensitivity_up_button,	// Retro 17Jul2004
 	*mouselook_sensitivity_down_button,	// Retro 17Jul2004
 	*joylook_sensitivity_up_button,		// Retro 17Jul2004
-	*joylook_sensitivity_down_button;	// Retro 17Jul2004
+	*joylook_sensitivity_down_button,	// Retro 17Jul2004
+	*autoconfigure_area,	// Retro 28Jul2004
+	*autoconfigure_button;	// Retro 28Jul2004
 
 static unsigned char
 	*option_joystick_text[2],
@@ -133,10 +135,13 @@ static unsigned char
 void initialise_joystick_selection (void);
 
 void notify_cyclic_option_button ( ui_object *obj, void *arg );
+void notify_cyclic_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 
 void notify_collective_option_button ( ui_object *obj, void *arg );
+void notify_collective_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 
 void notify_pedal_option_button ( ui_object *obj, void *arg );
+void notify_pedal_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 
  //Retro10Jul2004_dead void notify_device_option_button ( ui_object *obj, void *arg );
 
@@ -146,13 +151,21 @@ void notify_keyboard_assist_option_button ( ui_object *obj, void *arg );
 
 // Retro 10Jul2004 start
 void notify_cyclic_y_option_button ( ui_object *obj, void *arg );
+void notify_cyclic_y_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_eo_pan_x_option_button ( ui_object *obj, void *arg );
+void notify_eo_pan_x_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_eo_pan_y_option_button ( ui_object *obj, void *arg );
+void notify_eo_pan_y_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_eo_zoom_option_button ( ui_object *obj, void *arg );
+void notify_eo_zoom_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_joylook_x_option_button ( ui_object *obj, void *arg );
+void notify_joylook_x_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_joylook_y_option_button ( ui_object *obj, void *arg );
+void notify_joylook_y_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_mouselook_option_button ( ui_object *obj, void *arg );
+void notify_mouselook_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 void notify_trackir_option_button ( ui_object *obj, void *arg );
+void notify_trackir_option_button_right ( ui_object *obj, void *arg );	// Retro 28Aug2004
 // Retro 10Jul2004 end
 
 // Retro 17Jul2004 start
@@ -165,9 +178,50 @@ void draw_joylook_sensitivity ( ui_object *obj, void *arg );
 void draw_mouselook_sensitivity ( ui_object *obj, void *arg );
 // Retro 17Jul2004 end
 
+void notify_autoconfigure_button( ui_object *obj, void *arg);		// Retro 28Jul2004
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Retro 28Aug2004
+
+void resetJoystickMapping(void)
+{
+	int
+		i;
+
+	set_global_collective_input ( KEYBOARD_INPUT );
+
+	set_global_cyclic_input ( KEYBOARD_INPUT );
+
+	set_global_pedal_input ( KEYBOARD_INPUT );
+
+	command_line_cyclic_joystick_index = -1;
+	command_line_cyclic_joystick_x_axis = -1;
+	command_line_cyclic_joystick_y_axis =- 1;
+
+	command_line_collective_joystick_index = -1;
+	command_line_collective_joystick_axis = -1;
+
+	command_line_rudder_joystick_index = -1;
+	command_line_rudder_joystick_axis = -1;
+
+	command_line_eo_pan_joystick_index = -1;
+	command_line_eo_pan_vertical_joystick_axis = -1;
+	command_line_eo_pan_horizontal_joystick_axis = -1;
+
+	command_line_eo_zoom_joystick_index = -1;
+	command_line_eo_zoom_joystick_axis = -1;
+
+	command_line_joylook_joystick_index = -1;
+	command_line_joylookh_joystick_axis = -1;
+	command_line_joylookv_joystick_axis = -1;
+
+	for (i = 0; i < AxisCount; i++)
+	{
+		AxisInfo[i].inUse = FALSE;
+	}
+}
 
 void initialise_joystick_selection (void)
 {
@@ -221,6 +275,7 @@ void initialise_joystick_selection (void)
 	if (( get_global_joystick_device_index () == -1 )||
 		( number_of_joystick_devices != get_global_joystick_device_index ()))
 	{
+#if 0
 		set_global_collective_input ( KEYBOARD_INPUT );
 
 		set_global_cyclic_input ( KEYBOARD_INPUT );
@@ -249,6 +304,11 @@ void initialise_joystick_selection (void)
 		command_line_joylook_joystick_index = -1;
 		command_line_joylookh_joystick_axis = -1;
 		command_line_joylookv_joystick_axis = -1;
+#else
+		set_global_joystick_device_index (-1);
+
+		resetJoystickMapping();
+#endif
 
 #if DEBUG_MODULE
 		debug_log ("Number of joysticks changed from %i to %i - resetting everything\n",get_global_joystick_device_index(),number_of_joystick_devices);
@@ -293,8 +353,28 @@ void setAxisUnused(int device, int axis)
 		retAxisIndex;
 
 	retAxisIndex = findAxisInArray(device,axis);
-	if (retAxisIndex > 0)
+	if (retAxisIndex > 0)	// '0' is keyboard, '-1' is 'not found'
 		AxisInfo[retAxisIndex].inUse = FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Retro 20Aug2004
+int checkIfAllAxisUsed()
+{
+	int
+		i;
+
+	// we start with 1 as 0 is the Keyboard, and, for our purposes, _never_ in use
+	for (i = 1; i < AxisCount; i++)
+	{
+		if (AxisInfo[i].inUse == FALSE)
+			return FALSE;
+	}
+
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,21 +386,78 @@ void setAxisUnused(int device, int axis)
 int findNextUnusedAxis(int device, int axis)
 {
 	int
-		retAxisIndex;
+		retAxisIndex,
+		i;
 
 	retAxisIndex = findAxisInArray(device,axis);
-	if (retAxisIndex != -1)	// set old deviceaxis to 'unused'
+
+	// set old deviceaxis to 'unused'
+	// '-1' indicated 'device+axis combination not found'
+	// either it was not mapped or an old configuration
+	// file was loaded (new device added or such)
+	if (retAxisIndex != -1)
 		AxisInfo[retAxisIndex].inUse = FALSE;
+	else
+		retAxisIndex = 0;
 
-	do {
-		if ((retAxisIndex != -1)&&(retAxisIndex < AxisCount-1))
-			retAxisIndex ++;
-		else
-			retAxisIndex = 0;
-	} while (AxisInfo[retAxisIndex].inUse == TRUE);
+	// Retro 20Aug2004 - if no axis is available, set mapping back to keyboard
+	if (checkIfAllAxisUsed() == TRUE)
+		return 0;
 
-	if (retAxisIndex != 0)	// keyboard is always 'not in use' for our purposes
-		AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+	// Retro 28Aug2004 - a safer variant, to avoid loops..
+	for (i = retAxisIndex+1; i < (retAxisIndex + AxisCount + 1); i++)
+	{
+		if (AxisInfo[(i%AxisCount)].inUse == FALSE)
+		{
+			retAxisIndex = (i%AxisCount);
+			break;
+		}
+	}
+
+	// set new deviceaxis to 'used'
+	// ..but keyboard is always 'not in use' for our purposes
+	if (retAxisIndex != 0)
+		AxisInfo[retAxisIndex].inUse = TRUE;
+
+	return retAxisIndex;
+}
+
+int findPreviousUnusedAxis(int device, int axis)
+{
+	int
+		retAxisIndex,
+		i;
+
+	retAxisIndex = findAxisInArray(device,axis);
+
+	// set old deviceaxis to 'unused'
+	// '-1' indicated 'device+axis combination not found'
+	// either it was not mapped or an old configuration
+	// file was loaded (new device added or such)
+	if (retAxisIndex != -1)
+		AxisInfo[retAxisIndex].inUse = FALSE;
+	else
+		retAxisIndex = 0;
+
+	// Retro 20Aug2004 - if no axis is available, set mapping back to keyboard
+	if (checkIfAllAxisUsed() == TRUE)
+		return 0;
+
+	// Retro 28Aug2004 - a safer variant, to avoid loops..
+	for (i = (retAxisIndex + AxisCount-1); i > retAxisIndex-1; i--)
+	{
+		if (AxisInfo[(i%AxisCount)].inUse == FALSE)
+		{
+			retAxisIndex = (i%AxisCount);
+			break;
+		}
+	}
+	
+	// set new deviceaxis to 'used'
+	// ..but keyboard is always 'not in use' for our purposes
+	if (retAxisIndex != 0)
+		AxisInfo[retAxisIndex].inUse = TRUE;
+
 	return retAxisIndex;
 }
 
@@ -335,12 +472,29 @@ int findNextUnusedAxis(int device, int axis)
 int findNextUnusedDeviceAxis(int device, int axis)
 {
 	int
-		retAxisIndex;
+		retAxisIndex,
+		i;
+
+	// user has to assign 'x' axis first
+	if (device == -1)
+		return 0;
 
 	retAxisIndex = findAxisInArray(device,axis);
-	if (retAxisIndex != -1)	// set old deviceaxis to 'unused'
-		AxisInfo[retAxisIndex].inUse = FALSE;
 
+	// set old deviceaxis to 'unused'
+	// '-1' indicated 'device+axis combination not found'
+	// either it was not mapped or an old configuration
+	// file was loaded (new device added or such)
+	if (retAxisIndex != -1)
+		AxisInfo[retAxisIndex].inUse = FALSE;
+	else
+		retAxisIndex = 0;
+
+	// Retro 20Aug2004 - if no axis is available, set back to keyboard
+	if (checkIfAllAxisUsed() == TRUE)
+		return 0;
+
+#if 0
 	do {
 		if ((retAxisIndex != -1)&&(retAxisIndex < AxisCount-1))
 			retAxisIndex ++;
@@ -348,8 +502,62 @@ int findNextUnusedDeviceAxis(int device, int axis)
 			retAxisIndex = 1;	// no keyboard in this selection, thanks
 
 	} while ((AxisInfo[retAxisIndex].device != device)||(AxisInfo[retAxisIndex].inUse == TRUE));
+#else
+	// Retro 28Aug2004 - a safer variant, to avoid loops..
+	for (i = retAxisIndex+1; i < (retAxisIndex + AxisCount + 1); i++)
+	{
+		if ((AxisInfo[(i%AxisCount)].device == device)&&(AxisInfo[(i%AxisCount)].inUse == FALSE))
+		{
+			retAxisIndex = (i%AxisCount);
+			break;
+		}
+	}
+#endif
 
-	AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+	if (retAxisIndex != 0)
+		AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+
+	return retAxisIndex;
+}
+
+int findPreviousUnusedDeviceAxis(int device, int axis)
+{
+	int
+		retAxisIndex,
+		i;
+
+	// user has to assign 'x' axis first
+	if (device == -1)
+		return 0;
+
+	retAxisIndex = findAxisInArray(device,axis);
+
+	// set old deviceaxis to 'unused'
+	// '-1' indicated 'device+axis combination not found'
+	// either it was not mapped or an old configuration
+	// file was loaded (new device added or such)
+	if (retAxisIndex != -1)
+		AxisInfo[retAxisIndex].inUse = FALSE;
+	else
+		retAxisIndex = 0;
+
+	// Retro 20Aug2004 - if no axis is available, set back to keyboard
+	if (checkIfAllAxisUsed() == TRUE)
+		return 0;
+
+	// Retro 28Aug2004 - a safer variant, to avoid loops..
+	for (i = (retAxisIndex + AxisCount-1); i > retAxisIndex-1; i--)
+	{
+		if ((AxisInfo[(i%AxisCount)].device == device)&&(AxisInfo[(i%AxisCount)].inUse == FALSE))
+		{
+			retAxisIndex = (i%AxisCount);
+			break;
+		}
+	}
+
+	if (retAxisIndex != 0)
+		AxisInfo[retAxisIndex].inUse = TRUE; // set new deviceaxis to 'used'
+
 	return retAxisIndex;
 }
 
@@ -647,9 +855,15 @@ void define_options_screen_controller_page_objects (void)
 		*page;
 
 	ui_object
+#if 0
 		*title_change_array [14],
 		*check_array [14],
 		*change_array [14];
+#else
+		*title_change_array[15],
+		*check_array[15],
+		*change_array[14];
+#endif
 
 	/////////////////////////////////////////////////////////////////
 	// Initialise Button Strings
@@ -1378,6 +1592,22 @@ void define_options_screen_controller_page_objects (void)
 
 	// Retro 17Jul2004 end
 
+	// Retro 28Aug2004 - autoconfigure area
+
+	autoconfigure_area = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (page),
+		UI_ATTR_VIRTUAL_POSITION (CONTROLLER_OPTION_TITLE_OFFSET_X, OPTION_TITLE_OFFSET_Y-OPTION_SMALL_AREA_OFFSET_Y),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_LARGE_WIDTH, OPTION_SMALL_AREA_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+	// Retro 28Aug2004 end
+
 	// Retro 17Jul2004 - mouselook sensitivity area
 	
 	mouselook_sensitivity_area = create_ui_object
@@ -1478,6 +1708,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_STATE (UI_OBJECT_STATE_OFF),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_cyclic_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_cyclic_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1518,6 +1749,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_STATE (UI_OBJECT_STATE_OFF),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_cyclic_y_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_cyclic_y_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1557,6 +1789,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_collective_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_collective_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1595,6 +1828,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_pedal_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_pedal_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1672,6 +1906,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_eo_pan_x_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_eo_pan_x_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1712,6 +1947,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_eo_pan_y_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_eo_pan_y_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1752,6 +1988,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_eo_zoom_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_eo_zoom_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1792,6 +2029,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_joylook_x_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_joylook_x_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -1832,6 +2070,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 		UI_ATTR_FUNCTION (notify_joylook_y_option_button),
+		UI_ATTR_RIGHT_FUNCTION (notify_joylook_y_option_button_right),	// Retro 28Aug2004
 		UI_ATTR_END
 	);
 
@@ -2054,6 +2293,26 @@ void define_options_screen_controller_page_objects (void)
 
 	// Retro 17Jul2004 end
 
+	// Retro 28Aug2004
+	create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (autoconfigure_area),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (1.0, 1.0),
+		UI_ATTR_TEXT (get_trans ("Autoconfigure")),
+		UI_ATTR_FUNCTION (notify_autoconfigure_button),
+		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
+	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	    UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_END
+	);
+	// Retro 28Aug2004 end
+
 	// Retro 17 Jul2004
 	// Shamelessly copied from OP_INSND.C
 	// Mouselook Sensitivity Controls ( "+ 30 -" or such)
@@ -2208,6 +2467,38 @@ void notify_cyclic_option_button ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 
+void notify_cyclic_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int AxisInfoIndex;
+	int oldCyclicDevice = command_line_cyclic_joystick_index;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_cyclic_joystick_index,command_line_cyclic_joystick_x_axis);
+
+	command_line_cyclic_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_cyclic_joystick_x_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_cyclic_joystick_index == -1)
+	{
+		set_global_cyclic_input (KEYBOARD_INPUT);
+	}
+	else
+	{
+		set_global_cyclic_input (JOYSTICK_INPUT);
+	}
+	if (command_line_cyclic_joystick_index != oldCyclicDevice)
+	{
+		set_ui_object_text (cyclic_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldCyclicDevice,command_line_cyclic_joystick_y_axis);
+		command_line_cyclic_joystick_y_axis = -1;
+	}
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
+	set_toggle_button_off (obj);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2229,6 +2520,23 @@ void notify_cyclic_y_option_button ( ui_object *obj, void *arg )
 
 	// don't leave text selected
 
+	set_toggle_button_off (obj);
+}
+
+void notify_cyclic_y_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedDeviceAxis(command_line_cyclic_joystick_index,command_line_cyclic_joystick_y_axis);
+
+	command_line_cyclic_joystick_y_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (cyclic_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
 	set_toggle_button_off (obj);
 }
 
@@ -2271,6 +2579,30 @@ void notify_collective_option_button ( ui_object *obj, void *arg )
 
 	// don't leave text selected
 
+	set_toggle_button_off (obj);
+}
+
+void notify_collective_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_collective_joystick_index,command_line_collective_joystick_axis);
+
+	command_line_collective_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_collective_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_collective_joystick_index == -1)
+		set_global_collective_input (KEYBOARD_INPUT);
+	else
+		set_global_collective_input (THROTTLE_INPUT);
+
+	set_ui_object_text (collective_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
 	set_toggle_button_off (obj);
 }
 
@@ -2321,6 +2653,36 @@ void notify_pedal_option_button ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 
+void notify_pedal_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_rudder_joystick_index,command_line_rudder_joystick_axis);
+
+	command_line_rudder_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_rudder_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	if (command_line_rudder_joystick_index == -1)
+	{
+		set_global_pedal_input (KEYBOARD_INPUT);
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [FALSE]);
+	}
+	else
+	{
+		set_global_pedal_input (RUDDER_INPUT);
+		set_ui_object_text (reverse_pedal_option_button, option_boolean_text [command_line_reverse_pedal]);
+	}
+
+	set_ui_object_text (pedal_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
+	set_toggle_button_off (obj);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2366,8 +2728,11 @@ void notify_device_option_button ( ui_object *obj, void *arg )
 
 void notify_eo_pan_x_option_button ( ui_object *obj, void *arg )
 {
-	int AxisInfoIndex;
-	int oldEOPanDevice = command_line_eo_pan_joystick_index;
+	int
+		AxisInfoIndex,
+		oldEOPanDevice;
+
+	oldEOPanDevice = command_line_eo_pan_joystick_index;
 
 	AxisInfoIndex = findNextUnusedAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_horizontal_joystick_axis);
 
@@ -2388,13 +2753,43 @@ void notify_eo_pan_x_option_button ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 
+void notify_eo_pan_x_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex,
+		oldEOPanDevice;
+
+	oldEOPanDevice = command_line_eo_pan_joystick_index;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_horizontal_joystick_axis);
+
+	command_line_eo_pan_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_eo_pan_horizontal_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_pan_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	if (command_line_eo_pan_joystick_index != oldEOPanDevice)
+	{
+		set_ui_object_text (eo_pan_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldEOPanDevice,command_line_eo_pan_vertical_joystick_axis);
+		command_line_eo_pan_vertical_joystick_axis = -1;
+	}
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
+	set_toggle_button_off (obj);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_eo_pan_y_option_button ( ui_object *obj, void *arg )
 {
-	int AxisInfoIndex;
+	int
+		AxisInfoIndex;
 
 	AxisInfoIndex = findNextUnusedDeviceAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_vertical_joystick_axis);
 
@@ -2404,6 +2799,24 @@ void notify_eo_pan_y_option_button ( ui_object *obj, void *arg )
 
 	// don't leave text selected
 
+	set_toggle_button_off (obj);
+}
+
+void notify_eo_pan_y_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedDeviceAxis(command_line_eo_pan_joystick_index,command_line_eo_pan_vertical_joystick_axis);
+
+	command_line_eo_pan_vertical_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_pan_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
 	set_toggle_button_off (obj);
 }
 
@@ -2428,14 +2841,36 @@ void notify_eo_zoom_option_button ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 
+void notify_eo_zoom_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_eo_zoom_joystick_index,command_line_eo_zoom_joystick_axis);
+
+	command_line_eo_zoom_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_eo_zoom_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (eo_zoom_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
+	set_toggle_button_off (obj);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_joylook_x_option_button ( ui_object *obj, void *arg )
 {
-	int AxisInfoIndex;
-	int oldJoyLookDevice = command_line_joylook_joystick_index;
+	int
+		AxisInfoIndex,
+		oldJoyLookDevice;
+	
+	oldJoyLookDevice = command_line_joylook_joystick_index;
 
 	AxisInfoIndex = findNextUnusedAxis(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
 
@@ -2464,13 +2899,51 @@ void notify_joylook_x_option_button ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 
+void notify_joylook_x_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex,
+		oldJoyLookDevice;
+	
+	oldJoyLookDevice = command_line_joylook_joystick_index;
+
+	AxisInfoIndex = findPreviousUnusedAxis(command_line_joylook_joystick_index,command_line_joylookh_joystick_axis);
+
+	command_line_joylook_joystick_index = AxisInfo[AxisInfoIndex].device;
+	command_line_joylookh_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (joylook_x_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	if (command_line_joylook_joystick_index != oldJoyLookDevice)
+	{
+		set_ui_object_text (joylook_y_option_button, option_joystick_text[0]);
+		setAxisUnused(oldJoyLookDevice,command_line_joylookv_joystick_axis);
+		command_line_joylookv_joystick_axis = -1;
+	}
+
+	// mouselook would override joystick look, so deactivate that
+	if ((command_line_mouse_look == TRUE)&&(command_line_joylook_joystick_index != -1))
+	{
+		command_line_mouse_look = FALSE;
+		set_ui_object_text (mouselook_option_button, option_boolean_text [0]);
+		setTrackIRButton (FALSE);
+	}
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
+	set_toggle_button_off (obj);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_joylook_y_option_button ( ui_object *obj, void *arg )
 {
-	int AxisInfoIndex;
+	int
+		AxisInfoIndex;
 
 	AxisInfoIndex = findNextUnusedDeviceAxis(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
 
@@ -2480,6 +2953,24 @@ void notify_joylook_y_option_button ( ui_object *obj, void *arg )
 
 	// don't leave text selected
 
+	set_toggle_button_off (obj);
+}
+
+void notify_joylook_y_option_button_right ( ui_object *obj, void *arg )	// Retro 28Aug2004
+{
+	int
+		AxisInfoIndex;
+
+	AxisInfoIndex = findPreviousUnusedDeviceAxis(command_line_joylook_joystick_index,command_line_joylookv_joystick_axis);
+
+	command_line_joylookv_joystick_axis = AxisInfo[AxisInfoIndex].axis;
+
+	set_ui_object_text (joylook_y_option_button, AxisInfo[AxisInfoIndex].AxisName);
+
+	// ugh
+	notify_show_controller_page ();
+
+	// don't leave text selected
 	set_toggle_button_off (obj);
 }
 
@@ -2756,4 +3247,139 @@ void notify_reverse_pedal_option_button ( ui_object *obj, void *arg )
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef MAX_PATH
+#define MAX_PATH 260 // ugh
+#endif
+
+extern void GetGUIDString(const int iDevice, char* theString);	// Retro 28Aug2004
+
+// in an ideal world those hardcoded mappings would be read from an .ini file
+void notify_autoconfigure_button ( ui_object *obj, void *arg)
+{
+	char strGuid[MAX_PATH];
+
+	// this variable lets the user cycle through all enumerated sticks.. at the end of the routine
+	// it get´s increased by one.
+static int iDevice = 0;
+
+	// does nothing #ifndef WIN32
+	GetGUIDString(iDevice,strGuid);
+	
+	if (!strGuid)
+		return;
+
+	//## Saitek X36 Flight Controller USB
+	if (strcmp("{053F06A3-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 6;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
+	// Logitech WingMan Force 3D USB
+	else if (strcmp("{C283046D-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 6;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
+	// Microsoft® SideWinder® Plug & Play Game Pad - although the sim is unflyable with this - imo
+	else if (strcmp("{0027045E-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+	}
+	// Thrustmaster Top Gun® AfterBurner (USB)
+	else if (strcmp("{B101044F-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 6;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
+#if 0
+	// Microsoft SideWinder Precision Racing Wheel
+	else if (strcmp("{{001A045E-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+	}
+#endif
+	// Saitek X45 Flight Controller USB
+	else if (strcmp("{053C06A3-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 6;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
+	// Saitek Cyborg Evo
+	else if (strcmp("{046406A3-0000-0000-0000-504944564944}",strGuid) == 0)
+	{
+		resetJoystickMapping();
+
+		set_global_collective_input ( THROTTLE_INPUT );
+		set_global_cyclic_input ( JOYSTICK_INPUT );
+		set_global_pedal_input ( RUDDER_INPUT );
+		command_line_cyclic_joystick_index = iDevice;
+		command_line_cyclic_joystick_x_axis = 0;
+		command_line_cyclic_joystick_y_axis = 1;
+		command_line_collective_joystick_index = iDevice;
+		command_line_collective_joystick_axis = 2;
+		command_line_rudder_joystick_index = iDevice;
+		command_line_rudder_joystick_axis = 5;
+	}
+	else	// no match, we do nothing and return
+	{
+		return;
+	}
+
+	// select next device next time this sub is executed
+	// make sure we don´t get an out-of-bounds error
+	iDevice++;
+	iDevice = iDevice % number_of_joystick_devices;
+
+	// redraw the whole screen with the new settings
+	notify_show_controller_page ();
 }
