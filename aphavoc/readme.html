@@ -92,25 +92,13 @@ href="http://eech.bollocks.net.nz" target="_blank"><span >http://eech.bollocks.n
   </ul>
   <h2><a name=MP id=MP></a><span >Multiplayer status </span></h2> 
   <p><span >Jabberwock, with the support from Todd Gibbs, have made some changes to the server-part of the code. Tested out OK, but the test environment is limited, so there could still be bugs left</span></p> 
-  <h2><a name=bugs></a><span >Bugs</span></h2> 
-  <p><span >This version seems to be pretty stable, both as single and multiplayer. If you find any bugs/odd behaviour please report them at one of the forums:<br> 
-    </span><a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30"><span
->http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30</span></a><br> 
-    <a href="http://forum.biohazcentral.com/viewforum.php?f=42"><span
->http://forum.biohazcentral.com/viewforum.php?f=42</span></a><br> 
-    <a
-href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27"><span
->http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27</span></a> </p> 
-  <p><span >Note: two bugs have been more or less solved: the &quot;FARP&quot; bug that caused helicopters to cue at landing pads, and the &quot;double mouse&quot; bug. </span></p> 
-  <p><span >A new bug appeared with the test-versions after W12. It seems to origin from erroneous entries in the WUT-files. Therefore new WUT-files are packed together with this exe. All should be put in the cohokum-folder. origwut.txt is for restoring the default game-profile after joining a game with tweaked profile. 1_6_13.txt is the essential parts of the old 151D-profile except for the weapons part. Weapons can now be tweaked in the eech.ini-file. 1_6_13H.txt is an even harder version of the 151D-profile &#8211;enemy choppers will actively search for you and attack.</span></p> 
   <h2><span ><a name="wut"></a>What&#8217;s a wut-profile?</span></h2> 
-  <p><span >A wut-profile (Weapons and Units Tweaker file) is a plain txt-file that alters some critical parameters in the game to make it more realistic/harder. The text file name is added to the start up file <strong>eech.ini </strong>that is read by cohokum.exe. </span></p>
-  <p><span > If you intend to join a MP-game all three profiles are needed, you&#8217;re not aware of the hosts profile until you&#8217;re connecting and if the host is running with one of the 1_6_xxx-profiles your game will look for a similar one in your cohokum-folder.<br>
-    Examples:<br>
-    Increasing AI cruise speed to a given number, changing the toughness of armour, choppers building or what you like, changing radar ranges, fire frequence and so on.<br>
-    1_6_13.txt is in all essential parts a replica of the old famous 151D-profile that was common before the source code was released.<br>
-    1_6_13h.txt is a bit harder version of 1_6_13.txt, adding aggressive enemy choppers. They will perform active scanning for you even if they&#8217;re on a recon or transfer mission and attack w/o provocation from your side :)<br>
-    origwut.txt is needed if you intend to play on-line and the host uses one of the other profiles. Origwut.txt restores the original settings when you leave a game with one of the other profiles.</span></p>
+  <p><span >A wut-profile (Weapons and Units Tweaker file) is a  text file that alters some critical parameters in the game to make it more realistic/harder. The text file name is added to the file <strong>eech.ini </strong>that is read by cohokum.exe. The most used is the file 151_D.txt which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons. For more information you can visit <a
+  href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073/gotcha</span></a> </span></p>
+  <p><span > If you intend to join a MP-game all three profiles are needed, you&#8217;re not aware of the hosts profile until you&#8217;re connecting and if the host is running with one of the 1_6_xxx-profiles your game will look for a similar one in your cohokum-folder.    1_6_13.txt is in all essential parts a replica of the old famous 151D-profile that was common before the source code was released. 
+    the file &quot;1_6_13h.txt&quot; is a bit harder version of 1_6_13.txt, adding aggressive enemy choppers. They will perform active scanning for you even if they&#8217;re on a recon or transfer mission and attack w/o provocation from your side :). The file &quot;
+    origwut.txt&quot; is needed if you intend to play on-line and the host uses one of the other profiles. Origwut.txt restores the original settings when you leave a game with one of the other profiles.</span></p>
+  <p>NOTE: there is a new type of WUT file as of version 161W14 of cohokum but the old ones are also still operational. </p>
   <h2><span ><a name=whatsnew></a>What's NEW in EECH?</span></h2> 
   <p><span >Text in <span
 class=style31 style37>red </span>describes the additions to version W14 </span></p> 
@@ -118,6 +106,15 @@ class=style31 style37>red </span>describes the additions to version W14 </span><
     <tr> 
       <td width=145 class="Normal"> <p><b><span >eech.ini parameter</span></b></p></td> 
       <td width=568 class="Normal"> <p><b><span >Description</span></b></p></td> 
+    </tr>
+    <tr class="style37">
+      <td colspan=2 class="Normal">
+        <p class=style37 style3 style37><strong>GWUT and WUT files </strong></p></td>
+    </tr>
+    <tr class="style37">
+      <td class="Normal"> wut=[filename]</td>
+      <td class="Normal"> WUT files are text files with Weapons and Units tweaks to make the game harder. As of version 161W14 a new version of the WUT file can be read as well as old style WUT files.  For more information visit <a
+  href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073/gotcha</span></a> </td>
     </tr>
     <tr class="style37">
       <td colspan=2 class="Normal">
@@ -254,16 +251,7 @@ class=style31 style37>red </span>describes the additions to version W14 </span><
           havoc pilot=x,y,z </span></p></td> 
       <td class="Normal"> <p><span >Retreating the pilots head causes the player to have a wider field of view without distortion. No more F1 / F2 pressing! The values can be edited by pressing Ctrl-\ in the game and using the numpad keys to move the viewpoint: 4 and 6 move distance to dashboard; 2 and 8 move vertically; 1 and 3 move horizontally. Alt-\ quits editing and saves the values in the eech.ini file. (Note: the file widemod.cfg is no longer needed). </span></p> 
         <p><span >Note: for some keyboards the keys are not Ctrl-\ and Alt-\ but something else. You just have to try for yourself on the right hand side of the keyboard. For more info: </span><a
-  href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073</span></a> </p></td> 
-    </tr> 
-    <tr> 
-      <td colspan=2 class="Normal"> <p><b><span >WUT </span></b></p></td> 
-    </tr> 
-    <tr> 
-      <td class="Normal"> <p><span >wut=[filename] </span></p></td> 
-      <td class="Normal"> <p><span >WUT = Weapons and Units Tweaker by DeStRo (Daniel Blazevic) </span><a
-  href="http://www.aplus.ba/dblazev/wut/" target="_blank"><span >http://www.aplus.ba/dblazev/wut/</span></a><span
-  >, a program to tweak loadout and behaviour of all 'entities' in the game. Most multiplayer games are done with wut 1.5.1D a series of reality tweaks that make life nice and difficult in EECH. With the WUT program you can save all your tweaks in a text file. The name of this file can be added to the eech.ini (e.g. 151_D.txt). For more info: </span><a href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073</span></a> </p></td> 
+  href="http://home.planet.nl/~jette073"><span >http://home.planet.nl/~jette073/gotcha</span></a></p></td> 
     </tr> 
     <tr> 
       <td colspan=2 class="Normal"> <p><b><span >Show framerate</span></b></p></td> 
@@ -316,7 +304,8 @@ class=style31 style37>red </span>describes the additions to version W14 </span><
           <span style=''>radar_blackhawk = a,b,c,d,e</span><br> 
           <span style=''>radar_hind = a,b,c,d </span></span></p></td> 
       <td valign=top class="Normal"> <p class="style33"><span
-   style=''>Adjustable radar ranges: a,b,c,d,e are the ranges, default are for instance: 500, 1000, 2000, 4000, 8000 for the Comanche. Note that the Havoc and Hind have only 4 ranges. If you consider this a cheat use the default ranges. </span></p></td> 
+   style=''>Adjustable radar ranges: a,b,c,d,e are the ranges, default are for instance: 500, 1000, 2000, 4000, 8000 for the Comanche. Note that the Havoc and Hind have only 4 ranges. If you consider this a cheat use the default ranges. </span></p>
+      <p class="style33">NOTE: THIS IS NO LONGER NEEDED AND IGNORED IF YOU USE THE NEW GWUT FILE</p></td> 
     </tr> 
     <tr> 
       <td colspan=2 class="Normal"> <p><strong><span >Amount of cannon ammo </span></strong></p></td> 
@@ -331,7 +320,8 @@ class=style31 style37>red </span>describes the additions to version W14 </span><
           <span style=''>rounds_blackhawk = x</span><br> 
           <span style=''>rounds_hind_AP = x</span><br> 
           <span style=''>rounds_hind_HE = x</span></span></p></td> 
-      <td valign=top class="Normal"> <p class="style33"><span  style=''>500 rounds of 20 mm M197 ammo? Common... be serious! Put in an amount that seems reasonable to you (max 65000). You can give each chopper its own amount. Leave the values at default if you consider this a cheat . </span></p></td> 
+      <td valign=top class="Normal"> <p class="style33"><span  style=''>500 rounds of 20 mm M197 ammo? Common... be serious! Put in an amount that seems reasonable to you (max 65000). You can give each chopper its own amount. Leave the values at default if you consider this a cheat . </span></p>
+      <p class="style33">NOTE: THIS IS NO LONGER NEEDED AND IGNORED IF YOU USE THE NEW GWUT FILE</p></td> 
     </tr> 
     <tr> 
       <td colspan=2 class="Normal"> <p><strong><span  style=''>Satellite view&nbsp; Unfortunately this one is still pending. Fingers crossed for the next version</span></strong></p></td> 
@@ -368,15 +358,27 @@ class=style31 style37>red </span>describes the additions to version W14 </span><
   </table> 
   <h2><a name=sourceandversion></a><span >Source code </span></h2> 
   <p><span >If you want to give the source code a try you can find all the necessary details at the EECH DevZone: </span><a
-href="http://eech.bollocks.net.nz"><span >http://eech.bollocks.net.nz</span></a><span >. You can aslo subscribe (free) to a developers mailing list. Look in the Wiki to find details on how to download and set up the code. </span></p> 
+href="http://eech.bollocks.net.nz"><span >http://eech.bollocks.net.nz</span></a><span >. You can aslo subscribe (free) to a developers mailing list. Look in the Wiki to find details on how to download and set up the code. </span></p>
+  <h2><a name=bugs></a><span >Bugs</span></h2>
+  <p><span >This version seems to be pretty stable, both as single and multiplayer. If you find any bugs/odd behaviour please report them at one of the forums:<br>
+    </span><a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30"><span
+>http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30</span></a><br>
+    <a href="http://forum.biohazcentral.com/viewforum.php?f=42"><span
+>http://forum.biohazcentral.com/viewforum.php?f=42</span></a><br>
+    <a
+href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27"><span
+>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27</span></a> </p>
+  <p><span >Note: two bugs have been more or less solved: the &quot;FARP&quot; bug that caused helicopters to cue at landing pads, and the &quot;double mouse&quot; bug. </span></p>
+  <p><span >A new bug appeared with the test-versions after W12. It seems to origin from erroneous entries in the WUT-files. Therefore new WUT-files are packed together with this exe. All should be put in the cohokum-folder. origwut.txt is for restoring the default game-profile after joining a game with tweaked profile. 1_6_13.txt is the essential parts of the old 151D-profile except for the weapons part. Weapons can now be tweaked in the eech.ini-file. 1_6_13H.txt is an even harder version of the 151D-profile &#8211;enemy choppers will actively search for you and attack.</span></p>
   <h2><a name=history></a><span >History</span></h2> 
   <p><span >Fixes/features in 1.6.0W14</span></p> 
   <ul type=disc> 
     <li><span
-     >Bugs in 1.6.0W13 fixed </span></li> 
+     >Some bugs of 1.6.0W13 fixed </span></li> 
     <li><span
      >Advanced flight model, should bring the helicopter closer to (assumed) reality :)</span></li> 
     <li>Designated target list</li>
+    <li>Able to read new style WUT files (Gotcha's GWUT tool) </li>
   </ul> 
   <p><span >Fixes/features in 1.6.0W13:</span></p> 
   <ul type=disc> 
