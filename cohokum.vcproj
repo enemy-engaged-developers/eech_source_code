@@ -1113,6 +1113,9 @@
 				<File
 					RelativePath=".\APHAVOC\SOURCE\UPDATE.C">
 				</File>
+				<File
+					RelativePath="APHAVOC\SOURCE\WUTcfg.c">
+				</File>
 				<Filter
 					Name="AI"
 					Filter="">
