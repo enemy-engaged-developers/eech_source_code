@@ -768,7 +768,12 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		green_end,
 		blue_end,
 		alpha_end,
-		radius_end;
+		radius_end,
+		// Xhit: added scale and alpha for downwash effect (030328)
+		scale;
+	
+	unsigned char
+		alpha_percentage;
 
 	int
 		frame,
@@ -776,6 +781,10 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		number_of_frames;
 
 	lifescale = lifetime / raw->smoke_lifetime;
+	
+	// Xhit: added to get scale and alpha for downwash effect (030328)
+	scale = raw->scale;
+	alpha_percentage = raw->alpha_percentage;
 
 	if ( lifescale < smoke_info->colour_change_1 )
 	{
@@ -850,14 +859,16 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	convert_float_to_int (blue_start + (d * (blue_end - blue_start)), &result);
 	spr->blue = result;
 
-	convert_float_to_int (alpha_start + ( d * (alpha_end - alpha_start)), &result);
+	// Xhit: added "* (alpha_percentage/100)" for downwash effect (030328)
+	convert_float_to_int (((alpha_start + ( d * (alpha_end - alpha_start))) * (alpha_percentage/100.0)), &result);
 	spr->alpha = result;
 
 	//
 	// set sprites size
 	// 
 	
-	result = radius_start + ( d * ( radius_end - radius_start ) );
+	//Xhit: added "* scale" at the end of following expression (if scale is not used it's default to 1.0) (030328)
+	result = ( radius_start + ( d * ( radius_end - radius_start ) ) ) * scale;
 
 	spr->radius = result + raw->width_adjustment;
 

@@ -143,7 +143,8 @@ extern int
 	command_line_ground_stabilisation_available,			// loke 030322
 //VJ framerate 24-mar-03	
 	command_line_framerate,
-	command_line_key_mapping;								// Retro 030322
+	command_line_key_mapping,								// Retro 030322
+	command_line_no_downwash;								// Xhit 030328
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

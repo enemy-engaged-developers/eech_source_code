@@ -167,6 +167,7 @@ int
 //VJ framerate 24-mar-03
     command_line_framerate 									= FALSE,
 	command_line_key_mapping								= FALSE;	// Retro 030322
+	command_line_no_downwash								= FALSE;	// Xhit 030328
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1531,6 +1532,14 @@ void process_command_line (int argc, char *argv[])
 			{ 
                 WUT_filename[0] = '\0'; 
 			} 
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "no_downwash"))	//Xhit 030328
+		////////////////////////////////////////
+		{
+			command_line_no_downwash = TRUE;
+
+			debug_log ("ARG:%s, RESPONSE:command_line_no_downwash = %d", s1, command_line_no_downwash);
 		}
 		////////////////////////////////////////
 		else

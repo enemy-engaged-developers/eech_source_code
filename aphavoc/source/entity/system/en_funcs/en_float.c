@@ -633,6 +633,15 @@ float_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
+		// Xhit: added "FLOAT_TYPE_MAIN_ROTOR_RADIUS" for downwash effect (030328)
+		{
+			"FLOAT_TYPE_MAIN_ROTOR_RADIUS",                    // name
+			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
 		{
 			"FLOAT_TYPE_MAIN_ROTOR_ROLL",                      // name
 			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
@@ -718,6 +727,15 @@ float_type_data
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,	 						// pack_type
 			1,																	// pack_num_whole_bits (excluding sign bit)
 			7,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		// Xhit: added "FLOAT_TYPE_NUMBER_OF_MAIN_ROTORS" for downwash effect (030328)
+		{
+			"FLOAT_TYPE_NUMBER_OF_MAIN_ROTORS",                    // name
+			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},

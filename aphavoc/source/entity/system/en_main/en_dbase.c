@@ -95,6 +95,9 @@ void initialise_entity_databases (void)
 	initialise_speech_index_table ();
 
 	initialise_fixed_3d_object_database ();
+
+// Xhit: added for downwash effect (030328)
+	initialise_downwash_database ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,6 +123,10 @@ void deinitialise_entity_databases (void)
 	deinitialise_speech_index_table ();
 
 	report_non_entries_in_fixed_3d_object_database ();
+
+// Xhit: added for downwash effect (030328)
+	deinitialise_downwash_database ();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

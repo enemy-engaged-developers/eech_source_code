@@ -108,6 +108,15 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		// Xhit: added for downwash effect. (030328)
+		case INT_TYPE_COLOUR_ALPHA:
+		////////////////////////////////////////
+		{
+			raw->alpha_percentage = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -201,6 +210,15 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		//Xhit: added for downwash effect. (030328)
+		case INT_TYPE_COLOUR_ALPHA:
+		////////////////////////////////////////
+		{
+			value = raw->alpha_percentage;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -230,6 +248,12 @@ void overload_smoke_list_int_value_functions (void)
 	fn_set_client_server_entity_int_value	[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_SMOKE_TYPE][COMMS_MODEL_SERVER]				= set_server_int_value;
 	fn_set_client_server_entity_int_value	[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_SMOKE_TYPE][COMMS_MODEL_CLIENT]				= set_client_int_value;
 	fn_get_local_entity_int_value				[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_SMOKE_TYPE]										= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value		[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_COLOUR_ALPHA]										= set_local_int_value;
+	fn_set_local_entity_int_value				[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_COLOUR_ALPHA]										= set_local_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_COLOUR_ALPHA][COMMS_MODEL_SERVER]				= set_server_int_value;
+	fn_set_client_server_entity_int_value	[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_COLOUR_ALPHA][COMMS_MODEL_CLIENT]				= set_client_int_value;
+	fn_get_local_entity_int_value				[ENTITY_TYPE_SMOKE_LIST][INT_TYPE_COLOUR_ALPHA]										= get_local_int_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

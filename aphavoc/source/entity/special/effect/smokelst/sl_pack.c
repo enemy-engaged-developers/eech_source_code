@@ -117,6 +117,10 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			pack_float_value (en, FLOAT_TYPE_GENERATOR_LIFETIME, raw->generator_lifetime);
 
+			// Xhit: added scale and alpha_percentage for downwash effect. (030328)
+			pack_float_value (en, FLOAT_TYPE_SCALE, raw->scale);
+			pack_int_value (en, INT_TYPE_COLOUR_ALPHA, raw->alpha_percentage);
+
 			// smoke_sleep
 
 			pack_float_value (en, FLOAT_TYPE_SMOKE_LIFETIME, raw->smoke_lifetime);
@@ -220,6 +224,10 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			raw->frequency = unpack_float_value (en, FLOAT_TYPE_FREQUENCY);
 
 			raw->generator_lifetime = unpack_float_value (en, FLOAT_TYPE_GENERATOR_LIFETIME);
+
+			// Xhit: added scale and alpha_percentage for downwash effect. (030328)
+			raw->scale = unpack_float_value (en, FLOAT_TYPE_SCALE);
+			raw->alpha_percentage = unpack_int_value (en, INT_TYPE_COLOUR_ALPHA);
 
 			// smoke_sleep
 

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /w /W0 /GX /O1 /I "C:\Data\Projects\eech\APHAVOC\SOURCE\\" /I "C:\Data\Projects\eech\MODULES" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Fr /YX /FD /c
+# ADD CPP /nologo /w /W0 /GX /O1 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "NDEBUG"
@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I "\Data\Projects\eech\APHAVOC\SOURCE\\" /I "\Data\Projects\eech\MODULES" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /w /W0 /Gm /GX /ZI /Od /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "_DEBUG"
@@ -3388,6 +3388,18 @@ SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SP_VEC3D.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SPRITE.C
+# End Source File
+# End Group
+# Begin Group "DOWNWASH"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DOWNWASH.C
+# End Source File
+# Begin Source File
+
+SOURCE=.\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DW_DBASE.C
 # End Source File
 # End Group
 # Begin Source File

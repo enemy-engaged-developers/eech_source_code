@@ -146,7 +146,13 @@ struct AIRCRAFT_DATA
 		potential_air_to_surface_threat,
 		ammo_economy,
 		fuel_default_weight,
-		fuel_economy;
+		fuel_economy,
+		// Xhit: added "number_of_main_rotors" for downwash effect. (030328) 
+		// The reason why it is a float is because that for some reason all integer values are packed
+		// where float can be choosen not to be packed. 
+		number_of_main_rotors,
+		// Xhit: added "main_rotor_radius" for downwash effect. (030328) 
+		main_rotor_radius;
 
 	int
 		initial_damage_level;
@@ -169,6 +175,7 @@ typedef struct AIRCRAFT_DATA aircraft_data;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //VJ WUT mod bug, date: 26-mar-03
 //remove "const" from definition
 extern aircraft_data

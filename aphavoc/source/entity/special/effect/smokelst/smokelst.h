@@ -95,6 +95,21 @@ typedef enum SMOKE_LIST_TYPES
 	SMOKE_LIST_TYPE_AIRCRAFT_SMALL_TOUCHDOWN_TRAIL,
 	SMOKE_LIST_TYPE_AIRCRAFT_LARGE_TOUCHDOWN_TRAIL,
 
+	// Xhit: added following for the downwash effects (these are taken from terrain_types) (030328)
+	SMOKE_LIST_TYPE_DOWNWASH_START,				//21
+
+	SMOKE_LIST_TYPE_DOWNWASH_SAND,				//22
+	SMOKE_LIST_TYPE_DOWNWASH_GRASS,				//23
+	SMOKE_LIST_TYPE_DOWNWASH_ASPHALT,			//24
+	SMOKE_LIST_TYPE_DOWNWASH_WATER,				//25
+	SMOKE_LIST_TYPE_DOWNWASH_SOIL,				//26
+	SMOKE_LIST_TYPE_DOWNWASH_FIELD_LIGHTBROWN,	//27
+	SMOKE_LIST_TYPE_DOWNWASH_FIELD_DARKBROWN,	//28	
+	SMOKE_LIST_TYPE_DOWNWASH_FIELD_LIGHTGREEN,	//29
+	SMOKE_LIST_TYPE_DOWNWASH_FIELD_DARKGREEN,	//30
+	SMOKE_LIST_TYPE_DOWNWASH_ROCK,				//31
+	SMOKE_LIST_TYPE_DOWNWASH_SNOW,				//32
+
 	NUM_SMOKE_LIST_TYPES
 
 } smoke_list_types;
@@ -117,7 +132,13 @@ struct SMOKE_LIST
 		smoke_sleep,
 		smoke_lifetime,
 		texture_distance,
-		width_adjustment;
+		width_adjustment,
+	// Xhit: added scale for downwash effect (030328)
+		scale;
+
+	// Xhit: added alpha_percentage for downwash effect (030328)
+	unsigned char
+		alpha_percentage;
 
 	unsigned int
 		alive_count				:	15,

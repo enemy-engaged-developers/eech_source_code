@@ -450,6 +450,15 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		// Xhit: added FLOAT_TYPE_MAIN_ROTOR_RADIUS for downwash effect (030328)
+		case FLOAT_TYPE_MAIN_ROTOR_RADIUS:
+		////////////////////////////////////////
+		{
+			value = aircraft_database[raw->mob.sub_type].main_rotor_radius;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_MAIN_ROTOR_SHAFT_ANGLE:
 		////////////////////////////////////////
 		{
@@ -478,6 +487,14 @@ static float get_local_float_value (entity *en, float_types type)
 		////////////////////////////////////////
 		{
 			value = aircraft_database[raw->mob.sub_type].max_roll;
+
+			break;
+		}
+		// Xhit: added FLOAT_TYPE_NUMBER_OF_MAIN_ROTORS for downwash effect (030328)
+		case FLOAT_TYPE_NUMBER_OF_MAIN_ROTORS:
+		////////////////////////////////////////
+		{
+			value = aircraft_database[raw->mob.sub_type].number_of_main_rotors;
 
 			break;
 		}
@@ -722,6 +739,9 @@ void overload_aircraft_float_value_functions (entity_types type)
 
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE]							= get_local_float_value;
 
+	// Xhit added following function for downwash effect 030328
+	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAIN_ROTOR_RADIUS]									= get_local_float_value;
+
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAIN_ROTOR_SHAFT_ANGLE]									= get_local_float_value;
 
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAX_3D_OBJECT_VISUAL_RANGE]							= get_local_float_value;
@@ -731,6 +751,9 @@ void overload_aircraft_float_value_functions (entity_types type)
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAX_ROLL]													= get_local_float_value;
 
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_MAX_VERTICAL_TURN_ALLOWANCE]							= get_local_float_value;
+
+	// Xhit added following function for downwash effect 030328
+	fn_get_local_entity_float_value				[type][FLOAT_TYPE_NUMBER_OF_MAIN_ROTORS]									= get_local_float_value;
 
 	fn_get_local_entity_float_value				[type][FLOAT_TYPE_POTENTIAL_AIR_THREAT]									= get_local_float_value;
 

@@ -125,8 +125,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		set_local_entity_data (en, raw);
 
 		////////////////////////////////////////
-   	//
-   	// INITIALISE ALL ENTITY DATA TO 'WORKING' DEFAULT VALUES
+   		//
+   		// INITIALISE ALL ENTITY DATA TO 'WORKING' DEFAULT VALUES
 		//
 		// DO NOT USE ACCESS FUNCTIONS
 		//
@@ -154,6 +154,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->width_adjustment = 0.0;
 
+		// Xhit: added scale and alpha_percentage for downwash effect (030328)
+		// default scale to 1.0 and alpha_percentage to 100 (%) since it's only used by downwash effect
+		// these values are used in function get_smoke_sprite_display_values and are called when smoke is drawn
+		raw->scale = 1.0;
+		raw->alpha_percentage = 100;
+
 		////////////////////////////////////////
 		//
 		// OVERWRITE DEFAULT VALUES WITH GIVEN ATTRIBUTES
@@ -173,6 +179,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		ASSERT (raw->frequency);
 
 		ASSERT (raw->smoke_lifetime);
+
+		// Xhit: Check to ensure that scale and alpha is not NULL and not zero (030328)
+		ASSERT (raw->scale);
+		ASSERT (raw->scale > 0);
+		ASSERT (raw->alpha_percentage);
+		ASSERT (raw->alpha_percentage > 0);
 
 		////////////////////////////////////////
 		//

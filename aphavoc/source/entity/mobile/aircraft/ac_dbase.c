@@ -75,6 +75,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Xhit: Introduced main_rotor_radius and number_of_main_rotors. (030328)
+//		 IMPORTANT: number_of_main_rotors is 2 only if the helicopter got 2 main rotors
+//		 on different axis (like the CHINOOK).
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //VJ WUT mod bug, date: 26-mar-03
 //remove "const" from definition
 aircraft_data
@@ -142,6 +149,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.315,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -217,6 +226,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			8.6,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -292,6 +303,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			5.95,																	// main_rotor_radius
 
 			500,																		// initial_damage_level
 
@@ -367,6 +380,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.25,																	// main_rotor_radius
 
 			650,																		// initial_damage_level
 
@@ -442,13 +457,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			8.18,																	// main_rotor_radius
 
 			650,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -517,13 +534,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			8.65,																	// main_rotor_radius
 
 			650,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			150,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -592,13 +611,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			9.145,																	// main_rotor_radius
 
 			750,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -667,13 +688,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.95,																	// main_rotor_radius
 
 			750,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -742,13 +765,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			9.5,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -817,13 +842,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			10.645,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -892,13 +919,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			2.0,																	// number_of_main_rotors
+			9.145,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -967,13 +996,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			17.5,																	// main_rotor_radius
 
 			1000,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			50,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1042,6 +1073,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 
@@ -1117,6 +1150,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 
@@ -1192,6 +1227,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1267,6 +1304,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1342,6 +1381,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1417,6 +1458,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1492,6 +1535,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1567,6 +1612,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			700,																		// initial_damage_level
 
@@ -1649,13 +1696,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.315,																	// main_rotor_radius
 
 			600,																		//DL initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1724,13 +1773,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.25,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			120,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1799,13 +1850,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			5.08,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1874,13 +1927,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			2.0,																	// number_of_main_rotors
+			12.885,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			FALSE,			 														// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -1949,13 +2004,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			6.7,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2024,13 +2081,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			7.315,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_MEDIUM,												// explosive_power
 			TRUE,																		// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			100,																		// points value
 
 			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2099,13 +2158,15 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			1.0,																	// number_of_main_rotors
+			12.08,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
 			EXPLOSIVE_QUALITY_EXPLOSIVE,										// explosive_quality
 			EXPLOSIVE_POWER_HIGH,												// explosive_power
 			FALSE,																	// offensive_capability
-			TRUE,																	// player_controllable
+			FALSE,																	// player_controllable
 			75,																		// points value
 
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
@@ -2174,6 +2235,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 
@@ -2249,6 +2312,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 
@@ -2324,6 +2389,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 
@@ -2399,6 +2466,8 @@ aircraft_data
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
+			0.0,																	// number_of_main_rotors
+			0.0,																	// main_rotor_radius
 
 			850,																		// initial_damage_level
 

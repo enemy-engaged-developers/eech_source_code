@@ -517,6 +517,15 @@ static void draw_local_3d_object (entity *en, float range)
 
 	////////////////////////////////////////
 
+	////////////////////////////////////////
+	// Xhit: added for downwash effect. (030328)
+	////////////////////////////////////////
+	if(!command_line_no_downwash)
+	{
+		draw_downwash_effect(en);
+	}
+	////////////////////////////////////////
+
 	#if DEBUG_MODULE
 
 	if (en == get_external_view_entity ())
