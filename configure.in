@@ -1,0 +1,177 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(aphavoc/source/init.c)
+AM_INIT_AUTOMAKE("eech", "0.0.1")
+
+dnl Use this language for tests
+AC_LANG_C
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_RANLIB
+AC_ISC_POSIX
+
+dnl Checks for libraries.
+AC_CHECK_LIB(GL, glBegin)
+AM_PATH_SDL(1.2.0,
+            CFLAGS="$CFLAGS $SDL_CFLAGS"; LIBS="$LIBS $SDL_LIBS",
+            AC_MSG_ERROR(SDL is not installed))
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(stdio.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(open close)
+
+AC_OUTPUT(	Makefile
+		modules/Makefile
+		modules/2d/Makefile
+		modules/3d/Makefile
+		modules/3d/clouds/Makefile
+		modules/3d/terrain/Makefile
+		modules/3d/terrain/external/Makefile
+		modules/graphics/Makefile
+		modules/graphics/external/Makefile
+		modules/maths/Makefile
+		modules/misc/Makefile
+		modules/multi/Makefile
+		modules/sound/Makefile
+		modules/sound/external/Makefile
+		modules/system/Makefile
+		modules/system/external/Makefile
+		modules/userint2/Makefile
+		modules/userint2/ui_draw/Makefile
+		modules/userint2/ui_obj/Makefile
+		modules/userint2/ui_obj/area/Makefile
+		modules/userint2/ui_obj/button/Makefile
+		modules/userint2/ui_obj/close/Makefile
+		modules/userint2/ui_obj/list/Makefile
+		modules/userint2/ui_obj/menu/Makefile
+		modules/userint2/ui_obj/number/Makefile
+		modules/userint2/ui_obj/radio/Makefile
+		modules/userint2/ui_obj/screen/Makefile
+		modules/userint2/ui_obj/text/Makefile
+		modules/userint2/ui_obj/toggle/Makefile
+		modules/userint2/ui_obj/slider/Makefile
+		modules/userint2/ui_obj/input/Makefile
+		modules/userint2/ui_sys/Makefile
+		modules/userint2/ui_sys/ui_attrs/Makefile
+		modules/userint2/ui_sys/ui_funcs/Makefile
+		modules/userint2/ui_sys/ui_types/Makefile
+		aphavoc/Makefile
+		aphavoc/source/Makefile
+		aphavoc/source/ai/Makefile
+		aphavoc/source/ai/ai_misc/Makefile
+		aphavoc/source/ai/faction/Makefile
+		aphavoc/source/ai/highlevl/Makefile
+		aphavoc/source/ai/parser/Makefile
+		aphavoc/source/ai/taskgen/Makefile
+		aphavoc/source/app3d/Makefile
+		aphavoc/source/appsound/Makefile
+		aphavoc/source/comms/Makefile
+		aphavoc/source/entity/Makefile
+		aphavoc/source/entity/en_misc/Makefile
+		aphavoc/source/entity/en_misc/en_anim/Makefile
+		aphavoc/source/entity/en_misc/en_maths/Makefile
+		aphavoc/source/entity/fixed/Makefile
+		aphavoc/source/entity/fixed/city/Makefile
+		aphavoc/source/entity/fixed/crater/Makefile
+		aphavoc/source/entity/fixed/cbuild/Makefile
+		aphavoc/source/entity/fixed/object/Makefile
+		aphavoc/source/entity/fixed/pylon/Makefile
+		aphavoc/source/entity/fixed/scenic/Makefile
+		aphavoc/source/entity/fixed/site/Makefile
+		aphavoc/source/entity/fixed/siteupdt/Makefile
+		aphavoc/source/entity/fixed/segment/Makefile
+		aphavoc/source/entity/mobile/Makefile
+		aphavoc/source/entity/mobile/aircraft/Makefile
+		aphavoc/source/entity/mobile/aircraft/fixwing/Makefile
+		aphavoc/source/entity/mobile/aircraft/helicop/Makefile
+		aphavoc/source/entity/mobile/cargo/Makefile
+		aphavoc/source/entity/mobile/vehicle/Makefile
+		aphavoc/source/entity/mobile/vehicle/anti_air/Makefile
+		aphavoc/source/entity/mobile/vehicle/person/Makefile
+		aphavoc/source/entity/mobile/vehicle/ship/Makefile
+		aphavoc/source/entity/mobile/vehicle/routed/Makefile
+		aphavoc/source/entity/mobile/weapon/Makefile
+		aphavoc/source/entity/mobile/weapon/configs/Makefile
+		aphavoc/source/entity/special/Makefile
+		aphavoc/source/entity/special/bridge/Makefile
+		aphavoc/source/entity/special/camera/Makefile
+		aphavoc/source/entity/special/division/Makefile
+		aphavoc/source/entity/special/effect/Makefile
+		aphavoc/source/entity/special/effect/explosn/Makefile
+		aphavoc/source/entity/special/effect/particle/Makefile
+		aphavoc/source/entity/special/effect/smokelst/Makefile
+		aphavoc/source/entity/special/effect/soundeff/Makefile
+		aphavoc/source/entity/special/effect/sprite/Makefile
+		aphavoc/source/entity/special/force/Makefile
+		aphavoc/source/entity/special/group/Makefile
+		aphavoc/source/entity/special/guide/Makefile
+		aphavoc/source/entity/special/keysite/Makefile
+		aphavoc/source/entity/special/landing/Makefile
+		aphavoc/source/entity/special/pilot/Makefile
+		aphavoc/source/entity/special/regen/Makefile
+		aphavoc/source/entity/special/sector/Makefile
+		aphavoc/source/entity/special/session/Makefile
+		aphavoc/source/entity/special/task/Makefile
+		aphavoc/source/entity/special/update/Makefile
+		aphavoc/source/entity/special/waypoint/Makefile
+		aphavoc/source/entity/system/Makefile
+		aphavoc/source/entity/system/en_attrs/Makefile
+		aphavoc/source/entity/system/en_comms/Makefile
+		aphavoc/source/entity/system/en_debug/Makefile
+		aphavoc/source/entity/system/en_funcs/Makefile
+		aphavoc/source/entity/system/en_funcs/en_list/Makefile
+		aphavoc/source/entity/system/en_main/Makefile
+		aphavoc/source/entity/system/en_msgs/Makefile
+		aphavoc/source/entity/system/en_types/Makefile
+		aphavoc/source/events/Makefile
+		aphavoc/source/gameflow/Makefile
+		aphavoc/source/gunships/Makefile
+		aphavoc/source/gunships/avionics/Makefile
+		aphavoc/source/gunships/avionics/apache/Makefile
+		aphavoc/source/gunships/avionics/comanche/Makefile
+		aphavoc/source/gunships/avionics/common/Makefile
+		aphavoc/source/gunships/avionics/havoc/Makefile
+		aphavoc/source/gunships/avionics/hokum/Makefile
+		aphavoc/source/gunships/cockpits/Makefile
+		aphavoc/source/gunships/cockpits/apache/Makefile
+		aphavoc/source/gunships/cockpits/comanche/Makefile
+		aphavoc/source/gunships/cockpits/common/Makefile
+		aphavoc/source/gunships/cockpits/havoc/Makefile
+		aphavoc/source/gunships/cockpits/hokum/Makefile
+		aphavoc/source/gunships/dynamics/Makefile
+		aphavoc/source/gunships/dynamics/apache/Makefile
+		aphavoc/source/gunships/dynamics/comanche/Makefile
+		aphavoc/source/gunships/dynamics/common/Makefile
+		aphavoc/source/gunships/dynamics/havoc/Makefile
+		aphavoc/source/gunships/dynamics/hokum/Makefile
+		aphavoc/source/gunships/views/Makefile
+		aphavoc/source/misc/Makefile
+		aphavoc/source/ui_menu/Makefile
+		aphavoc/source/ui_menu/advert/Makefile
+		aphavoc/source/ui_menu/credits/Makefile
+		aphavoc/source/ui_menu/czone/Makefile
+		aphavoc/source/ui_menu/exit/Makefile
+		aphavoc/source/ui_menu/gametype/Makefile
+		aphavoc/source/ui_menu/gunships/Makefile
+		aphavoc/source/ui_menu/ingame/Makefile
+		aphavoc/source/ui_menu/ingame/campaign/Makefile
+		aphavoc/source/ui_menu/ingame/common/Makefile
+		aphavoc/source/ui_menu/ingame/fflight/Makefile
+		aphavoc/source/ui_menu/initsc/Makefile
+		aphavoc/source/ui_menu/main/Makefile
+		aphavoc/source/ui_menu/multiop/Makefile
+		aphavoc/source/ui_menu/options/Makefile
+		aphavoc/source/ui_menu/player/Makefile
+		aphavoc/source/ui_menu/session/Makefile
+		aphavoc/source/ui_menu/sessparm/Makefile
+		aphavoc/source/ui_menu/title/Makefile
+		aphavoc/source/ui_menu/loading/Makefile
+		aphavoc/source/ui_menu/dedicate/Makefile	)
