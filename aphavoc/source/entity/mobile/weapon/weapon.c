@@ -1312,8 +1312,10 @@ void update_entity_weapon_systems (entity *source)
 					}
 
 
-						// 050120 Jabberwock - Cannon tracking
+					// 050121 Jabberwock - Cannon tracking with limits - thanks, Loke!
 
+					if (command_line_cannontrack)
+					{
 						switch (command_line_cannontrack)
 						{
 							case 1:
@@ -1337,8 +1339,24 @@ void update_entity_weapon_systems (entity *source)
 								}
 								break;
 							}
+
+						}
+						required_heading_offset = bound
+						(
+							required_heading_offset,
+							weapon_config_database[config_type][package].min_heading_limit,
+							weapon_config_database[config_type][package].max_heading_limit
+						);
+
+						required_pitch_offset = bound
+						(
+							required_pitch_offset,
+							weapon_config_database[config_type][package].min_pitch_limit,
+							weapon_config_database[config_type][package].max_pitch_limit
+						);
+
 					}
-					// 050120 Jabberwock ends
+					// 050121 Jabberwock ends
 
 						//set_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON_SYSTEM_READY, FALSE);
 
