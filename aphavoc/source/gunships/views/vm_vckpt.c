@@ -81,11 +81,11 @@
 // #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
 
 //VJ 050208 gives the possibility to look behind you (since you can't turn your body) 
-#define MAX_LOOK_ANGLE_LEFT_RIGHT  120.0   //all choppers, was 90 degrees
-#define MAX_LOOK_ANGLE_UP1  60.0	//comanche, hokum   //was 45
-#define MAX_LOOK_ANGLE_UP2  60.0 //rest              //was 40
+#define MAX_LOOK_ANGLE_LEFT_RIGHT  135.0   //all choppers, was 90 degrees
+#define MAX_LOOK_ANGLE_UP1  75.0	//comanche, hokum   //was 45
+#define MAX_LOOK_ANGLE_UP2  75.0 //rest              //was 40
 #define MAX_LOOK_ANGLE_DOWN1  60.0 //comanche, hokum //was 45
-#define MAX_LOOK_ANGLE_DOWN2  40.0 //rest            //was 20
+#define MAX_LOOK_ANGLE_DOWN2  20.0 //rest            //was 20
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ static float get_rotate_left_limit (void)
 		{
 			// JB 030313 Fly any aircraft
 			limit = rad (135.0);
-			// limit = rad (0.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -278,8 +278,8 @@ static float get_rotate_right_limit (void)
 		////////////////////////////////////////
 		{
 			// JB 030313 Fly any aircraft
-			limit = rad (-135.0);
-			//limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
+			//limit = rad (-135.0);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT);
 
 			break;
 		}
@@ -687,6 +687,7 @@ void update_virtual_cockpit_view (void)
 
 //VJ wideview mod, date: 27-mar-03	
 //VJ 050131 wideview mod, better
+/*
 	if (get_global_wide_cockpit () &&
 		 !command_line_3d_cockpit &&
 		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
@@ -698,6 +699,7 @@ void update_virtual_cockpit_view (void)
    		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}	
+	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1229,6 +1231,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 				if (command_line_3d_cockpit)
 				{
+					
 					draw_apache_external_virtual_cockpit_3d
 					(
 						VIRTUAL_COCKPIT_STOWED_WIPER |
@@ -2300,10 +2303,11 @@ void switch_seat_position (void)
 		restore_co_pilot_seat_values ();
 
 //VJ wideview mod, date: 18-mar-03	
-        if (wide_cockpit_nr	== 0) 
-           wide_cockpit_nr = 1;	
-        if (wide_cockpit_nr	== 2) 
-           wide_cockpit_nr = 3;	
+//VJ 050210 update wideview
+        if (wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT) 
+           wide_cockpit_nr = WIDEVIEW_COMANCHE_COPILOT;	
+        if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT) 
+           wide_cockpit_nr = WIDEVIEW_HOKUM_COPILOT;	
 	}
 	else
 	{
@@ -2320,10 +2324,11 @@ void switch_seat_position (void)
 		restore_pilot_seat_values ();
 
 //VJ wideview mod, date: 18-mar-03	
-        if (wide_cockpit_nr	== 1) 
-           wide_cockpit_nr = 0;	
-        if (wide_cockpit_nr	== 3) 
-           wide_cockpit_nr = 2;	
+//VJ 050210 update wideview
+        if (wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT) 
+           wide_cockpit_nr = WIDEVIEW_COMANCHE_PILOT;	
+        if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT) 
+           wide_cockpit_nr = WIDEVIEW_HOKUM_PILOT;	
 	}
 }
 
@@ -3770,7 +3775,7 @@ void update_virtual_cockpit_padlock_view (void)
 			set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
 		}
 	}
-
+/*
 //VJ wideview mod, date: 27-mar-03	
 //VJ 050131 wideview mod, better
 	if (get_global_wide_cockpit () &&
@@ -3784,6 +3789,7 @@ void update_virtual_cockpit_padlock_view (void)
    		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}
+	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
