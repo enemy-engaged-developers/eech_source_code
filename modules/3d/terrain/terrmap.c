@@ -2270,6 +2270,14 @@ void draw_2d_terrain_contour_map ( void )
 			i_coordinates[3],
 			j_coordinates[3];
 
+		int
+			c;
+
+		for (c = 0 ; c < 9 ; c++)
+		{
+			heights[c] = 0;
+		}
+
 		next_z_valid = ( z_count < ( z_total - 1 ) ) ? TRUE : FALSE;
 
 		current_x = minimum_x;
@@ -2282,12 +2290,6 @@ void draw_2d_terrain_contour_map ( void )
 
 		heights[2] = terrain_height_data[ ( z_offsets[0] * terrain_height_data_width ) + x_offsets[2] ];
 		heights[5] = terrain_height_data[ ( z_offsets[1] * terrain_height_data_width ) + x_offsets[2] ];
-
-		heights[3] = 0;
-		heights[4] = 0;
-		heights[6] = 0;
-		heights[7] = 0;
-		heights[8] = 0;
 
 		if ( next_z_valid )
 		{
