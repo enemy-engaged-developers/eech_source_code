@@ -521,11 +521,15 @@ void application_main (int argc, char **argv)
 
 	game ();
 
+	//VJ 030511 save automatically when leaving game to save all player choices in eech.ini
+	dump_ini_file();
+
 	//
 	// end application
 	//
 
 	end_application ();
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
