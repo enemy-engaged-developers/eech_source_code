@@ -94,6 +94,38 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef WIN32
+// _control87(..) implementation and general wizardry by Colin Bayer <vogon@icculus.org>
+
+#define IC_AFFINE 0x1000
+#define IC_PROJECTIVE 0x1000
+#define MCW_RC 0xC00
+#define MCW_RC 0xC00
+#define MCW_PC 0x300
+#define MCW_EM 0x3F
+#define MCW_IC 0x1000
+#define RC_NEAR 0x0
+#define RC_DOWN 0x400
+#define RC_UP 0x800
+#define RC_CHOP 0xC00
+#define PC_24 0x0
+#define PC_53 0x200
+#define PC_64 0x300
+#define _EM_ZERODIVIDE 0x4
+
+unsigned short _control87(unsigned short val, unsigned short mask) {
+	unsigned short old_cw, new_cw;
+	__asm__ __volatile__ ( "fstcw %0;" : "=m" (old_cw) : /* no inputs */ );
+	new_cw = (old_cw & ~mask) | (val & mask);
+	__asm__ __volatile__ ( "fclex; fldcw %0;" : /* no outputs */ : "m" (new_cw) );
+	return old_cw;
+}
+#endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /* This is the default value loaded into the 80x87 control word.
    If you want higher precision, then change PC_53 to PC_64. The
    reason we have the default set to PC_53 is generate reproducible
