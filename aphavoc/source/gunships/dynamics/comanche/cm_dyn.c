@@ -2268,6 +2268,10 @@ void update_attitude_dynamics (void)
 			position.y = 0.0;
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
+			//Werewolf 3 Jan 04
+			if (command_line_dynamics_advanced_flight_model == TRUE)
+				this_reaction_force *= 0.1;
+
 			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
 		}
 	}
@@ -2303,6 +2307,10 @@ void update_attitude_dynamics (void)
 		direction.x = 0.0;
 		direction.y = -1.0;
 		direction.z = 0.0;
+		
+		//Werewolf 3 Jan 04
+		if (command_line_dynamics_advanced_flight_model == TRUE)
+			reaction_force *= 0.1;
 
 		add_dynamic_force ("Realign force (X axis)", reaction_force, 0.0, &position, &direction, FALSE);
 	}
@@ -2363,6 +2371,10 @@ void update_attitude_dynamics (void)
 		direction.y = 0.0;
 		direction.z = -1.0 * sign;
 	
+		//Werewolf 3 Jan 04
+		if (command_line_dynamics_advanced_flight_model == TRUE)
+			reaction_force *= 0.4;
+
 		add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
@@ -2390,6 +2402,10 @@ void update_attitude_dynamics (void)
 		direction.y = 0.0;
 		direction.z = 0.0;
 	
+		//Werewolf 3 Jan 04
+		if (command_line_dynamics_advanced_flight_model == TRUE)
+			reaction_force *= 0.8;
+
 		add_dynamic_force ("Lateral motion drag", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////

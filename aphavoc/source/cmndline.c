@@ -78,6 +78,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
+	command_line_dynamics_advanced_flight_model					= FALSE,  //Werewolf 3 Jan 04
 	command_line_report_to_masterserver						= TRUE,  //Werewolf 2 Jan 04
 	command_line_debug_input									= FALSE,
 	command_line_debug_log_timing_info						= TRUE,
@@ -198,7 +199,7 @@ float
 	command_line_aitool_grid_pitch 							= 0.0,
 	command_line_comms_resend_timeout						= 2.0,
 	command_line_comms_packet_resend_timer 				= 5.0,
-	command_line_city_block_approximation_range 			= 500.0,
+	command_line_city_block_approximation_range 			= 1000.0,
 	command_line_user_invulnerable_time						= 5.0,
 	command_line_object_lod_factor							= 1.0,
 	command_line_fog_of_war_maximum_value 					= DEFAULT_FOG_OF_WAR_MAXIMUM_VALUE,

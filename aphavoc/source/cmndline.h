@@ -79,6 +79,7 @@ extern void process_environment_variable (char *name);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
+	command_line_dynamics_advanced_flight_model, //Werewolf 3 Jan 04
 	command_line_report_to_masterserver, //Werewolf 2 Jan 04
 	command_line_debug_input,
 	command_line_debug_log_timing_info,

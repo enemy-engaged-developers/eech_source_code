@@ -307,9 +307,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "sss")==0)
 		  if(strlen(q)!=0)
 				strcpy(command_line_secondary_server_setting, q);
-				
-		//Werewolf 2 Jan 04
-		if (strcmp(p, "usemaster")==0) 	command_line_report_to_masterserver = d1;
+
+		if (strcmp(p, "usemaster")==0) 	command_line_report_to_masterserver = d1; //Werewolf 2 Jan 04
 				
 		if (strcmp(p, "ccrs")==0) 	command_line_comms_connection_receive_size = d1;
 		if (strcmp(p, "cdrs")==0) 	command_line_comms_data_record_size = d1;
@@ -335,6 +334,7 @@ void process_ini_file(int argc, char *argv[])
 		  if (strlen(q)!=0)
 			  strcpy(command_line_game_initialisation_phase_path, q);
 //DYN
+		if (strcmp(p, "advancedfm")==0) command_line_dynamics_advanced_flight_model = d1; //Werewolf 3 Jan 04
 		if (strcmp(p, "drbs")==0) 	command_line_dynamics_retreating_blade_stall_effect = v1;
 		if (strcmp(p, "drv")==0) 	command_line_dynamics_rudder_value = v1;
 		if (strcmp(p, "dra")==0) 	command_line_dynamics_rudder_acceleration = v1;
@@ -630,6 +630,7 @@ void dump_ini_file(void)
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
 	fprintf(f,"path=%s              # Path to map, campaign, skirmish\n",command_line_game_initialisation_phase_path);
 	fprintf(f,"[Dynamics]\n");
+	fprintf(f,"advancedfm=%d      # advanced (more complex) flight model, off by default.\n",command_line_dynamics_advanced_flight_model);
 	fprintf(f,"drbs=%3.1f         # retreating blade stall, floating point scaling factor for RBS effect (default = 1.0)\n",command_line_dynamics_retreating_blade_stall_effect);
 	fprintf(f,"drv=%3.1f          # rudder value, scaling factor for drag on tail rotation (default = 1.0)\n",command_line_dynamics_rudder_value);
 	fprintf(f,"dra=%3.1f          # rudder acceleration, scaling factor for tail rotation acceleration (default = 0.8)\n",command_line_dynamics_rudder_acceleration);
