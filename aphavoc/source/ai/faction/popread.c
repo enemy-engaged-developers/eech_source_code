@@ -2984,6 +2984,15 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 		waypoint_world_pos.y += height_offset;
 
+//VJ FARP bug, date: 18-mar-03
+
+// ensure the waypoint elevation (y coord) is at the terrain elevation or higher (because ships are 20m above sealevel)
+// and add 10 cm to the elevation to ensure the aircraft touch the ground when landing, 
+// this seems to trigger a change of status
+		waypoint_world_pos.y = max(waypoint_world_pos.y,get_3d_terrain_point_data (waypoint_world_pos.x,waypoint_world_pos.z, NULL ));		
+		waypoint_world_pos.y += 0.1;
+//VJ FARP bug, date: 18-mar-03, end
+
 		inhangar_flags = get_waypoint_inhangar_bits ( &route_waypoint_positions[current_route_waypoint_offset], current_airport_inst3d );
 
 		formation_index = add_formation_to_database ( route_waypoint_positions[current_route_waypoint_offset].number_of_positions,
