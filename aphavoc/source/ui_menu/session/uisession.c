@@ -1089,7 +1089,8 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 
 	// Jabberwock 0400201 Session filter revised
 
-	if (strstr(directory, "camp01") && command_line_session_filter)
+	//VJ 050123 small bug fix: check for lowercase AND uppercase
+	if ((strstr(directory, "CAMP01") || strstr(directory, "camp01")) && command_line_session_filter)
 	{
 		sprintf(warzone_path, "%s\\*.chc", directory);
 
@@ -1368,6 +1369,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
+debug_log("session filer: campaign_title %s", campaign_title);							
 							// VJ 050123 aphavoc install hack, do not close map if it exists but EEAH is not offcially installed
 							if (!command_line_aphavoc)
 							{ 								
