@@ -948,7 +948,9 @@ void load_2d_terrain ( char *path )
 		sprintf ( node_file, "%s\\route\\rivdata.nde", path );
 		sprintf ( path_file, "%s\\route\\rivdata.wp", path );
 
-		load_2d_terrain_contour_river_data ( node_file, path_file );
+//VJ for loading homemade maps without rivers 030405
+    	if ( file_exist ( node_file ) )
+		   load_2d_terrain_contour_river_data ( node_file, path_file );
 	}
 
 	//
@@ -969,7 +971,9 @@ void load_2d_terrain ( char *path )
 		sprintf ( node_file, "%s\\route\\roaddata.nde", path );
 		sprintf ( path_file, "%s\\route\\roaddata.wp", path );
 
-		load_2d_terrain_contour_road_data ( node_file, path_file );
+//VJ for loading homemade maps without roads 030405
+    	if ( file_exist ( node_file ) )
+    		load_2d_terrain_contour_road_data ( node_file, path_file );
 	}
 
 	//
