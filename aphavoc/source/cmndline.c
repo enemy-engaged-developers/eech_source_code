@@ -1519,19 +1519,19 @@ void process_command_line (int argc, char *argv[])
 				command_line_framerate = FALSE;
 			}
 		}
-//VJ WUT mod 26-mar-03 
-		//////////////////////////////////////// 
-		else if (s2 = strarg (s1, "wut")) 
-		//////////////////////////////////////// 
-		{ 
-			if (*s2 == ':') 
-			{ 
-				sscanf (s2 + 1, "%s", WUT_filename); 
-			} 
-			else 
-			{ 
-                WUT_filename[0] = '\0'; 
-			} 
+//VJ WUT mod 26-mar-03
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "wut"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%s", WUT_filename);
+			}
+			else
+			{
+                WUT_filename[0] = '\0';
+			}
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "no_downwash"))	//Xhit 030328
