@@ -2423,12 +2423,15 @@ void update_joystick_pov_position (void)
 	if (get_global_cyclic_input () == JOYSTICK_INPUT)
 	{
 #ifdef WIN32
-		if (joystick_devices[global_options.joystick_device_index].joystick_has_pov)
+// Retro_dead_18Jul2004		if (joystick_devices[global_options.joystick_device_index].joystick_has_pov)
+		if (joystick_devices[command_line_cyclic_joystick_index].joystick_has_pov)
 #else
-		if (joystick_devices[global_options.joystick_device_index].number_of_hats > 0)
+// Retro_dead_18Jul2004		if (joystick_devices[global_options.joystick_device_index].number_of_hats > 0)
+		if (joystick_devices[command_line_cyclic_joystick_index].number_of_hats > 0)
 #endif
 		{
-			joystick_pov_position = get_joystick_hat( &joystick_devices[global_options.joystick_device_index], 0 );
+// Retro_dead_18Jul2004			joystick_pov_position = get_joystick_hat( &joystick_devices[global_options.joystick_device_index], 0 );
+			joystick_pov_position = get_joystick_hat( &joystick_devices[command_line_cyclic_joystick_index], 0 );
 
 			switch(joystick_pov_position) {
 			case HAT_CENTERED:
