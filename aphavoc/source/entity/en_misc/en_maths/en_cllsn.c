@@ -747,9 +747,9 @@ static int accurate_moving_bounding_box_collision_test
 
 		do
 		{
-			multiply_matrix3x3_vec3d (&p[0], attitude, &p[0]);
-			multiply_matrix3x3_vec3d (&p[1], attitude, &p[1]);
-			multiply_matrix3x3_vec3d (&p[2], attitude, &p[2]);
+			multiply_matrix3x3_vec3d (&p[0], *attitude, &p[0]);
+			multiply_matrix3x3_vec3d (&p[1], *attitude, &p[1]);
+			multiply_matrix3x3_vec3d (&p[2], *attitude, &p[2]);
 
 			//
 			// collision test triangle at old position
