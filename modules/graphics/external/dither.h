@@ -64,6 +64,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/* forward declarations for types used below */
+struct PSD_RGB;
+struct PSD_RGBA;
+/*********************************************/
+
 extern void compute_dithered_rgb_image ( int width, int height, struct PSD_RGB *image, rgb_packed *result_image );
 
 extern void compute_dithered_rgba_image ( int width, int height, struct PSD_RGBA *image, rgb_packed *result_image );

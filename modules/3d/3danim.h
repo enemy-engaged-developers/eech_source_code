@@ -64,6 +64,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/* forward declarations for types used below */
+struct OBJECT_3D_INSTANCE;
+/*********************************************/
+
 extern void initialise_object_texture_animations ( struct OBJECT_3D_INSTANCE *obj );
 
 extern int set_texture_animation_frame_on_object ( struct OBJECT_3D_INSTANCE *obj, texture_animation_indices index, int frame );
