@@ -75,7 +75,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#define CURRENT_HEADER "[GWUT file, version 1.3]"
+#define CURRENT_HEADER "GWUT file"
 
 #define IntToBin(v) (v==0?0:(int)(log((double)v)/log(2.0)))
 #define BinToInt(v) (v==0?0:(int)exp((double)v*log(2.0))+1)
@@ -1184,9 +1184,9 @@ void ReadGWutInfo(char *fname)
 	// read file header
 	TESTDUMP(buf);
 			
-	if (!strcmp(buf,CURRENT_HEADER) == 0)
+	if (!strstr(buf,CURRENT_HEADER))
 	{
-		debug_fatal("GWUT file %s has the wrong header, version 1.3 is needed: %s",fname,buf);
+		debug_fatal("GWUT file %s has the wrong header: %s",fname,buf);
 		return;
 	}
 
