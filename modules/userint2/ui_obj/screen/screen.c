@@ -94,7 +94,7 @@ void push_ui_screen (ui_object *this_screen)
 		*stack_search;
 
 	screen_ui_object
-		*screen;
+		*screen = NULL;
 
 	// check if already on stack
 

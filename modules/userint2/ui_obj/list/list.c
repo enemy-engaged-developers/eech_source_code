@@ -519,7 +519,7 @@ ui_object *add_to_pop_up_list_with_word_wrap (char *text, ui_object *obj, ui_obj
 		font;
 
 	ui_object
-		*item;
+		*item = NULL;
 
 	char
 		temp_text [256],
