@@ -170,7 +170,7 @@ parm [ eax ] [ ebx ] [ ecx ] [ edx ]							\
 value no8087 [ eax ]															\
 modify exact [ eax ebx ecx edx ];
 
-#else
+#elif WIN32
 
 __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
 {
@@ -190,6 +190,26 @@ __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
 	__asm or	eax, ebx;
 	__asm or	ecx, edx;
 	__asm or	eax, ecx;
+}
+
+#else
+
+/* ASM -> C portage by Colin Bayer <vogon@icculus.org> */
+
+__inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
+{
+  xmin = xmin >> 31;
+  ymin &= 0x80000000;
+  xmax = xmax >> 29;
+  ymax &= 0x80000000;
+  ymin = ymin >> 30;
+  xmin &= 0x1;
+  ymax = ymax >> 28;
+  xmax &= 0x4;
+  xmin |= ymin;
+  xmax |= ymax;
+  xmin |= xmax;
+  return xmin;
 }
 
 #endif
