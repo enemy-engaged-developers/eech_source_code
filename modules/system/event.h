@@ -251,7 +251,7 @@ extern void reset_events (void);
 
 extern void create_joystick_event ( int device_index, int button, enum BUTTON_STATES state );
 
-extern void create_key_event ( int key, int state );
+extern void create_key_event ( int key, enum KEY_STATES state );
 
 extern void create_mouse_button_event ( enum DEVICE_EVENTS button, enum BUTTON_STATES state );
 
