@@ -64,6 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
 #ifdef __WATCOMC__
 
 void asm_convert_float_to_int ( float value, int *ptr );
@@ -79,7 +80,7 @@ void asm_convert_double_to_int ( double value, int *ptr );
 	"fistp	dword ptr [ edi ]"			\
 parm [8087] [edi];
 
-#elif WIN32
+#else
 
 __inline void asm_convert_float_to_int ( float value, int *integer )
 {
@@ -105,6 +106,7 @@ __inline void asm_convert_double_to_int ( double value, int *integer )
 	}
 }
 
+#endif
 #else
 
 /* Linux ASM portage by Colin Bayer <vogon@icculus.org> */
