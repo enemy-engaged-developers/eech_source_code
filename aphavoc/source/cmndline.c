@@ -164,11 +164,11 @@ int
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
-//VJ framerate 24-mar-03
-    command_line_framerate 									= FALSE,
+    command_line_framerate 									= FALSE,    // VJ 030326
 	command_line_key_mapping								= FALSE;	// Retro 030322
 	command_line_no_downwash								= FALSE,	// Xhit 030328
-	command_line_wut										= FALSE;	// VJ 030330
+	command_line_wut										= FALSE,	// VJ 030330
+	command_line_dump_ini									= FALSE;	// VJ 030330
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -195,7 +195,9 @@ char
 	command_line_game_initialisation_phase_directory [128]	= "\0",
 	command_line_game_initialisation_phase_filename [128]	= "\0",
 	command_line_debug_log_name[100]							= "DEBUG.LOG",
-	command_line_ip_address[128]								= "\0";
+	command_line_ip_address[128]								= "\0",
+	command_line_primary_server_setting[128]					= "\0",  //VJ for werewolf 030403
+	command_line_secondary_server_setting[128]					= "\0";  //VJ for werewolf 030403 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1271,6 +1273,44 @@ void process_command_line (int argc, char *argv[])
 
 			strcpy (global_options.ip_address, command_line_ip_address);
 		}
+//VJ added for werewolf primary server setting	030403	
+		////////////////////////////////////////
+		else if ((s2 = strarg (s1, "primary_server_setting")) || (s2 = strarg (s1, "pss")))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%s", &command_line_primary_server_setting);
+			}
+			else
+			{
+				strcpy (command_line_primary_server_setting, "\0");
+			}
+
+			if (strlen (command_line_primary_server_setting) == 0)
+			{
+				strcpy (command_line_primary_server_setting, "\0");
+			}
+		}
+//VJ added for werewolf seconday server setting	030403
+		////////////////////////////////////////
+		else if ((s2 = strarg (s1, "secondary_server_setting")) || (s2 = strarg (s1, "sss")))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%s", &command_line_secondary_server_setting);
+			}
+			else
+			{
+				strcpy (command_line_secondary_server_setting, "\0");
+			}
+
+			if (strlen (command_line_secondary_server_setting) == 0)
+			{
+				strcpy (command_line_secondary_server_setting, "\0");
+			}
+		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "dump_session")) || (s2 = strarg (s1, "ds")))
 		////////////////////////////////////////
@@ -1536,6 +1576,12 @@ void process_command_line (int argc, char *argv[])
                 WUT_filename[0] = '\0';
 				command_line_wut = FALSE;
 			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "ini"))
+		////////////////////////////////////////
+		{
+				command_line_dump_ini = TRUE;
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "no_downwash"))	//Xhit 030328

@@ -144,7 +144,8 @@ extern int
 	command_line_framerate,									//VJ 030324
 	command_line_key_mapping,								// Retro 030322
 	command_line_no_downwash,								// Xhit 030328
-	command_line_wut;										// VJ 030330
+	command_line_wut,										// VJ 030330
+	command_line_dump_ini;									// VJ 030403
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
@@ -172,7 +173,10 @@ extern char
 	command_line_game_initialisation_phase_directory [],
 	command_line_game_initialisation_phase_filename [],
 	command_line_debug_log_name[],
-	command_line_ip_address[];
+	command_line_ip_address[],
+	command_line_primary_server_setting[],	 //VJ for werewolf and eech.ini 030403
+	command_line_secondary_server_setting[]; //VJ for werewolf and eech.ini 030403 
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
