@@ -144,7 +144,7 @@ static hokum_mfd_locations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[11];
+	mfd_colours[13];
 
 #define MFD_COLOUR1 		  		(mfd_colours[0])
 #define MFD_COLOUR2 		  		(mfd_colours[1])
@@ -157,6 +157,8 @@ static rgb_colour
 #define MFD_ROAD_COLOUR			(mfd_colours[8])
 #define MFD_BACKGROUND_COLOUR	(mfd_colours[9])
 #define MFD_CLEAR_COLOUR		(mfd_colours[10])
+#define MFD_COLOUR7				(mfd_colours[11])
+#define MFD_COLOUR8				(mfd_colours[12])
 
 static rgb_colour
    clear_mfd_colour;
@@ -1483,10 +1485,18 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR3;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR1;
+				else
+					target_symbol_colour = MFD_COLOUR3;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR1;			
+			{
+					target_symbol_colour = MFD_COLOUR8;
+			}
 		}		
 		else
 			target_symbol_colour = MFD_COLOUR2;
@@ -1496,10 +1506,18 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 		if (display_on_tsd)
 		{
-			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-				target_symbol_colour = MFD_COLOUR4;
+			//VJ 030511 TSD render mod, treat enemy colours as cheat
+			if (command_line_tsd_enemy_colours)
+			{
+				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+					target_symbol_colour = MFD_COLOUR2;
+				else
+					target_symbol_colour = MFD_COLOUR4;
+			}
 			else
-				target_symbol_colour = MFD_COLOUR2;			
+			{
+					target_symbol_colour = MFD_COLOUR7;
+			}
 		}		
 		else
 			target_symbol_colour = MFD_COLOUR1;
@@ -4629,20 +4647,26 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
 		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
+				
 		if (tsd_render_palette == 0)
 		{
 			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
 		}	
 		else
-		if (tsd_render_palette == 1)
-		{
-			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
-		}	
-		else
-		{
-			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
-		}	
+			if (tsd_render_palette == 1)
+			{
+				set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
+			}	
+			else
+			{
+				set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
+			}	
+
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
+		//VJ 030530 colour tweaks: black and dark gray are best
+		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
+		set_rgb_colour (MFD_COLOUR8,    0,   0,  0, 255);
 	
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
 	}
@@ -4895,7 +4919,13 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
-							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+//VJ 030423 TSD render mod, enemy of comanche so blue
+//VJ 030511 TSD render mod, enemy optional in eech.ini
+							if (command_line_tsd_enemy_colours)
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+							else				
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
+							
 						}
 					}
 				}
