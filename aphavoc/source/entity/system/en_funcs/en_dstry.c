@@ -96,7 +96,9 @@ void (*fn_kill_client_server_entity[NUM_ENTITY_TYPES][NUM_COMMS_MODEL_TYPES]) (e
 
 static default_destroy_entity (entity *en)
 {
-	debug_fatal ("default_destroy_entity invoked: %s (index = %d)", get_local_entity_type_name (en), get_local_entity_index (en));
+// Werewolf: Temporary multiplayer fix 080403
+//	debug_fatal ("default_destroy_entity invoked: %s (index = %d)", get_local_entity_type_name (en), get_local_entity_index (en));
+return;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
