@@ -391,7 +391,26 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
   <p><span >A new bug appeared with the test-versions after W12. It seems to origin from erroneous entries in the WUT-files. Therefore new WUT-files are packed together with this exe. All should be put in the cohokum-folder. origwut.txt is for restoring the default game-profile after joining a game with tweaked profile. 1_6_13.txt is the essential parts of the old 151D-profile except for the weapons part. Weapons can now be tweaked in the eech.ini-file. 1_6_13H.txt is an even harder version of the 151D-pro
 file &#8211;enemy choppers will actively search for you and attack.</span></p>
   <h2><a name=history></a><span >History</span></h2> 
-  <p>FIxes/features in 1.6.0w15</p> 
+  <p>Current version -ongoing</p> 
+  <ul>
+    <li>Fly_Any_Aircraft error when using GWUT-files fixed</li>
+    <li>MP-changes in the following files:<br>
+      Changes are made so that the process Validate_Connection ALWAYS removes a
+      player, no matter how he left.&nbsp;<br>
+      mission.c-------------Player_Leave is outcommented. Validate_Connection
+      takes care of the removal<br>
+      commsserver.c-------Process Validate_Connection changed so it's active
+      only when the game runs as host<br>
+      flight.c----------------Pauseserver changed so Validate_Connection is
+      active even when the game is paused, otherwise the last client leaving
+      would not be removed<br>
+      directp.c--------------Process Direct_play_Player_Leave_Group outcommented.
+      leaving the removal to Validate_Connection<br>
+      <br>
+      <b>It's crucial that the host runs with cvc=1</b><br>
+    </li>
+  </ul>
+  <p>Fixes/features in 1.6.0w15</p> 
   <ul>
     <li>Default values of cpac, cgs, cpds changed</li>
     <li>Comanche loadout-error in GWUT fixed</li>
