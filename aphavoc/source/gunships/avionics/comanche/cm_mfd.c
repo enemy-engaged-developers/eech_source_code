@@ -4428,7 +4428,20 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
 		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
-		set_rgb_colour (MFD_COLOUR5,   0, 128,   192, 255);
+		if (tsd_render_palette == 0)
+		{
+			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
+		}	
+		else
+		if (tsd_render_palette == 1)
+		{
+			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
+		}	
+		else
+		{
+			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
+		}	
+
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
 			
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);

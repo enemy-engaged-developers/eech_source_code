@@ -134,8 +134,15 @@ void set_tsd_colours(void)
 	
 		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
 		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
-		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,96, 255);
-		set_rgb_colour (MFD_ROAD_COLOUR,        248,248,248, 255);
+if (tsd_render_palette == 1)
+{
+		set_rgb_colour (MFD_ROAD_COLOUR,        96,96,96, 255);
+}		
+else
+{
+		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,132, 255);
+		//set_rgb_colour (MFD_ROAD_COLOUR,        248,248,248, 255);
+}		
 		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
 }	
 
