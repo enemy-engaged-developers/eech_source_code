@@ -1471,7 +1471,14 @@ void load_dynamics_model (event *ev)
 		*file_ptr;
 
 	// JB 030313 Enable running out of separate directories
-	file_ptr = safe_fopen (current_flight_dynamics->filename, "r");
+	if (file_exist (current_flight_dynamics->filename))
+	{
+		file_ptr = safe_fopen (current_flight_dynamics->filename, "r");
+	}
+	else
+	{
+		file_ptr = NULL;
+	}
 
 	if (file_ptr)
 	{
