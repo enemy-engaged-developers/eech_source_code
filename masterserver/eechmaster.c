@@ -23,13 +23,14 @@ int addr_len, numbytes = 0;
 
 typedef struct
 {
-    char Adress[100];
+    char Address[100];
     char Name[256];
     int MaxClients;
     int CurClients;
-    int Version;
+    char Version[256];
     int Age;
     int TotalAge;
+    int isUsed;
 } ServerData;
 
 char tempstring[500];
@@ -109,17 +110,20 @@ char header3[3000] = {"
               <TBODY>
               <TR bgColor=#9090d0>
 
-                <TD width=370 align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=120 align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		&nbsp; Hosting Player Name
 		</B></FONT></TD>
-                <TD width=120 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=80 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		Current Players
 		</B></FONT></TD>
-                <TD width=120 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=80 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		MaxPlayers
 		</B></FONT></TD>
-                <TD width=140 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=110 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		IP Address
+		</B></FONT></TD>
+                <TD width=100 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+		Version
 		</B></FONT></TD>
                 <TD width=70 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		Uptime
@@ -127,16 +131,19 @@ char header3[3000] = {"
 		</TR>
 
               <TR bgColor=#000000>
-                <TD width=500 align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=120 align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		-
 		</B></FONT></TD>
-                <TD width=120 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=80 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		-
 		</B></FONT></TD>
-                <TD width=120 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+                <TD width=80 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		-
 		</B></FONT></TD>
                 <TD width=110 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+		-
+		</B></FONT></TD>
+                <TD width=100 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		-
 		</B></FONT></TD>
                 <TD width=70 align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
@@ -187,6 +194,11 @@ char step5[1024] = {"
 //		v1.0
 char step6[1024] = {"
 		</B></FONT></TD>
+                <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
+		"};
+//		4h20m
+char step7[1024] = {"
+		</B></FONT></TD>
 		</TR>
 		"};
 
@@ -210,7 +222,7 @@ if (f=fopen("//var//www//html//eech//index.html", "w"))
 {
 
     for(i=0; i<=(maxservers+5); i++)
-	if (Servers[i].Version != -1)
+	if (Servers[i].isUsed != -1)
 	{
 	    totalservers++;
 	    totalplayers+=Servers[i].CurClients;
@@ -223,7 +235,7 @@ if (f=fopen("//var//www//html//eech//index.html", "w"))
     fprintf(f, "%s", header3);
     
     for(i=0; i<=(maxservers+5); i++)
-	if (Servers[i].Version != -1)
+	if (Servers[i].isUsed != -1)
 	{
 	    alternating = (-1)*alternating;
 	    if (alternating<0)
@@ -236,10 +248,12 @@ if (f=fopen("//var//www//html//eech//index.html", "w"))
 	    fprintf(f, "%s", step3);
 	    fprintf(f, "%i", Servers[i].MaxClients);
 	    fprintf(f, "%s", step4);
-	    fprintf(f, "%s", Servers[i].Adress);
+	    fprintf(f, "%s", Servers[i].Address);
 	    fprintf(f, "%s", step5);
-	    fprintf(f, "%ih %im", abs(Servers[i].TotalAge / 3600), abs((Servers[i].TotalAge%3600) / 60));
+	    fprintf(f, "%s", Servers[i].Version);
 	    fprintf(f, "%s", step6);
+	    fprintf(f, "%ih %im", abs(Servers[i].TotalAge / 3600), abs((Servers[i].TotalAge%3600) / 60));
+	    fprintf(f, "%s", step7);
 	}
 
     fprintf(f, "%s", trailer);
@@ -267,18 +281,18 @@ int i;
 
 
     for(i=0; (i<=maxservers+5); i++)
-	if (Servers[i].Version != -1)
+	if (Servers[i].isUsed != -1)
 	{
 	    Servers[i].TotalAge++;
 	    Servers[i].Age++;
 	}
     for(i=0; (i<=maxservers+5); i++)
-	if (Servers[i].Version != -1)
+	if (Servers[i].isUsed != -1)
 	    if (Servers[i].Age > MaxServerAge)
 	    {
-		sprintf(tempstring, "REMOVE: %s %s\n", Servers[i].Adress, Servers[i].Name);
+		sprintf(tempstring, "REMOVE: %s %s\n", Servers[i].Address, Servers[i].Name);
 		WriteLog(tempstring);
-	    	Servers[i].Version=-1;
+	    	Servers[i].isUsed=-1;
 		WriteServerList();
 //		if (i==maxservers)
 //		    maxservers--;
@@ -289,20 +303,20 @@ void ProcessServerHeartbeat(void)
 {
     char header[80];
     char TempName[400];
-    char TempAdress[256];
+    char TempAddress[256];
     int TempMaxClients;
     int TempCurClients;
-    int TempVersion;
+    char TempVersion[256];
     int i;
     int found = 0;
 
     if (strlen(ReceiveBuffer)<10)
 	return;
 
-    sscanf(ReceiveBuffer, "%s %s %s %i %i %i", header,
-    	TempAdress, TempName, &TempMaxClients, &TempCurClients, &TempVersion);
+    sscanf(ReceiveBuffer, "%s %s %s %i %i %s", header,
+    	TempAddress, TempName, &TempMaxClients, &TempCurClients, TempVersion);
 
-    sprintf(TempAdress, "%s", inet_ntoa(from.sin_addr));
+    sprintf(TempAddress, "%s", inet_ntoa(from.sin_addr));
 
     // convert underscores in server names to spaces
     for (i=0; i<strlen(TempName); i++)
@@ -311,13 +325,13 @@ void ProcessServerHeartbeat(void)
 
     // already in list? If yes, then just update data
     for(i=0; i<=(maxservers+5); i++)
-    if ((Servers[i].Version!=-1) && (strcmp(Servers[i].Adress,TempAdress)==0))
+    if ((Servers[i].isUsed!=-1) && (strcmp(Servers[i].Address,TempAddress)==0))
     {
 //	printf("UPDATE: Server %i\n", i);
         sprintf(Servers[i].Name, "%s", TempName);
 	Servers[i].MaxClients = TempMaxClients;
 	Servers[i].CurClients = TempCurClients;
-	Servers[i].Version = TempVersion;
+	sprintf(Servers[i].Version, "%s", TempVersion);
 	Servers[i].Age = 0;
 	found = 1;
 	WriteServerList();
@@ -328,17 +342,18 @@ void ProcessServerHeartbeat(void)
     if (found == 0)
     {
         for(i=0; i<=(maxservers+5); i++)
-        if (Servers[i].Version==-1)
+        if (Servers[i].isUsed==-1)
         {
 	    sprintf(Servers[i].Name, "%s", TempName);
-            sprintf(Servers[i].Adress, "%s", TempAdress);
-	    sprintf(tempstring, "ADD: %s %s\n", Servers[i].Adress, Servers[i].Name);
+            sprintf(Servers[i].Address, "%s", TempAddress);
+	    sprintf(tempstring, "ADD: %s %s\n", Servers[i].Address, Servers[i].Name);
 	    WriteLog(tempstring);
 	    Servers[i].MaxClients = TempMaxClients;
 	    Servers[i].CurClients = TempCurClients;
-	    Servers[i].Version = TempVersion;
+	    sprintf(Servers[i].Version, "%s", TempVersion);
 	    Servers[i].Age = 0;
 	    Servers[i].TotalAge = 0;
+	    Servers[i].isUsed = 1;
 	    found = 1;
 	    if (i>=maxservers)
 		maxservers=i;
@@ -358,7 +373,7 @@ void SendServerList(void)
 
     for(i=0; i<=(maxservers+5); i++)
     {
-	if (Servers[i].Version != -1)
+	if (Servers[i].isUsed != -1)
 	{
 
         sprintf(TempName, "%s", Servers[i].Name);
@@ -367,8 +382,8 @@ void SendServerList(void)
 	    if (TempName[o]==' ')
 		TempName[o]='_' ;
 
-		sprintf(SendBuffer, "%s %s %s %i %i %i", "W",
-		Servers[i].Adress,
+		sprintf(SendBuffer, "%s %s %s %i %i %s", "W",
+		Servers[i].Address,
 		TempName,
 		Servers[i].MaxClients,
 		Servers[i].CurClients,
@@ -397,7 +412,7 @@ int main(void)
   ReceiveBuffer[0] = '\0';
   
   for (i=0; i<14999; i++)
-      Servers[i].Version = -1;
+      Servers[i].isUsed = -1;
 
   WriteServerList();
 
