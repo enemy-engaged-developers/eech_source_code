@@ -91,6 +91,8 @@ static status_message_types
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern int hokum_periscope_check ( int currentlyUsingPeriscope );	// Retro 6Feb2005
+
 void clear_status_message (void)
 {
 	status_message[0] = '\0';
@@ -316,6 +318,17 @@ static void display_time_acceleration (void)
 
 void draw_view (void)
 {
+	TIR_Poll (); // Retro 6Feb2005
+
+	// Retro 6Feb2005 (whole block)
+	if ((command_line_TIR_6DOF)&&(query_TIR_active() == TRUE)&&
+		(( view_mode == VIEW_MODE_VIRTUAL_COCKPIT)||( view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE )))
+	{
+		current_custom_cockpit_viewpoint.x = getViewpointOffsetX (current_custom_cockpit_viewpoint.x);
+		current_custom_cockpit_viewpoint.y = getViewpointOffsetY (current_custom_cockpit_viewpoint.y);
+		current_custom_cockpit_viewpoint.z = getViewpointOffsetZ (current_custom_cockpit_viewpoint.z);
+	}
+
    switch (view_mode)
    {
       ////////////////////////////////////////
@@ -704,7 +717,20 @@ void draw_view (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
-			draw_virtual_cockpit_3d_periscope_view ();
+			if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005 (the if block)
+			{
+				if ( hokum_periscope_check ( TRUE ) )
+					draw_virtual_cockpit_3d_periscope_view ();
+				else
+				{
+					set_view_mode ( VIEW_MODE_VIRTUAL_COCKPIT );
+					draw_virtual_cockpit_3d_view ();
+				}
+			}
+			else	// original Razorworks call..
+			{
+				draw_virtual_cockpit_3d_periscope_view ();
+			}
 
 			break;
 		}

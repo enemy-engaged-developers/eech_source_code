@@ -200,6 +200,8 @@ extern cockpit_position wide_cockpit_position[6];
 //VJ 030318 wideview mod
 extern int wide_cockpit_nr;
 
+extern cockpit_position current_custom_cockpit_viewpoint;				// Retro 6Feb2005
+
 //VJ 030324 framerate 
 extern float framerate, framerate_avg;
 extern int doframerate;

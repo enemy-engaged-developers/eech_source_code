@@ -657,11 +657,11 @@ void update_virtual_cockpit_view (void)
 		}
 		else	// TIR
 		{
-			temp_p = (float) GetPitch();
-			temp_h = (float) GetYaw();
+			temp_p = TIR_GetPitch();
+			temp_h = TIR_GetYaw();
 
-			temp_p = -45*temp_p/16383;	// Those are the max-possible values as they are restriced above in this file
-			temp_h = 90*temp_h/16383;
+			temp_p = -45. * temp_p / 16383.;	// Those are the max-possible values as they are restriced above in this file
+			temp_h = 90. * temp_h / 16383.;
 
 			pilot_head_pitch = rad(temp_p);
 			pilot_head_heading = rad(temp_h);

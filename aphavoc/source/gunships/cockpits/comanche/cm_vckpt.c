@@ -930,7 +930,11 @@ void get_comanche_crew_viewpoint (void)
 	{
 		search_head.result_sub_object->relative_heading = -pilot_head_heading;
 		search_head.result_sub_object->relative_pitch = head_pitch_datum - pilot_head_pitch;
-		search_head.result_sub_object->relative_roll = 0.0;
+
+		if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005
+			search_head.result_sub_object->relative_roll = -TIR_GetRoll() / 16383. * PI / 2.;	// Retro 6Feb2005
+		else
+			search_head.result_sub_object->relative_roll = 0.0;
 	}
 	else
 	{
@@ -960,6 +964,28 @@ void get_comanche_crew_viewpoint (void)
 		pilot_head_vp.y += vp.y;
 		pilot_head_vp.z += vp.z;
 
+		if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005 (whole block)
+		{
+			matrix3x3 invAttitude;
+			vec3d
+				shiftVP, shiftWorld;
+
+			// First lets find out the displacement the user wants.. this is in the user's viewsystem coords !!
+			// Now store this info in a temp vect3d..
+			shiftVP.x = current_custom_cockpit_viewpoint.x;
+			shiftVP.y = current_custom_cockpit_viewpoint.y; 
+			shiftVP.z = current_custom_cockpit_viewpoint.z;
+
+			// Now we need to convert our vec3d into world coords.. for this we need the inverse of the viewpoint attitude matrix..
+			get_inverse_matrix (invAttitude, vp.attitude);
+			// And rotate ! Voila, the result vec3d is now in world coords..
+			multiply_transpose_matrix3x3_vec3d (&shiftWorld, invAttitude, &shiftVP);
+			// Now apply that displacement.. BUT ONLY TO THE HEAD !!
+			pilot_head_vp.x -= shiftWorld.x;
+			pilot_head_vp.y -= shiftWorld.y;
+			pilot_head_vp.z -= shiftWorld.z;
+		}
+
 		memcpy (pilot_head_vp.attitude, vp.attitude, sizeof (matrix3x3));
 
 		vp.x = -vp.x;
@@ -967,6 +993,15 @@ void get_comanche_crew_viewpoint (void)
 		vp.z = -vp.z;
 
 		multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, pilot_head_vp.attitude, &vp.position);
+
+		if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005 (whole block)
+		{
+			// Now shift the viewpoint (AND the model) by the positive displacement.. puts the cockpit back were it belongs..
+			// but the viewpoint (the head) is in another place.. fini
+			virtual_cockpit_inst3d->vp.x += current_custom_cockpit_viewpoint.x;
+			virtual_cockpit_inst3d->vp.y += current_custom_cockpit_viewpoint.y;
+			virtual_cockpit_inst3d->vp.z += current_custom_cockpit_viewpoint.z;
+		}
 	
 	}
 	else

@@ -91,6 +91,7 @@ c_object_files    += $+ &
                      $(currentdir)\vm_updt.obj &
                      $(currentdir)\vm_vckpt.obj &
                      $(currentdir)\vm_satinfo.obj &
+                     $(currentdir)\vm_headmovement.obj &
                      $-
 
 asm_object_files  += $+ &
