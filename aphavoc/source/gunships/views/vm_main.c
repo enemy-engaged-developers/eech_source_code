@@ -1053,6 +1053,8 @@ static void enter_view_mode (view_modes mode)
 
 			if (!get_apache_havoc_gunship_fixed_cockpit ())
 			{
+				//VJ 050211 needed for wideview pitch setting
+				pilot_head_pitch = pilot_head_pitch_datum;
 				mode = VIEW_MODE_VIRTUAL_COCKPIT;
 			}
 

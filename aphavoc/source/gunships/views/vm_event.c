@@ -111,19 +111,6 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 030318 JB&VJ wideview mod
-static void wide_cockpit_edit_event (event *ev);
-//static void wide_cockpit_save_event (event *ev);
-
-//VJ 030423 TSD render mod
-static void TSD_render_event (event *ev);
-static void TSD_render_palette_event (event *ev);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 void initialise_view_events (void)
 {
    adjust_view_left_key = FALSE;
@@ -153,7 +140,6 @@ void initialise_view_events (void)
 	joystick_pov_down = FALSE;
 	
 //VJ 030318 wideview mod
-   wide_cockpit_edit_event (NULL);
   	edit_wide_cockpit = FALSE;
 	set_global_wide_cockpit (FALSE);		
 
@@ -1021,10 +1007,29 @@ static void TSD_render_palette_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 030318 wideview mod
-static void wide_cockpit_toggle_event (event *ev)
+//VJ 050213 bug fixes for pitch
+static void toggle_wideview_event (event *ev)
 {
 	set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
    edit_wide_cockpit = FALSE;
+   //VJ 050211 restore pitch when switching of wideview
+   if (!get_global_wide_cockpit ())
+   {
+		pilot_head_pitch_datum = 0;
+		co_pilot_head_pitch_datum = 0;
+		if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||
+			 wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
+			pilot_head_pitch = 0;
+	}
+	else
+	{
+		if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||
+			 wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
+		{	 
+			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+		}	
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1032,7 +1037,7 @@ static void wide_cockpit_toggle_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ wideview mod, date: 18-mar-03	
-static void wide_cockpit_edit_event (event *ev)
+static void toggle_wideview_edit_event (event *ev)
 {
 //VJ 050126 save_wide no longer needed, this can toggle
 	if (get_global_wide_cockpit ())
@@ -2174,10 +2179,8 @@ void set_gunship_view_mode_events (void)
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
 
 //VJ wideview mod, date: 18-mar-03	
-	set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, wide_cockpit_toggle_event);
-	set_event (DIK_BACKSLASH, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, wide_cockpit_edit_event);
-//VJ 050127 no longer needed	
-	//set_event (DIK_BACKSLASH, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, wide_cockpit_save_event);
+	set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, toggle_wideview_event);
+	set_event (DIK_BACKSLASH, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_wideview_edit_event);
 
 	if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
 	{
