@@ -82,10 +82,17 @@
 #include <stdarg.h>
 #include <limits.h>
 #include <float.h>
-#ifdef WIN32
-  #include <io.h>
-#endif
 #include <time.h>
+#ifdef WIN32
+# include <io.h>
+#endif
+#ifndef WIN32
+# include <sys/types.h>
+# include <unistd.h>
+# include <dirent.h>
+# include <fcntl.h>
+# include <sys/mman.h>
+#endif
 #include <malloc.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -383,26 +390,43 @@ typedef struct tagKERNINGPAIR {
 typedef unsigned int FOURCC;         /* a four character code */
 #endif /* __WATCOMC__ */
 
+#ifdef WIN32 /* Windows specific headers follow */
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
 #include <winnls.h>
 #include <dinput.h>
 #include <objbase.h>
-
 // crh 030319 Open Watcom doesn't have a "VFW.H" anywhere... it seems to build
 //            okay without it, but this may not be generally true
 #ifndef __WATCOMC__
 #include <vfw.h>
 #endif /* __WATCOMC__ */
 
+#include <io.h>
+
+#else /* Non-Windows headers follow */
+#include <SDL/SDL.h>
+
+#include <sys/types.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+
+typedef enum {
+  TRUE = 1,
+  FALSE = 0
+} BOOL;
+
+typedef short SHORT;
+
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
-#ifdef WIN32
-  #include <io.h>
-#endif
 #include <time.h>
 #include <malloc.h>
 #include <sys/stat.h>
