@@ -407,6 +407,7 @@ typedef unsigned int FOURCC;         /* a four character code */
 
 #else /* Non-Windows headers follow */
 #include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 
 #include <sys/types.h>
 #include <unistd.h>
