@@ -4102,7 +4102,7 @@ void process_received_entity_comms_messages (void)
 
 				if (message_text_type_send_string (type))
 				{
-					unpack_string (NULL, STRING_TYPE_PILOT_MESSAGE, &message);
+					unpack_string (NULL, STRING_TYPE_PILOT_MESSAGE, message);
 
 					string = message;
 
@@ -4901,7 +4901,7 @@ void process_received_entity_comms_messages (void)
 				raw->route_waypoint_types = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 				memset (raw->route_waypoint_types, 0, sizeof (entity_sub_types) * raw->route_length);
 			
-				raw->route_formation_types = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
+				raw->route_formation_types = (formation_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 				memset (raw->route_formation_types, 0, sizeof (entity_sub_types) * raw->route_length);
 				
 				// positions
