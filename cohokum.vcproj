@@ -38,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib"
+				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
 				OutputFile=".\Output/Release/cohokum.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib"
+				AdditionalDependencies="d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib"
 				OutputFile=".\Output/Debug/cohokum.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -1115,6 +1115,9 @@
 				</File>
 				<File
 					RelativePath="APHAVOC\SOURCE\WUTcfg.c">
+				</File>
+				<File
+					RelativePath="aphavoc\source\eechini.c">
 				</File>
 				<Filter
 					Name="AI"
