@@ -78,13 +78,13 @@
 
 #define MAJOR_VERSION 1
 
-#define DATA_VERSION 4
+#define DATA_VERSION 6
 
-#define MINOR_VERSION 7
+#define MINOR_VERSION 0
 
 #define BUILD_TYPE """X"""
 
-#define APP_NAME """Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.4.7X"""
+#define APP_NAME """Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.0X"""
 
 #endif /* _MSC_VER */
 // EECH VC fix
@@ -352,7 +352,7 @@ typedef struct tagKERNINGPAIR {
 
 #else /* INTERNAL_MODULES */
 
-#pragma PACK (8)
+#pragma pack (8)
 
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_DCOM
@@ -421,7 +421,7 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <malloc.h>
 #include <sys\stat.h>
 
-#pragma PACK (4)
+#pragma pack (4)
 
 #include "system\assert.h"
 
