@@ -356,7 +356,7 @@ int parser_campaign_file (char *filename, int *offset)
 
 				fseek (file_ptr, *offset, SEEK_SET);
 
-				if (!if_file_tag_operator (value1, &operator_name, value2))
+				if (!if_file_tag_operator (value1, operator_name, value2))
 				{
 	
 					destroy_while_loop_head ();
@@ -412,7 +412,7 @@ int parser_campaign_file (char *filename, int *offset)
 
 				fseek (file_ptr, *offset, SEEK_SET);
 
-				return_value = calulate_operator (value1, &operator_name, value2);
+				return_value = calulate_operator (value1, operator_name, value2);
 
 				fclose (file_ptr);
 
@@ -436,7 +436,7 @@ int parser_campaign_file (char *filename, int *offset)
 
 				fseek (file_ptr, *offset, SEEK_SET);
 
-				return_value = if_file_tag_operator (value1, &operator_name, value2);
+				return_value = if_file_tag_operator (value1, operator_name, value2);
 
 				if (!return_value)
 				{
