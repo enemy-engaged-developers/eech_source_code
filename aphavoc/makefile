@@ -15,13 +15,13 @@
 !   loaddll    hcl2   hwdll
 !   loaddll    wcc386   wccd386
 !   loaddll    wlink    wlink
-!	loaddll    hcl3 mspdb50
+!       loaddll    hcl3 mspdb50
 
 #################################################################################################################################
 #################################################################################################################################
 #################################################################################################################################
 
-# define EECH_ROOTDIR in your environment to specify location of the main EECH SRC directory (added by crh)
+# define EECH_ROOTDIR in your environment to specify location of the main EECH SRC directory (added by crh@outpost.co.nz)
 # eg EECH_ROOTDIR=y:\Projects\EECH
 
 projectname = project
@@ -46,9 +46,9 @@ minor_revision = 7
 
 #
 # Build types:
-#	A: Alpha
-#	B: Beta
-#	C: Commercial
+#       A: Alpha
+#       B: Beta
+#       C: Commercial
 #       D: Demo
 #       E: Electronic Distribution (Commercial make minus CD protection)
 #       X: Experimental patch (although same as Commercial build)
@@ -361,23 +361,23 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files)
 #        @ echo Creating Linker Response File ...
 !ifdef visualc
         @ %create $^@
-		@ %append $^@ /NOLOGO
-		@ %append $^@ /SUBSYSTEM:WINDOWS
+                @ %append $^@ /NOLOGO
+                @ %append $^@ /SUBSYSTEM:WINDOWS
         @ %append $^@ /OUT:$^&.exe
 !ifdef debug
-		@ %append $^@ /DEBUG
-		@ %append $^@ /DEBUGTYPE:CV
+                @ %append $^@ /DEBUG
+                @ %append $^@ /DEBUGTYPE:CV
 !endif
-		@ %append $^@ /NODEFAULTLIB:LIBCMTD
-		@ %append $^@ user32.lib
-		@ %append $^@ ctl3d32s.lib
-		@ %append $^@ winmm.lib
-		@ %append $^@ ole32.lib
-		@ %append $^@ GDI32.lib
-		@ %append $^@ LIBC.lib
-		@ %append $^@ LIBCMT.lib
-		@ %append $^@ MSVCRT.lib
-		@ %append $^@ MTXIH.lib
+                @ %append $^@ /NODEFAULTLIB:LIBCMTD
+                @ %append $^@ user32.lib
+                @ %append $^@ ctl3d32s.lib
+                @ %append $^@ winmm.lib
+                @ %append $^@ ole32.lib
+                @ %append $^@ GDI32.lib
+                @ %append $^@ LIBC.lib
+                @ %append $^@ LIBCMT.lib
+                @ %append $^@ MSVCRT.lib
+                @ %append $^@ MTXIH.lib
         @ for %i in ($(lib_files)) do @ %append $^@ %i
         @ for %i in ($(c_module_object_files)) do @ %append $^@ %i
         @ for %i in ($(c_object_files)) do @ %append $^@ %i
@@ -391,11 +391,11 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files)
         @ %append $^@ OPTION SYMF
         @ %append $^@ OPTION MAP
         @ %append $^@ NAME $^&
-		@ %append $^@ OPTION INCREMENTAL=$(project).ilk
-		@ %append $^@ OPTION VERSION=$(major_revision).$(data_revision).$(minor_revision)
-		@ %append $^@ OPTION STATICS
-		@ %append $^@ OPTION RESOURCE=cohokum.res
-#		@ %append $^@ OPTION ELIMINATE
+                @ %append $^@ OPTION INCREMENTAL=$(project).ilk
+                @ %append $^@ OPTION VERSION=$(major_revision).$(data_revision).$(minor_revision)
+                @ %append $^@ OPTION STATICS
+                @ %append $^@ OPTION RESOURCE=cohokum.res
+#               @ %append $^@ OPTION ELIMINATE
 !ifdef debug
 !ifndef nolinkdebug
         @ %append $^@ DEBUG ALL
@@ -421,12 +421,12 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files)
 !ifdef visualc
 
 $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk
-		link @$(projectname).lnk
+                link @$(projectname).lnk
 
 !else
 
 $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk
-		wlink @$(projectname).lnk
+                wlink @$(projectname).lnk
 
 !endif
 
@@ -441,9 +441,9 @@ $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).l
 ########################################
 
 remake : .SYMBOLIC
-	@ for %i in ( $(c_object_files)) do quietdel %i
-	@ for %i in ( $(c_module_object_files)) do quietdel %i
-	@ quietdel $(projectname).lnk
+        @ for %i in ( $(c_object_files)) do quietdel %i
+        @ for %i in ( $(c_module_object_files)) do quietdel %i
+        @ quietdel $(projectname).lnk
 
 #################################################################################################################################
 #################################################################################################################################
