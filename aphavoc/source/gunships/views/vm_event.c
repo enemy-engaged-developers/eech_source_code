@@ -875,7 +875,9 @@ static void wide_cockpit_edit_event (event *ev)
 	FILE *f;
 	char buf[128];
 	char *p;
-	int i, j;
+	// crh 030323 - variable "i" is not used
+	// int i, j;
+	int j;
 	
  	   
  	if (!get_global_wide_cockpit ())
