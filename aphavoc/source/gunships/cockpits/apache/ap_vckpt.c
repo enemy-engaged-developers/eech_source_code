@@ -1028,6 +1028,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 			draw_3d_scene ();
 
+			end_3d_scene ();
 		}
 	}
 
