@@ -144,15 +144,14 @@ void set_tsd_colours(void)
 		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
 		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
 
-if (tsd_render_palette == 1)
-{
-		set_rgb_colour (MFD_ROAD_COLOUR,        96,96,96, 255);
-}
-else
-{
-		set_rgb_colour (MFD_ROAD_COLOUR,        255,255,132, 255);
-		//set_rgb_colour (MFD_ROAD_COLOUR,        248,248,248, 255);
-}
+		if (tsd_render_palette == 1)
+		{
+			set_rgb_colour (MFD_ROAD_COLOUR,        96,96,96, 255);
+		}
+		else
+		{
+			set_rgb_colour (MFD_ROAD_COLOUR,        255,255,132, 255);
+		}
 		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
 }
 
@@ -184,7 +183,7 @@ void Initialise_TSD_render_terrain(void)
 	draw_large_mfd = TRUE;
 
 	set_tsd_colours();
-
+//water
 	set_rgb_colour(terrain_colour[0][0],100, 150, 240, 255);
 //colours as atlas: green yellow red white, strong
 	set_rgb_colour(terrain_colour[0][1],89,152,41,255);
@@ -255,7 +254,7 @@ void Initialise_TSD_render_terrain(void)
 	set_rgb_colour(terrain_colour[1][31],106,53,23,255);
 	set_rgb_colour(terrain_colour[1][32],86,42,12,255);
 
-//colours as atlas but washed
+//green - yellow - red
 	set_rgb_colour(terrain_colour[2][32],90,59,27,255);
 	set_rgb_colour(terrain_colour[2][31],105,59,27,255);
 	set_rgb_colour(terrain_colour[2][30],119,61,28,255);
@@ -842,22 +841,21 @@ float get_aspect(float z1, float z2, float z3, float z4)
 //z1, z2 in x direction, z3, z4 in z direction
 	float _b, _c, aspect, asp_corr;
 
-   if (tsd_render_mode != TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE &&
-	   tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE)
-	return (1.0);
-
-	// dx/dy = horizontal derivative
+	// dx/dy = E-W derivative
 	_b = z3+z4 - (z1+z2);
-	// dz/dy = vertical derivative
+	// dz/dy = N-S derivative
 	_c = z2+z4 - (z1+z3);
-	aspect = (_c != 0 ? atan(_b/_c): 0);   //y/x
-	if (_b <= 0 && _c <= 0)  asp_corr =   4.7124;//270/360*(6.2832);
-	if (_b > 0 && _c <= 0)  asp_corr =  -1.5708;//-90/360*(6.2832);
-	if (_b <= 0 && _c > 0)  asp_corr =  -4.7124;//-270/360*(6.2832);
-	if (_b > 0 && _c > 0)  asp_corr =   1.5708;//90/360*(6.2832);
+	aspect = (_c != 0 ? atan(_b/_c) : 0);
+	if (_b <= 0 && _c <= 0) asp_corr = rad(270);
+	if (_b >  0 && _c <= 0) asp_corr = rad(-90);
+	if (_b <= 0 && _c >  0) asp_corr = rad(-270);
+	if (_b >  0 && _c >  0) asp_corr = rad(90);
 	// simple shader
-	aspect = 0.6+0.2*(cos(aspect+asp_corr)+1);
-	return (aspect);
+
+	//rad(-45) is sun from NW when chopper is facing N
+	aspect = 0.5+0.25*(cos(aspect+asp_corr+rad(-45))+1);
+	return(aspect);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -988,8 +986,8 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	convert_float_to_int ((x_max * terrain_3d_simple_elevation_x_grid_size_reciprocal), &x_max_index);
 	convert_float_to_int ((z_max * terrain_3d_simple_elevation_z_grid_size_reciprocal), &z_max_index);
 
-   if (range == TSD_ASE_RANGE_25000)
-     step = 2;
+   //if (range == TSD_ASE_RANGE_25000)
+     //step = 2;
    stepmask = ~(step - 1);
 
 	//
@@ -1039,7 +1037,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 
 		for (z_index = z_min_index; z_index < z_max_index; z_index += step)
 		{
-			float mid_x, mid_z, mid_y, mid_yz;
+			float mid_x, mid_z, mid_y;//, mid_yz;
 
 			dx0 = dx_start;
 			dx1 = dx_start + dx_grid;
@@ -1053,54 +1051,58 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			for (x_index = x_min_index; x_index < x_max_index; x_index += step)
 			{
 				int c = 0;
-				float aspect=1.0, old_aspect_x=1.0;
+				float oa = 1.0, aspect=1.0, old_aspect_x=1.0;
 
-				//VJ 030511 aspect is in fact a shade factor beteen 0.6 and 1.0
-				aspect = get_aspect(this_row_ptr[0],this_row_ptr[1],next_row_ptr[0],next_row_ptr[1]);
-			   if (x_index > x_min_index && z_index == z_min_index)
-            {
-            	aspect = (aspect+old_aspect_x)/2.0;
-            }
-			   if (z_index > z_min_index && z_index > z_min_index)
-            {
-            	aspect = (aspect+old_aspect_x+old_aspectrow[aspect_index]+old_aspectrow[aspect_index-1])/4.0;
-            }
-            #if DEBUG_ASPECT
-					terrain_col.r = (int)(aspect*255);
-					terrain_col.g = (int)(aspect*255);
-					terrain_col.b = 0;//(int)aspect*255;
-					terrain_col.a = 255;
-			   	draw_2d_filled_triangle (dx0,dz0,dx0,dz1,dx1,dz1,terrain_col);
-			   	draw_2d_filled_triangle (dx0,dz0,dx1,dz1,dx1,dz0,terrain_col);
-			   #endif
-
+				//VJ 030511 aspect is in fact a shade factor beteen 0.5 and 1.0
+   			if (tsd_render_mode == TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE ||
+	   			tsd_render_mode == TSD_RENDER_SHADED_RELIEF_MODE)
+	   		{
+	   			oa = get_aspect(this_row_ptr[0],this_row_ptr[1],next_row_ptr[0],next_row_ptr[1]);
+					aspect = oa;
+			   	if (x_index > x_min_index && z_index == z_min_index)
+            	{
+            		aspect = (3*aspect+old_aspect_x)/4.0;
+            	}
+			   	if (z_index > z_min_index && z_index > z_min_index)
+            	{
+            		aspect = (4*aspect+old_aspect_x+old_aspectrow[aspect_index])/6.0;//old_aspectrow[aspect_index-1]
+            	}
+            	#if DEBUG_ASPECT
+						terrain_col.r = (int)(aspect*255);
+						terrain_col.g = (int)(aspect*255);
+						terrain_col.b = 0;//(int)aspect*255;
+						terrain_col.a = 255;
+			   		draw_2d_filled_triangle (dx0,dz0,dx0,dz1,dx1,dz1,terrain_col);
+			   		draw_2d_filled_triangle (dx0,dz0,dx1,dz1,dx1,dz0,terrain_col);
+			   	#endif
+				}
 
 				mid_x = 0.5*(dx0+dx1);
 			   mid_y = (this_row_ptr[0]+this_row_ptr[1]+next_row_ptr[0]+next_row_ptr[1])/4.0;
 			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   mid_yz = (this_row_ptr[0]+this_row_ptr[1])/2.0;
+//			   mid_yz = (this_row_ptr[0]+this_row_ptr[1])/2.0;
 //				aspect = get_aspect_tri(this_row_ptr[0],this_row_ptr[1],mid_yz,mid_y);
 		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,mid_x,mid_z,dx1,dz0,terrain_col);
 
 			   terrain_elev = (this_row_ptr[1]+next_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   mid_yz = (this_row_ptr[1]+next_row_ptr[1])/2.0;
+//			   mid_yz = (this_row_ptr[1]+next_row_ptr[1])/2.0;
 //				aspect = get_aspect_tri(mid_y,mid_yz,this_row_ptr[1],next_row_ptr[1]);
 		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx1,dz0,mid_x,mid_z,dx1,dz1,terrain_col);
 
 			   terrain_elev = (this_row_ptr[0]+next_row_ptr[0]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   mid_yz = (this_row_ptr[0]+next_row_ptr[0])/2.0;
+//			   mid_yz = (this_row_ptr[0]+next_row_ptr[0])/2.0;
 //				aspect = get_aspect_tri(mid_yz,mid_y,this_row_ptr[0],next_row_ptr[0]);
 		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,dx0,dz1,mid_x,mid_z,terrain_col);
 
 			   terrain_elev = (next_row_ptr[0]+next_row_ptr[1]+mid_y)/3.0;
 		   	c = colour_scale(terrain_elev);
-			   mid_yz = (next_row_ptr[0]+next_row_ptr[1])/2.0;
+//			   mid_yz = (next_row_ptr[0]+next_row_ptr[1])/2.0;
 //				aspect = get_aspect_tri(next_row_ptr[0],next_row_ptr[1],mid_y,mid_yz);
 		   	get_terrain_colour(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz1,dx1,dz1,mid_x,mid_z,terrain_col);
@@ -1118,8 +1120,8 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 				//
 				// save old aspect for averaging
 				//
-            old_aspect_x = aspect;            
-				aspectrow[aspect_index] = aspect;
+            old_aspect_x = oa;//aspect;            
+				aspectrow[aspect_index] = oa;//aspect;
 			}
 
 			for (aspect_index = 0; aspect_index < nr_aspect_steps; aspect_index++)
