@@ -824,7 +824,7 @@ void ShowFramerate(void)
 	}
 	
 	sprintf (buf, "%6.1f", framerate);
-    ui_display_text (buf, 10, 10);               
+    ui_display_text (buf, 10, 24);               
 	
 
 }	
