@@ -1371,7 +1371,7 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 						{
 debug_log("session filer: campaign_title %s", campaign_title);							
 							// VJ 050123 aphavoc install hack, do not close map if it exists but EEAH is not offcially installed
-							if (!command_line_aphavoc)
+							if (!global_aphavoc_maps)
 							{ 								
 								if (!get_global_apache_havoc_installed ()) 
 								{

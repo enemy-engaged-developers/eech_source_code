@@ -75,7 +75,7 @@ extern entity *get_viewed_entity (void);
 //VJ 050123 added apache install hack 
 #define get_apache_havoc_gunship_fixed_cockpit() ( get_apache_havoc_gunship () && (!full_screen_hi_res) && \
                                                  (application_video_colourdepth == 16) && (command_line_3d_cockpit == 0) \
-                                                 && (command_line_aphavoc == 0) )
+                                                 && (global_aphavoc_maps == 0) )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
