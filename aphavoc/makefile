@@ -26,7 +26,7 @@
 
 projectname = project
 
-rootdir = %EECH_ROOTDIR
+rootdir = $(%EECH_ROOTDIR)
 
 projectdir = $(rootdir)\aphavoc
 
@@ -340,7 +340,7 @@ cc_args += /dINSTALL_FROM_CDROM
 .asm.obj:
         * $(asm) $(asm_args) /fo=$^@ $[@
 
-.c.obj:
+.c.obj: 
 !ifdef visualc
         * $(cc) $[@ $(cc_args) /Fo$^@
 !else
