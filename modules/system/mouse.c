@@ -68,7 +68,7 @@
 
 #include "graphics.h"
 
-#include "cmndline.h"	// lfriembichler 030317, need this for mouse_look and mouse_look_speed
+#include "cmndline.h"	// Retro 030317, need this for mouse_look and mouse_look_speed
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,8 +97,8 @@ static DIDEVICEOBJECTDATA
 static int
 	mouse_position_x = 0,
 	mouse_position_y = 0,
-	abs_mouse_x = 0,		// lfriembichler 030317
-	abs_mouse_y = 0,		// lfriembichler 030317
+	abs_mouse_x = 0,		// Retro 030317
+	abs_mouse_y = 0,		// Retro 030317
 	mouse_on;
 
 static POINT
@@ -628,7 +628,7 @@ void move_mouse ( int dx, int dy )
 		mouse_position_y = bound ( mouse_position_y, 0, (application_video_height -1) );
 	}
 
-	// lfriembichler 030317 starts
+	// Retro 030317 starts
 	// OK what´s happening here... I need an absolute rather than a relative mouse, so I add/dec the mouse movements
 	// to two variables that have a 'hard ceiling'
 	// There are 2 access methods (below) through which I can get to this data
@@ -648,7 +648,7 @@ void move_mouse ( int dx, int dy )
 		abs_mouse_y = 16383;
 	else if (abs_mouse_y <= -16383)
 		abs_mouse_y = -16383;
-	// lfriembichler 030317 ends
+	// Retro 030317 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -676,7 +676,7 @@ void set_mouse_on ( void )
 void set_mouse_off ( void )
 {
 
-	if (command_line_mouse_look == FALSE)	// Clause by lfriembichler 030317, to enable mouse_events in 3d
+	if (command_line_mouse_look == FALSE)	// Clause by Retro 030317, to enable mouse_events in 3d
 	{
 		#if MOUSE_DEBUG
 
@@ -744,17 +744,17 @@ void set_mouse_y ( int y )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_absolute_mouse_x ( void )	// lfriembichler 030317
+int get_absolute_mouse_x ( void )	// Retro 030317
 {
 
 	return ( abs_mouse_x );
 }
-int get_absolute_mouse_y ( void )	// lfriembichler 030317
+int get_absolute_mouse_y ( void )	// Retro 030317
 {
 
 	return ( abs_mouse_y );
 }
-void reset_absolute_mouse ( void )	// lfriembichler 030317
+void reset_absolute_mouse ( void )	// Retro 030317
 {
 	abs_mouse_x = abs_mouse_y = 0;
 }

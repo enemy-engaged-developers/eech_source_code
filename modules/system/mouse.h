@@ -97,10 +97,10 @@ extern int get_mouse_y ( void );
 
 extern void set_mouse_y ( int y );
 
-extern int get_absolute_mouse_x ( void );				// lfriembichler 030317
-extern int get_absolute_mouse_y ( void );				// lfriembichler 030317
+extern int get_absolute_mouse_x ( void );				// Retro 030317
+extern int get_absolute_mouse_y ( void );				// Retro 030317
 
-extern void reset_absolute_mouse ( void );				// lfriembichler 030317
+extern void reset_absolute_mouse ( void );				// Retro 030317
 
 extern int get_mouse_on ( void );
 
