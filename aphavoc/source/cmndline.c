@@ -191,7 +191,8 @@ int
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
 	command_line_joylook_step						= 30,	// Jabberwock 031104 Joystick look
 	command_line_designated_targets					= 0,  // Jabberwock 031107 Designated target
-	command_line_session_filter					= 0,  // Jabberwock 031210 Session filter
+	command_line_session_filter						= 0,  // Jabberwock 031210 Session filter
+	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 // Jabberwock 031118 Server side settings
 	session_planner_goto_button,
 	session_vector_flight_model,
@@ -1842,7 +1843,21 @@ void process_command_line (int argc, char *argv[])
 				command_line_session_filter = FALSE;
 			}
 		}
-				
+		
+		////////////////////////////////////////		
+		else if (s2 = strarg (s1, "pause_server"))		// Jabberwock 040220 Pause server
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_pause_server);
+			}
+			else
+			{
+				command_line_pause_server = FALSE;
+			}
+		}
+		
         ////////////////////////////////////////
 		else
 		////////////////////////////////////////

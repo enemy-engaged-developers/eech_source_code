@@ -330,6 +330,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "servlog")==0) // Jabberwock 031119 Server log
 		  if (strlen(q)!=0)
 			  strcpy(command_line_server_log_filename, q); 
+		if (strcmp(p, "pauseserv")==0) 	command_line_pause_server = d1; // Jabberwock 040220 Pause server
 		if (strcmp(p, "dedicated")==0) 	command_line_comms_dedicated_server = d1;
 		if (strcmp(p, "game_type")==0) 	command_line_game_initialisation_phase_game_type = d1;
 		if (strcmp(p, "gunship_type")==0) command_line_game_initialisation_phase_gunship_type = d1;
@@ -635,6 +636,7 @@ void dump_ini_file(void)
 	fprintf(f,"css=%d               # show communication stats (def = 0)\n",command_line_comms_show_stats);
 	fprintf(f,"cist=%d              # comms initial sleep time\n",command_line_comms_initial_sleep_time);
 	fprintf(f,"servlog=%s           # filename for server log\n",command_line_server_log_filename);
+	fprintf(f,"pauseserv=%d         # pause server if no clients connected\n",command_line_pause_server); // 040320 Jabberwock - Pause server
 	fprintf(f,"dedicated=%d         # active server mode, off by default.\n",command_line_comms_dedicated_server);
 	fprintf(f,"game_type=%d         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish (def = 0)\n",command_line_game_initialisation_phase_game_type);
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);

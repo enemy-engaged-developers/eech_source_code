@@ -169,6 +169,7 @@ extern int
 	command_line_joylook_step,									// Jabberwock 031104 Joystick look
 	command_line_designated_targets,							// Jabberwock 031107 Designated targets
 	command_line_session_filter,								// Jabberwock 031210 Session filter
+	command_line_pause_server,									// Jabberwock 040220 Pause server
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
 	session_vector_flight_model,

@@ -309,6 +309,11 @@ void flight (void)
 			set_active_screen (video_screen);
 
 			update_client_server_entity (get_camera_entity ());
+			
+			if (command_line_pause_server) // 040220 Pause server - is it safe?
+			{
+				receive_comms_data (); 
+			}
 		}
 		else
 		{

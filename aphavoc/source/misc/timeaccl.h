@@ -90,6 +90,8 @@ extern void toggle_pause_time_acceleration (event *ev);
 
 extern void set_time_acceleration (int acceleration);
 
+extern void force_pause_acceleration (void); // 040230 Jabberwock - Pause server
+
 extern void set_raw_time_acceleration (int acceleration);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
