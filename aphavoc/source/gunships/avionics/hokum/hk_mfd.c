@@ -1437,6 +1437,156 @@ static void draw_radar_arc (float arc_size, float radius, rgb_colour colour)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030423 TSD render mod, added display_on_tsd
+static void draw_radar_target_symbol (entity *target, vec3d *source_position, float scale, int selected_target, int display_on_tsd)
+{
+	target_symbol_types
+		target_symbol_type;
+
+	rgb_colour
+		target_symbol_colour;
+
+//VJ 030423 TSD render mod
+	entity_sides
+		source_side;
+	entity	
+		*source;
+		
+	float
+		dx,
+		dy;
+
+	vec3d
+		*target_position;
+
+	ASSERT (target);
+
+	ASSERT (source_position);
+
+	ASSERT (!get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER));
+
+//VJ 030423 TSD render mod
+	source = get_gunship_entity ();
+	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	
+	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+	dx = (target_position->x - source_position->x) * scale;
+	dy = (target_position->z - source_position->z) * scale;
+
+	target_symbol_type = get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
+
+	ASSERT ((target_symbol_type >= 0) && (target_symbol_type < NUM_TARGET_SYMBOL_TYPES));
+
+	if (get_local_entity_index (target) & 1)
+	{
+//VJ 030423 TSD render mod
+		if (display_on_tsd)
+		{
+			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+				target_symbol_colour = MFD_COLOUR3;
+			else
+				target_symbol_colour = MFD_COLOUR1;			
+		}		
+		else
+			target_symbol_colour = MFD_COLOUR2;
+	}
+	else
+	{
+//VJ 030423 TSD render mod
+		if (display_on_tsd)
+		{
+			if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
+				target_symbol_colour = MFD_COLOUR4;
+			else
+				target_symbol_colour = MFD_COLOUR2;			
+		}		
+		else
+			target_symbol_colour = MFD_COLOUR1;
+	}
+
+	if (draw_large_mfd)
+	{
+		if (get_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR))
+		{
+			if (selected_target)
+			{
+//VJ 030423 TSD render mod
+				if (display_on_tsd)
+					draw_2d_mono_sprite (large_display_target_symbols_los_mask[target_symbol_type], dx, dy, clear_mfd_colour);
+				else
+					draw_2d_mono_sprite (large_display_target_symbols_los_mask[target_symbol_type], dx, dy, MFD_COLOUR6);
+			}
+
+			draw_2d_mono_sprite (large_display_target_symbols_los[target_symbol_type], dx, dy, target_symbol_colour);
+		}
+		else
+		{
+			if (selected_target)
+			{
+//VJ 030423 TSD render mod
+				if (display_on_tsd)
+					draw_2d_mono_sprite (large_display_target_symbols_no_los_mask[target_symbol_type], dx, dy, clear_mfd_colour);
+				else
+					draw_2d_mono_sprite (large_display_target_symbols_no_los_mask[target_symbol_type], dx, dy, MFD_COLOUR6);
+			}
+
+			draw_2d_mono_sprite (large_display_target_symbols_no_los[target_symbol_type], dx, dy, target_symbol_colour);
+		}
+
+		if (selected_target)
+		{
+//VJ 030423 TSD render mod
+			if (display_on_tsd)
+				draw_2d_mono_sprite (large_display_target_symbol_selected_target_mask, dx, dy, clear_mfd_colour);
+			else
+				draw_2d_mono_sprite (large_display_target_symbol_selected_target_mask, dx, dy, MFD_COLOUR6);
+
+			draw_2d_mono_sprite (large_display_target_symbol_selected_target, dx, dy, target_symbol_colour);
+		}
+	}
+	else
+	{
+		if (get_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR))
+		{
+			if (selected_target)
+			{
+//VJ 030423 TSD render mod
+				if (display_on_tsd)
+					draw_2d_mono_sprite (small_display_target_symbols_los_mask[target_symbol_type], dx, dy, clear_mfd_colour);
+				else
+					draw_2d_mono_sprite (small_display_target_symbols_los_mask[target_symbol_type], dx, dy, MFD_COLOUR6);
+			}
+
+			draw_2d_mono_sprite (small_display_target_symbols_los[target_symbol_type], dx, dy, target_symbol_colour);
+		}
+		else
+		{
+			if (selected_target)
+			{
+//VJ 030423 TSD render mod
+				if (display_on_tsd)
+					draw_2d_mono_sprite (small_display_target_symbols_no_los_mask[target_symbol_type], dx, dy, clear_mfd_colour);
+				else
+					draw_2d_mono_sprite (small_display_target_symbols_no_los_mask[target_symbol_type], dx, dy, MFD_COLOUR6);
+			}
+
+			draw_2d_mono_sprite (small_display_target_symbols_no_los[target_symbol_type], dx, dy, target_symbol_colour);
+		}
+
+		if (selected_target)
+		{
+//VJ 030423 TSD render mod
+			if (display_on_tsd)
+				draw_2d_mono_sprite (small_display_target_symbol_selected_target_mask, dx, dy, clear_mfd_colour);
+			else
+				draw_2d_mono_sprite (small_display_target_symbol_selected_target_mask, dx, dy, MFD_COLOUR6);
+
+			draw_2d_mono_sprite (small_display_target_symbol_selected_target, dx, dy, target_symbol_colour);
+		}
+	}
+}
+/*
 static void draw_radar_target_symbol (entity *target, vec3d *source_position, float scale, int selected_target)
 {
 	target_symbol_types
@@ -1533,7 +1683,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 		}
 	}
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1841,7 +1991,8 @@ static void draw_ground_radar_mfd (void)
 			{
 				if (get_target_matches_ground_radar_declutter_criteria (target))
 				{
-					draw_radar_target_symbol (target, source_position, scale, FALSE);
+//VJ 030423 TSD render mod
+					draw_radar_target_symbol (target, source_position, scale, FALSE, FALSE);
 				}
 			}
 
@@ -1858,7 +2009,8 @@ static void draw_ground_radar_mfd (void)
 
 			if (target)
 			{
-				draw_radar_target_symbol (target, source_position, scale, TRUE);
+//VJ 030423 TSD render mod
+				draw_radar_target_symbol (target, source_position, scale, TRUE, FALSE);
 			}
 		}
 
@@ -2077,7 +2229,8 @@ static void draw_air_radar_mfd (void)
 			{
 				if (get_target_matches_air_radar_declutter_criteria (target, source_side))
 				{
-					draw_radar_target_symbol (target, source_position, scale, FALSE);
+//VJ 030423 TSD render mod
+					draw_radar_target_symbol (target, source_position, scale, FALSE, FALSE);
 				}
 			}
 
@@ -2094,7 +2247,8 @@ static void draw_air_radar_mfd (void)
 
 			if (target)
 			{
-				draw_radar_target_symbol (target, source_position, scale, TRUE);
+//VJ 030423 TSD render mod				
+				draw_radar_target_symbol (target, source_position, scale, TRUE, FALSE);
 			}
 		}
 
@@ -3415,7 +3569,8 @@ static void draw_2d_periscope_mfd (int valid_3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//VJ 030423 TSD render mod, code moved to co_tsd.c in ../common
+/* 
 static int
 	contour_spacing,
 	contour_samples;
@@ -4350,7 +4505,7 @@ static void draw_tsd_contour_map (float y_translate, float range, float scale, v
 
 	set_2d_window_rotation (mfd_env, 0.0);
 }
-
+*/ //VJ 030423 TSD render mod, code moved to co_tsd.c in ../common
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4463,11 +4618,31 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 	////////////////////////////////////////
 	//
-	// contour map
+	//VJ 030423 TSD RENDER MOD
 	//
 	////////////////////////////////////////
 
-	draw_tsd_contour_map (-y_origin, tsd_ase_range, scale, source_position, source_heading);
+	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
+	{
+		//VJ 030423 TSD render mod
+		set_rgb_colour (MFD_COLOUR1,   0, 0,  96, 255);  //dark blue
+	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
+		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
+		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
+		set_rgb_colour (MFD_COLOUR5,   0, 128,   192, 255);
+		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
+	
+	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
+	}
+	
+	////////////////////////////////////////
+	//
+	// contour map
+	//
+	////////////////////////////////////////
+	
+//VJ 030423 TSD render mod, added mfd_env
+	draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
 
 	////////////////////////////////////////
 	//
@@ -4726,7 +4901,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 			{
 				if (!get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER))
 				{
-					draw_radar_target_symbol (target, source_position, scale, FALSE);
+					//VJ 030423 TSD render mod
+					if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
+						draw_radar_target_symbol (target, source_position, scale, FALSE, FALSE);
+					else
+						draw_radar_target_symbol (target, source_position, scale, FALSE, TRUE);
 				}
 
 				target = get_local_entity_child_succ (target, LIST_TYPE_GUNSHIP_TARGET);
@@ -4738,7 +4917,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 			if (source_target)
 			{
-				draw_radar_target_symbol (source_target, source_position, scale, TRUE);
+				//VJ 030423 TSD render mod
+				if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
+					draw_radar_target_symbol (source_target, source_position, scale, TRUE, FALSE);
+				else
+					draw_radar_target_symbol (source_target, source_position, scale, TRUE, TRUE);
 			}
 
 			//
@@ -5219,6 +5402,13 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 			print_mono_font_string (buffer);
 		}
 	}
+//VJ 030423 TSD render mod
+	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
+	set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
+	set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
+	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
+	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
+	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);	
 }
 
 #undef RADIUS
@@ -5488,7 +5678,8 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 
 					if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 					{
-						draw_radar_target_symbol (threat, source_position, scale, FALSE);
+//VJ 030423 TSD render mod
+						draw_radar_target_symbol (threat, source_position, scale, FALSE, FALSE);
 					}
 				}
 			}
@@ -9588,6 +9779,11 @@ void initialise_hokum_mfd (void)
 			weapon_line_points[i].y += WEAPON_LINE_POINT_Y_TRANSLATE;
 		}
 	}
+	
+//VJ 030423 TSd render mod
+
+   Initialise_TSD_render_terrain();
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
