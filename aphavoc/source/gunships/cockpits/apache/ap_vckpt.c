@@ -1027,7 +1027,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
 
 			draw_3d_scene ();
-
+//VJ 300303 bug fix: the following line was omitted from the source accidently
 			end_3d_scene ();
 		}
 	}
