@@ -1353,3 +1353,14 @@ void GetGUIDString(const int iDevice, char* theString)
 	strcpy(theString,strTemp);
 #endif
 }
+
+void ShutdownAxisInformation()
+{
+	int i = 0;
+
+	for (i = 1; i < AxisCount; i++)	// '0' is keyboard and was not created on the heap
+	{
+		free(AxisInfo[i].AxisName);
+		AxisInfo[i].AxisName = 0;
+	}
+}
