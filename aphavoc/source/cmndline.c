@@ -167,7 +167,8 @@ int
 //VJ framerate 24-mar-03
     command_line_framerate 									= FALSE,
 	command_line_key_mapping								= FALSE;	// Retro 030322
-	command_line_no_downwash								= FALSE;	// Xhit 030328
+	command_line_no_downwash								= FALSE,	// Xhit 030328
+	command_line_wut										= FALSE;	// VJ 030330
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1519,6 +1520,7 @@ void process_command_line (int argc, char *argv[])
 				command_line_framerate = FALSE;
 			}
 		}
+		
 //VJ WUT mod 26-mar-03
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "wut"))
@@ -1527,10 +1529,12 @@ void process_command_line (int argc, char *argv[])
 			if (*s2 == ':')
 			{
 				sscanf (s2 + 1, "%s", WUT_filename);
+				command_line_wut = TRUE;
 			}
 			else
 			{
                 WUT_filename[0] = '\0';
+				command_line_wut = FALSE;
 			}
 		}
 		////////////////////////////////////////

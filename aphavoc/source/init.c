@@ -933,8 +933,8 @@ void full_initialise_game (void)
 	// Parse the WUT text file 
 	//
 	////////////////////////////////////////
-
-    parse_WUT_file(WUT_filename);
+    if (command_line_wut)
+    	parse_WUT_file(WUT_filename);
 
 
 //	play_avi ( "wenesday.avi", 0 );
