@@ -2751,6 +2751,16 @@
 									RelativePath=".\APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\SPRITE\SP_VEC3D.C">
 								</File>
 							</Filter>
+							<Filter
+								Name="DOWNWASH"
+								Filter="">
+								<File
+									RelativePath="APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DOWNWASH.C">
+								</File>
+								<File
+									RelativePath="APHAVOC\SOURCE\ENTITY\SPECIAL\EFFECT\DOWNWASH\DW_DBASE.C">
+								</File>
+							</Filter>
 						</Filter>
 						<Filter
 							Name="DIVISION"
