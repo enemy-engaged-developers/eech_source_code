@@ -1971,7 +1971,7 @@ int net_connectToMaster (char *serverName, short port, int servernum)
                 debug_log ("HEARTBEAT: ERROR connecting to primary master!");
             }
             else
-            }
+            {
                 debug_log ("HEARTBEAT: ERROR connecting to secondary master!");
             }
             return -1;
