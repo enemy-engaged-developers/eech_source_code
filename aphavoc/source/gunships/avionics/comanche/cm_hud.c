@@ -903,11 +903,8 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	ASSERT (main_3d_env);
 	
-	//VJ 050204 bug fix scale not correct
-	if (get_global_unscaled_displays ())
-		scalefactor = global_hud_size/2.0;
-	else
-		scalefactor = 1.0;
+	//VJ 050213 bug fix scale was not correct
+	scalefactor = global_hud_size2/2.0;
 
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 
@@ -2775,9 +2772,9 @@ void draw_comanche_hud (void)
 	real_colour
 		colour,
 		specular;
+
 /* VJ used for trying out
 char buffer[255];
-
 		if (check_key(DIK_NUMPAD7))
 		{
 			system_sleep(20);
@@ -2920,6 +2917,9 @@ char buffer[255];
 	// get screen co-ords (scaled to keep HUD size constant)
 	//
 
+//VJ 050213 hud scaling mod: for size > 1.0 graphics resampling is used 
+// for size < 1.0 (get_global_unscaled_displays = TRUE) the hud is redrawn 
+//at a smaller scale but the fonts etc are kept at a readable size
 	if (get_global_unscaled_displays ())
 	{
 		hud_screen_x_min = full_screen_x_mid - 128.0;
@@ -2941,15 +2941,19 @@ char buffer[255];
 
 		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * factor )) * full_screen_width) - 0.001;
 		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * factor )) * full_screen_height) - 0.001;
+
+		hud_screen_x_scale = 640.0 / full_screen_width *factor/2.0;
+		hud_screen_y_scale = 480.0 / full_screen_height *factor/2.0;
 /*
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
 		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
 		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
-*/		
+
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
+*/		
 	}
 	
 //VJ 050126 hud mod start 
@@ -3105,8 +3109,8 @@ char buffer[255];
 
 		set_d3d_culling (TRUE);
 
-//		sprintf(buffer,"ghs %f",global_hud_size );
-//      ui_display_text (buffer, 10, 40);
+		//sprintf(buffer,"ghs %f %f",global_hud_size,global_hud_size2);
+      //ui_display_text (buffer, 10, 40);
 
 		end_3d_scene ();
 	}
