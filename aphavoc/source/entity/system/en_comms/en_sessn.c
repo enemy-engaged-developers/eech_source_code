@@ -1305,7 +1305,8 @@ void repair_landing_entity_locks (pack_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void register_attach_meta_smoke_list_to_object (entity *en, meta_smoke_list_types type, object_3d_sub_object_index_numbers attachment_point, int *entity_index_list, int count)
+/* FIXME: 2nd arg should be of type meta_smoke_list_types, but its declaration is not available yet, which breaks in gcc (yem) */
+void register_attach_meta_smoke_list_to_object (entity *en, int type, object_3d_sub_object_index_numbers attachment_point, int *entity_index_list, int count)
 {
 
 	comms_entity_smoke_list_creation_type
