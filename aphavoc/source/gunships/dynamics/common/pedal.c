@@ -267,6 +267,13 @@ void update_pedal_pressure_inputs (void)
 				joyval = get_joystick_axis (command_line_rudder_joystick_index, command_line_rudder_joystick_axis);
 			}
 
+			// Retro 17Jul2004
+			if (command_line_reverse_pedal)
+			{
+				joyval *= -1;
+			}
+			// Retro 17Jul2004 end
+
 			current_flight_dynamics->input_data.pedal.delta = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 
 			if (current_flight_dynamics->input_data.pedal.delta < -0.5)
