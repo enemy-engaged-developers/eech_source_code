@@ -356,9 +356,9 @@ void parse_WUT_file(char *fname)
 	            int d2 = 0;
 	            char *vname, *q = buf1+83;
 
-                get_values(q, &v2, &d2);
-                
-            	if ( strstr(buf1, "Guidance Type"                       )) { weapon_database[i].guidance_type = d2; }                         
+               get_values(q, &v2, &d2);
+    			//VJ 030603 changed "Guidance Type" to "Guidance" for WUT 3.5
+            if ( strstr(buf1, "Guidance"                            )) { weapon_database[i].guidance_type = d2; }                         
 				if ( strstr(buf1, "Aiming Type"                         )) { weapon_database[i].aiming_type = d2; }                           
 				if ( strstr(buf1, "Decoy Type"                          )) { weapon_database[i].decoy_type = d2; }                            
 				if ( strstr(buf1, "Warhead Type"                        )) { weapon_database[i].warhead_type = d2; }                          
