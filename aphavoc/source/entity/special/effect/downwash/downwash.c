@@ -442,7 +442,7 @@ void draw_downwash_effect(entity *en)
 	//Xhit: main_rotor_radius is got here because DOWNWASH_EFFECT_MAX_ALTITUDE depends on it. (030328)
 	main_rotor_radius = aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].main_rotor_radius;
 
-	if((main_rotor_rpm > 20.0) && ((pos.y - min_altitude) < DOWNWASH_EFFECT_MAX_ALTITUDE))
+	if((main_rotor_rpm > 1.0) && ((pos.y - min_altitude) < DOWNWASH_EFFECT_MAX_ALTITUDE))
 	{
 		
 		number_of_main_rotors = (int) aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].number_of_main_rotors;
