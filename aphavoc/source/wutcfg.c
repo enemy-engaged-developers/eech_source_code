@@ -105,8 +105,42 @@ void get_values(char *q, float *v2, int *d2)
 	  debug_log("try wut %f %d\n",v2, d2);                
 }	
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void parse_WUT_file(char *fname)
+{
+	 FILE *f;
+	 char buf[255];
+	 
+	if (!file_exist(fname))
+	{
+		debug_fatal("WUT filename error",fname);
+		return;
+	}
+
+	f = fopen(fname, "r");
+	if (!f)
+	{
+		debug_fatal("Error opening GWUT file: [ %s ]",fname);
+		return;
+	}
+
+	fscanf(f,"%[^\n]\n",buf);
+	fclose(f);
+	
+	if (!strcmp(buf,"[GWUT file, version 1.0]"))
+		ReadGWutInfo(fname);
+	else
+		ReadWutFile(fname);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ReadWutFile(char *fname)
 {
 	 FILE *f;
 	 int i;
@@ -798,7 +832,7 @@ Whether or not the site type can be considered a potential campaign objective
 						task_database[i].player_reserve_factor			= (d2 >> 14); // 3 bit value
 					 }                    
 					 if (strstr(buf1,"TaskCompleted Score"   )) { task_database[i].task_completed_score = d2; }             
-					 if (strstr(buf1,"Moveent Type"          )) { task_database[i].movement_type = d2; }                    
+					 if (strstr(buf1,"Movement Type"          )) { task_database[i].movement_type = d2; }                    
 					 if (strstr(buf1,"Landing Types"         )) { task_database[i].landing_types = d2; }             
 					 if (strstr(buf1,"Air Attack strength"   )) { task_database[i].ai_stats.air_attack_strength = d2; }     
 					 if (strstr(buf1,"Ground Attack strength")) { task_database[i].ai_stats.ground_attack_strength = d2; }  
@@ -1035,9 +1069,8 @@ Whether or not the site type can be considered a potential campaign objective
 */
 
 		#ifdef WUT_DEBUG
-  
-				  debug_log("WUT: DONE!!!\n");
-fclose(fout);		
+			debug_log("WUT: DONE!!!\n");
+			fclose(fout);		
 		#endif
 	 
 	 
@@ -1053,94 +1086,3 @@ fclose(fout);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 					 
-/* translation in weapons type config  
-struct WEAPON_PACKAGE
-{
-	int
-		sub_type,
-		number,
-		heading_depth,
-		pitch_depth,
-		muzzle_depth,
-		make_weapon_system_ready,
-		rotate,
-		salvo_size;
-
-	float
-		heading_rate,
-		min_heading_limit,
-		max_heading_limit,
-		pitch_rate,
-		min_pitch_limit,
-		max_pitch_limit,
-		muzzle_rotate_rate,
-		rotate_inhibit_velocity;
-
-	unsigned int
-		heading_share_mask,
-		pitch_share_mask;
-
-	muzzle_flash_types
-		muzzle_flash_type;
-
-				  
-if(entnr == 495) vname = "UH60_BLACK_HAWK          ";                
-if(entnr == 496) vname = "MI24D_HIND               ";                
-if(entnr == 497) vname = "CH46E_SEA_KNIGHT         ";                
-if(entnr == 498) vname = "KA29_HELIX_B             ";                
-if(entnr == 499) vname = "CH3_JOLLY_GREEN_GIANT    ";                
-if(entnr == 500) vname = "MI17_HIP                 ";                
-if(entnr == 501) vname = "CH47D_CHINOOK            ";                
-if(entnr == 502) vname = "MI6_HOOK                 ";
-if(entnr == 503) vname = "A10A_THUNDERBOLT         ";
-if(entnr == 504) vname = "SU25_FROGFOOT            ";
-if(entnr == 505) vname = "F16_FIGHTING_FALCON      ";
-if(entnr == 506) vname = "F16_FIGHTING_FALCON      ";
-if(entnr == 507) vname = "MIG29_FULCRUM            ";
-if(entnr == 508) vname = "MIG29_FULCRUM            ";
-if(entnr == 509) vname = "AV8B_HARRIER             ";
-if(entnr == 510) vname = "YAK141_FREESTYLE         ";
-if(entnr == 511) vname = "FA18_HORNET              ";
-if(entnr == 512) vname = "FA18_HORNET              ";
-if(entnr == 513) vname = "SU33_FLANKER             ";
-if(entnr == 514) vname = "SU33_FLANKER             ";
-if(entnr == 515) vname = "AH64A_APACHE             ";
-if(entnr == 516) vname = "AH64A_APACHE             ";
-if(entnr == 517) vname = "KA50_HOKUM               ";
-if(entnr == 518) vname = "KA50_HOKUM               ";
-if(entnr == 519) vname = "OH58D_KIOWA_WARRIOR      ";
-if(entnr == 520) vname = "MV22_OSPREY              ";
-if(entnr == 521) vname = "AH1T_SEACOBRA            ";
-if(entnr == 522) vname = "AH1W_SUPERCOBRA          ";
-if(entnr == 523) vname = "CH53E_SUPER_STALLION     ";
-if(entnr == 524) vname = "C17_GLOBEMASTER_III      ";
-if(entnr == 525) vname = "IL76MD_CANDID_B          ";
-if(entnr == 526) vname = "C130J_HERCULES_II        ";
-if(entnr == 527) vname = "AN12B_CUB                ";
-if(entnr == 528) vname = "M1A2_ABRAMS              ";
-if(entnr == 529) vname = "T80U                     ";
-if(entnr == 530) vname = "M2A2_BRADLEY             ";
-if(entnr == 531) vname = "BMP2                     ";
-if(entnr == 532) vname = "BMP3                     ";
-if(entnr == 533) vname = "M113A2                   ";
-if(entnr == 534) vname = "BTR80                    ";
-if(entnr == 535) vname = "BRDM2                    ";
-if(entnr == 536) vname = "M109A2                   ";
-if(entnr == 537) vname = "2S19                     ";
-if(entnr == 538) vname = "M270_MLRS                ";
-if(entnr == 539) vname = "BM21_GRAD                ";
-if(entnr == 540) vname = "M163_VULCAN              ";
-if(entnr == 541) vname = "SA19_GRISON              ";
-if(entnr == 542) vname = "M1037_AVENGER            ";
-if(entnr == 543) vname = "M48A1_CHAPARRAL          ";
-if(entnr == 544) vname = "SA13_GOPHER              ";
-if(entnr == 545) vname = "TARAWA_CLASS             ";
-if(entnr == 546) vname = "KIEV_CLASS               ";
-if(entnr == 547) vname = "OLIVER_HAZARD_PERRY_CLASS";
-if(entnr == 548) vname = "KRIVAK_II_CLASS          ";
-if(entnr == 549) vname = "AIST_CLASS               ";
-if(entnr == 550) vname = "US_INFANTRY_SAM_STANDING ";
-if(entnr == 551) vname = "US_INFANTRY_SAM_KNEELING ";
-if(entnr == 552) vname = "CIS_INFANTRY_SAM_STANDING";
-if(entnr == 553) vname = "CIS_INFANTRY_SAM_KNEELING";
-*/
