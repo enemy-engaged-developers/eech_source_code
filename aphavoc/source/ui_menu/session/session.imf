@@ -79,9 +79,9 @@ currentdir = $(projectdir)\source\ui_menu\session
 #################################################################################################################################
 
 c_object_files    += $+ &
-                     $(currentdir)\session.obj &
+                     $(currentdir)\uisession.obj &
                      $(currentdir)\sess_sc.obj &
-                     $(currentdir)\sess_fn.obj &
+                     $(currentdir)\uisess_fn.obj &
                      $(currentdir)\mission.obj &
                      $-
 

@@ -85,7 +85,7 @@ c_object_files    += $+ &
                      $(currentdir)\sl_draw.obj &
                      $(currentdir)\sl_dstry.obj &
                      $(currentdir)\sl_float.obj &
-                     $(currentdir)\sl_funcs.obj &
+                     $(currentdir)\sl_smokefuncs.obj &
                      $(currentdir)\sl_int.obj &
                      $(currentdir)\sl_list.obj &
                      $(currentdir)\sl_meta.obj &

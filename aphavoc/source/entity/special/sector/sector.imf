@@ -79,10 +79,10 @@ currentdir = $(projectdir)\source\entity\special\sector
 #################################################################################################################################
 
 c_object_files    += $+ &
-                     $(currentdir)\sc_creat.obj &
+                     $(currentdir)\sc_seccreat.obj &
                      $(currentdir)\sc_dstry.obj &
                      $(currentdir)\sc_float.obj &
-                     $(currentdir)\sc_funcs.obj &
+                     $(currentdir)\sc_secfuncs.obj &
                      $(currentdir)\sc_int.obj &
                      $(currentdir)\sc_list.obj &
                      $(currentdir)\sc_msgs.obj &

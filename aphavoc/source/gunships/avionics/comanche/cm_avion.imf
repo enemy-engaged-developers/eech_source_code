@@ -89,7 +89,7 @@ c_object_files		+=	$+ &
 							$(currentdir)\cm_radar.obj &
 							$(currentdir)\cm_tgt.obj &
 							$(currentdir)\cm_thrt.obj &
-							$(currentdir)\cm_wpn.obj &
+							$(currentdir)\cm_cowpn.obj &
 							$-
 
 asm_object_files	+=	$+ &

@@ -80,7 +80,7 @@ currentdir = $(projectdir)\source\comms
 
 c_object_files		+=	$+ &
 							$(currentdir)\comms.obj &
-                     $(currentdir)\server.obj &
+                     $(currentdir)\commsserver.obj &
                      $(currentdir)\comm_man.obj &
 							$-
 

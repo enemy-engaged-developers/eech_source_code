@@ -103,7 +103,7 @@ c_module_object_files   += $+ &
 										$(currentdir)\safemem.obj &
 										$(currentdir)\memblock.obj &
 										$(currentdir)\files.obj &
-										$(currentdir)\input.obj &
+										$(currentdir)\sysinput.obj &
 										$(currentdir)\mouse.obj &
 										$(currentdir)\memcmp.obj &
 										$(currentdir)\memory.obj &
