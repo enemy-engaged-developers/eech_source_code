@@ -82,7 +82,9 @@
 #include <stdarg.h>
 #include <limits.h>
 #include <float.h>
-#include <io.h>
+#ifdef WIN32
+  #include <io.h>
+#endif
 #include <time.h>
 #include <malloc.h>
 #include <string.h>
@@ -398,7 +400,9 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
-#include <io.h>
+#ifdef WIN32
+  #include <io.h>
+#endif
 #include <time.h>
 #include <malloc.h>
 #include <sys/stat.h>
