@@ -741,6 +741,9 @@ void full_initialise_game (void)
 	ui_force_update ();
 
 	InitTrackIR ();
+	// Retro 6Feb2005 - maybe make the following command-line-vars
+	TIR_SetTimeout(60);		// TIR deactivates itself after 60 frames without update
+	TIR_SetMaxXY (8192);	// Movement range for vector expansion
 
 	////////////////////////////////////////
 	//

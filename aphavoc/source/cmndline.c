@@ -197,6 +197,7 @@ int
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction			= 0,	// Retro 31Jan2005
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
+	command_line_TIR_6DOF							= 0,	// Retro 6Feb2005
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background 
@@ -641,6 +642,23 @@ void process_command_line (int argc, char *argv[])
 			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_high_lod_hack);
 		}
 		//	Retro 31Oct2004 end
+		// Retro 6Feb2005
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "TIR6DOF"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_TIR_6DOF);
+			}
+			else
+			{
+				command_line_TIR_6DOF = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_TIR_6DOF);
+		}
+		// Retro 6Feb2005
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "fog"))
 		////////////////////////////////////////

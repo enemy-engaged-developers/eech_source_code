@@ -522,6 +522,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "external_trackir") == 0) command_line_external_trackir = d1;	// Retro 31Oct2004
 		if (strcmp(p, "external_trackir_dir") == 0) command_line_external_trackir_direction = d1;	// Retro 31Jan2005
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
+		if (strcmp(p, "TIR_6DOF") == 0) command_line_TIR_6DOF = d1;	// Retro 6Feb2005
 		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod		
 		if (strcmp(p, "cannontrack") == 0) command_line_cannontrack = d1;	// Jabberwock 050120 Cannon tracking
 		if (strcmp(p, "faa") == 0)
@@ -798,6 +799,7 @@ VJ 041217 OBSOLETE ======================*/
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"external_trackir=%d  # if TrackIR is active, let it control external view too\n",command_line_external_trackir); // Retro 31Oct2004
 	fprintf(f,"external_trackir_dir=%d  # Can be used to invert the view direction of the external TIR\n",command_line_external_trackir_direction); // Retro 31Jan2005
+	fprintf(f,"TIR_6DOF=%d          # Enables support for TrackIR vector in the hokum and comanche\n",command_line_TIR_6DOF); // Retro 6Feb2005
 	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"3d_cockpit=%d        # EXPERIMENTAL! Draws a 3d apache cockpit (wide_view and MFD close-up (F3 and F4) disabled)\n",command_line_3d_cockpit);	// VJ 050101
 	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking

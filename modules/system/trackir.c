@@ -181,8 +181,6 @@ int query_TIR_active()
 	if (dllLoadedOK == FALSE)
 		return 0;
 
-	gpfNP_Poll();
-
 	return gpfNP_QueryTIRActive();
 }
 

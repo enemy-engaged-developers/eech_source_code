@@ -809,6 +809,8 @@ void notify_show_controller_page (void)
 
 	// trackIR (depending on mouselook)
 
+	TIR_Poll();	// Retro 6Feb2005
+
 	if (query_TIR_active() == TRUE)
 	{
 		if (command_line_mouse_look != MOUSELOOK_OFF)
@@ -3009,6 +3011,8 @@ void setTrackIRButton ( int selection )
 			set_ui_object_text (trackir_option_button, option_boolean_text [0]);
 	}
 #else
+	TIR_Poll();	// Retro 6Feb2005
+
 	if (query_TIR_active() == TRUE)
 	{
 		if (selection == TRUE)
