@@ -1600,8 +1600,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 			restore_reverse_tactical_camera_values ();
 
-//			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
-			set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREY, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
 		}
 	}
 	// Jabberwock 031016 ends
