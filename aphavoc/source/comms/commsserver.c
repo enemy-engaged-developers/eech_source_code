@@ -296,8 +296,9 @@ void validate_connections (void)
 
 		this_connection = this_connection->next;
 
-		if (destroy_connection->pilot_entity) // Jabberwock 031204 MP bug search - reinstated
+		if (get_comms_model () == COMMS_MODEL_SERVER) // Jabberwock 040603 cvc turned off for clients
 		{
+			
 			// added count_limit for connecting players
 			if (destroy_connection->pilot_entity)
 			{
@@ -310,7 +311,7 @@ void validate_connections (void)
 		
 			if ((get_system_time () - destroy_connection->connection_validation_time) > timeout_limit * TIME_1_SECOND)
 			{
-				if (destroy_connection->validation_count > 1) // Jabberwock 031203 Only two passes
+				if (destroy_connection->validation_count > 2) // Jabberwock 040603 Three passes
 				{
 // Jabberwock 031107 MP bug search - this is where original crash occurs, but it's symptom, not the cause!
 /*                                 	if (destroy_connection->pilot_entity)
@@ -353,30 +354,28 @@ void validate_connections (void)
 					if (get_comms_model () == COMMS_MODEL_SERVER)
 					{
 						debug_log ("SERVER: TIMEOUT: Unregistering connection %d", destroy_connection->connection_id);
-						//unregister_connection (destroy_connection->connection_id);
+						free_connection_packets (destroy_connection->connection_id); // Jabberwock 040602 Maybe this will clear DP groups... 
 						// Jabberwock 0312073 MP bug search - Not working - DP timeout kills the player first....
-                                                server_log("In cvc, DP-remove player from group");         //Moje040516 added for server_log info
+
 						direct_play_remove_player_from_group (destroy_connection->connection_id);
+						unregister_connection (destroy_connection->connection_id);
 					}
 					else
 					{
-						debug_log ("SERVER: TIMEOUT: Quitting game", destroy_connection->connection_id);
+						debug_log ("SERVER: TIMEOUT: Quitting game", destroy_connection->connection_id); // Jabberwock 040603 cvc removed for clients - DP will crash anyway...
 						start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 					}
-
-					unregister_connection (destroy_connection->connection_id);
 				}
-			}
-			else
-			{
+				else
+				{
+					debug_log ("SERVER: sending %d CONNECTION_VALIDATION", destroy_connection->connection_id);
 
-				debug_log ("SERVER: sending %d CONNECTION_VALIDATION", destroy_connection->connection_id);
+					send_packet (destroy_connection->connection_id, PACKET_TYPE_CONNECTION_VALIDATION, NULL, 0, SEND_TYPE_PERSONAL);
 
-				send_packet (destroy_connection->connection_id, PACKET_TYPE_CONNECTION_VALIDATION, NULL, 0, SEND_TYPE_PERSONAL);
+					destroy_connection->connection_validation_time = get_system_time (); // Jabberwock 040603 Restored
 
-				//destroy_connection->connection_validation_time = get_system_time ();
-
-				destroy_connection->validation_count ++;
+					destroy_connection->validation_count ++;
+				}
 			}
 		}
 	}
