@@ -337,7 +337,7 @@ void validate_connections (void)
 
 					if (destroy_connection->pilot_entity)
 					{
-						server_log("%s removed", get_local_entity_string (destroy_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
+						server_log("%s removed by cvc", get_local_entity_string (destroy_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
 
 						destroy_client_server_entity (destroy_connection->pilot_entity);
 
@@ -355,6 +355,7 @@ void validate_connections (void)
 						debug_log ("SERVER: TIMEOUT: Unregistering connection %d", destroy_connection->connection_id);
 						//unregister_connection (destroy_connection->connection_id);
 						// Jabberwock 0312073 MP bug search - Not working - DP timeout kills the player first....
+                                                server_log("In cvc, DP-remove player from group");         //Moje040516 added for server_log info
 						direct_play_remove_player_from_group (destroy_connection->connection_id);
 					}
 					else
