@@ -181,8 +181,7 @@ void application_main (int argc, char **argv)
 
 	set_apache_havoc_installation_path ();
 
-// VJ 050118 aphavoc install hack
-	if (apache_havoc_installation_path_valid || command_line_aphavoc)
+	if (apache_havoc_installation_path_valid)
 	{
 		set_global_apache_havoc_installed (TRUE);
 

@@ -635,7 +635,8 @@ void full_initialise_game (void)
 	// Check Apache Havoc FFP files exist
 	//
 
-	check_apache_havoc_ffp_files ();
+// VJ 050123 aphavoc install hack: this function gives true or false depending on presence of terrain.ffp files in EEAH map dirs
+	command_line_aphavoc = check_apache_havoc_ffp_files ();
 
 	////////////////////////////////////////
 	//
@@ -644,13 +645,16 @@ void full_initialise_game (void)
 	////////////////////////////////////////
 
 	#if !DEMO_VERSION	
-// VJ 050118 aphavoc install hack
 		if (get_global_apache_havoc_installed () || command_line_aphavoc)
 		{
 			char
 				buffer [256];
-	
-			sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));
+
+// VJ 050123 aphavoc install hack
+			if (command_line_aphavoc)
+				sprintf (buffer, "Apache Havoc: %s", "Maps enabled");
+			else			
+				sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));
 	
 			set_ui_object_text (ah_installed_text, buffer);
 	
@@ -979,10 +983,12 @@ int check_apache_havoc_ffp_files (void)
 
 	int
 		flag;
-// VJ 050118 aphavoc install hack
-	if (get_global_apache_havoc_installed () || command_line_aphavoc)
-	{
-	
+		
+// VJ 050118 aphavoc install hack, check even if graphics not installed
+/*
+	if (get_global_apache_havoc_installed ())
+	{	
+*/		
 		flag = TRUE;
 	
 		if (!file_exist ("..\\common\\maps\\map1\\terrain\\terrain.ffp"))
@@ -1002,7 +1008,7 @@ int check_apache_havoc_ffp_files (void)
 	
 			flag = FALSE;
 		}
-	
+		
 		if (!flag)
 		{
 	
@@ -1010,8 +1016,10 @@ int check_apache_havoc_ffp_files (void)
 
 			return FALSE;
 		}
+// VJ 050118 aphavoc install hack, check even if graphics not installed
+/*		
 	}
-
+*/
 	return TRUE;
 }
 

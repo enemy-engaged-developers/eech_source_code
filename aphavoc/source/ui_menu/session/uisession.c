@@ -1368,19 +1368,19 @@ void recursive_check_campaign_files (char *directory, session_list_data_type **l
 
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
-
+							// VJ 050123 aphavoc install hack, do not close map if it exists but EEAH is not offcially installed
 							if (!command_line_aphavoc)
 							{ 								
-							if (!get_global_apache_havoc_installed ()) 
-							{
-
-								end_flag = TRUE;
-
-								debug_log ("SESSION: Campaign %s required Apache-Havoc to be installed", campaign_title);
-
-								break;
+								if (!get_global_apache_havoc_installed ()) 
+								{
+                     	
+									end_flag = TRUE;
+                     	
+									debug_log ("SESSION: Campaign %s required Apache-Havoc to be installed", campaign_title);
+                     	
+									break;
+								}
 							}
-						}
 						}
 
 						case FILE_TAG_END:

@@ -197,7 +197,7 @@ int
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
-	command_line_aphavoc								= 0,	// VJ 050118 aphavoc install hack
+	command_line_aphavoc								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
 
 // Jabberwock 031118 Server side settings
@@ -1930,19 +1930,6 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_3d_cockpit = FALSE;
-			}
-		}
-		////////////////////////////////////////
-		else if (s2 = strarg (s1, "aphavoc"))		// VJ 050118 aphavoc install hack
-		////////////////////////////////////////
-		{
-			if (*s2 == ':')
-			{
-				sscanf (s2 + 1, "%d", &command_line_aphavoc);
-			}
-			else
-			{
-				command_line_aphavoc = FALSE;
 			}
 		}
 		////////////////////////////////////////
