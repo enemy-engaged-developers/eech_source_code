@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -191,7 +191,8 @@ int direct_play_initialise_system (void)
 
 		memset ( &connection_data, 0, sizeof ( connection_data_type ) );
 
-		direct_play_set_group_name ( "Unnamed Group" );
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_set_group_name ( "Unnamed Group" );
 
 		direct_play_set_session_name ( "Unnamed Session" );
 
@@ -264,15 +265,15 @@ void destroy_direct_play_interface ( void )
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			ret;
-	
+
 		ret = IDirectPlayX_Release ( direct_playx );
-	
+
 		if ( ret != 0 )
 		{
-	
+
 			debug_log ( "DIRECTP: Unable to release the directplay object" );
 		}
 
@@ -542,11 +543,13 @@ void direct_play_deinitialise_system ( void )
 		// check all of these...
 		//
 
-		direct_play_leave_group ();
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_leave_group ();
 
 		direct_play_destroy_player ();
 
-		direct_play_destroy_group ();
+		// Jabberwock 050303 Remove DP groups
+		// direct_play_destroy_group ();
 
 		direct_play_close_session ();
 
@@ -611,53 +614,53 @@ int direct_play_enumerate_service_providers ( void )
 	{
 
 		create_direct_play_interface ();
-	
+
 		//
 		// Now enumerate the service providers
 		//
-	
+
 	#if DIRECT_PLAY_DEBUG
-	
+
 		debug_log ( "DIRECTP: Services avaliable :" );
-	
+
 	#endif
-	
+
 		hr = IDirectPlayX_EnumConnections ( direct_playx, &TEST_GUID, ( LPVOID ) direct_play_enumerate_connections,
 																NULL, DPCONNECTION_DIRECTPLAY | DPCONNECTION_DIRECTPLAYLOBBY );
-	
-	
+
+
 		if ( hr != DP_OK )
 		{
-	
+
 			destroy_direct_play_interface ();
-	
+
 			debug_log ( "DIRECTP: DirectPlay::EnumConnections : %s", get_dplay_error_message ( hr ) );
-	
+
 			return FALSE;
 		}
-	
+
 		destroy_direct_play_interface ();
-	
+
 		//
 		// Now validate the connections
 		//
-	
+
 		{
-	
+
 			service_provider_table_type
 				*new_sp_list,
 				*this_sp,
 				*next_sp;
 
 			new_sp_list = NULL;
-	
+
 			this_sp = service_provider_table;
-	
+
 			while ( this_sp )
 			{
-		
+
 				create_direct_play_interface ();
-	
+
 				hr = IDirectPlayX_InitializeConnection ( direct_playx, this_sp->connection, 0 );
 
 				if ( hr == DP_OK )
@@ -700,28 +703,28 @@ int direct_play_enumerate_service_providers ( void )
 						//
 						// Now, if we have a modem address list, parse that
 						//
-				
+
 						if ( modem_address_data )
 						{
-				
+
 							HRESULT
 								hr;
-				
+
 							LPDIRECTPLAYLOBBY3A
 								direct_play_lobby;
-					
+
 							hr = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
-					
+
 							if ( hr != DP_OK )
 							{
-					
+
 								debug_log ( "DIRECTP: UNABLE TO CREATE A DIRECTPLAYLOBBY3 interface to parse modem strings" );
 							}
 							else
 							{
-				
+
 								hr = IDirectPlayLobby_EnumAddress ( direct_play_lobby, direct_play_enum_address_callback, modem_address_data, modem_address_datasize, NULL );
-				
+
 								IDirectPlayLobby_Release ( direct_play_lobby );
 							}
 						}
@@ -730,67 +733,67 @@ int direct_play_enumerate_service_providers ( void )
 					//
 					// Add this one to the new list
 					//
-	
+
 					next_sp = this_sp->next;
-	
+
 					this_sp->next = new_sp_list;
-	
+
 					new_sp_list = this_sp;
-	
+
 					this_sp = next_sp;
 				}
 				else
 				{
-	
+
 					//
 					// Free up the memory associated with this sp
 					//
-	
+
 					next_sp = this_sp->next;
-	
+
 					safe_free ( this_sp->name );
-	
+
 					safe_free ( this_sp->connection );
-	
+
 					safe_free ( this_sp->guid );
-	
+
 					safe_free ( this_sp );
-	
+
 					this_sp = next_sp;
 				}
 
 				destroy_direct_play_interface ();
 			}
-	
+
 			service_provider_table = new_sp_list;
 		}
 	}
 	else
 	{
-	
+
 		//
 		// Create a fake "lobby" service provider for the UI
 		//
 
 		service_provider_table_type
 			*new_service_provider;
-	
+
 		new_service_provider = ( service_provider_table_type * ) safe_malloc ( sizeof ( service_provider_table_type ) );
-	
+
 		new_service_provider->next = service_provider_table;
-	
+
 		service_provider_table = new_service_provider;
-	
+
 		new_service_provider->guid = safe_malloc ( sizeof ( GUID ) );
-	
+
 		memcpy ( new_service_provider->guid, &TEST_GUID, sizeof ( GUID ) );
-	
+
 		new_service_provider->connection_size = 0;
-	
+
 		new_service_provider->connection = NULL;
-	
+
 		new_service_provider->name = ( char * ) safe_malloc ( ( strlen ( "DirectPlay Lobby" ) + 1 ) );
-	
+
 		sprintf ( new_service_provider->name, "%s", "DirectPlay Lobby" );
 	}
 
@@ -811,35 +814,35 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 			*string;
 
 		string = ( char * ) data;
-	
+
 		while ( strlen ( string ) )
 		{
-	
+
 			modem_names
 				*modem_name;
-	
+
 			//
 			// Add this modem to the list
 			//
-	
+
 			modem_name = safe_malloc ( sizeof ( modem_names ) );
-	
+
 			modem_name->name = safe_malloc ( strlen ( string ) + 1 );
-	
+
 			strcpy ( modem_name->name, string );
-	
+
 			if ( !modem_name_list )
 			{
-	
+
 				modem_name->succ = NULL;
-	
+
 				modem_name_list = modem_name;
 			}
 			else
 			{
-	
+
 				modem_name->succ = modem_name_list;
-	
+
 				modem_name_list = modem_name;
 			}
 
@@ -896,20 +899,20 @@ int direct_play_create_interface ( service_provider_table_type *this_service )
 
 	if ( !direct_play_get_lobbied () )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		//
 		// Create the direct play interface itself
 		//
-	
+
 		create_direct_play_interface ();
-	
+
 		connection_data.service_provider.guid = safe_malloc ( sizeof ( GUID ) );
-	
+
 		connection_data.service_provider.name = safe_malloc ( strlen ( this_service->name ) + 1 );
-	
+
 		connection_data.service_provider.connection = safe_malloc ( this_service->connection_size );
 
 		connection_data.one_way_hosting_setup = FALSE;
@@ -917,29 +920,29 @@ int direct_play_create_interface ( service_provider_table_type *this_service )
 		connection_data.is_initialised = FALSE;
 
 		connection_data.is_hosting = FALSE;
-	
+
 		memcpy ( connection_data.service_provider.guid, this_service->guid, sizeof ( GUID ) );
-	
+
 		memcpy ( connection_data.service_provider.name, this_service->name, ( strlen ( this_service->name ) + 1 ) );
-	
+
 		memcpy ( connection_data.service_provider.connection, this_service->connection, this_service->connection_size );
-	
+
 		direct_play_set_comms_mode ( DIRECT_PLAY_COMMS_MODE_MULTI );
-	
+
 		//
 		// Initialise the connection
 		//
-	
+
 		hr = IDirectPlayX_InitializeConnection ( direct_playx, connection_data.service_provider.connection, 0 );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::InitializeConnection : %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
-	
+
 		return ( TRUE );
 	}
 	else
@@ -950,7 +953,7 @@ int direct_play_create_interface ( service_provider_table_type *this_service )
 		//
 
 		direct_play_set_comms_mode ( DIRECT_PLAY_COMMS_MODE_MULTI );
-	
+
 		return ( TRUE );
 	}
 }
@@ -1010,21 +1013,21 @@ int direct_play_close_session (void)
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		hr = IDirectPlayX_Close ( direct_playx );
-	
+
 		if ( hr != DP_OK )
 		{
 
 #if DIRECT_PLAY_DEBUG
-	
+
 			debug_log ( "DIRECTP: DirectPlay::Close : %s", get_dplay_error_message ( hr ) );
 
 #endif
-	
+
 			return ( FALSE );
 		}
 	}
@@ -1091,10 +1094,10 @@ int direct_play_enumerate_sessions (void)
 
 			if ( !destroy_session->lobby_session )
 			{
-	
+
 				if ( destroy_session->session->lpszSessionNameA )
 				{
-	
+
 					safe_free ( destroy_session->session->lpszSessionNameA );
 				}
 			}
@@ -1116,28 +1119,28 @@ int direct_play_enumerate_sessions (void)
 
 		if ( direct_playx )
 		{
-	
+
 			#if DIRECT_PLAY_DEBUG
-		
+
 			debug_log ( "DIRECTP: Enumerating sessions avaliable:" );
-		
+
 			#endif
-		
+
 			memset ( &sessionDesc, 0, sizeof ( DPSESSIONDESC2 ) );
-		
+
 			sessionDesc.dwSize = sizeof ( DPSESSIONDESC2 );
-		
+
 			sessionDesc.guidApplication = TEST_GUID;
-		
+
 			hr = IDirectPlayX_EnumSessions ( direct_playx, &sessionDesc, 0,
 															( LPDPENUMSESSIONSCALLBACK2 ) direct_play_enumerate_sessions_callback,
 															NULL,
 															DPENUMSESSIONS_ASYNC );
 	//														DPENUMSESSIONS_RETURNSTATUS | DPENUMSESSIONS_AVAILABLE | DPENUMSESSIONS_ASYNC );
-		
+
 			if ( hr != DP_OK )
 			{
-		
+
 				debug_log ( "DIRECTP: DirectPlay::EnumSessions : %s", get_dplay_error_message ( hr ) );
 			}
 		}
@@ -1147,32 +1150,32 @@ int direct_play_enumerate_sessions (void)
 
 		if ( direct_play_get_lobbied_join () )
 		{
-	
+
 			session_table_type
 				*new_session;
-	
+
 			debug_log ( "Creating lobby session" );
-	
+
 			new_session = ( session_table_type * ) safe_malloc ( sizeof ( session_table_type ) );
-	
+
 			new_session->lobby_session = TRUE;
-	
+
 			new_session->next_session = session_table;
-	
+
 			session_table = new_session;
-	
+
 			new_session->session = ( LPDPSESSIONDESC2 ) safe_malloc ( sizeof ( DPSESSIONDESC2 ) );
-	
+
 			memcpy ( new_session->session, direct_play_lobby3_connection_data->lpSessionDesc, sizeof ( DPSESSIONDESC2 ) );
-	
+
 			session_counter ++;
-	
+
 			#if DIRECT_PLAY_DEBUG
-	
+
 			debug_log ("DIRECTP:      %s", new_session->session->lpszSessionNameA);
-	
+
 			#endif
-	
+
 			debug_log ( "Done" );
 		}
 
@@ -1256,10 +1259,10 @@ int direct_play_refresh_modem_session ( void )
 
 			if ( !destroy_session->lobby_session )
 			{
-	
+
 				if ( destroy_session->session->lpszSessionNameA )
 				{
-	
+
 					safe_free ( destroy_session->session->lpszSessionNameA );
 				}
 			}
@@ -1297,21 +1300,21 @@ int direct_play_refresh_modem_session ( void )
 
 		if ( hr == DPERR_BUFFERTOOSMALL )
 		{
-	
+
 			new_session->session = ( LPDPSESSIONDESC2 ) safe_malloc ( size );
-	
+
 			memset ( new_session->session, 0, size );
-	
+
 			hr = IDirectPlayX_GetSessionDesc ( direct_playx, ( LPVOID ) new_session->session, ( LPDWORD ) &size );
-	
+
 			if ( hr == DP_OK )
 			{
-	
+
 				session_counter ++;
 			}
 			else
 			{
-	
+
 				debug_log ( "Directp: Refresh modem session: %s", get_dplay_error_message ( hr ) );
 			}
 		}
@@ -1350,9 +1353,9 @@ int internal_direct_play_destroy_modem ( void *data )
 
 	if ( direct_playx )
 	{
-	
+
 		IDirectPlayX_Release ( direct_playx );
-	
+
 		direct_playx = NULL;
 	}
 	return(NULL);
@@ -1410,10 +1413,10 @@ int direct_play_dial_modem ( char *modem, char *phone_number )
 
 			if ( !destroy_session->lobby_session )
 			{
-	
+
 				if ( destroy_session->session->lpszSessionNameA )
 				{
-	
+
 					safe_free ( destroy_session->session->lpszSessionNameA );
 				}
 			}
@@ -1455,7 +1458,7 @@ int direct_play_dial_modem ( char *modem, char *phone_number )
 	address_elements[number_of_elements].dwDataSize = strlen ( modem ) + 1;
 	address_elements[number_of_elements].lpData = modem;
 	number_of_elements++;
-	
+
 	address_elements[number_of_elements].guidDataType = DPAID_Phone;
 	address_elements[number_of_elements].dwDataSize = strlen ( phone_number ) + 1;
 	address_elements[number_of_elements].lpData = phone_number;
@@ -1580,15 +1583,15 @@ int internal_direct_play_dial_modem ( void *data )
 		}
 		else
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::EnumSessions : %s", get_dplay_error_message ( ret ) );
-	
+
 			return ( FALSE );
 		}
 	}
 	else
 	{
-	
+
 		return ( TRUE );
 	}
 }
@@ -1818,7 +1821,7 @@ int internal_direct_play_answer_modem ( void *data )
 		//
 
 		memset ( &sessionDesc, 0, sizeof ( DPSESSIONDESC2 ) );
-	
+
 		sessionDesc.dwSize = sizeof ( DPSESSIONDESC2 );
 		sessionDesc.dwFlags =  DPSESSION_KEEPALIVE;
 		sessionDesc.dwMaxPlayers = 2;
@@ -1828,7 +1831,7 @@ int internal_direct_play_answer_modem ( void *data )
 		sessionDesc.dwReserved2 = 0;
 		sessionDesc.dwUser1 = *user_data;
 		connection_data.this_session.session = &sessionDesc;
-	
+
 		if ( direct_play_use_guaranteed_packets )
 		{
 
@@ -1836,12 +1839,12 @@ int internal_direct_play_answer_modem ( void *data )
 		}
 
 		ret = IDirectPlayX_Open ( direct_playx, &sessionDesc, DPOPEN_CREATE | DPOPEN_RETURNSTATUS );
-	
+
 		if ( ret != DP_OK )
 		{
-	
+
 			debug_log ( "DirectPlay::Open error: %s", get_dplay_error_message ( ret ) );
-	
+
 			return ( FALSE );
 		}
 		else
@@ -1976,13 +1979,13 @@ int direct_play_create_session ( int value )
 
 	if ( direct_playx )
 	{
-	
+
 		//
 		// Create a new session
 		//
-	
+
 		memset ( &sessionDesc, 0, sizeof ( DPSESSIONDESC2 ) );
-	
+
 		sessionDesc.dwSize = sizeof ( DPSESSIONDESC2 );
 
 		sessionDesc.dwFlags = DPSESSION_KEEPALIVE;
@@ -2000,14 +2003,14 @@ int direct_play_create_session ( int value )
 		sessionDesc.dwReserved2 = 0;
 		sessionDesc.dwUser1 = value;
 		connection_data.this_session.session = &sessionDesc;
-	
+
 		hr = IDirectPlayX_Open ( direct_playx, &sessionDesc, DPOPEN_CREATE );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DirectPlay::Open error: %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
 	}
@@ -2024,23 +2027,23 @@ void direct_play_set_session_type_and_name ( int value )
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		int
 			size;
-	
+
 		//
 		// Get the current session description
 		//
-	
+
 		hr = IDirectPlayX_GetSessionDesc ( direct_playx, NULL, ( LPDWORD ) &size );
-	
+
 		session_capabilities = ( LPVOID ) safe_malloc ( size );
-	
+
 		hr = IDirectPlayX_GetSessionDesc ( direct_playx, ( LPVOID ) session_capabilities, ( LPDWORD ) &size );
-	
+
 		if ( hr == DP_OK )
 		{
 
@@ -2083,48 +2086,48 @@ int direct_play_join_session (void)
 
 	if ( !direct_play_get_lobbied () )
 	{
-	
+
 		//
 		// After enumerating the avaliable sessions, join one
 		//
-	
+
 		if ( connection_data.this_session.session )
 		{
-	
+
 			memset ( &sessionDesc, 0, sizeof ( DPSESSIONDESC2 ) );
-	
+
 			sessionDesc.dwSize = sizeof ( DPSESSIONDESC2 );
-	
+
 			sessionDesc.guidInstance = connection_data.this_session.session->guidInstance;
-	
+
 			sessionDesc.guidApplication = connection_data.this_session.session->guidApplication;
-	
+
 			hr = IDirectPlayX_Open ( direct_playx, &sessionDesc, DPOPEN_JOIN );
-	
+
 			if ( hr != DP_OK )
 			{
-	
+
 				debug_log ( "DIRECTP: DirectPlay::Open : %s", get_dplay_error_message ( hr ) );
-	
+
 				return ( FALSE );
 			}
-	
-	
+
+
 			direct_play_set_session_name ( ( char * ) connection_data.this_session.session->lpszSessionName );
-	
+
 	#if DIRECT_PLAY_DEBUG
-	
+
 			debug_log ( "DIRECTP: Joining Session %s", connection_data.this_session.session->lpszSessionName );
-	
+
 	#endif
-	
+
 			return TRUE;
 		}
 		else
 		{
 
 			debug_log ( "Attempting to join a direct play session, but session is not set" );
-	
+
 			return ( FALSE );
 		}
 	}
@@ -2137,9 +2140,9 @@ int direct_play_join_session (void)
 	}
 
 	#if DIRECT_PLAY_DEBUG
-	
+
 			debug_log ( "DIRECTP: Joining Session: Undefined State" );
-	
+
 	#endif
 	return ( FALSE ); // schorpp - default handling undefined state
 
@@ -2248,15 +2251,15 @@ int direct_play_session_capabilities (void)
 	#endif
 
 	return TRUE;
-	
+
 	}
 
 	#if DIRECT_PLAY_DEBUG
-	
+
 	debug_log ( "DIRECTP: direct_play_session_capabilities: Undefined State" );
-	
+
 	#endif
-	
+
 	return ( FALSE ); // schorpp - default handling undefined state
 }
 
@@ -2345,7 +2348,7 @@ int direct_play_enumerate_groups (void)
 			#endif
 
 			if ( hr == DP_OK )
-				return ( group_counter ); 
+				return ( group_counter );
 
 		}
 	}
@@ -2403,19 +2406,19 @@ int direct_play_create_group (void)
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		DPID
 			id;
-	
+
 		DPNAME
 			dpName;
-	
+
 		static group_table_type
 			new_group;
-	
+
 #if DIRECT_PLAY_DEBUG
 
 		debug_log ( "DIRECTP: DirectPlay::CreateGroup" );
@@ -2423,30 +2426,30 @@ int direct_play_create_group (void)
 #endif
 
 		memset ( &dpName, 0, sizeof ( DPNAME ) );
-	
+
 		dpName.dwSize = sizeof ( DPNAME );
-	
+
 		dpName.lpszShortName = ( LPWSTR ) direct_play_get_group_name ();
-	
+
 		dpName.lpszLongName = ( LPWSTR ) direct_play_get_group_name ();
-	
+
 		hr = IDirectPlayX_CreateGroup ( direct_playx, &id, &dpName, NULL, 0, 0 );
-	
+
 		direct_play_set_group_id ( id );
-	
+
 		new_group.group = direct_play_get_group_id ();
-	
+
 		new_group.group_name = ( char * ) safe_malloc ( strlen ( direct_play_get_group_name () ) + 1 );
-	
+
 		sprintf ( new_group.group_name, "%s", direct_play_get_group_name () );
-	
+
 		connection_data.this_group = &new_group;
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DirectPlay::CreateGroup error: %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
 
@@ -2481,7 +2484,7 @@ int direct_play_join_group (void)
 
 			return FALSE;
 		}
-		
+
 		#if DIRECT_PLAY_DEBUG
 
 		debug_log ("DIRECTP: Joining Group %s", connection_data.this_group->group_name);
@@ -2515,42 +2518,42 @@ int direct_play_leave_group (void)
 
 	if ( direct_playx )
 	{
-	
+
 		if ( connection_data.this_group )
 		{
-	
+
 			if ( connection_data.this_group->group )
 			{
-		
+
 				#if DIRECT_PLAY_DEBUG
-		
+
 				debug_log ("DIRECTP: DirectPlay:: Deleting Player from group" );
-		
+
 				#endif
-		
+
 				hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, direct_play_get_player_id () );
-		
+
 				if ( hr != DP_OK )
 				{
-		
+
 					debug_log ( "DIRECTP: DirectPlay::DeletePlayerFromGroup: %s", get_dplay_error_message ( hr ) );
-		
+
 					return FALSE;
 				}
-		
+
 				return ( TRUE );
 			}
 			else
 			{
-	
+
 				return ( FALSE );
 			}
 		}
 		else
 		{
-	
+
 			debug_log ("DIRECTP: LEAVE GROUP : no group set");
-	
+
 			return ( FALSE );
 		}
 	}
@@ -2574,34 +2577,34 @@ int direct_play_remove_player_from_group (DPID id)
 
 	if ( direct_playx )
 	{
-	
+
 		if ( connection_data.this_group )
 		{
-	
+
 			if ( connection_data.this_group->group )
 			{
-		
+
 				#if DIRECT_PLAY_DEBUG
-		
+
 				debug_log ("DIRECTP: DirectPlay:: Deleting Player from group" );
-		
+
 				#endif
-		
+
 	 			hr = IDirectPlayX_DeletePlayerFromGroup ( direct_playx, connection_data.this_group->group, id );
-		
+
 				if ( hr != DP_OK )
 				{
-		
+
 					debug_log ( "DIRECTP: DirectPlay::DeletePlayerFromGroup: %s", get_dplay_error_message ( hr ) );
                                 ////Moje 040624 Removed next line. We know that this fails most of the time, but despite that
                                 ////            cvc manages to clear the client-data and the server survives
 	 			////	server_log ("Error: Failed to remove player %d from group: %d", id, connection_data.this_group->group ); // Jabberwock 031209 - Error log
-		
+
 					return FALSE;
 				}
-		
+
 				hr = IDirectPlayX_DestroyPlayer ( direct_playx, id); // Jabberwock 031209 Destroy player
-	
+
 				if ( hr != DP_OK )
 				{
 					server_log ("Error: Failed to destroy player %d", id); // Jabberwock 040609 - Expanded log
@@ -2610,20 +2613,20 @@ int direct_play_remove_player_from_group (DPID id)
 				}
 
 				server_log ("Success: player %d removed", id); // Jabberwock 040609 - Expanded log
-				
+
 				return ( TRUE );
 			}
 			else
 			{
-	
+
 				return ( FALSE );
 			}
 		}
 		else
 		{
-	
+
 			debug_log ("DIRECTP: LEAVE GROUP : no group set");
-	
+
 			return ( FALSE );
 		}
 	}
@@ -2643,10 +2646,10 @@ int direct_play_destroy_group (void)
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		#if DIRECT_PLAY_DEBUG
 
 		debug_log ("DIRECTP: DirectPlay:: Destroy group" );
@@ -2654,12 +2657,12 @@ int direct_play_destroy_group (void)
 		#endif
 
 		hr = IDirectPlayX_DestroyGroup ( direct_playx, direct_play_get_group_id () );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::DestroyGroup: %s", get_dplay_error_message ( hr ) );
-	
+
 			return FALSE;
 		}
 	}
@@ -2685,20 +2688,20 @@ int direct_play_create_player (void)
 
 	if ( direct_playx )
 	{
-	
+
 		DPNAME
 			dpName;
-	
+
 		HRESULT
 			hr;
-	
+
 		DPID
 			id;
-	
+
 		//
 		// create a new player.
 		//
-	
+
 		#if DIRECT_PLAY_DEBUG
 
 		debug_log ("DIRECTP: DirectPlay:: Create player" );
@@ -2706,25 +2709,25 @@ int direct_play_create_player (void)
 		#endif
 
 		memset ( &dpName, 0, sizeof ( DPNAME ) );
-	
+
 		dpName.dwSize = sizeof ( DPNAME );
-	
+
 		dpName.lpszShortName = ( LPWSTR ) connection_data.player_name;
-	
+
 		dpName.lpszLongNameA = NULL;
-	
+
 		hr = IDirectPlayX_CreatePlayer ( direct_playx, &id, &dpName, NULL, NULL, 0, 0 );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::CreatePlayer: %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
-	
+
 		direct_play_set_player_id (id);
-	
+
 		return ( TRUE );
 	}
 
@@ -2740,20 +2743,20 @@ int direct_play_create_server_player (void)
 
 	if ( direct_playx )
 	{
-	
+
 		DPNAME
 			dpName;
-	
+
 		HRESULT
 			hr;
-	
+
 		DPID
 			id;
-	
+
 		//
 		// create a new player.
 		//
-	
+
 		#if DIRECT_PLAY_DEBUG
 
 		debug_log ("DIRECTP: DirectPlay:: Create player" );
@@ -2761,25 +2764,25 @@ int direct_play_create_server_player (void)
 		#endif
 
 		memset ( &dpName, 0, sizeof ( DPNAME ) );
-	
+
 		dpName.dwSize = sizeof ( DPNAME );
-	
+
 		dpName.lpszShortName = ( LPWSTR ) connection_data.player_name;
-	
+
 		dpName.lpszLongNameA = NULL;
-	
+
 		hr = IDirectPlayX_CreatePlayer ( direct_playx, &id, &dpName, NULL, NULL, 0, DPPLAYER_SERVERPLAYER );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::CreatePlayer: %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
-	
+
 		direct_play_set_player_id (id);
-	
+
 		return ( TRUE );
 	}
 
@@ -2795,10 +2798,10 @@ int direct_play_destroy_player (void)
 
 	if ( direct_playx )
 	{
-	
+
 		HRESULT
 			hr;
-	
+
 		#if DIRECT_PLAY_DEBUG
 
 		debug_log ("DIRECTP: DirectPlay:: Destroy player" );
@@ -2806,15 +2809,15 @@ int direct_play_destroy_player (void)
 		#endif
 
 		hr = IDirectPlayX_DestroyPlayer ( direct_playx, direct_play_get_player_id () );
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			debug_log ( "DIRECTP: DirectPlay::DestroyPlayer: %s", get_dplay_error_message ( hr ) );
-	
+
 			return ( FALSE );
 		}
-	
+
 		return ( TRUE );
 	}
 
@@ -2830,7 +2833,7 @@ void direct_play_get_message_queue ( void )
 
 	if ( direct_playx )
 	{
-	
+
 		IDirectPlayX_GetMessageQueue ( direct_playx, 0, 0, DPMESSAGEQUEUE_SEND, &direct_play_send_queue_number_of_packets, &direct_play_send_queue_number_of_bytes );
 	}
 }
@@ -2869,7 +2872,7 @@ int direct_play_send_data ( DPID to_id, LPVOID data, int size )
 	}
 	else
 	{
-	
+
 		hr = IDirectPlayX_Send ( direct_playx, direct_play_get_player_id (), to_id, 0, data, size );
 	}
 
@@ -2935,38 +2938,38 @@ int direct_play_receive_data (LPVOID data, int size)
 
 	while ( sender_player_id == DPID_SYSMSG )
 	{
-	
+
 		s1 = size;
-	
+
 		hr = IDirectPlayX_Receive ( direct_playx, &sender_player_id, &receiver_player_id, DPRECEIVE_ALL, ( LPVOID ) data, ( LPDWORD ) &s1 );
-	
+
 		//
 		// If data was set to NULL, it was a request for the packet size so just return size
 		//
-	
+
 		if ( data == NULL )
 		{
-	
+
 			return ( s1 );
 		}
-	
+
 		if ( hr != DP_OK )
 		{
-	
+
 			if ( hr != DPERR_NOMESSAGES )
 			{
-	
+
 				debug_log ( "DIRECTP: DirectPlay::Receive: %s", get_dplay_error_message ( hr ) );
 			}
-	
+
 			return ( FALSE );
 		}
 
 		if ( sender_player_id == DPID_SYSMSG )
 		{
-	
+
 			type = ( LPDPMSG_GENERIC ) data;
-	
+
 			direct_play_system_message ( type );
 		}
 	}
@@ -3664,7 +3667,7 @@ void set_direct_play_inet_address ( char *ip_address )
 
 		HRESULT
 			ret;
-	
+
 		DPCOMPOUNDADDRESSELEMENT
 			address_elements[3];
 
@@ -3787,7 +3790,7 @@ void set_direct_play_serial_address ( int com_port, int baud_rate, int stop_bits
 
 		HRESULT
 			ret;
-	
+
 		DPCOMPOUNDADDRESSELEMENT
 			address_elements[3];
 
