@@ -156,11 +156,11 @@ int
 	command_line_mouse_look										= FALSE,	// Retro 030317
 	command_line_mouse_look_speed								= 15,		// Retro 030317
 	command_line_min_fov											= 20,		// Retro 030318
-	command_line_max_fov											= 80;		// Retro 030318
-	command_line_eo_pan_joystick_index						= -1;		// loke 030319
-	command_line_eo_pan_vertical_joystick_axis			= 6;		// loke 030319
-	command_line_eo_pan_horizontal_joystick_axis			= 8;		// loke 030319
-	command_line_eo_zoom_joystick_index						= -1;		// loke 030319
+	command_line_max_fov											= 80,		// Retro 030318
+	command_line_eo_pan_joystick_index						= -1,		// loke 030319
+	command_line_eo_pan_vertical_joystick_axis			= 6,		// loke 030319
+	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
+	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7;		// loke 030319
 
 float
