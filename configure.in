@@ -1,5 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(aphavoc/source/init.c)
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE("eech", "0.0.1")
 
 dnl Use this language for tests
@@ -7,8 +8,8 @@ AC_LANG_C
 
 dnl Checks for programs.
 AC_PROG_CC
-AC_PROG_RANLIB
 AC_ISC_POSIX
+AC_PROG_LIBTOOL
 
 dnl Checks for libraries.
 AC_CHECK_LIB(GL, glBegin)
@@ -21,14 +22,22 @@ AM_PATH_SDL(1.2.0,
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(stdio.h)
+AC_CHECK_HEADERS(time.h)
+AC_PATH_TOOL(SYSTEM_TIME_H_PATH, time.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
+AC_C_INLINE
 
 dnl Checks for library functions.
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(open close)
+AC_CHECK_FUNCS(time gmtime)
+
+dnl Misc stuff.
+STATIC_LIB="-all-static"
+AC_SUBST(STATIC_LIB)
 
 dnl --enable-debug
 AC_MSG_CHECKING("whether debug is enabled")
@@ -54,6 +63,7 @@ AC_OUTPUT(	Makefile
 		modules/3d/terrain/Makefile
 		modules/3d/terrain/external/Makefile
 		modules/graphics/Makefile
+		modules/graphics/SDL/Makefile
 		modules/graphics/external/Makefile
 		modules/maths/Makefile
 		modules/misc/Makefile
@@ -61,6 +71,7 @@ AC_OUTPUT(	Makefile
 		modules/sound/Makefile
 		modules/sound/external/Makefile
 		modules/system/Makefile
+		modules/system/unix/Makefile
 		modules/system/external/Makefile
 		modules/userint2/Makefile
 		modules/userint2/ui_draw/Makefile
@@ -195,3 +206,7 @@ AC_OUTPUT(	Makefile
 		aphavoc/source/ui_menu/dedicate/Makefile	)
 
 rm -f aphavoc/makefile
+
+echo I'm using LIBTOOL because I couldn't link all the different libs.la otherwise.
+echo The drawback is that you have to type "libtool --mode=execute gvd <prog_name>"
+echo in order to run the program in a debugger, like gvd.
