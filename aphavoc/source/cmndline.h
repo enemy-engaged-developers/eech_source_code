@@ -153,7 +153,8 @@ extern int
 	command_line_collective_joystick_axis,					// loke 030418
 	command_line_rudder_joystick_index,						// loke 030418
 	command_line_rudder_joystick_axis,						// loke 030418
-	command_line_high_res_mfd;									// loke 030420
+	command_line_high_res_mfd,									// loke 030420
+	command_line_fly_any_airplane;							// VJ 030424	
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

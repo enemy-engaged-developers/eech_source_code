@@ -84,7 +84,7 @@ void process_ini_file(int argc, char *argv[])
     char *p, *q;
     char fname[12] = "eech.ini";
     float v1;
-    int d1;
+    int d1, k;
    
     buf = malloc (255);
     if (buf == NULL)
@@ -229,7 +229,17 @@ void process_ini_file(int argc, char *argv[])
         if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1;
         if (strcmp(p, "ruddern") == 0) command_line_rudder_joystick_index = d1;
         if (strcmp(p, "rudderax") == 0) command_line_rudder_joystick_axis = d1;
-		  if (strcmp(p, "highresmfd") == 0) command_line_high_res_mfd = d1;
+		  if (strcmp(p, "highresmfd") == 0) command_line_high_res_mfd = d1; // loke 030420 
+		  if (strcmp(p, "faa") == 0)                                          
+		  {
+		  	   // VJ 030424 fly any aircraft optional, default on
+		  		command_line_fly_any_airplane = d1;
+		  		if (command_line_fly_any_airplane == 0)
+		  		{
+					for (k=4; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
+  						aircraft_database[k].player_controllable = FALSE;
+  				}		  		
+		  }	
         if (strcmp(p, "wut") == 0) 
         {
             if (strlen(q)!=0) 
@@ -244,6 +254,8 @@ void process_ini_file(int argc, char *argv[])
     }
 
   fclose(f);
+   
+  
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,6 +350,7 @@ void dump_ini_file(void)
 	fprintf(f,"dwash=0             # rotor downwash (dust), def = 0 (downwash visible)\n");
 	fprintf(f,"wut=                # supply a filename of a wut text file here\n");
 	fprintf(f,"highresmfd=0        # high resolution mfd's\n");
+	fprintf(f,"faa=1               # fligh any aircraft (default on = 1)\n");
 	fprintf(f,"[end of file]\n");    
 
 	fclose(f);

@@ -177,6 +177,7 @@ int
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
 	command_line_high_res_mfd									= 0;		// loke 030420
+	command_line_fly_any_airplane								= 1;     // VJ 030424
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
