@@ -96,6 +96,91 @@ void set_game_flow (game_flow_types flow)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////
+//VJ 041213 load the map specific custom textures
+//session->warzone_name = map name e.g. "map3"
+// in this directory one can have a textfile with directory names 
+//to look for custom textures
+//VJ 050106 changed to read text file with directory names
+/////////////////////////////////////////////////////////////////////
+
+void load_warzone_override_textures (char *warzone_name)
+{				
+	char directory_textdir_path[256];
+	char directory_search_path[256];
+
+	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
+	
+	debug_log("Overide dir warzone name %s", warzone_name);
+	
+	if ( file_exist ( directory_textdir_path ) )
+	{
+		int count;
+		FILE *ftextdir;
+		char buf[256];
+		char *p;
+
+		ftextdir = fopen(directory_textdir_path,"r");
+
+		// skip comment lines
+		fscanf(ftextdir,"%[^\n]\n",buf);
+		while (buf[0] == '#')
+				fscanf(ftextdir,"%[^\n]\n",buf);
+
+		// get directory names, can be more than one
+		while (strchr(buf,'='))
+		{
+			//format: dir1=[name] etc.
+			p = strtok(buf,"=");
+			p = strtok(NULL,"#");
+
+			if (p)
+			{
+				int i;
+				//strip leading and trailing spaces
+ 					i = strlen(p)-1;
+ 					while (i > 0 && p[i] == ' ')
+ 						i--;
+ 					p[i+1]='\0';
+				while (p[0] == ' ')
+				  p++;
+
+    				//file mask *.bmp in correct dir
+				sprintf (directory_search_path, "\"%s\\%s\\*.bmp\"", "..\\cohokum\\graphics\\textures",p);
+
+  				debug_log("warzone override texture directory: [%s]",directory_search_path);
+
+				for( count=0; count < MAX_TEXTURES; count++ )
+				{
+					system_texture_override_names[count][0]='\0';
+				}
+
+				initialize_texture_override_names ( system_texture_override_names,  p );
+
+				for( count=0; count < MAX_TEXTURES; count++ )
+				{
+					int retrieved_index;
+
+					retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+
+					if( retrieved_index > 0)
+					{
+						load_texture_override ( system_texture_override_names[count], retrieved_index, p);
+					}
+				}
+			}
+			fscanf(ftextdir,"%[^\n]\n",buf);
+		}
+	}
+}
+/////////////////////////////////////////////////////////////////////
+//VJ 050106 END load warzone specific textures
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 game_flow_types get_game_flow (void)
 {
 
@@ -370,80 +455,6 @@ void process_game_initialisation_phases (void)
 
 			if (session)
 			{
-				/////////////////////////////////////////////////////////////////////
-				//VJ 041213 load the map specific custom textures
-				//VJ here goes session->warzone_name = map name e.g. "map3"
-				//VJ changed to read text file with directory names
-				/////////////////////////////////////////////////////////////////////
-				char directory_textdir_path[256];
-				char directory_search_path[256];
-
-				sprintf (directory_textdir_path, "..\\common\\maps\\%s\\texturedirs.txt",session->warzone_name);
-
-				if ( file_exist ( directory_textdir_path ) )
-				{
-					int count;
-					FILE *ftextdir;
-					char buf[256];
-					char *p;
-
-					ftextdir = fopen(directory_textdir_path,"r");
-
-					// skip comment lines
-					fscanf(ftextdir,"%[^\n]\n",buf);
-					while (buf[0] == '#')
-							fscanf(ftextdir,"%[^\n]\n",buf);
-
-					// get directory names, can be more than one
-					while (strchr(buf,'='))
-					{
-						//format: dir1=[name] etc.
-						p = strtok(buf,"=");
-						p = strtok(NULL,"#");
-
-						if (p)
-						{
-							int i;
-							//strip leading and trailing spaces
-	   					i = strlen(p)-1;
-	   					while (i > 0 && p[i] == ' ')
-	   						i--;
-	   					p[i+1]='\0';
-							while (p[0] == ' ')
-							  p++;
-
-	      				//file mask *.bmp in correct dir
-							sprintf (directory_search_path, "\"%s\\%s\\*.bmp\"", "..\\cohokum\\graphics\\textures",p);
-
-	      				debug_log("warzone override texture directory: [%s]",directory_search_path);
-
-							for( count=0; count < MAX_TEXTURES; count++ )
-							{
-								system_texture_override_names[count][0]='\0';
-							}
-
-							initialize_texture_override_names ( system_texture_override_names,  p );
-
-							for( count=0; count < MAX_TEXTURES; count++ )
-							{
-								int retrieved_index;
-
-								retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
-
-								if( retrieved_index > 0)
-								{
-									load_texture_override ( system_texture_override_names[count], retrieved_index, p);
-								}
-							}
-						}
-						fscanf(ftextdir,"%[^\n]\n",buf);
-					}
-				}
-
-				/////////////////////////////////////////////////////////////////////
-				//VJ 050106 END load warzone specific textures
-				/////////////////////////////////////////////////////////////////////
-
 				if (get_comms_model () == COMMS_MODEL_SERVER)
 				{
 
@@ -836,7 +847,7 @@ void process_game_initialisation_phases (void)
 			    }
 			    else
 //VJ 050110 if no MP then do not check for origwut.txt
-			    if (command_line_report_to_masterserver)
+			 //   if (command_line_report_to_masterserver)
 			    {
               	if (file_exist("origwut.txt"))
               		parse_WUT_file("origwut.txt");
@@ -922,6 +933,17 @@ void process_game_initialisation_phases (void)
 			debug_log ("DEDICATE: setup ...");
 
 			#endif
+
+			/////////////////////////////////////////////////////////////////////
+			//VJ 050106 read custom textures, SP game
+			/////////////////////////////////////////////////////////////////////
+			
+			load_warzone_override_textures (session->data_path);
+			
+			/////////////////////////////////////////////////////////////////////
+			//VJ 050114 end
+			/////////////////////////////////////////////////////////////////////
+
 
 			game_initialisation_phase = GAME_INITIALISATION_PHASE_GUNSHIP_TYPE;
 		}
