@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -153,7 +153,7 @@ void process_game_initialisation_phases (void)
 	char
 		operator [64],
 		variable [64];
-			
+
 	switch (game_initialisation_phase)
 	{
 
@@ -222,75 +222,75 @@ void process_game_initialisation_phases (void)
 						break;
 					}
 				}
-					
+
 				load_side_dependant_application_sound_samples (NUM_ENTITY_SIDES);
 
 				if (get_game_type () != GAME_TYPE_INVALID)
 				{
-	
+
 					if ((get_global_gunship_side () != ENTITY_SIDE_NEUTRAL) || (get_game_type () == GAME_TYPE_DEMO))
 					{
-	
+
 						if (!get_current_game_session ())
 						{
-	
+
 							session = (session_list_data_type *) malloc_heap_mem (sizeof (session_list_data_type));
 							memset (session, 0, sizeof (session_list_data_type));
 
 							session->title = (char *) malloc_heap_mem (sizeof (char) * (strlen ("Dedicated Server") + 2));
-	
+
 							sprintf (session->title, "Dedicated Server");
-	
+
 							session->type = SESSION_LIST_TYPE_HOST;
-	
+
 							session->list_id = 1;
-	
+
 							session->type_id = 1;
-	
+
 							session->join_session = NULL;
-	
+
 							session->warzone_name = "Cuba";
-	
+
 							if ((strcmp (command_line_game_initialisation_phase_path, "/0") == 0) ||
 								(strcmp (command_line_game_initialisation_phase_path, "") == 0))
 							{
-	
+
 								sprintf (session->data_path, "..\\common\\maps\\map6");
 							}
 							else
 							{
-	
+
 								sprintf (session->data_path, command_line_game_initialisation_phase_path);
 							}
-	
+
 							if ((strcmp (command_line_game_initialisation_phase_directory, "/0") == 0) ||
 								(strcmp (command_line_game_initialisation_phase_directory, "") == 0))
 							{
-	
+
 								sprintf (session->campaign_directory, "camp01");
 							}
 							else
 							{
-	
+
 								sprintf (session->campaign_directory, command_line_game_initialisation_phase_directory);
 							}
 
 							if ((strcmp (command_line_game_initialisation_phase_filename, "/0") == 0) ||
 								(strcmp (command_line_game_initialisation_phase_filename, "") == 0))
 							{
-	
+
 								sprintf (session->campaign_filename, "yemen.chc");
 							}
 							else
 							{
-	
+
 								sprintf (session->campaign_filename, command_line_game_initialisation_phase_filename);
 							}
-	
+
 							session->child = NULL;
-	
+
 							session->next = NULL;
-	
+
 							set_current_game_session (session);
 
 							if (get_game_type () == GAME_TYPE_DEMO)
@@ -370,31 +370,79 @@ void process_game_initialisation_phases (void)
 
 			if (session)
 			{
-				
-//VJ 041213 load the map specific custom textures				
-				int count;
-				
+				/////////////////////////////////////////////////////////////////////
+				//VJ 041213 load the map specific custom textures
 				//VJ here goes session->warzone_name = map name e.g. "map3"
-				
-				for( count=0; count < MAX_TEXTURES; count++ )
+				//VJ changed to read text file with directory names
+				/////////////////////////////////////////////////////////////////////
+				char directory_textdir_path[256];
+				char directory_search_path[256];
+
+				sprintf (directory_textdir_path, "..\\common\\maps\\%s\\texturedirs.txt",session->warzone_name);
+
+				if ( file_exist ( directory_textdir_path ) )
 				{
-					system_texture_override_names[count][0]='\0';
-				}
-				
-				initialize_texture_override_names ( system_texture_override_names,  session->warzone_name );
-				
-				// Now that all the screens are loaded we check to see if there is are any overrides
-				for( count=0; count < MAX_TEXTURES; count++ )
-				{
-					int retrieved_index;
-				     
-					retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
-				     
-					if( retrieved_index > 0)
+					int count;
+					FILE *ftextdir;
+					char buf[256];
+					char *p;
+
+					ftextdir = fopen(directory_textdir_path,"r");
+
+					// skip comment lines
+					fscanf(ftextdir,"%[^\n]\n",buf);
+					while (buf[0] == '#')
+							fscanf(ftextdir,"%[^\n]\n",buf);
+
+					// get directory names, can be more than one
+					while (strchr(buf,'='))
 					{
-						load_texture_override ( system_texture_override_names[count], retrieved_index, session->warzone_name);				        
-					}		
+						//format: dir1=[name] etc.
+						p = strtok(buf,"=");
+						p = strtok(NULL,"#");
+
+						if (p)
+						{
+							int i;
+							//strip leading and trailing spaces
+	   					i = strlen(p)-1;
+	   					while (i > 0 && p[i] == ' ')
+	   						i--;
+	   					p[i+1]='\0';
+							while (p[0] == ' ')
+							  p++;
+
+	      				//file mask *.bmp in correct dir
+							sprintf (directory_search_path, "\"%s\\%s\\*.bmp\"", "..\\cohokum\\graphics\\textures",p);
+
+	      				debug_log("warzone override texture directory: [%s]",directory_search_path);
+
+							for( count=0; count < MAX_TEXTURES; count++ )
+							{
+								system_texture_override_names[count][0]='\0';
+							}
+
+							initialize_texture_override_names ( system_texture_override_names,  p );
+
+							for( count=0; count < MAX_TEXTURES; count++ )
+							{
+								int retrieved_index;
+
+								retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+
+								if( retrieved_index > 0)
+								{
+									load_texture_override ( system_texture_override_names[count], retrieved_index, p);
+								}
+							}
+						}
+						fscanf(ftextdir,"%[^\n]\n",buf);
+					}
 				}
+
+				/////////////////////////////////////////////////////////////////////
+				//VJ 050106 END load warzone specific textures
+				/////////////////////////////////////////////////////////////////////
 
 				if (get_comms_model () == COMMS_MODEL_SERVER)
 				{
@@ -456,7 +504,7 @@ void process_game_initialisation_phases (void)
 
 											free_mem (session->title);
 										}
-			
+
 										session->title = (char *) malloc_heap_mem (sizeof (char) * (strlen (line) + 2));
 
 										sprintf (session->title, "%s", line);
@@ -484,7 +532,7 @@ void process_game_initialisation_phases (void)
 									}
 
 									set_ui_object_vslider_virtual_position (get_ui_object_vslider (session_briefing_area), 0.0);
-									
+
 									break;
 								}
 
@@ -685,7 +733,7 @@ void process_game_initialisation_phases (void)
 					if ( ( this_connection->is_initialised ) && ( !this_connection->one_way_hosting_setup ) )
 					{
 						// Jabberwock 031118 MP bug - too fatal - enumerate fails on correct games
-	
+
 						//schorpp "fatal" errhdl
 						if (!( direct_play_join_session () && direct_play_session_capabilities ()))
 						{
@@ -698,14 +746,14 @@ void process_game_initialisation_phases (void)
 						   	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to enumerate groups!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 							break;
 						}
-						
+
 						this_connection->this_group = direct_play_get_group_table ();
 
 						if (!(
 						direct_play_create_player () &&
 
 						direct_play_join_group () ))
-						{					
+						{
                         	add_to_pop_up_list_with_word_wrap (get_trans ("Error: failed to join group!"), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
                         	//start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
@@ -780,29 +828,35 @@ void process_game_initialisation_phases (void)
 				name = get_player_log_name (get_current_player_log ());
 
 				ASSERT (name);
-				
+
 				// Jabberwock 031118 Server side settings
 				if (command_line_wut)
 			    {
 			    	parse_WUT_file(WUT_filename);
 			    }
 			    else
+//VJ 050110 if no MP then do not check for origwut.txt
+			    if (command_line_report_to_masterserver)
 			    {
-			    	parse_WUT_file("origwut.txt");
+              	if (file_exist("origwut.txt"))
+              		parse_WUT_file("origwut.txt");
+              	else 
+              	if (file_exist("gwut146x.csv"))
+              		parse_WUT_file("gwut146x.csv");
 			    }
-			    
+
 			    session_planner_goto_button = command_line_planner_goto_button;
-			    
+
 			    session_vector_flight_model = command_line_vector_flight_model;
-			    
+
 			    session_ground_radar_ignores_infantry = command_line_ground_radar_ignores_infantry;
-			    
+
 			    session_camcom = command_line_camcom;
-			    
+
 				server_log ("separator"); // Jabberwock 031119 Server log
-				
+
 				server_log ("Campaign started: %s", session->title); // Jabberwock 031119 Server log
-				
+
 				// Jabberwock 031118 ends
 
 				sprintf (text, "%s's %s", name, session->title);
@@ -936,7 +990,7 @@ void process_game_initialisation_phases (void)
 				initialise_regen_queues ();
 
 				#if !DEMO_VERSION
-				
+
 				initialise_main_campaign_screen ();
 
 				#endif
