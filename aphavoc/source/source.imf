@@ -93,6 +93,7 @@ c_object_files    += $+ &
                      $(currentdir)\cdmusic.obj &
                      $(currentdir)\cmndline.obj &
                      $(currentdir)\wutcfg.obj &
+                     $(currentdir)\gwutcfg.obj &
                      $(currentdir)\eechini.obj &
                      $(currentdir)\servlog.obj &
                      $-
