@@ -76,7 +76,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const guide_data
+//VJ 040321 GWUT change
+//remove "const" from definition
+guide_data
    guide_database[NUM_ENTITY_SUB_TYPE_GUIDES] =
 	{
       ////////////////////////////////////////
@@ -193,7 +195,8 @@ const guide_data
 			{
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_RADIUS
 //VJ FARP bug: changed heading from 1 to 30, additional movement seems to stop bunny hopping 
-				{ TRUE,		rad (30.0) },							// GUIDE_CRITERIA_HEADING				
+//VJ 03/10/28: FARP bug: changed heading to 360, meaing all directions count 
+				{ TRUE,		rad (360.0) },							// GUIDE_CRITERIA_HEADING				
 //VJ FARP bug: changed altitude boundary from 0.005 to 0.5 m stops bunny hopping 
 				{ TRUE,		0.5 },									// GUIDE_CRITERIA_ALTITUDE
 				{ FALSE,		0.0 },									// GUIDE_CRITERIA_TRANSMIT_DATA
