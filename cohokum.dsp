@@ -4652,6 +4652,10 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_THRT.C
 # End Source File
 # Begin Source File
 
+SOURCE=.\aphavoc\source\gunships\avionics\common\co_tsd.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\AVIONICS\COMMON\CO_WP.C
 # End Source File
 # Begin Source File
