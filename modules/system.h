@@ -71,6 +71,9 @@
 // JB 030311 VC compile fix
 #define DIRECTINPUT_VERSION 0x0700
 
+// crh 030319 add ifdef to make these defines VC-specific
+#ifdef _MSC_VER
+
 #define ENV_NAME """COMANCHE_HOKUM"""
 
 #define MAJOR_VERSION 1
@@ -82,6 +85,8 @@
 #define BUILD_TYPE """X"""
 
 #define APP_NAME """Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.4.7X"""
+
+#endif /* _MSC_VER */
 // EECH VC fix
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,6 +319,9 @@ typedef struct tagKERNINGPAIR {
 
 #include "system\external\joystick.h"
 
+// crh 030320 quick hack to provide prototypes
+#include "system\external\trackir.h"
+
 #include "system\external\ev_stack.h"
 
 #include "system\external\ev_alpha.h"
@@ -386,7 +394,10 @@ typedef struct tagKERNINGPAIR {
 #define NOPROFILER
 #define NODEFERWINDOWPOS
 
+// crh 030319 Open Watcom defines FOURCC in \watcom\H\NT\mmsystem.h
+#ifndef __WATCOMC__
 typedef unsigned int FOURCC;         /* a four character code */
+#endif /* __WATCOMC__ */
 
 #include <windows.h>
 #include <windowsx.h>
@@ -394,7 +405,12 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <winnls.h>
 #include <dinput.h>
 #include <objbase.h>
+
+// crh 030319 Open Watcom doesn't have a "VFW.H" anywhere... it seems to build
+//            okay without it, but this may not be generally true
+#ifndef __WATCOMC__
 #include <vfw.h>
+#endif /* __WATCOMC__ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -432,6 +448,9 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include "system\joyevent.h"
 
 #include "system\joystick.h"
+
+// crh 030320 quick hack to provide prototypes
+#include "system\trackir.h"
 
 #include "system\ev_stack.h"
 
