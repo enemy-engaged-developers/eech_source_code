@@ -210,7 +210,7 @@ void process_ini_file(void)
                
 			debug_log("wutfile ini [%s]",WUT_filename);               
 
-            if (file_exist(WUT_filename)) 
+            if (WUT_filename[0] != 0 && file_exist(WUT_filename)) 
                command_line_wut = TRUE; 
             // wut filename checking is done elsewhere
         }    
