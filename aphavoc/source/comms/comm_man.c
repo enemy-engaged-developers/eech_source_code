@@ -113,6 +113,7 @@ SOCKADDR_IN Master2;
 int mastersocket = -1;
 int mastersocket2 = -1;
 short MasterPort = 1375;
+int num_multiplayer_refreshes = 0;
 int last_heartbeat_time = 0;
 char localplayer[256];
 char ReceiveBuffer[65535];
@@ -120,7 +121,7 @@ char SendBuffer[65535];
 int PACKET_SIZE = 4096; // This should be set from network.cpp
 SOCKADDR from;
 ServerData Servers[1000];
-int numServers;
+int numServers = 0;
 //-- Werewolf
 
 
@@ -1939,30 +1940,37 @@ int net_CheckForDataOnSocket (int p1, int p2)
 {
 	fd_set rread;
 	struct timeval to;
-	int sr;
+	int sr = -1;
 	int p;
 	
-	if (p2 > 0)
-	  p = p2;
 	if (p1 > 0)
+	{
 	  p = p1;
+	  FD_ZERO (&rread);
+	  FD_SET (p, &rread);	
+	  memset (&to, 0, sizeof (to));
+	  to.tv_sec = 0;
+	  to.tv_usec = 10;
+	  sr = select (1, &rread, NULL, NULL, &to);
+	  if (sr > 0)
+	    if (FD_ISSET (p,&rread))
+	      return 1;
+        }
+        if (p2 > 0)
+        {
+	  p = p2;
+	  FD_ZERO (&rread);
+	  FD_SET (p, &rread);	
+	  memset (&to, 0, sizeof (to));
+	  to.tv_sec = 0;
+	  to.tv_usec = 10;
+	  sr = select (1, &rread, NULL, NULL, &to);
+	  if (sr > 0)
+	    if (FD_ISSET (p,&rread))
+	      return 2;
+         }
 
-	FD_ZERO (&rread);
-	FD_SET (p, &rread);	
-
-	memset (&to, 0, sizeof (to));
-
-	to.tv_usec = 1;
-	sr = select (1, &rread, NULL, NULL, &to);
- 
-	if (sr < 0) /* There was an error */
-    	return FALSE;
-
-	if (sr > 0)
-		if (FD_ISSET (p,&rread))
-			return 1;
-
-	return -1;
+	return sr;
 }
 
 // Send a UDP packet to the masterserver
@@ -1981,14 +1989,14 @@ void net_sendDataToMaster (char *data, int servernum)
 }
 
 //This is a special function because the received data is stored in ReceiveBuffer!!
-void net_receiveData (int s1, int s2)
+void net_receiveData (int s)
 {
 	int socket;
 	int len = sizeof (SOCKADDR);
-	if (s2 > 0)
-	  socket = s2;
-	if (s1 > 0)
-	  socket = s1;
+	if (s == 1)
+	  socket = mastersocket;
+	if (s == 2)
+	  socket = mastersocket2;
 	  
 	memset (ReceiveBuffer, '\0', PACKET_SIZE);
 	recvfrom (socket, ReceiveBuffer, PACKET_SIZE, 0, &from, &len);
@@ -2033,12 +2041,14 @@ int net_connectToMaster (char *serverName, short port, int servernum)
         {
             Master.sin_family = AF_INET;
             Master.sin_addr.s_addr = ulServerAddr;
+//            Master.sin_addr.s_addr = inet_addr(serverName);
             Master.sin_port = htons (port);
         }
         else
         {
             Master2.sin_family = AF_INET;
             Master2.sin_addr.s_addr = ulServerAddr;
+//            Master2.sin_addr.s_addr = inet_addr(serverName);
             Master2.sin_port = htons (port);
         }
 
@@ -2087,34 +2097,49 @@ void net_getServerList(void)
 {
     char header[80];
     int index = 0;
-    long timeout = 0;
+    int respondingServer = 0;
+//    long timeout = 0;
 
 
-    net_init_heartbeat();
+//    net_init_heartbeat();
 
     debug_log ("GETSERVERLIST: Init");
     
     if ((mastersocket <=0) && (mastersocket2 <=0))
+    {
+    	numServers = 0;
 	return;
+    }
 
-    //Request a list of servers
-    sprintf(SendBuffer, "Y");
-    if (mastersocket > 0 )
-      net_sendDataToMaster (SendBuffer, 1);
-    if (mastersocket2 > 0 )
-      net_sendDataToMaster (SendBuffer, 2);
 
-    debug_log ("GETSERVERLIST: Request sent");
+    if (num_multiplayer_refreshes == 1)
+    {
+      //Request a list of servers
+      sprintf(SendBuffer, "Y");
+      if (mastersocket > 0 )
+        net_sendDataToMaster (SendBuffer, 1);
+      if (mastersocket2 > 0 )
+        net_sendDataToMaster (SendBuffer, 2);
+        
+      debug_log ("GETSERVERLIST: Request sent");
+    }
+    else if (num_multiplayer_refreshes > 2)
+    {
+          num_multiplayer_refreshes = 0;
+    }
 
-		do {
-		timeout++;
-		} while ((net_CheckForDataOnSocket (mastersocket, mastersocket2)!=1) && (timeout < 6000000));
-		if (timeout<6000000)
+//		do {
+//		timeout++;
+//		} while ((net_CheckForDataOnSocket (mastersocket, mastersocket2)!=1) && (timeout < 6000000));
+//		if (timeout<6000000)
+//		{
+		respondingServer = net_CheckForDataOnSocket (mastersocket, mastersocket2);
+		if (respondingServer > 0)
 		{
 			do
 			{
-				net_receiveData (mastersocket, mastersocket2); //The received data is in ReceiveBuffer!!
-    debug_log ("GETSERVERLIST: Received: %s", ReceiveBuffer);
+				net_receiveData (respondingServer); //The received data is in ReceiveBuffer!!
+				debug_log ("GETSERVERLIST: Received: %s", ReceiveBuffer);
 
 				if (ReceiveBuffer[0] == 'W')
 				{
@@ -2126,13 +2151,10 @@ void net_getServerList(void)
 					index++;
 				}
 			} while (strcmp(ReceiveBuffer, "X Done!") != 0);
+			numServers = index;
+			sprintf(Servers[index].Version, "");
 		}
-		else
-			index=-1;
-
-		numServers = index;
-		sprintf(Servers[index+1].Version, "");
-		net_uninit_heartbeat();
+//		net_uninit_heartbeat();
 }
 
 

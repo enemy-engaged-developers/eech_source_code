@@ -949,6 +949,9 @@ void full_initialise_game (void)
 
     	parse_WUT_file(WUT_filename);
     }
+    
+    //Werewolf
+    net_init_heartbeat();
 
 //	play_avi ( "wenesday.avi", 0 );
 }

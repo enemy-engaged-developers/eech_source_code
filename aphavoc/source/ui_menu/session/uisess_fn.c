@@ -539,7 +539,7 @@ void session_update_session_list (void)
 		open_pack_buffer (tx_pack_buffer, command_line_comms_pack_buffer_size);
 	}
 
-	game_update_time = TIME_2_SECOND * 5;
+	game_update_time = TIME_2_SECOND;
 
 	if (update_ticks < get_system_time ())
 	{
@@ -553,6 +553,8 @@ void session_update_session_list (void)
 		data_exchange ();
 
 		session_list_rescan_function (NULL, NULL);
+
+		num_multiplayer_refreshes++;
 
 		update_ticks = get_system_time () + game_update_time;
 

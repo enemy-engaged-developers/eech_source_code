@@ -134,6 +134,9 @@ void deinitialise_game (void)
 
    deinitialise_comms ();
 
+	//Werewolf
+	net_uninit_heartbeat();
+
 	////////////////////////////////////////
 	//
 	// INITIALISE LANGUAGE DATABASE

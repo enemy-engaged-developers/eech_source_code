@@ -214,9 +214,6 @@ void flight (void)
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		server_create_session ();
-		//-- Werewolf
-		net_init_heartbeat ();
-		//-- Werewolf
 	}
 
 	////////////////////////////////////////
@@ -429,10 +426,6 @@ void flight (void)
 	}
 
 	ASSERT ((get_ui_screen_stack_head () != campaign_screen) && (get_ui_screen_stack_head () != options_screen));
-
-	//-- Werewolf
-	net_uninit_heartbeat ();
-	//-- Werewolf
 
 	////////////////////////////////////////
 	set_game_status (GAME_STATUS_UNINITIALISING);
