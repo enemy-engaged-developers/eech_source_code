@@ -807,7 +807,7 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 	ASSERT (main_3d_env);
 
 	//VJ 050213 bug fix scale not correct
-	scalefactor = global_hud_size2/2.0;
+	scalefactor = global_hud_size2;
 
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 
