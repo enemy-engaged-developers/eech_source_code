@@ -589,12 +589,14 @@ static void mouse_down_event (event *ev)
 
 static void mouse_wheel_down_event (event *ev)
 {
-	mouse_wheel_down++;
+	if ((command_line_eo_zoom_joystick_index == -1)/*&&(command_line_eo_zoom_joystick_axis == -1)*/)	// Retro 12Dez2004
+		mouse_wheel_down++;
 }
 
 static void mouse_wheel_up_event (event *ev)
 {
-	mouse_wheel_up++;
+	if ((command_line_eo_zoom_joystick_index == -1)/*&&(command_line_eo_zoom_joystick_axis == -1)*/)	// Retro 12Dez2004
+		mouse_wheel_up++;
 }
 
 
