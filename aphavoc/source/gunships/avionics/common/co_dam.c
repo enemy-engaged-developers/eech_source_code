@@ -185,6 +185,23 @@ void partially_repair_gunship_damage (void)
 
 			break;
 		}
+		////Moje 030817 Start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			partially_repair_blackhawk_damage ();
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			partially_repair_hind_damage ();
+
+			break;
+		}
+		////Moje 020817 End
 	}
 }
 
@@ -230,6 +247,22 @@ void repair_gunship_weapon_damage (void)
 
 			break;
 		}
+		////Moje 030817 start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			repair_blackhawk_weapon_damage ();
+
+			break;
+		}
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			repair_hind_weapon_damage ();
+
+			break;
+		}
+		////Moje 030817 end
 	}
 }
 
@@ -275,6 +308,22 @@ void damage_gunship (gunship_damage_levels damage_level)
 
 			break;
 		}
+		////Moje 030817 start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			damage_blackhawk (damage_level);
+
+			break;
+		}
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			damage_hind (damage_level);
+
+			break;
+		}
+		////Moje 030817 end
 	}
 }
 
@@ -321,6 +370,24 @@ int get_gunship_comms_equipment_ok (void)
 
 			break;
 		}
+		////Moje 030817 start
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			status = !blackhawk_damage.communications;
+
+			break;
+		}
+		////////////////////////////////////////
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			status = !hind_damage.communications;
+
+			break;
+		}
+		////Moje 030817 end
 		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
@@ -376,6 +443,22 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 
 			break;
 		}
+		////Moje 030817 start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			notify_blackhawk_avionics_of_dynamics_fault (damage);
+
+			break;
+		}
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			notify_hind_avionics_of_dynamics_fault (damage);
+
+			break;
+		}
+		////Moje 030817 end
 	}
 }
 
@@ -454,6 +537,26 @@ void fully_repair_local_entity_avionics (entity *en)
 
 				break;
 			}
+			////Moje 030817 start
+			case GUNSHIP_TYPE_BLACKHAWK:
+			////////////////////////////////////////
+			{
+				fully_repair_blackhawk_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, blackhawk_damage.flags);
+
+				break;
+			}
+			case GUNSHIP_TYPE_HIND:
+			////////////////////////////////////////
+			{
+				fully_repair_hind_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
+
+				break;
+			}
+			////Moje 030817 end
 		}
 	}
 }
@@ -512,6 +615,26 @@ void partially_repair_local_entity_avionics (entity *en)
 
 				break;
 			}
+			////Moje 030817 start
+			case GUNSHIP_TYPE_BLACKHAWK:
+			////////////////////////////////////////
+			{
+				partially_repair_blackhawk_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, blackhawk_damage.flags);
+
+				break;
+			}
+			case GUNSHIP_TYPE_HIND:
+			////////////////////////////////////////
+			{
+				partially_repair_hind_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
+
+				break;
+			}
+			////Moje 030817 end
 		}
 	}
 }
@@ -576,6 +699,30 @@ void load_gunship_avionics_damage (void)
 
 			break;
 		}
+		////Moje 030817 start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			blackhawk_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_blackhawk_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load blackhawk damage: %x", blackhawk_damage.flags);
+
+			break;
+		}
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			hind_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_hind_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load Hind damage: %x", hind_damage.flags);
+
+			break;
+		}
+		////Moje 030817 end
 	}
 }
 
@@ -629,6 +776,26 @@ void save_gunship_avionics_damage (void)
 
 			break;
 		}
+		////Moje 030817 start
+		case GUNSHIP_TYPE_BLACKHAWK:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, blackhawk_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Blackhawk damage: %x", blackhawk_damage);
+
+			break;
+		}
+		case GUNSHIP_TYPE_HIND:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, hind_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save Hind damage: %x", hind_damage);
+
+			break;
+		}
+		////Moje 0300817 end
 	}
 }
 
