@@ -780,6 +780,8 @@ static int limit_pitch (int pitch, int *step_direction)
 static void draw_pitch_ladder (int draw_horizon_line_only)
 {
 	float
+		//VJ 050204 bug fix scale not correct
+		scalefactor,
 		pitch,
 		mod_pitch,
 		tan_mod_pitch,
@@ -804,6 +806,12 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	ASSERT (main_3d_env);
 
+	//VJ 050204 bug fix scale not correct
+	if (get_global_unscaled_displays ())
+		scalefactor = global_hud_size;
+	else
+		scalefactor = 1.0;
+
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
@@ -822,12 +830,16 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 	x_scale /= tan (main_3d_env->width_view_angle * 0.5);
 	x_scale /= (active_2d_environment->vp.x_max - active_2d_environment->vp.x_min) * 0.5;
 	x_scale *= -sin (roll);
+//VJ 050204 bug fix scale not correct
+	x_scale *= hud_screen_x_scale * scalefactor;
 
 	y_scale = (main_3d_env->clip_ymax - main_3d_env->clip_ymin) * 0.5;
 	y_scale /= tan (main_3d_env->height_view_angle * 0.5);
 	y_scale /= (active_2d_environment->vp.y_max - active_2d_environment->vp.y_min) * 0.5;
 	y_scale *= cos (roll);
-
+//VJ 050204 bug fix scale not correct
+	y_scale *= hud_screen_y_scale * scalefactor;
+	
 	x_horizon = tan_mod_pitch * x_scale;
 	y_horizon = tan_mod_pitch * y_scale;
 
@@ -2800,8 +2812,9 @@ void draw_apache_hud (void)
 	}
 
 //VJ 050126 hud mod start 
-	hud_screen_x_scale = global_hud_size;
-	hud_screen_y_scale = global_hud_size;
+	//VJ 050204 bug fix do not touch the scale
+	//hud_screen_x_scale = global_hud_size;
+	//hud_screen_y_scale = global_hud_size;
 	hsd.hud_viewport_x_min = hud_viewport_x_min; 
 	hsd.hud_viewport_y_min = hud_viewport_y_min; 
 	hsd.hud_viewport_x_max = hud_viewport_x_max; 
