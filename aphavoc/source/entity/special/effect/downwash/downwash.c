@@ -399,8 +399,6 @@ void draw_downwash_effect(entity *en)
 	float
 		main_rotor_radius,
 		main_rotor_rpm,
-		offset_x,
-		offset_z,
 		min_altitude;
 
 	int

@@ -48,8 +48,6 @@ void initialise_downwash_database()
 
 static void	initialise_misc_downwash_database()
 {
-	downwash_component
-		*downwash_info;
 
 	downwash_data
 		*this_downwash;
