@@ -86,7 +86,7 @@ const effect_data
 	  // Xhit: added for downwash effect (030328)
 	  // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_DOWNWASH
       {
-         FALSE,															// constructed locally
+         TRUE,															// constructed locally
       },
       // ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_EXPLOSION_PARTICLE
       {
