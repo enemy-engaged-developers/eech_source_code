@@ -70,6 +70,9 @@
 
 #include "misc.h"
 
+//VJ 050304 needed for texture colour mod
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -963,6 +966,42 @@ void initialise_3d_thailand_terrain_types ( void )
 	terrain_texture_trench_detail							= get_system_texture_index ( "TERRAIN_THAILAND_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
 
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+		terrain_texture_sea_colour_pass								= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass							= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass								= get_system_texture_index ( "TERRAIN_colour_pass_4" );
+		terrain_texture_forest_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_builtup_area1_colour_pass					= get_system_texture_index ( "TERRAIN_THAI_CITY4" );
+		terrain_texture_builtup_area2_colour_pass					= get_system_texture_index ( "TERRAIN_THAI_CITY3" );
+		terrain_texture_builtup_area3_colour_pass					= get_system_texture_index ( "TERRAIN_THAI_CITY2" );
+		terrain_texture_builtup_area4_colour_pass					= get_system_texture_index ( "TERRAIN_THAI_CITY1" );
+		terrain_texture_road_colour_pass								= get_system_texture_index ( "TERRAIN_colour_pass_ROAD" );
+		terrain_texture_track_colour_pass							= get_system_texture_index ( "TERRAIN_THAI_DIRT_TRACK" );
+		terrain_texture_river_colour_pass							= get_system_texture_index ( "TERRAIN_THAILAND_RIVER" );
+		terrain_texture_reservoir_colour_pass						= get_system_texture_index ( "TERRAIN_THAILAND_RIVER" );
+		terrain_texture_road_bank_colour_pass						= get_system_texture_index ( "TERRAIN_colour_pass_4" );
+		terrain_texture_river_bank_colour_pass						= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_field1_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass							= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass							= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass							= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass					= get_system_texture_index ( "TERRAIN_SWAMP1" );
+		terrain_texture_altered_land2_colour_pass					= get_system_texture_index ( "TERRAIN_SWAMP2" );
+		terrain_texture_altered_land3_colour_pass					= get_system_texture_index ( "TERRAIN_HIGHLAND" );
+		terrain_texture_hedge_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_wall_colour_pass								= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_trench_colour_pass							= get_system_texture_index ( "TERRAIN_THAILAND_RIVER" );
+	}
+	
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
@@ -1120,6 +1159,42 @@ void initialise_3d_cuba_terrain_types ( void )
 	terrain_texture_wall_colour_pass							= get_system_texture_index ( "COLOUR_PASS_ROCK" );
 	terrain_texture_trench_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
+	
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+		terrain_texture_sea_colour_pass								= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass							= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass								= get_system_texture_index ( "TERRAIN_DETAIL4" );
+		terrain_texture_forest_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_builtup_area1_colour_pass					= get_system_texture_index ( "TERRAIN_CUBA_CITY4" );
+		terrain_texture_builtup_area2_colour_pass					= get_system_texture_index ( "TERRAIN_CUBA_CITY3" );
+		terrain_texture_builtup_area3_colour_pass					= get_system_texture_index ( "TERRAIN_CUBA_CITY2" );
+		terrain_texture_builtup_area4_colour_pass					= get_system_texture_index ( "TERRAIN_CUBA_CITY1" );
+		terrain_texture_road_colour_pass								= get_system_texture_index ( "TERRAIN_DETAILROAD" );
+		terrain_texture_track_colour_pass							= get_system_texture_index ( "TERRAIN_THAI_TRACK" );
+		terrain_texture_river_colour_pass							= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_reservoir_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_road_bank_colour_pass						= get_system_texture_index ( "TERRAIN_DETAIL4" );
+		terrain_texture_river_bank_colour_pass						= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_field1_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass							= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass							= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass							= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass					= get_system_texture_index ( "TERRAIN_SCRUB" );
+		terrain_texture_altered_land2_colour_pass					= get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+		terrain_texture_altered_land3_colour_pass					= get_system_texture_index ( "TERRAIN_SNOW" );
+		terrain_texture_hedge_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_wall_colour_pass								= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_trench_colour_pass							= get_system_texture_index ( "TERRAIN_RIVER" );
+	}
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
@@ -1280,6 +1355,42 @@ void initialise_3d_georgia_terrain_types ( void )
 	terrain_texture_trench_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
 
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+		terrain_texture_sea_colour_pass								= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass							= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass								= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+		terrain_texture_forest_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_builtup_area1_colour_pass					= get_system_texture_index ( "TERRAIN_GRG_CITY4" );
+		terrain_texture_builtup_area2_colour_pass					= get_system_texture_index ( "TERRAIN_GRG_CITY3" );
+		terrain_texture_builtup_area3_colour_pass					= get_system_texture_index ( "TERRAIN_GRG_CITY2" );
+		terrain_texture_builtup_area4_colour_pass					= get_system_texture_index ( "TERRAIN_GRG_CITY1" );
+		terrain_texture_road_colour_pass								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_track_colour_pass							= get_system_texture_index ( "TERRAIN_THAI_TRACK" );
+		terrain_texture_river_colour_pass							= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_reservoir_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_road_bank_colour_pass						= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+		terrain_texture_river_bank_colour_pass						= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_field1_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass							= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass							= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass							= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass					= get_system_texture_index ( "TERRAIN_SCRUB" );
+		terrain_texture_altered_land2_colour_pass					= get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+		terrain_texture_altered_land3_colour_pass					= get_system_texture_index ( "TERRAIN_SNOW" );
+		terrain_texture_hedge_colour_pass							= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_wall_colour_pass								= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_trench_colour_pass							= get_system_texture_index ( "TERRAIN_RIVER" );
+	}
+
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
@@ -1358,8 +1469,9 @@ void initialise_3d_lebanon_terrain_types ( void )
 		reflection_texture_index;
 
 	set_3d_rain_special_snow_flag ( FALSE );
-
-	terrain_texture_sea_detail									= get_system_texture_index ( "TERRAIN_SEA_1" );
+	
+	terrain_texture_sea_detail									= get_system_texture_index ( "TERRAIN_TRYOUT" );
+//	terrain_texture_sea_detail									= get_system_texture_index ( "TERRAIN_SEA_1" );
 	terrain_texture_sea_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SEA_LEBANON" );
 	terrain_texture_beach_detail								= get_system_texture_index ( "TERRAIN_BEACH" );
 	terrain_texture_beach_colour_pass						= get_system_texture_index ( "COLOUR_PASS_LEBANON" );
@@ -1399,7 +1511,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 	terrain_texture_river_bank_detail						= get_system_texture_index ( "TERRAIN_BEACH" );
 	terrain_texture_river_bank_colour_pass					= get_system_texture_index ( "COLOUR_PASS_LEBANON" );
 	terrain_texture_rail_bank_detail							= 0;
-	terrain_texture_rail_bank_colour_pass					= 0;
+	terrain_texture_rail_bank_colour_pass					= 0;	
 	terrain_texture_field1_detail								= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
 	terrain_texture_field1_colour_pass						= get_system_texture_index ( "COLOUR_PASS_LEBANON" );
 	terrain_texture_field2_detail								= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
@@ -1435,6 +1547,43 @@ void initialise_3d_lebanon_terrain_types ( void )
 	terrain_texture_trench_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
 
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+
+		terrain_texture_sea_colour_pass							= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass						= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass							= get_system_texture_index ( "TERRAIN_DETAIL_LEBANON" );
+		terrain_texture_forest_colour_pass						= get_system_texture_index ( "TERRAIN_TREE_CANOPY_LEBANON" );
+		terrain_texture_builtup_area1_colour_pass				= get_system_texture_index ( "CP_LEBANON_V2_CITY1" );
+		terrain_texture_builtup_area2_colour_pass				= get_system_texture_index ( "CP_LEBANON_V2_CITY2" );
+		terrain_texture_builtup_area3_colour_pass				= get_system_texture_index ( "CP_LEBANON_V2_CITY3" );
+		terrain_texture_builtup_area4_colour_pass				= get_system_texture_index ( "CP_LEBANON_V2_CITY4" );
+		terrain_texture_road_colour_pass							= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_track_colour_pass						= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_river_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_reservoir_colour_pass					= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_road_bank_colour_pass					= get_system_texture_index ( "TERRAIN_DETAIL_LEBANON" );
+		terrain_texture_river_bank_colour_pass					= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_field1_colour_pass						= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass						= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass						= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass						= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass						= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass						= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass						= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "TERRAIN_DETAIL_LEBANON" );
+		terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "TERRAIN_BARE_ROCK_LEBANON" );
+		terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "TERRAIN_SNOW_LEBANON" );
+		terrain_texture_hedge_colour_pass						= get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+		terrain_texture_wall_colour_pass							= get_system_texture_index ( "TERRAIN_WALL_LEBANON" );
+		terrain_texture_trench_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+	}
+	
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_DESERT;
@@ -1474,16 +1623,12 @@ void initialise_3d_lebanon_terrain_types ( void )
 	terrain_surface_wall										= SURFACE_TYPE_DESERT;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
-
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
-
-//	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
 
 	if ( reflection_texture_index != -1 )
 	{
-
 		set_object_3d_reflection_texture_map ( reflection_texture_index );
 	}
 
@@ -1595,6 +1740,42 @@ void initialise_3d_yemen_terrain_types ( void )
 	terrain_texture_trench_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
 
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+		terrain_texture_sea_colour_pass								= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass							= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass								= get_system_texture_index ( "TERRAIN_YEMEN_GRITTY" );
+		terrain_texture_forest_colour_pass							= get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+		terrain_texture_builtup_area1_colour_pass					= get_system_texture_index ( "YEMEN_CITY3" );
+		terrain_texture_builtup_area2_colour_pass					= get_system_texture_index ( "YEMEN_CITY1" );
+		terrain_texture_builtup_area3_colour_pass					= get_system_texture_index ( "YEMEN_CITY1" );
+		terrain_texture_builtup_area4_colour_pass					= get_system_texture_index ( "YEMEN_CITY1" );
+		terrain_texture_road_colour_pass								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_track_colour_pass							= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_river_colour_pass							= get_system_texture_index ( "TERRAIN_YEMEN_STONY" );
+		terrain_texture_reservoir_colour_pass						= get_system_texture_index ( "TERRAIN_YEMEN_GRITTY" );
+		terrain_texture_road_bank_colour_pass						= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+		terrain_texture_river_bank_colour_pass						= get_system_texture_index ( "TERRAIN_YEMEN_GRITTY" );
+		terrain_texture_field1_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass							= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass							= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass							= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass							= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass							= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass							= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass					= get_system_texture_index ( "TERRAIN_YEMEN_BAKED" );
+		terrain_texture_altered_land2_colour_pass					= get_system_texture_index ( "TERRAIN_YEMEN_STONY" );
+		terrain_texture_altered_land3_colour_pass					= get_system_texture_index ( "TERRAIN_YEMEN_LUNAR" );
+		terrain_texture_hedge_colour_pass							= get_system_texture_index ( "TERRAIN_YEMEN_STONY" );
+		terrain_texture_wall_colour_pass								= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+		terrain_texture_trench_colour_pass							= get_system_texture_index ( "TERRAIN_RIVER" );
+	}
+	
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
@@ -1673,6 +1854,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 		reflection_texture_index;
 
 	set_3d_rain_special_snow_flag ( FALSE );
+	
 	terrain_texture_sea_detail									= get_system_texture_index ( "TERRAIN_SEA_1" );
 	terrain_texture_sea_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SEA_LEBANON" );
 	terrain_texture_beach_detail								= get_system_texture_index ( "TERRAIN_BEACH" );
@@ -1751,6 +1933,42 @@ void initialise_3d_taiwan_terrain_types ( void )
 	terrain_texture_wall_colour_pass							= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
 	terrain_texture_trench_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
 	terrain_texture_trench_colour_pass						= 0;
+
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+	{
+		terrain_texture_sea_colour_pass							= get_system_texture_index ( "TERRAIN_SEA_1" );
+		terrain_texture_beach_colour_pass						= get_system_texture_index ( "TERRAIN_BEACH" );
+		terrain_texture_land_colour_pass							= get_system_texture_index ( "TERRAIN_HIGHLAND" );
+		terrain_texture_forest_colour_pass						= get_system_texture_index ( "TERRAIN_TREE_CANOPY_LEBANON" );
+		terrain_texture_builtup_area1_colour_pass				= get_system_texture_index ( "CP_THAI_V2_CITY1" );
+		terrain_texture_builtup_area2_colour_pass				= get_system_texture_index ( "CP_THAI_V2_CITY2" );
+		terrain_texture_builtup_area3_colour_pass				= get_system_texture_index ( "CP_THAI_V2_CITY3" );
+		terrain_texture_builtup_area4_colour_pass				= get_system_texture_index ( "CP_THAI_V2_CITY4" );
+		terrain_texture_road_colour_pass							= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_track_colour_pass						= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+		terrain_texture_river_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_reservoir_colour_pass					= get_system_texture_index ( "TERRAIN_RIVER" );
+		terrain_texture_road_bank_colour_pass					= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+		terrain_texture_river_bank_colour_pass					= get_system_texture_index ( "TERRAIN_YEMEN_GRITTY" );	
+		terrain_texture_field1_colour_pass						= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field2_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field3_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field4_colour_pass						= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_field5_colour_pass						= get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+		terrain_texture_field6_colour_pass						= get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+		terrain_texture_field7_colour_pass						= get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+		terrain_texture_field8_colour_pass						= get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+		terrain_texture_field9_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+		terrain_texture_field10_colour_pass						= get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+		terrain_texture_field11_colour_pass						= get_system_texture_index ( "TERRAIN_CORNFIELD" );
+		terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "TERRAIN_YEMEN_BAKEDv" );
+		terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "TERRAIN_SCRUB" );
+		terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "TERRAIN_YEMEN_STONY" );
+		terrain_texture_hedge_colour_pass						= get_system_texture_index ( "TERRAIN_YEMEN_STONY" );
+		terrain_texture_wall_colour_pass							= get_system_texture_index ( "CP_LEBANON_V2_CITY3" );
+		terrain_texture_trench_colour_pass						= get_system_texture_index ( "TERRAIN_RIVER" );
+	}
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	terrain_surface_sea										= SURFACE_TYPE_WATER;

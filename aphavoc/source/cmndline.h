@@ -177,7 +177,8 @@ extern int
 	command_line_TIR_6DOF,										// Retro 6Feb2005
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
-	global_hud_alpha, // VJ 050126 hud mod: background 
+	global_hud_alpha, 									// VJ 050126 hud mod: background 
+	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,
