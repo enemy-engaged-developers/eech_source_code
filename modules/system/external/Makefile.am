@@ -1,5 +1,6 @@
-noinst_LIBRARIES = libexternal.a
-libexternal_a_SOURCES =
+noinst_LTLIBRARIES = libexternal.la
+libexternal_la_SOURCES = 
 SUBDIRS =
-LDADD =
-INCLUDES = -I$(top_srcdir)/modules -I../.. -I..
+LDFLAGS = @STATIC_LIB@
+LIBADD = \
+INCLUDES = -I$(top_srcdir)/modules -I.. -I$(top_srcdir)/aphavoc/source
