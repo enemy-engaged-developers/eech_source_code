@@ -132,6 +132,18 @@ void set_raw_external_view_entity (entity *en)
 
 				break;
 			}
+			
+			// Jabberwock 031009 Satellite view
+			////////////////////////////////////////
+			case CAMERA_MODE_SATELLITE:
+			////////////////////////////////////////
+			{
+				reset_satellite_camera (raw);
+
+				break;
+			}
+			// Jabberwock 031009 ends			
+			
 			////////////////////////////////////////
 			case CAMERA_MODE_EJECT:
 			////////////////////////////////////////

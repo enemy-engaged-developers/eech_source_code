@@ -1238,11 +1238,18 @@ static int check_visible_entity (ui_object *obj, entity *en)
 
 void map_centralise_function (ui_object *obj, void *arg)
 {
-	vec3d
-		pos;
+	//vec3d
+	//	pos;
 
 	map_dimension_type
 		*map_dimensions;
+		
+	entity
+		*en,
+		*group;
+	
+	int
+		side;
 
 	if (((int) arg) == BUTTON_STATE_DOWN)
 	{
@@ -1251,26 +1258,55 @@ void map_centralise_function (ui_object *obj, void *arg)
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 		ASSERT (map_dimensions);
+		
+		// Jabberwock 031007 Campaign Commander - cancel mission
+		
+		
+		map_dimensions->selected_entity = NULL;
 
-		//
-		// Disable Tracking
-		//
-			
-		force_map_layer_control_object (MAP_LAYER_CONTROL_TRACK_PLAYER, FALSE);
-
-		//
-		// work out click position in world coords
-		//
+		side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 	
-		pos.x = get_mouse_x ();
-		pos.z = get_mouse_y ();
+		en = get_map_mouse_over_entity (map_dimensions);
+		
+		if ((en) && (get_local_entity_type (en) == ENTITY_TYPE_TASK) && (command_line_camcom) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+		{
+			if (get_local_entity_int_value (en, INT_TYPE_SIDE) == side) 
+			{
+				if (get_local_task_list_type (en) == LIST_TYPE_UNASSIGNED_TASK)
+				{
+					notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, en, NULL, TASK_TERMINATED_ABORTED);
+				}
+				else
+				{
+					group = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
+					
+					notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, en, en, TASK_TERMINATED_STOP_TIME_REACHED);
+				}
+			}
+		}
+		// Jabberwock 031007 ends
+		//else  // Jabberwock 031020 Fine mouse panning - commented out, as centralising is not needed and quirky
+		{
+			//
+			// Disable Tracking
+			//
 
-		map_get_world_coords_from_screen (obj, &pos, &pos);
-	
-		map_dimensions->x = pos.x;
-		map_dimensions->z = pos.z;
+		//	force_map_layer_control_object (MAP_LAYER_CONTROL_TRACK_PLAYER, FALSE); 
 
-		bound_map_extents (obj, NULL, NULL);
+			//
+			// work out click position in world coords
+			//
+
+		//	pos.x = get_mouse_x ();
+		//	pos.z = get_mouse_y ();
+
+		//	map_get_world_coords_from_screen (obj, &pos, &pos);
+
+		//	map_dimensions->x = pos.x;
+		//	map_dimensions->z = pos.z;
+
+		//	bound_map_extents (obj, NULL, NULL);
+		}
 	}
 }
 
@@ -4783,6 +4819,117 @@ void shift_current_map_right_event (event *ev)
 	}
 }
 
+// Jabberwock 031020 Fine mouse panning
+
+void fine_current_map_up_event (event *ev)
+{
+	ui_object
+		*obj;
+
+	map_dimension_type
+		*map_dimensions;
+
+	float
+		d;
+
+	obj = last_drawn_map_object;
+
+	if ((obj) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+
+		d = map_dimensions->size * 0.01;
+	
+		map_dimensions->z += d;
+
+		bound_map_extents (obj, NULL, NULL);
+	}
+}
+
+void fine_current_map_down_event (event *ev)
+{
+	ui_object
+		*obj;
+
+	map_dimension_type
+		*map_dimensions;
+
+	float
+		d;
+
+	obj = last_drawn_map_object;
+
+	if ((obj) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+
+		d = map_dimensions->size * 0.01;
+	
+		map_dimensions->z -= d;
+
+		bound_map_extents (obj, NULL, NULL);
+	}
+}
+
+void fine_current_map_left_event (event *ev)
+{
+	ui_object
+		*obj;
+
+	map_dimension_type
+		*map_dimensions;
+
+	float
+		d;
+
+	obj = last_drawn_map_object;
+
+	if ((obj) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+
+		d = map_dimensions->size * 0.01;
+	
+		map_dimensions->x -= d;
+
+		bound_map_extents (obj, NULL, NULL);
+	}
+}
+
+void fine_current_map_right_event (event *ev)
+{
+	ui_object
+		*obj;
+
+	map_dimension_type
+		*map_dimensions;
+
+	float
+		d;
+
+	obj = last_drawn_map_object;
+
+	if ((obj) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+
+		d = map_dimensions->size * 0.01;
+	
+		map_dimensions->x += d;
+
+		bound_map_extents (obj, NULL, NULL);
+	}
+}
+// Jabberwock 031020 ends
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5089,3 +5236,69 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Jabberwock 031009 Satellite view
+
+void switch_to_satellite_event (event *ev)
+{
+	map_dimension_type
+		*map_dimensions;
+			
+	entity
+		*key,
+		*en,
+		*objective;
+
+	ui_object
+			*obj;
+				
+	obj = last_drawn_map_object;
+
+	if (obj)	
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		map_dimensions->selected_entity = NULL;
+	
+		en = get_map_mouse_over_entity (map_dimensions);
+		
+		key = NULL;
+		
+		if (en)
+		{
+			switch (get_local_entity_type (en))	
+			{
+				case ENTITY_TYPE_KEYSITE:
+				case ENTITY_TYPE_WAYPOINT:
+				{
+					key = en;
+					
+					break;
+				}
+				case ENTITY_TYPE_TASK:
+				{
+					objective = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
+				
+					if (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE)
+					{
+						key = objective;
+					}
+					
+					break;
+				}
+			}
+		}
+		if (key)
+		{
+			ASSERT (get_local_entity_int_value (key, INT_TYPE_VIEWABLE));
+				
+			notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_SATELLITE);
+			
+			set_external_view_entity (key);
+			
+			toggle_in_flight_game_modes (NULL);
+		}
+	}
+}
+// Jabberwock 031009 ends
+

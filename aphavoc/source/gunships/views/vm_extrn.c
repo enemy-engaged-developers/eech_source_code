@@ -663,7 +663,16 @@ void draw_external_3d_view (void)
    // draw 3D scene
    //
 
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	// Jabberwock 031009 - Tint for satellite view
+	
+	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
+	{
+		set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUE, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_MEDIUM);
+	}
+	else
+	{
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	}
 
 	draw_main_3d_scene (&main_vp);
 
@@ -686,7 +695,8 @@ void draw_external_3d_view (void)
 
 		ASSERT (source);
 
-		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+		// Jabberwock 031016 Inset view
+		target = get_inset ();
 
 		if (target)
 		{
@@ -695,6 +705,7 @@ void draw_external_3d_view (void)
 				case CAMERA_MODE_CHASE:
 				case CAMERA_MODE_DROP:
 				case CAMERA_MODE_STATIC:
+				case CAMERA_MODE_SATELLITE:		// Jabberwock 031009 Satellite view
 				case CAMERA_MODE_FLY_BY:
 				case CAMERA_MODE_CINEMATIC:
 				{
@@ -814,7 +825,8 @@ void draw_external_3d_view (void)
 	{
 		if (!get_display_exit_message())
 		{
-			if (get_global_display_external_view_name ())
+			// Jabberwock 031009 Satellite view - turn off text for keysites
+			if (get_global_display_external_view_name () && (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE))
 			{
 				display_external_view_text ();
 			}
@@ -888,6 +900,7 @@ void select_external_view (void)
 			case CAMERA_MODE_END_OF_MISSION:
 			case CAMERA_MODE_DROP:
 			case CAMERA_MODE_STATIC:
+//			case CAMERA_MODE_SATELLITE:		// Jabberwock 031009 Satellite view
 			case CAMERA_MODE_EJECT:
 			//case CAMERA_MODE_FLY_BY:
 			//case CAMERA_MODE_CINEMATIC:

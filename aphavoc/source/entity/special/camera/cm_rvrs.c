@@ -152,7 +152,7 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 	ASSERT (get_camera_entity ());
 
 	raw = get_local_entity_data (get_camera_entity ());
-
+	
 	//
 	// get camera position
 	//
@@ -266,6 +266,12 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 	direction.z = target_position.z - raw->position.z;
 
 	length = (direction.x * direction.x) + (direction.y * direction.y) + (direction.z * direction.z);
+	
+	if (source == target)
+	{
+		length = 200; // Jabberwock 031016
+	
+	}
 
 	if (length > 1.0)
 	{

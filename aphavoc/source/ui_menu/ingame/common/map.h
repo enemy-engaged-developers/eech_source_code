@@ -275,12 +275,20 @@ extern void shift_current_map_down_event (event *ev);
 extern void shift_current_map_left_event (event *ev);
 extern void shift_current_map_right_event (event *ev);
 
+extern void fine_current_map_up_event (event *ev); // Jabberwock 031020 Fine mouse panning
+extern void fine_current_map_down_event (event *ev);
+extern void fine_current_map_left_event (event *ev);
+extern void fine_current_map_right_event (event *ev); // Jabberwock 031020 ends
+
+
 extern void zoom_in_current_map_event (event *ev);
 extern void zoom_out_current_map_event (event *ev);
 
 extern void centre_current_map_on_player (event *ev);
 
 extern void map_wheel_zoom_in_event (event *ev); // Jabberwock 031002
+
+extern void switch_to_satellite_event (event *ev); // Jabberwock 031009 Satellite view
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

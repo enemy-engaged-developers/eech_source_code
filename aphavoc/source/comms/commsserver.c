@@ -302,44 +302,33 @@ void validate_connections (void)
 	
 				if (destroy_connection->validation_count > 3)
 				{
-	
-					if (destroy_connection->pilot_entity)
+                                 	if (destroy_connection->pilot_entity)
 					{
-	
-						entity
-							*gunship;
-	
-						gunship = get_local_entity_parent (destroy_connection->pilot_entity, LIST_TYPE_AIRCREW);
+ 					     entity
+ 						*gunship;
+      						gunship = get_local_entity_parent (destroy_connection->pilot_entity, LIST_TYPE_AIRCREW);
 	
 						if (gunship)
 						{
-		
 							set_client_server_entity_int_value (gunship, INT_TYPE_PLAYER, ENTITY_PLAYER_AI);
-		
 							debug_log ("SERVER: TIMEOUT: Resetting clients gunship to AI");
 						}
-		
-						destroy_client_server_entity (destroy_connection->pilot_entity);
-			
-						debug_log ("SERVER: TIMEOUT: destroying clients pilot entity");
+
+					destroy_client_server_entity (destroy_connection->pilot_entity);
+					debug_log ("SERVER: TIMEOUT: destroying clients pilot entity");
 					}
-	
+
 					unregister_connection (destroy_connection->connection_id);
 		
 					if (get_comms_model () == COMMS_MODEL_SERVER)
 					{
-		
 						debug_log ("SERVER: TIMEOUT: Unregistering connection %d", destroy_connection->connection_id);
-	
 						//unregister_connection (destroy_connection->connection_id);
-	
 						direct_play_remove_player_from_group (destroy_connection->connection_id);
 					}
 					else
 					{
-		
 						debug_log ("SERVER: TIMEOUT: Quitting game", destroy_connection->connection_id);
-	
 						start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 					}
 				}

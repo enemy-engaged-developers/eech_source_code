@@ -817,7 +817,10 @@ void ingame_screen_set_events (void)
 	//
 	// Map keyboard shortcuts
 	//
+	
+	set_event (DIK_SPACE, MODIFIER_NONE, KEY_STATE_DOWN, switch_to_satellite_event); // Jabberwock 031009 Satellite view
 
+	
 	set_event (DIK_UP, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_up_event);
 	set_event (DIK_DOWN, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_down_event);
 	set_event (DIK_LEFT, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_left_event);
@@ -866,13 +869,18 @@ void ingame_screen_set_events (void)
 	set_event (DIK_ADD, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, adjust_3d_preview_zoom_in_event);
 	set_event (DIK_SUBTRACT, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, adjust_3d_preview_zoom_out_event);
 
-	set_event (MOUSE_WHEEL_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_in_event); // Jabberwock 031002 - wheel preview control
-	set_event (MOUSE_WHEEL_DOWN, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_out_event);
-	set_event (MOUSE_MOVE_LEFT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_heading_left_event);
-	set_event (MOUSE_MOVE_RIGHT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_heading_right_event);
-	set_event (MOUSE_MOVE_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_up_event);
-	set_event (MOUSE_MOVE_DOWN, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_down_event);
-   
+	set_event (MOUSE_WHEEL_UP, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_in_event); // Jabberwock 031002 - wheel preview control
+	set_event (MOUSE_WHEEL_DOWN, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_out_event);
+	set_event (MOUSE_MOVE_LEFT, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_heading_left_event);
+	set_event (MOUSE_MOVE_RIGHT, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_heading_right_event);
+	set_event (MOUSE_MOVE_UP, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_up_event);
+	set_event (MOUSE_MOVE_DOWN, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_down_event);
+	
+	
+	set_event (MOUSE_MOVE_LEFT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_right_event); // Jabberwock 031020 Fine mouse panning
+	set_event (MOUSE_MOVE_RIGHT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_left_event);
+	set_event (MOUSE_MOVE_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_down_event);
+	set_event (MOUSE_MOVE_DOWN, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_up_event);
 
 	//
 	// mouse buttons

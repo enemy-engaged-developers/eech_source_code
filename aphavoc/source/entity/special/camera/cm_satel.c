@@ -58,7 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-
+// Jabberwock 031009 Satellite view
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,191 +72,189 @@
 
 #include "project.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// The camera entity is a 'local only' entity.
-//
-// The camera entity should be inserted into the update list first so that it is forced to the end of the update list and
-// is therefore updated last (otherwise it may lag the subject by one frame).
-//
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void update_server (entity *en)
+
+void reset_satellite_camera (camera *raw)
 {
-	camera
-		*raw;
+	entity
+		*en;
 
-	raw = get_local_entity_data (en);
+	vec3d
+		pos,
+		v;
+
+	matrix3x3
+		m;
+
+	float
+		heading,
+		z_min,
+		z_max,
+		length;
+
+	ASSERT (raw);
 
 	ASSERT (raw->external_view_entity);
 
-	//
-	// update camera
-	//
+	en = raw->external_view_entity;
 
-	if (get_view_mode () == VIEW_MODE_EXTERNAL)
-	{
-		switch (raw->camera_mode)
+	z_min = get_local_entity_float_value (en, FLOAT_TYPE_CHASE_VIEW_MIN_DISTANCE);
+	z_max = get_local_entity_float_value (en, FLOAT_TYPE_CHASE_VIEW_MAX_DISTANCE);
+
+	ASSERT (z_min < z_max);
+
+	heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
+
+	get_3d_transformation_matrix (m, heading, CHASE_CAMERA_RESET_PITCH, 0.0);
+
+	v.x = 0.0;
+	v.y = 0.0;
+	v.z = 0.0;
+
+	multiply_matrix3x3_vec3d (&v, m, &v);
+
+	get_local_entity_target_point (en, &pos);
+
+	raw->position.x = pos.x + v.x;
+	raw->position.y = pos.y + v.y;
+	raw->position.z = pos.z + v.z;
+	
+	//
+	// keep point above ground (unless point off map)
+	//
+	
+		if (point_inside_map_area (&raw->position))
 		{
-			////////////////////////////////////////
-			case CAMERA_MODE_CHASE:
-			////////////////////////////////////////
-			{
-				update_chase_camera (raw);
+			raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + CAMERA_MIN_HEIGHT_ABOVE_GROUND);
+		}
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_END_OF_MISSION:
-			////////////////////////////////////////
-			{
-				update_end_of_mission_camera (raw);
+	
+	raw->motion_vector.y = raw->position.y;
+	
+	raw->position.y += 5000;
+		
+	//
+	// attitude
+	//
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_DROP:
-			////////////////////////////////////////
-			{
-				update_drop_camera (raw);
+	v.x = pos.x - raw->position.x;
+	v.y = pos.y - raw->position.y;
+	v.z = pos.z - raw->position.z;
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_STATIC:
-			////////////////////////////////////////
-			{
-				update_static_camera (raw);
+	length = (v.x * v.x) + (v.y * v.y) + (v.z * v.z);
 
-				break;
-			}
-			
-			// Jabberwock 031009 Satellite view
-			////////////////////////////////////////
-			case CAMERA_MODE_SATELLITE:
-			////////////////////////////////////////
-			{
-				update_satellite_camera (raw);
+	if (length > 1.0)
+	{
+		length = sqrt (length);
 
-				break;
-			}
-			// Jabberwock 031009 ends
-			
-			////////////////////////////////////////
-			case CAMERA_MODE_EJECT:
-			////////////////////////////////////////
-			{
-				update_eject_camera (raw);
+		normalise_3d_vector_given_magnitude (&v, length);
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_FLY_BY:
-			////////////////////////////////////////
-			{
-				update_fly_by_camera (raw);
+		get_matrix3x3_from_unit_vec3d (raw->attitude, &v);
+	}
+	else
+	{
+		get_identity_matrix3x3 (raw->attitude);
+	}
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_CINEMATIC:
-			////////////////////////////////////////
-			{
-				update_cinematic_camera (raw);
+	//
+	// motion vector
+	//
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_BUILDING:
-			////////////////////////////////////////
-			{
-				update_building_camera (raw);
+	raw->motion_vector.x = 0.0;
+	raw->motion_vector.z = 0.0;
+	
+	raw->fly_by_camera_timer = frand1() * 150 + 80; // parasiting on the struct, can't get my own data...
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_WEAPON:
-			////////////////////////////////////////
-			{
-				update_weapon_camera (raw);
+}
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_WEAPON_EXPLOSION:
-			////////////////////////////////////////
-			{
-				update_weapon_explosion_camera (raw);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_DEBRIEFING:
-			////////////////////////////////////////
-			{
-				update_debriefing_camera (raw);
+void update_satellite_camera (camera *raw)
+{
+	float
+		heading,
+		pitch;
+	
+	vec3d
+		pos,
+		v;
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_RECOGNITION_GUIDE_TOP_VIEW:
-			////////////////////////////////////////
-			{
-				update_recognition_guide_top_view_camera (raw);
+	entity
+		*en;
+	
+	ASSERT (raw);
+	
+	en = raw->external_view_entity;
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_RECOGNITION_GUIDE_SIDE_VIEW:
-			////////////////////////////////////////
-			{
-				update_recognition_guide_side_view_camera (raw);
+	if (adjust_view_left_key || joystick_pov_left)
+	{
+		raw->position.x -= 1;
+	}
+	else if (adjust_view_right_key || joystick_pov_right)
+	{
+		raw->position.x += 1;
+	}
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_RECOGNITION_GUIDE_FRONT_VIEW:
-			////////////////////////////////////////
-			{
-				update_recognition_guide_front_view_camera (raw);
+	if (adjust_view_up_key || joystick_pov_up)
+	{
+		raw->position.z += 1;
 
-				break;
-			}
-			////////////////////////////////////////
-			case CAMERA_MODE_RECOGNITION_GUIDE_3D_VIEW:
-			////////////////////////////////////////
-			{
-				update_recognition_guide_3d_view_camera (raw);
+	}
+	else if (adjust_view_down_key || joystick_pov_down)
+	{
+		raw->position.z -= 1;
+	}
+	
+	if (adjust_view_zoom_out_key)
+	{
+		raw->position.y += 1000;
 
-				break;
-			}
-			////////////////////////////////////////
-			default:
-			////////////////////////////////////////
-			{
-				debug_fatal ("Invalid camera mode = %d", raw->camera_mode);
+		raw->position.y = min (5000 + raw->motion_vector.y, raw->position.y);
+		
+		adjust_view_zoom_out_key = FALSE;
+	}
+	else if (adjust_view_zoom_in_key)
+	{
+		raw->position.y -= 1000;
 
-				break;
-			}
+		raw->position.y = max (1000 + raw->motion_vector.y, raw->position.y);
+		
+		adjust_view_zoom_in_key = FALSE;
+	}
+
+	heading = 0.1;
+	
+	pitch = -1.5;
+	
+	switch (get_local_entity_type (en))
+	{
+		case ENTITY_TYPE_HELICOPTER:
+		case ENTITY_TYPE_FIXED_WING:
+		case ENTITY_TYPE_ROUTED_VEHICLE:
+		case ENTITY_TYPE_SHIP_VEHICLE:
+		case ENTITY_TYPE_ANTI_AIRCRAFT:
+		case ENTITY_TYPE_GROUP:
+		{
+			get_local_entity_target_point (en, &pos);
+	
+			raw->position.x = pos.x + v.x;
+			raw->position.z = pos.z + v.z;		
+
+			break;
 		}
 	}
+
+	get_3d_transformation_matrix (raw->attitude, heading, pitch, 0.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void overload_camera_update_functions (void)
-{
-	fn_update_client_server_entity[ENTITY_TYPE_CAMERA][COMMS_MODEL_SERVER] = update_server;
-
-	fn_update_client_server_entity[ENTITY_TYPE_CAMERA][COMMS_MODEL_CLIENT] = update_server;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Jabberwock 031009 ends

@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+#include "ai/highlevl/reaction.h" // Jabberwock 031007
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +191,13 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 
 					show_group_page (en, FALSE);
 				}
-
+				else // Jabberwock 031007 Campaign Commander function
+				{
+					if (command_line_camcom)
+					{
+						create_reaction_to_map_click (en);
+					}
+				}
 				break;
 			}
 
@@ -202,7 +209,13 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 
 					show_base_page (en, FALSE);
 				}
-
+				else // Jabberwock 031007 Campaign Commander function
+				{
+					if (command_line_camcom)
+					{
+						create_reaction_to_map_click (en);
+					}
+				}
 				break;
 			}
 
@@ -256,7 +269,8 @@ void campaign_map_left_click_function (ui_object *obj, void *arg)
 		
 		return;
 	}
-
+		
+	
 	//
 	// Check Insert Waypoint Icons
 	//

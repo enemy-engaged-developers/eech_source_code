@@ -134,6 +134,11 @@ static long windows_right_button_up_routine ( HWND hWnd, UINT message, WPARAM wP
 
 static long windows_right_button_down_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 
+static long windows_middle_button_up_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam ); // Jabberwock 031016
+
+static long windows_middle_button_down_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,6 +242,9 @@ void initialise_mouse ( void )
 		register_system_message_function ( WM_LBUTTONUP, windows_left_button_up_routine );
 		register_system_message_function ( WM_RBUTTONDOWN, windows_right_button_down_routine );
 		register_system_message_function ( WM_RBUTTONUP, windows_right_button_up_routine );
+		register_system_message_function ( WM_MBUTTONDOWN, windows_middle_button_down_routine );
+		register_system_message_function ( WM_MBUTTONUP, windows_middle_button_up_routine ); // Jabberwock 031016 Middle button
+
 	}
 
 	ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
@@ -395,6 +403,24 @@ void generate_mouse_events ( void )
 	
 							break;
 						}
+						
+						case DIMOFS_BUTTON2: // Jabberwock 031016 Middle button
+						{
+	
+							if ( direct_input_mouse_events[count].dwData & 0x80 )
+							{
+			
+								create_mouse_button_event ( MOUSE_MIDDLE_BUTTON, BUTTON_STATE_DOWN );
+							}
+							else
+							{
+			
+								create_mouse_button_event ( MOUSE_MIDDLE_BUTTON, BUTTON_STATE_UP );
+							}
+	
+							break;
+						}
+						
 	
 						case DIMOFS_X:
 						{
@@ -597,15 +623,24 @@ int process_mouse_event (event *ev)
 				default:
 				{
 
-					if (ev->button == MOUSE_LEFT_BUTTON)
+					switch (ev->button)
 					{
-		
-						modifier = 1 << MODIFIER_MOUSE_LEFT_BUTTON;
-					}
-					else
-					{
-		
-						modifier = 1 << MODIFIER_MOUSE_RIGHT_BUTTON;
+						case MOUSE_LEFT_BUTTON:
+						{
+							modifier = 1 << MODIFIER_MOUSE_LEFT_BUTTON;
+							
+							break;
+						}
+						case MOUSE_RIGHT_BUTTON:
+						{
+							modifier = 1 << MODIFIER_MOUSE_RIGHT_BUTTON;
+							
+							break;
+						}
+						default:
+						{
+							break;
+						}
 					}
 		
 					if (ev->state == BUTTON_STATE_UP)
@@ -912,3 +947,35 @@ static long windows_right_button_down_routine ( HWND hWnd, UINT message, WPARAM 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Jabberwock 031016
+
+static long windows_middle_button_up_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+{
+
+	hWnd;
+	message;
+	wParam;
+	lParam;
+
+	create_mouse_button_event ( MOUSE_MIDDLE_BUTTON, BUTTON_STATE_UP );
+
+	return ( 0 );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static long windows_middle_button_down_routine ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+{
+
+	hWnd;
+	message;
+	wParam;
+	lParam;
+
+	create_mouse_button_event ( MOUSE_MIDDLE_BUTTON, BUTTON_STATE_DOWN );
+
+	return ( 0 );
+}

@@ -70,6 +70,7 @@ enum CAMERA_MODES
 	CAMERA_MODE_END_OF_MISSION,
 	CAMERA_MODE_DROP,
 	CAMERA_MODE_STATIC,
+	CAMERA_MODE_SATELLITE, // Jabberwock 031009 Satellite view
 	CAMERA_MODE_EJECT,
 	CAMERA_MODE_FLY_BY,
 	CAMERA_MODE_CINEMATIC,
@@ -98,6 +99,7 @@ enum CAMERA_ACTIONS
 	CAMERA_ACTION_END_OF_MISSION,
 	CAMERA_ACTION_DROP,
 	CAMERA_ACTION_STATIC,
+	CAMERA_ACTION_SATELLITE, // Jabberwock 031009 Satellite view
 	CAMERA_ACTION_EJECT,
 	CAMERA_ACTION_FLY_BY,
 	CAMERA_ACTION_CINEMATIC,
@@ -153,7 +155,7 @@ struct CAMERA
 
 	int
 		auto_edit;
-
+	
 	terrain_3d_point_data
 		terrain_info;
 
@@ -247,6 +249,7 @@ struct CAMERA
 
 	entity
 		*external_view_entity;
+
 };
 
 typedef struct CAMERA camera;
@@ -345,6 +348,8 @@ extern char *get_camera_mode_name (camera_modes mode);
 #include "cm_rvrs.h"
 
 #include "cm_stat.h"
+
+#include "cm_satel.h" // Jabberwock 031009 Satellite view
 
 #include "cm_updt.h"
 

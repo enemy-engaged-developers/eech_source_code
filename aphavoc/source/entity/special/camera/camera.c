@@ -83,6 +83,7 @@ char
 		"CAMERA_MODE_END_OF_MISSION",
 		"CAMERA_MODE_DROP",
 		"CAMERA_MODE_STATIC",
+		"CAMERA_MODE_SATELLITE",		// Jabberwock 031009 Satellite view
 		"CAMERA_MODE_EJECT",
 		"CAMERA_MODE_FLY_BY",
 		"CAMERA_MODE_CINEMATIC",
@@ -109,6 +110,7 @@ char
 		"CAMERA_ACTION_END_OF_MISSION",
 		"CAMERA_ACTION_DROP",
 		"CAMERA_ACTION_STATIC",
+		"CAMERA_ACTION_SATELLITE", // Jabberwock 031009 Satellite view
 		"CAMERA_ACTION_EJECT",
 		"CAMERA_ACTION_FLY_BY",
 		"CAMERA_ACTION_CINEMATIC",
@@ -223,6 +225,18 @@ char *get_camera_mode_name (camera_modes mode)
 
 			break;
 		}
+
+		// Jabberwock 031009 Satellite view
+		////////////////////////////////////////
+		case CAMERA_MODE_SATELLITE:
+		////////////////////////////////////////
+		{
+			s = "Satellite camera";
+
+			break;
+		}
+		// Jabberwock 031009 ends
+		
 		////////////////////////////////////////
 		case CAMERA_MODE_FLY_BY:
 		////////////////////////////////////////

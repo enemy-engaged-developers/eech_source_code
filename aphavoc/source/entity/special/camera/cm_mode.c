@@ -85,6 +85,15 @@ void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 		debug_log ("Setting camera mode to %s", camera_mode_names[mode]);
 	}
 
+	// Jabberwock 031009 - Satellite view - only satellite view for sites
+	if (get_local_entity_type (raw->external_view_entity) == ENTITY_TYPE_KEYSITE)
+	{ 
+		mode = CAMERA_MODE_SATELLITE;
+		auto_edit = 0;
+	}
+	// Jabberwock 031009 ends
+	
+	
 	if (auto_edit)
 	{
 		if (!raw->auto_edit)
@@ -104,7 +113,7 @@ void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 			set_status_message (get_trans (s), STATUS_MESSAGE_TYPE_CAMERA);
 		}
 	}
-
+	
 	switch (mode)
 	{
 		////////////////////////////////////////
@@ -139,6 +148,18 @@ void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 
 			break;
 		}
+		
+		// Jabberwock 031009 Satellite view
+		case CAMERA_MODE_SATELLITE:
+		////////////////////////////////////////
+		{
+			reset_satellite_camera (raw);
+
+			break;
+		}
+		
+		// Jabberwock 031009 ends
+		
 		////////////////////////////////////////
 		case CAMERA_MODE_EJECT:
 		////////////////////////////////////////

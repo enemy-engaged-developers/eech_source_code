@@ -77,6 +77,8 @@ currentdir = $(projectdir)\source\entity\special\camera
 #################################################################################################################################
 #################################################################################################################################
 #################################################################################################################################
+#  \cm_satel.obj & added in the list below. Jabberwock
+#
 
 c_object_files    += $+ &
                      $(currentdir)\camera.obj &
@@ -105,6 +107,7 @@ c_object_files    += $+ &
                      $(currentdir)\cm_recog.obj &
                      $(currentdir)\cm_rvrs.obj &
                      $(currentdir)\cm_stat.obj &
+                     $(currentdir)\cm_satel.obj &
                      $(currentdir)\cm_updt.obj &
                      $(currentdir)\cm_vec3d.obj &
                      $(currentdir)\cm_view.obj &

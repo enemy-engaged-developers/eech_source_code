@@ -784,6 +784,8 @@ static void enter_view_mode (view_modes mode)
 
 	leave_seat_position (mode, view_mode);
 
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE); // Jabberwock 031009 Clear fog
+	
 	switch (mode)
 	{
 		////////////////////////////////////////
@@ -1479,7 +1481,7 @@ int set_view_mode (view_modes mode)
 		//
 		// clear any 'camera' messages
 		//
-
+		
 		if (in_cockpit)
 		{
 			if (get_status_message_type () == STATUS_MESSAGE_TYPE_CAMERA)

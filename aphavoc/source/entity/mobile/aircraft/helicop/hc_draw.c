@@ -155,7 +155,7 @@ static void draw_local_3d_object (entity *en, float range)
 			{
 				draw_canopy_doors = TRUE;
 
-				if (internal_view)
+				if (!internal_view)
 				{
 					draw_virtual_cockpit_parts = TRUE;
 				}
@@ -175,7 +175,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
+				// search.result_sub_object->visible_object = !draw_virtual_cockpit_parts; Jabberwock 031016 Inset view
 			}
 
 			//
@@ -268,7 +268,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				search.result_sub_object->visible_object = draw_virtual_cockpit_parts;
+				// search.result_sub_object->visible_object = draw_virtual_cockpit_parts; Jabberwock 031016 Inset view
 			}
 
 			//
@@ -281,7 +281,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 			{
-				search.result_sub_object->visible_object = !draw_virtual_cockpit_parts;
+				// search.result_sub_object->visible_object = !draw_virtual_cockpit_parts; Jabberwock 031016 Inset view
 			}
 
 			//
@@ -402,12 +402,13 @@ static void draw_local_3d_object (entity *en, float range)
 		// draw
 		//
 
+		
 		if (!internal_view)
 		{
 			if (!in_flight_invisible_object)
 			{
 				animate_and_draw_entity_muzzle_flash_effect (en);
-
+			
 				insert_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_OBJECT, raw->ac.inst3d);
 			}
 		}
@@ -438,7 +439,7 @@ static void draw_local_3d_object (entity *en, float range)
 			}
 		}
 	}
-	else
+	// else Jabberwock 031016 Inset view
 	{
 		//
 		// update viewpoint

@@ -159,7 +159,8 @@ extern int
 	command_line_tsd_render_mode,								// VJ 030511
 	command_line_tsd_palette,									// VJ 030511
 	command_line_green_mfd,										// loke 030517
-	command_line_maxplayers;									// Werewolf 030518
+	command_line_maxplayers,									// Werewolf 030518
+	command_line_camcom;										// Jabberwock 031007 Campaign Commander
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,

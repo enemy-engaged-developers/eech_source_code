@@ -78,7 +78,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define ROTATE_RATE	(rad (135.0))
+// #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +86,8 @@
 
 static padlock_modes
 	padlock_mode;
+padlock_modes	
+	inset_mode;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,6 +570,11 @@ void deinitialise_virtual_cockpit_view (void)
 
 void update_virtual_cockpit_view (void)
 {
+	int 
+		ROTATE_RATE;
+	
+	ROTATE_RATE = command_line_mouse_look_speed / 6; // Jabberwock 031016 - variable POV speed
+	
 	// lfriembichler 030317 start
 	// enabled panning by mouse/trackir
 	// trackir only works with mousepanning enabled AND the naturalpoint window
@@ -1138,6 +1145,8 @@ void draw_virtual_cockpit_3d_view (void)
 {
 	ASSERT (get_gunship_entity ());
 
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+	
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
@@ -1477,7 +1486,45 @@ void draw_virtual_cockpit_3d_view (void)
 		////Moje 030816 End
 
 	}
+	
+	// Jabberwock 031016 Inset view - cockpit
+	if (external_view_inset_target)
+	{
+		entity
+			*source,
+			*target;
 
+		viewpoint
+			vp;
+
+		source = get_external_view_entity ();
+		
+		target = get_inset ();
+
+		ASSERT (source);
+
+		if (target)
+		{
+			store_reverse_tactical_camera_values ();
+
+			set_reverse_tactical_camera_values (source, target);
+
+		   	get_local_entity_vec3d (get_camera_entity (), VEC3D_TYPE_POSITION, &vp.position);
+
+   			get_local_entity_attitude_matrix (get_camera_entity (), vp.attitude);
+
+			set_main_3d_inset_target_screen_params ();
+
+			draw_main_3d_scene (&vp);
+
+			restore_reverse_tactical_camera_values ();
+
+			set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+		}
+	}
+	// Jabberwock 031016 ends
+	
+	
 	//
 	// restore virtual cockpit 3D instance
 	//
@@ -2516,9 +2563,9 @@ static entity *get_next_wingman (void)
 		*group,
 		*wingman;
 
-	source = get_gunship_entity ();
-
 	ASSERT (source);
+
+	source = get_gunship_entity ();
 
 	wingman = get_local_entity_first_child (source, LIST_TYPE_PADLOCK);
 
@@ -3377,6 +3424,88 @@ void select_padlock_view_event (padlock_modes mode)
 	}
 }
 
+// Jabberwock 031016 Inset view
+
+void select_inset_view_event (padlock_modes mode)
+{
+	inset_mode = mode;
+}
+
+
+entity *get_inset (void)
+{
+	entity
+		*source,
+		*target;
+
+	source = get_external_view_entity ();
+
+	target = NULL;
+	
+	if (source)
+	{
+		switch (inset_mode)
+		{
+			case PADLOCK_MODE_NONE:
+			{
+				target = get_gunship_entity();
+
+				break;
+			}
+			case PADLOCK_MODE_WINGMAN:
+			{	
+				if (source == get_gunship_entity())
+				{
+					target = get_next_wingman ();
+				}
+				break;
+			}
+			case PADLOCK_MODE_AIR_THREAT:
+			{
+				if (source == get_gunship_entity())
+				{
+					target = get_next_air_threat ();
+				}
+				break;
+			}
+			case PADLOCK_MODE_GROUND_THREAT:
+			{	
+				if (source == get_gunship_entity())
+				{
+					target = get_next_ground_threat ();
+				}
+				break;
+			}
+			case PADLOCK_MODE_MISSILE_THREAT:
+			{
+				if (source == get_gunship_entity())
+				{
+					target = get_next_missile_threat ();
+				}
+				break;
+			}
+			case PADLOCK_MODE_WAYPOINT:
+			{
+				target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+				
+				if (!target)
+				{
+					if (source == get_gunship_entity())
+					{
+						target = get_local_entity_current_waypoint (source);
+					}
+				}
+				break;
+			}
+		}
+	}
+	return (target);
+}
+
+
+
+// Jabberwock 031016 ends
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3401,6 +3530,8 @@ entity *get_players_padlock (void)
 			////////////////////////////////////////
 			{
 				debug_fatal ("Invalid padlock mode = PADLOCK_MODE_NONE");
+				
+				target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET); // Jabberwock 031016
 
 				break;
 			}

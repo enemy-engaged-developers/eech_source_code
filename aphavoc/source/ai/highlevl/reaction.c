@@ -82,6 +82,7 @@ static void create_reaction_to_strike_task_completed (entity *task);
 
 static void create_reaction_to_offensive_keysite_task_assigned (entity *task);
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -774,6 +775,165 @@ void create_reaction_to_artillery_fire (entity *group, entity *target)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Jabberwock 031007 - Campaign Commander functions
+
+void create_reaction_to_map_click (entity *objective)
+{
+	entity
+		*force,
+		*new_task;
+
+	entity_sides
+		task_side;
+
+	int
+		sub_type;
+
+	float
+		efficiency;
+
+	task_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+
+	force = get_local_force_entity (task_side);
+
+	ASSERT (force);
+
+	sub_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
+
+	switch (get_local_entity_type (objective))
+	{
+		case ENTITY_TYPE_KEYSITE:
+		{
+			efficiency = get_local_entity_float_value (objective, FLOAT_TYPE_EFFICIENCY);
+
+			if (get_local_entity_int_value (objective, INT_TYPE_ALIVE))
+			{
+
+				if (keysite_database [sub_type].troop_insertion_target)
+				{
+					//
+					// check keysite efficiency - if less than threshold level then create T.I.
+					//
+	
+					if (efficiency < keysite_database [sub_type].minimum_efficiency)
+					{
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, task_side))
+						{
+							new_task = create_troop_insertion_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_TROOP_INSERTION].task_priority, NULL, NULL);
+	
+						}
+					}
+				}
+	
+				if (keysite_database [sub_type].ground_strike_target)
+				{
+					if (efficiency >= keysite_database [sub_type].minimum_efficiency)
+					{
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_GROUND_STRIKE, task_side))
+						{
+							new_task = create_ground_strike_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_GROUND_STRIKE].task_priority, NULL, NULL);
+						}
+					}
+				}
+				else
+				{
+					if (keysite_database [sub_type].oca_target)
+					{
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_STRIKE, task_side))
+						{
+							new_task = create_oca_strike_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_OCA_STRIKE].task_priority, NULL, NULL);
+	
+						}
+					
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_OCA_SWEEP, task_side))
+						{
+							new_task = create_oca_sweep_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_OCA_SWEEP].task_priority, NULL, NULL);
+		
+						}
+					}
+				}
+	
+				if (keysite_database [sub_type].ship_strike_target)
+				{
+					new_task = create_anti_ship_strike_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_ANTI_SHIP_STRIKE].task_priority, NULL, NULL);
+	
+				}
+			}
+			break;
+		}
+		
+		case ENTITY_TYPE_GROUP:
+		{
+			switch (sub_type)
+			{
+				case ENTITY_SUB_TYPE_GROUP_ANTI_AIRCRAFT:
+				{
+					int
+						member_count;
+
+					member_count = get_local_entity_int_value (objective, INT_TYPE_MEMBER_COUNT);
+
+					if (member_count > 0)
+					{
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_SEAD, task_side))
+						{
+							new_task = create_sead_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_SEAD].task_priority, NULL, NULL);
+	
+						}	
+					}
+					break;
+				}
+			
+				case ENTITY_SUB_TYPE_GROUP_PRIMARY_FRONTLINE:
+				case ENTITY_SUB_TYPE_GROUP_SECONDARY_FRONTLINE:
+				case ENTITY_SUB_TYPE_GROUP_SELF_PROPELLED_ARTILLERY:
+				case ENTITY_SUB_TYPE_GROUP_SELF_PROPELLED_MLRS:
+				{
+					int
+						member_count;
+
+					member_count = get_local_entity_int_value (objective, INT_TYPE_MEMBER_COUNT);
+
+					if (member_count > 0)
+					{
+						if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_BAI, task_side))
+						{
+							new_task = create_bai_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_BAI].task_priority, NULL, NULL);
+
+						}	
+					}
+					break;
+				}
+
+				case ENTITY_SUB_TYPE_GROUP_ATTACK_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_MARINE_ATTACK_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_ASSAULT_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_MARINE_ASSAULT_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_RECON_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_RECON_ATTACK_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_MEDIUM_LIFT_TRANSPORT_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_HELICOPTER:
+				case ENTITY_SUB_TYPE_GROUP_MULTI_ROLE_FIGHTER:
+				case ENTITY_SUB_TYPE_GROUP_CARRIER_BORNE_ATTACK_AIRCRAFT:
+				case ENTITY_SUB_TYPE_GROUP_CARRIER_BORNE_INTERCEPTOR:
+				case ENTITY_SUB_TYPE_GROUP_CLOSE_AIR_SUPPORT_AIRCRAFT:
+				case ENTITY_SUB_TYPE_GROUP_MEDIUM_LIFT_TRANSPORT_AIRCRAFT:
+				case ENTITY_SUB_TYPE_GROUP_HEAVY_LIFT_TRANSPORT_AIRCRAFT:
+				{
+					if (!entity_is_object_of_task (objective, ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT, task_side))
+					{
+						new_task = create_close_air_support_task (task_side, objective, NULL, TRUE, task_database [ENTITY_SUB_TYPE_TASK_CLOSE_AIR_SUPPORT].task_priority, NULL, NULL);
+					}
+				}
+				break;
+			}
+			break;
+		}
+	}
+	
+}
+
+// Jabberwock 031007 ends
 
 
 

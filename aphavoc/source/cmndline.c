@@ -182,7 +182,8 @@ int
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
 	command_line_green_mfd										= 0,		// loke 030517
-	command_line_maxplayers							= 4;	// Werewolf 030518
+	command_line_maxplayers							= 4,	// Werewolf 030518
+	command_line_camcom								= FALSE;	// Jabberwock 031007 Campaign Commander
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -1731,7 +1732,20 @@ void process_command_line (int argc, char *argv[])
 				command_line_green_mfd = TRUE;
 			}
 		}
-      ////////////////////////////////////////
+		////////////////////////////////////////		
+		else if (s2 = strarg (s1, "camcom"))		// Jabberwock 031007 Campaign Commander
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_camcom);
+			}
+			else
+			{
+				command_line_camcom = FALSE;
+			}
+		}
+        ////////////////////////////////////////
 		else
 		////////////////////////////////////////
 		{

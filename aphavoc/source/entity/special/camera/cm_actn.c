@@ -204,6 +204,26 @@ void set_camera_action (camera *raw, camera_actions action)
 
 			break;
 		}
+		
+		// Jabberwock 031009 Satellite view
+		////////////////////////////////////////
+		case CAMERA_ACTION_SATELLITE:
+		////////////////////////////////////////
+		{
+			if (get_view_mode () != VIEW_MODE_EXTERNAL)
+			{
+				if (!set_view_mode (VIEW_MODE_EXTERNAL))
+				{
+					break;
+				}
+			}
+
+			set_camera_mode (raw, CAMERA_MODE_SATELLITE, FALSE);
+
+			break;
+		}
+		// Jabberwock 031009 ends
+		
 		////////////////////////////////////////
 		case CAMERA_ACTION_EJECT:
 		////////////////////////////////////////

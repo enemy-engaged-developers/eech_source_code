@@ -447,6 +447,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
+		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
@@ -667,7 +668,7 @@ void dump_ini_file(void)
 	fprintf(f, "rounds_hind_HE=%d    #rounds cannon HIND 2A42_30MM_HE rounds (0 - 65000)\n",rounds_hind_HE);
 	fprintf(f,"[Mods]\n");
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present\n",command_line_mouse_look);
-	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0)\n",command_line_mouse_look_speed);
+	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=6,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov=%d            # general field of view maximum, linked to key '9'\n",command_line_max_fov);
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
@@ -693,6 +694,7 @@ void dump_ini_file(void)
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);
+	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"[end of file]\n");
 	
 	fclose(f);

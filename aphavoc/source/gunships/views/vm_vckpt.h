@@ -110,9 +110,16 @@ extern void leave_padlock_view (void);
 
 extern void select_padlock_view_event (padlock_modes mode);
 
+extern void select_inset_view_event (padlock_modes mode); // Jabberwock 031016 Inset view
+
+extern entity *get_inset (void);
+
 extern entity *get_players_padlock (void);
 
 extern void update_virtual_cockpit_padlock_view (void);
+
+extern padlock_modes
+	inset_mode;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

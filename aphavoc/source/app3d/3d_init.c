@@ -1334,7 +1334,67 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			break;
 		}
+
+		// Jabberwock 031009 Satellite tint for satellite view
+		case DISPLAY_3D_TINT_BLUE:
+		{
+			
+			int
+				interference;
+				
+			camera
+				*raw;
+				
+			
+			//
+			// Set the light modes
+			//
+
+			set_3d_lightmode ( main_3d_env, LIGHTMODE_AUTOMATIC_LIGHT );
+
+			set_3d_infrared_mode ( main_3d_env, INFRARED_OFF );
+	
+			//
+			// Set the fogmode
+			//
+
+			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
+
+			raw = get_local_entity_data (get_camera_entity ());
+						
+			interference = raw->fly_by_camera_timer;
+
+			if (interference < 180)
+			{
+				fog_colour.r = 32;
+				fog_colour.g = 64;
+				fog_colour.b = 96;
+			}
+			else
+			{
+				fog_colour.r = 255;
+				fog_colour.g = 255;
+				fog_colour.b = 255;
+			}
+			
+			
+			//if (interference < 150)
+			//{
+				//fog_colour.a = frand1() * 40 + 150;
+			//	fog_colour.a += 1;
+			//}
+			//else
+			//{
+				fog_colour.a = interference;
+			//}
+
+	
+			set_3d_fog_colour ( main_3d_env, fog_colour );
+
+			break;
+		}
 	}
+// Jabberwock 031009 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

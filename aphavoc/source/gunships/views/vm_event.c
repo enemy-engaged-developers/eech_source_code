@@ -1431,9 +1431,14 @@ set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
 
 static void next_side_event (event *ev)
 {
-	select_view_menu_next_side ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_next_side ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1442,9 +1447,14 @@ static void next_side_event (event *ev)
 
 static void previous_side_event (event *ev)
 {
-	select_view_menu_previous_side_event ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_previous_side_event ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1453,9 +1463,14 @@ static void previous_side_event (event *ev)
 
 static void next_category_event (event *ev)
 {
-	select_view_menu_next_category ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{	
+		select_view_menu_next_category ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1464,9 +1479,14 @@ static void next_category_event (event *ev)
 
 static void previous_category_event (event *ev)
 {
-	select_view_menu_previous_category ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_previous_category ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1475,9 +1495,14 @@ static void previous_category_event (event *ev)
 
 static void next_type_event (event *ev)
 {
-	select_view_menu_next_type ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_next_type ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1486,9 +1511,14 @@ static void next_type_event (event *ev)
 
 static void previous_type_event (event *ev)
 {
-	select_view_menu_previous_type ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{	
+		select_view_menu_previous_type ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1497,9 +1527,14 @@ static void previous_type_event (event *ev)
 
 static void next_object_event (event *ev)
 {
-	select_view_menu_next_object ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_next_object ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1508,9 +1543,14 @@ static void next_object_event (event *ev)
 
 static void previous_object_event (event *ev)
 {
-	select_view_menu_previous_object_event ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_previous_object_event ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1605,9 +1645,14 @@ static void players_padlock_event (event *ev)
 
 static void view_all_event (event *ev)
 {
-	select_view_menu_view_all ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_view_menu_view_all ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1650,9 +1695,14 @@ static void view_available_gunships_event (event *ev)
 
 static void next_view_range_event (event *ev)
 {
-	select_next_view_menu_range ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_next_view_menu_range ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1661,9 +1711,14 @@ static void next_view_range_event (event *ev)
 
 static void previous_view_range_event (event *ev)
 {
-	select_previous_view_menu_range ();
+	// Jabberwock 031009 Satellite view - keysites are not on menu
+	
+	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
+	{
+		select_previous_view_menu_range ();
 
-	select_external_view ();
+		select_external_view ();
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1726,6 +1781,15 @@ static void static_camera_event (event *ev)
 	notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_STATIC);
 }
 
+// Jabberwock 031009 Satellite view
+
+static void satellite_camera_event (event *ev)
+{
+	notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_SATELLITE);
+}
+
+// Jabberwock 031009 ends
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1783,55 +1847,112 @@ static void set_padlock_view_event (event *ev)
 {
 	ASSERT (ev);
 
-	switch (ev->key)
+	if (external_view_inset_target)
 	{
-		////////////////////////////////////////
-		case DIK_2:
-		////////////////////////////////////////
+		switch (ev->key)
 		{
-			select_padlock_view_event (PADLOCK_MODE_WINGMAN);
+			////////////////////////////////////////
+			case DIK_0:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_NONE);
 
-			break;
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_2:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_WINGMAN);
+
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_3:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_AIR_THREAT);
+
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_4:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_GROUND_THREAT);
+
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_5:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_MISSILE_THREAT);
+
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_6:
+			////////////////////////////////////////
+			{
+				select_inset_view_event (PADLOCK_MODE_WAYPOINT);
+
+				break;
+			}
 		}
-		////////////////////////////////////////
-		case DIK_3:
-		////////////////////////////////////////
+	}
+	else
+	{
+		switch (ev->key)
 		{
-			select_padlock_view_event (PADLOCK_MODE_AIR_THREAT);
+			////////////////////////////////////////
+			case DIK_2:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_WINGMAN);
 
-			break;
-		}
-		////////////////////////////////////////
-		case DIK_4:
-		////////////////////////////////////////
-		{
-			select_padlock_view_event (PADLOCK_MODE_GROUND_THREAT);
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_3:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_AIR_THREAT);
 
-			break;
-		}
-		////////////////////////////////////////
-		case DIK_5:
-		////////////////////////////////////////
-		{
-			select_padlock_view_event (PADLOCK_MODE_MISSILE_THREAT);
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_4:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_GROUND_THREAT);
 
-			break;
-		}
-		////////////////////////////////////////
-		case DIK_6:
-		////////////////////////////////////////
-		{
-			select_padlock_view_event (PADLOCK_MODE_WAYPOINT);
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_5:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_MISSILE_THREAT);
 
-			break;
-		}
-		////////////////////////////////////////
-		case DIK_0:
-		////////////////////////////////////////
-		{
-			select_padlock_view_event (PADLOCK_MODE_NONE);
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_6:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_WAYPOINT);
 
-			break;
+				break;
+			}
+			////////////////////////////////////////
+			case DIK_0:
+			////////////////////////////////////////
+			{
+				select_padlock_view_event (PADLOCK_MODE_NONE);
+
+				break;
+			}
 		}
 	}
 }
@@ -2024,6 +2145,7 @@ void set_view_mode_events (void)
 	set_event (DIK_F9, MODIFIER_NONE, KEY_STATE_DOWN, chase_camera_event);
 	set_event (DIK_F9, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, reset_chase_camera_position_event);
 	set_event (DIK_F9, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_chase_camera_lock_rotate_event);
+	set_event (DIK_F9, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, satellite_camera_event); // Jabberwock 031009 Satellite view
 
 	set_event (DIK_F10, MODIFIER_NONE, KEY_STATE_DOWN, fly_by_camera_event);
 	set_event (DIK_F10, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, drop_camera_event);
@@ -2207,6 +2329,7 @@ void set_gunship_view_mode_events (void)
 	set_event (DIK_5, MODIFIER_NONE, KEY_STATE_DOWN, set_padlock_view_event);
 	set_event (DIK_6, MODIFIER_NONE, KEY_STATE_DOWN, set_padlock_view_event);
 	set_event (DIK_0, MODIFIER_NONE, KEY_STATE_DOWN, set_padlock_view_event);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

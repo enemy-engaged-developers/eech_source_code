@@ -279,7 +279,7 @@ void draw_application_3d_scene (void)
 		end_3d_scene ();
 	}
 
-	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_ON )
+	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_ON ) 
 	{
 
 		switch ( current_3d_noise_level )
@@ -318,7 +318,16 @@ void draw_application_3d_scene (void)
 			}
 		}
 	}
-
+	
+	// Jabberwock 031009 - Get fog for satellite
+	
+	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
+	{
+		render_infrared_interference ( 0 ); // no matter, we use variable alpha anyway
+	}
+	
+	// Jabberwock 031009 ends
+	
 	update_application_3d_scene ();
 
 #if ( OEM_3DLABS_VERSION )
@@ -723,8 +732,20 @@ void render_infrared_interference ( int alpha )
 		colour.red = fog_colour.r;
 		colour.green = fog_colour.g;
 		colour.blue = fog_colour.b;
-		colour.alpha = alpha;
-
+		
+		// Jabberwock 031009 Use fog_colour alpha for variable fog
+		
+		if ((fog_colour.a) > 0)
+		{
+			colour.alpha = fog_colour.a;
+		}
+		else
+		{
+			colour.alpha = alpha;
+		}
+		
+		// Jabberwock 031009 ends
+		
 		specular.red = 0;
 		specular.green = 0;
 		specular.blue = 0;
