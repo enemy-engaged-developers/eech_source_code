@@ -486,7 +486,8 @@ extern int getYaw ( void );
 		pilot_head_pitch = max (get_rotate_down_limit (), pilot_head_pitch);
 	} // end Retro 030317
 
-//VJ wideview mod, date: 26-mar-03	
+
+//VJ wideview mod, date: 27-mar-03	
 	if (get_global_wide_cockpit ())
 	{		
         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
