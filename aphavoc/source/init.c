@@ -934,8 +934,17 @@ void full_initialise_game (void)
 	//
 	////////////////////////////////////////
     if (command_line_wut)
-    	parse_WUT_file(WUT_filename);
+    {
+	debug_log ( "reading WUT file %s",WUT_filename );
 
+	sprintf (buffer, "%s...%s: %s", get_trans ("Loading"), get_trans ("WUT file"), WUT_filename);
+
+	set_ui_object_text (initialising_text, buffer);
+
+	ui_force_update ();
+
+    	parse_WUT_file(WUT_filename);
+    }
 
 //	play_avi ( "wenesday.avi", 0 );
 }
