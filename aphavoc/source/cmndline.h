@@ -79,6 +79,7 @@ extern void process_environment_variable (char *name);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
+	command_line_report_to_masterserver, //Werewolf 2 Jan 04
 	command_line_debug_input,
 	command_line_debug_log_timing_info,
 	command_line_dump_session,

@@ -296,6 +296,8 @@ void update_cyclic_pressure_inputs (void)
 					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value -= ((MODEL_FRAME_RATE * get_model_delta_time ()) / 2.0) * (current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
 				}
 			}
+
+
 			
 			if (current_flight_dynamics->input_data.cyclic_input_pressure & CYCLIC_PRESSURE_BACKWARD)
 			{
@@ -369,64 +371,25 @@ void update_cyclic_pressure_inputs (void)
 			}
 			else
 			{
-
-				static float
-					a = 1.0,
-					b = 1.0;
 		
 				// restore x
-/*
-				if (check_key (DIK_W))
-				{
-
-					a += 0.1;
-
-					debug_log ("a = %f", a);
-				}
-				else if (check_key (DIK_S))
-				{
-
-					a -= 0.1;
-
-					debug_log ("a = %f", a);
-				}
-
-				if (check_key (DIK_E))
-				{
-
-					b += 0.1;
-
-					debug_log ("b = %f", b);
-				}
-				else if (check_key (DIK_D))
-				{
-
-					b -= 0.1;
-
-					debug_log ("b = %f", b);
-				}
-		
-	  */
+				//Werewolf: Removed old debug code, removed redundant multiplications
+				
 				if (get_global_cyclic_input () == KEYBOARD_INPUT)
 				{
-
 					if (get_current_dynamics_options (DYNAMICS_OPTIONS_KEYBOARD_ASSISTANCE))
 					{
-	
-						current_flight_dynamics->input_data.cyclic_x.value += ((a * 1.0 / 16.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_x_trim.value - current_flight_dynamics->input_data.cyclic_x.value);
+						current_flight_dynamics->input_data.cyclic_x.value += ((1.0 / 16.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_x_trim.value - current_flight_dynamics->input_data.cyclic_x.value);
 					}
 					else
 					{
-	
-						current_flight_dynamics->input_data.cyclic_x.value += ((b * 3.0 / 4.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_x_trim.value - current_flight_dynamics->input_data.cyclic_x.value);
+						current_flight_dynamics->input_data.cyclic_x.value += ((3.0 / 4.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_x_trim.value - current_flight_dynamics->input_data.cyclic_x.value);
 					}
 				}
 				else if (get_global_cyclic_input () == MOUSE_INPUT)
 				{
-		
 					if (fabs (current_flight_dynamics->input_data.cyclic_x.value) < 5.0)
 					{
-		
 						current_flight_dynamics->input_data.cyclic_x.value *= 0.8;
 					}
 				}
@@ -434,7 +397,6 @@ void update_cyclic_pressure_inputs (void)
 		
 			if (current_flight_dynamics->input_data.cyclic_vertical_pressure.value)
 			{
-			
 				//current_flight_dynamics->input_data.cyclic_y.value += (MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_vertical_pressure.value + current_flight_dynamics->input_data.cyclic_y_trim.value);
 				current_flight_dynamics->input_data.cyclic_y.value += (MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_vertical_pressure.value);// + current_flight_dynamics->input_data.cyclic_y_trim.value);
 			}
@@ -445,26 +407,20 @@ void update_cyclic_pressure_inputs (void)
 		
 				if (get_global_cyclic_input () == KEYBOARD_INPUT)
 				{
-
 					if (get_current_dynamics_options (DYNAMICS_OPTIONS_KEYBOARD_ASSISTANCE))
 					{
-						
 						current_flight_dynamics->input_data.cyclic_y.value += ((1.0 / 16.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_y_trim.value - current_flight_dynamics->input_data.cyclic_y.value);
 					}
 					else
 					{
-						
 						current_flight_dynamics->input_data.cyclic_y.value += ((3.0 / 4.0) * MODEL_FRAME_RATE * get_model_delta_time ()) * (current_flight_dynamics->input_data.cyclic_y_trim.value - current_flight_dynamics->input_data.cyclic_y.value);
 					}
 				}
 				else if (get_global_cyclic_input () == MOUSE_INPUT)
 				{
-		
 					if (fabs (current_flight_dynamics->input_data.cyclic_y.value) < 5.0)
 					{
-
 						debug_fatal ("CYCLIC: code with delta time");
-		
 						current_flight_dynamics->input_data.cyclic_y.value *= 0.8;
 					}
 				}

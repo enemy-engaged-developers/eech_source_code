@@ -78,6 +78,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
+	command_line_report_to_masterserver						= TRUE,  //Werewolf 2 Jan 04
 	command_line_debug_input									= FALSE,
 	command_line_debug_log_timing_info						= TRUE,
 	command_line_dump_session									= FALSE,

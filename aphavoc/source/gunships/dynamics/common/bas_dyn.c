@@ -145,7 +145,7 @@ void initialise_basic_dynamics (void)
 			if (file_size ("basic.dyn") != sizeof (dynamics_type))
 			{
 
-				debug_fatal ("DYNAMICS: BASIC: apache.dyn file incorrect size");
+				debug_fatal ("DYNAMICS: BASIC: basic.dyn file incorrect size");
 			}
 
 			load_dynamics_model (file_ptr);

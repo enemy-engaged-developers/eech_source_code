@@ -1982,6 +1982,10 @@ int net_CheckForDataOnSocket (int p1, int p2)
 // Send a UDP packet to the masterserver
 void net_sendDataToMaster (char *data, int servernum)
 {
+    if (command_line_report_to_masterserver == FALSE)
+    	return;
+
+
     if (servernum == 1)
     {
           debug_log ("HEARTBEAT: sending heartbeat to primary server");
@@ -2104,10 +2108,9 @@ void net_getServerList(void)
     char header[80];
     int index = 0;
     int respondingServer = 0;
-//    long timeout = 0;
 
-
-//    net_init_heartbeat();
+    if (command_line_report_to_masterserver == FALSE)
+    	return;
 
     debug_log ("GETSERVERLIST: Init");
     
@@ -2174,6 +2177,9 @@ void net_getServerList(void)
 // TODO: Replace hardcoded address with .ini-aware parameter.
 void net_init_heartbeat(void)
 {
+    if (command_line_report_to_masterserver == FALSE)
+    	return;
+
         mastersocket = net_connectToMaster (command_line_primary_server_setting, MasterPort, 1);
         if (mastersocket <= 0)
           mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
@@ -2190,6 +2196,9 @@ void net_handle_heartbeat(void)
 {
     connection_data_type
         *this_connection;
+
+    if (command_line_report_to_masterserver == FALSE)
+    	return;
 
         // Time for another heartbeat?
     if (last_heartbeat_time < get_system_time ())
@@ -2224,6 +2233,9 @@ void net_handle_heartbeat(void)
 // Close masterserver socket.
 void net_uninit_heartbeat(void)
 {
+    if (command_line_report_to_masterserver == FALSE)
+    	return;
+
     if (mastersocket >= 0)
           closesocket (mastersocket);
         mastersocket = -1;  
