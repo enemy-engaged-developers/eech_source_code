@@ -801,12 +801,20 @@ void ShowFramerate(void)
 {
 	char buf[12];
 	float dummy = 0;
-	
+	FILE *f;	
 	if (doframerate > 30)
 	{			   
 		framerate = framerate_avg /(doframerate+1);
 		framerate_avg = 0;
     	doframerate = 0;
+
+		if (command_line_framerate == 2)
+		{
+		   f=fopen("framerate.txt","a");
+		   fprintf (f,"%6.1f\n", framerate);
+		   fclose(f);
+		}   
+
     }   
     dummy = get_one_over_delta_time ();
     if (dummy < framerate*2)
@@ -817,5 +825,6 @@ void ShowFramerate(void)
 	
 	sprintf (buf, "%6.1f", framerate);
     ui_display_text (buf, 10, 10);               
-		
+	
+
 }	
