@@ -1314,6 +1314,92 @@ void map_zoom_out_function (ui_object *obj, void *arg)
 	map_centralise_function (obj, NULL);
 }
 
+// Jabberwock 031002 mouse-wheel map zoom procedures
+
+void map_wheel_centralise (ui_object *obj)
+{
+	vec3d
+		pos;
+
+	map_dimension_type
+		*map_dimensions;
+
+		ASSERT (obj);
+	
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+
+		pos.x = get_mouse_x ();
+		pos.z = get_mouse_y ();
+
+		map_get_world_coords_from_screen (obj, &pos, &pos);
+	
+		map_dimensions->x = pos.x;
+		map_dimensions->z = pos.z;
+		
+		bound_map_extents (obj, NULL, NULL);
+		
+}
+
+
+void map_wheel_zoom_in_event (event *ev)
+{
+	
+	map_dimension_type
+		*map_dimensions;
+
+	ui_object
+			*obj;
+			
+	float
+		x,
+		y,
+		width,
+		height,
+		wx_min,
+		wz_min,
+		wx_max,
+		wz_max;
+		
+	vec3d
+		pos1;
+
+	obj = last_drawn_map_object;
+	
+
+	if (obj)
+	{
+		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+		ASSERT (map_dimensions);
+	
+		map_dimensions->size /= 2.0;
+
+		map_dimensions->size = bound (map_dimensions->size, 100.0, max (MAX_MAP_X, MAX_MAP_Z));
+
+		pos1.x = get_mouse_x ();
+		pos1.z = get_mouse_y ();
+
+		x = get_ui_object_x (obj);
+				
+		y = get_ui_object_y (obj);
+
+		map_wheel_centralise (obj);
+		
+		get_2d_terrain_map_world_dimensions (&wx_min, &wz_min, &wx_max, &wz_max);
+		
+		width = get_ui_object_x_size (obj)/2;
+		height = get_ui_object_y_size (obj)/2;
+
+		set_mouse_x (x+width);
+		set_mouse_y (y+height);
+	}
+
+}
+
+// Jabberwock 031002 ends
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4712,6 +4798,7 @@ void zoom_in_current_map_event (event *ev)
 	{
 		map_zoom_in_function (obj, NULL);
 	}
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4729,6 +4816,7 @@ void zoom_out_current_map_event (event *ev)
 	{
 		map_zoom_out_function (obj, NULL);
 	}
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -902,6 +902,72 @@ static void toggle_navigation_lights_event (event *ev)
 	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_LIGHTS_ON, status);
 }
 
+// Jabberwock 030930 FLIR mouse control
+
+static void mouse_next_target_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		single_target_acquisition_system_select_next_target_key++;
+	}
+}
+
+
+static void mouse_lock_target_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		toggle_comanche_lock_target ();
+	}
+}
+
+static void mouse_left_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		mouse_move_left++;
+	}
+}
+	
+static void mouse_right_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		mouse_move_right++;
+	}
+}
+
+static void mouse_up_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		mouse_move_down++;
+	}
+}
+
+static void mouse_down_event (event *ev)
+{
+	if (command_line_mouse_look == FALSE)
+	{
+		mouse_move_up++;
+	}
+}
+
+static void mouse_wheel_down_event (event *ev)
+{
+	mouse_wheel_down++;
+}
+
+static void mouse_wheel_up_event (event *ev)
+{
+	mouse_wheel_up++;
+}
+
+
+
+// Jabberwock 030930 ends
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1092,6 +1158,26 @@ void set_ah64a_avionics_events (void)
 	set_event ((JOYSTICK_BUTTON + 3), MODIFIER_NONE, KEY_STATE_DOWN, select_next_target_event);
 
 	set_event ((JOYSTICK_BUTTON + 4), MODIFIER_NONE, KEY_STATE_DOWN, virtual_cockpit_track_target_event);
+
+	// Jabberwock 030930 Mouse FLIR control
+		
+	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_lock_target_event);
+	
+	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_next_target_event);
+	
+	set_event (MOUSE_MOVE_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_up_event);
+	
+	set_event (MOUSE_MOVE_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_down_event);
+	
+	set_event (MOUSE_MOVE_LEFT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_left_event);
+	
+	set_event (MOUSE_MOVE_RIGHT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_right_event);
+	
+	set_event (MOUSE_WHEEL_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_up_event);
+	
+	set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_down_event);
+	
+	// Jabberwock 030930 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

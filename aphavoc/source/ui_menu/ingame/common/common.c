@@ -833,6 +833,9 @@ void ingame_screen_set_events (void)
 
    set_event (DIK_ADD, MODIFIER_NONE, KEY_STATE_DOWN, zoom_in_current_map_event);
    set_event (DIK_SUBTRACT, MODIFIER_NONE, KEY_STATE_DOWN, zoom_out_current_map_event);
+   
+   set_event (MOUSE_WHEEL_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, map_wheel_zoom_in_event); // Jabberwock 031002 - wheel map zoom
+   set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, zoom_out_current_map_event);
 
 	set_event (DIK_PERIOD, MODIFIER_NONE, KEY_STATE_DOWN, zoom_in_current_map_event);
 	set_event (DIK_COMMA, MODIFIER_NONE, KEY_STATE_DOWN, zoom_out_current_map_event);
@@ -862,6 +865,14 @@ void ingame_screen_set_events (void)
 
 	set_event (DIK_ADD, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, adjust_3d_preview_zoom_in_event);
 	set_event (DIK_SUBTRACT, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, adjust_3d_preview_zoom_out_event);
+
+	set_event (MOUSE_WHEEL_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_in_event); // Jabberwock 031002 - wheel preview control
+	set_event (MOUSE_WHEEL_DOWN, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_zoom_out_event);
+	set_event (MOUSE_MOVE_LEFT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_heading_left_event);
+	set_event (MOUSE_MOVE_RIGHT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_heading_right_event);
+	set_event (MOUSE_MOVE_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_up_event);
+	set_event (MOUSE_MOVE_DOWN, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_down_event);
+   
 
 	//
 	// mouse buttons

@@ -215,6 +215,7 @@ void update_havoc_eo (eo_params *eo)
 	float
 		fine_slew_rate,
 		medium_slew_rate,
+		mouse_slew_rate, // Jabberwock 030930
 		coarse_slew_rate;
 
 	ASSERT (eo);
@@ -271,6 +272,8 @@ void update_havoc_eo (eo_params *eo)
 
 			medium_slew_rate = rad (0.25) * get_delta_time ();
 
+			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+			
 			coarse_slew_rate = rad (1.0) * get_delta_time ();
 
 			break;
@@ -283,6 +286,8 @@ void update_havoc_eo (eo_params *eo)
 
 			medium_slew_rate = rad (2.5) * get_delta_time ();
 
+			mouse_slew_rate = rad (6) * get_delta_time ();	// Jabberwock 030930
+			
 			coarse_slew_rate = rad (10.0) * get_delta_time ();
 
 			break;
@@ -295,6 +300,8 @@ void update_havoc_eo (eo_params *eo)
 
 			medium_slew_rate = rad (20.0) * get_delta_time ();
 
+			mouse_slew_rate = rad (48) * get_delta_time ();	// Jabberwock 030930
+			
 			coarse_slew_rate = rad (80.0) * get_delta_time ();
 
 			break;
@@ -410,6 +417,67 @@ void update_havoc_eo (eo_params *eo)
 
 		single_target_acquisition_system_select_previous_target_key--;
 	}
+
+	// Jabberwock 030930 - Mouse FLIR control functions
+
+	if (mouse_move_left) 
+	{
+		eo_azimuth -= mouse_slew_rate;
+
+		eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+
+		mouse_move_left--;
+	}
+
+	if (mouse_move_right) 
+	{
+		eo_azimuth += mouse_slew_rate;
+
+		eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+
+		mouse_move_right--;
+	}
+
+	if (mouse_move_up) 
+	{
+		eo_elevation -= medium_slew_rate;
+
+		eo_elevation = max (eo_elevation, eo_min_elevation);
+
+		mouse_move_up--;
+	}
+
+	if (mouse_move_down) 
+	{
+		eo_elevation += medium_slew_rate;
+
+		eo_elevation = min (eo_elevation, eo_max_elevation);
+
+		mouse_move_down--;
+	}
+
+	while (mouse_wheel_down)
+	{
+
+		if (eo->field_of_view < eo->max_field_of_view)
+		{
+			eo->field_of_view++;
+		}
+
+		mouse_wheel_down--;
+	}
+
+	while (mouse_wheel_up)
+	{
+		if (eo->field_of_view > eo->min_field_of_view)
+		{
+			eo->field_of_view--;
+		}
+
+		mouse_wheel_up--;
+	}
+
+	// Jabberwock 030930 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

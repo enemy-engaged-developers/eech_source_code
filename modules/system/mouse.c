@@ -104,6 +104,7 @@ static int
 static POINT
 	windows_cursor_position;
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,8 +437,9 @@ void generate_mouse_events ( void )
 
 				create_mouse_move_event ( dx, dy, dz );
 			}
-	
+			
 			move_mouse ( dx, dy );
+	
 		}
 	}
 }
@@ -452,7 +454,8 @@ int process_mouse_event (event *ev)
 		loop,
 		modifier,
 		move_horizontal_ev = 0,
-		move_vertical_ev = 0;
+		move_vertical_ev = 0,
+		move_wheel_ev = 0; // Jabberwock 030930 Mouse wheel events
 
 	int
 		function_flag = FALSE;
@@ -500,6 +503,19 @@ int process_mouse_event (event *ev)
 			
 						move_vertical_ev = MOUSE_MOVE_DOWN;
 					}
+					// Jabberwock 030930 - mouse wheel events
+					if (ev->dz > 0)
+					{
+								
+						move_wheel_ev = MOUSE_WHEEL_UP;
+					}
+					else if (ev->dz < 0)
+					{
+						move_wheel_ev = MOUSE_WHEEL_DOWN;
+					}
+					
+					// Jabberwock 030930 ends
+					
 	
 					// horizontal move function
 		
@@ -537,6 +553,23 @@ int process_mouse_event (event *ev)
 						}
 					}
 	
+					if (move_wheel_ev)
+						{
+		
+							if (registered_events [move_wheel_ev][loop].in_use)
+							{
+		
+								if (registered_events [move_wheel_ev][loop].function)
+								{
+		
+									registered_events [move_wheel_ev][loop].function (ev);
+		
+									function_flag = TRUE;
+								}
+							}
+						}
+	
+	
 					// if we've already done a function quit
 	
 					if (!function_flag)
@@ -559,7 +592,7 @@ int process_mouse_event (event *ev)
 	
 					break;
 				}
-		
+				
 				case EVENT_TYPE_MOUSE_BUTTON:
 				default:
 				{
@@ -627,7 +660,9 @@ void move_mouse ( int dx, int dy )
 
 		mouse_position_x = bound ( mouse_position_x, 0, (application_video_width -1) );
 		mouse_position_y = bound ( mouse_position_y, 0, (application_video_height -1) );
+	
 	}
+	
 
 	// Retro 030317 starts
 	// OK what´s happening here... I need an absolute rather than a relative mouse, so I add/dec the mouse movements
@@ -685,7 +720,7 @@ void set_mouse_off ( void )
 
 		#endif
 
-		mouse_on = FALSE;
+		// mouse_on = FALSE; Commented out by Jabberwock 030930, to enable mouse FLIR control
 	}
 
 	set_mouse_graphic_off ();
@@ -877,4 +912,3 @@ static long windows_right_button_down_routine ( HWND hWnd, UINT message, WPARAM 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
