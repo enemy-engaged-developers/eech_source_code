@@ -70,8 +70,28 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 030807 radar range adjustable 
+float  	BLACKHAWK_RADAR_SCAN_RANGE_500,	
+			BLACKHAWK_RADAR_SCAN_RANGE_1000,
+			BLACKHAWK_RADAR_SCAN_RANGE_2000,			
+			BLACKHAWK_RADAR_SCAN_RANGE_4000,			
+			BLACKHAWK_RADAR_SCAN_RANGE_8000;			
+			
+float radar_range_blackhawk[5];
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_blackhawk_radar (void)
 {
+	//VJ 030807 radar range adjustable 	                                    
+   BLACKHAWK_RADAR_SCAN_RANGE_500  = radar_range_blackhawk[0];	         
+	BLACKHAWK_RADAR_SCAN_RANGE_1000 = radar_range_blackhawk[1];            
+	BLACKHAWK_RADAR_SCAN_RANGE_2000 = radar_range_blackhawk[2];		      
+	BLACKHAWK_RADAR_SCAN_RANGE_4000 = radar_range_blackhawk[3];		      
+	BLACKHAWK_RADAR_SCAN_RANGE_8000 = radar_range_blackhawk[4];				
+	
 	ground_radar.scan_range		  			= BLACKHAWK_RADAR_SCAN_RANGE_8000;
 	ground_radar.scan_datum	  				= rad (0.0);
 	ground_radar.scan_arc_size	  			= BLACKHAWK_RADAR_SCAN_ARC_SIZE_90;

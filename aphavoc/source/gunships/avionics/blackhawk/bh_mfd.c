@@ -1026,8 +1026,10 @@ static void draw_field_of_regard_and_view_boxes (void)
 
 static void display_radar_scan_range (float scan_range)
 {
+//VJ 030807 radar range adjustable
 	char
-		*s;
+		s[8];
+//		*s;
 
 	float
 		width,
@@ -1035,27 +1037,33 @@ static void display_radar_scan_range (float scan_range)
 
 	if (scan_range == BLACKHAWK_RADAR_SCAN_RANGE_500)
 	{
-		s = "500m";
+//		s = "500m";
+		sprintf(s,"%.0fm",BLACKHAWK_RADAR_SCAN_RANGE_500);
 	}
 	else if (scan_range == BLACKHAWK_RADAR_SCAN_RANGE_1000)
 	{
-		s = "1Km";
+//		s = "1Km";
+		sprintf(s,"%.0fKm",BLACKHAWK_RADAR_SCAN_RANGE_1000/1000);
 	}
 	else if (scan_range == BLACKHAWK_RADAR_SCAN_RANGE_2000)
 	{
-		s = "2Km";
+//		s = "2Km";
+		sprintf(s,"%.0fKm",BLACKHAWK_RADAR_SCAN_RANGE_2000/1000);
 	}
 	else if (scan_range == BLACKHAWK_RADAR_SCAN_RANGE_4000)
 	{
-		s = "4Km";
+//		s = "4Km";
+		sprintf(s,"%.0fKm",BLACKHAWK_RADAR_SCAN_RANGE_4000/1000);
 	}
 	else if (scan_range == BLACKHAWK_RADAR_SCAN_RANGE_8000)
 	{
-		s = "8Km";
+//		s = "8Km";
+		sprintf(s,"%.0fKm",BLACKHAWK_RADAR_SCAN_RANGE_8000/1000);
 	}
 	else
 	{
-		s = "XXX";
+//		s = "XXX";
+		sprintf(s,"XXX");
 	}
 
 	width = get_mono_font_string_width (s);
@@ -1232,7 +1240,7 @@ static void draw_radar_arc (float arc_size, float radius, rgb_colour colour)
 		x2,
 		y2;
 
-	num_segments = (int) (arc_size * (1.0 / BLACKHAWK_RADAR_SCAN_ARC_SEGMENT_SIZE));
+	num_segments = (int) (arc_size * (1.0 / APACHE_RADAR_SCAN_ARC_SEGMENT_SIZE));
 
 	if (num_segments > 0)
 	{
@@ -1245,7 +1253,7 @@ static void draw_radar_arc (float arc_size, float radius, rgb_colour colour)
 
 		while (num_segments--)
 		{
-			theta -= BLACKHAWK_RADAR_SCAN_ARC_SEGMENT_SIZE;
+			theta -= APACHE_RADAR_SCAN_ARC_SEGMENT_SIZE;
 
 			sine_cosine (theta, &sin_theta, &cos_theta);
 
@@ -1683,7 +1691,7 @@ static void draw_ground_radar_mfd (void)
 
 	draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
 
-	draw_radar_arc (BLACKHAWK_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR4);
+	draw_radar_arc (APACHE_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR4);
 
 	//
 	// scan limits and range markers
@@ -1914,7 +1922,7 @@ static void draw_air_radar_mfd (void)
 	// scan limits
 	//
 
-	if (air_radar.scan_arc_size == BLACKHAWK_RADAR_SCAN_ARC_SIZE_360)
+	if (air_radar.scan_arc_size == APACHE_RADAR_SCAN_ARC_SIZE_360)
 	{
 		draw_2d_circle (0.0, 0.0, RADIUS, MFD_COLOUR1);
 	}
@@ -2305,6 +2313,9 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 	day_segment_types
 		day_segment_type;
 
+	int
+		tint;
+
 	ASSERT (eo);
 
 	switch (eo->field_of_view)
@@ -2379,26 +2390,35 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
+	if (command_line_green_mfd)
+	{
+		tint = DISPLAY_3D_TINT_GREEN;
+	}
+	else
+	{
+		tint = DISPLAY_3D_TINT_GREY;
+	}
+
 	if (draw_large_mfd)
 	{
 		if (location == MFD_LOCATION_LHS)
 		{
-			set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, 334.0, 333.0, rad (59.99) * zoom, rad (59.99) * zoom);
+			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, 334.0, 333.0, rad (59.99) * zoom, rad (59.99) * zoom);
 		}
 		else
 		{
-			set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, 334.0, 333.0, rad (59.99) * zoom, rad (59.99) * zoom);
+			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, 334.0, 333.0, rad (59.99) * zoom, rad (59.99) * zoom);
 		}
 	}
 	else
 	{
 		if (location == MFD_LOCATION_LHS)
 		{
-			set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad (59.99) * zoom, rad (59.99) * zoom);
+			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad (59.99) * zoom, rad (59.99) * zoom);
 		}
 		else
 		{
-			set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad (59.99) * zoom, rad (59.99) * zoom);
+			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad (59.99) * zoom, rad (59.99) * zoom);
 		}
 	}
 
@@ -2432,6 +2452,9 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	day_segment_types
 		day_segment_type;
+
+	int
+		tint;
 
 	ASSERT (eo);
 
@@ -2515,7 +2538,16 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	set_active_screen (small_eo_3d_texture_screen);
 
-	set_main_3d_params (DISPLAY_3D_TINT_GREEN, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	if (command_line_green_mfd)
+	{
+		tint = DISPLAY_3D_TINT_GREEN;
+	}
+	else
+	{
+		tint = DISPLAY_3D_TINT_GREY;
+	}
+
+	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -3171,25 +3203,25 @@ static void draw_tactical_situation_display_mfd (void)
 		set_rgb_colour (MFD_COLOUR3,	240, 64,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4,	148, 32,   0, 255);//dark red
 
-		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini		
-		set_rgb_colour (MFD_COLOUR7,   96, 96, 96, 255);
 		if (tsd_render_palette == 0)
 		{
-			set_rgb_colour (MFD_COLOUR8,    48, 48, 48, 255);
 			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
-		}	
+		}
 		else
-		if (tsd_render_palette == 1)
-		{
-			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
-			set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
-		}	
-		else
-		{
-			set_rgb_colour (MFD_COLOUR8,    64, 64, 64, 255);
-			set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
-		}	
+			if (tsd_render_palette == 1)
+			{
+				set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
+			}	
+			else
+			{
+				set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
+			}	
+		
 		set_rgb_colour (MFD_COLOUR6,	255, 255,  0, 255);
+		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini		
+		//VJ 030530 colour tweaks: black and dark gray are best
+		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
+		set_rgb_colour (MFD_COLOUR8,   0, 0, 0, 255);
 		
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
 	}
@@ -3243,7 +3275,7 @@ static void draw_tactical_situation_display_mfd (void)
 
 			radius = air_radar.scan_range * scale;
 
-			if (air_radar.scan_arc_size == BLACKHAWK_RADAR_SCAN_ARC_SIZE_360)
+			if (air_radar.scan_arc_size == APACHE_RADAR_SCAN_ARC_SIZE_360)
 			{
 				draw_2d_circle (0.0, 0.0, radius, MFD_COLOUR4);
 			}
@@ -3457,10 +3489,14 @@ static void draw_tactical_situation_display_mfd (void)
 
 //VJ 030423 TSD render mod, enemy of comanche so red
 //VJ 030511 TSD render mod, enemy optional in eech.ini
-							if (command_line_tsd_enemy_colours)
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-							else				
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);							
+//VJ 030530 TSD render mod, corrected colour vor original view MFD_COLOUR2
+							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE) 
+								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+							else	
+								if (command_line_tsd_enemy_colours)
+									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
+								else				
+									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
 						}
 					}
 				}
@@ -4761,6 +4797,219 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 		return;
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	// Chain Gun
+	//
+	////////////////////////////////////////////////////////////////////////////////
+
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND)
+	{
+		if (draw_large_mfd)
+		{
+			////////////////////////////////////////
+			//
+			// LARGE
+			//
+			////////////////////////////////////////
+
+			//
+			// chain gun
+			//
+
+			if (number == 0)
+			{
+				if ((weapon_sub_type == selected_weapon) && (!damaged))
+				{
+					draw_sprite (118, 200, 262, 134, 28, 27);
+				}
+			}
+			else
+			{
+				if ((weapon_sub_type == selected_weapon) && (!damaged))
+				{
+					draw_sprite (118, 200, 292, 134, 28, 27);
+				}
+				else
+				{
+					draw_sprite (118, 200, 322, 134, 27, 27);
+				}
+			}
+
+			//
+			// digits
+			//
+
+			hardpoint_x = 115;
+			hardpoint_y = 234;
+
+			sprintf (buffer, "%04d", number);
+
+			if ((weapon_sub_type == selected_weapon) && (!damaged))
+			{
+				v = 32;
+			}
+			else
+			{
+				v = 47;
+			}
+
+			if (buffer[0] == '0')
+			{
+				u = 364 + (9 * 10);
+			}
+			else
+			{
+				u = 364 + ((buffer[0] - '1') * 10);
+			}
+
+			draw_sprite (hardpoint_x, hardpoint_y, u, v, 8, 12);
+
+			if (buffer[1] == '0')
+			{
+				u = 364 + (9 * 10);
+			}
+			else
+			{
+				u = 364 + ((buffer[1] - '1') * 10);
+			}
+
+			draw_sprite (hardpoint_x + 9, hardpoint_y, u, v, 8, 12);
+
+			if (buffer[2] == '0')
+			{
+				u = 364 + (9 * 10);
+			}
+			else
+			{
+				u = 364 + ((buffer[2] - '1') * 10);
+			}
+
+			draw_sprite (hardpoint_x + 18, hardpoint_y, u, v, 8, 12);
+
+			if (buffer[3] == '0')
+			{
+				u = 364 + (9 * 10);
+			}
+			else
+			{
+				u = 364 + ((buffer[3] - '1') * 10);
+			}
+
+			draw_sprite (hardpoint_x + 27, hardpoint_y, u, v, 8, 12);
+
+			//
+			// damage cross
+			//
+
+			if (damaged)
+			{
+				draw_sprite (116, 203, 334, 61, 32, 32);
+			}
+		}
+		else
+		{
+			////////////////////////////////////////
+			//
+			// SMALL
+			//
+			////////////////////////////////////////
+
+			//
+			// chain gun
+			//
+
+			if (number == 0)
+			{
+				if ((weapon_sub_type == selected_weapon) && (!damaged))
+				{
+					draw_sprite (61, 360, 133, 327, 14, 13);
+				}
+			}
+			else
+			{
+				if ((weapon_sub_type == selected_weapon) && (!damaged))
+				{
+					draw_sprite (61, 360, 148, 327, 14, 13);
+				}
+				else
+				{
+					draw_sprite (61, 360, 163, 327, 13, 13);
+				}
+			}
+
+			//
+			// digits
+			//
+
+			hardpoint_x = 60;
+			hardpoint_y = 377;
+
+			sprintf (buffer, "%04d", number);
+
+			if ((weapon_sub_type == selected_weapon) && (!damaged))
+			{
+				v = 276;
+			}
+			else
+			{
+				v = 283;
+			}
+
+			if (buffer[0] == '0')
+			{
+				u = 184 + (9 * 5);
+			}
+			else
+			{
+				u = 184 + ((buffer[0] - '1') * 5);
+			}
+
+			draw_sprite (hardpoint_x, hardpoint_y, u, v, 4, 6);
+
+			if (buffer[1] == '0')
+			{
+				u = 184 + (9 * 5);
+			}
+			else
+			{
+				u = 184 + ((buffer[1] - '1') * 5);
+			}
+
+			draw_sprite (hardpoint_x + 4, hardpoint_y, u, v, 4, 6);
+
+			if (buffer[2] == '0')
+			{
+				u = 184 + (9 * 5);
+			}
+			else
+			{
+				u = 184 + ((buffer[2] - '1') * 5);
+			}
+
+			draw_sprite (hardpoint_x + 8, hardpoint_y, u, v, 4, 6);
+
+			if (buffer[3] == '0')
+			{
+				u = 184 + (9 * 5);
+			}
+			else
+			{
+				u = 184 + ((buffer[3] - '1') * 5);
+			}
+
+			draw_sprite (hardpoint_x + 12, hardpoint_y, u, v, 4, 6);
+
+			//
+			// damage cross
+			//
+
+			if (damaged)
+			{
+				draw_sprite (60, 361, 169, 290, 16, 16);
+			}
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -4784,28 +5033,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 50;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 188;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 18;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 220;
 					hardpoint_y = 177;
@@ -4885,25 +5134,25 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 			{
 				switch (heading_depth)
 				{
-					case BLACKHAWK_LHS_INNER_PYLON:
+					case APACHE_LHS_INNER_PYLON:
 					{
 						draw_sprite (47, 181, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_RHS_INNER_PYLON:
+					case APACHE_RHS_INNER_PYLON:
 					{
 						draw_sprite (185, 181, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_LHS_OUTER_PYLON:
+					case APACHE_LHS_OUTER_PYLON:
 					{
 						draw_sprite (15, 181, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_RHS_OUTER_PYLON:
+					case APACHE_RHS_OUTER_PYLON:
 					{
 						draw_sprite (217, 181, 334, 61, 32, 32);
 
@@ -4918,28 +5167,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 47;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 185;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 15;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 217;
 					hardpoint_y = 234;
@@ -4985,28 +5234,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 27;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 96;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 11;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 112;
 					hardpoint_y = 348;
@@ -5086,25 +5335,25 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 			{
 				switch (heading_depth)
 				{
-					case BLACKHAWK_LHS_INNER_PYLON:
+					case APACHE_LHS_INNER_PYLON:
 					{
 						draw_sprite (26, 350, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_RHS_INNER_PYLON:
+					case APACHE_RHS_INNER_PYLON:
 					{
 						draw_sprite (95, 350, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_LHS_OUTER_PYLON:
+					case APACHE_LHS_OUTER_PYLON:
 					{
 						draw_sprite (10, 350, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_RHS_OUTER_PYLON:
+					case APACHE_RHS_OUTER_PYLON:
 					{
 						draw_sprite (111, 350, 169, 290, 16, 16);
 
@@ -5119,28 +5368,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 26;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 95;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 10;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 111;
 					hardpoint_y = 377;
@@ -5196,28 +5445,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 53;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 191;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 21;
 					hardpoint_y = 177;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 223;
 					hardpoint_y = 177;
@@ -5241,8 +5490,8 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					if (number > 3)
 					{
@@ -5338,8 +5587,8 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					if (number > 3)
 					{
@@ -5445,25 +5694,25 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 			{
 				switch (heading_depth)
 				{
-					case BLACKHAWK_LHS_INNER_PYLON:
+					case APACHE_LHS_INNER_PYLON:
 					{
 						draw_sprite (47, 196, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_RHS_INNER_PYLON:
+					case APACHE_RHS_INNER_PYLON:
 					{
 						draw_sprite (185, 196, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_LHS_OUTER_PYLON:
+					case APACHE_LHS_OUTER_PYLON:
 					{
 						draw_sprite (15, 196, 334, 61, 32, 32);
 
 						break;
 					}
-					case BLACKHAWK_RHS_OUTER_PYLON:
+					case APACHE_RHS_OUTER_PYLON:
 					{
 						draw_sprite (217, 196, 334, 61, 32, 32);
 
@@ -5478,28 +5727,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 47;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 185;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 15;
 					hardpoint_y = 234;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 217;
 					hardpoint_y = 234;
@@ -5545,28 +5794,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 29;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 98;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 13;
 					hardpoint_y = 348;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 114;
 					hardpoint_y = 348;
@@ -5590,8 +5839,8 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					if (number > 3)
 					{
@@ -5687,8 +5936,8 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					if (number > 3)
 					{
@@ -5794,25 +6043,25 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 			{
 				switch (heading_depth)
 				{
-					case BLACKHAWK_LHS_INNER_PYLON:
+					case APACHE_LHS_INNER_PYLON:
 					{
 						draw_sprite (26, 358, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_RHS_INNER_PYLON:
+					case APACHE_RHS_INNER_PYLON:
 					{
 						draw_sprite (95, 358, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_LHS_OUTER_PYLON:
+					case APACHE_LHS_OUTER_PYLON:
 					{
 						draw_sprite (10, 358, 169, 290, 16, 16);
 
 						break;
 					}
-					case BLACKHAWK_RHS_OUTER_PYLON:
+					case APACHE_RHS_OUTER_PYLON:
 					{
 						draw_sprite (111, 358, 169, 290, 16, 16);
 
@@ -5827,28 +6076,28 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 
 			switch (heading_depth)
 			{
-				case BLACKHAWK_LHS_INNER_PYLON:
+				case APACHE_LHS_INNER_PYLON:
 				{
 					hardpoint_x = 26;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_RHS_INNER_PYLON:
+				case APACHE_RHS_INNER_PYLON:
 				{
 					hardpoint_x = 95;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_LHS_OUTER_PYLON:
+				case APACHE_LHS_OUTER_PYLON:
 				{
 					hardpoint_x = 10;
 					hardpoint_y = 377;
 
 					break;
 				}
-				case BLACKHAWK_RHS_OUTER_PYLON:
+				case APACHE_RHS_OUTER_PYLON:
 				{
 					hardpoint_x = 111;
 					hardpoint_y = 377;
@@ -5882,6 +6131,293 @@ static draw_weapon_hardpoint_info (int heading_depth, entity_sub_types given_wea
 		}
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	// Stingers
+	//
+	////////////////////////////////////////////////////////////////////////////////
+
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+	{
+		if (draw_large_mfd)
+		{
+			////////////////////////////////////////
+			//
+			// LARGE
+			//
+			////////////////////////////////////////
+
+			//
+			// missiles
+			//
+
+			switch (heading_depth)
+			{
+				case APACHE_LHS_WING_TIP_MOUNT:
+				{
+					if (number > 1)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (6, 144, 280, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (6, 144, 316, 61, 16, 16);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (6, 144, 262, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (6, 144, 298, 61, 16, 16);
+						}
+					}
+
+					if (number > 0)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (6, 161, 280, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (6, 161, 316, 61, 16, 16);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (6, 161, 262, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (6, 161, 298, 61, 16, 16);
+						}
+					}
+
+					break;
+				}
+				case APACHE_RHS_WING_TIP_MOUNT:
+				{
+					if (number > 1)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (242, 144, 280, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (242, 144, 316, 61, 16, 16);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (242, 144, 262, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (242, 144, 298, 61, 16, 16);
+						}
+					}
+
+					if (number > 0)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (242, 161, 280, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (242, 161, 316, 61, 16, 16);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (242, 161, 262, 61, 16, 16);
+						}
+						else
+						{
+							draw_sprite (242, 161, 298, 61, 16, 16);
+						}
+					}
+
+					break;
+				}
+			}
+
+			//
+			// damage cross
+			//
+
+			if (damaged)
+			{
+				switch (heading_depth)
+				{
+					case APACHE_LHS_WING_TIP_MOUNT:
+					{
+						draw_sprite (6, 144, 368, 61, 17, 33);
+
+						break;
+					}
+					case APACHE_RHS_WING_TIP_MOUNT:
+					{
+						draw_sprite (241, 144, 368, 61, 17, 33);
+
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			////////////////////////////////////////
+			//
+			// SMALL
+			//
+			////////////////////////////////////////
+
+			//
+			// missiles
+			//
+
+			switch (heading_depth)
+			{
+				case APACHE_LHS_WING_TIP_MOUNT:
+				{
+					if (number > 1)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (5, 332, 142, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (5, 332, 160, 290, 8, 8);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (5, 332, 133, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (5, 332, 151, 290, 8, 8);
+						}
+					}
+
+					if (number > 0)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (5, 340, 142, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (5, 340, 160, 290, 8, 8);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (5, 340, 133, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (5, 340, 151, 290, 8, 8);
+						}
+					}
+
+					break;
+				}
+				case APACHE_RHS_WING_TIP_MOUNT:
+				{
+					if (number > 1)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (123, 332, 142, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (123, 332, 160, 290, 8, 8);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (123, 332, 133, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (123, 332, 151, 290, 8, 8);
+						}
+					}
+
+					if (number > 0)
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (123, 340, 142, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (123, 340, 160, 290, 8, 8);
+						}
+					}
+					else
+					{
+						if ((weapon_sub_type == selected_weapon) && (!damaged))
+						{
+							draw_sprite (123, 340, 133, 290, 8, 8);
+						}
+						else
+						{
+							draw_sprite (123, 340, 151, 290, 8, 8);
+						}
+					}
+
+					break;
+				}
+			}
+
+			//
+			// damage cross
+			//
+
+			if (damaged)
+			{
+				switch (heading_depth)
+				{
+					case APACHE_LHS_WING_TIP_MOUNT:
+					{
+						draw_sprite (5, 332, 186, 290, 8, 17);
+
+						break;
+					}
+					case APACHE_RHS_WING_TIP_MOUNT:
+					{
+						draw_sprite (122, 332, 186, 290, 8, 17);
+
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -6232,17 +6768,23 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 		// hardpoints
 		//
 
-		draw_weapon_hardpoint_info (BLACKHAWK_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_RHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+
+		draw_weapon_hardpoint_info (APACHE_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+
+		draw_weapon_hardpoint_info (APACHE_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, selected_weapon);
+
+		draw_weapon_hardpoint_info (APACHE_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, selected_weapon);
 
 		//
 		// auto-countermeasures
@@ -6337,18 +6879,23 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 		// hardpoints
 		//
 
+		draw_weapon_hardpoint_info (APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_RHS_WING_TIP_MOUNT, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_RHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
 
-		draw_weapon_hardpoint_info (BLACKHAWK_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, selected_weapon);
+		draw_weapon_hardpoint_info (APACHE_RHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, selected_weapon);
+
+		draw_weapon_hardpoint_info (APACHE_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF, selected_weapon);
+
+		draw_weapon_hardpoint_info (APACHE_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE, selected_weapon);
 
 		//
 		// auto-countermeasures
