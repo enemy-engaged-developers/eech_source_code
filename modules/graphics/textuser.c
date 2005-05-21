@@ -93,6 +93,9 @@
 
 #include "graphics.h"
 
+//VJ 050304 needed for texture colour mod
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,11 +186,32 @@ typedef struct TEXTURE_NAME_HASH_ENTRY texture_name_hash_entry;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+struct DDSURFACEDESC2 
+Member Description 
+DWORD dwSize Size of structure. This member must be set to 124. 
+DWORD dwFlags Flags to indicate valid fields. Always include DDSD_CAPS, DDSD_PIXELFORMAT, DDSD_WIDTH, DDSD_HEIGHT. 
+DWORD dwHeight Height of the main image in pixels 
+DWORD dwWidth Width of the main image in pixels 
+DWORD dwPitchOrLinearSize For uncompressed formats, this is the number of bytes per scan line (DWORD> aligned) for the main image. dwFlags should include DDSD_PITCH in this case. For compressed formats, this is the total number of bytes for the main image. dwFlags should be include DDSD_LINEARSIZE in this case. 
+DWORD dwDepth For volume textures, this is the depth of the volume. dwFlags should include DDSD_DEPTH in this case. 
+DWORD dwMipMapCount For items with mipmap levels, this is the total number of levels in the mipmap chain of the main image. dwFlags should include DDSD_MIPMAPCOUNT in this case. 
+DWORD dwReserved1[11]  
+DDPIXELFORMAT ddpfPixelFormat 32-byte value that specifies the pixel format structure. 
+DDCAPS2 ddsCaps 16-byte value that specifies the capabilities structure. 
+DWORD dwReserved2 
+*/
 
 int
 	number_of_system_texture_palettes,
 	number_of_system_textures,
 	number_of_system_texture_camoflages;
+
+//VJ 050322 texture coulor mod: texture scale array, 64 is enough for terrain textures
+int 
+	texture_override_scales[64][2];
+	
+//FILE *fout;
 
 screen
 	*system_textures[MAX_TEXTURES],
@@ -261,11 +285,19 @@ void convert_single_alpha_texture_map_data ( unsigned char *data, int width, int
 
 void convert_multiple_alpha_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp );
 
-void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp );
+void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp, int reverse );
 
 void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp );
+void convert_single_alpha_32bit_texture_map_data_v ( unsigned char *data, unsigned char *dataa, int width, int height, screen *this_texture);
 
-void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp );
+void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp, int reverse );
+
+//VJ 050503 check bitmap
+int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename );
+
+//void load_texture_override_dds ( char system_texture_override_names[MAX_TEXTURES][128]);
+
+screen *create_texture_map_dds ( int type, DDSURFACEDESC2 ddsd );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1047,7 +1079,7 @@ BOOL load_texturemap_data ( char *path )
 			}
 		}
 		*/
-
+//VJ 24 bit texture loading
 		for ( count = 0; count < number_of_system_textures; count++ )
 		{
 
@@ -1104,7 +1136,6 @@ BOOL load_texturemap_data ( char *path )
 			system_texture_name_hashes[count].texture_index = count;
 			system_texture_name_hashes[count].succ = system_texture_name_hash_table[hash_index];
 			system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[count];
-
 			if ( flags.reserved_texture )
 			{
 
@@ -1133,7 +1164,7 @@ BOOL load_texturemap_data ( char *path )
 				//
 				// If we compress the textures, skip over the first level texture
 				//
-
+//VJ 050423 compress_system_textures = FALSE in textsys.c as far as I know
 				if ( compress_system_textures )
 				{
 
@@ -1208,6 +1239,8 @@ BOOL load_texturemap_data ( char *path )
 					}
 				}
 
+//VJ mip mapped textures are just one behind the other and width/height is halved
+
 				if ( ( width != height ) && ( d3d_square_only_textures ) )
 				{
 
@@ -1239,7 +1272,7 @@ BOOL load_texturemap_data ( char *path )
 
 					if ( ( temp == 0 ) || ( d3d_mipmap_textures ) )
 					{
-
+//VJ# in C:\gms\Razorworks\eech-new\modules\graphics\textsys.c
 #if ( ALLOW_TEXTURE_CREATION )
 						while ( !lock_texture ( this_texture, temp ) )
 						{
@@ -1254,11 +1287,11 @@ BOOL load_texturemap_data ( char *path )
 							case TEXTURE_TYPE_NOALPHA:
 							case TEXTURE_TYPE_NOALPHA_NOPALETTE:
 							{
-
+//3 bytes for RGB
 								fread ( texture_image_data, ( width * height * 3 ), 1, fp );
 
 #if ( ALLOW_TEXTURE_CREATION )
-								convert_no_alpha_24bit_texture_map_data ( texture_image_data, width, height, this_texture, fp );
+								convert_no_alpha_24bit_texture_map_data ( texture_image_data, width, height, this_texture, fp, 0 );
 #endif
 
 								break;
@@ -1266,6 +1299,7 @@ BOOL load_texturemap_data ( char *path )
 
 							case TEXTURE_TYPE_SINGLEALPHA:
 							{
+//4 bytes for RGBA
 
 								fread ( texture_image_data, ( width * height * 4 ), 1, fp );
 
@@ -1282,7 +1316,7 @@ BOOL load_texturemap_data ( char *path )
 								fread ( texture_image_data, ( width * height * 4 ), 1, fp );
 
 #if ( ALLOW_TEXTURE_CREATION )
-								convert_multiple_alpha_32bit_texture_map_data ( texture_image_data, width, height, this_texture, fp );
+								convert_multiple_alpha_32bit_texture_map_data ( texture_image_data, width, height, this_texture, fp, 0 );
 #endif
 
 								break;
@@ -1296,7 +1330,7 @@ BOOL load_texturemap_data ( char *path )
 					else
 					{
 
-						//
+						// graphics card cannot handle mipmapping
 						// Skip over the mipmap data
 						//
 
@@ -1336,6 +1370,7 @@ BOOL load_texturemap_data ( char *path )
 				}
 			}
 		}
+//		fclose(fout);
 	}
 
 	return ( TRUE );
@@ -1805,7 +1840,7 @@ void convert_multiple_alpha_texture_map_data ( unsigned char *data, int width, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp )
+void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp, int reverse )
 {
 
 	int
@@ -1857,10 +1892,15 @@ void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, i
 
 			for ( x = 0; x < width; x++ )
 			{
-
+				if (!reverse){
 				red = *data++;
 				green = *data++;
 				blue = *data++;
+				}else{				
+				blue = *data++;
+				green = *data++;
+				red = *data++;
+				}				
 
 				red <<= 24;
 				green <<= 24;
@@ -1914,9 +1954,15 @@ void convert_no_alpha_24bit_texture_map_data ( unsigned char *data, int width, i
 			for ( x = 0; x < width; x++ )
 			{
 
+				if (!reverse){
 				red = *data++;
 				green = *data++;
 				blue = *data++;
+				}else{				
+				blue = *data++;
+				green = *data++;
+				red = *data++;
+				}				
 
 				red <<= 24;
 				green <<= 24;
@@ -2106,7 +2152,7 @@ void convert_single_alpha_32bit_texture_map_data ( unsigned char *data, int widt
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp )
+void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp, int reverse )
 {
 
 	int
@@ -2160,9 +2206,16 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 			for ( x = 0; x < width; x++ )
 			{
 
-				red = *data++;
-				green = *data++;
-				blue = *data++;
+				if (!reverse){
+					red = *data++;
+					green = *data++;
+					blue = *data++;
+				}
+				else{
+					blue = *data++;
+					green = *data++;
+					red = *data++;
+				}						
 				alpha = *data++;
 				alpha = 255 - alpha;
 
@@ -2221,9 +2274,16 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 			for ( x = 0; x < width; x++ )
 			{
 
-				red = *data++;
-				green = *data++;
-				blue = *data++;
+				if (!reverse){
+					red = *data++;
+					green = *data++;
+					blue = *data++;
+				}
+				else{
+					blue = *data++;
+					green = *data++;
+					red = *data++;
+				}						
 				alpha = *data++;
 				alpha = 255 - alpha;
 
@@ -2539,7 +2599,10 @@ int match_system_texture_name ( char *name )
 	*ptr++ = '\0';
 
 	// throw away the first part of the name = the sub-directory of cohokum\graphics\textures
-	p = strchr(real_name,'\\');
+	// scan string for last occurence of '\\'
+	// throw away that part
+	//VJ 050319 texture colour mod, adjustment
+	p = strrchr(real_name,'\\');
 	p++;
 
 	strcpy(real_name, p);
@@ -3499,41 +3562,39 @@ void load_custom_textures ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128] )//, char *mapname )
+void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128])
 {
 
 	FILE
-		*fp;
+		*fp, *fpa;
 
 // VJ 041217 bitmap header info: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_5f8y.asp
 	BITMAPFILEHEADER
-		bmfh;
+		bmfh, bmfha;
 
 	BITMAPINFOHEADER
-		bmih;
+		bmih, bmiha;
 
 	char
-		*buffer,
-		*p;
+		*buffer, *buffera, *buffer4;
 
 	char
-		full_override_texture_filename[128];
+		full_override_texture_filename[128],
+		full_override_texture_filename_a[128];
 
 	int
-		count,
-		buffer_size,
-		x,
-		y;
+		count, temp, mipmap, alpha,
+		width, height, 
+		buffer_size;
 
-	rgb_colour
-		col;
 
 	//VJ 041217 palette for 8 bit textures
-	rgb_colour pal[256];
+	rgb_colour 
+		pal[256];
 
 	//static
 	screen
-				*override_screen;
+		*override_screen;
 
 	// Now that all the screens are loaded we check to see if there is are any overrides
 	for( count=0; count < MAX_TEXTURES; count++ )
@@ -3546,144 +3607,165 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 		if( retrieved_index > 0)
 		{
 
-//			sprintf ( full_override_texture_filename, "%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname, system_texture_override_names[count] );
 			sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count] );
+
+			debug_log ("++OVERRIDES++ looking for file %s",full_override_texture_filename);
 
 			if ( !file_exist ( full_override_texture_filename ) )
 				continue;
 
-			debug_log ("++OVERRIDES++ Loading file %s",full_override_texture_filename);
-
-			fp = safe_fopen (full_override_texture_filename, "rb");
-
-			//
-			// check if the file header is correct
-			//
-
-			fread (&bmfh, sizeof (bmfh), 1, fp);
-
-			if (bmfh.bfType != BITMAP_ID)
+			//VJ 050426 destroy texture that is to be replaced
+			if ( system_textures[retrieved_index]->palette )
 			{
-				safe_fclose (fp);
-
-				debug_log ("%s is not a real bitmap",full_override_texture_filename);
-
-				return;
+				IDirectDrawSurface7_SetPalette ( system_textures[retrieved_index]->surface, NULL );
+				system_textures[retrieved_index]->palette = NULL;
 			}
-
-			//
-			// check if the info header is correct
-			//
-
-			fread (&bmih, sizeof (bmih), 1, fp);
-
-		   //VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
-		   if (bmih.biBitCount == 8){
-		 	   fread (&pal, sizeof (pal), 1, fp);
-		 	}
-
-			if (bmih.biCompression != BI_RGB)
+			release_texture_surface ( &system_textures[retrieved_index]->surface );
+	
+			// check nr of mipmap levels;			
+			mipmap = 1;
+			sprintf ( full_override_texture_filename, "%s\\%s_%d.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count], mipmap );
+			while (file_exist ( full_override_texture_filename ) )
 			{
-				safe_fclose (fp);
-
-				debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
-
-				return;
+				mipmap++;
+				sprintf ( full_override_texture_filename, "%s\\%s_%d.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count], mipmap ); 
 			}
+			mipmap--;
 
-			//VJ only 8 and 24 bit uncompressed bitmaps are read
-			if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
+		//if (mipmap > 0) debug_fatal("mipmap %s %d",full_override_texture_filename,mipmap);		
+
+			// check alpha presence
+			sprintf ( full_override_texture_filename, "%s\\%s_a.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count]);
+			alpha = 0;
+			if (file_exist ( full_override_texture_filename )) alpha = 1;
+		
+//VJ mipmapping, set mipmap to 0 for now, itnworks but still beta stage
+mipmap = 0;			
+alpha = 0;
+
+			for ( temp = 0; temp <= mipmap; temp++ )
 			{
-				safe_fclose (fp);
+	   		
+				if (temp == 0)
+					sprintf ( full_override_texture_filename, "%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count] );
+				else
+					sprintf ( full_override_texture_filename, "%s\\%s_%d.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count], temp ); 
 
-				debug_log ("%s is not 24 bit!", full_override_texture_filename );
+				fp = safe_fopen (full_override_texture_filename, "rb");
+				
+				fread (&bmfh, sizeof (bmfh), 1, fp);
+      	
+				//read bitmap header info structure
+				fread (&bmih, sizeof (bmih), 1, fp);   			
+   			//VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
+   			
+				if (bmih.biBitCount == 8){
+ 	   			fread (&pal, sizeof (pal), 1, fp);
+ 				}
+ 				
+				
+				//check bitmap header for correct format
+      		if (!check_bitmap_header ( bmih, full_override_texture_filename) )
+      		{
+					safe_fclose (fp);
+      			return;
+      		}      	
 
-				return;
-			}
+				if (alpha > 0)
+				{
+					if (temp == 0)
+						sprintf ( full_override_texture_filename_a, "%s\\%s_a.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count] );
+					else
+						sprintf ( full_override_texture_filename_a, "%s\\%s_%d_a.bmp", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count], temp ); 										
 
-			if (bmih.biHeight > MAX_TEXTURE_WIDTH)
-			{
-				safe_fclose (fp);
+					fpa = safe_fopen (full_override_texture_filename_a, "rb");
+			
+					fread (&bmfha, sizeof (bmfha), 1, fpa);
+      	
+					fread (&bmiha, sizeof (bmiha), 1, fpa);   			
+					if (bmih.biBitCount == 8)
+ 		   			fread (&pal, sizeof (pal), 1, fp);
+				}
 
-				debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
 
-				return;
-			}
-
-			if (bmih.biWidth > MAX_TEXTURE_WIDTH)
-			{
-				safe_fclose (fp);
-
-				debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
-
-				return;
-			}
-
-			// create a screen for this texture. This does not load the data into the screen
-			// it just creates it and sets it's attributes
-
-			// The way we're calling assumes that there is no alpha channel in the texture, need to fix this
-			// It also assumes that there are no mipmaps. This will not cause problems, but
-			// it will look cruddy under certain circumstances
-
-			override_screen = create_user_texture_screen (bmih.biWidth, bmih.biHeight, SCREEN_FORMAT_TYPE_NOALPHA_NOPALETTE, 0);
-
-			//
-			// texture
-			//
-
-		   if (bmih.biBitCount == 24)
-			   buffer_size = bmih.biWidth * bmih.biHeight * 3;
-			// note color depth is assumed here
-
-		   if (bmih.biBitCount == 8)
-		      buffer_size = bmih.biWidth * bmih.biHeight;
-
-			buffer = safe_malloc (buffer_size);
-
-			fread (buffer, buffer_size, 1, fp);
-
-			set_active_screen (override_screen);
-
-			if (lock_screen (override_screen))
-			{
-				p = buffer;
-
-		      if (bmih.biBitCount == 24)
-		      {
-					for (y = bmih.biHeight - 1; y >= 0; y--)
-					{
-						for (x = 0; x < bmih.biWidth; x++)
+    			  	
+				//VJ 050426 create a new texture map with mipmap levels if needed
+				width = bmih.biWidth;
+				height = bmih.biHeight;
+				//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
+				if (temp == 0)
+				{
+						if (alpha == 0)
 						{
+							override_screen = create_texture_map (width, height, TEXTURE_TYPE_NOALPHA_NOPALETTE, 
+				         	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
+				      }
+				      else
+				      {
+							override_screen = create_texture_map (width, height, TEXTURE_TYPE_SINGLEALPHA, 
+				         	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
+						}				         	       	   
+			   }   	       	   
+   			     	
+			   if (bmih.biBitCount == 24)
+				   buffer_size = width * height * 3;
+				// note color depth is assumed here
+				
+			   //if (bmih.biBitCount == 8)
+			     // buffer_size = width * height;
+      	
+				buffer = safe_malloc (buffer_size);
+      	
+				fread (buffer, buffer_size, 1, fp);
 
-							col.b = *p++;
-							col.g = *p++;
-							col.r = *p++;
-							col.a = 255;
-
-							set_pixel (x, y, col);
-						}
-					}
+				if (alpha > 0)
+				{					
+					buffer4 = safe_malloc (width * height * 4);      	
+					if (bmih.biBitCount == 8)					
+						buffera = safe_malloc (width * height);      	
+					else
+						buffera = safe_malloc (buffer_size);      	
+						
+					fread (buffera, buffer_size, 1, fp);
+				}	
+      	
+				while ( !lock_texture ( override_screen, temp ) )
+				{
+					Sleep ( 100 );
 				}
+   		/*
+				if (alpha > 0)
+				{
+					int i, j = 0;
+	   			for (i = 0; i < width*height*4; i+=4)
+   				{
+   					buffer4[i] = buffer[j+2];
+   					buffer4[i+1] = buffer[j+1];
+   					buffer4[i+2] = buffer[j];
+   					buffer4[i+3] = buffera[j]==255 ? 255 : 0;//buffer[j] > 10 ? 255: 0; //buffera[j];
+	   				j++;//j += 3;
+   				}
+   			}	
+   			*/
+				//only for NON PALETTE files
+				if (alpha == 0)
+					convert_no_alpha_24bit_texture_map_data ( buffer, width, height , override_screen, fp, 1 );
+				else	
+					convert_single_alpha_32bit_texture_map_data_v ( buffer, buffera, width, height , override_screen);
+				
+				unlock_texture ( override_screen );
+				
+				safe_free (buffer);
 
-		   	if (bmih.biBitCount == 8)
-		   	{
-					for (y = bmih.biHeight - 1; y >= 0; y--){
-						for (x = 0; x < bmih.biWidth; x++){
-		   	 			set_pixel (x, y, pal[*p++]);
-						}
-					}
+				safe_fclose (fp);
 
-				}
-
-				unlock_screen (override_screen);
+				if (alpha > 0)
+				{
+					safe_free (buffera);
+					safe_free (buffer4);
+					safe_fclose (fpa);
+				}					
 			}
-
-			set_active_screen (video_screen);
-
-			safe_free (buffer);
-
-			safe_fclose (fp);
 
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
@@ -3745,13 +3827,44 @@ void initialize_texture_override_names ( char system_texture_override_names[MAX_
 			valid_file = get_next_directory_file ( directory_listing );
 		}
 	}
+
+//VJ 050515 do the same for dds files and continue index++
+	sprintf (directory_search_path, "%s\\%s\\*.dds", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+
+	directory_listing = get_first_directory_file ( directory_search_path );
+	
+	if ( directory_listing )
+	{
+		valid_file = TRUE;
+
+		while ( valid_file )
+		{
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				filename = strupr(get_directory_file_filename ( directory_listing ));
+
+				debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
+
+				//we don't want the .dds in the overides index
+				filename[strlen(filename) - 4] = '\0';
+
+				if (index < MAX_TEXTURES)
+					sprintf (system_texture_override_names[index], "%s\\%s", mapname, filename);
+				//avoid overflow, not likely because of fixed name list
+				
+				index++;
+			}
+			valid_file = get_next_directory_file ( directory_listing );
+		}
+	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//load warzone specific textures, called from \aphavoc\source\ai\faction\faction.c line 142
+//VJ load warzone specific textures, called from \aphavoc\source\ai\faction\faction.c line 142
 void load_warzone_override_textures (char *warzone_name)
 {
 	char directory_textdir_path[256];
@@ -3759,13 +3872,13 @@ void load_warzone_override_textures (char *warzone_name)
 	// empty name database
 	clear_texture_override_names ();
 
-	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
+	sprintf (directory_textdir_path, "%s\\%s\\texturedirs.txt",TEXTURE_OVERRIDE_DIRECTORY,warzone_name);
 
 	debug_log("Overide dir warzone name %s", warzone_name);
 
 	if ( file_exist ( directory_textdir_path ) )
 	{
-		//int count;
+//		int count;
 		FILE *ftextdir;
 		char buf[256];
 		char *p;
@@ -3796,8 +3909,8 @@ void load_warzone_override_textures (char *warzone_name)
 				  p++;
 
 				// get override texture names in array
-				initialize_texture_override_names ( system_texture_override_names, p );
-
+				initialize_texture_override_names ( system_texture_override_names, p );		
+				
 				override_present = TRUE;
 
 				#if DEBUG_MODULE
@@ -3810,18 +3923,43 @@ void load_warzone_override_textures (char *warzone_name)
 						debug_log("Texture override +++ warzone screen %d (%d) : %s",retrieved_index,count,system_texture_override_names[count]);
 					}
 				}
-				#endif
+				#endif				
 			}
 			// get the next specified dir
 			fscanf(ftextdir,"%[^\n]\n",buf);
 		}
-   
-   
+
    	// load and replace the default texures and all the textures that were loaded at startup (in textuser.c)
    	if (override_present)
-			load_texture_override ( system_texture_override_names );//, p);
+			load_texture_override ( system_texture_override_names );
 
 	}
+
+	//VJ 050319 texture colour mod, load terrain textures
+	if (command_line_texture_colour == 1)
+	{
+		if (strstr(warzone_name, "map1" )) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (strstr(warzone_name, "map2" )) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (strstr(warzone_name, "map3" )) sprintf (directory_textdir_path, "%s\\georgia" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (strstr(warzone_name, "map4" )) sprintf (directory_textdir_path, "%s\\taiwan"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (strstr(warzone_name, "map5" )) sprintf (directory_textdir_path, "%s\\lebanon" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (strstr(warzone_name, "map6" )) sprintf (directory_textdir_path, "%s\\yemen"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+
+		debug_log(" === texture colour mod dir:  %s",directory_textdir_path);
+
+		//TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions 
+		initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
+		
+		load_texture_override ( system_texture_override_names );
+
+//VJ mipmapping dds files still under construction, just ignore
+//		load_texture_override_dds ( system_texture_override_names );
+
+		initialize_terrain_texture_scales ( directory_textdir_path );
+
+		//VJ 050412 flag to destroy later on
+		//override_present = TRUE;
+	}	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3832,7 +3970,6 @@ void load_warzone_override_textures (char *warzone_name)
 void restore_default_textures ( void )
 {
 	int count = 0;
-
 
  	if (override_present)
  	{
@@ -3857,8 +3994,517 @@ void restore_default_textures ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 050322 texture colour mod, function to read texture scale file
+void initialize_terrain_texture_scales ( char *mapname )
+{
+	char filename[128];
+
+	sprintf (filename, "%s\\%s\\texture_scales.txt", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+
+  debug_log("===TEXTURE SCALES DIRECTORY=== %s",filename);
+
+	global_infrared = -1;
+	// initialize infra red
+	
+	if ( file_exist ( filename ) )
+	{
+		FILE *fin;
+		char buf[256];
+		char *p;
+		int c, index, count;
+		
+		fin = fopen(filename,"r");
+
+		// skip comment lines
+		fscanf(fin,"%[^\n]\n",buf);
+		while (buf[0] == '#')
+				fscanf(fin,"%[^\n]\n",buf);
+
+		for (count = 0; count < 64; count ++)
+		{
+			texture_override_scales[count][0] = 0;
+			texture_override_scales[count][1] = 64; //safe value
+			texture_override_scales[count][2] = 64; //safe value
+		}
+		
+		count = 0;
+		while (count < 64 && 
+				 strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))			
+		{			
+			int i;
+			p = strtok(buf,"=");
+
+			//scan name
+			if (p)
+			{
+				//strip leading and trailing spaces
+				i = strlen(p)-1;
+				
+				while (i > 0 && (p[i] == ' ' || p[i] == '\t'))
+//				while (i > 0 && p[i] == ' ')
+					i--;
+				p[i+1]='\0';
+				while (p[0] == ' ')
+				  p++;
+				index = -1;
+
+				for ( c = 0; c < number_of_system_textures; c++ )
+				{
+					if ( strcmp ( system_texture_names[c], p ) == 0 )
+					{
+						index = c;
+						break;
+					}
+				}				
+				texture_override_scales[count][0] = index;
+			}				  
+			
+/*
+			//scan 1st scale
+			p = strtok(NULL,",");
+			if (p)
+			{		
+				texture_override_scales[count][1] = atoi(p);						  
+			}				  
+*/			
+			//scan 2nd scale
+			p = strtok(NULL,"#");
+			if (p)
+			{		
+				texture_override_scales[count][1] = atoi(p);						  
+			}				  
+
+			fscanf(fin,"%[^\n]\n",buf);			
+			// next line
+			
+			debug_log("===scales %d %d %d",count, texture_override_scales[count][0], texture_override_scales[count][1]);		
+			count++;
+		}
+		fclose(fin);
+	}			  
+}	
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // End VJ custom texture mod
 // based on work by Have_Quick 12/2/2003
 // 05/01/15, 050116, 050118
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename )
+{  	   	
+	if (bmih.biCompression != BI_RGB)
+	{
+		debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
+		return 0;
+	}
+   	
+	//VJ only 8 and 24 bit uncompressed bitmaps are read
+	if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
+	{
+		debug_log ("%s is not 24 bit!", full_override_texture_filename );
+		return 0;
+	}
+   	
+	if (bmih.biHeight > MAX_TEXTURE_WIDTH)
+	{
+		debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
+		return 0;
+	}
+   	
+	if (bmih.biWidth > MAX_TEXTURE_WIDTH)
+	{
+		debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
+		return 0;
+	}
+	return 1;
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void convert_single_alpha_32bit_texture_map_data_v ( unsigned char *data, unsigned char *dataa, int width, int height, screen *this_texture )
+{
+
+	int
+		x,
+		y;
+
+	int
+		y_count,
+		y_repeat;
+
+	unsigned int
+		red,
+		green,
+		blue,
+		alpha;
+
+	if ( ( width > height ) && ( d3d_square_only_textures ) )
+	{
+
+		y_repeat = width / height;
+	}
+	else
+	{
+
+		y_repeat = 1;
+	}
+
+	if ( single_alpha_texture_pixel_width <= 16 )
+	{
+
+		unsigned char
+			*ptr;
+
+		int
+			pitch;
+
+		unsigned short int
+			pixel_value;
+
+		//
+		// We're dealing with a 16bit texture format.
+		//
+
+		ptr = get_screen_data ( this_texture );
+
+		pitch = get_screen_pitch ( this_texture );
+
+		for ( y = 0; y < height; y++ )
+		{
+
+			for ( x = 0; x < width; x++ )
+			{
+
+				blue = *data++;
+				green = *data++;
+				red = *data++;
+				alpha = *dataa++;
+				
+				alpha = 255 - alpha;
+
+				red <<= 24;
+				green <<= 24;
+				blue <<= 24;
+				alpha <<= 24;
+/*
+				red &= texture_single_alpha_red_mask;
+				green &= texture_single_alpha_green_mask;
+				blue &= texture_single_alpha_blue_mask;
+				alpha &= texture_single_alpha_alpha_mask;
+
+				red >>= texture_single_alpha_red_shift;
+				green >>= texture_single_alpha_green_shift;
+				blue >>= texture_single_alpha_blue_shift;
+				alpha >>= texture_single_alpha_alpha_shift;
+*/
+
+				red &= texture_multiple_alpha_red_mask;
+				green &= texture_multiple_alpha_green_mask;
+				blue &= texture_multiple_alpha_blue_mask;
+				alpha &= texture_multiple_alpha_alpha_mask;
+
+				red >>= texture_multiple_alpha_red_shift;
+				green >>= texture_multiple_alpha_green_shift;
+				blue >>= texture_multiple_alpha_blue_shift;
+				alpha >>= texture_multiple_alpha_alpha_shift;
+
+
+				pixel_value = ( red | green | blue | alpha );
+
+				*( ( unsigned short int * ) &ptr[( x * 2 )] ) = pixel_value;
+
+				for ( y_count = 0; y_count < y_repeat; y_count++ )
+				{
+
+					*( ( unsigned short int * ) &ptr[( y_count * pitch ) + ( x * 2 )] ) = pixel_value;
+				}
+			}
+
+			ptr += ( y_repeat * pitch );
+		}
+	}
+	else
+	{
+
+		unsigned char
+			*ptr;
+
+		int
+			pitch;
+
+		unsigned int
+			pixel_value;
+
+		//
+		// We're dealing with a 32 texture format.
+		//
+
+		ptr = get_screen_data ( this_texture );
+
+		pitch = get_screen_pitch ( this_texture );
+
+		for ( y = 0; y < height; y++ )
+		{
+
+			for ( x = 0; x < width; x++ )
+			{
+
+				blue = *data++;
+				green = *data++;
+				red = *data++;
+				alpha = *dataa++;
+				alpha = 255 - alpha;
+
+				red <<= 24;
+				green <<= 24;
+				blue <<= 24;
+				alpha <<= 24;
+
+/*
+				red &= texture_single_alpha_red_mask;
+				green &= texture_single_alpha_green_mask;
+				blue &= texture_single_alpha_blue_mask;
+				alpha &= texture_single_alpha_alpha_mask;
+				
+				
+				red >>= texture_single_alpha_red_shift;
+				green >>= texture_single_alpha_green_shift;
+				blue >>= texture_single_alpha_blue_shift;
+				alpha >>= texture_single_alpha_alpha_shift;
+*/
+				red &= texture_multiple_alpha_red_mask;
+				green &= texture_multiple_alpha_green_mask;
+				blue &= texture_multiple_alpha_blue_mask;
+				alpha &= texture_multiple_alpha_alpha_mask;
+
+				red >>= texture_multiple_alpha_red_shift;
+				green >>= texture_multiple_alpha_green_shift;
+				blue >>= texture_multiple_alpha_blue_shift;
+				alpha >>= texture_multiple_alpha_alpha_shift;
+
+				pixel_value = ( red | green | blue | alpha );
+
+				*( ( unsigned int * ) &ptr[( x * 4 )] ) = pixel_value;
+
+				for ( y_count = 0; y_count < y_repeat; y_count++ )
+				{
+
+					*( ( unsigned int * ) &ptr[( y_count * pitch ) + ( x * 4 )] ) = pixel_value;
+				}
+			}
+
+			ptr += ( y_repeat * pitch );
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ mipmapping dds files still under construction, just ignore
+
+void load_texture_override_dds ( char system_texture_override_names[MAX_TEXTURES][128])
+{
+
+	FILE
+		*fp;
+
+	DDSURFACEDESC2 ddsh;
+	DWORD dwmagic;
+	
+	int type;
+	
+	char
+		*buffer;
+
+	char
+		full_override_texture_filename[128];
+
+	int
+		count, temp, mipmap,
+		width, height, 
+		buffer_size;
+
+	//static
+	screen
+		*override_screen;
+
+	// Now that all the screens are loaded we check to see if there is are any overrides
+	for( count=0; count < MAX_TEXTURES; count++ )
+	{
+		int retrieved_index = 0;
+
+		if (system_texture_override_names[count][0] != '\0')		   
+			retrieved_index = match_system_texture_name ( system_texture_override_names[count] );
+
+		if( retrieved_index > 0)
+		{
+
+			sprintf ( full_override_texture_filename, "%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY, system_texture_override_names[count] );
+
+			debug_log ("++OVERRIDES DDS++ looking for file %s",full_override_texture_filename);
+
+			if ( !file_exist ( full_override_texture_filename ) )
+				continue;
+
+			//VJ 050426 destroy texture that is to be replaced
+			if ( system_textures[retrieved_index]->palette )
+			{
+				IDirectDrawSurface7_SetPalette ( system_textures[retrieved_index]->surface, NULL );
+				system_textures[retrieved_index]->palette = NULL;
+			}
+			release_texture_surface ( &system_textures[retrieved_index]->surface );
+	
+	
+			fp = safe_fopen (full_override_texture_filename, "rb");
+			fread (&dwmagic, sizeof (dwmagic), 1, fp);
+
+			fread (&ddsh, sizeof (ddsh), 1, fp);
+			
+			if ( ddsh.dwFlags & DDSD_LINEARSIZE )
+			{
+			 	debug_fatal("Compressed dds files not supported: %s",full_override_texture_filename);
+			}  
+			
+			if ( ddsh.ddpfPixelFormat.dwFlags & DDPF_FOURCC  )
+			{
+			 	debug_fatal("Only RGB dds files supported: %s",full_override_texture_filename);
+			}  
+
+			mipmap = ddsh.dwMipMapCount;
+
+//C:\gms\Razorworks\eech-new\modules\graphics\textsys.h			
+			if (ddsh.ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS )
+				type = TEXTURE_TYPE_MULTIPLEALPHA;
+			else	
+				type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
+				
+		//			debug_fatal("type %d %d %s",type, mipmap,full_override_texture_filename);
+			width = ddsh.dwWidth;
+			height = ddsh.dwHeight;
+
+			override_screen = create_texture_map (width, height, type, mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
+			//override_screen = create_texture_map_dds (type, ddsh);
+
+
+			for ( temp = 0; temp <= mipmap; temp++ )
+			{
+
+				//VJ 050426 create a new texture map with mipmap levels if needed
+				//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h				
+   			     	
+			   buffer_size = width * height * (ddsh.ddpfPixelFormat.dwRGBBitCount >> 3);
+				buffer = safe_malloc (buffer_size);     	
+				fread (buffer, buffer_size, 1, fp);
+				
+ 				while ( !lock_texture ( override_screen, temp ) )
+				{
+					Sleep ( 100 );
+				}
+				
+				if (type == TEXTURE_TYPE_NOALPHA_NOPALETTE)
+					convert_no_alpha_24bit_texture_map_data ( buffer, width, height, override_screen, fp, 1 );
+				if (type == TEXTURE_TYPE_MULTIPLEALPHA)
+					convert_multiple_alpha_32bit_texture_map_data ( buffer, width, height, override_screen, fp, 1);
+				
+				unlock_texture ( override_screen );
+				
+				safe_free (buffer);
+
+				width >>= 1;
+				height >>= 1;
+
+			}
+
+			safe_fclose (fp);
+			
+			// now we set the pointer in the system textxures array to point to this
+			// screen rather than the original screen
+			set_system_texture_screen (override_screen, retrieved_index);
+
+			//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+			system_texture_info[retrieved_index].texture_screen = override_screen;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ mipmapping dds files still under construction, just ignore
+screen *create_texture_map_dds ( int type, DDSURFACEDESC2 ddsd )
+{
+
+	screen
+		*texture;
+
+	HRESULT
+		ddrval;
+
+	texture = get_free_screen ();
+
+	texture->type = type;
+	texture->width = 	ddsd.dwWidth;
+	texture->height = ddsd.dwHeight;
+
+	//texture_paletted = texture_formats[type].palette;
+
+	texture->contains_alpha = FALSE;//( texture_formats[type].bpp_alpha ) ? TRUE : FALSE;
+
+	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
+	//ddsd.dwMipMapCount += 1;
+	/*
+	if ( ( d3d_mipmap_textures ) && ( number_of_mipmaps > 1 ) )
+	{
+
+		ddsd.dwFlags |= DDSD_MIPMAPCOUNT;
+		ddsd.ddsCaps.dwCaps |= DDSCAPS_COMPLEX | DDSCAPS_MIPMAP;
+		ddsd.dwMipMapCount = number_of_mipmaps;
+	}
+*/
+	ddsd.ddsCaps.dwCaps2 = DDSCAPS2_HINTSTATIC | DDSCAPS2_D3DTEXTUREMANAGE;
+	ddsd.ddsCaps.dwCaps3 = 0;
+	ddsd.ddsCaps.dwCaps4 = 0;
+
+
+		ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->surface, NULL );
+
+		if ( ddrval != DD_OK )
+		{
+
+			debug_fatal ( "Unable to create texture surface: %s ", get_ddraw_error_message ( ddrval ));
+		}
+
+		//
+		// Get the surface description to check the texture
+		//
+
+		ddsd.dwSize = sizeof ( ddsd );
+
+		ddrval = IDirectDrawSurface7_GetSurfaceDesc ( texture->surface, &ddsd );
+
+		if ( ddrval != DD_OK )
+		{
+
+			debug_fatal ( "Unable to get texture surface description: %s", get_ddraw_error_message ( ddrval ) );
+		}
+
+		texture->palette = NULL;
+
+		texture->used = TRUE;
+		texture->colour_table = NULL;//texture_colour_table;
+		texture->clone_screen = FALSE;
+		texture->do_not_destroy = TRUE;
+
+	return ( texture );
+}

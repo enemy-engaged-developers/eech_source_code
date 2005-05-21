@@ -91,13 +91,16 @@ extern struct SCREEN
 extern char
 	system_texture_names[MAX_TEXTURES][128];
 
-//VJ
 extern char
 	system_texture_override_names[MAX_TEXTURES][128];
 
 extern int
 	system_textures_referenced[MAX_TEXTURES];
 
+//VJ 050322 texture coulor mod: texture scale array, 64 is enough for terrain textures
+extern int 
+	texture_override_scales[64][2];
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,10 +136,12 @@ extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *grap
 //VJ 050116 custom texture mod: all functions are in textuser.c
 extern void load_custom_textures( void );
 extern void initialize_texture_override_names ( char system_texture_override_names[MAX_TEXTURES][128], char *mapname );
-extern void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128] );
+extern void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][128]);
 extern void clear_texture_override_names ( void );
 extern void restore_default_textures( void );
 extern void load_warzone_override_textures (char *warzone_name);
+//VJ 030514 texture colour mod
+extern void initialize_terrain_texture_scales ( char *mapname );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
