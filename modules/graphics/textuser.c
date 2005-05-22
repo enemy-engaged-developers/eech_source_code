@@ -3640,8 +3640,8 @@ void load_texture_override ( char system_texture_override_names[MAX_TEXTURES][12
 			if (file_exist ( full_override_texture_filename )) alpha = 1;
 		
 //VJ mipmapping, set mipmap to 0 for now, itnworks but still beta stage
-mipmap = 0;			
-alpha = 0;
+//mipmap = 0;			
+//alpha = 0;
 
 			for ( temp = 0; temp <= mipmap; temp++ )
 			{
@@ -4003,7 +4003,7 @@ void initialize_terrain_texture_scales ( char *mapname )
 
   debug_log("===TEXTURE SCALES DIRECTORY=== %s",filename);
 
-	global_infrared = -1;
+	// global_infrared = -1;
 	// initialize infra red
 	
 	if ( file_exist ( filename ) )
