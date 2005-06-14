@@ -66,6 +66,8 @@
 
 #include "sound.h"
 
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -361,7 +363,7 @@ LPDIRECTSOUNDBUFFER dsound_create_sound_buffer ( sample_types type, int rate, in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer )
+LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, int size )
 {
 
 	HRESULT
@@ -370,7 +372,55 @@ LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer )
 	LPDIRECTSOUNDBUFFER
 		duplicand;
 
+	WAVEFORMATEX
+		pcmwf;
+	DSBUFFERDESC
+		dsbdesc;
+	unsigned char * datasrc, * datadst;
+
 	ASSERT ( buffer );
+
+	if ( command_line_sound_hdwrbuf > 0 )
+	{
+		dsrval = IDirectSoundBuffer_GetFormat ( buffer, ( LPWAVEFORMATEX ) &pcmwf, sizeof(pcmwf), NULL );
+		if ( dsrval != DS_OK )
+		{
+			debug_log ( "Unable to get format: %s", get_dsound_error_message ( dsrval ) );
+			return ( NULL );
+		}
+
+		memset ( &dsbdesc, 0, sizeof ( DSBUFFERDESC ) );
+		dsbdesc.dwSize = sizeof ( DSBUFFERDESC );
+		dsbdesc.lpwfxFormat = ( LPWAVEFORMATEX ) &pcmwf;
+		dsbdesc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_LOCHARDWARE;
+		dsbdesc.dwBufferBytes = size;
+
+		dsrval = IDirectSound_CreateSoundBuffer ( dsound, &dsbdesc, &duplicand, NULL );
+		if ( dsrval != DS_OK )
+		{
+			debug_log ( "Unable to create hardware sound buffer: ( %d, %d ) - %s", pcmwf.nSamplesPerSec, size, get_dsound_error_message ( dsrval ) );
+			return ( NULL );
+		}
+
+		datasrc = dsound_lock_sound_buffer ( buffer, 0, size );
+		if ( datasrc == NULL )
+		{
+			IDirectSoundBuffer_Release ( duplicand );
+			return ( NULL );
+		}
+		datadst = dsound_lock_sound_buffer ( duplicand, 0, size );
+		if ( datadst == NULL )
+		{
+			dsound_unlock_sound_buffer ( buffer, datasrc, size );
+			IDirectSoundBuffer_Release ( duplicand );
+			return ( NULL );
+		}
+		memcpy ( datadst, datasrc, size );
+		dsound_unlock_sound_buffer ( buffer, datasrc, size );
+		dsound_unlock_sound_buffer ( duplicand, datadst, size );
+
+		return ( duplicand );
+	}
 
 	dsrval = IDirectSound_DuplicateSoundBuffer ( dsound, buffer, &duplicand );
 

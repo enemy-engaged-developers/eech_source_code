@@ -354,6 +354,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "vfm")==0) 	command_line_vector_flight_model = d1;
 		if (strcmp(p, "psr")==0) 	command_line_player_start_rank = d1;
 		if (strcmp(p, "ns")==0) 		command_line_no_sound=d1;
+		if (strcmp(p, "hdwrbuf")==0) 	command_line_sound_hdwrbuf=d1;
 		if (strcmp(p, "mta")==0) 	command_line_max_time_acceleration = d1;
 		if (strcmp(p, "nomcm")==0) 	command_line_no_mission_complete_music = d1;
 //WUT
@@ -530,6 +531,7 @@ void dump_ini_file(void)
 	fprintf(f,"vfm=%d               # vector flight model, activates viewer or \"UFO\" flight mode.\n",command_line_vector_flight_model);
 	fprintf(f,"psr=%d               # player start rank for new pilots\n",command_line_player_start_rank);
 	fprintf(f,"ns=%d                # Bypass soundcard, useful for tracking hardware conflicts\n",command_line_no_sound);
+	fprintf(f,"hdwrbuf=%d           # Number of hardware buffers to use (0 to use software only)\n",command_line_sound_hdwrbuf);
 	fprintf(f,"mta=%d               # The maximum multiplier allowed for time acceleration (default - 4)\n",command_line_max_time_acceleration);
 	fprintf(f,"nomcm=%d             # no mission complete music\n",command_line_no_mission_complete_music);
 	fprintf(f,"[WUT]\n");

@@ -107,6 +107,7 @@ int
 	command_line_entity_update_frame_rate					= 2.0,
 	command_line_hardware_render								= FALSE,
 	command_line_no_sound										= FALSE,
+	command_line_sound_hdwrbuf									= 0,
 	command_line_clean_graphics								= FALSE,
 
 	#ifdef DEBUG
@@ -1496,6 +1497,16 @@ void process_command_line (int argc, char *argv[])
 			}
 
 			debug_log ("ARG:%s, RESPONSE:command_line_no_sound = %d", s1, command_line_no_sound);
+		}
+		else if ((s2 = strarg (s1, "hdwrbuf")))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_sound_hdwrbuf);
+			}
+
+			debug_log ("ARG:%s, RESPONSE:command_line_sound_hdwrbuf = %d", s1, command_line_sound_hdwrbuf);
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "notnl"))

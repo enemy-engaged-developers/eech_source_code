@@ -66,11 +66,15 @@
 
 #include "sound.h"
 
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS 256
+static int
+	maximum_current_system_sound_effects;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +166,11 @@ int initialise_sound_system ( void )
 	int
 		count;
 
+	if ( command_line_sound_hdwrbuf > 0 && command_line_sound_hdwrbuf <= MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS )
+		maximum_current_system_sound_effects = command_line_sound_hdwrbuf;
+	else
+		maximum_current_system_sound_effects = MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS;
+
 	if ( initialise_direct_sound () )
 	{
 
@@ -173,7 +182,7 @@ int initialise_sound_system ( void )
 		// Initialise the sound effects
 		//
 	
-		for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+		for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 		{
 	
 			current_system_sound_effects[count].used = FALSE;
@@ -322,7 +331,7 @@ system_sound_effect * get_first_system_sound_effect ( void )
 	int
 		count;
 
-	for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
 
 		if ( current_system_sound_effects[count].used )
@@ -349,7 +358,7 @@ system_sound_effect * get_next_system_sound_effect ( system_sound_effect *effect
 
 	count++;
 
-	for ( ; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+	for ( ; count < maximum_current_system_sound_effects; count++ )
 	{
 
 		if ( current_system_sound_effects[count].used )
@@ -372,7 +381,7 @@ system_sound_effect * get_next_free_system_system_sound_effect ( void )
 	int
 		count;
 
-	for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
 
 		if ( !current_system_sound_effects[count].used )
@@ -397,7 +406,7 @@ void destroy_all_system_sound_effects ( void )
 	int
 		count;
 
-	for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
 
 		if ( current_system_sound_effects[count].used )
@@ -632,7 +641,7 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 		// Duplicate the sound buffer concerned
 		//
 
-		effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer );
+		effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer, source_sound_samples[sound_sample_index].size );
 
 		if ( !effect->sound_buffer )
 		{
@@ -718,7 +727,7 @@ system_sound_effect * create_sequenced_system_sound_effect ( int number_of_sampl
 		// Duplicate the sound buffer concerned
 		//
 
-		effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[ samples[0].sound_sample_index ].sound_buffer );
+		effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[ samples[0].sound_sample_index ].sound_buffer, source_sound_samples[ samples[0].sound_sample_index ].size );
 
 		if ( !effect->sound_buffer )
 		{
@@ -853,7 +862,7 @@ void update_system_sound_effect_system ( void )
 		// Go through all the sound effects, updating their properties.
 		//
 	
-		for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+		for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 		{
 	
 			effect = &current_system_sound_effects[count];
@@ -919,7 +928,7 @@ void update_system_sound_effect_system ( void )
 	
 							sound_sample_index = effect->sound_sample_sequence[ effect->current_sequenced_sample_offset ].sound_sample_index;
 	
-							effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer );
+							effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer, source_sound_samples[sound_sample_index].size );
 	
 							//
 							// Start the buffer playing
@@ -988,7 +997,7 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 
 			sound_sample_index = effect->sound_sample_sequence[ effect->current_sequenced_sample_offset ].sound_sample_index;
 
-			effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer );
+			effect->sound_buffer = dsound_duplicate_sound_buffer ( source_sound_samples[sound_sample_index].sound_buffer, source_sound_samples[sound_sample_index].size );
 
 			//
 			// Start the buffer playing
@@ -1189,7 +1198,7 @@ void pause_sound_system ( void )
 		int
 			count;
 	
-		for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+		for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 		{
 	
 			if ( ( current_system_sound_effects[count].used ) && ( !current_system_sound_effects[count].paused ) )
@@ -1216,7 +1225,7 @@ void continue_sound_system ( void )
 		int
 			count;
 	
-		for ( count = 0; count < MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS; count++ )
+		for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 		{
 	
 			if ( ( current_system_sound_effects[count].used ) && ( !current_system_sound_effects[count].paused ) )

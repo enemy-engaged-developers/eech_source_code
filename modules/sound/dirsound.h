@@ -118,7 +118,7 @@ extern BOOL initialise_direct_sound ( void );
 
 extern LPDIRECTSOUNDBUFFER dsound_create_sound_buffer ( sample_types type, int rate, int size );
 
-extern LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer );
+extern LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, int size );
 
 extern void dsound_destroy_sound_buffer ( LPDIRECTSOUNDBUFFER buffer );
 

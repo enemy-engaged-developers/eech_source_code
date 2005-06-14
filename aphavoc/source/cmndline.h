@@ -90,6 +90,7 @@ extern int
 	command_line_cdrom_drive_letter,
 	command_line_hardware_render,
 	command_line_no_sound,
+	command_line_sound_hdwrbuf,
 	command_line_clean_graphics,
 	command_line_new_graphics,
 	command_line_max_time_acceleration,
