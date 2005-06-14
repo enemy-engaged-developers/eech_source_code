@@ -133,6 +133,34 @@ void initialise_gunships_screen (void)
 	ui_object
 		*option_bdrop;
 
+
+	// Preselect side if requested
+	if ( gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL )
+	{
+		switch ( command_line_game_initialisation_phase_gunship_type )
+		{
+			case GUNSHIP_TYPE_APACHE:
+			case GUNSHIP_TYPE_COMANCHE:
+			case GUNSHIP_TYPE_BLACKHAWK:
+			case GUNSHIP_TYPE_AH64A:
+			{
+				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+
+				break;
+			}
+
+			case GUNSHIP_TYPE_HAVOC:
+			case GUNSHIP_TYPE_HOKUM:
+			case GUNSHIP_TYPE_HIND:
+			case GUNSHIP_TYPE_KA50:
+			{
+				gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+
+				break;
+			}
+		}
+	}
+
 	x1 = 0.0;
 	y1 = 0.0;
 	x2 = 1.0;
