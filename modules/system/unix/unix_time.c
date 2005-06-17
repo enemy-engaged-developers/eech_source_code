@@ -163,7 +163,7 @@ void set_delta_time ( void )
 
 		system_delta_time_history[system_delta_time_history_position] = system_delta_time;
 
-		system_delta_time_history_position = ( ++system_delta_time_history_position ) % DELTA_TIME_HISTORY_SIZE;
+		system_delta_time_history_position = ( system_delta_time_history_position + 1 ) % DELTA_TIME_HISTORY_SIZE;
 	}
 	else
 	{
@@ -346,7 +346,7 @@ void set_manual_delta_time (float delta_time)
 
 		system_delta_time_history [system_delta_time_history_position] = system_delta_time;
 
-		system_delta_time_history_position = (++ system_delta_time_history_position) % DELTA_TIME_HISTORY_SIZE;
+		system_delta_time_history_position = ( system_delta_time_history_position + 1 ) % DELTA_TIME_HISTORY_SIZE;
 	}
 	else
 	{

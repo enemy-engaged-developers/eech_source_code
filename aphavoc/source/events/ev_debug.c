@@ -96,7 +96,7 @@ static void toggle_in_flight_external_view_entity_debug_flight_info_event (event
 
 static void toggle_in_flight_debug_keysite_info_event (event *ev)
 {
-	in_flight_debug_keysite_info = (++ in_flight_debug_keysite_info) % (NUM_ENTITY_SUB_TYPE_LANDINGS + 1);
+	in_flight_debug_keysite_info = ( in_flight_debug_keysite_info + 1 ) % (NUM_ENTITY_SUB_TYPE_LANDINGS + 1);
 
 	//dump_keysite_info ();
 }

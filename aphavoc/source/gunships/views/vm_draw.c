@@ -843,14 +843,9 @@ void ShowFramerate(void)
 
     }   
     dummy = get_one_over_delta_time ();
-    if (dummy < framerate*2)
-    {
-    	framerate_avg += dummy; 
-    	doframerate++; 
-	}
+   	framerate_avg += dummy; 
+   	doframerate++; 
 	
 	sprintf (buf, "%6.1f", framerate);
     ui_display_text (buf, 10, 24);               
-	
-
 }	

@@ -152,7 +152,7 @@ static int
 	total_number_of_scene_sub_object_indices,
 	total_number_of_scene_texture_animations,
 	total_number_of_scene_approximations,
-	total_number_of_scene_sub_object_keyframes;
+	total_number_of_scene_sub_object_keyframes,
 	total_number_of_scene_sub_object_dissolve_keyframes;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

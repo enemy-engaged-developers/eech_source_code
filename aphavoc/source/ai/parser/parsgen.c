@@ -178,7 +178,7 @@ void update_campaign_triggers (void)
 	//while (TRUE)
 	{
 
-		//trigger = (trigger ++) % NUM_CAMPAIGN_TRIGGER_TYPES;
+		//trigger = ( trigger + 1 ) % NUM_CAMPAIGN_TRIGGER_TYPES;
 
 		if (!update_script_triggers (trigger))
 		{

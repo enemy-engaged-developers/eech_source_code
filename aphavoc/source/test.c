@@ -2534,7 +2534,7 @@ void update_cpu_count (void)
 
 	cpu_count_av_percent = (cpu_count_av / 200000000) * 100;
 
-	cpu_history_position = (++ cpu_history_position) % MAX_CPU_COUNT_HISTORY;
+	cpu_history_position = ( cpu_history_position + 1 ) % MAX_CPU_COUNT_HISTORY;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

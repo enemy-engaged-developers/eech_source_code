@@ -102,12 +102,12 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = BASE_Y_APACHE;
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = BASE_Z_APACHE;
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = BASE_P_APACHE;
-	
+
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = BASE_X_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = BASE_Y_HAVOC;
-		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;			
+		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = BASE_P_HAVOC;
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ void read_wideview_parameters (char *q, int i)
 	p = strtok(NULL,",");	     
 	if (p) 
 		wide_cockpit_position[i].p = atof(p);
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,12 +166,12 @@ static void initialize_radar_ranges(void)
 		radar_range_hokum[2] = 4000;
 		radar_range_hokum[3] = 6000;
 		radar_range_hokum[4] = 10000;
-		
+
 		radar_range_hind[0] = 1000;
 		radar_range_hind[1] = 2000;
 		radar_range_hind[2] = 4000;
-		radar_range_hind[3] = 6000;		
-}	
+		radar_range_hind[3] = 6000;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +193,7 @@ void process_ini_file(int argc, char *argv[])
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
 //VJ 050125 changed back: this should always be done
-    initialize_radar_ranges();	
+    initialize_radar_ranges();
 
 	 buf = malloc (255);
 	 if (buf == NULL)
@@ -247,7 +247,7 @@ void process_ini_file(int argc, char *argv[])
       		buf1[j] = buf[i];
 	   		j++;
       	}  
-      }	
+      }
       buf1[j] = '\0';
       
 //VJ 041002 bug fix: if variable is empty so # follows = the # is overwritten by NULL 
@@ -255,12 +255,12 @@ void process_ini_file(int argc, char *argv[])
 //without spaces. fix: empty q when that is the case.
 		r = strchr(buf1, '=');
 		r++;
-		if (r[0] == '#'){       		
+		if (r[0] == '#'){       
   			p = strtok(buf1,"=");
-			q[0] = '\0';	
-		}else{		
+			q[0] = '\0';
+		}else{
   			p = strtok(buf1,"=");
-			q = strtok(NULL,"#");	
+			q = strtok(NULL,"#");
 		}   
 
 		while(q[i]!=' ')
@@ -311,7 +311,7 @@ void process_ini_file(int argc, char *argv[])
 				strcpy(command_line_secondary_server_setting, q);
 
 		if (strcmp(p, "usemaster")==0) 	command_line_report_to_masterserver = d1; //Werewolf 2 Jan 04
-				
+
 		if (strcmp(p, "ccrs")==0) 	command_line_comms_connection_receive_size = d1;
 		if (strcmp(p, "cdrs")==0) 	command_line_comms_data_record_size = d1;
 		if (strcmp(p, "cpbs")==0) 	command_line_comms_pack_buffer_size = d1;
@@ -368,9 +368,9 @@ void process_ini_file(int argc, char *argv[])
 
 			if (WUT_filename[0] != 0 && file_exist(WUT_filename))
 				command_line_wut = TRUE;
-			// wut filename checking is done elsewhere	
+			// wut filename checking is done elsewhere
 		}
-		
+
 //WIDEVIEW
 //VJ 030511 added the wideview params to eech.ini
 //VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
@@ -387,7 +387,7 @@ void process_ini_file(int argc, char *argv[])
 			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
 	 	if (strcmp(p, "havoc_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HAVOC_PILOT);
-		
+
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
 		if (strcmp(p, "msls") == 0)			command_line_mouse_look_speed = d1;
@@ -406,7 +406,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
-////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;		
+////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;
 		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1; 
 		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
 		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1 - 1;
@@ -429,8 +429,9 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "external_trackir_dir") == 0) command_line_external_trackir_direction = d1;	// Retro 31Jan2005
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "TIR_6DOF") == 0) command_line_TIR_6DOF = d1;	// Retro 6Feb2005
-		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod		
+		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
+		if (strcmp(p, "autosave") == 0) command_line_autosave = d1 * 60;
 		if (strcmp(p, "cannontrack") == 0) command_line_cannontrack = d1;	// Jabberwock 050120 Cannon tracking
 		if (strcmp(p, "faa") == 0)
 		{
@@ -451,7 +452,7 @@ void process_ini_file(int argc, char *argv[])
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
 
-//VJ 040816 forgot these	
+//VJ 040816 forgot these
    if (buf1) free(buf1);  
    if (buf) free(buf);  
 }
@@ -464,8 +465,7 @@ void process_ini_file(int argc, char *argv[])
 void dump_ini_file(void)
 {
 	FILE *f = fopen("eech.ini","w");
-	
-		
+
 	fprintf(f,"[Enemy Engaged - Comanche Hokum commandline options]\n");
 	fprintf(f,"[Game]\n");
 	fprintf(f,"chaff=%3.1f        # Effectivness of chaff where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_chaff_effectiveness);
@@ -478,10 +478,7 @@ void dump_ini_file(void)
 	fprintf(f,"cbar=%.0f            # distance in meters that city blocks resolve\n",command_line_city_block_approximation_range);
 	fprintf(f,"fs=%d                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen)\n",command_line_full_screen);
 	fprintf(f,"mfr=%d               # Max visual frame rate, (defaults = 30)\n",command_line_max_frame_rate);
-	if (command_line_display_bpp == 16)
-		fprintf(f,"32bit=0             # Activates 32bit rendering if your video card supports it\n");
-	else
-		fprintf(f,"32bit=1             # Activates 32bit rendering if your video card supports it\n");
+	fprintf(f,"32bit=%d             # Activates 32bit rendering if your video card supports it\n", command_line_display_bpp != 16);
 	fprintf(f,"nrt=%d               # Turns off rendering to texture in case of visual problems with MFDs or TADS\n",command_line_no_render_to_texture);
 	fprintf(f,"notnl=%d             # Turns off GeForce \"TnL\" support for troubleshooting\n",command_line_no_hardware_tnl);
 	fprintf(f,"3dreset=0            # Reset screen resolution to 640x480 (def = 0)\n");
@@ -586,8 +583,9 @@ void dump_ini_file(void)
 	fprintf(f,"3d_cockpit=%d        # EXPERIMENTAL! Draws a 3d apache cockpit (wide_view and MFD close-up (F3 and F4) disabled)\n",command_line_3d_cockpit);	// VJ 050101
 	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 	fprintf(f,"texture_colour=%d    # Use texture colours directly. WARNING: only use with correct texture packs (def=0) \n",command_line_texture_colour);	//VJ 050303 texture colour mod
+	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 for not to autosave\n", command_line_autosave / 60);
 	fprintf(f,"[end of file]\n");
-	
+
 	fclose(f);
 }
 

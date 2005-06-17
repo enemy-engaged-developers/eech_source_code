@@ -105,7 +105,7 @@ void reset_satellite_camera (camera *raw)
 	z_min = get_local_entity_float_value (en, FLOAT_TYPE_CHASE_VIEW_MIN_DISTANCE);
 	z_max = get_local_entity_float_value (en, FLOAT_TYPE_CHASE_VIEW_MAX_DISTANCE);
 
-	ASSERT (z_min < z_max);
+	//ASSERT (z_min < z_max);
 
 	heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 

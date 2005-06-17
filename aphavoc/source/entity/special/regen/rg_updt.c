@@ -1024,7 +1024,7 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 
 		count++;
 
-		front = (front ++) % old_size;
+		front = (front + 1) % old_size;
 	}
 
 	m1->count = count;

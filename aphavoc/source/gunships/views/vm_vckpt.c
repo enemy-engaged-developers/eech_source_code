@@ -2675,9 +2675,9 @@ static entity *get_next_wingman (void)
 		*group,
 		*wingman;
 
-	ASSERT (source);
-
 	source = get_gunship_entity ();
+
+	ASSERT (source);
 
 	wingman = get_local_entity_first_child (source, LIST_TYPE_PADLOCK);
 
@@ -3246,9 +3246,9 @@ void select_padlock_view_event (padlock_modes mode)
 		*source,
 		*target;
 
-	ASSERT (get_gunship_entity ());
-
 	source = get_gunship_entity ();
+
+	ASSERT (source);
 
 	switch (mode)
 	{

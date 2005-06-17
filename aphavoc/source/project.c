@@ -564,7 +564,7 @@ void set_comanche_hokum_installation_path(void)
 
 		type = REG_SZ;
 
-		RegQueryValueEx ( comanche_hokum_key, "Installation Path", NULL, &type, ( LPBYTE ) &comanche_hokum_installation_path, ( LPDWORD ) &string_length );
+		RegQueryValueEx ( comanche_hokum_key, "Installation Path", NULL, &type, ( LPBYTE ) comanche_hokum_installation_path, ( LPDWORD ) &string_length );
 	}
 
 	RegCloseKey ( comanche_hokum_key );
@@ -602,7 +602,7 @@ void set_apache_havoc_installation_path ( void )
 
 				type = REG_SZ;
 
-				if ( RegQueryValueEx ( apache_havoc_key, "Installation Path", NULL, &type, ( LPBYTE ) &apache_havoc_installation_path, ( LPDWORD ) &string_length ) == ERROR_SUCCESS )
+				if ( RegQueryValueEx ( apache_havoc_key, "Installation Path", NULL, &type, ( LPBYTE ) apache_havoc_installation_path, ( LPDWORD ) &string_length ) == ERROR_SUCCESS )
 				{
 
 					apache_havoc_installation_path_valid = TRUE;

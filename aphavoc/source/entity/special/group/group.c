@@ -1466,7 +1466,7 @@ int assign_group_callsign (entity *en)
 		while (group_callsign_names [index].side [side])
 		{
 
-			index = (++ index) % NUM_GROUP_CALLSIGNS;
+			index = ( index + 1 ) % NUM_GROUP_CALLSIGNS;
 
 			if (index == start_position)
 			{

@@ -155,19 +155,23 @@ static int
 
 	number_of_watch_lines = 0,							// Number of debug monitor lines on display in the window
 
-	number_of_watch_monitor_lines = 0;				// Total number of monitor lines
+	number_of_watch_monitor_lines = 0,				// Total number of monitor lines
 
-	current_log_monitor_line = 0,						// Current monitor line at top of monitor window
+	//current_log_monitor_line = 0,						// Current monitor line at top of monitor window
 
 	number_of_log_lines = 0,							// Number of debug monitor lines on display in the window
 
-	number_of_log_monitor_lines = 0;					// Total number of monitor lines
+	//current_filtered_log_monitor_line = 0,			// Current monitor line at top of monitor window
 
-	current_filtered_log_monitor_line = 0,			// Current monitor line at top of monitor window
+	number_of_filtered_log_lines = 0;				// Number of debug monitor lines on display in the window
 
-	number_of_filtered_log_lines = 0,				// Number of debug monitor lines on display in the window
+#ifdef DEBUG
 
+static int
+	number_of_log_monitor_lines = 0,					// Total number of monitor lines
 	number_of_filtered_log_monitor_lines = 0;		// Total number of monitor lines
+
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -448,9 +448,30 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 void set_application_current_directory ( void )
 {
-
 	char
 		*ptr;
+
+#ifdef DEBUG
+
+	HANDLE key;
+	char root[1024];
+	DWORD type;
+	long string_length;
+
+	if ( RegOpenKey ( HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &key ) == ERROR_SUCCESS )
+	{
+		string_length = sizeof ( root );
+		type = REG_SZ;
+		RegQueryValueEx ( key, "Installation Path", NULL, &type, ( LPBYTE ) root, ( LPDWORD ) &string_length );
+		strcat ( root, "\\COHOKUM" );
+   		SetCurrentDirectory ( root );
+		GetCurrentDirectory ( sizeof ( application_current_directory ), application_current_directory );
+		RegCloseKey ( key );
+		return;
+	}
+	RegCloseKey ( key );
+
+#endif
 
 	GetModuleFileName ( NULL, application_current_directory, sizeof ( application_current_directory ) );
 
@@ -471,6 +492,7 @@ void set_application_current_directory ( void )
 
 		SetCurrentDirectory ( application_current_directory );
 	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

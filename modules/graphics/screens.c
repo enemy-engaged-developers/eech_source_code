@@ -384,7 +384,7 @@ BOOL destroy_screen ( screen *this_screen )
 		ret;
 
 	ASSERT ( this_screen );
-	ASSERT ( this_screen->surface );
+	//ASSERT ( this_screen->surface );
 
 	if ( !this_screen->do_not_destroy )
 	{

@@ -88,7 +88,7 @@ int
 	current_3d_object_is_flat;
 
 int
-	specular_rendering_enabled = TRUE;
+	specular_rendering_enabled = TRUE,
 	textured_object_rendering_enabled = FALSE;
 
 face_surface_description
