@@ -3872,7 +3872,7 @@ void load_warzone_override_textures (char *warzone_name)
 	// empty name database
 	clear_texture_override_names ();
 
-	sprintf (directory_textdir_path, "%s\\%s\\texturedirs.txt",TEXTURE_OVERRIDE_DIRECTORY,warzone_name);
+	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
 
 	debug_log("Overide dir warzone name %s", warzone_name);
 
