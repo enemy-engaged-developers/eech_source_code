@@ -180,7 +180,7 @@ extern int
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha, 									// VJ 050126 hud mod: background 
 	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
-	command_line_autosave,
+	command_line_autosave,								//Casm 17JUN05 Autosave option
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
 	session_planner_goto_button,

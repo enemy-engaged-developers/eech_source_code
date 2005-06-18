@@ -451,6 +451,7 @@ void set_application_current_directory ( void )
 	char
 		*ptr;
 
+	// Casm 17JUN05 Using directory from Registry while debugging.
 #ifdef DEBUG
 
 	HANDLE key;
@@ -472,6 +473,7 @@ void set_application_current_directory ( void )
 	RegCloseKey ( key );
 
 #endif
+	// Casm 17JUN05 Using directory from Registry while debugging.
 
 	GetModuleFileName ( NULL, application_current_directory, sizeof ( application_current_directory ) );
 

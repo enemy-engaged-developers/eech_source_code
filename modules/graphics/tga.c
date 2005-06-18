@@ -68,6 +68,8 @@
 
 #include "misc.h"
 
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -491,16 +493,19 @@ void save_tga_screen_with_thumbnail ( char *screen_filename, char *thumbnail_fil
 
 	for ( loop_y = 0; loop_y < height; loop_y++ )
 	{
-
-		unsigned short int
+        // Casm 18JUN05 Fixed to allow both 16- and 32- bit screns to be saved
+		unsigned char
 			*source_line_data;
+		int pixel_size;
 
-		source_line_data = ( unsigned short int * ) source_line;
+		source_line_data = ( unsigned char * ) source_line;
+		pixel_size = command_line_display_bpp == 16 ? 2 : 4;
 
 		for ( loop_x = 0; loop_x < width; loop_x ++ )
 		{
+			colour = get_rgb_colour_value ( * ( unsigned long * ) source_line_data );
 
-			colour = get_rgb_colour_value ( *source_line_data++ );
+			source_line_data += pixel_size;
 
 			*image_ptr ++ = colour.b;
 			*image_ptr ++ = colour.g;

@@ -134,7 +134,7 @@ void initialise_gunships_screen (void)
 		*option_bdrop;
 
 
-	// Preselect side if requested
+	// Casm 11JUN05 Preselect side if requested
 	if ( gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL )
 	{
 		switch ( command_line_game_initialisation_phase_gunship_type )
@@ -160,6 +160,7 @@ void initialise_gunships_screen (void)
 			}
 		}
 	}
+	// Casm 11JUN05 Preselect side if requested
 
 	x1 = 0.0;
 	y1 = 0.0;

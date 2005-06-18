@@ -83,9 +83,6 @@ int
 	pages_clear,
 	game_update_time;
 
-static time_t
-	last_autosaved, now;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +105,12 @@ void flight (void)
 
 	int
 		count;
+
+	// Casm 17JUN05 Autosave option
+	time_t
+		last_autosaved, now;
+	// Casm 17JUN05 Autosave option
+
 
 	keysite = NULL;
 
@@ -291,7 +294,9 @@ void flight (void)
 	}
 #endif	// Retro 10Jul2004
 
+	// Casm 17JUN05 Autosave option
 	last_autosaved = time ( NULL );
+	// Casm 17JUN05 Autosave option
 
 	while (!get_exit_flight_loop ())
 	{
@@ -480,12 +485,14 @@ void flight (void)
 			}
 		}
 #endif	// Retro 10Jul2004
+		// Casm 17JUN05 Autosave option
 		now = time ( NULL );
 		if ( command_line_autosave > 0 && last_autosaved + command_line_autosave < now )
 		{
 			store_session ( get_current_game_session (), "AUTOSAVE" );
 			last_autosaved = now;
 		}
+		// Casm 17JUN05 Autosave option
 	}
 
 	ASSERT ((get_ui_screen_stack_head () != campaign_screen) && (get_ui_screen_stack_head () != options_screen));

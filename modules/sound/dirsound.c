@@ -380,6 +380,7 @@ LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, 
 
 	ASSERT ( buffer );
 
+	// Casm 11JUN05 Hardware sound buffers
 	if ( command_line_sound_hdwrbuf > 0 )
 	{
 		dsrval = IDirectSoundBuffer_GetFormat ( buffer, ( LPWAVEFORMATEX ) &pcmwf, sizeof(pcmwf), NULL );
@@ -421,6 +422,7 @@ LPDIRECTSOUNDBUFFER dsound_duplicate_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, 
 
 		return ( duplicand );
 	}
+	// Casm 11JUN05 Hardware sound buffers
 
 	dsrval = IDirectSound_DuplicateSoundBuffer ( dsound, buffer, &duplicand );
 

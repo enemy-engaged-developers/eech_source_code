@@ -76,7 +76,7 @@ extern rgb_packed get_packed_pixel ( const int x, const int y );
 
 extern rgb_packed get_rgb_packed_value ( const rgb_colour colour );
 
-extern rgb_colour get_rgb_colour_value ( const rgb_packed colour );
+extern rgb_colour get_rgb_colour_value ( const unsigned long colour );
 
 extern rgb_packed get_user_rgb_packed_value ( const rgb_colour colour );
 
