@@ -68,6 +68,9 @@
 
 #include "misc.h"
 
+//VJ 050619 included to check global_anisotropic setting
+#include "cmndline.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -917,17 +920,28 @@ void initialise_3d_terrain ( void )
 
 	if ( d3d_trilinear_filtering )
 	{
-
 		terrain_texture_mag_filter = D3DTFG_LINEAR;
 		terrain_texture_min_filter = D3DTFN_LINEAR;
-		terrain_texture_mip_filter = D3DTFP_POINT;
+
+		//VJ 050619 if anisotropic is on set higher filter for blending
+		if( global_anisotropic )
+			{ terrain_texture_mip_filter = D3DTFP_LINEAR; }
+		else 
+			{ terrain_texture_mip_filter = D3DTFP_POINT; }
+//		terrain_texture_mip_filter = D3DTFP_POINT;
 	}
 	else
 	{
 
 		terrain_texture_mag_filter = D3DTFG_LINEAR;
 		terrain_texture_min_filter = D3DTFN_LINEAR;
-		terrain_texture_mip_filter = D3DTFP_POINT;
+
+		//VJ 050619 if anisotropic is on set higher filter for blending
+		if( global_anisotropic )
+			{ terrain_texture_mip_filter = D3DTFP_LINEAR; }
+		else 
+			{ terrain_texture_mip_filter = D3DTFP_POINT; }
+//		terrain_texture_mip_filter = D3DTFP_POINT;
 	}
 
 	//

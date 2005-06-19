@@ -202,6 +202,8 @@ int
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background 
+	global_mipmapping									= 0,  //VJ 050530 mipmapping on/off
+	global_anisotropic								= 0,	//VJ 050530 AF on/off
 	command_line_texture_colour					= 0,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_autosave					= 0,  //Casm 17JUN05 Autosave option
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
