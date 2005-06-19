@@ -120,9 +120,10 @@ void initialise_application_3d_system (void)
 
 	load_texturemap_data ( "3ddata" );
 	
+	//VJ 050619 NO LONGER NEEDED, all textures are loaded when entering warzone
 	//VJ 050116 custom texture mod
-	load_custom_textures ();
-
+	//	load_custom_textures ();
+	
 	initialise_3d_system ();
 
 	initialise_3d_objects ( "3ddata" );
