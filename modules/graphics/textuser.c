@@ -2575,6 +2575,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Casm 19JUN05 Changes to allow ..\..\somedir path to be valid. Also changed some weird constructions
 int match_system_texture_name ( char *name )
 {
 
@@ -2590,35 +2591,31 @@ int match_system_texture_name ( char *name )
 
 	ptr = real_name;
 
-	// convert to uppercase
-	while ( ( *name != '\0' ) && ( *name != '.' ) )
-	{
-
-		*ptr++ = toupper ( *name++ );
-	}
-	*ptr++ = '\0';
-
 	// throw away the first part of the name = the sub-directory of cohokum\graphics\textures
 	// scan string for last occurence of '\\'
 	// throw away that part
 	//VJ 050319 texture colour mod, adjustment
-	p = strrchr(real_name,'\\');
+	p = strrchr(name,'\\');
 	p++;
 
-	strcpy(real_name, p);
+	// convert to uppercase
+	while ( ( *p != '\0' ) && ( *p != '.' ) )
+	{
+
+		*ptr++ = toupper ( *p++ );
+	}
+	*ptr++ = '\0';
 
 	//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
-	if (strstr(real_name, "-BIN"))
+	if (p = strstr(real_name, "-BIN"))
 	{
-		p = strstr(real_name, "-BIN");
-	   real_name[strlen(real_name)-strlen(p)] = '\0';
+		*p = '\0';
 	}
 
 	//VJ 04/12/17 if textimpex name then delete -PAL-etc	8bit
-	if (strstr(real_name, "-PAL"))
+	if (p = strstr(real_name, "-PAL"))
 	{
-		p = strstr(real_name, "-PAL");
-	   real_name[strlen(real_name)-strlen(p)] = '\0';
+		*p = '\0';
 	}
 
 //VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
@@ -2629,17 +2626,17 @@ int match_system_texture_name ( char *name )
 		 return (385);
 	}
 	else
-   if (strstr(real_name, DESERTIND_1))
+   if (p = strstr(real_name, DESERTIND_1))
    {
 		//check for _DESERT
-       real_name[strlen(real_name)-strlen(DESERTIND_1)] = '\0';
+       *p = '\0';
        camo = 1;
    }
    else
-   if (strstr(real_name, DESERTIND_2))
+   if (p = strstr(real_name, DESERTIND_2))
    {
 		//check for -D
-       real_name[strlen(real_name)-strlen(DESERTIND_2)] = '\0';
+       *p = '\0';
        camo = 1;
    }
 
