@@ -299,6 +299,7 @@ void process_ini_file(int argc, char *argv[])
 		}
 		if (strcmp(p, "dxtm")==0) 	command_line_d3d_use_texture_management = d1;
 		if (strcmp(p, "cg")==0) 		command_line_clean_graphics = d1;
+		if (strcmp(p, "palette")==0) 	d3d_allow_paletted_textures = d1; //Casm 20JUN05 External switch of .pal/.bin for textures
 //COMMS
 		if (strcmp(p, "ipa")==0)
 		  if(strlen(q)!=0)
@@ -484,6 +485,7 @@ void dump_ini_file(void)
 	fprintf(f,"3dreset=0            # Reset screen resolution to 640x480 (def = 0)\n");
 	fprintf(f,"dxtm=%d              # directx texture management, should fix \"unable to allocate hardware slot\" error (def = 0)\n",command_line_d3d_use_texture_management);
 	fprintf(f,"cg=0                # clean graphics, re-installs graphics files (def = 0)\n");
+	fprintf(f,"palette=%i           # allow to use textures.pal if videocard supports it. Default is 1. Recommended is 0.\n", d3d_allow_paletted_textures); //Casm 20JUN05 External switch of .pal/.bin for textures
 	fprintf(f,"[Communications]\n");
 	fprintf(f,"maxplayers=%d        # maximum number of players in a multiplayer game, def = 4\n",command_line_maxplayers);
 	fprintf(f,"ipa=%s               # ip address = TCPIP address to connect to. A HOST can leave out the value.\n",command_line_ip_address);
