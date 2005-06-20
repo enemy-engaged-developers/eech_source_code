@@ -3634,8 +3634,10 @@ void load_warzone_override_textures (char *warzone_name)
 			 
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
-	}	
-	
+	}
+	else
+		command_line_texture_colour = 0;
+
 	for (count = 0; count < MAX_TEXTURES; count++)
 	{
 		if (system_texture_override_names[count].type != 0)
