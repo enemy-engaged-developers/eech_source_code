@@ -3611,10 +3611,9 @@ void load_warzone_override_textures (char *warzone_name)
 	map = warzone_name + strlen ( warzone_name ) - 1;
 	if ( *map == '\\' )
  		map--;
-	assert ( isdigit ( *map ) );
 	nr = (int) (*map - '0');
-	
-	if (/*command_line_texture_colour == 1 && */nr <= 6)
+
+	if (/*command_line_texture_colour == 1 && */ nr >= 1 && nr <= 6)
 	{		
 		if (nr == 1) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 2) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
