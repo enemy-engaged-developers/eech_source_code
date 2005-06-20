@@ -489,6 +489,7 @@ void flight (void)
 		now = time ( NULL );
 		if ( command_line_autosave > 0 && last_autosaved + command_line_autosave < now )
 		{
+			debug_log ( "Autosaving..." );
 			store_session ( get_current_game_session (), "AUTOSAVE" );
 			last_autosaved = now;
 		}
