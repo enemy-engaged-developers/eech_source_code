@@ -83,7 +83,7 @@
 // used in:
 //Razorworks\eech-new\aphavoc\source\init.c
 //Razorworks\eech-new\aphavoc\source\comms\comm_man.c
-#define BUILD_TYPE	"W1T6"
+#define BUILD_TYPE	"W1T7"
 
 #define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W1T4"
 
