@@ -271,6 +271,9 @@ typedef struct OVERRIDENAME overridename;
 overridename 
 	system_texture_override_names[MAX_TEXTURES];
 
+//VJ 050621 backup commandline
+static int 
+	texture_colour_bak;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3564,7 +3567,6 @@ void load_warzone_override_textures (char *warzone_name)
 
 	if ( file_exist ( directory_textdir_path ) )
 	{
-//		int count;
 		FILE *ftextdir;
 		char buf[256];
 		char *p;
@@ -3612,7 +3614,7 @@ void load_warzone_override_textures (char *warzone_name)
  		map--;
 	nr = (int) (*map - '0');
 
-	if (/*command_line_texture_colour == 1 && */ nr >= 1 && nr <= 6)
+	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 6)
 	{		
 		if (nr == 1) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 2) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
@@ -3626,16 +3628,14 @@ void load_warzone_override_textures (char *warzone_name)
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions 
 		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
 
+		//VJ 050621 backup commandline var, set to 0 if no textures found
+		texture_colour_bak = command_line_texture_colour;
 		if (nrtextfound == 0)
 			command_line_texture_colour = 0;
-		else
-			command_line_texture_colour = 1;
 			 
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
-	else
-		command_line_texture_colour = 0;
 
 	for (count = 0; count < MAX_TEXTURES; count++)
 	{
@@ -3658,38 +3658,36 @@ void load_warzone_override_textures (char *warzone_name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//restore pointers to default + startup override textures
+//VJ 050620 restore pointers to default + startup override textures
 // called from \eech-new\aphavoc\source\flight.c
 void restore_default_textures ( void )
 {
 	int count = 0;
 
-	//return;
-	//VJ 050618 this doesn't work because after all the texture loading and destroying in between the list is no longer accurate 
-	// that means that the original textures may not exist anymore in the memory
-	// this means that loading another warzone may have texture
-
-	   for (count = 0; count < MAX_TEXTURES; count++)
-	   if (system_texture_override_names[count].type > 0)
-	   {				
-			debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
-		
-		
-			if ( system_textures[count]->palette )
-			{
-				IDirectDrawSurface7_SetPalette ( system_textures[count]->surface, NULL );
-				system_textures[count]->palette = NULL;
-			}
-			release_texture_surface ( &system_textures[count]->surface );
-			
-		//if (system_textures[ count ] && system_textures[ count ]->surface)
-		//	   destroy_screen ( system_textures[ count ] );
+	//VJ 050621 restore backup commandline
+	command_line_texture_colour = texture_colour_bak;
 	
-		// restore pointer to original textures
-			system_textures[ count ] = backup_system_textures[ count ];
-			system_texture_info[ count ] = backup_system_texture_info[ count ];
+   for (count = 0; count < MAX_TEXTURES; count++)
+   if (system_texture_override_names[count].type > 0)
+   {				
+		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
 	
+	
+		if ( system_textures[count]->palette )
+		{
+			IDirectDrawSurface7_SetPalette ( system_textures[count]->surface, NULL );
+			system_textures[count]->palette = NULL;
 		}
+		release_texture_surface ( &system_textures[count]->surface );
+		
+	//if (system_textures[ count ] && system_textures[ count ]->surface)
+	//	   destroy_screen ( system_textures[ count ] );
+
+	// restore pointer to original textures
+		system_textures[ count ] = backup_system_textures[ count ];
+		system_texture_info[ count ] = backup_system_texture_info[ count ];
+
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
