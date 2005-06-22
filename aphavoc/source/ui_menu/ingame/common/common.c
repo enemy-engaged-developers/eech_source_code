@@ -906,7 +906,7 @@ void ingame_screen_set_events (void)
 	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_LEFT_SHIFT, BUTTON_STATE_EITHER, ui_right_mouse_button);
 
 	//Casm 20JUN05 QuickSave feature
-	set_event (DIK_S, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, quicksave_event);
+	set_event (DIK_Z, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, quicksave_event);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
