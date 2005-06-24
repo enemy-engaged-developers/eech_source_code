@@ -2426,7 +2426,6 @@ terrain_texture_sea_detail_16 = get_system_texture_index ( "CP_LEBANON_CITY4");
 		terrain_texture_river_bank_colour_pass					= terrain_texture_river_bank_detail;
 		terrain_texture_trench_colour_pass						= terrain_texture_trench_detail;
 
-#if MOVINGWATER
 		terrain_texture_field1_colour_pass						= terrain_texture_field1_detail;
 		terrain_texture_field2_colour_pass						= terrain_texture_field2_detail;
 		terrain_texture_field3_colour_pass						= terrain_texture_field3_detail;
@@ -2438,7 +2437,7 @@ terrain_texture_sea_detail_16 = get_system_texture_index ( "CP_LEBANON_CITY4");
 		terrain_texture_field9_colour_pass						= terrain_texture_field9_detail;
 		terrain_texture_field10_colour_pass						= terrain_texture_field10_detail;
 		terrain_texture_field11_colour_pass						= terrain_texture_field11_detail;
-#endif
+
 		terrain_texture_altered_land1_colour_pass				= terrain_texture_altered_land1_detail;
 		terrain_texture_altered_land2_colour_pass				= terrain_texture_altered_land2_detail;
 		terrain_texture_altered_land3_colour_pass				= terrain_texture_altered_land3_detail;
