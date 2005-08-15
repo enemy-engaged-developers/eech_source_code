@@ -486,9 +486,9 @@ void realise_3d_shadow_setting ( env_3d *env )
 
 	ASSERT ( env );
 
-	set_d3d_shadow_colour ( env->shadow_setting.light_colour.red * 255.0,
-									env->shadow_setting.light_colour.green * 255.0,
-									env->shadow_setting.light_colour.blue * 255.0,
+	set_d3d_shadow_colour ( env->shadow_setting.light__colour.red * 255.0,
+									env->shadow_setting.light__colour.green * 255.0,
+									env->shadow_setting.light__colour.blue * 255.0,
 									128.0 );
 }
 

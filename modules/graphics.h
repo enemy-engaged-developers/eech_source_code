@@ -107,8 +107,6 @@ typedef struct tagPALETTEENTRY {
 
 #include "graphics/external/clip.h"
 
-#include "graphics/external/dither.h"
-
 #include "graphics/external/dassess.h"
 
 #include "graphics/external/dresol.h"
@@ -168,6 +166,8 @@ typedef struct tagPALETTEENTRY {
 #include "graphics/external/psdread.h"
 
 #include "graphics/external/psdwrite.h"
+
+#include "graphics/external/dither.h"
 
 #include "graphics/external/textsys.h"
 
@@ -275,8 +275,6 @@ typedef struct tagPALETTEENTRY {
 
 #include "graphics/clip.h"
 
-#include "graphics/dither.h"
-
 #include "graphics/dassess.h"
 
 #include "graphics/dresol.h"
@@ -336,6 +334,8 @@ typedef struct tagPALETTEENTRY {
 #include "graphics/psdread.h"
 
 #include "graphics/psdwrite.h"
+
+#include "graphics/dither.h"
 
 #include "graphics/textsys.h"
 

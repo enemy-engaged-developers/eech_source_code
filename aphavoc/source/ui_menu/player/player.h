@@ -100,7 +100,7 @@ enum PILOT_RANK_TYPES
 
 typedef enum PILOT_RANK_TYPES pilot_rank_types;
 
-extern unsigned char
+extern const char
 	*pilot_rank_names [];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ enum MEDAL_TYPES
 
 typedef enum MEDAL_TYPES medal_types;
 
-extern unsigned char
+extern const char
 	*medal_type_names [];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ typedef struct PLAYER_LOG_TYPE player_log_type;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char
+extern const char
 	*us_medal_type_names [NUM_MEDAL_TYPES],
 	*cis_medal_type_names [NUM_MEDAL_TYPES],
 	*rank_type_names [NUM_PILOT_RANKS];
@@ -245,9 +245,9 @@ extern char
 
 extern void initialise_medal_and_promotion_names (void);
 
-extern char *get_pilot_rank_name (int rank);
-extern char *get_pilot_rank_short_name (int rank);
-extern unsigned char *get_untranslated_pilot_rank_short_name (int rank);
+extern const char *get_pilot_rank_name (int rank);
+extern const char *get_pilot_rank_short_name (int rank);
+extern const char *get_untranslated_pilot_rank_short_name (int rank);
 
 extern player_log_type *get_player_log_list ();
 extern void set_player_log_list (player_log_type *log);

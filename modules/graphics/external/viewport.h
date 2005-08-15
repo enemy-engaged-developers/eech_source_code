@@ -150,6 +150,7 @@ extern void clear_viewport ( const rgb_colour colour );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef __WIN32__
 #ifdef __WATCOMC__
 
 extern int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax );
@@ -170,7 +171,26 @@ parm [ eax ] [ ebx ] [ ecx ] [ edx ]							\
 value no8087 [ eax ]															\
 modify exact [ eax ebx ecx edx ];
 
-#elif WIN32
+#elif defined ( __GNUC__ )
+
+static __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
+{
+	xmin >>= 31;
+	ymin &= 0x80000000;
+	xmax >>= 29;
+	ymax &= 0x80000000;
+	ymin >>= 30;
+	xmin &= 0x00000001;
+	ymax >>= 28;
+	xmax &= 0x00000004;
+	xmin |= ymin;
+	xmax |= ymax;
+	xmin |= xmax;
+
+	return xmin;
+}
+
+#else
 
 __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
 {
@@ -191,6 +211,7 @@ __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
 	__asm or	ecx, edx;
 	__asm or	eax, ecx;
 }
+#endif
 
 #else
 

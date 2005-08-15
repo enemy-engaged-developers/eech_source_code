@@ -143,7 +143,7 @@ void get_keyframed_animation_state( float value, int *state, float *remainder )
 int update_entity_reversable_keyframed_value( entity *en, float *animation_state, float animation_rate )
 {
 
-	keyframe_animation_states
+	int
 		int_state;
 
 	float
@@ -247,7 +247,7 @@ int update_entity_simple_keyframed_value( entity *en, float *animation_state, fl
 float set_entity_keyframe_value_animating_forwards( entity *en, float animation_state )
 {
 
-	keyframe_animation_states
+	int
 		int_state;
 
 	float
@@ -302,7 +302,7 @@ float set_entity_keyframe_value_animating_forwards( entity *en, float animation_
 float set_entity_keyframe_value_animating_reverse( entity *en, float animation_state )
 {
 
-	keyframe_animation_states
+	int
 		int_state;
 
 	float
@@ -362,7 +362,7 @@ float set_entity_keyframe_value_animating_reverse( entity *en, float animation_s
 void animate_entity_reversable_keyframed_sub_objects( object_3d_instance *inst3d, object_3d_sub_object_index_numbers sub_object_type, float animation_state )
 {
 
-	keyframe_animation_states
+	int
 		int_state;
 
 	float

@@ -108,7 +108,7 @@ struct FONT_DATABASE_HEADER
 {
 
 	char
-		typename[128];
+		type_name[128];
 
 	int
 		font_character_maximum_width,
@@ -232,9 +232,9 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void load_windows_ui_font ( font_types font, char *type_name, int height, int width, float thickness, int italics, int dropshadow );
+static void load_windows_ui_font ( font_types font, const char *type_name, int height, int width, float thickness, int italics, int dropshadow );
 
-static int get_kerning_offset ( char *ptr );
+static int get_kerning_offset ( const char *ptr );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +442,7 @@ void initialise_ui_font (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_windows_ui_font ( font_types font, char *typename, int width, int height, float weight, int italics, int dropshadow )
+void load_windows_ui_font ( font_types font, const char *type_name, int width, int height, float weight, int italics, int dropshadow )
 {
 
 	HFONT
@@ -509,9 +509,9 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 
 	new_font->loaded = TRUE;
 
-	new_font->typename = safe_malloc ( strlen ( typename ) + 1 );
+	new_font->type_name = safe_malloc ( strlen ( type_name ) + 1 );
 
-	strcpy ( new_font->typename, typename );
+	strcpy ( new_font->type_name, type_name );
 
 	new_font->font_source_height = height;
 	new_font->font_source_width = width;
@@ -548,7 +548,7 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 		for ( count = 0; count < number_of_fonts; count++ )
 		{
 
-			if ( stricmp ( font_headers[count].typename, typename ) == 0 )
+			if ( stricmp ( font_headers[count].type_name, type_name ) == 0 )
 			{
 
 				if (	( font_headers[count].font_source_height == height ) &&
@@ -590,17 +590,17 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 			buf[32];
 
 		char
-			real_typename[32];
+			real_type_name[32];
 
-		for ( count = 0; count < strlen ( typename ); count++ )
+		for ( count = 0; count < strlen ( type_name ); count++ )
 		{
 
-			buf[count] = typename[count];
+			buf[count] = type_name[count];
 		}
 
 		buf[count] = 0;
 
-		strcpy ( font_header.typename, typename );
+		strcpy ( font_header.type_name, type_name );
 		font_header.font_source_width = width;
 		font_header.font_source_height = height;
 		font_header.font_source_weight = weight;
@@ -645,7 +645,7 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 											CLIP_DEFAULT_PRECIS,			// How to clip the font!!!!
 											DEFAULT_QUALITY,				// ANTIALIASED_QUALITY,	//DEFAULT_QUALITY,		// quality
 											VARIABLE_PITCH | FF_SCRIPT,
-											buf );	//typename );
+											buf );	//type_name );
 	
 
 		if ( !my_font )
@@ -658,7 +658,7 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 		// Get Kerning information
 		//
 
-		debug_log ( "Creating font %s ( %d )", typename, height );
+		debug_log ( "Creating font %s ( %d )", type_name, height );
 	
 		hdc = GetDC ( application_window );
 
@@ -668,13 +668,13 @@ void load_windows_ui_font ( font_types font, char *typename, int width, int heig
 
 		ReleaseDC ( application_window, hdc );
 
-		for ( count = 0; count < strlen ( typename ); count++ )
+		for ( count = 0; count < strlen ( type_name ); count++ )
 		{
 
-			real_typename[count] = typename[count];
+			real_type_name[count] = type_name[count];
 		}
 
-		debug_log ( "Using font: %s", real_typename );
+		debug_log ( "Using font: %s", real_type_name );
 
 		number_of_kerning_pairs = GetKerningPairs ( hdc, 0, 0 );
 
@@ -1303,7 +1303,7 @@ void deinitialise_ui_font (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float ui_display_text (char *text, float x, float y)
+float ui_display_text (const char *text, float x, float y)
 {
 
 	if ( d3d_in_3d_scene )
@@ -1328,7 +1328,7 @@ float ui_display_text (char *text, float x, float y)
 			char_start_y,
 			original_x_position;
 	
-		unsigned char
+		const char
 			*text_ptr;
 	
 		viewport
@@ -1698,7 +1698,7 @@ float ui_display_text (char *text, float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_kerning_offset ( unsigned char *ptr )
+int get_kerning_offset ( const char *ptr )
 {
 
 	int
@@ -1743,13 +1743,13 @@ int get_kerning_offset ( unsigned char *ptr )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float ui_get_string_length (char *string)
+float ui_get_string_length (const char *string)
 {
 
 	int
 		length;
 
-	char
+	const char
 		*current_char;
 
 	font_character
@@ -1800,7 +1800,7 @@ float ui_get_string_length (char *string)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int ui_display_centred_text (char *text, float x1, float x2, float y1, float y2)
+int ui_display_centred_text (const char *text, float x1, float x2, float y1, float y2)
 {
 
 	float

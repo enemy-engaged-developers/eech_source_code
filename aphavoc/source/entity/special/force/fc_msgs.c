@@ -271,10 +271,22 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 					{
 						switch (sub_type)
 						{
+							case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
 							case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+							case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
 							case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 							{
 								complete = CAMPAIGN_COMPLETED_FALSE;
+
+								break;
+							}
+							case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+							case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+							case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+							case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+							{
+								if (aircraft_database[sub_type].player_controllable)
+									complete = CAMPAIGN_COMPLETED_FALSE;
 
 								break;
 							}

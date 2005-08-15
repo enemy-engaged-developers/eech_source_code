@@ -289,7 +289,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	// Create the device
 	//
 
-	di_err = IDirectInput7_CreateDeviceEx (direct_input, &device_instance->guidInstance, &IID_IDirectInputDevice7, &device, NULL);
+	di_err = IDirectInput7_CreateDeviceEx (direct_input, &device_instance->guidInstance, &IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
 
 	if (di_err != DI_OK)
 	{

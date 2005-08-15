@@ -88,13 +88,13 @@ extern void initialise_terrain_simple_elevation ( void );
 
 extern float get_3d_terrain_fast_elevation ( float x, float z );
 
-extern int load_terrain_simple_elevation ( char *filename );
+extern int load_terrain_simple_elevation ( const char *filename );
 
 extern void unload_terrain_simple_elevation_grid ( void );
 
 extern void generate_terrain_simple_elevation ( float elevation_grid_size );
 
-extern void save_terrain_simple_elevation ( char *filename );
+extern void save_terrain_simple_elevation ( const char *filename );
 
 extern void display_terrain_simple_elevation_statistics ( void );
 

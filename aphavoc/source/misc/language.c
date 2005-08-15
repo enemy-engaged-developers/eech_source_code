@@ -121,7 +121,7 @@ static int get_next_file_translation (FILE *file_ptr, char *buffer, int size);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char
+const char
 	*language_strings [] =
 	{
 		"ENGLISH",
@@ -157,7 +157,7 @@ void initialise_alphabet_pointers (void)
 	
 	current = translation_list;
 
-	memset (alphabet_pointers, NULL, NUM_ALPHABET_POINTERS);
+	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
 
 	// set 1st pointer to 1st of misc. characters
 	a = current->tag [0];
@@ -486,7 +486,7 @@ void initialise_language_database (void)
 
 	translation_list = NULL;
 
-	memset (alphabet_pointers, NULL, NUM_ALPHABET_POINTERS);
+	memset (alphabet_pointers, 0, NUM_ALPHABET_POINTERS);
 
 	#if PREPROCESS_DAT_FILES
 		preprocess_language_database ();
@@ -550,12 +550,12 @@ void initialise_language_database (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *get_trans (char *string)
+const char *get_trans (const char *string)
 {
 	language_struct
 		*temp;
 		
-	char
+	const char
 		*result = NULL;
 		
 	int

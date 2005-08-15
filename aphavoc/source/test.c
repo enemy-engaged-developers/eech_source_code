@@ -439,7 +439,7 @@ static float display_in_flight_debug_misc_info (float y)
 
 				if (en)
 				{
-					raw = get_local_entity_data (en);
+					raw = ( camera * ) get_local_entity_data (en);
 
 					if (get_view_mode () == VIEW_MODE_EXTERNAL)
 					{
@@ -862,7 +862,7 @@ static float display_in_flight_debug_force_info (float y)
 
 		set_mono_font_position (0.0, y);
 
-		session_raw = get_local_entity_data (get_session_entity ());
+		session_raw = ( session * ) get_local_entity_data (get_session_entity ());
 
 		get_digital_clock_values (session_raw->elapsed_time, &elapsed_hours, &elapsed_minutes, &elapsed_seconds);
 
@@ -881,7 +881,7 @@ static float display_in_flight_debug_force_info (float y)
 		while (force_en)
 		{
 
-			force_raw = get_local_entity_data (force_en);
+			force_raw = ( force * ) get_local_entity_data (force_en);
 
 			y += get_mono_font_char_height ('X');
 			set_mono_font_position (0.0, y);
@@ -925,7 +925,7 @@ static float display_in_flight_debug_force_info (float y)
 		while (force_en)
 		{
 
-			force_raw = get_local_entity_data (force_en);
+			force_raw = ( force * ) get_local_entity_data (force_en);
 
 			keysite_en = get_local_entity_first_child (force_en, LIST_TYPE_KEYSITE_FORCE);
 
@@ -998,7 +998,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 
 		en = get_external_view_entity ();
 
-		routed = get_local_entity_data (en);
+		routed = ( routed_vehicle * ) get_local_entity_data (en);
 
 		set_viewport (full_screen_x_min, full_screen_y_min, full_screen_x_max, full_screen_y_max);
 
@@ -1208,7 +1208,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 				y += get_mono_font_char_height ('X');
 				set_mono_font_position (0.0, y);
 
-				sprintf (s, "   Formation = %s", get_formation_name (get_local_entity_int_value (cwp, INT_TYPE_WAYPOINT_FORMATION)));
+				sprintf (s, "   Formation = %s", get_formation_name ((formation_types)get_local_entity_int_value (cwp, INT_TYPE_WAYPOINT_FORMATION)));
 				print_mono_font_string (s);
 			}
 
@@ -1328,7 +1328,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 			aircraft
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = ( aircraft * ) get_local_entity_data (en);
 
 			// Approx number
 			sprintf (s, "   Approx. number = %d", get_3d_object_approximation_number (raw->inst3d));
@@ -1340,7 +1340,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 			vehicle
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = ( vehicle * ) get_local_entity_data (en);
 
 			// Approx number
 			sprintf (s, "   Approx. number = %d", get_3d_object_approximation_number (raw->inst3d));
@@ -1535,7 +1535,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 	
 						sprintf (s, "WP %s (%s), (flt time %f), range %f",
 									get_local_entity_string (wp, STRING_TYPE_FULL_NAME),
-									get_formation_name (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
+									get_formation_name ((formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
 									get_local_entity_float_value (wp, FLOAT_TYPE_FLIGHT_TIME),
 									range);
 	
@@ -1545,7 +1545,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 	
 						sprintf (s, "WP %s (%s), (flt time %f)",
 									get_local_entity_string (wp, STRING_TYPE_FULL_NAME),
-									get_formation_name (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
+									get_formation_name ((formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
 									get_local_entity_float_value (wp, FLOAT_TYPE_FLIGHT_TIME));
 					}
 	
@@ -1714,7 +1714,7 @@ static void display_in_flight_external_view_entity_weapon_info (void)
 
 			unarmed = TRUE;
 
-			package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+			package_status = ( weapon_package_status * ) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 			if (package_status)
 			{
@@ -2221,7 +2221,7 @@ static void display_in_flight_external_view_entity_guide_info (void)
 		valid_members,
 		member_number;
 
-	unsigned char
+	char
 		s[200],
 		member_string [32];
 
@@ -2289,9 +2289,9 @@ static void display_in_flight_external_view_entity_guide_info (void)
 
 					for (loop = 0; loop < NUM_GUIDE_CRITERIA_TYPES; loop ++)
 					{
-						if (get_guide_criteria_valid (guide, loop))
+						if (get_guide_criteria_valid (guide, ( guide_criteria_types ) loop))
 						{
-							unsigned char
+							const char
 								*criteria_name;
 
 							float
@@ -2299,7 +2299,7 @@ static void display_in_flight_external_view_entity_guide_info (void)
 								
 							criteria_name = guide_criteria_type_names [loop];
 
-							value = get_guide_criteria_value (guide, loop);
+							value = get_guide_criteria_value (guide, ( guide_criteria_types ) loop);
 
 							sprintf (s, "%s - %f", criteria_name, value);
 

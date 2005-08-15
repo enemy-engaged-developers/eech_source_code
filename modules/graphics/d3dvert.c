@@ -253,7 +253,7 @@ LPD3DTLVERTEX get_d3d_point_vertices_points_address ( int number_of_points )
 
 	ASSERT ( number_of_points < MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER );
 
-	d3drval = IDirect3DVertexBuffer7_Lock ( d3d.point_vertex_buffer, DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &vertices, NULL );
+	d3drval = IDirect3DVertexBuffer7_Lock ( d3d.point_vertex_buffer, DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &vertices, NULL );
 
 	if ( d3drval != DD_OK )
 	{
@@ -279,7 +279,7 @@ LPD3DTLVERTEX get_d3d_alpha_vertex_buffer_vertices ( int buffer )
 
 	ASSERT ( buffer < MAX_ALPHA_VERTEX_BUFFERS );
 
-	d3drval = IDirect3DVertexBuffer7_Lock ( d3d.alpha_vertex_buffer[buffer], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &vertices, NULL );
+	d3drval = IDirect3DVertexBuffer7_Lock ( d3d.alpha_vertex_buffer[buffer], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &vertices, NULL );
 
 	if ( d3drval != DD_OK )
 	{
@@ -410,7 +410,7 @@ void get_d3d_triangle_vertex_buffer ( void )
 		d3d.triangle_buffer->texture.texture_settings = data.texture_settings;
 
 		ret = IDirect3DVertexBuffer7_Lock ( d3d.triangle_buffer->buffer, DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_DISCARDCONTENTS | DDLOCK_SURFACEMEMORYPTR,
-															&d3d.triangle_buffer->vertices, NULL );
+															( LPVOID * ) &d3d.triangle_buffer->vertices, NULL );
 		
 		if ( ret != DD_OK )
 		{
@@ -489,7 +489,7 @@ void get_d3d_line_vertex_buffer ( void )
 		d3d.line_buffer->indices_index = 0;
 	
 		ret = IDirect3DVertexBuffer7_Lock ( d3d.line_buffer->buffer, DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_DISCARDCONTENTS | DDLOCK_SURFACEMEMORYPTR,
-															&d3d.line_buffer->vertices, NULL );
+															( LPVOID * ) &d3d.line_buffer->vertices, NULL );
 		
 		if ( ret != DD_OK )
 		{

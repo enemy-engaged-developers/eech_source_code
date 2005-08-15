@@ -525,7 +525,7 @@ void brief_initialise_game (void)
 void full_initialise_game (void)
 {
 
-	unsigned char
+	char
 		buffer [1024];
 
 	////////////////////////////////////////

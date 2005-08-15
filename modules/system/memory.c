@@ -234,8 +234,17 @@ void walk_memory_heap ( void )
 		{
 	
 			heap_status = _heapwalk( &heap );
-	
+
+#ifdef _HEAPOK
+
 			if ( heap_status != _HEAPOK )
+
+#else
+
+			if ( !heap_status )
+
+#endif
+
 				break;
 	
 			fprintf ( fp, "%s block at %Fp of size %d\n", ( heap._useflag == _USEDENTRY ? "USED" : "FREE" ), heap._pentry, heap._size );
@@ -247,6 +256,8 @@ void walk_memory_heap ( void )
 			}
 		}
 		
+#ifdef _HEAPOK
+
 		switch ( heap_status )
 		{
 	
@@ -286,6 +297,8 @@ void walk_memory_heap ( void )
 				break;
 			}
 		}
+
+#endif
 
 		fprintf ( fp, "Total memory_allocated = %d", memory_allocated );
 #else

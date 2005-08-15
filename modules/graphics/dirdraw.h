@@ -201,7 +201,7 @@ extern struct direct_draw_data ddraw;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-struct DISPLAY_DEVICE
+struct DD_DISPLAY_DEVICE
 {
 
 	char
@@ -215,11 +215,11 @@ struct DISPLAY_DEVICE
 	GUID
 		guid;
 
-	struct DISPLAY_DEVICE
+	struct DD_DISPLAY_DEVICE
 		*succ;
 };
 
-typedef struct DISPLAY_DEVICE display_device;
+typedef struct DD_DISPLAY_DEVICE display_device;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ extern BOOL ddraw_set_display_resolution ( int width, int height, int depth, dis
 
 extern BOOL ddraw_change_display_resolution ( int width, int height, int depth );
 
-extern BOOL ddraw_lock_surface ( LPDIRECTDRAWSURFACEX surface, unsigned char **ptr, int *pitch );
+extern BOOL ddraw_lock_surface ( LPDIRECTDRAWSURFACEX surface, LPVOID *ptr, int *pitch );
 
 extern BOOL ddraw_unlock_surface ( LPDIRECTDRAWSURFACEX surface, unsigned char *memory );
 
@@ -263,7 +263,7 @@ extern BOOL ddraw_destroy_surface ( LPDIRECTDRAWSURFACEX surface );
 
 extern BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level );
 
-extern char *get_ddraw_error_message ( HRESULT error );
+extern const char *get_ddraw_error_message ( HRESULT error );
 
 extern void ddraw_validate_display_devices ( void );
 

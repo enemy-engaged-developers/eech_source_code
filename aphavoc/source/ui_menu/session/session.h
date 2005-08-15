@@ -115,11 +115,11 @@ struct SESSION_LIST_DATA_TYPE
    session_table_type
       *join_session;
 
-   unsigned char
+   char
 		*warzone_name,
-      data_path [256],
-      campaign_directory [64],
-      campaign_filename [64];
+		data_path [256],
+		campaign_directory [64],
+		campaign_filename [64];
 
    char ip_address [256];
 
@@ -197,7 +197,7 @@ extern void get_first_multi_session (session_list_data_type **list);
 
 extern void restore_session (session_list_data_type *session);
 
-extern int store_session (session_list_data_type *session, unsigned char *filename);
+extern int store_session (session_list_data_type *session, const char *filename);
 
 extern void set_current_game_session (session_list_data_type *game_session);
 

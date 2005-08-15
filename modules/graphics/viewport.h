@@ -174,6 +174,25 @@ parm [ eax ] [ ebx ] [ ecx ] [ edx ]							\
 value no8087 [ eax ]															\
 modify exact [ eax ebx ecx edx ];
 
+#elif defined ( __GNUC__ )
+
+__inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )
+{
+	xmin >>= 31;
+	ymin &= 0x80000000;
+	xmax >>= 29;
+	ymax &= 0x80000000;
+	ymin >>= 30;
+	xmin &= 0x00000001;
+	ymax >>= 28;
+	xmax &= 0x00000004;
+	xmin |= ymin;
+	xmax |= ymax;
+	xmin |= xmax;
+
+	return xmin;
+}
+
 #else
 
 __inline int generate_lookup_outcode ( int xmin, int ymin, int xmax, int ymax )

@@ -454,7 +454,7 @@ void set_application_current_directory ( void )
 	// Casm 17JUN05 Using directory from Registry while debugging.
 #ifdef DEBUG
 
-	HANDLE key;
+	HKEY key;
 	char root[1024];
 	DWORD type;
 	long string_length;

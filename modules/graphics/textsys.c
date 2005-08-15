@@ -773,8 +773,8 @@ BOOL unlock_texture ( screen *texture )
 	ASSERT ( texture->locked );
 	ASSERT ( texture->data );
 
-	ddrval = IDirectDrawSurface7_Unlock ( texture->surface_locked, texture->data );
-		
+	ddrval = IDirectDrawSurface7_Unlock ( texture->surface_locked, NULL );
+
 	if ( ddrval != DD_OK )
 	{
 

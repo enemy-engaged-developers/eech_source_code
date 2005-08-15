@@ -192,7 +192,7 @@ typedef struct FORMATION_VEHICLE_COMPONENTS formation_vehicle_components;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern unsigned char
+extern const char
 	*formation_names [],
 	*formation_display_names [],
 	*formation_component_names [];
@@ -221,7 +221,7 @@ extern formation_type *get_formation (formation_types formation);
 
 extern short int get_number_in_formation (formation_types formation);
 
-extern char *get_formation_name (formation_types formation);
+extern const char *get_formation_name (formation_types formation);
 
 extern float get_formation_member_radius (formation_types form, int member_count);
 

@@ -90,6 +90,8 @@
 
 #else /* NO_INTERNAL_MODULES */
 
+#include <dplay.h>
+
 #include <dsound.h>
 
 #include "sound/dirsound.h"

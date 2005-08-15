@@ -111,7 +111,7 @@ ui_object
 	*realism_suppress_ai_fire_area,
 	*realism_suppress_ai_fire_button;
 
-static unsigned char
+static const char
 	*boolean_text[2],
 	*suppress_ai_fire_text[2],
 	*time_of_day_text[6],
@@ -131,9 +131,9 @@ static void process_session_setup_time_of_day_options (session_time_of_day_setti
 
 static void process_session_setup_weather_options (session_weather_settings weather_setting);
 
-static void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, unsigned char *button_text[], int num_strings);
+static void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, const char *button_text[], int num_strings);
 
-static void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, unsigned char *button_text[], int num_strings);
+static void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, const char *button_text[], int num_strings);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1155,7 +1155,7 @@ void notify_realism_suppress_ai_fire_function ( ui_object *obj, void *arg )
 void session_parameters_text_input_function ( ui_object *obj, void *arg )
 {
 
-	char
+	const char
 		*text;
 
 	ui_object
@@ -1247,8 +1247,9 @@ void session_parameters_text_input_function ( ui_object *obj, void *arg )
 
 static void session_parameters_bounded_input_function ( ui_object *obj, void *arg, int minimum, int maximum )
 {
+	const char
+		*text;
 	char
-		*text,
 		buffer[ 8 ];
 
 	int
@@ -1543,7 +1544,7 @@ void process_restore_session_setup_options (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, unsigned char *button_text[], int num_strings)
+void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, const char *button_text[], int num_strings)
 {
 	float
 		old_size,
@@ -1573,7 +1574,7 @@ void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_o
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, unsigned char *button_text[], int num_strings)
+void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *title_text_obj, ui_object *button_box_obj, ui_object *button_obj, const char *button_text[], int num_strings)
 {
 	float
 		old_size,

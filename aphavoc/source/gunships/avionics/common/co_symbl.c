@@ -82,7 +82,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_unknown_los[] =
 	{
 		11,
@@ -102,7 +102,7 @@ static char
 		0,1,0,0,0,0,0,0,0,1,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_unknown_los_mask[] =
 	{
 		13,
@@ -124,7 +124,7 @@ static char
 		0,0,1,0,0,0,0,0,0,0,1,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_unknown_no_los[] =
 	{
 		11,
@@ -144,7 +144,7 @@ static char
 		0,1,0,0,0,0,0,0,0,1,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_unknown_no_los_mask[] =
 	{
 		13,
@@ -166,7 +166,7 @@ static char
 		0,0,1,0,0,0,0,0,0,0,1,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_unknown_los[] =
 	{
 		7,
@@ -182,7 +182,7 @@ static char
 		0,1,0,0,0,1,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_unknown_los_mask[] =
 	{
 		9,
@@ -200,7 +200,7 @@ static char
 		0,0,1,0,0,0,1,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_unknown_no_los[] =
 	{
 		7,
@@ -216,7 +216,7 @@ static char
 		0,1,0,0,0,1,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_unknown_no_los_mask[] =
 	{
 		9,
@@ -244,7 +244,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_wheeled_vehicle_los[] =
 	{
 		11,
@@ -264,7 +264,7 @@ static char
 		0,0,0,0,1,1,1,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_wheeled_vehicle_los_mask[] =
 	{
 		13,
@@ -286,7 +286,7 @@ static char
 		0,0,0,0,0,1,1,1,0,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_wheeled_vehicle_no_los[] =
 	{
 		11,
@@ -306,7 +306,7 @@ static char
 		0,0,0,0,1,1,1,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_wheeled_vehicle_no_los_mask[] =
 	{
 		13,
@@ -328,7 +328,7 @@ static char
 		0,0,0,0,0,1,1,1,0,0,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_wheeled_vehicle_los[] =
 	{
 		7,
@@ -344,7 +344,7 @@ static char
 		0,0,1,1,1,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_wheeled_vehicle_los_mask[] =
 	{
 		9,
@@ -362,7 +362,7 @@ static char
 		0,0,0,1,1,1,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_wheeled_vehicle_no_los[] =
 	{
 		7,
@@ -378,7 +378,7 @@ static char
 		0,0,1,1,1,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_wheeled_vehicle_no_los_mask[] =
 	{
 		9,
@@ -406,7 +406,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_tracked_vehicle_los[] =
 	{
 		11,
@@ -426,7 +426,7 @@ static char
 		1,1,1,0,0,0,0,0,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_tracked_vehicle_los_mask[] =
 	{
 		13,
@@ -448,7 +448,7 @@ static char
 		1,1,1,1,1,0,0,0,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_tracked_vehicle_no_los[] =
 	{
 		11,
@@ -468,7 +468,7 @@ static char
 		1,1,1,0,0,0,0,0,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_tracked_vehicle_no_los_mask[] =
 	{
 		13,
@@ -490,7 +490,7 @@ static char
 		1,1,1,1,1,0,0,0,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_tracked_vehicle_los[] =
 	{
 		7,
@@ -506,7 +506,7 @@ static char
 		1,1,0,0,0,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_tracked_vehicle_los_mask[] =
 	{
 		9,
@@ -524,7 +524,7 @@ static char
 		1,1,1,1,0,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_tracked_vehicle_no_los[] =
 	{
 		7,
@@ -540,7 +540,7 @@ static char
 		1,1,0,0,0,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_tracked_vehicle_no_los_mask[] =
 	{
 		9,
@@ -568,7 +568,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_air_defence_unit_los[] =
 	{
 		11,
@@ -588,7 +588,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_air_defence_unit_los_mask[] =
 	{
 		13,
@@ -610,7 +610,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_air_defence_unit_no_los[] =
 	{
 		11,
@@ -630,7 +630,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_air_defence_unit_no_los_mask[] =
 	{
 		13,
@@ -652,7 +652,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_air_defence_unit_los[] =
 	{
 		7,
@@ -668,7 +668,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_air_defence_unit_los_mask[] =
 	{
 		9,
@@ -686,7 +686,7 @@ static char
 		1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_air_defence_unit_no_los[] =
 	{
 		7,
@@ -702,7 +702,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_air_defence_unit_no_los_mask[] =
 	{
 		9,
@@ -730,7 +730,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_aircraft_los[] =
 	{
 		11,
@@ -750,7 +750,7 @@ static char
 		0,0,0,0,0,1,0,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_aircraft_los_mask[] =
 	{
 		13,
@@ -772,7 +772,7 @@ static char
 		0,0,0,0,0,0,1,0,0,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_aircraft_no_los[] =
 	{
 		11,
@@ -792,7 +792,7 @@ static char
 		0,0,0,0,0,1,0,0,0,0,0,
 	};
 
-static char
+static const char
 	large_display_target_symbol_aircraft_no_los_mask[] =
 	{
 		13,
@@ -814,7 +814,7 @@ static char
 		0,0,0,0,0,0,1,0,0,0,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_aircraft_los[] =
 	{
 		7,
@@ -830,7 +830,7 @@ static char
 		0,0,0,1,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_aircraft_los_mask[] =
 	{
 		9,
@@ -848,7 +848,7 @@ static char
 		0,0,0,0,1,0,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_aircraft_no_los[] =
 	{
 		7,
@@ -864,7 +864,7 @@ static char
 		0,0,0,1,0,0,0,
 	};
 
-static char
+static const char
 	small_display_target_symbol_aircraft_no_los_mask[] =
 	{
 		9,
@@ -892,7 +892,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_helicopter_los[] =
 	{
 		11,
@@ -912,7 +912,7 @@ static char
 		1,0,0,0,0,0,0,0,0,0,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_helicopter_los_mask[] =
 	{
 		13,
@@ -934,7 +934,7 @@ static char
 		1,1,0,0,0,0,0,0,0,0,0,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_helicopter_no_los[] =
 	{
 		11,
@@ -954,7 +954,7 @@ static char
 		1,0,0,0,0,0,0,0,0,0,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_helicopter_no_los_mask[] =
 	{
 		13,
@@ -976,7 +976,7 @@ static char
 		1,1,0,0,0,0,0,0,0,0,0,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_helicopter_los[] =
 	{
 		7,
@@ -992,7 +992,7 @@ static char
 		1,0,0,0,0,0,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_helicopter_los_mask[] =
 	{
 		9,
@@ -1010,7 +1010,7 @@ static char
 		1,1,0,0,0,0,0,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_helicopter_no_los[] =
 	{
 		7,
@@ -1026,7 +1026,7 @@ static char
 		1,0,0,0,0,0,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_helicopter_no_los_mask[] =
 	{
 		9,
@@ -1054,7 +1054,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_ship_los[] =
 	{
 		11,
@@ -1072,7 +1072,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_ship_los_mask[] =
 	{
 		13,
@@ -1092,7 +1092,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_ship_no_los[] =
 	{
 		11,
@@ -1110,7 +1110,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_ship_no_los_mask[] =
 	{
 		13,
@@ -1130,7 +1130,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_ship_los[] =
 	{
 		7,
@@ -1146,7 +1146,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_ship_los_mask[] =
 	{
 		9,
@@ -1164,7 +1164,7 @@ static char
 		1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_ship_no_los[] =
 	{
 		7,
@@ -1180,7 +1180,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_ship_no_los_mask[] =
 	{
 		9,
@@ -1208,7 +1208,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	large_display_target_symbol_structure_los[] =
 	{
 		11,
@@ -1228,7 +1228,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_structure_los_mask[] =
 	{
 		13,
@@ -1250,7 +1250,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_structure_no_los[] =
 	{
 		11,
@@ -1270,7 +1270,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	large_display_target_symbol_structure_no_los_mask[] =
 	{
 		13,
@@ -1292,7 +1292,7 @@ static char
 		1,1,1,1,1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_structure_los[] =
 	{
 		7,
@@ -1308,7 +1308,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_structure_los_mask[] =
 	{
 		9,
@@ -1326,7 +1326,7 @@ static char
 		1,1,1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_structure_no_los[] =
 	{
 		7,
@@ -1342,7 +1342,7 @@ static char
 		1,1,1,1,1,1,1,
 	};
 
-static char
+static const char
 	small_display_target_symbol_structure_no_los_mask[] =
 	{
 		9,
@@ -1370,7 +1370,7 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char
+const char
 	large_display_target_symbol_selected_target[] =
 	{
 		21,
@@ -1400,7 +1400,7 @@ char
 		0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,
 	};
 
-char
+const char
 	large_display_target_symbol_selected_target_mask[] =
 	{
 		23,
@@ -1432,7 +1432,7 @@ char
 		0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
 	};
 
-char
+const char
 	small_display_target_symbol_selected_target[] =
 	{
 		15,
@@ -1456,7 +1456,7 @@ char
 		0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
 	};
 
-char
+const char
 	small_display_target_symbol_selected_target_mask[] =
 	{
 		17,
@@ -1486,7 +1486,7 @@ char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char
+const char
 	*large_display_target_symbols_los[] =
 	{
 		large_display_target_symbol_unknown_los,			  				// TARGET_SYMBOL_UNKNOWN
@@ -1499,7 +1499,7 @@ char
 		large_display_target_symbol_structure_los,		  	 			// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*large_display_target_symbols_los_mask[] =
 	{
 		large_display_target_symbol_unknown_los_mask,					// TARGET_SYMBOL_UNKNOWN
@@ -1512,7 +1512,7 @@ char
 		large_display_target_symbol_structure_los_mask,		  			// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*large_display_target_symbols_no_los[] =
 	{
 		large_display_target_symbol_unknown_no_los,						// TARGET_SYMBOL_UNKNOWN
@@ -1525,7 +1525,7 @@ char
 		large_display_target_symbol_structure_no_los,					// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*large_display_target_symbols_no_los_mask[] =
 	{
 		large_display_target_symbol_unknown_no_los_mask,				// TARGET_SYMBOL_UNKNOWN
@@ -1538,7 +1538,7 @@ char
 		large_display_target_symbol_structure_no_los_mask,				// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*small_display_target_symbols_los[] =
 	{
 		small_display_target_symbol_unknown_los,			  				// TARGET_SYMBOL_UNKNOWN
@@ -1551,7 +1551,7 @@ char
 		small_display_target_symbol_structure_los,		  	 			// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*small_display_target_symbols_los_mask[] =
 	{
 		small_display_target_symbol_unknown_los_mask,					// TARGET_SYMBOL_UNKNOWN
@@ -1564,7 +1564,7 @@ char
 		small_display_target_symbol_structure_los_mask,					// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*small_display_target_symbols_no_los[] =
 	{
 		small_display_target_symbol_unknown_no_los,						// TARGET_SYMBOL_UNKNOWN
@@ -1577,7 +1577,7 @@ char
 		small_display_target_symbol_structure_no_los,					// TARGET_SYMBOL_STRUCTURE
 	};
 
-char
+const char
 	*small_display_target_symbols_no_los_mask[] =
 	{
 		small_display_target_symbol_unknown_no_los_mask,				// TARGET_SYMBOL_UNKNOWN

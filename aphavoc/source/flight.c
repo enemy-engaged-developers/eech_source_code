@@ -601,7 +601,7 @@ void toggle_in_flight_game_modes (event *ev)
 void set_raw_in_flight_game_mode (int flag)
 {
 
-	in_flight_game_mode = flag;
+	in_flight_game_mode = (in_flight_game_modes)flag;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -611,7 +611,7 @@ void set_raw_in_flight_game_mode (int flag)
 void set_in_flight_game_mode (int flag)
 {
 
-	in_flight_game_mode = flag;
+	in_flight_game_mode = (in_flight_game_modes)flag;
 
 	switch (flag)
 	{

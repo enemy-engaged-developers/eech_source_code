@@ -236,7 +236,7 @@ extern void destroy_d3d_vertex_buffers ( void );
 
 extern void recreate_d3d ( void );
 
-extern char * get_d3d_error_message ( HRESULT error );
+extern const char * get_d3d_error_message ( HRESULT error );
 
 extern BOOL d3d_begin_scene ( void );
 

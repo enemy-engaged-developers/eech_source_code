@@ -73,7 +73,7 @@
 object_3d_information
 	*object_3d_information_database = NULL;
 
-char
+const char
 	**object_3d_enumeration_names = NULL,
 	**object_3d_sub_object_names = NULL,
 	**object_3d_camoflage_set_names = NULL,
@@ -101,7 +101,7 @@ int
 // JB 030311 Enable running out of separate directories
 extern char comanche_hokum_installation_path[];
 
-void initialise_3d_objects_info ( char *directory )
+void initialise_3d_objects_info ( const char *directory )
 {
 
 	int

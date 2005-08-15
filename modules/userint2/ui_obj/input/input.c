@@ -92,8 +92,9 @@ ui_object
 void input_entry (int key_code)
 {
 
+	const char
+		*input_text;
 	char
-		*input_text,
 		text [128],
 		c [2];
 

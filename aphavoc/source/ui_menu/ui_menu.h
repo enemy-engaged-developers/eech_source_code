@@ -124,9 +124,9 @@ typedef enum RESIZE_UI_OBJECT_TYPES resize_ui_object_types;
 
 extern void initialise_ui_menus (void);
 
-extern void preprocess_translation_object_size (ui_object *change_obj, ui_object *check_obj, unsigned char *translations[], int num_trans, resize_ui_object_types flag);
+extern void preprocess_translation_object_size (ui_object *change_obj, ui_object *check_obj, const char **translations, int num_trans, resize_ui_object_types flag);
 
-extern void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_obj, unsigned char *translations[], int num_trans, resize_ui_object_types flag);
+extern void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_obj, const char **translations, int num_trans, resize_ui_object_types flag);
 
 extern void set_ui_frontend_list_object_highlightable (ui_object *obj);
 

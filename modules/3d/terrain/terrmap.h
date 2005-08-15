@@ -159,11 +159,11 @@ extern void set_2d_terrain_contour_colour ( int flag );
 
 extern void set_2d_terrain_contour_heights ( int number_of_heights, float *heights );
 
-extern void load_2d_terrain ( char *path );
+extern void load_2d_terrain ( const char *path );
 
 extern void unload_2d_terrain ( void );
 
-extern void load_contour_map_colours ( char *filename );
+extern void load_contour_map_colours ( const char *filename );
 
 extern float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 );
 

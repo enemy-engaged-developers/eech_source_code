@@ -76,7 +76,7 @@ extern void clear_3d_terrain_point_data ( terrain_3d_point_data *point_data );
 
 #if ( DEBUG_TERRAIN )
 
-extern float get_3d_terrain_point_data_ex ( float x, float z, terrain_3d_point_data *point_data, char *file, int line );
+extern float get_3d_terrain_point_data_ex ( float x, float z, terrain_3d_point_data *point_data, const char *file, int line );
 
 #define get_3d_terrain_point_data(X,Z,DATA) (get_3d_terrain_point_data_ex ((X), (Z), (DATA), __FILE__, __LINE__))
 

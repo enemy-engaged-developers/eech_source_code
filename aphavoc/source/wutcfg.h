@@ -77,10 +77,10 @@ extern char WUT_filename [128];
 
 extern char session_WUT_filename[128]; // Jabberwock 031115 WUT server side - temporary string for session
 
-extern void parse_WUT_file(char *fname); // VJ 040229 Changed for New GWUT capcbility
+extern void parse_WUT_file(const char *fname); // VJ 040229 Changed for New GWUT capcbility
 // function to check the WUT file and decide new or old wut
 
-extern void ReadWutFile(char *fname);  // VJ 040229 Changed for New GWUT capcbility
+extern void ReadWutFile(const char *fname);  // VJ 040229 Changed for New GWUT capcbility
 // function to parse the WUT file and decide new or old wut
 
 

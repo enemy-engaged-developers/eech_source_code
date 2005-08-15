@@ -108,9 +108,9 @@ extern void release_system_textures ( void );
 
 extern void recreate_agp_memory_textures ( void );
 
-extern BOOL load_texturemap_data ( char *texture_binary_filename );
+extern BOOL load_texturemap_data ( const char *texture_binary_filename );
 
-extern int get_system_texture_index ( char *name );
+extern int get_system_texture_index ( const char *name );
 
 extern struct SCREEN *create_texture_map ( int width, int height, texture_map_types type, int number_of_mipmaps, LPDIRECTDRAWPALETTE texture_palette, PALETTEENTRY *texture_colour_table );
 
@@ -124,14 +124,14 @@ extern char *get_system_texture_name ( int index );
 
 extern void report_system_texture_stats ( void );
 
-extern struct TEXTURE_GRAPHIC *create_texture_graphic ( char *filename );
+extern struct TEXTURE_GRAPHIC *create_texture_graphic ( const char *filename );
 
 extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
 
 //VJ 050116 custom texture mod: all functions are in textuser.c except for this one
-extern void load_warzone_override_textures (char *warzone_name);
+extern void load_warzone_override_textures (const char *warzone_name);
 
 void restore_default_textures( void );
 

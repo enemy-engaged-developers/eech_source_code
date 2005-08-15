@@ -144,7 +144,7 @@ typedef struct FILE_TAG_VARIABLE_TYPE file_tag_variable_type;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char
+extern const char
 	*system_tag_strings [];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,19 +163,19 @@ extern void deinitialise_file_tag_system (void);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void set_file_tag (FILE *file_ptr, char *application_nums [], int tag);
+extern void set_file_tag (FILE *file_ptr, const char *application_nums [], int tag);
 
 extern void set_file_int (FILE *file_ptr, int value);
 
 extern void set_file_float (FILE *file_ptr, float value);
 
-extern void set_file_string (FILE *file_ptr, char *string);
+extern void set_file_string (FILE *file_ptr, const char *string);
 
-extern void set_file_enum (FILE *file_ptr, char *enum_strings [], int enum_value);
+extern void set_file_enum (FILE *file_ptr, const char *enum_strings [], int enum_value);
 
 extern void set_file_new_line (FILE *file_ptr, int count);
 
-extern void set_file_comment (FILE *file_ptr, char *string);
+extern void set_file_comment (FILE *file_ptr, const char *string);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,11 +185,11 @@ extern void set_file_comment (FILE *file_ptr, char *string);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern int get_file_tag (char *line, char *application_enums [], int last_application_enum);
+extern int get_file_tag (const char *line, const char *application_enums [], int last_application_enum);
 
-extern int get_next_file_tag (FILE *file_ptr, char *application_enums [], int last_application_enum);
+extern int get_next_file_tag (FILE *file_ptr, const char *application_enums [], int last_application_enum);
 
-extern int check_next_file_tag (FILE *file_ptr, char *application_enums [], int last_application_enum);
+extern int check_next_file_tag (FILE *file_ptr, const char *application_enums [], int last_application_enum);
 
 extern int get_next_file_int (FILE *file_ptr);
 
@@ -201,7 +201,7 @@ extern int get_next_file_string (FILE *file_ptr, char *buffer, int size);
 
 extern int get_next_file_word (FILE *file_ptr, char *buffer, int size);
 
-extern int get_next_file_enum (FILE *file_ptr, char *enum_strings [], int last_enum);
+extern int get_next_file_enum (FILE *file_ptr, const char *enum_strings [], int last_enum);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,9 +213,9 @@ extern void unregister_file_tag_variable (char *variable_name);
 
 extern int *get_file_tag_variable (char *variable_name);
 
-extern int if_file_tag_variable (char *variable_name, char *operator, int value);
+extern int if_file_tag_variable (char *variable_name, char *operator_, int value);
 
-extern int if_file_tag_operator (int value1, char *operator, int value2);
+extern int if_file_tag_operator (int value1, char *operator_, int value2);
 
 extern int set_file_tag_variable (char *variable_name, int value);
 

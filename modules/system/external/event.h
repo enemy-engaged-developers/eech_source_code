@@ -161,7 +161,7 @@ enum MODIFIER_TYPES
    NUM_MODIFIER_TYPES
 };
 
-extern char
+extern const char
 	*button_state_names [],
 	*modifier_type_names [];
 

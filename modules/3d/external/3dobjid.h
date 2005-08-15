@@ -97,13 +97,13 @@ typedef struct TEXTURE_ANIMATION_INFORMATION texture_animation_information;
 
 extern object_3d_information *object_3d_information_database;
 
-extern char **object_3d_enumeration_names;
+extern const char **object_3d_enumeration_names;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void initialise_3d_objects_info ( char *directory );
+extern void initialise_3d_objects_info ( const char *directory );
 
 extern int get_object_3d_index_from_name ( char *name );
 
@@ -130,7 +130,7 @@ extern void set_object_3d_texture_camoflage_by_name ( char *name );
 extern object_3d_information
 	*object_3d_information_database;
 
-extern char
+extern const char
 	**object_3d_enumeration_names,
 	**object_3d_sub_object_names,
 	**object_3d_camoflage_set_names,

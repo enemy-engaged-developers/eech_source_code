@@ -89,7 +89,7 @@ typedef struct MOTION_DATA motion_data;
 
 extern crew_roles get_crew_role (void);
 
-extern void read_motion_values (char *filespec, int num_frames, motion_data *array);
+extern void read_motion_values (const char *filespec, int num_frames, motion_data *array);
 
 extern void interpolate_motion_values (float x, float y, motion_data *array, int array_width, motion_data *result);
 

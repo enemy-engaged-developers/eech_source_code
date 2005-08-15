@@ -183,7 +183,7 @@ static void chat_input_function (ui_object *obj, void *arg)
 	entity 	// Jabberwock 040213 Chat send after Enter
 		*target;
 		
-	unsigned char
+	const char
 		*text;
 		
 	text = get_ui_object_text (chat_input);
@@ -219,7 +219,7 @@ static void notify_send_message (ui_object *obj, void *arg)
 	entity
 		*target;
 		
-	unsigned char
+	const char
 		*text;
 		
 	target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
@@ -444,8 +444,9 @@ static void draw_chat_send_button (ui_object *obj, void *arg)
 	rgb_colour
 		*col;
 		
-	static unsigned char
-		*text,
+	static const char
+		*text;
+	static char
 		s [256];
 
 	sprintf (s, "%s: ", get_trans ("SEND TO"));

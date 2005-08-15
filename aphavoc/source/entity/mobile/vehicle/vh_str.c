@@ -190,7 +190,7 @@ static void set_client_string (entity *en, string_types type, char *s)
 
 #if GET_LOCAL_REQUIRED
 
-static char *get_local_string (entity *en, string_types type)
+static const char *get_local_string (entity *en, string_types type)
 {
 	vehicle
 		*raw;

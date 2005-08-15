@@ -423,12 +423,13 @@ static void display_external_view_text (void)
 			default:
 			////////////////////////////////////////////////////////////////////////////////
 			{
-   			char
-      			*s1,
+	   			char
 					*s2,
 					buffer1[200],
 					buffer2[200],
-					tmp[200],
+					tmp[200];
+   				const char
+    	  			*s1,
 					*full_name,
 					*first_name,
 					*last_name,
@@ -439,8 +440,8 @@ static void display_external_view_text (void)
 					x,
 					y;
 
-   			entity
-      			*en,
+	   			entity
+    	  			*en,
 					*aircrew,
 					*group,
 					*task,

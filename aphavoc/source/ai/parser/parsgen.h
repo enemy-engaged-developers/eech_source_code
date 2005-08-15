@@ -129,11 +129,9 @@ extern void initialise_parser (void);
 
 extern void update_campaign_triggers (void);
 
-extern int parser_campaign_file (char *filename, int *offset);
+extern int parser_campaign_file (const char *filename, int *offset);
 
 extern int update_script_triggers (campaign_trigger trigger);
-
-extern int trigger_triggered (campaign_trigger_type *this_campaign_trigger);
 
 extern void generate_key_bound_triggers (void);
 

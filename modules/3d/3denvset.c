@@ -423,15 +423,15 @@ void interpolate_two_light_settings  ( main_light_setting *result_light, main_li
 	// Calculate the light light colour
 	//
 
-	dr = end_light->light_colour.red - start_light->light_colour.red;
-	dg = end_light->light_colour.green - start_light->light_colour.green;
-	db = end_light->light_colour.blue - start_light->light_colour.blue;
-	da = end_light->light_colour.alpha - start_light->light_colour.alpha;
+	dr = end_light->light__colour.red - start_light->light__colour.red;
+	dg = end_light->light__colour.green - start_light->light__colour.green;
+	db = end_light->light__colour.blue - start_light->light__colour.blue;
+	da = end_light->light__colour.alpha - start_light->light__colour.alpha;
 
-	result_light->light_colour.red = start_light->light_colour.red + ( t * dr );
-	result_light->light_colour.green = start_light->light_colour.green + ( t * dg );
-	result_light->light_colour.blue = start_light->light_colour.blue + ( t * db );
-	result_light->light_colour.alpha = start_light->light_colour.alpha + ( t * da );
+	result_light->light__colour.red = start_light->light__colour.red + ( t * dr );
+	result_light->light__colour.green = start_light->light__colour.green + ( t * dg );
+	result_light->light__colour.blue = start_light->light__colour.blue + ( t * db );
+	result_light->light__colour.alpha = start_light->light__colour.alpha + ( t * da );
 
 	//
 	// Calculate the light object colour
@@ -475,10 +475,10 @@ void calculate_interpolated_light_setting ( float time_of_day, main_light_settin
 	if ( !light_head->succ )
 	{
 
-		result_light->light_colour.red = light_head->light_colour.red;
-		result_light->light_colour.green = light_head->light_colour.green;
-		result_light->light_colour.blue = light_head->light_colour.blue;
-		result_light->light_colour.alpha = light_head->light_colour.alpha;
+		result_light->light__colour.red = light_head->light__colour.red;
+		result_light->light__colour.green = light_head->light__colour.green;
+		result_light->light__colour.blue = light_head->light__colour.blue;
+		result_light->light__colour.alpha = light_head->light__colour.alpha;
 
 		result_light->object_colour.red = light_head->object_colour.red;
 		result_light->object_colour.green = light_head->object_colour.green;
@@ -818,9 +818,9 @@ void add_3d_ambient_light_setting ( env_3d *env, weathermodes mode, rgb_colour c
 	g /= 255.0;
 	b /= 255.0;
 
-	light->light_colour.red = r;
-	light->light_colour.green = g;
-	light->light_colour.blue = b;
+	light->light__colour.red = r;
+	light->light__colour.green = g;
+	light->light__colour.blue = b;
 
 	light->time = time;
 
@@ -999,10 +999,10 @@ void add_3d_sun_setting ( env_3d *env, weathermodes weathermode, float scale, fl
 	b *= light_intensity;
 	a *= light_intensity;
 
-	light->light_colour.red = r;
-	light->light_colour.green = g;
-	light->light_colour.blue = b;
-	light->light_colour.alpha = a;
+	light->light__colour.red = r;
+	light->light__colour.green = g;
+	light->light__colour.blue = b;
+	light->light__colour.alpha = a;
 
 	r = object_colour.r;
 	g = object_colour.g;
@@ -1206,9 +1206,9 @@ void add_3d_moon_setting ( env_3d *env, weathermodes weathermode, float scale, f
 	g *= light_intensity;
 	b *= light_intensity;
 
-	light->light_colour.red = r;
-	light->light_colour.green = g;
-	light->light_colour.blue = b;
+	light->light__colour.red = r;
+	light->light__colour.green = g;
+	light->light__colour.blue = b;
 
 	r = object_colour.r;
 	g = object_colour.g;
@@ -1387,10 +1387,10 @@ void add_3d_cloud_light_setting ( env_3d *env, weathermodes mode, rgb_colour col
 
 	light = safe_malloc ( sizeof ( main_light_setting ) );
 
-	light->light_colour.red = ( ( float ) colour.r ) / 255.0;
-	light->light_colour.green = ( ( float ) colour.g ) / 255.0;
-	light->light_colour.blue = ( ( float ) colour.b ) / 255.0;
-	light->light_colour.alpha = ( ( float ) colour.a ) / 255.0;
+	light->light__colour.red = ( ( float ) colour.r ) / 255.0;
+	light->light__colour.green = ( ( float ) colour.g ) / 255.0;
+	light->light__colour.blue = ( ( float ) colour.b ) / 255.0;
+	light->light__colour.alpha = ( ( float ) colour.a ) / 255.0;
 
 	light->object_colour.red = ( ( float ) object_colour.r ) / 255.0;
 	light->object_colour.green = ( ( float ) object_colour.g ) / 255.0;
@@ -1564,9 +1564,9 @@ void add_3d_shadow_setting ( env_3d *env, weathermodes mode, rgb_colour colour, 
 	g /= 255.0;
 	b /= 255.0;
 
-	light->light_colour.red = r;
-	light->light_colour.green = g;
-	light->light_colour.blue = b;
+	light->light__colour.red = r;
+	light->light__colour.green = g;
+	light->light__colour.blue = b;
 
 	light->time = time;
 
@@ -2031,9 +2031,9 @@ void calculate_3d_ambient_light ( env_3d *env )
 
 	interpolate_two_light_settings ( &result_light, &start_light, &end_light, weather_t );
 
-	env->ambient_light.red = result_light.light_colour.red;
-	env->ambient_light.green = result_light.light_colour.green;
-	env->ambient_light.blue = result_light.light_colour.blue;
+	env->ambient_light.red = result_light.light__colour.red;
+	env->ambient_light.green = result_light.light__colour.green;
+	env->ambient_light.blue = result_light.light__colour.blue;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2125,7 +2125,7 @@ void calculate_3d_sun_light ( env_3d *env )
 
 		env->sun_3d_light.type = LIGHT_3D_TYPE_DIRECTIONAL;
 
-		env->sun_3d_light.colour = env->sun_light.light_colour;
+		env->sun_3d_light.colour = env->sun_light.light__colour;
 		env->sun_3d_light.intensity = ( env->sun_3d_light.colour.red * 0.3 ) + ( env->sun_3d_light.colour.green * 0.59 ) + ( env->sun_3d_light.colour.blue * 0.11 );
 
 		env->sun_3d_light.light_direction.x = sun_attitude[2][0];
@@ -2226,7 +2226,7 @@ void calculate_3d_moon_light ( env_3d *env )
 
 		env->moon_3d_light.type = LIGHT_3D_TYPE_DIRECTIONAL;
 
-		env->moon_3d_light.colour = env->moon_light.light_colour;
+		env->moon_3d_light.colour = env->moon_light.light__colour;
 		env->moon_3d_light.intensity = ( env->moon_3d_light.colour.red * 0.3 ) + ( env->moon_3d_light.colour.green * 0.59 ) + ( env->moon_3d_light.colour.blue * 0.11 );
 
 		env->moon_3d_light.light_direction.x = moon_attitude[2][0];
@@ -2300,10 +2300,10 @@ void calculate_3d_cloud_light ( env_3d *env )
 
 	interpolate_two_light_settings ( &result_light, &start_light, &end_light, weather_t );
 
-	env->cloud_light.light_colour.red = result_light.light_colour.red;
-	env->cloud_light.light_colour.green = result_light.light_colour.green;
-	env->cloud_light.light_colour.blue = result_light.light_colour.blue;
-	env->cloud_light.light_colour.alpha = result_light.light_colour.alpha;
+	env->cloud_light.light__colour.red = result_light.light__colour.red;
+	env->cloud_light.light__colour.green = result_light.light__colour.green;
+	env->cloud_light.light__colour.blue = result_light.light__colour.blue;
+	env->cloud_light.light__colour.alpha = result_light.light__colour.alpha;
 
 	env->cloud_light.object_colour.red = result_light.object_colour.red;
 	env->cloud_light.object_colour.green = result_light.object_colour.green;
@@ -2375,9 +2375,9 @@ void calculate_3d_shadow_light ( env_3d *env )
 
 	interpolate_two_light_settings ( &result_light, &start_light, &end_light, weather_t );
 
-	env->shadow_setting.light_colour.red = result_light.light_colour.red;
-	env->shadow_setting.light_colour.green = result_light.light_colour.green;
-	env->shadow_setting.light_colour.blue = result_light.light_colour.blue;
+	env->shadow_setting.light__colour.red = result_light.light__colour.red;
+	env->shadow_setting.light__colour.green = result_light.light__colour.green;
+	env->shadow_setting.light__colour.blue = result_light.light__colour.blue;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

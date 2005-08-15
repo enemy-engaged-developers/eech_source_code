@@ -66,23 +66,23 @@
 
 extern int initialise_file_system ( void );
 
-extern void * mopen ( char *filename );
+extern void * mopen ( const char *filename );
 
 extern int mclose ( void *data );
 
-extern int file_exist (char *filename);
+extern int file_exist (const char *filename);
 
-extern int file_size ( char *filename );
+extern int file_size ( const char *filename );
 
 extern void reset_safe_memory_mapped_file_counter (void);
 
 extern void check_safe_memory_mapped_file_counter (void);
 
-extern void *safe_mopen (char *filename);
+extern void *safe_mopen (const char *filename);
 
 extern int safe_mclose (void *data);
 
-extern FILE *safe_fopen( char *filename, char *mode );
+extern FILE *safe_fopen( const char *filename, const char *mode );
 
 extern int safe_fclose (FILE *fp);
 

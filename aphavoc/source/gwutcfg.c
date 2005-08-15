@@ -86,7 +86,7 @@ int INCLUDE_WEAPON_TYPES;
 int WRITE_HEADER;
 int READ_HEADER;
 
-void DumpGWutInfo(char *filename)
+void DumpGWutInfo(const char *filename)
 {
 	  FILE *fout;
 	  int i, j, k;
@@ -1149,7 +1149,7 @@ void DumpGWutInfo(char *filename)
 	
 // VJ040229 Function to read the entire GWUT file
 // VJ 040321 corrected ammo bugs, include pylon number
-void ReadGWutInfo(char *fname)
+void ReadGWutInfo(const char *fname)
 {
 	FILE *f;
 	FILE *fout;
@@ -1211,7 +1211,7 @@ void ReadGWutInfo(char *fname)
 		//get entity number
 		p = strtok(NULL,",");
 		//skip full name
-		aircraft_database[i].force                                         = IntValue(p);
+		aircraft_database[i].force                                         = ( entity_forces ) IntValue(p);
 		aircraft_database[i].default_weapon_config_type                    = IntValue(p);
 		aircraft_database[i].min_weapon_config_type                        = IntValue(p);
 		aircraft_database[i].max_weapon_config_type                        = IntValue(p);
@@ -1219,10 +1219,10 @@ void ReadGWutInfo(char *fname)
 		aircraft_database[i].air_to_surface_weapon_config_type             = IntValue(p);
 		aircraft_database[i].scout_weapon_config_type                      = IntValue(p);
 		aircraft_database[i].default_weapon_type                           = IntValue(p);
-		aircraft_database[i].target_symbol_type                            = IntValue(p);
-		aircraft_database[i].target_priority_type                          = IntValue(p);
-		aircraft_database[i].force_info_catagory                           = IntValue(p);
-		aircraft_database[i].threat_type                                   = IntValue(p);
+		aircraft_database[i].target_symbol_type                            = ( target_symbol_types ) IntValue(p);
+		aircraft_database[i].target_priority_type                          = ( target_priority_types ) IntValue(p);
+		aircraft_database[i].force_info_catagory                           = ( force_info_catagories ) IntValue(p);
+		aircraft_database[i].threat_type                                   = ( threat_types ) IntValue(p);
 		aircraft_database[i].centre_of_gravity_to_ground_distance          = FloatValue(p);
 		aircraft_database[i].centre_of_gravity_to_ground_distance_destroyed= FloatValue(p);
 		aircraft_database[i].chase_view_min_distance                       = FloatValue(p);
@@ -1290,16 +1290,16 @@ void ReadGWutInfo(char *fname)
 		p = strtok(NULL,",");
 		//skip full name
 
-		vehicle_database[i].force                               = IntValue(p);
+		vehicle_database[i].force                               = ( entity_forces ) IntValue(p);
 		vehicle_database[i].default_weapon_config_type          = IntValue(p);
 		vehicle_database[i].min_weapon_config_type              = IntValue(p);
 		vehicle_database[i].max_weapon_config_type              = IntValue(p);
 		vehicle_database[i].default_weapon_type                 = IntValue(p);
-		vehicle_database[i].target_type                         = IntValue(p);
-		vehicle_database[i].target_symbol_type                  = IntValue(p);
-		vehicle_database[i].target_priority_type                = IntValue(p);
-		vehicle_database[i].force_info_catagory                 = IntValue(p);
-		vehicle_database[i].threat_type                         = IntValue(p);
+		vehicle_database[i].target_type                         = ( target_types ) IntValue(p);
+		vehicle_database[i].target_symbol_type                  = ( target_symbol_types ) IntValue(p);
+		vehicle_database[i].target_priority_type                = ( target_priority_types ) IntValue(p);
+		vehicle_database[i].force_info_catagory                 = ( force_info_catagories ) IntValue(p);
+		vehicle_database[i].threat_type                         = ( threat_types ) IntValue(p);
 		vehicle_database[i].carries_smoke_grenades              = IntValue(p);
 		vehicle_database[i].chase_view_min_distance             = FloatValue(p);
 		vehicle_database[i].chase_view_max_distance             = FloatValue(p);
@@ -1360,7 +1360,7 @@ void ReadGWutInfo(char *fname)
 		weapon_database[i].aiming_type                     = IntValue(p);
 		weapon_database[i].decoy_type                      = IntValue(p);
 		weapon_database[i].warhead_type                    = IntValue(p);
-		weapon_database[i].threat_type                     = IntValue(p);
+		weapon_database[i].threat_type                     = ( threat_types ) IntValue(p);
 		weapon_database[i].report_ammo_low_count           = IntValue(p);
 		weapon_database[i].gun_shake                       = IntValue(p);
 		weapon_database[i].soft_damage_capability          = IntValue(p);
@@ -1472,15 +1472,15 @@ void ReadGWutInfo(char *fname)
 		p = strtok(NULL,",");
 		//skip full name
 
-		group_database[i].group_category                  = IntValue(p);
-		group_database[i].registry_list_type              = IntValue(p);
-		group_database[i].group_list_type                 = IntValue(p);
-		group_database[i].movement_type                   = IntValue(p);
+		group_database[i].group_category                  = ( group_category_types ) IntValue(p);
+		group_database[i].registry_list_type              = ( list_types ) IntValue(p);
+		group_database[i].group_list_type                 = ( list_types ) IntValue(p);
+		group_database[i].movement_type                   = ( movement_types ) IntValue(p);
 		group_database[i].default_landing_type            = IntValue(p);
-		group_database[i].default_entity_type             = IntValue(p);
+		group_database[i].default_entity_type             = ( entity_types ) IntValue(p);
 		group_database[i].default_blue_force_sub_type     = IntValue(p);
 		group_database[i].default_red_force_sub_type      = IntValue(p);
-		group_database[i].default_group_formation         = IntValue(p);
+		group_database[i].default_group_formation         = ( formation_types ) IntValue(p);
 		group_database[i].default_group_division          = IntValue(p);
 		group_database[i].maximum_groups_per_division     = IntValue(p);
 		group_database[i].rearming_time                   = IntValue(p);
@@ -1521,7 +1521,7 @@ void ReadGWutInfo(char *fname)
 		p = strtok(NULL,",");
 		//skip full name
 
-		task_database[i].task_category                   = IntValue(p);
+		task_database[i].task_category                   = ( task_category_types ) IntValue(p);
 		task_database[i].task_priority                   = IntValue(p);
 		task_database[i].difficulty_rating               = IntValue(p);
 		task_database[i].task_default_target_class       = IntValue(p);
@@ -1550,7 +1550,7 @@ void ReadGWutInfo(char *fname)
 		task_database[i].task_pass_percentage_partial    = IntValue(p);
 		task_database[i].task_pass_percentage_success    = IntValue(p);
 		task_database[i].task_completed_score            = IntValue(p);
-		task_database[i].movement_type                   = IntValue(p);
+		task_database[i].movement_type                   = ( movement_types ) IntValue(p);
 		k = 0;
 		j = IntValue(p); if (j == 1) k = 1;
 		j = IntValue(p); if (j == 1) k = k | 2;

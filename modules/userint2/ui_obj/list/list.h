@@ -104,9 +104,9 @@ extern void ui_object_destroy_list_items (ui_object *list);
 
 extern int ui_object_destroy_list_item (ui_object *list, ui_object *item);
 
-extern ui_object *add_to_pop_up_list (char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour);
+extern ui_object *add_to_pop_up_list (const char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour);
 
-extern ui_object *add_to_pop_up_list_with_word_wrap (char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour);
+extern ui_object *add_to_pop_up_list_with_word_wrap (const char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour);
 
 extern void resize_pop_up_list (ui_object *obj);
 

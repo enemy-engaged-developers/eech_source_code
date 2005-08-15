@@ -131,13 +131,13 @@ extern void load_ui_font (unsigned char *font_data, int font_id);
 
 extern void deinitialise_ui_font (void);
 
-extern float ui_display_text (char *text, float x, float y);
+extern float ui_display_text (const char *text, float x, float y);
 
-extern float ui_get_string_length (char *string);
+extern float ui_get_string_length (const char *string);
 
-extern int ui_display_centred_text (char *text, float x1, float x2, float y1, float y2);
+extern int ui_display_centred_text (const char *text, float x1, float x2, float y1, float y2);
 
-//extern float ui_display_highlighted_text (char *text, float x, float y);
+//extern float ui_display_highlighted_text (const char *text, float x, float y);
 
 extern void set_ui_font (int font_id);
 

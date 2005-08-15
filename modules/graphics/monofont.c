@@ -82,7 +82,7 @@
 #define CELL_HEIGHT_3X6		(6)
 #define CELL_SIZE_3X6		(CELL_HEADER_SIZE + CELL_WIDTH_3X6 * CELL_HEIGHT_3X6)
 
-static char
+static const char
 	mono_font_3x6_cells[NUM_CHARACTERS][CELL_SIZE_3X6] =
 	{
 		#include "mono3x6.h"
@@ -96,7 +96,7 @@ static char
 #define CELL_HEIGHT_5X7		(7)
 #define CELL_SIZE_5X7		(CELL_HEADER_SIZE + CELL_WIDTH_5X7 * CELL_HEIGHT_5X7)
 
-static char
+static const char
 	mono_font_5x7_cells[NUM_CHARACTERS][CELL_SIZE_5X7] =
 	{
 		#include "mono5x7.h"
@@ -110,7 +110,7 @@ static char
 #define CELL_HEIGHT_5X9		(9)
 #define CELL_SIZE_5X9		(CELL_HEADER_SIZE + CELL_WIDTH_5X9 * CELL_HEIGHT_5X9)
 
-static char
+static const char
 	mono_font_5x9_cells[NUM_CHARACTERS][CELL_SIZE_5X9] =
 	{
 		#include "mono5x9.h"
@@ -124,7 +124,7 @@ static char
 #define CELL_HEIGHT_6X7		(7)
 #define CELL_SIZE_6X7		(CELL_HEADER_SIZE + CELL_WIDTH_6X7 * CELL_HEIGHT_6X7)
 
-static char
+static const char
 	mono_font_6x7_cells[NUM_CHARACTERS][CELL_SIZE_6X7] =
 	{
 		#include "mono6x7.h"
@@ -138,7 +138,7 @@ static char
 #define CELL_HEIGHT_6X10	(10)
 #define CELL_SIZE_6X10		(CELL_HEADER_SIZE + CELL_WIDTH_6X10 * CELL_HEIGHT_6X10)
 
-static char
+static const char
 	mono_font_6x10_cells[NUM_CHARACTERS][CELL_SIZE_6X10] =
 	{
 		#include "mono6x10.h"
@@ -152,7 +152,7 @@ static char
 #define CELL_HEIGHT_7X12	(12)
 #define CELL_SIZE_7X12		(CELL_HEADER_SIZE + CELL_WIDTH_7X12 * CELL_HEIGHT_7X12)
 
-static char
+static const char
 	mono_font_7x12_cells[NUM_CHARACTERS][CELL_SIZE_7X12] =
 	{
 		#include "mono7x12.h"
@@ -162,18 +162,18 @@ static char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	*mono_font_cells_table[NUM_MONO_FONT_TYPES] =
 	{
-		mono_font_3x6_cells,
-		mono_font_5x7_cells,
-		mono_font_5x9_cells,
-		mono_font_6x7_cells,
-		mono_font_6x10_cells,
-		mono_font_7x12_cells
+		( const char * ) mono_font_3x6_cells,
+		( const char * ) mono_font_5x7_cells,
+		( const char * ) mono_font_5x9_cells,
+		( const char * ) mono_font_6x7_cells,
+		( const char * ) mono_font_6x10_cells,
+		( const char * ) mono_font_7x12_cells
 	};
 
-static float
+static const float
 	mono_font_width_table[NUM_MONO_FONT_TYPES] =
 	{
 		CELL_WIDTH_3X6,
@@ -184,7 +184,7 @@ static float
 		CELL_WIDTH_7X12,
 	};
 
-static float
+static const float
 	mono_font_height_table[NUM_MONO_FONT_TYPES] =
 	{
 		CELL_HEIGHT_3X6,
@@ -195,7 +195,7 @@ static float
 		CELL_HEIGHT_7X12
 	};
 
-static int
+static const int
 	mono_font_size_table[NUM_MONO_FONT_TYPES] =
 	{
 		CELL_SIZE_3X6,
@@ -216,8 +216,8 @@ static mono_font_types
 static rgb_colour
 	mono_font_colour = {255, 255, 255, 255};
 
-static char
-	*mono_font_cells = mono_font_5x9_cells;
+static const char
+	*mono_font_cells = ( const char * ) mono_font_5x9_cells;
 
 static float
 	mono_font_x_position = 0.0,
@@ -328,10 +328,10 @@ float get_mono_font_char_height (const char c)
 
 void print_mono_font_char (const char c)
 {
-	char
+	const char
 		*sprite_ptr;
 
-	ASSERT (c < NUM_CHARACTERS);
+	ASSERT (c >= 0 && c < NUM_CHARACTERS);
 
 	sprite_ptr = mono_font_cells + (c * mono_font_size);
 
@@ -344,7 +344,7 @@ void print_mono_font_char (const char c)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float get_mono_font_string_width (char *s)
+float get_mono_font_string_width (const char *s)
 {
 	float
 		length,
@@ -365,7 +365,7 @@ float get_mono_font_string_width (char *s)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void print_mono_font_string (char *s)
+void print_mono_font_string (const char *s)
 {
 	while (*s)
 	{

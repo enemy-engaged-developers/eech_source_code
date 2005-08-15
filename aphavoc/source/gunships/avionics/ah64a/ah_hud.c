@@ -2077,8 +2077,9 @@ static void draw_target_symbology (void)
 
 static void display_target_information (void)
 {
+	const char
+		*s;
 	char
-		*s,
 		buffer[200];
 
 	float

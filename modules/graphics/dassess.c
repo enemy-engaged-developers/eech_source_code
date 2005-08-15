@@ -186,7 +186,7 @@ int ddraw_internal_assess_3d_capabilities ( LPDIRECTDRAWX lpDD )
 	// Create the direct3d device from this direct draw object
 	//
 
-	d3drval = IDirectDraw7_QueryInterface ( lpDD, &IID_IDirect3D7, &lpD3D );
+	d3drval = IDirectDraw7_QueryInterface ( lpDD, &IID_IDirect3D7, ( LPVOID FAR * ) &lpD3D );
 
 #if ( DEBUG_MODULE )
 	debug_log ( "Created Direct3D: %08x", lpD3D );

@@ -97,9 +97,9 @@ extern int get_memory_block_system_installed (void);
 
 #if DEBUG_MEMBLOCK_MODULE
 
-extern void *malloc_fast_memory (size_t size, char *file, int line);
+extern void *malloc_fast_memory (size_t size, const char *file, int line);
 
-extern void *malloc_heap_memory (size_t size, char *file, int line);
+extern void *malloc_heap_memory (size_t size, const char *file, int line);
 
 #else
 

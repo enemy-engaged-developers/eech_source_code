@@ -6262,9 +6262,9 @@ file_data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char *get_language_specific_distribution_file_specifier (char *file_specifier, file_data *file);
+/*static char *get_language_specific_distribution_file_specifier (char *file_specifier, file_data *file);
 
-static char *get_language_specific_local_distribution_file_specifier (char *file_specifier, file_data *file);
+static char *get_language_specific_local_distribution_file_specifier (char *file_specifier, file_data *file);*/
 
 static char *get_distribution_file_specifier (char *file_specifier, file_data *file);
 
@@ -6625,7 +6625,7 @@ static void mopen_pre_installed_apache_havoc_cockpit_graphics (void)
 			}
 			else
 			{
-				graphics_files[i].data = safe_mopen (apache_havoc_installation_file);
+				graphics_files[i].data = ( unsigned char * ) safe_mopen (apache_havoc_installation_file);
 			}
 		}
 	}
@@ -6660,7 +6660,7 @@ void mopen_all_graphics_files (int pass_conversion)
 			{
 				get_installation_file_specifier (installation_file, &graphics_files[i]);
 
-				graphics_files[i].data = safe_mopen (installation_file);
+				graphics_files[i].data = ( unsigned char * ) safe_mopen (installation_file);
 			}
 		}
 	}

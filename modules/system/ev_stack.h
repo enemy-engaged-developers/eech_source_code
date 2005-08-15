@@ -95,9 +95,9 @@ extern void initialise_event_stack (void);
 
 extern void deinitialise_event_stack (void);
 
-extern void push_event (void ((*function) (void)), char *name);
+extern void push_event (void ((*function) (void)), const char *name);
 
-extern void push_event_overlay (void ((*this_function) (void)), char *name);
+extern void push_event_overlay (void ((*this_function) (void)), const char *name);
 
 extern void push_event_stop (void);
 

@@ -74,13 +74,13 @@ extern void set_2d_terrain_contour_colour ( int flag );
 
 extern void set_2d_terrain_contour_heights ( int number_of_heights, float *heights );
 
-extern int load_2d_terrain_contour_river_data ( char *nodes_filenamne, char *path_filename );
+extern int load_2d_terrain_contour_river_data ( const char *nodes_filename, const char *path_filename );
 
-extern int load_2d_terrain_contour_road_data ( char *nodes_filenamne, char *path_filename );
+extern int load_2d_terrain_contour_road_data ( const char *nodes_filename, const char *path_filename );
 
-extern void load_contour_map_colours ( char *filename );
+extern void load_contour_map_colours ( const char *filename );
 
-extern void load_contour_map_lakes ( char *filename );
+extern void load_contour_map_lakes ( const char *filename );
 
 extern float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 );
 

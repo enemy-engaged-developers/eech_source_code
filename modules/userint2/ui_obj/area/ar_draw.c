@@ -446,7 +446,7 @@ static void draw_area_ui_object (ui_object *obj)
 			if (get_ui_object_text (obj))
 			{
 
-				char
+				const char
 					*text_ptr;
 
 				int
@@ -548,7 +548,7 @@ static void tool_tips_draw_area_ui_object (ui_object *obj)
 		if (timer < get_system_time ())
 		{
 
-			char
+			const char
 				*text;
 
 			float

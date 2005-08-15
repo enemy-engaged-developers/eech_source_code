@@ -126,7 +126,7 @@ extern terrain_tree_info
 
 extern void initialise_3d_terrain_trees ( void );
 
-extern void load_terrain_3d_tree_database ( char *sector_filename, char *data_filename );
+extern void load_terrain_3d_tree_database ( const char *sector_filename, const char *data_filename );
 
 extern void unload_terrain_3d_tree_database ( void );
 

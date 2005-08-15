@@ -87,7 +87,7 @@ ui_object
 	*avionics_option_button,
 	*difficulty_option_button;
 
-static unsigned char
+static const char
 	*option_boolean_text[2],
 	*option_cpg_text[3],
 	*option_avionics_text[2],

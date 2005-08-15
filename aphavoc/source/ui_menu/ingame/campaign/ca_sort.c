@@ -99,7 +99,7 @@ struct GROUP_LIST_SORT_TYPE
 	entity_sub_types
 		type;
 
-	unsigned char
+	const char
 		*name;
 };
 
@@ -120,7 +120,7 @@ struct BASE_LIST_SORT_TYPE
 	entity_sub_types
 		type;
 
-	unsigned char
+	const char
 		*base_name;
 };
 
@@ -153,7 +153,7 @@ static void sort_base_list (base_list_sort_type *sort_list, int *indices, int co
 
 static void quicksort_int (int *indices, int count, int *sort_order);
 
-static void quicksort_string (int *indices, int count, unsigned char **sort_order);
+static void quicksort_string (int *indices, int count, const char **sort_order);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1553,7 +1553,7 @@ void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 	int
 		*int_order;
 
-	unsigned char
+	const char
 		**string_order;
 
 	int
@@ -1593,7 +1593,7 @@ void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 			// Sort by base name
 			//
 		
-			string_order = malloc_fast_mem (sizeof (unsigned char *) * count);
+			string_order = malloc_fast_mem (sizeof (const char *) * count);
 	
 			for (loop = 0; loop < count; loop ++)
 			{
@@ -1661,13 +1661,13 @@ void quicksort_int (int *indices, int count, int *sort_order)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void qs_string (int *indices, unsigned char **sort_order, int left, int right)
+static void qs_string (int *indices, const char **sort_order, int left, int right)
 {
    int
       i, j,
       temp;
 
-  	unsigned char
+  	const char
       *x, *y;
 
    i = left;
@@ -1700,7 +1700,7 @@ static void qs_string (int *indices, unsigned char **sort_order, int left, int r
    if (i < right) qs_string (indices, sort_order, i, right);
 }
 
-void quicksort_string (int *indices, int count, unsigned char **sort_order)
+void quicksort_string (int *indices, int count, const char **sort_order)
 {
    qs_string (indices, sort_order, 0, count - 1);
 }

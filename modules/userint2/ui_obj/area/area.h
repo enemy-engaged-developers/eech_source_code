@@ -238,11 +238,11 @@ typedef struct AREA_UI_OBJECT area_ui_object;
 
 extern void ui_object_autosize (ui_object *obj);
 
-extern void get_text_position (float *x, float *y, float x1, float y1, float x2, float y2, char *text, text_justify_types justify_type);
+extern void get_text_position (float *x, float *y, float x1, float y1, float x2, float y2, const char *text, text_justify_types justify_type);
 
-extern void get_text_y_position (float *y, float y1, float y2, char *text, text_justify_types justify_type, int line_count);
+extern void get_text_y_position (float *y, float y1, float y2, const char *text, text_justify_types justify_type, int line_count);
 
-extern void get_text_x_position (float *x, float x1, float x2, char *text, text_justify_types justify_type);
+extern void get_text_x_position (float *x, float x1, float x2, const char *text, text_justify_types justify_type);
 
 extern float get_ui_object_bounded_t_value (ui_object *obj);
 

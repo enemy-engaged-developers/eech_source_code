@@ -103,7 +103,7 @@ void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 	}
 	else
 	{
-		char
+		const char
 			*s;
 
 		s = get_camera_mode_name (mode);

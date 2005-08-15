@@ -438,7 +438,7 @@ void notify_modem_dial_function ( ui_object *obj, void *arg )
 		case MODEM_NOT_CONNECTED:
 		{
 
-			char
+			const char
 				*modem,
 				*phone;
 		

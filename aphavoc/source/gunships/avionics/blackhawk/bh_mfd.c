@@ -1090,8 +1090,9 @@ static void display_radar_scan_range (float scan_range)
 
 static void display_radar_target_details (entity *target, float target_range, radar_params *radar)
 {
+	const char
+		*s;
 	char
-		*s,
 		buffer[200];
 
 	float
@@ -2706,8 +2707,9 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d, int scaled_3d)
 {
+	const char
+		*s;
 	char
-		*s,
 		buffer[200];
 
 	float

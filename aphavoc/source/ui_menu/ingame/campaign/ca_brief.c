@@ -130,13 +130,14 @@ void show_briefing_page (entity *mission, int force_update)
 		*objective,
 		*group;
 
-	static unsigned char
+	static char
 		s [128],
-		*objective_name,
 		text [3072],
 		text1 [1024],
 		text2 [1024],
 		text3 [1024];
+	static const char
+		*objective_name;
 
 	unsigned char
 		*text_ptr,
@@ -154,7 +155,7 @@ void show_briefing_page (entity *mission, int force_update)
 
 	set_ui_object_virtual_y_size (briefing_text_list, 1.0);
 
-	if (get_briefing_text (mission, &text1, &text2, &text3))
+	if (get_briefing_text (mission, text1, text2, text3))
 	{
 
 		memset (text, 0, sizeof (text));
@@ -2064,7 +2065,7 @@ void overload_briefing_page_message_responses (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_briefing_text_to_list (ui_object *list, char *text1)
+void add_briefing_text_to_list (ui_object *list, const char *text1)
 {
 
 	rgb_colour
@@ -2073,7 +2074,8 @@ void add_briefing_text_to_list (ui_object *list, char *text1)
 	char
 		temp_text [256],
 		word [128],
-		*word_ptr,
+		*word_ptr;
+	const char
 		*text_ptr;
 
 	int

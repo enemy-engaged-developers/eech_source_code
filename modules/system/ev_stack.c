@@ -136,7 +136,7 @@ void deinitialise_event_stack (void)
 
 // push events, clearing event table first.
 
-void push_event (void ((*this_function) (void)), char *name)
+void push_event (void ((*this_function) (void)), const char *name)
 {
 
 	event_stack
@@ -296,7 +296,7 @@ void push_event (void ((*this_function) (void)), char *name)
 
 // push events, without clearing event table first. Previous events will 'show through' the current event layer
 
-void push_event_overlay (void ((*this_function) (void)), char *name)
+void push_event_overlay (void ((*this_function) (void)), const char *name)
 {
 
 	event_stack

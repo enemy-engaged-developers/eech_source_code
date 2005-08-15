@@ -110,7 +110,7 @@ static void internal_initialise_input_system ( void )
 	// We always need to create the DirectInput device - the joystick always uses it.
 	//
 
-	ret = DirectInputCreateEx ( application_instance, DIRECTINPUT_VERSION, &IID_IDirectInput7, &direct_input, NULL );
+	ret = DirectInputCreateEx ( application_instance, DIRECTINPUT_VERSION, &IID_IDirectInput7, ( LPVOID * ) &direct_input, NULL );
 
 	if ( ret != DI_OK )
 	{
@@ -211,7 +211,7 @@ static struct DINPUT_ERROR_MESSAGE dinput_error_table[] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char * get_dinput_error_message ( HRESULT error )
+const char * get_dinput_error_message ( HRESULT error )
 {
 
 	int

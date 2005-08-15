@@ -58,5 +58,5 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-extern void server_log ( char *string, ... ); // Jabberwock 031119 Server log
+extern void server_log ( const char *string, ... ); // Jabberwock 031119 Server log
 

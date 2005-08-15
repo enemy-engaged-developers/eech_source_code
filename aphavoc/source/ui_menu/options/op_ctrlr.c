@@ -121,7 +121,7 @@ ui_object
 	*autoconfigure_area,	// Retro 28Jul2004
 	*autoconfigure_button;	// Retro 28Jul2004
 
-static unsigned char
+static const char
 	*option_joystick_text[2],
 	*option_throttle_text[2],
 	*option_pedal_text[2],

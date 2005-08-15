@@ -196,7 +196,7 @@ extern BOOL SDL_set_display_resolution ( int width, int height, int depth, displ
 
 extern BOOL ddraw_change_display_resolution ( int width, int height, int depth );
 extern BOOL ddraw_flip_surface ( void );
-extern char *get_ddraw_error_message ( HRESULT error );
+extern const char *get_ddraw_error_message ( HRESULT error );
 extern void blit_front_buffer_to_render_buffer ( void );
 
 

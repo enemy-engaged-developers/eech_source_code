@@ -69,3 +69,4 @@ extern float getViewpointOffsetX (float z);
 extern float getViewpointOffsetY (float z);
 
 extern float getViewpointOffsetZ (float z);
+

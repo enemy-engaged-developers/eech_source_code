@@ -94,7 +94,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef WIN32
+#if !defined ( WIN32 ) || defined ( __GNUC__ )
 // _control87(..) implementation and general wizardry by Colin Bayer <vogon@icculus.org>
 
 #define IC_AFFINE 0x1000
@@ -111,6 +111,9 @@
 #define PC_24 0x0
 #define PC_53 0x200
 #define PC_64 0x300
+
+#ifndef _EM_ZERODIVIDE
+
 #define _EM_ZERODIVIDE 0x4
 
 unsigned short _control87(unsigned short val, unsigned short mask) {
@@ -120,6 +123,19 @@ unsigned short _control87(unsigned short val, unsigned short mask) {
 	__asm__ __volatile__ ( "fclex; fldcw %0;" : /* no outputs */ : "m" (new_cw) );
 	return old_cw;
 }
+#endif
+
+#ifndef EM_INVALID
+
+#define	EM_INVALID	_EM_INVALID
+#define	EM_DENORMAL	_EM_DENORMAL
+#define	EM_ZERODIVIDE	_EM_ZERODIVIDE
+#define	EM_OVERFLOW	_EM_OVERFLOW
+#define	EM_UNDERFLOW	_EM_UNDERFLOW
+#define	EM_INEXACT	_EM_INEXACT
+
+#endif
+
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

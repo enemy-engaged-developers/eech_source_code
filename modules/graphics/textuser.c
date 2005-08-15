@@ -302,6 +302,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES]);
 void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
 void clear_texture_override_names ( void );
+static void initialize_terrain_texture_scales ( const char *mapname );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,7 +464,7 @@ void release_system_textures ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_system_texture_index ( char *name )
+int get_system_texture_index ( const char *name )
 {
 
 	int
@@ -519,7 +520,7 @@ int get_system_texture_index ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL load_texturemap_data ( char *path )
+BOOL load_texturemap_data ( const char *path )
 {
 
 	int
@@ -2640,7 +2641,7 @@ void report_system_texture_stats ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-texture_graphic *create_texture_graphic ( char *filename )
+texture_graphic *create_texture_graphic ( const char *filename )
 {
 
 	int
@@ -3538,7 +3539,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 //VJ load warzone specific textures, called from \aphavoc\source\ai\faction\faction.c line 142
 //with this function textures are called from just before you go into campaign
 //they are called in a crtain order and later occurences of a texture take precedence over earlier
-void load_warzone_override_textures (char *warzone_name)
+void load_warzone_override_textures (const char *warzone_name)
 {
 	int count = 0;
 	char directory_textdir_path[256];
@@ -3636,6 +3637,8 @@ void load_warzone_override_textures (char *warzone_name)
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
+	else
+		command_line_texture_colour = 0;
 
 	for (count = 0; count < MAX_TEXTURES; count++)
 	{
@@ -3695,7 +3698,7 @@ void restore_default_textures ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050322 texture colour mod, function to read texture scale file
-void initialize_terrain_texture_scales ( char *mapname )
+static void initialize_terrain_texture_scales ( const char *mapname )
 {
 	char filename[128];
 

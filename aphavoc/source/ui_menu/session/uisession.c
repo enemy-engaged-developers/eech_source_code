@@ -100,9 +100,9 @@ session_info_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, char *address);
+static session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address);
 
-static void recursive_check_campaign_files (char *directory, session_list_data_type **list, char *extension);
+static void recursive_check_campaign_files (const char *directory, session_list_data_type **list, const char *extension);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ void destroy_session_list (session_list_data_type **list)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-session_list_data_type *add_session (char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, char *address)
+session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address)
 {
 
 	char
@@ -717,13 +717,13 @@ void compile_restore_session_list (session_list_data_type **list)
 // Jabberwock 040201 Session filter
 	if (!command_line_session_filter || (strcmp (session_filter_value, "root") == 0))
 	{
-		recursive_check_campaign_files ("..\\common\\maps", list, &extension);
+		recursive_check_campaign_files ("..\\common\\maps", list, extension);
 	}
 	else
 	{
 		if ((strcmp (session_filter_value, "-Multiplayer-") != 0))
 		{
-			recursive_check_campaign_files (session_filter_value, list, &extension);
+			recursive_check_campaign_files (session_filter_value, list, extension);
 		}
 	}
 }
@@ -743,7 +743,7 @@ session_list_data_type *get_session_list (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int store_session (session_list_data_type *game_session, unsigned char *filename)
+int store_session (session_list_data_type *game_session, const char *filename)
 {
 	#if !DEMO_VERSION
 
@@ -779,7 +779,7 @@ int store_session (session_list_data_type *game_session, unsigned char *filename
 	extension [1] = extension [0];
 	extension [0] = 'S';
 
-	strcat(script_filename, &extension);
+	strcat(script_filename, extension);
 
 	//
 	// Create scripting file
@@ -912,10 +912,10 @@ int store_session (session_list_data_type *game_session, unsigned char *filename
 
 		set_file_tag (file_ptr, application_tag_strings, FILE_TAG_FACTION);
 		set_file_tag (file_ptr, application_tag_strings, FILE_TAG_SIDE);
-		set_file_enum (file_ptr, &entity_side_names, get_local_entity_int_value (force, INT_TYPE_SIDE));
+		set_file_enum (file_ptr, entity_side_names, get_local_entity_int_value (force, INT_TYPE_SIDE));
 
 		set_file_tag (file_ptr, application_tag_strings, FILE_TAG_COLOUR);
-		set_file_enum (file_ptr, &sys_colour_names, get_local_entity_int_value (force, INT_TYPE_COLOUR));
+		set_file_enum (file_ptr, sys_colour_names, get_local_entity_int_value (force, INT_TYPE_COLOUR));
 
 		force = get_local_entity_child_pred (force, LIST_TYPE_FORCE);
 	}
@@ -1058,7 +1058,7 @@ int store_session (session_list_data_type *game_session, unsigned char *filename
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void recursive_check_campaign_files (char *directory, session_list_data_type **list, char *extension)
+void recursive_check_campaign_files (const char *directory, session_list_data_type **list, const char *extension)
 {
 
 	session_list_types

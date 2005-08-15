@@ -386,9 +386,10 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 	message_text_types
 		type;
 
-	unsigned char
+	const char
 		*pilot_name,
-		*flight_name,
+		*flight_name;
+	char
 		temp_string [512];
 
 	entity

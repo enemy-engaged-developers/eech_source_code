@@ -195,7 +195,7 @@ void process_ini_file(int argc, char *argv[])
 //VJ 050125 changed back: this should always be done
     initialize_radar_ranges();
 
-	 buf = malloc (255);
+	 buf = ( char * ) malloc (255);
 	 if (buf == NULL)
 	 {
 		  debug_fatal ("Could not allocate buffer");
@@ -229,7 +229,7 @@ void process_ini_file(int argc, char *argv[])
 	 }
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
-    buf1 = malloc(255);
+    buf1 = ( char * ) malloc(255);
     
 	 // main loop to parse eech.ini file
 	 while (!strstr(buf,"end of file"))

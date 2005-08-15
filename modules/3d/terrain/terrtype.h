@@ -298,12 +298,10 @@ extern void initialise_3d_terrain_types ( void );
 
 extern void initialise_3d_terrain_map_specific_texture_indices ( void );
 
-extern char *get_terrain_type_name ( terrain_types type );
+extern const char *get_terrain_type_name ( terrain_types type );
 
 // Xhit: added to get surface_type for downwash effect. (030328)
 extern int get_terrain_surface_type ( terrain_types type );
-
-extern void initialise_all_custom_terrain_types ( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

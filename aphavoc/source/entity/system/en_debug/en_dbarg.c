@@ -128,7 +128,8 @@ static void debug_log_text (entity_debug_modes mode, entity *en, char *format, .
 
 	char
 		s1[400],
-		s2[400],
+		s2[400];
+	const char
 		*name;
 
 	//
@@ -303,7 +304,7 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 
 			type = va_arg (pargs, char_types);
 
-			value = va_arg (pargs, char);
+			value = va_arg (pargs, int);
 
 			debug_log_text (mode, en, "%s = %c", get_char_type_name (type), value);
 

@@ -64,12 +64,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_set_ui_object_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
+extern void (*fn_set_ui_object_text [NUM_UI_TYPES]) (ui_object *obj, const char *text);
 
-extern char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
+extern const char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
 
 
-extern void (*fn_set_ui_object_add_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
+extern void (*fn_set_ui_object_add_text [NUM_UI_TYPES]) (ui_object *obj, const char *text);
 
 
 extern void (*fn_set_ui_object_text_justify [NUM_UI_TYPES]) (ui_object *obj, text_justify_types justify);
@@ -119,20 +119,20 @@ extern rgb_colour (*fn_get_ui_object_selected_font_colour_end [NUM_UI_TYPES]) (u
 extern rgb_colour (*fn_get_ui_object_selected_font_colour_start [NUM_UI_TYPES]) (ui_object *obj);
 
 
-extern void (*fn_set_ui_object_tool_tips [NUM_UI_TYPES]) (ui_object *obj, char *tool_tips);
+extern void (*fn_set_ui_object_tool_tips [NUM_UI_TYPES]) (ui_object *obj, const char *tool_tips);
 
-extern char *(*fn_get_ui_object_tool_tips [NUM_UI_TYPES]) (ui_object *obj);
+extern const char *(*fn_get_ui_object_tool_tips [NUM_UI_TYPES]) (ui_object *obj);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void default_set_ui_object_text (ui_object *obj, char *text);
+extern void default_set_ui_object_text (ui_object *obj, const char *text);
 
-extern char *default_get_ui_object_text (ui_object *obj);
+extern const char *default_get_ui_object_text (ui_object *obj);
 
 
-extern void default_set_ui_object_add_text (ui_object *obj, char *text);
+extern void default_set_ui_object_add_text (ui_object *obj, const char *text);
 
 
 extern void default_set_ui_object_text_justify (ui_object *obj, text_justify_types justify);

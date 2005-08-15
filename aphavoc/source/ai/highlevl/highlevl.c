@@ -3014,7 +3014,7 @@ void create_artillery_strike_tasks (void)
 
 #ifdef DEBUG
 
-void ai_log (char *string, ...)
+void ai_log (const char *string, ...)
 {
 	static char
 		buffer[1000];

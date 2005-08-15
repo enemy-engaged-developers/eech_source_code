@@ -93,7 +93,7 @@ BOOL initialise_graphics_rendering_system ( void )
 #include "amstream.h"
 #include "ddstream.h"
 
-void play_avi ( char *filename, int exit_key )
+void play_avi ( const char *filename, int exit_key )
 {
 
 	IAMMultiMediaStream

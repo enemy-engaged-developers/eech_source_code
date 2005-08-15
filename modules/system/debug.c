@@ -498,7 +498,7 @@ long initialise_internal_debug_system ( void * data )
 
 #ifdef DEBUG
 
-void debug_log (char *msg, ...)
+void debug_log (const char *msg, ...)
 {
 
 	FILE
@@ -610,7 +610,7 @@ void debug_log (char *msg, ...)
 	}
 }
 
-void debug_colour_log ( enum DEBUG_COLOURS colour, char *msg, ...)
+void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
 
 	FILE
@@ -720,7 +720,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, char *msg, ...)
 	}
 }
 
-void debug_filtered_log (char *msg, ...)
+void debug_filtered_log (const char *msg, ...)
 {
 
 	FILE
@@ -830,7 +830,7 @@ void debug_filtered_log (char *msg, ...)
 	}
 }
 
-void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, char *msg, ...)
+void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
 
 	FILE
@@ -946,7 +946,7 @@ void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, char *msg, ...)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_fatal ( char *string, ... )
+void debug_fatal ( const char *string, ... )
 {
 
 	va_list
@@ -1068,7 +1068,7 @@ void add_watch_item ( LPMONITORDATA md )
 
 #ifdef DEBUG
 
-void debug_watch ( char *string, enum mt_type type, void *data )
+void debug_watch ( const char *string, enum mt_type type, void *data )
 {
 
 	LPMONITORDATA
@@ -1100,7 +1100,7 @@ void debug_watch ( char *string, enum mt_type type, void *data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_watch2 ( char *string, enum mt_type type, void *data1, void *data2 )
+void debug_watch2 ( const char *string, enum mt_type type, void *data1, void *data2 )
 {
 
 	LPMONITORDATA
@@ -1133,7 +1133,7 @@ void debug_watch2 ( char *string, enum mt_type type, void *data1, void *data2 )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_watch3 ( char *string, enum mt_type type, void *data1, void *data2, void *data3 )
+void debug_watch3 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3 )
 {
 
 	LPMONITORDATA
@@ -1167,7 +1167,7 @@ void debug_watch3 ( char *string, enum mt_type type, void *data1, void *data2, v
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_watch4 ( char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
+void debug_watch4 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
 {
 
 	LPMONITORDATA
@@ -1202,7 +1202,7 @@ void debug_watch4 ( char *string, enum mt_type type, void *data1, void *data2, v
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_colour_watch ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data )
+void debug_colour_watch ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data )
 {
 
 	LPMONITORDATA
@@ -1234,7 +1234,7 @@ void debug_colour_watch ( enum DEBUG_COLOURS colour, char *string, enum mt_type 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_colour_watch2 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2 )
+void debug_colour_watch2 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2 )
 {
 
 	LPMONITORDATA
@@ -1267,7 +1267,7 @@ void debug_colour_watch2 ( enum DEBUG_COLOURS colour, char *string, enum mt_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_colour_watch3 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2, void *data3 )
+void debug_colour_watch3 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3 )
 {
 
 	LPMONITORDATA
@@ -1301,7 +1301,7 @@ void debug_colour_watch3 ( enum DEBUG_COLOURS colour, char *string, enum mt_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void debug_colour_watch4 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
+void debug_colour_watch4 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 )
 {
 
 	LPMONITORDATA
@@ -2036,7 +2036,7 @@ void application_monitor_process_thread ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void rename_debug_log_file (char *new_file_name)
+void rename_debug_log_file (const char *new_file_name)
 {
 	int
 		error;

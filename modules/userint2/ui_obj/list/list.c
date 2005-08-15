@@ -398,7 +398,7 @@ int ui_object_destroy_list_item (ui_object *list, ui_object *item)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ui_object *add_to_pop_up_list (char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour)
+ui_object *add_to_pop_up_list (const char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour)
 {
 
 	notify_types
@@ -511,7 +511,7 @@ ui_object *add_to_pop_up_list (char *text, ui_object *obj, ui_object *next_item,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ui_object *add_to_pop_up_list_with_word_wrap (char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour)
+ui_object *add_to_pop_up_list_with_word_wrap (const char *text, ui_object *obj, ui_object *next_item, int list_id, int font_type, rgb_colour font_colour)
 {
 
 	font_types
@@ -524,7 +524,8 @@ ui_object *add_to_pop_up_list_with_word_wrap (char *text, ui_object *obj, ui_obj
 	char
 		temp_text [256],
 		word [128],
-		*word_ptr,
+		*word_ptr;
+	const char
 		*text_ptr;
 
 	int

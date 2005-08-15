@@ -2074,8 +2074,9 @@ static void display_weapon_information (void)
 
 static void display_target_information (void)
 {
+	const char
+		*s;
 	char
-		*s,
 		buffer[200];
 
 	float

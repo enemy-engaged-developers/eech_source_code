@@ -149,7 +149,7 @@ static BOOL FAR PASCAL direct_play_enumerate_sessions_callback (LPDPSESSIONDESC2
 
 static BOOL WINAPI direct_play_enumerate_groups_callback (DPID dpId, DWORD dwPlayerType, LPCDPNAME lpName, DWORD dwFlagsm, LPVOID lpContext);
 
-/*static*/ char *get_dplay_error_message (HRESULT error);
+/*static*/ const char *get_dplay_error_message (HRESULT error);
 
 void direct_play_system_message (LPDPMSG_GENERIC type);
 
@@ -157,7 +157,7 @@ void direct_play_sort_session_list (void);
 
 #if DEBUG_DUMP_PACKET_DATA
 
-static void write_comms_data (int flag, char *data, int size);
+static void write_comms_data (int flag, const char *data, int size);
 
 #endif
 
@@ -372,7 +372,7 @@ void direct_play_initialise_lobbies ( void )
 				// Now connect to the lobby's game
 				//
 
-				ret = IDirectPlayLobby_ConnectEx ( direct_play_lobby3, 0, &IID_IDirectPlay4A, &direct_playx, NULL );
+				ret = IDirectPlayLobby_ConnectEx ( direct_play_lobby3, 0, &IID_IDirectPlay4A, ( LPVOID * ) &direct_playx, NULL );
 
 				if ( ret != DP_OK )
 				{
@@ -439,7 +439,7 @@ int direct_play_get_lobbied_join ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void direct_play_register_application ( char *app_name, char *filename )
+void direct_play_register_application ( const char *app_name, const char *filename )
 {
 
 	HRESULT
@@ -458,14 +458,14 @@ void direct_play_register_application ( char *app_name, char *filename )
 
 	application_description.dwSize = sizeof ( DPAPPLICATIONDESC );
 	application_description.dwFlags = 0;
-	application_description.lpszApplicationNameA = app_name;
+	application_description.lpszApplicationNameA = ( LPSTR ) app_name;
 
 	memcpy ( &application_description.guidApplication, &TEST_GUID, sizeof ( GUID ) );
-	application_description.lpszFilenameA= filename;
+	application_description.lpszFilenameA= ( LPSTR ) filename;
 	application_description.lpszCommandLineA= NULL;
 	application_description.lpszPathA = path;
 	application_description.lpszCurrentDirectoryA= path;
-	application_description.lpszDescriptionA= app_name;
+	application_description.lpszDescriptionA= ( LPSTR ) app_name;
 	application_description.lpszDescriptionW= NULL;
 
 	ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &dp_lobby3 );
@@ -810,10 +810,10 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 	if ( memcmp ( guid, &DPAID_Modem, sizeof ( GUID ) ) == 0 )
 	{
 
-		char
+		const char
 			*string;
 
-		string = ( char * ) data;
+		string = ( const char * ) data;
 	
 		while ( strlen ( string ) )
 		{
@@ -1358,7 +1358,7 @@ int internal_direct_play_destroy_modem ( void *data )
 	
 		direct_playx = NULL;
 	}
-	return(NULL);
+	return(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1367,7 +1367,7 @@ int internal_direct_play_destroy_modem ( void *data )
 
 static int internal_direct_play_dial_modem ( void *data );
 
-int direct_play_dial_modem ( char *modem, char *phone_number )
+int direct_play_dial_modem ( const char *modem, const char *phone_number )
 {
 
 	HRESULT
@@ -1456,12 +1456,12 @@ int direct_play_dial_modem ( char *modem, char *phone_number )
 
 	address_elements[number_of_elements].guidDataType = DPAID_Modem;
 	address_elements[number_of_elements].dwDataSize = strlen ( modem ) + 1;
-	address_elements[number_of_elements].lpData = modem;
+	address_elements[number_of_elements].lpData = ( LPSTR ) modem;
 	number_of_elements++;
 	
 	address_elements[number_of_elements].guidDataType = DPAID_Phone;
 	address_elements[number_of_elements].dwDataSize = strlen ( phone_number ) + 1;
-	address_elements[number_of_elements].lpData = phone_number;
+	address_elements[number_of_elements].lpData = ( LPSTR ) phone_number;
 	number_of_elements++;
 
 	//
@@ -1667,7 +1667,7 @@ int internal_direct_play_dial_modem_status ( void *data )
 
 static int internal_direct_play_answer_modem ( void *data );
 
-int direct_play_answer_modem ( char *modem, int user_data )
+int direct_play_answer_modem ( const char *modem, int user_data )
 {
 
 	DPCOMPOUNDADDRESSELEMENT
@@ -1718,7 +1718,7 @@ int direct_play_answer_modem ( char *modem, int user_data )
 
 		address_elements[number_of_elements].guidDataType = DPAID_Modem;
 		address_elements[number_of_elements].dwDataSize = strlen ( modem ) + 1;
-		address_elements[number_of_elements].lpData = modem;
+		address_elements[number_of_elements].lpData = ( LPSTR ) modem;
 		number_of_elements++;
 	}
 
@@ -2113,7 +2113,7 @@ int direct_play_join_session (void)
 			}
 	
 	
-			direct_play_set_session_name ( ( char * ) connection_data.this_session.session->lpszSessionName );
+			direct_play_set_session_name ( ( const char * ) connection_data.this_session.session->lpszSessionName );
 	
 	#if DIRECT_PLAY_DEBUG
 	
@@ -2292,10 +2292,10 @@ int direct_play_session_max_players (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //-- Werewolf
-char *direct_play_session_admin_name (void)
+const char *direct_play_session_admin_name (void)
 {
 
-	return (char *) ( ( LPDPSESSIONDESC2 ) session_capabilities )->dwUser1;
+	return (const char *) ( ( LPDPSESSIONDESC2 ) session_capabilities )->dwUser1;
 }
 //-- Werewolf
 
@@ -2998,7 +2998,7 @@ int direct_play_receive_data (LPVOID data, int size)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void direct_play_set_group_name (char *name)
+void direct_play_set_group_name (const char *name)
 {
 
 	int
@@ -3043,7 +3043,7 @@ void direct_play_set_group_name (char *name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void direct_play_set_session_name (char *name)
+void direct_play_set_session_name (const char *name)
 {
 
 	int
@@ -3087,7 +3087,7 @@ void direct_play_set_session_name (char *name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void direct_play_set_player_name (char *name)
+void direct_play_set_player_name (const char *name)
 {
 
 	int
@@ -3131,7 +3131,7 @@ void direct_play_set_player_name (char *name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *direct_play_get_group_name (void)
+const char *direct_play_get_group_name (void)
 {
 
 	return connection_data.group_name;
@@ -3141,7 +3141,7 @@ char *direct_play_get_group_name (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *direct_play_get_session_name (void)
+const char *direct_play_get_session_name (void)
 {
 
 	return connection_data.session_name;
@@ -3151,7 +3151,7 @@ char *direct_play_get_session_name (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *direct_play_get_player_name (DPID player_id)
+const char *direct_play_get_player_name (DPID player_id)
 {
 
 	int
@@ -3660,7 +3660,7 @@ void direct_play_sort_session_list (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_direct_play_inet_address ( char *ip_address )
+void set_direct_play_inet_address ( const char *ip_address )
 {
 
 	if ( direct_playx )
@@ -3705,7 +3705,7 @@ void set_direct_play_inet_address ( char *ip_address )
 
 		address_elements[1].guidDataType = DPAID_INet;
 		address_elements[1].dwDataSize = strlen ( ip_address ) + 1;
-		address_elements[1].lpData = ip_address;
+		address_elements[1].lpData = ( void * ) ip_address;
 
 		//
 		// Find the size of memory to store the address
@@ -4040,7 +4040,7 @@ static struct DPLAY_ERROR_MESSAGE dplay_error_table[] =
 static char
 	no_dplay_error_message[] = "NO_DPLAY_ERROR_MESSAGE_FOUND";
 
-char *get_dplay_error_message (HRESULT error)
+const char *get_dplay_error_message (HRESULT error)
 {
 
 	int
@@ -4072,7 +4072,7 @@ char *get_dplay_error_message (HRESULT error)
 
 #if DEBUG_DUMP_PACKET_DATA
 
-void write_comms_data (int flag, char *data, int size)
+void write_comms_data (int flag, const char *data, int size)
 {
 
 	FILE

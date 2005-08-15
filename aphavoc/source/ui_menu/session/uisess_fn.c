@@ -1035,9 +1035,12 @@ void rename_session (void)
 
 void session_name_input_function ( ui_object *obj, void *arg )
 {
-  	unsigned char
-		limited_name [34],
+  	char
+		limited_name [34];
+  	const char
 		*text;
+	char *
+		copy;
 
 	ui_object
 		*object;
@@ -1048,13 +1051,18 @@ void session_name_input_function ( ui_object *obj, void *arg )
 
 	if ((text) && (strlen (text) > 0))
 	{
-		parse_filename (text, 30);
+		copy = malloc_fast_memory ( strlen ( text ) + 30 );
+		strcpy ( copy, text );
 
-		strcpy (limited_name, text);
+		parse_filename (copy, 30);
+
+		strcpy (limited_name, copy);
 
 		set_ui_object_text (object, limited_name);
 	
 		set_ui_object_drawable (object, TRUE);
+
+		free_mem ( copy );
 	}
 
 	set_ui_object_drawable (session_name_entry_area, FALSE);

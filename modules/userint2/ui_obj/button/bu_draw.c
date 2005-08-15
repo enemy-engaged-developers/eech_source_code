@@ -354,7 +354,7 @@ static void draw_button_ui_object (ui_object *obj)
 			if (get_ui_object_text (obj))
 			{
 
-				char
+				const char
 					*text_ptr;
 
 				int

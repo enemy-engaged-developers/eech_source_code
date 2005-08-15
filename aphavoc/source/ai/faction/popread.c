@@ -316,7 +316,7 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void read_sector_side_file ( char *sides_filename )
+void read_sector_side_file ( const char *sides_filename )
 {
 
 	#if DEBUG_MODULE
@@ -565,7 +565,7 @@ entity_sides get_initial_sector_side ( int x_sec, int z_sec )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void read_population_placement_file ( char *placement_filename )
+void read_population_placement_file ( const char *placement_filename )
 {
 
 	FILE
@@ -4041,7 +4041,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 	if ( object_index == OBJECT_3D_INVALID_OBJECT_INDEX )
 	{
 
-		return ( NULL );
+		return ( 0 );
 	}
 
 	if ( !object_3d_troop_routes[object_index].landing_route )
@@ -4113,7 +4113,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 	if ( object_index == OBJECT_3D_INVALID_OBJECT_INDEX )
 	{
 
-		return ( NULL );
+		return ( 0 );
 	}
 
 	if ( !object_3d_troop_routes[object_index].takeoff_route )

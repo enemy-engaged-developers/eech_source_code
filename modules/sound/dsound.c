@@ -391,7 +391,7 @@ unsigned char * dsound_lock_sound_buffer ( LPDIRECTSOUNDBUFFER buffer, int posit
 	ASSERT ( size );
 	ASSERT ( dsound );
 
-	dsrval = IDirectSoundBuffer_Lock ( buffer, position, size, &data, &length, NULL, NULL, 0 );
+	dsrval = IDirectSoundBuffer_Lock ( buffer, position, size, ( LPVOID * ) &data, &length, NULL, NULL, 0 );
 
 	if ( dsrval != DS_OK )
 	{

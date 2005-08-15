@@ -164,3 +164,4 @@ float getViewpointOffsetZ (float z)
 
 	return z;
 }
+

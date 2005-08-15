@@ -157,33 +157,33 @@ extern void suppress_debug_log_timing_info ( int flag );
 
 extern void initialise_debug_system ( int logging );
 
-extern void debug_fatal ( char *string, ... );
+extern void debug_fatal ( const char *string, ... );
 
 #ifdef DEBUG
 
-extern void debug_log ( char *string, ... );
+extern void debug_log ( const char *string, ... );
 
-extern void debug_colour_log ( enum DEBUG_COLOURS colour, char *string, ... );
+extern void debug_colour_log ( enum DEBUG_COLOURS colour, const char *string, ... );
 
-extern void debug_filtered_log (char *msg, ...);
+extern void debug_filtered_log (const char *msg, ...);
 
-extern void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, char *msg, ...);
+extern void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...);
 
-extern void debug_watch ( char *string, enum mt_type type, void *data );
+extern void debug_watch ( const char *string, enum mt_type type, void *data );
 
-extern void debug_colour_watch ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data );
+extern void debug_colour_watch ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data );
 
-extern void debug_watch2 ( char *string, enum mt_type type, void *data1, void *data2 );
+extern void debug_watch2 ( const char *string, enum mt_type type, void *data1, void *data2 );
 
-extern void debug_colour_watch2 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2 );
+extern void debug_colour_watch2 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2 );
 
-extern void debug_watch3 ( char *string, enum mt_type type, void *data1, void *data2, void *data3 );
+extern void debug_watch3 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3 );
 
-extern void debug_colour_watch3 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2, void *data3 );
+extern void debug_colour_watch3 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3 );
 
-extern void debug_watch4 ( char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 );
+extern void debug_watch4 ( const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 );
 
-extern void debug_colour_watch4 ( enum DEBUG_COLOURS colour, char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 );
+extern void debug_colour_watch4 ( enum DEBUG_COLOURS colour, const char *string, enum mt_type type, void *data1, void *data2, void *data3, void *data4 );
 
 extern void update_debug_windows ( void );
 
@@ -233,7 +233,7 @@ struct EVENT;
 
 extern void breakout ( struct EVENT *ev );
 
-extern void rename_debug_log_file (char *new_file_name);
+extern void rename_debug_log_file (const char *new_file_name);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

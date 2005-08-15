@@ -251,7 +251,7 @@ extern int direct_play_destroy_interface (void);
 extern int direct_play_enumerate_service_providers ();
 extern int direct_play_interface_capabilities (void);
 extern int direct_play_get_lobbied ( void );
-extern void direct_play_register_application ( char *app_name, char *filename );
+extern void direct_play_register_application ( const char *app_name, const char *filename );
 
 extern int direct_play_enumerate_sessions (void);
 extern int direct_play_create_session (int value);
@@ -277,13 +277,13 @@ extern int direct_play_receive_data (void *data, int size);
 extern struct SERVICE_PROVIDER_TABLE_TYPE *direct_play_get_service_provider_table (void);
 extern struct SESSION_TABLE_TYPE *direct_play_get_session_table (void);
 extern struct GROUP_TABLE_TYPE *direct_play_get_group_table (void);
-extern void direct_play_set_group_name (char *name);
-extern void direct_play_set_session_name (char *name);
-extern void direct_play_set_player_name (char *name);
-extern char *direct_play_get_session_name (void);
-extern char *direct_play_get_session_name (void);
-extern char *direct_play_get_group_name (void);
-extern char *direct_play_get_player_name (DPID player_id);
+extern void direct_play_set_group_name (const char *name);
+extern void direct_play_set_session_name (const char *name);
+extern void direct_play_set_player_name (const char *name);
+extern const char *direct_play_get_session_name (void);
+extern const char *direct_play_get_session_name (void);
+extern const char *direct_play_get_group_name (void);
+extern const char *direct_play_get_player_name (DPID player_id);
 extern void direct_play_set_group_id (int id);
 extern int direct_play_get_group_id (void);
 extern void direct_play_set_player_id (int id);
@@ -306,11 +306,11 @@ extern void direct_play_set_session_type_and_name ( int value );
 
 extern void direct_play_destroy_modem ( void );
 
-extern int direct_play_dial_modem ( char *modem, char *phone_number );
+extern int direct_play_dial_modem ( const char *modem, const char *phone_number );
 
-extern int direct_play_answer_modem ( char *modem, int user_data );
+extern int direct_play_answer_modem ( const char *modem, int user_data );
 
-extern void set_direct_play_inet_address ( char *address );
+extern void set_direct_play_inet_address ( const char *address );
 extern void set_direct_play_serial_address ( int com_port, int baud_rate, int stop_bits, int parity, int flow );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -536,7 +536,7 @@ extern int direct_play_enumerate_service_providers ();
 extern int direct_play_interface_capabilities (void);
 extern DPCAPS *direct_play_get_interface_capabilities (void);
 extern int direct_play_get_lobbied ( void );
-extern void direct_play_register_application ( char *app_name, char *filename );
+extern void direct_play_register_application ( const char *app_name, const char *filename );
 
 extern int direct_play_enumerate_sessions (void);
 extern int direct_play_create_session (int value);
@@ -562,13 +562,13 @@ extern int direct_play_receive_data (void *data, int size);
 extern struct SERVICE_PROVIDER_TABLE_TYPE *direct_play_get_service_provider_table (void);
 extern struct SESSION_TABLE_TYPE *direct_play_get_session_table (void);
 extern struct GROUP_TABLE_TYPE *direct_play_get_group_table (void);
-extern void direct_play_set_group_name (char *name);
-extern void direct_play_set_session_name (char *name);
-extern void direct_play_set_player_name (char *name);
-extern char *direct_play_get_session_name (void);
-extern char *direct_play_get_session_name (void);
-extern char *direct_play_get_group_name (void);
-extern char *direct_play_get_player_name (DPID player_id);
+extern void direct_play_set_group_name (const char *name);
+extern void direct_play_set_session_name (const char *name);
+extern void direct_play_set_player_name (const char *name);
+extern const char *direct_play_get_session_name (void);
+extern const char *direct_play_get_session_name (void);
+extern const char *direct_play_get_group_name (void);
+extern const char *direct_play_get_player_name (DPID player_id);
 extern void direct_play_set_group_id (int id);
 extern int direct_play_get_group_id (void);
 extern void direct_play_set_player_id (int id);
@@ -595,13 +595,13 @@ extern void direct_play_set_session_type_and_name ( int value );
 
 extern void direct_play_destroy_modem ( void );
 
-extern int direct_play_dial_modem ( char *modem, char *phone_number );
+extern int direct_play_dial_modem ( const char *modem, const char *phone_number );
 extern HRESULT direct_play_dial_modem_status ( void );
 
-extern int direct_play_answer_modem ( char *modem, int user_data );
+extern int direct_play_answer_modem ( const char *modem, int user_data );
 extern HRESULT direct_play_answer_modem_status ( void );
 
-extern void set_direct_play_inet_address ( char *address );
+extern void set_direct_play_inet_address ( const char *address );
 extern void set_direct_play_serial_address ( int com_port, int baud_rate, int stop_bits, int parity, int flow );
 
 extern int direct_play_get_send_queue_number_of_packets (void);

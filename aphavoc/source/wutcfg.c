@@ -109,7 +109,7 @@ void get_values(char *q, float *v2, int *d2)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void parse_WUT_file(char *fname)
+void parse_WUT_file(const char *fname)
 {
 	 FILE *f;
 	 char buf[255];
@@ -147,7 +147,7 @@ void parse_WUT_file(char *fname)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ReadWutFile(char *fname)
+void ReadWutFile(const char *fname)
 {
 	 FILE *f;
 	 int i;
@@ -412,7 +412,7 @@ void ReadWutFile(char *fname)
 				if ( strstr(buf1, "Aiming Type"                         )) { weapon_database[i].aiming_type = d2; }                           
 				if ( strstr(buf1, "Decoy Type"                          )) { weapon_database[i].decoy_type = d2; }                            
 				if ( strstr(buf1, "Warhead Type"                        )) { weapon_database[i].warhead_type = d2; }                          
-				if ( strstr(buf1, "Threat Type"                         )) { weapon_database[i].threat_type = d2; }                           
+				if ( strstr(buf1, "Threat Type"                         )) { weapon_database[i].threat_type = ( threat_types ) d2; }                           
 				if ( strstr(buf1, "Launch Sound Effect Sub Type"        )) { weapon_database[i].launch_sound_effect_sub_type = d2; }          
 				if ( strstr(buf1, "Interior Launch Sound Effect"        )) { weapon_database[i].interior_launch_sound_effect = d2; }          
 				if ( strstr(buf1, "Exterior Launch Sound Effect"        )) { weapon_database[i].exterior_launch_sound_effect = d2; }          
@@ -648,15 +648,15 @@ Whether or not the site type can be considered a potential campaign objective
 			  
 					 //if (strstr(buf1,"Full Name {text}"           )) { group_database[i].full_name                       = v2; }                          
 					 //if (strstr(buf1,"Group Short Name {text}"    )) { group_database[i].group_short_name                = v2; }                          
-					 if (strstr(buf1,"Group Category"             )) { group_database[i].group_category                  = d2; }                           
-					 if (strstr(buf1,"Registery List"             )) { group_database[i].registry_list_type              = d2; }                           
-					 if (strstr(buf1,"Group List"                 )) { group_database[i].group_list_type                 = d2; }                           
-					 if (strstr(buf1,"Movement Type"              )) { group_database[i].movement_type                   = d2; }                           
-					 if (strstr(buf1,"Landing Type"               )) { group_database[i].default_landing_type            = d2; }                           
-					 if (strstr(buf1,"Default Entity Type"        )) { group_database[i].default_entity_type             = d2; }                           
+					 if (strstr(buf1,"Group Category"             )) { group_database[i].group_category                  = ( group_category_types ) d2; }                           
+					 if (strstr(buf1,"Registery List"             )) { group_database[i].registry_list_type              = ( list_types ) d2; }                           
+					 if (strstr(buf1,"Group List"                 )) { group_database[i].group_list_type                 = ( list_types ) d2; }                           
+					 if (strstr(buf1,"Movement Type"              )) { group_database[i].movement_type                   = ( movement_types ) d2; }                           
+					 if (strstr(buf1,"Landing Type"               )) { group_database[i].default_landing_type            = ( entity_types ) d2; }                           
+					 if (strstr(buf1,"Default Entity Type"        )) { group_database[i].default_entity_type             = ( entity_types ) d2; }                           
 					 if (strstr(buf1,"Default Blue Force Sub Type")) { group_database[i].default_blue_force_sub_type     = d2; }                           
 					 if (strstr(buf1,"Default Red Force Sub Type" )) { group_database[i].default_red_force_sub_type      = d2; }                           
-					 if (strstr(buf1,"Default Group Formation"    )) { group_database[i].default_group_formation         = d2; }                           
+					 if (strstr(buf1,"Default Group Formation"    )) { group_database[i].default_group_formation         = ( formation_types ) d2; }                           
 					 if (strstr(buf1,"Default Group Division"     )) { group_database[i].default_group_division          = d2; }                           
 					 if (strstr(buf1,"Maximum Groups Per Division")) { group_database[i].maximum_groups_per_division     = d2; }                           
 					 if (strstr(buf1,"Platoon Name {text}"        )) 
@@ -749,7 +749,7 @@ Whether or not the site type can be considered a potential campaign objective
 					 //if (strstr(buf1,"Name {text}"            )) { task_database[i].*full_name = v2; }                          
 					 //if (strstr(buf1,"Short Name {text}"      )) { task_database[i].*short_name = v2; }                         
 					 //if (strstr(buf1,"Key {text}"             )) { task_database[i].*key = v2; }                                
-					 if (strstr(buf1,"Task Category"          )) { task_database[i].task_category = d2; }                    
+					 if (strstr(buf1,"Task Category"          )) { task_database[i].task_category = ( task_category_types ) d2; }                    
 					 if (strstr(buf1,"Task Priority"          )) { task_database[i].task_priority = v2; }  //the only float                
 					 if (strstr(buf1,"Difficulty Rating"      )) { task_database[i].difficulty_rating = d2; }                     
 					 if (strstr(buf1,"7"                      )) 
@@ -843,7 +843,7 @@ Whether or not the site type can be considered a potential campaign objective
 						task_database[i].player_reserve_factor			= (d2 >> 14); // 3 bit value
 					 }                    
 					 if (strstr(buf1,"TaskCompleted Score"   )) { task_database[i].task_completed_score = d2; }             
-					 if (strstr(buf1,"Movement Type"          )) { task_database[i].movement_type = d2; }                    
+					 if (strstr(buf1,"Movement Type"          )) { task_database[i].movement_type = ( movement_types ) d2; }                    
 					 if (strstr(buf1,"Landing Types"         )) { task_database[i].landing_types = d2; }             
 					 if (strstr(buf1,"Air Attack strength"   )) { task_database[i].ai_stats.air_attack_strength = d2; }     
 					 if (strstr(buf1,"Ground Attack strength")) { task_database[i].ai_stats.ground_attack_strength = d2; }  

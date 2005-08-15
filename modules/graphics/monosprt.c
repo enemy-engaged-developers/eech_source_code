@@ -78,7 +78,7 @@
 // char y_offset
 // char pixel * width * height (pixel either 0 or 1)
 
-void draw_mono_sprite (char *sprite_ptr, const float x, const float y, const rgb_colour colour)
+void draw_mono_sprite (const char *sprite_ptr, const float x, const float y, const rgb_colour colour)
 {
 
 	if (get_screen_pixel_width (active_screen) == 2)

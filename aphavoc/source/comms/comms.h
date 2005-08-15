@@ -85,7 +85,7 @@ enum COMMS_MODEL_TYPES
 
 typedef enum COMMS_MODEL_TYPES comms_model_types;
 
-extern char
+extern const char
 	*comms_model_string,
 	*comms_model_names [],
 	*send_type_names [];

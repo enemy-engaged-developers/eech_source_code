@@ -301,14 +301,12 @@ extern void initialise_3d_georgia_terrain_types ( void );
 
 extern void initialise_3d_terrain_render_special_types ( void );
 
-extern char *get_terrain_type_name ( terrain_types type );
+extern const char *get_terrain_type_name ( terrain_types type );
 
 extern void animate_terrain_sea ( float );
 
 // Xhit: added to get surface_type for downwash effect. (030328)
 extern int get_terrain_surface_type ( terrain_types type );
-
-extern void initialise_all_custom_terrain_types ( void );
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

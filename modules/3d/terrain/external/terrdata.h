@@ -528,13 +528,13 @@ extern void set_3d_terrain_detail_blend_parameters ( float fog_factor );
 
 extern void set_3d_terrain_detail_blend_factors ( void );
 
-extern int load_3d_terrain ( char *path );
+extern int load_3d_terrain ( const char *path );
 
 extern void unload_3d_terrain ( void );
 
 extern void save_3d_object_as_terrain_sector ( int object );
 
-extern void save_terrain_sector_as_lw_3d_object ( int x, int z, char *filename );
+extern void save_terrain_sector_as_lw_3d_object ( int x, int z, const char *filename );
 
 extern void get_terrain_3d_sector ( float x, float z, int *sectorx, int *sectorz );
 

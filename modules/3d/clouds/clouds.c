@@ -498,9 +498,9 @@ void scan_3d_clouds ( void )
 	// Now bias the blend factors, to take into account the transparency of each texture
 	//
 
-	cloud_weather_one_minus_blend_factor *= active_3d_environment->cloud_light.light_colour.alpha;
+	cloud_weather_one_minus_blend_factor *= active_3d_environment->cloud_light.light__colour.alpha;
 
-	cloud_weather_blend_factor *= active_3d_environment->cloud_light.light_colour.alpha;
+	cloud_weather_blend_factor *= active_3d_environment->cloud_light.light__colour.alpha;
 
 	//
 	// Get the sector the visual_3d_vp is currently in
@@ -762,13 +762,13 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 					colour_t = 0;
 				}
 
-				dr = active_3d_environment->cloud_light.object_colour.red - active_3d_environment->cloud_light.light_colour.red;
-				dg = active_3d_environment->cloud_light.object_colour.green - active_3d_environment->cloud_light.light_colour.green;
-				db = active_3d_environment->cloud_light.object_colour.blue - active_3d_environment->cloud_light.light_colour.blue;
+				dr = active_3d_environment->cloud_light.object_colour.red - active_3d_environment->cloud_light.light__colour.red;
+				dg = active_3d_environment->cloud_light.object_colour.green - active_3d_environment->cloud_light.light__colour.green;
+				db = active_3d_environment->cloud_light.object_colour.blue - active_3d_environment->cloud_light.light__colour.blue;
 	
-				r = active_3d_environment->cloud_light.light_colour.red + ( colour_t * dr );
-				g = active_3d_environment->cloud_light.light_colour.green + ( colour_t * dg );
-				b = active_3d_environment->cloud_light.light_colour.blue + ( colour_t * db );
+				r = active_3d_environment->cloud_light.light__colour.red + ( colour_t * dr );
+				g = active_3d_environment->cloud_light.light__colour.green + ( colour_t * dg );
+				b = active_3d_environment->cloud_light.light__colour.blue + ( colour_t * db );
 	
 				convert_float_to_int ( r * 255.0, &ir );
 				convert_float_to_int ( g * 255.0, &ig );
@@ -980,13 +980,13 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 
 			cloud_points[count].a = bound ( alpha, 0, 1 );
 
-			dr = active_3d_environment->cloud_light.object_colour.red - active_3d_environment->cloud_light.light_colour.red;
-			dg = active_3d_environment->cloud_light.object_colour.green - active_3d_environment->cloud_light.light_colour.green;
-			db = active_3d_environment->cloud_light.object_colour.blue - active_3d_environment->cloud_light.light_colour.blue;
+			dr = active_3d_environment->cloud_light.object_colour.red - active_3d_environment->cloud_light.light__colour.red;
+			dg = active_3d_environment->cloud_light.object_colour.green - active_3d_environment->cloud_light.light__colour.green;
+			db = active_3d_environment->cloud_light.object_colour.blue - active_3d_environment->cloud_light.light__colour.blue;
 
-			r = active_3d_environment->cloud_light.light_colour.red + ( colour_t * dr );
-			g = active_3d_environment->cloud_light.light_colour.green + ( colour_t * dg );
-			b = active_3d_environment->cloud_light.light_colour.blue + ( colour_t * db );
+			r = active_3d_environment->cloud_light.light__colour.red + ( colour_t * dr );
+			g = active_3d_environment->cloud_light.light__colour.green + ( colour_t * dg );
+			b = active_3d_environment->cloud_light.light__colour.blue + ( colour_t * db );
 
 			convert_float_to_int ( r * 255.0, &ir );
 			convert_float_to_int ( g * 255.0, &ig );
@@ -997,9 +997,9 @@ void draw_3d_cloud_sector ( scene_slot_drawing_list *slot )
 			cloud_points[count].blue = ib;
 /*
 			debug_log ( "( %d, %d, %d ) -> ( %d, %d, %d ) d( %d, %d, %d ) blend = %f = %d, %d, %d",
-									active_3d_environment->cloud_light.light_colour.red * 255,
-									active_3d_environment->cloud_light.light_colour.green * 255,
-									active_3d_environment->cloud_light.light_colour.blue * 255,
+									active_3d_environment->cloud_light.light__colour.red * 255,
+									active_3d_environment->cloud_light.light__colour.green * 255,
+									active_3d_environment->cloud_light.light__colour.blue * 255,
 									active_3d_environment->cloud_light.object_colour.red * 255,
 									active_3d_environment->cloud_light.object_colour.green * 255,
 									active_3d_environment->cloud_light.object_colour.blue * 255,

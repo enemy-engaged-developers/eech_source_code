@@ -239,7 +239,7 @@ extern void set_completed_task_expire_time (float value);
 
 extern float get_completed_task_expire_time (void);
 
-extern unsigned char *get_task_objective_string (entity *en);
+extern const char *get_task_objective_string (entity *en);
 
 extern void get_task_objective_mfd_display_string (entity *en, unsigned char *s);
 

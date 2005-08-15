@@ -146,9 +146,9 @@ static void player_select_side_function ( ui_object *obj, void *arg );
 
 static player_log_type *create_empty_player_log ();
 
-static player_log_type *create_player_log (char *name);
+static player_log_type *create_player_log (const char *name);
 
-static player_log_type *rename_player_log (int id, char *name);
+static player_log_type *rename_player_log (int id, const char *name);
 
 static void rebuild_player_log_list (void);
 
@@ -908,7 +908,7 @@ void notify_medals_button (ui_object *obj, void *arg)
 void player_list_function (ui_object *obj, void *arg)
 {
 
-	char
+	const char
 		*player_name;
 
 	player_log_type
@@ -1042,7 +1042,7 @@ void player_add_function (ui_object *obj, void *arg)
 void player_name_input_function ( ui_object *obj, void *arg )
 {
 
-  	char
+  	const char
 		*text;
 
 	ui_object
@@ -1759,7 +1759,7 @@ player_log_type *create_empty_player_log ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-player_log_type *create_player_log (char *name)
+player_log_type *create_player_log (const char *name)
 {
 
 	player_log_type
@@ -1792,7 +1792,7 @@ player_log_type *create_player_log (char *name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-player_log_type *rename_player_log (int id, char *name)
+player_log_type *rename_player_log (int id, const char *name)
 {
 
 	player_log_type

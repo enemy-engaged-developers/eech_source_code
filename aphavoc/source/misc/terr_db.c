@@ -83,13 +83,13 @@ static terrain_database_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_terrain_database_element (terrain_types type, terrain_classes class, int draw_crater, int raised, int suitable_for_ground_vehicle)
+void set_terrain_database_element (terrain_types type, terrain_classes terr_class, int draw_crater, int raised, int suitable_for_ground_vehicle)
 {
 
 	ASSERT (type >= TERRAIN_TYPE_INVALID);
 	ASSERT (type < TERRAIN_TYPE_LAST);
 
-	terrain_database [type].class = class;
+	terrain_database [type].terr_class = terr_class;
 
 	terrain_database [type].draw_crater = draw_crater;
 
@@ -107,7 +107,7 @@ terrain_classes get_terrain_type_class ( terrain_types type )
 	ASSERT (type >= TERRAIN_TYPE_INVALID);
 	ASSERT (type < TERRAIN_TYPE_LAST);
 
-	return terrain_database [type].class;
+	return terrain_database [type].terr_class;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ void initialise_terrain_database ()
 {
 
 	//
-	// parameters : (type, class, draw_crater, raised, suitable_for_ground_vehicle)
+	// parameters : (type, terr_class, draw_crater, raised, suitable_for_ground_vehicle)
 	//
 
 	set_terrain_database_element (TERRAIN_TYPE_INVALID, TERRAIN_CLASS_INVALID, FALSE, FALSE, FALSE);

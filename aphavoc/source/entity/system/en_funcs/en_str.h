@@ -147,7 +147,7 @@ extern string_type_data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char
+extern const char
 	*overload_invalid_string_type_message,
 	*debug_fatal_invalid_string_type_message;
 
@@ -167,7 +167,7 @@ extern char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_set_local_entity_raw_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type, char *s);
+extern void (*fn_set_local_entity_raw_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type, const char *s);
 
 #define set_local_entity_raw_string(EN,STRING_TYPE,VALUE) (fn_set_local_entity_raw_string[get_local_entity_type ((EN))][validate_string_type ((STRING_TYPE))] ((EN), (STRING_TYPE), (VALUE)))
 
@@ -175,7 +175,7 @@ extern void (*fn_set_local_entity_raw_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_set_local_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type, char *s);
+extern void (*fn_set_local_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type, const char *s);
 
 #define set_local_entity_string(EN,STRING_TYPE,VALUE) (fn_set_local_entity_string[get_local_entity_type ((EN))][validate_string_type ((STRING_TYPE))] ((EN), (STRING_TYPE), (VALUE)))
 
@@ -183,7 +183,7 @@ extern void (*fn_set_local_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (e
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_set_client_server_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES][NUM_COMMS_MODEL_TYPES]) (entity *en, string_types type, char *s);
+extern void (*fn_set_client_server_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES][NUM_COMMS_MODEL_TYPES]) (entity *en, string_types type, const char *s);
 
 #define set_client_server_entity_string(EN,STRING_TYPE,VALUE) (fn_set_client_server_entity_string[get_local_entity_type ((EN))][validate_string_type ((STRING_TYPE))][get_comms_model ()] ((EN), (STRING_TYPE), (VALUE)))
 
@@ -191,7 +191,7 @@ extern void (*fn_set_client_server_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char *(*fn_get_local_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type);
+extern const char *(*fn_get_local_entity_string[NUM_ENTITY_TYPES][NUM_STRING_TYPES]) (entity *en, string_types type);
 
 #define get_local_entity_string(EN,STRING_TYPE) (fn_get_local_entity_string[get_local_entity_type ((EN))][validate_string_type ((STRING_TYPE))] ((EN), (STRING_TYPE)))
 

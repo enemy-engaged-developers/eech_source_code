@@ -104,6 +104,8 @@
 
 #ifdef NO_INTERNAL_MODULES
 
+#include "3d/external/3dobjbuf.h"
+
 #include "3d/external/3dexplos.h"
 
 #include "3d/external/3ddisp.h"
@@ -142,8 +144,6 @@
 
 #include "3d/external/3dlight.h"
 
-#include "3d/external/3dobjbuf.h"
-
 #include "3d/external/3dobjvb.h"
 
 #include "3d/external/3dsubobj.h"
@@ -179,6 +179,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #else /* NO_INTERNAL_MODULES */
+
+#include "3d/3dobjbuf.h"
 
 #include "3d/3dexplos.h"
 
@@ -217,8 +219,6 @@
 #include "3d/3dscene.h"
 
 #include "3d/3dlight.h"
-
-#include "3d/3dobjbuf.h"
 
 #include "3d/3dobjvb.h"
 

@@ -74,7 +74,7 @@ extern void start_messaging_system (event *ev);
 
 extern void set_message_events (void);
 
-extern void send_text_message (entity *sender, entity *target, message_text_types type, unsigned char *text);
+extern void send_text_message (entity *sender, entity *target, message_text_types type, const char *text);
 
 extern void comms_shortcut_attack_my_target (event *ev);
 

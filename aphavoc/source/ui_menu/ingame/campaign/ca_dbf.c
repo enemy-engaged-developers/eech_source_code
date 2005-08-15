@@ -108,10 +108,10 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 		*base,
 		*previous;
 
-	static unsigned char
+	static char
 		s [128];
 
-	unsigned char
+	char
 		medal_text [1024],
 		*debrief,
 		*ff_debrief;
@@ -191,7 +191,7 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 				if (get_medal_briefing_text (mission, medal, medal_text))
 				{
 			
-					add_briefing_text_to_list (debriefing_text_list, &medal_text);
+					add_briefing_text_to_list (debriefing_text_list, medal_text);
 				}
 				else
 				{

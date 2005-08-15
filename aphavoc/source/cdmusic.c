@@ -113,7 +113,7 @@ void play_cd_music (cd_music_types music_type)
 				case CD_MUSIC_TYPE_COCKPIT:
 				{
 		
-					track = CD_MUSIC_TRACK_INGAME1 + (rand16() % NUM_CD_MUSIC_COCKPIT_TRACKS);
+					track = ( cd_music_tracks ) ( CD_MUSIC_TRACK_INGAME1 + (rand16() % NUM_CD_MUSIC_COCKPIT_TRACKS) );
 					
 					current_music_track = track;
 		
@@ -129,7 +129,7 @@ void play_cd_music (cd_music_types music_type)
 				case CD_MUSIC_TYPE_MISSION_COMPLETE:
 				{
 		
-					track = CD_MUSIC_TRACK_MISSION_COMPLETE1 + (rand16() % NUM_CD_MUSIC_MISSION_COMPLETE_TRACKS);
+					track = ( cd_music_tracks ) ( CD_MUSIC_TRACK_MISSION_COMPLETE1 + (rand16() % NUM_CD_MUSIC_MISSION_COMPLETE_TRACKS) );
 					
 					current_music_track = track;
 		

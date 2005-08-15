@@ -104,7 +104,7 @@ extern ui_object
 	*modem_status_text;
 
 
-extern unsigned char
+extern const char
 	*baud_rate_text[4],
 	*stop_bits_text[3],
 	*parity_text[4],

@@ -2125,7 +2125,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, &vertices, NULL );
+					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
 					if ( FAILED ( ret ) )
 					{
@@ -2281,7 +2281,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, &vertices, NULL );
+					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
 					if ( FAILED ( ret ) )
 					{
@@ -2592,7 +2592,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, &vertices, NULL );
+					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
 					if ( FAILED ( ret ) )
 					{
@@ -2758,7 +2758,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, &vertices, NULL );
+					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
 					if ( FAILED ( ret ) )
 					{

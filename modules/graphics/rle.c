@@ -95,7 +95,7 @@
 //		0xFFFF (end of file)
 //	}
 
-void convert_tga_to_rle (char *tga_filename, char *rle_filename)
+void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 {
 	FILE
 		*rle_file_ptr;
@@ -298,7 +298,7 @@ void convert_tga_to_rle (char *tga_filename, char *rle_filename)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void convert_psd_to_rle ( char *psd_filename, char *rle_filename )
+void convert_psd_to_rle ( const char *psd_filename, const char *rle_filename )
 {
 
 	FILE
@@ -511,7 +511,7 @@ void convert_psd_to_rle ( char *psd_filename, char *rle_filename )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void convert_and_dither_psd_to_rle (char *psd_filename, char *rle_filename)
+void convert_and_dither_psd_to_rle (const char *psd_filename, const char *rle_filename)
 {
 
 	FILE
@@ -744,7 +744,7 @@ void convert_and_dither_psd_to_rle (char *psd_filename, char *rle_filename)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void blit_rle_graphic (unsigned char *rle_graphic, const int x, const int y)
+void blit_rle_graphic (const unsigned char *rle_graphic, const int x, const int y)
 {
 	int
 		screen_pitch,
@@ -753,9 +753,10 @@ void blit_rle_graphic (unsigned char *rle_graphic, const int x, const int y)
 		run_length,
 		x_add;
 
+	const unsigned char
+		*rd;
 	unsigned char
 		*screen_data,
-		*rd,
 		*wt;
 
 	ASSERT (rle_graphic);

@@ -99,7 +99,7 @@ extern float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char
+extern const char
 	*target_acquisition_system_names[NUM_TARGET_ACQUISITION_SYSTEMS];
 
 #define get_selected_target_acquisition_system_name() (target_acquisition_system_names[target_acquisition_system])
@@ -182,7 +182,7 @@ extern void toggle_designated_target (void); // Jabberwock 031108 Designated tar
 
 extern entity *get_local_entity_boresight_target (entity *source, vec3d *boresight_unit_vector, float range, float field_of_view);
 
-extern char *get_target_display_name (entity *target, char *buffer, int large_display);
+extern const char *get_target_display_name (entity *target, char *buffer, int large_display);
 
 extern int get_number_of_valid_gunship_targets (entity *receiver);
 

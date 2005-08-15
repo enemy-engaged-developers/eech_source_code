@@ -386,8 +386,9 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 void assess_effectiveness_of_all_weapons_on_entity (entity *en)
 {
+	const char
+		*target_name;
 	char
-		*target_name,
 		*filename;
 
 	FILE
@@ -521,7 +522,7 @@ void display_debug_kill_info (entity *victim, entity *aggressor)
 		*victim_task,
 		*aggressor_task;
 
-	char
+	const char
 		*desc1,
 		*desc2,
 		*victim_desc,

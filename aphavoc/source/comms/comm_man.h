@@ -169,7 +169,7 @@ extern void net_handle_heartbeat(void);
 
 extern void net_uninit_heartbeat(void);
 
-extern void net_set_hostname (char *data);
+extern void net_set_hostname (const char *data);
 
 extern void net_getServerList(void);
 //-- Werewolf

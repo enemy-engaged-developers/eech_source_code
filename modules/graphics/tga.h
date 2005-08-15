@@ -124,17 +124,17 @@ extern int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void *load_tga_file (char *filename, short int *width, short int *height, int *bits_per_pixel);
+extern void *load_tga_file (const char *filename, short int *width, short int *height, int *bits_per_pixel);
 
-extern void *memory_map_tga_file (char *filename, char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel);
+extern void *memory_map_tga_file (const char *filename, char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel);
 
-extern void save_tga_screen (char *filename);
+extern void save_tga_screen (const char *filename);
 
-extern void save_tga_screen_with_thumbnail ( char *screen_filename, char *thumbnail_filename );
+extern void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *thumbnail_filename );
 
-extern void save_tga_image (char *filename, int width, int height, unsigned char *data);
+extern void save_tga_image (const char *filename, int width, int height, const unsigned char *data);
 
-extern void save_tga_greyscale_image ( char *filename, int width, int height, unsigned char *data );
+extern void save_tga_greyscale_image ( const char *filename, int width, int height, const unsigned char *data );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

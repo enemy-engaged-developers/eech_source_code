@@ -243,7 +243,7 @@ struct MAIN_LIGHT_SETTING
 		*succ;
 
 	light_colour
-		light_colour,
+		light__colour,
 		object_colour;
 
 	float

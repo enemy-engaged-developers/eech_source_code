@@ -635,7 +635,7 @@ int create_test_d3d_device ( int width, int height )
 	// Get a d3d3 driver interface
 	//
 
-	d3drval = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, &d3d.d3d );
+	d3drval = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, ( LPVOID FAR * ) &d3d.d3d );
 
 	if ( d3drval != DD_OK )
 	{

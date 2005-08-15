@@ -126,7 +126,7 @@ ui_object
 	*modem_cancel_button,
 	*modem_status_text;
 
-unsigned char
+const char
 	*baud_rate_text[4],
 	*stop_bits_text[3],
 	*parity_text[4],
@@ -170,8 +170,9 @@ void define_multi_player_setup_objects (void)
 		y2,
 		mb_width;
 
-	unsigned char
-		text[128],
+	char
+		text[128];
+	const char
 		*translations [3];
 
 	ui_object
@@ -1478,7 +1479,7 @@ void notify_flow_function ( ui_object *obj, void *arg )
 void multi_text_input_function ( ui_object *obj, void *arg )
 {
 
-	char
+	const char
 		*text;
 		
 	obj;

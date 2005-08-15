@@ -2417,7 +2417,7 @@ unsigned long LookUpIPAddress(CHAR * inet_address)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Used by pilot.c to remember the hosting player's name
-void net_set_hostname (char *data)
+void net_set_hostname (const char *data)
 {
     sprintf(localplayer, "%s", data);
 }

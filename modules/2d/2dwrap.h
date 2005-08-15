@@ -86,7 +86,7 @@ extern void get_2d_float_screen_x_coordinate (const float wx, float *x);
 
 extern void get_2d_float_screen_y_coordinate (const float wy, float *y);
 
-extern void draw_2d_mono_sprite (char *sprite_ptr, const float x, const float y, const rgb_colour colour);
+extern void draw_2d_mono_sprite (const char *sprite_ptr, const float x, const float y, const rgb_colour colour);
 
 extern void draw_2d_circle (const float x, const float y, const float r, const rgb_colour col);
 

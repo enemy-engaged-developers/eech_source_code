@@ -203,7 +203,7 @@ static void map_draw_pilots (ui_object *obj, entity_sides side);
 
 static void map_draw_missions (ui_object *obj, entity_sides side);
 
-static void map_draw_string (ui_object *obj, vec3d *pos, unsigned char *string, font_types font, rgb_colour *col, int centered);
+static void map_draw_string (ui_object *obj, vec3d *pos, const char *string, font_types font, rgb_colour *col, int centered);
 
 static void map_draw_entity_icon (ui_object *obj, entity *en, vec3d *pos, int icon, int side, float scale);
 
@@ -677,7 +677,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 			// Draw WP1 Letter
 			//
 			
-			sprintf (tag, "%c", (char *) get_local_entity_char_value (wp1, CHAR_TYPE_TAG));
+			sprintf (tag, "%c", get_local_entity_char_value (wp1, CHAR_TYPE_TAG));
 
 			font_width = ui_get_string_length (tag);
 
@@ -708,7 +708,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 		map_draw_entity_icon (obj, wp1, &wpos2, icon, side, ICON_RESOLUTION_SCALE);
 
-		sprintf (tag, "%c", (char *) get_local_entity_char_value (wp1, CHAR_TYPE_TAG));
+		sprintf (tag, "%c", get_local_entity_char_value (wp1, CHAR_TYPE_TAG));
 
 		font_width = ui_get_string_length (tag);
 
@@ -2380,7 +2380,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 	map_icon_type
 		icon;
 
-	unsigned char
+	const char
 		*name;
 
 	entity_sides
@@ -2589,8 +2589,9 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 		side,
 		pilot_side;
 
-	unsigned char
-		*name,
+	const char
+		*name;
+	char
 		id [5];
 
 	map_dimension_type
@@ -2793,7 +2794,7 @@ void map_draw_pilots (ui_object *obj, entity_sides side)
 	vec3d
 		*pos;
 
-	unsigned char
+	const char
 		*name;
 
 	map_dimension_type
@@ -2979,7 +2980,7 @@ void map_draw_symbol (ui_object *obj, vec3d *pos, unsigned char tag, font_types 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void map_draw_string (ui_object *obj, vec3d *pos, unsigned char *string, font_types font, rgb_colour *col, int centered)
+void map_draw_string (ui_object *obj, vec3d *pos, const char *string, font_types font, rgb_colour *col, int centered)
 {
 	vec3d
 		screen_pos;
@@ -4604,8 +4605,9 @@ void map_draw_grid (ui_object *obj)
 
 void map_draw_track_entity (ui_object *obj, entity *en)
 {
-	unsigned char
-		*name,
+	const char
+		*name;
+	char
 		text [64];
 
 	float

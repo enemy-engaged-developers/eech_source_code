@@ -105,7 +105,7 @@ extern void initialise_language_database (void);
 
 extern void test_array (void);
 
-extern char *get_trans (char *string);
+extern const char *get_trans (const char *string);
 
 extern void deinitialise_language_database (void);
 

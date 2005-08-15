@@ -89,7 +89,15 @@ cc = cl
 
 !else
 
+!ifdef gcc
+
+cc = gcc
+
+!else
+
 cc = wcc386
+
+!endif
 
 !endif
 
@@ -174,7 +182,15 @@ cc_args += /D "NO_ENTITY_SYMBOLS"
 
 !else
 
+!ifdef gcc
+
+cc_ags += -D NO_ENTITY_SYMBOLS
+
+!else
+
 cc_args += /DNO_ENTITY_SYMBOLS
+
+!endif
 
 !endif
 
@@ -201,6 +217,19 @@ cc_args += /I"$(projectdir)\source"
 
 cc_args += /D "WIN32"
 cc_args += /D "_WINDOWS"
+
+!else
+
+!ifdef gcc
+
+cc_args += -mwindows
+cc_args += -c
+cc_args += -I $(DXSDK)\include
+cc_args += -I $(modulesdir)
+cc_args += -I $(projectdir)\source
+cc_args += -W 
+#cc_args += -Wall
+#cc_args += -x c++
 
 !else
 
@@ -237,6 +266,8 @@ asm_args += /nologo
 
 !endif
 
+!endif
+
 #
 # DEBUG OPTIONS
 #
@@ -252,10 +283,19 @@ cc_args += /Ge
 
 !else
 
+!ifdef gcc
+
+cc_args += -g
+cc_args += -D DEBUG
+
+!else
+
 cc_args += /d2
 cc_args += /of+
 cc_args += /hd
 cc_args += /DDEBUG
+
+!endif
 
 !endif
 
@@ -273,10 +313,19 @@ cc_args += /D "DEBUG"
 
 !else
 
+!ifdef gcc
+
+cc_args += -g
+cc_args += -D DEBUG
+
+!else
+
 cc_args += /d2
 cc_args += /hd
 cc_args += /dVTUNE
 cc_args += /dDEBUG
+
+!endif
 
 !endif
 
@@ -297,7 +346,15 @@ cc_args += /G6
 
 !else
 
+!ifdef gcc
+
+cc_args += -O2
+
+!else
+
 cc_args += /oneatx /oh /ol+ /ob
+
+!endif
 
 !endif
 
@@ -316,7 +373,11 @@ cc_args += /oneatx /oh /ol+ /ob
 !ifdef visualc
 cc_args += /d"COMMERCIAL"
 !else
+!ifdef gcc
+cc_args += -D COMMERCIAL
+!else
 cc_args += /dCOMMERCIAL
+!endif
 !endif
 
 !endif
@@ -326,7 +387,11 @@ cc_args += /dCOMMERCIAL
 !ifdef visualc
 cc_args += /d"INSTALL_FROM_CDROM"
 !else
+!ifdef gcc
+cc_args += -D INSTALL_FROM_CDROM
+!else
 cc_args += /dINSTALL_FROM_CDROM
+!endif
 !endif
 
 !endif
@@ -348,7 +413,11 @@ cc_args += /dINSTALL_FROM_CDROM
 !ifdef visualc
         * $(cc) $[@ $(cc_args) /Fo$^@
 !else
+!ifdef gcc
+        * $(cc) $(cc_args) -o $^@ $[@
+!else
         * $(cc) $(cc_args) /Fo=$^@ $[@
+!endif
 !endif
 
 #################################################################################################################################

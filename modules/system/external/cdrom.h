@@ -66,7 +66,7 @@
 
 extern void initialise_cdrom_system ( void );
 
-extern int check_cdrom_file_exists ( char *filename );
+extern int check_cdrom_file_exists ( const char *filename );
 
 extern int capture_cd_audio_device ( void );
 

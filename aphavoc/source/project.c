@@ -552,7 +552,7 @@ void application_main (int argc, char **argv)
 // JB 030311
 void set_comanche_hokum_installation_path(void)
 {
-	HANDLE comanche_hokum_key;
+	HKEY comanche_hokum_key;
 
 	// JB 030311 Enable running out of separate directories
 	if ( RegOpenKey ( HKEY_LOCAL_MACHINE, "Software\\Razorworks\\Comanche Hokum", &comanche_hokum_key ) == ERROR_SUCCESS )
@@ -576,7 +576,7 @@ void set_comanche_hokum_installation_path(void)
 void set_apache_havoc_installation_path ( void )
 {
 
-	HANDLE
+	HKEY
 		software_key,
 		razorworks_key,
 		apache_havoc_key;
@@ -625,7 +625,7 @@ void set_apache_havoc_installation_path ( void )
 void set_registry_language_settings ( void )
 {
 
-	HANDLE
+	HKEY
 		software_key,
 		razorworks_key,
 		comanche_hokum_key;

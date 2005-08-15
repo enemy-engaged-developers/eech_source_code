@@ -64,40 +64,40 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern char
+extern const char
 	large_display_target_symbol_selected_target[];
 
-extern char
+extern const char
 	large_display_target_symbol_selected_target_mask[];
 
-extern char
+extern const char
 	small_display_target_symbol_selected_target[];
 
-extern char
+extern const char
 	small_display_target_symbol_selected_target_mask[];
 
-extern char
+extern const char
 	*large_display_target_symbols_los[];
 
-extern char
+extern const char
 	*large_display_target_symbols_los_mask[];
 
-extern char
+extern const char
 	*large_display_target_symbols_no_los[];
 
-extern char
+extern const char
 	*large_display_target_symbols_no_los_mask[];
 
-extern char
+extern const char
 	*small_display_target_symbols_los[];
 
-extern char
+extern const char
 	*small_display_target_symbols_los_mask[];
 
-extern char
+extern const char
 	*small_display_target_symbols_no_los[];
 
-extern char
+extern const char
 	*small_display_target_symbols_no_los_mask[];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

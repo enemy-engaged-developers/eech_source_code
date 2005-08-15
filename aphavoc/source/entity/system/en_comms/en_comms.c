@@ -639,7 +639,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_char_type (type);
 
-			value = va_arg (pargs, char);
+			value = va_arg (pargs, int);
 
 			pack_char_value (en, type, value);
 

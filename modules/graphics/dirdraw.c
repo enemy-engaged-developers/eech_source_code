@@ -191,6 +191,8 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 
 static HRESULT WINAPI ddraw_enumerate_zbuffer_formats ( DDPIXELFORMAT *format, void *choice );
 
+static void save_system_palette ( void );
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -381,7 +383,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 				if ( memcmp ( device_guid, &device->guid, sizeof ( GUID ) ) == 0 )
 				{
 
-					ret = DirectDrawCreateEx ( &device->guid, &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+					ret = DirectDrawCreateEx ( &device->guid, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
 			
 					if ( FAILED ( ret ) )
 					{
@@ -418,12 +420,12 @@ BOOL ddraw_initialise ( GUID *device_guid )
 			if ( best_display_device->is_primary )
 			{
 	
-				ret = DirectDrawCreateEx ( NULL, &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+				ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
 			}
 			else
 			{
 
-				ret = DirectDrawCreateEx ( &best_display_device->guid, &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+				ret = DirectDrawCreateEx ( &best_display_device->guid, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
 			}
 	
 			if ( FAILED ( ret ) )
@@ -450,7 +452,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	if ( !ddraw.ddraw )
 	{
 
-		ret = DirectDrawCreateEx ( NULL, &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+		ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
 
 		if ( FAILED ( ret ) )
 		{
@@ -497,7 +499,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	// Get a d3d driver interface
 	//
 
-	ret = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, &d3d.d3d );
+	ret = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, ( LPVOID FAR * ) &d3d.d3d );
 
 	if ( ret != DD_OK )
 	{
@@ -729,7 +731,7 @@ BOOL ddraw_release_objects ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL ddraw_lock_surface ( LPDIRECTDRAWSURFACEX surface, unsigned char **ptr, int *pitch )
+BOOL ddraw_lock_surface ( LPDIRECTDRAWSURFACEX surface, LPVOID *ptr, int *pitch )
 {
 	
 	DDSURFACEDESC2
@@ -2609,7 +2611,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 	// Create the driver
 	//
 
-	ddrval = DirectDrawCreateEx ( lpGUID, &lpDD, &IID_IDirectDraw7, NULL );
+	ddrval = DirectDrawCreateEx ( lpGUID, ( LPVOID * ) &lpDD, &IID_IDirectDraw7, NULL );
 
 	if ( ddrval != DD_OK )
 	{
@@ -3076,7 +3078,7 @@ static struct DDRAW_ERROR_MESSAGE ddraw_error_table[] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char * get_ddraw_error_message ( HRESULT error )
+const char * get_ddraw_error_message ( HRESULT error )
 {
 
 	int

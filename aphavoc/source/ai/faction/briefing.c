@@ -131,7 +131,7 @@ task_briefing_type
 extra_briefing_type
 	*extra_briefing_database;
 
-char
+const char
 	*us_medal_type_names [NUM_MEDAL_TYPES],
 	*cis_medal_type_names [NUM_MEDAL_TYPES],
 	*rank_type_names [NUM_PILOT_RANKS];

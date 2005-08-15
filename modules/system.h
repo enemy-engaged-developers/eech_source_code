@@ -393,7 +393,7 @@ typedef struct tagKERNINGPAIR {
 #define NODEFERWINDOWPOS
 
 // crh 030319 Open Watcom defines FOURCC in \watcom\H\NT\mmsystem.h
-#ifndef __WATCOMC__
+#if !defined ( __WATCOMC__ ) && !defined ( __GNUC__ )
 typedef unsigned int FOURCC;         /* a four character code */
 #endif /* __WATCOMC__ */
 
@@ -406,7 +406,7 @@ typedef unsigned int FOURCC;         /* a four character code */
 #include <objbase.h>
 // crh 030319 Open Watcom doesn't have a "VFW.H" anywhere... it seems to build
 //            okay without it, but this may not be generally true
-#ifndef __WATCOMC__
+#if !defined ( __WATCOMC__ ) && !defined ( __GNUC__ )
 #include <vfw.h>
 #endif /* __WATCOMC__ */
 

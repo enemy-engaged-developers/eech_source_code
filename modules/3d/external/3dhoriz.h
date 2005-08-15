@@ -66,7 +66,7 @@
 
 extern void initialise_3d_horizon ( env_3d *env, object_3d_index_numbers index );
 
-extern void add_3d_horizon_image ( env_3d *env, char *filename, float time, enum WEATHERMODES mode );
+extern void add_3d_horizon_image ( env_3d *env, const char *filename, float time, enum WEATHERMODES mode );
 
 extern void destroy_all_3d_horizon_images ( env_3d *env );
 

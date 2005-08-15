@@ -134,7 +134,7 @@ void set_ui_frontend_list_object_highlightable (ui_object *obj)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void preprocess_translation_object_size (ui_object *change_obj, ui_object *check_obj, unsigned char *translations[], int num_trans, resize_ui_object_types flag)
+void preprocess_translation_object_size (ui_object *change_obj, ui_object *check_obj, const char **translations, int num_trans, resize_ui_object_types flag)
 {
 	int
 		i,
@@ -379,7 +379,7 @@ void preprocess_translation_object_size (ui_object *change_obj, ui_object *check
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_obj, unsigned char *translations[], int num_trans, resize_ui_object_types flag)
+void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_obj, const char **translations, int num_trans, resize_ui_object_types flag)
 {
 	int
 		i,

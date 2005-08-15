@@ -66,7 +66,7 @@
 
 extern void show_save_page (ui_object *obj);
 
-extern void parse_filename (unsigned char *text, int max_length);
+extern void parse_filename (char *text, int max_length);
 
 extern void initialise_campaign_screen_save_page_objects (void);
 

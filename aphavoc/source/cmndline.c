@@ -282,7 +282,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_game_initialisation_phase_path);
+				sscanf (s2 + 1, "%s", command_line_game_initialisation_phase_path);
 			}
 			else
 			{
@@ -302,7 +302,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_game_initialisation_phase_directory);
+				sscanf (s2 + 1, "%s", command_line_game_initialisation_phase_directory);
 			}
 			else
 			{
@@ -322,7 +322,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_game_initialisation_phase_filename);
+				sscanf (s2 + 1, "%s", command_line_game_initialisation_phase_filename);
 			}
 			else
 			{
@@ -1001,7 +1001,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%c", &command_line_cdrom_drive_letter);
+				sscanf (s2 + 1, "%c", command_line_cdrom_drive_letter);
 			}
 			else
 			{
@@ -1365,7 +1365,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_debug_log_name);
+				sscanf (s2 + 1, "%s", command_line_debug_log_name);
 			}
 			else
 			{
@@ -1387,7 +1387,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_ip_address);
+				sscanf (s2 + 1, "%s", command_line_ip_address);
 			}
 			else
 			{
@@ -1410,7 +1410,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_primary_server_setting);
+				sscanf (s2 + 1, "%s", command_line_primary_server_setting);
 			}
 			else
 			{
@@ -1429,7 +1429,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_secondary_server_setting);
+				sscanf (s2 + 1, "%s", command_line_secondary_server_setting);
 			}
 			else
 			{
@@ -1763,7 +1763,7 @@ void process_command_line (int argc, char *argv[])
 		{
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%s", &command_line_server_log_filename);
+				sscanf (s2 + 1, "%s", command_line_server_log_filename);
 			}
 			else
 			{
@@ -2011,7 +2011,7 @@ void process_command_line (int argc, char *argv[])
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void process_environment_variable (char *name)
+void process_environment_variable (const char *name)
 {
 	int
 		argc;
@@ -2032,7 +2032,7 @@ void process_environment_variable (char *name)
 			// copy enviroment variable
 			//
 
-			buffer = safe_malloc (strlen (env) + 1);
+			buffer = ( char * ) safe_malloc (strlen (env) + 1);
 
 			strcpy (buffer, env);
 

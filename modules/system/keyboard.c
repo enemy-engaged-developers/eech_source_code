@@ -124,7 +124,7 @@ void initialise_keyboard ( void )
 	if ( input_system_type == INPUT_DIRECTINPUT )
 	{
 
-		ret = IDirectInput7_CreateDeviceEx ( direct_input, &GUID_SysKeyboard, &IID_IDirectInputDevice7, &direct_input_keyboard, NULL );
+		ret = IDirectInput7_CreateDeviceEx ( direct_input, &GUID_SysKeyboard, &IID_IDirectInputDevice7, (LPVOID *) &direct_input_keyboard, NULL );
 
 		if (ret != DI_OK )
 		{

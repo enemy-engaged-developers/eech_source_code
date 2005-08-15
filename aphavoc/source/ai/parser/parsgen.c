@@ -125,13 +125,13 @@ campaign_while_loop_type
 
 static void add_campaign_trigger (campaign_trigger type, int value1, int value2, int value3, int value4, char *event_name, campaign_trigger trigger_type);
 
-static campaign_event_type *add_campaign_event (char *name, char *filename, int file_offset);
+static campaign_event_type *add_campaign_event (char *name, const char *filename, int file_offset);
 
 static campaign_event_type *get_campaign_event (char *name);
 
 static int trigger_triggered (campaign_trigger_type *this_campaign_trigger);
 
-static campaign_while_loop_type *add_while_loop (char *filename, int file_offset);
+static campaign_while_loop_type *add_while_loop (const char *filename, int file_offset);
 
 static void destroy_while_loop_head (void);
 
@@ -192,7 +192,7 @@ void update_campaign_triggers (void)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int parser_campaign_file (char *filename, int *offset)
+int parser_campaign_file (const char *filename, int *offset)
 {
 
 	file_tags
@@ -2281,7 +2281,7 @@ void add_campaign_trigger (campaign_trigger type, int value1, int value2, int va
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-campaign_event_type *add_campaign_event (char *name, char *filename, int file_offset)
+campaign_event_type *add_campaign_event (char *name, const char *filename, int file_offset)
 {
 
 	campaign_event_type
@@ -2513,7 +2513,7 @@ campaign_event_type *get_campaign_event (char *name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int trigger_triggered (campaign_trigger_type *this_campaign_trigger)
+static int trigger_triggered (campaign_trigger_type *this_campaign_trigger)
 {
 
 	int
@@ -2642,7 +2642,7 @@ int trigger_triggered (campaign_trigger_type *this_campaign_trigger)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-campaign_while_loop_type *add_while_loop (char *filename, int file_offset)
+campaign_while_loop_type *add_while_loop (const char *filename, int file_offset)
 {
 
 	campaign_while_loop_type

@@ -88,7 +88,7 @@ extern int create_sead_tasks_around_keysite (entity *original_task, entity *keys
 
 #ifdef DEBUG
 
-extern void ai_log (char *string, ...);
+extern void ai_log (const char *string, ...);
 
 #else
 

@@ -81,7 +81,7 @@ extern void deinitialise_campaign_screen_3d_textures (void);
 
 extern void define_campaign_screen_briefing_page_objects (void);
 
-extern void add_briefing_text_to_list (ui_object *list, char *text1);
+extern void add_briefing_text_to_list (ui_object *list, const char *text1);
 
 extern void resize_briefing_list_size (ui_object *list);
 

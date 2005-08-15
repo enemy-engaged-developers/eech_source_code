@@ -73,7 +73,7 @@
 void get_clock_int_values (int time_of_day, int *hours, int *minutes, int *seconds);	// Retro 30Jan2004 fwd declaration
 // Jabberwock 031119 Server log
 
-void server_log (char *msg, ...)
+void server_log (const char *msg, ...)
 {
 
 	FILE

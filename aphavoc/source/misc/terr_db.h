@@ -67,7 +67,7 @@
 struct TERRAIN_DATABASE_TYPE
 {
 	terrain_classes
-		class;
+		terr_class;
 
 	unsigned int
 		draw_crater							: 1,

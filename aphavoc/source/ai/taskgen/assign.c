@@ -177,9 +177,9 @@ void assign_keysite_tasks (entity *keysite, task_category_types category)
 
 	ASSERT (task_count > 0);
 	
-	task_list = malloc_fast_mem (sizeof (entity *) * task_count);
+	task_list = ( entity * * ) malloc_fast_mem (sizeof (entity *) * task_count);
 
-	sort_order = malloc_fast_mem (sizeof (float) * task_count);
+	sort_order = ( float * ) malloc_fast_mem (sizeof (float) * task_count);
 
 	task_count = 0;
 
@@ -437,7 +437,7 @@ entity *get_suitable_registered_group (entity *task, int *idle_group_count)
 
 		if (!get_local_entity_parent (current_group, LIST_TYPE_PILOT_LOCK))
 		{
-			group_raw = get_local_entity_data (current_group);
+			group_raw = ( group * ) get_local_entity_data (current_group);
 	
 			//////////////////////////////////////////////////////////////////
 			// stop carriers being assigned
@@ -560,7 +560,7 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 
 		if (get_local_entity_int_value (group_en, INT_TYPE_GROUP_LIST_TYPE) == LIST_TYPE_KEYSITE_GROUP)
 		{
-			keysite = get_local_entity_ptr_value (task_en, PTR_TYPE_RETURN_KEYSITE);
+			keysite = ( entity * ) get_local_entity_ptr_value (task_en, PTR_TYPE_RETURN_KEYSITE);
 
 			if (keysite)
 			{
@@ -574,7 +574,7 @@ int assign_primary_task_to_group (entity *group_en, entity *task_en)
 
 		side = get_local_entity_int_value (group_en, INT_TYPE_SIDE);
 
-		force = get_local_force_entity (side);
+		force = get_local_force_entity ( ( entity_sides ) side );
 
 		ASSERT (force);
 
@@ -783,7 +783,7 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 
 	ASSERT (!(get_local_group_primary_task (group) && (get_local_entity_int_value (task_en, INT_TYPE_PRIMARY_TASK))));
 
-	task_raw = get_local_entity_data (task_en);
+	task_raw = ( task * ) get_local_entity_data (task_en);
 
 	group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -840,7 +840,7 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 
 	pos = get_local_entity_vec3d_ptr (task_en, VEC3D_TYPE_STOP_POSITION);
 
-	force = get_local_force_entity (get_local_entity_int_value (task_en, INT_TYPE_SIDE));
+	force = get_local_force_entity ( ( entity_sides ) get_local_entity_int_value (task_en, INT_TYPE_SIDE) );
 
 	sub_type = group_database [group_type].default_landing_type;
 
@@ -852,7 +852,7 @@ int assign_task_to_group (entity *group, entity *task_en, unsigned int valid_mem
 	{
 		ASSERT (start_keysite);
 
-		end_keysite = get_local_entity_ptr_value (task_en, PTR_TYPE_RETURN_KEYSITE);
+		end_keysite = ( entity * ) get_local_entity_ptr_value (task_en, PTR_TYPE_RETURN_KEYSITE);
 
 		if (end_keysite)
 		{

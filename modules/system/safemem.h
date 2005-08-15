@@ -81,7 +81,7 @@ extern void check_safe_memory_counter (void);
 
 #if DEBUG_SAFEMEM_MODULE
 
-extern void *safe_malloc_memory (size_t size, char *file, int line);
+extern void *safe_malloc_memory (size_t size, const char *file, int line);
 
 #else
 

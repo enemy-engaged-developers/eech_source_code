@@ -64,9 +64,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void read_sector_side_file ( char *sides_filename );
+extern void read_sector_side_file ( const char *sides_filename );
 
-extern void read_population_placement_file ( char *placement_filename );
+extern void read_population_placement_file ( const char *placement_filename );
 
 extern int get_object_3d_troop_landing_route ( int object_index, vec3d **route );
 

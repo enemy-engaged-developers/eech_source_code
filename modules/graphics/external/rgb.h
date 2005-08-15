@@ -98,21 +98,21 @@ extern void blit_rgb_alpha_masked_sprite_zero_mask_value (unsigned char *rgb_dat
 
 extern void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (unsigned char *rgb_data, unsigned char *mask_data, rgb_alpha_masked_sprite_data *sprite_data, screen *user_screen);
 
-extern void convert_tga_to_rgb (char *tga_filename, char *rgb_filename);
+extern void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename);
 
-extern void convert_tga_to_rgb_alpha (char *tga_filename, char *rgb_alpha_filename);
+extern void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_filename);
 
-extern void convert_tga_to_alpha_mask (char *tga_filename, char *alpha_mask_filename);
+extern void convert_tga_to_alpha_mask (const char *tga_filename, char *const alpha_mask_filename);
 
-extern void convert_psd_to_rgb (char *psd_filename, char *rgb_filename);
+extern void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename);
 
-extern void convert_psd_to_rgb_alpha (char *psd_filename, char *rgb_alpha_filename);
+extern void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_filename);
 
-extern void convert_psd_to_alpha_mask (char *psd_filename, char *alpha_mask_filename);
+extern void convert_psd_to_alpha_mask (const char *psd_filename, const char *alpha_mask_filename);
 
-extern void convert_and_dither_psd_to_rgb_alpha ( char *psd_filename, char *rgb_alpha_filename );
+extern void convert_and_dither_psd_to_rgb_alpha ( const char *psd_filename, const char *rgb_alpha_filename );
 
-extern void convert_and_dither_psd_to_rgb ( char *psd_filename, char *rgb_filename );
+extern void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_filename );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

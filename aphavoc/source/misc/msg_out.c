@@ -103,7 +103,7 @@ struct MESSAGE_ACTION_TYPE
 		message,
 		*actions;
 
-	unsigned char
+	char
 		*title,
 		**action_text;
 
@@ -179,9 +179,9 @@ static void deinitialise_messages (void);
 
 static void initialise_message_database (void);
 
-static message_action_type *create_message_database_list (message_categories type, int value, void ((*function) (message_type message)), int number_of_actions, unsigned char *title);
+static message_action_type *create_message_database_list (message_categories type, int value, void ((*function) (message_type message)), int number_of_actions, const char *title);
 
-static void add_message_action_to_database (message_action_type *parent, int index, message_categories type, int value, int keycode, unsigned char *text);
+static void add_message_action_to_database (message_action_type *parent, int index, message_categories type, int value, int keycode, const char *text);
 
 static void create_leaf_message_action (message_categories type, int value, void ((*function) (message_type message)));
 
@@ -221,9 +221,9 @@ static void send_pilot_keyboard_message (message_type message);
 
 static void send_wingman_keyboard_message (message_type message);
 
-static unsigned char *get_wingman_message_text (message_categories message_type);
+static const char *get_wingman_message_text (message_categories message_type);
 
-static unsigned char *get_wingman_attack_my_target_text (entity *sender, entity *wingman);
+static const char *get_wingman_attack_my_target_text (entity *sender, entity *wingman);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1121,12 +1121,12 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-message_action_type *create_message_database_list (message_categories type, int value, void ((*function) (message_type message)), int number_of_actions, unsigned char *title)
+message_action_type *create_message_database_list (message_categories type, int value, void ((*function) (message_type message)), int number_of_actions, const char *title)
 {
 	message_action_type
 		*new_message_action;
 
-	unsigned char
+	const char
 		*text;
 
 	new_message_action = (message_action_type *) malloc_fast_mem (sizeof (message_action_type));
@@ -1160,8 +1160,8 @@ message_action_type *create_message_database_list (message_categories type, int 
 		new_message_action->keycodes = malloc_fast_mem (sizeof (int) * number_of_actions);
 		memset (new_message_action->keycodes, 0, sizeof (int) * number_of_actions);
 
-		new_message_action->action_text = malloc_fast_mem (sizeof (unsigned char *) * number_of_actions);
-		memset (new_message_action->action_text, 0, sizeof (unsigned char *) * number_of_actions);
+		new_message_action->action_text = malloc_fast_mem (sizeof (char *) * number_of_actions);
+		memset (new_message_action->action_text, 0, sizeof (char *) * number_of_actions);
 	}
 
 	new_message_action->next = message_database;
@@ -1201,9 +1201,9 @@ void create_leaf_message_action (message_categories type, int value, void ((*fun
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_message_action_to_database (message_action_type *parent, int index, message_categories type, int value, int keycode, unsigned char *text)
+void add_message_action_to_database (message_action_type *parent, int index, message_categories type, int value, int keycode, const char *text)
 {
-	unsigned char
+	const char
 		*translated_text;
 
 	ASSERT (parent);
@@ -1366,10 +1366,11 @@ void message_set_input_events (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void send_text_message (entity *sender, entity *target, message_text_types type, unsigned char *text)
+void send_text_message (entity *sender, entity *target, message_text_types type, const char *text)
 {
-	unsigned char
-		*kb,
+	const char
+		*kb;
+	char
 		*pm,
 		*parsed_message;
 
@@ -1569,7 +1570,7 @@ void send_simple_message (message_type message)
 
 void send_wingman_message_to_human_player (entity *sender, message_categories message_type, entity *wingman)
 {
-	unsigned char
+	const char
 		*text;
 
 	ASSERT (sender);
@@ -1621,12 +1622,12 @@ void comms_shortcut_attack_my_target (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char *get_wingman_message_text (message_categories message_type)
+const char *get_wingman_message_text (message_categories message_type)
 {
 	int
 		loop;
 
-	unsigned char
+	const char
 		*text;
 
 	loop = 0;
@@ -1652,7 +1653,7 @@ unsigned char *get_wingman_message_text (message_categories message_type)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char *get_wingman_attack_my_target_text (entity *sender, entity *wingman)
+const char *get_wingman_attack_my_target_text (entity *sender, entity *wingman)
 {
 	entity
 		*target;
@@ -1669,7 +1670,7 @@ unsigned char *get_wingman_attack_my_target_text (entity *sender, entity *wingma
 	int
 		int_heading;
 
-	unsigned char
+	const char
 		*target_description;
 
 	ASSERT (sender);

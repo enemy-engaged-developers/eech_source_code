@@ -121,7 +121,7 @@ ui_object
 	*screen_resolution_button,
 	*screen_accept_button;
 
-static unsigned char
+static const char
 	*detail_text[3],
 	*option_boolean_text[2],
 	*option_gcard_text[2];
@@ -192,7 +192,7 @@ void notify_show_graphics_page (void)
 			{
 				set_ui_object_text (card_selection_button, device->name);
 
-				preprocess_translation_object_size (card_selection_button_graphic, card_selection_button, &device->name, 1, RESIZE_OPTION_CYCLE_BUTTON);
+				preprocess_translation_object_size (card_selection_button_graphic, card_selection_button, ( const char * * ) &device->name, 1, RESIZE_OPTION_CYCLE_BUTTON);
 
 				found = 1;
 

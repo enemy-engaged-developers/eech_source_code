@@ -64,15 +64,15 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void save_psd_screen ( char *filename );
+extern void save_psd_screen ( const char *filename );
 
-extern void write_psd_screen_file ( char *filename, int width, int height, int pitch, unsigned char *data );
+extern void write_psd_screen_file ( const char *filename, int width, int height, int pitch, unsigned char *data );
 
-extern void write_psd_rgb_file ( char *filename, int width, int height, int pitch, unsigned char *data );
+extern void write_psd_rgb_file ( const char *filename, int width, int height, int pitch, unsigned char *data );
 
-extern void write_psd_greyscale ( char *filename, int width, int height, int pitch, unsigned char *data );
+extern void write_psd_greyscale ( const char *filename, int width, int height, int pitch, unsigned char *data );
 
-extern void write_psd_colourindex_and_alpha ( char *filename, int width, int height, int pitch, unsigned char *data );
+extern void write_psd_colourindex_and_alpha ( const char *filename, int width, int height, int pitch, unsigned char *data );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

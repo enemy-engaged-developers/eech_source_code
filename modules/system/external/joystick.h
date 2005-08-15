@@ -241,3 +241,4 @@ typedef struct {
 extern AxisInfo_t AxisInfo[16*8];
 extern int AxisCount;
 // Retro 10Jul2004 end
+

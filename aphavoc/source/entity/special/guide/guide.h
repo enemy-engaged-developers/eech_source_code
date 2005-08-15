@@ -100,7 +100,7 @@ enum GUIDE_CRITERIA_TYPES
 
 typedef enum GUIDE_CRITERIA_TYPES guide_criteria_types;
 
-extern unsigned char
+extern const char
 	*guide_criteria_type_names [NUM_GUIDE_CRITERIA_TYPES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

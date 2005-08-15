@@ -80,7 +80,7 @@ typedef enum STATUS_MESSAGE_TYPES status_message_types;
 
 extern void initialise_status_message (void);
 
-extern void set_status_message (char *s, status_message_types type);
+extern void set_status_message (const char *s, status_message_types type);
 
 extern int get_status_message_displayed (void);
 

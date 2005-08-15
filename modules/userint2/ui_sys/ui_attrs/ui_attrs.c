@@ -272,10 +272,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -291,10 +291,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -309,10 +309,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -327,10 +327,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_gradient_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_colour_gradient_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -346,10 +346,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_gradient_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -364,10 +364,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_colour_gradient_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -435,10 +435,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -454,10 +454,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -472,10 +472,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -600,10 +600,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -619,10 +619,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -637,10 +637,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -670,10 +670,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -689,10 +689,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -707,10 +707,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -1113,10 +1113,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -1132,10 +1132,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -1150,10 +1150,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -1168,10 +1168,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
@@ -1187,10 +1187,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_end (obj, rc.red, rc.green, rc.blue, rc.alpha);
 
@@ -1205,10 +1205,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				real_colour
 					rc;
 
-				rc.red = va_arg (pargs, char);
-				rc.green = va_arg (pargs, char);
-				rc.blue = va_arg (pargs, char);
-				rc.alpha = va_arg (pargs, char);
+				rc.red = va_arg (pargs, int);
+				rc.green = va_arg (pargs, int);
+				rc.blue = va_arg (pargs, int);
+				rc.alpha = va_arg (pargs, int);
 
 				set_ui_object_selected_font_colour_start (obj, rc.red, rc.green, rc.blue, rc.alpha);
 

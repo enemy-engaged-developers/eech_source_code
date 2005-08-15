@@ -115,7 +115,7 @@ void initialise_status_message (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_status_message (char *s, status_message_types type)
+void set_status_message (const char *s, status_message_types type)
 {
 	ASSERT ((type >= 0) && (type < NUM_STATUS_MESSAGE_TYPES));
 
@@ -228,7 +228,7 @@ static void display_eject_message (void)
 	int
 		display_message;
 
-	char
+	const char
 		*s;
 
 	float
@@ -277,8 +277,9 @@ static void display_eject_message (void)
 
 static void display_time_acceleration (void)
 {
+	const char
+		*s;
 	char
-		*s,
 		buffer[80];
 
 	float

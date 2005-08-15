@@ -145,7 +145,7 @@ void initialise_campaign_screen_save_page_objects (void)
 
 static void save_session (ui_object *obj, void *arg)
 {
-	unsigned char
+	const char
 		*filename;
 
 	ASSERT (get_current_game_session ());
@@ -209,9 +209,9 @@ static int valid_filename_symbol (unsigned char c)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void parse_filename (unsigned char *text, int max_length)
+void parse_filename (char *text, int max_length)
 {
-	unsigned char
+	char
 		*kb,
 		*pm,
 		*parsed_text;
@@ -256,6 +256,8 @@ void parse_filename (unsigned char *text, int max_length)
 	//
 
 	strcpy (text, parsed_text);
+
+	free_mem ( parsed_text );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,8 +266,10 @@ void parse_filename (unsigned char *text, int max_length)
 
 void filename_input_function ( ui_object *obj, void *arg )
 {
-	unsigned char
+	const char
 		*text;
+	char *
+		copy;
 		
 	text = get_ui_object_text (save_filename_input);
 
@@ -273,9 +277,14 @@ void filename_input_function ( ui_object *obj, void *arg )
 	{
 		if (strlen (text) > 0)
 		{
-			parse_filename (text, FILENAME_MAX_LENGTH);
+			copy = malloc_fast_memory ( strlen ( text ) + 1 );
+			strcpy ( copy, text );
 
-			set_ui_object_text (save_current_filename, text);
+			parse_filename (copy, FILENAME_MAX_LENGTH);
+
+			set_ui_object_text (save_current_filename, copy);
+
+			free_mem ( copy );
 		}
 	}
 
@@ -290,7 +299,7 @@ void filename_input_function ( ui_object *obj, void *arg )
 
 static void save_game_function (ui_object *obj, void *arg)
 {
-	unsigned char
+	const char
 		*text;
 				
 	#if DEBUG_MODULE
@@ -375,7 +384,7 @@ void build_save_file_list (void)
 	extension [1] = extension [0];
 	extension [0] = 'S';
 
-	strcat (full_filename, &extension);
+	strcat (full_filename, extension);
 
 	directory_listing = get_first_directory_file (full_filename);
 
@@ -416,8 +425,10 @@ void build_save_file_list (void)
 
 static void notify_save_file_list (ui_object *obj, void *arg)
 {
-	unsigned char
+	const char
 		*text;
+	char *
+		copy;
 		
 	text = get_ui_object_text (obj);
 
@@ -425,9 +436,14 @@ static void notify_save_file_list (ui_object *obj, void *arg)
 	{
 		if (strlen (text) > 0)
 		{
-			parse_filename (text, FILENAME_MAX_LENGTH);
+			copy = malloc_fast_memory ( strlen ( text ) + 1 );
+			strcpy ( copy, text );
 
-			set_ui_object_text (save_current_filename, text);
+			parse_filename (copy, FILENAME_MAX_LENGTH);
+
+			set_ui_object_text (save_current_filename, copy);
+
+			free_mem ( copy );
 		}
 	}
 
@@ -442,7 +458,7 @@ static void notify_save_file_list (ui_object *obj, void *arg)
 
 static void update_save_page_objects (ui_object *obj, void *arg)
 {
-	unsigned char
+	const char
 		*text;
 
 	set_ui_object_drawable (page_back_button, get_campaign_history_valid ());

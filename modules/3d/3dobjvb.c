@@ -464,7 +464,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 	next_vertex_buffer_index = 3;
 
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &plain_vertices, NULL );
+	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices, NULL );
 
 	if ( FAILED ( ret ) )
 	{
@@ -472,7 +472,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 		debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
 	}
 
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &textured_vertices, NULL );
+	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices, NULL );
 
 	if ( FAILED ( ret ) )
 	{
@@ -480,7 +480,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 		debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
 	}
 
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &lightmap_vertices, NULL );
+	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices, NULL );
 
 	if ( FAILED ( ret ) )
 	{
@@ -590,7 +590,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 								if ( current_lightmap_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
 								
-									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &lightmap_vertices, NULL );
+									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices, NULL );
 								
 									if ( FAILED ( ret ) )
 									{
@@ -743,7 +743,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 								if ( current_textured_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
 								
-									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &textured_vertices, NULL );
+									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices, NULL );
 								
 									if ( FAILED ( ret ) )
 									{
@@ -895,7 +895,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 							if ( current_plain_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 							{
 							
-								ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, &plain_vertices, NULL );
+								ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices, NULL );
 							
 								if ( FAILED ( ret ) )
 								{
@@ -1686,9 +1686,9 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		switch ( type )
 		{
 
-			case D3D_VB_PLAIN_TYPE:		ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, &plain_vertices, NULL ); break;
-			case D3D_VB_TEXTURED_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, &textured_vertices, NULL ); break;
-			case D3D_VB_LIGHTMAP_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, &lightmap_vertices, NULL ); break;
+			case D3D_VB_PLAIN_TYPE:		ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &plain_vertices, NULL ); break;
+			case D3D_VB_TEXTURED_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &textured_vertices, NULL ); break;
+			case D3D_VB_LIGHTMAP_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &lightmap_vertices, NULL ); break;
 		}
 
 #if REPORT_RERENDER

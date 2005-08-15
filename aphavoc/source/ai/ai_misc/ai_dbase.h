@@ -115,7 +115,7 @@ extern void initialise_ai_database (void);
 
 extern void deinitialise_ai_database (void);
 
-extern void load_ai_sector_data (char *filename);
+extern void load_ai_sector_data (const char *filename);
 
 extern void initialise_population_name_database (void);
 

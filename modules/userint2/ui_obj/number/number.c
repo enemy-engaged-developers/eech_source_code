@@ -109,7 +109,8 @@ void adjust_number_function (event *ev)
 {
 
 	char
-		new_number [32],
+		new_number [32];
+	const char
 		*str_number;
 
 	int

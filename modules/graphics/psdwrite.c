@@ -85,7 +85,7 @@ unsigned char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void save_psd_screen ( char *filename )
+void save_psd_screen ( const char *filename )
 {
 
 	write_psd_screen_file ( filename,
@@ -99,7 +99,7 @@ void save_psd_screen ( char *filename )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void write_psd_screen_file ( char *filename, int width, int height, int pitch, unsigned char *data )
+void write_psd_screen_file ( const char *filename, int width, int height, int pitch, const unsigned char *data )
 {
 
 	FILE
@@ -115,7 +115,7 @@ void write_psd_screen_file ( char *filename, int width, int height, int pitch, u
 		x,
 		y;
 
-	unsigned char
+	const unsigned char
 		*graphic_data;
 
 	unsigned short int
@@ -365,7 +365,7 @@ void write_psd_screen_file ( char *filename, int width, int height, int pitch, u
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void write_psd_rgb_file ( char *filename, int width, int height, int pitch, unsigned char *data )
+void write_psd_rgb_file ( const char *filename, int width, int height, int pitch, const unsigned char *data )
 {
 
 	FILE
@@ -381,7 +381,7 @@ void write_psd_rgb_file ( char *filename, int width, int height, int pitch, unsi
 		x,
 		y;
 
-	unsigned char
+	const unsigned char
 		*graphic_data,
 		*source_line;
 
@@ -620,7 +620,7 @@ void write_psd_rgb_file ( char *filename, int width, int height, int pitch, unsi
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void write_psd_greyscale ( char *filename, int width, int height, int pitch, unsigned char *data )
+void write_psd_greyscale ( const char *filename, int width, int height, int pitch, const unsigned char *data )
 {
 
 	FILE
@@ -789,7 +789,7 @@ void write_psd_greyscale ( char *filename, int width, int height, int pitch, uns
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void write_psd_colourindex_and_alpha ( char *filename, int width, int height, int pitch, unsigned char *data )
+void write_psd_colourindex_and_alpha ( const char *filename, int width, int height, int pitch, const unsigned char *data )
 {
 
 	FILE
@@ -805,7 +805,7 @@ void write_psd_colourindex_and_alpha ( char *filename, int width, int height, in
 		x,
 		y;
 
-	unsigned char
+	const unsigned char
 		*graphic_data;
 
 	fp = safe_fopen ( filename, "wb" );
@@ -931,7 +931,7 @@ void write_psd_colourindex_and_alpha ( char *filename, int width, int height, in
 	for ( y = 0; y < height; y++ )
 	{
 
-		unsigned char
+		const unsigned char
 			*source_line;
 
 		source_line = graphic_data;
@@ -966,7 +966,7 @@ void write_psd_colourindex_and_alpha ( char *filename, int width, int height, in
 	for ( y = 0; y < height; y++ )
 	{
 
-		unsigned char
+		const unsigned char
 			*source_line;
 
 		source_line = graphic_data;
@@ -1032,7 +1032,7 @@ void write_psd_colourindex_and_alpha ( char *filename, int width, int height, in
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int run_length_encode_data ( unsigned char *source_data, char *result, int length )
+int run_length_encode_data ( const unsigned char *source_data, char *result, int length )
 {
 
 	int
@@ -1051,7 +1051,7 @@ int run_length_encode_data ( unsigned char *source_data, char *result, int lengt
 			//
 
 			*result++ = 0;
-			*result++ = ( ( char * ) source_data )[0];
+			*result++ = ( ( const char * ) source_data )[0];
 
 			length = 0;
 			data_written += 2;
@@ -1067,7 +1067,7 @@ int run_length_encode_data ( unsigned char *source_data, char *result, int lengt
 			{
 
 				*result++ = -1;										// Duplicate next byte twice
-				*result++ = ( ( char * ) source_data )[0];
+				*result++ = ( ( const char * ) source_data )[0];
 	
 				length = 0;
 				data_written += 2;
@@ -1076,8 +1076,8 @@ int run_length_encode_data ( unsigned char *source_data, char *result, int lengt
 			{
 
 				*result++ = 1;											// Copy the next 2 bytes literally
-				*result++ = ( ( char * ) source_data )[0];
-				*result++ = ( ( char * ) source_data )[1];
+				*result++ = ( ( const char * ) source_data )[0];
+				*result++ = ( ( const char * ) source_data )[1];
 
 				length = 0;
 				data_written += 3;
@@ -1121,7 +1121,7 @@ int run_length_encode_data ( unsigned char *source_data, char *result, int lengt
 				}
 
 				*result++ = -( run_length - 1 );
-				*result++ = ( ( char * ) source_data )[0];
+				*result++ = ( ( const char * ) source_data )[0];
 
 				source_data += run_length;
 				data_written += 2;
@@ -1190,7 +1190,7 @@ int run_length_encode_data ( unsigned char *source_data, char *result, int lengt
 				for ( count = 0; count < run_length; count++ )
 				{
 
-					*result++ = ( ( char * ) source_data )[count];
+					*result++ = ( ( const char * ) source_data )[count];
 				}
 
 				source_data += run_length;
