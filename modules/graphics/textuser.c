@@ -3638,6 +3638,7 @@ void load_warzone_override_textures (const char *warzone_name)
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
 	else
+		// Casm 16AUG05 - If the map is not map01-map06 we must force texture-colour to be zero
 		command_line_texture_colour = 0;
 
 	for (count = 0; count < MAX_TEXTURES; count++)

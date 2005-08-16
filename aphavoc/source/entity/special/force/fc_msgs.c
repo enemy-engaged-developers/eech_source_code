@@ -271,8 +271,10 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 					{
 						switch (sub_type)
 						{
+							// Casm 16AUG05 Apache is always player-controllable
 							case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
 							case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+							// Casm 16AUG05 Havoc is always player-controllable
 							case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
 							case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 							{
@@ -280,6 +282,9 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 
 								break;
 							}
+							// Casm 16AUG05 begin
+							// All of the following helos can employ weapons
+							// If they are player-controllable player may win
 							case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 							case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
 							case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
@@ -290,6 +295,7 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 
 								break;
 							}
+							// Casm 16AUG05 end Thanks to Craigmire!
 						}
 					}
 

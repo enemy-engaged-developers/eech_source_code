@@ -257,6 +257,7 @@ void parse_filename (char *text, int max_length)
 
 	strcpy (text, parsed_text);
 
+	// Casm 16AUG05 Fixed memory leak
 	free_mem ( parsed_text );
 }
 

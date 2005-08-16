@@ -773,6 +773,7 @@ BOOL unlock_texture ( screen *texture )
 	ASSERT ( texture->locked );
 	ASSERT ( texture->data );
 
+	// Casm 16AUG05 Set the second argument to NULL - Thanks to Tamlin!
 	ddrval = IDirectDrawSurface7_Unlock ( texture->surface_locked, NULL );
 
 	if ( ddrval != DD_OK )
