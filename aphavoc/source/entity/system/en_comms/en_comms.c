@@ -665,7 +665,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			int
 				index;
 
-			char
+			const char
 				*buffer;
 
 			ASSERT (!en);
@@ -678,7 +678,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_entity_safe_index (index);
 
-			buffer = va_arg (pargs, char *);
+			buffer = va_arg (pargs, const char *);
 
 			pack_entity_attributes (buffer);
 
@@ -2408,7 +2408,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			string_types
 				type;
 
-			char
+			const char
 				*s;
 
 			ASSERT (en);
@@ -2419,7 +2419,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_string_type (type);
 
-			s = va_arg (pargs, char *);
+			s = va_arg (pargs, const char *);
 
 			pack_string (en, type, s);
 

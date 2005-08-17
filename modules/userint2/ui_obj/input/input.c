@@ -174,7 +174,7 @@ void input_entry (int key_code)
 		
 					sprintf (c, "%c", key_code);
 		
-					set_ui_object_add_text (input_object, (char *) c);
+					set_ui_object_add_text (input_object, c);
 				}
 
 				set_ui_font_type ( font );
@@ -205,7 +205,7 @@ void input_entry (int key_code)
 		
 				sprintf (c, "%c", key_code);
 		
-				set_ui_object_add_text (input_object, (char *) c);
+				set_ui_object_add_text (input_object, c);
 
 				set_ui_font_type ( font );
 			}
@@ -215,7 +215,7 @@ void input_entry (int key_code)
 
 			sprintf (c, "%c", key_code);
 
-			set_ui_object_add_text (input_object, (char *) c);
+			set_ui_object_add_text (input_object, c);
 		}
 	}
 }

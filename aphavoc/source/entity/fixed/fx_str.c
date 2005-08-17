@@ -103,7 +103,7 @@ static char
 
 #if SET_LOCAL_REQUIRED
 
-static void set_local_string (entity *en, string_types type, char *s)
+static void set_local_string (entity *en, string_types type, const char *s)
 {
 	fixed
 		*raw;
@@ -139,7 +139,7 @@ static void set_local_string (entity *en, string_types type, char *s)
 
 #if SET_CLIENT_SERVER_REQUIRED
 
-static void set_remote_string (entity *en, string_types type, char *s)
+static void set_remote_string (entity *en, string_types type, const char *s)
 {
 	ASSERT (s);
 
@@ -160,7 +160,7 @@ static void set_remote_string (entity *en, string_types type, char *s)
 
 #if SET_CLIENT_SERVER_REQUIRED
 
-static void set_server_string (entity *en, string_types type, char *s)
+static void set_server_string (entity *en, string_types type, const char *s)
 {
 	ASSERT (s);
 
@@ -181,7 +181,7 @@ static void set_server_string (entity *en, string_types type, char *s)
 
 #if SET_CLIENT_SERVER_REQUIRED
 
-static void set_client_string (entity *en, string_types type, char *s)
+static void set_client_string (entity *en, string_types type, const char *s)
 {
 	ASSERT (s);
 

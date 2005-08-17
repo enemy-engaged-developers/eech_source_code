@@ -538,7 +538,7 @@ typedef enum INT_PACK_TYPES int_pack_types;
 
 struct INT_TYPE_DATA
 {
-	char
+	const char
 		*name;
 
 	int_pack_types

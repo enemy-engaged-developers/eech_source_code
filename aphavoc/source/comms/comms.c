@@ -1552,7 +1552,7 @@ void request_resend_packet (connection_list_type *connection, int frame_id, int 
 		new_stub_packet = new_stub_packet->next;
 	}
 	
-	buffer_ptr = (char *) &buffer;
+	buffer_ptr = (char *) buffer;
 
 	quick_set_list_item (buffer_ptr, int, frame_id);
 

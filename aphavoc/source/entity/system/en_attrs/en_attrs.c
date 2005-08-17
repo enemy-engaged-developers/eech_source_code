@@ -305,12 +305,12 @@ void set_local_entity_attributes (entity *en, char *pargs)
 				string_types
 					type;
 
-				char
+				const char
 					*s;
 
 				type = get_list_item (pargs, string_types);
 
-				s = get_list_item (pargs, char *);
+				s = get_list_item (pargs, const char *);
 
 				set_local_entity_raw_string (en, type, s);
 
@@ -354,7 +354,7 @@ void set_local_entity_attributes (entity *en, char *pargs)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void pack_entity_attributes (char *buffer)
+void pack_entity_attributes (const char *buffer)
 {
 	entity_attributes
 		attr;
@@ -509,14 +509,14 @@ void pack_entity_attributes (char *buffer)
 				string_types
 					type;
 
-				char
+				const char
 					*s;
 
 				type = get_list_item (buffer, string_types);
 
 				pack_string_type (type);
 
-				s = get_list_item (buffer, char *);
+				s = get_list_item (buffer, const char *);
 
 				//
 				// pack the string contents not the string pointer

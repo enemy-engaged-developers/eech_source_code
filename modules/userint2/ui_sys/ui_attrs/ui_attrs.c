@@ -114,10 +114,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            char
+            const char
                *text;
 
-            text = va_arg (pargs, char *);
+            text = va_arg (pargs, const char *);
 
             set_ui_object_add_text (obj, text);
 
@@ -140,12 +140,12 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 				ui_object_types
 					type;
 
-				char
+				const char
 					*text;
 
 				type = va_arg (pargs, ui_object_types);
 
-				text = va_arg (pargs, char *);
+				text = va_arg (pargs, const char *);
 
 				x_size = get_ui_object_x_size (obj);
 
@@ -1382,10 +1382,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            char
+            const char
                *text;
 
-            text = va_arg (pargs, char *);
+            text = va_arg (pargs, const char *);
 
             set_ui_object_text (obj, text);
 
@@ -1459,10 +1459,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            char
+            const char
                *tool_tips;
 
-            tool_tips = va_arg (pargs, char *);
+            tool_tips = va_arg (pargs, const char *);
 
             set_ui_object_tool_tips (obj, tool_tips);
 

@@ -311,7 +311,7 @@ struct GAME_TEXT_LANGUAGE_TYPE
 	int
 		language;
 
-	char
+	const char
 		*text;
 
 	int

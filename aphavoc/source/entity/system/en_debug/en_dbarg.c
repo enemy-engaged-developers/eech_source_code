@@ -706,12 +706,12 @@ void debug_log_entity_args (entity_debug_modes mode, entity_debug_args arg, enti
 			string_types
 				type;
 
-			char
+			const char
 				*s;
 
 			type = va_arg (pargs, string_types);
 
-			s = va_arg (pargs, char *);
+			s = va_arg (pargs, const char *);
 
 			ASSERT (s);
 
