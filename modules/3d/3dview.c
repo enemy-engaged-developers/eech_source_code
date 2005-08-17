@@ -390,14 +390,14 @@ void realise_3d_clip_extents ( env_3d *env )
 	// Retro 31Oct2004 - Halloween code :O
 	// if set to FALSE, this will enable higher LODs out to farer distances, and obliterate FPS near cities..
 	//
+	// Casm 19AUG05 Need to compare tans of half of the angles!
 	if (!command_line_high_lod_hack)
 	{
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan ( rad ( 59.99 ) );
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( 59.99 / 2 ) );
 	}
 	else	// Retro 31Oct2004 (all)
 	{
-		// Casm 19AUG05 tan of angle of PI/2 and more is not what you expect to calculate
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan ( rad ( command_line_max_fov <= 85 ? command_line_max_fov : 85 ) );
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( command_line_max_fov / 2 ) );
 	}
 }
 
