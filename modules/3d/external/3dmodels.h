@@ -1819,7 +1819,7 @@ typedef enum OBJECT_3D_CAMERA_INDEX_NUMBERS object_3d_camera_index_numbers;
 struct OBJECT_3D_INFORMATION
 {
 
-	char
+	const char
 		*name;
 
 	float

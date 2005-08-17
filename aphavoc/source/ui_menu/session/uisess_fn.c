@@ -948,7 +948,7 @@ void build_session_list (void)
 
 void rename_session (void)
 {
-	unsigned char
+	char
 		*ptr,
 		old_name [1024],
 		filename [1024],

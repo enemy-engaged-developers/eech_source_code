@@ -1659,7 +1659,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			// (entity_comms_messages message, entity *sender, entity *target, int type, char *message)
 			//
 
-			unsigned char
+			const char
 				*message;
 
 			entity
@@ -1678,7 +1678,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_int_value (en, INT_TYPE_MESSAGE_TEXT_TYPE, type);
 
-			message = va_arg (pargs, unsigned char *);
+			message = va_arg (pargs, const char *);
 
 			if (message_text_type_send_string (type))
 			{
@@ -4090,7 +4090,7 @@ void process_received_entity_comms_messages (void)
 				message_text_types
 					type;
 
-				unsigned char
+				char
 					*string,
 					message [STRING_TYPE_MESSAGE_LENGTH];
 

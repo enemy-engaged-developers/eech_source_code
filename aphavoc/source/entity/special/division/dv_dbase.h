@@ -66,7 +66,7 @@
 
 struct DIVISION_DATA
 {
-	unsigned char
+	char
 		*full_name;
 
 	entity_sub_types

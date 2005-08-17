@@ -105,7 +105,7 @@ typedef struct PILOT pilot;
 struct CLIENT_PILOT_REQUEST_DATA
 {
 
-	unsigned char
+	char
 		name [STRING_TYPE_PLAYERS_NAME_MAX_LENGTH + 1];
 
 	int
@@ -145,7 +145,7 @@ typedef struct CLIENT_PILOT_REQUEST_DATA client_pilot_request_data;
 
 extern void set_pilot_entity (entity *en);
 
-extern entity *create_new_pilot_entity (unsigned char *name, entity_sides side, int rank, entity_sub_types sub_type, int unique_id, int difficulty);
+extern entity *create_new_pilot_entity (const char *name, entity_sides side, int rank, entity_sub_types sub_type, int unique_id, int difficulty);
 
 extern void create_server_pilot (void);
 
@@ -163,9 +163,9 @@ extern void draw_high_score_table (void);
 
 extern void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_object *red_list_object);
 
-extern unsigned char *get_high_score_table_entry (int index, int *side, int *kills);
+extern const char *get_high_score_table_entry (int index, int *side, int *kills);
 
-extern unsigned char *get_high_score_table_first_name (void);
+extern const char *get_high_score_table_first_name (void);
 
 extern void draw_special_restart_text (void);
 

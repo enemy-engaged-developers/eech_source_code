@@ -169,7 +169,7 @@ void add_mission_to_common_list (entity *en, int text_type)
 	ui_object
 		*new_item;
 
-	unsigned char
+	char
 		buffer [128];
 
 	ASSERT (en);
@@ -312,7 +312,7 @@ void add_group_to_common_list (entity *en, int text_type)
 	ui_object
 		*new_item;
 
-	unsigned char
+	char
 		ext1 [5],
 		ext2 [5],
 		buffer [128];
@@ -504,7 +504,7 @@ void add_base_to_common_list (entity *en, int text_type)
 	ui_object
 		*new_item;
 
-	unsigned char
+	char
 		buffer [128];
 
 	ASSERT (en);

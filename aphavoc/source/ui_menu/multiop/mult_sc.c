@@ -1334,7 +1334,7 @@ void define_multi_player_setup_objects (void)
 
 void notify_com_port_function ( ui_object *obj, void *arg )
 {
-	unsigned char
+	char
 		text [2];
 
    int

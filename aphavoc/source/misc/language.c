@@ -146,7 +146,7 @@ void initialise_alphabet_pointers (void)
 	language_struct
 		*current;
 
-	unsigned char
+	char
 		a,
 		letter;
 
@@ -479,10 +479,11 @@ void initialise_language_database (void)
 	int
 		valid_file;
 
-	unsigned char
+	char
 		directory_search_path[256],
-		*filename,
 		full_filename[256];
+	const char
+		*filename;
 
 	translation_list = NULL;
 
@@ -682,7 +683,7 @@ void test_translation_list (void)
 int get_next_file_translation (FILE *file_ptr, char *buffer, int size)
 {
 
-	unsigned char
+	char
 		temp [BUFFER_SIZE];
 		
 	int
@@ -766,7 +767,7 @@ void preprocess_language_file (FILE *fp, FILE *fp_out)
 	file_tags
 		tag;
 		
-	unsigned char
+	char
 		buffer [BUFFER_SIZE];
 				
 	int
@@ -896,11 +897,12 @@ void preprocess_language_database (void)
 		count = 0,
 		valid_file;
 
-	unsigned char
+	char
 		directory_search_path [256],
-		*filename,
 		full_filename [256],
 		output_filename [256];
+	const char
+		*filename;
 
 	sprintf (directory_search_path, "%s\\*.txt", LANGUAGE_DIRECTORY);
 

@@ -66,7 +66,7 @@
 
 struct KEYSITE_DATA
 {
-   char
+   const char
       *full_name,
 		*short_name;
 

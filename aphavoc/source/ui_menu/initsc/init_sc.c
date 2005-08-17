@@ -94,7 +94,7 @@ void initialise_init_screen (void)
 		y1,
 		y2;
 
-	unsigned char
+	char
 		buf[128];
 
 	x1 = 0.0;

@@ -137,7 +137,7 @@ static message_action_type
 static int
 	in_flight_messages = FALSE;
 
-static unsigned char
+static char
 	keyboard_message [MAX_KEYBOARD_MESSAGE_LENGTH],
 	attack_my_target_message [512];
 
@@ -154,7 +154,7 @@ static struct WINGMAN_MESSAGE_TEXT_TABLE
 	message_categories
 		message_type;
 
-	unsigned char
+	const char
 		*text;
 
 } wingman_message_text_table[] =
@@ -1283,7 +1283,7 @@ void enter_wingman_message (message_type message)
 void message_input_entry (int key_code)
 {
 
-	unsigned char
+	char
 		c [3];
 
 	int
@@ -1778,7 +1778,7 @@ void display_in_flight_outgoing_messages (void)
 		y,
 		indent;
 
-	unsigned char
+	char
 		s [200],
 		pilot_name [STRING_TYPE_PLAYERS_NAME_MAX_LENGTH + 10],
 		*message_name;

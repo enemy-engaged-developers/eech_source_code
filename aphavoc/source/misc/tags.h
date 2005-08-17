@@ -349,23 +349,23 @@ extern int get_next_file_enum (FILE *file_ptr, const char *enum_strings [], int 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void register_file_tag_variable (char *variable_name, int *variable);
+extern void register_file_tag_variable (const char *variable_name, int *variable);
 
-extern void unregister_file_tag_variable (char *variable_name);
+extern void unregister_file_tag_variable (const char *variable_name);
 
-extern int *get_file_tag_variable (char *variable_name);
+extern int *get_file_tag_variable (const char *variable_name);
 
-extern int if_file_tag_variable (char *variable_name, char *operator, int value);
+extern int if_file_tag_variable (const char *variable_name, const char *operator, int value);
 
-extern int if_file_tag_operator (int value1, char *operator, int value2);
+extern int if_file_tag_operator (int value1, const char *operator, int value2);
 
-extern int set_file_tag_variable (char *variable_name, int value);
+extern int set_file_tag_variable (const char *variable_name, int value);
 
-extern int get_variable_id (char *name);
+extern int get_variable_id (const char *name);
 
-extern int get_operator_id (char *name);
+extern int get_operator_id (const char *name);
 
-extern char *get_variable_name (int id);
+extern const char *get_variable_name (int id);
 
 extern char get_operator_name (int id);
 

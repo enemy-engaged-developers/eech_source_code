@@ -245,7 +245,7 @@ struct LAYER_CONTROL_BUTTON_TYPE
 	void
 		*function;
 
-	const unsigned char
+	const char
 		*graphic_filename;
 };
 
@@ -876,7 +876,7 @@ void draw_group_waypoint_routes (ui_object *obj, entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void load_map_icon (int icon, int side, unsigned char *filename)
+static void load_map_icon (int icon, int side, const char *filename)
 {
 	ASSERT ((side >= 0) && (side < NUM_ENTITY_SIDES));
 
@@ -893,7 +893,7 @@ static void load_map_icon (int icon, int side, unsigned char *filename)
 
 static void load_key_icons (int layer)
 {
-	unsigned char
+	char
 		filename [256];
 
 	ASSERT ((layer >= 0) && (layer < NUM_MAP_LAYER_CONTROLS));
@@ -915,9 +915,9 @@ static void load_key_icons (int layer)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void load_misc_3state_icons (unsigned char *name, texture_graphic **icons)
+static void load_misc_3state_icons (const char *name, texture_graphic **icons)
 {
-	unsigned char
+	char
 		filename [256];
 
 	sprintf (filename, "graphics\\ui\\cohokum\\key\\%sprp.psd", name);
@@ -2859,7 +2859,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	map_icon_type
 		icon;
 
-	unsigned char
+	char
 		name [32];
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
@@ -2959,7 +2959,7 @@ void map_draw_symbol (ui_object *obj, vec3d *pos, unsigned char tag, font_types 
 	vec3d
 		screen_pos;
 
-	unsigned char
+	char
 		s [2];
 
 	ASSERT (pos);
@@ -4421,7 +4421,7 @@ void map_draw_events (ui_object *obj)
 void map_draw_grid (ui_object *obj)
 {
 
-	unsigned char
+	char
 		scale_text [32],
 		grid_number [10];
 

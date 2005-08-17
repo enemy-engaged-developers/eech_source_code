@@ -117,7 +117,7 @@ void show_base_page (entity *base, int force_update)
 	int
 		x, z;
 
-	unsigned char
+	char
 		s [128];
 
 	ASSERT (base);
@@ -224,7 +224,7 @@ void initialise_campaign_screen_base_page_objects (void)
 
 static void update_base_page_objects (ui_object *obj, void *arg)
 {
-	unsigned char
+	char
 		s [128];
 
 	entity
@@ -527,7 +527,7 @@ void define_campaign_screen_base_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		output [128];
 
 	/////////////////////////////////////////////////////////////////

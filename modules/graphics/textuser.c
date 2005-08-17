@@ -295,10 +295,10 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 
 //VJ 050619 the following functions are used in custom texture mods, in this file only
 // only the funtion void load_warzone_override_textures (char *warzone_name) is global 
-int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename );
+int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
 void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES]);
 void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], char *mapname );
+int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
 void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES]);
 void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
 void clear_texture_override_names ( void );
@@ -2359,7 +2359,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 
 //VJ 050619 this function assumes that the name has no path information 
 //and is the filename with extention only, which it should be to work with the rest
-int match_system_texture_name ( char *name )
+int match_system_texture_name ( const char *name )
 {
 
 	char
@@ -2435,7 +2435,7 @@ int match_system_texture_name ( char *name )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *get_system_texture_name ( int index )
+const char *get_system_texture_name ( int index )
 {
 
 	if ( ( index >= 0 ) && ( index < number_of_system_textures ) )
@@ -3319,7 +3319,7 @@ void load_texture_override ( overridename system_texture_override_names[MAX_TEXT
 	char
 		*buffer, *bufferswap;
 
-	char
+	const char
 		*full_override_texture_filename;//[128];
 		
 
@@ -3450,7 +3450,7 @@ void load_texture_override ( overridename system_texture_override_names[MAX_TEXT
 // and puts them in the override names structure. 
 // NOTE: dds files take preference over bmp files.
 // NOTE: if a name already exists from previous calls to this function they are overwritten
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], char *mapname )
+int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname )
 {
 
 	directory_file_list
@@ -3461,8 +3461,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		index = 0,
 		count = 0;
 
-	unsigned char
-		directory_search_path[256],
+	char
+		directory_search_path[256];
+	const char
 		*filename;
 
 	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
@@ -3477,7 +3478,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		{
 			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
+				filename = get_directory_file_filename ( directory_listing );
 
 				retrieved_index = match_system_texture_name ( filename );
 
@@ -3486,8 +3487,10 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", strupr(TEXTURE_OVERRIDE_DIRECTORY), strupr(mapname), strupr(filename));	
-					strcpy(system_texture_override_names[index].name, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
+					strupr(system_texture_override_names[index].path);
+					strcpy(system_texture_override_names[index].name, filename);
+					strupr(system_texture_override_names[index].name);
 					system_texture_override_names[index].type = 1;
 					count++;
 				}
@@ -3509,7 +3512,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		{
 			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
-				filename = strupr(get_directory_file_filename ( directory_listing ));
+				filename = get_directory_file_filename ( directory_listing );
 
 				retrieved_index = match_system_texture_name ( filename );
 
@@ -3519,8 +3522,10 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", strupr(TEXTURE_OVERRIDE_DIRECTORY), strupr(mapname), strupr(filename));	
-					strcpy(system_texture_override_names[index].name, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
+					strupr(system_texture_override_names[index].path);
+					strcpy(system_texture_override_names[index].name, filename);
+					strupr(system_texture_override_names[index].name);
 					system_texture_override_names[index].type = 2;
 
 					count++;
@@ -3795,7 +3800,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename )
+int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename )
 {  	   	
 	if (bmih.biCompression != BI_RGB)
 	{

@@ -752,7 +752,8 @@ void process_game_initialisation_phases (void)
 			{
 
 				char
-					text [128],
+					text [128];
+				const char
 					*name;
 
 				name = get_player_log_name (get_current_player_log ());

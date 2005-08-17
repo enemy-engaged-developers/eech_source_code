@@ -109,7 +109,7 @@ static campaign_screen_weapon_loading_button_type
 static texture_graphic
 	*bar_graphic;
 
-static unsigned char
+static char
 	buffer [192];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -713,7 +713,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 		x2,
 		y2;
 
-	unsigned char
+	char
 		string [256];
 
 	int

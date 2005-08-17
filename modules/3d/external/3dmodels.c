@@ -1566,7 +1566,7 @@ object_3d_information object_3d_information_database[] =
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-char *object_3d_enumeration_names[] =
+const char *object_3d_enumeration_names[] =
 {
 
 	"INVALID_OBJECT",

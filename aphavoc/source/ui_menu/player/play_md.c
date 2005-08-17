@@ -863,7 +863,7 @@ void highlight_us_medal_info (ui_object *obj, void *arg)
 	player_log_type
 		*player;
 		
-	unsigned char
+	char
 		name_text [128],
 		info_text [128];
 
@@ -915,7 +915,7 @@ void highlight_russian_medal_info (ui_object *obj, void *arg)
 	player_log_type
 		*player;
 		
-	unsigned char
+	char
 		name_text [128],
 		info_text [128];
 

@@ -2519,8 +2519,9 @@ static int trigger_triggered (campaign_trigger_type *this_campaign_trigger)
 	int
 		return_value;
 
+	const char
+		*variable_name;
 	char
-		*variable_name,
 		operator_name;
 
 	return_value = FALSE;

@@ -567,7 +567,7 @@ void restore_helicopter_entity (entity *en, vec3d *pos, operational_state_types 
 
 void notify_gunship_entity_mission_completed (entity *en, entity *task)
 {
-	unsigned char
+	char
 		s [128];
 
 	ASSERT (en);

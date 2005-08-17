@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static unsigned char
+static char
 	string [128];
 
 static float
@@ -102,7 +102,7 @@ static void draw_campaign_time (ui_object *obj, void *arg)
 		minutes,
 		seconds;
 
-	static unsigned char
+	static char
 		s [128];
 
 	ASSERT (get_session_entity ());
@@ -124,7 +124,7 @@ static void draw_campaign_time (ui_object *obj, void *arg)
 
 static void draw_campaign_time_acceleration (ui_object *obj, void *arg)
 {
-	static unsigned char
+	static char
 		s [16];
 
 	if (get_time_acceleration () == TIME_ACCELERATION_PAUSE)
@@ -190,7 +190,7 @@ static void draw_campaign_current_message (ui_object *obj, void *arg)
 
 static void draw_campaign_frame_rate (ui_object *obj, void *arg)
 {
-	static unsigned char
+	static char
 		s [16];
 
 	sprintf (s, "FR: %.1f", 1.0 / get_delta_time_average ());
@@ -366,7 +366,7 @@ static void display_mouse_over_keysite_entity_description (entity *en, ui_object
 	entity_sub_types
 		sub_type;
 
-	static unsigned char
+	static char
 		buf [128];
 
 	ASSERT (en);

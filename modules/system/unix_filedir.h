@@ -98,9 +98,9 @@ extern directory_file_list *get_first_directory_file ( const char *path );
 
 extern int get_next_directory_file ( directory_file_list *list );
 
-extern char *get_directory_filename ( directory_file_list *list );
+extern const char *get_directory_filename ( directory_file_list *list );
 
-extern char *get_directory_file_filename ( directory_file_list *list );
+extern const char *get_directory_file_filename ( directory_file_list *list );
 
 extern time_t get_directory_file_last_write_time ( directory_file_list *list );
 

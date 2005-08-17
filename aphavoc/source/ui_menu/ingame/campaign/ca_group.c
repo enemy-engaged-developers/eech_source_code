@@ -124,7 +124,7 @@ static void update_member_list (ui_object *obj, void *arg);
 
 int show_group_page (entity *group, int force_update)
 {
-	static unsigned char
+	static char
 		buffer [192];
 
 	entity
@@ -825,7 +825,7 @@ void define_campaign_screen_group_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		output [128];
 
 	/////////////////////////////////////////////////////////////////

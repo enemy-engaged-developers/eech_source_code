@@ -66,7 +66,7 @@
 
 struct FORCE
 {
-	unsigned char
+	char
 		force_name [STRING_TYPE_FORCE_NAME_MAX_LENGTH + 1];
 
 	list_root

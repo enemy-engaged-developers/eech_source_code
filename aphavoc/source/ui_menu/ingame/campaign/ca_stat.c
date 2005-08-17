@@ -133,7 +133,7 @@ static void show_stats_objectives_page (void)
 	ui_object
 		*new_item;
 
-	unsigned char
+	char
 		s [128];
 
 	side = get_global_gunship_side (); 
@@ -360,7 +360,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 		x2, y2,
 		c, t, w;
 
-	unsigned char
+	char
 		s [16];
 
 	texture_graphic
@@ -455,7 +455,7 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 		x2, y2,
 		c, t, w;
 
-	unsigned char
+	char
 		s [16];
 
 	texture_graphic
@@ -738,7 +738,7 @@ void notify_page_objective_highlight_function (ui_object *obj, void *arg)
 	entity_sub_types
 		keysite_type;
 
-	static unsigned char
+	static char
 		text [2048];
 
 	if ((int) arg == BUTTON_STATE_DOWN)
@@ -815,7 +815,7 @@ void define_campaign_screen_stats_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		string [256];
 
 	int

@@ -67,7 +67,7 @@
 struct OBJECT_3D_INFORMATION
 {
 
-	char
+	const char
 		*name;
 
 	float

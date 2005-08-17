@@ -85,8 +85,9 @@
 struct BRIEFING_SUBSTITUTION_TYPE
 {
 
+	const char
+		*string;
 	char
-		*string,
 		*position_ptr;
 
 	void
@@ -136,7 +137,7 @@ const char
 	*cis_medal_type_names [NUM_MEDAL_TYPES],
 	*rank_type_names [NUM_PILOT_RANKS];
 
-unsigned char
+const char
 	*brief_filenames [] =
 	{
 		"brief_en.dat",

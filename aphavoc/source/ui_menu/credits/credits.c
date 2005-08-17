@@ -146,7 +146,7 @@ void initialise_credits_screen (void)
 		x2,
 		y2;
 
-	unsigned char
+	char
 		string [256];
 
 	x2 = 1.0;

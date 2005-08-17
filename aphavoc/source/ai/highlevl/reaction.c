@@ -320,7 +320,7 @@ void create_reaction_to_recon_task_completed (entity *task)
 	float
 		priority;
 
-	unsigned char
+	char
 		s [256];
 
 	ASSERT (task);

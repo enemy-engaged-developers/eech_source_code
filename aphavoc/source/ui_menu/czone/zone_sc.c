@@ -208,7 +208,7 @@ void notify_combat_zone_back_button (ui_object *obj, void *arg)
 void load_3d_terrain_game_data (void)
 {
 
-	unsigned char
+	char
 		filename [1024];
 
 	session_list_data_type

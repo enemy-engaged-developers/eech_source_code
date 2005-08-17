@@ -938,7 +938,7 @@ extern void save_global_options_data (void);
 
 extern void load_global_options_data (void);
 /*
-extern char *get_localisation_text (game_text_translation_type *list, int button_id);
+extern const char *get_localisation_text (game_text_translation_type *list, int button_id);
 
 extern int get_localisation_x_position (game_text_translation_type *list, int button_id);
 

@@ -345,7 +345,7 @@ void initialise_campaign_screen_debriefing_page_objects (void)
 
 static void update_debriefing_page_objects (ui_object *obj, void *arg)
 {
-	unsigned char
+	char
 		s [128];
 
 	entity
@@ -367,7 +367,7 @@ static void update_debriefing_page_objects (ui_object *obj, void *arg)
 		int
 			result;
 
-		unsigned char
+		char
 			output [256];
 
 		result = get_local_entity_int_value (mission, INT_TYPE_TASK_COMPLETED);
@@ -567,7 +567,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		output [128];
 		
 	/////////////////////////////////////////////////////////////////

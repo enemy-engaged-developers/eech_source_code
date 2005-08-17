@@ -609,7 +609,7 @@ void notify_show_controller_page (void)
 	}
 	else
 	{
-		unsigned char
+		const char
 			*name[1];
 
 		set_ui_object_text (device_option_button, joystick_devices[get_global_joystick_device_index ()].device_name);
@@ -2699,7 +2699,7 @@ void notify_pedal_option_button_right ( ui_object *obj, void *arg )	// Retro 28A
 #if 0  //Retro10Jul2004_dead
 void notify_device_option_button ( ui_object *obj, void *arg )
 {
-	unsigned char
+	const char
 		*name[1];
 
 	if (number_of_joystick_devices > 1)
@@ -3216,7 +3216,7 @@ void notify_joylook_sensitivity_down_button ( ui_object *obj, void *arg )
 
 void draw_joylook_sensitivity ( ui_object *obj, void *arg )
 {
-	unsigned char
+	char
 		s [8];
 
 	ASSERT ((command_line_joylook_step > 0) && (command_line_joylook_step <= 100));
@@ -3253,7 +3253,7 @@ void notify_mouselook_sensitivity_down_button ( ui_object *obj, void *arg )
 
 void draw_mouselook_sensitivity ( ui_object *obj, void *arg )
 {
-	unsigned char
+	char
 		s [8];
 
 	ASSERT ((command_line_mouse_look_speed > 0) && (command_line_mouse_look_speed <= 20));

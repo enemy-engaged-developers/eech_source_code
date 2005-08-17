@@ -241,7 +241,7 @@ extern float get_completed_task_expire_time (void);
 
 extern const char *get_task_objective_string (entity *en);
 
-extern void get_task_objective_mfd_display_string (entity *en, unsigned char *s);
+extern void get_task_objective_mfd_display_string (entity *en, char *s);
 
 extern int get_task_friendly_fire_incidents (entity *task);
 

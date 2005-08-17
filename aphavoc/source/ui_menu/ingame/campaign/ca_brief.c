@@ -139,7 +139,7 @@ void show_briefing_page (entity *mission, int force_update)
 	static const char
 		*objective_name;
 
-	unsigned char
+	char
 		*text_ptr,
 		*dest_text_ptr;
 
@@ -519,7 +519,7 @@ void initialise_campaign_screen_briefing_page_objects (void)
 
 static void update_briefing_page_objects (ui_object *obj, void *arg)
 {
-	unsigned char
+	char
 		buffer [64],
 		s [128];
 
@@ -563,7 +563,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 			minutes,
 			seconds;
 
-		unsigned char
+		char
 			output [32];
 
 		if (get_local_task_list_type (mission) == LIST_TYPE_UNASSIGNED_TASK)
@@ -1187,7 +1187,7 @@ void define_campaign_screen_briefing_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		output [64];
 
 	/////////////////////////////////////////////////////////////////

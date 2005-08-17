@@ -391,7 +391,7 @@ void dedicated_screen_update_function (ui_object *obj, void *arg)
 		minutes,
 		seconds;
 
-	unsigned char
+	char
 		s [64];
 
 	ASSERT (command_line_comms_dedicated_server);

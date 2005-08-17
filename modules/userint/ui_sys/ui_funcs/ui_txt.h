@@ -66,7 +66,7 @@
 
 extern void (*fn_set_ui_object_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
 
-extern char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
+extern const char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
 
 extern void (*fn_set_ui_object_add_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
 
@@ -88,7 +88,7 @@ extern int (*fn_get_ui_object_hilight_font [NUM_UI_TYPES]) (ui_object *obj);
 
 extern void default_set_ui_object_text (ui_object *obj, char *text);
 
-extern char *default_get_ui_object_text (ui_object *obj);
+extern const char *default_get_ui_object_text (ui_object *obj);
 
 extern void default_set_ui_object_add_text (ui_object *obj, char *text);
 

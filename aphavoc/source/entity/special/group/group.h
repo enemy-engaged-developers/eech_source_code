@@ -174,7 +174,7 @@ typedef enum GROUP_CALLSIGN_TYPES group_callsign_types;
 struct GROUP_CALLSIGN_NAME_TYPE
 {
 
-	unsigned char
+	char
 		*callsign;
 
 	char
@@ -250,7 +250,7 @@ struct GROUP
 		unique_id						: NUM_UNIQUE_ID_BITS,
 		verbose_operational_state	: NUM_VERBOSE_OPERATIONAL_STATE_BITS;
 
-	unsigned char
+	char
 		division_name [STRING_TYPE_DIVISION_NAME_MAX_LENGTH + 1];
 };
 

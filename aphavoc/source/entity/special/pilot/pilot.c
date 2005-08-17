@@ -101,7 +101,7 @@ struct PILOT_SCORE_TYPE
 	entity_sides
 		side;
 	
-	unsigned char
+	char
 		name [STRING_TYPE_PLAYERS_NAME_MAX_LENGTH + 1];
 };
 
@@ -186,7 +186,7 @@ void send_pilot_joined_message (entity *en)
 	int
 		player_count;
 
-	unsigned char
+	char
 		text [200];
 
 	//
@@ -225,7 +225,7 @@ void send_pilot_quit_message (entity *en)
 	int
 		player_count;
 
-	unsigned char
+	char
 		text [200];
 
 	//
@@ -266,7 +266,7 @@ void send_pilot_quit_message (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-entity *create_new_pilot_entity (unsigned char *name, entity_sides side, int rank, entity_sub_types sub_type, int unique_id, int difficulty)
+entity *create_new_pilot_entity (const char *name, entity_sides side, int rank, entity_sub_types sub_type, int unique_id, int difficulty)
 {
 	entity
 		*en,
@@ -691,7 +691,7 @@ void draw_high_score_table_to_ui_object_list (ui_object *blue_list_object, ui_ob
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char *get_high_score_table_entry (int index, int *side, int *kills)
+const char *get_high_score_table_entry (int index, int *side, int *kills)
 {
 	pilot_score_type
 		*item;
@@ -722,7 +722,7 @@ unsigned char *get_high_score_table_entry (int index, int *side, int *kills)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char *get_high_score_table_first_name (void)
+const char *get_high_score_table_first_name (void)
 {
 	pilot_score_type
 		*item;

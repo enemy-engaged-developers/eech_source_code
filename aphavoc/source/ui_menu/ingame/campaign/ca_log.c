@@ -143,7 +143,7 @@ void add_message_to_campaign_log (int index)
 		minutes,
 		seconds;
 
-	unsigned char
+	char
 		*s;
 
 	message_log_type

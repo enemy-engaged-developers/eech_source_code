@@ -299,7 +299,7 @@ void build_chat_target_list (void)
 		*pilot,
 		*current_target;
 
-	static unsigned char
+	static char
 		s [128];
 
 	current_target = get_local_entity_safe_ptr (get_ui_object_item_number (chat_send_button));
@@ -525,7 +525,7 @@ int add_message_to_campaign_log (int index)
 		minutes,
 		seconds;
 
-	unsigned char
+	char
 		*s;
 
 	message_log_type
@@ -596,7 +596,7 @@ void define_campaign_screen_chat_page_objects (void)
 	ui_object
 		*page;
 
-	unsigned char
+	char
 		string [256];
 
 	/////////////////////////////////////////////////////////////////

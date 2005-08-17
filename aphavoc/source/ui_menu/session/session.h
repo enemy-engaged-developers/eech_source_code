@@ -101,7 +101,7 @@ typedef enum SESSION_LIST_TYPES session_list_types;
 struct SESSION_LIST_DATA_TYPE
 {
 
-   unsigned char
+   char
 		*displayed_title,
       *title;
 
@@ -116,7 +116,8 @@ struct SESSION_LIST_DATA_TYPE
       *join_session;
 
    char
-		*warzone_name,
+		*warzone_name;
+   char
 		data_path [256],
 		campaign_directory [64],
 		campaign_filename [64];

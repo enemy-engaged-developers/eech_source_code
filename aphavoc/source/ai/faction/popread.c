@@ -230,7 +230,7 @@ static void insert_airfield_buildings ( int side, object_3d_instance *instance )
 
 static void insert_keysite_or_city_object ( entity *city, entity *keysite, entity *keysite_group, entity_sides keysite_side, int object_number, float world_x, float world_y, float world_z, float heading );
 
-static unsigned char *get_keysite_name (float x, float z, entity_sides *side);
+static const char *get_keysite_name (float x, float z, entity_sides *side);
 
 static void initialise_object_3d_troop_landing_routes ( void );
 
@@ -262,7 +262,7 @@ static int
 	current_initial_sector_sides_x_length,
 	current_initial_sector_sides_z_length;
 
-char *blue_force_carrier_names[] =
+const char *blue_force_carrier_names[] =
 	{
 
 		"USS TARAWA",
@@ -281,7 +281,7 @@ char *blue_force_carrier_names[] =
 		"USS CARRIER 9",
 	};
 
-char *red_force_carrier_names[] =
+const char *red_force_carrier_names[] =
 	{
 
 		"BODRY",
@@ -1719,7 +1719,8 @@ void read_population_airfield_placements ( FILE *fp )
 					position;
 	
 				char
-					buffer [256],
+					buffer [256];
+				const char
 					*airfield_name;
 	
 				int
@@ -3914,7 +3915,7 @@ void insert_keysite_or_city_object ( entity *city, entity *keysite, entity *keys
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-unsigned char *get_keysite_name (float x, float z, entity_sides *side)
+static const char *get_keysite_name (float x, float z, entity_sides *side)
 {
 
 	float

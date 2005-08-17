@@ -526,7 +526,7 @@ void compile_multi_session_list (session_list_data_type **list)
 	connection_data_type
 		*this_connection;
 
-	unsigned char
+	char
 		text [128];
 
 	this_connection = direct_play_get_connection_data ();
@@ -623,7 +623,7 @@ void get_first_multi_session (session_list_data_type **list)
 	session_list_data_type
 		*this_session_list;
 
-	unsigned char
+	char
 		text [128];
 
 	this_connection = direct_play_get_connection_data ();
@@ -1073,7 +1073,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		value,
 		valid_file;
 
-	static unsigned char
+	static char
 		operator [64],
 		variable [64],
 		temp_warzone_name [128],
@@ -1160,7 +1160,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 				int
 					end_flag;
 
-				static unsigned char
+				static char
 					*ptr,
 					*last_ptr,
 					path [1024],

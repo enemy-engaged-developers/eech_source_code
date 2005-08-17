@@ -87,7 +87,7 @@ static ui_object
 	*clear_current_selections_button,
 	*quit_current_mission_button;
 
-static unsigned char
+static char
 	string [128];
 
 static int
@@ -1506,7 +1506,7 @@ static void update_selection_area (ui_object *obj, void *arg)
 
 void define_campaign_screen_selection_objects (void)
 {
-	unsigned char
+	char
 		string [256];
 		
 	float

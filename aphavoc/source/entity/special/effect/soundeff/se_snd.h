@@ -66,7 +66,7 @@
 
 extern void overload_sound_effect_sound_functions (void);
 
-extern unsigned char *get_sound_channel_name (int channel);
+extern const char *get_sound_channel_name (int channel);
 
 extern int get_sound_channel_volume (int channel);
 

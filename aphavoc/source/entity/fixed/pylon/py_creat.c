@@ -106,7 +106,7 @@ static int load_local_pylon_entities (unsigned char *name)
 		*pylon_node_file_ptr,
 		*pylon_link_file_ptr;
 
-	unsigned char
+	char
 		filename [1024];
 
 	session_list_data_type

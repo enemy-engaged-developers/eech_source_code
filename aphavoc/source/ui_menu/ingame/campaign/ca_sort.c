@@ -249,7 +249,7 @@ static void collapse_mission_list (mission_list_sort_type *sort_list, int *indic
 		loop,
 		index;
 
-	unsigned char
+	char
 		buffer [256];
 
 	ui_object
@@ -730,7 +730,7 @@ static void collapse_group_list (group_list_sort_type *sort_list, int *indices, 
 		type_count,
 		last_type;
 
-	unsigned char
+	char
 		buffer [256];
 
 	ui_object
@@ -1184,7 +1184,7 @@ void display_sorted_collapsed_base_list (entity *force)
 	entity
 		*keysite;
 
-	unsigned char
+	char
 		buffer [256];
 
 	ui_object

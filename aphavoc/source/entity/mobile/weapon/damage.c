@@ -726,8 +726,9 @@ void initialise_destroyed_object_database (void)
 		normal_object,
 		destroyed_object;
 
+	const char
+		*normal_object_string;
 	char
-		*normal_object_string,
 		*destroyed_object_string;
 
 	int

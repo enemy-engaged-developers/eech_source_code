@@ -341,7 +341,7 @@ void output_supply_heat_map (void)
 		numzeros = 4,
 		count = 0;
 
-	unsigned char
+	char
 		filename[13],
 		temp_string[7];
 	

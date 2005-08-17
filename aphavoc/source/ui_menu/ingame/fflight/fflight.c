@@ -228,7 +228,7 @@ void initialise_free_flight_screen (void)
 		x_size,
 		y_size;
 
-	unsigned char
+	char
 		string [256];
 
 	x_size = 1.0;

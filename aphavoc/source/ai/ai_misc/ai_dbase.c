@@ -226,7 +226,7 @@ void initialise_population_name_database (void)
 			case FILE_TAG_NAME:
 			{
 
-				unsigned char
+				char
 					name [128];
 
 				//

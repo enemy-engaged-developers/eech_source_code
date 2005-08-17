@@ -79,7 +79,7 @@ struct DIVISION
 		division_link,
 		division_headquarters_link;
 
-	unsigned char
+	char
 		division_name [STRING_TYPE_DIVISION_NAME_MAX_LENGTH + 1];
 };
 
@@ -125,9 +125,9 @@ extern entity *create_new_division (entity_sub_types type, entity_sides side, en
 
 extern entity *add_group_to_division (entity *group, entity *known_division);
 
-extern void get_number_extension (int number, unsigned char *extension);
+extern void get_number_extension (int number, char *extension);
 
-extern int set_local_division_name (entity *en, unsigned char *s);
+extern int set_local_division_name (entity *en, char *s);
 
 extern void initialise_division_database (void);
 

@@ -87,7 +87,7 @@ struct MESSAGE_LOG_TYPE
 	rgb_colour
 		colour;
 
-	unsigned char
+	char
 		*string;
 };
 
@@ -113,7 +113,7 @@ extern void display_in_flight_incoming_messages (void);
 
 extern void display_last_received_message (event *arg);
 
-extern void set_incoming_message (entity *sender, entity *target, message_text_types type, unsigned char *string);
+extern void set_incoming_message (entity *sender, entity *target, message_text_types type, char *string);
 
 extern void update_message_log (void);
 

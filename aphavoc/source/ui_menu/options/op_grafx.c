@@ -142,7 +142,7 @@ void notify_show_graphics_page (void)
 	int
 		found = 0;
 
-	unsigned char
+	char
 		text [32];
 				
 	new_width = global_options.visual_screen_width;
@@ -1290,7 +1290,7 @@ display_device *get_card_selection_device ( void )
 
 void notify_screen_resolution_button (ui_object *obj, void *arg)
 {
-	unsigned char
+	char
 		text [12];
 
 	int

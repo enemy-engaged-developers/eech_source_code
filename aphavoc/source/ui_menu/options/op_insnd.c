@@ -113,7 +113,7 @@ static void draw_channel_muted (ui_object *obj, void *arg)
 
 static void draw_channel_volume (ui_object *obj, void *arg)
 {
-	unsigned char
+	char
 		s [8];
 
 	int

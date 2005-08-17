@@ -212,7 +212,7 @@ typedef struct PLAYER_SIDE_LOG_TYPE player_side_log_type;
 struct PLAYER_LOG_TYPE
 {
 
-	unsigned char
+	char
 		*name;
 
 	int
@@ -257,7 +257,7 @@ extern void set_current_player_log (player_log_type *log);
 
 extern player_log_type *get_player_log_next (player_log_type *log);
 
-extern char *get_player_log_name (player_log_type *log);
+extern const char *get_player_log_name (player_log_type *log);
 
 extern int get_player_rank_from_points ( int points );
 extern int get_player_points_from_rank ( int rank );

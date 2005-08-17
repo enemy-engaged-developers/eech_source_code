@@ -553,7 +553,7 @@ void initialise_campaign_screen (void)
 		x_size,
 		y_size;
 
-	unsigned char
+	char
 		string [256];
 
 	blue_campaign_complete_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\map\\bvictory.psd" );

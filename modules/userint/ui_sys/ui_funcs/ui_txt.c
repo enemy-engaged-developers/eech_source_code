@@ -71,7 +71,7 @@
 
 void (*fn_set_ui_object_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
 
-char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
+const char *(*fn_get_ui_object_text [NUM_UI_TYPES]) (ui_object *obj);
 
 void (*fn_set_ui_object_add_text [NUM_UI_TYPES]) (ui_object *obj, char *text);
 
@@ -102,7 +102,7 @@ void default_set_ui_object_text (ui_object *obj, char *text)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char *default_get_ui_object_text (ui_object *obj)
+const char *default_get_ui_object_text (ui_object *obj)
 {
 
 	obj;

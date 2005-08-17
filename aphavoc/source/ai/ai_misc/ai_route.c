@@ -94,11 +94,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int read_road_route_node_data (unsigned char *name);
+static int read_road_route_node_data (char *name);
 
-static int read_road_route_node_positions (unsigned char *name);
+static int read_road_route_node_positions (char *name);
 
-static int read_road_route_node_link_positions (unsigned char *name);
+static int read_road_route_node_link_positions (char *name);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,7 +326,7 @@ void read_road_route_data (void)
 //			}
 //
 
-int read_road_route_node_data (unsigned char *name)
+static int read_road_route_node_data (char *name)
 {
 
 	int
@@ -544,7 +544,7 @@ int read_road_route_node_data (unsigned char *name)
 // list of vec3d positions
 //
 
-int read_road_route_node_positions (unsigned char *name)
+static int read_road_route_node_positions (char *name)
 {
 
    FILE
@@ -636,7 +636,7 @@ int read_road_route_node_positions (unsigned char *name)
 // List of node_link_data for each position and cost.
 //
 
-int read_road_route_node_link_positions (unsigned char *name)
+static int read_road_route_node_link_positions (char *name)
 {
 
    FILE

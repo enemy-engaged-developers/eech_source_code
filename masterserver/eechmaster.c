@@ -48,7 +48,7 @@ int MaxServerAge = 240; //Servers are removed after 240 seconds of inactivity
 
 
 
-char header1[3000] = {"
+const char header1[3000] = {"
 <HTML><HEAD><TITLE>Enemy Engaged Server List</TITLE><ALKALINE skip>
 <META content=\"A list of all active EECH multiplayer servers\" 
 name=description>
@@ -75,7 +75,7 @@ name=description>
 		&nbsp;
 		"};
 //		 7
-char header2[3000] = {"
+const char header2[3000] = {"
 		</B></FONT></TD>
 	      </TR>
 		</TBODY></TABLE>
@@ -93,7 +93,7 @@ char header2[3000] = {"
 		&nbsp; 
 		"};
 //		0
-char header3[3000] = {"
+const char header3[3000] = {"
 		</B></FONT></TD>
 	      </TR>
 		</TBODY></TABLE>
@@ -152,7 +152,7 @@ char header3[3000] = {"
 		</TR>
 		"};
 
-char trailer[1024] = {"
+const char trailer[1024] = {"
 		</TBODY></TABLE>
             <TABLE border=0 cellPadding=0 cellSpacing=0 height=1>
               <TBODY>
@@ -162,42 +162,42 @@ char trailer[1024] = {"
 </CENTER>
 		"};
 
-char step1a[1024] = {"
+const char step1a[1024] = {"
               <TR bgColor=#e0e0e0>
                 <TD align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>&nbsp;
 		"};
-char step1b[1024] = {"
+const char step1b[1024] = {"
               <TR bgColor=#b0b0b0>
                 <TD align=left borderColor=#c0c0c0><FONT face=Tahoma size=1><B>&nbsp;
 		"};
 //		Development Server at draid.dhs.org
-char step2[1024] = 
+const char step2[1024] = 
 {"
 		</B></FONT></TD>
                 <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		"};
 //		0 curclients
-char step3[1024] = {"
+const char step3[1024] = {"
 		</B></FONT></TD>
                 <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		"};
 //		8 maxclients
-char step4[1024] = {"
+const char step4[1024] = {"
 		</B></FONT></TD>
                 <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		"};
 //		192.168.0.200
-char step5[1024] = {"
+const char step5[1024] = {"
 		</B></FONT></TD>
                 <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		"};
 //		v1.0
-char step6[1024] = {"
+const char step6[1024] = {"
 		</B></FONT></TD>
                 <TD align=middle borderColor=#c0c0c0><FONT face=Tahoma size=1><B>
 		"};
 //		4h20m
-char step7[1024] = {"
+const char step7[1024] = {"
 		</B></FONT></TD>
 		</TR>
 		"};
@@ -263,7 +263,7 @@ if (f=fopen("//var//www//html//eech//index.html", "w"))
 
 
 
-void WriteLog(char s1[])
+void WriteLog(const char s1[])
 {
     FILE *f;
 

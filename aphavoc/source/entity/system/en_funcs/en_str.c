@@ -247,7 +247,7 @@ void initialise_entity_string_default_functions (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void pack_string (entity *en, string_types type, char *s)
+void pack_string (entity *en, string_types type, const char *s)
 {
 	ASSERT ((type >= 0) && (type < NUM_STRING_TYPES));
 
@@ -266,7 +266,7 @@ void pack_string (entity *en, string_types type, char *s)
 
 	while (*s)
 	{
-		pack_unsigned_data (*s++, 8);//DEBUG//
+		pack_unsigned_data ((unsigned char)*s++, 8);//DEBUG//
 	}
 
 	pack_unsigned_data (0, 8);//DEBUG//

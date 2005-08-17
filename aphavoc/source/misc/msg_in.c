@@ -381,7 +381,7 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static entity *format_incoming_message (message_log_type *message, entity *sender, entity *target, unsigned char *raw_string)
+static entity *format_incoming_message (message_log_type *message, entity *sender, entity *target, char *raw_string)
 {
 	message_text_types
 		type;
@@ -759,7 +759,7 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_incoming_message (entity *sender, entity *target, message_text_types type, unsigned char *string)
+void set_incoming_message (entity *sender, entity *target, message_text_types type, char *string)
 {
 	message_log_type
 		*temp,
@@ -2152,14 +2152,14 @@ int get_incoming_in_flight_message_flag (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void display_in_flight_incoming_messages ()
+void display_in_flight_incoming_messages (void)
 {
 	int
 		hours,
 		minutes,
 		seconds;
 
-	unsigned char
+	char
 		*s;
 
 	message_log_type
@@ -2357,7 +2357,7 @@ void unpack_local_message_log (pack_modes mode)
 	message_log_type
 		*log;
 
-	static unsigned char
+	static char
 		s [STRING_TYPE_MESSAGE_LENGTH + 4];
 		
    ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));

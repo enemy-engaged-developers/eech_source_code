@@ -87,7 +87,7 @@ typedef enum POPULATION_NAME_TYPES population_name_types;
 struct POPULATION_NAME_DATABASE_TYPE
 {
 
-	unsigned char
+	char
 		*name;
 
 	population_name_types

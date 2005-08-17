@@ -172,7 +172,7 @@ void notify_multi_player_setup (void)
 	connection_data_type
 		*this_connection;
 
-	unsigned char
+	char
 		text [10];
 
 //	if ( get_ui_object_drawable ( obj ) )
