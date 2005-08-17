@@ -193,6 +193,29 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_SIDE:
 		////////////////////////////////////////
 		{
+			// Casm 18AUG05 begin We need to place this group to another force if side is changed
+			if ( raw->side != ENTITY_SIDE_UNINITIALISED && value != ENTITY_SIDE_UNINITIALISED && raw->side != value )
+			{
+				entity
+					*old_force,
+					*new_force;
+				list_types
+					list_type;
+
+				list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+				if (list_type != LIST_TYPE_INVALID)
+				{
+					old_force = get_local_force_entity (raw->side);
+					new_force = get_local_force_entity (value);
+
+					delete_local_entity_from_parents_child_list (en, list_type);
+					remove_group_type_from_force_info (old_force, raw->sub_type);
+					insert_local_entity_into_parents_child_list (en, list_type, new_force, NULL);
+					add_group_type_to_force_info (new_force, raw->sub_type);
+				}
+			}
+			// Casm 18AUG05 end
+
 			raw->side = value;
 
 			break;

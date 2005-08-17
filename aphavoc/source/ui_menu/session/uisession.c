@@ -439,7 +439,8 @@ session_list_data_type *add_session (const char *title, session_list_types type,
    // add to session list
    //
 
-	if (unique_session)
+	// Casm 18AUG05 Allow to show different saved games with the same name
+	if (unique_session || type == SESSION_LIST_TYPE_RESTORE)
 	{
 
 		if (insert_position)

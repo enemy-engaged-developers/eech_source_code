@@ -396,7 +396,8 @@ void realise_3d_clip_extents ( env_3d *env )
 	}
 	else	// Retro 31Oct2004 (all)
 	{
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan (rad ((float)command_line_max_fov));
+		// Casm 19AUG05 tan of angle of PI/2 and more is not what you expect to calculate
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle ) / tan ( rad ( command_line_max_fov <= 85 ? command_line_max_fov : 85 ) );
 	}
 }
 
