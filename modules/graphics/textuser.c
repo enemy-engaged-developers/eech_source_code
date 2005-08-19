@@ -298,13 +298,13 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 // void restore_default_textures( void );
 
 //VJ 050814 cleaned up differences between dds and bmp download
-int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename );
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], char *mapname );
+int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
+int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
 void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES]);
 void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
 void clear_texture_override_names ( void );
-screen *load_dds_file_screen (char *full_override_texture_filename, int step);
-screen *load_bmp_file_screen (char *full_override_texture_filename);
+screen *load_dds_file_screen (const char *full_override_texture_filename, int step);
+screen *load_bmp_file_screen (const char *full_override_texture_filename);
 //VJ 050814 dynamic water
 void load_texture_water( int warzonenr );
 
@@ -3310,7 +3310,7 @@ void clear_texture_override_names ( void )
 //VJ 050618 load the bmp files, assumed not mipmapped 
 void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES])
 {
-	char
+	const char
 		*full_override_texture_filename;//[128];
 	int
 		count;
@@ -3352,7 +3352,7 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 // and puts them in the override names structure. 
 // NOTE: dds files take preference over bmp files.
 // NOTE: if a name already exists from previous calls to this function they are overwritten
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], char *mapname )
+int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname )
 {
 
 	directory_file_list
@@ -3366,7 +3366,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 	unsigned char
 		directory_search_path[256];
 	char	
-		*filename;
+		filename[256];
 
 	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
@@ -3380,7 +3380,8 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		{
 			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
-				filename = strupr((char *)get_directory_file_filename ( directory_listing ));
+				strcpy(filename, get_directory_file_filename ( directory_listing ));
+				strupr(filename);
 
 				retrieved_index = match_system_texture_name ( filename );
 
@@ -3391,8 +3392,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", strupr(TEXTURE_OVERRIDE_DIRECTORY), strupr(mapname), strupr(filename));	
-					strcpy(system_texture_override_names[index].name, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+					strupr(system_texture_override_names[index].path);
+					strcpy(system_texture_override_names[index].name, filename);
 					system_texture_override_names[index].type = 1;
 					count++;
 				}
@@ -3414,7 +3416,8 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		{
 			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
-				filename = strupr((char *)get_directory_file_filename ( directory_listing ));
+				strcpy(filename, get_directory_file_filename ( directory_listing ));
+				strupr(filename);
 
 				retrieved_index = match_system_texture_name ( filename );
 
@@ -3425,8 +3428,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 #endif
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", strupr(TEXTURE_OVERRIDE_DIRECTORY), strupr(mapname), strupr(filename));	
-					strcpy(system_texture_override_names[index].name, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+					strupr(system_texture_override_names[index].path);
+					strcpy(system_texture_override_names[index].name, filename);
 					system_texture_override_names[index].type = 2;
 
 					count++;
@@ -3724,7 +3728,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_filename )
+int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename )
 {  	   	
 	if (bmih.biCompression != BI_RGB)
 	{
@@ -3760,7 +3764,7 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, char *full_override_texture_fil
 
 void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES])
 {
-	char
+	const char
 		*full_override_texture_filename;//[128];
 
 	int
@@ -3957,7 +3961,7 @@ void load_texture_water( int warzonenr )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050814 load a mipmapped and alpha dds file and link to a screen
-screen *load_dds_file_screen (char *full_override_texture_filename, int step)
+screen *load_dds_file_screen (const char *full_override_texture_filename, int step)
 {
 		int
 			temp;
@@ -4089,7 +4093,7 @@ screen *load_dds_file_screen (char *full_override_texture_filename, int step)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050814 load a non-mipmapped and non-alpha bitmap and link to a screen
-screen *load_bmp_file_screen (char *full_override_texture_filename)
+screen *load_bmp_file_screen (const char *full_override_texture_filename)
 {
 	FILE
 		*fp;

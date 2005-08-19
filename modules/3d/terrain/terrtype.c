@@ -950,7 +950,8 @@ void initialise_3d_custom_terrain_types( void )
 				change_river_texture = 0;  
 			if (change_sea_texture == terrain_water_information[1].number)
 				change_sea_texture = 0;  
-			if (change_sea_texture == terrain_water_information[2].number)
+			// Casm 19AUG05 - Reservoir here, not sea
+			if (change_reservoir_texture == terrain_water_information[2].number)
 				change_reservoir_texture = 0;  
 
 			//	start_of_river_textures = first bottom texture, start_of_river_textures+1 is the start of the transparent changing textures
