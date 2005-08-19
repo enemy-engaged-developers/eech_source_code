@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
-<link rel=Edit-Time-Data href="./readme-filer/editdata.mso">
+<link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
 <title>EECH Community Release Version 1.6.0W14</title>
 <style>
 <!--
@@ -55,13 +55,14 @@ body {
 	background-color: #dddddd;
 }
 .style46 {font-size: 10}
+.style47 {color: #663399}
 -->
 </style>
 </head>
 <body class="Normal" lang=SV>
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" bgcolor="#FFFFFF"><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.1 W5</span></h1>
+    <td width="800" bgcolor="#FFFFFF"><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W2</span></h1>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
       </div>
@@ -72,11 +73,11 @@ body {
       </div>
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
-      <p align=right style='text-align:right; font-style: italic;'><span lang=EN-GB>Last edited: 07 mar 2005</span></p>
+      <p align=right style='text-align:right; font-style: italic;'><span lang=EN-GB>Last edited by Gotcha: 20 aug 2005</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
-        <li><a href="#installation"><span
-     lang=EN-GB>Installation and additional files needed </span></a></li>
+        <li><span
+     lang=EN-GB>Installation and additional files needed </span></li>
         <li><a href="#trouble">Troubleshooting</a></li>
         <li><a href="#gameinfo"><span
      lang=EN-GB>General game info</span> (flyable choppers, WUT, MP)</a> </li>
@@ -91,56 +92,83 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 161W5?</span></h2>
+      <h2><span lang=EN-GB>What's NEW in EECH 162W2 ?</span></h2>
+      <p><em><strong>(since version 161W5, this exe replaces 162W1T7)</strong></em></p>
       <ol>
-        <li>Texture colour mod: setting the <em>texture_colour </em>parameter in eech.ini the landscape gets its colour directly of the terrain textures. Must be used with special texture packs still to be released. </li>
-        <li>Wideview: pilot's head pitch is added to the settings. Ctrl-\ and num7/9 to set (mouselook must be off). Ctrl-\ now toggles the wideview edit (Alt-\ is gone). </li>
-        <li>HUD: scalable for blue choppers by using Alt-F1 from 70 to 140%. HUD background can be set to a transparent sunglass colour by pressing Shift-K. </li>
-        <li> View range increased: left and right looking to +135 and -135 degrees in 3D cockpits, and up/down looking angles to 75 and 40 degrees.</li>
-        <li>6 Degrees of Freedom movement for TrackIR with Vector Expension, use eech.ini setting TIR_6DOF=1</li>
-        <li>Bug fix: TrackIR stops when you move outside its range. New trackir.dll included for this. </li>
-        <li>Bug fixes: 
-        radar intialization, cannon tracking,   F3/F4 in apache 3D cockpit.</li>
-        <li>Outside view zoom with mousewheel enabled.</li>
+        <li>In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
+        <li>Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting).
+          <ul>
+            <li>texture_colour=1 </li>
+            <li>mipmapping=1 </li>
+            <li>texture_filtering =1 </li>
+          </ul>
+        </li>
+        <li>Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1), download the <a href="#installation">texture pack</a></li>
+        <li>For texture modders, (untested) alpha blending support for dds textures</li>
+        <li>Autosave and Quicksave (Ctrl-Z), eech.ini setting autosave=n (n= nr of minutes)</li>
+        <li>Three brightness levels of PNVS night vision, press Ctrl-N when in game. </li>
+        <li>Hardware sound support (4 speakers) </li>
+        <li>YrachIR vector support (eech.ini: TIR_6DOF=1)</li>
+        <li>Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card</li>
+        <li>Screenshots can now be taken when in 32bit mode</li>
+        <li>Numerous bug fixes and code cleaning </li>
       </ol>
-      <h3>New  in version 161W4 </h3>
-      <ol>
-        <li>A fix for the new Saitek X52 controller.</li>
-        <li>Use the Apache Havoc maps (Georgia, Thailand, Cuba) available in <em>eeahmapssetup1.0.exe</em>  (117 MByte !) and can be downloaded from <a
-     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>Werewolf's site</span></a>.</li>
-        <li>Slave cannon to the viewpoint without autolocking the targets. This works when acqusition systems are off or when IHADSS/HIDSS/HMS is used - depending on the <a href="#eechini">eech.ini </a>setting. Works with TrackIR! You switch in-game with Ctrl-NumDel.</li>
-        <li>Custom made textures: textures can now be read from a texture directory and its subdirectories. use the <em>texturesetup.exe</em> from <a href="http://www.planet.nl/%7Ejette073/gotcha">Gotcha's site</a>.</li>
-        <li>Extended UI control page.</li>
-        <li>A first attempt at a 3D Apache cockpit in-game.  Set 3d_cockpit=1 in <a href="#eechini">eech.ini</a>.</li>
-      </ol>      
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and additional files </span></h2>
       <h3 class="p">Basic Install </h3>
-      <p class="p">NOTE: all files have to be installed to the Razorworks main directory. The install files will be put in the proper place. </p>
-      <p class="p">If you do not own Enemy Engaged - Apache Havoc you can skip the first two steps </p>
+      <p class="p">If you do not own EE - Apache Havoc you can skip the first two steps </p>
       <ol>
-        <li><span lang=EN-GB>Install EEAH from CD and run once to unpack the graphics files. </span></li>
+        <li><span lang=EN-GB>Install EE - Apache Havoc from CD and run once to unpack the graphics files. </span></li>
         <li><span lang=EN-GB>Patch EEAH up to <a href="http://www.razorworks.com/enemyengaged/mainframe.html#Patches" target="_blank">patch 1.1E</a>, run once. </span></li>
-        <li>Install Enemy Engaged - Comanche Hokum from the CD. </li>
+        <li>Install EE - Comanche Hokum from the CD. </li>
         <li>Download and install <a href="http://www.razorworks.com/enemyengaged/chpatch/EECH_Patch.exe">patch 141C</a> from the Razorworks site: documentation is <a href="http://www.razorworks.com/enemyengaged/chpatch/index.html" target="_blank">here</a></li>
-        <li>Download and install the latest EECHDEV <a href="htpp://www.planet.nl/%7Ejette073/gotcha/download/eechsetup161W5.exe">version 161w5</a>. This file contains the latest exe, and all auxillary files that you need to run it. <br>
-            <strong>Note</strong>: the setup files <strong>eech.ini</strong> and <strong>game.cfg</strong> are automatically created when you run the game and they don't exist.</li>
-        <li>If there are new options the old eech.ini will still be read and the new options added when you leave the game. </li>
+        <li>Download and install the latest relatively bugfree EECHDEV version <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/download/eechsetup162W2.exe">eechsetup162W2.exe</a>. This file contains the latest exe, and <strong>all auxillary files that you need</strong> to run it. They will be automatically put into the correct directories. Documentation is <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/161w5readme.html" target="_blank">here</a>.<br>
+            <strong>Note</strong>: the setup files <strong>eech.ini</strong> and <strong>game.cfg</strong> are automatically created when you run the game and they don't exist: please read <a href="#trouble">this</a>.</li>
+        <li>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </li>
+        <li><strong>*optional*</strong>: there is usually a version availible that is the latest build, for testing, it is just the executable so you cannot skip step 5! </li>
+        <li>IMPORTANT: when you have just installed eech by default the <strong>avionics</strong> <strong>in the options menu </strong> is set at <strong>&quot;novice&quot;. This means that you cannot operate the targetting systems,</strong> it is done for you in the game by the &quot;copilot&quot;. Set this option at <strong>advanced</strong> when in the game for full operation. When you delete the game.cfg and it is recreated by the game, the option is reset at novice! </li>
       </ol>
       <h3>Addons</h3>
-      <p>The addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and creates and installs all that is needed, you only have to click yes. The order doesn't really matter as these addons are independent. However the order below gives you the best result ;-). </p>
-      <blockquote>
-        <h4>Maps, campaigns and skimishes </h4>
-        <ol>
-          <li>The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc: <a href="http://hoxdna.org/eech/files/eeahmapssetup1.0.exe">eeahmapssetup1.0.exe</a> (beware: 117 Mbyte). With permission of Razorworks.</li>
-          <li>Custom campaigns: Alaska, Aleut, Kuwait and Lybia campaigns and additional campaigns and skirmishes in all warzones: <a href="http://hoxdna.org/eech/files/superpatch2.exe">superpatch2.exe</a>. Thanks Werewolf for hosting these! </li>
-        </ol>
-        <h4>Texture packs </h4>
-        <ol>
-          <li>Basic hi-res textures, <a href="download/texturesetup.exe">texturesetup.exe</a>. These are <strong><em>optional</em></strong> for the basic install but <strong><em>necessary</em></strong> for the custom made Alaska, Aleut, Kuwait and Lybia campaigns that are in the superpatch2.</li>
-          <li><a href="download/texturepack1.0.exe">Texture pack 1.0</a>. beautifull general and Kuwait textures for your enjoyment. </li>
-        </ol>
-      </blockquote>      
+      <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order doesn't really matter as these addons are independent. However the order below gives you the best result ;-). </p>
+      <h4>Maps, campaigns and skimishes </h4>
+      <ol>
+        <li>The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc: <a href="http://hoxdna.org/eech/files/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a> (beware: 117 Mbyte). With permission of Razorworks.</li>
+        <li>Custom campaigns: Alaska, Aleut, Kuwait and Lybia campaigns and additional campaigns and skirmishes in all warzones: <a href="http://hoxdna.org/eech/files/superpatch2.exe">superpatch2.exe</a>. You also need the textures for these (see below). <br>
+            <br>
+    Thanks Werewolf for hosting these! </li>
+      </ol>
+      <h4>Texture packs </h4>
+      <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
+      &quot;texture_colour=1&quot;, &quot;mipmapping=1&quot;, and &quot;texture_filtering=1&quot;. </p>
+      <p>The following texture packs can be installed in random order (note that these packs create a load of extra directories under /razorworks/cohokum/graphics/textures):</p>
+      <h5 class="style47">General</h5>
+      <ol>
+        <li>The textures you need for the custom fanbase maps Alaska, Aleut, Lybia, Kuwait (the so called superpatch2 maps, see above): <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackusermaps.exe">texturepackusermaps.exe</a><br>
+    Please read this pack's <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/download/readme_texturepackusermaps.html" target="_blank">readme</a> to understand what this does! </li>
+        <li>Improved Kuwait textures by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackkuwait.exe" target="_blank">texturepackkuwait.exe</a> </li>
+        <li>OLD: High res cockpit and camo textures (by Gotcha and others):<s><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackcc.exe" target="_blank"> texturepackcc.exe</a></s>. <br>
+        This is replaced by: </li>
+        <li> Improved highres cockpit textures by Michael Langner (based on my old stuff): <a href="http://webdisk.planet.nl/jette073/publiek/album/dl/texturepackwater.exe" target="_blank">texturepackcockpit3.exe</a> </li>
+        <li>Improved camo textures by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackMLcamo.exe" target="_blank">texturepackMLcamo.exe</a> </li>
+        <li>Improved camo textures by Rocky: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockycamo2.exe" target="_blank">texturepackrockycamo2.exe</a> </li>
+        <li>Improved general textures (and pilot skin) by Michael Langner and Rocky: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeneral.exe" target="_blank">texturepackgeneral.exe</a> </li>
+        <li>New opening screen and menu backgrounds by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a> </li>
+      </ol>
+      <h5 class="style47">Terrain</h5>
+      <ol>
+        <li>Dynamic water textures (works <strong>ONLY</strong> with version 162W2 and later) by Gotcha: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackwater.exe" target="_blank">texturepackwater.exe</a> </li>
+        <li>The terrain texture packs, one for each warzone:
+            <ul>
+              <li>georgia (by gotcha):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> texturepackgeorgia.exe</a></li>
+              <li>georgia (by Rocky):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockygeorgia.exe"> texturepackrockygeorgia.exe</a></li>
+              <li>lebanon (by gotcha): <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacklebanon.exe">texturepacklebanon.exe</a></li>
+              <li>taiwan (by gotcha):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> </a><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacktaiwan.exe">texturepacktaiwan.exe</a></li>
+              <li>yemen (by Rocky):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> </a><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.rar">texturepackyemen.rar</a>, <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.r00">texturepackyemen.r00</a></li>
+              <li>thailand: not yet!</li>
+              <li>cuba: not yet!</li>
+            </ul>
+        </li>
+      </ol>      
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name="trouble"></a>Trouble shooting </h2>
       <p>If your game doesn't run properly, there is not so much that can be done! </p>
@@ -176,7 +204,7 @@ lang=EN-GB><a href="#top">[top ^]</a></span>
         <li>Use a <a href="#wut">WUT</a> file to change the behaviour of vehicles and aircraft all in the game , increased difficulty (some say more realistic).</li>
         <li>Use custom textures to improve the looks of the game.</li>
         <li>Browse through the <a href="#eechini">eech.ini</a> and activate for instance &quot;faa=1&quot; (fly any aircraft, jump in returning choppers and have a field day) or for instance &quot;camcom=1&quot;, the campaign commander which lets you create missions and give you a greater control of the campaign. </li>
-        <li>Play online with MP (look <a href="http://hoxdna.org/eech/" target="_blank">here</a> to see what's up). </li>
+        <li>Play online with MP (look <a href="http://hoxdna.org/eech/" target="_blank">on this server</a> to see what's up). </li>
       </ol>      
       <h3><span class="style37" lang=EN-GB>Flyable choppers</span></h3>
       <p><span lang=EN-GB>As of version 1.6.0.W12 you can fly, change the loadout and repair the following choppers: Comanche, Apache Longbow, HokumB, Havoc, Blackhawk, Hind, AH64-A (Apache), and KA50 (Hokum). The cockpits and the flight behaviour of the new blue choppers default to the Apache Longbow, of the red choppers to the Havok. </span></p>
@@ -184,9 +212,9 @@ lang=EN-GB><a href="#top">[top ^]</a></span>
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a><span
 lang=EN-GB> (in the addon download area). These files should go here: &quot;\Razorworks\cohokum\graphics\ui\cohokum\Map\&quot;. Normally these files are included in the setup file.</span></p>
       <p><span lang=EN-GB>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select (mission), confirm and off you go (you can't choose it from the mission or group list since it has no task). You can only do this if the option &quot;faa&quot; in eech.ini is set to &quot;1&quot; (see <a href="#eechini">eech.ini</a>). </span></p>
-      <p><span lang=EN-GB>Jabberwock made any chopper flyable in free-flight mode. Just be sure you activate the &quot;fly any aircraft&quot; switch in eech.ini. Then use F12-key and scroll through to spot the chopper you want to use. Hit F12 again to clear the screen and you are in the cockpit of the chosen chopper.</span></p>
+      <p><span lang=EN-GB>Jabberwock made any chopper flyable in free-flight mode. Just be sure you activate the &quot;fly any aircraft&quot; switch in eech.ini. Use F12-key to see the aircraft and scroll through the list to the chopper you want to use. Hit F12 again to clear the screen <strong>and then hit 'U' </strong>and you are in the cockpit of the chosen chopper.</span></p>
       <h3><a name=MP id=MP></a><span class="style37" lang=EN-GB>Multiplayer status </span></h3>
-      <p><span lang=EN-GB>Jabberwock, with the support from Todd Gibbs, has made some changes to the server-part of the code. Tested out OK by Moje, but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><b>It's crucial that the host runs with cvc=1</b></span>. Its also a good idea to touch only the other variables if you know what you are doing. </span></p>
+      <p>Seems to be fairly smooth these days, <span lang=EN-GB></span><span lang=EN-GB>but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><b>It's crucial that the host runs with cvc=1</b></span>. Its also a good idea to touch only the other variables if you know what you are doing. <strong>Downwash </strong>should be off, it can mess up the host after a while. </span></p>
       <h3><a name=wut></a><span class="style37" lang=EN-GB>What is a WUT file?</span></h3>
       <p><span lang=EN-GB>Most people fly with a WUT file. A WUT-profile (Weapons and Units Tweaker file) is a text file that alters some critical parameters in the game to make it more &quot;realistic&quot; and harder. The text file name can be added to the file <a href="#eechini">eech.ini </a>and all parameters are read by cohokum.exe at startup. The most used WUT file is <strong>gwut151D.csv</strong> which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons (increasing gameplay difficulty). Furthermore there is <strong>gwut1613H.csv</strong> which adds enemy chopper aggressiveness (all enemy choppers behave as if they are on a strike mission), and <span><strong>gwut146X.csv </strong>which is needed when playing multiplayer and has the game's default values (identical to playing without a WUT file). </span></span></p>
       <p><span lang=EN-GB><span>You can edit these files with the GWUT editor, downloadable from </span></span><a
@@ -248,25 +276,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr valign="top" bgcolor="#EEEEEE">
           <td colspan=2 class="Normal">
-            <h4 class="style41"><span lang=EN-GB>[Radar ranges (obsolete)]</span></h4></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">&nbsp; </td>
-          <td class="Normal">
-            <p class=style33><span lang=EN-GB>Adjustable radar ranges: <em>this feature is available through the GWUT files</em></span></p></td>
-        </tr>
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan=2 class="Normal">
-            <h4 class="style41">[Amount of cannon ammo <span
-  lang=EN-GB>(obsolete)]</span></h4></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">&nbsp; </td>
-          <td class="Normal">
-            <p class=style33><span lang=EN-GB>Adjustable ammo:<em> this feature is available through the GWUT files</em></span></p></td>
-        </tr>
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan=2 class="Normal">
             <h4 class="style41">[WUT]</h4></td>
         </tr>
         <tr valign="top">
@@ -314,7 +323,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr valign="top">
           <td colspan=2 class="Normal">
-            <p><span class=style341><span lang=EN-GB>Mouse controlled FLIR</span></span></p></td>
+            <p><span class=style341><strong>Mouse controlled FLIR</strong></span></p></td>
         </tr>
         <tr valign="top">
           <td width="214" class="Normal">
@@ -500,15 +509,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
             <p> reversed pedal input</p></td>
         </tr>
         <tr valign="top">
-          <td colspan="2" class="Normal">
-            <p><span class="style5"><strong>TrackIR external view </strong></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> external_trackir=0<br>
-          external_trackir_dir=0</td>
-          <td class="Normal"> if TrackIR is active, let it control external view too (def=0). Invert the view direction of the external TIR (def=0)</td>
-        </tr>
-        <tr valign="top">
           <td colspan="2" class="Normal"> <strong>High LOD </strong></td>
         </tr>
         <tr valign="top">
@@ -523,12 +523,48 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal"> EXPERIMENTAL! Draws a 3D apache cockpit using an in game <span lang=EN-GB>apache model. Very ugly but fun. 
       Default = 0; </span></td>
         </tr>
-		<tr valign="top">
+        <tr valign="top">
+          <td colspan="2" class="Normal">
+            <p><span class="style5"><strong>TrackIR external view </strong></span></p></td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> external_trackir=0<br>
+    external_trackir_dir=0</td>
+          <td class="Normal"> if TrackIR is active, let it control external view too (def=0). Invert the view direction of the external TIR (def=0)</td>
+        </tr>
+        <tr valign="top">
           <td colspan="2" class="Normal"> <strong>Cannon tracking boresight</strong></td>
         </tr>
         <tr valign="top">
-          <td width="214" class="style43"> cannontrack=1</td>
-          <td class="Normal"> Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is turned off (Ctrl-NumDel), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </span></td>
+          <td class="style43"> cannontrack=1</td>
+          <td class="Normal"> Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is turned off (Ctrl-NumDel), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </td>
+        </tr>
+        <tr valign="top">
+          <td colspan="2" class="Normal"><strong>           TrackIR vector support</strong></td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> TIR_6DOF=0</td>
+          <td class="Normal"> Enables support for TrackIR vector in the hokum and comanche</td>
+        </tr>
+        <tr valign="top">
+          <td colspan="2" class="Normal"> <strong>Texture support </strong></td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> <p>texture_colour=0<br>
+            texture_filtering=0<br>
+            mipmapping=0<br>
+            dynamic_water=0
+          </p>          </td>
+          <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates fllwing water but only with the correct texture packs. </td>
+        </tr>
+        <tr valign="top">
+          <td colspan="2" class="Normal"> <strong>Autosave</strong></td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> autosave=0 </td>
+          <td class="Normal">
+            <p>      autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p>
+          </td>
         </tr>
       </table>
       <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
@@ -655,9 +691,23 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td colspan=2 class="Normal"><strong><span lang=EN-GB>HUD</span></strong> </td>
         </tr>
         <tr>
-          <td width="190" class="style43"><div align="center">Alt-F1<br> 
-          Shift-K </div></td>
+          <td class="style43"><div align="center">Alt-F1<br>
+      Shift-K </div></td>
           <td class="Normal"><span class="style33"><span lang=EN-GB>Change the HUD size from 70% to 140% and background shading colour. </span></span> </td>
+        </tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong><span lang=EN-GB>PNVS</span></strong></td>
+        </tr>
+        <tr>
+          <td class="style43"><div align="center">Ctrl-N</div></td>
+          <td class="Normal"><span class="style33"><span lang=EN-GB>Change brightness of night view, 3 settings. </span></span> </td>
+        </tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong><span lang=EN-GB>Quicksave</span></strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="style43"><div align="center">Ctrl-Z</div></td>
+          <td class="Normal"><span class="style33"><span lang=EN-GB>save the game anytime </span></span> </td>
         </tr>
       </table>
       <p align="right"><span
@@ -697,23 +747,23 @@ lang=EN-GB>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaf
      target="_blank"><span lang=EN-GB>Comanche - Hokum strategy guide</span></a><span lang=EN-GB> - by Richard harley (Flexman)</span></li>
         <li><a
      href="http://www.gamesover.com/walkthroughs/Enemy_engaged.txt"
-     target="_blank"><span lang=EN-GB>EECH FAQ V3.2</span></a><span lang=EN-GB> - Fallons FAQ, very old but still some valuable info </span></li>
+     target="_blank"><span lang=EN-GB>EECH FAQ V3.2</span></a><span lang=EN-GB> - Fallons FAQ, <strong>very old</strong> but still some valuable info </span></li>
         <li><a
-     href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's EECH goodies</span></a><span
+     href="http://home.planet.nl/%7Ejette073/gotcha" target="_blank"><span lang=EN-GB>Gotcha's EECH goodies</span></a><span
      lang=EN-GB> - resources: exe downloads, texture packs, GWUT and lots of mod info.</span></li>
         <li><a
      href="http://hoxdna.org/eech/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/</span></a><span
      lang=EN-GB> - EECH Multiplayer Master Server web frontend</span></li>
         <li><a
-     href="http://hoxdna.org/eech/files/"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB> - resources: superpatch2, EEAH map pack </span></li>
-        <li><a href="http://www.helosim.com/">helosim.com </a> - general site with helicopter sim news including EECH        </li>
-        <li><a href="http://kimchoceech.homestead.com/index.html">Kimchocs eech website </a>- Missions and files
-        <li><a href="http://www.geocities.com/mispunts/">Mispunt's </a> - Textures and mods
-        <li><a href="http://robfox.net/">Robfox </a> - Many good utilities: terrain viewer, generator, editor etc.
-        <li><a href="http://www.simhq.com/simhq3/sims/combat_helo/cohokum/index.shtml">SimHQ </a> - files and utilities (sounds)
-        <li><a href="http://chmaps-spidey.freeservers.com/maps.html">Spidey's page </a> - CH Control manager programming page (including files for EECH)
-        <li><a href="http://members.rogers.com/map-room/">Starshoy </a> - Campaigns and Skirmishes (English and Russian)
-        <li><a href="http://tarawa.free.fr/">Tarawa </a> - Great EECH site with lots of downloads, textures <li><a href="http://www.eech.de.vu/">www.eech.de.vu </a> - Handy links and MP info by Savage9 </li>
+     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB> - resources: superpatch2, EEAH map pack </span></li>
+        <li><a href="http://www.helosim.com/" target="_blank">helosim.com </a> - general site with helicopter sim news including EECH        </li>
+        <li><a href="http://kimchoceech.homestead.com/index.html" target="_blank">Kimchocs eech website </a>- Missions and files
+        <li><a href="http://www.geocities.com/mispunts/" target="_blank">Mispunt's </a> - Textures and mods
+        <li><a href="http://robfox.net/" target="_blank">Robfox </a> - Many good utilities: terrain viewer, generator, editor etc.
+        <li><a href="http://www.simhq.com/simhq3/sims/combat_helo/cohokum/index.shtml" target="_blank">SimHQ </a> - files and utilities (sounds)
+        <li><a href="http://chmaps-spidey.freeservers.com/maps.html" target="_blank">Spidey's page </a> - CH Control manager programming page (including files for EECH)
+        <li><a href="http://members.rogers.com/map-room/" target="_blank">Starshoy </a> - Campaigns and Skirmishes (English and Russian)
+        <li><a href="http://tarawa.free.fr/" target="_blank">Tarawa </a> - Great EECH site with lots of downloads, textures <li><a href="http://www.eech.de.vu/" target="_blank">www.eech.de.vu </a> - Handy links and MP info by Savage9 </li>
       </ul>
       <div align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span>
       </div>
