@@ -892,7 +892,7 @@ void initialise_3d_custom_terrain_types( void )
 
 		is_side = 1;
 		sld = 4*sld;
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_altered_land1_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
+		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
 		sld/=4;
 		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
 
