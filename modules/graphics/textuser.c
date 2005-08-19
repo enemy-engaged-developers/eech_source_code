@@ -3823,10 +3823,17 @@ void load_texture_water( int warzonenr )
 	
 	
 	sprintf(filename,"%s\\%s\\waterinfo.txt", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER );
-	
-	fin = fopen(filename,"r");
-	if (!fin)
+	//VJ 050820 added file checking to prevent crash
+	if ( !file_exist ( filename ) ){
+		global_dynamic_water	= 0;
 		return;
+	}	
+		
+	fin = fopen(filename,"r");	
+	if (!fin){
+		global_dynamic_water	= 0;
+		return;
+	}	
 
 	// analyse riverinfo.txt	
 	// read comments
