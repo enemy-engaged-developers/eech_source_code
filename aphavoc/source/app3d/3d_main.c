@@ -153,8 +153,12 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			case GUNSHIP_TYPE_AH64A:
 			////Moje 030816 end
 			{
-				set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
-
+//VJ 050818 PNVS brighness levels
+				switch (global_PNVS_level){
+					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+				}
 				break;
 			}
 			case GUNSHIP_TYPE_HAVOC:
@@ -166,8 +170,12 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			case GUNSHIP_TYPE_KA50:
 			////Moje 030816 End
 			{
-				set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);
-
+//VJ 050818 PNVS brighness levels
+				switch (global_PNVS_level){
+					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+				}
 				break;
 			}
 		}
