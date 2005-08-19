@@ -64,6 +64,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include "userint.h"
+
 #include "graphics.h"
 
 #include "terrain.h"
@@ -79,8 +81,6 @@
 
 #define TERRAIN_DEFAULT_TEXTURE_SIZE 1
 
-#define MOVINGWATER 0
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,14 +94,13 @@ terrain_type_info
 
 int
 	terrain_dual_pass_rendering_enabled = TRUE;
+		
+//VJ 050818 dynamic water mod	
+static int delay_count = 1;	
+static int change_river_texture = 0;
+static int change_sea_texture = 0;
+static int change_reservoir_texture = 0;
 	
-//VJ 050619 experimental ignore!	
-#if MOVINGWATER
-static long seapass = 1;	
-static int sp = 1;
-static int step= 1;
-#endif	
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,24 +140,6 @@ static void initialise_all_custom_terrain_types ( void );
 
 static int
 	terrain_texture_sea_detail,							terrain_texture_sea_colour_pass,
-#if MOVINGWATER
-	terrain_texture_sea_detail_1 ,							terrain_texture_sea_colour_pass_1 ,
-	terrain_texture_sea_detail_2 ,							terrain_texture_sea_colour_pass_2 ,
-	terrain_texture_sea_detail_3 ,							terrain_texture_sea_colour_pass_3 ,
-	terrain_texture_sea_detail_4 ,							terrain_texture_sea_colour_pass_4 ,
-	terrain_texture_sea_detail_5 ,							terrain_texture_sea_colour_pass_5 ,
-	terrain_texture_sea_detail_6 ,							terrain_texture_sea_colour_pass_6 ,
-	terrain_texture_sea_detail_7 ,							terrain_texture_sea_colour_pass_7 ,
-	terrain_texture_sea_detail_8 ,							terrain_texture_sea_colour_pass_8 ,
-	terrain_texture_sea_detail_9 ,							terrain_texture_sea_colour_pass_9 ,
-	terrain_texture_sea_detail_10,							terrain_texture_sea_colour_pass_10,
-	terrain_texture_sea_detail_11,							terrain_texture_sea_colour_pass_11,
-	terrain_texture_sea_detail_12,							terrain_texture_sea_colour_pass_12,
-	terrain_texture_sea_detail_13,							terrain_texture_sea_colour_pass_13,
-	terrain_texture_sea_detail_14,							terrain_texture_sea_colour_pass_14,
-	terrain_texture_sea_detail_15,							terrain_texture_sea_colour_pass_15,
-	terrain_texture_sea_detail_16,							terrain_texture_sea_colour_pass_16,
-#endif
 	terrain_texture_beach_detail,						terrain_texture_beach_colour_pass,
 	terrain_texture_land_detail,						terrain_texture_land_colour_pass,
 	terrain_texture_forest_detail,						terrain_texture_forest_colour_pass,
@@ -245,6 +226,7 @@ static int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 void set_3d_terrain_dual_pass_rendering ( int enabled )
 {
 
@@ -280,6 +262,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 
 	terrain_types
 		count;
+
 
 	void ( *draw_unclipped_fan_word_face ) ( int );
 	void ( *draw_unclipped_fan_byte_face ) ( int );
@@ -673,12 +656,10 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
    set_terrain_rendering_routines ( TEMP_TERRAIN_TYPE_BUILT_UP_AREA_BANK,		POLYGON_TYPE_UNKNOWN, NULL, NULL, NULL, NULL );
 
 
-	//FOREST
-	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze	
 	if (command_line_texture_colour == 1)
 	{
-		
+			
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_FLOOR, POLYGON_TYPE_FAN,
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );											
@@ -701,7 +682,16 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, POLYGON_TYPE_STRIP,
 													draw_texture_z_clipped_strip_word_face, draw_texture_z_clipped_strip_byte_face,
 													draw_texture_z_unclipped_strip_word_face, draw_texture_z_unclipped_strip_byte_face );
-	
+		
+//the difference between colour_clipped_fan and clipped fan is a recolouring before rendering 
+//where the colours (255,255,255) are applied. This ignores than light and time of day so no good!	
+//it also affects NPVS view: lighting ignored so CITIES showing up as bright!
+		
+		
+		
+		
+		
+		
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_TOP, POLYGON_TYPE_FAN,
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
@@ -735,27 +725,14 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
 
-   	set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA1, POLYGON_TYPE_FAN,
-													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
-													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-   	set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA2, POLYGON_TYPE_FAN,
-													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
-													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-   	set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA3, POLYGON_TYPE_FAN,
-													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
-													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-	   set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA4, POLYGON_TYPE_FAN,
-													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
-													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-
-   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_TOP, POLYGON_TYPE_STRIP,
-												draw_clipped_strip_word_face, draw_clipped_strip_byte_face,
-												draw_unclipped_strip_word_face, draw_unclipped_strip_byte_face);
-//VJ 050619 changed these to display without greyish haze in the distance
-   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_SIDE_X, POLYGON_TYPE_STRIP,
+	   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_TOP, POLYGON_TYPE_STRIP,
+													draw_clipped_strip_word_face, draw_clipped_strip_byte_face,
+													draw_unclipped_strip_word_face, draw_unclipped_strip_byte_face);
+	//VJ 050619 changed these to display without greyish haze in the distance
+	   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_SIDE_X, POLYGON_TYPE_STRIP,
 													draw_texture_x_clipped_strip_word_face, draw_texture_x_clipped_strip_byte_face,
 													draw_texture_x_unclipped_strip_word_face, draw_texture_x_unclipped_strip_byte_face );
-   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_SIDE_Z, POLYGON_TYPE_STRIP,
+	   set_terrain_rendering_routines ( TERRAIN_TYPE_HEDGE_SIDE_Z, POLYGON_TYPE_STRIP,
 													draw_texture_z_clipped_strip_word_face, draw_texture_z_clipped_strip_byte_face,
 													draw_texture_z_unclipped_strip_word_face, draw_texture_z_unclipped_strip_byte_face );
 
@@ -904,26 +881,24 @@ void initialise_3d_custom_terrain_types( void )
 	if (texture_override_scales[count][0] > 0)
 	{
 		int index = texture_override_scales[count][0];
-		int sl = texture_override_scales[count][1];
-		int sld = sl;
-		int sldd = sl;	
+		float sl = texture_override_scales[count][1];
+		float sld = sl;
+		float sldd = sl;	
 
 		is_side = 0;
-		
-#if !MOVINGWATER
-		if (index == terrain_texture_sea_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_sea );		
-#endif
+
 		if (index == terrain_texture_beach_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_beach );
 		if (index == terrain_texture_land_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, sld, sld, sl, sl,  255, 255, 255, terrain_surface_land);
 
 		is_side = 1;
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
+		sld = 4*sld;
+		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_altered_land1_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
+		sld/=4;
 		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
 
-		sld = sl/2.4;				
-		// forest sides need separate scaling, this works for 512x128 textures
+		sld = sl; //2.4*sl ???
 		sldd = sld/4;
-		// if this is too small there are simply more textures displayed
+		//if this is too small there are simply more textures displayed
 		//sldd = the vertical scale is 0.25 of the horizontal scale
 		//scale top-side forest texture between top and side
 		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
@@ -954,59 +929,57 @@ void initialise_3d_custom_terrain_types( void )
 			if (index == terrain_texture_builtup_area3_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_detail, terrain_texture_builtup_area3_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area3 );
 			if (index == terrain_texture_builtup_area4_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_detail, terrain_texture_builtup_area4_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4 );
 		}
+//VJ 050818 dynamic water textures ===>
+		if (!global_dynamic_water || current_terrain_version.map_number == 6){
+			if (index == terrain_texture_sea_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_sea );		
+			if (index == terrain_texture_river_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_river );		
+	   	if (index == terrain_texture_reservoir_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_reservoir );
+		}else{
+			delay_count++;	
+			if (delay_count % terrain_water_information[0].delay == 0) 	
+				change_river_texture++;
+			if (delay_count % terrain_water_information[1].delay == 0) 	
+				change_sea_texture++;
+			if (delay_count % terrain_water_information[2].delay == 0) 	
+				change_reservoir_texture++;
 
-   	if (index == terrain_texture_river_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_river);
+			if (delay_count == 50000) 
+				delay_count = 0;
 
-//VJ moving water experiment, just ignore
-#if MOVINGWATER
-		
-	   seapass++;
-		if (seapass % (int) 200 == 0) //floor(get_one_over_delta_time()/10)*70;
-		  sp++;
-/*
-		if (seapass % (int) (8*500) == (8*  0)) step=1;
-		if (seapass % (int) (8*500) == (8* 50)) step=2;
-		if (seapass % (int) (8*500) == (8*100)) step=3;
-		if (seapass % (int) (8*500) == (8*150)) step=4;
-		if (seapass % (int) (8*500) == (8*200)) step=5;
-		if (seapass % (int) (8*500) == (8*250)) step=6;
-		if (seapass % (int) (8*500) == (8*300)) step=5;
-		if (seapass % (int) (8*500) == (8*350)) step=4;
-		if (seapass % (int) (8*500) == (8*400)) step=3;
-		if (seapass % (int) (8*500) == (8*450)) step=2;
-*/
+			if (change_river_texture == terrain_water_information[0].number)
+				change_river_texture = 0;  
+			if (change_sea_texture == terrain_water_information[1].number)
+				change_sea_texture = 0;  
+			if (change_sea_texture == terrain_water_information[2].number)
+				change_reservoir_texture = 0;  
+
+			//	start_of_river_textures = first bottom texture, start_of_river_textures+1 is the start of the transparent changing textures
+			sl = terrain_water_information[0].scale_bottom;
+			sld = terrain_water_information[0].scale_top;
+			if (index == terrain_texture_river_detail ) 
+				set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_water_information[0].placenr, terrain_water_information[0].placenr+1+change_river_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
 			
-		if (sp == 17)
-		  sp = 1;  
+			sl = terrain_water_information[1].scale_bottom;
+			sld = terrain_water_information[1].scale_top;
+			if (index == terrain_texture_sea_detail ) 
+				set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_water_information[1].placenr, terrain_water_information[1].placenr+1+change_sea_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
 
-		if (seapass == 10000) seapass = 0;
+			sl = terrain_water_information[2].scale_bottom;
+			sld = terrain_water_information[2].scale_top;
+			if (index == terrain_texture_reservoir_detail ) 
+	   		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_water_information[2].placenr, terrain_water_information[2].placenr+1+change_sea_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
 
-if (index == terrain_texture_sea_detail    ) {
-			if (sp == 1 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_1 , terrain_texture_sea_colour_pass_1 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 2 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_2 , terrain_texture_sea_colour_pass_2 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 3 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_3 , terrain_texture_sea_colour_pass_3 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 4 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_4 , terrain_texture_sea_colour_pass_4 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 5 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_5 , terrain_texture_sea_colour_pass_5 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 6 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_6 , terrain_texture_sea_colour_pass_6 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 7 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_7 , terrain_texture_sea_colour_pass_7 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 8 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_8 , terrain_texture_sea_colour_pass_8 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 9 ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_9 , terrain_texture_sea_colour_pass_9 , sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 10) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_10, terrain_texture_sea_colour_pass_10, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 11) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_11, terrain_texture_sea_colour_pass_11, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 12) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_12, terrain_texture_sea_colour_pass_12, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 13) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_13, terrain_texture_sea_colour_pass_13, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 14) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_14, terrain_texture_sea_colour_pass_14, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 15) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_15, terrain_texture_sea_colour_pass_15, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-			if (sp == 16) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail_16, terrain_texture_sea_colour_pass_16, sld, sld, sldd, sldd, 255,255,255, terrain_surface_sea );		
-}
-#endif
+			sl = texture_override_scales[count][1];
+			sld = sl;
+		}
+//VJ 050818 dynamic water textures <===
 
-   	if (index == terrain_texture_reservoir_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_reservoir );
    	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
    	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
    	
    	sldd = sld/2;
    	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );   	
+   	
    	if (index == terrain_texture_rail_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL_BANK, terrain_texture_rail_bank_detail, terrain_texture_rail_bank_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_rail_bank );
 
    	if (index == terrain_texture_field1_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field1 );
@@ -2315,6 +2288,7 @@ int get_terrain_surface_type ( terrain_types type )
 
 static void initialise_all_custom_terrain_types ( void )
 {
+
 	 	terrain_texture_sea_detail								= get_system_texture_index ( "TERRAIN_SEA_1" );
 		terrain_texture_beach_detail							= get_system_texture_index ( "TERRAIN_BEACH" );
 		terrain_texture_land_detail							= get_system_texture_index ( "TERRAIN_DETAIL_4" );
@@ -2360,47 +2334,7 @@ static void initialise_all_custom_terrain_types ( void )
 		terrain_texture_hedge_detail							= get_system_texture_index ( "TERRAIN_WALL_LEBANON" );
 		terrain_texture_wall_detail							= get_system_texture_index ( "TERRAIN_WALL" );
 		terrain_texture_trench_detail							= get_system_texture_index ( "TERRAIN_RIVER" );
-		
-//VJ experiment ignore		
-#if MOVINGWATER
-
-terrain_texture_sea_detail_1  = get_system_texture_index ( "TERRAIN_THAI_CITY1");
-terrain_texture_sea_detail_2  = get_system_texture_index ( "TERRAIN_THAI_CITY2");
-terrain_texture_sea_detail_3  = get_system_texture_index ( "TERRAIN_THAI_CITY3");
-terrain_texture_sea_detail_4  = get_system_texture_index ( "TERRAIN_THAI_CITY4");
-terrain_texture_sea_detail_5  = get_system_texture_index ( "TERRAIN_CUBA_CITY1");
-terrain_texture_sea_detail_6  = get_system_texture_index ( "TERRAIN_CUBA_CITY2");
-terrain_texture_sea_detail_7  = get_system_texture_index ( "TERRAIN_CUBA_CITY3");
-terrain_texture_sea_detail_8  = get_system_texture_index ( "TERRAIN_CUBA_CITY4");
-terrain_texture_sea_detail_9  = get_system_texture_index ( "YEMEN_CITY1");
-terrain_texture_sea_detail_10 = get_system_texture_index ( "YEMEN_CITY2");
-terrain_texture_sea_detail_11 = get_system_texture_index ( "YEMEN_CITY3");
-terrain_texture_sea_detail_12 = get_system_texture_index ( "YEMEN_CITY4");
-terrain_texture_sea_detail_13 = get_system_texture_index ( "CP_LEBANON_CITY1");
-terrain_texture_sea_detail_14 = get_system_texture_index ( "CP_LEBANON_CITY2");
-terrain_texture_sea_detail_15 = get_system_texture_index ( "CP_LEBANON_CITY3");
-terrain_texture_sea_detail_16 = get_system_texture_index ( "CP_LEBANON_CITY4");	
-		
-		terrain_texture_sea_colour_pass_1 					= terrain_texture_sea_detail_1 ;
-		terrain_texture_sea_colour_pass_2 					= terrain_texture_sea_detail_2 ;
-		terrain_texture_sea_colour_pass_3 					= terrain_texture_sea_detail_3 ;
-		terrain_texture_sea_colour_pass_4 					= terrain_texture_sea_detail_4 ;
-		terrain_texture_sea_colour_pass_5 					= terrain_texture_sea_detail_5 ;
-		terrain_texture_sea_colour_pass_6 					= terrain_texture_sea_detail_6 ;
-		terrain_texture_sea_colour_pass_7 					= terrain_texture_sea_detail_7 ;
-		terrain_texture_sea_colour_pass_8 					= terrain_texture_sea_detail_8 ;
-		terrain_texture_sea_colour_pass_9 					= terrain_texture_sea_detail_9 ;
-		terrain_texture_sea_colour_pass_10					= terrain_texture_sea_detail_10;
-		terrain_texture_sea_colour_pass_11					= terrain_texture_sea_detail_11;
-		terrain_texture_sea_colour_pass_12					= terrain_texture_sea_detail_12;
-		terrain_texture_sea_colour_pass_13					= terrain_texture_sea_detail_13;
-		terrain_texture_sea_colour_pass_14					= terrain_texture_sea_detail_14;
-		terrain_texture_sea_colour_pass_15					= terrain_texture_sea_detail_15;
-		terrain_texture_sea_colour_pass_16					= terrain_texture_sea_detail_16;
-		
-#endif
-
-				
+			
 		terrain_texture_sea_colour_pass						= terrain_texture_sea_detail;
 		terrain_texture_beach_colour_pass					= terrain_texture_beach_detail;
 		terrain_texture_land_colour_pass						= terrain_texture_land_detail;

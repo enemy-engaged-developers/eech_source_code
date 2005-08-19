@@ -71,99 +71,114 @@
 enum //TERRAIN_TYPES
 {
 
-	TERRAIN_TYPE_INVALID,
+	TERRAIN_TYPE_INVALID,						//0
 
 	// Sunken features tops
-   TERRAIN_TYPE_RIVER,
-   TERRAIN_TYPE_RESERVOIR,
-   TERRAIN_TYPE_TRENCH,
+   TERRAIN_TYPE_RIVER,							//1
+   TERRAIN_TYPE_RESERVOIR,                //2
+   TERRAIN_TYPE_TRENCH,                   //3
 
 	// Sunken features banks
-   TERRAIN_TYPE_RIVER_BANK,
-   TERRAIN_TYPE_TRENCH_SIDE_X,
-   TERRAIN_TYPE_TRENCH_SIDE_Z,
-
-	// Regular terrain types
-   TERRAIN_TYPE_SEA,
-
-   TERRAIN_TYPE_BEACH,
-
-   TERRAIN_TYPE_LAND,
-
-	TERRAIN_TYPE_FIELD1,
-	TERRAIN_TYPE_FIELD2,
-	TERRAIN_TYPE_FIELD3,
-	TERRAIN_TYPE_FIELD4,
-	TERRAIN_TYPE_FIELD5,
-	TERRAIN_TYPE_FIELD6,
-	TERRAIN_TYPE_FIELD7,
-	TERRAIN_TYPE_FIELD8,
-	TERRAIN_TYPE_FIELD9,
-	TERRAIN_TYPE_FIELD10,
-	TERRAIN_TYPE_FIELD11,
-
-	TERRAIN_TYPE_ALTERED_LAND1,
-	TERRAIN_TYPE_ALTERED_LAND2,
-	TERRAIN_TYPE_ALTERED_LAND3,
-
-	TERRAIN_TYPE_FOREST_FLOOR,
-
-	// Raised features banks
-   TERRAIN_TYPE_ROAD_BANK,
-   TERRAIN_TYPE_RAIL_BANK,
-
-	// Raised features sides
-	TERRAIN_TYPE_HEDGE_SIDE_X,
-	TERRAIN_TYPE_HEDGE_SIDE_Z,
-	TERRAIN_TYPE_WALL_SIDE_X,
-	TERRAIN_TYPE_WALL_SIDE_Z,
-   TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X,
-   TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z,
-   TERRAIN_TYPE_FOREST_SIDE_MID_X,
-   TERRAIN_TYPE_FOREST_SIDE_MID_Z,
-   TERRAIN_TYPE_FOREST_SIDE_TOP_X,
-   TERRAIN_TYPE_FOREST_SIDE_TOP_Z,
-
-	// Raised features tops
-   TERRAIN_TYPE_BUILT_UP_AREA1,
-   TERRAIN_TYPE_BUILT_UP_AREA2,
-   TERRAIN_TYPE_BUILT_UP_AREA3,
-   TERRAIN_TYPE_BUILT_UP_AREA4,
-
-   TERRAIN_TYPE_ROAD,
-   TERRAIN_TYPE_TRACK,
-   TERRAIN_TYPE_RAIL,
-	TERRAIN_TYPE_WALL_TOP,
-	TERRAIN_TYPE_HEDGE_TOP,
-
-   TERRAIN_TYPE_FOREST_TOP,
-
-	// Temporary types used in the terrain generation, but not in the visual
-	TEMP_TERRAIN_TYPE_FRINGE,
-	TEMP_TERRAIN_TYPE_POWER_LINE,
-	TEMP_TERRAIN_TYPE_TELEPHONE_LINE,
-	TEMP_TERRAIN_TYPE_SEA_BANK,
-	TEMP_TERRAIN_TYPE_COASTAL_RIVER,
-
-	TEMP_TERRAIN_TYPE_BEACH_MID,
-
-   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK3,
-   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK5,
-   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK7,
-
-   TEMP_TERRAIN_TYPE_LAKE,
-
-   TEMP_TERRAIN_TYPE_FOREST_SIDE_X,
-   TEMP_TERRAIN_TYPE_FOREST_SIDE_Z,
-
-	TEMP_TERRAIN_TYPE_OFFROAD,
-	TEMP_TERRAIN_TYPE_POLITICAL_BOUNDARY,
-	TEMP_TERRAIN_TYPE_BUILT_UP_AREA_BANK,
-
-	TERRAIN_TYPE_LAST,
+   TERRAIN_TYPE_RIVER_BANK,					//4
+   TERRAIN_TYPE_TRENCH_SIDE_X,				//5
+   TERRAIN_TYPE_TRENCH_SIDE_Z,            //6
+                                          //
+	// Regular terrain types               //
+   TERRAIN_TYPE_SEA,                      //7
+                                          //
+   TERRAIN_TYPE_BEACH,                    //8
+                                          //
+   TERRAIN_TYPE_LAND,                     //9
+                                          //
+	TERRAIN_TYPE_FIELD1,                   //10
+	TERRAIN_TYPE_FIELD2,                   //11
+	TERRAIN_TYPE_FIELD3,                   //12
+	TERRAIN_TYPE_FIELD4,                   //13
+	TERRAIN_TYPE_FIELD5,                   //14
+	TERRAIN_TYPE_FIELD6,                   //15
+	TERRAIN_TYPE_FIELD7,                   //16
+	TERRAIN_TYPE_FIELD8,                   //17
+	TERRAIN_TYPE_FIELD9,                   //18
+	TERRAIN_TYPE_FIELD10,                  //19
+	TERRAIN_TYPE_FIELD11,                  //20
+                                          //
+	TERRAIN_TYPE_ALTERED_LAND1,            //21
+	TERRAIN_TYPE_ALTERED_LAND2,            //22
+	TERRAIN_TYPE_ALTERED_LAND3,            //23
+                                          //
+	TERRAIN_TYPE_FOREST_FLOOR,             //24
+                                          //
+	// Raised features banks               //
+   TERRAIN_TYPE_ROAD_BANK,                //25
+   TERRAIN_TYPE_RAIL_BANK,                //26
+                                          //
+	// Raised features sides               //
+	TERRAIN_TYPE_HEDGE_SIDE_X,             //27
+	TERRAIN_TYPE_HEDGE_SIDE_Z,             //28
+	TERRAIN_TYPE_WALL_SIDE_X,              //29
+	TERRAIN_TYPE_WALL_SIDE_Z,              //30
+   TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X,     //31
+   TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z,     //32
+   TERRAIN_TYPE_FOREST_SIDE_MID_X,        //33
+   TERRAIN_TYPE_FOREST_SIDE_MID_Z,        //34
+   TERRAIN_TYPE_FOREST_SIDE_TOP_X,        //35
+   TERRAIN_TYPE_FOREST_SIDE_TOP_Z,        //36
+                                          //
+	// Raised features tops                //
+   TERRAIN_TYPE_BUILT_UP_AREA1,           //37
+   TERRAIN_TYPE_BUILT_UP_AREA2,           //38
+   TERRAIN_TYPE_BUILT_UP_AREA3,           //39
+   TERRAIN_TYPE_BUILT_UP_AREA4,           //40
+                                          //
+   TERRAIN_TYPE_ROAD,                     //41
+   TERRAIN_TYPE_TRACK,                    //42
+   TERRAIN_TYPE_RAIL,                     //43
+	TERRAIN_TYPE_WALL_TOP,                 //44
+	TERRAIN_TYPE_HEDGE_TOP,                //45
+                                          //
+   TERRAIN_TYPE_FOREST_TOP,               //46
+                                          //
+	// Temporary types used in the terrain //generation, but not in the visual
+	TEMP_TERRAIN_TYPE_FRINGE,              //
+	TEMP_TERRAIN_TYPE_POWER_LINE,          //
+	TEMP_TERRAIN_TYPE_TELEPHONE_LINE,      //
+	TEMP_TERRAIN_TYPE_SEA_BANK,            //
+	TEMP_TERRAIN_TYPE_COASTAL_RIVER,       //
+                                          //
+	TEMP_TERRAIN_TYPE_BEACH_MID,           //
+                                          //
+   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK3, //
+   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK5, //
+   TEMP_TERRAIN_TYPE_STEPPED_RIVER_BANK7, //
+                                          //
+   TEMP_TERRAIN_TYPE_LAKE,                //
+                                          //
+   TEMP_TERRAIN_TYPE_FOREST_SIDE_X,       //
+   TEMP_TERRAIN_TYPE_FOREST_SIDE_Z,       //
+                                          //
+	TEMP_TERRAIN_TYPE_OFFROAD,             //
+	TEMP_TERRAIN_TYPE_POLITICAL_BOUNDARY,  //
+	TEMP_TERRAIN_TYPE_BUILT_UP_AREA_BANK,  //
+                                          //
+	TERRAIN_TYPE_LAST,                     // 62
 };
 
 typedef int terrain_types;	//enum TERRAIN_TYPES terrain_types;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ 050814 number of river textures
+// declared in textuser.c but needed in terrtype.c
+extern int 
+	start_of_river_textures,
+	number_of_river_textures,
+	delay_river,
+	scale_river_top,scale_river_bottom,
+	start_of_sea_textures,
+	number_of_sea_textures,
+	delay_sea,
+	scale_sea_top,scale_sea_bottom;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
