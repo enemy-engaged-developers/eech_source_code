@@ -3336,11 +3336,16 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
-			set_system_texture_screen (override_screen, count);
+			//VJ 050821 check if it worked		
+			if (override_screen) {
+				set_system_texture_screen (override_screen, count);
 
-			//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
-			system_texture_info[count].texture_screen = override_screen;
-
+				//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+				system_texture_info[count].texture_screen = override_screen;
+			}else{
+				//not done, reset flag
+				system_texture_override_names[count].type = 0;
+			}
 		}   // if text type = 1
 	}	//count maxtextures
 }
@@ -3600,7 +3605,7 @@ void restore_default_textures ( void )
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 
 	}
-
+/* not sure about this and not necessary, water is outside regular textures anyway
 	if (global_dynamic_water)
 	{
 		int nr;
@@ -3621,6 +3626,7 @@ void restore_default_textures ( void )
 
 		}
    }
+*/   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3783,15 +3789,21 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 
 			override_screen = load_dds_file_screen(full_override_texture_filename, 0);
 
-			// adjust alpha bit if user screen contains alpha
-			if (override_screen->contains_alpha)
-				system_texture_info[count].flags.contains_alpha = 1;
+			//VJ 050821 check if it worked		
+			if (override_screen) {
+				// adjust alpha bit if user screen contains alpha
+				if (override_screen->contains_alpha)
+					system_texture_info[count].flags.contains_alpha = 1;
 
-			// now we set the pointer in the system textxures array to point to this
-			// screen rather than the original screen
-			system_textures[count] = override_screen;
-			//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
-			system_texture_info[count].texture_screen = override_screen;
+				// now we set the pointer in the system textxures array to point to this
+				// screen rather than the original screen
+				system_textures[count] = override_screen;
+				//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+				system_texture_info[count].texture_screen = override_screen;
+			}else{
+				//not done, reset flag
+				system_texture_override_names[count].type = 0;
+			}
 		}
 	}
 }
