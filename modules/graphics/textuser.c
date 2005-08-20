@@ -249,8 +249,9 @@ unsigned char
 #define TEXTURE_OVERRIDE_DIRECTORY_COCKPIT "COCKPIT"
 #define TEXTURE_OVERRIDE_DIRECTORY_TERRAIN "TERRAIN"
 #define TEXTURE_OVERRIDE_DIRECTORY_CAMO "CAMO"
-//VJ 050814 dynamic water directory
+//VJ 050814 dynamic water and general directories
 #define TEXTURE_OVERRIDE_DIRECTORY_WATER "TERRAIN\\WATER"
+#define TEXTURE_OVERRIDE_DIRECTORY_GENERAL "GENERAL"
 
 #define BITMAP_ID		(0x4D42)
 
@@ -3461,6 +3462,8 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	// first seek all textures in common directories
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
+	
+	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
 
@@ -3548,14 +3551,7 @@ void load_warzone_override_textures (const char *warzone_name)
 	else
 		command_line_texture_colour = 0;
 
-#if DEBUG_MODULE
-	
-	for (int count = 0; count < MAX_TEXTURES; count++)
-	{
-		if (system_texture_override_names[count].type != 0)
-		debug_log("override used : %d %d %s %s",count, system_texture_override_names[count].type,system_texture_override_names[count].name,system_texture_override_names[count].path);		
-	}
-#endif
+	debug_log("Nr override textures found %d",nrtextfound);		
 	
 	//now we have all the names, load the bmp and dds files
 	
@@ -3565,7 +3561,7 @@ void load_warzone_override_textures (const char *warzone_name)
 		//VJ 050530 read mipmapped dds files 
 	load_texture_override_dds ( system_texture_override_names );
 		
-	//VJ 050814 dynamic water	
+	//VJ 050820 dynamic water, pass warzone nr for tuning	
 	if (global_dynamic_water)
 		load_texture_water( nr );
 
