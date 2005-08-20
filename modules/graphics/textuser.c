@@ -89,7 +89,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 050814 NOTE: 
+//VJ 050814 NOTE:
 // - bmp bitmaps are always considered 24 bit RGB non-mipmap and non-alpha blended
 // - dds are 24 bit RGB format and may contains mipmaps, and may contain an alpha channel
 //   the format with alpha is: unsigned 32 bit A8R8G8B8
@@ -202,9 +202,9 @@ int
 	number_of_system_texture_camoflages;
 
 //VJ 050322 texture coulor mod: texture scale array, 64 is enough for terrain textures
-int 
+int
 	texture_override_scales[64][2];
-	
+
 screen
 	*system_textures[MAX_TEXTURES],
 	//VJ 050116 custom texture mod: backup textures to restore default
@@ -263,11 +263,11 @@ struct OVERRIDENAME {
 
 typedef struct OVERRIDENAME overridename;
 
-overridename 
+overridename
 	system_texture_override_names[MAX_TEXTURES];
 
 //VJ 050621 backup of commandline
-static int 
+static int
 	texture_colour_bak;
 
 //VJ 040814 dynamic water
@@ -295,7 +295,7 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 
 //VJ 050619 the following functions are used in custom texture mods, in this file only
 // only two funtions are global:
-// void load_warzone_override_textures (char *warzone_name) 
+// void load_warzone_override_textures (char *warzone_name)
 // void restore_default_textures( void );
 
 //VJ 050814 cleaned up differences between dds and bmp download
@@ -629,7 +629,7 @@ BOOL load_texturemap_data ( const char *path )
 
 			texture_flags
 				flags;
-	
+
 			fread ( &value, sizeof ( unsigned int ), 1, fp );
 
 			flags.flags = value;
@@ -1174,7 +1174,7 @@ BOOL load_texturemap_data ( const char *path )
 			}
 		}//for count to number_of_system_textures
 
-	
+
 	}//else  24 bit: !d3d_paletted_textures_supported
 
 
@@ -2363,7 +2363,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ 050619 this function assumes that the name has no path information 
+//VJ 050619 this function assumes that the name has no path information
 //and is the filename with extention only, which it should be to work with the rest
 int match_system_texture_name ( const char *name )
 {
@@ -2403,7 +2403,7 @@ int match_system_texture_name ( const char *name )
 //VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
 	if (strstr(real_name, "BREEZE_BLOCKS_DESERT_CAMO"))
 	{
-		// this is the only name with _DESERT_ inside its name, must be an overview 
+		// this is the only name with _DESERT_ inside its name, must be an overview
 		// treat as an exception
 		 return (385);
 	}
@@ -2432,7 +2432,7 @@ int match_system_texture_name ( const char *name )
 			return ( count + camo );
 		}
 	}
-	
+
 	// if no solution return 0
 	return ( 0 );
 }
@@ -3295,12 +3295,12 @@ void get_texture_graphic_source_dimensions ( texture_graphic *graphic, int *widt
 void clear_texture_override_names ( void )
 {
 	int count;
-	
+
 	for ( count = 0; count < MAX_TEXTURES; count++ ){
    	system_texture_override_names[count].name[0] = '\0';
    	system_texture_override_names[count].path[0] = '\0';
    	system_texture_override_names[count].type = 0;
-   }	
+   }
 }
 
 
@@ -3308,7 +3308,7 @@ void clear_texture_override_names ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ 050618 load the bmp files, assumed not mipmapped 
+//VJ 050618 load the bmp files, assumed not mipmapped
 void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES])
 {
 	const char
@@ -3327,10 +3327,10 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 		{
 
 			full_override_texture_filename = system_texture_override_names[count].path;
-			
+
 #if DEBUG_MODULE
 			debug_log ("++OVERRIDES++ found file %s",full_override_texture_filename);
-#endif	
+#endif
 
 			override_screen = load_bmp_file_screen(full_override_texture_filename);
 
@@ -3350,7 +3350,7 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050619 this function scans the directory for bmp and dds files that occur in the texture list
-// and puts them in the override names structure. 
+// and puts them in the override names structure.
 // NOTE: dds files take preference over bmp files.
 // NOTE: if a name already exists from previous calls to this function they are overwritten
 int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname )
@@ -3366,13 +3366,13 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 	unsigned char
 		directory_search_path[256];
-	char	
+	char
 		filename[256];
 
 	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
 	directory_listing = get_first_directory_file ( directory_search_path );
-	
+
 	if ( directory_listing )
 	{
 		valid_file = TRUE;
@@ -3388,12 +3388,12 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 #if DEBUG_MODULE
 				debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-#endif	
+#endif
 
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
 					strupr(system_texture_override_names[index].path);
 					strcpy(system_texture_override_names[index].name, filename);
 					system_texture_override_names[index].type = 1;
@@ -3408,7 +3408,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 	sprintf (directory_search_path, "%s\\%s\\*.dds", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
 	directory_listing = get_first_directory_file ( directory_search_path );
-	
+
 	if ( directory_listing )
 	{
 		valid_file = TRUE;
@@ -3429,7 +3429,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 #endif
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
 					strupr(system_texture_override_names[index].path);
 					strcpy(system_texture_override_names[index].name, filename);
 					system_texture_override_names[index].type = 2;
@@ -3456,13 +3456,13 @@ void load_warzone_override_textures (const char *warzone_name)
 	int nr = 0;
 	const char * map;
 	int nrtextfound = 0;
-	
+
 	// empty all the strings
 	clear_texture_override_names ();
 
 	// first seek all textures in common directories
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
-	
+
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
@@ -3471,7 +3471,7 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
-	
+
 	//then look for the custom directories
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
 
@@ -3510,8 +3510,8 @@ void load_warzone_override_textures (const char *warzone_name)
 				debug_log("=== Looking for additional textures in %s",p);
 
 				// get override texture names in array
-				nrtextfound = initialize_texture_override_names ( system_texture_override_names, p );		
-				
+				nrtextfound = initialize_texture_override_names ( system_texture_override_names, p );
+
 			}
 			// get the next specified dir
 			fscanf(ftextdir,"%[^\n]\n",buf);
@@ -3520,51 +3520,51 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	//last look for the modded and mipmapped terrain textures
 	//VJ 050319 texture colour mod, load terrain textures
-	
+
 	map = warzone_name + strlen ( warzone_name ) - 1;
 	if ( *map == '\\' )
  		map--;
 	nr = (int) (*map - '0');
 
+	// Casm 20AUG05 Moved backup before "if"
+	//VJ 050621 backup commandline var, set to 0 if no textures found
+	texture_colour_bak = command_line_texture_colour;
 	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 6)
-	{		
+	{
 		if (nr == 1) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 2) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 3) sprintf (directory_textdir_path, "%s\\georgia" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 4) sprintf (directory_textdir_path, "%s\\taiwan"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 5) sprintf (directory_textdir_path, "%s\\lebanon" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 6) sprintf (directory_textdir_path, "%s\\yemen"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);		
-		    
+		if (nr == 6) sprintf (directory_textdir_path, "%s\\yemen"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+
 		debug_log("=== Terrain texture colour mod dir:  %s",directory_textdir_path);
 
-		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions 
+		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
 		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
 
-		//VJ 050621 backup commandline var, set to 0 if no textures found
-		texture_colour_bak = command_line_texture_colour;
 		if (nrtextfound == 0)
 			command_line_texture_colour = 0;
-			 
+
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
 	else
 		command_line_texture_colour = 0;
 
-	debug_log("Nr override textures found %d",nrtextfound);		
-	
+	debug_log("Nr override textures found %d",nrtextfound);
+
 	//now we have all the names, load the bmp and dds files
-	
-		//VJ 050530 read single bmp files 
+
+		//VJ 050530 read single bmp files
 	load_texture_override_bmp ( system_texture_override_names );
 
-		//VJ 050530 read mipmapped dds files 
+		//VJ 050530 read mipmapped dds files
 	load_texture_override_dds ( system_texture_override_names );
-		
-	//VJ 050820 dynamic water, pass warzone nr for tuning	
+
+	//VJ 050820 dynamic water, pass warzone nr for tuning
 	if (global_dynamic_water)
 		load_texture_water( nr );
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3579,46 +3579,46 @@ void restore_default_textures ( void )
 
 	//VJ 050621 restore backup commandline
 	command_line_texture_colour = texture_colour_bak;
-	
+
    for (count = 0; count < MAX_TEXTURES; count++)
    if (system_texture_override_names[count].type > 0)
-   {				
-		
+   {
+
 #if DEBUG_MODULE
 		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
-#endif	
-	
+#endif
+
 		if ( system_textures[count]->palette )
 		{
 			IDirectDrawSurface7_SetPalette ( system_textures[count]->surface, NULL );
 			system_textures[count]->palette = NULL;
 		}
 		release_texture_surface ( &system_textures[count]->surface );
-		
+
 	// restore pointer to original textures
 		system_textures[ count ] = backup_system_textures[ count ];
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 
 	}
-	
+
 	if (global_dynamic_water)
 	{
 		int nr;
-		
+
 		nr = terrain_water_information[2].start + terrain_water_information[2].number+1;
 		for ( count = terrain_water_information[0].start; count < nr; count++ )
-		{		
-			
+		{
+
 	#if DEBUG_MODULE
 			debug_log("dynamic water Texture release (%d) : %s",count,system_texture_override_names[count].name);
-	#endif	
-		
+	#endif
+
 			release_texture_surface ( &system_textures[count]->surface );
-			
+
 		// restore pointer to original textures
 			system_textures[ count ] = backup_system_textures[ count ];
 			system_texture_info[ count ] = backup_system_texture_info[ count ];
-	
+
 		}
    }
 }
@@ -3642,7 +3642,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 		char buf[256];
 		char *p;
 		int c, index, count;
-		
+
 		fin = fopen(filename,"r");
 
 		// skip comment lines
@@ -3656,11 +3656,11 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 			texture_override_scales[count][1] = 64; //safe value
 			texture_override_scales[count][2] = 64; //safe value
 		}
-		
+
 		count = 0;
-		while (count < 64 && 
-				 strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))			
-		{			
+		while (count < 64 &&
+				 strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))
+		{
 			int i;
 			p = strtok(buf,"=");
 
@@ -3669,7 +3669,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 			{
 				//strip leading and trailing spaces
 				i = strlen(p)-1;
-				
+
 				while (i > 0 && (p[i] == ' ' || p[i] == '\t'))
 					i--;
 				p[i+1]='\0';
@@ -3684,33 +3684,33 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 						index = c;
 						break;
 					}
-				}				
+				}
 				texture_override_scales[count][0] = index;
-			}				  
-			
+			}
+
 /*
 			//scan 1st scale
 			p = strtok(NULL,",");
 			if (p)
-			{		
-				texture_override_scales[count][1] = atoi(p);						  
-			}				  
-*/			
+			{
+				texture_override_scales[count][1] = atoi(p);
+			}
+*/
 			//scan 2nd scale
 			p = strtok(NULL,"#");
 			if (p)
-			{		
-				texture_override_scales[count][1] = atoi(p);						  
-			}				  
+			{
+				texture_override_scales[count][1] = atoi(p);
+			}
 
-			fscanf(fin,"%[^\n]\n",buf);			
+			fscanf(fin,"%[^\n]\n",buf);
 			// next line
-			
+
 			count++;
 		}
 		fclose(fin);
-	}			  
-}	
+	}
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3725,26 +3725,26 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename )
-{  	   	
+{
 	if (bmih.biCompression != BI_RGB)
 	{
 		debug_log ("%s is not uncompressed RGB!", full_override_texture_filename );
 		return 0;
 	}
-   	
+
 	//VJ only 8 and 24 bit uncompressed bitmaps are read
 	if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
 	{
 		debug_log ("%s is not 24 bit!", full_override_texture_filename );
 		return 0;
 	}
-   /* unlimited size	
+   /* unlimited size
 	if (bmih.biHeight > MAX_TEXTURE_HEIGHT)
 	{
 		debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
 		return 0;
 	}
-   	
+
 	if (bmih.biWidth > MAX_TEXTURE_WIDTH)
 	{
 		debug_fatal ("%s wider than the maximum allowed", full_override_texture_filename );
@@ -3752,7 +3752,7 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 	}
 	*/
 	return 1;
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3782,11 +3782,11 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 			//debug_log ("++OVERRIDES++ found dds file %s",full_override_texture_filename);
 
 			override_screen = load_dds_file_screen(full_override_texture_filename, 0);
-			
+
 			// adjust alpha bit if user screen contains alpha
 			if (override_screen->contains_alpha)
-				system_texture_info[count].flags.contains_alpha = 1;			
-			
+				system_texture_info[count].flags.contains_alpha = 1;
+
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
 			system_textures[count] = override_screen;
@@ -3804,34 +3804,34 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 void load_texture_water( int warzonenr )
 {
 	FILE *fin;
-		
+
 	screen
 		*override_screen;
-		
-	int 
+
+	int
 		i, placenr, count;
-	
+
 	char
 		buf[256],
 		filename[128];
 
 	char *p, *q;
-	
-	
+
+
 	sprintf(filename,"%s\\%s\\waterinfo.txt", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER );
 	//VJ 050820 added file checking to prevent crash
 	if ( !file_exist ( filename ) ){
 		global_dynamic_water	= 0;
 		return;
-	}	
-		
-	fin = fopen(filename,"r");	
+	}
+
+	fin = fopen(filename,"r");
 	if (!fin){
 		global_dynamic_water	= 0;
 		return;
-	}	
+	}
 
-	// analyse riverinfo.txt	
+	// analyse riverinfo.txt
 	// read comments
 	fscanf(fin,"%[^\n]\n",buf);
 	while (buf[0] == '#')
@@ -3854,7 +3854,7 @@ void load_texture_water( int warzonenr )
 		p = strtok(NULL,"#");
 		if (p)
 			terrain_water_information[i].scale_top = atoi(p);
-   	
+
 		fscanf(fin,"%[^\n]\n",buf);
 		p = strtok(buf,"=");
 		p = strtok(NULL,",");
@@ -3865,7 +3865,7 @@ void load_texture_water( int warzonenr )
 				*q = '\0';
 			strcpy(terrain_water_information[i].name_bottom, p);
 		}
-		p = strtok(NULL,","); 
+		p = strtok(NULL,",");
 		if (p)
 			terrain_water_information[i].type = atoi(p);
 		p = strtok(NULL,",");
@@ -3887,9 +3887,9 @@ void load_texture_water( int warzonenr )
 			terrain_water_information[i].scale_bottom = atoi(p);
 
 		fscanf(fin,"%[^\n]\n",buf);
-		
+
 		debug_log("dynamic water %s %s",terrain_water_information[i].name_top, terrain_water_information[i].name_bottom);
-	}	
+	}
 
 	fclose(fin);
 
@@ -3909,51 +3909,51 @@ void load_texture_water( int warzonenr )
 		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, terrain_water_information[i].name_top);
 
 		//debug_log("water %d %d %s",placenr, i, filename);
-	
+
 		override_screen = load_dds_file_screen(filename, 0);
-			
+
 		count = placenr;
 		system_texture_info[count].flags.contains_alpha = 1;
 		system_texture_info[count].flags.vertically_inverted = 1;
 		system_texture_info[count].flags.mipmap_enabled = 1;
 		system_texture_info[count].flags.wrapped = 1;
-			
+
 		system_textures[count]  = override_screen;
 		system_texture_info[count].texture_screen = override_screen;
-				
+
 		// load dynamic texture series
-		rivernr = terrain_water_information[i].start;	
+		rivernr = terrain_water_information[i].start;
 		for ( count = placenr+1; count < placenr+1+terrain_water_information[i].number; count++ )
 		{
 			system_texture_info[count].flags.contains_alpha = 1;
 			system_texture_info[count].flags.vertically_inverted = 1;
 			system_texture_info[count].flags.mipmap_enabled = 1;
 			system_texture_info[count].flags.wrapped = 1;
-	
+
 			system_texture_info[count].texture_screen = NULL;
-	
+
 			memset ( system_texture_names[count], 0, 128 );
 
 			if (terrain_water_information[i].number < 100)
-				sprintf(system_texture_names[count],"%s%02d",terrain_water_information[i].name_bottom,rivernr);		
+				sprintf(system_texture_names[count],"%s%02d",terrain_water_information[i].name_bottom,rivernr);
 			else
-				sprintf(system_texture_names[count],"%s%03d",terrain_water_information[i].name_bottom,rivernr);		
+				sprintf(system_texture_names[count],"%s%03d",terrain_water_information[i].name_bottom,rivernr);
 		//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
 			rivernr++;
-	
+
 			if (terrain_water_information[i].type == 1){
 				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
 				override_screen = load_bmp_file_screen(filename);
-			}	
+			}
 			if (terrain_water_information[i].type == 2){
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
 				override_screen = load_dds_file_screen(filename, terrain_water_information[i].alpha);
-			}	
-	
+			}
+
 			if (override_screen) {
 				system_textures[count]  = override_screen;
 				system_texture_info[count].texture_screen = override_screen;
-			}	
+			}
 		}
 		placenr += terrain_water_information[i].number+1;
 	}
@@ -3970,69 +3970,69 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			temp;
 		FILE
 			*fp;
-	
+
 		DDSURFACEDESC2 ddsh;
-		
+
 		DWORD dwmagic;
-		
+
 		int type;
-		
+
 		char
 			*buffer, *bufferswap;
-	
+
 		int
 			mipmap,
-			width, height, 
+			width, height,
 			buffer_size;
 
 		screen
 			*override_screen;
 
 		fp = safe_fopen (full_override_texture_filename, "rb");
-		
+
 		if (!fp)
 			return (NULL);
-			
+
 		fread (&dwmagic, sizeof (dwmagic), 1, fp);
 
 		fread (&ddsh, sizeof (ddsh), 1, fp);
 
-/*			
+/*
 			if ( width != height )
 			{
 			 	debug_fatal("Only square dds files supported for now: %s",full_override_texture_filename);
-			}  
+			}
 */
 		/*			if ( ddsh.dwFlags & DDSD_LINEARSIZE )
 			{
 			 	debug_fatal("Compressed dds files not supported: %s",full_override_texture_filename);
-			}  
-	
+			}
+
 			if ( ddsh.ddpfPixelFormat.dwFlags & DDPF_FOURCC  )
 			{
 			 	debug_fatal("Only RGB dds files supported: %s",full_override_texture_filename);
-			}  
+			}
 */
 		mipmap = ddsh.dwMipMapCount;
 
 		if ( mipmap <= 1 )
 		{
 		 	debug_fatal("Only mipmapped dds files allowed, use bmps otherwise: %s",full_override_texture_filename);
-		}  
+		}
 
-//C:\gms\Razorworks\eech-new\modules\graphics\textsys.h			
+//C:\gms\Razorworks\eech-new\modules\graphics\textsys.h
 		if (ddsh.ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS )
 			type = TEXTURE_TYPE_MULTIPLEALPHA;
-		else	
+		else
 			type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
-			
+
 		width = ddsh.dwWidth;
 		height = ddsh.dwHeight;
-		
+
 		//VJ 050530 set mipmapping to no mipmaps if wanted
 		if (!global_mipmapping)
 			mipmap = 1;
-			
+
 		override_screen = create_texture_map (width, height, type, mipmap, system_texture_palettes[0], system_texture_colour_tables[0] );
 
 		for ( temp = 0; temp < mipmap; temp++ )  //was <= mipmap!
@@ -4040,11 +4040,11 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			int x, y;
 			int nrbyte = ddsh.ddpfPixelFormat.dwRGBBitCount >> 3;
 			//VJ 050426 create a new texture map with mipmap levels if needed
-			//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h				
+			//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 
 		   buffer_size = width * height * nrbyte;
-			buffer = safe_malloc (buffer_size);     	
-			bufferswap = safe_malloc (buffer_size);     	
+			buffer = safe_malloc (buffer_size);
+			bufferswap = safe_malloc (buffer_size);
 
 			fread (buffer, buffer_size, 1, fp);
 
@@ -4052,32 +4052,32 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			for ( y = 0; y < height; y++ )
 			{
 				for ( x = 0; x < width; x++ )
-				{                                                                              
+				{
 					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = buffer[y*width*nrbyte + x*nrbyte + 2];
 					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = buffer[y*width*nrbyte + x*nrbyte + 1];
 					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = buffer[y*width*nrbyte + x*nrbyte + 0];
-				//add alpha layer if necessary	 
-				if (nrbyte == 4){					
+				//add alpha layer if necessary
+				if (nrbyte == 4){
 					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 3] = min(255, max(0, buffer[y*width*nrbyte + x*nrbyte + 3]+step));
-				}	 
-					 
 				}
-			}	
-			
+
+				}
+			}
+
 			while ( !lock_texture ( override_screen, temp ) )
 			{
 				Sleep ( 100 );
 			}
-			
+
 			if (type == TEXTURE_TYPE_NOALPHA_NOPALETTE)
 				convert_no_alpha_24bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
 			if (type == TEXTURE_TYPE_MULTIPLEALPHA)// || type == TEXTURE_TYPE_SINGLEALPHA)
 				convert_multiple_alpha_32bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
 			if (type == TEXTURE_TYPE_SINGLEALPHA)
 				convert_single_alpha_32bit_texture_map_data ( bufferswap, width, height, override_screen, fp );
-			
+
 			unlock_texture ( override_screen );
-			
+
 			safe_free (buffer);
 			safe_free (bufferswap);
 
@@ -4088,7 +4088,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 
 		safe_fclose (fp);
 
-		return override_screen;		
+		return override_screen;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4112,12 +4112,12 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		*buffer, *bufferswap;
 
 	int
-		width, height, 
+		width, height,
 		buffer_size,
 		x, y, mipmap, temp = 0;
 
 	//VJ 041217 palette for 8 bit textures
-	rgb_colour 
+	rgb_colour
 		pal[256];
 
 	//static
@@ -4125,42 +4125,42 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		*override_screen;
 
 	//VJ 050530 mipmapping, set mipmap to 0 for now, it works but reserved for dds files
-	mipmap = 0;			
-	
+	mipmap = 0;
+
 	fp = safe_fopen (full_override_texture_filename, "rb");
 
 	fread (&bmfh, sizeof (bmfh), 1, fp);
-     	
+
 	//read bitmap header info structure
-	fread (&bmih, sizeof (bmih), 1, fp);   			
+	fread (&bmih, sizeof (bmih), 1, fp);
 			//VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
-			
+
 	if (bmih.biBitCount == 8){
   		fread (&pal, sizeof (pal), 1, fp);
-	}	
-	
+	}
+
 	//check bitmap header for correct format
 	if (!check_bitmap_header ( bmih, full_override_texture_filename) )
 	{
 		safe_fclose (fp);
    	return NULL;
-   }      	
+   }
 
- 			  	
+
 	//VJ 050426 create a new texture map with mipmap levels if needed
 	width = bmih.biWidth;
 	height = bmih.biHeight;
 	//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
-	override_screen = create_texture_map (width, height, TEXTURE_TYPE_NOALPHA_NOPALETTE, 
+	override_screen = create_texture_map (width, height, TEXTURE_TYPE_NOALPHA_NOPALETTE,
         	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
-			     	
+
    if (bmih.biBitCount == 8)
       buffer_size = width * height;
-   	
+
    if (bmih.biBitCount == 24)
 	   buffer_size = width * height * 3;
 	// note color depth is assumed here
-	
+
 	buffer = safe_malloc (buffer_size);
 	bufferswap = safe_malloc (buffer_size);
 
@@ -4170,18 +4170,18 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	//VJ 050618 changed this part to proper texture handling instead of drawing pixels on a screen
 	//swap lines around, bitmaps are upside down in the game
    if (bmih.biBitCount == 24)
-   {   	
+   {
 		for ( y = 0; y < height; y++ )
 		{
 			for ( x = 0; x < width; x++ )
-			{                                                                              
+			{
 				 bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*3 + x*3 + 2];
 				 bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*3 + x*3 + 1];
 				 bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*3 + x*3 + 0];
 			}
-		}	
+		}
 	}
-	
+
 	while ( !lock_texture ( override_screen, temp ) )
 	{
 		Sleep ( 100 );
@@ -4192,9 +4192,9 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		convert_no_alpha_24bit_texture_map_data ( bufferswap, width, height , override_screen, fp );
    if (bmih.biBitCount == 8)
 		convert_no_alpha_texture_map_data ( buffer, width, height, override_screen , fp );
-	
+
 	unlock_texture ( override_screen );
-	
+
 	safe_free (buffer);
 	safe_free (bufferswap);
 
