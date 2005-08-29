@@ -194,6 +194,21 @@ extern void update_debug_windows ( void );
 #else
 
 #ifdef WIN32
+#ifdef __BORLANDC__
+# define debug_log ;//
+# define debug_colour_log ;//
+# define debug_filtered_log ;//
+# define debug_colour_filtered_log ;//
+# define debug_watch ;//
+# define debug_colour_watch ;//
+# define debug_watch2 ;//
+# define debug_colour_watch2 ;//
+# define debug_watch3 ;//
+# define debug_colour_watch3 ;//
+# define debug_watch4 ;//
+# define debug_colour_watch4 ;//
+# define BREAKOUT ;//
+#else
 # define debug_log();
 # define debug_colour_log();
 # define debug_filtered_log();
@@ -207,6 +222,7 @@ extern void update_debug_windows ( void );
 # define debug_watch4();
 # define debug_colour_watch4();
 # define BREAKOUT();
+#endif
 #else
 # define debug_log(a, x...) do { } while(0);
 # define debug_colour_log(a, b, x...) do { } while(0);

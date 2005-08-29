@@ -72,7 +72,7 @@ struct WAYPOINT_DATA
 	//
 	////////////////////////////////////////
 
-	char
+	const char
 		*full_name;
 
 	int

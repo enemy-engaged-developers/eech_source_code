@@ -156,7 +156,7 @@ void initialise_comms_manager (void)
     {
 
 		//add_update_function (validate_connections, command_line_comms_timeout, 1.0);
-		
+
 		add_update_function (validate_connections, 3.0, 1.0); // Jabberwock - VC was called to rarely if cto was high
     }
 
@@ -311,7 +311,7 @@ static int get_number_of_connected_players (void)
 
     int
         player_count;
-        
+
     temp_connection = get_connection_list_head ();
 
     player_count = 0;
@@ -542,6 +542,21 @@ void comms_send_data (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// 29AUG05 Casm Fix for wut transfer - don't overwrite pointers!
+static void smart_memcpy ( void * dst, const void * src, int elemsize, int skipsize, int elems )
+{
+	for ( ; elems > 0; elems--)
+	{
+		memcpy ( ( char * ) dst + skipsize, ( const char * ) src + skipsize, elemsize - skipsize );
+		src = ( const char * ) src + elemsize;
+		dst = ( char * ) dst + elemsize;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void comms_process_data (void)
 {
 
@@ -715,163 +730,163 @@ void comms_process_data (void)
 
                                 while (TRUE)
                                 {
-        
+
                                     ptr = new_connection->connection_receive_buffer;
-        
+
                                     size = 0;
-        
+
                                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                     //
                                     // Check both client and server are running same campaign data
                                     //
-                                    
+
                                     // Jabberwock 050301 Hardcoded version number
-                                    
+
                                     // please put in the date of the version! check it is changed twice!
-                                    server_version_number = 1621; // Jabberwock 050322 
-                                                                         
+                                    server_version_number = 1621; // Jabberwock 050322
+
                                     quick_set_list_item (ptr, int, server_version_number);
-        
+
                                     size += sizeof (int);
                                     //
                                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
                                     // map details
-        
+
                                     quick_set_list_item (ptr, int, NUM_MAP_X_SECTORS);
-        
+
                                     quick_set_list_item (ptr, int, NUM_MAP_Z_SECTORS);
-        
+
                                     quick_set_list_item (ptr, int, SECTOR_SIDE_LENGTH);
-        
+
                                     size += sizeof (int) * 3;
-        
+
                                     // data path
-        
+
                                     strcpy (ptr, current_session->data_path);
-        
+
                                     ptr += strlen (current_session->data_path) + 1;
-        
+
                                     size += strlen (current_session->data_path) + 1;
-        
+
                                     // population_placement filename
-        
+
                                     if (population_placement_filename)
                                     {
-        
+
                                         strcpy (ptr, population_placement_filename);
-        
+
                                         ptr += strlen (population_placement_filename) + 1;
-        
+
                                         size += strlen (population_placement_filename) + 1;
                                     }
                                     else
                                     {
-        
+
                                         strcpy (ptr, "\0");
-        
+
                                         ptr += strlen ("\0") + 1;
-        
+
                                         size += strlen ("\0") + 1;
                                     }
-        
+
                                     //
-        
+
                                     // side_data filename
-        
+
                                     if (side_data_filename)
                                     {
-        
+
                                         strcpy (ptr, side_data_filename);
-        
+
                                         ptr += strlen (side_data_filename) + 1;
-        
+
                                         size += strlen (side_data_filename) + 1;
                                     }
                                     else
                                     {
-        
+
                                         strcpy (ptr, "\0");
-        
+
                                         ptr += strlen ("\0") + 1;
-        
+
                                         size += strlen ("\0") + 1;
                                     }
-        
+
                                     // campaign_population filename
-        
+
                                     if (campaign_population_filename)
                                     {
-        
+
                                         strcpy (ptr, campaign_population_filename);
-        
+
                                         ptr += strlen (campaign_population_filename) + 1;
-        
+
                                         size += strlen (campaign_population_filename) + 1;
                                     }
                                     else
                                     {
-        
+
                                         strcpy (ptr, "\0");
-        
+
                                         ptr += strlen ("\0") + 1;
-        
+
                                         size += strlen ("\0") + 1;
                                     }
-        
+
                                     //
                                     // planner position and zoom
                                     //
-        
+
 //                                  quick_set_list_item (ptr, float, planner_map_data.centre_map_x);
-        
+
 //                                  quick_set_list_item (ptr, float, planner_map_data.centre_map_z);
-        
+
 //                                  size += sizeof (float) * 2;
-        
+
 //                                  quick_set_list_item (ptr, int, planner_map_data.map_zoom);
-        
+
 //                                  size += sizeof (int);
-        
+
                                     //
                                     // Pilots
                                     //
-        
+
                                     player_count = get_number_of_connected_players ();
 
                                     quick_set_list_item (ptr, int, player_count);
-        
+
                                     size += sizeof (int);
-        
+
                                     //
                                     //
                                     //
-        
+
                                     #if DEBUG_MODULE
-        
+
                                     debug_log ("COMM_MAN: sending data path %s, population placement %s, side data %s, campaign_pop file %s",
                                                     current_session->data_path, population_placement_filename, side_data_filename, campaign_population_filename);
-        
+
                                     #endif
-        
+
                                     new_connection->connection_receive_buffer_size -= size;
-        
+
                                     if (!pack_session (ptr, &new_connection->connection_receive_buffer_size, PACK_MODE_BROWSE_SESSION))
                                     {
-        
+
                                         break;
                                     }
-        
+
                                     new_connection->connection_receive_buffer_size *= 2;
-        
+
                                     #if DEBUG_MODULE
-        
+
                                     debug_log ("COMMS MAN: Browse: connection_receive_buffer too small, mallocing to %d", new_connection->connection_receive_buffer_size);
-        
+
                                     #endif
-        
+
                                     free_mem (new_connection->connection_receive_buffer);
-        
+
                                     new_connection->connection_receive_buffer = malloc_heap_mem (new_connection->connection_receive_buffer_size);
                                 }
 
@@ -880,17 +895,17 @@ void comms_process_data (void)
                                 //
 
                                 send_packet (received_id, PACKET_TYPE_SESSION_INFO, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
-    
+
                                 /*
                                 {
-    
+
                                     FILE
                                         *test_ptr;
-    
+
                                     test_ptr = fopen ("out.txt", "wb");
-    
+
                                     fwrite (new_connection->connection_receive_buffer, 1, new_connection->connection_receive_buffer_size + size, test_ptr);
-    
+
                                     fclose (test_ptr);
                                 }
                                 */
@@ -904,7 +919,7 @@ void comms_process_data (void)
 
                         break;
                     }
-                    
+
 // Jabberwock 031118 Server side settings
 
                     case PACKET_TYPE_SETTINGS_REQUEST:
@@ -915,34 +930,34 @@ void comms_process_data (void)
 
                         int
                             size;
-                            
+
                         FILE
                      		*fp;
 
                         connection_list_type
                             *new_connection;
-						
+
 						if (get_comms_model () == COMMS_MODEL_SERVER)
 						{
 							send_comms_data ();
 
                             new_connection = get_connection_list_item (received_id);
-							
+
          		       	    ptr = new_connection->connection_receive_buffer;
-        
+
 							size = 0;
-							
+
 							// MOTD
-							
+
 							strcpy (buf, "\0");
 
 							if (file_exist ("motd.txt"))
 							{
 								if (file_size ("motd.txt") < 256)
 								{
-								
+
 									fp = fopen ("motd.txt", "r" );
-								
+
 									if ( fp )
 									{
 										fscanf (fp, "%[^\n]\n", buf);
@@ -954,17 +969,17 @@ void comms_process_data (void)
 								{
 									server_log ("motd.txt too long!");
 								}
-							}						
-							
+							}
+
 							strcpy (ptr, buf);
-								
+
 							ptr += strlen (buf) + 1;
-								
+
 							size += strlen (buf) + 1;
 							// end of MOTD
-							
+
 							// WUT checking
-							
+
 							if (command_line_wut)
 							{
 								strcpy (ptr, WUT_filename);
@@ -980,8 +995,8 @@ void comms_process_data (void)
 								ptr += strlen ("NONE") + 1;
 
 								size += strlen ("NONE") + 1;
-							}                                    
-							
+							}
+
 							// Jabberwock 050129 WUT transfer - server side
 							// with great help from Gotcha
 
@@ -1090,28 +1105,28 @@ void comms_process_data (void)
 							// Jabberwock 050129 ends
 
 							quick_set_list_item (ptr, int, command_line_planner_goto_button);
-							
-							size += sizeof (int);							
-							
+
+							size += sizeof (int);
+
 							quick_set_list_item (ptr, int, command_line_vector_flight_model);
-														
-							size += sizeof (int);							
-							
+
+							size += sizeof (int);
+
 							quick_set_list_item (ptr, int, command_line_ground_radar_ignores_infantry);
-														
-							size += sizeof (int);							
-							
+
+							size += sizeof (int);
+
 							quick_set_list_item (ptr, int, command_line_camcom);
-														
-							size += sizeof (int);							
-							
+
+							size += sizeof (int);
+
 							send_packet (received_id, PACKET_TYPE_SETTINGS_DATA, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
-							
+
 						}
-						
+
 						break;
 					}
-					
+
 					case PACKET_TYPE_SETTINGS_DATA:
                     {
                         int
@@ -1121,7 +1136,7 @@ void comms_process_data (void)
                             *ptr,
                             motd [256],
                             buffer [256],
-                            temp_wut_filename[128];	
+                            temp_wut_filename[128];
 
 	                   	ptr = received_data;
 
@@ -1130,35 +1145,35 @@ void comms_process_data (void)
 						ui_object_destroy_list_items (session_info_list);
 
 						// MOTD
-						
-						
+
+
 						strncpy (motd, ptr, sizeof (motd));
-						
+
 						ptr += strlen (motd) + 1;
-						
+
 						size += strlen (motd) + 1;
-						
+
 						if (strlen (motd) > 0)
 						{
 							sprintf (buffer, "%s", motd);
 
 							add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
-							
+
 							add_to_pop_up_list_with_word_wrap (" ", session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 						}
-	                    
-		                        
+
+
                         // WUT
-              
+
                         strncpy (temp_wut_filename, ptr, sizeof (temp_wut_filename));
 
                         ptr += strlen (temp_wut_filename) + 1;
 
                         size += strlen (temp_wut_filename) + 1;
-                        
+
                         strcpy(session_WUT_filename, temp_wut_filename);
 
-                     //   { Jabberwock 050129 WUT transfer - client side
+                     // Jabberwock 050129 WUT transfer - client side
                      // with great help from Gotcha
 
 					 /*	not needed anymore, hopefully!
@@ -1167,13 +1182,13 @@ void comms_process_data (void)
                        		if (!file_exist(session_WUT_filename))
                        		{
                        			sprintf (buffer, "%s: %s", get_trans ("Missing local WUT file"), temp_wut_filename);
-                       			
+
                        			add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
-                       			
+
 		               			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
-						
+
 										set_ui_object_drawable (session_screen_continue_button, FALSE);
-                        			
+
 	                       		break;
 	                       	}
 	                       	else
@@ -1186,19 +1201,21 @@ void comms_process_data (void)
                         {
                         	if (file_exist("origwut.txt"))
                         		parse_WUT_file("origwut.txt");
-                        	else 
+                        	else
                         	if (file_exist("gwut146x.csv"))
                         		parse_WUT_file("gwut146x.csv");
                         }
-						*/ 
+						*/
 
                         sprintf (buffer, "%s: %s", get_trans ("Server WUT version"), session_WUT_filename);
-						
+
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						// 29AUG05 Casm Fix for wut transfer - don't overwrite pointers!
 
 						// Aircraft
 
-						memcpy (aircraft_database, ptr, sizeof(aircraft_database));
+						smart_memcpy ( aircraft_database, ptr, sizeof ( *aircraft_database ), 4 * sizeof ( const char * ), sizeof ( aircraft_database ) / sizeof ( *aircraft_database ) );
 
 						ptr += sizeof(aircraft_database);
 
@@ -1206,7 +1223,7 @@ void comms_process_data (void)
 
 						// Vehicle
 
-						memcpy (vehicle_database, ptr, sizeof(vehicle_database));
+						smart_memcpy ( vehicle_database, ptr, sizeof ( *vehicle_database ), 4 * sizeof ( const char * ), sizeof ( vehicle_database ) / sizeof ( *vehicle_database ) );
 
 						ptr += sizeof(vehicle_database);
 
@@ -1214,7 +1231,7 @@ void comms_process_data (void)
 
 						// Weapon
 
-						memcpy (weapon_database, ptr, sizeof(weapon_database));
+						smart_memcpy ( weapon_database, ptr, sizeof ( *weapon_database ), 5 * sizeof ( const char * ), sizeof ( weapon_database ) / sizeof ( *weapon_database ) );
 
 						ptr += sizeof(weapon_database);
 
@@ -1222,7 +1239,7 @@ void comms_process_data (void)
 
 						// Keysite
 
-						memcpy (keysite_database, ptr, sizeof(keysite_database));
+						smart_memcpy ( keysite_database, ptr, sizeof ( *keysite_database ), 2 * sizeof ( const char * ), sizeof ( keysite_database ) / sizeof ( *keysite_database ) );
 
 						ptr += sizeof(keysite_database);
 
@@ -1230,7 +1247,7 @@ void comms_process_data (void)
 
 						// Group
 
-						memcpy (group_database, ptr, sizeof(group_database));
+						smart_memcpy ( group_database, ptr, sizeof ( *group_database ), 2 * sizeof ( const char * ), sizeof ( group_database ) / sizeof ( *group_database ) );
 
 						ptr += sizeof(group_database);
 
@@ -1238,7 +1255,7 @@ void comms_process_data (void)
 
 						// Task
 
-						memcpy (task_database, ptr, sizeof(task_database));
+						smart_memcpy ( task_database, ptr, sizeof ( *task_database ), 3 * sizeof ( const char * ), sizeof ( task_database ) / sizeof ( *task_database ) );
 
 						ptr += sizeof(task_database);
 
@@ -1246,7 +1263,7 @@ void comms_process_data (void)
 
 						// Waypoint
 
-						memcpy (waypoint_database, ptr, sizeof(waypoint_database));
+						smart_memcpy ( waypoint_database, ptr, sizeof ( *waypoint_database ), 1 * sizeof ( const char * ), sizeof ( waypoint_database ) / sizeof ( *waypoint_database ) );
 
 						ptr += sizeof(waypoint_database);
 
@@ -1303,47 +1320,47 @@ void comms_process_data (void)
                         session_planner_goto_button = get_list_item (ptr, int);
 
                         size += sizeof (int);
-                        
+
                         sprintf (buffer, "%s: %d", get_trans ("Map GOTO button"), session_planner_goto_button);
 
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
-						
+
 						session_vector_flight_model = get_list_item (ptr, int);
 
                         size += sizeof (int);
-                        
+
                         sprintf (buffer, "%s: %d", get_trans ("Vector flight model"), session_vector_flight_model);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
-						
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
 						session_ground_radar_ignores_infantry = get_list_item (ptr, int);
 
                         size += sizeof (int);
-                        
+
                         sprintf (buffer, "%s: %d", get_trans ("Radar ignores infantry"), session_ground_radar_ignores_infantry);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						session_camcom = get_list_item (ptr, int);
 
                         size += sizeof (int);
-                        
+
                         sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);						
-						
+						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
                			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
-						
+
 						set_ui_object_drawable (session_screen_continue_button, FALSE);
-               			
+
                			set_ui_object_drawable (session_screen_next_bdrop, TRUE);
 
 						set_ui_object_drawable (session_screen_next_button, TRUE);
-						
+
 						break;
 
                     }
-// Jabberwock 031118 ends 
+// Jabberwock 031118 ends
 
                     case PACKET_TYPE_CONNECTION_VALIDATION:
                     {
@@ -1364,7 +1381,7 @@ void comms_process_data (void)
                         connection = get_connection_list_item (received_id);
 
                         connection->validation_count = 0;
-                        
+
                         connection->connection_validation_time = get_system_time (); // Jabberwock - Validation reset
 
                         debug_log ("COMM_MAN: received CONNECTION_RESPONSE, connection still alive");
@@ -1415,12 +1432,12 @@ void comms_process_data (void)
                         //
                         // Check both client and server are running same campaign data
                         //
-                        
+
                         // Jabberwock 050301 Hardcoded version number
-                                    
-                        // please put in the date of the version! check it is changed twice!                        
-                        
-                        client_version_number = 1621; // Jabberwock 050322 
+
+                        // please put in the date of the version! check it is changed twice!
+
+                        client_version_number = 1621; // Jabberwock 050322
 
                         server_version_number = get_list_item (ptr, int);
 
@@ -1438,7 +1455,7 @@ void comms_process_data (void)
                         }
                         //
                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						
+
 						// Jabberwock 050320 Downwash MP check
 						if (command_line_downwash)
 						{
@@ -1448,7 +1465,7 @@ void comms_process_data (void)
 							break;
                         }
                         // Jabberwock 050320 ends
-						
+
                         // map details
 
                         x_size = get_list_item (ptr, int);
@@ -1596,7 +1613,7 @@ void comms_process_data (void)
                         if (unpack_session (ptr, received_size, PACK_MODE_BROWSE_SESSION))
                         {
 
-                            debug_log ("COMMS MAN: browse: received size overflow"); // schorpp 
+                            debug_log ("COMMS MAN: browse: received size overflow"); // schorpp
  							start_game_exit (GAME_EXIT_KICKOUT, FALSE);
 							break;
                        }
@@ -1624,11 +1641,11 @@ void comms_process_data (void)
                         #endif
 
                         // Jabberwock 031118 Server side settings
-                        
+
                         set_ui_object_drawable (session_screen_continue_bdrop, TRUE);
-                        
+
                         set_ui_object_drawable (session_screen_continue_button, TRUE);
-                        
+
                         // Jabberwock 031118 ends
 
                         //
@@ -1897,8 +1914,8 @@ void comms_process_data (void)
                             }
 
                             #endif
-                            
-                            
+
+
                             if (this_connection->pilot_entity)
                             {
                             	server_log ("%s is trying to join...", get_local_entity_string (this_connection->pilot_entity, STRING_TYPE_PILOTS_NAME));
@@ -2130,7 +2147,7 @@ void comms_process_data (void)
                         //
                         // LOAD TERRAIN DATA
                         //
-                    
+
                         load_3d_terrain_game_data ();
 
                         initialise_population_name_database ();
@@ -2173,12 +2190,12 @@ void comms_process_data (void)
                         }
 /*
                         force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
-                    
+
                         while (force)
                         {
-                        
+
                             create_frontline (force);
-                        
+
                             force = get_local_entity_child_succ (force, LIST_TYPE_FORCE);
                         }
 
@@ -2192,11 +2209,11 @@ void comms_process_data (void)
 
                             received_data += received_size - 4;
                             index_number = get_list_item (received_data, int);
-    
+
                             new_connection = get_connection_list_item (received_id);
-    
+
                             new_connection->receive_group_frame_id = index_number;
-    
+
                             send_packet (get_server_id (), PACKET_TYPE_CLIENT_FRAME_ID, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
                         }
 
@@ -2313,9 +2330,9 @@ void comms_process_data (void)
 
                             if (received_id == get_server_id ())
                             {
-        
+
                                 //setup_campaign_over_screen (get_local_force_entity (get_global_gunship_side ()), CAMPAIGN_RESULT_STALEMATE);
-        
+
                                 start_game_exit (GAME_EXIT_KICKOUT, FALSE);
                             }
                         }
@@ -2371,7 +2388,7 @@ static int
 
         set_delta_time ();
     }
-    
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2381,7 +2398,7 @@ static int
 //-- Werewolf
 
 // Resolve masterserver hostname
-unsigned long LookUpIPAddress(CHAR * inet_address)  
+unsigned long LookUpIPAddress(CHAR * inet_address)
 {
 
     unsigned long ulServerAddr = INADDR_NONE;
@@ -2389,12 +2406,12 @@ unsigned long LookUpIPAddress(CHAR * inet_address)
 
     // Try parsing inet xxx.xxx.xxx.xxx format string
     ulServerAddr = inet_addr(inet_address);
-    if (ulServerAddr == INADDR_NONE)  
+    if (ulServerAddr == INADDR_NONE)
     {
-        // If the IP address parse fails, try               
+        // If the IP address parse fails, try
         // resolving host name using hosts file
         hostentry = gethostbyname(inet_address);
-            
+
         // At this point, the user didn't enter an IP address
         // or valid host name.  Display error message and return
         // exit.  Return FALSE to indicate failure.
@@ -2407,7 +2424,7 @@ unsigned long LookUpIPAddress(CHAR * inet_address)
         {
             ulServerAddr = *((unsigned long *)hostentry->h_addr_list[0]);
         }
-    }       
+    }
 
     return ulServerAddr;
 }
@@ -2432,12 +2449,12 @@ int net_CheckForDataOnSocket (int p1, int p2)
 	struct timeval to;
 	int sr = -1;
 	int p;
-	
+
 	if (p1 > 0)
 	{
 	  p = p1;
 	  FD_ZERO (&rread);
-	  FD_SET (p, &rread);	
+	  FD_SET (p, &rread);
 	  memset (&to, 0, sizeof (to));
 	  to.tv_sec = 0;
 	  to.tv_usec = 10;
@@ -2450,7 +2467,7 @@ int net_CheckForDataOnSocket (int p1, int p2)
         {
 	  p = p2;
 	  FD_ZERO (&rread);
-	  FD_SET (p, &rread);	
+	  FD_SET (p, &rread);
 	  memset (&to, 0, sizeof (to));
 	  to.tv_sec = 0;
 	  to.tv_usec = 10;
@@ -2491,7 +2508,7 @@ void net_receiveData (int s)
 	  socket = mastersocket;
 	if (s == 2)
 	  socket = mastersocket2;
-	  
+
 	memset (ReceiveBuffer, '\0', PACKET_SIZE);
 	recvfrom (socket, ReceiveBuffer, PACKET_SIZE, 0, &from, &len);
 }
@@ -2501,7 +2518,7 @@ void net_receiveData (int s)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Opens a socket to the masterserver. Returns -1 if unsuccessfull
-int net_connectToMaster (char *serverName, short port, int servernum) 
+int net_connectToMaster (char *serverName, short port, int servernum)
 {
         int sock;
         u_long ulServerAddr;
@@ -2513,7 +2530,7 @@ int net_connectToMaster (char *serverName, short port, int servernum)
         else
         {
             debug_log ("HEARTBEAT: Connecting to secondary master");
-        }  
+        }
 
         ulServerAddr = LookUpIPAddress(serverName);
 
@@ -2597,7 +2614,7 @@ void net_getServerList(void)
     	return;
 
     debug_log ("GETSERVERLIST: Init");
-    
+
     if ((mastersocket <=0) && (mastersocket2 <=0))
     {
     	numServers = 0;
@@ -2613,7 +2630,7 @@ void net_getServerList(void)
         net_sendDataToMaster (SendBuffer, 1);
       if (mastersocket2 > 0 )
         net_sendDataToMaster (SendBuffer, 2);
-        
+
       debug_log ("GETSERVERLIST: Request sent");
     }
     else if (num_multiplayer_refreshes > 2)
@@ -2636,9 +2653,9 @@ void net_getServerList(void)
 
 				if (ReceiveBuffer[0] == 'W')
 				{
-				    sscanf(ReceiveBuffer, "%s %s %s %i %i %s", header, Servers[index].Adress, 
-										Servers[index].Name, 
-										&Servers[index].MaxClients, 
+				    sscanf(ReceiveBuffer, "%s %s %s %i %i %s", header, Servers[index].Adress,
+										Servers[index].Name,
+										&Servers[index].MaxClients,
 										&Servers[index].CurClients,
 										Servers[index].Version);
 					index++;
@@ -2668,7 +2685,7 @@ void net_init_heartbeat(void)
         if (mastersocket <= 0)
           mastersocket2 = net_connectToMaster (command_line_secondary_server_setting, MasterPort, 2);
     debug_log ("HEARTBEAT: after heartbeat initialisation");
-    
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2697,7 +2714,7 @@ void net_handle_heartbeat(void)
         {
           connection_data_type *this_connection;
           this_connection = direct_play_get_connection_data ();
-          // Check whether the current networking method is TCP/IP 
+          // Check whether the current networking method is TCP/IP
           if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
           {
             //Send heartbeat
@@ -2707,7 +2724,7 @@ void net_handle_heartbeat(void)
       }
       //Set next scheduled heartbeat time. Strangely, ONE_SECOND does not equal one second, hence the multiplication factor "1000"
           last_heartbeat_time = get_system_time () + (ONE_SECOND * 60 * 1000);
-    }   
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2722,10 +2739,10 @@ void net_uninit_heartbeat(void)
 
     if (mastersocket >= 0)
           closesocket (mastersocket);
-        mastersocket = -1;  
+        mastersocket = -1;
     if (mastersocket2 >= 0)
           closesocket (mastersocket2);
-        mastersocket2 = -1; 
+        mastersocket2 = -1;
 }
 //-- Werewolf
 

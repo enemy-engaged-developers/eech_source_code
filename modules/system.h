@@ -95,10 +95,12 @@
 #endif
 #ifndef WIN32
 # include <sys/types.h>
-# include <unistd.h>
 # include <dirent.h>
 # include <fcntl.h>
+#ifndef __BORLANDC__
+# include <unistd.h>
 # include <sys/mman.h>
+#endif
 #endif
 #include <malloc.h>
 #include <string.h>
@@ -393,7 +395,7 @@ typedef struct tagKERNINGPAIR {
 #define NODEFERWINDOWPOS
 
 // crh 030319 Open Watcom defines FOURCC in \watcom\H\NT\mmsystem.h
-#if !defined ( __WATCOMC__ ) && !defined ( __GNUC__ )
+#if !defined ( __WATCOMC__ ) && !defined ( __GNUC__ ) && !defined ( __BORLANDC__ )
 typedef unsigned int FOURCC;         /* a four character code */
 #endif /* __WATCOMC__ */
 

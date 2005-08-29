@@ -195,7 +195,7 @@ static const char *get_local_string (entity *en, string_types type)
 	weapon
 		*raw;
 
-	char
+	const char
 		*s;
 
 	raw = get_local_entity_data (en);

@@ -98,6 +98,32 @@ inline static void asm_convert_double_to_int ( double value, int *integer )
 						: /* no outputs */ : "t" (value), "d" (integer) : "memory" );
 }
 
+#elif defined ( __BORLANDC__ )
+
+void asm_convert_float_to_int ( float value, int *integer )
+{
+
+	__asm
+	{
+
+		fld value
+		mov edx, integer
+		fistp dword ptr [edx]
+	}
+}
+
+void asm_convert_double_to_int ( double value, int *integer )
+{
+
+	__asm
+	{
+
+		fld value
+		mov edx, integer
+		fistp dword ptr [edx]
+	}
+}
+
 #else
 
 __inline void asm_convert_float_to_int ( float value, int *integer )

@@ -66,7 +66,7 @@
 
 struct AIRCRAFT_DATA
 {
-	char
+	const char
 		*full_name,
 		*long_display_name,
 		*short_display_name,

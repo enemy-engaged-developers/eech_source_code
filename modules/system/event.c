@@ -164,7 +164,7 @@ int initialise_event_system (void)
 void clear_events (void)
 {
 
-   #if DEBUG_EVENT
+   #if DEBUG_EVENT_
 
    debug_log ("EVENT: clear events ");
 
@@ -183,7 +183,7 @@ void reset_events (void)
 	int
 		loop1;
 
-   #if DEBUG_EVENT
+   #if DEBUG_EVENT_
 
    debug_log ("EVENT: reset events ");
 

@@ -66,7 +66,7 @@
 
 struct WEAPON_DATA
 {
-	char
+	const char
 		*full_name,
 		*hud_name,
 		*mfd_name,

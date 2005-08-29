@@ -67,7 +67,7 @@
 struct KEYSITE_DATA
 {
    const char
-      *full_name,
+		*full_name,
 		*short_name;
 
 	supply_type

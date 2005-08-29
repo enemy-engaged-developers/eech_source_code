@@ -459,7 +459,7 @@ void process_ini_file(int argc, char *argv[])
 //VJ 050818 water doesn't work without the colour texture mod
 	if (command_line_texture_colour == 0)
 		global_dynamic_water = 0;
-		
+
 //VJ 040816 forgot these
    if (buf1) free(buf1);  
    if (buf) free(buf);  
@@ -472,7 +472,7 @@ void process_ini_file(int argc, char *argv[])
 //VJ 030511 rewrote dump_ini_file
 void dump_ini_file(void)
 {
-	FILE *f = fopen("eech.ini","w");
+	FILE *f = fopen("EECH.INI","w");
 
 	fprintf(f,"[Enemy Engaged - Comanche Hokum commandline options]\n");
 	fprintf(f,"[Game]\n");

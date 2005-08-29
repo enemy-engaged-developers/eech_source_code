@@ -66,7 +66,7 @@
 
 struct GROUP_DATA
 {
-	char
+	const char
 		*full_name,
 		*group_short_name;
 
