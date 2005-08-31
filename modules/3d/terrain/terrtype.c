@@ -968,7 +968,7 @@ void initialise_3d_custom_terrain_types( void )
 			sl = terrain_water_information[2].scale_bottom;
 			sld = terrain_water_information[2].scale_top;
 			if (index == terrain_texture_reservoir_detail ) 
-	   		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_water_information[2].placenr, terrain_water_information[2].placenr+1+change_sea_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
+	   		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_water_information[2].placenr, terrain_water_information[2].placenr+1+change_reservoir_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
 
 			sl = texture_override_scales[count][1];
 			sld = sl;
