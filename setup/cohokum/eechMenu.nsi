@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "161W4"
+  !define VERSION "162W2"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -32,7 +32,8 @@
 		!define MUI_ICON eech.ico
   		!define MUI_WELCOMEFINISHPAGE_BITMAP enemyengagedlogo.bmp
   		!define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
-
+		!define MUI_WELCOMEPAGE_TITLE_3LINES
+		
   !insertmacro MUI_PAGE_LICENSE licenceeech.txt
 		!define MUI_COMPONENTSPAGE_TEXT_TOP "Check/Uncheck the components you want to install. CAREFUL: files will be overwritten!"
   !insertmacro MUI_PAGE_COMPONENTS  	
@@ -51,16 +52,28 @@
 ;--------------------------------
 ;Installer Sections
 
+Section "Create a backup?" SecBackup
+	!define TBACKUP1 $INSTDIR\cohokum                                                       
+	CreateDirectory "$INSTDIR\cohokum\backup"
+	
+CopyFiles /FILESONLY ${TBACKUP1}\cohokum.exe           ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${TBACKUP1}\GWUT146X.csv          ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${TBACKUP1}\GWUT151D.csv          ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${TBACKUP1}\GWUT1613H.csv         ${TBACKUP1}\backup
+	
+SectionEnd
 
 Section "cohokum.exe" SectionExe
 
   SetOutPath "$INSTDIR\cohokum"
   
-  ;ADD YOUR OWN FILES HERE...
   File "..\..\aphavoc\cohokum.exe"
   File ${VERSION}readme.html
   File motd.txt
   File TrackIR.dll	
+  File GWUT146X.csv
+  File GWUT151D.csv
+  File GWUT1613H.csv  
 
   SetOutPath "$INSTDIR\common\data\language\"
   File ..\common\data\language\tlate6.dat
@@ -73,27 +86,19 @@ Section "cohokum.exe" SectionExe
  
 SectionEnd
 
-Section "WUT files" SecGWUT
-
-  SetOutPath "$INSTDIR\cohokum"
-  
-  ;ADD YOUR OWN FILES HERE...
-  File GWUT146X.csv
-  File GWUT151D.csv
-  File GWUT1613H.csv  
-
-SectionEnd
 
 ;--------------------------------
 ;Descriptions
 
   ;Language strings
   LangString DESC_SectionExe ${LANG_ENGLISH} "Install cohokum.exe, readme.html, additional payload screens, motd.txt and tlate6.dat language file"
-  LangString DESC_SecGWUT ${LANG_ENGLISH} "Weapons and Units Tweaker files"
+;  LangString DESC_SecGWUT ${LANG_ENGLISH} "Weapons and Units Tweaker files"
+  LangString DESC_SecBackup ${LANG_ENGLISH} "Backup exe and wut files in a subdirectory 'backup' "
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+	 !insertmacro MUI_DESCRIPTION_TEXT ${SecBackup} $(DESC_SecBackup)
     !insertmacro MUI_DESCRIPTION_TEXT ${SectionExe} $(DESC_SectionExe)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecGWUT} $(DESC_SecGWUT)
+ ;   !insertmacro MUI_DESCRIPTION_TEXT ${SecGWUT} $(DESC_SecGWUT)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
