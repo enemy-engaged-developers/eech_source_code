@@ -55,7 +55,6 @@ body {
 	background-color: #dddddd;
 }
 .style46 {font-size: 10}
-.style47 {color: #663399}
 -->
 </style>
 </head>
@@ -77,7 +76,7 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><span
-     lang=EN-GB>Installation and additional files needed </span></li>
+     lang=EN-GB><a href="#installation">Installation and addons</a></span></li>
         <li><a href="#trouble">Troubleshooting</a></li>
         <li><a href="#gameinfo"><span
      lang=EN-GB>General game info</span> (flyable choppers, WUT, MP)</a> </li>
@@ -96,25 +95,27 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
       <p><em><strong>(since version 161W5, this exe replaces 162W1T7)</strong></em></p>
       <ol>
         <li>In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
-        <li>Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting).
+        <li>Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting, set this to a higher quality setting).
           <ul>
             <li>texture_colour=1 </li>
             <li>mipmapping=1 </li>
             <li>texture_filtering =1 </li>
           </ul>
         </li>
-        <li>Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1), download the <a href="#installation">texture pack</a></li>
+        <li>Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1), download the appropriate texture packs</li>
         <li>For texture modders, (untested) alpha blending support for dds textures</li>
         <li>Autosave and Quicksave (Ctrl-Z), eech.ini setting autosave=n (n= nr of minutes)</li>
         <li>Three brightness levels of PNVS night vision, press Ctrl-N when in game. </li>
         <li>Hardware sound support (4 speakers) </li>
-        <li>YrachIR vector support (eech.ini: TIR_6DOF=1)</li>
-        <li>Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card</li>
+        <li>TrackIR vector support (eech.ini: TIR_6DOF=1)</li>
+        <li>Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card. Palleted textures can still be chosen via eech.ini. </li>
         <li>Screenshots can now be taken when in 32bit mode</li>
         <li>Numerous bug fixes and code cleaning </li>
       </ol>
+      <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
       <p align="right"><span
-lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and additional files </span></h2>
+lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
+      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
       <h3 class="p">Basic Install </h3>
       <p class="p">If you do not own EE - Apache Havoc you can skip the first two steps </p>
       <ol>
@@ -131,45 +132,103 @@ lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name=installation>
       <h3>Addons</h3>
       <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order doesn't really matter as these addons are independent. However the order below gives you the best result ;-). </p>
       <h4>Maps, campaigns and skimishes </h4>
-      <ol>
-        <li>The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc: <a href="http://hoxdna.org/eech/files/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a> (beware: 117 Mbyte). With permission of Razorworks.</li>
-        <li>Custom campaigns: Alaska, Aleut, Kuwait and Lybia campaigns and additional campaigns and skirmishes in all warzones: <a href="http://hoxdna.org/eech/files/superpatch2.exe">superpatch2.exe</a>. You also need the textures for these (see below). <br>
-            <br>
-    Thanks Werewolf for hosting these! </li>
-      </ol>
-      <h4>Texture packs </h4>
+      <table width="800" border="0">
+        <tr bgcolor="eeeeee">
+          <td colspan="2"><strong>Apache Havoc campaigns </strong></td>
+        </tr>
+        <tr>
+          <td width="242"><a href="http://hoxdna.org/eech/files/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a> </td>
+          <td width="530">The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc (beware: 117 Mbyte). With permission of Razorworks. </td>
+        </tr>
+        <tr bgcolor="eeeeee">
+          <td colspan="2"><strong>Fan made campaigns </strong></td>
+        </tr>
+        <tr>
+          <td><a href="http://hoxdna.org/eech/files/superpatch2.exe">superpatch2.exe</a></td>
+          <td>Custom campaigns: Alaska, Aleut, Kuwait and Lybia campaigns and additional campaigns and skirmishes in all warzones. You also need the textures for these (see below)</td>
+        </tr>
+      </table>            <h4>Texture packs </h4>
       <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
       &quot;texture_colour=1&quot;, &quot;mipmapping=1&quot;, and &quot;texture_filtering=1&quot;. </p>
       <p>The following texture packs can be installed in random order (note that these packs create a load of extra directories under /razorworks/cohokum/graphics/textures):</p>
-      <h5 class="style47">General</h5>
-      <ol>
-        <li>The textures you need for the custom fanbase maps Alaska, Aleut, Lybia, Kuwait (the so called superpatch2 maps, see above): <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackusermaps.exe">texturepackusermaps.exe</a><br>
-    Please read this pack's <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/download/readme_texturepackusermaps.html" target="_blank">readme</a> to understand what this does! </li>
-        <li>Improved Kuwait textures by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackkuwait.exe" target="_blank">texturepackkuwait.exe</a> </li>
-        <li>OLD: High res cockpit and camo textures (by Gotcha and others):<s><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackcc.exe" target="_blank"> texturepackcc.exe</a></s>. <br>
-        This is replaced by: </li>
-        <li> Improved highres cockpit textures by Michael Langner (based on my old stuff): <a href="http://webdisk.planet.nl/jette073/publiek/album/dl/texturepackwater.exe" target="_blank">texturepackcockpit3.exe</a> </li>
-        <li>Improved camo textures by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackMLcamo.exe" target="_blank">texturepackMLcamo.exe</a> </li>
-        <li>Improved camo textures by Rocky: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockycamo2.exe" target="_blank">texturepackrockycamo2.exe</a> </li>
-        <li>Improved general textures (and pilot skin) by Michael Langner and Rocky: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeneral.exe" target="_blank">texturepackgeneral.exe</a> </li>
-        <li>New opening screen and menu backgrounds by Michael Langner: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a> </li>
-      </ol>
-      <h5 class="style47">Terrain</h5>
-      <ol>
-        <li>Dynamic water textures (works <strong>ONLY</strong> with version 162W2 and later) by Gotcha: <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackwater.exe" target="_blank">texturepackwater.exe</a> </li>
-        <li>The terrain texture packs, one for each warzone:
-            <ul>
-              <li>georgia (by gotcha):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> texturepackgeorgia.exe</a></li>
-              <li>georgia (by Rocky):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockygeorgia.exe"> texturepackrockygeorgia.exe</a></li>
-              <li>lebanon (by gotcha): <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacklebanon.exe">texturepacklebanon.exe</a></li>
-              <li>taiwan (by gotcha):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> </a><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacktaiwan.exe">texturepacktaiwan.exe</a></li>
-              <li>yemen (by Rocky):<a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe"> </a><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.rar">texturepackyemen.rar</a>, <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.r00">texturepackyemen.r00</a></li>
-              <li>thailand: not yet!</li>
-              <li>cuba: not yet!</li>
-            </ul>
-        </li>
-      </ol>      
-      <p align="right"><span
+      <table width="800" border="0">
+        <tr bgcolor="#eeeeee">
+          <td colspan="2"><strong>Textures for Alaska, ALeut, Kuwait, Lybia </strong></td>
+        </tr>
+        <tr>
+          <td width="234"><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackusermaps.exe">texturepackusermaps.exe</a></td>
+          <td width="538">Created and collected textures for the coolection of user made maps (the superpack2), by several authors </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackkuwait.exe" target="_blank">texturepackkuwait.exe</a></td>
+          <td>Improved Kuwait textures by Michael Langner (replaces above) </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackalaska.exe" target="_blank">texturepackalaska.exe</a></td>
+          <td>Improved Kuwait textures by Michael Langner (replaces above)</td>
+        </tr>
+        <tr bgcolor="#EEEEEE">
+          <td colspan="2"><strong>Camo, Cockpit and general textures </strong></td>
+        </tr>
+        <tr>
+          <td> <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackcc.exe" target="_blank">texturepackcc.exe</a></td>
+          <td>High res cockpit textures by Gotcha, Camo by Rocky and Polak and others </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/dl/texturepackwater.exe" target="_blank">texturepackcockpit3.exe</a></td>
+          <td>Improved cockpit textures by Michael Langner (replaces above) </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackMLcamo.exe" target="_blank">texturepackMLcamo.exe</a> </td>
+          <td>Improved camo textures by Michael Langner (replaces above) </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockycamo2.exe" target="_blank">texturepackrockycamo2.exe</a> </td>
+          <td>Improved camo textures by Rocky (replaces above partly)</td>
+        </tr>
+        <tr>
+          <td height="45"><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeneral.exe" target="_blank">texturepackgeneral.exe</a></td>
+          <td>Improved general textures (and pilot skin) by Michael Langner and sky textures by Rocky</td>
+        </tr>
+        <tr>
+          <td> <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a></td>
+          <td>New opening screen and menu backgrounds created by Michael Langner</td>
+        </tr>
+        <tr bgcolor="#EEEEEE">
+          <td colspan="2"><strong>Terrain texture packs </strong></td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe">texturepackgeorgia.exe</a><br>            <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockygeorgia.exe">texturepackrockygeorgia.exe</a><br></td>
+          <td>Georgia textures by Gotcha, and a highres replacement of some textures by Rocky </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacklebanon2.exe">texturepacklebanon2.exe</a></td>
+          <td>Lebanon textures by Gotcha </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacktaiwan.exe">texturepacktaiwan.exe</a></td>
+          <td>Taiwan textures by Gotcha </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.exe">texturepackyemen.exe</a><br>          </td>
+          <td>Yemen textures by Rocky</td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackthailand.exe">texturepackthailand.exe</a></td>
+          <td>Thailand textures by Rocky. </td>
+        </tr>
+        <tr>
+          <td><em>texturepackcuba.exe</em></td>
+          <td>Not done yet ! </td>
+        </tr>
+        <tr bgcolor="#EEEEEE">
+          <td colspan="2"><strong>Dynamic water textures</strong> (set dynamic_water=1 in eech.ini) </td>
+        </tr>
+        <tr>
+          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackwater.exe" target="_blank">texturepackwater.exe</a> </td>
+          <td>Dynamic water textures for rivers, reservoirs and sea by Gotcha </td>
+        </tr>
+      </table>            <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name="trouble"></a>Trouble shooting </h2>
       <p>If your game doesn't run properly, there is not so much that can be done! </p>
       <ul>
@@ -547,15 +606,21 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal"> Enables support for TrackIR vector in the hokum and comanche</td>
         </tr>
         <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Texture support </strong></td>
+          <td colspan="2" class="Normal"> <strong>Texture support and colour setting </strong></td>
         </tr>
         <tr valign="top">
-          <td class="style43"> <p>texture_colour=0<br>
-            texture_filtering=0<br>
-            mipmapping=0<br>
-            dynamic_water=0
-          </p>          </td>
+          <td class="style43">
+            <p>texture_colour=0<br>
+      texture_filtering=0<br>
+      mipmapping=0<br>
+      dynamic_water=0 </p></td>
           <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates fllwing water but only with the correct texture packs. </td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> <p>palette=0<br>
+            </p>          </td>
+          <td class="Normal"> allow to use textures.pal if videocard supports it. Default is 1. <br>
+          Recommended is 0 (24 bit textures).</td>
         </tr>
         <tr valign="top">
           <td colspan="2" class="Normal"> <strong>Autosave</strong></td>
@@ -563,7 +628,15 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         <tr valign="top">
           <td class="style43"> autosave=0 </td>
           <td class="Normal">
-            <p>      autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p>
+            <p> autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p></td>
+        </tr>
+        <tr valign="top">
+          <td colspan="2" class="Normal"> <strong>Sound</strong></td>
+        </tr>
+        <tr valign="top">
+          <td class="style43"> hdwrbuf=0</td>
+          <td class="Normal">
+            <p>                 Number of hardware buffers to use for sound card (0 to use software only)</p>
           </td>
         </tr>
       </table>
