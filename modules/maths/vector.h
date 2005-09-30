@@ -215,47 +215,47 @@ extern float normalise_any_3d_vector ( vec3d *vector );
 
 extern float normalise_any_2d_vector ( vec2d *vector );
 
-extern float get_3d_vector_magnitude ( vec3d *vector );
+extern float get_3d_vector_magnitude ( const vec3d *vector );
 
-extern float get_2d_vector_magnitude ( vec2d *vector );
+extern float get_2d_vector_magnitude ( const vec2d *vector );
 
-extern float get_3d_vector_inverse_magnitude ( vec3d *vector );
+extern float get_3d_vector_inverse_magnitude ( const vec3d *vector );
 
 extern void normalise_3d_vector_given_magnitude ( vec3d *vector, float length );
 
 extern void normalise_2d_vector_given_magnitude ( vec2d *vector, float length );
 
-extern float get_3d_perp_dist_of_point_from_line (vec3d *point_a, vec3d *point_b, vec3d *point_c, vec3d *point_d);
+extern float get_3d_perp_dist_of_point_from_line (const vec3d *point_a, const vec3d *point_b, const vec3d *point_c, vec3d *point_d);
 
-extern void get_3d_perp_vector_of_point_from_line (vec3d *line_point_a, vec3d *line_point_b, vec3d *point_c, vec3d *result);
+extern void get_3d_perp_vector_of_point_from_line (const vec3d *line_point_a, const vec3d *line_point_b, const vec3d *point_c, vec3d *result);
 
-extern float get_2d_perp_dist_of_point_from_line (vec3d *line_point_a, vec3d *line_point_b, vec3d *point_c, float *distance_along_line);
+extern float get_2d_perp_dist_of_point_from_line (const vec3d *line_point_a, const vec3d *line_point_b, const vec3d *point_c, float *distance_along_line);
 
-extern float get_2d_perp_dist_of_point_from_infinite_line (vec3d *line_point_a, vec3d *line_point_b, vec3d *point_c);
+extern float get_2d_perp_dist_of_point_from_infinite_line (const vec3d *line_point_a, const vec3d *line_point_b, const vec3d *point_c);
 
-extern line_line_intercept_result_types line_line_3d_intercept (vec3d *p1, vec3d *p2, vec3d *q1, vec3d *q2, vec3d *intercept_point_p, vec3d *intercept_point_q);
+extern line_line_intercept_result_types line_line_3d_intercept (const vec3d *p1, const vec3d *p2, const vec3d *q1, const vec3d *q2, vec3d *intercept_point_p, vec3d *intercept_point_q);
 
-extern int line_line_2d_intercept (vec2d *p1, vec2d *p2, vec2d *q1, vec2d *q2, vec2d *intercept_point);
+extern int line_line_2d_intercept (const vec2d *p1, const vec2d *p2, const vec2d *q1, const vec2d *q2, vec2d *intercept_point);
 
-extern float get_2d_vector_dot_product( vec2d *a, vec2d *b );
+extern float get_2d_vector_dot_product( const vec2d *a, const vec2d *b );
 
-extern float get_3d_vector_dot_product( vec3d *a, vec3d *b );
+extern float get_3d_vector_dot_product( const vec3d *a, const vec3d *b );
 
-extern float get_2d_unit_vector_dot_product (vec2d *a, vec2d *b);
+extern float get_2d_unit_vector_dot_product (const vec2d *a, const vec2d *b);
 
-extern float get_3d_unit_vector_dot_product (vec3d *a, vec3d *b);
+extern float get_3d_unit_vector_dot_product (const vec3d *a, const vec3d *b);
 
-extern void get_3d_vector_cross_product (vec3d *result, vec3d *v1, vec3d *v2);
+extern void get_3d_vector_cross_product (vec3d *result, const vec3d *v1, const vec3d *v2);
 
 extern void get_3d_unit_vector_from_heading_and_pitch (vec3d *result, float heading, float pitch);
 
-extern void get_heading_and_pitch_from_3d_unit_vector (vec3d *v, float *heading, float *pitch);
+extern void get_heading_and_pitch_from_3d_unit_vector (const vec3d *v, float *heading, float *pitch);
 
-extern int get_3d_vector_cube_cube_intersect (vec3d *v1a, vec3d *v1b, vec3d *v2a, vec3d *v2b);
+extern int get_3d_vector_cube_cube_intersect (const vec3d *v1a, const vec3d *v1b, const vec3d *v2a, const vec3d *v2b);
 
-extern int get_3d_line_triangle_intersection (vec3d *p1, vec3d *p2, vec3d *pa, vec3d *pb, vec3d *pc, vec3d *pi, vec3d *ni);
+extern int get_3d_line_triangle_intersection (const vec3d *p1, const vec3d *p2, const vec3d *pa, const vec3d *pb, const vec3d *pc, vec3d *pi, vec3d *ni);
 
-extern int get_3d_line_quad_intersection (vec3d *p1, vec3d *p2, vec3d *pa, vec3d *pb, vec3d *pc, vec3d *pd, vec3d *pi, vec3d *ni);
+extern int get_3d_line_quad_intersection (const vec3d *p1, const vec3d *p2, const vec3d *pa, const vec3d *pb, const vec3d *pc, const vec3d *pd, vec3d *pi, vec3d *ni);
 
 extern void invert_3d_vector (vec3d *vector);
 
@@ -283,13 +283,13 @@ extern double normalise_3d_double_vector ( double_vec3d *vector );
 
 extern double normalise_any_3d_double_vector ( double_vec3d *vector );
 
-extern double get_3d_double_vector_magnitude ( double_vec3d *vector );
+extern double get_3d_double_vector_magnitude ( const double_vec3d *vector );
 
-extern double get_3d_double_vector_dot_product( double_vec3d *a, double_vec3d *b );
+extern double get_3d_double_vector_dot_product( const double_vec3d *a, const double_vec3d *b );
 
-extern double get_3d_unit_double_vector_dot_product (double_vec3d *a, double_vec3d *b);
+extern double get_3d_unit_double_vector_dot_product (const double_vec3d *a, const double_vec3d *b);
 
-extern void get_3d_double_vector_cross_product (double_vec3d *result, double_vec3d *v1, double_vec3d *v2);
+extern void get_3d_double_vector_cross_product (double_vec3d *result, const double_vec3d *v1, const double_vec3d *v2);
 
 extern void invert_3d_double_vector (double_vec3d *vector);
 
@@ -297,9 +297,9 @@ extern void rotate_2d_double_vector (double_vec3d *vector, float theta);
 
 extern void get_3d_unit_double_vector_from_heading_and_pitch (double_vec3d *result, double heading, double pitch);
 
-extern void copy_vec3d_to_double_vec3d (vec3d *vec1, double_vec3d *vec2);
+extern void copy_vec3d_to_double_vec3d (const vec3d *vec1, double_vec3d *vec2);
 
-extern void copy_double_vec3d_to_vec3d (double_vec3d *vec1, vec3d *vec2);
+extern void copy_double_vec3d_to_vec3d (const double_vec3d *vec1, vec3d *vec2);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

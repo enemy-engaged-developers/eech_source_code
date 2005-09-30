@@ -770,6 +770,8 @@ BOOL unlock_screen ( screen *this_screen )
 
 		this_screen->locked = FALSE;
 
+		this_screen->data = NULL;
+
 		return ( TRUE );
 	}
 	else

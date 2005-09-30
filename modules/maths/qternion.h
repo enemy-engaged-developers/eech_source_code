@@ -80,15 +80,15 @@ typedef struct QUATERNION quaternion;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void slerp_quaternion ( quaternion *result, quaternion *from, quaternion *to, float t );
+extern void slerp_quaternion ( quaternion *result, const quaternion *from, const quaternion *to, float t );
 
-extern void multiply_quaternion_by_quaternion ( quaternion *result, quaternion *q1, quaternion *q2 );
+extern void multiply_quaternion_by_quaternion ( quaternion *result, const quaternion *q1, const quaternion *q2 );
 
-extern void multiply_quaternion_by_vec3d ( vec3d *result, quaternion *q, vec3d *v );
+extern void multiply_quaternion_by_vec3d ( vec3d *result, const quaternion *q, const vec3d *v );
 
-extern void convert_quaternion_to_matrix3x3 ( matrix3x3 result, quaternion *q );
+extern void convert_quaternion_to_matrix3x3 ( matrix3x3 result, const quaternion *q );
 
-extern void convert_matrix3x3_to_quaternion ( quaternion *result, matrix3x3 matrix );
+extern void convert_matrix3x3_to_quaternion ( quaternion *result, const matrix3x3 matrix );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

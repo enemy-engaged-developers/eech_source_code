@@ -292,7 +292,7 @@ static void update_base_page_objects (ui_object *obj, void *arg)
 		}
 		else
 		{
-			sprintf (s, "N/A", efficiency);
+			sprintf (s, "N/A");
 		}
 
 		set_ui_object_text (base_page_efficiency_box, s);

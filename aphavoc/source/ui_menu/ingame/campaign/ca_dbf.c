@@ -215,7 +215,7 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 			if (get_promotion_briefing_text (mission, awarded_promotion, medal_text))
 			{
 		
-				add_briefing_text_to_list (debriefing_text_list, &medal_text);
+				add_briefing_text_to_list (debriefing_text_list, &medal_text[0]);
 			}
 			else
 			{

@@ -256,7 +256,7 @@ void get_3d_transformation_heading_matrix ( matrix3x3 m, float heading )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_4d_transformation_matrix ( matrix4x4 m, float heading, float pitch, float roll, vec3d *position )
+void get_4d_transformation_matrix ( matrix4x4 m, float heading, float pitch, float roll, const vec3d *position )
 {
 
 	float
@@ -335,7 +335,7 @@ void get_4d_projection_matrix ( matrix4x4 m, float near_plane, float far_plane, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_arbitrary_rotation_matrix ( matrix3x3 m, vec3d *v, float angle )
+void get_arbitrary_rotation_matrix ( matrix3x3 m, const vec3d *v, float angle )
 {
 
 	float
@@ -400,7 +400,7 @@ void get_arbitrary_rotation_matrix ( matrix3x3 m, vec3d *v, float angle )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_reflection_matrix ( matrix3x3 m, vec3d *v )
+void get_reflection_matrix ( matrix3x3 m, const vec3d *v )
 {
 
 	float
@@ -433,7 +433,7 @@ void get_reflection_matrix ( matrix3x3 m, vec3d *v )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v )
+void multiply_matrix3x3_vec3d ( vec3d *result, const matrix3x3 m, const vec3d *v )
 {
 
 	vec3d
@@ -460,7 +460,7 @@ void multiply_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_transpose_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v )
+void multiply_transpose_matrix3x3_vec3d ( vec3d *result, const matrix3x3 m, const vec3d *v )
 {
 
 	vec3d
@@ -489,7 +489,7 @@ void multiply_transpose_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v )
 
 // NB: matrix a is preserved throughout calculation but b is not. ie... do not use multiply_matrix3x3_matrix3x3 (a, b, a)
 
-void multiply_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b )
+void multiply_matrix3x3_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[0][1] * b[1][0] ) + ( a[0][2] * b[2][0] ) );
@@ -509,7 +509,7 @@ void multiply_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_transpose_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b )
+void multiply_transpose_matrix3x3_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[1][0] * b[1][0] ) + ( a[2][0] * b[2][0] ) );
@@ -529,7 +529,7 @@ void multiply_transpose_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, mat
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_matrix3x3_transpose_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b )
+void multiply_matrix3x3_transpose_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[0][1] * b[0][1] ) + ( a[0][2] * b[0][2] ) );
@@ -549,7 +549,7 @@ void multiply_matrix3x3_transpose_matrix3x3 ( matrix3x3 result, matrix3x3 a, mat
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_matrix4x4_matrix4x4 ( matrix4x4 result, matrix4x4 a, matrix4x4 b )
+void multiply_matrix4x4_matrix4x4 ( matrix4x4 result, const matrix4x4 a, const matrix4x4 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[0][1] * b[1][0] ) + ( a[0][2] * b[2][0] ) + a[0][3] * b[3][0]);
@@ -577,7 +577,7 @@ void multiply_matrix4x4_matrix4x4 ( matrix4x4 result, matrix4x4 a, matrix4x4 b )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_matrix4x4_vec4d ( vec4d *result, matrix4x4 m, vec4d *v )
+void multiply_matrix4x4_vec4d ( vec4d *result, const matrix4x4 m, const vec4d *v )
 {
 
 	vec4d
@@ -619,7 +619,7 @@ void multiply_matrix4x4_vec4d ( vec4d *result, matrix4x4 m, vec4d *v )
 // (result) = (a[1][0] a[1][1] 0) * (b[1][0] b[1][1] 0)
 //            (a[2][0] a[2][1] 1)   (b[2][0] b[2][1] 1)
 
-void multiply_matrix3x3_matrix3x3_2d (matrix3x3 result, matrix3x3 a, matrix3x3 b)
+void multiply_matrix3x3_matrix3x3_2d (matrix3x3 result, const matrix3x3 a, const matrix3x3 b)
 {
 	result[0][0] = (a[0][0] * b[0][0]) + (a[0][1] * b[1][0]);
 	result[0][1] = (a[0][0] * b[0][1]) + (a[0][1] * b[1][1]);
@@ -659,7 +659,7 @@ void get_identity_matrix3x3 (matrix3x3 m)
 
 // Kramer's Rule
 
-void get_inverse_matrix (matrix3x3 result, matrix3x3 matrix)
+void get_inverse_matrix (matrix3x3 result, const matrix3x3 matrix)
 {
 
 	float
@@ -713,7 +713,7 @@ void get_inverse_matrix (matrix3x3 result, matrix3x3 matrix)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_matrix3x3_from_unit_vec3d (matrix3x3 result, vec3d *v)
+void get_matrix3x3_from_unit_vec3d (matrix3x3 result, const vec3d *v)
 {
 	float
 		heading,
@@ -730,7 +730,7 @@ void get_matrix3x3_from_unit_vec3d (matrix3x3 result, vec3d *v)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_matrix3x3_from_unit_vec3d_and_roll (matrix3x3 result, vec3d *v, float roll)
+void get_matrix3x3_from_unit_vec3d_and_roll (matrix3x3 result, const vec3d *v, float roll)
 {
 	float
 		heading,
@@ -747,7 +747,7 @@ void get_matrix3x3_from_unit_vec3d_and_roll (matrix3x3 result, vec3d *v, float r
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result, vec3d *normal, float heading)
+void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result, const vec3d *normal, float heading)
 {
 	//
 	// guard against possible divide by zero
@@ -793,7 +793,7 @@ void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int check_identity_matrix3x3 (matrix3x3 m)
+int check_identity_matrix3x3 (const matrix3x3 m)
 {
 
 	if (memncmp ((char *) m, (char *) &identity_matrix3x3, sizeof (matrix3x3)))
@@ -813,7 +813,7 @@ int check_identity_matrix3x3 (matrix3x3 m)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, double_matrix3x3 m, double_vec3d *v )
+void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, const double_matrix3x3 m, const double_vec3d *v )
 {
 
 	vec3d
@@ -840,7 +840,7 @@ void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, double_matri
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, double_matrix3x3 m, double_vec3d *v )
+void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, const double_matrix3x3 m, const double_vec3d *v )
 {
 
 	double_vec3d
@@ -869,7 +869,7 @@ void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, do
 
 // NB: matrix a is preserved throughout calculation but b is not. ie... do not use multiply_matrix3x3_matrix3x3 (a, b, a)
 
-void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b )
+void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[0][1] * b[1][0] ) + ( a[0][2] * b[2][0] ) );
@@ -889,7 +889,7 @@ void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, doubl
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b )
+void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[1][0] * b[1][0] ) + ( a[2][0] * b[2][0] ) );
@@ -909,7 +909,7 @@ void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 res
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_double_matrix3x3_transpose_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b )
+void multiply_double_matrix3x3_transpose_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b )
 {
 
 	result[0][0] = ( ( a[0][0] * b[0][0] ) + ( a[0][1] * b[0][1] ) + ( a[0][2] * b[0][2] ) );
@@ -929,7 +929,7 @@ void multiply_double_matrix3x3_transpose_double_matrix3x3 ( double_matrix3x3 res
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_arbitrary_rotation_double_matrix ( double_matrix3x3 m, double_vec3d *v, float angle )
+void get_arbitrary_rotation_double_matrix ( double_matrix3x3 m, const double_vec3d *v, float angle )
 {
 
 	double
@@ -1013,7 +1013,7 @@ void get_identity_double_matrix3x3 (double_matrix3x3 m)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_double_matrix3x3_from_unit_double_vec3d (double_matrix3x3 result, double_vec3d *v)
+void get_double_matrix3x3_from_unit_double_vec3d (double_matrix3x3 result, const double_vec3d *v)
 {
 	double
 		heading,
@@ -1085,7 +1085,7 @@ void get_3d_transformation_double_matrix ( double_matrix3x3 m, double heading, d
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_double_matrix3x3_from_unit_double_vec3d_and_roll (double_matrix3x3 result, double_vec3d *v, double roll)
+void get_double_matrix3x3_from_unit_double_vec3d_and_roll (double_matrix3x3 result, const double_vec3d *v, double roll)
 {
 	double
 		heading,
@@ -1102,7 +1102,7 @@ void get_double_matrix3x3_from_unit_double_vec3d_and_roll (double_matrix3x3 resu
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_3d_transformation_double_matrix_from_face_normal_and_heading (double_matrix3x3 result, double_vec3d *normal, double heading)
+void get_3d_transformation_double_matrix_from_face_normal_and_heading (double_matrix3x3 result, const double_vec3d *normal, double heading)
 {
 	//
 	// guard against possible divide by zero
@@ -1152,7 +1152,7 @@ void get_3d_transformation_double_matrix_from_face_normal_and_heading (double_ma
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_matrix3x3_from_unit_double_vec3d_and_roll (matrix3x3 result, double_vec3d *v, double roll)
+void get_matrix3x3_from_unit_double_vec3d_and_roll (matrix3x3 result, const double_vec3d *v, double roll)
 {
 	float
 		heading,
@@ -1169,7 +1169,7 @@ void get_matrix3x3_from_unit_double_vec3d_and_roll (matrix3x3 result, double_vec
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_transpose_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3 m, vec3d *v )
+void multiply_transpose_double_matrix3x3_vec3d ( vec3d *result, const double_matrix3x3 m, const vec3d *v )
 {
 
 	vec3d
@@ -1196,7 +1196,7 @@ void multiply_transpose_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void multiply_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3 m, vec3d *v )
+void multiply_double_matrix3x3_vec3d ( vec3d *result, const double_matrix3x3 m, const vec3d *v )
 {
 
 	vec3d
@@ -1225,7 +1225,7 @@ void multiply_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3 m, vec3d 
 
 // Kramer's Rule
 
-void get_inverse_double_matrix (double_matrix3x3 result, double_matrix3x3 matrix)
+void get_inverse_double_matrix (double_matrix3x3 result, const double_matrix3x3 matrix)
 {
 
 	double

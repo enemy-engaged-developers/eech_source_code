@@ -64,21 +64,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern float get_2d_range (vec3d *v1, vec3d *v2);
+extern float get_2d_range (const vec3d *v1, const vec3d *v2);
 
-extern float get_sqr_2d_range (vec3d *v1, vec3d *v2);
+extern float get_sqr_2d_range (const vec3d *v1, const vec3d *v2);
 
-extern double get_2d_double_range (double_vec3d *v1, double_vec3d *v2);
+extern double get_2d_double_range (const double_vec3d *v1, const double_vec3d *v2);
 
-extern double get_sqr_2d_double_range (double_vec3d *v1, double_vec3d *v2);
+extern double get_sqr_2d_double_range (const double_vec3d *v1, const double_vec3d *v2);
 
-extern float get_approx_2d_range (vec3d *v1, vec3d *v2);
+extern float get_approx_2d_range (const vec3d *v1, const vec3d *v2);
 
-extern float get_3d_range (vec3d *v1, vec3d *v2);
+extern float get_3d_range (const vec3d *v1, const vec3d *v2);
 
-extern float get_sqr_3d_range (vec3d *v1, vec3d *v2);
+extern float get_sqr_3d_range (const vec3d *v1, const vec3d *v2);
 
-extern float get_approx_3d_range (vec3d *v1, vec3d *v2);
+extern float get_approx_3d_range (const vec3d *v1, const vec3d *v2);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

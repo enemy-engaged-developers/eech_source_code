@@ -587,7 +587,7 @@ int check_next_file_tag (FILE *file_ptr, const char *application_enums [], int l
 			}
 		}
 
-      fseek (file_ptr, -(strlen (line) + 3), SEEK_CUR);
+      fseek (file_ptr, -((int)strlen (line) + 3), SEEK_CUR);
    }
 
 	#if DEBUG_MODULE

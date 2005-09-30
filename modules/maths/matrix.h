@@ -106,41 +106,41 @@ extern void get_3d_transformation_heading_pitch_matrix ( matrix3x3 m, float head
 
 extern void get_3d_transformation_heading_matrix ( matrix3x3 m, float heading );
 
-extern void get_arbitrary_rotation_matrix ( matrix3x3 m, vec3d *v, float angle );
+extern void get_arbitrary_rotation_matrix ( matrix3x3 m, const vec3d *v, float angle );
 
-extern void get_4d_transformation_matrix ( matrix4x4 m, float heading, float pitch, float roll, vec3d *position );
+extern void get_4d_transformation_matrix ( matrix4x4 m, float heading, float pitch, float roll, const vec3d *position );
 
 extern void get_4d_projection_matrix ( matrix4x4 m, float near_plane, float far_plane, float fov_width, float fov_height );
 
-extern void get_reflection_matrix ( matrix3x3 m, vec3d *v );
+extern void get_reflection_matrix ( matrix3x3 m, const vec3d *v );
 
-extern void multiply_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v );
+extern void multiply_matrix3x3_vec3d ( vec3d *result, const matrix3x3 m, const vec3d *v );
 
-extern void multiply_transpose_matrix3x3_vec3d ( vec3d *result, matrix3x3 m, vec3d *v );
+extern void multiply_transpose_matrix3x3_vec3d ( vec3d *result, const matrix3x3 m, const vec3d *v );
 
-extern void multiply_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b );
+extern void multiply_matrix3x3_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b );
 
-extern void multiply_transpose_matrix3x3_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b );
+extern void multiply_transpose_matrix3x3_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b );
 
-extern void multiply_matrix3x3_transpose_matrix3x3 ( matrix3x3 result, matrix3x3 a, matrix3x3 b );
+extern void multiply_matrix3x3_transpose_matrix3x3 ( matrix3x3 result, const matrix3x3 a, const matrix3x3 b );
 
-extern void multiply_matrix4x4_matrix4x4 ( matrix4x4 result, matrix4x4 a, matrix4x4 b );
+extern void multiply_matrix4x4_matrix4x4 ( matrix4x4 result, const matrix4x4 a, const matrix4x4 b );
 
-extern void multiply_matrix4x4_vec4d ( vec4d *result, matrix4x4 m, vec4d *v );
+extern void multiply_matrix4x4_vec4d ( vec4d *result, const matrix4x4 m, const vec4d *v );
 
-extern void multiply_matrix3x3_matrix3x3_2d (matrix3x3 result, matrix3x3 a, matrix3x3 b);
+extern void multiply_matrix3x3_matrix3x3_2d (matrix3x3 result, const matrix3x3 a, const matrix3x3 b);
 
 extern void get_identity_matrix3x3 (matrix3x3 m);
 
-extern void get_inverse_matrix (matrix3x3 result, matrix3x3 matrix);
+extern void get_inverse_matrix (matrix3x3 result, const matrix3x3 matrix);
 
-extern void get_matrix3x3_from_unit_vec3d (matrix3x3 result, vec3d *v);
+extern void get_matrix3x3_from_unit_vec3d (matrix3x3 result, const vec3d *v);
 
-extern void get_matrix3x3_from_unit_vec3d_and_roll (matrix3x3 result, vec3d *v, float roll);
+extern void get_matrix3x3_from_unit_vec3d_and_roll (matrix3x3 result, const vec3d *v, float roll);
 
-extern void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result, vec3d *normal, float heading);
+extern void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result, const vec3d *normal, float heading);
 
-extern int check_identity_matrix3x3 (matrix3x3 m);
+extern int check_identity_matrix3x3 (const matrix3x3 m);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,29 +160,29 @@ extern int check_identity_matrix3x3 (matrix3x3 m);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, double_matrix3x3 m, double_vec3d *v );
+extern void multiply_double_matrix3x3_double_vec3d ( double_vec3d *result, const double_matrix3x3 m, const double_vec3d *v );
 
-extern void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, double_matrix3x3 m, double_vec3d *v );
+extern void multiply_transpose_double_matrix3x3_double_vec3d ( double_vec3d *result, const double_matrix3x3 m, const double_vec3d *v );
 
-extern void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b );
+extern void multiply_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b );
 
-extern void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b );
+extern void multiply_transpose_double_matrix3x3_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b );
 
-extern void multiply_double_matrix3x3_transpose_double_matrix3x3 ( double_matrix3x3 result, double_matrix3x3 a, double_matrix3x3 b );
+extern void multiply_double_matrix3x3_transpose_double_matrix3x3 ( double_matrix3x3 result, const double_matrix3x3 a, const double_matrix3x3 b );
 
-extern void get_arbitrary_rotation_double_matrix ( double_matrix3x3 m, double_vec3d *v, float angle );
+extern void get_arbitrary_rotation_double_matrix ( double_matrix3x3 m, const double_vec3d *v, float angle );
 
 extern void get_identity_double_matrix3x3 (double_matrix3x3 m);
 
-extern void get_double_matrix3x3_from_unit_double_vec3d (double_matrix3x3 result, double_vec3d *v);
+extern void get_double_matrix3x3_from_unit_double_vec3d (double_matrix3x3 result, const double_vec3d *v);
 
 extern void get_3d_transformation_double_matrix ( double_matrix3x3 m, double heading, double pitch, double roll );
 
-extern void get_double_matrix3x3_from_unit_double_vec3d_and_roll (double_matrix3x3 result, double_vec3d *v, double roll);
+extern void get_double_matrix3x3_from_unit_double_vec3d_and_roll (double_matrix3x3 result, const double_vec3d *v, double roll);
 
-extern void get_inverse_double_matrix (double_matrix3x3 result, double_matrix3x3 matrix);
+extern void get_inverse_double_matrix (double_matrix3x3 result, const double_matrix3x3 matrix);
 
-extern void get_3d_transformation_double_matrix_from_face_normal_and_heading (double_matrix3x3 result, double_vec3d *normal, double heading);
+extern void get_3d_transformation_double_matrix_from_face_normal_and_heading (double_matrix3x3 result, const double_vec3d *normal, double heading);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,11 +192,11 @@ extern void get_3d_transformation_double_matrix_from_face_normal_and_heading (do
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void get_matrix3x3_from_unit_double_vec3d_and_roll (matrix3x3 result, double_vec3d *v, double roll);
+extern void get_matrix3x3_from_unit_double_vec3d_and_roll (matrix3x3 result, const double_vec3d *v, double roll);
 
-extern void multiply_transpose_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3 m, vec3d *v );
+extern void multiply_transpose_double_matrix3x3_vec3d ( vec3d *result, const double_matrix3x3 m, const vec3d *v );
 
-extern void multiply_double_matrix3x3_vec3d ( vec3d *result, double_matrix3x3 m, vec3d *v );
+extern void multiply_double_matrix3x3_vec3d ( vec3d *result, const double_matrix3x3 m, const vec3d *v );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

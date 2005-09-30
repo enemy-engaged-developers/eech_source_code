@@ -99,7 +99,7 @@ struct GROUP_DATA
 	int
 		maximum_groups_per_division;
 
-	char
+	const char
 		*platoon_name;
 
 	int

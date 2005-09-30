@@ -85,7 +85,7 @@ void ui_create_window (float x1, float y1, float x2, float y2)
 
 	ui_set_origin (x1, y1);
 
-	ui_draw_area (0, 0, x2 - x1, y2 - y1, UI_OBJECT_STATE_OFF);
+	//ui_draw_area (0, 0, x2 - x1, y2 - y1, UI_OBJECT_STATE_OFF);
 
 	set_viewport (x1 + 1, y1 + 1, x2 - 1, y2 - 1);
 

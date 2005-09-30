@@ -335,7 +335,7 @@ entity *get_free_local_entity (int index)
 	}
 	else
 	{
-		debug_fatal ("Entity already in use: %s (index = %d)", get_local_entity_type_name (en), index);
+		debug_fatal ("Entity already in use: %s (index = %d)", entity_type_names[index], index);
 	}
 
 	return (en);

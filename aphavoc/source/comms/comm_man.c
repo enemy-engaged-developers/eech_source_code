@@ -553,6 +553,25 @@ static void smart_memcpy ( void * dst, const void * src, int elemsize, int skips
 	}
 }
 
+// 01OCT05 Casm yet another fix for wut transfer - special care for platoon_name field in group_database
+static void group_database_cpy ( group_data * dst, const group_data * src )
+{
+	int
+		elems;
+	const char
+		*tmp;
+
+	for ( elems = NUM_ENTITY_SUB_TYPE_GROUPS; elems > 0; elems--)
+	{
+		tmp = dst->platoon_name;
+		memcpy ( ( char * ) dst + 2 * sizeof ( const char * ), ( const char * ) src + 2 * sizeof ( const char * ), sizeof ( group_data ) - 2 * sizeof ( const char * ) );
+		dst->platoon_name = tmp;
+		src++;
+		dst++;
+	}
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1247,7 +1266,8 @@ void comms_process_data (void)
 
 						// Group
 
-						smart_memcpy ( group_database, ptr, sizeof ( *group_database ), 2 * sizeof ( const char * ), sizeof ( group_database ) / sizeof ( *group_database ) );
+						// 01OCT05 Casm yet another fix for wut transfer - special care for platoon_name field in group_database
+						group_database_cpy ( group_database, ( const group_data * ) ptr );
 
 						ptr += sizeof(group_database);
 
