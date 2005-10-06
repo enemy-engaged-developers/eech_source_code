@@ -80,6 +80,7 @@ double
 	zbuffer_constant_elevated_bias,
 	zbuffer_constant_normal_bias,
 	zbuffer_constant_lowered_bias,
+	zbuffer_constant_lowered_bias2,
 	zbuffer_constant_shadow_bias,
 	zbuffer_constant_shadow_bias_decrement;
 
@@ -113,12 +114,18 @@ void set_zbuffer_parameters ( float zmin, float zmax, float scaled_zmin, float s
 	zbuffer_factor = ( zmax * zmin * ( scaled_zmax - scaled_zmin ) ) / ( zmax - zmin );
 	zbuffer_constant = scaled_zmax + ( zmax * ( scaled_zmin - scaled_zmax ) ) / ( zmax - zmin );
 
+//VJ 051003 based on a tip by Tamlin: trying to solve flickering of shadow and runway.
+// used in terrgeom.c line 4420
 	zbuffer_constant_elevated_bias = zbuffer_constant + ( ( ( scaled_zmax - scaled_zmin ) * 4 ) / 65535.0 );
 	zbuffer_constant_normal_bias = zbuffer_constant + ( ( ( scaled_zmax - scaled_zmin ) * 0 ) / 65535.0 );
 	zbuffer_constant_lowered_bias = zbuffer_constant - ( ( ( scaled_zmax - scaled_zmin ) * 4 ) / 65535.0 );
-	zbuffer_constant_shadow_bias = zbuffer_constant + ( ( ( scaled_zmax - scaled_zmin ) * 6 ) / 65535.0 );
-}
+	zbuffer_constant_lowered_bias2 = zbuffer_constant - ( ( ( scaled_zmax - scaled_zmin ) * 18 ) / 65535.0 );
+	zbuffer_constant_shadow_bias = zbuffer_constant + ( ( ( scaled_zmax - scaled_zmin ) * 12 /*6*/ ) / 65535.0 );
 
+	//example values:zbuf:1.000125 -1.000125 0.000000 1.000000 1.000064 1.000125 1.000186 1.000308 1.000033
+	
+}                                        
+                                         
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4105,7 +4105,7 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 
 	if ( d3d_using_hardware_tnl )
 	{
-
+/*
 		if ( ( *( float * ) &slot->z ) > ( 3072 + TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 ) )
 		{
 
@@ -4116,6 +4116,32 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 
 			zbuffer_constant = zbuffer_constant_lowered_bias;
 		}
+	}
+*/	
+//VJ 051006, trying to resolve closeup flickering of runway and shadow 		
+//distribute zbuffer_constant from lowered_bias2 for closeup to regular lowered_bias for far away
+
+		double zz = ( *( double * ) &slot->z );
+		
+		if ( zz > ( 3072 + TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 ) )
+		{
+
+			zbuffer_constant = zbuffer_constant_normal_bias;
+			// no bias above 3072+4*2048
+		}
+		else
+		if ( zz > ( 1000 ) )
+		{
+
+			zbuffer_constant = zbuffer_constant_lowered_bias;
+			// small bias above 1000 m
+		}
+		else
+		{	
+			zbuffer_constant = zbuffer_constant_lowered_bias + 
+			exp(-0.000015*zz*zz )*(zbuffer_constant_lowered_bias2-zbuffer_constant_lowered_bias);
+			//gaussian distribution seems to work best between approx. 1000 and 0 m
+		}	
 	}
 	else
 	{

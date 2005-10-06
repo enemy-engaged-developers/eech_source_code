@@ -74,6 +74,7 @@ extern double
 	zbuffer_constant_elevated_bias,
 	zbuffer_constant_normal_bias,
 	zbuffer_constant_lowered_bias,
+	zbuffer_constant_lowered_bias2,
 	zbuffer_constant_shadow_bias,
 	zbuffer_constant_shadow_bias_decrement;
 /*
