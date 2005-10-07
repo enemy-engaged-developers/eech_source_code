@@ -271,6 +271,7 @@ static int
 	texture_colour_bak;
 
 //VJ 040814 dynamic water
+
 terrain_dynamic_water_info
 	terrain_water_information[3]; // sea, river, reservoir
 
@@ -1186,6 +1187,10 @@ BOOL load_texturemap_data ( const char *path )
 		backup_system_textures[count] = system_textures[count];
 		backup_system_texture_info[count] = system_texture_info[count];
 	}
+
+	//VJ 050913 separate dynamic water for alaska and user made maps
+	//terrain_water_information[0].delay = -1;
+	//use as flag for intialization process
 
 	return ( TRUE );
 }
@@ -3534,7 +3539,8 @@ void load_warzone_override_textures (const char *warzone_name)
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
-	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 6)
+	
+	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 9)
 	{
 		if (nr == 1) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 2) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
@@ -3542,7 +3548,10 @@ void load_warzone_override_textures (const char *warzone_name)
 		if (nr == 4) sprintf (directory_textdir_path, "%s\\taiwan"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 5) sprintf (directory_textdir_path, "%s\\lebanon" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
 		if (nr == 6) sprintf (directory_textdir_path, "%s\\yemen"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-
+		if (nr == 7) sprintf (directory_textdir_path, "%s\\alaska"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+      if (nr == 8) sprintf (directory_textdir_path, "%s\\aleut"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		if (nr == 9) sprintf (directory_textdir_path, "%s\\kuwait"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
+		
 		debug_log("=== Terrain texture colour mod dir:  %s",directory_textdir_path);
 
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
@@ -3554,8 +3563,6 @@ void load_warzone_override_textures (const char *warzone_name)
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
-	else
-		command_line_texture_colour = 0;
 
 	debug_log("Nr override textures found %d",nrtextfound);
 
