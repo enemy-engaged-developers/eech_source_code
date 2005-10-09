@@ -4121,7 +4121,7 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 //VJ 051006, trying to resolve closeup flickering of runway and shadow 		
 //distribute zbuffer_constant from lowered_bias2 for closeup to regular lowered_bias for far away
 
-		double zz = ( *( double * ) &slot->z );
+		double zz = ( *( float * ) &slot->z );
 		
 		if ( zz > ( 3072 + TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 ) )
 		{
