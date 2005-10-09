@@ -98,6 +98,8 @@ extern void blit_rgb_alpha_masked_sprite_zero_mask_value (const unsigned char *r
 
 extern void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned char *rgb_data, const unsigned char *mask_data, const rgb_alpha_masked_sprite_data *sprite_data, screen *user_screen);
 
+extern void blit_rgb_alpha_masked_sprite_zero_mask_value_scaled (const unsigned char *rgb_data, const unsigned char *mask_data, int t_x, int t_y, int t_dx, int t_dy, int s_x, int s_y, int s_dx, int s_dy, unsigned char mask_value);
+
 extern void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename);
 
 extern void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_filename);

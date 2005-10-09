@@ -764,7 +764,7 @@ void create_d3d_vertex_buffers ( void )
 	desc.dwCaps = D3DVBCAPS_WRITEONLY;
 #endif
 
-	desc.dwNumVertices = 512;
+	desc.dwNumVertices = 2048;
 	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
 
 	ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.hardware_untransformed_buffer, 0 );

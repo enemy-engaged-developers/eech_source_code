@@ -283,7 +283,7 @@ void draw_mono_sprite (const char *sprite_ptr, const float x, const float y, con
 		unsigned int
 			col;
 	
-		col = get_rgb_packed_value (colour);
+		col = colour.colour;
 	
 		width = *sprite_ptr++;
 		height = *sprite_ptr++;

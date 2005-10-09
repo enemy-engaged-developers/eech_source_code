@@ -316,7 +316,7 @@ void draw_line ( float fx1, float fy1, float fx2, float fy2, rgb_colour colour )
 			unsigned int
 				col;
 	
-			col = get_rgb_packed_value (colour);
+			col = colour.colour;
 		
 			screen_data = get_screen_data (active_screen);
 			screen_pitch = get_screen_pitch (active_screen);
@@ -1014,7 +1014,7 @@ void draw_half_thick_line ( float fx1, float fy1, float fx2, float fy2, rgb_colo
 		ASSERT ( active_screen );
 		ASSERT ( get_screen_locked ( active_screen ) );
 	
-		col = get_rgb_packed_value (colour);
+		col = colour.colour;
 	
 		screen_data = get_screen_data (active_screen);
 		screen_pitch = get_screen_pitch (active_screen);
@@ -1505,6 +1505,43 @@ int generate_outcode ( float i, float j )
 	ixmax |= iymax;
 
 	return ( ixmin | ixmax );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_arrow (float centre_x, float centre_y, float dot_x, float dot_y, float scale_x, float scale_y, rgb_colour colour)
+{
+	draw_line (centre_x, centre_y, dot_x, dot_y, colour);
+	if (scale_x > 1.1)
+	{
+		draw_line (centre_x + 1, centre_y, dot_x + 1, dot_y, colour);
+		draw_line (centre_x - 1, centre_y, dot_x - 1, dot_y, colour);
+		draw_line (centre_x + 1, centre_y, dot_x + 1, dot_y, colour);
+		draw_line (centre_x - 1, centre_y, dot_x - 1, dot_y, colour);
+	}
+	if (scale_y > 1.1)
+	{
+		draw_line (centre_x, centre_y + 1, dot_x, dot_y + 1, colour);
+		draw_line (centre_x, centre_y - 1, dot_x, dot_y - 1, colour);
+		draw_line (centre_x, centre_y + 1, dot_x, dot_y + 1, colour);
+		draw_line (centre_x, centre_y - 1, dot_x, dot_y - 1, colour);
+	}
+	if (scale_x > 2.1)
+	{
+		draw_line (centre_x + 2, centre_y, dot_x + 2, dot_y, colour);
+		draw_line (centre_x - 2, centre_y, dot_x - 2, dot_y, colour);
+		draw_line (centre_x + 2, centre_y, dot_x + 2, dot_y, colour);
+		draw_line (centre_x - 2, centre_y, dot_x - 2, dot_y, colour);
+	}
+	if (scale_y > 2.1)
+	{
+		draw_line (centre_x, centre_y + 2, dot_x, dot_y + 2, colour);
+		draw_line (centre_x, centre_y - 2, dot_x, dot_y - 2, colour);
+		draw_line (centre_x, centre_y + 2, dot_x, dot_y + 2, colour);
+		draw_line (centre_x, centre_y - 2, dot_x, dot_y - 2, colour);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

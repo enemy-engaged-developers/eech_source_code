@@ -181,9 +181,8 @@ void update_satellite_camera (camera *raw)
 		heading,
 		pitch;
 	
-	vec3d
-		pos,
-		v;
+	/*vec3d
+		pos;*/
 
 	entity
 		*en;
@@ -232,7 +231,7 @@ void update_satellite_camera (camera *raw)
 	
 	pitch = -1.5;
 	
-	switch (get_local_entity_type (en))
+	/*switch (get_local_entity_type (en))
 	{
 		case ENTITY_TYPE_HELICOPTER:
 		case ENTITY_TYPE_FIXED_WING:
@@ -248,7 +247,7 @@ void update_satellite_camera (camera *raw)
 
 			break;
 		}
-	}
+	}*/
 
 	get_3d_transformation_matrix (raw->attitude, heading, pitch, 0.0);
 }

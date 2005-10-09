@@ -397,7 +397,10 @@ void realise_3d_clip_extents ( env_3d *env )
 	}
 	else	// Retro 31Oct2004 (all)
 	{
-		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( command_line_max_fov / 2 ) );
+		// Casm 08OCT05
+		extern int
+			max_fov;
+		current_3d_viewangle_distance_conversion_factor = tan ( env->width_view_angle / 2 ) / tan ( rad ( max_fov / 2 ) );
 	}
 }
 

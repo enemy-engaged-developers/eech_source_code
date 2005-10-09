@@ -393,7 +393,10 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
 		if (strcmp(p, "msls") == 0)			command_line_mouse_look_speed = d1;
 		if (strcmp(p, "minfov") == 0) 		command_line_min_fov = d1;
-		if (strcmp(p, "maxfov") == 0) 		command_line_max_fov = d1;
+		if (strcmp(p, "maxfov0") == 0) 		command_line_max_fov0 = d1;
+		if (strcmp(p, "maxfov1") == 0) 		command_line_max_fov1 = d1;
+		if (strcmp(p, "maxfov2") == 0) 		command_line_max_fov2 = d1;
+		if (strcmp(p, "maxfov3") == 0) 		command_line_max_fov3 = d1;
 		if (strcmp(p, "eopann") == 0) 		command_line_eo_pan_joystick_index = d1;
 		if (strcmp(p, "eopanv") == 0) 		command_line_eo_pan_vertical_joystick_axis = d1 - 1;
 		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1 - 1;
@@ -553,7 +556,10 @@ void dump_ini_file(void)
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
-	fprintf(f,"maxfov=%d            # general field of view maximum, linked to key '9'\n",command_line_max_fov);
+	fprintf(f,"maxfov0=%d            # general field of view maximum for Apache pits, linked to key '9'\n",command_line_max_fov0);
+	fprintf(f,"maxfov1=%d            # general field of view maximum for Havoc pits, linked to key '9'\n",command_line_max_fov1);
+	fprintf(f,"maxfov2=%d            # general field of view maximum for Comanche pits, linked to key '9'\n",command_line_max_fov2);
+	fprintf(f,"maxfov3=%d            # general field of view maximum for Hokum-B pits, linked to key '9'\n",command_line_max_fov3);
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
 	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1
 	fprintf(f,"eopanh=%d            # joystick DirectX axis used for horizontal FLIR panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1

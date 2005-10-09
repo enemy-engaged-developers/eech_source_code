@@ -136,7 +136,10 @@ extern int
 	command_line_mouse_look,									// Retro 030317
 	command_line_mouse_look_speed,							// Retro 030317
 	command_line_min_fov,										// Retro 030318
-	command_line_max_fov,										// Retro 030318
+	command_line_max_fov0,										// Retro 030318
+	command_line_max_fov1,										// Casm 08OCT05
+	command_line_max_fov2,										// Casm 08OCT05
+	command_line_max_fov3,										// Casm 08OCT05
 	command_line_eo_pan_joystick_index,						// loke 030319
 	command_line_eo_pan_vertical_joystick_axis,			// loke 030319
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319

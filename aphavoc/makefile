@@ -259,6 +259,7 @@ cc_args += /dWIN32
 cc_args += /ri
 cc_args += /w4
 cc_args += /zld
+#cc_args += /DOBJECTS_EXPORT
 
 asm_args += /c
 asm_args += /W3

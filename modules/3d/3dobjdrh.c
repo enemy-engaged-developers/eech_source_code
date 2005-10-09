@@ -2185,14 +2185,9 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 							current_object_3d_point_list++;
 							point_count++;
-							
-							//-- Werewolf: Sanity check, 4 Apr 2003
-							if (point_count>510)
-							  break;
-							//-- Werewolf
 						}
 	
-						ASSERT ( point_count < 512 );
+						ASSERT ( point_count < 2048 );
 	
 						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
 	
@@ -2342,7 +2337,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 							point_count++;
 						}
 	
-						ASSERT ( point_count < 512 );
+						ASSERT ( point_count < 2048 );
 	
 						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
 	
@@ -2654,7 +2649,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 							point_count++;
 						}
 	
-						ASSERT ( point_count < 512 );
+						ASSERT ( point_count < 2048 );
 	
 						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
 	
@@ -2819,7 +2814,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 							point_count++;
 						}
 	
-						ASSERT ( point_count < 512 );
+						ASSERT ( point_count < 2048 );
 	
 						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
 	

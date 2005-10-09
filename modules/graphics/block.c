@@ -168,7 +168,7 @@ void set_hatched_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 		ULONG
 			screen_colour;
 	
-		screen_colour = get_rgb_packed_value ( colour );
+		screen_colour = colour.colour;
 
 		for ( y = y1; y < y2; y++ )
 		{

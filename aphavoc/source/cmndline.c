@@ -159,7 +159,10 @@ int
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
 	command_line_mouse_look_speed								= 15,		// Retro 030317
 	command_line_min_fov											= 20,		// Retro 030318
-	command_line_max_fov											= 80,		// Retro 030318
+	command_line_max_fov0											= 80,		// Retro 030318
+	command_line_max_fov1											= 80,		// Casm 08OCT05
+	command_line_max_fov2											= 80,		// Casm 08OCT05
+	command_line_max_fov3											= 80,		// Casm 08OCT05
 	command_line_eo_pan_joystick_index						= -1,		// loke 030319
 	command_line_eo_pan_vertical_joystick_axis			= 6,		// loke 030319
 	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
@@ -1602,13 +1605,21 @@ void process_command_line (int argc, char *argv[])
 		else if (s2 = strarg(s1, "maxfov"))		//all by Retro 030318
 		////////////////////////////////////////
 		{
+			// Casm 08OCT05
 			if (*s2 == ':')
 			{
-				sscanf (s2 + 1, "%d", &command_line_max_fov);
-			}
+				int
+					max_fov;
 
-			if ((command_line_max_fov <= 10)||(command_line_max_fov >= 120))
-				command_line_max_fov = 80;
+				sscanf (s2 + 1, "%d", &max_fov);
+
+				if ((max_fov <= 10)||(max_fov >= 120))
+					max_fov = 80;
+				command_line_max_fov0 = max_fov;
+				command_line_max_fov1 = max_fov;
+				command_line_max_fov2 = max_fov;
+				command_line_max_fov3 = max_fov;
+			}
 		}
 #if 0 //Retro27NovDEAD
 		////////////////////////////////////////

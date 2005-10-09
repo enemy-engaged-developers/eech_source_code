@@ -316,6 +316,7 @@ void initialise_3d_objects ( const char *directory )
 #endif
 
 	objects_3d_data = safe_malloc ( ( total_number_of_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
+	memset ( objects_3d_data, 0, ( total_number_of_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
 
 	//
 	// Now the first object ( index 0 ) is a NULL object - and has no 3d points, or anything at all
@@ -472,9 +473,11 @@ void initialise_3d_objects ( const char *directory )
 				fread ( &number_of_point_normals, sizeof ( int ), 1, fp );
 				fread ( &number_of_point_textures, sizeof ( int ), 1, fp );
 
-//				objects_3d_data[count].number_of_surface_points = number_of_point_references;
-//				objects_3d_data[count].number_of_surface_point_normals = number_of_point_normals;
-//				objects_3d_data[count].number_of_surface_texture_points = number_of_point_textures;
+#ifdef OBJECTS_EXPORT
+				objects_3d_data[count].number_of_surface_points = number_of_point_references;
+				objects_3d_data[count].number_of_surface_point_normals = number_of_point_normals;
+				objects_3d_data[count].number_of_surface_texture_points = number_of_point_textures;
+#endif
 
 				objects_3d_data[count].surface_points = current_object_surface_point_references;
 				objects_3d_data[count].surface_point_normals = current_object_surface_point_normal_references;
@@ -575,7 +578,11 @@ void initialise_3d_objects ( const char *directory )
 				fread ( current_faces_point_list, sizeof ( struct POINT_3D_SHORT_REFERENCE ), point_reference_count, fp );
 	
 				objects_3d_data[count].object_faces_point_plain_list = current_faces_point_list;
-	
+
+#ifdef OBJECTS_EXPORT
+				objects_3d_data[count].number_of_object_face_points = point_reference_count;
+#endif
+
 				current_faces_point_list += point_reference_count;
 			}
 	
@@ -585,7 +592,11 @@ void initialise_3d_objects ( const char *directory )
 				fread ( current_faces_face_normal_list, sizeof ( struct POINT_3D_PLAIN_REFERENCE ), face_normal_reference_count, fp );
 	
 				objects_3d_data[count].object_face_normal_references = current_faces_face_normal_list;
-	
+
+#ifdef OBJECTS_EXPORT
+				objects_3d_data[count].number_of_object_face_normal_references = face_normal_reference_count;
+#endif
+
 				current_faces_face_normal_list += face_normal_reference_count;
 			}
 		}

@@ -645,6 +645,7 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 		mask_height,
 		mask_add_on,
 		screen_add_on,
+		screen_one_add_on,
 		u_loop,
 		v_loop;
 
@@ -699,9 +700,10 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 	// screen
 	//
 
-	screen_add_on = screen_pitch - (sprite_data->width * sizeof (rgb_packed));
+	screen_one_add_on = get_screen_pixel_width (active_screen);
+	screen_add_on = screen_pitch - (sprite_data->width * screen_one_add_on);
 
-	screen_data += (sprite_data->x * sizeof (rgb_packed)) + (sprite_data->y * screen_pitch);
+	screen_data += (sprite_data->x * screen_one_add_on) + (sprite_data->y * screen_pitch);
 
 	//
 	// blit sprite
@@ -717,14 +719,17 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 
 				col.a = 255;
 
-				*(rgb_packed *)screen_data = get_rgb_packed_value (col);
+				if (screen_one_add_on == 2)
+					*(rgb_packed *)screen_data = get_rgb_packed_value (col);
+				else
+					*(ULONG *)screen_data = col.colour;
 			}
 
 			rgb_data += sizeof (rgb_packed);
 
 			mask_data++;
 
-			screen_data += sizeof (rgb_packed);
+			screen_data += screen_one_add_on;
 		}
 
 		rgb_data += rgb_add_on;
@@ -733,6 +738,130 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 
 		screen_data += screen_add_on;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void blit_rgb_alpha_masked_sprite_zero_mask_value_scaled (const unsigned char *rgb_data, const unsigned char *mask_data, int t_x, int t_y, int t_dx, int t_dy, int s_x, int s_y, int s_dx, int s_dy, unsigned char mask_value)
+{
+#if 0
+static rgb_alpha_masked_sprite_data
+	sprite_values;
+		sprite_values.x = t_x;
+		sprite_values.y = t_y;
+		sprite_values.u = s_x;
+		sprite_values.v = s_y;
+		sprite_values.width = s_dx;
+		sprite_values.height = s_dy;
+		sprite_values.mask_value = mask_value;
+		blit_rgb_alpha_masked_sprite (rgb_data, mask_data, &sprite_values);
+#else
+	int
+		screen_pitch,
+		rgb_width,
+		rgb_height,
+		mask_width,
+		mask_height,
+		screen_add_on,
+		screen_one_add_on,
+		u_loop,
+		v_loop,
+		x,
+		y,
+		dx,
+		dy;
+
+	unsigned char
+		*screen_data;
+
+	rgb_colour
+		col;
+
+	ASSERT (rgb_data);
+
+	ASSERT (mask_data);
+
+	ASSERT (s_dx);
+
+	ASSERT (s_dy);
+
+	set_user_screen_pixel_format (active_screen);
+
+	screen_pitch = get_screen_pitch (active_screen);
+
+	screen_data = get_screen_data (active_screen);
+
+	//
+	// rgb data
+	//
+
+	rgb_width = get_list_item (rgb_data, unsigned short int) * sizeof (rgb_packed);
+
+	rgb_height = get_list_item (rgb_data, unsigned short int);
+
+	rgb_data += (s_x * sizeof (rgb_packed)) + (s_y * rgb_width);
+
+	//
+	// mask data
+	//
+
+	mask_width = get_list_item (mask_data, unsigned short int);
+
+	mask_height = get_list_item (mask_data, unsigned short int);
+
+	mask_data += s_x + (s_y * mask_width);
+
+	//
+	// screen
+	//
+
+	screen_one_add_on = get_screen_pixel_width (active_screen);
+
+	screen_add_on = screen_pitch - (t_dx * screen_one_add_on);
+
+	screen_data += (t_x * screen_one_add_on) + (t_y * screen_pitch);
+
+	//
+	// deltas
+	//
+
+	dx = ( s_dx << 16 ) / t_dx;
+	dy = ( s_dy << 16 ) / t_dy;
+
+	//
+	// blit sprite
+	//
+
+	y = 0;
+	for (v_loop = t_dy; v_loop > 0; v_loop--)
+	{
+		x = 0;
+		for (u_loop = t_dx; u_loop > 0; u_loop--)
+		{
+			if (mask_data[(y >> 16) * mask_width + (x >> 16)] == mask_value)
+			{
+				col = get_user_rgb_colour_value (*(rgb_packed *)(rgb_data + (y >> 16) * rgb_width + (x >> 16) * sizeof (rgb_packed)));
+
+				col.a = 255;
+
+				if (screen_one_add_on == 2)
+					*(rgb_packed *)screen_data = get_rgb_packed_value (col);
+				else
+					*(ULONG *)screen_data = col.colour;
+			}
+
+			screen_data += screen_one_add_on;
+
+			x += dx;
+		}
+
+		screen_data += screen_add_on;
+
+		y += dy;
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

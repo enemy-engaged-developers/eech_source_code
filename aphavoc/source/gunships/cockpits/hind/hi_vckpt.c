@@ -550,6 +550,13 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 		draw_hind_mfd_on_texture ();
 	}
 
+	// Casm 10SEP05 Havoc Instruments - temporary used for Hind
+	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
+	{
+		memcpy (&havoc_lamps, &hind_lamps, sizeof (havoc_lamps));
+		draw_havoc_virtual_cockpit_instruments_on_texture ();
+	}
+
 	////////////////////////////////////////
 	//
 	// draw 3D scene with lighting
@@ -705,7 +712,8 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 // re-insert compass here (internal is draw after external
 					if (get_global_wide_cockpit ())
 					{					
-					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);				}
+					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);
+					}
 				}
 			}
 
@@ -714,7 +722,7 @@ void draw_hind_internal_virtual_cockpit (unsigned int flags)
 //VJ wideview mod, date: 18-mar-03	
          if (edit_wide_cockpit)
        	{
-				sprintf(buffer,"HAVOC wide cockpit mod edit (set freelook off):");
+				sprintf(buffer,"HIND wide cockpit mod edit (set freelook off):");
 				ui_display_text (buffer, 10, 40);
 				sprintf(buffer,"Y: num 8/2; Z: num 4/6; pitch: num 7/9; Restore: num 0; Ctrl-\\ Leave");
 				ui_display_text (buffer, 10, 60);

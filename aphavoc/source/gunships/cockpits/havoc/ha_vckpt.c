@@ -550,6 +550,12 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		draw_havoc_mfd_on_texture ();
 	}
 
+	// Casm 10SEP05 Havoc Instruments
+	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
+	{
+		draw_havoc_virtual_cockpit_instruments_on_texture ();
+	}
+
 	////////////////////////////////////////
 	//
 	// draw 3D scene with lighting
@@ -705,7 +711,8 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 					// re-insert compass here (internal is draw after external
 					if (get_global_wide_cockpit ())
 					{
-					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);				}
+					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);
+					}
 				}
 			}
 

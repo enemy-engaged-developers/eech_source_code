@@ -81,7 +81,7 @@
 // will probably be read in from a file eventually
 //
 
-static char
+static const char
 	*blue_side_first_name_list [] =
 	{
 		"Alex",
@@ -101,7 +101,7 @@ static char
 
 #define NUM_BLUE_SIDE_FIRST_NAMES 13
 
-static char
+static const char
 	*blue_side_last_name_list [] =
 	{
 		"Cole",
@@ -130,7 +130,7 @@ static char
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	*red_side_first_name_list [] =
 	{
 		"Anthony",
@@ -149,7 +149,7 @@ static char
 
 #define NUM_RED_SIDE_FIRST_NAMES 12
 
-static char
+static const char
 	*red_side_last_name_list [] =
 	{
 		"Bodicker",

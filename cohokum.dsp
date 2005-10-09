@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="cohokum" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=cohokum - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "cohokum.mak" CFG="cohokum - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "cohokum - Win32 Release" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "cohokum - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "cohokum - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -43,8 +43,8 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /MT /Gm /GX /Zi /O2 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /Fr /YX /FD /c
-# SUBTRACT CPP /nologo
+# ADD CPP /MT /Gm /GX /Zi /O2 /I ".\APHAVOC\SOURCE\\" /I ".\MODULES" /I "\DXSDK\Include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "RELEASE" /YX /FD /c
+# SUBTRACT CPP /nologo /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "NDEBUG"
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # SUBTRACT BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /debug /machine:I386 /force /out:"\Razorworks\cohokum\cohokummsc6r.exe" /libpath:"\DXSDK\Lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /debug /machine:I386 /force /out:"cohokummsc6r.exe" /libpath:"\DXSDK\Lib"
 # SUBTRACT LINK32 /nologo
 
 !ELSEIF  "$(CFG)" == "cohokum - Win32 Debug"
@@ -71,8 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /MTd /W2 /Gm /Gi /GX /ZI /Od /I ".\APHAVOC\SOURCE" /I ".\MODULES" /I "\DXSDK\Include" /I ".\APHAVOC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /FR /YX /FD /GZ /c
-# SUBTRACT CPP /nologo /X
+# ADD CPP /nologo /MTd /W2 /ZI /Od /I ".\APHAVOC\SOURCE" /I "\DXSDK\Include" /I ".\MODULES" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /YX /FD /I /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x41d /d "_DEBUG"
@@ -82,8 +81,8 @@ BSC32=bscmake.exe
 # SUBTRACT BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /debug /machine:I386 /force /out:"\Razorworks\cohokum\cohokummsc6d.exe" /pdbtype:sept /libpath:"\DXSDK\Lib"
-# SUBTRACT LINK32 /nologo
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib d3dx.lib d3dxd.lib d3dxof.lib DDRAW.LIB DINPUT.LIB DPLAYX.LIB DSETUP.LIB DSOUND.LIB DXGUID.LIB AMSTRMID.LIB Winmm.lib wsock32.lib /subsystem:windows /incremental:no /debug /machine:I386 /force /out:"cohokummsc6d.exe" /pdbtype:sept /libpath:"\DXSDK\Lib" /FIXED:NO
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -4482,6 +4481,10 @@ SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\VIEWS\VM_EXTRN.C
 # Begin Source File
 
 SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\VIEWS\VM_FIXED.C
+# End Source File
+# Begin Source File
+
+SOURCE=.\APHAVOC\SOURCE\GUNSHIPS\VIEWS\vm_headmovement.c
 # End Source File
 # Begin Source File
 

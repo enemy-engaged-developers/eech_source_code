@@ -275,7 +275,7 @@ void draw_circle (const float x, const float y, const float r, const rgb_colour 
 		// get screen values
 		//
 	
-		col = get_rgb_packed_value (colour);
+		col = colour.colour;
 	
 		screen_data = get_screen_data (active_screen);
 		screen_pitch = get_screen_pitch (active_screen);
@@ -691,7 +691,7 @@ void draw_hatched_filled_circle ( const float x, const float y, const float r, c
 		// get screen values
 		//
 		
-		col = get_rgb_packed_value ( colour );
+		col = colour.colour;
 		
 		screen_data = get_screen_data ( active_screen );
 		screen_pitch = get_screen_pitch ( active_screen );

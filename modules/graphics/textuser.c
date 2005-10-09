@@ -3539,19 +3539,17 @@ void load_warzone_override_textures (const char *warzone_name)
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
-	
+
 	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 9)
 	{
-		if (nr == 1) sprintf (directory_textdir_path, "%s\\thailand",TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 2) sprintf (directory_textdir_path, "%s\\cuba"    ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 3) sprintf (directory_textdir_path, "%s\\georgia" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 4) sprintf (directory_textdir_path, "%s\\taiwan"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 5) sprintf (directory_textdir_path, "%s\\lebanon" ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 6) sprintf (directory_textdir_path, "%s\\yemen"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 7) sprintf (directory_textdir_path, "%s\\alaska"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-      if (nr == 8) sprintf (directory_textdir_path, "%s\\aleut"   ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		if (nr == 9) sprintf (directory_textdir_path, "%s\\kuwait"  ,TEXTURE_OVERRIDE_DIRECTORY_TERRAIN);
-		
+		static const char *
+			maps[10] =
+			{
+				"LYBIA", "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
+				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT"
+			};
+		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[nr]);
+
 		debug_log("=== Terrain texture colour mod dir:  %s",directory_textdir_path);
 
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
@@ -3563,6 +3561,8 @@ void load_warzone_override_textures (const char *warzone_name)
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
+	else
+		command_line_texture_colour = 0;
 
 	debug_log("Nr override textures found %d",nrtextfound);
 

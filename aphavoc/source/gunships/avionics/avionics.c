@@ -167,6 +167,9 @@ void initialise_avionics (void)
 
 			initialise_havoc_threat_warning_system ();
 
+			// Casm 10SEP05 Havoc Instruments
+			initialise_havoc_instruments ();
+
 			//
 			// push events after avionics have been initialised
 			//
@@ -329,6 +332,10 @@ void initialise_avionics (void)
 			initialise_hind_lamp_avionics ();
 
 			initialise_hind_threat_warning_system ();
+
+			// Casm 10SEP05 Havoc Instruments - temporary used for Hind too
+			initialise_havoc_instrument_colours ();
+			initialise_havoc_instruments ();
 
 			//
 			// push events after avionics have been initialised
@@ -531,6 +538,9 @@ void deinitialise_avionics (void)
 
 			deinitialise_havoc_threat_warning_system ();
 
+			// Casm 10SEP05 Havoc Instruments
+			deinitialise_havoc_instruments ();
+
 			break;
 		}
 		////////////////////////////////////////
@@ -705,6 +715,9 @@ void deinitialise_avionics (void)
 			deinitialise_hind_lamp_avionics ();
 
 			deinitialise_hind_threat_warning_system ();
+
+			// Casm 10SEP05 Havoc Instruments - temporary used for Hind
+			deinitialise_havoc_instruments ();
 
 			break;
 		}

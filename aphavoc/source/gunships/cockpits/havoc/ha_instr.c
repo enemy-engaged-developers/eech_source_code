@@ -124,8 +124,48 @@ static rgb_colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static const char
 	*instrument_error = "Cannot draw instrument on panel";
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm Gauges Arrows mod
+
+enum TEXTURE_GAUGES
+{
+	TG_LLHS,
+	TG_ULHS,
+	TG_LRHS,
+	TG_URHS,
+	TG_CEN,
+	TG_LAST
+};
+
+static texture_index_numbers
+	textures[TG_LAST][3] =
+		{
+			{ TEXTURE_INDEX_DAY_INSTR_LLHS, TEXTURE_INDEX_NGT_INSTR_LLHS, TEXTURE_INDEX_TWI_INSTR_LLHS },
+			{ TEXTURE_INDEX_DAY_INSTR_ULHS, TEXTURE_INDEX_NGT_INSTR_ULHS, TEXTURE_INDEX_TWI_INSTR_ULHS },
+			{ TEXTURE_INDEX_DAY_INSTR_LRHS, TEXTURE_INDEX_NGT_INSTR_LRHS, TEXTURE_INDEX_TWI_INSTR_LRHS },
+			{ TEXTURE_INDEX_DAY_INSTR_URHS, TEXTURE_INDEX_NGT_INSTR_URHS, TEXTURE_INDEX_TWI_INSTR_URHS },
+			{ TEXTURE_INDEX_DAY_INSTR_CEN,  TEXTURE_INDEX_NGT_INSTR_CEN,  TEXTURE_INDEX_TWI_INSTR_CEN  }
+		};
+
+static screen
+	*old_texture_screen[TG_LAST][3],
+	*texture_screen[TG_LAST][3];
+
+static float
+	texture_width[TG_LAST][3],
+	texture_height[TG_LAST][3];
+
+#define draw_sprite(scale_x, scale_y, flag, t_x, t_y, t_dx, t_dy, s_x, s_y, s_dx, s_dy, mask) \
+	if (flag) \
+		blit_rgb_alpha_masked_sprite_zero_mask_value_scaled (sprite_data, mask_data, t_x * scale_x, t_y * scale_y, t_dx * scale_x, t_dy * scale_y, s_x, s_y, s_dx, s_dy, mask);
+
+// Casm end
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +199,7 @@ static char
 
 void initialise_havoc_instrument_colours (void)
 {
-	set_rgb_colour (white_needle_colour_level1,  200, 200, 200, 0);
+	set_rgb_colour (white_needle_colour_level1,  255, 255, 255, 0);
 	set_rgb_colour (yellow_needle_colour_level1, 205, 183,  13, 0);
 	set_rgb_colour (orange_needle_colour_level1, 255, 147,   0, 0);
 	set_rgb_colour (red_needle_colour_level1,    188,  58,  26, 0);
@@ -2133,3 +2173,437 @@ void get_havoc_virtual_cockpit_hsi_needle_values (float *direction_finder, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 10SEP05 begin Havoc Instruments
+
+void initialise_havoc_instruments (void)
+{
+	enum TEXTURE_GAUGES
+		tg;
+	int
+		texture;
+
+	for (tg = 0; tg < TG_LAST; tg++)
+	{
+		for (texture = 0; texture < 3; texture++)
+		{
+			old_texture_screen[tg][texture] = create_screen_for_system_texture (textures[tg][texture]);
+			texture_width[tg][texture] = get_screen_width (old_texture_screen[tg][texture]);
+			texture_height[tg][texture] = get_screen_height (old_texture_screen[tg][texture]);
+
+			texture_screen[tg][texture] = create_system_texture_screen (texture_width[tg][texture], texture_height[tg][texture], textures[tg][texture], TEXTURE_TYPE_NOALPHA_NOPALETTE);
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void deinitialise_havoc_instruments (void)
+{
+	enum TEXTURE_GAUGES
+		tg;
+	int
+		texture;
+
+	for (tg = 0; tg < TG_LAST; tg++)
+	{
+		for (texture = 0; texture < 3; texture++)
+		{
+			set_system_texture_screen (old_texture_screen[tg][texture], textures[tg][texture]);
+			destroy_screen (texture_screen[tg][texture]);
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_havoc_virtual_cockpit_instruments_on_texture (void)
+{
+	int
+		texture;
+	enum TEXTURE_GAUGES
+		tg;
+	float
+		width,
+		height,
+		value,
+		hour_hand_value,
+		minute_hand_value,
+		second_hand_value,
+		centre_x,
+		centre_y,
+		dot_x,
+		dot_y;
+	graphics_file_specifiers
+		base_cockpit_graphics_file;
+	unsigned char
+		*sprite_data,
+		*mask_data;
+	extern havoc_lamp_flags
+		havoc_lamps;
+
+
+	set_havoc_instrument_colours ();
+
+	switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
+	{
+		case DAY_SEGMENT_TYPE_DAWN:
+		{
+			texture = 2;
+			base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL2_BASE;
+			break;
+		}
+		case DAY_SEGMENT_TYPE_DAY:
+		{
+			texture = 0;
+			base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL1_BASE;
+			break;
+		}
+		case DAY_SEGMENT_TYPE_DUSK:
+		{
+			texture = 2;
+			base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL2_BASE;
+			break;
+		}
+		case DAY_SEGMENT_TYPE_NIGHT:
+		{
+			texture = 1;
+			base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL3_BASE;
+			break;
+		}
+	}
+
+	#if DEMO_VERSION
+
+	texture = 0;
+	base_cockpit_graphics_file = GRAPHICS_COCKPITS_HAVOC_LEVEL1_BASE;
+
+	#endif
+
+	/* Copy original panels */
+	for (tg = 0; tg < TG_LAST; tg++)
+	{
+		register int
+			width = texture_width[tg][texture],
+			height = texture_height[tg][texture];
+		blit_screens (old_texture_screen[tg][texture], texture_screen[tg][texture], 0, 0, width - 1, height - 1, 0, 0, width - 1, height - 1);
+	}
+
+	/* Find sprites */
+
+	sprite_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES);
+
+	mask_data = get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_SPRITES_MASK);
+
+	/* Draw indicators */
+
+	/* Lower Left Panel */
+	width = texture_width[TG_LLHS][texture];
+	height = texture_height[TG_LLHS][texture];
+
+	if (lock_screen (texture_screen[TG_LLHS][texture]))
+	{
+		set_active_screen (texture_screen[TG_LLHS][texture]);
+
+		/* Vertical speed indicator */
+		value = metres_per_minute (current_flight_dynamics->world_velocity_y.value);
+		value = bound (value, -300.0, 300.0);
+		value *= rad (180.0) / 300.0;
+	    centre_x = 251 * width / 512;
+    	centre_y = 315 * height / 512;
+		dot_x = centre_x - cos (value) * 40 * width / 512;
+		dot_y = centre_y - sin (value) * 50 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Barometric altimeter long arrow */
+		value = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0);
+		value *= rad (360.0) / 1000.0;
+	    centre_x = 126 * width / 512;
+    	centre_y = 318 * height / 512;
+		dot_x = centre_x + sin (value) * 40 * width / 512;
+		dot_y = centre_y - cos (value) * 50 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Barometric altimeter short arrow */
+		value = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0);
+		value *= rad (360.0) / 10000.0;
+	    centre_x = 126 * width / 512;
+    	centre_y = 318 * height / 512;
+		dot_x = centre_x + sin (value) * 20 * width / 512;
+		dot_y = centre_y - cos (value) * 25 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Airspeed */
+		value = kilometres_per_hour (current_flight_dynamics->indicated_airspeed.value);
+		value = bound (value, -50.0, 450.0);
+		value *= rad (180.0) / 400.0;
+	    centre_x = 282 * width / 512;
+    	centre_y = 146 * height / 512;
+		dot_x = centre_x - cos (value) * 40 * width / 512;
+		dot_y = centre_y - sin (value) * 50 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Slip */
+		value = kilometres_per_hour (current_flight_dynamics->indicated_slip.value);
+		value = bound (value, -100.0, 100.0);
+		value *= rad (45.0) / 100.0;
+	    centre_x = 282 * width / 512;
+    	centre_y = 146 * height / 512;
+		dot_x = centre_x + sin (value) * 20 * width / 512;
+		dot_y = centre_y + cos (value) * 25 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* RPM */
+		value = current_flight_dynamics->main_rotor_rpm.value;
+		value = bound (value, 0.0, 100.0);
+		value += 20.0;
+		value *= rad (360.0) / 120.0;
+	    centre_x = 157 * width / 512;
+    	centre_y = 146 * height / 512;
+		dot_x = centre_x + sin (value) * 40 * width / 512;
+		dot_y = centre_y - cos (value) * 50 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Draw chaff & flare lamps */
+		draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_chaff_green, 172, 26, 40, 22, 481,  79,  22,  11,  51);
+		draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_flare_green, 218, 26, 40, 22, 503,  79,  22,  11,  48);
+		draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_chaff_red, 172, 26, 40, 22, 436,  54,  22,  11,  51);
+		draw_sprite(width / 512, height / 512, havoc_lamps.weapons_management_flare_red, 218, 26, 40, 22, 458,  54,  22,  11,  48);
+
+		unlock_screen (texture_screen[TG_LLHS][texture]);
+	}
+
+	/* Upper Left Panel */
+	width = texture_width[TG_ULHS][texture];
+	height = texture_height[TG_ULHS][texture];
+
+	if (lock_screen (texture_screen[TG_ULHS][texture]))
+	{
+		set_active_screen (texture_screen[TG_ULHS][texture]);
+
+		/* G meter */
+		value = current_flight_dynamics->g_force.value;
+		value = bound (value, -2.0, 4.0);
+		value *= rad (360.0) / 7.0;
+	    centre_x = 209 * width / 512;
+    	centre_y = 194 * height / 512;
+		dot_x = centre_x + sin (value) * 35 * width / 512;
+		dot_y = centre_y - cos (value) * 35 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Radar altimeter */
+		value = current_flight_dynamics->radar_altitude.value;
+		value = bound (value, 0.0, 300.0);
+		if (value < 100.0)
+			value *= rad (360.0) / 160.0;
+		else
+			value = value * rad (180.0) / 400.0 + rad (180.0);
+	    centre_x = 182 * width / 512;
+    	centre_y = 366 * height / 512;
+		dot_x = centre_x + sin (value) * 50 * width / 512;
+		dot_y = centre_y - cos (value) * 50 * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+		/* Draw master caution lamp */
+		draw_sprite(width / 512, height / 512, havoc_lamps.master_caution, 315, 51, 124, 76, 213, 150,  42,  29, 232);
+
+		unlock_screen (texture_screen[TG_ULHS][texture]);
+	}
+
+	/* Lower Right Panel */
+	width = texture_width[TG_LRHS][texture];
+	height = texture_height[TG_LRHS][texture];
+
+	if (lock_screen (texture_screen[TG_LRHS][texture]))
+	{
+		set_active_screen (texture_screen[TG_LRHS][texture]);
+
+		/* Left engine torque */
+		value = current_flight_dynamics->left_engine_torque.value;
+		value = bound (value, 0.0, 110.0);
+		value *= 170.0 / 100.0;
+	    centre_x = 22 * width / 512;
+    	centre_y = 466 * height / 512;
+	    dot_x = centre_x;
+    	dot_y = centre_y - value * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
+
+		/* Right engine torque */
+		value = current_flight_dynamics->right_engine_torque.value;
+		value = bound (value, 0.0, 110.0);
+		value *= 170.0 / 100.0;
+	    centre_x = 66 * width / 512;
+    	centre_y = 466 * height / 512;
+	    dot_x = centre_x;
+    	dot_y = centre_y - value * height / 512;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
+
+		/* Left engine temperature */
+		/* Right engine temperature */
+
+		/* Draw status lamps */
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_1 , 167,  48, 58, 26, 332,   2,  22,  11, 120);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_2 , 227,  48, 58, 26, 354,   2,  22,  11, 117);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_3 , 288,  48, 58, 26, 376,   2,  22,  11, 115);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_4 , 167,  76, 58, 26, 332,  13,  22,  11, 112);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_5 , 227,  76, 58, 26, 354,  13,  22,  11, 110);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_6 , 288,  76, 58, 26, 376,  13,  22,  11, 107);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_7 , 167, 104, 58, 26, 332,  24,  22,  11, 105);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_8 , 227, 104, 58, 26, 354,  24,  22,  11, 102);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_9 , 288, 104, 58, 26, 376,  24,  22,  11,  99);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_10, 167, 133, 58, 26, 332,  35,  22,  11,  97);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_11, 227, 133, 58, 26, 354,  35,  22,  11,  94);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_12, 288, 133, 58, 26, 376,  35,  22,  11,  92);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_13, 167, 161, 58, 26, 332,  46,  22,  11,  89);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_14, 227, 161, 58, 26, 354,  46,  22,  11,  87);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_15, 288, 161, 58, 26, 376,  46,  22,  11,  84);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_16, 167, 189, 58, 26, 332,  57,  22,  11,  82);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_17, 227, 189, 58, 26, 354,  57,  22,  11,  79);
+		draw_sprite (width / 512, height / 512, havoc_lamps.status_18, 288, 189, 58, 26, 376,  57,  22,  11,  76);
+
+		/* Draw radio lamp */
+		draw_sprite(width / 512, height / 512, havoc_lamps.radio, 374, 271, 86, 44, 401,  50,  29,  17,  74);
+
+		/* Draw oil & temperature lamps */
+		draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_pressure_normal, 274, 392, 8, 30, 580,  55,   3,  13,  46);
+		draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_pressure_normal, 306, 392, 8, 30, 591,  55,   4,  13,  43);
+		draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_pressure_low, 274, 412, 8, 10, 579,  90,   4,   5,  46);
+		draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_pressure_low, 306, 412, 8, 10, 591,  90,   4,   5,  43);
+		draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_temperature_normal, 274, 292, 8, 34, 579,  72,   5,  15,  46);
+		draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_temperature_normal, 306, 292, 8, 34, 591,  72,   5,  15,  43);
+		draw_sprite(width / 512, height / 512, havoc_lamps.lh_engine_oil_temperature_high, 274, 268, 8, 58, 576,  99,   4,  25,  46);
+		draw_sprite(width / 512, height / 512, havoc_lamps.rh_engine_oil_temperature_high, 306, 268, 8, 58, 588,  99,   4,  25,  43);
+
+		unlock_screen (texture_screen[TG_LRHS][texture]);
+	}
+
+	/* Upper Right Panel */
+	width = texture_width[TG_URHS][texture];
+	height = texture_height[TG_URHS][texture];
+
+	if (lock_screen (texture_screen[TG_URHS][texture]))
+	{
+		set_active_screen (texture_screen[TG_URHS][texture]);
+
+		/* Draw warning lamps */
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_1, 118,  40, 68, 34, 539,   2,  22,  12,  71);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_2, 193,  40, 68, 34, 561,   2,  23,  12,  69);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_3, 118,  78, 68, 34, 539,  14,  22,  11,  66);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_4, 193,  78, 68, 34, 561,  14,  23,  11,  64);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_5, 118, 116, 68, 34, 539,  25,  22,  11,  61);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_6, 193, 116, 68, 34, 561,  25,  23,  11,  59);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_7, 118, 154, 68, 34, 539,  36,  22,  12,  56);
+		draw_sprite (width / 512, height / 512, havoc_lamps.warning_8, 193, 154, 68, 34, 561,  36,  23,  12,  54);
+
+		/* Draw threat warning lamps */
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_1, 120, 377, 18, 10, 274, 230,   8,   6, 229);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_2, 143, 377, 18, 10, 282, 230,   8,   6, 227);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_3, 170, 377, 18, 10, 290, 230,   8,   6, 224);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_4, 195, 377, 18, 10, 298, 230,   7,   6, 222);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_5, 219, 377, 18, 10, 305, 230,   8,   6, 219);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_radar_type_6, 244, 377, 18, 10, 313, 230,   8,   6, 217);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_1, 151, 322, 11, 12, 289, 221,   5,   3, 209);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_2, 145, 309,  9, 13, 284, 217,   5,   5, 207);	// (19% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_3, 144, 295,  6, 11, 281, 211,   4,   6, 204);	// (20% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_4, 145, 279,  8, 15, 281, 205,   3,   6, 201);	// (21% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_5, 149, 266, 10, 13, 282, 200,   3,   5, 199);	// (22% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_6, 158, 257, 12,  8, 285, 195,   4,   5, 196);	// (23% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_7, 167, 250, 14, 10, 289, 192,   6,   4, 194);	// (24% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_8, 187, 249,  8,  6, 295, 192,   5,   2, 191);	// (25% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_9, 200, 250, 12,  9, 300, 192,   6,   4, 189);	// (26% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_10, 211, 256, 12, 12, 306, 195,   4,   5, 186);	// (27% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_11, 221, 267, 11, 14, 310, 200,   3,   6, 184);	// (28% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_12, 228, 281,  9, 17, 311, 206,   3,   5, 181);	// (29% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_13, 230, 300, 10, 16, 309, 211,   5,   6, 178);	// (30% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_14, 220, 316, 12, 13, 306, 217,   5,   4, 176);	// (31% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_close_range_15, 206, 329, 14, 15, 300, 220,   6,   4, 173);	// (32% alpha)
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_rear_close_range, 152, 345, 8, 6, 285, 222,   4,   4, 120);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_rear_close_range, 218, 345, 8, 6, 305, 222,   5,   4, 117);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_90_close_range, 132, 279, 8, 6, 278, 203,   4,   4, 171);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_67_close_range, 141, 261, 8, 6, 281, 196,   4,   4, 168);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_45_close_range, 154, 246, 8, 6, 285, 191,   4,   4, 166);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_22_close_range, 171, 237, 8, 6, 292, 188,   4,   4, 163);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_22_close_range, 200, 237, 8, 6, 299, 188,   4,   4, 161);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_45_close_range, 218, 246, 8, 6, 305, 191,   4,   4, 158);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_67_close_range, 232, 261, 8, 6, 310, 196,   4,   4, 156);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_90_close_range, 240, 279, 8, 6, 313, 203,   4,   4, 153);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_rear, 140, 351, 18, 20, 281, 224,   7,   6, 214);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_rear, 224, 351, 18, 20, 307, 224,   6,   6, 212);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_90, 108, 273, 18, 20, 272, 200,   6,   7, 150);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_67, 118, 249, 18, 20, 275, 192,   7,   7, 148);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_45, 137, 227, 18, 20, 281, 186,   7,   6, 145);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_lh_22, 162, 218, 18, 20, 290, 183,   6,   6, 143);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_22, 200, 218, 18, 20, 299, 183,   6,   6, 140);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_45, 222, 227, 18, 20, 307, 186,   6,   6, 138);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_67, 242, 249, 18, 20, 313, 192,   7,   7, 135);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_bearing_rh_90, 254, 273, 18, 20, 317, 201,   6,   6, 133);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_below, 177, 290, 26, 12, 292, 206,  11,   5, 130);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_above, 177, 274, 26, 12, 292, 202,  11,   4, 127);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_lh_lock, 161, 266, 24, 66, 286, 197,  11,  23, 125);
+		draw_sprite (width / 512, height / 512, havoc_lamps.threat_warning_missile_rh_lock, 197, 266, 24, 66, 298, 197,  11,  23, 122);
+
+		unlock_screen (texture_screen[TG_URHS][texture]);
+	}
+
+	/* Centre Panel */
+	width = texture_width[TG_CEN][texture];
+	height = texture_height[TG_CEN][texture];
+
+	if (lock_screen (texture_screen[TG_CEN][texture]))
+	{
+		set_active_screen (texture_screen[TG_CEN][texture]);
+
+		/* Clock */
+		value = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+		get_analogue_clock_values (value, &hour_hand_value, &minute_hand_value, &second_hand_value);
+		/* Hour */
+		value = hour_hand_value * rad (360.0) / 12.0;
+	    centre_x = 77 * width / 512;
+    	centre_y = 119 * height / 256;
+		dot_x = centre_x + sin (value) * 20 * width / 512;
+		dot_y = centre_y - cos (value) * 30 * height / 256;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 64, white_needle_colour);
+		/* Minute */
+		value = minute_hand_value * rad (360.0) / 60.0;
+	    centre_x = 77 * width / 512;
+    	centre_y = 119 * height / 256;
+		dot_x = centre_x + sin (value) * 40 * width / 512;
+		dot_y = centre_y - cos (value) * 60 * height / 256;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 256, height / 128, white_needle_colour);
+		/* Second */
+		value = second_hand_value * rad (360.0) / 60.0;
+	    centre_x = 77 * width / 512;
+    	centre_y = 119 * height / 256;
+		dot_x = centre_x + sin (value) * 40 * width / 512;
+		dot_y = centre_y - cos (value) * 60 * height / 256;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 256, height / 128, red_needle_colour);
+
+		/* Fuel */
+		value = current_flight_dynamics->fuel_weight.value;
+		value = bound (value, 0.0, 1600.0);
+		value = (value - 750.0) * rad (360.0) / 2000.0;
+	    centre_x = 432 * width / 512;
+    	centre_y = 118 * height / 256;
+		dot_x = centre_x + sin (value) * 40 * width / 512;
+		dot_y = centre_y - cos (value) * 60 * height / 256;
+		centre_x = centre_x + sin (value) * 10 * width / 512;
+		centre_y = centre_y - cos (value) * 15 * height / 256;
+		draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 64, yellow_needle_colour);
+
+		unlock_screen (texture_screen[TG_CEN][texture]);
+	}
+
+	/* Restore */
+	set_active_screen (video_screen);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Casm 10SEP05 end
+

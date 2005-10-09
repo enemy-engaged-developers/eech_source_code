@@ -416,7 +416,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 	{
 		if (side == this_side)
 		{
-			draw_stats_page_solid_bar (obj, solid_bar_graphic, x1, y1, x2, y2, w);
+			draw_stats_page_solid_bar (obj, solid_bar_graphic, x1, y1, x2, y2, 1.0);
 		}
 	}
 
