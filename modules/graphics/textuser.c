@@ -3534,7 +3534,10 @@ void load_warzone_override_textures (const char *warzone_name)
 	map = warzone_name + strlen ( warzone_name ) - 1;
 	if ( *map == '\\' )
  		map--;
-	nr = (int) (*map - '0');
+ 	if (*(map-1) <= '9' && *(map-1) >= '0')
+ 	   map--;
+	nr = atoi(map);
+	//VJ 051008 enable mapnumbers > 9 	//(int) (*map - '0');
 
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
