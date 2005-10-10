@@ -3534,7 +3534,7 @@ void load_warzone_override_textures (const char *warzone_name)
 	map = warzone_name + strlen ( warzone_name ) - 1;
 	if ( *map == '\\' )
  		map--;
- 	if (*(map-1) <= '9' && *(map-1) >= '0')
+ 	if (isdigit(map[-1]))
  	   map--;
 	nr = atoi(map);
 	//VJ 051008 enable mapnumbers > 9 	//(int) (*map - '0');
@@ -3543,13 +3543,14 @@ void load_warzone_override_textures (const char *warzone_name)
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
 
-	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 9)
+	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 10)
 	{
+		// Casm 10OCT05 made Lybia to be 10th instead of 0th (because of Gotcha's changes above of atoi)
 		static const char *
-			maps[10] =
+			maps[11] =
 			{
-				"LYBIA", "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
-				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT"
+				NULL, "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
+				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA"
 			};
 		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[nr]);
 
