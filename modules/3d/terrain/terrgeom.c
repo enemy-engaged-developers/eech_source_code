@@ -65,6 +65,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "terrain.h"
+//VJ 051011 global zbuffer optional
+#include "cmndline.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4130,17 +4132,28 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 			// no bias above 3072+4*2048
 		}
 		else
-		if ( zz > ( 1000 ) )
 		{
-
-			zbuffer_constant = zbuffer_constant_lowered_bias;
-			// small bias above 1000 m
-		}
-		else
-		{	
-			zbuffer_constant = zbuffer_constant_lowered_bias + 
-			exp(-0.000015*zz*zz )*(zbuffer_constant_lowered_bias2-zbuffer_constant_lowered_bias);
-			//gaussian distribution seems to work best between approx. 1000 and 0 m
+			//VJ 051011 zbuffer correction optional
+			if (global_zbuffer)
+			{
+				if ( zz > ( 1000.0 ) )
+				{
+		
+					zbuffer_constant = zbuffer_constant_lowered_bias;
+					// small bias above 1000 m
+				}
+				else
+				{	
+					zbuffer_constant = zbuffer_constant_lowered_bias + 
+					exp(-0.000015*zz*zz )*(zbuffer_constant_lowered_bias2-zbuffer_constant_lowered_bias);
+					//gaussian distribution seems to work best between approx. 1000 and 0 m
+				}
+			}	
+			else
+			{
+	
+				zbuffer_constant = zbuffer_constant_lowered_bias;
+			}
 		}	
 	}
 	else

@@ -437,6 +437,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
 		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping
+		if (strcmp(p, "zbuffer") == 0) global_zbuffer = d1;	//VJ 051011 zbuffer
+
 		if (strcmp(p, "dynamic_water") == 0) global_dynamic_water = d1;	//VJ 050817 dynamic water textures
 		if (strcmp(p, "autosave") == 0) command_line_autosave = d1 * 60; // Casm 17JUN05 Autosave option
 		if (strcmp(p, "cannontrack") == 0) command_line_cannontrack = d1;	// Jabberwock 050120 Cannon tracking
@@ -600,6 +602,7 @@ void dump_ini_file(void)
 	fprintf(f,"texture_colour=%d    # Use texture colours directly. WARNING: only use with correct texture packs (def=0) \n",command_line_texture_colour);	//VJ 050303 texture colour mod
 	fprintf(f,"texture_filtering=%d  # Texture blending, reacts to Anisotropic filter setting. EXPERIMENTAL (def=0) \n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
+	fprintf(f,"zbuffer=%d           # z-buffer correction for runways and landing pads. May cause terrain artifacts. (def=0) \n",global_zbuffer);	//VJ 051011 zbuffer
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 for not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
 	fprintf(f,"[end of file]\n");
