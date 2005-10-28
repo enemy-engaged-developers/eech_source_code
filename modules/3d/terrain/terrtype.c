@@ -135,6 +135,10 @@ static void initialise_3d_alaska_terrain_types ( void );
 static void initialise_3d_aleut_terrain_types ( void );
 
 static void initialise_3d_kuwait_terrain_types ( void );
+
+static void initialise_3d_grand_terrain_types ( void );
+
+static void initialise_3d_mars_terrain_types ( void );
 //VJ 051007 <==
 static void initialise_3d_custom_terrain_types( void );
 
@@ -878,10 +882,25 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 			break;
 		}
 
-		case 9:	
+		case 9:	//kuwait
+		case 10:	//lybia
 		{
 
 			initialise_3d_kuwait_terrain_types ();
+
+			break;
+		}
+		case 11:	//grand canyon
+		{
+
+			initialise_3d_grand_terrain_types ();
+
+			break;
+		}
+		case 12:	//mars
+		{
+
+			initialise_3d_mars_terrain_types ();
 
 			break;
 		}
@@ -2456,39 +2475,14 @@ void initialise_3d_alaska_terrain_types ( void )
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
-	terrain_surface_forest									= SURFACE_TYPE_NONE;
-	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
 	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
-	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
-	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
-	terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field4									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field5									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field6									= SURFACE_TYPE_SOIL;
-	terrain_surface_field7									= SURFACE_TYPE_SOIL;
-	terrain_surface_field8									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
 	terrain_surface_altered_land1							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
-	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
-	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
@@ -2565,39 +2559,14 @@ void initialise_3d_aleut_terrain_types ( void )
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
-	terrain_surface_forest									= SURFACE_TYPE_NONE;
-	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
 	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
-	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
-	terrain_surface_rail										= SURFACE_TYPE_SOIL;
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
-	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
-	terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field4									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field5									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field6									= SURFACE_TYPE_SOIL;
-	terrain_surface_field7									= SURFACE_TYPE_SOIL;
-	terrain_surface_field8									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
 	terrain_surface_altered_land1							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
-	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
-	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
@@ -2676,14 +2645,6 @@ void initialise_3d_kuwait_terrain_types ( void )
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
 	terrain_surface_forest									= SURFACE_TYPE_NONE;
-	terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
-	terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
 	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
 	terrain_surface_river									= SURFACE_TYPE_WATER;
@@ -2692,25 +2653,14 @@ void initialise_3d_kuwait_terrain_types ( void )
 	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
 	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
 	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
-	terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field4									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field5									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field6									= SURFACE_TYPE_SOIL;
-	terrain_surface_field7									= SURFACE_TYPE_SOIL;
-	terrain_surface_field8									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
-	terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
-	terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
 	terrain_surface_altered_land1							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
-	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
-	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
 
-	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
+	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
 
@@ -2722,4 +2672,167 @@ void initialise_3d_kuwait_terrain_types ( void )
 
 	set_2d_terrain_contour_heights ( sizeof ( contour_heights ) / sizeof ( float ), contour_heights );
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void initialise_3d_grand_terrain_types ( void )
+{
+
+	float
+		contour_heights[] =
+		{
+			-1000,
+			-0.0001,
+			250,
+			500,
+			750,
+			1000,
+			1250,
+			1500,
+			2000,
+		};
+
+	int
+		reflection_texture_index;
+
+	set_3d_rain_special_snow_flag ( FALSE ); //????
+
+	terrain_texture_sea_detail									= get_system_texture_index ( "TERRAIN_SEA_1" );
+	terrain_texture_sea_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SEA_LEBANON" );
+	terrain_texture_beach_detail								= get_system_texture_index ( "TERRAIN_BEACH" );
+	terrain_texture_beach_colour_pass						= get_system_texture_index ( "COLOUR_PASS_LEBANON" );
+
+	terrain_texture_land_detail								= get_system_texture_index ( "TERRAIN_HIGHLAND" );
+	terrain_texture_land_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
+
+	terrain_texture_road_detail								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+	terrain_texture_road_colour_pass							= get_system_texture_index ( "COLOUR_PASS_WALL" );      //TERRAIN_THAI_TRACK" );
+	terrain_texture_track_detail								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+	terrain_texture_track_colour_pass						= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+	terrain_texture_river_detail								= get_system_texture_index ( "TERRAIN_RIVER" );
+	terrain_texture_river_colour_pass						= get_system_texture_index ( "COLOUR_PASS_SEA_LEBANON" );
+	terrain_texture_reservoir_detail							= get_system_texture_index ( "TERRAIN_RIVER" );
+	terrain_texture_reservoir_colour_pass					= get_system_texture_index ( "COLOUR_PASS_SEA_LEBANON" );
+	terrain_texture_road_bank_detail							= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+	terrain_texture_road_bank_colour_pass					= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+	terrain_texture_river_bank_detail						= get_system_texture_index ( "TERRAIN_YEMEN_GRITTY" );
+	terrain_texture_river_bank_colour_pass					= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+	terrain_texture_altered_land1_detail					= get_system_texture_index ( "TERRAIN_SCRUB" );
+	terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "COLOUR_PASS_MOUNTAINS" );
+	terrain_texture_altered_land2_detail					= get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+	terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "COLOUR_PASS_ROCK" );
+	terrain_texture_altered_land3_detail					= get_system_texture_index ( "TERRAIN_SNOW" );
+	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
+
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+		initialise_all_custom_terrain_types ();
+
+	terrain_surface_sea										= SURFACE_TYPE_WATER;
+	terrain_surface_beach									= SURFACE_TYPE_SAND;
+	terrain_surface_land										= SURFACE_TYPE_SOIL;
+	terrain_surface_forest									= SURFACE_TYPE_NONE;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
+	terrain_surface_track									= SURFACE_TYPE_SOIL;
+	terrain_surface_river									= SURFACE_TYPE_WATER;
+	terrain_surface_reservoir								= SURFACE_TYPE_WATER;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
+	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
+	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
+	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land1							= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
+	terrain_surface_trench									= SURFACE_TYPE_WATER;
+
+	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
+	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+	set_object_3d_texture_camoflage_by_name ( "DESERT" );
+
+	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+
+	if ( reflection_texture_index != -1 )
+	{
+
+		set_object_3d_reflection_texture_map ( reflection_texture_index );
+	}
+
+	set_2d_terrain_contour_heights ( sizeof ( contour_heights ) / sizeof ( float ), contour_heights );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void initialise_3d_mars_terrain_types ( void )
+{
+
+	float
+		contour_heights[] =
+		{
+			-1000,
+			-0.0001,
+			250,
+			500,
+			750,
+			1000,
+			1250,
+			1500,
+			2000,
+		};
+
+	int
+		reflection_texture_index;
+
+	set_3d_rain_special_snow_flag ( FALSE ); //????
+
+	terrain_texture_land_detail								= get_system_texture_index ( "TERRAIN_HIGHLAND" );
+	terrain_texture_land_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
+
+	terrain_texture_road_detail								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+	terrain_texture_road_colour_pass							= get_system_texture_index ( "COLOUR_PASS_WALL" );      //TERRAIN_THAI_TRACK" );
+	terrain_texture_track_detail								= get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+	terrain_texture_track_colour_pass						= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+	terrain_texture_road_bank_detail							= get_system_texture_index ( "TERRAIN_DETAIL_4" );
+	terrain_texture_road_bank_colour_pass					= get_system_texture_index ( "COLOUR_PASS_YEMEN_BAKED2" );
+	terrain_texture_altered_land1_detail					= get_system_texture_index ( "TERRAIN_SCRUB" );
+	terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "COLOUR_PASS_MOUNTAINS" );
+	terrain_texture_altered_land2_detail					= get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+	terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "COLOUR_PASS_ROCK" );
+	terrain_texture_altered_land3_detail					= get_system_texture_index ( "TERRAIN_SNOW" );
+	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
+
+	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
+	if (command_line_texture_colour == 1)
+		initialise_all_custom_terrain_types ();
+
+	terrain_surface_land										= SURFACE_TYPE_SOIL;
+	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
+	terrain_surface_track									= SURFACE_TYPE_SOIL;
+	terrain_surface_rail										= SURFACE_TYPE_SOIL;
+	terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
+	terrain_surface_river_bank								= SURFACE_TYPE_SAND;
+	terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land1							= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
+	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
+	terrain_surface_trench									= SURFACE_TYPE_WATER;
+
+	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
+	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+	set_object_3d_texture_camoflage_by_name ( "DESERT" );
+
+	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+
+	if ( reflection_texture_index != -1 )
+	{
+
+		set_object_3d_reflection_texture_map ( reflection_texture_index );
+	}
+
+	set_2d_terrain_contour_heights ( sizeof ( contour_heights ) / sizeof ( float ), contour_heights );
+}
+
 //VJ 051007 <===
