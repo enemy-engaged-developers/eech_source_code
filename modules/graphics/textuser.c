@@ -104,6 +104,9 @@
 
 //VJ 050304 needed for texture colour mod
 #include "cmndline.h"
+//VJ 051011 add winter textures
+#include "global.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +126,8 @@ int
 // VJ 04/12/12 desert camouflage texture name indicator
 #define DESERTIND_1 "_DESERT"
 #define DESERTIND_2 "-D"
+//VJ 051011 add winter textures
+#define DESERTIND_3 "-W"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,9 +261,11 @@ unsigned char
 #define BITMAP_ID		(0x4D42)
 
 struct OVERRIDENAME {
-	char name[64];
-	char path[256];
-	int type;
+	char name[64]; //texture name
+	char path[256];  //full path+file name on disk
+	int type;   //1 = bmp; 2 = dds
+//VJ 051011 add winter textures
+	int camo;   //0 = regular; 1 = winter; 2 = desert
 };
 
 typedef struct OVERRIDENAME overridename;
@@ -271,7 +278,6 @@ static int
 	texture_colour_bak;
 
 //VJ 040814 dynamic water
-
 terrain_dynamic_water_info
 	terrain_water_information[3]; // sea, river, reservoir
 
@@ -1174,11 +1180,7 @@ BOOL load_texturemap_data ( const char *path )
 				}
 			}
 		}//for count to number_of_system_textures
-
-
 	}//else  24 bit: !d3d_paletted_textures_supported
-
-
 
 	//VJ 050619 make a backup of the original pointers to the screens
 	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
@@ -1187,10 +1189,6 @@ BOOL load_texturemap_data ( const char *path )
 		backup_system_textures[count] = system_textures[count];
 		backup_system_texture_info[count] = system_texture_info[count];
 	}
-
-	//VJ 050913 separate dynamic water for alaska and user made maps
-	//terrain_water_information[0].delay = -1;
-	//use as flag for intialization process
 
 	return ( TRUE );
 }
@@ -2413,18 +2411,26 @@ int match_system_texture_name ( const char *name )
 		 return (385);
 	}
 	else
-   if (p = strstr(real_name, DESERTIND_1))
+   if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_1)))
    {
 		//check for _DESERT
        *p = '\0';
        camo = 1;
    }
    else
-   if (p = strstr(real_name, DESERTIND_2))
+   if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_2)))
    {
 		//check for -D
        *p = '\0';
        camo = 1;
+   }
+   else
+//VJ 051011 add winter textures    
+   if (get_global_season() == SESSION_SEASON_WINTER && (p = strstr(real_name, DESERTIND_3)))
+   {
+		//check for -W
+       *p = '\0';
+       camo = 0;
    }
 
 	for ( count = 0; count < number_of_system_textures; count++ )
@@ -3305,7 +3311,8 @@ void clear_texture_override_names ( void )
    	system_texture_override_names[count].name[0] = '\0';
    	system_texture_override_names[count].path[0] = '\0';
    	system_texture_override_names[count].type = 0;
-   }
+   	system_texture_override_names[count].camo = 0;
+   }	
 }
 
 
@@ -3396,17 +3403,42 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 				retrieved_index = match_system_texture_name ( filename );
 
-#if DEBUG_MODULE
-				debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-#endif
 
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-					strupr(system_texture_override_names[index].path);
-					strcpy(system_texture_override_names[index].name, filename);
-					system_texture_override_names[index].type = 1;
+//VJ 051011 add winter textures ==>
+					//VJ 051010 force winter textures					
+					if ((get_global_season() == SESSION_SEASON_WINTER) && strstr(filename,DESERTIND_3))
+					{
+						   system_texture_override_names[index].camo = 1;
+							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+							strupr(system_texture_override_names[index].path);
+							strcpy(system_texture_override_names[index].name, filename);
+							system_texture_override_names[index].type = 1;
+							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+					}
+					//VJ 051010 force desert textures
+					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))					
+					{
+					   system_texture_override_names[index].camo = 2;
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+						strupr(system_texture_override_names[index].path);
+						strcpy(system_texture_override_names[index].name, filename);
+						system_texture_override_names[index].type = 1;
+						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+					}	
+					//VJ 051010 use normal textures for the rest
+				   if (system_texture_override_names[index].camo == 0)
+				   {
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+						strupr(system_texture_override_names[index].path);
+						strcpy(system_texture_override_names[index].name, filename);
+						system_texture_override_names[index].type = 1;
+						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+				   }
+//VJ 051011 <== add winter textures 
+
 					count++;
 				}
 			}
@@ -3434,16 +3466,39 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 
-#if DEBUG_MODULE
-					debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-#endif
 					index = retrieved_index;
 
-					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-					strupr(system_texture_override_names[index].path);
-					strcpy(system_texture_override_names[index].name, filename);
-					system_texture_override_names[index].type = 2;
-
+//VJ 051011 add winter textures ==>
+					//VJ 051010 force winter textures
+					if ((get_global_season() == SESSION_SEASON_WINTER) && strstr(filename,DESERTIND_3))
+					{
+						   system_texture_override_names[index].camo = 1;
+							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+							strupr(system_texture_override_names[index].path);
+							strcpy(system_texture_override_names[index].name, filename);
+							system_texture_override_names[index].type = 2;
+							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+					}
+					//VJ 051010 force desert textures
+					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))					
+					{
+					   system_texture_override_names[index].camo = 2;
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+						strupr(system_texture_override_names[index].path);
+						strcpy(system_texture_override_names[index].name, filename);
+						system_texture_override_names[index].type = 2;
+						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+					}	
+					//VJ 051010 use normal textures for the rest
+				   if (system_texture_override_names[index].camo == 0)
+				   {
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+						strupr(system_texture_override_names[index].path);
+						strcpy(system_texture_override_names[index].name, filename);
+						system_texture_override_names[index].type = 2;
+						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+				   }
+//VJ 051011 <== add winter textures 
 					count++;
 				}
 			}
@@ -3463,7 +3518,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 void load_warzone_override_textures (const char *warzone_name)
 {
 	char directory_textdir_path[256];
-	int nr = 0;
+	int count, mapnr = 0;
 	const char * map;
 	int nrtextfound = 0;
 
@@ -3471,7 +3526,8 @@ void load_warzone_override_textures (const char *warzone_name)
 	clear_texture_override_names ();
 
 	// first seek all textures in common directories
-	nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
+	//VJ 051024 do not use root directory to search
+	//nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
 
@@ -3481,7 +3537,7 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
-
+/*VJ 051024: do not look in custom directories anymore: overcomplicated and nobody uses it!
 	//then look for the custom directories
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
 
@@ -3527,32 +3583,36 @@ void load_warzone_override_textures (const char *warzone_name)
 			fscanf(ftextdir,"%[^\n]\n",buf);
 		}
 	}
-
+*/
 	//last look for the modded and mipmapped terrain textures
 	//VJ 050319 texture colour mod, load terrain textures
+
+	// Casm 20AUG05 Moved backup before "if"
+	//VJ 050621 backup commandline var, set to 0 if no textures found
+	texture_colour_bak = command_line_texture_colour;
 
 	map = warzone_name + strlen ( warzone_name ) - 1;
 	if ( *map == '\\' )
  		map--;
  	if (isdigit(map[-1]))
  	   map--;
-	nr = atoi(map);
+	mapnr = atoi(map);
 	//VJ 051008 enable mapnumbers > 9 	//(int) (*map - '0');
 
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
 
-	if (command_line_texture_colour == 1 && nr >= 1 && nr <= 10)
+	if (command_line_texture_colour == 1 && mapnr >= 1 && mapnr <= 12)
 	{
 		// Casm 10OCT05 made Lybia to be 10th instead of 0th (because of Gotcha's changes above of atoi)
 		static const char *
-			maps[11] =
+			maps[13] =
 			{
 				NULL, "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
-				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA"
+				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA","GRAND", "MARS"
 			};
-		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[nr]);
+		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[mapnr]);
 
 		debug_log("=== Terrain texture colour mod dir:  %s",directory_textdir_path);
 
@@ -3580,7 +3640,7 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	//VJ 050820 dynamic water, pass warzone nr for tuning
 	if (global_dynamic_water)
-		load_texture_water( nr );
+		load_texture_water( mapnr );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3616,28 +3676,28 @@ void restore_default_textures ( void )
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 
 	}
-/* not sure about this and not necessary, water is outside regular textures anyway
+
+//VJ 051011 release dynamic water
 	if (global_dynamic_water)
 	{
 		int nr;
-
-		nr = terrain_water_information[2].start + terrain_water_information[2].number+1;
-		for ( count = terrain_water_information[0].start; count < nr; count++ )
-		{
-
-	#if DEBUG_MODULE
-			debug_log("dynamic water Texture release (%d) : %s",count,system_texture_override_names[count].name);
-	#endif
-
+		
+		nr = terrain_water_information[0].number+terrain_water_information[1].number + terrain_water_information[2].number+1;
+		for ( count = terrain_water_information[0].placenr; count < nr; count++ )
+		{		
+			
+	//#if DEBUG_MODULE
+			debug_log("dynamic water Texture release (%d-%d) ",count,nr);
+	//#endif	
+		
 			release_texture_surface ( &system_textures[count]->surface );
-
+			
 		// restore pointer to original textures
-			system_textures[ count ] = backup_system_textures[ count ];
-			system_texture_info[ count ] = backup_system_texture_info[ count ];
-
+			//system_textures[ count ] = backup_system_textures[ count ];
+			//system_texture_info[ count ] = backup_system_texture_info[ count ];
+	
 		}
    }
-*/   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
