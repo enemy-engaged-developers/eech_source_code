@@ -77,6 +77,8 @@ extern void define_session_parameter_objects (void);
 
 extern void notify_time_of_day_function ( ui_object *obj, void *arg );
 
+extern void notify_season_function ( ui_object *obj, void *arg );
+
 extern void notify_weather_function ( ui_object *obj, void *arg );
 
 

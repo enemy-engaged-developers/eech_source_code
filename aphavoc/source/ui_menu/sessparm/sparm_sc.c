@@ -92,7 +92,9 @@ enum
 
 ui_object
 	*session_parameters_area,
-
+//VJ 051011 add season summer/winter/desert button	
+	*season_area,
+	*season_button,
 	*time_of_day_area,
 	*time_of_day_button,
 	*weather_area,
@@ -115,7 +117,13 @@ static const char
 	*boolean_text[2],
 	*suppress_ai_fire_text[2],
 	*time_of_day_text[6],
-	*weather_text[4];
+	*weather_text[4],
+//VJ 051011 add season summer/winter/desert button	
+	*season_text[3];
+
+static int 
+		mapnr;
+	  
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +146,25 @@ static void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_objec
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ 051011 add season summer/winter/desert button	
+int get_map_number (const char *warzone_name)
+{
+	int mapnr = 0;
+	const char *map;
+	
+	map = warzone_name + strlen ( warzone_name ) - 1;
+	if ( *map == '\\' )
+ 		map--;
+ 	if (isdigit(map[-1]))
+ 	   map--;
+	mapnr = atoi(map);
+	
+	return (mapnr);
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_session_parameters (void)
 {
@@ -151,13 +178,55 @@ void notify_session_parameters (void)
 	// Set the button states
 	//
 
+//VJ 051011 add season summer/winter/desert button	==>
+	mapnr = get_map_number ( get_current_game_session()->data_path ); 
+
+	if (mapnr == 5 || mapnr == 6 || mapnr == 9 || mapnr == 10 || mapnr == 11 || mapnr == 12)
+	{
+		set_global_season( SESSION_SEASON_DESERT );
+	}
+	else
+	if (mapnr == 7 || mapnr == 8)
+	{
+		set_global_season( SESSION_SEASON_WINTER );
+	}
+	else
+	{
+		set_global_season( SESSION_SEASON_SUMMER );
+	}
+
+	//Deserts and tropical warzones cannot change season
+	//"THAILAND", "CUBA", "GEORGIA", "TAIWAN", "LEBANON", "YEMEN", 
+   //"ALASKA", "ALEUT", "KUWAIT", "LYBIA", "GRAND", "MARS"
+	if (mapnr != 3 && mapnr != 7 && mapnr != 8)
+	{
+		set_ui_object_highlightable (season_button, FALSE);
+
+		set_ui_object_font_colour_end (season_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 127);
+
+		set_ui_object_notify_on (season_button, NOTIFY_TYPE_NONE);
+	}
+	else
+	{
+		set_ui_object_highlightable (season_button, TRUE);
+
+		set_ui_object_font_colour_end (season_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255);
+
+		set_ui_object_notify_on (season_button, NOTIFY_TYPE_BUTTON_DOWN);
+	}
+//VJ 051011 <== add season summer/winter/desert button	
+
 	switch ( get_game_type () )
 	{
 
 		case GAME_TYPE_FREE_FLIGHT:
 		{
-	
-			y = 0.533;
+//VJ 051011 add season summer/winter/desert button		
+			y = 0.333;
+			set_ui_object_virtual_y (season_area, y);
+			set_ui_object_text (season_button, season_text [get_global_season () - 1]);
+
+			y += OPTION_AREA_OFFSET_Y;
 			set_ui_object_virtual_y (time_of_day_area, y);
 			set_ui_object_text (time_of_day_button, time_of_day_text [get_global_session_free_flight_time_of_day () - 1]);
 
@@ -186,6 +255,7 @@ void notify_session_parameters (void)
 			set_ui_object_text (realism_weapons_damage_button, boolean_text [!get_global_session_free_flight_realism_invulnerable_from_weapons ()]);
 
 			set_ui_object_drawable (time_of_day_area, TRUE);
+			set_ui_object_drawable (season_area, TRUE);
 			set_ui_object_drawable (weather_area, TRUE);
 			set_ui_object_drawable (realism_inf_weapons_area, TRUE);
 			set_ui_object_drawable (realism_inf_fuel_area, TRUE);
@@ -199,8 +269,12 @@ void notify_session_parameters (void)
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
-	
+	//VJ 051011 add season summer/winter/desert button	
 			y = 0.533;
+			set_ui_object_virtual_y (season_area, y);
+			set_ui_object_text (season_button, season_text [get_global_season () - 1]);
+
+			y += OPTION_AREA_OFFSET_Y;
 			set_ui_object_virtual_y (time_of_day_area, y);
 			set_ui_object_text (time_of_day_button, time_of_day_text [get_global_session_campaign_time_of_day () - 1]);
 
@@ -210,6 +284,7 @@ void notify_session_parameters (void)
 
 			set_ui_object_drawable (session_briefing_overlay, TRUE);
 			set_ui_object_drawable (time_of_day_area, TRUE);
+			set_ui_object_drawable (season_area, TRUE);
 			set_ui_object_drawable (weather_area, TRUE);
 
 			break;
@@ -248,6 +323,7 @@ void notify_clear_all_session_parameters (void)
 	set_ui_object_drawable (session_parameters_area, FALSE);
 	set_ui_object_drawable (session_briefing_overlay, FALSE);
 	set_ui_object_drawable (time_of_day_area, FALSE);
+	set_ui_object_drawable (season_area, FALSE);
 	set_ui_object_drawable (weather_area, FALSE);
 	set_ui_object_drawable (realism_inf_weapons_area, FALSE);
 	set_ui_object_drawable (realism_inf_fuel_area, FALSE);
@@ -279,6 +355,10 @@ void define_session_parameter_objects (void)
 
 	suppress_ai_fire_text [0] = get_trans ("Passive");
 	suppress_ai_fire_text [1] = get_trans ("Hostile");
+
+	season_text [0] = get_trans ("Summer");
+	season_text [1] = get_trans ("Winter");
+	season_text [2] = get_trans ("Desert");
 
 	time_of_day_text [0] = get_trans ("Random");
 	time_of_day_text [1] = get_trans ("Dawn");
@@ -315,11 +395,87 @@ void define_session_parameter_objects (void)
 
 	// areas and titles
 
+//VJ 051011 add season summer/winter/desert button	==>
+	/////////////////////////////////////////////////////////////////
+	//Season
+	
+	x1 = 0.506;
+	y1 = 0.5333;
+
+   season_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT (session_screen),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (SETUP_AREA_WIDTH, SETUP_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	title_box_obj = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (season_area),
+		UI_ATTR_VIRTUAL_POSITION (0, 0),
+		UI_ATTR_VIRTUAL_SIZE (SETUP_BOX_WIDTH, SETUP_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+	title_text_obj = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (season_area),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Season")),
+		UI_ATTR_END
+	);
+
+	// Season Button
+	
+	button_box_obj = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (season_area),
+		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_WIDTH + SETUP_BOX_GAP_WIDTH, 0),
+		UI_ATTR_VIRTUAL_SIZE (SETUP_BOX_MEDIUM_WIDTH, SETUP_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_medium),
+		UI_ATTR_END
+	);
+
+   season_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (button_box_obj),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_season_function),
+		UI_ATTR_END
+	);
+
+	process_sessparm_objects (title_box_obj, title_text_obj, button_box_obj, season_button, season_text, 5);
+
 	/////////////////////////////////////////////////////////////////
 	//Time of Day
 	
-	x1 = 0.506;
-	y1 = 0.533;
+	y1 += OPTION_AREA_OFFSET_Y;
 
    time_of_day_area = create_ui_object
 								(
@@ -390,6 +546,8 @@ void define_session_parameter_objects (void)
 	);
 
 	process_sessparm_objects (title_box_obj, title_text_obj, button_box_obj, time_of_day_button, time_of_day_text, 5);
+
+//VJ 051011 <== add season summer/winter/desert button
 
 	/////////////////////////////////////////////////////////////////
 	//	Weather
@@ -854,6 +1012,31 @@ void define_session_parameter_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VJ 051011 add season summer/winter/desert button	==>
+void notify_season_function ( ui_object *obj, void *arg )
+{
+	
+	int
+		tod;
+
+	tod = get_global_season ();
+	
+	tod++;
+	// skip deserts. they cannot be changed
+	if (tod == SESSION_SEASON_DESERT)	
+		tod = SESSION_SEASON_SUMMER;
+	
+	set_global_season (tod);
+
+	set_ui_object_text (obj, season_text [get_global_season () - 1]);
+	
+	set_toggle_button_off (obj);
+
+}
+//VJ 051011 <==add season summer/winter/desert button
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_time_of_day_function ( ui_object *obj, void *arg )
 {
@@ -940,7 +1123,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 	}
 
 	weather++;
-
+	
 	if (weather > SESSION_WEATHER_POOR)
 	{
 		weather = SESSION_WEATHER_RANDOM;
@@ -1322,6 +1505,7 @@ void notify_text_input_function ( ui_object *obj, void *arg )
 	set_toggle_button_off (obj);
 }
 */
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1358,8 +1542,12 @@ static void process_session_setup_weather_options (session_weather_settings weat
 		}
 		case SESSION_WEATHER_POOR:
 		{
-			set_session_fixed_weather_mode (get_session_entity (), WEATHERMODE_HEAVY_RAIN);
-
+			//VJ 051014 link winter/summer to snow/rain 
+			if (get_global_season() == SESSION_SEASON_WINTER)
+				set_session_fixed_weather_mode (get_session_entity (), WEATHERMODE_SNOW);
+			else
+				set_session_fixed_weather_mode (get_session_entity (), WEATHERMODE_HEAVY_RAIN);
+			
 			break;
 		}
 		default:
@@ -1430,11 +1618,17 @@ void process_host_session_setup_options (void)
 	session_time_of_day_settings
 		time_of_day;
 
+//VJ 051011 add season summer/winter/desert button
+	session_season_settings
+		season_setting;
+		
 	ASSERT (get_session_entity ());
 
 	weather_setting = SESSION_WEATHER_RANDOM;
 
 	time_of_day = SESSION_TIME_RANDOM;
+	
+	season_setting = SESSION_SEASON_SUMMER;
 
 	switch (get_game_type ())
 	{
@@ -1451,6 +1645,8 @@ void process_host_session_setup_options (void)
 
 			weather_setting = get_global_session_campaign_weather();
 			time_of_day = get_global_session_campaign_time_of_day();
+//VJ 051011 add season summer/winter/desert button
+			season_setting = get_global_season();
 
 			break;
 		}
@@ -1466,6 +1662,8 @@ void process_host_session_setup_options (void)
 
 			weather_setting = get_global_session_free_flight_weather();
 			time_of_day = get_global_session_free_flight_time_of_day();
+//VJ 051011 add season summer/winter/desert button
+			season_setting = get_global_season();
 
 			break;
 		}
@@ -1496,11 +1694,18 @@ void process_restore_session_setup_options (void)
 	session_time_of_day_settings
 		time_of_day;
 
+//VJ 051011 add season summer/winter/desert button
+	session_season_settings
+		season_setting;
+
 	ASSERT (get_session_entity ());
 
 	weather_setting = SESSION_WEATHER_RANDOM;
 
 	time_of_day = SESSION_TIME_RANDOM;
+	
+//VJ 051011 add season summer/winter/desert button
+	season_setting = SESSION_SEASON_SUMMER;
 
 	switch (get_game_type ())
 	{
@@ -1516,6 +1721,8 @@ void process_restore_session_setup_options (void)
 
 			weather_setting = get_global_session_free_flight_weather();
 			time_of_day = get_global_session_free_flight_time_of_day();
+//VJ 051011 add season summer/winter/desert button
+			season_setting = get_global_season();
 
 			break;
 		}
@@ -1609,5 +1816,3 @@ void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *titl
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
