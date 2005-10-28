@@ -187,6 +187,8 @@ extern int
 	global_anisotropic,										//VJ 050530 AF on/off	
 	global_PNVS_level, 									 // VJ 050704 light setting for PNVS
 	global_dynamic_water,  								//VJ 050817 dynamic water textures
+	global_season,											//VJ 051011 add winter textures
+	global_zbuffer,										//VJ 051011 zbuffer correction
 	command_line_autosave,								//Casm 17JUN05 Autosave option
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
