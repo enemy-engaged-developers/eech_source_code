@@ -387,8 +387,12 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				//
 				
 				cwm = WEATHERMODE_DRY;
-				twm = WEATHERMODE_LIGHT_RAIN;
-	
+				//VJ 051014 link winter/summer to snow/rain 
+				if (get_global_season() == SESSION_SEASON_WINTER)
+					twm = WEATHERMODE_SNOW;
+				else
+					twm = WEATHERMODE_LIGHT_RAIN;
+		
 				ts = (raw->weather_radius - range) / (raw->weather_radius * 0.333);
 			}
 			else if (range >= (raw->weather_radius * 0.333))
@@ -397,8 +401,17 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				// camera is in the light rain / heavy rain zone
 				//
 				
-				cwm = WEATHERMODE_LIGHT_RAIN;
-				twm = WEATHERMODE_HEAVY_RAIN;
+				//VJ 051014 link winter/summer to snow/rain 
+				if (get_global_season() == SESSION_SEASON_WINTER)
+				{
+					cwm = WEATHERMODE_SNOW;
+					twm = WEATHERMODE_SNOW;
+				}
+				else
+				{
+					cwm = WEATHERMODE_LIGHT_RAIN;
+					twm = WEATHERMODE_HEAVY_RAIN;
+				}
 	
 				ts = ((raw->weather_radius * 0.666) - range) / (raw->weather_radius * 0.333);
 			}
@@ -408,9 +421,17 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				// camera is in the heavy rain zone
 				//
 				
-				cwm = WEATHERMODE_HEAVY_RAIN;
-				twm = WEATHERMODE_HEAVY_RAIN;
-	
+				//VJ 051014 link winter/summer to snow/rain 
+				if (get_global_season() == SESSION_SEASON_WINTER)
+				{
+					cwm = WEATHERMODE_SNOW;
+					twm = WEATHERMODE_SNOW;
+				}
+				else
+				{
+					cwm = WEATHERMODE_HEAVY_RAIN;
+					twm = WEATHERMODE_HEAVY_RAIN;
+				}
 				ts = 0.0;
 			}
 	
