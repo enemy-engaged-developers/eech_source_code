@@ -3537,7 +3537,7 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
-/*VJ 051024: do not look in custom directories anymore: overcomplicated and nobody uses it!
+/*VJ 051024: do not look in custom directories anymore: overcomplicated and nobody uses it!*/
 	//then look for the custom directories
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
 
@@ -3583,7 +3583,7 @@ void load_warzone_override_textures (const char *warzone_name)
 			fscanf(ftextdir,"%[^\n]\n",buf);
 		}
 	}
-*/
+
 	//last look for the modded and mipmapped terrain textures
 	//VJ 050319 texture colour mod, load terrain textures
 
