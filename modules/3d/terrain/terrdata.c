@@ -703,7 +703,9 @@ int load_3d_terrain ( const char *path )
 						case 6:
 						{
 
-							terrain_3d_tree_object = construct_3d_object_by_name ( "Y_DATE_PALM" );
+							//terrain_3d_tree_object = construct_3d_object_by_name ( "Y_DATE_PALM" );
+							//VJ 051030 for Maverick, change to whole tree else only truncs of palms are shown
+							terrain_3d_tree_object = construct_3d_object_by_name ( "FOREST_TREE_OBJECT" );
 
 							break;
 						}
