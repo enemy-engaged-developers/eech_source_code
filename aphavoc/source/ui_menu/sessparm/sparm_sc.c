@@ -186,7 +186,7 @@ void notify_session_parameters (void)
 		set_global_season( SESSION_SEASON_DESERT );
 	}
 	else
-	if (mapnr == 7 || mapnr == 8)
+	if (mapnr == 7 || mapnr == 8 || mapnr == 13)
 	{
 		set_global_season( SESSION_SEASON_WINTER );
 	}
@@ -198,7 +198,7 @@ void notify_session_parameters (void)
 	//Deserts and tropical warzones cannot change season
 	//"THAILAND", "CUBA", "GEORGIA", "TAIWAN", "LEBANON", "YEMEN", 
    //"ALASKA", "ALEUT", "KUWAIT", "LYBIA", "GRAND", "MARS"
-	if (mapnr != 3 && mapnr != 7 && mapnr != 8)
+	if (mapnr != 3 && mapnr != 7 && mapnr != 8 && mapnr != 13)
 	{
 		set_ui_object_highlightable (season_button, FALSE);
 

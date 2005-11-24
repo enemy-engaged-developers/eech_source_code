@@ -83,9 +83,9 @@
 // used in:
 //Razorworks\eech-new\aphavoc\source\init.c
 //Razorworks\eech-new\aphavoc\source\comms\comm_man.c
-#define BUILD_TYPE	"W2"
+#define BUILD_TYPE	"W2T4"
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W2"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W2T4"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *

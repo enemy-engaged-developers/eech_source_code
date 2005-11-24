@@ -111,11 +111,12 @@ static rgb_colour
 // main 2D environment
 //
 ////////////////////////////////////////
+//Maverick fix the apache MFD font
 
-#define MFD_WINDOW_X_MIN				(-1.0)
-#define MFD_WINDOW_Y_MIN				(-1.0)
-#define MFD_WINDOW_X_MAX				(0.999)
-#define MFD_WINDOW_Y_MAX				(0.999)
+#define MFD_WINDOW_X_MIN				(-1.1)
+#define MFD_WINDOW_Y_MIN				(-1.1)
+#define MFD_WINDOW_X_MAX				(1.100)
+#define MFD_WINDOW_Y_MAX				(1.100)
 
 #define MFD_VIEWPORT_SMALL_SIZE		(128)
 #define MFD_VIEWPORT_LARGE_SIZE		(331)

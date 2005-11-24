@@ -1072,7 +1072,8 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 	int
 		i,
 		value,
-		valid_file;
+		valid_file,
+	    upper;
 
 	static char
 		operator [64],
@@ -1099,11 +1100,17 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 		sprintf(temp_warzone_name, "%s", get_directory_file_filename (warzone_file));
 
-		for (i = 0; i < (strlen (temp_warzone_name) - 4); i++)
+	//  Vadim 051120, if chc filename has spaces, capitalize every word
+ 
+		for (upper=1, i = 0; i < (strlen (temp_warzone_name) - 4); i++)
 		{
-			if (i == 0)
+			if (upper)
 			{
 				temp_warzone_name[i] = toupper (temp_warzone_name[i]);
+				upper=0;
+			}
+			else if (isspace(temp_warzone_name[i])) {
+					upper=1;
 			}
 			else
 			{

@@ -1032,7 +1032,10 @@ void load_2d_terrain ( const char *path )
 	if ( !load_terrain_simple_elevation ( node_file ) )
 	{
 
-		generate_terrain_simple_elevation ( 512.0 );
+//		generate_terrain_simple_elevation ( 512.0 );
+// Vadim 051120 We need higher resolution 2D map for fjords and such.
+// it will only work if the original file is absent though.
+		generate_terrain_simple_elevation ( 256.0 );
 
 		save_terrain_simple_elevation ( node_file );
 	}

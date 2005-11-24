@@ -3518,7 +3518,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 void load_warzone_override_textures (const char *warzone_name)
 {
 	char directory_textdir_path[256];
-	int count, mapnr = 0;
+	int mapnr = 0;
 	const char * map;
 	int nrtextfound = 0;
 
@@ -3603,14 +3603,14 @@ void load_warzone_override_textures (const char *warzone_name)
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
 
-	if (command_line_texture_colour == 1 && mapnr >= 1 && mapnr <= 12)
+	if (command_line_texture_colour == 1 && mapnr >= 1 && mapnr <= 13)
 	{
 		// Casm 10OCT05 made Lybia to be 10th instead of 0th (because of Gotcha's changes above of atoi)
 		static const char *
-			maps[13] =
+			maps[14] =
 			{
 				NULL, "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
-				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA","GRAND", "MARS"
+				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA","GRAND", "MARS", "Alexander Archipelago"
 			};
 		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[mapnr]);
 
