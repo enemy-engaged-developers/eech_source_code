@@ -1704,9 +1704,6 @@ void process_restore_session_setup_options (void)
 
 	time_of_day = SESSION_TIME_RANDOM;
 	
-//VJ 051011 add season summer/winter/desert button
-	season_setting = SESSION_SEASON_SUMMER;
-
 	switch (get_game_type ())
 	{
 

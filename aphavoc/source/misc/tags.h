@@ -241,6 +241,8 @@ enum FILE_TAGS
 	FILE_TAG_X_SECTOR,
 	FILE_TAG_Z_SECTOR,
 	FILE_TAG_ZOOM,
+	//VJ 051202 add season file tag for winter/summer camo
+	FILE_TAG_SEASON,
 	FILE_TAG_APPLICATION_LAST_TAG
 };
 

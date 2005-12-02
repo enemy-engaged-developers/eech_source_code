@@ -260,6 +260,8 @@ const char
 		"X_SECTOR",
 		"Z_SECTOR",
 		"ZOOM",
+	//VJ 051202 add season file tag for winter/summer camo		
+		"SEASON",
 		"APPLICATION_LAST_TAG"
    };
 /*
