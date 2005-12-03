@@ -1139,6 +1139,10 @@ void comms_process_data (void)
 
 							size += sizeof (int);
 
+							quick_set_list_item (ptr, int, global_season);
+
+							size += sizeof (int);
+
 							send_packet (received_id, PACKET_TYPE_SETTINGS_DATA, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
 
 						}
@@ -1156,6 +1160,9 @@ void comms_process_data (void)
                             motd [256],
                             buffer [256],
                             temp_wut_filename[128];
+
+						int
+							season;
 
 	                   	ptr = received_data;
 
@@ -1351,7 +1358,7 @@ void comms_process_data (void)
 
                         sprintf (buffer, "%s: %d", get_trans ("Vector flight model"), session_vector_flight_model);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						session_ground_radar_ignores_infantry = get_list_item (ptr, int);
 
@@ -1359,7 +1366,7 @@ void comms_process_data (void)
 
                         sprintf (buffer, "%s: %d", get_trans ("Radar ignores infantry"), session_ground_radar_ignores_infantry);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						session_camcom = get_list_item (ptr, int);
 
@@ -1367,7 +1374,20 @@ void comms_process_data (void)
 
                         sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
 
-						add_to_pop_up_list_with_word_wrap (get_trans (buffer), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+
+						season = get_list_item (ptr, int);
+
+                        size += sizeof (int);
+
+						if (season > 0 && season <= 3)
+						{
+							const char
+								*seasons[4] = { NULL, "Summer", "Winter", "Desert" };
+
+							global_season = season;
+							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
+						}
 
                			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 
