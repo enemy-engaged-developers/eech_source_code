@@ -1253,7 +1253,9 @@ int parser_campaign_file (const char *filename, int *offset)
 				ASSERT (get_session_entity ());
 
 				rain_effect = get_next_file_int (file_ptr);
-
+				//if (get_global_season() == SESSION_SEASON_WINTER)
+					//rain_effect = 1;
+	
 				if (!rain_effect)
 				{
 
@@ -2134,6 +2136,26 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				break;
 			}
+
+	//VJ 051202 add season file tag for winter/summer camo		
+			case FILE_TAG_SEASON:
+			{
+				int
+					season = 0;
+				
+				season = get_next_file_int (file_ptr);
+
+				#if DEBUG_MODULE
+
+				debug_log ("PARSGEN: season %d", global_season);
+
+				#endif
+
+				global_season = season;
+				
+				break;
+			}
+
 
 			case FILE_TAG_SAVED_CAMPAIGN:
 			{

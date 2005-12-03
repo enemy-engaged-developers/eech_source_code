@@ -83,13 +83,13 @@
 // used in:
 //Razorworks\eech-new\aphavoc\source\init.c
 //Razorworks\eech-new\aphavoc\source\comms\comm_man.c
-#define BUILD_TYPE	"W2T4"
+#define BUILD_TYPE	"W2T5"
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W2T4"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W2T5"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *
- * first letter: W => Open Watcom Build
+ * first letter: W => Open Watcom Build, T is a temp version for bug finding
  *               V => Visual C Build
  *               G => gcc build (only theoretical at present)
  *
