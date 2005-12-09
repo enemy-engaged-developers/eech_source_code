@@ -161,8 +161,9 @@ static float
 	texture_width[TG_LAST][3],
 	texture_height[TG_LAST][3];
 
+//VJ 051209 added check aphavoc installed else there are no sprites
 #define draw_sprite(scale_x, scale_y, flag, t_x, t_y, t_dx, t_dy, s_x, s_y, s_dx, s_dy, mask) \
-	if (flag) \
+	if (flag && get_global_apache_havoc_installed()) \
 		blit_rgb_alpha_masked_sprite_zero_mask_value_scaled (sprite_data, mask_data, t_x * scale_x, t_y * scale_y, t_dx * scale_x, t_dy * scale_y, s_x, s_y, s_dx, s_dy, mask);
 
 // Casm end
