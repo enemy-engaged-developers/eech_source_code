@@ -521,6 +521,7 @@ void game_type_button_function (ui_object *obj, void *arg)
 			{
 	
 				int
+					filter,
 					count,
 					index,
 					warzone;
@@ -537,11 +538,18 @@ void game_type_button_function (ui_object *obj, void *arg)
 	
 				//session_filter = SESSION_LIST_TYPE_HOST;
 				
+				// 16DEC05 Casm Fix for Demo mode selection
+				filter = command_line_session_filter;
+				command_line_session_filter = 0;
+
 				initialise_session_list ();
 
 				session_list_rescan_function (NULL, NULL);
 			
 				session_update_session_list ();
+
+				// 16DEC05 Casm Fix for Demo mode selection
+				command_line_session_filter = filter;
 		
 				session = session_list_head;
 		
