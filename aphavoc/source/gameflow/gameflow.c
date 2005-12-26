@@ -766,13 +766,14 @@ void process_game_initialisation_phases (void)
 			    	parse_WUT_file(WUT_filename);
 			    }
 			    else
-//VJ 050110 check for origwut.txt or gwut146x.csv
 			    {
-              	if (file_exist("origwut.txt"))
-              		parse_WUT_file("origwut.txt");
-              	else 
+//VJ 050110 check for origwut.txt or gwut146x.csv
+//VJ 051225 reversed this, I think it is assumed by now that CSV files are used by everyone			    	
               	if (file_exist("gwut146x.csv"))
               		parse_WUT_file("gwut146x.csv");
+              	else	
+              	if (file_exist("origwut.txt"))
+              		parse_WUT_file("origwut.txt");
 			    }
 
 			    session_planner_goto_button = command_line_planner_goto_button;
