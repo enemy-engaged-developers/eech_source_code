@@ -885,8 +885,8 @@ extern global_options_data
 #define set_global_session_free_flight_time_of_day(VALUE) (global_options.session_free_flight_time_of_day = (VALUE))
 #define get_global_session_free_flight_time_of_day() (global_options.session_free_flight_time_of_day)
 
-#define set_global_season(VALUE) (global_season = (VALUE))
-#define get_global_season() (global_season)
+#define set_global_season(VALUE) (current_map_info.season = (VALUE))   //VJ 051227 changed from global_season 
+#define get_global_season() (current_map_info.season)                  //VJ 051227 changed from global_season
 
 #define set_global_session_campaign_time_of_day(VALUE) (global_options.session_campaign_time_of_day = (VALUE))
 #define get_global_session_campaign_time_of_day() (global_options.session_campaign_time_of_day)

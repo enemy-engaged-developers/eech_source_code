@@ -127,7 +127,8 @@ void flight (void)
 /////////////////////////////////////////
 //VJ 050116 custom texture mod
 
-	load_warzone_override_textures (get_current_game_session ()->data_path);
+	//VJ 051227 changed function parameter to void
+	load_warzone_override_textures ();
 	
 	//repaint the screen to show the textures are loaded
 	ui_repaint ();

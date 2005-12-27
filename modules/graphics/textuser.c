@@ -102,10 +102,9 @@
 
 #include "graphics.h"
 
-//VJ 050304 needed for texture colour mod
-#include "cmndline.h"
-//VJ 051011 add winter textures
-#include "global.h"
+//VJ 051223 changed to project.h to access get_current_game_session()
+//this includes cmndline.h and global.h needed for texture colour mod and winter textures
+#include "project.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,8 +206,8 @@ int
 	number_of_system_texture_camoflages;
 
 //VJ 050322 texture coulor mod: texture scale array, 64 is enough for terrain textures
-int
-	texture_override_scales[64][2];
+//int
+	//texture_override_scales[64][2];
 
 screen
 	*system_textures[MAX_TEXTURES],
@@ -278,9 +277,13 @@ static int
 	texture_colour_bak;
 
 //VJ 040814 dynamic water
-terrain_dynamic_water_info
-	terrain_water_information[3]; // sea, river, reservoir
+//VJ 051226 moved to map info structure
+//terrain_dynamic_water_info
+	//water_info[3]; // sea, river, reservoir
 
+//VJ 051225 moved all map info to one structure    
+custom_map_info
+	current_map_info;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +305,7 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 
 //VJ 050619 the following functions are used in custom texture mods, in this file only
 // only two funtions are global:
-// void load_warzone_override_textures (char *warzone_name)
+// void load_warzone_override_textures ( session_list_data_type *current_game_session );
 // void restore_default_textures( void );
 
 //VJ 050814 cleaned up differences between dds and bmp download
@@ -314,9 +317,9 @@ void clear_texture_override_names ( void );
 screen *load_dds_file_screen (const char *full_override_texture_filename, int step);
 screen *load_bmp_file_screen (const char *full_override_texture_filename);
 //VJ 050814 dynamic water
-void load_texture_water( int warzonenr );
-
-static void initialize_terrain_texture_scales ( const char *mapname );
+//VJ 051226 changed function parameter to void
+void load_texture_water( void );
+void initialize_terrain_texture_scales ( const char *mapname );
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3416,7 +3419,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 							strupr(system_texture_override_names[index].path);
 							strcpy(system_texture_override_names[index].name, filename);
 							system_texture_override_names[index].type = 1;
+							#if DEBUG_MODULE
 							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+							#endif							
 					}
 					//VJ 051010 force desert textures
 					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))					
@@ -3426,7 +3431,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
 						system_texture_override_names[index].type = 1;
+						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+						#endif							
 					}	
 					//VJ 051010 use normal textures for the rest
 				   if (system_texture_override_names[index].camo == 0)
@@ -3435,7 +3442,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
 						system_texture_override_names[index].type = 1;
+						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
+						#endif							
 				   }
 //VJ 051011 <== add winter textures 
 
@@ -3511,16 +3520,16 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//VJ load warzone specific textures, called from \aphavoc\source\ai\faction\faction.c line 142
+//VJ load warzone specific textures, called from: eech-new\aphavoc\source\flight.c about line 130
 //with this function textures are called from just before you go into campaign
 //they are called in a crtain order and later occurences of a texture take precedence over earlier
-void load_warzone_override_textures (const char *warzone_name)
+void load_warzone_override_textures ()
 {
 	char directory_textdir_path[256];
-	int mapnr = 0;
-	const char * map;
 	int nrtextfound = 0;
+	
+	// VJ 051226 NOTE: map_info structure is called from aphavoc\source\ui_menu\sessparm\sparm_sc.c
+	// and main variables are already set (warzone name, number, countours etc.
 
 	// empty all the strings
 	clear_texture_override_names ();
@@ -3537,11 +3546,9 @@ void load_warzone_override_textures (const char *warzone_name)
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
-/*VJ 051024: do not look in custom directories anymore: overcomplicated and nobody uses it!*/
-	//then look for the custom directories
-	sprintf (directory_textdir_path, "%s\\texturedirs.txt",warzone_name);
+	sprintf (directory_textdir_path, "%s\\texturedirs.txt",get_current_game_session()->data_path);
 
-	debug_log("=== Searching for aditional paths in texturedirs.txt of warzone %s",warzone_name);
+	debug_log("=== Searching for aditional paths in texturedirs.txt of warzone %s",get_current_game_session()->warzone_name);
 
 	if ( file_exist ( directory_textdir_path ) )
 	{
@@ -3590,31 +3597,15 @@ void load_warzone_override_textures (const char *warzone_name)
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
-
-	map = warzone_name + strlen ( warzone_name ) - 1;
-	if ( *map == '\\' )
- 		map--;
- 	if (isdigit(map[-1]))
- 	   map--;
-	mapnr = atoi(map);
-	//VJ 051008 enable mapnumbers > 9 	//(int) (*map - '0');
-
-	// Casm 20AUG05 Moved backup before "if"
-	//VJ 050621 backup commandline var, set to 0 if no textures found
-	texture_colour_bak = command_line_texture_colour;
-
-	if (command_line_texture_colour == 1 && mapnr >= 1 && mapnr <= 13)
+	
+	if (command_line_texture_colour == 1)
 	{
-		// Casm 10OCT05 made Lybia to be 10th instead of 0th (because of Gotcha's changes above of atoi)
-		static const char *
-			maps[14] =
-			{
-				NULL, "THAILAND", "CUBA", "GEORGIA", "TAIWAN",
-				"LEBANON", "YEMEN", "ALASKA", "ALEUT", "KUWAIT", "LYBIA","GRAND", "MARS", "Alexander Archipelago"
-			};
-		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, maps[mapnr]);
 
-		debug_log("=== Terrain texture colour mod dir:  %s",directory_textdir_path);
+		//VJ 051223 removed string list with warzone names:
+		//look directly for texture dir with name current_map_info.name" (= session title)
+		//That way warzones can be added automatically without adding strings to the code
+		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, current_map_info.name);
+		debug_log("=== loading custom info: texture dir:  %s",directory_textdir_path);
 
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
 		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
@@ -3625,22 +3616,20 @@ void load_warzone_override_textures (const char *warzone_name)
 		//VJ read text file with scale indicators for terrain texture display
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
-	else
-		command_line_texture_colour = 0;
 
 	debug_log("Nr override textures found %d",nrtextfound);
 
 	//now we have all the names, load the bmp and dds files
 
-		//VJ 050530 read single bmp files
+	//VJ 050530 read single bmp files
 	load_texture_override_bmp ( system_texture_override_names );
 
-		//VJ 050530 read mipmapped dds files
+	//VJ 050530 read mipmapped dds files
 	load_texture_override_dds ( system_texture_override_names );
 
-	//VJ 050820 dynamic water, pass warzone nr for tuning
+	//VJ 050820 dynamic water
 	if (global_dynamic_water)
-		load_texture_water( mapnr );
+		load_texture_water();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3682,8 +3671,10 @@ void restore_default_textures ( void )
 	{
 		int nr;
 		
-		nr = terrain_water_information[0].number+terrain_water_information[1].number + terrain_water_information[2].number+1;
-		for ( count = terrain_water_information[0].placenr; count < nr; count++ )
+		nr = current_map_info.water_info[0].number + 
+		     current_map_info.water_info[1].number + 
+		     current_map_info.water_info[2].number+1;
+		for ( count = current_map_info.water_info[0].placenr; count < nr; count++ )
 		{		
 			
 	//#if DEBUG_MODULE
@@ -3691,13 +3682,12 @@ void restore_default_textures ( void )
 	//#endif	
 		
 			release_texture_surface ( &system_textures[count]->surface );
-			
-		// restore pointer to original textures
-			//system_textures[ count ] = backup_system_textures[ count ];
-			//system_texture_info[ count ] = backup_system_texture_info[ count ];
 	
 		}
    }
+   
+   //VJ 051225 reset map data 
+   initialise_custom_map_info();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3710,8 +3700,6 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 	char filename[128];
 
 	sprintf (filename, "%s\\%s\\texture_scales.txt", TEXTURE_OVERRIDE_DIRECTORY, mapname);
-
-  	debug_log("===TEXTURE SCALES DIRECTORY=== %s",filename);
 
 	if ( file_exist ( filename ) )
 	{
@@ -3727,16 +3715,9 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 		while (buf[0] == '#')
 				fscanf(fin,"%[^\n]\n",buf);
 
-		for (count = 0; count < 64; count ++)
-		{
-			texture_override_scales[count][0] = 0;
-			texture_override_scales[count][1] = 64; //safe value
-			texture_override_scales[count][2] = 64; //safe value
-		}
-
 		count = 0;
 		while (count < 64 &&
-				 strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))
+			strchr(buf,'=') && (strstr(buf,"TERRAIN") || strstr(buf,"CITY")))
 		{
 			int i;
 			p = strtok(buf,"=");
@@ -3762,22 +3743,14 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 						break;
 					}
 				}
-				texture_override_scales[count][0] = index;
+				current_map_info.texture_override_scales[count][0] = index;
 			}
 
-/*
-			//scan 1st scale
-			p = strtok(NULL,",");
-			if (p)
-			{
-				texture_override_scales[count][1] = atoi(p);
-			}
-*/
-			//scan 2nd scale
+			//scan scale
 			p = strtok(NULL,"#");
 			if (p)
 			{
-				texture_override_scales[count][1] = atoi(p);
+				current_map_info.texture_override_scales[count][1] = atoi(p);				
 			}
 
 			fscanf(fin,"%[^\n]\n",buf);
@@ -3785,17 +3758,10 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 
 			count++;
 		}
+
 		fclose(fin);
 	}
 }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// End VJ custom texture mod
-// based on work by Have_Quick 12/2/2003
-// 05/01/15, 050116, 050118
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3884,7 +3850,8 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050814 dynamic water
-void load_texture_water( int warzonenr )
+//VJ 051226 changed function parameter to void
+void load_texture_water( void )
 {
 	FILE *fin;
 
@@ -3929,14 +3896,14 @@ void load_texture_water( int warzonenr )
 				q = p;
 			while (*q != ' ') q++;
 				*q = '\0';
-			strcpy(terrain_water_information[i].name_top, p);
+			strcpy(current_map_info.water_info[i].name_top, p);
 		}
 		p = strtok(NULL,",");
 		if (p)
-			terrain_water_information[i].delay = atoi(p);
+			current_map_info.water_info[i].delay = atoi(p);
 		p = strtok(NULL,"#");
 		if (p)
-			terrain_water_information[i].scale_top = atoi(p);
+			current_map_info.water_info[i].scale_top = atoi(p);
 
 		fscanf(fin,"%[^\n]\n",buf);
 		p = strtok(buf,"=");
@@ -3946,32 +3913,34 @@ void load_texture_water( int warzonenr )
 				q = p;
 			while (*q != ' ') q++;
 				*q = '\0';
-			strcpy(terrain_water_information[i].name_bottom, p);
+			strcpy(current_map_info.water_info[i].name_bottom, p);
 		}
 		p = strtok(NULL,",");
 		if (p)
-			terrain_water_information[i].type = atoi(p);
+			current_map_info.water_info[i].type = atoi(p);
 		p = strtok(NULL,",");
 		if (p)
-			terrain_water_information[i].start = atoi(p);
+			current_map_info.water_info[i].start = atoi(p);
 		p = strtok(NULL,",");
 		if (p)
-			terrain_water_information[i].number = atoi(p);
+			current_map_info.water_info[i].number = atoi(p);
 		p = strtok(NULL,",");
 		if (p)
-			terrain_water_information[i].alpha = atoi(p);
+			current_map_info.water_info[i].alpha = atoi(p);
 		// tune according to warzone, lebanon is reference
-		if (i == 0 && warzonenr == 3)//geogria
-			terrain_water_information[i].alpha -= 50;
-		if (i == 0 && warzonenr == 4)//taiwan
-			terrain_water_information[i].alpha -= 30;
+		if (i == 0 && current_map_info.mapnr == 3)
+			current_map_info.water_info[i].alpha -= 50;
+		if (i == 0 && current_map_info.mapnr == 4)
+			current_map_info.water_info[i].alpha -= 30;
 		p = strtok(NULL,"#");
 		if (p)
-			terrain_water_information[i].scale_bottom = atoi(p);
+			current_map_info.water_info[i].scale_bottom = atoi(p);
 
 		fscanf(fin,"%[^\n]\n",buf);
 
-		debug_log("dynamic water %s %s",terrain_water_information[i].name_top, terrain_water_information[i].name_bottom);
+		debug_log("dynamic water %s %s",
+		current_map_info.water_info[i].name_top, 
+		current_map_info.water_info[i].name_bottom);
 	}
 
 	fclose(fin);
@@ -3987,11 +3956,11 @@ void load_texture_water( int warzonenr )
 	for (i = 0; i < 3; i++)
 	{
 		int rivernr = 0;
-		terrain_water_information[i].placenr = placenr;
+		current_map_info.water_info[i].placenr = placenr;
 		// read the bottom texture
-		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, terrain_water_information[i].name_top);
+		sprintf(filename,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, TEXTURE_OVERRIDE_DIRECTORY_WATER, current_map_info.water_info[i].name_top);
 
-		//debug_log("water %d %d %s",placenr, i, filename);
+		debug_log("water %d %d %s",placenr, i, filename);
 
 		override_screen = load_dds_file_screen(filename, 0);
 
@@ -4005,8 +3974,8 @@ void load_texture_water( int warzonenr )
 		system_texture_info[count].texture_screen = override_screen;
 
 		// load dynamic texture series
-		rivernr = terrain_water_information[i].start;
-		for ( count = placenr+1; count < placenr+1+terrain_water_information[i].number; count++ )
+		rivernr = current_map_info.water_info[i].start;
+		for ( count = placenr+1; count < placenr+1+current_map_info.water_info[i].number; count++ )
 		{
 			system_texture_info[count].flags.contains_alpha = 1;
 			system_texture_info[count].flags.vertically_inverted = 1;
@@ -4017,20 +3986,22 @@ void load_texture_water( int warzonenr )
 
 			memset ( system_texture_names[count], 0, 128 );
 
-			if (terrain_water_information[i].number < 100)
-				sprintf(system_texture_names[count],"%s%02d",terrain_water_information[i].name_bottom,rivernr);
+			if (current_map_info.water_info[i].number < 100)
+				sprintf(system_texture_names[count],"%s%02d",current_map_info.water_info[i].name_bottom,rivernr);
 			else
-				sprintf(system_texture_names[count],"%s%03d",terrain_water_information[i].name_bottom,rivernr);
-		//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
+				sprintf(system_texture_names[count],"%s%03d",current_map_info.water_info[i].name_bottom,rivernr);
+		   
+		   //debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
+			
 			rivernr++;
 
-			if (terrain_water_information[i].type == 1){
+			if (current_map_info.water_info[i].type == 1){
 				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
 				override_screen = load_bmp_file_screen(filename);
 			}
-			if (terrain_water_information[i].type == 2){
+			if (current_map_info.water_info[i].type == 2){
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
-				override_screen = load_dds_file_screen(filename, terrain_water_information[i].alpha);
+				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha);
 			}
 
 			if (override_screen) {
@@ -4038,7 +4009,7 @@ void load_texture_water( int warzonenr )
 				system_texture_info[count].texture_screen = override_screen;
 			}
 		}
-		placenr += terrain_water_information[i].number+1;
+		placenr += current_map_info.water_info[i].number+1;
 	}
 }
 
@@ -4103,7 +4074,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 		 	debug_fatal("Only mipmapped dds files allowed, use bmps otherwise: %s",full_override_texture_filename);
 		}
 
-//C:\gms\Razorworks\eech-new\modules\graphics\textsys.h
+		//eech-new\modules\graphics\textsys.h
 		if (ddsh.ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS )
 			type = TEXTURE_TYPE_MULTIPLEALPHA;
 		else
@@ -4284,6 +4255,173 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	safe_fclose (fp);
 
 	return override_screen;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ 051226 custom map info used in terrtype.c
+// moved water and texture scale info to structure CUSTOM_MAP_INFO
+//enables adding custom maps without changing the code
+void initialise_custom_map_info( void )
+{
+	int i;
+	
+	current_map_info.user_defined_contour_heights = 0;
+	for (i = 0; i < 9; i++)
+		current_map_info.contour_heights[i] = 0;
+		 
+	for (i = 0; i < 64; i ++)
+	{
+		current_map_info.texture_override_scales[i][0] = 0;
+		current_map_info.texture_override_scales[i][1] = 64; //safe value
+	}
+	
+	current_map_info.name[0] = '\0';
+	
+	current_map_info.mapnr = 0;
+
+	current_map_info.season = 1;
+	
+	for (i = 0; i < 3; i++){
+		current_map_info.water_info[i].start = 0;
+		current_map_info.water_info[i].number = 0;
+		current_map_info.water_info[i].delay = 0;
+		current_map_info.water_info[i].scale_top = 0;
+		current_map_info.water_info[i].scale_bottom = 0;
+		current_map_info.water_info[i].alpha = 0;
+		current_map_info.water_info[i].type = 0;
+		current_map_info.water_info[i].placenr = 0;
+		current_map_info.water_info[i].name_top[0] = '\0';
+		current_map_info.water_info[i].name_bottom[0] = '\0';
+	}
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ 052127 read map info data
+//called from \eech-new\aphavoc\source\ui_menu\sessparm\sparm_sc.c
+void read_map_info_data( void )
+{
+	FILE *fin;
+	int
+		i, j;
+
+	char
+		buf[256],
+		filename[128];
+
+	char *p;
+
+	initialise_custom_map_info();
+
+	// VJ 051223 head of the session list, title field contains warzone name "Taiwan" etc
+	strcpy(current_map_info.name, get_session_list()->title);
+	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
+
+	//in eech-new\aphavoc\source\ui_menu\session\session.h
+	p = strstr(get_current_game_session()->warzone_name, "map")+3;
+	current_map_info.mapnr = atoi(p);
+	debug_log("=== loading custom info: warzone nr %s %d",get_current_game_session()->warzone_name,current_map_info.mapnr);
+	
+	//initialize what we know
+	switch (current_map_info.mapnr) {
+		case 5: 
+		case 6: 
+		case 9: 
+		case 10: 
+		case 12: 
+		{	
+			set_global_season( SESSION_SEASON_DESERT );
+//			current_map_info.season = 3;
+			break;
+		}	
+		case 7: 
+		case 8: 
+		case 13: 
+		{
+			set_global_season( SESSION_SEASON_WINTER );
+//			current_map_info.season = 2;			
+			break;
+		}
+		default:
+		{
+			set_global_season( SESSION_SEASON_SUMMER );		
+//			current_map_info.season = 1;			
+		}
+	}
+	
+	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
+	
+	//VJ 050820 added file checking to prevent crash
+	if ( !file_exist ( filename ) )
+		return;
+	
+	debug_log("=== Reading custom map info file: %s",filename);
+	
+	fin = fopen(filename,"r");
+
+	// analyse mapinfo.txt
+	// read comments
+	fscanf(fin,"%[^\n]\n",buf);
+	while (buf[0] == '#')
+		fscanf(fin,"%[^\n]\n",buf);
+	
+	for (j = 0 ; j < 3; j++)
+	{
+		//debug_log("read mapinof buf: %s",buf);
+	
+		//VJ 051225 added more map info for custom map reading
+		//scan contours and camo
+		if (strstr(buf, "season"))
+		{
+			p = strtok(buf,"=");
+			p = strtok(NULL,"#");
+			if (p)
+				current_map_info.season = atoi(p);
+			if (current_map_info.season == 0)	
+				current_map_info.season = 1;	
+			debug_log("===map info data: season: %d",	current_map_info.season);
+		}	
+		
+		//scan for 2D map contour info
+		if (strstr(buf, "contour"))
+		{
+			p = strtok(buf,"=");
+			for (i = 0; i <= 8; i++)
+			{
+				p = strtok(NULL,",#");
+				if (p)
+			  		current_map_info.contour_heights[i] = atof(p);
+				debug_log("custom contour %f",current_map_info.contour_heights[i]);
+			}			
+			
+			// rude check if info makes sense
+			if (current_map_info.contour_heights[8] > 0)
+				current_map_info.user_defined_contour_heights = 1;
+		
+		   // set the contours again, this is also done in the terrtype.c 
+			if (current_map_info.user_defined_contour_heights)
+		  		set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
+		}
+		
+		if (strstr(buf, "dry river"))
+		{
+			p = strtok(buf,"=");
+			p = strtok(NULL,"#");
+			if (p)
+				current_map_info.dry_river = atoi(p);
+			debug_log("===map info data: dry river: %d",	current_map_info.dry_river);
+		}	
+		
+		fscanf(fin,"%[^\n]\n",buf);
+	}
+	
+	fclose(fin);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

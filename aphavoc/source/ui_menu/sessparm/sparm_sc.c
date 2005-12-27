@@ -121,10 +121,6 @@ static const char
 //VJ 051011 add season summer/winter/desert button	
 	*season_text[3];
 
-static int 
-		mapnr;
-	  
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,25 +142,6 @@ static void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_objec
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 051011 add season summer/winter/desert button	
-int get_map_number (const char *warzone_name)
-{
-	int mapnr = 0;
-	const char *map;
-	
-	map = warzone_name + strlen ( warzone_name ) - 1;
-	if ( *map == '\\' )
- 		map--;
- 	if (isdigit(map[-1]))
- 	   map--;
-	mapnr = atoi(map);
-	
-	return (mapnr);
-}	
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void notify_session_parameters (void)
 {
@@ -173,32 +150,18 @@ void notify_session_parameters (void)
 
 	notify_clear_all_session_parameters ();
 
+	//VJ 051227 reading map inof data for automatic custom map 
+	// function declared in textuser.c
+	read_map_info_data();
 
 	//
 	// Set the button states
 	//
 
-//VJ 051011 add season summer/winter/desert button	==>
-	mapnr = get_map_number ( get_current_game_session()->data_path ); 
+	//VJ 051227 set season info with map_info structure
+	set_global_season( current_map_info.season );		
 
-	if (mapnr == 5 || mapnr == 6 || mapnr == 9 || mapnr == 10 || mapnr == 11 || mapnr == 12)
-	{
-		set_global_season( SESSION_SEASON_DESERT );
-	}
-	else
-	if (mapnr == 7 || mapnr == 8 || mapnr == 13)
-	{
-		set_global_season( SESSION_SEASON_WINTER );
-	}
-	else
-	{
-		set_global_season( SESSION_SEASON_SUMMER );
-	}
-
-	//Deserts and tropical warzones cannot change season
-	//"THAILAND", "CUBA", "GEORGIA", "TAIWAN", "LEBANON", "YEMEN", 
-   //"ALASKA", "ALEUT", "KUWAIT", "LYBIA", "GRAND", "MARS"
-	if (mapnr != 3 && mapnr != 7 && mapnr != 8 && mapnr != 13)
+	if (current_map_info.season != 2)
 	{
 		set_ui_object_highlightable (season_button, FALSE);
 
@@ -214,7 +177,6 @@ void notify_session_parameters (void)
 
 		set_ui_object_notify_on (season_button, NOTIFY_TYPE_BUTTON_DOWN);
 	}
-//VJ 051011 <== add season summer/winter/desert button	
 
 	switch ( get_game_type () )
 	{

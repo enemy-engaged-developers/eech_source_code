@@ -89,10 +89,68 @@ extern int
 	system_textures_referenced[MAX_TEXTURES];
 	
 //VJ 050322 texture colour mod: texture scale array, 64 is enough for terrain textures
-extern int 
-	texture_override_scales[64][2];
-	
+//VJ 051226 replaced with map info strcture
+//extern int 
+	//texture_override_scales[64][2];
+//VJ 050818 dynamic water INFO STRUCTURE
+struct TERRAIN_DYNAMIC_WATER_INFO
+{
 
+	int	
+		start,
+		number,
+		delay,
+		scale_top,
+		scale_bottom,
+		alpha,
+		type,
+		placenr;
+	
+	char
+		name_top[128],
+		name_bottom[128];
+};
+
+typedef struct TERRAIN_DYNAMIC_WATER_INFO terrain_dynamic_water_info;
+
+
+//VJ 051223 contour heights in texture scale file for painless adding of custom maps
+struct CUSTOM_MAP_INFO
+{
+	// 0 = sea, 1 = river, 2 = reservoir
+	terrain_dynamic_water_info
+		water_info[3]; 
+	
+	//for desert maps: 0 = flowing river, 1 = dry river bed
+	int 
+		dry_river;  
+
+	//contour heigths 9 intervals
+	int
+		user_defined_contour_heights;
+		
+	float 
+		contour_heights[9];
+
+	char 
+		name[128];
+	int
+	 	mapnr;
+	
+	//same as global season 1 = default, 2 = default+winter, 3=desert
+	int
+		season; 
+
+  //VJ 050322 texture colour mod: texture scale array, 64 is enough for terrain textures
+	int 
+		texture_override_scales[64][2];
+			
+};
+typedef struct CUSTOM_MAP_INFO custom_map_info;	
+	
+extern custom_map_info
+	current_map_info;
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,9 +184,14 @@ extern void destroy_texture_graphic ( struct TEXTURE_GRAPHIC *graphic );
 extern void get_texture_graphic_source_dimensions ( struct TEXTURE_GRAPHIC *graphic, int *width, int *height );
 
 //VJ 050116 custom texture mod: functions needed 
-extern void load_warzone_override_textures (const char *warzone_name);
+//VJ 051223 changed function to void
+extern void load_warzone_override_textures ( void );
 
-void restore_default_textures( void );
+extern void restore_default_textures( void );
+
+extern void initialise_custom_map_info( void );
+
+extern void read_map_info_data( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

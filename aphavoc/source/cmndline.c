@@ -210,7 +210,7 @@ int
 	global_PNVS_level									= 0,  // VJ 050704 light setting for PNVS
 	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures	
 	global_zbuffer										= 0,	//VJ 051011 zbuffer correction
-	global_season										= 1,	//VJ 051011 add winter textures
+//VJ 051227 no longer needed, mapinfo structure	global_season										= 1,	//VJ 051011 add winter textures
 	command_line_texture_colour					= 0,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_autosave					= 0,  //Casm 17JUN05 Autosave option
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking

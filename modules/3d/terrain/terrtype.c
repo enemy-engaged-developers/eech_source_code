@@ -73,7 +73,9 @@
 #include "misc.h"
 
 //VJ 050304 needed for texture colour mod
-#include "cmndline.h"
+//#include "cmndline.h"
+//VJ 051227 changed to project.h for get and set_global_season
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +147,12 @@ static void initialise_3d_alexander_archipelago_terrain_types ( void );
 static void initialise_3d_custom_terrain_types( void );
 
 static void initialise_all_custom_terrain_types ( void );
+
+//VJ 051224 DEFAULT custom terrain intialisation
+static void initialise_3d_custom_map_terrain_types ( void );
+
+//VJ 052124 surface types for rotor dust
+static void initialise_surface_types( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -669,7 +677,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze	
 	if (command_line_texture_colour == 1)
 	{
-			
+
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_FLOOR, POLYGON_TYPE_FAN,
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );											
@@ -699,8 +707,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_TOP, POLYGON_TYPE_FAN,
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-//												draw_colour_clipped_fan_word_face, draw_colour_clipped_fan_byte_face,
-//												draw_colour_unclipped_fan_word_face, draw_colour_unclipped_fan_byte_face );
+
 //very little difference between these		
 
 	   set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA1, POLYGON_TYPE_FAN,
@@ -843,7 +850,8 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 		}
 
 		case 3: // GEORGIA
-		default:
+		//VJ 051223 moved default down for custom campaign mod	
+		//default:
 		{
 
 			initialise_3d_georgia_terrain_types ();
@@ -913,16 +921,25 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 
 			break;
 		}
+		//VJ 051223 moved default for custom campaign mod	
+		default:
+		{
+			
+			if (command_line_texture_colour == 0)
+				initialise_3d_georgia_terrain_types ();
+			else
+				initialise_3d_custom_map_terrain_types ();
+		}
 		//VJ 051007 <==
 	}
 
+	// link texture indices to textures abd default scales
 	initialise_3d_terrain_types ();
 
-//VJ 050314	texture colour mod
-	if (command_line_texture_colour == 1){
-		initialise_3d_custom_terrain_types();
-		
-	}	
+	//VJ 050314	texture colour mod
+	if (command_line_texture_colour == 1)
+		initialise_3d_custom_terrain_types();		
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -931,16 +948,17 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 
 //VJ 050322 texture colour mod, function to read texture scales form file and apply
 //VJ 051001 rearranged the order 
+//VJ 051226 all info now in current_map_info
 void initialise_3d_custom_terrain_types( void )
 {
 	int count = 0;
 	float sl, sld, sldd;
 	
 	for (count = 0; count < 64; count++)
-	if (texture_override_scales[count][0] > 0)
+	if (current_map_info.texture_override_scales[count][0] > 0)
 	{
-		int index = texture_override_scales[count][0];
-		sl = texture_override_scales[count][1];
+		int index = current_map_info.texture_override_scales[count][0];
+		sl = current_map_info.texture_override_scales[count][1];
 		sld = sl;
 		sldd = sl;	
 
@@ -1007,53 +1025,59 @@ void initialise_3d_custom_terrain_types( void )
    						//do not change because then all texture packs look strange
    	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );   	
 
-		sld = sl; 
-		sldd = sld*0.25;
-		//if this is too small there are simply more textures displayed
-		//sldd = the vertical scale is 0.25 of the horizontal scale
+		//VJ 051223 fixed forest side textures and scaling: index was wrong
+		sld = sl/2.4;				
+		// forest sides need separate scaling
+		sldd = sld/4;
 		//scale top-side forest texture between top and side
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
 			
 		//VJ 051001 dynamic water textures
-		//if (terrain_water_information[0].delay == -1) 
-		  // return;
-	
 		delay_count++;	
-		if (delay_count % terrain_water_information[0].delay == 0) 	
+		if (delay_count % current_map_info.water_info[0].delay == 0) 	
 			change_river_texture++;
-		if (delay_count % terrain_water_information[1].delay == 0) 	
+		if (delay_count % current_map_info.water_info[1].delay == 0) 	
 			change_sea_texture++;
-		if (delay_count % terrain_water_information[2].delay == 0) 	
+		if (delay_count % current_map_info.water_info[2].delay == 0) 	
 			change_reservoir_texture++;
 	
 		if (delay_count == 50000) 
 			delay_count = 0;
 	
-		if (change_river_texture == terrain_water_information[0].number)
+		if (change_river_texture == current_map_info.water_info[0].number)
 			change_river_texture = 0;  
-		if (change_sea_texture == terrain_water_information[1].number)
+		if (change_sea_texture == current_map_info.water_info[1].number)
 			change_sea_texture = 0;  
 		// Casm 19AUG05 - Reservoir here, not sea
-		if (change_reservoir_texture == terrain_water_information[2].number)
+		if (change_reservoir_texture == current_map_info.water_info[2].number)
 			change_reservoir_texture = 0;  
 	
 		//	start_of_river_textures = first bottom texture, start_of_river_textures+1 is the start of the transparent changing textures
-		sl = terrain_water_information[0].scale_bottom;
-		sld = terrain_water_information[0].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_water_information[0].placenr, terrain_water_information[0].placenr+1+change_river_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
+		sl = current_map_info.water_info[0].scale_bottom;
+		sld = current_map_info.water_info[0].scale_top;
+		set_terrain_type_textures ( TERRAIN_TYPE_RIVER, 
+				current_map_info.water_info[0].placenr, 
+				current_map_info.water_info[0].placenr+1+change_river_texture, 
+				sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
 		
-		sl = terrain_water_information[1].scale_bottom;
-		sld = terrain_water_information[1].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_water_information[1].placenr, terrain_water_information[1].placenr+1+change_sea_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
+		sl = current_map_info.water_info[1].scale_bottom;
+		sld = current_map_info.water_info[1].scale_top;
+		set_terrain_type_textures ( TERRAIN_TYPE_SEA, 
+				current_map_info.water_info[1].placenr, 
+				current_map_info.water_info[1].placenr+1+change_sea_texture, 
+				sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
 	
-		sl = terrain_water_information[2].scale_bottom;
-		sld = terrain_water_information[2].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_water_information[2].placenr, terrain_water_information[2].placenr+1+change_reservoir_texture, sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
+		sl = current_map_info.water_info[2].scale_bottom;
+		sld = current_map_info.water_info[2].scale_top;
+		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, 
+				current_map_info.water_info[2].placenr, 
+				current_map_info.water_info[2].placenr+1+change_reservoir_texture, 
+				sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
 	}
 }
 
@@ -1275,6 +1299,10 @@ void initialise_3d_thailand_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -1312,7 +1340,7 @@ void initialise_3d_thailand_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
 	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -1437,6 +1465,10 @@ void initialise_3d_cuba_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -1474,7 +1506,7 @@ void initialise_3d_cuba_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
 	terrain_surface_wall										= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
@@ -1600,6 +1632,10 @@ void initialise_3d_georgia_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 	
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -1637,7 +1673,7 @@ void initialise_3d_georgia_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
 	terrain_surface_wall										= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -1760,6 +1796,10 @@ void initialise_3d_lebanon_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_DESERT;
 	terrain_surface_land										= SURFACE_TYPE_DESERT;
@@ -1797,7 +1837,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_DESERT;
 	terrain_surface_wall										= SURFACE_TYPE_DESERT;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -1920,6 +1960,10 @@ void initialise_3d_yemen_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SAND;
@@ -1957,7 +2001,7 @@ void initialise_3d_yemen_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_SAND;
 	terrain_surface_wall										= SURFACE_TYPE_SAND;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2082,6 +2126,10 @@ void initialise_3d_taiwan_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2119,7 +2167,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 	terrain_surface_hedge									= SURFACE_TYPE_SOIL;
 	terrain_surface_wall										= SURFACE_TYPE_ROCK;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2377,6 +2425,7 @@ static void initialise_all_custom_terrain_types ( void )
 		terrain_texture_sea_colour_pass						= terrain_texture_sea_detail;
 		terrain_texture_beach_colour_pass					= terrain_texture_beach_detail;
 		terrain_texture_land_colour_pass						= terrain_texture_land_detail;
+		
 		terrain_texture_forest_colour_pass					= terrain_texture_forest_detail;
 		terrain_texture_forest_bottom_colour_pass			= terrain_texture_forest_bottom_detail;
 		terrain_texture_forest_middle_colour_pass			= terrain_texture_forest_middle_detail;
@@ -2481,6 +2530,10 @@ void initialise_3d_alaska_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2493,7 +2546,7 @@ void initialise_3d_alaska_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2565,6 +2618,10 @@ void initialise_3d_aleut_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2577,7 +2634,7 @@ void initialise_3d_aleut_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2650,6 +2707,10 @@ void initialise_3d_kuwait_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2666,7 +2727,7 @@ void initialise_3d_kuwait_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
 	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
@@ -2739,6 +2800,10 @@ void initialise_3d_grand_terrain_types ( void )
 	if (command_line_texture_colour == 1)
 		initialise_all_custom_terrain_types ();
 
+		//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2755,7 +2820,7 @@ void initialise_3d_grand_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
 	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
@@ -2817,6 +2882,10 @@ void initialise_3d_mars_terrain_types ( void )
 	if (command_line_texture_colour == 1)
 		initialise_all_custom_terrain_types ();
 
+	//set surface types for rotor dust
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
 	terrain_surface_road										= SURFACE_TYPE_ASPHALT;
 	terrain_surface_track									= SURFACE_TYPE_SOIL;
@@ -2828,9 +2897,8 @@ void initialise_3d_mars_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
+*/
 
-	//VJ 051011 Changed from default camoflage to desert so that desert textures are used for kuwait and lybia
-	//set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 	set_object_3d_texture_camoflage_by_name ( "DESERT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2902,6 +2970,9 @@ void initialise_3d_alexander_archipelago_terrain_types ( void )
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+/*
 	terrain_surface_sea										= SURFACE_TYPE_WATER;
 	terrain_surface_beach									= SURFACE_TYPE_SAND;
 	terrain_surface_land										= SURFACE_TYPE_SOIL;
@@ -2914,7 +2985,7 @@ void initialise_3d_alexander_archipelago_terrain_types ( void )
 	terrain_surface_altered_land2							= SURFACE_TYPE_SOIL;
 	terrain_surface_altered_land3							= SURFACE_TYPE_SOIL;
 	terrain_surface_trench									= SURFACE_TYPE_WATER;
-
+*/
 	set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
 
 	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
@@ -2928,6 +2999,151 @@ void initialise_3d_alexander_archipelago_terrain_types ( void )
 	set_2d_terrain_contour_heights ( sizeof ( contour_heights ) / sizeof ( float ), contour_heights );
 }
 
-
-
 //VJ 051007 <===
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//VJ 051224 DEFAULT custom terrain intialisation
+void initialise_3d_custom_map_terrain_types ( void )
+{
+	int
+		reflection_texture_index;
+   
+   //safe contour heights
+	float 
+		contour_heights[] =
+		{
+			-1000,
+			-0.0001,
+			250,
+			500,
+			750,
+			1250,
+			2000,
+			3000,
+			5000,
+		};	
+
+   //set_3d_rain_special_snow_flag ( TRUE ); 
+	//has no effect, this is supposed to turn rain into snow above altered land 3 but is commented out
+
+	// load custom texture list 
+	initialise_all_custom_terrain_types ();
+
+	if (get_global_season() == 3)
+		set_object_3d_texture_camoflage_by_name ( "DESERT" );
+	else	
+		set_object_3d_texture_camoflage_by_name ( "DEFAULT" );
+
+	//VJ 051224 moved to separate function
+	initialise_surface_types();
+
+	reflection_texture_index = get_system_texture_index ( "ENVIRO_YEMEN_SMALL" );
+
+	if ( reflection_texture_index != -1 )
+	{
+		set_object_3d_reflection_texture_map ( reflection_texture_index );
+	}
+	
+	if (current_map_info.user_defined_contour_heights)
+	{
+		set_2d_terrain_contour_heights ( sizeof ( current_map_info.contour_heights ) / sizeof ( float ), current_map_info.contour_heights );
+	}
+	else
+	{	
+		set_2d_terrain_contour_heights ( sizeof ( contour_heights ) / sizeof ( float ), contour_heights );
+	}	
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Moved all downwash terraintypes to seperate function, if this appears ok the warzone initialise functions can be cleaned up
+static void initialise_surface_types( void )
+{
+	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
+	//initialize normal surface
+	if (get_global_season() < 3)
+	{
+		terrain_surface_sea										= SURFACE_TYPE_WATER;
+		terrain_surface_beach									= SURFACE_TYPE_SAND;
+		terrain_surface_land										= SURFACE_TYPE_SOIL;
+		terrain_surface_forest									= SURFACE_TYPE_NONE;
+		terrain_surface_builtup_area1							= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area2							= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area3							= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area4							= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_ASPHALT;
+		terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_ASPHALT;
+		terrain_surface_road										= SURFACE_TYPE_ASPHALT;
+		terrain_surface_track									= SURFACE_TYPE_SOIL;
+		terrain_surface_river									= SURFACE_TYPE_WATER;
+		terrain_surface_reservoir								= SURFACE_TYPE_WATER;
+		terrain_surface_rail										= SURFACE_TYPE_SOIL;
+		terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
+		terrain_surface_river_bank								= SURFACE_TYPE_SAND;
+		terrain_surface_rail_bank								= SURFACE_TYPE_SOIL;
+		terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
+		terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field4									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field5									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field6									= SURFACE_TYPE_SOIL;
+		terrain_surface_field7									= SURFACE_TYPE_SOIL;
+		terrain_surface_field8									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
+		terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_altered_land1							= SURFACE_TYPE_ROCK;
+		terrain_surface_altered_land2							= SURFACE_TYPE_ROCK;
+		terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
+		terrain_surface_hedge									= SURFACE_TYPE_SOIL;
+		terrain_surface_wall										= SURFACE_TYPE_SOIL;
+		terrain_surface_trench									= SURFACE_TYPE_WATER;
+	}
+	else
+	//initialize desert surface
+	{
+		terrain_surface_sea										= SURFACE_TYPE_WATER;
+		terrain_surface_beach									= SURFACE_TYPE_DESERT;
+		terrain_surface_land										= SURFACE_TYPE_DESERT;
+		terrain_surface_forest									= SURFACE_TYPE_NONE;
+		terrain_surface_builtup_area1							= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area2							= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area3							= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area4							= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area1_infrared				= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area2_infrared				= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area3_infrared				= SURFACE_TYPE_DESERT;
+		terrain_surface_builtup_area4_infrared				= SURFACE_TYPE_DESERT;
+		terrain_surface_road										= SURFACE_TYPE_DESERT;
+		terrain_surface_track									= SURFACE_TYPE_SOIL;
+		terrain_surface_river									= SURFACE_TYPE_WATER;
+		terrain_surface_reservoir								= SURFACE_TYPE_WATER;
+		terrain_surface_rail										= SURFACE_TYPE_SOIL;
+		terrain_surface_road_bank								= SURFACE_TYPE_SOIL;
+		terrain_surface_river_bank								= SURFACE_TYPE_DESERT;
+		terrain_surface_rail_bank								= SURFACE_TYPE_DESERT;
+		terrain_surface_field1									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field2									= SURFACE_TYPE_FIELD_DARKBROWN;
+		terrain_surface_field3									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field4									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field5									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field6									= SURFACE_TYPE_SOIL;
+		terrain_surface_field7									= SURFACE_TYPE_SOIL;
+		terrain_surface_field8									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field9									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_field10									= SURFACE_TYPE_FIELD_DARKBROWN;
+		terrain_surface_field11									= SURFACE_TYPE_FIELD_LIGHTBROWN;
+		terrain_surface_altered_land1							= SURFACE_TYPE_DESERT;
+		terrain_surface_altered_land2							= SURFACE_TYPE_DESERT;
+		terrain_surface_altered_land3							= SURFACE_TYPE_SNOW;
+		terrain_surface_hedge									= SURFACE_TYPE_DESERT;
+		terrain_surface_wall										= SURFACE_TYPE_DESERT;
+		terrain_surface_trench									= SURFACE_TYPE_WATER;
+	}
+}
