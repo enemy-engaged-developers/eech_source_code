@@ -1140,7 +1140,8 @@ void comms_process_data (void)
 							size += sizeof (int);
 
 							// 03DEC05 Casm Added season info transer
-							quick_set_list_item (ptr, int, global_season);
+							//VJ 051227 use set and get global season here
+							quick_set_list_item (ptr, int, get_global_season() );
 
 							size += sizeof (int);
 
@@ -1387,7 +1388,9 @@ void comms_process_data (void)
 							const char
 								*seasons[4] = { NULL, "Summer", "Winter", "Desert" };
 
-							global_season = season;
+							//VJ 051227 use set and get global season here
+							set_global_season ( season );
+
 							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 						}
 

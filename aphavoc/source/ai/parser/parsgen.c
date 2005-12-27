@@ -2144,14 +2144,15 @@ int parser_campaign_file (const char *filename, int *offset)
 					season = 0;
 				
 				season = get_next_file_int (file_ptr);
+				//VJ 051227 use set and get global season here
+				set_global_season( season );
 
 				#if DEBUG_MODULE
 
-				debug_log ("PARSGEN: season %d", global_season);
+				debug_log ("PARSGEN: season %d", get_global_season() );
 
 				#endif
 
-				global_season = season;
 				
 				break;
 			}

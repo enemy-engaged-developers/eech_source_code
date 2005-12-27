@@ -963,9 +963,10 @@ int store_session (session_list_data_type *game_session, const char *filename)
 	// End
 
    //VJ 051202 add season (camo) info to file description
+   //use set and get_global_season
 	set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 	set_file_tag (file_ptr, application_tag_strings, FILE_TAG_SEASON);
-	set_file_int (file_ptr, (int) global_season);
+	set_file_int (file_ptr, (int) get_global_season() );
 	set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 
 	set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
@@ -1383,7 +1384,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
-debug_log("session filer: campaign_title %s", campaign_title);							
+							debug_log("session filter: campaign_title %s", campaign_title);							
 							// VJ 050123 aphavoc install hack, do not close map if it exists but EEAH is not offcially installed
 							if (!global_aphavoc_maps)
 							{ 								
