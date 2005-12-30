@@ -4314,7 +4314,8 @@ void read_map_info_data( void )
 		buf[256],
 		filename[128];
 
-	char *p;
+	const char
+		*map, *p;
 
 	initialise_custom_map_info();
 
@@ -4323,10 +4324,19 @@ void read_map_info_data( void )
 	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
 
 	//in eech-new\aphavoc\source\ui_menu\session\session.h
-	p = strstr(get_current_game_session()->warzone_name, "map")+3;
-	current_map_info.mapnr = atoi(p);
+	// Casm, 30DEC05 Fixed map number determination
+	current_map_info.mapnr = 0;
+	map = get_current_game_session()->warzone_name;
+	for (p = map + strlen (map) - 3; map < p; map++)
+	{
+		if (!strnicmp (map, "map", 3))
+		{
+			current_map_info.mapnr = atoi(map + 3);
+			break;
+		}
+	}
 	debug_log("=== loading custom info: warzone nr %s %d",get_current_game_session()->warzone_name,current_map_info.mapnr);
-	
+
 	//initialize what we know
 	switch (current_map_info.mapnr) {
 		case 5: 
