@@ -1038,46 +1038,55 @@ void initialise_3d_custom_terrain_types( void )
 		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
 			
 		//VJ 051001 dynamic water textures
-		delay_count++;	
-		if (delay_count % current_map_info.water_info[0].delay == 0) 	
-			change_river_texture++;
-		if (delay_count % current_map_info.water_info[1].delay == 0) 	
-			change_sea_texture++;
-		if (delay_count % current_map_info.water_info[2].delay == 0) 	
-			change_reservoir_texture++;
-	
-		if (delay_count == 50000) 
-			delay_count = 0;
-	
-		if (change_river_texture == current_map_info.water_info[0].number)
-			change_river_texture = 0;  
-		if (change_sea_texture == current_map_info.water_info[1].number)
-			change_sea_texture = 0;  
-		// Casm 19AUG05 - Reservoir here, not sea
-		if (change_reservoir_texture == current_map_info.water_info[2].number)
-			change_reservoir_texture = 0;  
-	
-		//	start_of_river_textures = first bottom texture, start_of_river_textures+1 is the start of the transparent changing textures
-		sl = current_map_info.water_info[0].scale_bottom;
-		sld = current_map_info.water_info[0].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_RIVER, 
-				current_map_info.water_info[0].placenr, 
-				current_map_info.water_info[0].placenr+1+change_river_texture, 
-				sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
-		
-		sl = current_map_info.water_info[1].scale_bottom;
-		sld = current_map_info.water_info[1].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_SEA, 
-				current_map_info.water_info[1].placenr, 
-				current_map_info.water_info[1].placenr+1+change_sea_texture, 
-				sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
-	
-		sl = current_map_info.water_info[2].scale_bottom;
-		sld = current_map_info.water_info[2].scale_top;
-		set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, 
-				current_map_info.water_info[2].placenr, 
-				current_map_info.water_info[2].placenr+1+change_reservoir_texture, 
-				sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
+		if (global_dynamic_water)
+		{		
+			delay_count++;	
+			if (delay_count == 50000) 
+				delay_count = 0;
+
+			// change sea textures
+			if (delay_count % current_map_info.water_info[1].delay == 0) 	
+				change_sea_texture++;
+			if (change_sea_texture == current_map_info.water_info[1].number)
+				change_sea_texture = 0;  
+			sl = current_map_info.water_info[1].scale_bottom;
+			sld = current_map_info.water_info[1].scale_top;
+			set_terrain_type_textures ( TERRAIN_TYPE_SEA, 
+					current_map_info.water_info[1].placenr, 
+					current_map_info.water_info[1].placenr+1+change_sea_texture, 
+					sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
+
+				
+			//desert campaigns can be dry, no flowing water on land, user should apply appropriate textures
+			if (!current_map_info.dry_river) 
+			{
+				// river textures
+				if (delay_count % current_map_info.water_info[0].delay == 0) 	
+					change_river_texture++;
+				if (change_river_texture == current_map_info.water_info[0].number)
+					change_river_texture = 0;  				
+				//	start_of_river_textures = first bottom texture, start_of_river_textures+1 is the start of the transparent changing textures
+				sl = current_map_info.water_info[0].scale_bottom;
+				sld = current_map_info.water_info[0].scale_top;
+				set_terrain_type_textures ( TERRAIN_TYPE_RIVER, 
+						current_map_info.water_info[0].placenr, 
+						current_map_info.water_info[0].placenr+1+change_river_texture, 
+						sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
+
+				//reservoir textures
+				if (delay_count % current_map_info.water_info[2].delay == 0) 	
+					change_reservoir_texture++;
+					// Casm 19AUG05 - Reservoir here, not sea
+				if (change_reservoir_texture == current_map_info.water_info[2].number)
+					change_reservoir_texture = 0;  						
+				sl = current_map_info.water_info[2].scale_bottom;
+				sld = current_map_info.water_info[2].scale_top;
+				set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, 
+						current_map_info.water_info[2].placenr, 
+						current_map_info.water_info[2].placenr+1+change_reservoir_texture, 
+						sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
+			}
+		}		
 	}
 }
 
@@ -2124,6 +2133,10 @@ void initialise_3d_taiwan_terrain_types ( void )
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
 	if (command_line_texture_colour == 1)
 		initialise_all_custom_terrain_types ();
+	terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
+	terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
+	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
+	terrain_texture_land_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	//set surface types for rotor dust
