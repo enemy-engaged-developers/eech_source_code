@@ -3546,6 +3546,37 @@ void load_warzone_override_textures ()
 
 	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
+	//VJ 051229 changed the order of reading: first all the official dirs, last the user defined dirs. 
+	//Makes more sense, else people make textures but they are not shown
+
+	//look for the modded and mipmapped terrain textures
+	//VJ 050319 texture colour mod, load terrain textures
+
+	// Casm 20AUG05 Moved backup before "if"
+	//VJ 050621 backup commandline var, set to 0 if no textures found
+	texture_colour_bak = command_line_texture_colour;
+	
+	if (command_line_texture_colour == 1)
+	{
+
+		//VJ 051223 removed string list with warzone names:
+		//look directly for texture dir with name current_map_info.name" (= session title)
+		//That way warzones can be added automatically without adding strings to the code
+		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, current_map_info.name);
+		debug_log("=== loading custom info: texture dir:  %s",directory_textdir_path);
+
+		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
+		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
+
+		if (nrtextfound == 0)
+			command_line_texture_colour = 0;
+
+		//VJ read text file with scale indicators for terrain texture display
+		initialize_terrain_texture_scales ( directory_textdir_path );
+	}
+
+	
+	//VJ 051228 last look for the user defined directories. Specified in a text file in the map dir
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",get_current_game_session()->data_path);
 
 	debug_log("=== Searching for aditional paths in texturedirs.txt of warzone %s",get_current_game_session()->warzone_name);
@@ -3591,31 +3622,6 @@ void load_warzone_override_textures ()
 		}
 	}
 
-	//last look for the modded and mipmapped terrain textures
-	//VJ 050319 texture colour mod, load terrain textures
-
-	// Casm 20AUG05 Moved backup before "if"
-	//VJ 050621 backup commandline var, set to 0 if no textures found
-	texture_colour_bak = command_line_texture_colour;
-	
-	if (command_line_texture_colour == 1)
-	{
-
-		//VJ 051223 removed string list with warzone names:
-		//look directly for texture dir with name current_map_info.name" (= session title)
-		//That way warzones can be added automatically without adding strings to the code
-		sprintf (directory_textdir_path, "%s\\%s", TEXTURE_OVERRIDE_DIRECTORY_TERRAIN, current_map_info.name);
-		debug_log("=== loading custom info: texture dir:  %s",directory_textdir_path);
-
-		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
-		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
-
-		if (nrtextfound == 0)
-			command_line_texture_colour = 0;
-
-		//VJ read text file with scale indicators for terrain texture display
-		initialize_terrain_texture_scales ( directory_textdir_path );
-	}
 
 	debug_log("Nr override textures found %d",nrtextfound);
 
@@ -4284,6 +4290,8 @@ void initialise_custom_map_info( void )
 
 	current_map_info.season = 1;
 	
+	current_map_info.dry_river = 0;
+
 	for (i = 0; i < 3; i++){
 		current_map_info.water_info[i].start = 0;
 		current_map_info.water_info[i].number = 0;
@@ -4324,8 +4332,8 @@ void read_map_info_data( void )
 	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
 
 	//in eech-new\aphavoc\source\ui_menu\session\session.h
-	// Casm, 30DEC05 Fixed map number determination
-	current_map_info.mapnr = 0;
+	// Casm, 30DEC05 Fixed map number determination	
+	current_map_info.mapnr = 0; //this is already initialized in initialise_custom_map_info but what the hell
 	map = get_current_game_session()->warzone_name;
 	for (p = map + strlen (map) - 3; map < p; map++)
 	{
@@ -4346,21 +4354,19 @@ void read_map_info_data( void )
 		case 12: 
 		{	
 			set_global_season( SESSION_SEASON_DESERT );
-//			current_map_info.season = 3;
 			break;
 		}	
+		case 3: //georgia
 		case 7: 
 		case 8: 
 		case 13: 
 		{
 			set_global_season( SESSION_SEASON_WINTER );
-//			current_map_info.season = 2;			
 			break;
 		}
 		default:
 		{
 			set_global_season( SESSION_SEASON_SUMMER );		
-//			current_map_info.season = 1;			
 		}
 	}
 	
