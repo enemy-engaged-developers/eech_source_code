@@ -2133,10 +2133,6 @@ void initialise_3d_taiwan_terrain_types ( void )
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
 	if (command_line_texture_colour == 1)
 		initialise_all_custom_terrain_types ();
-	terrain_texture_altered_land1_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
-	terrain_texture_altered_land2_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
-	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
-	terrain_texture_land_colour_pass							= get_system_texture_index ( "COLOUR_PASS_SWAMP" );
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	//set surface types for rotor dust
