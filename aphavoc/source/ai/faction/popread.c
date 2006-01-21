@@ -1575,7 +1575,7 @@ void read_population_airfield_placements ( FILE *fp )
 				case OBJECT_3D_RUSSIAN_FARP09:
 				case OBJECT_3D_RUSSIAN_FARP10:
 				case OBJECT_3D_RUSSIAN_FARP12:
-				case OBJECT_3D_RUSSIAN_FARP13:
+				case OBJECT_3D_RUSSIAN_FARP13:					
 				{
 	
 					#if DEBUG_MODULE
@@ -1663,9 +1663,10 @@ void read_population_airfield_placements ( FILE *fp )
 			}
 	
 			current_airport_inst3d = construct_3d_object ( object_index );
-	
+
 			current_airport_inst3d->vp.position.x = x;
-			current_airport_inst3d->vp.position.y = y;
+	//VJ 060107 zbuffer fix for disappearing runways, simply elevate them above ground level by 0.01 m
+			current_airport_inst3d->vp.position.y = y+0.01;
 			current_airport_inst3d->vp.position.z = z;
 	
 			current_airport_inst3d->object_has_shadow = FALSE;
