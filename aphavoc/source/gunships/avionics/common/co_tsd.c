@@ -1220,14 +1220,10 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 		                           
 		for (z_index = z_min_index; z_index < z_max_index; z_index += step)
 		{                          
-// VJ 051006 simplified code, lower detail but better framerate
-//			float mid_x, mid_z, mid_y;
                                  
 			dx0 = dx_start;         
 			dx1 = dx_start + dx_grid;
-                                 
-//			mid_z = 0.5*(dz0+dz1);  
-                                 
+                                                                 
 			this_row_ptr = this_row_start_ptr;
 			next_row_ptr = next_row_start_ptr;
                                  
@@ -1258,38 +1254,45 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			   		draw_2d_filled_triangle (dx0,dz0,dx0,dz1,dx1,dz1,terrain_col);
 			   		draw_2d_filled_triangle (dx0,dz0,dx1,dz1,dx1,dz0,terrain_col);
 			   	#endif            
-				}                    
-/* VJ 051006 simplified code, lower detail but better framerate
-				mid_x = 0.5*(dx0+dx1);
-			   mid_y = (this_row_ptr[0]+this_row_ptr[1]+next_row_ptr[0]+next_row_ptr[1])/4.0;
+				}               
+				     
+			// VJ 060125 split each grid cell into 4 triagles when at a low radar range
+			// else draw 1 square grid cell, gives better framerate at 10 and 25 km radar range
+			if (range < TSD_ASE_RANGE_10000)
+			{
+				float mid_z = 0.5*(dz0+dz1);  
+				float mid_x = 0.5*(dx0+dx1);
+			   float mid_y = (this_row_ptr[0]+this_row_ptr[1]+next_row_ptr[0]+next_row_ptr[1])/4.0;
 			                        
 			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+mid_y)/3.0;
 			   c = COLOUR_SCALE(terrain_elev);
-		   	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
+			  	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,mid_x,mid_z,dx1,dz0,terrain_col);
-                                 
+			                              
 			   terrain_elev = (this_row_ptr[1]+next_row_ptr[1]+mid_y)/3.0;
 			   c = COLOUR_SCALE(terrain_elev);
-		   	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
+			  	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx1,dz0,mid_x,mid_z,dx1,dz1,terrain_col);
-                                 
+			                              
 			   terrain_elev = (this_row_ptr[0]+next_row_ptr[0]+mid_y)/3.0;
 			   c = COLOUR_SCALE(terrain_elev);
-		   	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
+			  	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,dx0,dz1,mid_x,mid_z,terrain_col);
-                                 
+			                              
 			   terrain_elev = (next_row_ptr[0]+next_row_ptr[1]+mid_y)/3.0;
 			   c = COLOUR_SCALE(terrain_elev);
-		   	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
+			  	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz1,dx1,dz1,mid_x,mid_z,terrain_col);
-                                 
-*/                               
+			}                             
+			else
+			{                            
 			   terrain_elev = (this_row_ptr[0]+this_row_ptr[1]+next_row_ptr[0]+next_row_ptr[1])/4.0;
 		   	c = COLOUR_SCALE(terrain_elev);
 		   	GET_TERRAIN_COLOUR(terrain_col, c, aspect);
 			   draw_2d_filled_triangle (dx0,dz0,dx1,dz1,dx1,dz0,terrain_col);
 			   draw_2d_filled_triangle (dx0,dz0,dx0,dz1,dx1,dz1,terrain_col);
   
+			}
 				//                   
 				// next column       
 				//                   
