@@ -118,8 +118,8 @@ static const char
 	*suppress_ai_fire_text[2],
 	*time_of_day_text[6],
 	*weather_text[4],
-//VJ 051011 add season summer/winter/desert button	
-	*season_text[3];
+//VJ 051011 add season default/summer/winter/desert button	
+	*season_text[4];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,6 @@ void notify_session_parameters (void)
 	//VJ 051227 reading map inof data for automatic custom map 
 	// function declared in textuser.c
 	read_map_info_data();
-
 	//
 	// Set the button states
 	//
@@ -161,7 +160,7 @@ void notify_session_parameters (void)
 	//VJ 051227 set season info with map_info structure
 	set_global_season( current_map_info.season );		
 
-	if (current_map_info.season != 2)
+	if (current_map_info.season != SESSION_SEASON_SUMMER && current_map_info.season != SESSION_SEASON_WINTER)
 	{
 		set_ui_object_highlightable (season_button, FALSE);
 
@@ -318,9 +317,10 @@ void define_session_parameter_objects (void)
 	suppress_ai_fire_text [0] = get_trans ("Passive");
 	suppress_ai_fire_text [1] = get_trans ("Hostile");
 
-	season_text [0] = get_trans ("Summer");
-	season_text [1] = get_trans ("Winter");
-	season_text [2] = get_trans ("Desert");
+	season_text [0] = get_trans ("Default");
+	season_text [1] = get_trans ("Summer");
+	season_text [2] = get_trans ("Winter");
+	season_text [3] = get_trans ("Desert");
 
 	time_of_day_text [0] = get_trans ("Random");
 	time_of_day_text [1] = get_trans ("Dawn");
@@ -432,7 +432,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-	process_sessparm_objects (title_box_obj, title_text_obj, button_box_obj, season_button, season_text, 5);
+	process_sessparm_objects (title_box_obj, title_text_obj, button_box_obj, season_button, season_text, 4);
 
 	/////////////////////////////////////////////////////////////////
 	//Time of Day
@@ -984,8 +984,10 @@ void notify_season_function ( ui_object *obj, void *arg )
 	tod = get_global_season ();
 	
 	tod++;
-	// skip deserts. they cannot be changed
+	// skip deserts and default, they cannot be changed
 	if (tod == SESSION_SEASON_DESERT)	
+		tod = SESSION_SEASON_DEFAULT;
+	if (tod == SESSION_SEASON_DEFAULT)	
 		tod = SESSION_SEASON_SUMMER;
 	
 	set_global_season (tod);
@@ -993,7 +995,10 @@ void notify_season_function ( ui_object *obj, void *arg )
 	set_ui_object_text (obj, season_text [get_global_season () - 1]);
 	
 	set_toggle_button_off (obj);
-
+debug_log("SEASON 3 - %d",get_global_season());
+ 
+ if (get_global_season () == SESSION_SEASON_SUMMER || get_global_season () == SESSION_SEASON_WINTER)
+    load_3d_terrain_game_data ();
 }
 //VJ 051011 <==add season summer/winter/desert button
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1590,7 +1595,7 @@ void process_host_session_setup_options (void)
 
 	time_of_day = SESSION_TIME_RANDOM;
 	
-	season_setting = SESSION_SEASON_SUMMER;
+	season_setting = SESSION_SEASON_DEFAULT;
 
 	switch (get_game_type ())
 	{
