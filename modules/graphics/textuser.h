@@ -146,10 +146,15 @@ struct CUSTOM_MAP_INFO
 	//same as global season 1 = default, 2 = default+winter, 3=desert
 	int
 		season; 
-
+		
   //VJ 050322 texture colour mod: texture scale array, 64 is enough for terrain textures
 	int 
 		texture_override_scales[64][2];
+		
+	//VJ 060120 keep the total number of textures = 
+	//number_of_system_textures+all water textures+extra terrain textures	
+	int 
+		last_texture;	
 			
 };
 typedef struct CUSTOM_MAP_INFO custom_map_info;	
@@ -157,7 +162,6 @@ typedef struct CUSTOM_MAP_INFO custom_map_info;
 extern custom_map_info
 	current_map_info;
 
-	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

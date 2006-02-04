@@ -93,6 +93,7 @@ extern int
 //extern int 
 	//texture_override_scales[64][2];
 //VJ 050818 dynamic water INFO STRUCTURE
+
 struct TERRAIN_DYNAMIC_WATER_INFO
 {
 
@@ -144,12 +145,18 @@ struct CUSTOM_MAP_INFO
   //VJ 050322 texture colour mod: texture scale array, 64 is enough for terrain textures
 	int 
 		texture_override_scales[64][2];
+
+	//VJ 060120 keep the total number of textures = 
+	//number_of_system_textures+all water textures+extra terrain textures	
+	int 
+		last_texture;	
 			
 };
 typedef struct CUSTOM_MAP_INFO custom_map_info;	
 	
 extern custom_map_info
 	current_map_info;
+
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
