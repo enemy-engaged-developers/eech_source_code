@@ -254,7 +254,7 @@ void send_pilot_quit_message (entity *en)
 	
 	server_log (text); // Jabberwock Server log
 	
-	if ((command_line_pause_server) && (player_count == 1)) // 040220 Jabberwock Pause server
+	if ((command_line_pause_server) && (player_count <= 1)) // 040220 Jabberwock Pause server, changed to <=1 by Werewolf
 	{
 		force_pause_acceleration();
 		server_log ("Server paused");
