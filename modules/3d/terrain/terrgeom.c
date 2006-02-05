@@ -255,6 +255,7 @@ int
 	final_terrain_3d_sectors_trivially_culled,
 	final_terrain_3d_sectors_complex_culled;
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -757,7 +758,8 @@ void scan_3d_terrain ( void )
 						}
 
 						if (	( terrain_3d_tree_rendering_enabled ) &&
-								( active_3d_environment->infrared_mode != INFRARED_ON ) &&
+						//VJ 040206 for Craigmire: trun on trees in infrared!
+								//( active_3d_environment->infrared_mode != INFRARED_ON ) &&
 								( terrain_tree_sectors ) &&
 								( terrain_tree_sectors[current_sector_z][current_sector_x].number_of_trees ) )
 						{
@@ -1087,6 +1089,9 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	float
 		scaled_rotation[3][3];
+		
+	int sz = slot->sector.z;
+	int sx = slot->sector.x;
 
 	//
 	// Set fpu precision
@@ -1400,14 +1405,21 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 			int
 				number_of_points;
 
-			if ( polygon->surface_change )	//get_3d_terrain_face_surface_change ( polygon ) )
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
 			{
-
-				surface++;
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
 	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
 
 				//
 				// Flush any buffered polygons
@@ -1457,15 +1469,26 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 	
 			int
 				number_of_points;
-	
-			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
-			{
 
-				surface++;
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
+			{
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
+
+				//
+				// Flush any buffered polygons
+				//
 
 				draw_terrain_3d_buffered_polygons ();
 
@@ -1592,6 +1615,9 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	float
 		scaled_rotation[3][3];
+		
+	int sz = slot->sector.z;
+	int sx = slot->sector.x;		
 
 	//
 	// Set fpu precision
@@ -1878,15 +1904,22 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 	
 			int
 				number_of_points;
-	
-			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
-			{
 
-				surface++;
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
+			{
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
 	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
 
 				//
 				// Flush any buffered polygons
@@ -1936,15 +1969,22 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 	
 			int
 				number_of_points;
-	
-			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
-			{
 
-				surface++;
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
+			{
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
 
 				//
 				// Flush any buffered polygons
@@ -2056,6 +2096,9 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 	float
 		scaled_rotation[3][3];
+
+	int sz = slot->sector.z;
+	int sx = slot->sector.x;
 
 	//
 	// Set fpu precision
@@ -2261,7 +2304,7 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 	if ( current_terrain_sector->number_of_points < 257 )
 	{
-
+		
 		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
@@ -2270,14 +2313,21 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 			int
 				number_of_points;
 	
-			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
 			{
-
-				surface++;
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
 
 				//
 				// Flush any buffered polygons
@@ -2285,11 +2335,13 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				reset_deferred_state_changes ();
+
+				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			current_terrain_type_class->render_byte_unclipped ( number_of_points );
 	
 			terrain_3d_sector_point_byte_references += number_of_points;
@@ -2298,24 +2350,31 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 		}
 	}
 	else
-	{
+	{		
 
 		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
 
 		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 		{
 	
-			int
+			int 
 				number_of_points;
-	
-			if ( polygon->surface_change ) //get_3d_terrain_face_surface_change ( polygon ) )
+				
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
 			{
-
-				surface++;
+				
+				if ( polygon->surface_change )
+					surface++;
 
 				current_terrain_type = surface->surface_id;
-		
+	
 				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
 
 				//
 				// Flush any buffered polygons
@@ -2323,11 +2382,13 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				reset_deferred_state_changes ();
+
+				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
-	
+
 			current_terrain_type_class->render_word_unclipped ( number_of_points );
 	
 			terrain_3d_sector_point_word_references += number_of_points;
@@ -4102,12 +4163,13 @@ vertex * construct_3d_terrain_normal_line ( int index, int *polygon_outcode )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 060124 revert back to original state. Disappearing runways solved in popread.c
 void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 {
 
 	if ( d3d_using_hardware_tnl )
 	{
-/*
+
 		if ( ( *( float * ) &slot->z ) > ( 3072 + TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 ) )
 		{
 
@@ -4119,43 +4181,6 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 			zbuffer_constant = zbuffer_constant_lowered_bias;
 		}
 	}
-*/	
-//VJ 051006, trying to resolve closeup flickering of runway and shadow 		
-//distribute zbuffer_constant from lowered_bias2 for closeup to regular lowered_bias for far away
-
-		double zz = ( *( float * ) &slot->z );
-		
-		if ( zz > ( 3072 + TERRAIN_3D_SECTOR_SIDE_LENGTH * 4 ) )
-		{
-
-			zbuffer_constant = zbuffer_constant_normal_bias;
-			// no bias above 3072+4*2048
-		}
-		else
-		{
-			//VJ 051011 zbuffer correction optional
-			if (global_zbuffer)
-			{
-				if ( zz > ( 1000.0 ) )
-				{
-		
-					zbuffer_constant = zbuffer_constant_lowered_bias;
-					// small bias above 1000 m
-				}
-				else
-				{	
-					zbuffer_constant = zbuffer_constant_lowered_bias + 
-					exp(-0.000015*zz*zz )*(zbuffer_constant_lowered_bias2-zbuffer_constant_lowered_bias);
-					//gaussian distribution seems to work best between approx. 1000 and 0 m
-				}
-			}	
-			else
-			{
-	
-				zbuffer_constant = zbuffer_constant_lowered_bias;
-			}
-		}	
-	}
 	else
 	{
 
@@ -4166,4 +4191,161 @@ void set_terrain_3d_zbuffer_constant ( scene_slot_drawing_list *slot )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+void setup_polygons_in_sector ( terrain_3d_sector	*current_terrain_sector )
+{
+	terrain_3d_face
+		*polygon;
 
+	terrain_3d_surface
+		*surface;
+
+	polygon = current_terrain_sector->polygons;
+
+	surface = current_terrain_sector->surface_changes;
+
+	current_terrain_type = surface->surface_id;
+
+	current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+	reset_terrain_3d_buffered_polygons ();
+
+	reset_deferred_state_changes ();
+
+	set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+
+	if ( current_terrain_sector->number_of_points < 257 )
+	{
+	
+		terrain_3d_sector_point_byte_references = current_terrain_sector->point_byte_references;
+	
+		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
+		{
+	
+			int
+				number_of_points;
+
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
+			{
+				
+				if ( polygon->surface_change )
+					surface++;
+
+				current_terrain_type = surface->surface_id;
+	
+				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
+
+				//
+				// Flush any buffered polygons
+				//
+
+				draw_terrain_3d_buffered_polygons ();
+
+				reset_deferred_state_changes ();
+
+				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+			}
+
+			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
+	
+			{
+		
+				if ( outcode_3d_terrain_byte_polygon ( number_of_points, terrain_3d_sector_point_byte_references, &terrain_3d_face_outcode ) )
+				{
+		
+					commit_deferred_state_changes ();
+
+					if ( terrain_3d_face_outcode )
+					{
+	
+						current_terrain_type_class->render_byte_clipped ( number_of_points );
+					}
+					else
+					{
+	
+						current_terrain_type_class->render_byte_unclipped ( number_of_points );
+					}
+				}
+		
+				terrain_3d_sector_point_byte_references += number_of_points;
+		
+				polygon++;
+			}
+		}
+	}
+	else
+	{
+	
+		terrain_3d_sector_point_word_references = current_terrain_sector->point_word_references;
+	
+		for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
+		{
+	
+			int
+				number_of_points;
+
+			if ( polygon->surface_change || customtype[sz][sx][count].flag == 1)
+			{
+				
+				if ( polygon->surface_change )
+					surface++;
+
+				current_terrain_type = surface->surface_id;
+	
+				current_terrain_type_class = &terrain_type_information[current_terrain_type];
+
+				if (customtype[sz][sx][count].flag == 1)
+				{
+					current_terrain_type_class->texture = system_textures[customtype[sz][sx][count].id];
+					current_terrain_type_class->texture2 = system_textures[customtype[sz][sx][count].id];
+				}	
+
+				//
+				// Flush any buffered polygons
+				//
+
+				draw_terrain_3d_buffered_polygons ();
+
+				reset_deferred_state_changes ();
+
+				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+			}
+
+			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
+	
+			{
+		
+				if ( outcode_3d_terrain_word_polygon ( number_of_points, terrain_3d_sector_point_word_references, &terrain_3d_face_outcode ) )
+				{
+		
+					commit_deferred_state_changes ();
+
+					if ( terrain_3d_face_outcode )
+					{
+	
+						current_terrain_type_class->render_word_clipped ( number_of_points );
+					}
+					else
+					{
+	
+						current_terrain_type_class->render_word_unclipped ( number_of_points );
+					}
+				}
+		
+				terrain_3d_sector_point_word_references += number_of_points;
+		
+				polygon++;
+			}
+		}
+	}
+}
+*/
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
