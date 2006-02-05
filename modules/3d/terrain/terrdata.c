@@ -70,6 +70,9 @@
 
 //VJ 050619 included to check global_anisotropic setting
 #include "cmndline.h"
+//VJ 040206 included for season check 
+#include "global.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +117,12 @@ object_3d_instance
 int
 	terrain_3d_tree_rendering_enabled = TRUE;
 
+//VJ 040206 3d structure to flag which polygons need a different terrain texture
+// and fill it with the corresponding numbers
+terrain_custom_type
+   ***customtype = NULL;
+	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +145,7 @@ float
 
 terrain_3d_file_validation
 	current_terrain_version;
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,6 +192,20 @@ int load_3d_terrain ( const char *path )
 	sprintf ( sector_file, "%s\\default.sec", path );
 
 	sprintf ( colour_file, "%s\\default.rgb", path );
+
+	//VJ 040206 read different point colour files when available for winter, 
+	// made for skagway etc maps of craigmire and maverick
+	if (get_global_season() == SESSION_SEASON_WINTER)
+	{
+		sprintf ( sector_file, "%s\\default-W.sec", path );
+		sprintf ( colour_file, "%s\\default-W.rgb", path );
+
+		if (!file_exist(sector_file) || !file_exist(colour_file))
+		{
+			sprintf ( sector_file, "%s\\default.sec", path );
+			sprintf ( colour_file, "%s\\default.rgb", path );
+		}	
+	}
 
 	sprintf ( tree_sector_file, "%s\\tree_pos.sec", path );
 
@@ -734,6 +758,17 @@ int load_3d_terrain ( const char *path )
 		debug_log ( "Cant find the terrain tree data" );
 	}
 
+
+	//VJ 060120 flag certain terrtain types to add textures		
+	// structure is used in terrgeom.c
+	
+	// make flagging structure and initialize to zero
+	make_flag_terrain_types ();
+	
+	// if option flag the 4 land terrain types + forest top
+	if (global_extended_terrain_textures)
+		flag_terrain_types();			
+
 	return ( TRUE );
 }
 
@@ -775,6 +810,7 @@ void unload_3d_terrain ( void )
 					object = object->next_object;
 				}
 			}
+			
 		}
 	}
 
@@ -850,6 +886,11 @@ void unload_3d_terrain ( void )
 	//
 
 	unload_terrain_simple_elevation_grid ();
+	
+	//VJ 060120 flag certain terrtain types to add textures		
+	// free structure
+	free_flag_terrain_types ();
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1991,3 +2032,178 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//VJ 060120 random integer generator
+int rand3(int lim)
+{
+        static long a = 3;
+
+        a = (((a * 214013L + 2531011L) >> 16) & 32767);
+
+        return ((a % lim) + 1);
+}
+
+//=====> VJ 040206 flag terrain polygons and replace some stadard textures 
+// with an alternative texture to increase landscape variability
+// must be used with additional texture packs
+// reacts to eech.ini option "extended textures"
+void flag_terrain_types ( void )
+{
+	
+	int x, z, count;
+	
+	terrain_3d_face
+		*polygon;
+
+	terrain_3d_surface
+		*surface;
+	terrain_3d_sector
+		*current_terrain_sector;
+		
+	debug_log("flagging terrain types...");	
+		
+	for ( z = 0; z < terrain_3d_sector_z_max; z++ )
+	{
+		
+		for ( x = 0; x < terrain_3d_sector_x_max; x++ )
+		{	
+			
+			current_terrain_sector = &terrain_sectors[z][x];			
+			
+			polygon = current_terrain_sector->polygons;
+   	
+			surface = current_terrain_sector->surface_changes;
+			
+			for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
+			{						
+				int r = rand3(5)-1; 					
+				if ( polygon->surface_change ) 
+					surface++;
+
+				switch (surface->surface_id) {
+					case TERRAIN_TYPE_LAND : //TEXTURE_INDEX_TERRAIN_THAI_CITY1-4
+					{
+						if (r > 0)
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_THAI_CITY1-1+r;
+	     	   		else
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_DETAIL_4;	     	   			
+     	   			customtype[z][x][count].flag = 1;	
+	     	   		break;
+	     	   	}	
+	     	   	
+					case TERRAIN_TYPE_ALTERED_LAND1 : //TEXTURE_INDEX_TERRAIN_CUBA_CITY1-4
+					{
+						if (r > 0)
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_CUBA_CITY1-1+r;
+  	     	   		else
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_SCRUB;
+     	   			customtype[z][x][count].flag = 1;	
+	     	   		break;
+	     	   	}	
+					case TERRAIN_TYPE_ALTERED_LAND2 : //TEXTURE_INDEX_CP_LEBANON_CITY1-4
+					{
+						if (r > 0)
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_CP_LEBANON_CITY1-1+r;
+  	     	   		else
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_BARE_ROCK2;
+     	   			customtype[z][x][count].flag = 1;	
+	     	   		break;
+	     	   	}	
+					case TERRAIN_TYPE_ALTERED_LAND3 : //TEXTURE_INDEX_CP_LEBANON_V2_CITY1-4
+					{
+						if (r > 0)
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_CP_LEBANON_V2_CITY1-1+r;
+  	     	   		else
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_SNOW;
+     	   			customtype[z][x][count].flag = 1;	
+	     	   		break;
+	     	   	}	
+	     	   	
+					case TERRAIN_TYPE_FOREST_TOP : //TEXTURE_INDEX_YEMEN_CITY1-4
+					{
+						if (r > 0)
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_YEMEN_CITY1-1+r;
+  	     	   		else
+	     	   			customtype[z][x][count].id = (int) TEXTURE_INDEX_TERRAIN_TREE_CANOPY_1;
+     	   			customtype[z][x][count].flag = 1;	
+	     	   		break;
+	     	   	}	
+	     	   }
+
+				polygon++;
+			}//count
+      }//x
+	}//z
+	debug_log("flagged terrain types");		
+}	
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void free_flag_terrain_types ( void )
+{
+
+	int
+		x,
+		z;
+	debug_log("freeing struct z %d x %d",terrain_3d_sector_z_max, terrain_3d_sector_x_max);		
+
+	for ( z = 0; z < terrain_3d_sector_z_max; z++ )
+	{
+
+		for ( x = 0; x < terrain_3d_sector_x_max; x++ )
+		{
+			if(customtype[z][x]){
+			   safe_free(customtype[z][x]);
+			   customtype[z][x] = NULL;
+			}
+		}
+	
+		if(customtype[z]){
+		   safe_free(customtype[z]);
+		   customtype[z] = NULL;
+		}
+	}
+
+	if(customtype){
+	   safe_free(customtype);
+	   customtype = NULL;
+	}
+	
+	debug_log("freed flagging structure");
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void make_flag_terrain_types ( void )
+{
+	
+	int x, z;
+	
+	debug_log("making struct z %d x %d",terrain_3d_sector_z_max, terrain_3d_sector_x_max);		
+		
+	customtype = (terrain_custom_type ***) safe_malloc (terrain_3d_sector_z_max * sizeof(terrain_custom_type **));
+		
+	for ( z = 0; z < terrain_3d_sector_z_max; z++ )
+	{
+		
+		customtype[z] = (terrain_custom_type **) safe_malloc (terrain_3d_sector_x_max * sizeof(terrain_custom_type *));
+		
+		for ( x = 0; x < terrain_3d_sector_x_max; x++ )
+		{	
+			
+			customtype[z][x] = (terrain_custom_type *) safe_malloc ((terrain_sectors[z][x].number_of_polygons+1) * sizeof(terrain_custom_type));
+
+			memset(customtype[z][x], 0, (terrain_sectors[z][x].number_of_polygons+1)*sizeof(terrain_custom_type));
+
+      }//x
+	}//z
+
+	debug_log("DONE made struct %d x %d",terrain_3d_sector_z_max, terrain_3d_sector_x_max);		
+		
+}	
+
+//VJ 040206 <===== flagging function until here
