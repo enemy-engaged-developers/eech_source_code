@@ -321,7 +321,6 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename);
 void load_texture_water( void );
 void initialize_terrain_texture_scales ( const char *mapname );
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3538,13 +3537,13 @@ void load_warzone_override_textures ()
 	//VJ 051024 do not use root directory to search
 	//nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
 
-	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
+	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
 
-	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
+	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
 
-	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
+	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
 
-	nrtextfound = initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
+	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
 	//VJ 051229 changed the order of reading: first all the official dirs, last the user defined dirs. 
 	//Makes more sense, else people make textures but they are not shown
@@ -3566,7 +3565,7 @@ void load_warzone_override_textures ()
 		debug_log("=== loading custom info: texture dir:  %s",directory_textdir_path);
 
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
-		nrtextfound = initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
+		nrtextfound += initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
 
 		if (nrtextfound == 0)
 			command_line_texture_colour = 0;
@@ -3614,7 +3613,7 @@ void load_warzone_override_textures ()
 				debug_log("=== Looking for additional textures in %s",p);
 
 				// get override texture names in array
-				nrtextfound = initialize_texture_override_names ( system_texture_override_names, p );
+				nrtextfound += initialize_texture_override_names ( system_texture_override_names, p );
 
 			}
 			// get the next specified dir
@@ -3636,6 +3635,7 @@ void load_warzone_override_textures ()
 	//VJ 050820 dynamic water
 	if (global_dynamic_water)
 		load_texture_water();
+		
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3672,28 +3672,26 @@ void restore_default_textures ( void )
 
 	}
 
-//VJ 051011 release dynamic water
-	if (global_dynamic_water)
+	//VJ 060120 release all texture loaded after the default system textures (water etc) 
+	if (current_map_info.last_texture > number_of_system_textures)
 	{
-		int nr;
-		
-		nr = current_map_info.water_info[0].number + 
-		     current_map_info.water_info[1].number + 
-		     current_map_info.water_info[2].number+1;
-		for ( count = current_map_info.water_info[0].placenr; count < nr; count++ )
+		     
+		for ( count = number_of_system_textures+1; count < current_map_info.last_texture; count++)
 		{		
 			
-	//#if DEBUG_MODULE
-			debug_log("dynamic water Texture release (%d-%d) ",count,nr);
-	//#endif	
+	#if DEBUG_MODULE
+			debug_log("Additional texture release (%d-%d) ",count);
+	#endif	
 		
-			release_texture_surface ( &system_textures[count]->surface );
+			if (system_textures[count]->surface)
+				release_texture_surface ( &system_textures[count]->surface );
 	
 		}
    }
    
    //VJ 051225 reset map data 
    initialise_custom_map_info();
+   
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4017,6 +4015,10 @@ void load_texture_water( void )
 		}
 		placenr += current_map_info.water_info[i].number+1;
 	}
+	
+	//VJ 010620 add total number of textures
+	current_map_info.last_texture = placenr;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4288,9 +4290,13 @@ void initialise_custom_map_info( void )
 	
 	current_map_info.mapnr = 0;
 
-	current_map_info.season = 1;
+//set the map season to default. There are 4 settings: default and desert, 
+//and summer and winter for the maps that change seasonally
+	current_map_info.season = SESSION_SEASON_DEFAULT;
 	
 	current_map_info.dry_river = 0;
+	
+	current_map_info.last_texture = number_of_system_textures;
 
 	for (i = 0; i < 3; i++){
 		current_map_info.water_info[i].start = 0;
@@ -4324,27 +4330,56 @@ void read_map_info_data( void )
 
 	const char
 		*map, *p;
-
+	
+	directory_file_list 
+		*list;
+	
 	initialise_custom_map_info();
 
 	// VJ 051223 head of the session list, title field contains warzone name "Taiwan" etc
-	strcpy(current_map_info.name, get_session_list()->title);
-	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
+	//strcpy(current_map_info.name, get_session_list()->title);
+	//VJ 040206: doesn't work in MP becaus ethe title is: -multiplayer- !!!
+	
+	// the purpose of this bit of code is to detect the warzone name which is then used 
+	// as directory name under /graphics/textures/terrain/[name] to read the textures from
 
 	//in eech-new\aphavoc\source\ui_menu\session\session.h
-	// Casm, 30DEC05 Fixed map number determination	
-	current_map_info.mapnr = 0; //this is already initialized in initialise_custom_map_info but what the hell
-	map = get_current_game_session()->warzone_name;
-	for (p = map + strlen (map) - 3; map < p; map++)
-	{
-		if (!strnicmp (map, "map", 3))
-		{
-			current_map_info.mapnr = atoi(map + 3);
-			break;
-		}
-	}
-	debug_log("=== loading custom info: warzone nr %s %d",get_current_game_session()->warzone_name,current_map_info.mapnr);
+	//VJ 020206 Changed to using data_path, because that one is initialized in multiplayer
+	
+	// try and read an integer > 9 
+	map = strchr(get_current_game_session()->data_path, '\0')-2;
+	current_map_info.mapnr = atoi(map);
+	// if result = 0 then read it as an integer < 9
+	if (current_map_info.mapnr == 0)	{
+		map++;
+		current_map_info.mapnr = atoi(map);
+	}	
 
+	debug_log("=== loading custom info: warzone number: %d",current_map_info.mapnr);
+
+	// now find the "short" name of the warzone by the campaign file. This is how it is done in the first place in uisession.c!
+	
+	//use the data_path to find the texture name by looking at the first file in the first campaign dir
+	//which is always taiwan.chc or yemen.chc etc
+	sprintf(filename,"%s\\camp01\\*.chc", get_current_game_session()->data_path);
+	list = get_first_directory_file(filename);
+	map = get_directory_file_filename (list);
+	
+	// look for the last occurence of '\\' or '/' 
+	if (strrchr(map,'\\')){
+		map = strrchr(map, '\\');
+	}
+	else	
+	if (strrchr(map,'/')){
+		map = strrchr(map, '/');
+	}
+	//copy the file name
+	strcpy(current_map_info.name, map);
+	
+	current_map_info.name[strlen(map)-4] = '\0';
+			
+	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
+	
 	//initialize what we know
 	switch (current_map_info.mapnr) {
 		case 5: 
@@ -4352,11 +4387,15 @@ void read_map_info_data( void )
 		case 9: 
 		case 10: 
 		case 12: 
-		{	
+		{				
 			set_global_season( SESSION_SEASON_DESERT );
 			break;
 		}	
 		case 3: //georgia
+		{
+			set_global_season( SESSION_SEASON_SUMMER );
+			break;
+		}
 		case 7: 
 		case 8: 
 		case 13: 
@@ -4366,10 +4405,12 @@ void read_map_info_data( void )
 		}
 		default:
 		{
-			set_global_season( SESSION_SEASON_SUMMER );		
+			set_global_season( SESSION_SEASON_DEFAULT );		
 		}
 	}
 	
+	// parse mapinfo.txt that should be added to new custom campaigns
+
 	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
 	
 	//VJ 050820 added file checking to prevent crash
@@ -4380,7 +4421,6 @@ void read_map_info_data( void )
 	
 	fin = fopen(filename,"r");
 
-	// analyse mapinfo.txt
 	// read comments
 	fscanf(fin,"%[^\n]\n",buf);
 	while (buf[0] == '#')
@@ -4443,3 +4483,4 @@ void read_map_info_data( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
