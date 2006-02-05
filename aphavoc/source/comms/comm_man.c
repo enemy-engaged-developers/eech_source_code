@@ -1379,14 +1379,14 @@ void comms_process_data (void)
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						// 03DEC05 Casm Added season info transer
-						season = get_list_item (ptr, int);
+						season = get_list_item (ptr, int);						
 
                         size += sizeof (int);
 
-						if (season > 0 && season <= 3)
+						if (season > 0 && season <= 4)
 						{
 							const char
-								*seasons[4] = { NULL, "Summer", "Winter", "Desert" };
+								*seasons[5] = { NULL, "Default", "Summer", "Winter", "Desert" };
 
 							//VJ 051227 use set and get global season here
 							set_global_season ( season );
@@ -1401,6 +1401,10 @@ void comms_process_data (void)
                			set_ui_object_drawable (session_screen_next_bdrop, TRUE);
 
 						set_ui_object_drawable (session_screen_next_button, TRUE);
+
+
+						//VJ 010206 now that we know the map number, initialize the info
+						read_map_info_data();
 
 						break;
 
