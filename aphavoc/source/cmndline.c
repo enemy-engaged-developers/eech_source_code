@@ -199,7 +199,7 @@ int
 	command_line_pause_server						= 0,  // 040320 Jabberwock - Pause server
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
-	command_line_external_trackir_direction			= 0,	// Retro 31Jan2005
+	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_TIR_6DOF							= 0,	// Retro 6Feb2005
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
@@ -209,18 +209,19 @@ int
 	global_anisotropic								= 0,	//VJ 050530 AF on/off
 	global_PNVS_level									= 0,  // VJ 050704 light setting for PNVS
 	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures	
-	global_zbuffer										= 0,	//VJ 051011 zbuffer correction
+//VJ 060120 OBSOLETE	global_zbuffer										= 0,	//VJ 051011 zbuffer correction //VJ 060120 OBSOLETE
+	global_extended_terrain_textures				= 0,   //VJ 060120 add more (random) terrain textures 
 //VJ 051227 no longer needed, mapinfo structure	global_season										= 1,	//VJ 051011 add winter textures
 	command_line_texture_colour					= 0,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
-	command_line_autosave					= 0,  //Casm 17JUN05 Autosave option
+	command_line_autosave							= 0,  //Casm 17JUN05 Autosave option
 	command_line_cannontrack						= 1, // Jabberwock 050120 Cannon tracking
-
 // Jabberwock 031118 Server side settings
-	session_planner_goto_button						= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
-	session_vector_flight_model						= FALSE, // camcom bugs removed
-	session_ground_radar_ignores_infantry			= 1,
-	session_camcom									= 0;
+	session_planner_goto_button					= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
+	session_vector_flight_model					= FALSE, // camcom bugs removed
+	session_ground_radar_ignores_infantry		= 1,
+	session_camcom										= 0;
 // Jabberwock 031118 ends
+
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
 	command_line_dynamics_rudder_value						= 1.0,

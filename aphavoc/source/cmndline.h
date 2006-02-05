@@ -188,7 +188,8 @@ extern int
 	global_PNVS_level, 									 // VJ 050704 light setting for PNVS
 	global_dynamic_water,  								//VJ 050817 dynamic water textures
 //VJ 051227 no longer needed, mapinfo structure	global_season,											//VJ 051011 add winter textures
-	global_zbuffer,										//VJ 051011 zbuffer correction
+//VJ 060120 OBSOLETE	global_zbuffer,										//VJ 051011 zbuffer correction
+	global_extended_terrain_textures,   		//VJ 060120 add more (random) terrain textures 
 	command_line_autosave,								//Casm 17JUN05 Autosave option
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
@@ -197,9 +198,10 @@ extern int
 	session_ground_radar_ignores_infantry,
 	session_camcom;
 
-
+ 
 
 extern float
+	rgbpoint,fogdist,
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,
 	command_line_dynamics_rudder_acceleration,
