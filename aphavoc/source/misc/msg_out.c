@@ -896,27 +896,37 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 					create_leaf_message_action (MESSAGE_WINGMAN_BOB_UP, 				index, send_group_message);
 					create_leaf_message_action (MESSAGE_WINGMAN_RETURN_TO_BASE, 	index, send_group_message);
 
-					sub_item = create_message_database_list (MESSAGE_FORMATION_LIST, index, message_list, 6, "Formation List");
+					sub_item = create_message_database_list (MESSAGE_FORMATION_LIST, index, message_list, 9, "Formation List");
 
 					////////////////////////////////////////////////
 					//
-					// Formation list Sub Menu - 6 options
+					// Formation list Sub Menu - 9 options
 					//
 					////////////////////////////////////////////////
 
-					add_message_action_to_database (sub_item, 0, MESSAGE_GROUP_ROW_LEFT,			index, DIK_1, "Row Left");
-					add_message_action_to_database (sub_item, 1, MESSAGE_GROUP_ROW_RIGHT,		index, DIK_2, "Row Right");
-					add_message_action_to_database (sub_item, 2, MESSAGE_GROUP_ECHELON_LEFT,	index, DIK_3, "Echelon Left");
-					add_message_action_to_database (sub_item, 3, MESSAGE_GROUP_ECHELON_RIGHT,	index, DIK_4, "Echelon Right");
-					add_message_action_to_database (sub_item, 4, MESSAGE_GROUP_COLUMN,			index, DIK_5, "Column");
-					add_message_action_to_database (sub_item, 5, MESSAGE_GROUP_WEDGE,				index, DIK_6, "Wedge");
+					add_message_action_to_database (sub_item, 0, MESSAGE_GROUP_ROW_LEFT,			  index, DIK_1, "Row Left");
+					add_message_action_to_database (sub_item, 1, MESSAGE_GROUP_ROW_RIGHT,		      index, DIK_2, "Row Right");
+					add_message_action_to_database (sub_item, 2, MESSAGE_GROUP_ECHELON_LEFT,	      index, DIK_3, "Echelon Left");
+					add_message_action_to_database (sub_item, 3, MESSAGE_GROUP_ECHELON_RIGHT,	      index, DIK_4, "Echelon Right");
+					add_message_action_to_database (sub_item, 4, MESSAGE_GROUP_COLUMN,			      index, DIK_5, "Column");
+					add_message_action_to_database (sub_item, 5, MESSAGE_GROUP_WEDGE,				  index, DIK_6, "Wedge");   
+                    //Mavericks Formations mod
+                    add_message_action_to_database (sub_item, 6, MESSAGE_GROUP_DIAMOND,				  index, DIK_7, "Diamond");
+                    add_message_action_to_database (sub_item, 7, MESSAGE_GROUP_STAGGERED_TRAIL_LEFT,  index, DIK_8, "Staggered Trail Left");
+                    add_message_action_to_database (sub_item, 8, MESSAGE_GROUP_STAGGERED_TRAIL_RIGHT,  index, DIK_9, "Staggered Trail Right");
+                    
 
-					create_leaf_message_action (MESSAGE_GROUP_ROW_LEFT, 		index, send_group_message);
-					create_leaf_message_action (MESSAGE_GROUP_ROW_RIGHT, 		index, send_group_message);
-					create_leaf_message_action (MESSAGE_GROUP_ECHELON_LEFT, 	index, send_group_message);
-					create_leaf_message_action (MESSAGE_GROUP_ECHELON_RIGHT, index, send_group_message);
-					create_leaf_message_action (MESSAGE_GROUP_COLUMN, 			index, send_group_message);
-					create_leaf_message_action (MESSAGE_GROUP_WEDGE, 			index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_ROW_LEFT, 		      index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_ROW_RIGHT, 		      index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_ECHELON_LEFT, 	      index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_ECHELON_RIGHT,          index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_COLUMN, 			      index, send_group_message);
+					create_leaf_message_action (MESSAGE_GROUP_WEDGE, 			      index, send_group_message);
+                    //Mavericks Formations mod
+                    create_leaf_message_action (MESSAGE_GROUP_DIAMOND, 			      index, send_group_message);
+                    create_leaf_message_action (MESSAGE_GROUP_STAGGERED_TRAIL_LEFT,   index, send_group_message);
+                    create_leaf_message_action (MESSAGE_GROUP_STAGGERED_TRAIL_RIGHT,  index, send_group_message);
+                    
 				}
 			}
 		}

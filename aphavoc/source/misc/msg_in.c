@@ -981,9 +981,34 @@ void process_radio_message (entity *en, message_categories type, int value)
 		{
 			group = get_local_entity_safe_ptr (value);
 
-			process_message_change_formation (en, group, FORMATION_WEDGE);
+			process_message_change_formation (en, group, FORMATION_WEDGE);    
 
 			break;
+	    }
+		case MESSAGE_GROUP_DIAMOND:
+		{
+			group = get_local_entity_safe_ptr (value);
+
+			process_message_change_formation (en, group, FORMATION_DIAMOND);
+
+			break;
+        }
+		case MESSAGE_GROUP_STAGGERED_TRAIL_LEFT:
+		{
+			group = get_local_entity_safe_ptr (value);
+
+			process_message_change_formation (en, group, FORMATION_STAGGERED_TRAIL_LEFT);
+
+			break;
+         }
+		case MESSAGE_GROUP_STAGGERED_TRAIL_RIGHT:
+		{
+			group = get_local_entity_safe_ptr (value);
+
+			process_message_change_formation (en, group, FORMATION_STAGGERED_TRAIL_RIGHT);
+
+			break;
+       
 		}
 		case MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE:
 		{

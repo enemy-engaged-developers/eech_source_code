@@ -110,7 +110,10 @@ const char *formation_names [] =
 	"ECHELON_RIGHT",
 	"COLUMN",
 	"WEDGE",
-	"80M_ROAD_NODE_16_TANKS",
+    "DIAMOND",
+    "STAGGERED_TRAIL_LEFT",
+    "STAGGERED_TRAIL_RIGHT",
+    "80M_ROAD_NODE_16_TANKS",
 	"INFANTRY_COLUMN",
 
 	"INVALID",
@@ -133,7 +136,10 @@ const char *formation_display_names [] =
 	"ECHELON RIGHT",
 	"COLUMN",
 	"WEDGE",
-	"TANK",
+    "DIAMOND",
+    "STAGGERED_TRAIL_LEFT",
+    "STAGGERED_TRAIL_RIGHT",
+    "TANK",
 	"INFANTRY",
 
 	"INVALID",
