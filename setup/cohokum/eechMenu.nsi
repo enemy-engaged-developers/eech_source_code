@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "162W2"
+  !define VERSION "162W3"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -43,7 +43,8 @@
 	   !define MUI_FINISHPAGE_NOAUTOCLOSE
   		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\${VERSION}readme.html"
   !insertmacro MUI_PAGE_FINISH
-  
+
+	ShowInstDetails show  
 ;--------------------------------
 ;Languages
  
@@ -60,6 +61,7 @@ CopyFiles /FILESONLY ${TBACKUP1}\cohokum.exe           ${TBACKUP1}\backup
 CopyFiles /FILESONLY ${TBACKUP1}\GWUT146X.csv          ${TBACKUP1}\backup
 CopyFiles /FILESONLY ${TBACKUP1}\GWUT151D.csv          ${TBACKUP1}\backup
 CopyFiles /FILESONLY ${TBACKUP1}\GWUT1613H.csv         ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${TBACKUP1}\GWUT162b.csv         ${TBACKUP1}\backup
 	
 SectionEnd
 
@@ -74,7 +76,12 @@ Section "cohokum.exe" SectionExe
   File GWUT146X.csv
   File GWUT151D.csv
   File GWUT1613H.csv  
+  File GWUT162b.csv  
+  File eech_key-layout_1_beta.pdf
 
+  SetOutPath "$INSTDIR\common\data\"
+  File ..\common\data\FORMS.DAT
+  
   SetOutPath "$INSTDIR\common\data\language\"
   File ..\common\data\language\tlate6.dat
 

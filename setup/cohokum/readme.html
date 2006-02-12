@@ -51,28 +51,28 @@ h4 {
 }
 .style43 {color: #6600CC}
 .style44 {font-size: 12px}
-body {
-	background-color: #dddddd;
-}
 .style46 {font-size: 10}
+.style47 {font-size: 12px; }
+.style50 {font-size: 12; font-style: italic; color: #000066; }
+.style51 {color: #000066}
+.style52 {font-size: 14px}
 -->
 </style>
 </head>
 <body class="Normal" lang=SV>
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" bgcolor="#FFFFFF"><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W2</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W3</span></h1>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
-      </div>
-      <p align=center style='text-align:center; font-family: Arial, Helvetica, sans-serif; font-style: italic;'><span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
-  BACKUP YOUR EXISTING COHOKUM.EXE BEFORE USING THIS FILE </span></p>
+        <span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
+  BACKUP YOUR EXISTING COHOKUM.EXE BEFORE USING THIS FILE </span></div>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
       </div>
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
-href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
-      <p align=right style='text-align:right; font-style: italic;'><span lang=EN-GB>Last edited by Gotcha: 20 aug 2005</span></p>
+href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
+      <p align=right style='text-align:right; font-style: italic;'><span lang=EN-GB>Last edited by Gotcha: 12 feb 2006</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><span
@@ -91,145 +91,156 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 162W2 ?</span></h2>
-      <p><em><strong>(since version 161W5, this exe replaces 162W1T7)</strong></em></p>
+      <h2><span lang=EN-GB>What's NEW in EECH 162W3 ?</span></h2>
+      <p><em><strong>(since version 162W2)</strong></em></p>
       <ol>
-        <li>In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
-        <li>Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting, set this to a higher quality setting).
-          <ul>
-            <li>texture_colour=1 </li>
-            <li>mipmapping=1 </li>
-            <li>texture_filtering =1 </li>
-          </ul>
-        </li>
-        <li>Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1), download the appropriate texture packs</li>
-        <li>For texture modders, (untested) alpha blending support for dds textures</li>
-        <li>Autosave and Quicksave (Ctrl-Z), eech.ini setting autosave=n (n= nr of minutes)</li>
-        <li>Three brightness levels of PNVS night vision, press Ctrl-N when in game. </li>
-        <li>Hardware sound support (4 speakers) </li>
-        <li>TrackIR vector support (eech.ini: TIR_6DOF=1)</li>
-        <li>Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card. Palleted textures can still be chosen via eech.ini. </li>
-        <li>Screenshots can now be taken when in 32bit mode</li>
-        <li>Numerous bug fixes and code cleaning </li>
+        <LI>
+        <div align="left">Add custom warzones without changing the code and custom warzones are treated as official warzones (dynamic water, desert textures etc).        </div>        
+        <LI>An in-game season option is activated for some maps that have two seasons: summer and winter (Alaska, Aleut, Georgia, other will follow). if you select winter it will snow instead of rain.
+        Winter textures are denoted with  &quot;name-W.bmp&quot; or &quot;name-W.dds&quot;. Also desert textures now always have the syntax: &quot;name-D.bmp&quot; or &quot;name-D.dds&quot;. 
+        <LI>A new option is added in eech.ini: &quot;extended_textures&quot;. This option increases the number of terrain textures frmo 5 to 25 to enhance the realism of the landscape (it kills repetition) but special texture packs are needed (not released yet).  
+        <LI>Working cockpit dials and lamps for Havoc (and Hind) by Firebird.
+        <LI>Alt-L toggles the high LOD feature so that when you fly above cities and your fps drops you can try switching it off.        </LI>
+        <LI>
+          <div align="left">TSD colour map display is improved and does not have such a large framerate hit when in 25km scale. </div>
+        </LI>
+        <LI>More HUD colours are added by Maverick. </LI>
+        <LI>HUD size and colour config are saved in eech.ini per gunship. </LI>
+        <LI>Three formations are added: diamond, ragged left and ragged right added by Maverick. Note you need a new files <em>FORMS.DAT</em>, included in this setup file  </LI>
+        <LI>A keycard has been added to this setup created by MAPI</LI>
+        <LI>A GWUT configuration file  has been added: GWUT162B.csv made by KLiM. See <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </LI>
       </ol>
+      <p><strong>IMPORTANT: this version needs a different texture setup. You will have to re-install the texture addon packs!</strong></p>
       <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
+      <p>===================================================================</p>
+      <p><strong>NEW</strong>: Go to www.eechcentral.com and download the installation tool: <A href="http://www.eechcentral.com/files/eechupdater1.0.exe" target="_blank">eechupdater1.0.exe</A></p>
+      <p>This will download and install all patches and addon packs that you need. If new packs arrive this tool will detect them and download them, keeping your database up to date. It is still a good idea to read the <br>
+      following ! </p>
+      <p>===================================================================</p>
       <h3 class="p">Basic Install </h3>
       <p class="p">If you do not own EE - Apache Havoc you can skip the first two steps </p>
       <ol>
         <li><span lang=EN-GB>Install EE - Apache Havoc from CD and run once to unpack the graphics files. </span></li>
         <li><span lang=EN-GB>Patch EEAH up to <a href="http://www.razorworks.com/enemyengaged/mainframe.html#Patches" target="_blank">patch 1.1E</a>, run once. </span></li>
         <li>Install EE - Comanche Hokum from the CD. </li>
-        <li>Download and install <a href="http://www.razorworks.com/enemyengaged/chpatch/EECH_Patch.exe">patch 141C</a> from the Razorworks site: documentation is <a href="http://www.razorworks.com/enemyengaged/chpatch/index.html" target="_blank">here</a></li>
-        <li>Download and install the latest relatively bugfree EECHDEV version <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/download/eechsetup162W2.exe">eechsetup162W2.exe</a>. This file contains the latest exe, and <strong>all auxillary files that you need</strong> to run it. They will be automatically put into the correct directories. Documentation is <a href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/161w5readme.html" target="_blank">here</a>.<br>
-            <strong>Note</strong>: the setup files <strong>eech.ini</strong> and <strong>game.cfg</strong> are automatically created when you run the game and they don't exist: please read <a href="#trouble">this</a>.</li>
-        <li>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </li>
-        <li><strong>*optional*</strong>: there is usually a version availible that is the latest build, for testing, it is just the executable so you cannot skip step 5! </li>
-        <li>IMPORTANT: when you have just installed eech by default the <strong>avionics</strong> <strong>in the options menu </strong> is set at <strong>&quot;novice&quot;. This means that you cannot operate the targetting systems,</strong> it is done for you in the game by the &quot;copilot&quot;. Set this option at <strong>advanced</strong> when in the game for full operation. When you delete the game.cfg and it is recreated by the game, the option is reset at novice! </li>
+        <li><strong>Do not forget this: </strong>Download and install <a href="http://www.razorworks.com/enemyengaged/chpatch/EECH_Patch.exe">patch 141C</a> from the Razorworks site: documentation is <a href="http://www.razorworks.com/enemyengaged/chpatch/index.html" target="_blank">here</a></li>
+        <li>Download and install the latest relatively bugfree EECHDEV version <a href="http://home.planet.nl/~jette073/gotcha/download/eechsetup162W3.exe">eechsetup162W3.exe</a>. This file contains the latest exe, and <strong>all auxillary files that you need</strong> to run it. They will be automatically put into the correct directories.<br>
+        <strong>Note</strong>: the setup files <strong>eech.ini</strong> and <strong>game.cfg</strong> are automatically created when you run the game and they don't exist: please read <a href="#trouble">this</a>.</li>
+        <li><FONT face="Verdana, Arial"><span class="style52">Download <strong>Mapi's</strong> keycard with all the new commands (save-as): <A 
+href="http://www.planet.nl/~jette073/gotcha/download/eech_key-layout_1_bata.pdf" 
+target=_blank>EECH_KEY.pdf</A></span></FONT></li>
       </ol>
+      <p>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </p>
+      <p>IMPORTANT: when you have just installed eech by default the <strong>avionics</strong> <strong>in the options menu </strong> is set at <strong>&quot;novice&quot;. This means that you cannot operate the targetting systems,</strong> it is done for you in the game by the &quot;copilot&quot;. Set this option at <strong>advanced</strong> when in the game for full operation. When you delete the game.cfg and it is recreated by the game, the option is reset at novice! </p>
       <h3>Addons</h3>
-      <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order doesn't really matter as these addons are independent. However the order below gives you the best result ;-). </p>
-      <h4>Maps, campaigns and skimishes </h4>
-      <table width="800" border="0">
-        <tr bgcolor="eeeeee">
-          <td colspan="2"><strong>Apache Havoc campaigns </strong></td>
-        </tr>
-        <tr>
-          <td width="242"><a href="http://hoxdna.org/eech/files/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a> </td>
-          <td width="530">The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc (beware: 117 Mbyte). With permission of Razorworks. </td>
-        </tr>
-        <tr bgcolor="eeeeee">
-          <td colspan="2"><strong>Fan made campaigns </strong></td>
-        </tr>
-        <tr>
-          <td><a href="http://hoxdna.org/eech/files/superpatch2.exe">superpatch2.exe</a></td>
-          <td>Custom campaigns: Alaska, Aleut, Kuwait and Lybia campaigns and additional campaigns and skirmishes in all warzones. You also need the textures for these (see below)</td>
-        </tr>
-      </table>            <h4>Texture packs </h4>
+      <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order below gives you the best result ;-). </p>
       <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
-      &quot;texture_colour=1&quot;, &quot;mipmapping=1&quot;, and &quot;texture_filtering=1&quot;. </p>
+&quot;texture_colour=1&quot;, &quot;mipmapping=1&quot;, &quot;texture_filtering=1&quot; and &quot;dynamic_water=1&quot;. Also set the anisotropy setting of your graphics card to a higher quality setting. </p>
       <p>The following texture packs can be installed in random order (note that these packs create a load of extra directories under /razorworks/cohokum/graphics/textures):</p>
-      <table width="800" border="0">
-        <tr bgcolor="#eeeeee">
-          <td colspan="2"><strong>Textures for Alaska, ALeut, Kuwait, Lybia </strong></td>
+      <table border="0" cellpadding="2" cellspacing="2">
+        
+          <td colspan="3" bgcolor="eeeeee"><strong>Apache Havoc campaigns </strong></td>
         </tr>
-        <tr>
-          <td width="234"><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackusermaps.exe">texturepackusermaps.exe</a></td>
-          <td width="538">Created and collected textures for the coolection of user made maps (the superpack2), by several authors </td>
+        
+          <td width="220" ><p><a href="http://www.eechcentral.com/files/Map packs/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a><a href="http://www.eechcentral.com/files/Map packs/eeahgeorgiapatch1.0.exe" target="_blank">eeahgeorgiapatch1.0.exe</a></p>
+            </td>
+          <td width="57" ><span class="style50">117 Mb </span></td>
+          <td >The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc. With permission of Razorworks. A small patch corrects a mistake in the Georgia files. </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackkuwait.exe" target="_blank">texturepackkuwait.exe</a></td>
-          <td>Improved Kuwait textures by Michael Langner (replaces above) </td>
+        <tr >
+          <td colspan="3" bgcolor="eeeeee"><strong>Fan made campaigns </strong></td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackalaska.exe" target="_blank">texturepackalaska.exe</a></td>
-          <td>Improved Kuwait textures by Michael Langner (replaces above)</td>
+        
+          <td height="54" ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/superpatch3.exe">superpatch3.exe</a></td>
+          <td height="54" ><span class="style50">14 Mb </span></td>
+          <td ><p>Custom campaigns: new version of Alaska and Aleut, older versions of Kuwait and Lybia campaigns and skirmishes. Trees packs for Alaska and Aleut. The Grand Canyon! </p></td>
         </tr>
-        <tr bgcolor="#EEEEEE">
-          <td colspan="2"><strong>Camo, Cockpit and general textures </strong></td>
+        <tr  >
+          <td colspan="3" bgcolor="eeeeee"><strong>Camo, Cockpit and general textures for all maps </strong></td>
         </tr>
-        <tr>
-          <td> <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackcc.exe" target="_blank">texturepackcc.exe</a></td>
-          <td>High res cockpit textures by Gotcha, Camo by Rocky and Polak and others </td>
+        
+          <td height="38" ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepack_gcc3.exe" target="_blank">texturepack_gcc3.exe</a></td>
+          <td height="38" ><span class="style50">26 Mb </span></td>
+          <td ><p>A compilation of all General, Cockpit and Camo textures by several authors, includes winter (-W) and desert (-D) textures. Includes also sky/cloud textures and Russian decals for each warzone. </p></td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/dl/texturepackwater.exe" target="_blank">texturepackcockpit3.exe</a></td>
-          <td>Improved cockpit textures by Michael Langner (replaces above) </td>
+        
+
+        <tr  >
+          <td colspan="3" bgcolor="eeeeee"><strong>Terrain texture packs </strong></td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackMLcamo.exe" target="_blank">texturepackMLcamo.exe</a> </td>
-          <td>Improved camo textures by Michael Langner (replaces above) </td>
+        
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepack_dynamicwater.exe" target="_blank">texturepack_dynamicwater.exe</a> </td>
+          <td ><span class="style50">19 Mb </span></td>
+          <td >Dynamic water textures for rivers, reservoirs and sea by Gotcha </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockycamo2.exe" target="_blank">texturepackrockycamo2.exe</a> </td>
-          <td>Improved camo textures by Rocky (replaces above partly)</td>
+
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackgeorgia2.exe">texturepackgeorgia2.exe</a><br></td>
+          <td ><span class="style50">26 Mb </span></td>
+          <td >Georgia textures by Gotcha</td>
+        </tr>  <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackgeorgia-W.exe">texturepackgeorgia-W.exe</a><br></td>
+            <td ><span class="style50">15 Mb </span></td>
+            <td >Georgia Winter textures by Maverick </td>
         </tr>
-        <tr>
-          <td height="45"><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeneral.exe" target="_blank">texturepackgeneral.exe</a></td>
-          <td>Improved general textures (and pilot skin) by Michael Langner and sky textures by Rocky</td>
+
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepacklebanon2.exe">texturepacklebanon2.exe</a></td>
+          <td ><span class="style50">20 Mb </span></td>
+          <td >Lebanon textures by Gotcha</td>
         </tr>
-        <tr>
-          <td> <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a></td>
-          <td>New opening screen and menu backgrounds created by Michael Langner</td>
+
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackyemen.exe">texturepackyemen.exe</a><br>          </td>
+          <td ><span class="style50">27 Mb </span></td>
+          <td >Yemen textures by Rocky</td>
         </tr>
-        <tr bgcolor="#EEEEEE">
-          <td colspan="2"><strong>Terrain texture packs </strong></td>
+         <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackthailand.exe" target="_blank">texturepackthailand.exe</a></td>
+          <td ><span class="style50">27 Mb </span></td>
+          <td >Thailand textures by Rocky </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackgeorgia.exe">texturepackgeorgia.exe</a><br>            <a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackrockygeorgia.exe">texturepackrockygeorgia.exe</a><br></td>
-          <td>Georgia textures by Gotcha, and a highres replacement of some textures by Rocky </td>
+
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepacktaiwan2.exe" target="_blank">texturepacktaiwan2.exe</a></td>
+          <td ><span class="style50">28 Mb </span></td>
+          <td >Taiwan textures by Gotcha </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacklebanon2.exe">texturepacklebanon2.exe</a></td>
-          <td>Lebanon textures by Gotcha </td>
+
+          <td ><em>texturepackcuba.exe</em></td>
+          <td ><span class="style51"></span></td>
+          <td >Not done yet ! (but you can copy the thailand textures for instance to the cuba terrain texture directory) </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepacktaiwan.exe">texturepacktaiwan.exe</a></td>
-          <td>Taiwan textures by Gotcha </td>
+
+          <td ><FONT face="Verdana, Arial"><A 
+href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackalaska.exe" 
+target=_blank>texturepackalaska.exe</A></FONT></td>
+          <td ><span class="style50">20 Mb </span></td>
+          <td > Alaska summer and winter textures by Maverick </td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackyemen.exe">texturepackyemen.exe</a><br>          </td>
-          <td>Yemen textures by Rocky</td>
+
+          <td ><FONT face="Verdana, Arial"><A 
+href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackaleut.exe" 
+target=_blank>texturepackaleut.exe</A></FONT></td>
+          <td ><span class="style50">18 Mb </span></td>
+          <td > Aleut summer and winter tesxtures by Maverick</td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackthailand.exe">texturepackthailand.exe</a></td>
-          <td>Thailand textures by Rocky. </td>
+
+          <td ><FONT face="Verdana, Arial"><A 
+href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackkuwait_etc.exe" 
+target=_blank>texturepackkuwait_etc.exe</A></FONT></td>
+          <td ><span class="style50">23 Mb </span></td>
+          <td > Textures for the Kuwait and Lybia campaigns </td>
         </tr>
-        <tr>
-          <td><em>texturepackcuba.exe</em></td>
-          <td>Not done yet ! </td>
+        <tr >
+          <td colspan="3" bgcolor="eeeeee"><strong>Miscellaneaous</strong></td>
         </tr>
-        <tr bgcolor="#EEEEEE">
-          <td colspan="2"><strong>Dynamic water textures</strong> (set dynamic_water=1 in eech.ini) </td>
+        
+          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a></td>
+          <td ><span class="style50">14 Mb </span></td>
+          <td >Opening screen and menu background replacements by Michael Langner</td>
         </tr>
-        <tr>
-          <td><a href="http://webdisk.planet.nl/jette073/publiek/album/texturepackwater.exe" target="_blank">texturepackwater.exe</a> </td>
-          <td>Dynamic water textures for rivers, reservoirs and sea by Gotcha </td>
-        </tr>
-      </table>            <p align="right"><span
-lang=EN-GB><a href="#top">[top ^]</a></span> </p>      <h2><a name="trouble"></a>Trouble shooting </h2>
+      </table>
+      <p align="right"><span
+lang=EN-GB><a href="#top">[top ^]</a></span> </p>
+      <h2><a name="trouble"></a>Trouble shooting </h2>
       <p>If your game doesn't run properly, there is not so much that can be done! </p>
       <ul>
         <li>If you have some weird behaviour, go to the directory razorworks\cohokum and delete the files <em><strong>game.cfg</strong></em> which contains all the settings of the in-game user interface, and <em><strong>eech.ini</strong></em> which contains additional and settings for mods, in the cohokum directory. These files are regenerated automatically. <strong>NOTE: </strong>when you delete <strong><em>game.cfg</em></strong> the avionics in the options screen is reset to &quot;novice&quot; and the targeting systems do not work, you have to set it to &quot;advanced&quot; to make it work again.<br>
@@ -275,10 +286,9 @@ lang=EN-GB> (in the addon download area). These files should go here: &quot;\Raz
       <h3><a name=MP id=MP></a><span class="style37" lang=EN-GB>Multiplayer status </span></h3>
       <p>Seems to be fairly smooth these days, <span lang=EN-GB></span><span lang=EN-GB>but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><b>It's crucial that the host runs with cvc=1</b></span>. Its also a good idea to touch only the other variables if you know what you are doing. <strong>Downwash </strong>should be off, it can mess up the host after a while. </span></p>
       <h3><a name=wut></a><span class="style37" lang=EN-GB>What is a WUT file?</span></h3>
-      <p><span lang=EN-GB>Most people fly with a WUT file. A WUT-profile (Weapons and Units Tweaker file) is a text file that alters some critical parameters in the game to make it more &quot;realistic&quot; and harder. The text file name can be added to the file <a href="#eechini">eech.ini </a>and all parameters are read by cohokum.exe at startup. The most used WUT file is <strong>gwut151D.csv</strong> which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons (increasing gameplay difficulty). Furthermore there is <strong>gwut1613H.csv</strong> which adds enemy chopper aggressiveness (all enemy choppers behave as if they are on a strike mission), and <span><strong>gwut146X.csv </strong>which is needed when playing multiplayer and has the game's default values (identical to playing without a WUT file). </span></span></p>
+      <p><span lang=EN-GB>Most people fly with a WUT file. A WUT-profile (Weapons and Units Tweaker file) is a text file that alters some critical parameters in the game to make it more &quot;realistic&quot; and harder. The text file name can be added to the file <a href="#eechini">eech.ini </a>and all parameters are read by cohokum.exe at startup. The most used WUT file is <strong>gwut151D.csv</strong> which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons (increasing gameplay difficulty). Furthermore there is <strong>gwut1613H.csv</strong> which adds enemy chopper aggressiveness (all enemy choppers behave as if they are on a strike mission), and <span><strong>gwut146X.csv </strong>which is needed when playing multiplayer and has the game's default values (identical to playing without a WUT file). </span></span>A last GWUT files has bee added: <strong>gwut162B.csv</strong> by KLiM, see <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </p>
       <p><span lang=EN-GB><span>You can edit these files with the GWUT editor, downloadable from </span></span><a
 href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a>. <span lang=EN-GB>If you intend to join a MP-game all three WUT files are needed. You are not aware of the host's profile until you're connecting and if the host is running with one of the WUT profiles your game will look for a similar one in your cohokum-folder. </span></p>
-      <p><span lang=EN-GB>NOTE: there are also <em>older</em> type WUT files that have less information and are called <strong><em>151_d.txt</em></strong>, <strong><em>1_6_13h.txt</em></strong> and <strong><em>origwut.txt</em></strong>. These can still be used and have the same behaviour but are no longer supported. </span></p>
       <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
       <h2><a name=eechini id="eechini"></a><span class="style37" lang=EN-GB>The eech.ini file and mod info </span></h2>
       <p><strong><em>These are only the modded variables! In order of appearance in eech.ini: </em></strong></p>
@@ -606,21 +616,15 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal"> Enables support for TrackIR vector in the hokum and comanche</td>
         </tr>
         <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Texture support and colour setting </strong></td>
+          <td colspan="2" class="Normal"> <strong>Texture support </strong></td>
         </tr>
         <tr valign="top">
-          <td class="style43">
-            <p>texture_colour=0<br>
-      texture_filtering=0<br>
-      mipmapping=0<br>
-      dynamic_water=0 </p></td>
+          <td class="style43"> <p>texture_colour=0<br>
+            texture_filtering=0<br>
+            mipmapping=0<br>
+            dynamic_water=0
+          </p>          </td>
           <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates fllwing water but only with the correct texture packs. </td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> <p>palette=0<br>
-            </p>          </td>
-          <td class="Normal"> allow to use textures.pal if videocard supports it. Default is 1. <br>
-          Recommended is 0 (24 bit textures).</td>
         </tr>
         <tr valign="top">
           <td colspan="2" class="Normal"> <strong>Autosave</strong></td>
@@ -628,16 +632,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         <tr valign="top">
           <td class="style43"> autosave=0 </td>
           <td class="Normal">
-            <p> autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Sound</strong></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> hdwrbuf=0</td>
-          <td class="Normal">
-            <p>                 Number of hardware buffers to use for sound card (0 to use software only)</p>
-          </td>
+            <p>      autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p>          </td>
         </tr>
       </table>
       <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
@@ -779,8 +774,15 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td colspan=2 class="Normal"><strong><span lang=EN-GB>Quicksave</span></strong></td>
         </tr>
         <tr>
-          <td width="190" class="style43"><div align="center">Ctrl-Z</div></td>
+          <td class="style43"><div align="center">Ctrl-Z</div></td>
           <td class="Normal"><span class="style33"><span lang=EN-GB>save the game anytime </span></span> </td>
+        </tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong><span lang=EN-GB>high LOD on/off </span></strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="style43"><div align="center">Alt-L</div></td>
+          <td class="Normal"><span class="style33"><span lang=EN-GB>Toggle High &quot;level of detail&quot; </span></span> for objects in game </td>
         </tr>
       </table>
       <p align="right"><span
@@ -789,14 +791,11 @@ lang=EN-GB><a href="#top">[top ^]</a></span> </p>
       <p><span lang=EN-GB>If you want to give the source code a try you can find all the necessary details at the EECH DevZone: </span><a
 href="http://eech.bollocks.net.nz"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a><span lang=EN-GB>. You will have to subscribe (its free). When you do, the Wiki and Topics sections become available where you can find details on how to download and set up the code with WinCVS. You can also subscribe to a developers mailing list. More info on how to set up the Watcom compiler using DX libraries can be found at </span><a
 href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a><span lang=EN-GB>. </span></p>
-      <p><span lang=EN-GB>This version seems to be pretty stable, both as single and multiplayer. If you find any bugs/odd behaviour please report them at one of the forums:<br>
+      <p><span lang=EN-GB>This version seems to be pretty stable, both as single and multiplayer. If you find any bugs/odd behaviour please report it at the SimHQ forum:<br>
         </span><a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30"><span
 lang=EN-GB>http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&amp;f=30</span></a><br>
-        <a href="http://forum.biohazcentral.com/viewforum.php?f=42"><span
-lang=EN-GB>http://forum.biohazcentral.com/viewforum.php?f=42</span></a><br>
         <a
-href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27"><span
-lang=EN-GB>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27</span></a> </p>
+href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad8cf4fa8e6738&amp;forumid=27"></a> </p>
       <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
       <h2><a name=fan></a><span lang=EN-GB>Fan sites </span></h2>
       <ul type=disc>
@@ -811,6 +810,8 @@ lang=EN-GB>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaf
      href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=a984c614a6936076ad78d8c97184e253&amp;forumid=27%20"
      target="_blank"><span lang=EN-GB>EECH forum</span></a><span lang=EN-GB> - forum at Frugalsworld (less active) </span></li>
         <li><a
+     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a><span lang=EN-GB> - All resources!</span></li>
+        <li><a
      href="http://eech.bollocks.net.nz/" target="_blank"><span lang=EN-GB>EECH DevZone</span></a><span lang=EN-GB> - latest compilations, addons, and CVS server for the source code (by Horse)</span></li>
         <li><a
      href="http://www.razorworks.com/enemyengaged/ahguide/index.html"
@@ -819,29 +820,39 @@ lang=EN-GB>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaf
      href="http://www.razorworks.com/enemyengaged/chguide/index.html"
      target="_blank"><span lang=EN-GB>Comanche - Hokum strategy guide</span></a><span lang=EN-GB> - by Richard harley (Flexman)</span></li>
         <li><a
-     href="http://www.gamesover.com/walkthroughs/Enemy_engaged.txt"
-     target="_blank"><span lang=EN-GB>EECH FAQ V3.2</span></a><span lang=EN-GB> - Fallons FAQ, <strong>very old</strong> but still some valuable info </span></li>
-        <li><a
      href="http://home.planet.nl/%7Ejette073/gotcha" target="_blank"><span lang=EN-GB>Gotcha's EECH goodies</span></a><span
      lang=EN-GB> - resources: exe downloads, texture packs, GWUT and lots of mod info.</span></li>
         <li><a
      href="http://hoxdna.org/eech/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/</span></a><span
      lang=EN-GB> - EECH Multiplayer Master Server web frontend</span></li>
-        <li><a
-     href="http://hoxdna.org/eech/files/" target="_blank"><span lang=EN-GB>http://hoxdna.org/eech/files/</span></a><span lang=EN-GB> - resources: superpatch2, EEAH map pack </span></li>
         <li><a href="http://www.helosim.com/" target="_blank">helosim.com </a> - general site with helicopter sim news including EECH        </li>
         <li><a href="http://kimchoceech.homestead.com/index.html" target="_blank">Kimchocs eech website </a>- Missions and files
         <li><a href="http://www.geocities.com/mispunts/" target="_blank">Mispunt's </a> - Textures and mods
         <li><a href="http://robfox.net/" target="_blank">Robfox </a> - Many good utilities: terrain viewer, generator, editor etc.
         <li><a href="http://www.simhq.com/simhq3/sims/combat_helo/cohokum/index.shtml" target="_blank">SimHQ </a> - files and utilities (sounds)
         <li><a href="http://chmaps-spidey.freeservers.com/maps.html" target="_blank">Spidey's page </a> - CH Control manager programming page (including files for EECH)
-        <li><a href="http://members.rogers.com/map-room/" target="_blank">Starshoy </a> - Campaigns and Skirmishes (English and Russian)
         <li><a href="http://tarawa.free.fr/" target="_blank">Tarawa </a> - Great EECH site with lots of downloads, textures <li><a href="http://www.eech.de.vu/" target="_blank">www.eech.de.vu </a> - Handy links and MP info by Savage9 </li>
       </ul>
-      <div align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span>
-      </div>
+      <div align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span>      </div>
       <h3><a name=history></a>Version h<span lang=EN-GB>istory</span></h3>
-      <span class="style44" lang=EN-GB>Fixes/features in 1.6.1w5:<span class="style46" lang=EN-GB></span></span>      <ul>
+      <p><span class="style47">Fixes/features in 1.6.2w2:<span class="style46" lang=EN-GB></span></span></p>
+      <ul>
+        <li class="style47">In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
+        <li class="style47">Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting).
+          
+          Set in eech.ini: texture_colour=1, mipmapping=1, texture_filtering =1 </li>
+        <li class="style44">Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1)</li>
+        <li class="style44">For texture modders, (untested) alpha blending support for dds textures</li>
+        <li class="style44">Autosave and Quicksave (Ctrl-Z), eech.ini setting autosave=n (n= nr of minutes)</li>
+        <li class="style44">Three brightness levels of PNVS night vision, press Ctrl-N when in game. </li>
+        <li class="style44">Hardware sound support (4 speakers) </li>
+        <li class="style44">TrackIR vector support (eech.ini: TIR_6DOF=1)</li>
+        <li class="style44">Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card</li>
+        <li class="style44">Screenshots can now be taken when in 32bit mode</li>
+        <li class="style44">Numerous bug fixes and code cleaning </li>
+      </ul>
+      <p><span class="style44" lang=EN-GB>Fixes/features in 1.6.1w5:<span class="style46" lang=EN-GB></span></span> </p>
+      <ul>
         <li class="style44">Texture colour mod, with special texture packs </li>
         <li class="style44">Wideview: pilot's head pitch is added </li>
         <li class="style44">HUD: scalable and background </li>
@@ -967,9 +978,8 @@ lang=EN-GB>http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaf
       </ul>
       <p class="style44"><span lang=EN-GB>1.6.0W0-1.6.0W4: undocumented test releases </span></p>
     <p align="right"><span lang=EN-GB>&nbsp;<a href="#top">[top ^]</a></span></p>
-  
   <tr>
-    <td bgcolor="#FFFFFF">&nbsp;</td>
+    <td >&nbsp;</td>
   </tr>
 </table>
 </body>
