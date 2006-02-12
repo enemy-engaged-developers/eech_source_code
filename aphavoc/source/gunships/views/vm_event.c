@@ -912,13 +912,15 @@ static void toggle_unscaled_displays_event (event *ev)
 	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
 	//VJ 050205, 050210 hud scaling mod
    global_hud_size2 += 0.1;
-   if (global_hud_size2 > 1.4)
+   if (global_hud_size2 > 1.1)
    	global_hud_size2 = 0.7;
    	
+	//VJ 060211 hud_code: store hud info
+	hud_code[(int)get_global_gunship_type ()][2] = (int)(global_hud_size2*10)+1;
+
    if (global_hud_size2 <= 1.0)
    {
    	set_global_unscaled_displays (TRUE);
-   	global_hud_size = global_hud_size2;
    }	
    else
    {

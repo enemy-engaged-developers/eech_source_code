@@ -2761,7 +2761,7 @@ void draw_ah64a_hud (void)
 */
 //VJ 050126 hud mod start
 
-	hud_viewport_size = HUD_VIEWPORT_SIZE * global_hud_size;
+	hud_viewport_size = HUD_VIEWPORT_SIZE * min( 1.0, global_hud_size2);//VJ 060212 clean up hud mod
    
 	hud_viewport_x_org = hud_viewport_size * 0.5;
    
@@ -2797,16 +2797,6 @@ void draw_ah64a_hud (void)
 	else
 	{
 		//VJ 050210 scaling factor for hud > 1.0
-		float factor = -5*global_hud_size2 + 9.0;
-		
-		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * factor )) * full_screen_width);
-		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * factor )) * full_screen_height);
-
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * factor )) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * factor )) * full_screen_height) - 0.001;
-		hud_screen_x_scale = 640.0 / full_screen_width *factor/2.0;
-		hud_screen_y_scale = 480.0 / full_screen_height *factor/2.0;
-/*
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
@@ -2815,13 +2805,10 @@ void draw_ah64a_hud (void)
 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
-*/		
+
 	}
 
 //VJ 050126 hud mod start 
-	//VJ 050204 bug fix do not touch the scale
-	//hud_screen_x_scale = global_hud_size;
-	//hud_screen_y_scale = global_hud_size;
 	hsd.hud_viewport_x_min = hud_viewport_x_min; 
 	hsd.hud_viewport_y_min = hud_viewport_y_min; 
 	hsd.hud_viewport_x_max = hud_viewport_x_max; 

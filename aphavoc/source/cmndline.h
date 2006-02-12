@@ -220,8 +220,7 @@ extern float
 	command_line_chaff_effectiveness,
 	command_line_flare_effectiveness,
 	command_line_smoke_effectiveness,
-	global_hud_size2,
-	global_hud_size;	// VJ 050126 hud mod: background 
+	global_hud_size2;// VJ 050126 hud mod: size 	
 
 extern char
 	command_line_game_initialisation_phase_path [],

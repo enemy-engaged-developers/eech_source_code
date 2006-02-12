@@ -86,6 +86,9 @@ static void toggle_high_LOD_event (event *ev)
 static void set_next_hud_colour_event (event *ev)
 {
 	set_next_hud_colour ();
+	
+	//VJ 060211 hud_code: store hud info
+	hud_code[(int)get_global_gunship_type ()][0] = get_global_hud_colour();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +111,9 @@ static void set_next_hud_alpha_event (event *ev)
 	global_hud_alpha += 16;	   
 	if (global_hud_alpha > 160)
 		global_hud_alpha = 0;
+		
+	//VJ 060211 hud_code: store hud info
+	hud_code[(int)get_global_gunship_type ()][1] = global_hud_alpha;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +123,9 @@ static void set_next_hud_alpha_event (event *ev)
 //VJ 050205 HUD size mod
 static void toggle_hud_enlarge_event (event *ev)
 {
+
 	set_global_hud_enlarge (get_global_hud_enlarge () ^ 1);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

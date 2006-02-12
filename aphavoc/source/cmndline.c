@@ -241,8 +241,7 @@ float
 	command_line_chaff_effectiveness							= 1.0,
 	command_line_flare_effectiveness							= 1.0,
 	command_line_smoke_effectiveness							= 1.0,
-	global_hud_size												= 1.0,	// VJ 050126 hud mod: background 
-	global_hud_size2												= 1.0;	// VJ 050126 hud mod: background 
+	global_hud_size2												= 1.0;	// VJ 050126 hud mod: size 
 
 char
 	command_line_game_initialisation_phase_path [128]			= "\0",

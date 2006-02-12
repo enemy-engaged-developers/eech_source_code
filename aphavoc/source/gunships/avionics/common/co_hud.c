@@ -99,6 +99,26 @@ hud_screen_data
 
 void initialise_common_hud (void)
 {
+	//VJ 060212 save hud info mod ==>
+	int gt=get_global_gunship_type();
+	
+	if (gt == 4 || gt == 6) gt = 0;
+	if (gt == 5 || gt == 7) gt = 1;
+	
+	set_global_hud_colour(hud_code[gt][0]);
+	global_hud_alpha = hud_code[gt][1];
+	global_hud_size2 = 0.1* (float) hud_code[gt][2];
+   if (global_hud_size2 <= 1.0)
+   {
+   	set_global_unscaled_displays (TRUE);
+   }	
+   else
+   {
+   	set_global_unscaled_displays (FALSE);
+	}	   	
+	//<=== VJ 060212 save hud info mod 
+	
+
 	display_hud_layout_grid = FALSE;
 
 	hud_bob_up_overlay = FALSE;
@@ -119,11 +139,26 @@ void initialise_common_hud (void)
 	set_rgb_colour (hud_colour_table[HUD_COL_CYAN],      0, 255, 255, 255);
 	set_rgb_colour (hud_colour_table[HUD_COL_BLUE],     30, 144, 255, 255);
 	set_rgb_colour (hud_colour_table[HUD_COL_BLACK],     0,   0,   0, 255);
-
+	
+   //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"
+   set_rgb_colour (hud_colour_table[HUD_COL_ORANGE],     255,   128,    0, 255); 
+   set_rgb_colour (hud_colour_table[HUD_COL_D_ORANGE],   255,    68,    0, 255); 	
+   set_rgb_colour (hud_colour_table[HUD_COL_L_YELLO],    248,   255,  120, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_D_YELLO],    255,   191,    0, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_N1_GREEN],     34,  255,    0, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_D2_GREEN],   170,   255,    0, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_N3_GREEN],   190,   255,   60, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_LAVENDER1],    195,   0,  114, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_LAVENDER2],   114,    0,  195, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_D_LAVENDER],  61,     0,  105, 255); 
+   set_rgb_colour (hud_colour_table[HUD_COL_D_BROWN],    125,    17,    0, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_PINK],       255,     0,  149, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_BLUE1],       68,   109,  140, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_BLUE2],       15,    26,   72, 255);
+   set_rgb_colour (hud_colour_table[HUD_COL_BLUE3],       49,    66,  109, 255);
+	
 	hud_colour = hud_colour_table[get_global_hud_colour ()];
-
-//VJ hud size mod
-	set_global_unscaled_displays (TRUE);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,14 +185,15 @@ void set_next_hud_colour (void)
 {
 	hud_colours
 		col;
-
+		
 	col = get_global_hud_colour ();
 
 	col = (++col <= NUM_HUD_COLOURS - 1) ? col : 0;
 
 	set_global_hud_colour (col);
 
-	hud_colour = hud_colour_table[col];
+	hud_colour = hud_colour_table[col];	
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
