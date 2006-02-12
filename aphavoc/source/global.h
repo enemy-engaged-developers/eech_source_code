@@ -164,10 +164,30 @@ enum HUD_COLOURS
 	HUD_COL_CYAN,
 	HUD_COL_BLUE,
 	HUD_COL_BLACK,
-	NUM_HUD_COLOURS
+    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"	
+        HUD_COL_ORANGE,
+        HUD_COL_D_ORANGE,
+        HUD_COL_L_YELLO,
+        HUD_COL_D_YELLO,
+        HUD_COL_N1_GREEN,
+        HUD_COL_D2_GREEN,
+        HUD_COL_N3_GREEN,
+        HUD_COL_LAVENDER1,
+        HUD_COL_LAVENDER2,
+        HUD_COL_D_LAVENDER,
+        HUD_COL_D_BROWN,
+        HUD_COL_PINK,
+        HUD_COL_BLUE1,
+        HUD_COL_BLUE2,
+        HUD_COL_BLUE3,
+    NUM_HUD_COLOURS
 };
 
 typedef enum HUD_COLOURS hud_colours;
+
+//VJ 060211 save hud info to eech.ini, for every gunship
+//declared in eechini.c
+extern int hud_code[8][3];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
