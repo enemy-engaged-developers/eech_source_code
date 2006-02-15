@@ -74,7 +74,7 @@
 
 #define DATA_VERSION	6
 
-#define MINOR_VERSION	3
+#define MINOR_VERSION	2
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME
