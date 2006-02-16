@@ -143,6 +143,9 @@ void create_campaign (session_list_data_type *session)
 	attach_session_sound_effects (get_session_entity ());
 
    enable_entity_comms_messages ();
+   
+//VJ 060217 initialize map info after parsing the campaign file
+   read_map_info_data();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
