@@ -956,7 +956,7 @@ void initialise_3d_custom_terrain_types( void )
 
 		//VJ 051001 sld equals sl but may not in future alpha blended display
 		if (index == terrain_texture_beach_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_beach );
-		if (index == terrain_texture_land_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, sld, sld, sldd, sldd,  2555, 255, 255, terrain_surface_land);
+		if (index == terrain_texture_land_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, sld, sld, sldd, sldd,  255, 255, 255, terrain_surface_land);
    	if (index == terrain_texture_altered_land1_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND1, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land1 );
    	if (index == terrain_texture_altered_land2_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND2, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land2 );
    	if (index == terrain_texture_altered_land3_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND3, terrain_texture_altered_land3_detail, terrain_texture_altered_land3_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land3 );
@@ -2987,7 +2987,7 @@ static void initialise_surface_types( void )
 {
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
 	//initialize normal surface
-	if (get_global_season() < 3)
+	if (get_global_season() != SESSION_SEASON_DESERT)
 	{
 		terrain_surface_sea										= SURFACE_TYPE_WATER;
 		terrain_surface_beach									= SURFACE_TYPE_SAND;
