@@ -101,10 +101,13 @@ void initialise_common_hud (void)
 {
 	//VJ 060212 save hud info mod ==>
 	int gt=get_global_gunship_type();
+	// happens at initialisation pahse, gunship not known yet
+	if (gt == 8) 
+		gt = 0;
 	
 	if (gt == 4 || gt == 6) gt = 0;
 	if (gt == 5 || gt == 7) gt = 1;
-	
+	debug_log("hud colour %d %d",gt,hud_code[gt][0]);
 	set_global_hud_colour(hud_code[gt][0]);
 	global_hud_alpha = hud_code[gt][1];
 	global_hud_size2 = 0.1* (float) hud_code[gt][2];
