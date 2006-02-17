@@ -3672,7 +3672,7 @@ void restore_default_textures ( void )
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 
 	}
-
+/*
 	//VJ 060120 release all texture loaded after the default system textures (water etc) 
 	if (current_map_info.last_texture > number_of_system_textures)
 	{
@@ -3689,7 +3689,7 @@ void restore_default_textures ( void )
 	
 		}
    }
-   
+   */
    //VJ 051225 reset map data 
    initialise_custom_map_info();
    
@@ -4336,7 +4336,9 @@ void read_map_info_data( void )
 	directory_file_list 
 		*list;
 	
-	initialise_custom_map_info();
+	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
+	// moved to init_3d.c
+	//initialise_custom_map_info();
 
 	// VJ 051223 head of the session list, title field contains warzone name "Taiwan" etc
 	//strcpy(current_map_info.name, get_session_list()->title);

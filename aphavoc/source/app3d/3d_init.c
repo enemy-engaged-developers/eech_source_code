@@ -120,9 +120,9 @@ void initialise_application_3d_system (void)
 
 	load_texturemap_data ( "3ddata" );
 	
-	//VJ 050619 NO LONGER NEEDED, all textures are loaded when entering warzone
-	//VJ 050116 custom texture mod
-	//	load_custom_textures ();
+	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
+	// moved to beginning
+	initialise_custom_map_info();
 	
 	initialise_3d_system ();
 
@@ -1144,7 +1144,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 					main_light.blue = 0.0;
 
 					break;
-				}
+				}				
 			}
 
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
