@@ -1394,16 +1394,17 @@ void comms_process_data (void)
 							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 						}
 
-               			set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
+               	set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 
 						set_ui_object_drawable (session_screen_continue_button, FALSE);
 
-               			set_ui_object_drawable (session_screen_next_bdrop, TRUE);
+               	set_ui_object_drawable (session_screen_next_bdrop, TRUE);
 
 						set_ui_object_drawable (session_screen_next_button, TRUE);
 
 
-						//VJ 010206 now that we know the map number, initialize the info
+						//VJ 060201 now that we know the map number, initialize the info
+						debug_log(" read_map_info_data from comm_man.c %d",current_map_info.user_season);
 						read_map_info_data();
 
 						break;

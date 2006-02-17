@@ -2071,8 +2071,6 @@ void flag_terrain_types ( void )
 	terrain_3d_sector
 		*current_terrain_sector;
 		
-	int i = 0;	
-		
 	debug_log("flagging terrain types...");	
 		
 	for ( z = 0; z < terrain_3d_sector_z_max; z++ )
