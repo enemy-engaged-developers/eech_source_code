@@ -2032,7 +2032,8 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ 060120 random integer generator
+//VJ 060120 random integer generator (Bill's generator)
+//http://paul.rutgers.edu/~rhoads/Code/code.html
 int rand3(int lim)
 {
         static long a = 3;
@@ -2042,13 +2043,24 @@ int rand3(int lim)
         return ((a % lim) + 1);
 }
 
+//
+// returns random integer from 1 to lim (Gerhard's generator)
+//
+int rand2(int lim)
+{
+        static long a = 1;  // could be made the seed value
+
+        a = (a * 32719 + 3) % 32749;
+        return ((a % lim) + 1);
+}
+
+
 //=====> VJ 040206 flag terrain polygons and replace some stadard textures 
 // with an alternative texture to increase landscape variability
 // must be used with additional texture packs
 // reacts to eech.ini option "extended textures"
 void flag_terrain_types ( void )
 {
-	
 	int x, z, count;
 	
 	terrain_3d_face
@@ -2058,6 +2070,8 @@ void flag_terrain_types ( void )
 		*surface;
 	terrain_3d_sector
 		*current_terrain_sector;
+		
+	int i = 0;	
 		
 	debug_log("flagging terrain types...");	
 		
@@ -2075,7 +2089,8 @@ void flag_terrain_types ( void )
 			
 			for ( count = current_terrain_sector->number_of_polygons; count > 0; count-- )
 			{						
-				int r = rand3(5)-1; 					
+				int r = rand2(5)-1; 					
+
 				if ( polygon->surface_change ) 
 					surface++;
 
@@ -2133,6 +2148,7 @@ void flag_terrain_types ( void )
 			}//count
       }//x
 	}//z
+
 	debug_log("flagged terrain types");		
 }	
 
@@ -2196,7 +2212,7 @@ void make_flag_terrain_types ( void )
 		{	
 			
 			customtype[z][x] = (terrain_custom_type *) safe_malloc ((terrain_sectors[z][x].number_of_polygons+1) * sizeof(terrain_custom_type));
-
+			
 			memset(customtype[z][x], 0, (terrain_sectors[z][x].number_of_polygons+1)*sizeof(terrain_custom_type));
 
       }//x

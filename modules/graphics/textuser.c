@@ -3554,10 +3554,11 @@ void load_warzone_override_textures ()
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
+
 	
 	if (command_line_texture_colour == 1)
 	{
-
+		
 		//VJ 051223 removed string list with warzone names:
 		//look directly for texture dir with name current_map_info.name" (= session title)
 		//That way warzones can be added automatically without adding strings to the code
@@ -4293,6 +4294,7 @@ void initialise_custom_map_info( void )
 //set the map season to default. There are 4 settings: default and desert, 
 //and summer and winter for the maps that change seasonally
 	current_map_info.season = SESSION_SEASON_DEFAULT;
+	current_map_info.user_season = 0;
 	
 	current_map_info.dry_river = 0;
 	
@@ -4381,34 +4383,36 @@ void read_map_info_data( void )
 	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
 	
 	//initialize what we know
-	switch (current_map_info.mapnr) {
-		case 5: 
-		case 6: 
-		case 9: 
-		case 10: 
-		case 12: 
-		{				
-			set_global_season( SESSION_SEASON_DESERT );
-			break;
-		}	
-		case 3: //georgia
-		{
-			set_global_season( SESSION_SEASON_SUMMER );
-			break;
-		}
-		case 7: 
-		case 8: 
-		case 13: 
-		{
-			set_global_season( SESSION_SEASON_WINTER );
-			break;
-		}
-		default:
-		{
-			set_global_season( SESSION_SEASON_DEFAULT );		
+	// if user did not select a season in the interface:
+	if(current_map_info.user_season == 0)
+	{
+		switch (current_map_info.mapnr) {
+			case 5: 
+			case 6: 
+			case 9: 
+			case 10: 
+			case 12: 
+			{				
+				set_global_season( SESSION_SEASON_DESERT );
+				break;
+			}	
+			case 3: //georgia
+			{
+				set_global_season( SESSION_SEASON_SUMMER );
+				break;
+			}
+			case 7: 
+			case 8: 
+			{
+				set_global_season( SESSION_SEASON_WINTER );
+				break;
+			}
+			default:
+			{
+				set_global_season( SESSION_SEASON_DEFAULT );		
+			}
 		}
 	}
-	
 	// parse mapinfo.txt that should be added to new custom campaigns
 
 	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
@@ -4432,17 +4436,22 @@ void read_map_info_data( void )
 	
 		//VJ 051225 added more map info for custom map reading
 		//scan contours and camo
-		if (strstr(buf, "season"))
-		{
-			p = strtok(buf,"=");
-			p = strtok(NULL,"#");
-			if (p)
-				current_map_info.season = atoi(p);
-			if (current_map_info.season == 0)	
-				current_map_info.season = 1;	
-			debug_log("===map info data: season: %d",	current_map_info.season);
-		}	
 		
+		// if user did not select a season in the interface:
+		if (current_map_info.user_season == 0)
+		{
+			if (strstr(buf, "season"))
+			{
+				p = strtok(buf,"=");
+				p = strtok(NULL,"#");
+				if (p)
+					current_map_info.season = atoi(p);
+				if (current_map_info.season == 0)	
+					current_map_info.season = 1;	
+				debug_log("===map info data: season: %d",	current_map_info.season);
+				set_global_season( current_map_info.season );
+			}	
+		}
 		//scan for 2D map contour info
 		if (strstr(buf, "contour"))
 		{

@@ -153,6 +153,7 @@ void notify_session_parameters (void)
 	//VJ 051227 reading map inof data for automatic custom map 
 	// function declared in textuser.c
 	read_map_info_data();
+	debug_log(" read_map_info_data from sparm_sc.c %d ",current_map_info.user_season);
 	//
 	// Set the button states
 	//
@@ -995,8 +996,10 @@ void notify_season_function ( ui_object *obj, void *arg )
 	set_ui_object_text (obj, season_text [get_global_season () - 1]);
 	
 	set_toggle_button_off (obj);
-debug_log("SEASON 3 - %d",get_global_season());
- 
+
+	// flag that the season is changed by the user and the file map info should be ignored	
+	current_map_info.user_season = 1;
+
  if (get_global_season () == SESSION_SEASON_SUMMER || get_global_season () == SESSION_SEASON_WINTER)
     load_3d_terrain_game_data ();
 }
