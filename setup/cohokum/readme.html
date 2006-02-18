@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.6.0W14</title>
+<title>EECH Community Release Version 1.6.0W4T1</title>
 <style>
 <!--
 a {
@@ -62,7 +62,7 @@ h4 {
 <body class="Normal" lang=SV>
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W3</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W4T1</span></h1>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
         <span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
@@ -71,7 +71,7 @@ h4 {
         <hr size=2 width="100%" align=center>
       </div>
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
-href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
+href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a>, <a href="http://www.eechcentral.com" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
       <p align=right style='text-align:right; font-style: italic;'><span lang=EN-GB>Last edited by Gotcha: 14 feb 2006</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
@@ -91,28 +91,14 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://www.e
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 162W3 ?</span></h2>
-      <p><em><strong>(since version 162W2)</strong></em></p>
+      <h2><span lang=EN-GB>What's NEW in EECH 162W4 ?</span></h2>
+      <p><em><strong>(since version 162W3)</strong></em></p>
       <ol>
-        <LI>
-        <div align="left">Add custom warzones without changing the code and custom warzones are treated as official warzones (dynamic water, desert textures etc).        </div>        
-        <LI>An in-game season option is activated for some maps that have two seasons: summer and winter (Alaska, Aleut, Georgia, other will follow). if you select winter it will snow instead of rain.
-        Winter textures are denoted with  &quot;name-W.bmp&quot; or &quot;name-W.dds&quot;. Also desert textures now always have the syntax: &quot;name-D.bmp&quot; or &quot;name-D.dds&quot;. 
-        <LI>A new option is added in eech.ini: &quot;extended_textures&quot;. This option increases the number of terrain textures frmo 5 to 25 to enhance the realism of the landscape (it kills repetition) but special texture packs are needed (not released yet).  
-        <LI>Working cockpit dials and lamps for Havoc (and Hind) by Firebird.
-        <LI>Alt-L toggles the high LOD feature so that when you fly above cities and your fps drops you can try switching it off.        </LI>
-        <LI>Ctrl-N adjust brightness level of the night vision, for more detail. There are 3 levels. </LI>
-        <LI>
-          <div align="left">TSD colour map display is improved and does not have such a large framerate hit when in 25km scale. </div>
-        </LI>
-        <LI>More HUD colours are added by Maverick. </LI>
-        <LI>HUD size and colour config are saved in eech.ini per gunship. </LI>
-        <LI>Three formations are added: diamond, ragged left and ragged right added by Maverick. Note you need a new files <em>FORMS.DAT</em>, included in this setup file.  </LI>
-        <LI>A keycard has been added to this setup created by MAPI</LI>
-        <LI>A GWUT configuration file  has been added: GWUT162B.csv made by KLiM. See <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </LI>
+        <LI>Engine and Rotorhead RPM dow decline under extreme stress. </LI>
+        <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
+        <LI>Sound modifications no longer require modifying sound.dat, just copy the new sound files into the audio directory!</LI>
       </ol>
-      <p><strong>IMPORTANT: this version needs a different texture setup. You will have to re-install the texture addon packs!</strong></p>
-      <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
+      <p><strong>IMPORTANT: This version needs several additional audio files to be present in the cohokum/audio directory.</strong></p>
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
@@ -335,13 +321,24 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr valign="top">
           <td colspan=2 class="Normal">
-            <p><strong><span lang=EN-GB >Advanced Flight Model</span></strong></p></td>
+            <p><strong><span lang=EN-GB >Advanced flight model</span></strong></p></td>
         </tr>
         <tr valign="top">
           <td width="214" class="Normal">
             <p class="style43">advancedfm=0</p></td>
           <td class="Normal">
             <p><span lang=EN-GB style='color:black;'>If enabled, this setting switches to a more complicated flight model. Pedal mixing will be disabled, which means that you will have to use the pedals to turn the chopper. This makes it possible to fly sideways to track and attack moving vehicles, for example.(default=0, off) .</span><span lang=EN-GB
+  style='color:red;'> </span></p></td>
+        </tr>
+        <tr valign="top">
+          <td colspan=2 class="Normal">
+            <p><strong><span lang=EN-GB >Realistic engine dynamics</span></strong></p></td>
+        </tr>
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43">enginerealism=1</p></td>
+          <td class="Normal">
+            <p><span lang=EN-GB style='color:black;'>Causes the game to simulate the workload that the engines and the rotorhead are stressed with, and causes engine RPM to drop under prolonged extreme stress. Also, engine torque INCREASES with increased workload. This setting also makes the engines <i>sound</i> more lifelike. (default=1, on) .</span><span lang=EN-GB
   style='color:red;'> </span></p></td>
         </tr>
         <tr valign="top" bgcolor="#EEEEEE">
@@ -836,6 +833,28 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       </ul>
       <div align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span>      </div>
       <h3><a name=history></a>Version h<span lang=EN-GB>istory</span></h3>
+      <p><span class="style47">Fixes/features in 1.6.2w3:<span class="style46" lang=EN-GB></span></span></p>
+      <ul>
+        <LI class="style44">
+        <div align="left">Add custom warzones without changing the code and custom warzones are treated as official warzones (dynamic water, desert textures etc).        </div>        
+        <LI class="style44">An in-game season option is activated for some maps that have two seasons: summer and winter (Alaska, Aleut, Georgia, other will follow). if you select winter it will snow instead of rain.
+        Winter textures are denoted with  &quot;name-W.bmp&quot; or &quot;name-W.dds&quot;. Also desert textures now always have the syntax: &quot;name-D.bmp&quot; or &quot;name-D.dds&quot;. 
+        <LI class="style44">A new option is added in eech.ini: &quot;extended_textures&quot;. This option increases the number of terrain textures frmo 5 to 25 to enhance the realism of the landscape (it kills repetition) but special texture packs are needed (not released yet).  
+        <LI class="style44">Working cockpit dials and lamps for Havoc (and Hind) by Firebird.
+        <LI class="style44">Alt-L toggles the high LOD feature so that when you fly above cities and your fps drops you can try switching it off.        </LI>
+        <LI class="style44">Ctrl-N adjust brightness level of the night vision, for more detail. There are 3 levels. </LI>
+        <LI class="style44">
+          <div align="left">TSD colour map display is improved and does not have such a large framerate hit when in 25km scale. </div>
+        </LI>
+        <LI class="style44">More HUD colours are added by Maverick. </LI>
+        <LI class="style44">HUD size and colour config are saved in eech.ini per gunship. </LI>
+        <LI class="style44">Three formations are added: diamond, ragged left and ragged right added by Maverick. Note you need a new files <em>FORMS.DAT</em>, included in this setup file.  </LI>
+        <LI class="style44">A keycard has been added to this setup created by MAPI</LI>
+        <LI class="style44">A GWUT configuration file  has been added: GWUT162B.csv made by KLiM. See <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </LI>
+      </ol>
+      <p><strong>IMPORTANT: this version needs a different texture setup. You will have to re-install the texture addon packs!</strong></p>
+      <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
+      </ul>
       <p><span class="style47">Fixes/features in 1.6.2w2:<span class="style46" lang=EN-GB></span></span></p>
       <ul>
         <li class="style47">In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
