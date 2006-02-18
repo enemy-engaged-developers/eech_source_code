@@ -221,6 +221,7 @@ static entity *create_client_server_speech_entity (entity *parent, entity_sides 
 		locality,
 		pos,
 		1.0,
+		1.0,
 		TRUE,
 		FALSE,
 		count,

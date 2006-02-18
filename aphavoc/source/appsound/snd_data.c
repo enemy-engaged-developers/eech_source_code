@@ -76,6 +76,8 @@
 
 #define SOUND_BLOCK_DATA_FILE 	"sound.dat"
 
+#define SOUND_OVERRIDE_DIRECTORY "..\\COHOKUM\\AUDIO"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2188,6 +2190,84 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_WEP_61, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\WEP_61.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_WEP_62, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\WEP_62.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_WEP_63, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\WEP_63.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"aprotores.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"aprotoret.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"aprotoris.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"aprotorit.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"harotores.pcm",	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"harotoret.pcm",	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"harotoris.pcm",	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"harotorit.pcm",	22050,	150,	0.0 },
+
+		// Werewolf:
+		// COMANCHE HELICOPTER
+		//
+
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"comanche_rotor_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"comanche_windup_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"comanche_winddown_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"comanche_slap_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"comanche_turbine_ext.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"comanche_rotor_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"comanche_windup_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"comanche_winddown_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"comanche_slap_int.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"comanche_turbine_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_COMANCHE_LOCK_ON, 						ENTITY_SIDE_NEUTRAL,	"comanche_a2a.pcm",		22050,	80,	0.0 },
+		{ SOUND_SAMPLE_INDEX_COMANCHE_MCA, 							ENTITY_SIDE_NEUTRAL,	"comanche_mca.pcm",		22050,	100,	0.0 },
+
+		// Werewolf:
+		// HOKUM HELICOPTER
+		//
+
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"hokum_rotor_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"hokum_windup_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"hokum_winddown_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"hokum_slap_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"hokum_turbine_ext.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"hokum_rotor_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"hokum_windup_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"hokum_winddown_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"hokum_slap_int.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"hokum_turbine_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_HOKUM_LOCK_ON, 						ENTITY_SIDE_NEUTRAL,	"hokum_a2a.pcm",		22050,	80,	0.0 },
+		{ SOUND_SAMPLE_INDEX_HOKUM_MCA, 							ENTITY_SIDE_NEUTRAL,	"hokum_mca.pcm",		22050,	100,	0.0 },
+
+		// Werewolf:
+		// BLACKHAWK HELICOPTER
+		//
+
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_rotor_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"blackhawk_windup_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"blackhawk_winddown_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_slap_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_turbine_ext.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_rotor_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"blackhawk_windup_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"blackhawk_winddown_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_slap_int.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"blackhawk_turbine_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_BLACKHAWK_LOCK_ON, 						ENTITY_SIDE_NEUTRAL,	"blackhawk_a2a.pcm",		22050,	80,	0.0 },
+		{ SOUND_SAMPLE_INDEX_BLACKHAWK_MCA, 							ENTITY_SIDE_NEUTRAL,	"blackhawk_mca.pcm",		22050,	100,	0.0 },
+
+		// Werewolf:
+		// HIND HELICOPTER
+		//
+
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"hind_rotor_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"hind_windup_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"hind_winddown_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"hind_slap_ext.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"hind_turbine_ext.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR, 				ENTITY_SIDE_NEUTRAL,	"hind_rotor_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_WIND_UP, 	ENTITY_SIDE_NEUTRAL,	"hind_windup_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_WIND_DOWN,	ENTITY_SIDE_NEUTRAL,	"hind_winddown_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_SLAP, 				ENTITY_SIDE_NEUTRAL,	"hind_slap_int.pcm", 	22050,	200,	2 * KILOMETRE },
+		{ SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_TURBINE, 				ENTITY_SIDE_NEUTRAL,	"hind_turbine_int.pcm", 	22050,	150,	0.0 },
+		{ SOUND_SAMPLE_INDEX_HIND_LOCK_ON, 						ENTITY_SIDE_NEUTRAL,	"hind_a2a.pcm",		22050,	80,	0.0 },
+		{ SOUND_SAMPLE_INDEX_HIND_MCA, 							ENTITY_SIDE_NEUTRAL,	"hind_mca.pcm",		22050,	100,	0.0 },
+
+
 	};
 
 int
@@ -2228,6 +2308,7 @@ void load_application_sound_samples ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void load_side_dependant_application_sound_samples ( entity_sides side )
 {
@@ -2336,15 +2417,52 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 								sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
 				
 								sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
-		
-								if ( sound_block_header_index == SOUND_SAMPLE_NOT_FOUND )
+
+								//--Werewolf sound override support
+								if ( file_exist ( filename ) )
 								{
-		
+									int size;
+									FILE *fp;
+									debug_log ( "**SOUNDFILE OVERRIDES* found file %s", filename );
+									size = file_size ( filename );
+									application_sound_effects[application_sound_samples[count].sound_sample_index].size = size;
+									if ( should_load_sample )
+									{
+										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
+										{
+											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
+																SAMPLE_TYPE_MONO_8BIT,
+																application_sound_samples[count].rate,
+																size );
+											fp = fopen ( filename, "rb" );
+											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
+											if ( ptr )
+											{
+												fread ( ptr, 1, size, fp );
+												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
+											}
+											fclose ( fp );
+										}
+									}
+									else
+									{
+										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
+										{
+											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
+										}
+									}
+								}
+								//-- END Werewolf sound override support
+
+								else if ( sound_block_header_index == SOUND_SAMPLE_NOT_FOUND )
+								{
 									int
 										size;
 		
 									FILE
 										*fp;
+
+									debug_log ( "Sound not found in sound.dat: %s", filename );
 				
 									size = file_size ( filename );
 		
@@ -2390,6 +2508,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 								}
 								else
 								{
+									debug_log ( "Sound loading from sound.dat: %s", filename );
 		
 									application_sound_effects[application_sound_samples[count].sound_sample_index].size = blocked_sound_samples[sound_block_header_index].sound_data_length;
 			

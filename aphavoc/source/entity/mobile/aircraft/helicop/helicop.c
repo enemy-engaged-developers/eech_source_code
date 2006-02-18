@@ -83,7 +83,8 @@ entity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality_types locality, sound_sample_indices looping_effect, sound_sample_indices wind_up_effect, sound_sample_indices wind_down_effect);
+//Werewolf: Changed to accomodate new rotor sound components: turbine sound, rotorslap sound
+static void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality_types locality, sound_sample_indices looping_effect, sound_sample_indices wind_up_effect, sound_sample_indices wind_down_effect, sound_sample_indices turbine_effect, sound_sample_indices rotorslap_effect);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -786,7 +787,6 @@ void create_helicopter_rotor_sound_effects (entity *en)
 	switch (sub_type)
 	{
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
-		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
 		{
 			create_specified_helicopter_rotor_sound_effects
 			(
@@ -794,7 +794,9 @@ void create_helicopter_rotor_sound_effects (entity *en)
 				SOUND_LOCALITY_EXTERIOR,
 				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,
 				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,
-				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_SLAP
 			);
 
 			create_specified_helicopter_rotor_sound_effects
@@ -803,13 +805,41 @@ void create_helicopter_rotor_sound_effects (entity *en)
 				SOUND_LOCALITY_INTERIOR,
 				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR,
 				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_WIND_UP,
-				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_WIND_DOWN
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_SLAP
+			);
+
+			break;
+		}
+		//Werewolf: Additional sounds
+		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_COMANCHE_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_COMANCHE_ROTOR_SLAP
 			);
 
 			break;
 		}
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
-		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 		{
 			create_specified_helicopter_rotor_sound_effects
 			(
@@ -817,7 +847,9 @@ void create_helicopter_rotor_sound_effects (entity *en)
 				SOUND_LOCALITY_EXTERIOR,
 				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR,
 				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_WIND_UP,
-				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_WIND_DOWN
+				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HAVOC_ROTOR_SLAP
 			);
 
 			create_specified_helicopter_rotor_sound_effects
@@ -826,11 +858,146 @@ void create_helicopter_rotor_sound_effects (entity *en)
 				SOUND_LOCALITY_INTERIOR,
 				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR,
 				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_WIND_UP,
-				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_WIND_DOWN
+				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_HAVOC_ROTOR_SLAP
 			);
 
 			break;
 		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_SLAP
+			);
+
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_BLACKHAWK_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_BLACKHAWK_ROTOR_SLAP
+			);
+
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HIND_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_SLAP
+			);
+
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_APACHE_ROTOR_SLAP
+			);
+
+			break;
+		}
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+		{
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_EXTERIOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_EXTERIOR_HOKUM_ROTOR_SLAP
+			);
+
+			create_specified_helicopter_rotor_sound_effects
+			(
+				en,
+				SOUND_LOCALITY_INTERIOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_UP,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_WIND_DOWN,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_TURBINE,
+				SOUND_SAMPLE_INDEX_INTERIOR_HOKUM_ROTOR_SLAP
+			);
+
+			break;
+		}
+		//Werewolf: End additional sounds
+
+
 		default:
 		{
 			create_specified_helicopter_rotor_sound_effects
@@ -838,6 +1005,8 @@ void create_helicopter_rotor_sound_effects (entity *en)
 				en,
 				SOUND_LOCALITY_ALL,
 				aircraft_database [sub_type].continuous_sound_effect_index,
+				SOUND_SAMPLE_INDEX_NONE,
+				SOUND_SAMPLE_INDEX_NONE,
 				SOUND_SAMPLE_INDEX_NONE,
 				SOUND_SAMPLE_INDEX_NONE
 			);
@@ -851,7 +1020,7 @@ void create_helicopter_rotor_sound_effects (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality_types locality, sound_sample_indices looping_effect, sound_sample_indices wind_up_effect, sound_sample_indices wind_down_effect)
+void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality_types locality, sound_sample_indices looping_effect, sound_sample_indices wind_up_effect, sound_sample_indices wind_down_effect, sound_sample_indices turbine_effect, sound_sample_indices rotorslap_effect)
 {
 	ASSERT (en);
 
@@ -872,10 +1041,53 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 		locality,
 		NULL,												// position
 		0.0,												// amplification
+		1.0,												// Werewolf pitch
 		FALSE,											// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
 		&looping_effect								// sample index list
+	);
+
+	// Werewolf:
+	// Turbine noise
+	//
+
+	if (turbine_effect != SOUND_SAMPLE_INDEX_NONE)
+	create_client_server_sound_effect_entity
+	(
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		locality,
+		NULL,												// position
+		0.0,												// amplification
+		1.0,												// Werewolf pitch
+		FALSE,											// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&turbine_effect								// sample index list
+	);
+
+	// Werewolf:
+	// Rotorslap
+	//
+
+	if (rotorslap_effect != SOUND_SAMPLE_INDEX_NONE)
+	create_client_server_sound_effect_entity
+	(
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		locality,
+		NULL,												// position
+		0.0,												// amplification
+		1.0,												// Werewolf pitch
+		FALSE,											// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&rotorslap_effect								// sample index list
 	);
 
 	//
@@ -893,6 +1105,7 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 			locality,
 			NULL,												// position
 			0.0,												// amplification
+			1.0,												// Werewolf pitch
 			FALSE,											// valid sound effect
 			FALSE,											// looping
 			1,													// sample count
@@ -915,6 +1128,7 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 			locality,
 			NULL,												// position
 			0.0,												// amplification
+			1.0,												// Werewolf pitch
 			FALSE,											// valid sound effect
 			FALSE,											// looping
 			1,													// sample count
@@ -946,6 +1160,8 @@ void kill_helicopter_rotor_sound_effects (entity *en)
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
 			if ((get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING) ||
+					(get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE) ||
+					(get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP) ||
 					(get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP) ||
 					(get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN))
 			{
@@ -962,7 +1178,7 @@ void kill_helicopter_rotor_sound_effects (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define HELICOPTER_ROTOR_SOUNDS_LOOPING_MAX_RPM_VALUE	45
-#define HELICOPTER_ROTOR_SOUNDS_LOOPING_MIN_RPM_VALUE	36
+#define HELICOPTER_ROTOR_SOUNDS_LOOPING_MIN_RPM_VALUE	30
 
 void update_local_helicopter_rotor_sounds (entity *en)
 {
@@ -971,7 +1187,17 @@ void update_local_helicopter_rotor_sounds (entity *en)
 
 	float
 		looping_amp,
-		winding_amp;
+		looping_pitch, //Werewolf pitch
+		slap_amp,
+		turbine_amp,
+		turbine_pitch,
+		winding_amp,
+//		main_rotor_pitch,
+//		main_rotor_roll,
+		acc_force;
+
+	vec3d
+		acc_direction;
 
 	entity
 		*spec;
@@ -994,16 +1220,68 @@ void update_local_helicopter_rotor_sounds (entity *en)
 							(HELICOPTER_ROTOR_SOUNDS_LOOPING_MAX_RPM_VALUE - HELICOPTER_ROTOR_SOUNDS_LOOPING_MIN_RPM_VALUE);
 	}
 
+	//Werewolf pitch
+	looping_pitch = raw->main_rotor_rpm / 100.0;
+
+	//For AI choppers we need to invert and tweak the RPM value changes, because AI choppers base their rotor RPM on the produced lift
+	//(For the AI, more lift => more RPM, which is the exact opposite of what it should be)
+	if (get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+	{
+		looping_pitch = 1.0; //Disabled since it simply doesn't sound right. Someday, someone should figure out a nice way of doing it.
+
+//		looping_pitch = (1.0 - looping_pitch); //this would go from 0.1 to 0.3, so we need further tweaks
+//		looping_pitch = looping_pitch / 12.0; //make the pitch changes less drastic
+//		looping_pitch = 0.95 + looping_pitch;
+	}
+
+	//Slapping sound depends on how harsh the direction changes are: Do a tight turn and the rotor blades will slap
+	if (get_current_flight_dynamics ())
+	{
+		acc_direction.x += current_flight_dynamics->model_acceleration_vector.x;
+		acc_direction.y += current_flight_dynamics->model_acceleration_vector.y;
+		acc_direction.z += current_flight_dynamics->model_acceleration_vector.z;
+		acc_force = (get_3d_vector_magnitude (&acc_direction) / 20.0); //force vector can get as high as 30.0, but 20.0 should suffice for the maximum slap sound
+		slap_amp = (acc_force) * looping_amp;
+		slap_amp = bound (slap_amp, 0.0, 1.0);
+//		debug_log ( "SLAP FORCE %f", acc_force );
+	}
+	else
+	{
+		acc_force = 0.0;
+		slap_amp = 0.0;
+	}
+
+
+
+	//Get the engine rpm statistics so we can control the turbine sounds accordingly
+	if (get_current_flight_dynamics ())
+	{
+		turbine_pitch = (current_flight_dynamics->right_engine_rpm.value + current_flight_dynamics->right_engine_rpm.value) / 100.0 / 2.0;
+		turbine_pitch = bound (turbine_pitch, 0.0, 1.3)+0.3;
+		turbine_amp = (raw->main_rotor_rpm / 100.0);
+	}
+	else
+	{
+		turbine_pitch = 1.3;
+		turbine_amp = 0.0;
+	}
+
+
+
 //	winding_amp = 1.0 - (looping_amp * looping_amp);
 	winding_amp = 1.0;
 
 	if (looping_amp == 0.0)
 	{
 		pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING, 0.0);
+		pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE, 0.0);
+		pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP, 0.0);
 	}
 	else
 	{
 		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING);
+		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE);
+		resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP);
 	}
 
 	//
@@ -1018,7 +1296,19 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		{
 			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING)
 			{
-				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, looping_amp);
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, (looping_amp-slap_amp)); //Werewolf: regular rotor sound cuts out when slapping sets in
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, looping_pitch);
+			}
+			//Werewolf TODO: Implement pitch and volume curves for turbine and slap sounds
+			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP)
+			{
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, (slap_amp)); //Werewolf: slapping sound
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, looping_pitch);
+			}
+			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE)
+			{
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, (turbine_amp)); //Werewolf: turbine sound
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, turbine_pitch);
 			}
 			else if ((get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP) ||
 							(get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN))

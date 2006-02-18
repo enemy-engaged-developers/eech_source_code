@@ -262,6 +262,7 @@ void update_lightning_effect (entity *en)
 				SOUND_LOCALITY_ALL,
 				&raw->weather_position,						// position
 				1.0,												// amplification
+				0.85+(0.3* frand1 ()), //pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count
@@ -283,6 +284,7 @@ void update_lightning_effect (entity *en)
 				SOUND_LOCALITY_ALL,
 				&raw->weather_position,						// position
 				1.0,												// amplification
+				0.85+(0.3* frand1 ()), //pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count

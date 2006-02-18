@@ -1227,6 +1227,8 @@ void update_dynamics_external_values (void)
 		air_density,
 		centre_of_gravity_to_ground_distance;
 
+//	float rotor_workload; //Werewolf
+
 	if (!get_gunship_entity ())
 	{
 		return;
@@ -1313,6 +1315,12 @@ void update_dynamics_external_values (void)
 	//
 	// rotor rpm
 	//
+
+	//Werewolf rotor sound pitch
+//	rotor_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value))
+//			  * 1.0;
+//	rotor_workload = bound (rotor_workload, 0.0, 100.0);
+//	set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_RPM, current_flight_dynamics->main_rotor_rpm.value / 1.20 - rotor_workload); // Werewolf
 
 	set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_RPM, current_flight_dynamics->main_rotor_rpm.value / 1.20);
 

@@ -519,6 +519,8 @@ static void kill_local (entity *en)
 	// kill engine sound effects
 	//
 
+	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP);
+	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE);
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING);
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP);
 	kill_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN);
@@ -661,6 +663,7 @@ static void kill_local (entity *en)
 			SOUND_LOCALITY_ALL,
 			NULL,												// position
 			1.0,												// amplification
+			1.0,												// Werewolf pitch
 			TRUE,												// valid sound effect
 			TRUE,												// looping
 			1,													// sample count

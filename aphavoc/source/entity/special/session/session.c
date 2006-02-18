@@ -664,6 +664,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
@@ -686,6 +687,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
@@ -708,6 +710,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
@@ -730,6 +733,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
@@ -752,6 +756,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
@@ -774,6 +779,7 @@ void attach_session_sound_effects (entity *en)
 		SOUND_LOCALITY_ALL,
 		NULL,												// position
 		0.0,												// amplification
+		1.0, //Werewolf pitch
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count

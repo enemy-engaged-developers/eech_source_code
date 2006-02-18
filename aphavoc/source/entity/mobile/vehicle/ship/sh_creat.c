@@ -470,6 +470,7 @@ entity *create_client_server_entity_ship (int index, entity_sub_types sub_type, 
 			SOUND_LOCALITY_ALL,
 			NULL,												// position
 			1.0,												// amplification
+			1.0,												// Werewolf pitch
 			TRUE,												// valid sound effect
 			TRUE,												// looping
 			1,													// sample count
@@ -490,6 +491,7 @@ entity *create_client_server_entity_ship (int index, entity_sub_types sub_type, 
 			SOUND_LOCALITY_ALL,
 			NULL,												// position
 			1.0,												// amplification
+			1.0,												// Werewolf pitch
 			FALSE,											// valid sound effect
 			TRUE,												// looping
 			1,													// sample count

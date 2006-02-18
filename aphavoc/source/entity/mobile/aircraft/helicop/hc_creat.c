@@ -486,10 +486,34 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 		switch (sub_type)
 		{
 			case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_APACHE_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_APACHE_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
 			case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_COMANCHE_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_COMANCHE_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
 		////Moje 030527 start
 			case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 		////Moje 030527 End
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_BLACKHAWK_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_BLACKHAWK_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
 		////Moje 030816 start
 			case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
 		////Moje 030816 End
@@ -499,22 +523,44 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
 				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
 				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
-
 				break;
 			}
 			case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
-			case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
-			////Moje 030612 line below added
-			case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
-			////Moje 030816 line below added
-			case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
 			{
 				mca_effect_index = SOUND_SAMPLE_INDEX_HAVOC_MCA;
 				lock_on_effect_index = SOUND_SAMPLE_INDEX_HAVOC_LOCK_ON;
 				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
 				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
 				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
-
+				break;
+			}
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_HOKUM_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_HOKUM_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
+			////Moje 030612 line below added
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_HIND_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_HIND_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
+			////Moje 030816 line below added
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_HOKUM_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_HOKUM_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
 				break;
 			}
 		}
@@ -559,6 +605,7 @@ void create_helicopter_cockpit_sound_effect (entity *en, entity_sub_types sub_ty
 			SOUND_LOCALITY_INTERIOR,
 			NULL,												// position
 			1.0,												// amplification
+			1.0,												// Werewolf pitch
 			FALSE,											// valid sound effect
 			TRUE,												// looping
 			1,													// sample count

@@ -711,6 +711,7 @@ void helicopter_death_movement (entity *en)
 					SOUND_LOCALITY_ALL,
 					NULL,												// position
 					1.0,												// amplification
+					1.0,												// Werewolf pitch
 					TRUE,												// valid sound effect
 					FALSE,											// looping
 					1,													// sample count

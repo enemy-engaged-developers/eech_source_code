@@ -2828,6 +2828,7 @@ void create_weapon_launched_sound_effects (entity *launcher, entity_sub_types we
 					SOUND_LOCALITY_INTERIOR,
 					NULL,												// position
 					1.0,												// amplification
+					1.0,												// Werewolf pitch
 					TRUE,												// valid sound effect
 					looping,											// looping
 					1,													// sample count
@@ -2852,6 +2853,7 @@ void create_weapon_launched_sound_effects (entity *launcher, entity_sub_types we
 					SOUND_LOCALITY_EXTERIOR,
 					NULL,												// position
 					1.0,												// amplification
+					1.0,												// Werewolf pitch
 					TRUE,												// valid sound effect
 					looping,											// looping
 					1,													// sample count
@@ -2880,6 +2882,7 @@ void create_weapon_launched_sound_effects (entity *launcher, entity_sub_types we
 					SOUND_LOCALITY_ALL,
 					NULL,												// position
 					1.0,												// amplification
+					1.0,												// Werewolf pitch
 					TRUE,												// valid sound effect
 					looping,											// looping
 					1,													// sample count

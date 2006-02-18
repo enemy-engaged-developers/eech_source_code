@@ -613,7 +613,7 @@ void update_ka50_advanced_dynamics (void)
 {
 
 	float
-		rpm;
+		rpm, workload=0.0;
 
 	update_power_dynamics ();
 
@@ -665,6 +665,15 @@ void update_ka50_advanced_dynamics (void)
 
 	//debug
 
+	//Werewolf engine torque management
+	//Rotor RPM is reduced by workload, so we have to have twice as much workload on the engine to circumvent the whacky way EECH mixes RPM into the engine torque
+	if (command_line_dynamics_advanced_engine_model == TRUE)
+	{
+	  workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value))
+		  * 100.0;
+	  workload = bound (workload, 0.0, 100.0);
+	}
+
 	if (!current_flight_dynamics->left_engine_torque.damaged)
 	{
 
@@ -682,7 +691,11 @@ void update_ka50_advanced_dynamics (void)
 			}
 		}
 
+//Werewolf: engine torque should INCREASE when the aircraft works harder
+//Rotor RPM drops under workload, so we use twice as much workload here to make the torque sum increase under workload
 		current_flight_dynamics->left_engine_torque.value += ((current_flight_dynamics->input_data.collective.value * rpm) - current_flight_dynamics->left_engine_torque.value) * (4.0 * get_model_delta_time ());
+		if (command_line_dynamics_advanced_engine_model == TRUE)
+		  current_flight_dynamics->left_engine_torque.value += (workload) * (4.0 * get_model_delta_time ());
 	}
 	else
 	{
@@ -707,7 +720,10 @@ void update_ka50_advanced_dynamics (void)
 			}
 		}
 
+//Werewolf
 		current_flight_dynamics->right_engine_torque.value += ((current_flight_dynamics->input_data.collective.value * rpm) - current_flight_dynamics->right_engine_torque.value) * (4.0 * get_model_delta_time ());
+		if (command_line_dynamics_advanced_engine_model == TRUE)
+			current_flight_dynamics->right_engine_torque.value += (workload) * (4.0 * get_model_delta_time ());
 	}
 	else
 	{
@@ -724,7 +740,7 @@ void update_left_engine_rpm_dynamics (void)
 {
 
 	float
-		collect;
+		collect, engine_workload = 0.0;
 
 	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
 
@@ -740,6 +756,15 @@ void update_left_engine_rpm_dynamics (void)
 	//
 	//
 
+	//Werewolf - Engine RPM depending on workload
+	if (command_line_dynamics_advanced_engine_model == TRUE)
+	{
+	  engine_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value))
+			  * 80.0;
+	  engine_workload = bound (engine_workload, 0.0, 100.0);
+	  //debug_log ( "Engine Workload=%.2f ", engine_workload);
+	}
+
 	current_flight_dynamics->left_engine_rpm.delta = current_flight_dynamics->left_engine_rpm.max - current_flight_dynamics->left_engine_rpm.value;
 
 	current_flight_dynamics->left_engine_rpm.delta = bound (current_flight_dynamics->left_engine_rpm.delta, -5.0, 5.0);
@@ -752,6 +777,8 @@ void update_left_engine_rpm_dynamics (void)
 	{
 
 		current_flight_dynamics->left_engine_rpm.value += current_flight_dynamics->left_engine_rpm.delta * get_model_delta_time ();
+		if (command_line_dynamics_advanced_engine_model == TRUE)
+		  current_flight_dynamics->left_engine_rpm.value -= engine_workload * (0.5 * get_model_delta_time ()); //Werewolf
 	}
 	else
 	{
@@ -805,7 +832,7 @@ void update_right_engine_rpm_dynamics (void)
 {
 
 	float
-		collect;
+		collect, engine_workload = 0.0;
 
 	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
 
@@ -821,6 +848,14 @@ void update_right_engine_rpm_dynamics (void)
 	//
 	//
 
+	//Werewolf - Engine RPM depending on workload
+	if (command_line_dynamics_advanced_engine_model == TRUE)
+	{
+	  engine_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value) )
+			  * 80.0;
+	  engine_workload = bound (engine_workload, 0.0, 100.0);
+	}
+
 	current_flight_dynamics->right_engine_rpm.delta = current_flight_dynamics->right_engine_rpm.max - current_flight_dynamics->right_engine_rpm.value;
 
 	current_flight_dynamics->right_engine_rpm.delta = bound (current_flight_dynamics->right_engine_rpm.delta, -5.0, 5.0);
@@ -833,6 +868,8 @@ void update_right_engine_rpm_dynamics (void)
 	{
 
 		current_flight_dynamics->right_engine_rpm.value += current_flight_dynamics->right_engine_rpm.delta * get_model_delta_time ();
+		if (command_line_dynamics_advanced_engine_model == TRUE)
+		  current_flight_dynamics->right_engine_rpm.value -= engine_workload * (0.5 * get_model_delta_time ()); //Werewolf
 	}
 	else
 	{
@@ -1069,7 +1106,8 @@ void update_main_rotor_rpm_dynamics (void)
 		blade_pitch,
 		rotor_rpm,
 		rpm_min,
-		rpm_max;
+		rpm_max,
+		rotor_workload = 0.0;
 
 	rpm_min = current_flight_dynamics->main_rotor_rpm.min;
 
@@ -1087,10 +1125,21 @@ void update_main_rotor_rpm_dynamics (void)
 	
 		number_of_engines = 2 - current_flight_dynamics->left_engine_rpm.damaged - current_flight_dynamics->right_engine_rpm.damaged;
 
+		//Werewolf - Rotor RPM depending on workload
+		if (command_line_dynamics_advanced_engine_model == TRUE)
+		{
+		  rotor_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value))
+				  * 30.0;
+		  rotor_workload = bound (rotor_workload, 0.0, 100.0);
+		  //debug_log ( "Rotor Workload=%.2f ", rotor_workload);
+		}
+
 		if (number_of_engines)
 		{
 
 			rotor_rpm = (current_flight_dynamics->left_engine_rpm.value + current_flight_dynamics->right_engine_rpm.value) / number_of_engines;
+			if (command_line_dynamics_advanced_engine_model == TRUE)
+			  rotor_rpm -= rotor_workload; //Werewolf
 		}
 
 		current_flight_dynamics->main_rotor_rpm.delta = rotor_rpm - current_flight_dynamics->main_rotor_rpm.value;

@@ -100,6 +100,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_SOUNDPITCH:
+		////////////////////////////////////////
+		{
+			raw->pitch = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_EFFECT_LIFETIME:
 		////////////////////////////////////////
 		{
@@ -201,6 +209,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_SOUNDPITCH:
+		////////////////////////////////////////
+		{
+			value = raw->pitch;
+
+			break;
+		}
+		////////////////////////////////////////
 		case FLOAT_TYPE_EFFECT_LIFETIME:
 		////////////////////////////////////////
 		{
@@ -252,6 +268,12 @@ void overload_sound_effect_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_AMPLIFICATION][COMMS_MODEL_SERVER]	= set_server_float_value;
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_AMPLIFICATION][COMMS_MODEL_CLIENT]	= set_client_float_value;
 	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_AMPLIFICATION]								= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_SOUNDPITCH]								= set_local_float_value;
+	fn_set_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_SOUNDPITCH]								= set_local_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_SOUNDPITCH][COMMS_MODEL_SERVER]	= set_server_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_SOUNDPITCH][COMMS_MODEL_CLIENT]	= set_client_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_SOUNDPITCH]								= get_local_float_value;
 
 	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_EFFECT_LIFETIME]							= set_local_float_value;
 	fn_set_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_EFFECT_LIFETIME]							= set_local_float_value;

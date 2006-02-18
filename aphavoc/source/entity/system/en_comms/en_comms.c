@@ -932,7 +932,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 				*sample_index_list;
 
 			float
-				amp;
+				amp, pitch;
 
 			vec3d
 				*position;
@@ -975,6 +975,9 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			amp = va_arg (pargs, double);
 			pack_float_value (en, FLOAT_TYPE_AMPLIFICATION, amp);
+
+			pitch = va_arg (pargs, double);
+			pack_float_value (en, FLOAT_TYPE_SOUNDPITCH, pitch);
 
 			valid = va_arg (pargs, int);
 			pack_int_value (en, INT_TYPE_VALID_SOUND_EFFECT, valid);
@@ -3275,7 +3278,7 @@ void process_received_entity_comms_messages (void)
 					create_stack_attributes;
 
 				float
-					amp;
+					amp, pitch;
 
 				vec3d
 					*pos,
@@ -3308,6 +3311,8 @@ void process_received_entity_comms_messages (void)
 
 				amp = unpack_float_value (NULL, FLOAT_TYPE_AMPLIFICATION);
 
+				pitch = unpack_float_value (NULL, FLOAT_TYPE_SOUNDPITCH);
+
 				valid = unpack_int_value (NULL, INT_TYPE_VALID_SOUND_EFFECT);
 
 				looping = unpack_int_value (NULL, INT_TYPE_SOUND_EFFECT_LOOPING);
@@ -3337,6 +3342,7 @@ void process_received_entity_comms_messages (void)
 					locality,
 					pos,
 					amp,
+					pitch,
 					valid,
 					looping,
 					sample_count,

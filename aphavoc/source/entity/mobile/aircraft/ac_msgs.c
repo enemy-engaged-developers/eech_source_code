@@ -116,6 +116,7 @@ static int response_to_articulate_undercarriage (entity_messages message, entity
 				SOUND_LOCALITY_ALL,
 				NULL, 											// position
 				1.0,												// amplification
+				1.0,												// Werewolf pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count

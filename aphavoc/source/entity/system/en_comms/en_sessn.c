@@ -1438,6 +1438,7 @@ void process_entity_sound_effect_creation (void)
 			SOUND_LOCALITY_ALL,
 			NULL,												// position
 			1.0,												// amplification
+			1.0, //Werewolf pitch
 			this_sound_effect_creation->valid,		// valid sound effect
 			TRUE,												// looping
 			1,													// sample count

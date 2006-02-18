@@ -200,6 +200,14 @@ const effect_data
       {
          FALSE,															// constructed locally
       },
+      // ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE
+      {
+         FALSE,															// constructed locally
+      },
+      // ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP
+      {
+         FALSE,															// constructed locally
+      },
       // ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN
       {
          FALSE,															// constructed locally

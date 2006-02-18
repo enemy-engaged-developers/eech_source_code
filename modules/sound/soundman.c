@@ -591,6 +591,7 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 		effect->paused = FALSE;
 		effect->looping = looping;
 		effect->volume = volume;
+		effect->pitch = 1.0;
 		effect->panning = panning;
 		effect->user_data = user_data;
 
@@ -688,6 +689,7 @@ system_sound_effect * create_sequenced_system_sound_effect ( int number_of_sampl
 		effect->looping = FALSE;
 		effect->panning = panning;
 		effect->volume = volume;
+		effect->pitch = 1.0;
 		effect->rate = samples[0].rate;
 		effect->user_data = user_data;
 
@@ -875,6 +877,8 @@ void update_system_sound_effect_system ( void )
 	
 							int
 								sound_sample_index;
+							int intrate; //Werewolf pitch - I hate typecasts
+							float floatrate = effect->rate*effect->pitch; //Werewolf
 	
 							//
 							// Move the samples along one in the sequence
@@ -901,8 +905,9 @@ void update_system_sound_effect_system ( void )
 							//
 							// Start the buffer playing
 							//
-	
-							dsound_set_sound_buffer_rate ( effect->sound_buffer, effect->rate );
+
+							convert_float_to_int (floatrate, &intrate);
+							dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate); //Werewolf
 	
 							dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
@@ -928,6 +933,8 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 
 	int
 		sound_sample_index;
+	int intrate; //Werewolf pitch - I hate typecasts
+	float floatrate = effect->rate*effect->pitch; //Werewolf
 
 	ASSERT ( effect );
 
@@ -974,7 +981,8 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 			if ( effect->sound_buffer )
 			{
 	
-				dsound_set_sound_buffer_rate ( effect->sound_buffer, effect->rate );
+				convert_float_to_int (floatrate, &intrate);
+				dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate );  //Werewolf 4 Feb 2006
 				
 				dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
@@ -994,7 +1002,8 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 
 void play_system_sound_effect ( system_sound_effect *effect, int buffer_position )
 {
-
+	int intrate; //Werewolf pitch - I hate typecasts
+	float floatrate = effect->rate*effect->pitch; //Werewolf
 	ASSERT ( effect );
 	ASSERT ( effect->sound_buffer );
 
@@ -1005,7 +1014,8 @@ void play_system_sound_effect ( system_sound_effect *effect, int buffer_position
 	
 		effect->paused = FALSE;
 	
-		dsound_set_sound_buffer_rate ( effect->sound_buffer, effect->rate );
+		convert_float_to_int (floatrate, &intrate);
+		dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate); //Werewolf pitch 4 Feb 2006
 	
 		dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
@@ -1121,6 +1131,47 @@ int get_system_sound_effect_panning ( system_sound_effect *effect )
 
 	return ( effect->panning );
 }
+
+//--Werewolf 4 Feb 2006 Sound pitch support
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch )
+{
+	int intrate; //Werewolf pitch - I hate typecasts
+	float floatrate;
+
+	ASSERT ( effect );
+	ASSERT ( effect->sound_buffer );
+
+	if (pitch < 0.1)
+		pitch = 0.1;
+	else if (pitch > 4.0)
+		pitch = 4.0;
+
+	effect->pitch = pitch;
+
+	floatrate = effect->rate*effect->pitch;
+	convert_float_to_int (floatrate, &intrate);
+//	debug_log ( "sound effect pitch change, pitch=%.2f  effect->pitch=%.2f  intrate=%d", pitch, effect->pitch, intrate);
+
+	dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_system_sound_effect_pitch ( system_sound_effect *effect )
+{
+
+	ASSERT ( effect );
+	ASSERT ( effect->sound_buffer );
+
+	return ( effect->pitch );
+}
+//--END Werewolf 4 Feb 2006 Sound pitch support
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

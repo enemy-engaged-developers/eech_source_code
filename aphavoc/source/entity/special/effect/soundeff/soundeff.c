@@ -547,6 +547,7 @@ entity *create_local_sound_effect_entity
 				sound_locality_types locality,
 				vec3d *position,
 				float amp,
+				float pitch,
 				int valid,
 				int looping,
 				int sample_count,
@@ -566,6 +567,11 @@ entity *create_local_sound_effect_entity
 	ASSERT (parent);
 
 	create_stack_attributes = force_local_entity_create_stack_attributes;
+
+	if (pitch == 0.0)   //Werewolf 4 Feb 2006
+	{
+		pitch = 1.0;  // If pitch is unset, use a sane default value
+	}
 
 	if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 	{
@@ -653,6 +659,7 @@ entity *create_local_sound_effect_entity
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_SOUND_LOCALITY, locality),
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_VALID_SOUND_EFFECT, valid),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_AMPLIFICATION, amp),
+		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SOUNDPITCH, pitch),
 		ENTITY_ATTR_END
 	);
 
@@ -688,6 +695,7 @@ entity *create_client_server_sound_effect_entity
 				sound_locality_types locality,
 				vec3d *position,
 				float amp,
+				float pitch,
 				int valid,
 				int looping,
 				int sample_count,
@@ -711,6 +719,7 @@ entity *create_client_server_sound_effect_entity
 		locality,
 		position,
 		amp,
+		pitch,
 		valid,
 		looping,
 		sample_count,
@@ -729,6 +738,7 @@ entity *create_client_server_sound_effect_entity
 		locality,
 		position,
 		amp,
+		pitch,
 		valid,
 		looping,
 		sample_count,

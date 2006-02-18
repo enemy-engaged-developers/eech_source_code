@@ -135,6 +135,7 @@ struct SYSTEM_SOUND_EFFECT
 		playing,
 		used,
 		looping;
+	float 	pitch;
 
 	void
 		*user_data;
@@ -217,6 +218,11 @@ extern int get_system_sound_effect_volume ( system_sound_effect *effect );
 extern void set_system_sound_effect_panning ( system_sound_effect *effect, int panning );
 
 extern int get_system_sound_effect_panning ( system_sound_effect *effect );
+
+extern void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch ); //Werewolf 4 Feb 2006
+
+extern float get_system_sound_effect_pitch ( system_sound_effect *effect ); //Werewolf 4 Feb 2006
+
 //
 // Sound SYSTEM routines
 //

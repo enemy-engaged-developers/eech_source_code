@@ -133,6 +133,8 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			pack_float_value (en, FLOAT_TYPE_AMPLIFICATION, raw->amplification);
 
+			pack_float_value (en, FLOAT_TYPE_SOUNDPITCH, raw->pitch);
+
 			pack_float_value (en, FLOAT_TYPE_EFFECT_LIFETIME, raw->effect_lifetime);
 
 			pack_float_value (en, FLOAT_TYPE_VALID_EFFECT_LIFETIME, raw->valid_effect_lifetime);
@@ -241,6 +243,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			}
 
 			raw->amplification = unpack_float_value (en, FLOAT_TYPE_AMPLIFICATION);
+
+			raw->pitch = unpack_float_value (en, FLOAT_TYPE_SOUNDPITCH);
 
 			raw->effect_lifetime = unpack_float_value (en, FLOAT_TYPE_EFFECT_LIFETIME);
 

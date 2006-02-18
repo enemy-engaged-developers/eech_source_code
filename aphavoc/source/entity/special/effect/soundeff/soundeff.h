@@ -108,6 +108,7 @@ struct SOUND_EFFECT
 
 	float
 		amplification,
+		pitch,
 		effect_lifetime,
 		valid_effect_lifetime;
 
@@ -194,6 +195,7 @@ extern entity *create_local_sound_effect_entity
 				sound_locality_types locality,
 				vec3d *position,
 				float amp,
+				float pitch,
 				int valid,
 				int looping,
 				int sample_count,
@@ -209,6 +211,7 @@ extern entity *create_client_server_sound_effect_entity
 				sound_locality_types locality,
 				vec3d *position,
 				float amp,
+				float pitch,
 				int valid,
 				int looping,
 				int sample_count,

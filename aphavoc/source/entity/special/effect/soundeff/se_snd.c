@@ -431,6 +431,16 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 					set_system_sound_effect_panning (raw->sound_effect_data, panning);
 				}
 			}
+
+			//Werewolf pitch 4 Feb 2006
+			if (raw->pitch)
+			{
+				float pitch = raw->pitch;
+//				debug_log ( "sound entity pitch change, pitch=%.2f ", pitch);
+
+				set_system_sound_effect_pitch (raw->sound_effect_data, pitch);
+			}
+			//End Werewolf pitch 4 Feb 2006
 				
 			if (!get_system_sound_effect_playing (raw->sound_effect_data))
 			{

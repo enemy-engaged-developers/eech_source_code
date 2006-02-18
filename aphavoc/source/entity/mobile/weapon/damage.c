@@ -277,6 +277,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 				SOUND_LOCALITY_INTERIOR,
 				NULL,												// position
 				damage_modifier,								// amplification
+				1.0,												// Werewolf pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count
@@ -295,6 +296,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 				SOUND_LOCALITY_EXTERIOR,
 				NULL,												// position
 				damage_modifier,								// amplification
+				1.0,												// Werewolf pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count

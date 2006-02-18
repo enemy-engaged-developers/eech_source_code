@@ -673,6 +673,7 @@ int create_meta_explosion_sound_effect( meta_explosion_component *explosion_comp
 		SOUND_LOCALITY_ALL,
 		position,										// position
 		explosion_component->sound_volume,		// amplification
+		1.0,						// Werewolf pitch
 		TRUE,												// valid sound effect
 		FALSE,											// looping
 		1,													// sample count

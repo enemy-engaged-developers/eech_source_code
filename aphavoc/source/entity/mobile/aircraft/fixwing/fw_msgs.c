@@ -373,6 +373,7 @@ static int response_to_waypoint_touch_down_reached (entity_messages message, ent
 				SOUND_LOCALITY_ALL,
 				NULL,												// position
 				1.0,												// amplification
+				1.0,												// Werewolf pitch
 				TRUE,												// valid sound effect
 				FALSE,											// looping
 				1,													// sample count

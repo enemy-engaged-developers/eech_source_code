@@ -130,6 +130,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->amplification = 1.0;
 
+		raw->pitch = 1.0; //Werewolf sound pitch mod
+
 		raw->sound_channel = SOUND_CHANNEL_SOUND_EFFECT;
 
 		//
