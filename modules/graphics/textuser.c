@@ -3672,7 +3672,7 @@ void restore_default_textures ( void )
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
 
 	}
-/*
+
 	//VJ 060120 release all texture loaded after the default system textures (water etc) 
 	if (current_map_info.last_texture > number_of_system_textures)
 	{
@@ -3689,7 +3689,7 @@ void restore_default_textures ( void )
 	
 		}
    }
-   */
+  
    //VJ 051225 reset map data 
    initialise_custom_map_info();
    
