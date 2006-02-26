@@ -322,36 +322,36 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	30;		// red
 		item->green_start			=	30;		// green
 		item->blue_start 			=	30;		// blue
-		item->alpha_start 		=	180;		// alpha
-		item->radius_start		=	3.5;		// radius
+		item->alpha_start 		=	0;		// alpha
+		item->radius_start		=	10.5;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.1;		// colour change 1 lifescale
 		item->red_1					=	30;		// red
 		item->green_1 				=	30;		// green
 		item->blue_1 				=	30;		// blue
-		item->alpha_1 				=	100;		// alpha
-		item->radius_1 			=	8.5;		// radius
+		item->alpha_1 				=	70;		// alpha
+		item->radius_1 			=	20.5;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	0.2;		// colour change 2 lifescale
-		item->red_2					=	30;		// red
-		item->green_2				=	30;		// green
-		item->blue_2				=	30;		// blue
-		item->alpha_2				=	100;		// alpha
-		item->radius_2				=	21.5;		// radius
+		item->red_2					=	00;		// red
+		item->green_2				=	00;		// green
+		item->blue_2				=	00;		// blue
+		item->alpha_2				=	30;		// alpha
+		item->radius_2				=	61.5;		// radius
 
 		// END COLOUR
 		item->red_end				=	60;		// red
 		item->green_end			=	60;		// green
 		item->blue_end				=	60;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	60.0;		// radius
+		item->radius_end			=	300.0;		// radius
 
 		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.8;
+		item->vertical_acceleration	=	0.6;
 
-		item->initial_velocity_noise	=	3.0;
+		item->initial_velocity_noise	=	6.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
@@ -364,6 +364,62 @@ void initialise_smoke_list_database (void)
 		item->lock_to_parent				=	TRUE;
 		item->wind_affected				=	TRUE;
 	}
+
+	////////////////////////////////////////
+	//
+	//	SMOKE_LIST_TYPE_FLAME
+	//
+	////////////////////////////////////////
+	{
+		item = &(smoke_list_database [SMOKE_LIST_TYPE_FLAME]);
+
+		// START COLOUR
+		item->red_start			=	80;		// red
+		item->green_start			=	80;		// green
+		item->blue_start 			=	50;		// blue
+		item->alpha_start 		=	100;		// alpha
+		item->radius_start		=	3.5;		// radius
+
+		// COLOUR CHANGE 1
+		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->red_1					=	80;		// red
+		item->green_1 				=	50;		// green
+		item->blue_1 				=	40;		// blue
+		item->alpha_1 				=	160;		// alpha
+		item->radius_1 			=	5.5;		// radius
+
+		// COLOUR CHANGE 2
+		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->red_2					=	60;		// red
+		item->green_2				=	30;		// green
+		item->blue_2				=	15;		// blue
+		item->alpha_2				=	60;		// alpha
+		item->radius_2				=	8.5;		// radius
+
+		// END COLOUR
+		item->red_end				=	30;		// red
+		item->green_end			=	10;		// green
+		item->blue_end				=	10;		// blue
+		item->alpha_end			=	0;			// alpha
+		item->radius_end			=	11.0;		// radius
+
+		item->final_vertical_velocity	=	2.5;
+		item->vertical_acceleration	=	2.2;
+
+		item->initial_velocity_noise	=	1.0;
+
+		item->texture						=	TEXTURE_ANIMATION_INDEX_CANNON_FLARE;
+		item->texture_size				=	1.0;
+		item->animation_rate				=	1.0;
+
+		item->additive						=	TRUE;
+		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
+		item->flat							=	FALSE;
+		item->ground_based				=	TRUE;
+		item->lock_to_parent				=	TRUE;
+		item->wind_affected				=	TRUE;
+	}
+
 
 	////////////////////////////////////////
 	//
@@ -487,8 +543,8 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	100;		// red
 		item->green_start			=	100;		// green
 		item->blue_start 			=	100;		// blue
-		item->alpha_start 		=	200;		// alpha
-		item->radius_start		=	15.0;		// radius
+		item->alpha_start 		=	100;		// alpha
+		item->radius_start		=	25.0;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.2;		// colour change 1 lifescale
@@ -496,15 +552,15 @@ void initialise_smoke_list_database (void)
 		item->green_1 				=	160;		// green
 		item->blue_1 				=	160;		// blue
 		item->alpha_1 				=	200;		// alpha
-		item->radius_1 			=	20.0;		// radius
+		item->radius_1 			=	50.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
 		item->red_2					=	120;		// red
 		item->green_2				=	120;		// green
 		item->blue_2				=	120;		// blue
-		item->alpha_2				=	20;		// alpha
-		item->radius_2				=	35.0;		// radius
+		item->alpha_2				=	0;		// alpha
+		item->radius_2				=	95.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	0;			// red

@@ -273,9 +273,9 @@ void initialise_misc_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 60.0;
+	explosion_info->generator_lifetime		= 70.0;
 	explosion_info->frequency					= 0.33333;
-	explosion_info->smoke_lifetime			= 16.0;
+	explosion_info->smoke_lifetime			= 30.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.0;
@@ -1589,9 +1589,9 @@ void initialise_object_dust_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 40.0;
+	explosion_info->generator_lifetime		= 10.0;
 	explosion_info->frequency					= 0.6;
-	explosion_info->smoke_lifetime			= 10.0;
+	explosion_info->smoke_lifetime			= 30.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.2;
@@ -1707,9 +1707,9 @@ void initialise_object_dust_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 120.0;
+	explosion_info->generator_lifetime		= 20.0;
 	explosion_info->frequency					= 0.5;
-	explosion_info->smoke_lifetime			= 16.0;
+	explosion_info->smoke_lifetime			= 40.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.2;
@@ -1837,7 +1837,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	6;
+	this_explosion->number_of_components	=	8;
 
 	this_explosion->damage_radius				=	30.0;
 
@@ -1962,7 +1962,7 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->sound_volume 				= 1.0;
 
 	//
-	// component 5
+	// component 5: Black smoke
 	//
 
 	explosion_info = &(this_explosion->component[ 5 ]);
@@ -1973,13 +1973,54 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 40.0;
-	explosion_info->frequency					= 0.5;
-	explosion_info->smoke_lifetime			= 10.0;
+	explosion_info->generator_lifetime		= 400.0;
+	explosion_info->frequency					= 1.0;
+	explosion_info->smoke_lifetime			= 100.0;
+
+	explosion_info->initial_velocity.x		= 0.0;
+	explosion_info->initial_velocity.y		= 0.1;
+	explosion_info->initial_velocity.z		= 0.0;
+
+	//
+	// component 6: Flame
+	//
+
+	explosion_info = &(this_explosion->component[ 6 ]);
+
+	explosion_info->type 						= EXPLOSION_SMOKE_TRAILS;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_FLAME;
+
+	explosion_info->trail_count 				=	1;
+
+	explosion_info->generator_lifetime		= 120.0;
+	explosion_info->frequency					= 0.3;
+	explosion_info->smoke_lifetime			= 4.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.2;
 	explosion_info->initial_velocity.z		= 0.0;
+
+	//
+	// component 7: Flame
+	//
+
+	explosion_info = &(this_explosion->component[ 7 ]);
+
+	explosion_info->type 						= EXPLOSION_SMOKE_TRAILS;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_FLAME;
+
+	explosion_info->trail_count 				=	1;
+
+	explosion_info->generator_lifetime		= 200.0;
+	explosion_info->frequency					= 0.2;
+	explosion_info->smoke_lifetime			= 3.0;
+
+	explosion_info->initial_velocity.x		= 0.0;
+	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.z		= 0.0;
+
 
 	////////////////////////////////////////
 	//
@@ -1989,7 +2030,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ LARGE_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	7;
+	this_explosion->number_of_components	=	9;
 
 	this_explosion->damage_radius				=	60.0;
 
@@ -2158,9 +2199,49 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
+	explosion_info->generator_lifetime		= 1200.0;
+	explosion_info->frequency					= 1.0;
+	explosion_info->smoke_lifetime			= 200.0;
+
+	explosion_info->initial_velocity.x		= 0.0;
+	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.z		= 0.0;
+
+	//
+	// component 7: Flame
+	//
+
+	explosion_info = &(this_explosion->component[ 7 ]);
+
+	explosion_info->type 						= EXPLOSION_SMOKE_TRAILS;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_FLAME;
+
+	explosion_info->trail_count 				=	1;
+
 	explosion_info->generator_lifetime		= 120.0;
-	explosion_info->frequency					= 0.5;
-	explosion_info->smoke_lifetime			= 16.0;
+	explosion_info->frequency					= 0.3;
+	explosion_info->smoke_lifetime			= 4.0;
+
+	explosion_info->initial_velocity.x		= 0.0;
+	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.z		= 0.0;
+
+	//
+	// component 8: Flame
+	//
+
+	explosion_info = &(this_explosion->component[ 8 ]);
+
+	explosion_info->type 						= EXPLOSION_SMOKE_TRAILS;
+
+	explosion_info->trail_type 				= SMOKE_LIST_TYPE_FLAME;
+
+	explosion_info->trail_count 				=	1;
+
+	explosion_info->generator_lifetime		= 200.0;
+	explosion_info->frequency					= 0.2;
+	explosion_info->smoke_lifetime			= 3.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.2;
