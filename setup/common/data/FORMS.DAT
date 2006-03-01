@@ -204,12 +204,12 @@
 :NAME STAGGERED_TRAIL_LEFT
 :RADIUS 600
 :COUNT 16
-:POSITION  -50.0,     0.0,      -50.0
-:POSITION  10.0,      0.0,     -100.0
-:POSITION -50.0,      0.0,     -50.0
-:POSITION -50.0,      0.0,     -150.0
+:POSITION  0.0,        0.0,      0.0
+:POSITION  0.0,       0.0,     -80.0
+:POSITION -50.0,       0.0,     -50.0
+:POSITION -50.0,       0.0,     -100.0
 :POSITION 100.0,      0.0,     -100.0
-:POSITION -150.0,     0.0,      150.0
+:POSITION -150.0,     0.0,     -150.0
 :POSITION 150.0,      0.0,     -150.0
 :POSITION -200.0,     0.0,     -200.0
 :POSITION 200.0,      0.0,     -200.0
@@ -229,8 +229,8 @@
 :NAME STAGGERED_TRAIL_RIGHT
 :RADIUS 600
 :COUNT 16
-:POSITION 0.0,        0.0,      0.0
-:POSITION 20.0,       0.0,     -80.0
+:POSITION  0.0,        0.0,      0.0
+:POSITION  0.0,       0.0,     -80.0
 :POSITION 50.0,       0.0,     -50.0
 :POSITION 50.0,       0.0,     -100.0
 :POSITION 100.0,      0.0,     -100.0
