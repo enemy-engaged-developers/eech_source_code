@@ -124,7 +124,9 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	float
 		v,
 		channel_volume,
-		zero_volume_range;
+		minimum_sound_range,
+		reference_sound_range,
+		maximum_sound_range;
 
 	raw = get_local_entity_data (en);
 
@@ -244,17 +246,19 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	// check if sound is within range
 	//
 
-	zero_volume_range = get_local_entity_float_value (en, FLOAT_TYPE_ZERO_VOLUME_RANGE);
+	minimum_sound_range = get_local_entity_float_value (en, FLOAT_TYPE_MINIMUM_SOUND_RANGE);
+	reference_sound_range = get_local_entity_float_value (en, FLOAT_TYPE_REFERENCE_SOUND_RANGE);
+	maximum_sound_range = get_local_entity_float_value (en, FLOAT_TYPE_MAXIMUM_SOUND_RANGE);
 
 	maximum_volume = get_local_entity_int_value (en, INT_TYPE_MAXIMUM_VOLUME);
 
-	if ((zero_volume_range == 0.0) || (range == 0.0))
+	if ((maximum_sound_range == 0.0) || (range == 0.0))
 	{
 		v = maximum_volume;
 	}
 	else
 	{
-		if (range >= zero_volume_range)
+		if (range >= maximum_sound_range)
 		{
 			#if DEBUG_MODULE
 		
@@ -276,12 +280,40 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		// adjust volume with range
 		//
 		{
-			float
-				temp;
-
-			temp = zero_volume_range - range;
-			
-			v = maximum_volume * ((temp * temp) / (zero_volume_range * zero_volume_range));
+//			float temp;
+//			temp = zero_volume_range - range;
+//			v = maximum_volume * ((temp * temp) / (zero_volume_range * zero_volume_range));
+			if ((minimum_sound_range == 0.0) && (reference_sound_range == 0.0))
+			{
+				float temp;
+				temp = maximum_sound_range - range;
+				v = ((temp * temp) / (maximum_sound_range * maximum_sound_range));
+			}
+			else if (minimum_sound_range == 0.0)
+			{
+           		if(range >= maximum_sound_range)
+	              	v = 0.0;
+           		else if(range > reference_sound_range)
+        	      	v = (reference_sound_range / range);
+    	       	else
+	              	v = 1.0;
+			}
+			else
+			{
+				v = 0.0;
+				if((range >= maximum_sound_range) || (range <= minimum_sound_range))
+					v = 0.0;
+				else if (range < reference_sound_range)
+					v = (range-minimum_sound_range) / (reference_sound_range-minimum_sound_range);
+				else
+					v = 1- ((range-reference_sound_range) / (maximum_sound_range-reference_sound_range));
+				//Normalize
+				if (v < 0.0)
+					v = 0.0;
+				else if (v > 1.0)
+					v = 1.0;
+			}
+			v = v * maximum_volume;
 		}
 	}
 

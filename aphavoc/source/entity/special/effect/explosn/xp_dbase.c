@@ -530,7 +530,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ SMALL_HE_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	5;
+	this_explosion->number_of_components	=	6;
 
 	this_explosion->damage_radius				=	10.0;
 
@@ -673,6 +673,16 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_SMALL_EXPLOSION;
 	explosion_info->sound_volume 				= 0.8;
 
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 5 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
+
+
 	////////////////////////////////////////
 	//
 	// MEDIUM HE EXPLOSION
@@ -681,7 +691,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_HE_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	5;
+	this_explosion->number_of_components	=	6;
 
 	this_explosion->damage_radius				=	30.0;
 
@@ -824,6 +834,16 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_MEDIUM_EXPLOSION;
 	explosion_info->sound_volume 				= 1.0;
 
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 5 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
+
+
 	////////////////////////////////////////
 	//
 	// LARGE HE EXPLOSION
@@ -832,7 +852,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ LARGE_HE_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	7;
+	this_explosion->number_of_components	=	8;
 
 	this_explosion->damage_radius				=	60.0;
 
@@ -1017,6 +1037,15 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->trail_type 				= SMOKE_LIST_TYPE_SMALL_PARTICLE_TRAIL;
 
 	explosion_info->initial_speed 			= 30.0;
+
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 7 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1748,7 +1777,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ SMALL_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	3;
+	this_explosion->number_of_components	=	4;
 
 	this_explosion->damage_radius				=	10.0;
 
@@ -1829,6 +1858,15 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_SMALL_EXPLOSION;
 	explosion_info->sound_volume 				= 1.0;
 
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 3 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
+
 	////////////////////////////////////////
 	//
 	// MEDIUM EXPLOSIVE OBJECT EXPLOSION
@@ -1837,7 +1875,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ MEDIUM_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	8;
+	this_explosion->number_of_components	=	9;
 
 	this_explosion->damage_radius				=	30.0;
 
@@ -2021,6 +2059,14 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->initial_velocity.y		= 0.2;
 	explosion_info->initial_velocity.z		= 0.0;
 
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 8 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
 
 	////////////////////////////////////////
 	//
@@ -2030,7 +2076,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion = &(meta_explosion_database[ LARGE_EXPLOSIVE_OBJECT_META_EXPLOSION ]);
 
-	this_explosion->number_of_components	=	9;
+	this_explosion->number_of_components	=	10;
 
 	this_explosion->damage_radius				=	60.0;
 
@@ -2246,6 +2292,15 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->initial_velocity.x		= 0.0;
 	explosion_info->initial_velocity.y		= 0.2;
 	explosion_info->initial_velocity.z		= 0.0;
+
+	//
+	// Werewolf: distant explosion sound
+	//
+
+	explosion_info = &(this_explosion->component[ 9 ]);
+	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
+	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+	explosion_info->sound_volume 				= 1.0;
 
 }
 

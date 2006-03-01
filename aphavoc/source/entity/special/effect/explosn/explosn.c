@@ -654,6 +654,7 @@ int create_meta_explosion_sound_effect( meta_explosion_component *explosion_comp
 {
 	entity
 		*new_entity;
+	int sampleToUse;
 
 	#if DEBUG_MODULE >= 2
 
@@ -662,6 +663,38 @@ int create_meta_explosion_sound_effect( meta_explosion_component *explosion_comp
 	debug_log( "index : %d", entity_index_list[ 0 ] );
 
 	#endif
+
+
+	if ((explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1) || 
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_2) ||
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_3) ||
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_4) ||
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_5) ||
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_6) ||
+		(explosion_component->sound_type == SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_7))
+	{
+		sampleToUse = 1 + (int) (7.0*rand()/(RAND_MAX+1.0));
+		switch(sampleToUse)
+		{
+			case 1:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+					break;
+			case 2:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_2;
+					break;
+			case 3:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_3;
+					break;
+			case 4:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_4;
+					break;
+			case 5:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_5;
+					break;
+			case 6:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_6;
+					break;
+			case 7:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_7;
+					break;
+			default:	explosion_component->sound_type = SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
+					break;
+		}
+	}
+
 
 	new_entity = create_local_sound_effect_entity
 	(

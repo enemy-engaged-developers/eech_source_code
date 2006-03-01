@@ -2195,6 +2195,15 @@ enum //SOUND_SAMPLE_INDICES
 	SOUND_SAMPLE_INDEX_INTERIOR_HIND_ROTOR_TURBINE,
 	SOUND_SAMPLE_INDEX_HIND_LOCK_ON,
 	SOUND_SAMPLE_INDEX_HIND_MCA,
+
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_2,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_3,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_4,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_5,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_6,
+	SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_7,
+
 	//Werewolf: end additional sounds
 
 	NUM_SOUND_SAMPLE_INDICES,
@@ -2223,7 +2232,9 @@ struct SOUND_SAMPLE_INFORMATION
 		maximum_volume;
 
 	float
-		zero_volume_range;
+		minimum_sound_range,
+		reference_sound_range,
+		maximum_sound_range;
 };
 
 typedef struct SOUND_SAMPLE_INFORMATION sound_sample_information;
@@ -2244,7 +2255,9 @@ struct SOUND_EFFECT_INFORMATION
 		maximum_volume;
 
 	float
-		zero_volume_range;
+		minimum_sound_range,
+		reference_sound_range,
+		maximum_sound_range;
 };
 
 typedef struct SOUND_EFFECT_INFORMATION sound_effect_information;

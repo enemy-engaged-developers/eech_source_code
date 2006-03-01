@@ -1398,7 +1398,23 @@ float_type_data
 			FALSE,															// fast_track
 		},
 		{
-			"FLOAT_TYPE_ZERO_VOLUME_RANGE",							// name
+			"FLOAT_TYPE_MINIMUM_SOUND_RANGE",							// name
+			FLOAT_PACK_TYPE_UNSIGNED_VALUE,							// pack_type
+			8,																	// pack_num_whole_bits (excluding sign bit)
+			4,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_REFERENCE_SOUND_RANGE",							// name
+			FLOAT_PACK_TYPE_UNSIGNED_VALUE,							// pack_type
+			8,																	// pack_num_whole_bits (excluding sign bit)
+			4,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_MAXIMUM_SOUND_RANGE",							// name
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,							// pack_type
 			8,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits

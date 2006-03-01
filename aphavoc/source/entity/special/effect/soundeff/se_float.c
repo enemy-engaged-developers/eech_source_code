@@ -233,14 +233,38 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
-		case FLOAT_TYPE_ZERO_VOLUME_RANGE:
+		case FLOAT_TYPE_MINIMUM_SOUND_RANGE:
 		////////////////////////////////////////
 		{
 			// possibly store in the entity ??
 
 			ASSERT (raw->effect_index);
 
-			value = application_sound_effects [raw->effect_index [0]].zero_volume_range;
+			value = application_sound_effects [raw->effect_index [0]].minimum_sound_range;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_REFERENCE_SOUND_RANGE:
+		////////////////////////////////////////
+		{
+			// possibly store in the entity ??
+
+			ASSERT (raw->effect_index);
+
+			value = application_sound_effects [raw->effect_index [0]].reference_sound_range;
+
+			break;
+		}
+		////////////////////////////////////////
+		case FLOAT_TYPE_MAXIMUM_SOUND_RANGE:
+		////////////////////////////////////////
+		{
+			// possibly store in the entity ??
+
+			ASSERT (raw->effect_index);
+
+			value = application_sound_effects [raw->effect_index [0]].maximum_sound_range;
 
 			break;
 		}
@@ -287,7 +311,9 @@ void overload_sound_effect_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_VALID_EFFECT_LIFETIME][COMMS_MODEL_CLIENT]	= set_client_float_value;
 	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_VALID_EFFECT_LIFETIME]							= get_local_float_value;
 
-	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_ZERO_VOLUME_RANGE]							= get_local_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_MINIMUM_SOUND_RANGE]							= get_local_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_REFERENCE_SOUND_RANGE]							= get_local_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_SOUND_EFFECT][FLOAT_TYPE_MAXIMUM_SOUND_RANGE]							= get_local_float_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
