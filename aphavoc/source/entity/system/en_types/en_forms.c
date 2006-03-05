@@ -110,12 +110,13 @@ const char *formation_names [] =
 	"ECHELON_RIGHT",
 	"COLUMN",
 	"WEDGE",
-    "DIAMOND",
+   "DIAMOND",
+//VJ 060305 three new formations for maverick
     "STAGGERED_TRAIL_LEFT",
     "STAGGERED_TRAIL_RIGHT",
     "80M_ROAD_NODE_16_TANKS",
-	"INFANTRY_COLUMN",
 
+	"INFANTRY_COLUMN",
 	"INVALID",
 	"NUM_FORMATION_TYPES"
 };
