@@ -985,6 +985,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 
 			break;
 	    }
+//VJ 060305 three new formations for maverick ====>
 		case MESSAGE_GROUP_DIAMOND:
 		{
 			group = get_local_entity_safe_ptr (value);
@@ -1010,6 +1011,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 			break;
        
 		}
+//VJ 060305 three new formations for maverick <====
 		case MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE:
 		{
 			process_message_request_airstrike (en);

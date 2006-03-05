@@ -910,11 +910,10 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 					add_message_action_to_database (sub_item, 3, MESSAGE_GROUP_ECHELON_RIGHT,	      index, DIK_4, "Echelon Right");
 					add_message_action_to_database (sub_item, 4, MESSAGE_GROUP_COLUMN,			      index, DIK_5, "Column");
 					add_message_action_to_database (sub_item, 5, MESSAGE_GROUP_WEDGE,				  index, DIK_6, "Wedge");   
-                    //Mavericks Formations mod
-                    add_message_action_to_database (sub_item, 6, MESSAGE_GROUP_DIAMOND,				  index, DIK_7, "Diamond");
-                    add_message_action_to_database (sub_item, 7, MESSAGE_GROUP_STAGGERED_TRAIL_LEFT,  index, DIK_8, "Staggered Trail Left");
-                    add_message_action_to_database (sub_item, 8, MESSAGE_GROUP_STAGGERED_TRAIL_RIGHT,  index, DIK_9, "Staggered Trail Right");
-                    
+			//VJ 060305 three new formations for maverick                  
+						add_message_action_to_database (sub_item, 6, MESSAGE_GROUP_DIAMOND,				  index, DIK_7, "Diamond");
+						add_message_action_to_database (sub_item, 7, MESSAGE_GROUP_STAGGERED_TRAIL_LEFT,  index, DIK_8, "Staggered Trail Left");
+						add_message_action_to_database (sub_item, 8, MESSAGE_GROUP_STAGGERED_TRAIL_RIGHT,  index, DIK_9, "Staggered Trail Right");
 
 					create_leaf_message_action (MESSAGE_GROUP_ROW_LEFT, 		      index, send_group_message);
 					create_leaf_message_action (MESSAGE_GROUP_ROW_RIGHT, 		      index, send_group_message);
