@@ -2024,9 +2024,29 @@ static void debug_set_entity_group_formation (event *ev)
 				}
 				case DIK_6:
 				{
-					set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, FORMATION_WEDGE);
+					set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, FORMATION_WEDGE);  
 
 					break;
+                }
+//VJ 060306 for Maverick 3 new group formations                
+				case DIK_7:
+				{
+					set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, FORMATION_DIAMOND);
+
+					break;
+                 }
+				case DIK_8:
+				{
+					set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, FORMATION_STAGGERED_TRAIL_LEFT);
+
+					break;
+                }
+				case DIK_9:
+				{
+					set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, FORMATION_STAGGERED_TRAIL_RIGHT);
+
+					break;
+              
 				}
 			}
 		}
