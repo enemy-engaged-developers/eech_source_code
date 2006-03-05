@@ -122,8 +122,9 @@ void initialise_application_3d_system (void)
 	
 	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
 	// moved to beginning
+	debug_log("###CUSTOM TEXTURE STARTUP: initialise_application_3d_system: initialise_custom_map_info");
 	initialise_custom_map_info();
-	
+
 	initialise_3d_system ();
 
 	initialise_3d_objects ( "3ddata" );
@@ -1060,6 +1061,21 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 					break;
 				}
+/* buggy
+//VJ 060105 extra light level for PNVS
+				case DISPLAY_3D_LIGHT_LEVEL_VERY_HIGH:
+				{
+
+					ambient_light.red = 1.2;
+					ambient_light.green = 1.0;
+					ambient_light.blue = 0.2;
+
+					main_light.red = 0.5;
+					main_light.green = 0.4;
+					main_light.blue = 0.2;
+					break;
+				}
+*/
 			}
 
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
@@ -1144,7 +1160,23 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 					main_light.blue = 0.0;
 
 					break;
-				}				
+				}
+/* buggy				
+//VJ 060105 extra light level for PNVS
+				case DISPLAY_3D_LIGHT_LEVEL_VERY_HIGH:
+				{
+
+					ambient_light.red = 0.4;//0.0;
+					ambient_light.green = 1.2;//0.8;
+					ambient_light.blue = 0.4;//0.0;
+
+					main_light.red = 0.2;//0.0;
+					main_light.green = 0.8;//0.2;
+					main_light.blue = 0.2;//0.0;
+
+					break;
+				}
+*/				
 			}
 
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
