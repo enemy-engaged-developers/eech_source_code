@@ -1665,8 +1665,8 @@ void read_population_airfield_placements ( FILE *fp )
 			current_airport_inst3d = construct_3d_object ( object_index );
 
 			current_airport_inst3d->vp.position.x = x;
-	//VJ 060107 zbuffer fix for disappearing runways, simply elevate them above ground level by 0.02 m
-			current_airport_inst3d->vp.position.y = y+0.02;
+	//VJ 060107 zbuffer fix for disappearing runways, simply elevate them above ground level by 0.05 m
+			current_airport_inst3d->vp.position.y = y+0.05;
 			current_airport_inst3d->vp.position.z = z;
 	
 			current_airport_inst3d->object_has_shadow = FALSE;
