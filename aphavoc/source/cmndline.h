@@ -202,7 +202,6 @@ extern int
  
 
 extern float
-	rgbpoint,fogdist,
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,
 	command_line_dynamics_rudder_acceleration,
