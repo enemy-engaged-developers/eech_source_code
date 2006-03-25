@@ -146,8 +146,6 @@ struct CUSTOM_MAP_INFO
 	//same as global season 1 = default, 2 = default+winter, 3=desert
 	int
 		season; 
-	int 
-		user_season;	
 		
   //VJ 050322 texture colour mod: texture scale array, 64 is enough for terrain textures
 	int 

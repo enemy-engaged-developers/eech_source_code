@@ -145,9 +145,10 @@ void create_campaign (session_list_data_type *session)
    enable_entity_comms_messages ();
    
 //VJ 060217 initialize map info after parsing the campaign file
-	debug_log(" read_map_info_data from faction.c %d",current_map_info.user_season);	
-	if(current_map_info.user_season == 0)
-  	read_map_info_data();
+//VJ 060319 further bug fixes
+  	read_map_info_data();      
+	debug_log("###CUSTOM TEXTURE STARTUP: faction.c: create_campaign: read_map_info_data");
+	  	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4293,8 +4293,8 @@ void initialise_custom_map_info( void )
 
 //set the map season to default. There are 4 settings: default and desert, 
 //and summer and winter for the maps that change seasonally
-	current_map_info.season = SESSION_SEASON_DEFAULT;
-	current_map_info.user_season = 0;
+//VJ 060319 further bug fixes
+	current_map_info.season = SESSION_SEASON_INVALID;
 	
 	current_map_info.dry_river = 0;
 	
@@ -4319,8 +4319,11 @@ void initialise_custom_map_info( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 052127 read map info data
-//called from \eech-new\aphavoc\source\ui_menu\sessparm\sparm_sc.c
-void read_map_info_data( void )
+//VJ 060319 further bug fixes
+//called from \eech-new\aphavoc\source\ui_menu\sessparm\sparm_sc.c with menu
+//called from \eech-new\aphavoc\source\comms\comm_man.c in case of MP
+//called from eech-new\aphavoc\source\ai\faction\faction.c in case of load save game
+void read_map_info_data ( void )
 {
 	FILE *fin;
 	int
@@ -4342,12 +4345,11 @@ void read_map_info_data( void )
 
 	// VJ 051223 head of the session list, title field contains warzone name "Taiwan" etc
 	//strcpy(current_map_info.name, get_session_list()->title);
-	//VJ 040206: doesn't work in MP becaus ethe title is: -multiplayer- !!!
+	//VJ 040206: doesn't work in MP because the title is: -multiplayer- !!!
 	
 	// the purpose of this bit of code is to detect the warzone name which is then used 
 	// as directory name under /graphics/textures/terrain/[name] to read the textures from
 
-	//in eech-new\aphavoc\source\ui_menu\session\session.h
 	//VJ 020206 Changed to using data_path, because that one is initialized in multiplayer
 	
 	// try and read an integer > 9 
@@ -4359,10 +4361,9 @@ void read_map_info_data( void )
 		current_map_info.mapnr = atoi(map);
 	}	
 
-	debug_log("=== loading custom info: warzone number: %d",current_map_info.mapnr);
+	debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: warzone number: %d",current_map_info.mapnr);
 
-	// now find the "short" name of the warzone by the campaign file. This is how it is done in the first place in uisession.c!
-	
+	// now find the "short" name of the warzone by the campaign file. This is how it is done in the first place in uisession.c!	
 	//use the data_path to find the texture name by looking at the first file in the first campaign dir
 	//which is always taiwan.chc or yemen.chc etc
 	sprintf(filename,"%s\\camp01\\*.chc", get_current_game_session()->data_path);
@@ -4382,11 +4383,84 @@ void read_map_info_data( void )
 	
 	current_map_info.name[strlen(map)-4] = '\0';
 			
-	debug_log("=== loading custom info: warzone name: %s",current_map_info.name);
+	debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: warzone name: %s",current_map_info.name);
+
+	//we now know the name
+	// parse mapinfo.txt that should be added to new custom campaigns
+	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
 	
-	//initialize what we know
-	// if user did not select a season in the interface:
-	if(current_map_info.user_season == 0)
+	//VJ 050820 added file checking to prevent crash
+	if ( file_exist ( filename ) )
+	{		
+		
+		debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: reading mainfo.txt: %s",filename);
+		
+		fin = fopen(filename,"r");
+	
+		// read comments
+		fscanf(fin,"%[^\n]\n",buf);
+		while (buf[0] == '#')
+			fscanf(fin,"%[^\n]\n",buf);
+		
+		for (j = 0 ; j < 3; j++)
+		{
+			//VJ 051225 added more map info for custom map reading
+			//scan contours and camo
+			
+			// if a season is not determined by the interface, MP or savegame			
+			if (current_map_info.season == SESSION_SEASON_INVALID)
+			{
+				if (strstr(buf, "season"))
+				{
+					p = strtok(buf,"=");
+					p = strtok(NULL,"#");
+					if (p)
+						current_map_info.season = atoi(p);
+					if (current_map_info.season == 0)	
+						current_map_info.season = 1;	
+					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: season: %d",	current_map_info.season);
+					set_global_season( current_map_info.season );
+				}	
+			}
+	
+			//scan for 2D map contour info
+			if (strstr(buf, "contour"))
+			{
+				p = strtok(buf,"=");
+				for (i = 0; i <= 8; i++)
+				{
+					p = strtok(NULL,",#");
+					if (p)
+				  		current_map_info.contour_heights[i] = atof(p);
+					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: custom contour %f",current_map_info.contour_heights[i]);
+				}			
+				
+				// rude check if info makes sense
+				if (current_map_info.contour_heights[8] > 0)
+					current_map_info.user_defined_contour_heights = 1;
+			
+			   // set the contours again, this is also done in the terrtype.c 
+				if (current_map_info.user_defined_contour_heights)
+			  		set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
+			}
+			
+			if (strstr(buf, "dry river"))
+			{
+				p = strtok(buf,"=");
+				p = strtok(NULL,"#");
+				if (p)
+					current_map_info.dry_river = atoi(p);
+				debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: dry river: %d",	current_map_info.dry_river);
+			}	
+			
+			fscanf(fin,"%[^\n]\n",buf);
+		}
+		
+		fclose(fin);
+	}
+	
+	//if no mapinfo.tct and no season determined yet, initialize what we know
+	if(current_map_info.season == SESSION_SEASON_INVALID)
 	{
 		switch (current_map_info.mapnr) {
 			case 5: 
@@ -4414,80 +4488,8 @@ void read_map_info_data( void )
 				set_global_season( SESSION_SEASON_DEFAULT );		
 			}
 		}
+		debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: default season: %d",	current_map_info.season);
 	}
-	// parse mapinfo.txt that should be added to new custom campaigns
-
-	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
-	
-	//VJ 050820 added file checking to prevent crash
-	if ( !file_exist ( filename ) )
-		return;
-	
-	debug_log("=== Reading custom map info file: %s",filename);
-	
-	fin = fopen(filename,"r");
-
-	// read comments
-	fscanf(fin,"%[^\n]\n",buf);
-	while (buf[0] == '#')
-		fscanf(fin,"%[^\n]\n",buf);
-	
-	for (j = 0 ; j < 3; j++)
-	{
-		//debug_log("read mapinof buf: %s",buf);
-	
-		//VJ 051225 added more map info for custom map reading
-		//scan contours and camo
-		
-		// if user did not select a season in the interface:
-		if (current_map_info.user_season == 0)
-		{
-			if (strstr(buf, "season"))
-			{
-				p = strtok(buf,"=");
-				p = strtok(NULL,"#");
-				if (p)
-					current_map_info.season = atoi(p);
-				if (current_map_info.season == 0)	
-					current_map_info.season = 1;	
-				debug_log("===map info data: season: %d",	current_map_info.season);
-				set_global_season( current_map_info.season );
-			}	
-		}
-		//scan for 2D map contour info
-		if (strstr(buf, "contour"))
-		{
-			p = strtok(buf,"=");
-			for (i = 0; i <= 8; i++)
-			{
-				p = strtok(NULL,",#");
-				if (p)
-			  		current_map_info.contour_heights[i] = atof(p);
-				debug_log("custom contour %f",current_map_info.contour_heights[i]);
-			}			
-			
-			// rude check if info makes sense
-			if (current_map_info.contour_heights[8] > 0)
-				current_map_info.user_defined_contour_heights = 1;
-		
-		   // set the contours again, this is also done in the terrtype.c 
-			if (current_map_info.user_defined_contour_heights)
-		  		set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
-		}
-		
-		if (strstr(buf, "dry river"))
-		{
-			p = strtok(buf,"=");
-			p = strtok(NULL,"#");
-			if (p)
-				current_map_info.dry_river = atoi(p);
-			debug_log("===map info data: dry river: %d",	current_map_info.dry_river);
-		}	
-		
-		fscanf(fin,"%[^\n]\n",buf);
-	}
-	
-	fclose(fin);
 	
 }
 

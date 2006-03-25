@@ -1372,16 +1372,16 @@ void comms_process_data (void)
 
 						session_camcom = get_list_item (ptr, int);
 
-                        size += sizeof (int);
+                  size += sizeof (int);
 
-                        sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
+                  sprintf (buffer, "%s: %d", get_trans ("Campaign Commander"), session_camcom);
 
 						add_to_pop_up_list_with_word_wrap (buffer, session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 
 						// 03DEC05 Casm Added season info transer
 						season = get_list_item (ptr, int);
 
-                        size += sizeof (int);
+                  size += sizeof (int);
 
 						if (season > 0 && season <= 4)
 						{
@@ -1389,6 +1389,7 @@ void comms_process_data (void)
 								*seasons[5] = { NULL, "Default", "Summer", "Winter", "Desert" };
 
 							//VJ 051227 use set and get global season here
+							//VJ 060319 further bug fixes
 							set_global_season ( season );
 
 							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
@@ -1402,9 +1403,8 @@ void comms_process_data (void)
 
 						set_ui_object_drawable (session_screen_next_button, TRUE);
 
-
 						//VJ 060201 now that we know the map number, initialize the info
-						debug_log(" read_map_info_data from comm_man.c %d",current_map_info.user_season);
+						debug_log("###CUSTOM TEXTURE STARTUP: comm_man.c: comms_process_data: read_map_info_data");
 						read_map_info_data();
 
 						break;

@@ -152,14 +152,15 @@ void notify_session_parameters (void)
 
 	//VJ 051227 reading map inof data for automatic custom map 
 	// function declared in textuser.c
+	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_session_parameters: read_map_info_data"); 
 	read_map_info_data();
-	debug_log(" read_map_info_data from sparm_sc.c %d ",current_map_info.user_season);
+
 	//
 	// Set the button states
 	//
 
 	//VJ 051227 set season info with map_info structure
-	set_global_season( current_map_info.season );		
+	set_global_season( current_map_info.season );
 
 	if (current_map_info.season != SESSION_SEASON_SUMMER && current_map_info.season != SESSION_SEASON_WINTER)
 	{
@@ -985,9 +986,9 @@ void notify_season_function ( ui_object *obj, void *arg )
 	tod = get_global_season ();
 	
 	tod++;
-	// skip deserts and default, they cannot be changed
+	// skip deserts. they cannot be changed
 	if (tod == SESSION_SEASON_DESERT)	
-		tod = SESSION_SEASON_DEFAULT;
+		tod = SESSION_SEASON_SUMMER;
 	if (tod == SESSION_SEASON_DEFAULT)	
 		tod = SESSION_SEASON_SUMMER;
 	
@@ -997,11 +998,8 @@ void notify_season_function ( ui_object *obj, void *arg )
 	
 	set_toggle_button_off (obj);
 
-	// flag that the season is changed by the user and the file map info should be ignored	
-	current_map_info.user_season = 1;
-
- if (get_global_season () == SESSION_SEASON_SUMMER || get_global_season () == SESSION_SEASON_WINTER)
-    load_3d_terrain_game_data ();
+//VJ 060319 further bug fixes
+	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_season_function"); 
 }
 //VJ 051011 <==add season summer/winter/desert button
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1589,8 +1587,8 @@ void process_host_session_setup_options (void)
 		time_of_day;
 
 //VJ 051011 add season summer/winter/desert button
-	session_season_settings
-		season_setting;
+	//session_season_settings
+		//season_setting;
 		
 	ASSERT (get_session_entity ());
 
@@ -1598,7 +1596,8 @@ void process_host_session_setup_options (void)
 
 	time_of_day = SESSION_TIME_RANDOM;
 	
-	season_setting = SESSION_SEASON_DEFAULT;
+//VJ 060304 changed to default season
+	//season_setting = SESSION_SEASON_DEFAULT;
 
 	switch (get_game_type ())
 	{
@@ -1616,7 +1615,7 @@ void process_host_session_setup_options (void)
 			weather_setting = get_global_session_campaign_weather();
 			time_of_day = get_global_session_campaign_time_of_day();
 //VJ 051011 add season summer/winter/desert button
-			season_setting = get_global_season();
+			//season_setting = get_global_season();
 
 			break;
 		}
@@ -1633,7 +1632,7 @@ void process_host_session_setup_options (void)
 			weather_setting = get_global_session_free_flight_weather();
 			time_of_day = get_global_session_free_flight_time_of_day();
 //VJ 051011 add season summer/winter/desert button
-			season_setting = get_global_season();
+			//season_setting = get_global_season();
 
 			break;
 		}
@@ -1665,8 +1664,8 @@ void process_restore_session_setup_options (void)
 		time_of_day;
 
 //VJ 051011 add season summer/winter/desert button
-	session_season_settings
-		season_setting;
+	//session_season_settings
+		//season_setting;
 
 	ASSERT (get_session_entity ());
 
@@ -1689,7 +1688,7 @@ void process_restore_session_setup_options (void)
 			weather_setting = get_global_session_free_flight_weather();
 			time_of_day = get_global_session_free_flight_time_of_day();
 //VJ 051011 add season summer/winter/desert button
-			season_setting = get_global_season();
+//			season_setting = get_global_season();
 
 			break;
 		}
