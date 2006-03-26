@@ -2971,7 +2971,7 @@ void initialise_3d_custom_map_terrain_types ( void )
 	if (current_map_info.user_defined_contour_heights)
 	{
 		//VJ 060325 changed to hard value 9
-		set_2d_terrain_contour_heights ( sizeof ( 9, current_map_info.contour_heights );
+		set_2d_terrain_contour_heights ( 9, contour_heights );
 	}
 	else
 	{	
