@@ -2195,7 +2195,7 @@ void free_flag_terrain_types ( void )
 void make_flag_terrain_types ( void )
 {
 	
-	int x, z;
+	int x, z, i;
 	
 	debug_log("making struct z %d x %d",terrain_3d_sector_z_max, terrain_3d_sector_x_max);		
 		
@@ -2211,8 +2211,13 @@ void make_flag_terrain_types ( void )
 			
 			customtype[z][x] = (terrain_custom_type *) safe_malloc ((terrain_sectors[z][x].number_of_polygons+1) * sizeof(terrain_custom_type));
 			
-			memset(customtype[z][x], 0, (terrain_sectors[z][x].number_of_polygons+1)*sizeof(terrain_custom_type));
-
+			//VJ 060423 memset didn't work? 
+			//memset(customtype[z][x], 0, (terrain_sectors[z][x].number_of_polygons+1)*sizeof(terrain_custom_type));
+			for (i = 0; i < terrain_sectors[z][x].number_of_polygons+1; i++)
+			{
+				customtype[z][x][i].id = 0;
+				customtype[z][x][i].flag = 0;
+			}
       }//x
 	}//z
 
