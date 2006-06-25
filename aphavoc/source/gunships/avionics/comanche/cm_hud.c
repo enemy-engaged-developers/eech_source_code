@@ -244,6 +244,36 @@ static char bob_up_command_heading_carat[] =
 	0,0,1,1,1,0,0,
 };
 
+//
+// flight path marker
+//
+
+static char flight_path_marker[] =
+{
+	// first two is size
+	25,
+	15,
+	// next two is center position
+	-12,
+	-9,
+	// the sprite itself
+	0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+	1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+	0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -253,7 +283,7 @@ static char bob_up_command_heading_carat[] =
 // pitch ladder
 //
 ////////////////////////////////////////
-
+// Points for making dashed pitch lines
 //													P11 O (+ve)
 //
 //
@@ -868,6 +898,224 @@ static int limit_pitch (int pitch, int *step_direction)
 	}
 
 	return (pitch);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// returns true if some part of the line lies inside the clip box
+static short clip_2d_line(float* x1, float* y1, float* x2, float* y2, float xmin, float ymin, float xmax, float ymax)
+{
+	float ratio;
+	float dx, dy;
+
+	dy = *y2 - *y1;
+	if (fabs(dy) < 0.001)  // (close to) horizontal line
+	{
+		if (*y1 > ymax || *y1 < ymin)  // line outside clip box
+			return FALSE;
+
+		*y2 = *y1;
+		*x1 = bound(*x1, xmin, xmax);
+		*x2 = bound(*x2, xmin, xmax);
+
+		return *x1 != *x2;
+	}
+	dx = *x2 - *x1;
+	if (fabs(dx) < 0.001)  // (close to) vertical line
+	{
+		if (*x1 < xmin || *x1 > xmax) // line outside clip box
+			return FALSE;
+		
+		*x1 = *x2;
+		*y1 = bound(*y1, ymin, ymax);
+		*y2 = bound(*y2, ymin, ymax);
+		
+		return *y1 != *y2;
+	}
+
+	ratio = dy / dx;
+
+	if (*x1 < xmin)
+	{
+		*y1 += (xmin - *x1) * ratio;
+		*x1 = xmin;
+	}
+	else if (*x1 > xmax)
+	{
+		*y1 -= (*x1 - xmax) * ratio;
+		*x1 = xmax;
+	}
+
+	if (*x2 < xmin)
+	{
+		*y2 += (xmin - *x2) * ratio;
+		*x2 = xmin;	
+	}
+	else if (*x2 > xmax)
+	{
+		*y2 -= (*x2 - xmax) * ratio;
+		*x2 = xmax;
+	}
+
+	if ((*y1 < ymin && *y2 < ymin) || (*y1 > ymax && *y2 > ymax))
+		return FALSE;
+
+	if (*y1 < ymin)
+	{
+		ASSERT(ratio > 0);
+		*x1 += (ymin - *y1) / ratio;
+		*y1 = ymin;
+		ASSERT(*x1 < xmax);
+	}
+	else if (*y1 > ymax)
+	{
+		ASSERT(ratio < 0);
+		*x1 -= (*y1 - ymax) / ratio;
+		*y1 = ymax;
+		ASSERT(*x1 < xmax);
+	}
+
+	if (*y2 < ymin)
+	{
+		ASSERT(ratio < 0);
+		*x2 += (ymin - *y2) / ratio;
+		*y2 = ymin;
+		ASSERT(*x2 < xmax);
+	}
+	else if (*y2 > ymax)
+	{
+		ASSERT(ratio > 0);
+		*x2 -= (*y2 - ymax) / ratio;
+		*y2 = ymax;
+		ASSERT(*x2 < xmax);
+	}
+
+	ASSERT(*x1 >= xmin && *x1 <= xmax && *x2 >= xmin && *x2 <= xmax &&
+		   *y1 >= ymin && *y1 <= ymax && *y2 >= ymin && *y2 <= ymax);
+	
+	return *x1 != *x2 && *y1 != *y2;
+}
+
+// arneh, june 2006 - added as part of transition mode hud
+static void draw_flight_path_marker (void)
+{
+	float forward_airspeed, sideways_airspeed, vertical_airspeed, flight_vector_x, flight_vector_y;
+	float pitch, roll, pixels_per_rad, focal_length, head_pitch;
+	float fpm_x_pixel_offset, fpm_y_pixel_offset, hud_pixel_ratio, fpm_hud_x_offset, fpm_hud_y_offset;
+	float cos_roll, sin_roll, fpm_x_offset, fpm_y_offset;
+	float horizon_angle, line_climb_ratio, horizon_pt_x, horizon_pt_y, horizon_deg;
+	float horizon_hud_x, horizon_hud_y, left_hud_x, left_hud_y, right_hud_x, right_hud_y;
+	
+	char s[4];
+	
+	forward_airspeed = current_flight_dynamics->velocity_z.value;
+	sideways_airspeed = current_flight_dynamics->velocity_x.value;
+	vertical_airspeed = current_flight_dynamics->world_velocity_y.value;
+
+	// figure out which direction we're going (relative to nose)
+	if (forward_airspeed < 0.01)   // don't bother drawing flight path marker if going backwards
+		return;
+	else
+	{
+		flight_vector_y = atan(vertical_airspeed / forward_airspeed);
+		flight_vector_x = atan(sideways_airspeed / forward_airspeed);
+	}
+
+	head_pitch = pilot_head_pitch;
+	if (get_global_wide_cockpit () &&
+		(wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT || wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT))
+   		head_pitch -= rad(wide_cockpit_position[wide_cockpit_nr].p);
+
+	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+	cos_roll = cos(roll);
+	sin_roll = sin(roll);
+
+	ASSERT (main_3d_env);
+	
+	// figure out on which screen pixel the flight path marker should be drawn
+	focal_length = tan (main_3d_env->width_view_angle * 0.5);               // view angle (20, 60, 80 deg etc.)
+	pixels_per_rad = (main_3d_env->clip_xmax - main_3d_env->clip_xmin) * 0.5;  // resolution
+	pixels_per_rad /= focal_length;
+
+	fpm_x_offset = pilot_head_heading + cos_roll * flight_vector_x + sin_roll * (pitch - flight_vector_y);
+	fpm_y_offset = head_pitch + cos_roll * (pitch - flight_vector_y) - sin_roll * flight_vector_x;
+	fpm_x_pixel_offset = pixels_per_rad * tan(fpm_x_offset);
+	fpm_y_pixel_offset = pixels_per_rad * tan(fpm_y_offset);
+
+
+	// figure out which hud texture pixel lies on top the screen pixel
+	hud_pixel_ratio = 1.0 /((active_2d_environment->vp.x_max - active_2d_environment->vp.x_min) * 0.5 / hud_screen_x_scale);
+	fpm_hud_x_offset = fpm_x_pixel_offset * hud_pixel_ratio;
+	fpm_hud_y_offset = fpm_y_pixel_offset * hud_pixel_ratio;
+
+	// draw the flight path marker on the hud
+	if (fpm_hud_x_offset > HUD_WINDOW_X_MIN + 0.05 && fpm_hud_x_offset < HUD_WINDOW_X_MAX - 0.05 && fpm_hud_y_offset > HUD_WINDOW_Y_MIN + 0.05 && fpm_hud_y_offset < HUD_WINDOW_Y_MAX - 0.05)
+		draw_hud_2d_mono_sprite (flight_path_marker, fpm_hud_x_offset, -fpm_hud_y_offset, hud_colour);
+
+
+	// draw horizon line
+	horizon_pt_x = fpm_x_offset + sin_roll * flight_vector_y;
+	horizon_pt_y = -(fpm_y_offset + cos_roll * flight_vector_y);
+	horizon_hud_x = hud_pixel_ratio * pixels_per_rad * tan(horizon_pt_x);
+	horizon_hud_y = hud_pixel_ratio * pixels_per_rad * tan(horizon_pt_y);
+	
+	horizon_angle = cos(pilot_head_heading) * roll + sin(pilot_head_heading) * -pitch;
+	horizon_deg = fmod(fabs(deg(horizon_angle)), 180);
+
+	if (horizon_deg < 89)  // my primitive horizon drawing algoritm assumes less than 90 degrees bank angle
+	{
+		line_climb_ratio = tan(horizon_angle);
+	
+		left_hud_x = horizon_hud_x - 1.5;
+		left_hud_y = horizon_hud_y + 1.5 * -line_climb_ratio;
+		right_hud_x = horizon_hud_x + 1.5;
+		right_hud_y = horizon_hud_y + 1.5 * line_climb_ratio;
+	
+		if (clip_2d_line(&left_hud_x, &left_hud_y, &right_hud_x, &right_hud_y, -0.75, -0.75, 0.8, 0.8))
+		{
+			float step = 0.05;
+			float x, y;
+			float xstep = step * cos_roll;
+			float ystep = xstep * line_climb_ratio;
+			ASSERT(left_hud_x != right_hud_x);
+			ASSERT(xstep != 0);
+
+			// draw left side of horizon line
+			x = horizon_hud_x - 3*xstep;
+			y = horizon_hud_y - 3*ystep;
+			while (x > left_hud_x)
+			{
+				float x2, y2;
+				x2 = x - xstep;
+				y2 = y - ystep;
+
+				if (x <= right_hud_x)
+					draw_2d_line(x, y, x2, y2, hud_colour);
+
+				x -= 2*xstep;
+				y -= 2*ystep;
+			}
+
+			// draw right side of horizon line
+			x = horizon_hud_x + 3*xstep;
+			y = horizon_hud_y + 3*ystep;
+			while (x < right_hud_x)
+			{
+				float x2, y2;
+				x2 = x + xstep;
+				y2 = y + ystep;
+	
+				if (x >= left_hud_x)
+					draw_2d_line(x, y, x2, y2, hud_colour);
+
+				x += 2*xstep;
+				y += 2*ystep;
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2503,6 +2751,56 @@ static void draw_field_of_view_and_regard_boxes (void)
 	draw_2d_line (x + 0.0400, y - 0.0300, x + 0.0400, y + 0.0300, hud_colour);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// arneh, june 2006. Improved to include acceleration cue
+static void draw_velocity_vector()
+{
+#define VV_CUTOFF_VELOCITY 10.0
+	float scale, x, z, dx, dz;
+	
+	z = current_flight_dynamics->velocity_z.value;
+	x = current_flight_dynamics->velocity_x.value;
+
+	// cutoff the velocity marker if it gets too far from center
+	if (fabs(z) > VV_CUTOFF_VELOCITY)
+	{
+		x *= VV_CUTOFF_VELOCITY / z;
+		z = VV_CUTOFF_VELOCITY;
+	}
+	if (fabs(x) > VV_CUTOFF_VELOCITY)
+	{
+		z *= VV_CUTOFF_VELOCITY / x;
+		x = VV_CUTOFF_VELOCITY;	
+	}
+
+	// from center use 70% of the hud area
+	scale = (0.7 / VV_CUTOFF_VELOCITY);
+
+	x *= scale;
+	z *= scale;
+
+	draw_2d_line(0.0, 0.0, x, z, hud_colour);
+	// draw a little plus at the end
+	draw_2d_line(x, z - 0.01, x, z + 0.01, hud_colour);
+	draw_2d_line(x - 0.01, z, x + 0.01, z, hud_colour);
+
+	// draw acceleration cue
+	if (current_flight_dynamics->radar_altitude.value > 0.1)
+	{
+		dx = current_flight_dynamics->model_acceleration_vector.x / 40.0;
+		dz = current_flight_dynamics->model_acceleration_vector.z / 20.0;
+	}
+	else  // the acceleration vector doesn't work on the ground (it apparently 
+	      // assumes no ground interfers with the acceleration :)
+		dx = dz = 0.0;
+	
+	draw_2d_circle(bound(x+dx, -0.8, 0.8), bound(z+dz, -0.8, 0.8), 0.04, hud_colour);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2511,17 +2809,12 @@ static void draw_bob_up_overlay (void)
 {
 	float
 		heading,
-		bearing,
-		theta,
-		length,
 		dx,
 		dz,
 		dxt,
 		dzt;
 
-	vec3d
-		*position,
-		*motion_vector;
+	vec3d *position;
 
 	if (hud_bob_up_overlay)
 	{
@@ -2537,70 +2830,27 @@ static void draw_bob_up_overlay (void)
 			//
 			// hover box
 			//
-
-			dxt = (dx * cos (heading)) - (dz * sin (heading));
-			dzt = (dx * sin (heading)) + (dz * cos (heading));
-
-			dxt *= 1.0 / 100.0;
-			dzt *= 1.0 / 100.0;
-
-			clip_2d_point_to_hud_extent (&dxt, &dzt);
-
-			draw_2d_line (dxt - 0.083, dzt + 0.200, dxt + 0.083, dzt + 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt + 0.200, dxt + 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt + 0.083, dxt + 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt - 0.083, dxt + 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt - 0.200, dxt - 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt - 0.083, dzt - 0.200, dxt - 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt - 0.083, dxt - 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt + 0.083, dxt - 0.083, dzt + 0.200, hud_colour);
-
-			//
-			// velocity vector
-			//
-
-			motion_vector = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
-
-			dx = motion_vector->x;
-			dz = motion_vector->z;
-
-			length = sqrt ((dx * dx) + (dz * dz));
-
-			if ((length < knots_to_metres_per_second (-0.1)) || (length > knots_to_metres_per_second (0.1)))
+			if (hud_bob_up_overlay)
 			{
-				length = min (length, knots_to_metres_per_second (10.0));
-
-				length *= 0.5 / knots_to_metres_per_second (10.0);
-
-				bearing = atan2 (dx, dz);
-
-				theta = bearing - heading;
-
-				if (theta > rad (180.0))
-				{
-					theta -= rad (360.0);
-				}
-				else if (theta < rad (-180.0))
-				{
-					theta += rad (360.0);
-				}
+				dxt = (dx * cos (heading)) - (dz * sin (heading));
+				dzt = (dx * sin (heading)) + (dz * cos (heading));
+	
+				dxt *= 1.0 / 100.0;
+				dzt *= 1.0 / 100.0;
+	
+				clip_2d_point_to_hud_extent (&dxt, &dzt);
+	
+				draw_2d_line (dxt - 0.083, dzt + 0.200, dxt + 0.083, dzt + 0.200, hud_colour);
+				draw_2d_line (dxt + 0.083, dzt + 0.200, dxt + 0.200, dzt + 0.083, hud_colour);
+				draw_2d_line (dxt + 0.200, dzt + 0.083, dxt + 0.200, dzt - 0.083, hud_colour);
+				draw_2d_line (dxt + 0.200, dzt - 0.083, dxt + 0.083, dzt - 0.200, hud_colour);
+				draw_2d_line (dxt + 0.083, dzt - 0.200, dxt - 0.083, dzt - 0.200, hud_colour);
+				draw_2d_line (dxt - 0.083, dzt - 0.200, dxt - 0.200, dzt - 0.083, hud_colour);
+				draw_2d_line (dxt - 0.200, dzt - 0.083, dxt - 0.200, dzt + 0.083, hud_colour);
+				draw_2d_line (dxt - 0.200, dzt + 0.083, dxt - 0.083, dzt + 0.200, hud_colour);
 			}
-			else
-			{
-				length = 0.0;
-
-				theta = 0.0;
-			}
-
-			set_2d_window_rotation (hud_env, -theta);
-
-			draw_2d_line (0.0, 0.0, 0.0, length, hud_colour);
-
-			length = max (length - 0.0075, 0.0);
-
-			draw_2d_line (-0.0075, length, 0.0075, length, hud_colour);
-
-			set_2d_window_rotation (hud_env, 0.0);
+			
+			draw_velocity_vector();
 		}
 		else
 		{
@@ -2659,7 +2909,7 @@ static void draw_navigation_mode_hud (void)
 	}
 
 	display_true_airspeed ();
-
+	
 	display_barometric_altitude ();
 
 	draw_rate_of_climb_scale ();
@@ -2670,6 +2920,34 @@ static void draw_navigation_mode_hud (void)
 
 	draw_bob_up_overlay ();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// arneh, june 2006 - added transition mode hud
+static void draw_transition_mode_hud (void)
+{
+	draw_hud_centre_datum ();
+
+	draw_flight_path_marker ();
+	
+	if (!hud_bob_up_overlay)
+		draw_velocity_vector();
+	
+	draw_heading_scale ();
+
+	display_true_airspeed ();
+
+	draw_rate_of_climb_scale ();
+
+	display_engine_torque ();
+
+	display_waypoint_information ();
+
+	draw_bob_up_overlay ();
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2687,11 +2965,11 @@ static void draw_weapon_mode_hud (void)
 	}
 
 	display_true_airspeed ();
-
+	
 	display_barometric_altitude ();
 
 	draw_rate_of_climb_scale ();
-
+	
 	display_engine_torque ();
 
 	draw_target_symbology ();
@@ -2992,6 +3270,12 @@ char buffer[255];
 
 				break;
 			}
+			case HUD_MODE_TRANSITION:
+			{
+				draw_transition_mode_hud ();
+
+				break;
+			}
 			case HUD_MODE_WEAPON:
 			{
 				draw_weapon_mode_hud ();
@@ -3223,6 +3507,12 @@ void draw_comanche_hud_on_lens_texture (void)
 				case HUD_MODE_NAVIGATION:
 				{
 					draw_navigation_mode_hud ();
+
+					break;
+				}
+				case HUD_MODE_TRANSITION:
+				{
+					draw_transition_mode_hud ();
 
 					break;
 				}
