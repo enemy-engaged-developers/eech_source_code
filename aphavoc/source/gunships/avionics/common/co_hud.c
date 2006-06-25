@@ -87,7 +87,7 @@ vec3d
 	hud_bob_up_position;
 
 hud_modes
-	hud_mode;
+	hud_mode, previous_hud_mode;
 
 //VJ 050126 hud mod 
 hud_screen_data 
@@ -132,7 +132,9 @@ void initialise_common_hud (void)
 	hud_bob_up_position.y = 0.0;
 	hud_bob_up_position.z = 0.0;
 
-	hud_mode = HUD_MODE_NAVIGATION;
+	// arneh, june 2006 - transtion mode hud fix
+	hud_mode = HUD_MODE_TRANSITION;
+	previous_hud_mode = HUD_MODE_TRANSITION;
 
 	set_rgb_colour (hud_colour_table[HUD_COL_WHITE],   255, 255, 240, 255);
 	set_rgb_colour (hud_colour_table[HUD_COL_RED],     255,  20,   0, 255);
@@ -228,6 +230,23 @@ void set_hud_bob_up_overlay (void)
 	hud_bob_up_heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
 
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &hud_bob_up_position);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void switch_hud_mode(void)
+{
+	if (hud_mode == HUD_MODE_WEAPON)
+		return;
+	
+	if (hud_mode == HUD_MODE_TRANSITION)
+		hud_mode = HUD_MODE_NAVIGATION;
+	else
+		hud_mode = HUD_MODE_TRANSITION;
+
+	previous_hud_mode = hud_mode;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -205,7 +205,7 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 			#if 0
 
-			hud_mode = HUD_MODE_NAVIGATION;
+			hud_mode = previous_hud_mode;
 
 			#endif
 
@@ -223,6 +223,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				select_comanche_ground_radar_main_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -242,6 +244,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				select_comanche_air_radar_main_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -261,6 +265,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				select_comanche_tads_main_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -280,6 +286,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				select_comanche_tads_main_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -299,6 +307,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				select_comanche_tads_main_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -315,7 +325,9 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 				target_acquisition_system = system;
 
 				activate_common_hms ();
-
+				
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
 			}
 

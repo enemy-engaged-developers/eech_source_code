@@ -205,7 +205,7 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 			#if 0
 
-			hud_mode = HUD_MODE_NAVIGATION;
+			hud_mode = previous_hud_mode;
 
 			#endif
 
@@ -222,6 +222,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 				activate_common_ground_radar ();
 
 				select_apache_ground_radar_mfd ();
+
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -242,6 +245,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				select_apache_air_radar_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
+
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -260,6 +266,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 				activate_common_eo ();
 
 				select_apache_tads_mfd ();
+
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -280,6 +289,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				select_apache_tads_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
+
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -299,6 +311,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				select_apache_tads_mfd ();
 
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
+
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -315,6 +330,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 				target_acquisition_system = system;
 
 				activate_common_hms ();
+
+				if (hud_mode != HUD_MODE_WEAPON)
+					previous_hud_mode = hud_mode;
 
 				hud_mode = HUD_MODE_WEAPON;
 			}

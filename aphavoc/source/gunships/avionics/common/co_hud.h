@@ -67,6 +67,7 @@
 enum HUD_MODES
 {
 	HUD_MODE_NAVIGATION,
+	HUD_MODE_TRANSITION,
 	HUD_MODE_WEAPON,
 	NUM_HUD_MODES
 };
@@ -96,7 +97,7 @@ extern vec3d
 	hud_bob_up_position;
 
 extern hud_modes
-	hud_mode;
+	hud_mode, previous_hud_mode;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +114,8 @@ extern void set_next_hud_colour (void);
 extern void set_prev_hud_colour (void);
 
 extern void set_hud_bob_up_overlay (void);
+
+extern void switch_hud_mode (void);
 
 extern void clear_hud_bob_up_overlay (void);
 

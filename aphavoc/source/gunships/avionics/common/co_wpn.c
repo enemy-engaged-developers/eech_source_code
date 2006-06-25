@@ -528,7 +528,7 @@ void set_gunship_weapon (entity_sub_types weapon_sub_type)
 
 	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
-		hud_mode = HUD_MODE_NAVIGATION;
+		hud_mode = previous_hud_mode;
 	}
 }
 
