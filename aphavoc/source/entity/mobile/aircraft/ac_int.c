@@ -268,10 +268,12 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 				if (value == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 				{
-					hud_mode = HUD_MODE_NAVIGATION;
+					hud_mode = previous_hud_mode;
 				}
 				else
 				{
+					if (hud_mode != HUD_MODE_WEAPON)
+						previous_hud_mode = hud_mode;
 					hud_mode = HUD_MODE_WEAPON;
 
 					if (get_global_simple_avionics ())
