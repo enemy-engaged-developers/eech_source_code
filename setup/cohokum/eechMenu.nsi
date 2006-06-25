@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "162W3"
+  !define VERSION "162W4T1"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -90,7 +90,85 @@ Section "cohokum.exe" SectionExe
   File graphics\ui\cohokum\Map\PayBla.psd
   File graphics\ui\cohokum\Map\PayHin.psd
   File graphics\ui\cohokum\Map\PayKa5.psd
- 
+
+  SetOutPath "$INSTDIR\cohokum\audio"
+  File audio\ap_a2a.pcm
+  File audio\ap_mca.pcm
+  File audio\aprotore.pcm
+  File audio\aprotores.pcm
+  File audio\aprotoret.pcm
+  File audio\aprotori.pcm
+  File audio\aprotoris.pcm
+  File audio\aprotorit.pcm
+  File audio\aprotupi.pcm
+  File audio\blackhawk_a2a.pcm
+  File audio\blackhawk_mca.pcm
+  File audio\blackhawk_rotor_ext.pcm
+  File audio\blackhawk_rotor_int.pcm
+  File audio\blackhawk_slap_ext.pcm
+  File audio\blackhawk_slap_int.pcm
+  File audio\blackhawk_turbine_ext.pcm
+  File audio\blackhawk_turbine_int.pcm
+  File audio\blackhawk_winddown_ext.pcm
+  File audio\blackhawk_winddown_int.pcm
+  File audio\blackhawk_windup_ext.pcm
+  File audio\blackhawk_windup_int.pcm
+  File audio\comanche_a2a.pcm
+  File audio\comanche_mca.pcm
+  File audio\comanche_rotor_ext.pcm
+  File audio\comanche_rotor_int.pcm
+  File audio\comanche_slap_ext.pcm
+  File audio\comanche_slap_int.pcm
+  File audio\comanche_turbine_ext.pcm
+  File audio\comanche_turbine_int.pcm
+  File audio\comanche_winddown_ext.pcm
+  File audio\comanche_winddown_int.pcm
+  File audio\comanche_windup_ext.pcm
+  File audio\comanche_windup_int.pcm
+  File audio\explosion_distant1.pcm
+  File audio\explosion_distant2.pcm
+  File audio\explosion_distant3.pcm
+  File audio\explosion_distant4.pcm
+  File audio\explosion_distant5.pcm
+  File audio\explosion_distant6.pcm
+  File audio\explosion_distant7.pcm
+  File audio\ha_a2a.pcm
+  File audio\ha_mca.pcm
+  File audio\harotore.pcm
+  File audio\harotores.pcm
+  File audio\harotoret.pcm
+  File audio\harotori.pcm
+  File audio\harotoris.pcm
+  File audio\harotorit.pcm
+  File audio\harotupe.pcm
+  File audio\harotupi.pcm
+  File audio\hind_a2a.pcm
+  File audio\hind_mca.pcm
+  File audio\hind_rotor_ext.pcm
+  File audio\hind_rotor_int.pcm
+  File audio\hind_slap_ext.pcm
+  File audio\hind_slap_int.pcm
+  File audio\hind_turbine_ext.pcm
+  File audio\hind_turbine_int.pcm
+  File audio\hind_winddown_ext.pcm
+  File audio\hind_winddown_int.pcm
+  File audio\hind_windup_ext.pcm
+  File audio\hind_windup_int.pcm
+  File audio\hokum_a2a.pcm
+  File audio\hokum_mca.pcm
+  File audio\hokum_rotor_ext.pcm
+  File audio\hokum_rotor_int.pcm
+  File audio\hokum_slap_ext.pcm
+  File audio\hokum_slap_int.pcm
+  File audio\hokum_turbine_ext.pcm
+  File audio\hokum_turbine_int.pcm
+  File audio\hokum_winddown_ext.pcm
+  File audio\hokum_winddown_int.pcm
+  File audio\hokum_windup_ext.pcm
+  File audio\hokum_windup_int.pcm
+  File audio\rotorsounds_readme.txt
+  File audio\tankmove.pcm
+
 SectionEnd
 
 
