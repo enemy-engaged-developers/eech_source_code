@@ -209,9 +209,62 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 	}
 	else
 	{
+		// arneh, june 06 - speed up main rotor (was 90 deg per second, now depending on rotor 
+		// rpm and number of blades is between 180 and 900 deg per second))
+		float rotor_angular_speed, blade_factor;
+		entity_sub_types sub_type;
+		
 		main_rotor_motion_blurred = TRUE;
 
-		main_rotor_delta_heading = rad (90.0) * get_delta_time ();
+		sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+		switch (sub_type)
+		{
+		// Five or more rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
+			blade_factor = 4.0;
+			break;
+
+		// four rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW:
+		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
+		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+			blade_factor = 5.5;
+			break;
+
+		// coaxial three rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
+			blade_factor = 6.5;
+			break;
+	
+		// three rotor blades		
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+			blade_factor = 7.0;
+			break;
+
+		// two rotor blades
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+			blade_factor = 12.0;
+			break;
+		
+		default:
+			blade_factor = 6.0;
+		}
+
+		rotor_angular_speed = bound(blade_factor * main_rotor_rpm, 180, blade_factor*100);
+		main_rotor_delta_heading = rad(rotor_angular_speed) * get_delta_time ();
+		// end rotor speed fix
 	}
 
 	//
