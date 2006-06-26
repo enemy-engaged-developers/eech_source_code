@@ -1440,6 +1440,7 @@ void draw_hind_hud_on_texture (void)
 
 			switch (hud_mode)
 			{
+				case HUD_MODE_TRANSITION:				
 				case HUD_MODE_NAVIGATION:
 				{
 					draw_navigation_mode_hud (TRUE);

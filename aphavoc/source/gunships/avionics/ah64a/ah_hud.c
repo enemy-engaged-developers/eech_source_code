@@ -2845,6 +2845,7 @@ void draw_ah64a_hud (void)
 
 		switch (hud_mode)
 		{
+			case HUD_MODE_TRANSITION:
 			case HUD_MODE_NAVIGATION:
 			{
 				draw_navigation_mode_hud ();

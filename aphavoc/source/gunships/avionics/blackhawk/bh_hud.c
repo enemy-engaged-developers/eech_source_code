@@ -2846,6 +2846,7 @@ void draw_blackhawk_hud (void)
 
 		switch (hud_mode)
 		{
+			case HUD_MODE_TRANSITION:			
 			case HUD_MODE_NAVIGATION:
 			{
 				draw_navigation_mode_hud ();
