@@ -666,14 +666,19 @@ void update_virtual_cockpit_view (void)
 	
 		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
 		{									// ..this also means it´s NOT possible to use TIR in relative mode !!
-			temp_h = get_absolute_mouse_x ();
-			temp_p = get_absolute_mouse_y ();
+			static int previous_mouse_update_flag = 1;
+			float dh, dp;
 
-			temp_h = -MAX_LOOK_ANGLE_LEFT_RIGHT1*temp_h/16383;	// seems left <-> right are swapped with the mouse ?
-			temp_p = -45*temp_p/16383;	// Those are the max-possible values as they are restriced above in this file
-			
-			pilot_head_pitch = rad(temp_p);
-			pilot_head_heading = rad(temp_h);
+			if (previous_mouse_update_flag != get_mouse_update_flag())
+			{
+				dh = get_mouse_move_delta_x() * -MAX_LOOK_ANGLE_LEFT_RIGHT1 / 8000.0;
+				dp = get_mouse_move_delta_y() * -45 / 8000.0;
+
+				previous_mouse_update_flag = get_mouse_update_flag();
+				
+				pilot_head_heading += rad(dh);
+				pilot_head_pitch += rad(dp);
+			}
 		}
 		else	// TIR
 		{

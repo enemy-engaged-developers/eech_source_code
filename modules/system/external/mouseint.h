@@ -97,6 +97,10 @@ extern int get_mouse_y ( void );
 
 extern void set_mouse_y ( int y );
 
+extern int get_mouse_update_flag (void);
+extern int get_mouse_move_delta_x (void);
+extern int get_mouse_move_delta_y (void);
+
 extern int get_absolute_mouse_x ( void );				// Retro 030317
 extern int get_absolute_mouse_y ( void );				// Retro 030317
 

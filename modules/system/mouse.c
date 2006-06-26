@@ -101,6 +101,9 @@ static int
 	mouse_position_y = 0,
 	abs_mouse_x = 0,		// Retro 030317
 	abs_mouse_y = 0,		// Retro 030317
+	mouse_move_delta_x = 0,
+	mouse_move_delta_y = 0,
+	mouse_update_flag = 0,
 	mouse_on;
 
 static POINT
@@ -691,6 +694,9 @@ void move_mouse ( int dx, int dy )
 
 	if ( mouse_on )
 	{
+		mouse_update_flag++;  // wraparound ok
+		mouse_move_delta_x = command_line_mouse_look_speed * dx;
+		mouse_move_delta_y = command_line_mouse_look_speed * dy;
 
 		mouse_position_x += dx;
 		mouse_position_y += dy;
@@ -819,6 +825,21 @@ void set_mouse_y ( int y )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int get_mouse_update_flag (void)
+{
+	return mouse_update_flag;
+}
+
+int get_mouse_move_delta_x (void)
+{
+	return mouse_move_delta_x;	
+}
+
+int get_mouse_move_delta_y (void)
+{
+	return mouse_move_delta_y;	
+}
 
 int get_absolute_mouse_x ( void )	// Retro 030317
 {
