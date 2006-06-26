@@ -89,7 +89,7 @@ dynamics_damage_type
 			"Main rotor",
 			DYNAMICS_DAMAGE_MAIN_ROTOR,
 			0.2,
-			1.0,
+			0.8,
 			60.0 * ONE_SECOND,
 			TRUE,
 			FALSE,
@@ -98,7 +98,7 @@ dynamics_damage_type
 			"Tail rotor",
 			DYNAMICS_DAMAGE_TAIL_ROTOR,
 			0.3,
-			0.7,
+			0.5,
 			50.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
@@ -107,7 +107,7 @@ dynamics_damage_type
 			"Left engine",
 			DYNAMICS_DAMAGE_LEFT_ENGINE,
 			0.4,
-			0.6,
+			0.1,
 			30.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
@@ -116,7 +116,7 @@ dynamics_damage_type
 			"Right engine",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE,
 			0.4,
-			0.6,
+			0.1,
 			30.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
@@ -407,7 +407,14 @@ void dynamics_damage_model (unsigned int damage, int random)
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
 					set_current_flight_dynamics_auto_pilot (FALSE);
-
+					
+					// if both engines damaged, disengage rotor
+					if (damage & DYNAMICS_DAMAGE_RIGHT_ENGINE
+						|| current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE)
+					{
+						current_flight_dynamics->rotor_brake = TRUE;
+						debug_log ("DYNAMICS: rotor disengage due to both engines failure");
+					}
 					break;
 				}
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
@@ -431,6 +438,14 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					set_current_flight_dynamics_auto_pilot (FALSE);
 
+					// if both engines damaged, disengage rotor
+					if (damage & DYNAMICS_DAMAGE_LEFT_ENGINE
+						|| current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE)
+					{
+						current_flight_dynamics->rotor_brake = TRUE;
+						debug_log ("DYNAMICS: rotor disengage due to both engines failure");
+					}
+					
 					break;
 				}
 				case DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE:
