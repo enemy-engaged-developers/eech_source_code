@@ -1146,7 +1146,8 @@ void update_main_rotor_rpm_dynamics (void)
 	}
 	else
 	{
-
+		// rotor brake on (rotor disengaged)
+		
 		float
 			min_delta_rpm,
 			max_delta_rpm,
@@ -1155,7 +1156,9 @@ void update_main_rotor_rpm_dynamics (void)
 		min_delta_rpm = -2.0;
 		max_delta_rpm = 10.0;
 
-		// rotor brake on
+		// arneh - when not engaged to engine, rpm may exceed max
+		// (but rotor will fail before reaching the new limit)
+		rpm_max *= 1.5;
 
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{
@@ -1169,7 +1172,8 @@ void update_main_rotor_rpm_dynamics (void)
 			current_flight_dynamics->main_rotor_rpm.delta = -(min_delta_rpm +
 				(current_flight_dynamics->input_data.collective.value / current_flight_dynamics->input_data.collective.max) *
 				(max_delta_rpm - min_delta_rpm) *
-				(1.0 - (current_flight_dynamics->velocity_z.value / current_flight_dynamics->velocity_z.max)));
+				(1.0 - (current_flight_dynamics->velocity_z.value / current_flight_dynamics->velocity_z.max)) + 
+				5 * (current_flight_dynamics->input_data.cyclic_y.value / current_flight_dynamics->input_data.cyclic_y.max));  // arneh - forward cyclic decreases rpm, backwards increase
 		}
 		else
 		{
@@ -1186,6 +1190,10 @@ void update_main_rotor_rpm_dynamics (void)
 	current_flight_dynamics->main_rotor_rpm.value += current_flight_dynamics->main_rotor_rpm.delta * get_model_delta_time ();
 
 	current_flight_dynamics->main_rotor_rpm.value = bound (current_flight_dynamics->main_rotor_rpm.value, rpm_min, rpm_max);
+
+	// arneh - damage rotor if rpm too high (can only happen when rotor is disengaged)
+	if (current_flight_dynamics->main_rotor_rpm.value > 125.0)
+		dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
 
 	// low rotor speech
 	if ((current_flight_dynamics->main_rotor_rpm.value < 60.0) && (current_flight_dynamics->main_rotor_rpm.delta < 0.0) && (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT)))
@@ -1238,10 +1246,13 @@ void update_tail_rotor_rpm_dynamics (void)
 
 	rpm = 0.0;
 
-	if ((!current_flight_dynamics->rotor_brake) && (!current_flight_dynamics->tail_rotor_rpm.damaged))
+	if (!current_flight_dynamics->tail_rotor_rpm.damaged)
 	{
-
-		rpm = engine_rpm;
+		if (!current_flight_dynamics->rotor_brake)
+			rpm = engine_rpm;
+		// arneh, june 2006 - when rotor is disengaged from engines, main rotor drives tail rotor
+		else
+			rpm = current_flight_dynamics->main_rotor_rpm.value;
 	}
 
 	current_flight_dynamics->tail_rotor_rpm.delta = rpm - current_flight_dynamics->tail_rotor_rpm.value;
@@ -1302,7 +1313,8 @@ void update_main_rotor_thrust_dynamics (void)
 
 	x = current_flight_dynamics->main_blade_pitch.value;
 
-	if (!current_flight_dynamics->rotor_brake)
+//  arneh - let rotor have thrust even when rotor is disengaged from engine
+//	if (!current_flight_dynamics->rotor_brake)
 	{
 
 		rpm_ratio = 0.0;
@@ -1329,22 +1341,6 @@ void update_main_rotor_thrust_dynamics (void)
 			rpm_ratio * (current_flight_dynamics->main_rotor_induced_air.min +
 			(current_flight_dynamics->main_rotor_induced_air.max - current_flight_dynamics->main_rotor_induced_air.min) *
 			(x - x_min) / (x_max - x_min));
-	
-		current_flight_dynamics->main_rotor_induced_air.value *=
-			(current_flight_dynamics->air_density.value / current_flight_dynamics->air_density.max);
-	}
-	else
-	{
-
-		current_flight_dynamics->main_rotor_induced_air.value = bound (-current_flight_dynamics->world_motion_vector.y,
-																							current_flight_dynamics->main_rotor_induced_air.min,
-																							current_flight_dynamics->main_rotor_induced_air.max);
-
-		if (current_flight_dynamics->main_rotor_rpm.max != 0.0)
-		{
-
-			current_flight_dynamics->main_rotor_induced_air.value *= current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
-		}
 	
 		current_flight_dynamics->main_rotor_induced_air.value *=
 			(current_flight_dynamics->air_density.value / current_flight_dynamics->air_density.max);
@@ -1387,19 +1383,13 @@ void update_tail_rotor_thrust_dynamics (void)
 
 	Tl = current_flight_dynamics->tail_boom_length.value;
 
-	//if ((!current_flight_dynamics->cross_coupling_effect.damaged) &&
-		//(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
-	{
-		
+	// arneh - when rotor is disengaged it produces no torque, so 0 tail rotor adjustment is desired
+	if (current_flight_dynamics->rotor_brake ||
+		(!current_flight_dynamics->cross_coupling_effect.damaged) &&
+		(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
+		desired = 0.0;
+	else
 		desired = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
-	}
-	// else
-	{
-
-		//desired = 0.0;
-
-		//
-	}
 
 	current_flight_dynamics->cross_coupling_effect.value += (desired - current_flight_dynamics->cross_coupling_effect.value) * get_model_delta_time ();
 
@@ -1781,7 +1771,6 @@ void update_attitude_dynamics (void)
 	{
 	
 		tail_angular_force = tail_rotor_induced_air_value * current_flight_dynamics->tail_boom_length.value;
-
 		tail_angular_force *= heading_inertia_value;
 	
 		position.x = 0.0;
@@ -2098,42 +2087,15 @@ void update_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// main rotor disc torque effect
 	////////////////////////////////////////////
-	//if (!model_landed)
-	{
 
-		if ((!current_flight_dynamics->cross_coupling_effect.damaged) &&
+	{
+		// arneh - main rotor produces no torque when disengaged from
+		// engine or if running with cross coupling enabled
+		if (current_flight_dynamics->rotor_brake ||
+			(!current_flight_dynamics->cross_coupling_effect.damaged) &&
 			(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
 		{
-		
-			main_angular_force = heading_inertia_value * (main_rotor_rpm_value * 2.0 * PI * (current_flight_dynamics->main_rotor_diameter.value / 2.0)) / 1649.0;
-		
-			position.x = 0.0;
-			position.y = -0.08022;
-			position.z = -current_flight_dynamics->tail_boom_length.value;
-
-			direction.x = current_flight_dynamics->rotor_rotation_direction;
-			direction.y = 0.0;
-			direction.z = 0.0;
-
-			if (model_landed)
-			{
-
-				position.y = 0.0;
-
-				if ((current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_LEFT) &&
-					(current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_RIGHT))
-				{
-	
-					main_angular_force = 0.0;
-				}
-				else
-				{
-
-					main_angular_force *= min (fabs (velocity_z_value) / 15.0, 1.0);
-				}
-			}
-
-			add_dynamic_force ("Main rotor angular torque", main_angular_force, 0.0, &position, &direction, FALSE);
+			main_angular_force = 0.0;
 		}
 		else
 		{
@@ -3127,21 +3089,16 @@ void update_acceleration_dynamics (void)
 
 		if (current_flight_dynamics->wheel_brake)
 		{
+			// arneh, june 2006 - reduces effectivness of wheel brakes
+			if (current_flight_dynamics->world_motion_vector.x > 0)
+				current_flight_dynamics->world_motion_vector.x -= min(20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+			else
+				current_flight_dynamics->world_motion_vector.x -= max(-20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 
-			current_flight_dynamics->world_motion_vector.x -= 6.0 * current_flight_dynamics->world_motion_vector.x * get_model_delta_time ();
-			current_flight_dynamics->world_motion_vector.z -= 6.0 * current_flight_dynamics->world_motion_vector.z * get_model_delta_time (); // 12.0 is about right
-
-			if (fabs (current_flight_dynamics->world_motion_vector.x) < 1.0)
-			{
-
-				current_flight_dynamics->world_motion_vector.x = 0.0;
-			}
-
-			if (fabs (current_flight_dynamics->world_motion_vector.z) < 1.0)
-			{
-
-				current_flight_dynamics->world_motion_vector.z = 0.0;
-			}
+			if (current_flight_dynamics->world_motion_vector.z > 0)
+				current_flight_dynamics->world_motion_vector.z -= min(5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+			else
+				current_flight_dynamics->world_motion_vector.z -= max(-5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 		}
 	}
 	{
