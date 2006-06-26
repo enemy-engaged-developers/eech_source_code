@@ -2371,7 +2371,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 	
 			/* RPM */
 			value = current_flight_dynamics->main_rotor_rpm.value;
-			value = bound (value, 0.0, 100.0);
+			value = bound (value, 0.0, 110.0);
 			value += 20.0;
 			value *= rad (360.0) / 120.0;
 		    centre_x = 157 * width / 512;
