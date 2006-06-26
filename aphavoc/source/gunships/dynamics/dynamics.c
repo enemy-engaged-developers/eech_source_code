@@ -1763,7 +1763,7 @@ void set_current_flight_dynamics_rotor_brake (int flag)
 		debug_log ("DYNAMICS: rotor brake engaged");
 
 		#endif
-	
+
 		current_flight_dynamics->left_engine_rpm.max = 0.0;
 	
 		current_flight_dynamics->right_engine_rpm.max = 0.0;
@@ -2210,12 +2210,16 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 
 		current_flight_dynamics->valid_last_frame_fixed_collision_points = FALSE;
 
+		/*
+		 * arneh, june 06 - removed this as setting the rpm to 0 is just wrong
+		 * rather let rotors spin themselves down
 		if (get_current_flight_dynamics_rotor_brake ())
 		{
 
 			current_flight_dynamics->main_rotor_rpm.value = 0.0;
 			current_flight_dynamics->tail_rotor_rpm.value = 0.0;
 		}
+		*/
 
 		add_flight_path_action (current_flight_dynamics->position.x, current_flight_dynamics->position.z, FLIGHT_PATH_ACTION_USER_NAVIGATING);
 /*
