@@ -907,7 +907,7 @@ static short clip_2d_line(float* x1, float* y1, float* x2, float* y2, float xmin
 static void draw_flight_path_marker (void)
 {
 	float forward_airspeed, sideways_airspeed, vertical_airspeed, flight_vector_x, flight_vector_y;
-	float pitch, roll, pixels_per_rad, focal_length, head_pitch;
+	float pitch, roll, pixels_per_rad, focal_length;
 	float fpm_x_pixel_offset, fpm_y_pixel_offset, hud_pixel_ratio, fpm_hud_x_offset, fpm_hud_y_offset;
 	float cos_roll, sin_roll, fpm_x_offset, fpm_y_offset;
 	float horizon_angle, line_climb_ratio, horizon_pt_x, horizon_pt_y, horizon_deg;
@@ -925,11 +925,6 @@ static void draw_flight_path_marker (void)
 		flight_vector_y = atan(vertical_airspeed / forward_airspeed);
 		flight_vector_x = atan(sideways_airspeed / forward_airspeed);
 	}
-
-/*
-	head_pitch = pilot_head_pitch;
-	if (get_global_wide_cockpit () && wide_cockpit_nr == WIDEVIEW_APACHE_PILOT)
-   		head_pitch -= rad(wide_cockpit_position[wide_cockpit_nr].p); */
 
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);

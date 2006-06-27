@@ -1008,8 +1008,6 @@ static void draw_flight_path_marker (void)
 	float horizon_angle, line_climb_ratio, horizon_pt_x, horizon_pt_y, horizon_deg;
 	float horizon_hud_x, horizon_hud_y, left_hud_x, left_hud_y, right_hud_x, right_hud_y;
 	
-	char s[4];
-	
 	forward_airspeed = current_flight_dynamics->velocity_z.value;
 	sideways_airspeed = current_flight_dynamics->velocity_x.value;
 	vertical_airspeed = current_flight_dynamics->world_velocity_y.value;
