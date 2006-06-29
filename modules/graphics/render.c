@@ -89,13 +89,15 @@ BOOL initialise_graphics_rendering_system ( void )
 
 #define COBJMACROS 1
 
+/*
 #include "mmstream.h"
 #include "amstream.h"
 #include "ddstream.h"
+*/
 
 void play_avi ( const char *filename, int exit_key )
 {
-
+/*
 	IAMMultiMediaStream
 		*pAMStream;
 
@@ -349,7 +351,7 @@ void play_avi ( const char *filename, int exit_key )
 		
 				end_3d_scene ();
 			}
-			*/
+			
 
 			ddraw_flip_surface ();
 		}
@@ -363,7 +365,7 @@ void play_avi ( const char *filename, int exit_key )
 
 	IMediaStream_Release ( pPrimaryVidStream );
 
-	return;
+	return; */
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
