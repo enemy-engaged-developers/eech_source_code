@@ -362,6 +362,7 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("main_rotor_pitch  				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_pitch_angle.value);
 	debug_watch ("main_rotor_thrust 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_thrust.value);
 	debug_watch ("main_rotor_rpm    				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rpm.value);
+	debug_watch ("main_rotor_rpm_delta 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rpm.delta);	
 	debug_watch ("main_rotor_rps    				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rps.value);
 	debug_watch ("main_rotor_angle  				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_angular_position.value);
 	debug_watch ("main_rotor_inc	 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_angular_increment.value);
