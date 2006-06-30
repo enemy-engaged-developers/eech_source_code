@@ -1319,7 +1319,7 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	120;	// red
 		item->green_start			=	100;	// green
 		item->blue_start 			=	40;	// blue
-		item->alpha_start 		=	200;	// alpha
+		item->alpha_start 		=	150;	// alpha
 		item->radius_start		=	6.0;	// radius
 
 		// COLOUR CHANGE 1
@@ -1541,7 +1541,7 @@ void initialise_smoke_list_database (void)
 		item->red_start				=	255;		// red
 		item->green_start				=	255;		// green
 		item->blue_start 				=	255;		// blue
-		item->alpha_start 			=	20;		// alpha
+		item->alpha_start 			=	60;		// alpha
 		item->radius_start			=	2.0;		// radius
 
 		// COLOUR CHANGE 1
@@ -1549,7 +1549,7 @@ void initialise_smoke_list_database (void)
 		item->red_1						=	180;		// red
 		item->green_1 					=	210;		// green
 		item->blue_1 					=	255;		// blue
-		item->alpha_1 					=	10;		// alpha
+		item->alpha_1 					=	40;		// alpha
 		item->radius_1 				=	4.0;		// radius
 
 		// COLOUR CHANGE 2
@@ -1557,7 +1557,7 @@ void initialise_smoke_list_database (void)
 		item->red_2						=	180;		// red
 		item->green_2					=	210;		// green
 		item->blue_2					=	255;		// blue
-		item->alpha_2					=	2;			// alpha
+		item->alpha_2					=	20;			// alpha
 		item->radius_2					=	8.0;		// radius
 
 		// END COLOUR
@@ -1565,7 +1565,7 @@ void initialise_smoke_list_database (void)
 		item->green_end				=	0;			// green
 		item->blue_end					=	0;			// blue
 		item->alpha_end				=	0;			// alpha
-		item->radius_end				=	1.0;		// radius
+		item->radius_end				=	10.0;		// radius
 
 		item->final_vertical_velocity		=	-1.0;
 		item->vertical_acceleration		=	1.0;
