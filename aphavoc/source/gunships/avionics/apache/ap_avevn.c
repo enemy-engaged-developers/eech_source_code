@@ -1036,7 +1036,6 @@ void set_apache_avionics_events (void)
 	set_event (DIK_O, MODIFIER_NONE, KEY_STATE_DOWN, set_hud_bob_up_overlay_event);
 
 	set_event (DIK_O, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, switch_hud_mode_event);
-	set_event (DIK_O, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, switch_hud_mode_event);
 
 	set_event (DIK_O, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, clear_hud_bob_up_overlay_event);
 

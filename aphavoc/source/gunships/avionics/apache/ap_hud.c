@@ -2614,35 +2614,46 @@ static void display_target_information (void)
 
 static void draw_field_of_view_and_regard_boxes (void)
 {
-	float
-		x,
-		y;
+	float x, y, slip;
 
-	draw_2d_line (-0.3000, -0.6000,  0.3000, -0.6000, hud_colour);
+	slip = bound(current_flight_dynamics->velocity_x.value, -10.0, 10.0);
+	slip *= 0.01;
+
+	// slip indicator
+	draw_2d_circle(slip, -0.6400, 0.0350, hud_colour);
+	draw_2d_line (0.0350, -0.6750,  0.0350, -0.6050, hud_colour);
+	draw_2d_line (-0.0350, -0.6750, -0.0350, -0.6050, hud_colour);
+
+	// box
+	draw_2d_line (-0.3000, -0.6750,  0.3000, -0.6750, hud_colour);
 	draw_2d_line (-0.3000, -0.8250,  0.3000, -0.8250, hud_colour);
-	draw_2d_line (-0.3000, -0.6000, -0.3000, -0.8250, hud_colour);
-	draw_2d_line ( 0.3000, -0.6000,  0.3000, -0.8250, hud_colour);
+	draw_2d_line (-0.3000, -0.6750, -0.3000, -0.8250, hud_colour);
+	draw_2d_line ( 0.3000, -0.6750,  0.3000, -0.8250, hud_colour);
 
-	draw_2d_line ( 0.0000, -0.6000,  0.0000, -0.6225, hud_colour);
-	draw_2d_line ( 0.0000, -0.8250,  0.0000, -0.8025, hud_colour);
+	// horizontal center tick marks
+	draw_2d_line ( 0.0000, -0.6750,  0.0000, -0.6900, hud_colour);
+	draw_2d_line ( 0.0000, -0.8250,  0.0000, -0.8100, hud_colour);
 
-	draw_2d_line ( 0.2250, -0.6000,  0.2250, -0.6225, hud_colour);
-	draw_2d_line ( 0.2250, -0.8250,  0.2250, -0.8025, hud_colour);
+	// 90 deg right tick marks
+	draw_2d_line ( 0.2250, -0.6750,  0.2250, -0.6900, hud_colour);
+	draw_2d_line ( 0.2250, -0.8250,  0.2250, -0.8100, hud_colour);
 
-	draw_2d_line (-0.2250, -0.6000, -0.2250, -0.6225, hud_colour);
-	draw_2d_line (-0.2250, -0.8250, -0.2250, -0.8025, hud_colour);
+	// 90 deg left tick marks
+	draw_2d_line (-0.2250, -0.6750, -0.2250, -0.6900, hud_colour);
+	draw_2d_line (-0.2250, -0.8250, -0.2250, -0.8100, hud_colour);
 
-	draw_2d_line (-0.3000, -0.6750, -0.2775, -0.6750, hud_colour);
-	draw_2d_line ( 0.3000, -0.6750,  0.2775, -0.6750, hud_colour);
+	// vertical center tick marks
+	draw_2d_line (-0.3000, -0.7250, -0.2775, -0.7250, hud_colour);
+	draw_2d_line ( 0.3000, -0.7250,  0.2775, -0.7250, hud_colour);
 
 	x = eo_azimuth / eo_max_azimuth * 0.3;
 
-	y = (eo_elevation / eo_min_elevation * -0.15) - 0.675;
+	y = (eo_elevation / eo_min_elevation * -0.10) - 0.7250;
 
-	draw_2d_line (x - 0.0400, y - 0.0300, x + 0.0400, y - 0.0300, hud_colour);
-	draw_2d_line (x - 0.0400, y + 0.0300, x + 0.0400, y + 0.0300, hud_colour);
-	draw_2d_line (x - 0.0400, y - 0.0300, x - 0.0400, y + 0.0300, hud_colour);
-	draw_2d_line (x + 0.0400, y - 0.0300, x + 0.0400, y + 0.0300, hud_colour);
+	draw_2d_line (x - 0.0400, y - 0.0250, x + 0.0400, y - 0.0250, hud_colour);
+	draw_2d_line (x - 0.0400, y + 0.0250, x + 0.0400, y + 0.0250, hud_colour);
+	draw_2d_line (x - 0.0400, y - 0.0250, x - 0.0400, y + 0.0250, hud_colour);
+	draw_2d_line (x + 0.0400, y - 0.0250, x + 0.0400, y + 0.0250, hud_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2932,6 +2943,10 @@ static void draw_navigation_mode_hud (void)
 
 	display_waypoint_information ();
 
+	display_target_information ();
+
+	draw_field_of_view_and_regard_boxes ();
+
 	draw_bob_up_overlay ();
 }
 
@@ -2959,6 +2974,10 @@ static void draw_transition_mode_hud (void)
 
 	display_waypoint_information ();
 
+	display_target_information ();
+
+	draw_field_of_view_and_regard_boxes ();
+
 	draw_bob_up_overlay ();
 }
 
@@ -2975,12 +2994,13 @@ static void draw_weapon_mode_hud (void)
 
 	if (get_cockpit_look_ahead ())
 	{
-		draw_pitch_ladder (TRUE);
+		if (previous_hud_mode == HUD_MODE_NAVIGATION)
+			draw_pitch_ladder (TRUE);
+		else
+			draw_flight_path_marker();
 	}
 
 	display_true_airspeed ();
-
-	display_barometric_altitude ();
 
 	draw_rate_of_climb_scale ();
 
