@@ -471,7 +471,7 @@ typedef enum INT_TYPES int_types;
 #define NUM_SKIP_NIGHT_TIME_BITS							(1)
 #define NUM_SMOKE_TYPE_BITS								(6)
 #define NUM_SOUND_CHANNEL_BITS							(4)
-#define NUM_SOUND_EFFECT_INDEX_BITS						(12)
+#define NUM_SOUND_EFFECT_INDEX_BITS						(16)
 #define NUM_SOUND_EFFECT_LOOPING_BITS					(1)
 #define NUM_SOUND_EFFECT_PANNING_BITS					(1)
 #define NUM_SOUND_EFFECT_RATE_BITS						(16)
