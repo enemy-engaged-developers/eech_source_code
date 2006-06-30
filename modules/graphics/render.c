@@ -282,7 +282,6 @@ void play_avi ( const char *filename, int exit_key )
 
 			IDirectDrawSurface7_Blt ( ddraw.lpRenderBuffer, NULL, pSurface, &rect, DDBLT_WAIT, NULL );
 //			IDirectDrawSurface7_Blt ( texture_screen->surface, NULL, pSurface, &rect, DDBLT_WAIT, NULL );
-/*
 			if ( begin_3d_scene () )
 			{
 		
