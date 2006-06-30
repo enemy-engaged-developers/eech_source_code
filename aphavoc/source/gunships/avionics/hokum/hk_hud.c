@@ -1171,6 +1171,8 @@ static void draw_weapon_mode_hud (void)
 
 	display_altitude ();
 
+	draw_rate_of_climb_scale ();
+
 	display_engine_torque ();
 
 	draw_bob_up_overlay ();

@@ -1206,6 +1206,8 @@ static void draw_weapon_mode_hud (int draw_on_virtual_cockpit_texture)
 
 	display_altitude ();
 
+	draw_rate_of_climb_scale ();
+
 	display_engine_torque ();
 
 	draw_bob_up_overlay ();
