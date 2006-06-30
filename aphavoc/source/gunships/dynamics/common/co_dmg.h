@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_DYNAMIC_DAMAGES 15
+#define NUM_DYNAMIC_DAMAGES 31
 
 enum DYNAMICS_DAMAGE_TYPES
 {
@@ -84,7 +84,7 @@ enum DYNAMICS_DAMAGE_TYPES
 	DYNAMICS_DAMAGE_AVIONICS					= (1 << 12),	// 4k
 	DYNAMICS_DAMAGE_FIRE_EXTINGUISHER		= (1 << 13),	// 8k
 	DYNAMICS_DAMAGE_UNDERCARRIAGE				= (1 << 14),	// 16k
-	NUM_DYNAMICS_DAMAGE_TYPES					= (1 << NUM_DYNAMIC_DAMAGES)		// 32
+	NUM_DYNAMICS_DAMAGE_TYPES					= (1 << NUM_DYNAMIC_DAMAGES)		// 4M
 };
 
 typedef enum DYNAMICS_DAMAGE_TYPES dynamics_damage_types;
