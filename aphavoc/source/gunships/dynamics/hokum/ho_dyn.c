@@ -1091,6 +1091,7 @@ void update_main_rotor_rpm_dynamics (void)
 	rpm_min = current_flight_dynamics->main_rotor_rpm.min;
 
 	rpm_max = current_flight_dynamics->main_rotor_rpm.max;
+	max_delta = 100.0 / 20.0;
 
 	blade_pitch = ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) /
 						(current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
@@ -1125,46 +1126,67 @@ void update_main_rotor_rpm_dynamics (void)
 	}
 	else
 	{
+		// arneh - rotor brake on (rotor disengaged)
+		// modelling of how autorotation affects rotor RPM
 
 		float
-			min_delta_rpm,
-			max_delta_rpm,
-			air_flow;
-	
-		min_delta_rpm = -2.0;
-		max_delta_rpm = 10.0;
+			induced_drag, profile_drag,
+			autorotational_acceleration,
+			rpm_ratio, air_flow;
 
-		// rotor brake on
+		// when not engaged to engine, rpm may exceed max
+		// (but rotor will fail before reaching the new limit)
+		rpm_max *= 1.5;
+		rpm_ratio = current_flight_dynamics->main_rotor_rpm.value / rpm_max;
 
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{
-
 			air_flow = get_3d_vector_magnitude (&current_flight_dynamics->model_motion_vector);
 
-			rotor_rpm = (1.0 - blade_pitch) * air_flow * rpm_max;
-	
-			rotor_rpm = bound (rotor_rpm, current_flight_dynamics->main_rotor_rpm.min, current_flight_dynamics->main_rotor_rpm.max);
-	
-			current_flight_dynamics->main_rotor_rpm.delta = -(min_delta_rpm +
-				(current_flight_dynamics->input_data.collective.value / current_flight_dynamics->input_data.collective.max) *
-				(max_delta_rpm - min_delta_rpm) *
-				(1.0 - (current_flight_dynamics->velocity_z.value / current_flight_dynamics->velocity_z.max)));
+			// function of vertical speed through air, but adjusted for blade pitch, which reduces the autorotational part of the rotor
+			// at about 10 m/s drag and autorotational acceleration should cancel each other out (all other things being ideal)
+			autorotational_acceleration = current_flight_dynamics->g_force.value * 
+				-(current_flight_dynamics->velocity_y.value / 10.0) *
+				max(0.6 - blade_pitch, 0.0);
+
+			// induced drag on rotor.  drops sharpy up to 60kts, slowly after that
+			// clean air produces less drag, hence a hover (where lots of vortexes 
+			// creates dirty air) has the most induced drag
+			induced_drag = blade_pitch * (1.0 - rpm_ratio);
+			if (air_flow < knots_to_metres_per_second(60))
+				induced_drag *= 1.0 - (air_flow / knots_to_metres_per_second(60) * 0.6);
+			else
+				induced_drag *= 0.6 - (air_flow / knots_to_metres_per_second(200) * 0.3);
+
+			// profile drag increases with speed and rotor rpm
+			profile_drag = rpm_ratio * (0.5 + 0.5 * blade_pitch) *
+				(0.5 + 0.4 * fabs(current_flight_dynamics->velocity_z.value / current_flight_dynamics->velocity_z.max) +
+				fabs(current_flight_dynamics->velocity_x.value / current_flight_dynamics->velocity_z.max));
+
+			// calulate change in rotor RPM.  The factors for autorotational_acceleration, 
+			// profile_drag and induced_drag have been arrived at by experimentation.
+			// Feel free to change the factors if you feel they are wrong.
+			current_flight_dynamics->main_rotor_rpm.delta = max_delta * 
+				(1.6 * autorotational_acceleration - 2.0 * profile_drag - 10.0 * induced_drag);
 		}
 		else
 		{
 
-			current_flight_dynamics->main_rotor_rpm.delta = -max_delta_rpm;
+			current_flight_dynamics->main_rotor_rpm.delta = -5.0;
 		}
 
 		//debug_log ("DYNAMICS: rotor rpm %f delta %f, velocity y %f, accelaration y %f", current_flight_dynamics->main_rotor_rpm.value, current_flight_dynamics->main_rotor_rpm.delta, current_flight_dynamics->velocity_y.value, current_flight_dynamics->velocity_y.delta);
 	}
 
-	max_delta = 100.0 / 20.0;
 	current_flight_dynamics->main_rotor_rpm.delta = bound (current_flight_dynamics->main_rotor_rpm.delta, -max_delta, max_delta);
 
 	current_flight_dynamics->main_rotor_rpm.value += current_flight_dynamics->main_rotor_rpm.delta * get_model_delta_time ();
 
 	current_flight_dynamics->main_rotor_rpm.value = bound (current_flight_dynamics->main_rotor_rpm.value, rpm_min, rpm_max);
+
+	// arneh - damage rotor if rpm too high (can only happen when rotor is disengaged)
+	if (current_flight_dynamics->main_rotor_rpm.value > 125.0)
+		dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
 
 	// low rotor speech
 	if ((current_flight_dynamics->main_rotor_rpm.value < 60.0) && (current_flight_dynamics->main_rotor_rpm.delta < 0.0) && (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT)))
@@ -1216,11 +1238,13 @@ void update_tail_rotor_rpm_dynamics (void)
 	}
 
 	rpm = 0.0;
-
-	if ((!current_flight_dynamics->rotor_brake) && (!current_flight_dynamics->tail_rotor_rpm.damaged))
+	if (!current_flight_dynamics->tail_rotor_rpm.damaged)
 	{
-
-		rpm = engine_rpm;
+		if (!current_flight_dynamics->rotor_brake)
+			rpm = engine_rpm;
+		// arneh, june 2006 - when rotor is disengaged from engines, main rotor drives tail rotor
+		else
+			rpm = current_flight_dynamics->main_rotor_rpm.value;
 	}
 
 	current_flight_dynamics->tail_rotor_rpm.delta = rpm - current_flight_dynamics->tail_rotor_rpm.value;
@@ -1253,7 +1277,8 @@ void update_main_rotor_coning_angle (void)
 	cm = current_flight_dynamics->main_rotor_coning_angle.min;
 	lift = current_flight_dynamics->lift.value;
 
-	coning_angle = ((cx - cm) / rx) * lift + cm;
+	// arneh - multiply with inverse rotor rpm, as high rotor rpm creates centrifugal force to counteract the lift
+	coning_angle = (((cx - cm) / rx) * lift + cm) * 100.0 / current_flight_dynamics->main_rotor_rpm.value;
 
 	current_flight_dynamics->main_rotor_coning_angle.value += (coning_angle - current_flight_dynamics->main_rotor_coning_angle.value) * get_model_delta_time ();
 
@@ -1281,7 +1306,8 @@ void update_main_rotor_thrust_dynamics (void)
 
 	x = current_flight_dynamics->main_blade_pitch.value;
 
-	if (!current_flight_dynamics->rotor_brake)
+	//  arneh - let rotor have thrust even when rotor is disengaged from engine
+	// if (!current_flight_dynamics->rotor_brake)
 	{
 
 		rpm_ratio = 0.0;
@@ -1309,22 +1335,6 @@ void update_main_rotor_thrust_dynamics (void)
 			rpm_ratio * (current_flight_dynamics->main_rotor_induced_air.min +
 			(current_flight_dynamics->main_rotor_induced_air.max - current_flight_dynamics->main_rotor_induced_air.min) *
 			(x - x_min) / (x_max - x_min));
-	
-		current_flight_dynamics->main_rotor_induced_air.value *=
-			(current_flight_dynamics->air_density.value / current_flight_dynamics->air_density.max);
-	}
-	else
-	{
-
-		current_flight_dynamics->main_rotor_induced_air.value = bound (-current_flight_dynamics->world_motion_vector.y,
-																							current_flight_dynamics->main_rotor_induced_air.min,
-																							current_flight_dynamics->main_rotor_induced_air.max);
-
-		if (current_flight_dynamics->main_rotor_rpm.max != 0.0)
-		{
-
-			current_flight_dynamics->main_rotor_induced_air.value *= current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
-		}
 	
 		current_flight_dynamics->main_rotor_induced_air.value *=
 			(current_flight_dynamics->air_density.value / current_flight_dynamics->air_density.max);
@@ -1367,19 +1377,13 @@ void update_tail_rotor_thrust_dynamics (void)
 
 	Tl = current_flight_dynamics->tail_boom_length.value;
 
-	//if ((!current_flight_dynamics->cross_coupling_effect.damaged) &&
-		//(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
-	{
-		
+	// arneh - when rotor is disengaged it produces no torque, so 0 tail rotor adjustment is desired
+	if (current_flight_dynamics->rotor_brake ||
+		(!current_flight_dynamics->cross_coupling_effect.damaged) &&
+		(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
+		desired = 0.0;
+	else
 		desired = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
-	}
-	// else
-	{
-
-		//desired = 0.0;
-
-		//
-	}
 
 	current_flight_dynamics->cross_coupling_effect.value += (desired - current_flight_dynamics->cross_coupling_effect.value) * get_model_delta_time ();
 
@@ -1906,7 +1910,10 @@ void update_attitude_dynamics (void)
 			direction.x = 0.0;
 			direction.y = 1.0;
 			direction.z = 0.0;
-	
+
+			// arneh - this force seems too strong, impossible to decend faster than
+			// about 7-8 m/s by default with forward speed. So reduce it a little
+			force *= 0.9;
 			add_dynamic_force ("Transitional lift", force, 0.0, &position, &direction, FALSE);
 		}
 	}
@@ -2942,21 +2949,16 @@ void update_acceleration_dynamics (void)
 
 		if (current_flight_dynamics->wheel_brake)
 		{
+			// arneh, june 2006 - reduces effectivness of wheel brakes
+			if (current_flight_dynamics->world_motion_vector.x > 0)
+				current_flight_dynamics->world_motion_vector.x -= min(20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+			else
+				current_flight_dynamics->world_motion_vector.x -= max(-20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 
-			current_flight_dynamics->world_motion_vector.x -= 6.0 * current_flight_dynamics->world_motion_vector.x * get_model_delta_time ();
-			current_flight_dynamics->world_motion_vector.z -= 6.0 * current_flight_dynamics->world_motion_vector.z * get_model_delta_time (); // 12.0 is about right
-
-			if (fabs (current_flight_dynamics->world_motion_vector.x) < 1.0)
-			{
-
-				current_flight_dynamics->world_motion_vector.x = 0.0;
-			}
-
-			if (fabs (current_flight_dynamics->world_motion_vector.z) < 1.0)
-			{
-
-				current_flight_dynamics->world_motion_vector.z = 0.0;
-			}
+			if (current_flight_dynamics->world_motion_vector.z > 0)
+				current_flight_dynamics->world_motion_vector.z -= min(5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+			else
+				current_flight_dynamics->world_motion_vector.z -= max(-5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 		}
 	}
 	{

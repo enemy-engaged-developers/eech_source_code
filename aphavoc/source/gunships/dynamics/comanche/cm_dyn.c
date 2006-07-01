@@ -1944,7 +1944,7 @@ void update_attitude_dynamics (void)
 
 			// arneh - this force seems too strong, impossible to decend faster than
 			// about 7-8 m/s by default with forward speed. So reduce it a little
-			force *= 0.8;	
+			force *= 0.9;	
 			add_dynamic_force ("Transitional lift", force, 0.0, &position, &direction, FALSE);
 		}
 	}
