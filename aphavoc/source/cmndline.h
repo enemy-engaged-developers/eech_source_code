@@ -82,6 +82,7 @@ extern int
 	command_line_dynamics_advanced_engine_model, //Werewolf 5 Feb 06
 	command_line_dynamics_advanced_flight_model, //Werewolf 3 Jan 04
 	command_line_report_to_masterserver, //Werewolf 2 Jan 04
+	command_line_dynamics_engine_startup, // arneh - july 06
 	command_line_debug_input,
 	command_line_debug_log_timing_info,
 	command_line_dump_session,
