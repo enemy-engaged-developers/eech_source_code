@@ -91,6 +91,8 @@ float canopy_door_state;
 
 void initialise_common_cockpits (void)
 {
+	canopy_door_state = CANOPY_DOOR_STATE_CLOSED;
+	
 	test_cockpit_instruments = FALSE;
 
 	draw_virtual_cockpit_needles_on_fixed_cockpits = TRUE;
