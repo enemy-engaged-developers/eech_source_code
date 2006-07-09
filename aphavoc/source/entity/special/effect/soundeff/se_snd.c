@@ -126,7 +126,8 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		channel_volume,
 		minimum_sound_range,
 		reference_sound_range,
-		maximum_sound_range;
+		maximum_sound_range,
+		canopy_state_amp;
 
 	raw = get_local_entity_data (en);
 
@@ -187,7 +188,9 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 			(!parent) ||
 			((raw->sound_locality == SOUND_LOCALITY_EXTERIOR) && (in_cockpit) && (parent == get_gunship_entity ())) ||
 			((raw->sound_locality == SOUND_LOCALITY_INTERIOR) && ((!in_cockpit) || ((parent != get_gunship_entity ()) && (parent != get_session_entity ()))))
-		)
+//			((raw->sound_locality == SOUND_LOCALITY_EXTERIOR) && (in_cockpit) && canopy_door_state == CANOPY_DOOR_STATE_CLOSED && (parent == get_gunship_entity ())) ||
+//			((raw->sound_locality == SOUND_LOCALITY_INTERIOR) && ((!in_cockpit) || canopy_door_state != CANOPY_DOOR_STATE_CLOSED || ((parent != get_gunship_entity ()) && (parent != get_session_entity ()))))
+			)
 	{
 		//
 		// added the !parent clause. Should really ASSERT on !parent, but there is the case of client lag meaning
@@ -322,6 +325,57 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	//
 	
 	v *= raw->amplification;
+
+	//
+	// arneh - adjust volume with canopy close/open
+	//
+
+	if (in_cockpit)
+	{
+		switch (raw->eff.sub_type)
+		{
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
+			if (parent == get_gunship_entity ())
+				v *= 1.5;
+			// fall through
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_RAIN:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_WIND:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_RAIN:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_WIND:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_JUNGLE:
+        case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
+			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
+			break;
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
+			canopy_state_amp = 0.8 + bound(canopy_door_state, 0.0, 0.2);
+			break;
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_INCOMING_MISSILE_WARNING:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_MCA:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC_SPEECH:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_LOCKED:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_TRACKED:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_WARNING_MESSAGE:
+		default:
+			canopy_state_amp = 1.0;
+			break;
+			}
+		v *= canopy_state_amp;
+	}
 
 	//
 	// adjust volume with channel sound settings

@@ -241,8 +241,10 @@ static void kill_local (entity *en)
 
 	#endif
 
-	if ((raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP) ||
-			(raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN))
+	if ((raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1) ||
+		(raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2) ||
+		(raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1) ||
+		(raw->eff.sub_type == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2))
 	{
 		//
 		// don't destroy rotor sounds, just stop playing and reset timers
