@@ -536,11 +536,6 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 
 		search_main_rotor_shaft_depth++;
 	}
-
-	if ((start_wind_down_sound) && (main_rotor_rpm > 0.0))
-	{
-		play_helicopter_winding_rotor_sounds (en, -1);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
