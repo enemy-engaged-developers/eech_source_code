@@ -626,7 +626,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
-			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_CH47,					            // continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_UP,		// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -780,7 +780,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
-			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_CH3,					                    // continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -857,7 +857,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
-			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_MI16,					// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -934,7 +934,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
-			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_CH47,					                // continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -1011,7 +1011,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			50,																		// points value
 
-			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_MI16,					                // continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
 		},
@@ -1088,7 +1088,7 @@ aircraft_data
 			FALSE,																	// player_controllable
 			300,																		// points value
 
-			SOUND_SAMPLE_INDEX_JET_LOW,										// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_A10,										// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
@@ -1945,7 +1945,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			75,																		// points value
 
-			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_V22,					// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_UP,		// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_MEDIUM_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -2022,9 +2022,9 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
 
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,						// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,			// wind_up_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
 		////////////////////////////////////////
 		//
@@ -2098,10 +2098,9 @@ aircraft_data
 			TRUE,																		// offensive_capability
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			100,																		// points value
-
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR,					// continuous_sound_effect_index
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
-			SOUND_SAMPLE_INDEX_SMALL_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
+            SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR,						// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_UP,			// wind_up_sound_effect_index
+			SOUND_SAMPLE_INDEX_EXTERIOR_APACHE_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
 		////////////////////////////////////////
 		//
@@ -2176,7 +2175,7 @@ aircraft_data
 			TRUE,																	// player_controllable JB 030408 Fly any aircraft
 			75,																		// points value
 
-			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR,					// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_CH53E,					                // continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_UP,			// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_LARGE_HELICOPTER_ROTOR_WIND_DOWN,		// wind_down_sound_effect_index
       },
@@ -2253,7 +2252,7 @@ aircraft_data
 			FALSE,																	// player_controllable
 			150,																		// points value
 
-			SOUND_SAMPLE_INDEX_JET_LOW,										// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_C17,										// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
@@ -2330,7 +2329,7 @@ aircraft_data
 			FALSE,																	// player_controllable
 			150,																		// points value
 
-			SOUND_SAMPLE_INDEX_JET_LOW,										// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_IL76,										// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
@@ -2407,7 +2406,7 @@ aircraft_data
 			FALSE,																	// player_controllable
 			150,																		// points value
 
-			SOUND_SAMPLE_INDEX_JET_LOW,										// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_C130,										// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},
@@ -2484,7 +2483,7 @@ aircraft_data
 			FALSE,																	// player_controllable
 			150,																		// points value
 
-			SOUND_SAMPLE_INDEX_JET_LOW,										// continuous_sound_effect_index
+			SOUND_SAMPLE_INDEX_AN12B,										// continuous_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_up_sound_effect_index
 			SOUND_SAMPLE_INDEX_NONE,											// wind_down_sound_effect_index
 		},

@@ -2406,8 +2406,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
 			THREAT_TYPE_IR_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_STINGER1,				// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_STINGER2,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			SPEECH_CPG_SWITCHING_TO_STINGERS,							// weapon_selected_cpg_speech
 			SPEECH_CPG_STINGERS_LOW,										// weapon_low_cpg_speech
@@ -3206,8 +3206,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
 			THREAT_TYPE_RF_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA1,				                    // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA2,				                    // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
 			SPEECH_CPG_SELECTING_ATAKA,									// weapon_selected_cpg_speech
 			SPEECH_CPG_ATAKAS_LOW,											// weapon_low_cpg_speech
@@ -3267,8 +3267,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK,			// warhead_type
 			THREAT_TYPE_LASER_MISSILE,										// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+		    SOUND_SAMPLE_INDEX_ATAKA1,				                    // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_ATAKA2,				                    // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
 			SPEECH_CPG_SWITCHING_TO_VIKHR,								// weapon_selected_cpg_speech
 			SPEECH_CPG_VIKHRS_LOW,											// weapon_low_cpg_speech
@@ -3518,8 +3518,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
 			THREAT_TYPE_IR_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,				// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -3823,8 +3823,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
 			THREAT_TYPE_IR_MISSILE,											// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,				                // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_CHAPARRAL,				                // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -4447,8 +4447,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_SMOKE_GRENADE,							// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_NONE,										// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_NONE,										// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_SMOKEGRENADE,								// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_SMOKEGRENADE,								// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -4644,8 +4644,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
@@ -4705,8 +4705,8 @@ weapon_data
 			WEAPON_WARHEAD_TYPE_BALL,										// warhead_type
 			THREAT_TYPE_INVALID,												// threat_type
 			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_INTERIOR_MISSILE_LAUNCH,					                    // exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
 			-1,																	// weapon_selected_cpg_speech
 			-1,																	// weapon_low_cpg_speech
