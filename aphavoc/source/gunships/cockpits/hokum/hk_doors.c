@@ -145,7 +145,7 @@ void animate_hokum_virtual_cockpit_canopy_doors (void)
 
 	if (aiming_state > canopy_door_state)
 	{
-		canopy_door_state += get_delta_time () * 0.3;
+		canopy_door_state += get_delta_time () * 0.5;
 
 		if (canopy_door_state > CANOPY_DOOR_STATE_OPEN)
 		{
@@ -154,7 +154,7 @@ void animate_hokum_virtual_cockpit_canopy_doors (void)
 	}
 	else if (aiming_state < canopy_door_state)
 	{
-		canopy_door_state -= get_delta_time () * 0.3;
+		canopy_door_state -= get_delta_time () * 0.5;
 
 		if (canopy_door_state < CANOPY_DOOR_STATE_CLOSED)
 		{
