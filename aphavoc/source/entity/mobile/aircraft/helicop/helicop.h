@@ -152,7 +152,7 @@ extern void kill_helicopter_rotor_sound_effects (entity *en);
 
 extern void update_local_helicopter_rotor_sounds (entity *en);
 
-extern void play_helicopter_winding_rotor_sounds (entity *en, int direction);
+extern void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine_num);
 
 extern int get_local_entity_suitable_for_player (entity *en, entity *pilot);
 
