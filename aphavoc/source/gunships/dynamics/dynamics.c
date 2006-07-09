@@ -3406,3 +3406,241 @@ void flight_dynamics_start_apu (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// arneh, july 06 - modelling of APU added
+void update_apu_rpm_dynamics (void)
+{
+	if (!current_flight_dynamics->apu_rpm.damaged)
+		current_flight_dynamics->apu_rpm.delta = bound(current_flight_dynamics->apu_rpm.max - current_flight_dynamics->apu_rpm.value, -30.0, 30.0);
+	else
+		current_flight_dynamics->apu_rpm.delta = -100.0;
+	current_flight_dynamics->apu_rpm.value = bound(current_flight_dynamics->apu_rpm.value + current_flight_dynamics->apu_rpm.delta * get_model_delta_time(), 0.0, 100.0);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// arneh, july 06 - modelling of engine temperature added
+void update_engine_temperature_dynamics (int engine_number)
+{
+	unsigned int engine_fire;
+	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque, *engine_temp;
+	
+	ASSERT(engine_number == 1 || engine_number == 2);
+
+	if (engine_number == 1)
+	{
+		n1_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+		engine_temp = &current_flight_dynamics->left_engine_temp;
+		n2_rpm = &current_flight_dynamics->left_engine_rpm;
+		engine_fire = DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE;
+		engine_torque = &current_flight_dynamics->left_engine_torque;
+	}
+	else if (engine_number == 2)
+	{
+		n1_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+		engine_temp = &current_flight_dynamics->right_engine_temp;
+		n2_rpm = &current_flight_dynamics->right_engine_rpm;
+		engine_fire = DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE;
+		engine_torque = &current_flight_dynamics->right_engine_torque;
+	}
+	else
+		return;
+
+	ASSERT(engine_temp->value >= 0.0 && engine_temp->value <= 1500.0);
+
+	// fire dies out if engine temp gets below 500 degrees (you have to stop the engine for that to happen)
+	if (engine_temp->value < 500.0)
+		current_flight_dynamics->dynamics_damage &= ~engine_fire;
+
+	if (n1_rpm->max == 0.0)  // engine shutdown
+	{
+		engine_temp->min = 35.0;
+		if (current_flight_dynamics->dynamics_damage & engine_fire)
+			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -30.0, 200.0);
+		else	
+			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -10.0, 200.0);
+	}
+	else if (n1_rpm->max == 20.0)  // no ignition, under APU power
+	{
+		engine_temp->min = 45.0;
+		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.20, -20.0, 200.0);
+	}
+	else  // ignition
+	{
+		float rpm_factor;
+		
+		engine_temp->value = max(engine_temp->value, 100.0);
+
+		rpm_factor = 500.0 + (n1_rpm->value * n1_rpm->value * 0.032);
+		if (n1_rpm->value > n2_rpm->value)  // should only happen during startup, or demanding really much from engine
+			rpm_factor += (n1_rpm->value - n2_rpm->value) * 5.0;
+
+		if (engine_torque->value > 100.0)   // increase temp more when overtorqueing
+			rpm_factor += (engine_torque->value - 100.0) * 10.0;
+
+		engine_temp->min = (1.0 - (0.5 * get_model_delta_time())) * engine_temp->min + 0.5 * get_model_delta_time() * rpm_factor;
+
+		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.5, -20.0, 1000.0);
+
+		// increase temp extra if engine on fire
+		if (current_flight_dynamics->dynamics_damage & engine_fire)
+			engine_temp->delta += 20.0;
+	}
+
+
+	engine_temp->value += engine_temp->delta * get_model_delta_time();
+	engine_temp->value = bound(engine_temp->value, 0.0, 1500.0);
+
+	// if temp above 820 degrees, randomly damage engine. probability depending on temperature	
+	if (engine_temp->value > 820.0)
+	{
+		int probability = (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
+		debug_log("fire probability: %f", get_model_delta_time() * (float)probability);
+		if ((rand16() % (int)probability) == 0)
+			dynamics_damage_model (engine_fire, FALSE);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_engine_rpm_dynamics (int engine_number)
+{
+	/* arneh - july 2006
+	 * Ok, here's how the engine dynamics works now.  N1 (or NG) is the gas
+	 * turbine which controls the amount of air/fuel which is combusted in the
+	 * engine, and hence how much power it makes.  N2 (or NP, or in the code
+	 * simply refered to as engine_rpm) is the power turbine which converts
+	 * the combustion energy into shaft rotation.
+	 * 
+	 * The N2 tubine is directly connected to the rotor (through a gearbox which
+	 * reduces the real RPM from somewhere around 20,000 RPM to rotor RPM
+	 * of around 300 RPM.  Left to itself the rotor and N2 RPM will drop under load
+	 * and increase with less load.  The engine tries to keep N2 RPM constant at
+	 * 100%, it does this by varying N1 speed (i.e. how much energy is produced by the
+	 * engine).  However, changing turbine speed is not instant, and even
+	 * when N1 speed has changed it might take a little longer before the extra
+	 * energy reaches the N2 turbine and is converted into shaft power.  Hence
+	 * it might not be able to keep N2 speed at exactly 100% at all times, espically
+	 * initially after sudden changes of rotor drag (i.e. by changing rotor pitch 
+	 * suddenly (fast pulling collective), or by sudden heavy rotor load (increase
+	 * in g-force by hard manouvering).
+	 * 
+	 * The values are used as follow:
+	 * *engine_rpm.value : actual RPM
+	 * *engine_n1_rpm.max : max allowed rpm of N1 engine.  Is directly controlled
+	 *    by pilot by use of throttle
+	 * *engine_n1_rpm.min : RPM engine control system has demanded.  Always less then max.
+	 * *rpm_delta : change of RPM in percent per second.  Controled by engine control system
+	 * apu_rpm.max : APU RPM commanded by pilot (100% when APU on, 0% when off)
+	 */
+	
+	
+	float collect;
+	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque;
+	short engine_damage;
+
+	ASSERT(engine_number == 1 || engine_number == 2);
+
+	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
+	collect = max (1.0, collect);
+
+	if (engine_number == 1)
+	{
+		n1_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+		n2_rpm = &current_flight_dynamics->left_engine_rpm;
+		engine_damage = current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE;
+		engine_torque = &current_flight_dynamics->left_engine_torque;
+	}
+	else if (engine_number == 2)
+	{
+		n1_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+		n2_rpm = &current_flight_dynamics->right_engine_rpm;
+		engine_damage = current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE;
+		engine_torque = &current_flight_dynamics->right_engine_torque;
+	}
+	else
+		return;
+
+	ASSERT(engine_torque->max > 0.0);
+	// model N2 RPM as function of N1 RPM and torque
+	{
+		float torque_ratio, surplus_energy;
+
+		float n1_power_ratio = (n1_rpm->value - 65.0) / (100.0 - 65.0);  // might be negative
+
+		torque_ratio = engine_torque->value / engine_torque->max;
+		surplus_energy = n1_power_ratio - torque_ratio;
+		
+		if (n1_rpm->value > n2_rpm->value)
+			surplus_energy += (n1_rpm->value - n2_rpm->value) * 0.15;
+		
+		n2_rpm->delta = surplus_energy * 20.0;
+		n2_rpm->value = bound(n2_rpm->value + n2_rpm->delta * get_model_delta_time (), 0.0, 110.0);
+	}
+
+	if (n1_rpm->value > 55.0)
+	{
+		float n2_delta, n1_delta;
+		
+		// shut down APU if both engines are running
+		if (current_flight_dynamics->left_engine_n1_rpm.value > 59.0
+			&& current_flight_dynamics->right_engine_n1_rpm.value > 59.0)
+			current_flight_dynamics->apu_rpm.max = 0.0;
+
+		// figure out how much power we need
+		n2_delta = n2_rpm->max - n2_rpm->value;  // this is how much we're trying to adjust N2 RPM
+		n2_delta -= 2 * n2_rpm->delta;   // try predicting were N2 RPM is heading
+		if (n2_rpm->value > n2_rpm->max) // be more aggresive about not going over 100% N2 RPM
+			n1_delta = 3 * n2_delta;
+		else
+			n1_delta = n2_delta;
+		n1_rpm->min = bound(n1_rpm->value + n1_delta, 60.0, 110.0);
+
+		n1_rpm->delta = min(n1_rpm->max, n1_rpm->min) - n1_rpm->value;
+		n1_rpm->delta = bound (n1_rpm->delta, -20.0, 15.0);
+	}
+	else // in the realm of the APU
+	{
+		float delta = 0.0;
+		
+		if (current_flight_dynamics->apu_rpm.max == 0.0)  // engine not capable of keeping RPM without APU under 55% RPM
+			n1_rpm->max = 0.0;
+
+		delta = n1_rpm->max - n1_rpm->value;
+		if (delta < 0.0)
+			n1_rpm->delta = bound(delta, -5.0, 0.0);
+		else
+		{
+			float apu_contribution = 4.0 * current_flight_dynamics->apu_rpm.value * 0.01;
+
+			if (n1_rpm->max < 60.0)  // only APU
+				n1_rpm->delta = min(apu_contribution, delta);
+			else  // engine itself is helping
+				n1_rpm->delta = min(delta, 2.0 + apu_contribution);
+		}
+	}
+
+
+	//
+	// damaged or out of fuel
+	//
+	
+	if (n2_rpm->damaged)
+	{
+		n1_rpm->max = 0.0;
+		n2_rpm->max = 0.0;
+		n1_rpm->value -= n1_rpm->value * get_model_delta_time();
+	}
+	else
+	{
+		if (current_flight_dynamics->fuel_weight.value <= 0.0)
+			n1_rpm->delta = -10.0;
+
+		n1_rpm->value += n1_rpm->delta * get_model_delta_time ();
+		n1_rpm->value = bound(n1_rpm->value, 0.0, 110.0);
+	}
+}
