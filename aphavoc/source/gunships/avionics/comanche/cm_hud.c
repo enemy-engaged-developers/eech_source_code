@@ -1677,7 +1677,7 @@ static void display_engine_torque (void)
 		y_max,
 		width;
 
-	torque = (int) current_flight_dynamics->combined_engine_torque.value;
+	torque = (int)(current_flight_dynamics->combined_engine_torque.value + 0.5);
 
 	sprintf (s, "%d%%", torque);
 

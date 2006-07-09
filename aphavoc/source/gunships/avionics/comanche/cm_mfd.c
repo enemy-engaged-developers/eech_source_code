@@ -8686,7 +8686,7 @@ static void draw_system_display_side_mfd (void)
 static void draw_engine_display_mfd (void)
 {
 	char
-		s[80];
+		s[80], s2[10];
 
 	int
 		x1,
@@ -8728,7 +8728,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	set_2d_mono_font_position (0.0, -0.6);
+	set_2d_mono_font_position (-0.7, -0.6);
 
 	x_adjust = get_mono_font_string_width ("FUEL QTY") * -0.5;
 
@@ -8736,21 +8736,21 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string ("FUEL QTY");
 
-	set_2d_mono_font_position (0.0, -0.7);
+	set_2d_mono_font_position (-0.7, -0.7);
 
-	x_adjust = get_mono_font_string_width ("LB") * -0.5;
+/*	x_adjust = get_mono_font_string_width ("LB") * -0.5;
 
 	set_mono_font_rel_position (x_adjust, 0.0);
 
-	print_mono_font_string ("LB");
+	print_mono_font_string ("LB"); */
 
-	set_2d_mono_font_position (0.0, -0.8);
+	set_2d_mono_font_position (-0.7, -0.7);
 
 	fvalue = bound (kilograms_to_pounds (current_flight_dynamics->fuel_weight.value), 0.0, 9999.0);
 
 	convert_float_to_int (fvalue, &ivalue);
 
-	sprintf (s, "%04d", ivalue);
+	sprintf (s, "%04d lb", ivalue);
 
 	x_adjust = get_mono_font_string_width (s) * -0.5;
 
@@ -8759,14 +8759,73 @@ static void draw_engine_display_mfd (void)
 	print_mono_font_string (s);
 
 	////////////////////////////////////////
+	
+	set_2d_mono_font_position (0.0, -0.6);
+	
+	x_adjust = get_mono_font_string_width ("THROTTLE") * -0.5;
+	
+	set_mono_font_rel_position (x_adjust, 0.0);
 
-	draw_2d_line (-0.8000 - 0.00, 0.3333, -0.7500 + 0.02, 0.3333, MFD_COLOUR1);
-	draw_2d_line (-0.6500 - 0.02, 0.3333, -0.4500 + 0.02, 0.3333, MFD_COLOUR1);
+	print_mono_font_string ("THROTTLE");
+	
+//	set_2d_mono_font_position (0.0, -0.7);
+
+	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	if (ivalue < 60)
+		sprintf(s2, "OFF ");
+	else if (ivalue == 60)
+		sprintf(s2, "IDLE");
+	else if (ivalue == 110.0)
+		sprintf(s2, "FLY ");
+	else
+		sprintf(s2, "%03d%%", (ivalue-60) * 2);
+
+	/*
+	x_adjust = get_mono_font_string_width (s) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s);	
+	*/
+	
+	set_2d_mono_font_position (0.0, -0.7);
+
+	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	if (ivalue < 60)
+		sprintf(s, " %s  OFF ", s2);
+	else if (ivalue == 60)
+		sprintf(s, " %s  IDLE", s2);
+	else if (ivalue == 110.0)
+		sprintf(s, " %s  FLY ", s2);
+	else
+		sprintf(s, " %s  %03d%%", s2, (ivalue-60) * 2);
+
+	x_adjust = get_mono_font_string_width (s) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s);	
+
+	////////////////////////////////////////
+
+	set_2d_mono_font_position (0.5, -0.6);
+
+	fvalue = bound (current_flight_dynamics->apu_rpm.value + 0.5, 0.0, 100.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	sprintf(s, "APU %03d%%", ivalue);
+
+	print_mono_font_string (s);		
+
+	////////////////////////////////////////
+
+	draw_2d_line (-0.7500 - 0.02, 0.3333, -0.6500 + 0.02, 0.3333, MFD_COLOUR1);
+	draw_2d_line (-0.5500 - 0.02, 0.3333, -0.4500 + 0.02, 0.3333, MFD_COLOUR1);
 	draw_2d_line (-0.3500 - 0.02, 0.3333, -0.2500 + 0.02, 0.3333, MFD_COLOUR1);
 	draw_2d_line (-0.1500 - 0.02, 0.3333, -0.0500 + 0.02, 0.3333, MFD_COLOUR1);
 
-	draw_2d_line ( 0.8000 + 0.00, 0.3333,  0.7500 - 0.02, 0.3333, MFD_COLOUR1);
-	draw_2d_line ( 0.6500 + 0.02, 0.3333,  0.4500 - 0.02, 0.3333, MFD_COLOUR1);
+	draw_2d_line ( 0.7500 + 0.00, 0.3333,  0.6500 - 0.02, 0.3333, MFD_COLOUR1);
+	draw_2d_line ( 0.5500 + 0.02, 0.3333,  0.4500 - 0.02, 0.3333, MFD_COLOUR1);
 	draw_2d_line ( 0.3500 + 0.02, 0.3333,  0.2500 - 0.02, 0.3333, MFD_COLOUR1);
 	draw_2d_line ( 0.1500 + 0.02, 0.3333,  0.0500 - 0.02, 0.3333, MFD_COLOUR1);
 
@@ -8920,10 +8979,108 @@ static void draw_engine_display_mfd (void)
 	#undef HEIGHT
 
 	//
-	// TQ1
+	// NG1
 	//
 
 	#define X_ORG	((float) (-0.4))
+	#define Y_ORG	((float) (0.5))
+	#define WIDTH	((float) (0.06))
+	#define HEIGHT	((float) (1.0))
+
+	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
+
+	x_adjust = get_mono_font_string_width ("NG") * -0.5;
+
+	set_mono_font_rel_position (x_adjust, 0.0);
+
+	print_mono_font_string ("NG");
+
+	////////////////////////////////////////
+
+	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);
+
+	convert_float_to_int (fvalue, &ivalue);
+
+	sprintf (s, "%03d", ivalue);
+
+	set_2d_mono_font_position (X_ORG, Y_ORG + 0.1);
+
+	x_adjust = get_mono_font_string_width (s) * -0.5;
+
+	set_mono_font_rel_position (x_adjust, 0.0);
+
+	print_mono_font_string (s);
+
+	////////////////////////////////////////
+
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+
+	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
+	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
+	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+
+	#undef X_ORG
+	#undef Y_ORG
+	#undef WIDTH
+	#undef HEIGHT
+
+	//
+	// NG2
+	//
+
+	#define X_ORG	((float) (0.4))
+	#define Y_ORG	((float) (0.5))
+	#define WIDTH	((float) (0.06))
+	#define HEIGHT	((float) (1.0))
+
+	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
+
+	x_adjust = get_mono_font_string_width ("NG") * -0.5;
+
+	set_mono_font_rel_position (x_adjust, 0.0);
+
+	print_mono_font_string ("NG");
+
+	////////////////////////////////////////
+
+	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);
+
+	convert_float_to_int (fvalue, &ivalue);
+
+	sprintf (s, "%03d", ivalue);
+
+	set_2d_mono_font_position (X_ORG, Y_ORG + 0.1);
+
+	x_adjust = get_mono_font_string_width (s) * -0.5;
+
+	set_mono_font_rel_position (x_adjust, 0.0);
+
+	print_mono_font_string (s);
+
+	////////////////////////////////////////
+
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
+	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
+
+	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
+	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
+	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+
+	#undef X_ORG
+	#undef Y_ORG
+	#undef WIDTH
+	#undef HEIGHT
+
+	//
+	// TQ1
+	//
+
+	#define X_ORG	((float) (-0.6))
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
@@ -8972,7 +9129,7 @@ static void draw_engine_display_mfd (void)
 	// TQ2
 	//
 
-	#define X_ORG	((float) (0.4))
+	#define X_ORG	((float) (0.6))
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
@@ -9021,7 +9178,7 @@ static void draw_engine_display_mfd (void)
 	// TGT1
 	//
 
-	#define X_ORG	((float) (-0.7))
+	#define X_ORG	((float) (-0.8))
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
@@ -9070,7 +9227,7 @@ static void draw_engine_display_mfd (void)
 	// TGT2
 	//
 
-	#define X_ORG	((float) (0.7))
+	#define X_ORG	((float) (0.8))
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
@@ -9259,7 +9416,7 @@ static void draw_engine_display_side_mfd (void)
 	#undef HEIGHT
 
 	//
-	// Np1
+	// NG1
 	//
 
 	#define X_ORG	((float) (-0.1708 - 0.4))
@@ -9269,15 +9426,15 @@ static void draw_engine_display_side_mfd (void)
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
-	x_adjust = get_mono_font_string_width ("NP") * -0.5;
+	x_adjust = get_mono_font_string_width ("NG") * -0.5;
 
 	set_mono_font_rel_position (x_adjust, 0.0);
 
-	print_mono_font_string ("NP");
+	print_mono_font_string ("NG");
 
 	////////////////////////////////////////
 
-	fvalue = bound (current_flight_dynamics->left_engine_rpm.value, 0.0, 120.0);
+	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);
 
 	convert_float_to_int (fvalue, &ivalue);
 
@@ -9308,7 +9465,7 @@ static void draw_engine_display_side_mfd (void)
 	#undef HEIGHT
 
 	//
-	// Np2
+	// NG2
 	//
 
 	#define X_ORG	((float) (0.1708 - 0.4))
@@ -9318,11 +9475,11 @@ static void draw_engine_display_side_mfd (void)
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
-	x_adjust = get_mono_font_string_width ("NP") * -0.5;
+	x_adjust = get_mono_font_string_width ("NG") * -0.5;
 
 	set_mono_font_rel_position (x_adjust, 0.0);
 
-	print_mono_font_string ("NP");
+	print_mono_font_string ("NG");
 
 	////////////////////////////////////////
 
