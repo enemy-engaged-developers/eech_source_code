@@ -78,11 +78,19 @@
 
 #define CANOPY_DOOR_STATE_UNINITIALISED	((float) (-1000.0))
 
-#define CANOPY_DOOR_STATE_CLOSED				((float) (0.0))
-#define CANOPY_DOOR_STATE_OPEN				((float) (1.0))
+static float aiming_state;
 
-static float
-	canopy_door_state;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_comanche_canopy_doors(event* ev)
+{
+	if (aiming_state == CANOPY_DOOR_STATE_OPEN)
+		aiming_state = CANOPY_DOOR_STATE_CLOSED;
+	else
+		aiming_state = CANOPY_DOOR_STATE_OPEN;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,28 +98,12 @@ static float
 
 static float get_canopy_doors_aiming_state (void)
 {
-	float
-		aiming_state;
-
 	ASSERT (get_gunship_entity ());
 
 	ASSERT (current_flight_dynamics);
 
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
-	{
 		aiming_state = CANOPY_DOOR_STATE_CLOSED;
-	}
-	else
-	{
-		if (current_flight_dynamics->rotor_brake)
-		{
-			aiming_state = CANOPY_DOOR_STATE_OPEN;
-		}
-		else
-		{
-			aiming_state = CANOPY_DOOR_STATE_CLOSED;
-		}
-	}
 
 	return (aiming_state);
 }
@@ -122,7 +114,10 @@ static float get_canopy_doors_aiming_state (void)
 
 void initialise_comanche_virtual_cockpit_canopy_doors (void)
 {
-	canopy_door_state = CANOPY_DOOR_STATE_UNINITIALISED;
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT) || !command_line_dynamics_engine_startup)
+		aiming_state = canopy_door_state = CANOPY_DOOR_STATE_CLOSED;
+	else
+		aiming_state = canopy_door_state = CANOPY_DOOR_STATE_OPEN;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,16 +134,13 @@ void animate_comanche_virtual_cockpit_canopy_doors (void)
 
 	ASSERT (virtual_cockpit_inst3d);
 
-	if (canopy_door_state == CANOPY_DOOR_STATE_UNINITIALISED)
-	{
-		canopy_door_state = get_canopy_doors_aiming_state ();
-	}
+	ASSERT (canopy_door_state <= CANOPY_DOOR_STATE_OPEN && canopy_door_state >= CANOPY_DOOR_STATE_CLOSED);
 
 	aiming_state = get_canopy_doors_aiming_state ();
 
 	if (aiming_state > canopy_door_state)
 	{
-		canopy_door_state += get_delta_time () * 0.5;
+		canopy_door_state += get_delta_time () * 0.3;
 
 		if (canopy_door_state > CANOPY_DOOR_STATE_OPEN)
 		{
@@ -157,7 +149,7 @@ void animate_comanche_virtual_cockpit_canopy_doors (void)
 	}
 	else if (aiming_state < canopy_door_state)
 	{
-		canopy_door_state -= get_delta_time () * 0.5;
+		canopy_door_state -= get_delta_time () * 0.3;
 
 		if (canopy_door_state < CANOPY_DOOR_STATE_CLOSED)
 		{
