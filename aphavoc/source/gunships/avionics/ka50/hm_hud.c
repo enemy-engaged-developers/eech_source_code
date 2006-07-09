@@ -1335,6 +1335,7 @@ void draw_ka50_hud_on_cockpit (int hud_enlarge)
 		switch (hud_mode)
 		{
 			case HUD_MODE_NAVIGATION:
+			case HUD_MODE_TRANSITION:
 			{
 				draw_navigation_mode_hud (FALSE);
 
