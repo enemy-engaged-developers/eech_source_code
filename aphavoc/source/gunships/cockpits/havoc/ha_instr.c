@@ -94,6 +94,7 @@ typedef struct SCALE_DATA scale_data;
 
 static rgb_colour
 	white_needle_colour,
+	grey_needle_colour,
 	yellow_needle_colour,
 	orange_needle_colour,
 	red_needle_colour,
@@ -102,18 +103,21 @@ static rgb_colour
 
 static rgb_colour
 	white_needle_colour_level1,
+	grey_needle_colour_level1,
 	yellow_needle_colour_level1,
 	orange_needle_colour_level1,
 	red_needle_colour_level1,
 	white_digit_colour_level1,
 	yellow_digit_colour_level1,
 	white_needle_colour_level2,
+	grey_needle_colour_level2,
 	yellow_needle_colour_level2,
 	orange_needle_colour_level2,
 	red_needle_colour_level2,
 	white_digit_colour_level2,
 	yellow_digit_colour_level2,
 	white_needle_colour_level3,
+	grey_needle_colour_level3,
 	yellow_needle_colour_level3,
 	orange_needle_colour_level3,
 	red_needle_colour_level3,
@@ -201,18 +205,21 @@ static float
 void initialise_havoc_instrument_colours (void)
 {
 	set_rgb_colour (white_needle_colour_level1,  255, 255, 255, 0);
+	set_rgb_colour (grey_needle_colour_level1,  128, 128, 128, 0);
 	set_rgb_colour (yellow_needle_colour_level1, 205, 183,  13, 0);
 	set_rgb_colour (orange_needle_colour_level1, 255, 147,   0, 0);
 	set_rgb_colour (red_needle_colour_level1,    188,  58,  26, 0);
 	set_rgb_colour (white_digit_colour_level1,   200, 200, 200, 0);
 	set_rgb_colour (yellow_digit_colour_level1,  205, 183,  13, 0);
 	set_rgb_colour (white_needle_colour_level2,  255, 147,   0, 0);
+	set_rgb_colour (grey_needle_colour_level2,   128,  74,   0, 0);
 	set_rgb_colour (yellow_needle_colour_level2, 255, 147,   0, 0);
 	set_rgb_colour (orange_needle_colour_level2, 255, 147,   0, 0);
 	set_rgb_colour (red_needle_colour_level2,    255, 147,   0, 0);
 	set_rgb_colour (white_digit_colour_level2,   255, 147,   0, 0);
 	set_rgb_colour (yellow_digit_colour_level2,  205, 183,  13, 0);
 	set_rgb_colour (white_needle_colour_level3,  255, 147,   0, 0);
+	set_rgb_colour (grey_needle_colour_level3,   128,  74,   0, 0);
 	set_rgb_colour (yellow_needle_colour_level3, 255, 147,   0, 0);
 	set_rgb_colour (orange_needle_colour_level3, 255, 147,   0, 0);
 	set_rgb_colour (red_needle_colour_level3,    255, 147,   0, 0);
@@ -231,6 +238,7 @@ void set_havoc_instrument_colours (void)
 		case DAY_SEGMENT_TYPE_DAWN:
 		{
 			white_needle_colour	= white_needle_colour_level2;
+			grey_needle_colour = grey_needle_colour_level2;
 			yellow_needle_colour	= yellow_needle_colour_level2;
 			orange_needle_colour	= orange_needle_colour_level2;
 			red_needle_colour		= red_needle_colour_level2;
@@ -242,6 +250,7 @@ void set_havoc_instrument_colours (void)
 		case DAY_SEGMENT_TYPE_DAY:
 		{
 			white_needle_colour	= white_needle_colour_level1;
+			grey_needle_colour = grey_needle_colour_level1;
 			yellow_needle_colour	= yellow_needle_colour_level1;
 			orange_needle_colour	= orange_needle_colour_level1;
 			red_needle_colour		= red_needle_colour_level1;
@@ -253,6 +262,7 @@ void set_havoc_instrument_colours (void)
 		case DAY_SEGMENT_TYPE_DUSK:
 		{
 			white_needle_colour	= white_needle_colour_level2;
+			grey_needle_colour = grey_needle_colour_level2;
 			yellow_needle_colour	= yellow_needle_colour_level2;
 			orange_needle_colour	= orange_needle_colour_level2;
 			red_needle_colour		= red_needle_colour_level2;
@@ -264,6 +274,7 @@ void set_havoc_instrument_colours (void)
 		case DAY_SEGMENT_TYPE_NIGHT:
 		{
 			white_needle_colour	= white_needle_colour_level3;
+			grey_needle_colour = grey_needle_colour_level3;
 			yellow_needle_colour	= yellow_needle_colour_level3;
 			orange_needle_colour	= orange_needle_colour_level3;
 			red_needle_colour		= red_needle_colour_level3;
@@ -2368,6 +2379,28 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			dot_x = centre_x + sin (value) * 20 * width / 512;
 			dot_y = centre_y + cos (value) * 25 * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, white_needle_colour);
+
+			// Left engine N2 RPM
+			value = current_flight_dynamics->left_engine_rpm.value;
+			value = bound (value, 0.0, 110.0);
+			value += 20.0;
+			value *= rad (360.0) / 120.0;
+		    centre_x = 157 * width / 512;
+	    	centre_y = 146 * height / 512;
+			dot_x = centre_x + sin (value) * 40 * width / 512;
+			dot_y = centre_y - cos (value) * 50 * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, grey_needle_colour);
+
+			// Right engine N2 RPM
+			value = current_flight_dynamics->right_engine_rpm.value;
+			value = bound (value, 0.0, 110.0);
+			value += 20.0;
+			value *= rad (360.0) / 120.0;
+		    centre_x = 157 * width / 512;
+	    	centre_y = 146 * height / 512;
+			dot_x = centre_x + sin (value) * 40 * width / 512;
+			dot_y = centre_y - cos (value) * 50 * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, grey_needle_colour);
 	
 			/* RPM */
 			value = current_flight_dynamics->main_rotor_rpm.value;
@@ -2432,6 +2465,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 	
 		if (lock_screen (texture_screen[TG_LRHS][texture]))
 		{
+			float lower_value, middle_value, upper_value;
 			set_active_screen (texture_screen[TG_LRHS][texture]);
 	
 			/* Left engine torque */
@@ -2453,9 +2487,66 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 		    dot_x = centre_x;
 	    	dot_y = centre_y - value * height / 512;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
+
+			/* Left engine N1 RPM */
+			value = current_flight_dynamics->left_engine_n1_rpm.value;
+			value = bound (value, 0.0, 110.0);
+			lower_value = bound(value, 0.0, 60.0);
+			lower_value *= 0.725;
+			middle_value = bound(value - 60.0, 0.0, 40.0);
+			middle_value *= 3.2;
+			upper_value = bound(value - 100.0, 0.0, 100.0);
+			upper_value *= 0.302;
+			value = lower_value + middle_value + upper_value;
+		    centre_x = 142 * width / 512;
+	    	centre_y = 475 * height / 512;
+		    dot_x = centre_x;
+	    	dot_y = centre_y - value * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
+
+			/* Right engine N1 RPM */
+			value = current_flight_dynamics->right_engine_n1_rpm.value;
+			value = bound (value, 0.0, 110.0);
+			lower_value = bound(value, 0.0, 60.0);
+			lower_value *= 0.725;
+			middle_value = bound(value - 60.0, 0.0, 40.0);
+			middle_value *= 3.2;
+			upper_value = bound(value - 100.0, 0.0, 100.0);
+			upper_value *= 0.302;
+			value = lower_value + middle_value + upper_value;
+		    centre_x = 186 * width / 512;
+	    	centre_y = 475 * height / 512;
+		    dot_x = centre_x;
+	    	dot_y = centre_y - value * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, yellow_needle_colour);
 	
 			/* Left engine temperature */
+			value = current_flight_dynamics->left_engine_temp.value;
+			value = bound (value, 0.0, 1000.0);
+			lower_value = bound(value, 0.0, 600.0);
+			lower_value *= 0.11;
+			upper_value = bound(value - 600.0, 0.0, 400.0);
+			upper_value *= 0.32;
+			value = lower_value + upper_value;
+		    centre_x = 135 * width / 512;
+	    	centre_y = 475 * height / 512;
+		    dot_x = centre_x;
+	    	dot_y = centre_y - value * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, red_needle_colour);
+
 			/* Right engine temperature */
+			value = current_flight_dynamics->right_engine_temp.value;
+			value = bound (value, 0.0, 1000.0);
+			lower_value = bound(value, 0.0, 600.0);
+			lower_value *= 0.11;
+			upper_value = bound(value - 600.0, 0.0, 400.0);
+			upper_value *= 0.32;
+			value = lower_value + upper_value;
+		    centre_x = 193 * width / 512;
+	    	centre_y = 475 * height / 512;
+		    dot_x = centre_x;
+	    	dot_y = centre_y - value * height / 512;
+			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 128, red_needle_colour);
 	
 			/* Draw status lamps */
 			draw_sprite (width / 512, height / 512, havoc_lamps.status_1 , 167,  48, 58, 26, 332,   2,  22,  11, 120);
