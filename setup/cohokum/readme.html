@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.6.2W4T1</title>
+<title>EECH Community Release Version 1.6.2W4T3</title>
 <style>
 <!--
 a {
@@ -62,7 +62,7 @@ h4 {
 <body class="Normal" lang=SV>
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W4T1</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W4T3</span></h1>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
         <span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
@@ -73,7 +73,7 @@ h4 {
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a>, <a href="http://www.eechcentral.com" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
       <p align=right style='text-align:right; font-style:
-      italic;'><span lang=EN-GB>Last edited by arneh: June 20, 2006</span></p>
+      italic;'><span lang=EN-GB>Last edited by arneh: June 30, 2006</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><span
@@ -92,10 +92,9 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 162W4T1?</span></h2>
+      <h2><span lang=EN-GB>What's NEW in EECH 162W4T3?</span></h2>
       <p><em><strong>(since version 162W3)</strong></em></p>
       <ol>
-        <LI>Engine and Rotorhead RPM now decline under extreme stress. </LI>
         <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
         <LI>Sound modifications no longer require modifying sound.dat,
       just copy the new sound files into the audio directory!</LI>
@@ -103,9 +102,67 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
       Shift+O to switch between the cruise mode (the existing
       navigation mode) and
       transition mode.
+        <li>Changes to existing HUDs.  For Apache and Comanche more
+	symbology is common for weapons and navigation mode.  A slip
+	indicator has been added to all modes.
+	For Russian helicopters
+	vertical speed scale is visble also in weapons mode.
         <li>Increased speed of main rotor animation</li>
+	<li>Numerous changes to make autorotation work (read <a
+	href="http://www.copters.com/pilot/autorotation.html">here</a>
+	to learn how to autorotate). 
+	  <ul>
+	    <li>Rotor brake is now actually engaging/disenging rotor
+	    to engine, it's not a brake</li>
+	    <li>The collective now works also when the rotor is disengaged</li>
+	    <li>Landing with engine failures don't automaticly make
+	    the helicopter explode</li>
+	    <li>Created new aerodynamic model for rotor RPM when rotor
+	    is disengaged. Rotor RPM is now affect by autorotation
+	    which increases rotor RPM, and induced and profile drag
+	    which reduces rotor RPM.</li>
+	    <li>Rotor makes no torque when rotor is disengaged</li>
+	    <li>When the rotor is disengaged, the main rotor drives
+	    the tail rotor so that it doesn't stop.</li>
+	    <li>When the rotor is disengaged rotor rpm may exceed
+	    100%, but get it too high and the rotor might fail as well. Add
+	    collective to slow the rotor down again.</li>
+	    <li>Rotor automatically disengages if both engines fail.</li>
+	  </ul>
+	<li>Numerous changes to make engines more realistic. Read <a
+	href="http://www.eechcentral.com/index.php/Engine_operations">here</a>
+	to learn how the engines work now.
+	<ul>
+	  <li>Added modelling of gas turbine part of engine (and not
+	    only power turbine, as it used to be)</li>
+	  <li>Engine control system automaticly controls gas turbine
+	        RPM in an effort to keep rotor RPM at 100%</li>
+	  <li>Added abillity to control throttle and starters for engines,
+	        including full startup procedure</li>
+	  <li>Added option for starting mission with engines off</li>
+	  <li>Modelling of APU added</li>
+	  <li>Modelling of engine temperature added</li>
+	  <li>Engine fire due to overtemperature now happens at random
+	    time, probability depending on temperature.</li>
+	  <li>Improved engine instruments to show engine information
+	    which previously was not modelled.</li>
+	  <li>Modelled sounds for turbines and APU to correspond with
+	        RPM of turbines</li>
+	  <li>Fuel consumption depends on engine RPM</li>
+	</ul>
+	<li>Decreased effectivness of wheel brake</li>
+	<li>Added key for manually opening and closing canopy doors
+	(Comanche and Hokum only)</li>
+	<li>Closing canopy doors reduce sound volume of external sounds<li>
+	<li>Make F1 work as center view in mouse look (for mouse only,
+	TIR works as before)</li>
+	</li>
       </ol>
-      <p><strong>IMPORTANT: This version needs several additional audio files to be present in the cohokum/audio directory.</strong></p>
+      <p><strong>IMPORTANT: This version has changed the format of save
+      games, and is incompatible with previous save games.  If you
+      have any saved campaigns you want to finish keep a backup of
+      your current cohokum.exe and use it for finishing the save game.
+      </strong></p>
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
@@ -347,6 +404,18 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal">
             <p><span lang=EN-GB style='color:black;'>Causes the game to simulate the workload that the engines and the rotorhead are stressed with, and causes engine RPM to drop under prolonged extreme stress. Also, engine torque INCREASES with increased workload. This setting also makes the engines <i>sound</i> more lifelike. (default=1, on) .</span><span lang=EN-GB
   style='color:red;'> </span></p></td>
+        </tr>
+        <tr valign="top">
+          <td colspan=2 class="Normal">
+            <p><strong>Engine startup</strong></p></td>
+        </tr>
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43">enginestartup=0</p></td>
+          <td class="Normal">
+            <p><style='color:black;'>If enabled will begin mission
+	    with engines off, and the pilot will have to start
+	    the engines as per engine start up procedures (default=0, off)</span></p></td>
         </tr>
         <tr valign="top" bgcolor="#EEEEEE">
           <td colspan=2 class="Normal">
@@ -644,14 +713,79 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
       <h2><a name="ingame"></a>Extra In-game commands </h2>
       <table border=0 cellpadding=4 cellspacing="4">
         <tr>
-          <td colspan=2 class="Normal"> <strong><span lang=EN-GB style='color:black;'>Designated target list</span></strong></td>
+          <td colspan=2 class="Normal"> <strong><span lang=EN-GB
+        style='color:black;'>Rotor control</span></strong></td>
         </tr>
         <tr>
-          <td width="190" class="style43">            <div align="center">Alt-Num0<br>
-          Ctrl-Num0</div></td>
+          <td width="190" class="style43">
+	    <div align="center">R</div>
+	  </td>
           <td class="Normal">
-            <p><span lang=EN-GB><span class="MsoNormal"><span lang=EN-GB style='color:black;'>Allows you to select designated targets even outside the target filter (see designated target list mod above) </span></span></span></p></td>
+            <p><span class="MsoNormal">
+	      <span lang=EN-GB style='color:black;'>
+	      Engage/disengage rotor (used to be rotor brake. Not much
+	      difference when on ground, but airborne a disengaged
+	      rotor will autorotate).
+	      </span></span>
+	    </p></td>
         </tr>
+        <tr>
+          <td colspan=2 class="Normal"> <strong><span
+        lang=EN-GB>Engine controls </span></strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">,</p></td>
+          <td class="Normal">
+            <p>Throttle up left engine</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">.</p></td>
+          <td class="Normal">
+            <p>Throttle up right engine</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Shift-,</p></td>
+          <td class="Normal">
+            <p>Throttle down left engine</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Shift-.</p></td>
+          <td class="Normal">
+            <p>Throttle down right engine</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Ctrl-,</p></td>
+          <td class="Normal">
+            <p>Left engine starter</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Ctrl-.</p></td>
+          <td class="Normal">
+            <p>Right engine starter</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Ctrl-/</p></td>
+          <td class="Normal">
+            <p>APU on/off</p></td>
+        </tr>
+
+	<tr>
+          <td colspan=2 class="Normal"> <strong>Canopy</strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Alt-C</p></td>
+          <td class="Normal">
+            <p>Open/close canopy doors</p></td>
+        </tr>
+
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Enhanced inset view </span></strong></td>
         </tr>

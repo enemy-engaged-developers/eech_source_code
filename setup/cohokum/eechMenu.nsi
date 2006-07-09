@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "162W4T1"
+  !define VERSION "162W4T3"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -84,6 +84,14 @@ Section "cohokum.exe" SectionExe
   
   SetOutPath "$INSTDIR\common\data\language\"
   File ..\common\data\language\tlate6.dat
+  File ..\common\data\ah64a.dyn
+  File ..\common\data\apache.dyn
+  File ..\common\data\blckhwk.dyn
+  File ..\common\data\comanche.dyn
+  File ..\common\data\havoc.dyn
+  File ..\common\data\hind.dyn
+  File ..\common\data\hokum.dyn
+  File ..\common\data\ka50.dyn
 
   SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\Map"
   File graphics\ui\cohokum\Map\PayAh6.psd
@@ -92,15 +100,43 @@ Section "cohokum.exe" SectionExe
   File graphics\ui\cohokum\Map\PayKa5.psd
 
   SetOutPath "$INSTDIR\cohokum\audio"
+
+  File audio\a10.pcm
+  File audio\ac_crash.pcm
+  File audio\ac_shotd.pcm
+  File audio\ah1.pcm
+  File audio\ah1t_seacobra_a2a.pcm
+  File audio\ah1t_seacobra_mca.pcm
+  File audio\ah1t_seacobra_rotor_ext.pcm
+  File audio\ah1t_seacobra_rotor_int.pcm
+  File audio\ah1t_seacobra_slap_ext.pcm
+  File audio\ah1t_seacobra_slap_int.pcm
+  File audio\ah1t_seacobra_turbine_ext.pcm
+  File audio\ah1t_seacobra_turbine_int.pcm
+  File audio\ah1t_seacobra_winddown_ext.pcm
+  File audio\ah1t_seacobra_winddown_int.pcm
+  File audio\ah1t_seacobra_windup_ext.pcm
+  File audio\ah1t_seacobra_windup_int.pcm
+  File audio\amb1.pcm
+  File audio\amb2.pcm
+  File audio\amb3.pcm
+  File audio\amb4.pcm
+  File audio\amb5.pcm
+  File audio\an12b.pcm
   File audio\ap_a2a.pcm
   File audio\ap_mca.pcm
+  File audio\aprotdne.pcm
+  File audio\aprotdni.pcm
   File audio\aprotore.pcm
   File audio\aprotores.pcm
   File audio\aprotoret.pcm
   File audio\aprotori.pcm
   File audio\aprotoris.pcm
   File audio\aprotorit.pcm
+  File audio\aprotupe.pcm
   File audio\aprotupi.pcm
+  File audio\ataka_e.pcm
+  File audio\ataka_i.pcm
   File audio\blackhawk_a2a.pcm
   File audio\blackhawk_mca.pcm
   File audio\blackhawk_rotor_ext.pcm
@@ -113,7 +149,42 @@ Section "cohokum.exe" SectionExe
   File audio\blackhawk_winddown_int.pcm
   File audio\blackhawk_windup_ext.pcm
   File audio\blackhawk_windup_int.pcm
+  File audio\c-130.pcm
+  File audio\c17.pcm
+  File audio\ch3_a2a.pcm
+  File audio\ch3_mca.pcm
+  File audio\ch3.pcm
+  File audio\ch3_rotor_ext.pcm
+  File audio\ch3_rotor_int.pcm
+  File audio\ch3_slap_ext.pcm
+  File audio\ch3_slap_int.pcm
+  File audio\ch3_turbine_ext.pcm
+  File audio\ch3_turbine_int.pcm
+  File audio\ch3_winddown_ext.pcm
+  File audio\ch3_winddown_int.pcm
+  File audio\ch3_windup_ext.pcm
+  File audio\ch3_windup_int.pcm
+  File audio\ch46e_a2a.pcm
+  File audio\ch46e_mca.pcm
+  File audio\ch46e_rotor_ext.pcm
+  File audio\ch46e_rotor_int.pcm
+  File audio\ch46e_slap_ext.pcm
+  File audio\ch46e_slap_int.pcm
+  File audio\ch46e_turbine_ext.pcm
+  File audio\ch46e_turbine_int.pcm
+  File audio\ch46e_winddown_ext.pcm
+  File audio\ch46e_winddown_int.pcm
+  File audio\ch46e_windup_ext.pcm
+  File audio\ch46e_windup_int.pcm
+  File audio\ch47.pcm
+  File audio\ch53e.pcm
+  File audio\chaffe.pcm
+  File audio\chaffi.pcm
+  File audio\chaparral.pcm
+  File audio\chgune.pcm
+  File audio\chguni.pcm
   File audio\comanche_a2a.pcm
+  File "audio\Comanche Cannon .pcm"
   File audio\comanche_mca.pcm
   File audio\comanche_rotor_ext.pcm
   File audio\comanche_rotor_int.pcm
@@ -132,8 +203,18 @@ Section "cohokum.exe" SectionExe
   File audio\explosion_distant5.pcm
   File audio\explosion_distant6.pcm
   File audio\explosion_distant7.pcm
+  File audio\explosions_door_ka52_1.pcm
+  File audio\explosions_door_ka52_2.pcm
+  File audio\explosions_door_ka52_e.pcm
+  File audio\explosions_door_ka52_i.pcm
+  File audio\explosions_door_ka52.pcm
+  File audio\flaree.pcm
+  File audio\flarei.pcm
+  File audio\grstrafe.pcm
   File audio\ha_a2a.pcm
   File audio\ha_mca.pcm
+  File audio\harotdne.pcm
+  File audio\harotdni.pcm
   File audio\harotore.pcm
   File audio\harotores.pcm
   File audio\harotoret.pcm
@@ -142,6 +223,10 @@ Section "cohokum.exe" SectionExe
   File audio\harotorit.pcm
   File audio\harotupe.pcm
   File audio\harotupi.pcm
+  File audio\h_artill.pcm
+  File audio\hc_crash.pcm
+  File audio\hc_doors.pcm
+  File audio\hc_shotd.pcm
   File audio\hind_a2a.pcm
   File audio\hind_mca.pcm
   File audio\hind_rotor_ext.pcm
@@ -166,8 +251,108 @@ Section "cohokum.exe" SectionExe
   File audio\hokum_winddown_int.pcm
   File audio\hokum_windup_ext.pcm
   File audio\hokum_windup_int.pcm
-  File audio\rotorsounds_readme.txt
+  File audio\hov_move.pcm
+  File audio\hov_tick.pcm
+  File audio\hv_dmg1e.pcm
+  File audio\hv_dmg1i.pcm
+  File audio\hv_dmg2e.pcm
+  File audio\hv_dmg2i.pcm
+  File audio\hv_mgun.pcm
+  File audio\hv_rain.pcm
+  File audio\hv_wind.pcm
+  File audio\IL76.pcm
+  File audio\incoming.pcm
+  File audio\jeepmove.pcm
+  File audio\jeeptick.pcm
+  File audio\jet_aft.pcm
+  File audio\jet_high.pcm
+  File audio\jet_low.pcm
+  File audio\jet_med.pcm
+  File audio\jungle.pcm
+  File audio\ka29_a2a.pcm
+  File audio\ka29_mca.pcm
+  File audio\ka29_rotor_ext.pcm
+  File audio\ka29_rotor_int.pcm
+  File audio\ka29_slap_ext.pcm
+  File audio\ka29_slap_int.pcm
+  File audio\ka29_turbine_ext.pcm
+  File audio\ka29_turbine_int.pcm
+  File audio\ka29_winddown_ext.pcm
+  File audio\ka29_winddown_int.pcm
+  File audio\ka29_windup_ext.pcm
+  File audio\ka29_windup_int.pcm
+  File audio\ka50_a2a.pcm
+  File audio\ka50_mca.pcm
+  File audio\ka50_rotor_ext.pcm
+  File audio\ka50_rotor_int.pcm
+  File audio\ka50_slap_ext.pcm
+  File audio\ka50_slap_int.pcm
+  File audio\ka50_turbine_ext.pcm
+  File audio\ka50_turbine_int.pcm
+  File audio\ka50_winddown_ext.pcm
+  File audio\ka50_winddown_int.pcm
+  File audio\ka50_windup_ext.pcm
+  File audio\ka50_windup_int.pcm
+  File audio\kiowa_a2a.pcm
+  File audio\kiowa_mca.pcm
+  File audio\kiowa_rotor_ext.pcm
+  File audio\kiowa_rotor_int.pcm
+  File audio\kiowa_slap_ext.pcm
+  File audio\kiowa_slap_int.pcm
+  File audio\kiowa_turbine_ext.pcm
+  File audio\kiowa_turbine_int.pcm
+  File audio\kiowa_winddown_ext.pcm
+  File audio\kiowa_winddown_int.pcm
+  File audio\kiowa_windup_ext.pcm
+  File audio\kiowa_windup_int.pcm
+  File audio\l_explsn.pcm
+  File audio\lg_rotdn.pcm
+  File audio\lg_rotor.pcm
+  File audio\lg_rotup.pcm
+  File audio\lg_water.pcm
+  File audio\lock1.pcm
+  File audio\lock_on2.pcm
+  File audio\lrlaunch.pcm
+  File audio\lstrike.pcm
+  File audio\lt_dmg1e.pcm
+  File audio\lt_dmg1i.pcm
+  File audio\lt_dmg2e.pcm
+  File audio\lt_dmg2i.pcm
+  File audio\lt_mgun.pcm
+  File audio\lt_rain.pcm
+  File audio\lt_wind.pcm
+  File audio\m_artill.pcm
+  File audio\md_rotdn.pcm
+  File audio\md_rotor.pcm
+  File audio\md_rotup.pcm
+  File audio\m_explsn.pcm
+  File audio\mi16.pcm
+  File audio\missilee.pcm
+  File audio\missilei.pcm
+  File audio\rockete.pcm
+  File audio\rocketi.pcm
+  File audio\rubble.pcm
+  File audio\screech.pcm
+  File audio\sea.pcm
+  File audio\s_explsn.pcm
+  File audio\sh_doors.pcm
+  File audio\shipmove.pcm
+  File audio\smokeGrenade.pcm
+  File audio\sm_rotdn.pcm
+  File audio\sm_rotor.pcm
+  File audio\sm_rotup.pcm
+  File audio\sm_water.pcm
+  File audio\srlaunch.pcm
+  File audio\stinger_e.pcm
+  File audio\stinger_i.pcm
+  File audio\sweep1.pcm
   File audio\tankmove.pcm
+  File audio\tanktick.pcm
+  File audio\thunder.pcm
+  File audio\trckmove.pcm
+  File audio\trcktick.pcm
+  File audio\undercar.pcm
+  File audio\v22.pcm
 
 SectionEnd
 
