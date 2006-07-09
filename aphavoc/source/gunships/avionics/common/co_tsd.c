@@ -841,7 +841,9 @@ static void draw_path_lines
 	vec3d                         
 		*sub_positions;            
                                  
-	ASSERT (number_of_paths > 0); 
+	ASSERT (number_of_paths > 0);
+	if (number_of_paths <= 0)
+		return;
                                  
 	ASSERT (paths);               
                                  
