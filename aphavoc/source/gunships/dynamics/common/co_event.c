@@ -201,6 +201,15 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_TAB, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, load_dynamics_model);
 		set_event (DIK_TAB, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, save_dynamics_model);
 
+		// arneh, july 2006 - engine keys
+		set_event (DIK_COMMA,  MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, flight_dynamics_start_engine_ev);
+		set_event (DIK_COMMA,  MODIFIER_NONE, 		  KEY_STATE_DOWN, flight_dynamics_throttle_engine_ev);
+		set_event (DIK_COMMA,  MODIFIER_LEFT_SHIFT,   KEY_STATE_DOWN, flight_dynamics_throttle_engine_ev);
+		set_event (DIK_PERIOD, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, flight_dynamics_start_engine_ev);
+		set_event (DIK_PERIOD, MODIFIER_NONE, 		  KEY_STATE_DOWN, flight_dynamics_throttle_engine_ev);
+		set_event (DIK_PERIOD, MODIFIER_LEFT_SHIFT,   KEY_STATE_DOWN, flight_dynamics_throttle_engine_ev);
+		set_event (DIK_SLASH,  MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, flight_dynamics_start_apu_ev);
+
 		#ifdef DEBUG
 
 		set_event (DIK_1, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, debug_dynamics_damage_model);
