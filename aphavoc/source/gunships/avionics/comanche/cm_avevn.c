@@ -1439,6 +1439,8 @@ void set_comanche_avionics_events (void)
 	set_event (DIK_0, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_mission_main_mfd_event);
 	set_event (DIK_0, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_mission_main_mfd_event);
 
+	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_comanche_canopy_doors);
+
 	////////////////////////////////////////
 	//
 	// JOYSTICK EVENTS
