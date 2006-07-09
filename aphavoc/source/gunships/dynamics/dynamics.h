@@ -373,12 +373,16 @@ struct DYNAMICS_TYPE
 	dynamics_float_variable
 		undercarriage_state,
 		left_engine_rpm,
+		left_engine_n1_rpm,
 		left_engine_torque,
 		left_engine_temp,
 
 		right_engine_rpm,
+		right_engine_n1_rpm,		
 		right_engine_torque,
 		right_engine_temp,
+
+		apu_rpm,
 
 		main_rotor_number_of_blades,
 		main_rotor_induced_air,
@@ -599,6 +603,20 @@ extern void flight_dynamics_toggle_altitude_lock (event *ev);
 extern void flight_dynamics_decrease_altitude_lock (event *ev);
 
 extern void flight_dynamics_increase_altitude_lock (event *ev);
+
+/*
+extern void flight_dynamics_start_left_engine (void);
+extern void flight_dynamics_throttle_up_left_engine (void);
+extern void flight_dynamics_throttle_down_left_engine (void);
+extern void flight_dynamics_start_right_engine (void);
+extern void flight_dynamics_throttle_up_right_engine (void);
+extern void flight_dynamics_throttle_down_right_engine (void);
+extern void flight_dynamics_start_apu (void);
+*/
+
+extern void flight_dynamics_start_engine_ev (event* ev);
+extern void flight_dynamics_throttle_engine_ev (event* ev);
+extern void flight_dynamics_start_apu_ev (event* ev);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

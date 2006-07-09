@@ -158,6 +158,10 @@ static void update_flight_path (void);
 
 static int valid_dynamics_autos_on (dynamics_hover_hold_types type);
 
+static void flight_dynamics_start_engine (int engine_number);
+static void flight_dynamics_throttle_engine (int engine_number, int rpm_delta);
+static void flight_dynamics_start_apu (void);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,10 +354,27 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("pedal_pressure   					= %f", MT_FLOAT, &current_flight_dynamics->input_data.pedal_pressure.value);
 
 
-	debug_watch ("left_engine_rpm   				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_rpm.value);
-	debug_watch ("right_engine_rpm  				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_rpm.value);
-	debug_watch ("left_engine_temp  				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_temp.value);
-	debug_watch ("right_engine_temp 				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_temp.value);
+	debug_watch ("apu_rpm   						= %f", MT_FLOAT, &current_flight_dynamics->apu_rpm.value);
+	debug_watch ("apu_rpm max 						= %f", MT_FLOAT, &current_flight_dynamics->apu_rpm.max);	
+
+	debug_watch ("left N1 rpm   					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.value);
+	debug_watch ("left min N1 rpm   				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.min);
+	debug_watch ("left max N1 rpm   				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.max);
+	debug_watch ("left N1 delta   					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.delta);
+	debug_watch ("left N2 rpm   					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_rpm.value);
+	debug_watch ("left N2 delta   					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_rpm.delta);
+	debug_watch ("left max N2 rpm					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_rpm.max);
+	debug_watch ("left engine temp  				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_temp.value);
+	debug_watch ("left engine torque 				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_torque.value);
+
+	debug_watch ("right N1 rpm  					= %f", MT_FLOAT, &current_flight_dynamics->right_engine_n1_rpm.value);
+	debug_watch ("right min N1 rpm   				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_n1_rpm.min);
+	debug_watch ("right max N1 rpm   				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_n1_rpm.max);
+	debug_watch ("right N1 delta   					= %f", MT_FLOAT, &current_flight_dynamics->right_engine_n1_rpm.delta);
+	debug_watch ("right N2 rpm  					= %f", MT_FLOAT, &current_flight_dynamics->right_engine_rpm.value);
+	debug_watch ("right N2 delta   					= %f", MT_FLOAT, &current_flight_dynamics->right_engine_rpm.delta);
+	debug_watch ("right engine temp 				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_temp.value);
+	debug_watch ("right engine torque 				= %f", MT_FLOAT, &current_flight_dynamics->right_engine_torque.value);
 
 	debug_watch ("vortex air flow				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_induced_vortex_air_flow.value);
 	debug_watch ("main_rotor_induced			= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_induced_air.value);
@@ -818,12 +839,37 @@ void set_dynamics_entity_values (entity *en)
 
 		current_flight_dynamics->left_engine_torque.value = 0.0;
 		current_flight_dynamics->right_engine_torque.value = 0.0;
+		current_flight_dynamics->left_engine_torque.max = 120.0;
+		current_flight_dynamics->right_engine_torque.max = 120.0;
 		current_flight_dynamics->combined_engine_torque.value = 0.0;
+
+		current_flight_dynamics->apu_rpm.value = 0.0;
+		if (command_line_dynamics_engine_startup)
+		{
+			current_flight_dynamics->left_engine_n1_rpm.value = 0.0;
+			current_flight_dynamics->right_engine_n1_rpm.value = 0.0;
+			current_flight_dynamics->left_engine_n1_rpm.max = 0.0;
+			current_flight_dynamics->right_engine_n1_rpm.max = 0.0;
+		}
+		else  // start with engines running
+		{
+			current_flight_dynamics->left_engine_n1_rpm.value = 60.0;
+			current_flight_dynamics->right_engine_n1_rpm.value = 60.0;
+			current_flight_dynamics->left_engine_n1_rpm.max = 110.0;
+			current_flight_dynamics->right_engine_n1_rpm.max = 110.0;
+		}
 
 		current_flight_dynamics->left_engine_rpm.value = 0.0;
 		current_flight_dynamics->right_engine_rpm.value = 0.0;
+		current_flight_dynamics->left_engine_rpm.max = 100.0;
+		current_flight_dynamics->right_engine_rpm.max = 100.0;
 		current_flight_dynamics->main_rotor_rpm.value = 0.0;
 		current_flight_dynamics->tail_rotor_rpm.value = 0.0;
+
+		current_flight_dynamics->left_engine_temp.value = 35.0;
+		current_flight_dynamics->right_engine_temp.value = 35.0;
+		current_flight_dynamics->left_engine_temp.min = 100.0;
+		current_flight_dynamics->right_engine_temp.min = 100.0;
 
 		current_flight_dynamics->input_data.collective.value = 0.0;
 
@@ -837,13 +883,25 @@ void set_dynamics_entity_values (entity *en)
 		current_flight_dynamics->left_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
 		current_flight_dynamics->right_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
 		current_flight_dynamics->combined_engine_torque.value = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM);
+		current_flight_dynamics->left_engine_torque.max = 120.0;
+		current_flight_dynamics->right_engine_torque.max = 120.0;
 
+		current_flight_dynamics->apu_rpm.value = 0.0;  // APU only used during start up
 		current_flight_dynamics->left_engine_rpm.value = 100.0;
 		current_flight_dynamics->right_engine_rpm.value = 100.0;
+		current_flight_dynamics->left_engine_rpm.max = 100.0;
+		current_flight_dynamics->right_engine_rpm.max = 100.0;
+		current_flight_dynamics->left_engine_n1_rpm.value = 80.0;
+		current_flight_dynamics->right_engine_n1_rpm.value = 80.0;
 		current_flight_dynamics->main_rotor_rpm.value = 100.0;
 		current_flight_dynamics->tail_rotor_rpm.value = 100.0;
 
 		current_flight_dynamics->input_data.collective.value = 0.0;
+
+		current_flight_dynamics->left_engine_temp.value = 750.0;
+		current_flight_dynamics->right_engine_temp.value = 750.0;
+		current_flight_dynamics->left_engine_temp.min = 700.0;
+		current_flight_dynamics->right_engine_temp.min = 700.0;
 
 		if (get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) != 0.0)
 		{
@@ -1765,10 +1823,6 @@ void set_current_flight_dynamics_rotor_brake (int flag)
 
 		#endif
 
-		current_flight_dynamics->left_engine_rpm.max = 0.0;
-	
-		current_flight_dynamics->right_engine_rpm.max = 0.0;
-
 		//
 		// Enter debrief if
 		//		landed &&
@@ -1844,20 +1898,6 @@ void set_current_flight_dynamics_rotor_brake (int flag)
 		debug_log ("DYNAMICS: WARNING : rotor brake disengaged");
 
 		#endif
-
-		if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_LEFT_ENGINE)
-		{
-	
-			current_flight_dynamics->left_engine_rpm.max = 100.0;
-		}
-
-		if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_RIGHT_ENGINE)
-		{
-	
-			current_flight_dynamics->right_engine_rpm.max = 100.0;
-		}
-
-		play_helicopter_winding_rotor_sounds (get_gunship_entity (), 1);
 	}
 }
 
@@ -2841,8 +2881,12 @@ void update_current_flight_dynamics_fuel_weight (void)
 	if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_INFINITE_FUEL))
 	#endif
 	{
+		float fuel_delta = current_flight_dynamics->fuel_weight.delta * get_delta_time ();
+		// arneh - adjust for engine RPM.  Adjusted to 1 at 85% N1 RPM on both engines
+		fuel_delta *= (current_flight_dynamics->left_engine_n1_rpm.value + 
+					   current_flight_dynamics->right_engine_n1_rpm.value) / 170.0;
 
-		current_flight_dynamics->fuel_weight.value -= current_flight_dynamics->fuel_weight.delta * get_delta_time ();
+		current_flight_dynamics->fuel_weight.value -= fuel_delta;
 
 		if (current_flight_dynamics->fuel_weight.value <= 0.0)
 		{
@@ -3205,6 +3249,158 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 	}
 
 	return flag;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// arneh, july 06 - event handler functions for new engine keys
+void flight_dynamics_start_apu_ev (event* ev)
+{
+	flight_dynamics_start_apu();
+}
+
+void flight_dynamics_start_engine_ev (event* ev)
+{
+	if (ev->key == DIK_COMMA)
+		flight_dynamics_start_engine(1);
+	else if (ev->key == DIK_PERIOD)
+		flight_dynamics_start_engine(2);
+}
+
+void flight_dynamics_throttle_engine_ev (event* ev)
+{
+	int engine = 1;
+	int rpm_delta = 0;
+
+	if (ev->key == DIK_COMMA)
+		engine = 1;
+	else if (ev->key == DIK_PERIOD)
+		engine = 2;
+
+	if (ev->modifier == MODIFIER_NONE)
+		rpm_delta = 10;
+	else if (ev->modifier == MODIFIER_LEFT_SHIFT)
+		rpm_delta = -10;
+
+	flight_dynamics_throttle_engine(engine, rpm_delta);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void flight_dynamics_start_engine (int engine_number)
+{
+	dynamics_float_variable* engine_rpm;
+
+	ASSERT (engine_number >= 1 && engine_number <= 2);
+	debug_log("Starting engine %d", engine_number);
+
+	if (engine_number == 1)
+		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+	else if (engine_number == 2)
+		engine_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+	else
+		return;
+
+	engine_rpm->max = max(engine_rpm->max, 20.0);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
+{
+	static int double_count[2] = {0, 0};
+
+	dynamics_float_variable *engine_rpm, *engine_temp;
+
+	ASSERT (engine_number == 1 || engine_number == 2);
+	debug_log("Throttling engine %d %d RPM", engine_number, rpm_delta);	
+	
+	if (engine_number == 1)
+	{
+		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+		engine_temp = &current_flight_dynamics->left_engine_temp;
+	}
+	else if (engine_number == 2)
+	{
+		engine_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+		engine_temp = &current_flight_dynamics->right_engine_temp;
+	}
+	else
+		return;
+
+	if (engine_rpm->damaged)
+	{
+		engine_rpm->max = 0.0;
+		return;	
+	}
+
+	// double throttle down with RPM under 62% shuts down engine
+	if (engine_rpm->value < 62.0 && engine_rpm->max == 60.0 && rpm_delta < 0.0)
+	{
+		if (double_count[engine_number-1] < 0)
+		{
+			engine_rpm->max = 0.0;
+			if (engine_rpm->value > 25.0)
+				play_helicopter_winding_rotor_sounds(get_gunship_entity(), -1, engine_number);
+			double_count[engine_number-1] = 0;
+		}
+		else if(engine_rpm->max > 0.0)
+			double_count[engine_number-1] = -1;
+		else
+			double_count[engine_number-1] = 0;
+
+		return;
+	}
+	else if (engine_rpm->value < 55.0 && rpm_delta > 0.0)
+	{
+		// igniting engine
+		if (double_count[engine_number-1] > 0)
+		{
+			if (current_flight_dynamics->apu_rpm.value > 80.0 && engine_rpm->value > 12.0)
+			{
+				debug_log("Engine %d ignition", engine_number);
+				engine_rpm->max = 60.0;
+				engine_temp->min += 1500.0;
+				play_helicopter_winding_rotor_sounds(get_gunship_entity(), 1, engine_number);
+			}
+
+			double_count[engine_number-1] = 0;
+		}
+		else if(engine_rpm->max < 60.0)
+			double_count[engine_number-1] = 1;
+		else
+			double_count[engine_number-1] = 0;
+
+		return;	
+	}
+	else
+		double_count[engine_number-1] = 0;
+
+	// throttles have no response until engine has powered up to at least 55%
+	if (engine_rpm->value < 55.0 && rpm_delta > 0.0)
+		return;
+
+	engine_rpm->max = bound(engine_rpm->max + rpm_delta, 60.0, 110.0);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void flight_dynamics_start_apu (void)
+{
+	debug_log("Starting APU");
+
+	if (current_flight_dynamics->apu_rpm.max > 0.0)
+		current_flight_dynamics->apu_rpm.max = 0.0;
+	else
+		current_flight_dynamics->apu_rpm.max = 100.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
