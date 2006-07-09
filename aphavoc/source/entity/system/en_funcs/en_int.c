@@ -2316,6 +2316,46 @@ static int default_get_entity_int_value (entity *en, int_types type)
 	return (value);
 }
 
+void debug_check_pack_types (void)
+{
+	// arneh - june 2006
+	// If you get an assert in this function there is a enum which has more
+	// values than bits available for storing it.
+	// You can increase the number of bits by changing its corresponding
+	// value above.  But this makes this exe incompatible with previous
+	// save games.  So if you do it, check if there are any warnings for
+	// any other values as well (i.e. they're close to exceeding the limit)
+	// and change them at the same time, so that we won't have to change save
+	// format too often (you can find warnings in the debug log).  And remember
+	// to mention it in the release notes, and on the dev mailing list.
+
+	ASSERT(NUM_DAY_SEGMENT_TYPES < (1 << NUM_DAY_SEGMENT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_FORMATION_TYPES < (1 << NUM_FORMATION_BITS) || NUM_FORMATION_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_GROUP_MODE_TYPES < (1 << NUM_GROUP_MODE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_GUIDE_CRITERIA_TYPES < (1 << NUM_GUIDE_CRITERIA_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_GUIDE_POSITION_TYPES < (1 << NUM_GUIDE_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_GUNSHIP_TYPES < (1 << NUM_GUNSHIP_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_MESSAGE_TEXT_TYPES < (1 << NUM_MESSAGE_TEXT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_META_EXPLOSION_TYPES < (1 << NUM_META_EXPLOSION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_META_SMOKE_LIST_TYPES < (1 << NUM_META_SMOKE_LIST_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert"); 
+	ASSERT(NUM_MOVEMENT_TYPES < (1 << NUM_MOVEMENT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_OPERATIONAL_STATE_TYPES < (1 << NUM_OPERATIONAL_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_POSITION_TYPES < (1 << NUM_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_RESUPPLY_SOURCE_TYPES < (1 << NUM_RESUPPLY_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_SOUND_CHANNEL_TYPES < (1 << NUM_SOUND_CHANNEL_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_SOUND_LOCALITY_TYPES < (1 << NUM_SOUND_LOCALITY_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_SPEECH_CATEGORY_TYPES < (1 << NUM_SPEECH_CATEGORY_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_COMPLETED_TYPES < (1 << NUM_TASK_COMPLETED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_ROE_TYPES < (1 << NUM_TASK_ROE_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_STATE_TYPES < (1 << NUM_TASK_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_TARGET_CLASS_TYPES < (1 << NUM_TASK_TARGET_CLASS_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_TARGET_SOURCE_TYPES < (1 << NUM_TASK_TARGET_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_TARGET_TYPES < (1 << NUM_TASK_TARGET_TYPE_BITS) || NUM_TASK_TARGET_TYPE_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_TERMINATED_TYPES < (1 << NUM_TASK_TERMINATED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_WAYPOINT_REACHED_TYPES < (1 << NUM_WAYPOINT_REACHED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_WEAPON_CONFIG_TYPES < (1 << NUM_WEAPON_CONFIG_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2325,6 +2365,8 @@ void initialise_entity_int_value_default_functions (void)
 	int
 		i,
 		j;
+
+	debug_check_pack_types();
 
 	for (i = 0; i < NUM_ENTITY_TYPES; i++)
 	{
