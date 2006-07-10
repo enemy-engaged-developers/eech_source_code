@@ -842,7 +842,7 @@ void set_dynamics_entity_values (entity *en)
 		current_flight_dynamics->left_engine_torque.max = 120.0;
 		current_flight_dynamics->right_engine_torque.max = 120.0;
 		current_flight_dynamics->combined_engine_torque.value = 0.0;
-
+		
 		current_flight_dynamics->apu_rpm.value = 0.0;
 		if (command_line_dynamics_engine_startup)
 		{
@@ -2262,6 +2262,17 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 		}
 		*/
 
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		{
+			current_flight_dynamics->left_engine_rpm.max = 100.0;  // engine is always trying for 100% N2 RPM
+			current_flight_dynamics->left_engine_n1_rpm.max = 110.0;
+			current_flight_dynamics->left_engine_torque.max = 120.0;
+
+			current_flight_dynamics->right_engine_rpm.max = 100.0;
+			current_flight_dynamics->right_engine_n1_rpm.max = 110.0;
+			current_flight_dynamics->right_engine_torque.max = 120.0;
+		}
+
 		add_flight_path_action (current_flight_dynamics->position.x, current_flight_dynamics->position.z, FLIGHT_PATH_ACTION_USER_NAVIGATING);
 /*
 		if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
@@ -3494,7 +3505,7 @@ void update_engine_temperature_dynamics (int engine_number)
 	engine_temp->value = bound(engine_temp->value, 0.0, 1500.0);
 
 	// if temp above 820 degrees, randomly damage engine. probability depending on temperature	
-	if (engine_temp->value > 820.0)
+	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
 	{
 		int probability = (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
 		debug_log("fire probability: %f", get_model_delta_time() * (float)probability);
