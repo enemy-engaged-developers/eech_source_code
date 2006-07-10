@@ -783,7 +783,88 @@ void attach_session_sound_effects (entity *en)
 		TRUE,												// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
-		&sound_effect_index							// sample index list
+		&sound_effect_index							       // sample index list
+
+	);
+
+	//
+	// Maverick's Ambiente sound mod 
+	//
+
+	sound_effect_index = SOUND_SAMPLE_INDEX_AMB1;
+
+	create_local_sound_effect_entity
+	(
+		ENTITY_INDEX_DONT_CARE,
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_AMB1,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		SOUND_LOCALITY_ALL,
+		NULL,												// position
+		0.0,												// amplification
+		1.0, //Werewolf pitch
+		TRUE,												// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&sound_effect_index							        // sample index list
+	);
+	
+    sound_effect_index = SOUND_SAMPLE_INDEX_AMB2;
+
+	create_local_sound_effect_entity
+	(
+		ENTITY_INDEX_DONT_CARE,
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_AMB2,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		SOUND_LOCALITY_ALL,
+		NULL,												// position
+		0.0,												// amplification
+		1.0, //Werewolf pitch
+		TRUE,												// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&sound_effect_index							        // sample index list
+	);
+	
+    sound_effect_index = SOUND_SAMPLE_INDEX_AMB3;
+
+	create_local_sound_effect_entity
+	(
+		ENTITY_INDEX_DONT_CARE,
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_AMB3,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		SOUND_LOCALITY_ALL,
+		NULL,												// position
+		0.0,												// amplification
+		1.0, //Werewolf pitch
+		TRUE,												// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&sound_effect_index							        // sample index list
+    );
+	
+    sound_effect_index = SOUND_SAMPLE_INDEX_AMB4;
+
+	create_local_sound_effect_entity
+	(
+		ENTITY_INDEX_DONT_CARE,
+		en,
+		ENTITY_SIDE_NEUTRAL,
+		ENTITY_SUB_TYPE_EFFECT_SOUND_AMB4,
+		SOUND_CHANNEL_SOUND_EFFECT,
+		SOUND_LOCALITY_ALL,
+		NULL,												// position
+		0.0,												// amplification
+		1.0, //Werewolf pitch
+		TRUE,												// valid sound effect
+		TRUE,												// looping
+		1,													// sample count
+		&sound_effect_index							        // sample index list
 	);
 }
 

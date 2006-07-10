@@ -711,6 +711,7 @@ void update_session_sound_effects (entity *en)
 				{
 					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
 	
+
 					if (terrain_types_in_sector [TERRAIN_TYPE_SEA])
 					{
 						value += (0.5 * get_delta_time ());
@@ -720,9 +721,9 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 
-					value = bound (value, 0.0, 1.0);
+					value = bound (value, 0.0, 0.3);
 
-					value *= (1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE));
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
 					if (in_cockpit)
 					{
@@ -743,7 +744,8 @@ void update_session_sound_effects (entity *en)
 				else
 				{
 					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
-	
+
+
 					if (terrain_types_in_sector [TERRAIN_TYPE_FOREST_TOP])
 					{
 						value += (0.5 * get_delta_time ());
@@ -752,10 +754,141 @@ void update_session_sound_effects (entity *en)
 					{
 						value -= (0.5 * get_delta_time ());
 					}
-	
-					value = bound (value, 0.0, 1.0);
 
-					value *= (1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE));
+					value = bound (value, 0.0, 0.3);
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
+
+					if (in_cockpit)
+					{
+						value *= 0.75;
+					}
+				}
+
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, value);
+
+				break;
+	        }
+			case ENTITY_SUB_TYPE_EFFECT_SOUND_AMB1:
+			{
+				if (alt >= SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE)
+				{
+					value = 0.0;
+				}
+				else
+				{
+					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
+	
+					if (terrain_types_in_sector [TERRAIN_TYPE_RIVER])
+					{
+						value += (0.5 * get_delta_time ());
+					}
+					else
+					{
+						value -= (0.5 * get_delta_time ());
+					}
+	
+					value = bound (value, 0.0, 0.3);
+
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
+
+					if (in_cockpit)
+					{
+						value *= 0.75;
+					}
+				}
+
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, value);
+
+				break;
+            }
+			case ENTITY_SUB_TYPE_EFFECT_SOUND_AMB2:
+			{
+				if (alt >= SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE)
+				{
+					value = 0.0;
+				}
+				else
+				{
+					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
+	
+					if (terrain_types_in_sector [TERRAIN_TYPE_RESERVOIR])
+					{
+						value += (0.5 * get_delta_time ());
+					}
+					else
+					{
+						value -= (0.5 * get_delta_time ());
+					}
+	
+					value = bound (value, 0.0, 0.3);
+
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
+
+					if (in_cockpit)
+					{
+						value *= 0.75;
+					}
+				}
+
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, value);
+
+				break;
+            }
+			case ENTITY_SUB_TYPE_EFFECT_SOUND_AMB3:
+			{
+				if (alt >= SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE)
+				{
+					value = 0.0;
+				}
+				else
+				{
+					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
+	
+					if (terrain_types_in_sector [TERRAIN_TYPE_ALTERED_LAND1])
+					{
+						value += (0.5 * get_delta_time ());
+					}
+					else
+					{
+						value -= (0.5 * get_delta_time ());
+					}
+	
+					value = bound (value, 0.0, 0.3);
+
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
+
+					if (in_cockpit)
+					{
+						value *= 0.75;
+					}
+				}
+
+				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, value);
+
+				break;
+            }
+			case ENTITY_SUB_TYPE_EFFECT_SOUND_AMB4:
+			{
+				if (alt >= SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE)
+				{
+					value = 0.0;
+				}
+				else
+				{
+					value = get_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION);
+	
+					if (terrain_types_in_sector [TERRAIN_TYPE_ALTERED_LAND2])
+					{
+						value += (0.5 * get_delta_time ());
+					}
+					else
+					{
+						value -= (0.5 * get_delta_time ());
+					}
+	
+					value = bound (value, 0.0, 0.3);
+
+					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
 					if (in_cockpit)
 					{
