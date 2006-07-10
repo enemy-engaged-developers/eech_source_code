@@ -1324,17 +1324,17 @@ void initialise_smoke_list_database (void)
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;	// colour change 1 lifescale
-		item->red_1					=	120;	// red
-		item->green_1 				=	100;	// green
-		item->blue_1 				=	40;	// blue
+		item->red_1					=	 90;	// red
+		item->green_1 				=	65;	// green
+		item->blue_1 				=	30;	// blue
 		item->alpha_1 				=	140;	// alpha
 		item->radius_1 			=	12.0;	// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;	// colour change 2 lifescale
-		item->red_2					=	120;	// red
-		item->green_2				=	100;	// green
-		item->blue_2				=	40;	// blue
+		item->red_2					=	 60;	// red
+		item->green_2				=	 50;	// green
+		item->blue_2				=	20;	// blue
 		item->alpha_2				=	100;	// alpha
 		item->radius_2				=	17.0;	// radius
 
