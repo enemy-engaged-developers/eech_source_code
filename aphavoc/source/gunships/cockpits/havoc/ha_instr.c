@@ -2267,7 +2267,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 		havoc_lamps;
 
 	//VJ 051221 included check for presense EEAH sprite 
-	if (get_global_apache_havoc_installed()) 
+	if (get_global_apache_havoc_installed())
 	{
 
 		set_havoc_instrument_colours ();

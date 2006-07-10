@@ -7116,7 +7116,7 @@ static void draw_system_display_mfd (void)
 
 	y_adjust = print_system_message ("STABILISER", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_STABILISER), y_adjust);
 
-	y_adjust = print_system_message ("MAIN ROTOR", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
+	y_adjust = print_system_message ("MAIN ROTOR", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
 
 	y_adjust = print_system_message ("TAIL ROTOR", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_TAIL_ROTOR), y_adjust);
 

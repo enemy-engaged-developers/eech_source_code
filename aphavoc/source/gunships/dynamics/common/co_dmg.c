@@ -211,6 +211,24 @@ dynamics_damage_type
 			FALSE,
 			TRUE,
 		},
+		{
+			"APU",
+			DYNAMICS_DAMAGE_APU,
+			0.0,
+			0.1,
+			10.0 * ONE_SECOND,
+			FALSE,
+			TRUE,
+		},
+		{
+			"Main rotor blade",
+			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE,
+			0.1,
+			0.2,
+			10.0 * ONE_SECOND,
+			FALSE,
+			TRUE,
+		},
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -664,6 +682,27 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					break;
 				}
+				case DYNAMICS_DAMAGE_APU:
+				{
+					debug_log ("DYNAMICS: APU damage");
+					
+					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_APU;
+
+					current_flight_dynamics->apu_rpm.max = 0.0;
+					current_flight_dynamics->apu_rpm.delta = -100.0;
+
+					current_flight_dynamics->apu_rpm.damaged = TRUE;
+					
+					break;
+				}
+				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
+				{
+					debug_log ("DYNAMICS: MAIN ROTOR BLADE damaged");
+					
+					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE;
+					
+					break;	
+				}
 				default:
 				{
 
@@ -1001,7 +1040,7 @@ void update_dynamics_at_keysite (void)
 
 			//#if DYNAMICS_DEBUG
 
-			debug_log ("DYNAMICS: refuelling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, current_flight_dynamics->fuel_weight.max);
+//			debug_log ("DYNAMICS: refuelling, fuel = %f (max = %f)", current_flight_dynamics->fuel_weight.value, current_flight_dynamics->fuel_weight.max);
 
 			//#endif
 
@@ -1164,6 +1203,8 @@ void update_dynamics_damage (void)
 				case DYNAMICS_DAMAGE_AVIONICS:
 				case DYNAMICS_DAMAGE_FIRE_EXTINGUISHER:
 				case DYNAMICS_DAMAGE_UNDERCARRIAGE:
+				case DYNAMICS_DAMAGE_APU:
+				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
 
 					break;
@@ -1687,6 +1728,16 @@ void repair_damage_model (unsigned int damage)
 
 					break;
 				}
+				case DYNAMICS_DAMAGE_APU:
+				{
+					current_flight_dynamics->apu_rpm.damaged = FALSE;
+					
+					break;
+				}
+				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
+				{
+					break;	
+				}
 				default:
 				{
 
@@ -1917,6 +1968,30 @@ void damage_entity_to_flight_model (entity *en)
 					#endif
 
 					break;
+				}
+				case DYNAMICS_DAMAGE_APU:
+				{
+					damage_level += 0.1;
+
+					#if DYNAMICS_DEBUG
+
+					debug_log ("DYNAMICS: APU damaged");
+
+					#endif
+					
+					break;
+				}
+				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
+				{
+					damage_level += 0.2;
+
+					#if DYNAMICS_DEBUG
+
+					debug_log ("DYNAMICS: MAIN ROTOR BLADE damaged");
+
+					#endif
+
+					break;	
 				}
 				default:
 				{

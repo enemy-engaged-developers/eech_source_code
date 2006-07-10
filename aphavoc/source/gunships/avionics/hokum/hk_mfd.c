@@ -7244,11 +7244,11 @@ static void draw_system_display_mfd (void)
 
 	y_adjust = print_mfd_system_message ("STABILISER", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_STABILISER), y_adjust, width_adjust);
 
-	y_adjust = print_mfd_system_message ("MAIN ROTOR", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust, width_adjust);
+	y_adjust = print_mfd_system_message ("MAIN ROTOR", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust, width_adjust);
 
 	y_adjust = print_mfd_system_message ("L ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE), y_adjust, width_adjust);
 
-	y_adjust = print_mfd_system_message ("APU", "DAMAGED", FALSE, y_adjust, width_adjust);
+	y_adjust = print_mfd_system_message ("APU", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust, width_adjust);
 
 	y_adjust = print_mfd_system_message ("R ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust, width_adjust);
 

@@ -8529,13 +8529,13 @@ static void draw_system_display_mfd (void)
 
 	y_adjust = print_main_mfd_system_message ("STABILISER", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_STABILISER), y_adjust);
 
-	y_adjust = print_main_mfd_system_message ("MAIN ROTOR", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
+	y_adjust = print_main_mfd_system_message ("MAIN ROTOR", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
 
 	y_adjust = print_main_mfd_system_message ("TAIL ROTOR", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_TAIL_ROTOR), y_adjust);
 
 	y_adjust = print_main_mfd_system_message ("L ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE), y_adjust);
 
-	y_adjust = print_main_mfd_system_message ("APU", "DAMAGED", FALSE, y_adjust);
+	y_adjust = print_main_mfd_system_message ("APU", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
 
 	y_adjust = print_main_mfd_system_message ("R ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust);
 
@@ -8651,13 +8651,13 @@ static void draw_system_display_side_mfd (void)
 
 	y_adjust = print_side_mfd_system_message ("STABILISER", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_STABILISER), y_adjust);
 
-	y_adjust = print_side_mfd_system_message ("MAIN ROTOR", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
+	y_adjust = print_side_mfd_system_message ("MAIN ROTOR", "FAIL", get_dynamics_damage_type (DYNAMICS_DAMAGE_MAIN_ROTOR), y_adjust);
 
 	y_adjust = print_side_mfd_system_message ("TAIL ROTOR", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_TAIL_ROTOR), y_adjust);
 
 	y_adjust = print_side_mfd_system_message ("L ENGINE", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE), y_adjust);
 
-	y_adjust = print_side_mfd_system_message ("APU", "DMGD", FALSE, y_adjust);
+	y_adjust = print_side_mfd_system_message ("APU", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
 
 	y_adjust = print_side_mfd_system_message ("R ENGINE", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust);
 
