@@ -673,16 +673,6 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_SMALL_EXPLOSION;
 	explosion_info->sound_volume 				= 0.8;
 
-	//
-	// Werewolf: distant explosion sound
-	//
-
-	explosion_info = &(this_explosion->component[ 5 ]);
-	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
-	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
-	explosion_info->sound_volume 				= 1.0;
-
-
 	////////////////////////////////////////
 	//
 	// MEDIUM HE EXPLOSION
@@ -842,7 +832,6 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_1;
 	explosion_info->sound_volume 				= 1.0;
-
 
 	////////////////////////////////////////
 	//
