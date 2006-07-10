@@ -7164,7 +7164,7 @@ static void draw_system_display_mfd (void)
 static void draw_engine_display_mfd (void)
 {
 	char
-		buffer[80];
+		buffer[80], buffer2[10];
 
 	int
 		i;
@@ -7175,6 +7175,7 @@ static void draw_engine_display_mfd (void)
 		y2,
 		y3,
 		bar_value,
+		x_adjust,
 		digital_readout;
 
 	set_mono_font_colour (MFD_COLOUR1);
@@ -7194,7 +7195,7 @@ static void draw_engine_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_2d_mono_font_position (-0.8, 0.6);
+	set_2d_mono_font_position (-0.85, 0.85);
 
 	if (draw_large_mfd)
 	{
@@ -7217,7 +7218,7 @@ static void draw_engine_display_mfd (void)
 
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (-0.8, -0.6);
+	set_2d_mono_font_position (-0.85, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7230,24 +7231,11 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (-0.8, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('1');
-
 	bar_value = digital_readout * 0.01;
 
-	get_2d_float_screen_coordinates (-0.8, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (-0.85, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7284,7 +7272,7 @@ static void draw_engine_display_mfd (void)
 
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (-0.6 - 0.025, -0.6);
+	set_2d_mono_font_position (-0.65 - 0.025, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7297,24 +7285,11 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (-0.6 - 0.025, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('2');
-
 	bar_value = digital_readout * 0.01;
 
-	get_2d_float_screen_coordinates (-0.6 - 0.025, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (-0.65 - 0.025, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7347,7 +7322,7 @@ static void draw_engine_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_2d_mono_font_position (-0.3, 0.6);
+	set_2d_mono_font_position (-0.35, 0.85);
 
 	if (draw_large_mfd)
 	{
@@ -7358,19 +7333,17 @@ static void draw_engine_display_mfd (void)
 		set_mono_font_rel_position (0.0, -7.0);
 	}
 
-	print_mono_font_string ("TEMP");
+	print_mono_font_string ("TGT");
 
 	//
 	// engine 1 temperature
 	//
 
-	digital_readout = bound (current_flight_dynamics->left_engine_temp.value * 0.125, 0.0, 125.0);
-
-	convert_float_to_int (digital_readout, &i);
-
+	digital_readout = bound (current_flight_dynamics->left_engine_temp.value, 0.0, 1000.0);
+	convert_float_to_int (digital_readout * 0.1, &i);
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (-0.3, -0.6);
+	set_2d_mono_font_position (-0.35, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7383,24 +7356,12 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (-0.3, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('1');
-
+	digital_readout = bound (current_flight_dynamics->left_engine_temp.value * 0.125, 0.0, 125.0);
 	bar_value = digital_readout * 0.0096;
 
-	get_2d_float_screen_coordinates (-0.3, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (-0.35, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7431,13 +7392,11 @@ static void draw_engine_display_mfd (void)
 	// engine 2 temperature
 	//
 
-	digital_readout = bound (current_flight_dynamics->right_engine_temp.value * 0.125, 0.0, 125.0);
-
-	convert_float_to_int (digital_readout, &i);
-
+	digital_readout = bound (current_flight_dynamics->right_engine_temp.value, 0.0, 1000.0);
+	convert_float_to_int (digital_readout * 0.1, &i);
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (-0.1 - 0.025, -0.6);
+	set_2d_mono_font_position (-0.15 - 0.025, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7450,24 +7409,12 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (-0.1 - 0.025, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('2');
-
+	digital_readout = bound (current_flight_dynamics->right_engine_temp.value * 0.125, 0.0, 125.0);
 	bar_value = digital_readout * 0.0096;
 
-	get_2d_float_screen_coordinates (-0.1 - 0.025, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (-0.15 - 0.025, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7504,7 +7451,7 @@ static void draw_engine_display_mfd (void)
 	// engine 1 rpm
 	//
 
-	set_2d_mono_font_position (0.2, 0.6);
+	set_2d_mono_font_position (0.1, 0.85);
 
 	if (draw_large_mfd)
 	{
@@ -7533,7 +7480,7 @@ static void draw_engine_display_mfd (void)
 
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (0.2, -0.6);
+	set_2d_mono_font_position (0.1 + 0.05, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7546,24 +7493,11 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (0.2, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('1');
-
 	bar_value = digital_readout * 0.01;
 
-	get_2d_float_screen_coordinates (0.2, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (0.1, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7594,7 +7528,7 @@ static void draw_engine_display_mfd (void)
 	// rotor rpm
 	//
 
-	set_2d_mono_font_position (0.35 - 0.0125, 0.6);
+	set_2d_mono_font_position (0.25 - 0.0125, 0.85);
 
 	if (draw_large_mfd)
 	{
@@ -7617,26 +7551,13 @@ static void draw_engine_display_mfd (void)
 		print_mono_font_char ('R');
 	}
 
-	set_2d_mono_font_position (0.35 - 0.0125, 0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (-8.0, -33.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (-5.0, -19.0);
-	}
-
-	print_mono_font_string ("RPM");
-
 	digital_readout = bound (current_flight_dynamics->main_rotor_rpm.value, 0.0, 125.0);
 
 	convert_float_to_int (digital_readout, &i);
 
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (0.35 - 0.0125, -0.4);
+	set_2d_mono_font_position (0.25 - 0.0125, -0.15);
 
 	if (draw_large_mfd)
 	{
@@ -7651,9 +7572,9 @@ static void draw_engine_display_mfd (void)
 
 	bar_value = digital_readout * 0.008;
 
-	get_2d_float_screen_coordinates (0.35 - 0.0125, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.4, &y2);
-	get_2d_float_screen_y_coordinate (-0.4 + bar_value, &y3);
+	get_2d_float_screen_coordinates (0.25 - 0.0125, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.15, &y2);
+	get_2d_float_screen_y_coordinate (-0.15 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7684,7 +7605,7 @@ static void draw_engine_display_mfd (void)
 	// engine 2 rpm
 	//
 
-	set_2d_mono_font_position (0.5 - 0.025, 0.6);
+	set_2d_mono_font_position (0.4 - 0.025, 0.85);
 
 	if (draw_large_mfd)
 	{
@@ -7713,7 +7634,7 @@ static void draw_engine_display_mfd (void)
 
 	sprintf (buffer, "%03d", i);
 
-	set_2d_mono_font_position (0.5 - 0.025, -0.6);
+	set_2d_mono_font_position (0.4 - 0.05, -0.35);
 
 	if (draw_large_mfd)
 	{
@@ -7726,24 +7647,11 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (0.5 - 0.025, -0.6);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_rel_position (0.0, 25.0);
-	}
-	else
-	{
-		set_mono_font_rel_position (0.0, 13.0);
-	}
-
-	print_mono_font_char ('2');
-
 	bar_value = digital_readout * 0.01;
 
-	get_2d_float_screen_coordinates (0.5 - 0.025, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	get_2d_float_screen_coordinates (0.4 - 0.025, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7776,26 +7684,24 @@ static void draw_engine_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_2d_mono_font_position (0.8 - 0.0125, 0.6);
+	set_2d_mono_font_position (-0.8, -0.7);
 
 	if (draw_large_mfd)
 	{
-		set_mono_font_rel_position (-12.0, -16.0);
+		set_mono_font_rel_position (2.0, -16.0);
 	}
 	else
 	{
-		set_mono_font_rel_position (-6.0, -7.0);
+		set_mono_font_rel_position (0.0, -7.0);
 	}
 
 	print_mono_font_string ("FUEL");
 
 	digital_readout = bound (kilograms_to_pounds (current_flight_dynamics->fuel_weight.value), 0.0, 2500.0);
-
 	convert_float_to_int (digital_readout, &i);
+	sprintf (buffer, "%04dlbs", i);
 
-	sprintf (buffer, "%04d", i);
-
-	set_2d_mono_font_position (0.8 - 0.0125, -0.6);
+	set_2d_mono_font_position (-0.8, -0.7);
 
 	if (draw_large_mfd)
 	{
@@ -7808,24 +7714,127 @@ static void draw_engine_display_mfd (void)
 
 	print_mono_font_string (buffer);
 
-	set_2d_mono_font_position (0.8 - 0.0125, -0.6);
+	////////////////////////////////////////
+	//
+	// NG RPM left engine
+	//
+	////////////////////////////////////////
+
+	set_2d_mono_font_position (0.65, 0.85);
 
 	if (draw_large_mfd)
 	{
-		set_mono_font_rel_position (-8.0, 25.0);
+		set_mono_font_rel_position (-6.0, -16.0);
+
+		print_mono_font_char ('N');
+
+		set_mono_font_rel_position (0.0, 2.0);
+
+		print_mono_font_char ('G');
 	}
 	else
 	{
-		set_mono_font_rel_position (-4.0, 13.0);
+		set_mono_font_rel_position (-2.0, -7.0);
+
+		print_mono_font_char ('N');
+
+		set_mono_font_rel_position (0.0, 1.0);
+
+		print_mono_font_char ('G');
 	}
 
-	print_mono_font_string ("LBS");
+	digital_readout = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);
+	convert_float_to_int (digital_readout, &i);
+	sprintf (buffer, "%03d", i);
 
-	bar_value = digital_readout * 0.00048;
+	set_2d_mono_font_position (0.65 - 0.05, -0.35);
 
-	get_2d_float_screen_coordinates (0.8 - 0.0125, 0.6, &x1, &y1);
-	get_2d_float_screen_y_coordinate (-0.6, &y2);
-	get_2d_float_screen_y_coordinate (-0.6 + bar_value, &y3);
+	if (draw_large_mfd)
+		set_mono_font_rel_position (-4.0, 8.0);
+	else
+		set_mono_font_rel_position (-2.0, 3.0);
+
+	print_mono_font_string (buffer);
+
+	bar_value = current_flight_dynamics->left_engine_n1_rpm.value * 0.01;
+	
+	get_2d_float_screen_coordinates (0.65 - 0.0125, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
+
+	if (draw_large_mfd)
+	{
+		draw_line (x1, y1, x1, y2, MFD_COLOUR1);
+		draw_line (x1 + 4.0, y1, x1 + 4.0, y2, MFD_COLOUR1);
+		draw_line (x1, y1, x1 + 4.0, y1, MFD_COLOUR1);
+		draw_line (x1, y2, x1 + 4.0, y2, MFD_COLOUR1);
+
+		draw_line (x1 + 1.0, y2, x1 + 1.0, y3, MFD_COLOUR1);
+		draw_line (x1 + 2.0, y2, x1 + 2.0, y3, MFD_COLOUR1);
+		draw_line (x1 + 3.0, y2, x1 + 3.0, y3, MFD_COLOUR1);
+		
+		draw_mono_sprite (large_engine_bar_marker, x1 - 7.0, y1 + 30.0, MFD_COLOUR1);
+	}
+	else
+	{
+		draw_line (x1, y1, x1, y2, MFD_COLOUR1);
+		draw_line (x1 + 2.0, y1, x1 + 2.0, y2, MFD_COLOUR1);
+		draw_line (x1, y1, x1 + 2.0, y1, MFD_COLOUR1);
+		draw_line (x1, y2, x1 + 2.0, y2, MFD_COLOUR1);
+
+		draw_line (x1 + 1.0, y2, x1 + 1.0, y3, MFD_COLOUR1);
+
+		draw_mono_sprite (small_engine_bar_marker, x1 + 4.0, y1 + 11.0, MFD_COLOUR1);
+		draw_mono_sprite (small_engine_bar_marker, x1 + 4.0, y1 + 33.0, MFD_COLOUR1);
+	}
+
+	////////////////////////////////////////
+	//
+	// NG RPM right engine
+	//
+	////////////////////////////////////////
+
+	set_2d_mono_font_position (0.85, 0.85);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_rel_position (-6.0, -16.0);
+
+		print_mono_font_char ('N');
+
+		set_mono_font_rel_position (0.0, 2.0);
+
+		print_mono_font_char ('G');
+	}
+	else
+	{
+		set_mono_font_rel_position (-2.0, -7.0);
+
+		print_mono_font_char ('N');
+
+		set_mono_font_rel_position (0.0, 1.0);
+
+		print_mono_font_char ('G');
+	}
+
+	digital_readout = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);
+	convert_float_to_int (digital_readout, &i);
+	sprintf (buffer, "%03d", i);
+
+	set_2d_mono_font_position (0.85, -0.35);
+
+	if (draw_large_mfd)
+		set_mono_font_rel_position (-4.0, 8.0);
+	else
+		set_mono_font_rel_position (-2.0, 3.0);
+
+	print_mono_font_string (buffer);
+
+	bar_value = current_flight_dynamics->right_engine_n1_rpm.value * 0.01;
+	
+	get_2d_float_screen_coordinates (0.85 - 0.0125, 0.85, &x1, &y1);
+	get_2d_float_screen_y_coordinate (-0.35, &y2);
+	get_2d_float_screen_y_coordinate (-0.35 + bar_value, &y3);
 
 	if (draw_large_mfd)
 	{
@@ -7846,7 +7855,79 @@ static void draw_engine_display_mfd (void)
 		draw_line (x1, y2, x1 + 2.0, y2, MFD_COLOUR1);
 
 		draw_line (x1 + 1.0, y2, x1 + 1.0, y3, MFD_COLOUR1);
+		
+		draw_mono_sprite (small_engine_bar_marker, x1 - 4.0, y1 + 33.0, MFD_COLOUR1);
+		draw_mono_sprite (small_engine_bar_marker, x1 - 4.0, y1 + 11.0, MFD_COLOUR1);
 	}
+	
+	////////////////////////////////////////
+	//
+	// Throttles
+	//
+	////////////////////////////////////////
+
+	set_2d_mono_font_position (-0.25, -0.7);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_rel_position (2.0, -16.0);
+	}
+	else
+	{
+		set_mono_font_rel_position (0.0, -7.0);
+	}
+
+	print_mono_font_string ("THROTTLE");
+
+	digital_readout = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (digital_readout, &i);
+
+	if (i < 60)
+		sprintf(buffer2, "OFF ");
+	else if (i == 60)
+		sprintf(buffer2, "IDLE");
+	else if (i == 110.0)
+		sprintf(buffer2, "FLY ");
+	else
+		sprintf(buffer2, "%03d%%", (i-60) * 2);
+
+	set_2d_mono_font_position (0.0, -0.75);
+
+	digital_readout = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (digital_readout, &i);
+
+	if (i< 60)
+		sprintf(buffer, " %s OFF ", buffer2);
+	else if (i == 60)
+		sprintf(buffer, " %s IDLE", buffer2);
+	else if (i == 110.0)
+		sprintf(buffer, " %s FLY ", buffer2);
+	else
+		sprintf(buffer, " %s %03d%%", buffer2, (i-60) * 2);
+
+	x_adjust = get_mono_font_string_width (buffer) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (buffer);	
+
+	////////////////////////////////////////
+
+	set_2d_mono_font_position (0.5, -0.7);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_rel_position (2.0, -16.0);
+	}
+	else
+	{
+		set_mono_font_rel_position (0.0, -7.0);
+	}
+
+	digital_readout = bound (current_flight_dynamics->apu_rpm.value + 0.5, 0.0, 100.0);
+	convert_float_to_int (digital_readout, &i);
+
+	sprintf(buffer, "APU %03d%%", i);
+
+	print_mono_font_string (buffer);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
