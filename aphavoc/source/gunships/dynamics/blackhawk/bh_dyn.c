@@ -92,10 +92,6 @@ static float
 
 static void set_dynamics_defaults (entity *en);
 
-static void update_left_engine_rpm_dynamics (void);
-
-static void update_right_engine_rpm_dynamics (void);
-
 static void update_main_rotor_dynamics (void);
 
 static void update_tail_rotor_dynamics (void);
@@ -202,6 +198,7 @@ void set_dynamics_defaults (entity *en)
 	// set default modifier values
 
 	current_flight_dynamics->undercarriage_state.modifier = 1.0;
+	current_flight_dynamics->apu_rpm.modifier = 1.0;
 	current_flight_dynamics->left_engine_rpm.modifier = 1.0;
 	current_flight_dynamics->left_engine_torque.modifier = 1.0;
 	current_flight_dynamics->left_engine_temp.modifier = 1.0;
@@ -357,17 +354,27 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->altitude.max = 20000.0;
 
 	// engine characteristics
+	current_flight_dynamics->apu_rpm.value = 0.0;
+	current_flight_dynamics->apu_rpm.min = 0.0;
+	current_flight_dynamics->apu_rpm.max = 0.0;
+	current_flight_dynamics->apu_rpm.damaged = FALSE;
 
 	current_flight_dynamics->left_engine_rpm.value = 0.0;
-	current_flight_dynamics->left_engine_rpm.max = 0.0;
-	current_flight_dynamics->left_engine_torque.value = 50;
+	current_flight_dynamics->left_engine_rpm.max = 100.0;  // engine is always trying for 100% N2 RPM
+	current_flight_dynamics->left_engine_n1_rpm.value = 0.0;
+	current_flight_dynamics->left_engine_n1_rpm.max = 0.0;
+	current_flight_dynamics->left_engine_torque.value = 0.0;
+	current_flight_dynamics->left_engine_torque.max = 120.0;
 
 	current_flight_dynamics->left_engine_temp.value = 800.0;
 	current_flight_dynamics->left_engine_temp.max = 1000.0;
 
 	current_flight_dynamics->right_engine_rpm.value = 0.0;
-	current_flight_dynamics->right_engine_rpm.max = 0.0;
-	current_flight_dynamics->right_engine_torque.value = 50;
+	current_flight_dynamics->right_engine_rpm.max = 100.0;
+	current_flight_dynamics->right_engine_n1_rpm.value = 0.0;
+	current_flight_dynamics->right_engine_n1_rpm.max = 0.0;
+	current_flight_dynamics->right_engine_torque.value = 0.0;
+	current_flight_dynamics->right_engine_torque.max = 120.0;
 
 	current_flight_dynamics->right_engine_temp.value = 800.0;
 	current_flight_dynamics->right_engine_temp.max = 1000.0;
@@ -588,16 +595,18 @@ void set_dynamics_defaults (entity *en)
 
 void update_blackhawk_advanced_dynamics (void)
 {
-
 	float
-		rpm, workload=0.0;
+		rpm, workload=0.0, total_rpm, left_power_ratio;
 
 	update_power_dynamics ();
 
-	update_left_engine_rpm_dynamics ();
+	update_apu_rpm_dynamics();
+	update_engine_rpm_dynamics(1);
+	update_engine_rpm_dynamics(2);
 
-	update_right_engine_rpm_dynamics ();
-
+	update_engine_temperature_dynamics (1);
+	update_engine_temperature_dynamics (2);
+	
 	update_main_rotor_dynamics ();
 
 	update_tail_rotor_dynamics ();
@@ -651,21 +660,26 @@ void update_blackhawk_advanced_dynamics (void)
 	  workload = bound (workload, 0.0, 100.0);
 	}
 
+	// arneh - distribute torque among engines depending on the N1 RPM of each engine
+	total_rpm = bound(current_flight_dynamics->left_engine_n1_rpm.value - 55.0, 0.0, 100.0) +
+		bound(current_flight_dynamics->right_engine_n1_rpm.value - 55.0, 0.0, 100.0);
+	if (total_rpm > 0.0)
+		left_power_ratio = bound(current_flight_dynamics->left_engine_n1_rpm.value -55.0, 0.0, 100.0) / total_rpm;
+	else
+		left_power_ratio = 0.5;
+
 	if (!current_flight_dynamics->left_engine_torque.damaged)
 	{
-
 		rpm = 0.0;
 
 		if (current_flight_dynamics->main_rotor_rpm.max != 0.0)
 		{
+			float rotor_rpm_diff = current_flight_dynamics->main_rotor_rpm.value - current_flight_dynamics->left_engine_rpm.value;
 
 			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
-
-			if (current_flight_dynamics->right_engine_torque.damaged)
-			{
-	
-				rpm *= 1.5;
-			}
+			rpm *= 0.5 + left_power_ratio;
+			if (rotor_rpm_diff > 0.0)
+				rpm *= 1.0 - bound(rotor_rpm_diff * 0.75, 0.0, 1.0);
 		}
 
 //Werewolf: engine torque should INCREASE when the aircraft works harder
@@ -682,19 +696,16 @@ void update_blackhawk_advanced_dynamics (void)
 
 	if (!current_flight_dynamics->right_engine_torque.damaged)
 	{
-
 		rpm = 0.0;
 
 		if (current_flight_dynamics->main_rotor_rpm.max != 0.0)
 		{
+			float rotor_rpm_diff = current_flight_dynamics->main_rotor_rpm.value - current_flight_dynamics->right_engine_rpm.value;
 
 			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
-
-			if (current_flight_dynamics->left_engine_torque.damaged)
-			{
-	
-				rpm *= 1.5;
-			}
+			rpm *= 0.5 + (1.0 - left_power_ratio);
+			if (rotor_rpm_diff > 0.0)
+				rpm *= 1.0 - bound(rotor_rpm_diff * 0.75, 0.0, 1.0);
 		}
 
 //Werewolf
@@ -707,189 +718,6 @@ void update_blackhawk_advanced_dynamics (void)
 
 		current_flight_dynamics->right_engine_torque.value -= current_flight_dynamics->right_engine_torque.value * get_model_delta_time ();
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void update_left_engine_rpm_dynamics (void)
-{
-
-	float
-		collect, engine_workload = 0.0;
-
-	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
-
-	collect = max (1.0, collect);
-
-	if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_LEFT_ENGINE)
-	{
-
-		current_flight_dynamics->left_engine_rpm.max = (100.0 - (1.0 * current_flight_dynamics->input_data.collective.delta)) * collect;
-	}
-
-	//
-	//
-	//
-
-	//Werewolf - Engine RPM depending on workload
-	if (command_line_dynamics_advanced_engine_model == TRUE)
-	{
-	  engine_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value))
-			  * 80.0;
-	  engine_workload = bound (engine_workload, 0.0, 100.0);
-	  //debug_log ( "Engine Workload=%.2f ", engine_workload);
-	}
-
-	current_flight_dynamics->left_engine_rpm.delta = current_flight_dynamics->left_engine_rpm.max - current_flight_dynamics->left_engine_rpm.value;
-
-	current_flight_dynamics->left_engine_rpm.delta = bound (current_flight_dynamics->left_engine_rpm.delta, -5.0, 5.0);
-
-	//
-	// damaged or out of fuel
-	//
-
-	if ((!current_flight_dynamics->left_engine_rpm.damaged) && (current_flight_dynamics->fuel_weight.value > 0.0))
-	{
-
-		current_flight_dynamics->left_engine_rpm.value += current_flight_dynamics->left_engine_rpm.delta * get_model_delta_time ();
-		if (command_line_dynamics_advanced_engine_model == TRUE)
-		  current_flight_dynamics->left_engine_rpm.value -= engine_workload * (0.5 * get_model_delta_time ()); //Werewolf
-	}
-	else
-	{
-
-		current_flight_dynamics->left_engine_rpm.value -= current_flight_dynamics->left_engine_rpm.value * get_model_delta_time ();
-	}
-
-	//
-	// temp and damaged if too hot
-	//
-
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_OVER_TORQUE))
-	{
-	
-		if (current_flight_dynamics->left_engine_torque.value > 101.0)
-		{
-
-			current_flight_dynamics->left_engine_temp.value += 0.43 * (current_flight_dynamics->left_engine_torque.value - 101.0) * get_model_delta_time ();
-	
-			current_flight_dynamics->left_overtorque = TRUE;
-
-			//debug_log ("left engine is overtorquing %f", current_flight_dynamics->left_engine_rpm.max);
-		}
-		else if ((!get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE)) || (get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE)))
-		{
-	
-			current_flight_dynamics->left_engine_temp.value -= (current_flight_dynamics->left_engine_temp.value - 800.0) * get_model_delta_time ();
-	
-			current_flight_dynamics->left_overtorque = FALSE;
-		}
-	}
-
-	if (current_flight_dynamics->left_engine_temp.value >= current_flight_dynamics->left_engine_temp.max)
-	{
-
-		dynamics_damage_model (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE, FALSE);
-	}
-				
-	//
-	// use fuel, tuned to give 1 hr of 100 % no input
-	//
-
-	//update_current_flight_dynamics_fuel_weight ();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void update_right_engine_rpm_dynamics (void)
-{
-
-	float
-		collect, engine_workload = 0.0;
-
-	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
-
-	collect = max (1.0, collect);
-
-	if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_RIGHT_ENGINE)
-	{
-
-		current_flight_dynamics->right_engine_rpm.max = (100.0 - (1.0 * current_flight_dynamics->input_data.collective.delta)) * collect;
-	}
-
-	//
-	//
-	//
-
-	//Werewolf - Engine RPM depending on workload
-	if (command_line_dynamics_advanced_engine_model == TRUE)
-	{
-	  engine_workload = ((float) fabs (current_flight_dynamics->main_rotor_pitch_angle.value) + (float) fabs (current_flight_dynamics->main_rotor_roll_angle.value) )
-			  * 80.0;
-	  engine_workload = bound (engine_workload, 0.0, 100.0);
-	}
-
-	current_flight_dynamics->right_engine_rpm.delta = current_flight_dynamics->right_engine_rpm.max - current_flight_dynamics->right_engine_rpm.value;
-
-	current_flight_dynamics->right_engine_rpm.delta = bound (current_flight_dynamics->right_engine_rpm.delta, -5.0, 5.0);
-
-	//
-	// damaged or out of fuel
-	//
-
-	if ((!current_flight_dynamics->right_engine_rpm.damaged) && (current_flight_dynamics->fuel_weight.value > 0.0))
-	{
-
-		current_flight_dynamics->right_engine_rpm.value += current_flight_dynamics->right_engine_rpm.delta * get_model_delta_time ();
-		if (command_line_dynamics_advanced_engine_model == TRUE)
-		  current_flight_dynamics->right_engine_rpm.value -= engine_workload * (0.5 * get_model_delta_time ()); //Werewolf
-	}
-	else
-	{
-
-		current_flight_dynamics->right_engine_rpm.value -= current_flight_dynamics->right_engine_rpm.value * get_model_delta_time ();
-	}
-
-	//
-	// temp and damaged if too hot
-	//
-
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_OVER_TORQUE))
-	{
-	
-		if (current_flight_dynamics->right_engine_torque.value > 101.0)
-		{
-
-			current_flight_dynamics->right_engine_temp.value += 0.5 * (current_flight_dynamics->right_engine_torque.value - 101.0) * get_model_delta_time ();
-	
-			current_flight_dynamics->right_overtorque = TRUE;
-
-			//debug_log ("right engine is overtorquing %f", current_flight_dynamics->right_engine_rpm.max);
-		}
-		else if ((!get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE)) || (get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE)))
-		{
-	
-			current_flight_dynamics->right_engine_temp.value -= (current_flight_dynamics->right_engine_temp.value - 800.0) * get_model_delta_time ();
-	
-			current_flight_dynamics->right_overtorque = FALSE;
-		}
-	}
-
-	if (current_flight_dynamics->right_engine_temp.value >= current_flight_dynamics->right_engine_temp.max)
-	{
-
-		dynamics_damage_model (DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE, FALSE);
-	}
-				
-	//
-	// use fuel, tuned to give 1 hr of 100 % no input
-	//
-
-	//update_current_flight_dynamics_fuel_weight ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1114,8 +942,8 @@ void update_main_rotor_rpm_dynamics (void)
 
 		if (number_of_engines)
 		{
-
-			rotor_rpm = (current_flight_dynamics->left_engine_rpm.value + current_flight_dynamics->right_engine_rpm.value) / number_of_engines;
+			// arneh - rotor spins at the speed of the fastest engine
+			rotor_rpm = max(current_flight_dynamics->left_engine_rpm.value, current_flight_dynamics->right_engine_rpm.value);
 			if (command_line_dynamics_advanced_engine_model == TRUE)
 			  rotor_rpm -= rotor_workload; //Werewolf
 		}
@@ -1130,7 +958,10 @@ void update_main_rotor_rpm_dynamics (void)
 		float
 			induced_drag, profile_drag,
 			autorotational_acceleration,
-			rpm_ratio, air_flow;
+			rpm_ratio, air_flow,
+			autorotation_factor = 1.6,
+			induced_drag_factor = 8.0,
+			profile_drag_factor = 2.0;
 
 		// when not engaged to engine, rpm may exceed max
 		// (but rotor will fail before reaching the new limit)
@@ -1165,7 +996,9 @@ void update_main_rotor_rpm_dynamics (void)
 			// profile_drag and induced_drag have been arrived at by experimentation.
 			// Feel free to change the factors if you feel they are wrong.
 			current_flight_dynamics->main_rotor_rpm.delta = max_delta * 
-				(1.6 * autorotational_acceleration - 2.0 * profile_drag - 10.0 * induced_drag);
+				(autorotation_factor * autorotational_acceleration - 
+				 profile_drag_factor * profile_drag -
+				 induced_drag_factor * induced_drag);
 		}
 		else
 		{
