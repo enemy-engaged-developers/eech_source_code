@@ -3643,7 +3643,6 @@ void update_engine_rpm_dynamics (int engine_number)
 	if (n2_rpm->damaged)
 	{
 		n1_rpm->max = 0.0;
-		n2_rpm->max = 0.0;
 		n1_rpm->value -= n1_rpm->value * get_model_delta_time();
 	}
 	else
