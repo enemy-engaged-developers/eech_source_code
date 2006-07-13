@@ -164,7 +164,8 @@ static screen
 	*lhs_mfd_texture_screen,
 	*rhs_mfd_texture_screen,
 	*lhs_overlaid_mfd_texture_screen,
-	*rhs_overlaid_mfd_texture_screen;
+	*rhs_overlaid_mfd_texture_screen,
+	*eo_3d_texture_screen;
 
 static rgb_colour
 	clear_mfd_colour;
@@ -621,7 +622,7 @@ static char
 		0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
-		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
 		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
@@ -661,7 +662,7 @@ static char
 		0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
-		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
@@ -731,18 +732,17 @@ void initialise_apache_mfd (void)
 	else
 		draw_large_mfd = TRUE;
 		
-	// Temporarily disable hifg-res MFD, as it doesn't quit work with TADS
-	draw_large_mfd = FALSE;
-
 	if (draw_large_mfd)
 	{
 		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
 		mfd_texture_size = MFD_TEXTURE_LARGE_SIZE;
+		eo_3d_texture_screen = large_eo_3d_texture_screen;
 	}
 	else
 	{
 		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
 		mfd_texture_size = MFD_TEXTURE_SMALL_SIZE;
+		eo_3d_texture_screen = small_eo_3d_texture_screen;
 	}
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
@@ -2574,9 +2574,6 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	ASSERT (eo);
 
-	if (draw_large_mfd)
-		return;
-
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
@@ -2715,12 +2712,9 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 	int
 		tint;
 
-	if (draw_large_mfd)
-		return;
-
 	ASSERT (eo);
 
-	ASSERT (small_eo_3d_texture_screen);
+	ASSERT (eo_3d_texture_screen);
 
 	ASSERT (d3d_can_render_to_texture);
 
@@ -2796,9 +2790,9 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		}
 	}
 
-	set_3d_render_target (small_eo_3d_texture_screen);
+	set_3d_render_target (eo_3d_texture_screen);
 
-	set_active_screen (small_eo_3d_texture_screen);
+	set_active_screen (eo_3d_texture_screen);
 
 	if (command_line_green_mfd)
 	{
@@ -2817,7 +2811,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	draw_eo_3d_scene = FALSE;
 
-	finalise_3d_render_target_texture (small_eo_3d_texture_screen);
+	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
 
@@ -7232,7 +7226,7 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 	case TARGET_ACQUISITION_SYSTEM_DTV:
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 	case TARGET_ACQUISITION_SYSTEM_IHADSS:
-		s_ptr = "LASER";
+		s_ptr = "LRF";
 		break;
 	case TARGET_ACQUISITION_SYSTEM_OFF:
 	default:
@@ -9253,34 +9247,41 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		}
 		////////////////////////////////////////
 		case MFD_MODE_FLIR:
+		case MFD_MODE_DTV:
+		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
 			if ((d3d_can_render_to_texture) && (!apache_damage.flir))
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
 				if (location == MFD_LOCATION_LHS)
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-				}
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 				else
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
-				}
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 
-				draw_3d_eo_display_on_texture (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
+				if (*mfd_mode == MFD_MODE_FLIR)
+					draw_3d_eo_display_on_texture (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
+				else if (*mfd_mode == MFD_MODE_DTV)
+					draw_3d_eo_display_on_texture (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV);
+				else
+					draw_3d_eo_display_on_texture (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
-					draw_2d_flir_mfd (TRUE, FALSE);
+					if (*mfd_mode == MFD_MODE_FLIR)
+						draw_2d_flir_mfd (TRUE, FALSE);
+					else if (*mfd_mode == MFD_MODE_DTV)
+						draw_2d_dtv_mfd (TRUE, FALSE);
+					else
+						draw_2d_dvo_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
-
-					unlock_screen (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -9295,115 +9296,12 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 					draw_layout_grid ();
 
-					draw_2d_flir_mfd (FALSE, FALSE);
-
-					flush_screen_texture_graphics (mfd_texture_screen);
-
-					unlock_screen (mfd_texture_screen);
-				}
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case MFD_MODE_DTV:
-		////////////////////////////////////////
-		{
-			if ((d3d_can_render_to_texture) && (!apache_damage.dtv))
-			{
-				ASSERT (small_eo_3d_texture_screen);
-
-				if (location == MFD_LOCATION_LHS)
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-				}
-				else
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
-				}
-
-				draw_3d_eo_display_on_texture (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV);
-
-				set_active_screen (small_eo_3d_texture_screen);
-
-				if (lock_screen (small_eo_3d_texture_screen))
-				{
-					draw_layout_grid ();
-
-					draw_2d_dtv_mfd (TRUE, FALSE);
-
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
-
-					unlock_screen (small_eo_3d_texture_screen);
-				}
-
-				set_pilots_full_screen_params (FALSE);
-			}
-			else
-			{
-				set_active_screen (mfd_texture_screen);
-
-				if (lock_screen (mfd_texture_screen))
-				{
-					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
-					draw_layout_grid ();
-
-					draw_2d_dtv_mfd (FALSE, FALSE);
-
-					flush_screen_texture_graphics (mfd_texture_screen);
-
-					unlock_screen (mfd_texture_screen);
-				}
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case MFD_MODE_DVO:
-		////////////////////////////////////////
-		{
-			if ((d3d_can_render_to_texture) && (!apache_damage.dvo))
-			{
-				ASSERT (small_eo_3d_texture_screen);
-
-				if (location == MFD_LOCATION_LHS)
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-				}
-				else
-				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
-				}
-
-				draw_3d_eo_display_on_texture (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO);
-
-				set_active_screen (small_eo_3d_texture_screen);
-
-				if (lock_screen (small_eo_3d_texture_screen))
-				{
-					draw_layout_grid ();
-
-					draw_2d_dvo_mfd (TRUE, FALSE);
-
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
-
-					unlock_screen (small_eo_3d_texture_screen);
-				}
-
-				set_pilots_full_screen_params (FALSE);
-			}
-			else
-			{
-				set_active_screen (mfd_texture_screen);
-
-				if (lock_screen (mfd_texture_screen))
-				{
-					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
-					draw_layout_grid ();
-
-					draw_2d_dvo_mfd (FALSE, FALSE);
+					if (*mfd_mode == MFD_MODE_FLIR)
+						draw_2d_flir_mfd (FALSE, FALSE);
+					else if (*mfd_mode == MFD_MODE_DTV)
+						draw_2d_dtv_mfd (FALSE, FALSE);
+					else
+						draw_2d_dvo_mfd (FALSE, FALSE);
 
 					flush_screen_texture_graphics (mfd_texture_screen);
 
