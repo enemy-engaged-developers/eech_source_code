@@ -3502,7 +3502,11 @@ void update_engine_temperature_dynamics (int engine_number)
 
 
 	engine_temp->value += engine_temp->delta * get_model_delta_time();
-	engine_temp->value = bound(engine_temp->value, 0.0, 1500.0);
+
+	if (current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
+		engine_temp->value = bound(engine_temp->value, 0.0, 1500.0);
+	else
+		engine_temp->value = bound(engine_temp->value, 0.0, 800.0);
 
 	// if temp above 820 degrees, randomly damage engine. probability depending on temperature	
 	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
@@ -3609,7 +3613,11 @@ void update_engine_rpm_dynamics (int engine_number)
 			n1_delta = 3 * n2_delta;
 		else
 			n1_delta = n2_delta;
-		n1_rpm->min = bound(n1_rpm->value + n1_delta, 60.0, 110.0);
+			
+		if (current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
+			n1_rpm->min = bound(n1_rpm->value + n1_delta, 60.0, 110.0);
+		else
+			n1_rpm->min = bound(n1_rpm->value + n1_delta, 60.0, 100.0);
 
 		n1_rpm->delta = min(n1_rpm->max, n1_rpm->min) - n1_rpm->value;
 		n1_rpm->delta = bound (n1_rpm->delta, -20.0, 15.0);
