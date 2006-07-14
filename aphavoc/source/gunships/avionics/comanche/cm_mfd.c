@@ -8535,7 +8535,7 @@ static void draw_system_display_mfd (void)
 
 	y_adjust = print_main_mfd_system_message ("L ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE), y_adjust);
 
-	y_adjust = print_main_mfd_system_message ("APU", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
+	y_adjust = print_main_mfd_system_message ("SPU", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
 
 	y_adjust = print_main_mfd_system_message ("R ENGINE", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust);
 
@@ -8657,7 +8657,7 @@ static void draw_system_display_side_mfd (void)
 
 	y_adjust = print_side_mfd_system_message ("L ENGINE", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE), y_adjust);
 
-	y_adjust = print_side_mfd_system_message ("APU", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
+	y_adjust = print_side_mfd_system_message ("SPU", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_APU), y_adjust);
 
 	y_adjust = print_side_mfd_system_message ("R ENGINE", "DMGD", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust);
 
@@ -8813,7 +8813,7 @@ static void draw_engine_display_mfd (void)
 	fvalue = bound (current_flight_dynamics->apu_rpm.value + 0.5, 0.0, 100.0);
 	convert_float_to_int (fvalue, &ivalue);
 
-	sprintf(s, "APU %03d%%", ivalue);
+	sprintf(s, "SPU %03d%%", ivalue);
 
 	print_mono_font_string (s);		
 
