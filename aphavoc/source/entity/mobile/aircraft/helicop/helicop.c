@@ -1386,7 +1386,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		looping_pitch, //Werewolf pitch
 		slap_amp,
 		left_turbine_amp, right_turbine_amp, apu_amp,
-		left_turbine_pitch, right_turbine_pitch, apu_pitch,
+		left_turbine_pitch = 1.0, right_turbine_pitch = 1.0, apu_pitch = 1.0,
 		winding_amp,
 //		main_rotor_pitch,
 //		main_rotor_roll,
@@ -1500,6 +1500,8 @@ void update_local_helicopter_rotor_sounds (entity *en)
 	{
 		left_turbine_pitch = right_turbine_pitch = 1.3;
 		left_turbine_amp = right_turbine_amp = 0.0;
+		apu_pitch = 1.0;
+		apu_amp = 0.0;
 	}
 
 //	resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE);
