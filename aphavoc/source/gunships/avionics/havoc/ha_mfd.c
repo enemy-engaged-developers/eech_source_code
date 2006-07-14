@@ -3258,10 +3258,6 @@ void draw_overlaid_havoc_mfd (float x_org, float y_org, float size)
 	// viewport
 	//
 
-/*	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
-
-	ASSERT (mfd_viewport_size <= mfd_texture_size); */
-
 	mfd_viewport_x_org = mfd_viewport_texture_x_org;
 
 	mfd_viewport_y_org = mfd_viewport_texture_y_org;

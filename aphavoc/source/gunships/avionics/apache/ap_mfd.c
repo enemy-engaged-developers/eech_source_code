@@ -8766,7 +8766,7 @@ void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int dr
 
 	draw_large_mfd = large_mfd;
 
-	if (TRUE || draw_large_mfd)
+	if (draw_large_mfd)
 	{
 		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;  
 	}
