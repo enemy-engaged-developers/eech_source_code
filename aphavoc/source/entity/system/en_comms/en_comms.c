@@ -5434,6 +5434,7 @@ void process_received_entity_comms_messages (void)
 void pack_entity_comms_message (entity_comms_messages message)
 {
 	ASSERT ((message >= 0) && (message < NUM_ENTITY_COMMS_MESSAGES));
+	ASSERT (!(message >> NUM_ENTITY_COMMS_MESSAGE_PACK_BITS));
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 

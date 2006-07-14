@@ -761,6 +761,8 @@ void pack_list_type (list_types type)
 
 	#endif
 
+	ASSERT(!(type >> NUM_LIST_TYPE_PACK_BITS));
+	
 	pack_unsigned_data (type, NUM_LIST_TYPE_PACK_BITS);
 }
 

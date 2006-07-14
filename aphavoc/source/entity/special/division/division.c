@@ -655,6 +655,8 @@ void pack_local_division_database (pack_modes mode)
 				if (valid)
 				{
 					count = division_id_database [side][type].count;
+					
+					ASSERT(count > 0);			
 	
 					pack_int_value (NULL, INT_TYPE_COUNT, count);
 	

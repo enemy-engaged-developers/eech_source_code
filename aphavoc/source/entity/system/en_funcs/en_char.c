@@ -187,6 +187,7 @@ void initialise_entity_char_value_default_functions (void)
 void pack_char_value (entity *en, char_types type, char value)
 {
 	ASSERT ((type >= 0) && (type < NUM_CHAR_TYPES));
+	ASSERT (!(value >> 7));
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
@@ -232,6 +233,7 @@ char unpack_char_value (entity *en, char_types type)
 void pack_char_type (char_types type)
 {
 	ASSERT ((type >= 0) && (type < NUM_CHAR_TYPES));
+	ASSERT (!(type >> NUM_CHAR_TYPE_PACK_BITS));
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 

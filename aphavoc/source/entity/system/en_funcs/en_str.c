@@ -325,6 +325,8 @@ void pack_string_type (string_types type)
 
 	#endif
 
+	ASSERT(!(type >> NUM_STRING_TYPE_PACK_BITS));
+
 	pack_unsigned_data (type, NUM_STRING_TYPE_PACK_BITS);
 }
 

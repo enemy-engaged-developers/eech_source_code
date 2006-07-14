@@ -335,6 +335,8 @@ void pack_entity_type (entity_types type)
 
 	#endif
 
+	ASSERT(!(type >> NUM_ENTITY_TYPE_PACK_BITS));
+
 	pack_unsigned_data (type, NUM_ENTITY_TYPE_PACK_BITS);
 }
 

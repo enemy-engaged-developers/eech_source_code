@@ -76,6 +76,8 @@
 
 #define DEBUG_MODULE_PACK_ALL	(PACK_ENTIRE_SESSION || 0)
 
+#define DEBUG_PACK_OVERFLOW TRUE
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -492,7 +494,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_GENERATOR_LIFETIME",							// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
-			9,																	// pack_num_whole_bits (excluding sign bit)
+			16,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
@@ -1032,7 +1034,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_SMOKE_LIFETIME",								// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
-			7,																	// pack_num_whole_bits (excluding sign bit)
+			12,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
@@ -1585,9 +1587,30 @@ void pack_float_value (entity *en, float_types type, float value)
 				case 11: pack_float_11_fractional_bits (fmod (value, PI2), &i); break;
 			}
 
-			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
+			width = 1 + float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			pack_signed_data (i, width + 1);
+			#ifdef DEBUG_PACK_OVERFLOW
+			{
+				int max_val = (1 << (width - 1)) - 1;
+				int min_val = -max_val - 1;
+
+				if (width < 32 && (i > max_val || i < min_val))
+				{
+					#ifdef DEBUG_PACK_OVERFLOW
+						debug_log_pack_overflow("signed angle", get_float_type_name(type), width, i, value);
+					#endif
+					
+					if (i > 0)
+						i = max_val;
+					else
+						i = min_val;
+					
+					ASSERT(!"Overflow when packing signed float type!");
+				}
+			}
+			#endif
+
+			pack_signed_data (i, width);
 
 			#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
@@ -1659,6 +1682,28 @@ void pack_float_value (entity *en, float_types type, float value)
 
 			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
+			#ifdef DEBUG_PACK_OVERFLOW
+			{
+				int max_val = (1 << (width)) - 1;
+				int min_val = 0;
+
+				if (width < 32 && (i > max_val || i < min_val))
+				{
+					#ifdef DEBUG_PACK_OVERFLOW
+						debug_log_pack_overflow("unsigned float angle", get_float_type_name(type), width, i, value);
+					#endif
+					
+					if (i > 0)
+						i = max_val;
+					else
+						i = min_val;
+					
+					ASSERT(!"Overflow when packing unsigned float type!");
+				}
+			}
+			#endif
+			ASSERT(!(i >> width));
+
 			pack_unsigned_data (i, width);
 
 			#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
@@ -1725,9 +1770,30 @@ void pack_float_value (entity *en, float_types type, float value)
 				case 11: pack_float_11_fractional_bits (value, &i); break;
 			}
 
-			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
+			width = 1 + float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
 
-			pack_signed_data (i, width + 1);
+			#ifdef DEBUG_PACK_OVERFLOW
+			{
+				int max_val = (1 << (width - 1)) - 1;
+				int min_val = -max_val - 1;
+
+				if (width < 32 && (i > max_val || i < min_val))
+				{
+					#ifdef DEBUG_PACK_OVERFLOW
+						debug_log_pack_overflow("signed float value", get_float_type_name(type), width, i, value);
+					#endif
+					
+					if (i > 0)
+						i = max_val;
+					else
+						i = min_val;
+					
+					ASSERT(!"Overflow when packing signed float type!");
+				}
+			}
+			#endif
+			
+			pack_signed_data (i, width);
 
 			#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
@@ -1796,6 +1862,28 @@ void pack_float_value (entity *en, float_types type, float value)
 			}
 
 			width = float_type_database[type].pack_num_whole_bits + float_type_database[type].pack_num_fractional_bits;
+
+			#ifdef DEBUG_PACK_OVERFLOW
+			{
+				int max_val = (1 << (width)) - 1;
+				int min_val = 0;
+
+				if (width < 32 && (i > max_val || i < min_val))
+				{
+					#ifdef DEBUG_PACK_OVERFLOW
+						debug_log_pack_overflow("unsigned float value", get_float_type_name(type), width, i, value);
+					#endif
+					
+					if (i > 0)
+						i = max_val;
+					else
+						i = min_val;
+					
+					ASSERT(!"Overflow when packing unsigned float type!");
+				}
+			}
+			#endif
+			ASSERT(!(i >> width));
 
 			pack_unsigned_data (i, width);
 
@@ -2056,6 +2144,8 @@ void pack_float_type (float_types type)
 	}
 
 	#endif
+
+	ASSERT(!(type >> NUM_FLOAT_TYPE_PACK_BITS));
 
 	pack_unsigned_data (type, NUM_FLOAT_TYPE_PACK_BITS);
 }

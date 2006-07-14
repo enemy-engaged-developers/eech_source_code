@@ -585,6 +585,8 @@ extern const char
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern void debug_log_pack_overflow(const char* type, const char* name, unsigned int width, int value, float fvalue);
+
 extern void (*fn_set_local_entity_raw_int_value[NUM_ENTITY_TYPES][NUM_INT_TYPES]) (entity *en, int_types type, int value);
 
 #define set_local_entity_raw_int_value(EN,INT_TYPE,VALUE) (fn_set_local_entity_raw_int_value[get_local_entity_type ((EN))][validate_int_type ((INT_TYPE))] ((EN), (INT_TYPE), (VALUE)))

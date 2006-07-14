@@ -2024,6 +2024,12 @@ const char
 	*overload_invalid_int_type_message = "Overloaded entity function invoked with invalid int type",
 	*debug_fatal_invalid_int_type_message = "Invalid int type (entity type = %s, index = %d, int type = %s, file = %s, line = %d)";
 
+#define DEBUG_PACK_OVERFLOW
+
+#ifdef DEBUG_PACK_OVERFLOW
+static FILE *debug_pack_file = NULL;
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2042,6 +2048,50 @@ int (*fn_get_local_entity_int_value[NUM_ENTITY_TYPES][NUM_INT_TYPES]) (entity *e
 
 static void default_set_entity_int_value (entity *en, int_types type, int value)
 {
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void debug_log_pack_overflow(const char* type, const char* name, unsigned int width, int value, float fvalue)
+{
+	debug_log("Overflow - type: %s, width %d, value: %d", name, width, value);
+
+	#ifdef DEBUG_PACK_OVERFLOW	
+		if (!debug_pack_file)
+			debug_pack_file = fopen("debug-save-errors.txt","a");
+		if (!debug_pack_file)
+		{
+			const char* error_msg = strerror(errno);
+			debug_fatal ("Could not open debug errors file: %s", error_msg);
+			return;
+		}
+
+		ASSERT(debug_pack_file);
+		
+		fprintf(debug_pack_file, "Overflow %s type: %s, width %d, int value: %d, float value: %f\n", type, name, width, value, fvalue);
+		fclose(debug_pack_file);
+	#endif
+}
+
+static void debug_log_pack(const char* string)
+{
+	#ifdef DEBUG_PACK_OVERFLOW	
+		if (!debug_pack_file)
+			debug_pack_file = fopen("debug-save-errors.txt","a");
+		if (!debug_pack_file)
+		{
+			const char* error_msg = strerror(errno);
+			debug_fatal ("Could not open debug errors file: %s", error_msg);
+			return;
+		}
+
+		ASSERT(debug_pack_file);
+		
+		fprintf(debug_pack_file, string);
+		fclose(debug_pack_file);
+	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2330,11 +2380,22 @@ void debug_check_pack_types (void)
 	// to mention it in the release notes, and on the dev mailing list.
 
 	ASSERT(NUM_DAY_SEGMENT_TYPES < (1 << NUM_DAY_SEGMENT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+
+	ASSERT(NUM_ENTITY_ATTRIBUTES < (1 << NUM_ENTITY_ATTRIBUTE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_ENTITY_COMMS_MESSAGES < (1 << NUM_ENTITY_COMMS_MESSAGE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_ENTITY_SUB_TYPE_FIXED < (1 << NUM_ENTITY_SUB_TYPE_FIXED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_ENTITY_SUB_TYPE_WEAPON_BITS < (1 << NUM_ENTITY_SUB_TYPE_WEAPON_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_ENTITY_TYPES < (1 << NUM_ENTITY_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+
+	assert(NUM_FLOAT_TYPES < (1 << NUM_FLOAT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_FORMATION_TYPES < (1 << NUM_FORMATION_BITS) || NUM_FORMATION_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GROUP_MODE_TYPES < (1 << NUM_GROUP_MODE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GUIDE_CRITERIA_TYPES < (1 << NUM_GUIDE_CRITERIA_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GUIDE_POSITION_TYPES < (1 << NUM_GUIDE_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GUNSHIP_TYPES < (1 << NUM_GUNSHIP_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_INT_TYPES < (1 << NUM_INT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_LIST_TYPES < (1 << NUM_LIST_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+
 	ASSERT(NUM_MESSAGE_TEXT_TYPES < (1 << NUM_MESSAGE_TEXT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_META_EXPLOSION_TYPES < (1 << NUM_META_EXPLOSION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_META_SMOKE_LIST_TYPES < (1 << NUM_META_SMOKE_LIST_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert"); 
@@ -2342,9 +2403,12 @@ void debug_check_pack_types (void)
 	ASSERT(NUM_OPERATIONAL_STATE_TYPES < (1 << NUM_OPERATIONAL_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_POSITION_TYPES < (1 << NUM_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_RESUPPLY_SOURCE_TYPES < (1 << NUM_RESUPPLY_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+
 	ASSERT(NUM_SOUND_CHANNEL_TYPES < (1 << NUM_SOUND_CHANNEL_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_SOUND_LOCALITY_TYPES < (1 << NUM_SOUND_LOCALITY_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_SPEECH_CATEGORY_TYPES < (1 << NUM_SPEECH_CATEGORY_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_STRING_TYPES < (1 << NUM_STRING_TYPE_PACK_BITS)  || !"Read the comment in the function to find out how to fix this assert");
+
 	ASSERT(NUM_TASK_COMPLETED_TYPES < (1 << NUM_TASK_COMPLETED_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_ROE_TYPES < (1 << NUM_TASK_ROE_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_STATE_TYPES < (1 << NUM_TASK_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
@@ -2352,6 +2416,8 @@ void debug_check_pack_types (void)
 	ASSERT(NUM_TASK_TARGET_SOURCE_TYPES < (1 << NUM_TASK_TARGET_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_TARGET_TYPES < (1 << NUM_TASK_TARGET_TYPE_BITS) || NUM_TASK_TARGET_TYPE_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_TERMINATED_TYPES < (1 << NUM_TASK_TERMINATED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+
+	ASSERT(NUM_VEC3D_TYPES < (1 << NUM_VEC3D_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_WAYPOINT_REACHED_TYPES < (1 << NUM_WAYPOINT_REACHED_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_WEAPON_CONFIG_TYPES < (1 << NUM_WEAPON_CONFIG_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 }
@@ -2391,7 +2457,12 @@ void initialise_entity_int_value_default_functions (void)
 
 void pack_int_value (entity *en, int_types type, int value)
 {
+	unsigned int pack_bits;
+	
 	ASSERT ((type >= 0) && (type < NUM_INT_TYPES));
+
+	pack_bits = int_type_database[type].num_pack_bits;
+	ASSERT(pack_bits > 0 && pack_bits <= 32);
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
@@ -2408,7 +2479,24 @@ void pack_int_value (entity *en, int_types type, int value)
 		case INT_PACK_TYPE_SIGNED:
 		////////////////////////////////////////
 		{
-			pack_signed_data (value, int_type_database[type].num_pack_bits);
+			int max_val = (1 << (pack_bits - 1)) - 1;
+			int min_val = -max_val - 1;
+			
+			if (pack_bits < 32 && (value > max_val || value < min_val))
+			{
+				#ifdef DEBUG_PACK_OVERFLOW
+					debug_log_pack_overflow("signed int", get_int_type_name(type), pack_bits, value, 0.0);
+				#endif
+				
+				if (value > 0)
+					value = max_val;
+				else
+					value = min_val;
+				
+				ASSERT(!"Overflow when packing signed int type!");
+			}
+
+			pack_signed_data (value, pack_bits);
 
 			break;
 		}
@@ -2416,7 +2504,18 @@ void pack_int_value (entity *en, int_types type, int value)
 		case INT_PACK_TYPE_UNSIGNED:
 		////////////////////////////////////////
 		{
-			pack_unsigned_data (value, int_type_database[type].num_pack_bits);
+			if (pack_bits < 32 && value & (0xffffffff << pack_bits))
+			{
+				#ifdef DEBUG_PACK_OVERFLOW
+					debug_log_pack_overflow("unsigned int", get_int_type_name(type), pack_bits, value, 0.0);
+				#endif
+				
+				value = (1 << pack_bits) - 1;
+				
+				ASSERT(!"Overflow when packing unsigned int type!");
+			}
+			
+			pack_unsigned_data (value, pack_bits);
 
 			break;
 		}
@@ -2498,6 +2597,8 @@ void pack_int_type (int_types type)
 	}
 
 	#endif
+
+	ASSERT(!(type >> NUM_INT_TYPE_PACK_BITS));
 
 	pack_unsigned_data (type, NUM_INT_TYPE_PACK_BITS);
 }

@@ -802,6 +802,8 @@ void pack_vec3d_type (vec3d_types type)
 
 	#endif
 
+	ASSERT(!(type >> NUM_VEC3D_TYPE_PACK_BITS));
+	
 	pack_unsigned_data (type, NUM_VEC3D_TYPE_PACK_BITS);
 }
 

@@ -783,6 +783,7 @@ int unpack_entity_attributes (char *buffer)
 void pack_entity_attribute (entity_attributes attr)
 {
 	ASSERT ((attr >= 0) && (attr < NUM_ENTITY_ATTRIBUTES));
+	ASSERT (!(attr >> NUM_ENTITY_ATTRIBUTE_PACK_BITS));
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
