@@ -174,7 +174,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_SOUNDPITCH", 								// name
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,                    // pack_type
-			1,																	// pack_num_whole_bits (excluding sign bit)
+			3,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
@@ -518,7 +518,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_HIGH_VELOCITY",								// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
-			9,																	// pack_num_whole_bits (excluding sign bit)
+			10,																	// pack_num_whole_bits (excluding sign bit)
 			6,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
@@ -1034,7 +1034,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_SMOKE_LIFETIME",								// name
 			FLOAT_PACK_TYPE_SIGNED_VALUE,								// pack_type
-			12,																	// pack_num_whole_bits (excluding sign bit)
+			16,																	// pack_num_whole_bits (excluding sign bit)
 			4,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
