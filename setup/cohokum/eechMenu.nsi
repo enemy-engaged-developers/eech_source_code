@@ -65,6 +65,19 @@ CopyFiles /FILESONLY ${TBACKUP1}\GWUT162b.csv         ${TBACKUP1}\backup
 	
 SectionEnd
 
+Section "UI screens" SectionUIScreens
+
+  SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum"
+
+  File graphics\ui\cohokum\Combat.psd
+  File graphics\ui\cohokum\Exit.psd
+  File graphics\ui\cohokum\Gunship.psd
+  File graphics\ui\cohokum\Main.psd
+  File graphics\ui\cohokum\Pilots.psd
+  File graphics\ui\cohokum\Setup.psd
+
+SectionEnd
+
 Section "cohokum.exe" SectionExe
 
   SetOutPath "$INSTDIR\cohokum"
@@ -364,11 +377,13 @@ SectionEnd
   LangString DESC_SectionExe ${LANG_ENGLISH} "Install cohokum.exe, readme.html, additional payload screens, motd.txt and tlate6.dat language file"
 ;  LangString DESC_SecGWUT ${LANG_ENGLISH} "Weapons and Units Tweaker files"
   LangString DESC_SecBackup ${LANG_ENGLISH} "Backup exe and wut files in a subdirectory 'backup' "
+  LangString DESC_SecUIScreens ${LANG_ENGLISH} "Install new more immersive UI screens"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	 !insertmacro MUI_DESCRIPTION_TEXT ${SecBackup} $(DESC_SecBackup)
     !insertmacro MUI_DESCRIPTION_TEXT ${SectionExe} $(DESC_SectionExe)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUIScreens} $(DESC_SecUIScreens)
  ;   !insertmacro MUI_DESCRIPTION_TEXT ${SecGWUT} $(DESC_SecGWUT)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
