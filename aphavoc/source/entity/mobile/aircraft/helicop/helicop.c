@@ -1499,7 +1499,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 	else
 	{
 		left_turbine_pitch = right_turbine_pitch = 1.3;
-		left_turbine_amp = right_turbine_amp = 0.0;
+		left_turbine_amp = right_turbine_amp = 1.0;
 		apu_pitch = 1.0;
 		apu_amp = 0.0;
 	}
