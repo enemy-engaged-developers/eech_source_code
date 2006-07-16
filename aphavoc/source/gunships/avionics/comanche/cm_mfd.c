@@ -9483,7 +9483,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	fvalue = bound (current_flight_dynamics->right_engine_rpm.value, 0.0, 120.0);
+	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);
 
 	convert_float_to_int (fvalue, &ivalue);
 
