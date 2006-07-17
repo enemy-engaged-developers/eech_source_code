@@ -2634,10 +2634,19 @@ void update_attitude_dynamics (void)
 		(get_current_dynamics_options (DYNAMICS_OPTIONS_VORTEX_RING)) &&
 		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
 	{
-
-		if (model_motion_vector.y < -fabs (main_rotor_induced_air_value))
+		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
+		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
+		
+		// arneh - create vibration when close to vortex ring state
+		if (vibration_limit > 0.0 && !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE))
 		{
+			debug_log("Close to vortex vibration: %f", vibration_limit);
+			create_rotor_vibration(bound(vibration_limit * 0.2, 0.0, 1.0));
+		}
 
+		if (air_over_rotor > 0.0)     //model_motion_vector.y < -fabs (main_rotor_induced_air_value))
+		{
+			debug_log("Vortex effect: %f", air_over_rotor);
 			force = current_flight_dynamics->main_rotor_induced_vortex_air_flow.modifier * fabs (main_rotor_induced_air_value) * max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min - fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0);
 
 			force *= deg (current_flight_dynamics->main_blade_pitch.value);
@@ -2730,6 +2739,10 @@ void update_attitude_dynamics (void)
 
 		#endif
 	}
+	
+	// arneh - add vibration if rotor damaged
+	if (!model_landed && current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
+		create_rotor_vibration(1.2);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2974,3 +2987,4 @@ void comanche_restore_damage_values (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

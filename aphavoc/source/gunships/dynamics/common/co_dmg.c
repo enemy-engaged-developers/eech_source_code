@@ -697,10 +697,16 @@ void dynamics_damage_model (unsigned int damage, int random)
 				}
 				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
+					if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)
+						break;
+					
 					debug_log ("DYNAMICS: MAIN ROTOR BLADE damaged");
-					
+
+					if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE))
+						play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_MAIN_ROTOR_DAMAGED);
+
 					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE;
-					
+
 					break;	
 				}
 				default:

@@ -223,6 +223,10 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_9, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, debug_dynamics_damage_model);
 		set_event (DIK_0, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, debug_dynamics_damage_model);
 
+		set_event (DIK_1, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_dynamics_event1);
+		set_event (DIK_2, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_dynamics_event2);
+		set_event (DIK_3, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_dynamics_event3);
+		set_event (DIK_4, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, debug_dynamics_event4);
 		#endif
 	}
 }

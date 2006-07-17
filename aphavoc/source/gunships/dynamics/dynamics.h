@@ -611,19 +611,18 @@ extern void flight_dynamics_decrease_altitude_lock (event *ev);
 
 extern void flight_dynamics_increase_altitude_lock (event *ev);
 
-/*
-extern void flight_dynamics_start_left_engine (void);
-extern void flight_dynamics_throttle_up_left_engine (void);
-extern void flight_dynamics_throttle_down_left_engine (void);
-extern void flight_dynamics_start_right_engine (void);
-extern void flight_dynamics_throttle_up_right_engine (void);
-extern void flight_dynamics_throttle_down_right_engine (void);
-extern void flight_dynamics_start_apu (void);
-*/
+extern void create_rotor_vibration(float force);
 
 extern void flight_dynamics_start_engine_ev (event* ev);
 extern void flight_dynamics_throttle_engine_ev (event* ev);
 extern void flight_dynamics_start_apu_ev (event* ev);
+
+#ifdef DEBUG
+extern void debug_dynamics_event1(event* ev);
+extern void debug_dynamics_event2(event* ev);
+extern void debug_dynamics_event3(event* ev);
+extern void debug_dynamics_event4(event* ev);
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

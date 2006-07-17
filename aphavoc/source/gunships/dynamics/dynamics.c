@@ -3662,3 +3662,73 @@ void update_engine_rpm_dynamics (int engine_number)
 		n1_rpm->value = bound(n1_rpm->value, 0.0, 110.0);
 	}
 }
+
+// arneh, july 2006 - create vibration effect on rotor
+void create_rotor_vibration(float force)
+{
+	static float time = 0;
+	static int step = 0;
+
+	float interval = 0.125;
+	
+	vec3d position,	direction;
+	
+	if (!get_gunship_entity () || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+		return;
+	
+	force = bound (force, -2.5, 2.5);
+
+	// to create vibration we rotate a force around the rotor disk, moving it 
+	// a quarter rotation every step
+	if (step == 0 || step == 2)
+		position.x = current_flight_dynamics->main_rotor_diameter.value * 0.5;
+	else
+		position.x = -current_flight_dynamics->main_rotor_diameter.value * 0.5;
+		
+	if (step < 2)
+		position.z = current_flight_dynamics->main_rotor_diameter.value * 0.5;
+	else
+		position.z = -current_flight_dynamics->main_rotor_diameter.value * 0.5;
+
+	position.y = 0.0;
+
+	time += get_delta_time();
+	// increase step every 0.125 seconds
+	if (time > interval)
+	{
+		step++;
+		if (step >= 4)
+			step = 0;
+
+		time = 0.0;
+	}
+
+	direction.x = 0.0;
+	direction.y = current_flight_dynamics->rotor_rotation_direction;
+	direction.z = 0.0;
+
+	add_dynamic_force ("vibration", force, 0.0, &position, &direction, FALSE);
+}
+
+#ifdef DEBUG
+// arneh - a few functions used for debugging by artificually introducing effects
+// by pressing debugging keys
+void debug_dynamics_event1(event* ev)
+{
+}
+
+void debug_dynamics_event2(event* ev)
+{
+}
+
+void debug_dynamics_event3(event* ev)
+{
+	dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
+}
+
+void debug_dynamics_event4(event* ev)
+{
+	debug_log("debug event 4");
+	dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE, FALSE);
+}
+#endif // DEBUG
