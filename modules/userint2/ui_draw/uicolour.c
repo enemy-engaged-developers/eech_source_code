@@ -317,19 +317,19 @@ void initialise_ui_colours ( void )
 	// Ingame UI colours
 	//
 
-	ui_ingame_title_text_colour.r = 255;
-	ui_ingame_title_text_colour.g = 0;
-	ui_ingame_title_text_colour.b = 0;
+	ui_ingame_title_text_colour.r = 40;
+	ui_ingame_title_text_colour.g = 40;
+	ui_ingame_title_text_colour.b = 128;
 	ui_ingame_title_text_colour.a = 255;
 
-	ui_ingame_live_text_colour.r = 120;
-	ui_ingame_live_text_colour.g = 0;
-	ui_ingame_live_text_colour.b = 255;
+	ui_ingame_live_text_colour.r = 96;
+	ui_ingame_live_text_colour.g = 96;
+	ui_ingame_live_text_colour.b = 222;
 	ui_ingame_live_text_colour.a = 255;
 
-	ui_ingame_dead_text_colour.r = 247;
-	ui_ingame_dead_text_colour.g = 121;
-	ui_ingame_dead_text_colour.b = 49;
+	ui_ingame_dead_text_colour.r = 200;
+	ui_ingame_dead_text_colour.g = 32;
+	ui_ingame_dead_text_colour.b = 32;
 	ui_ingame_dead_text_colour.a = 255;
 
 	ui_ingame_highlight_text_colour.r = 255;
@@ -337,13 +337,13 @@ void initialise_ui_colours ( void )
 	ui_ingame_highlight_text_colour.b = 255;
 	ui_ingame_highlight_text_colour.a = 255;
 
-	ui_ingame_selected_text_colour.r = 255;
-	ui_ingame_selected_text_colour.g = 255;
-	ui_ingame_selected_text_colour.b = 0;
+	ui_ingame_selected_text_colour.r = 192;
+	ui_ingame_selected_text_colour.g = 192;
+	ui_ingame_selected_text_colour.b = 192;
 	ui_ingame_selected_text_colour.a = 255;
 
 	ui_ingame_cycle_text_colour.r = 120;
-	ui_ingame_cycle_text_colour.g = 0;
+	ui_ingame_cycle_text_colour.g = 120;
 	ui_ingame_cycle_text_colour.b = 255;
 	ui_ingame_cycle_text_colour.a = 255;
 
@@ -356,21 +356,21 @@ void initialise_ui_colours ( void )
 	ui_init_screen_text_colour.a = 255;
 
 	// screen title text - yellow - dead
-	ui_screen_title_text_colour.r = 255;
+	ui_screen_title_text_colour.r = 0;
 	ui_screen_title_text_colour.g = 0;
-	ui_screen_title_text_colour.b = 0;
+	ui_screen_title_text_colour.b = 160;
 	ui_screen_title_text_colour.a = 255;
 
 	// option title text - orange - dead
-	ui_option_title_text_colour.r = 254;
-	ui_option_title_text_colour.g = 124;
-	ui_option_title_text_colour.b = 47;
+	ui_option_title_text_colour.r = 180;
+	ui_option_title_text_colour.g = 180;
+	ui_option_title_text_colour.b = 180;
 	ui_option_title_text_colour.a =255;
 
 	// list text colours - live
-	ui_list_text_default_colour.r = 182;
-	ui_list_text_default_colour.g = 182;
-	ui_list_text_default_colour.b = 182;
+	ui_list_text_default_colour.r = 192;
+	ui_list_text_default_colour.g = 192;
+	ui_list_text_default_colour.b = 220;
 	ui_list_text_default_colour.a =255;
 
 	ui_list_text_hilite_colour.r = 255;
@@ -384,9 +384,9 @@ void initialise_ui_colours ( void )
 	ui_list_text_selected_colour.a =255;
 
 	// all other text - live
-	ui_option_text_default_colour.r = 182;
-	ui_option_text_default_colour.g = 182;
-	ui_option_text_default_colour.b = 182;
+	ui_option_text_default_colour.r = 220;
+	ui_option_text_default_colour.g = 220;
+	ui_option_text_default_colour.b = 220;
 	ui_option_text_default_colour.a = 255;
 
 	ui_option_text_hilite_colour.r = 255;
@@ -394,9 +394,9 @@ void initialise_ui_colours ( void )
 	ui_option_text_hilite_colour.b = 255;
 	ui_option_text_hilite_colour.a = 255;
 
-	ui_option_text_selected_colour.r = 255;
-	ui_option_text_selected_colour.g = 255;
-	ui_option_text_selected_colour.b = 0;
+	ui_option_text_selected_colour.r = 40;
+	ui_option_text_selected_colour.g = 0;
+	ui_option_text_selected_colour.b = 255;
 	ui_option_text_selected_colour.a = 255;
 }
 
