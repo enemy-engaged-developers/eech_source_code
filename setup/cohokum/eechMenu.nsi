@@ -94,9 +94,6 @@ Section "cohokum.exe" SectionExe
 
   SetOutPath "$INSTDIR\common\data\"
   File ..\common\data\FORMS.DAT
-  
-  SetOutPath "$INSTDIR\common\data\"
-  File ..\common\data\language\tlate6.dat
   File ..\common\data\ah64a.dyn
   File ..\common\data\apache.dyn
   File ..\common\data\blckhwk.dyn
@@ -105,6 +102,9 @@ Section "cohokum.exe" SectionExe
   File ..\common\data\hind.dyn
   File ..\common\data\hokum.dyn
   File ..\common\data\ka50.dyn
+  
+  SetOutPath "$INSTDIR\common\data\language"
+  File ..\common\data\language\tlate6.dat
 
   SetOutPath "$INSTDIR\cohokum\graphics\ui\cohokum\Map"
   File graphics\ui\cohokum\Map\PayAh6.psd
