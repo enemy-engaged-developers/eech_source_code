@@ -2075,7 +2075,7 @@ void debug_log_pack_overflow(const char* type, const char* name, unsigned int wi
 	#endif
 }
 
-static void debug_log_pack(const char* string)
+/*static void debug_log_pack(const char* string)
 {
 	#ifdef DEBUG_PACK_OVERFLOW	
 		if (!debug_pack_file)
@@ -2092,7 +2092,7 @@ static void debug_log_pack(const char* string)
 		fprintf(debug_pack_file, string);
 		fclose(debug_pack_file);
 	#endif
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
