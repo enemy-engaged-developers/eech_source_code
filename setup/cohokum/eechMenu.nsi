@@ -95,7 +95,7 @@ Section "cohokum.exe" SectionExe
   SetOutPath "$INSTDIR\common\data\"
   File ..\common\data\FORMS.DAT
   
-  SetOutPath "$INSTDIR\common\data\language\"
+  SetOutPath "$INSTDIR\common\data\"
   File ..\common\data\language\tlate6.dat
   File ..\common\data\ah64a.dyn
   File ..\common\data\apache.dyn
