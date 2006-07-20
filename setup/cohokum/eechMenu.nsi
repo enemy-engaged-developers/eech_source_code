@@ -197,7 +197,6 @@ Section "cohokum.exe" SectionExe
   File audio\chgune.pcm
   File audio\chguni.pcm
   File audio\comanche_a2a.pcm
-  File "audio\Comanche Cannon .pcm"
   File audio\comanche_mca.pcm
   File audio\comanche_rotor_ext.pcm
   File audio\comanche_rotor_int.pcm
