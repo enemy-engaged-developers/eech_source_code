@@ -1505,7 +1505,7 @@ void comms_process_data (void)
                         }
                         //
                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 						// Jabberwock 050320 Downwash MP check
 						if (command_line_downwash)
 						{
@@ -1515,7 +1515,7 @@ void comms_process_data (void)
 							break;
                         }
                         // Jabberwock 050320 ends
-*/
+
                         // map details
 
                         x_size = get_list_item (ptr, int);
