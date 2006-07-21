@@ -1487,7 +1487,7 @@ void comms_process_data (void)
 
                         // please put in the date of the version! check it is changed twice!
 
-                        client_version_number = 1621; // Jabberwock 050322
+                        client_version_number = VERSION_NUMBER_INT; // Jabberwock 050322
 
                         server_version_number = get_list_item (ptr, int);
 

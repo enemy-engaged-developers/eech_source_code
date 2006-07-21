@@ -72,9 +72,9 @@
 
 #define MAJOR_VERSION	1
 
-#define DATA_VERSION	6
+#define DATA_VERSION	7
 
-#define MINOR_VERSION	2
+#define MINOR_VERSION	0
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME
@@ -83,9 +83,12 @@
 // used in:
 //Razorworks\eech-new\aphavoc\source\init.c
 //Razorworks\eech-new\aphavoc\source\comms\comm_man.c
-#define BUILD_TYPE	"W4T3"
+#define BUILD_TYPE	""
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.6.2W4"
+// used in comms/comm_man.c to make sure client and server use same version
+#define VERSION_NUMBER_INT 10700   // two digits for DATA and MINOR verions
+
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.7"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *
