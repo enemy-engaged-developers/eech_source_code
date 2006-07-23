@@ -421,6 +421,12 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("world velocity.x  				= %f", MT_FLOAT, &current_flight_dynamics->world_velocity_x.value);
 	debug_watch ("world velocity.y	  				= %f", MT_FLOAT, &current_flight_dynamics->world_velocity_y.value);
 	debug_watch ("world velocity.z  				= %f", MT_FLOAT, &current_flight_dynamics->world_velocity_z.value);
+	debug_watch ("model acceleration.x  				= %f", MT_FLOAT, &current_flight_dynamics->model_acceleration_vector.x);
+	debug_watch ("model acceleration.y	  				= %f", MT_FLOAT, &current_flight_dynamics->model_acceleration_vector.y);
+	debug_watch ("model acceleration.z  				= %f", MT_FLOAT, &current_flight_dynamics->model_acceleration_vector.z);
+	debug_watch ("world acceleration.x  				= %f", MT_FLOAT, &current_flight_dynamics->world_acceleration_vector.x);
+	debug_watch ("world acceleration.y	  				= %f", MT_FLOAT, &current_flight_dynamics->world_acceleration_vector.y);
+	debug_watch ("world acceleration.z  				= %f", MT_FLOAT, &current_flight_dynamics->world_acceleration_vector.z);
 
 	debug_watch ("altitude   	   					= %f", MT_FLOAT, &current_flight_dynamics->altitude.value);
 	debug_watch ("ground altitude   				= %f", MT_FLOAT, &current_flight_dynamics->altitude.min);
@@ -1092,6 +1098,11 @@ void update_flight_dynamics (void)
 		update_dynamics_damage ();
 
 		current_flight_dynamics->velocity_z.value = bound (current_flight_dynamics->velocity_z.value, knots (-100), knots (200));
+		
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+			current_flight_dynamics->g_force.value = 1.0 + current_flight_dynamics->model_acceleration_vector.y / G;
+		else
+			current_flight_dynamics->g_force.value = 1.0;
 	}
 }
 
@@ -3715,10 +3726,12 @@ void create_rotor_vibration(float force)
 // by pressing debugging keys
 void debug_dynamics_event1(event* ev)
 {
+	command_line_high_res_hud = 1;
 }
 
 void debug_dynamics_event2(event* ev)
 {
+	command_line_high_res_hud = 0;
 }
 
 void debug_dynamics_event3(event* ev)
