@@ -495,14 +495,9 @@ struct OBJECT_3D
 	struct POINT_3D_PLAIN_REFERENCE
 		*surface_point_normals;
 
-#ifdef OBJECTS_EXPORT
-	unsigned
-		number_of_surface_points,
-		number_of_surface_point_normals,
-		number_of_surface_texture_points,
-		number_of_object_face_points,
-		number_of_object_face_normal_references;
-#endif
+    /* 26JUL06 Casm Import of 3D objects */
+    int
+        custom;
 };
 
 typedef struct OBJECT_3D object_3d;

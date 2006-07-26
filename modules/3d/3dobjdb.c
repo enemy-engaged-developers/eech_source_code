@@ -473,12 +473,6 @@ void initialise_3d_objects ( const char *directory )
 				fread ( &number_of_point_normals, sizeof ( int ), 1, fp );
 				fread ( &number_of_point_textures, sizeof ( int ), 1, fp );
 
-#ifdef OBJECTS_EXPORT
-				objects_3d_data[count].number_of_surface_points = number_of_point_references;
-				objects_3d_data[count].number_of_surface_point_normals = number_of_point_normals;
-				objects_3d_data[count].number_of_surface_texture_points = number_of_point_textures;
-#endif
-
 				objects_3d_data[count].surface_points = current_object_surface_point_references;
 				objects_3d_data[count].surface_point_normals = current_object_surface_point_normal_references;
 				objects_3d_data[count].surface_texture_points = current_object_surface_point_texture_references;
@@ -579,10 +573,6 @@ void initialise_3d_objects ( const char *directory )
 	
 				objects_3d_data[count].object_faces_point_plain_list = current_faces_point_list;
 
-#ifdef OBJECTS_EXPORT
-				objects_3d_data[count].number_of_object_face_points = point_reference_count;
-#endif
-
 				current_faces_point_list += point_reference_count;
 			}
 	
@@ -593,16 +583,169 @@ void initialise_3d_objects ( const char *directory )
 	
 				objects_3d_data[count].object_face_normal_references = current_faces_face_normal_list;
 
-#ifdef OBJECTS_EXPORT
-				objects_3d_data[count].number_of_object_face_normal_references = face_normal_reference_count;
-#endif
-
 				current_faces_face_normal_list += face_normal_reference_count;
 			}
 		}
 	}
 
 	fclose ( fp );
+
+	/* 26JUL06 Casm Import of 3D objects BEGIN */
+	{
+		int
+			rc;
+		long
+			handle;
+		struct _finddata_t
+			fi;
+		struct OBJECT_3D
+			*obj;
+
+		sprintf ( filename, "%s\\OBJECTS\\????.EEO", directory );
+		for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
+		{
+			int
+				objid;
+			FILE
+				*file;
+			int
+				number_of_points,
+				number_of_faces,
+				number_of_surfaces,
+				number_of_texture_points,
+				number_of_polygoned_faces,
+				number_of_point_normals,
+				number_of_point_references,
+				number_of_surface_point_references;
+
+			if ( !isxdigit ( fi.name[0] ) || !isxdigit ( fi.name[1] ) ||
+			     !isxdigit ( fi.name[2] ) || !isxdigit ( fi.name[3] ) )
+				continue;
+
+			objid = strtol ( fi.name, NULL, 16 );
+			if ( objid <= 0 || objid > total_number_of_objects )
+				continue;
+
+			obj = &objects_3d_data[objid];
+
+			sprintf ( filename, "%s\\OBJECTS\\%s", directory, fi.name );
+			file = fopen ( filename, "rb" );
+			if ( !file )
+				continue;
+
+			debug_log ( "Replacing 3d object %04X", objid );
+
+			fread ( &number_of_points, 4, 1, file );
+			fread ( &number_of_faces, 4, 1, file );
+			fread ( &number_of_surfaces, 4, 1, file );
+			fread ( &number_of_polygoned_faces, 4, 1, file );
+			fread ( &number_of_point_normals, 4, 1, file );
+			fread ( &number_of_point_references, 4, 1, file );
+			fread ( &number_of_texture_points, 4, 1, file );
+			fread ( &number_of_surface_point_references, 4, 1, file );
+
+			obj->number_of_points = number_of_points;
+			obj->number_of_faces = number_of_faces;
+			obj->number_of_surfaces = number_of_surfaces;
+
+			fread ( &obj->bounding_box, 24, 1, file );
+			fread ( &obj->bounding_box2, 24, 1, file );
+
+			if ( obj->number_of_points )
+			{
+				obj->points = safe_malloc ( 6 * obj->number_of_points );
+				fread ( obj->points, 6, obj->number_of_points, file );
+			}
+			else
+				obj->points = NULL;
+			if ( number_of_polygoned_faces )
+			{
+				obj->faces = safe_malloc ( 1 * number_of_polygoned_faces );
+				fread ( obj->faces, 1, number_of_polygoned_faces, file );
+			}
+			else
+				obj->faces = NULL;
+			if ( number_of_point_normals )
+			{
+				obj->point_normals = safe_malloc ( 2 * number_of_point_normals );
+				fread ( obj->point_normals, 2, number_of_point_normals, file );
+			}
+			else
+				obj->point_normals = NULL;
+			if ( number_of_point_references )
+			{
+				obj->object_faces_point_plain_list = safe_malloc ( 1 * number_of_point_references );
+				fread ( obj->object_faces_point_plain_list, 1, number_of_point_references, file );
+			}
+			else
+				obj->object_faces_point_plain_list = NULL;
+			if ( obj->number_of_surfaces )
+			{
+				obj->surfaces = safe_malloc ( 16 * obj->number_of_surfaces );
+				fread ( obj->surfaces, 16, obj->number_of_surfaces, file );
+			}
+			else
+				obj->surfaces = NULL;
+			if ( number_of_polygoned_faces )
+			{
+				obj->object_face_normal_references = safe_malloc ( 2 * number_of_polygoned_faces );
+				fread ( obj->object_face_normal_references, 2, number_of_polygoned_faces, file );
+			}
+			else
+				obj->object_face_normal_references = NULL;
+			if ( number_of_texture_points )
+			{
+				obj->surface_texture_points = safe_malloc ( 8 * number_of_texture_points );
+				fread ( obj->surface_texture_points, 8, number_of_texture_points, file );
+			}
+			else
+				obj->surface_texture_points = NULL;
+			if ( number_of_surface_point_references )
+			{
+				obj->surface_points = safe_malloc ( 2 * number_of_surface_point_references );
+				fread ( obj->surface_points, 2, number_of_surface_point_references, file );
+			}
+			else
+				obj->surface_points = NULL;
+			obj->surface_point_normals = NULL;
+
+			obj->custom = 1;
+
+			fclose ( file );
+		}
+		_findclose ( handle );
+
+		if ( handle != -1 )
+		{
+			struct FACE_SURFACE_DESCRIPTION
+				*surfaces,
+				*cursurface;
+			int
+				number_of_surfaces;
+
+			number_of_surfaces = 0;
+			for ( count = 1; count <= total_number_of_objects; count++ )
+				number_of_surfaces += objects_3d_data[count].number_of_surfaces;
+			surfaces = safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
+			cursurface = surfaces;
+			for ( count = 1; count <= total_number_of_objects; count++ )
+			{
+				obj = &objects_3d_data[count];
+
+				if ( !obj->number_of_surfaces )
+					continue;
+				memcpy ( cursurface, obj->surfaces, sizeof ( face_surface_description ) * obj->number_of_surfaces );
+				if ( obj->custom )
+					safe_free ( obj->surfaces );
+				obj->surfaces = cursurface;
+				cursurface += obj->number_of_surfaces;
+			}
+			safe_free ( object_database_surfaces );
+			object_database_surfaces = surfaces;
+			total_number_of_surfaces = number_of_surfaces;
+		}
+	}
+	/* 26JUL06 Casm Import of 3D objects END */
 
 #if REPORT_OBJECT_STATS
 	debug_log ( "Total number of surfaces: %d, memory used: %d", total_number_of_surfaces, ( total_number_of_surfaces * sizeof ( face_surface_description ) ) );
@@ -618,7 +761,6 @@ void initialise_3d_objects ( const char *directory )
 																	total_number_of_point_normals * sizeof ( object_3d_point_normal ) +
 																	total_number_of_polygons * sizeof ( object_3d_face ) +
 																	total_number_of_plain_points * 2 );
-
 
 	debug_log ( "Reading in 3d scenes" );
 #endif
