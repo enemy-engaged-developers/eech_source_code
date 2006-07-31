@@ -90,7 +90,7 @@ Section "cohokum.exe" SectionExe
   File GWUT151D.csv
   File GWUT1613H.csv  
   File GWUT162b.csv  
-  File eech_key-layout_1_beta.pdf
+  File eech_key-layout.pdf
 
   SetOutPath "$INSTDIR\common\data\"
   File ..\common\data\FORMS.DAT
