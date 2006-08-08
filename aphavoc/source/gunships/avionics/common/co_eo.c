@@ -353,20 +353,19 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static float get_eo_boresight_terrain_los_clear_range (void)
+static float get_eo_boresight_terrain_los_clear_range (vec3d* position)
 {
 	float
 		los_clear_range;
 
 	vec3d
-		position,
 		step;
 
 	//
 	// small steps across near range
 	//
 
-	position = eo_vp.position;
+	*position = eo_vp.position;
 
 	los_clear_range = 0.0;
 
@@ -378,15 +377,15 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 	{
 		los_clear_range += SMALL_TERRAIN_LOS_STEP;
 
-		position.x += step.x;
-		position.y += step.y;
-		position.z += step.z;
+		position->x += step.x;
+		position->y += step.y;
+		position->z += step.z;
 
 		if (draw_eo_terrain_los_markers && (get_view_mode () == VIEW_MODE_EXTERNAL))
 		{
 			create_rotated_debug_3d_object
 			(
-				&position,
+				position,
 				0.0,
 				0.0,
 				0.0,
@@ -396,7 +395,7 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 			);
 		}
 
-		if (point_below_ground (&position))
+		if (point_below_ground (position))
 		{
 			return (los_clear_range);
 		}
@@ -406,7 +405,7 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 	// large steps across complete range
 	//
 
-	position = eo_vp.position;
+	*position = eo_vp.position;
 
 	los_clear_range = 0.0;
 
@@ -418,15 +417,15 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 	{
 		los_clear_range += LARGE_TERRAIN_LOS_STEP;
 
-		position.x += step.x;
-		position.y += step.y;
-		position.z += step.z;
+		position->x += step.x;
+		position->y += step.y;
+		position->z += step.z;
 
 		if (draw_eo_terrain_los_markers && (get_view_mode () == VIEW_MODE_EXTERNAL))
 		{
 			create_rotated_debug_3d_object
 			(
-				&position,
+				position,
 				0.0,
 				0.0,
 				0.0,
@@ -436,7 +435,7 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 			);
 		}
 
-		if (point_below_ground (&position))
+		if (point_below_ground (position))
 		{
 			return (los_clear_range);
 		}
@@ -449,29 +448,59 @@ static float get_eo_boresight_terrain_los_clear_range (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static float get_eo_boresight_tree_los_clear_range (vec3d *los_start, vec3d *los_end)
+static float get_eo_boresight_tree_los_clear_range (vec3d *los_start, vec3d *los_end, vec3d* intercept_point)
 {
 	float
 		los_clear_range;
 
 	vec3d
-		intercept_point,
 		face_normal;
 
+	ASSERT (intercept_point);
 	ASSERT (los_start);
-
 	ASSERT (los_end);
 
-	if (get_line_of_sight_collision_tree (los_start, los_end, &intercept_point, &face_normal, FALSE, TRUE))
+	if (get_line_of_sight_collision_tree (los_start, los_end, intercept_point, &face_normal, FALSE, TRUE))
 	{
-		los_clear_range = get_3d_range (los_start, &intercept_point);
+		los_clear_range = get_3d_range (los_start, intercept_point);
 	}
 	else
 	{
 		los_clear_range = eo_max_visual_range;
+		intercept_point->x = 0.0;
+		intercept_point->y = 0.0;
+		intercept_point->z = 0.0;
 	}
 
 	return (los_clear_range);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_eo_los_intercept_point(vec3d* intercept_point)
+{
+	vec3d object_intercept_point, los_start, los_end;
+	float terrain_clear = get_eo_boresight_terrain_los_clear_range(intercept_point);
+	float object_range = 10000.0;
+
+	los_start = eo_vp.position;
+
+	los_end.x = los_start.x + eo_vp.zv.x * eo_max_visual_range;
+	los_end.y = los_start.y + eo_vp.zv.y * eo_max_visual_range;
+	los_end.z = los_start.z + eo_vp.zv.z * eo_max_visual_range;
+
+	object_range = get_eo_boresight_tree_los_clear_range (&los_start, &los_end, &object_intercept_point);
+
+	if (object_range < terrain_clear)  // some object blocks line of sigth before terrain
+	{
+		*intercept_point = object_intercept_point;
+		return object_range;
+	}
+	else
+		return terrain_clear;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -755,9 +784,11 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 	{
 		if (first_pass)
 		{
-			terrain_los_range = get_eo_boresight_terrain_los_clear_range ();
+			vec3d intercept_point;
+			
+			terrain_los_range = get_eo_boresight_terrain_los_clear_range (&intercept_point);
 
-			tree_los_range = get_eo_boresight_tree_los_clear_range (los_start, los_end);
+			tree_los_range = get_eo_boresight_tree_los_clear_range (los_start, los_end, &intercept_point);
 
 			los_range = min (terrain_los_range, tree_los_range);
 		}
