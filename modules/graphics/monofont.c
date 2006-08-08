@@ -158,6 +158,26 @@ static const char
 		#include "mono7x12.h"
 	};
 
+#define CELL_WIDTH_8X14		(8)
+#define CELL_HEIGHT_8X14	(14)
+#define CELL_SIZE_8X14		(CELL_HEADER_SIZE + CELL_WIDTH_8X14 * CELL_HEIGHT_8X14)
+
+static const char
+	mono_font_8x14_cells[NUM_CHARACTERS][CELL_SIZE_8X14] =
+	{
+		#include "mono8x14.h"
+	};
+
+#define CELL_WIDTH_10X16	(10)
+#define CELL_HEIGHT_10X16	(16)
+#define CELL_SIZE_10X16		(CELL_HEADER_SIZE + CELL_WIDTH_10X16 * CELL_HEIGHT_10X16)
+
+static const char
+	mono_font_10x16_cells[NUM_CHARACTERS][CELL_SIZE_10X16] =
+	{
+		#include "mono10x16.h"
+	};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +190,9 @@ static const char
 		( const char * ) mono_font_5x9_cells,
 		( const char * ) mono_font_6x7_cells,
 		( const char * ) mono_font_6x10_cells,
-		( const char * ) mono_font_7x12_cells
+		( const char * ) mono_font_7x12_cells,
+		( const char * ) mono_font_8x14_cells,
+		( const char * ) mono_font_10x16_cells
 	};
 
 static const float
@@ -182,6 +204,8 @@ static const float
 		CELL_WIDTH_6X7,
 		CELL_WIDTH_6X10,
 		CELL_WIDTH_7X12,
+		CELL_WIDTH_8X14,
+		CELL_WIDTH_10X16,
 	};
 
 static const float
@@ -192,7 +216,9 @@ static const float
 		CELL_HEIGHT_5X9,
 		CELL_HEIGHT_6X7,
 		CELL_HEIGHT_6X10,
-		CELL_HEIGHT_7X12
+		CELL_HEIGHT_7X12,
+		CELL_HEIGHT_8X14,
+		CELL_HEIGHT_10X16,
 	};
 
 static const int
@@ -203,7 +229,9 @@ static const int
 		CELL_SIZE_5X9,
 		CELL_SIZE_6X7,
 		CELL_SIZE_6X10,
-		CELL_SIZE_7X12
+		CELL_SIZE_7X12,
+		CELL_SIZE_8X14,
+		CELL_SIZE_10X16,
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
