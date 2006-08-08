@@ -64,35 +64,35 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void set_2d_pixel (const float x, const float y, const rgb_colour col);
+extern void set_2d_pixel (float x, float y, const rgb_colour col);
 
-extern void draw_2d_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col);
+extern void draw_2d_line (float x1, float y1, float x2, float y2, const rgb_colour col);
 
-extern void draw_2d_thick_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col);
+//extern void draw_2d_thick_line (float x1, float y1, float x2, float y2, const rgb_colour col);
 
-extern void draw_2d_half_thick_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col);
+extern void draw_2d_half_thick_line (float x1, float y1, float x2, float y2, const rgb_colour col);
 
-extern void draw_2d_filled_triangle (const float x1, const float y1, const float x2, const float y2, const float x3, const float y3, const rgb_colour col);
+extern void draw_2d_filled_triangle (float x1, float y1, float x2, float y2, float x3, float y3, const rgb_colour col);
 
-extern void set_2d_mono_font_position (const float x, const float y);
+extern void set_2d_mono_font_position (float x, float y);
 
 extern void get_2d_world_position (const float x, const float y, float *x_world, float *y_world);
 
 extern void get_2d_int_screen_coordinates (const float wx, const float wy, int *x, int *y);
 
-extern void get_2d_float_screen_coordinates (const float wx, const float wy, float *x, float *y);
+extern void get_2d_float_screen_coordinates (float wx, float wy, float *x, float *y);
 
-extern void get_2d_float_screen_x_coordinate (const float wx, float *x);
+extern void get_2d_float_screen_x_coordinate (float wx, float *x);
 
-extern void get_2d_float_screen_y_coordinate (const float wy, float *y);
+extern void get_2d_float_screen_y_coordinate (float wy, float *y);
 
-extern void draw_2d_mono_sprite (const char *sprite_ptr, const float x, const float y, const rgb_colour colour);
+extern void draw_2d_mono_sprite (const char *sprite_ptr, float x, float y, const rgb_colour colour);
 
-extern void draw_2d_circle (const float x, const float y, const float r, const rgb_colour col);
+extern void draw_2d_circle (float x, float y, float r, const rgb_colour col);
 
-extern void draw_2d_hatched_area (const float x1, const float y1, const float x2, const float y2, const rgb_colour col);
+extern void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_colour col);
 
-extern void draw_2d_hatched_circle (const float x, const float y, const float r, const rgb_colour col);
+extern void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour col);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -72,7 +72,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_2d_pixel (const float x, const float y, const rgb_colour col)
+void set_2d_pixel (float x, float y, const rgb_colour col)
 {
 	float
 		xt,
@@ -94,6 +94,9 @@ void set_2d_pixel (const float x, const float y, const rgb_colour col)
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
 	convert_float_to_int (xt, &xi);
 	convert_float_to_int (yt, &yi);
 
@@ -104,7 +107,7 @@ void set_2d_pixel (const float x, const float y, const rgb_colour col)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col)
+void draw_2d_line (float x1, float y1, float x2, float y2, const rgb_colour col)
 {
 	float
 		x1t,
@@ -113,7 +116,7 @@ void draw_2d_line (const float x1, const float y1, const float x2, const float y
 		y2t;
 
 	ASSERT (active_2d_environment);
-
+	
 	validate_2d_composite_transformation_matrix (active_2d_environment);
 
 	x1t = (x1 * active_2d_environment->composite_transformation[0][0]) +
@@ -131,6 +134,11 @@ void draw_2d_line (const float x1, const float y1, const float x2, const float y
 	y2t = (x2 * active_2d_environment->composite_transformation[0][1]) +
 			(y2 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
+
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
 
 	if (clip_line (&x1t, &y1t, &x2t, &y2t))
 	{
@@ -142,7 +150,7 @@ void draw_2d_line (const float x1, const float y1, const float x2, const float y
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_thick_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col)
+void draw_2d_half_thick_line (float x1, float y1, float x2, float y2, const rgb_colour col)
 {
 	float
 		x1t,
@@ -170,43 +178,10 @@ void draw_2d_thick_line (const float x1, const float y1, const float x2, const f
 			(y2 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
-	if (clip_line (&x1t, &y1t, &x2t, &y2t))
-	{
-//		draw_thick_line (x1t, y1t, x2t, y2t, col);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_2d_half_thick_line (const float x1, const float y1, const float x2, const float y2, const rgb_colour col)
-{
-	float
-		x1t,
-		y1t,
-		x2t,
-		y2t;
-
-	ASSERT (active_2d_environment);
-
-	validate_2d_composite_transformation_matrix (active_2d_environment);
-
-	x1t = (x1 * active_2d_environment->composite_transformation[0][0]) +
-		   (y1 * active_2d_environment->composite_transformation[1][0]) +
-			active_2d_environment->composite_transformation[2][0];
-
-	y1t = (x1 * active_2d_environment->composite_transformation[0][1]) +
-			(y1 * active_2d_environment->composite_transformation[1][1]) +
-			active_2d_environment->composite_transformation[2][1];
-
-	x2t = (x2 * active_2d_environment->composite_transformation[0][0]) +
-			(y2 * active_2d_environment->composite_transformation[1][0]) +
-			active_2d_environment->composite_transformation[2][0];
-
-	y2t = (x2 * active_2d_environment->composite_transformation[0][1]) +
-			(y2 * active_2d_environment->composite_transformation[1][1]) +
-			active_2d_environment->composite_transformation[2][1];
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
 
 	if (clip_line (&x1t, &y1t, &x2t, &y2t))
 	{
@@ -218,7 +193,7 @@ void draw_2d_half_thick_line (const float x1, const float y1, const float x2, co
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_filled_triangle (const float x1, const float y1, const float x2, const float y2, const float x3, const float y3, const rgb_colour col)
+void draw_2d_filled_triangle (float x1, float y1, float x2, float y2, float x3, float y3, const rgb_colour col)
 {
 	float
 		x1t,
@@ -256,6 +231,14 @@ void draw_2d_filled_triangle (const float x1, const float y1, const float x2, co
 			(y3 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x3t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y3t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
 	draw_software_plain_triangle ( x1t, y1t, x2t, y2t, x3t, y3t, col );
 }
 
@@ -263,7 +246,7 @@ void draw_2d_filled_triangle (const float x1, const float y1, const float x2, co
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_2d_mono_font_position (const float x, const float y)
+void set_2d_mono_font_position (float x, float y)
 {
 	float
 		x1t,
@@ -280,6 +263,9 @@ void set_2d_mono_font_position (const float x, const float y)
 	y1t = (x * active_2d_environment->composite_transformation[0][1]) +
 			(y * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
+
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
 
 	set_mono_font_position (x1t, y1t);
 }
@@ -341,7 +327,7 @@ void get_2d_int_screen_coordinates (const float wx, const float wy, int *x, int 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void get_2d_float_screen_coordinates (const float wx, const float wy, float *x, float *y)
+void get_2d_float_screen_coordinates (float wx, float wy, float *x, float *y)
 {
 	ASSERT (active_2d_environment);
 
@@ -368,6 +354,8 @@ void get_2d_float_screen_x_coordinate (const float wx, float *x)
 
 	*x = (wx * active_2d_environment->composite_transformation[0][0]) +
 		  active_2d_environment->composite_transformation[2][0];
+
+	*x -= active_2d_environment->offset_x;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -382,13 +370,15 @@ void get_2d_float_screen_y_coordinate (const float wy, float *y)
 
 	*y = (wy * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
+		  
+	*y -= active_2d_environment->offset_y;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_mono_sprite (const char *sprite_ptr, const float x, const float y, const rgb_colour colour)
+void draw_2d_mono_sprite (const char *sprite_ptr, float x, float y, const rgb_colour colour)
 {
 	float
 		xt,
@@ -406,6 +396,9 @@ void draw_2d_mono_sprite (const char *sprite_ptr, const float x, const float y, 
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
 	draw_mono_sprite (sprite_ptr, xt, yt, colour);
 }
 
@@ -413,7 +406,7 @@ void draw_2d_mono_sprite (const char *sprite_ptr, const float x, const float y, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_circle (const float x, const float y, const float r, const rgb_colour col)
+void draw_2d_circle (float x, float y, const float r, const rgb_colour col)
 {
 	float
 		xt,
@@ -434,6 +427,9 @@ void draw_2d_circle (const float x, const float y, const float r, const rgb_colo
 
 	rt = r * active_2d_environment->window_scaling[0][0];
 
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
 	draw_circle (xt, yt, rt, col);
 }
 
@@ -441,7 +437,7 @@ void draw_2d_circle (const float x, const float y, const float r, const rgb_colo
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_hatched_area (const float x1, const float y1, const float x2, const float y2, const rgb_colour col)
+void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_colour col)
 {
 	float
 		x1t,
@@ -469,6 +465,12 @@ void draw_2d_hatched_area (const float x1, const float y1, const float x2, const
 		  (y2 * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
 	x1t = bound (x1t, active_viewport.x_min, active_viewport.x_max);
 	y1t = bound (y1t, active_viewport.y_min, active_viewport.y_max);
 
@@ -482,7 +484,7 @@ void draw_2d_hatched_area (const float x1, const float y1, const float x2, const
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_hatched_circle (const float x, const float y, const float r, const rgb_colour col)
+void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour col)
 {
 	float
 		xt,
@@ -500,6 +502,9 @@ void draw_2d_hatched_circle (const float x, const float y, const float r, const 
 	yt = (x * active_2d_environment->composite_transformation[0][1]) +
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
+
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
 
 	rt = r * active_2d_environment->window_scaling[0][0];
 

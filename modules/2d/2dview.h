@@ -73,7 +73,9 @@ struct ENV_2D
 		window_x_min,
 		window_y_min,
 		window_x_max,
-		window_y_max;
+		window_y_max,
+		offset_x,
+		offset_y;
 
 	//
 	// transformation matrices (in order applied)
@@ -169,6 +171,10 @@ extern void reset_2d_instance (env_2d *env);
 extern void get_2d_composite_transformation_matrix (env_2d *env);
 
 extern void get_2d_inverse_composite_transformation_matrix (env_2d *env);
+
+extern void set_2d_view_offset (env_2d* env, float dx, float dy);
+
+extern void reset_2d_view_offset (env_2d* env);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
