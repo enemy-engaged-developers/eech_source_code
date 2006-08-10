@@ -9624,9 +9624,10 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 	// viewport
 	//
 
-	draw_large_mfd = FALSE;
-
-	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+	if (draw_large_mfd)
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+	else
+		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
 
 	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
