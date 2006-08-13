@@ -358,11 +358,10 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->apu_rpm.max = 0.0;
 	current_flight_dynamics->apu_rpm.damaged = FALSE;
 
-
 	current_flight_dynamics->left_engine_rpm.value = 0.0;
 	current_flight_dynamics->left_engine_rpm.max = 100.0;  // engine is always trying for 100% N2 RPM
 	current_flight_dynamics->left_engine_n1_rpm.value = 0.0;
-	current_flight_dynamics->left_engine_n1_rpm.max = 0.0;
+	current_flight_dynamics->left_engine_n1_rpm.max = 100.0;
 	current_flight_dynamics->left_engine_torque.value = 0.0;
 	current_flight_dynamics->left_engine_torque.max = 120.0;
 	
@@ -372,7 +371,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->right_engine_rpm.value = 0.0;
 	current_flight_dynamics->right_engine_rpm.max = 100.0;
 	current_flight_dynamics->right_engine_n1_rpm.value = 0.0;
-	current_flight_dynamics->right_engine_n1_rpm.max = 0.0;
+	current_flight_dynamics->right_engine_n1_rpm.max = 100.0;
 	current_flight_dynamics->right_engine_torque.value = 0.0;
 	current_flight_dynamics->right_engine_torque.max = 120.0;
 

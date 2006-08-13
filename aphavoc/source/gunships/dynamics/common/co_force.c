@@ -375,6 +375,7 @@ void resolve_dynamic_forces (void)
       heading,
       pitch;
 
+   ASSERT(get_gunship_entity());
    get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
    // get heading, pitch, and roll
