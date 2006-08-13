@@ -663,7 +663,7 @@ float_type_data
 		{
 			"FLOAT_TYPE_MAIN_ROTOR_RPM",                       // name
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,		  					// pack_type
-			4,																	// pack_num_whole_bits (excluding sign bit)
+			8,																	// pack_num_whole_bits (excluding sign bit)
 			0,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
