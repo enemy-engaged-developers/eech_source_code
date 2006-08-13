@@ -2777,13 +2777,13 @@ static void draw_velocity_vector()
 	// cutoff the velocity marker if it gets too far from center
 	if (fabs(z) > VV_CUTOFF_VELOCITY)
 	{
-		x *= VV_CUTOFF_VELOCITY / z;
-		z = VV_CUTOFF_VELOCITY;
+		x *= VV_CUTOFF_VELOCITY / fabs(z);
+		z = bound(z, -VV_CUTOFF_VELOCITY, VV_CUTOFF_VELOCITY);
 	}
 	if (fabs(x) > VV_CUTOFF_VELOCITY)
 	{
-		z *= VV_CUTOFF_VELOCITY / x;
-		x = VV_CUTOFF_VELOCITY;	
+		z *= VV_CUTOFF_VELOCITY / fabs(x);
+		x = bound(x, -VV_CUTOFF_VELOCITY, VV_CUTOFF_VELOCITY);
 	}
 
 	// from center use 70% of the hud area
