@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.6.2W4T3</title>
+<title>EECH Community Release Version 1.7</title>
 <style>
 <!--
 a {
@@ -62,7 +62,7 @@ h4 {
 <body class="Normal" lang=SV>
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.6.2 W4T3</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.7</span></h1>
       <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
         <span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
@@ -73,7 +73,7 @@ h4 {
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a>, <a href="http://www.eechcentral.com" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
       <p align=right style='text-align:right; font-style:
-      italic;'><span lang=EN-GB>Last edited by arneh: July 15, 2006</span></p>
+      italic;'><span lang=EN-GB>Last edited by arneh: August 14, 2006</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><span
@@ -92,22 +92,11 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
         <li><a href="#history"><span
      lang=EN-GB>Version history</span></a></li>
       </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 162W4T3?</span></h2>
-      <p><em><strong>(since version 162W3)</strong></em></p>
-      <ol>
-        <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
-        <LI>Sound modifications no longer require modifying sound.dat,
-      just copy the new sound files into the audio directory!</LI>
-        <li>New HUD mode for Apache and Comanche: transition mode. Use
-      Shift+O to switch between the cruise mode (the existing
-      navigation mode) and
-      transition mode.
-        <li>Changes to existing HUDs.  For Apache and Comanche more
-	symbology is common for weapons and navigation mode.  A slip
-	indicator has been added to all modes.
-	For Russian helicopters
-	vertical speed scale is visble also in weapons mode.
-        <li>Increased speed of main rotor animation</li>
+      <h2><span lang=EN-GB>What's NEW in EECH 1.7?</span></h2>
+      <p><em><strong>(since version 1.6.2 W3)</strong></em></p>
+      <dl>
+      <dt>Flight model changes</dt>
+      <dd><ol>
 	<li>Numerous changes to make autorotation work (read <a
 	href="http://www.copters.com/pilot/autorotation.html">here</a>
 	to learn how to autorotate). 
@@ -150,24 +139,63 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
 	        RPM of turbines</li>
 	  <li>Fuel consumption depends on engine RPM</li>
 	</ul>
+	<li>Slow speed flight model tweaks.  Should make slow speed
+	handling easier and more realistic, particulary sideways flight.
 	<li>Decreased effectivness of wheel brake</li>
-	<li>Added key for manually opening and closing canopy doors
-	(Comanche and Hokum only)</li>
-	<li>Closing canopy doors reduce sound volume of external
-	sounds<li>
+	<li>Implemented rotor vibration. Used when close to entering
+	    vortex ring effect, or when main rotor slightly damaged.</li>
+      </ol></dd>
+      <dt>Avionics changes</dt>
+      <dd><ol>
+	<li>Completely new HUD for the ka-52, based on the real Hokum
+	HUD. Read <a
+	href="http://www.eechcentral.com/index.php/Hokum_HUD">here</a>
+	for instructions. This HUD is also available in high resolution.
+        <li>New HUD mode for Apache and Comanche: transition mode. Use
+      Shift+O to switch between the cruise mode (the existing
+      navigation mode) and
+      transition mode.
+        <li>Changes to existing HUDs.  For Apache and Comanche more
+	symbology is common for weapons and navigation mode.  A slip
+	indicator has been added to all modes.
+	For Russian helicopters
+	vertical speed scale is visble also in weapons mode.
 	<li>Implemented high-res MFDs for the Apache and Havoc</li>
 	<li>Made new weapons page MFD for Apache which is more like
 	the page in the real AH-64D</li>
+    
+      </ol></dd>
+      <dt>Sound changes</dt>
+      <dd><ol>
+        <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
+        <LI>Sound modifications no longer require modifying sound.dat,
+      just copy the new sound files into the audio directory!</LI>
+	<li>Closing canopy doors reduce sound volume of external
+	sounds<li>
+
+      </ol></dd>
+      <dt>Other changes</dt>
+      <dd><ol>
+
+        <li>Increased speed of main rotor animation</li>
+	<li>Added key for manually opening and closing canopy doors
+	(Comanche and Hokum only)</li>
 	<li>New, more immersive UI screens</li>
 	<li>Make F1 work as center view in mouse look (for mouse only,
 	TIR works as before)</li>
-	</li>
-      </ol>
-      <p><strong>IMPORTANT: This version has changed the format of save
+	<li>Implemented collimation effect for HUD (the focus on
+	infinity, HUD image moves with the head effect). Currently Hokum only.
+      </ol></dd>
+      <dl>
+
+      <strong><p>IMPORTANT: This version has changed the format of save
       games, and is incompatible with ALL previous save games.  If you
       have any saved campaigns you want to finish keep a backup of
       your current cohokum.exe and use it for finishing the save game.
-      </strong></p>
+      </p>
+      <p>It is also  multiplayer incompatible with all previous versions.</p>
+      </strong>
+
       <p align="right"><span
 lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
       <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
@@ -190,7 +218,14 @@ href="http://www.planet.nl/~jette073/gotcha/download/eech_key-layout_1_bata.pdf"
 target=_blank>EECH_KEY.pdf</A></span></FONT></li>
       </ol>
       <p>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </p>
-      <p>IMPORTANT: when you have just installed eech by default the <strong>avionics</strong> <strong>in the options menu </strong> is set at <strong>&quot;novice&quot;. This means that you cannot operate the targetting systems,</strong> it is done for you in the game by the &quot;copilot&quot;. Set this option at <strong>advanced</strong> when in the game for full operation. When you delete the game.cfg and it is recreated by the game, the option is reset at novice! </p>
+      <p>IMPORTANT: when you have just installed eech by default the
+      <strong>avionics</strong> <strong>in the options menu </strong>
+      is set at <strong>&quot;novice&quot;. This means that you cannot
+      operate the targetting systems,</strong> it is done for you in
+      the game by the &quot;copilot&quot;. Set this option at
+      <strong>advanced</strong> when in the game for full operation.
+      When you delete the game.cfg and it is recreated by the game,
+      the option is reset at novice! </p>
       <h3>Addons</h3>
       <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order below gives you the best result ;-). </p>
       <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
@@ -576,9 +611,23 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>highresmfd=0 </span></p></td>
+            <p class="style43"><span lang=EN-GB>highresmfd=1 </span></p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>The resolution of the Comanche and Hokum MFD's will be doubled. Remember that there is a small framerate hit when activating this feature. </span></p></td>
+            <p><span lang=EN-GB>The resolution of the MFD's will be doubled. Remember that there is a small framerate hit when activating this feature. </span></p></td>
+        </tr>
+        <tr valign="top">
+          <td colspan=2 class="Normal">
+            <p><b><span lang=EN-GB>High resolution HUD</span></b></p></td>
+        </tr>
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43"><span lang=EN-GB>highreshud=1 </span></p></td>
+          <td class="Normal">
+            <p><span lang=EN-GB>The resolution of the HUD will be
+        doubled. Remember that there is a small framerate hit when
+        activating this feature. Currently only the Ka-52 has a high
+        res mode for the HUD, for the other helicopters this setting
+        has no effect.</span></p></td>
         </tr>
         <tr valign="top">
           <td colspan=2 class="Normal">
