@@ -319,27 +319,27 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_FIRE]);
 
 		// START COLOUR
-		item->red_start			=	30;		// red
+		item->red_start			=	80;		// red
 		item->green_start			=	30;		// green
 		item->blue_start 			=	30;		// blue
 		item->alpha_start 		=	0;		// alpha
 		item->radius_start		=	10.5;		// radius
 
 		// COLOUR CHANGE 1
-		item->colour_change_1	=	0.1;		// colour change 1 lifescale
+		item->colour_change_1	=	0.05;		// colour change 1 lifescale
 		item->red_1					=	30;		// red
 		item->green_1 				=	30;		// green
 		item->blue_1 				=	30;		// blue
-		item->alpha_1 				=	70;		// alpha
-		item->radius_1 			=	20.5;		// radius
+		item->alpha_1 				=	90;		// alpha
+		item->radius_1 			=	30.5;		// radius
 
 		// COLOUR CHANGE 2
-		item->colour_change_2	=	0.2;		// colour change 2 lifescale
+		item->colour_change_2	=	0.125;		// colour change 2 lifescale
 		item->red_2					=	00;		// red
 		item->green_2				=	00;		// green
 		item->blue_2				=	00;		// blue
 		item->alpha_2				=	30;		// alpha
-		item->radius_2				=	61.5;		// radius
+		item->radius_2				=	101.5;		// radius
 
 		// END COLOUR
 		item->red_end				=	60;		// red
@@ -349,9 +349,9 @@ void initialise_smoke_list_database (void)
 		item->radius_end			=	300.0;		// radius
 
 		item->final_vertical_velocity	=	2.5;
-		item->vertical_acceleration	=	0.6;
+		item->vertical_acceleration	=	0.7;
 
-		item->initial_velocity_noise	=	6.0;
+		item->initial_velocity_noise	=	12.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;

@@ -874,7 +874,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_ON;
-	smoke_list_info->frequency 				=	0.25;
+	smoke_list_info->frequency 				=	0.75;
 	smoke_list_info->smoke_lifetime 			=	8.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
