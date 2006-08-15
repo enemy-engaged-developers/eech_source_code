@@ -1879,7 +1879,7 @@ void update_attitude_dynamics (void)
 
 			main_angular_force *= command_line_dynamics_rudder_value;
 
-			main_angular_force *= 1.0 + 1.0 * (current_flight_dynamics->tail_blade_pitch.value / current_flight_dynamics->tail_blade_pitch.max);
+			main_angular_force *= 1.0 + (current_flight_dynamics->tail_blade_pitch.value / current_flight_dynamics->tail_blade_pitch.max);
 
 			add_dynamic_force ("Main rotor angular torque", main_angular_force, 0.0, &position, &direction, FALSE);
 		}
@@ -1931,7 +1931,7 @@ void update_attitude_dynamics (void)
 			scaling,
 			drag;
 
-		drag = -50.0;
+		drag = -40.0;
 
 		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
 
@@ -2109,7 +2109,7 @@ void update_attitude_dynamics (void)
 
 		// arneh 20060813 - reduce drag in sideway flight - compensated by reduced lift. 
 		// makes it impossible to keep flying sideways at insane bank angles without losing altitude
-		Fmax = 0.5;
+		Fmax = 1.0;
 
 		if (current_flight_dynamics->velocity_x.max != 0.0)
 			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0);
