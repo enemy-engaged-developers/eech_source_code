@@ -73,7 +73,7 @@ h4 {
       <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
 href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a>, <a href="http://www.eechcentral.com" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
       <p align=right style='text-align:right; font-style:
-      italic;'><span lang=EN-GB>Last edited by arneh: August 14, 2006</span></p>
+      italic;'><span lang=EN-GB>Last edited by arneh: August 17, 2006</span></p>
       <h2><span class="style40">Contents</span></h2>
       <ul type=disc>
         <li><span
@@ -140,7 +140,7 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
 	  <li>Fuel consumption depends on engine RPM</li>
 	</ul>
 	<li>Slow speed flight model tweaks.  Should make slow speed
-	handling easier and more realistic, particulary sideways flight.
+	handling easier and more realistic, particularly sideways flight.
 	<li>Decreased effectivness of wheel brake</li>
 	<li>Implemented rotor vibration. Used when close to entering
 	    vortex ring effect, or when main rotor slightly damaged.</li>
@@ -186,6 +186,8 @@ href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.
 	<li>Implemented collimation effect for HUD (the focus on
 	infinity, HUD image moves with the head effect). Currently
 	Hokum only.
+	<li>Implemented head movement with G-forces in wideview mode
+	(Comanche and Hokum only).
 	<li>Allow loading of modified 3D models from
 	COHOKUM\3DDATA\OBJECTS directory.  Use Firebird's 3D model
 	<a
@@ -492,6 +494,17 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
             <p><span lang=EN-GB>Note: for some keyboards with strange and disturbing langauage settings the keys are not \ and Ctrl-\ but something else. You just have to try for yourself on the right hand side of the keyboard. For more info: </span><a
 href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a></p></td>
         </tr>
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43">g-force_head_movement</p></td>
+          <td class="Normal">
+            <p><style='color:black;'>Adjust amount head will move with
+	    g-forces in wideview.  Default = 1.0, off = 0.0 all other
+	    values adjust amount of movement (may be set to more than
+	    1.0 or even negative values to move head in opposite
+	    direction)</span></p></td> 
+        </tr>
+ 	
         <tr valign="top" bgcolor="#EEEEEE">
           <td colspan="2" class="style41"><h4>[Mods]</h4></td>
         </tr>
