@@ -86,10 +86,29 @@ void set_trim_control (event *ev)
 
 void clear_trim_control (event *ev)
 {
+	float centre_trim;
+	
+	// arneh 20060817 - trim for hover
+	switch (get_global_gunship_type ())
+	{
+	case GUNSHIP_TYPE_COMANCHE:
+		centre_trim = 2.0;
+		break;
+	case GUNSHIP_TYPE_HOKUM:
+		centre_trim = 0.0;
+		break;
+	case GUNSHIP_TYPE_APACHE:
+		centre_trim = 3.5;
+		break;
+	default:
+		centre_trim = 6.0;
+		break;
+	}
+	
 
 	current_flight_dynamics->input_data.cyclic_x_trim.value = 0.0;
 
-	current_flight_dynamics->input_data.cyclic_y_trim.value = 6.0;
+	current_flight_dynamics->input_data.cyclic_y_trim.value = centre_trim;
 
 	debug_log ("CO_DYN: clearing trim");
 }
