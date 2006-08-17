@@ -162,6 +162,7 @@ extern int
 	command_line_rudder_joystick_index,						// loke 030418
 	command_line_rudder_joystick_axis,						// loke 030418
 	command_line_high_res_mfd,									// loke 030420
+	command_line_high_res_hud,									// arneh 2006-07-18
 	command_line_fly_any_airplane,							// VJ 030424
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511
@@ -221,6 +222,7 @@ extern float
 	command_line_chaff_effectiveness,
 	command_line_flare_effectiveness,
 	command_line_smoke_effectiveness,
+	command_line_g_force_head_movment_modifier,
 	global_hud_size2;// VJ 050126 hud mod: size 	
 
 extern char

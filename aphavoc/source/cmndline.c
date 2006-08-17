@@ -184,7 +184,8 @@ int
 	command_line_collective_joystick_axis					= 3,		// loke 030418
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
-	command_line_high_res_mfd									= 0,		// loke 030420
+	command_line_high_res_mfd									= 1,		// loke 030420
+	command_line_high_res_hud									= 1,        // arneh 20060808
 	command_line_fly_any_airplane								= 1,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
@@ -243,6 +244,7 @@ float
 	command_line_chaff_effectiveness							= 1.0,
 	command_line_flare_effectiveness							= 1.0,
 	command_line_smoke_effectiveness							= 1.0,
+	command_line_g_force_head_movment_modifier					= 1.0,
 	global_hud_size2												= 1.0;	// VJ 050126 hud mod: size 
 
 char

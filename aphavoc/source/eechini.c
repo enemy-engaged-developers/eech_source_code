@@ -423,7 +423,7 @@ void process_ini_file(int argc, char *argv[])
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_COPILOT);
 	 	if (strcmp(p, "hokum_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_PILOT);
-	 	if (strcmp(p, "holum_co-pilot")==0)
+	 	if (strcmp(p, "hokum_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_COPILOT);
 	 	if (strcmp(p, "apache_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
@@ -432,7 +432,8 @@ void process_ini_file(int argc, char *argv[])
 		//VJ 060211 save hud config info
 	 	if (strcmp(p, "hud_code")==0)
 	 		read_hud_parameters(q);
-
+	 	if (strcmp(p, "g-force_head_movement")==0)
+	 		command_line_g_force_head_movment_modifier = v1;
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
 		if (strcmp(p, "msls") == 0)			command_line_mouse_look_speed = d1;
@@ -464,6 +465,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
+		if (strcmp(p, "highreshud") == 0)	command_line_high_res_hud = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
@@ -532,7 +534,7 @@ void dump_ini_file(void)
 	fprintf(f,"fog=%.0f            # Sets the time (sec) taken for the \"fog of war\" to reshroud enemy sector info (def 4 hours).\n",command_line_fog_of_war_maximum_value);
 	fprintf(f,"cpac=%d              # capture aircraft: aircraft landed at captured bases or FARPS become usable by your side.\n",command_line_capture_aircraft);
 	fprintf(f,"uit=%3.1f            # user invulnerable time (default 5 sec), when starting mission\n",command_line_user_invulnerable_time);
-	fprintf(f,"[Graphics]\n");
+	fprintf(f,"\n[Graphics]\n");
 	fprintf(f,"cbar=%.0f            # distance in meters that city blocks resolve\n",command_line_city_block_approximation_range);
 	fprintf(f,"fs=%d                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen)\n",command_line_full_screen);
 	fprintf(f,"mfr=%d               # Max visual frame rate, (defaults = 30)\n",command_line_max_frame_rate);
@@ -543,7 +545,7 @@ void dump_ini_file(void)
 	fprintf(f,"dxtm=%d              # directx texture management, should fix \"unable to allocate hardware slot\" error (def = 0)\n",command_line_d3d_use_texture_management);
 	fprintf(f,"cg=0                # clean graphics, re-installs graphics files (def = 0)\n");
 	fprintf(f,"palette=%i           # allow to use textures.pal if videocard supports it. Default is 1. Recommended is 0.\n", d3d_allow_paletted_textures); //Casm 20JUN05 External switch of .pal/.bin for textures
-	fprintf(f,"[Communications]\n");
+	fprintf(f,"\n[Communications]\n");
 	fprintf(f,"maxplayers=%d        # maximum number of players in a multiplayer game, def = 4\n",command_line_maxplayers);
 	fprintf(f,"ipa=%s               # ip address = TCPIP address to connect to. A HOST can leave out the value.\n",command_line_ip_address);
 	fprintf(f,"usemaster=%d         # Report game to internet masterserver (0 for private games)\n",command_line_report_to_masterserver);  //Werewolf 2 Jan 04
@@ -572,7 +574,7 @@ void dump_ini_file(void)
 	fprintf(f,"game_type=%d         # Valid game_types are: 1 = Freeflight, 2 = Campaign, 3 = Skirmish (def = 0)\n",command_line_game_initialisation_phase_game_type);
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
 	fprintf(f,"path=%s              # Path to map, campaign, skirmish\n",command_line_game_initialisation_phase_path);
-	fprintf(f,"[Dynamics]\n");
+	fprintf(f,"\n[Dynamics]\n");
 	fprintf(f,"advancedfm=%d      # advanced (more complex) flight model, off by default.\n",command_line_dynamics_advanced_flight_model);
 	fprintf(f,"enginerealism=%d      # realistic engine workload simulation model, on by default.\n",command_line_dynamics_advanced_engine_model);
 	fprintf(f,"enginestartup=%d      # manual engine start up, off by default.\n", command_line_dynamics_engine_startup);
@@ -584,7 +586,7 @@ void dump_ini_file(void)
 	fprintf(f,"dtrd=%3.1f         # tail rotor drag, scaling factor for drag caused by tail in forward flight (default = 1.0)\n",command_line_dynamics_tail_rotor_drag);
 	fprintf(f,"dzd=%3.1f          # cyclic dead zone, percentage deadzone for the cyclic (default = 0.0)\n",command_line_dynamics_cyclic_dead_zone);
 	fprintf(f,"dyal=%3.1f         # yaw altitude loss (default = 5.0)\n",command_line_dynamics_yaw_altitude_loss);
-	fprintf(f,"[Miscellaneous]\n");
+	fprintf(f,"\n[Miscellaneous]\n");
 	fprintf(f,"goto=%d              # Activates \"GOTO\" teleport button on the campaign map.\n",command_line_planner_goto_button);
 	fprintf(f,"vfm=%d               # vector flight model, activates viewer or \"UFO\" flight mode.\n",command_line_vector_flight_model);
 	fprintf(f,"psr=%d               # player start rank for new pilots\n",command_line_player_start_rank);
@@ -593,10 +595,11 @@ void dump_ini_file(void)
 	fprintf(f,"mta=%d               # The maximum multiplier allowed for time acceleration (default - 4)\n",command_line_max_time_acceleration);
 	fprintf(f,"nomcm=%d             # no mission complete music\n",command_line_no_mission_complete_music);
 //VJ 060209 re-organized in groups with more or less the same meaning
-	fprintf(f,"[MODIFICATIONS]\n");
+	fprintf(f,"\n[MODIFICATIONS]\n");
 	fprintf(f,"[WUT]\n");
 	fprintf(f,"wut=%s               # supply a filename of a wut text file here\n",WUT_filename);
-	fprintf(f,"[Wideview]\n");
+	fprintf(f,"\n[Wideview]\n");
+	fprintf(f, "g-force_head_movement=%.1f                # g-forces move head in wideview (default 1.0, off = 0.0, other values adjust amount of head movement)\n", command_line_g_force_head_movment_modifier);
 	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].x,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].y,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].z,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].p);
 	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f,%.3f  #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p);
 	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].p);
@@ -610,14 +613,14 @@ void dump_ini_file(void)
 		hud_code[2][0],hud_code[2][1],hud_code[2][2],
 		hud_code[3][0],hud_code[3][1],hud_code[3][2]);
 
-	fprintf(f,"[Gameplay]\n");	
+	fprintf(f,"\n[Gameplay]\n");	
 	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
-	fprintf(f,"[Joysticks and TIR]\n");	
+	fprintf(f,"\n[Joysticks and TIR]\n");	
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
 	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1
 	fprintf(f,"eopanh=%d            # joystick DirectX axis used for horizontal FLIR panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1
@@ -640,7 +643,7 @@ void dump_ini_file(void)
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"TIR_6DOF=%d          # Enables support for TrackIR vector in the hokum and comanche\n",command_line_TIR_6DOF); // Retro 6Feb2005
-	fprintf(f,"[Graphics and textures]\n");
+	fprintf(f,"\n[Graphics and textures]\n");
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov0=%d            # general field of view maximum for Apache pits, linked to key '9'\n",command_line_max_fov0);
 	fprintf(f,"maxfov1=%d            # general field of view maximum for Havoc pits, linked to key '9'\n",command_line_max_fov1);
@@ -648,7 +651,8 @@ void dump_ini_file(void)
 	fprintf(f,"maxfov3=%d            # general field of view maximum for Hokum-B pits, linked to key '9'\n",command_line_max_fov3);	
 	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
-	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 0 (off)\n",command_line_high_res_mfd);
+	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
+	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
 	fprintf(f,"greenmfd=%d          # mfd's are green (def = 0 (off), 1 = on)\n",command_line_green_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
@@ -659,7 +663,7 @@ void dump_ini_file(void)
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"extended_terrain=%d  # add more terrain textures: WARNING exctra terrain packs must be present. (def=0) \n",global_extended_terrain_textures);	//VJ 060120 load extra terrain textures
-	fprintf(f,"[Misc]\n");
+	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 for not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
 	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
