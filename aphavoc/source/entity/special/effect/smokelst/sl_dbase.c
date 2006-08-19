@@ -1319,7 +1319,7 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	120;	// red
 		item->green_start			=	100;	// green
 		item->blue_start 			=	40;	// blue
-		item->alpha_start 		=	150;	// alpha
+		item->alpha_start 		=	120;	// alpha
 		item->radius_start		=	6.0;	// radius
 
 		// COLOUR CHANGE 1
@@ -1375,7 +1375,7 @@ void initialise_smoke_list_database (void)
 		item->red_start			=	120;	// red
 		item->green_start			=	100;	// green
 		item->blue_start 			=	40;	// blue
-		item->alpha_start 		=	120;	// alpha
+		item->alpha_start 		=	100;	// alpha
 		item->radius_start		=	4.0;	// radius
 
 		// COLOUR CHANGE 1
