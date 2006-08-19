@@ -148,7 +148,7 @@ void initialise_view_events (void)
 	
 //VJ 030318 wideview mod
   	edit_wide_cockpit = FALSE;
-	set_global_wide_cockpit (FALSE);		
+	set_global_wide_cockpit (FALSE);	
 
 //VJ 030511 TSD render mod, linked to eech.ini
 	tsd_render_mode = command_line_tsd_render_mode+1;
