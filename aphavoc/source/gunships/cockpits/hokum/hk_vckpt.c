@@ -749,7 +749,8 @@ void draw_hokum_virtual_cockpit (void)
 			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;	
 
 			virtual_cockpit_inst3d->vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
-			virtual_cockpit_inst3d->vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+			if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+				virtual_cockpit_inst3d->vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT)
 	   		pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );

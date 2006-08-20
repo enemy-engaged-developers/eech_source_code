@@ -110,10 +110,8 @@ static float getMaxDown()
 	return command_line_viewpoint_down_limit[get_global_gunship_type ()][get_crew_role ()];
 }
 
-float getViewpointOffsetX ()
+float getViewpointOffsetX (float x)
 {
-	float x = 0.0;
-	
 	if ((command_line_TIR_6DOF == TRUE) && ( query_TIR_active () == TRUE ))
 	{
 		float tmp = TIR_GetX() / TIR_GetMaxXY();
@@ -131,10 +129,8 @@ float getViewpointOffsetX ()
 	return x;
 }
 
-float getViewpointOffsetY ()
+float getViewpointOffsetY (float y)
 {
-	float y = 0.0;
-	
 	if ((command_line_TIR_6DOF == TRUE) && ( query_TIR_active () == TRUE ))
 	{
 		float tmp = TIR_GetY() / TIR_GetMaxXY();
@@ -144,17 +140,15 @@ float getViewpointOffsetY ()
 			y = tmp * getMaxDown();
 	}
 
-	if (get_global_wide_cockpit())
+	if (get_global_wide_cockpit() && !current_flight_dynamics->auto_hover)
 		y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025;
 	
 	y = bound ( y, getMaxDown(), getMaxUp());
 	return y;
 }
 
-float getViewpointOffsetZ ()
+float getViewpointOffsetZ (float z)
 {
-	float z = 0.0;
-
 	if ((command_line_TIR_6DOF == TRUE) && ( query_TIR_active () == TRUE ))
 	{
 		float tmp = TIR_GetZ() / 16383.;	// this value is fixed, as opposed to x and y
@@ -163,10 +157,8 @@ float getViewpointOffsetZ ()
 		else
 			z = tmp * -getMaxBackward();
 	}
-	else
-	{
-		z = bound ( z, getMaxBackward(), getMaxForeward() );
-	}
+
+	z = bound ( z, getMaxBackward(), getMaxForeward() );
 
 	return z;
 }

@@ -325,9 +325,9 @@ void draw_view (void)
 	if ((command_line_TIR_6DOF)&&(query_TIR_active() == TRUE)&&
 		(( view_mode == VIEW_MODE_VIRTUAL_COCKPIT)||( view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE )))
 	{
-		current_custom_cockpit_viewpoint.x += getViewpointOffsetX();
-		current_custom_cockpit_viewpoint.y += getViewpointOffsetY();
-		current_custom_cockpit_viewpoint.z += getViewpointOffsetZ();
+		current_custom_cockpit_viewpoint.x = getViewpointOffsetX(current_custom_cockpit_viewpoint.x);
+		current_custom_cockpit_viewpoint.y = getViewpointOffsetY(current_custom_cockpit_viewpoint.y);
+		current_custom_cockpit_viewpoint.z = getViewpointOffsetZ(current_custom_cockpit_viewpoint.z);
 	}
 
    switch (view_mode)

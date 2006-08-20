@@ -1705,8 +1705,8 @@ void draw_hokum_hud (void)
 
 //		if (command_line_TIR_6DOF && query_TIR_active())
 		{
-			head_offset_x += getViewpointOffsetX();
-			head_offset_y += getViewpointOffsetY();
+			head_offset_x = getViewpointOffsetX(head_offset_x);
+			head_offset_y = getViewpointOffsetY(head_offset_y);
 		}
 
 		x_offset = head_offset_x * -HUD_UNIT_RATIO;
