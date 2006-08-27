@@ -762,7 +762,7 @@ void comms_process_data (void)
                                     // Jabberwock 050301 Hardcoded version number
 
                                     // please put in the date of the version! check it is changed twice!
-                                    server_version_number = 1621; // Jabberwock 050322
+                                    server_version_number = VERSION_NUMBER_INT;
 
                                     quick_set_list_item (ptr, int, server_version_number);
 
