@@ -1442,6 +1442,7 @@ void draw_ka50_hud_on_texture (void)
 			switch (hud_mode)
 			{
 				case HUD_MODE_NAVIGATION:
+				case HUD_MODE_TRANSITION:
 				{
 					draw_navigation_mode_hud (TRUE);
 
