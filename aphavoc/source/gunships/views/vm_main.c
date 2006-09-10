@@ -1054,7 +1054,9 @@ static void enter_view_mode (view_modes mode)
 			if (!get_apache_havoc_gunship_fixed_cockpit ())
 			{
 				//VJ 050211 needed for wideview pitch setting
-				pilot_head_pitch = pilot_head_pitch_datum;
+				//VJ 060910 use correct pitch in comanche and hokum
+				if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||	wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
+					 pilot_head_pitch = pilot_head_pitch_datum;
 				mode = VIEW_MODE_VIRTUAL_COCKPIT;
 			}
 
