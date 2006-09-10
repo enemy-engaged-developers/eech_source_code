@@ -121,9 +121,9 @@ float getViewpointOffsetX (float x)
 		else
 			x = tmp * -getMaxRight();
 	}
-
+//VJ 060910 added command_line_g_force_head_movment_modifier
 	if (get_global_wide_cockpit())
-		x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025;
+		x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 	x = bound ( x, getMaxRight(), getMaxLeft() );
 	return x;
@@ -140,8 +140,9 @@ float getViewpointOffsetY (float y)
 			y = tmp * getMaxDown();
 	}
 
+//VJ 060910 added command_line_g_force_head_movment_modifier
 	if (get_global_wide_cockpit() && !current_flight_dynamics->auto_hover)
-		y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025;
+		y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 	
 	y = bound ( y, getMaxDown(), getMaxUp());
 	return y;
