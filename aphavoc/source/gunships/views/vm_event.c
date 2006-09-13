@@ -910,9 +910,9 @@ static void toggle_display_hud_on_external_view_event (event *ev)
 static void toggle_unscaled_displays_event (event *ev)
 {
 	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
-	//VJ 050205, 050210 hud scaling mod
+	//VJ 050205, 050210, 060913 hud scaling mod
     global_hud_size2 += 0.1;
-    if (global_hud_size2 > 1.1)
+    if (global_hud_size2 > 1.3)
       global_hud_size2 = 0.7;
    	
 	//VJ 060211 hud_code: store hud info

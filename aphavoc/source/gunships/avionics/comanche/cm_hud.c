@@ -3230,22 +3230,22 @@ char buffer[255];
 	}
 	else
 	{
-		//VJ 050210 scaling factor for hud > 1.0
-		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
-		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
+		//VJ 050210, 060913 scaling factor for hud > 1.0
+		float scale = 4.35 - 2.5*global_hud_size2;			 
+		hud_screen_x_min = full_screen_x_mid - ((256.0 / (scale*640.0 * 2.0)) * full_screen_width);
+		hud_screen_y_min = full_screen_y_mid - ((256.0 / (scale*480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (scale*640.0 * 2.0)) * full_screen_width) - 0.001;
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (scale*480.0 * 2.0)) * full_screen_height) - 0.001;
 
-		hud_screen_x_scale = 640.0 / full_screen_width;
-		hud_screen_y_scale = 480.0 / full_screen_height;
-
+		hud_screen_x_scale = scale*640.0 / full_screen_width;
+		hud_screen_y_scale = scale*480.0 / full_screen_height;
 	}
 	
 //VJ 050126 hud mod start 
-	//VJ 050204 bug fix do not touch the scale
-	//hud_screen_x_scale = global_hud_size;
-	//hud_screen_y_scale = global_hud_size;
+	//VJ 050204 bug fix do not touch the scale	
+	//hud_screen_x_scale = global_hud_size2;
+	//hud_screen_y_scale = global_hud_size2;
 	hsd.hud_viewport_x_min = hud_viewport_x_min; 
 	hsd.hud_viewport_y_min = hud_viewport_y_min; 
 	hsd.hud_viewport_x_max = hud_viewport_x_max; 
