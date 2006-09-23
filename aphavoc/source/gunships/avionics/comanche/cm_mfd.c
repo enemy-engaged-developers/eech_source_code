@@ -4417,6 +4417,293 @@ static void draw_tsd_contour_map (float y_translate, float range, float scale, v
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// ATARIBABY HEADING SCALE TSD
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_heading_scale_tsd (float heading, int draw_command_heading)
+{
+	float
+		heading_width_ratio,
+		heading_tick_x_spacing,
+		x_adjust_single,
+		x_adjust_double,
+		y_adjust,
+		tick_10_deg_top,
+		tick_10_deg_bottom,
+		tick_30_deg_top,
+		tick_30_deg_bottom,
+		tick_datum_top,
+		tick_datum_bottom,
+		mfd_vp_x_min,
+		mfd_vp_x_max,
+		x,
+		u,
+		heading_step_10,
+		mod_heading_step_10;
+
+	int
+		loop,
+		int_heading_step_10,
+		tick_type;
+
+	//
+	// sort large and small mfd differences
+	//
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_type (MONO_FONT_TYPE_5X9);
+
+		heading_width_ratio		= 0.4;
+
+		heading_tick_x_spacing	= 0.4 / 6.5;
+
+		x_adjust_single  			= -2.0;
+		x_adjust_double  			= -5.0;
+		y_adjust			  			= -8.0;
+
+		tick_10_deg_top			= 0.925 - 0.015;
+		tick_10_deg_bottom  		= 0.925 - 0.015 - 0.045;
+		tick_30_deg_top	  		= 0.925;
+		tick_30_deg_bottom  		= 0.925 - 0.075;
+		tick_datum_top		  		= 0.925 - 0.075 - 0.010;
+		tick_datum_bottom	  		= 0.925 - 0.075 - 0.010 - 0.045;
+	}
+	else
+	{
+		set_mono_font_type (MONO_FONT_TYPE_3X6);
+
+		heading_width_ratio		= 0.3;
+
+		heading_tick_x_spacing	= 0.4 / 5.0;
+
+		x_adjust_single			= -1.0;
+		x_adjust_double  			= -3.0;
+		y_adjust			  			= -6.0;
+
+		tick_10_deg_top  			= 0.875 - 0.015;
+		tick_10_deg_bottom 		= 0.875 - 0.015 - 0.045;
+		tick_30_deg_top	  		= 0.875;
+		tick_30_deg_bottom  		= 0.875 - 0.075;
+		tick_datum_top		  		= 0.875 - 0.075 - 0.010;
+		tick_datum_bottom	  		= 0.875 - 0.075 - 0.010 - 0.045;
+	}
+
+	//
+	// adjust 2D environment for heading scale clipping
+	//
+
+	if (draw_main_display)
+	{
+		get_2d_float_screen_x_coordinate (0.0, &u);
+	}
+	else
+	{
+		get_2d_float_screen_x_coordinate (-0.4, &u);
+	}
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * heading_width_ratio, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * heading_width_ratio, MFD_WINDOW_Y_MAX);
+
+	mfd_vp_x_min = u - (mfd_viewport_size * (heading_width_ratio * 0.5));
+
+	mfd_vp_x_max = u + (mfd_viewport_size * (heading_width_ratio * 0.5)) - 0.001;
+
+	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
+
+	//
+	// draw heading datum tick
+	//
+
+	draw_2d_line (0.0, tick_datum_top, 0.0, tick_datum_bottom, MFD_COLOUR1);
+
+	//
+	// draw command heading carat
+	//
+
+	if (draw_command_heading)
+	{
+		if (!comanche_damage.navigation_computer)
+		{
+			entity
+				*wp;
+
+			wp = get_local_entity_current_waypoint (get_gunship_entity ());
+
+			if (wp)
+			{
+				vec3d
+					*gunship_position,
+					waypoint_position;
+
+				float
+					dx,
+					dz,
+					bearing,
+					command_heading;
+
+				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+
+				get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+
+				dx = waypoint_position.x - gunship_position->x;
+				dz = waypoint_position.z - gunship_position->z;
+
+				bearing = atan2 (dx, dz);
+
+				command_heading = bearing - heading;
+
+				if (command_heading > rad (180.0))
+				{
+					command_heading -= rad (360.0);
+				}
+				else if (command_heading < rad (-180.0))
+				{
+					command_heading += rad (360.0);
+				}
+
+				command_heading = bound (command_heading, rad (-90.0), rad (90.0));
+
+				if (draw_large_mfd)
+				{
+					draw_2d_mono_sprite (large_command_heading_carat, 0.0 + (command_heading * ((heading_width_ratio - 0.035) / rad (90.0))), tick_datum_top, MFD_COLOUR1);
+				}
+				else
+				{
+					draw_2d_mono_sprite (small_command_heading_carat, 0.0 + (command_heading * ((heading_width_ratio - 0.050) / rad (90.0))), tick_datum_top, MFD_COLOUR1);
+				}
+			}
+		}
+	}
+
+	//
+	// draw heading scale
+	//
+
+	heading_step_10 = deg (heading * 0.1);
+
+	int_heading_step_10 = (int) heading_step_10;
+
+	mod_heading_step_10 = heading_step_10 - (float) int_heading_step_10;
+
+	int_heading_step_10 -= 10;
+
+	if (int_heading_step_10 < 0)
+	{
+		int_heading_step_10 += 36;
+	}
+
+	// tick type:-
+	//
+	//		0 = long tick (30 degs)
+	//		1 = short tick (10 degs)
+	//		2 = short tick (20 degs)
+
+	tick_type = int_heading_step_10 % 3;
+
+	x = - (10.0 + mod_heading_step_10) * heading_tick_x_spacing;
+
+	for (loop = 0; loop <= 20; loop++)
+	{
+		if (tick_type == 0)
+		{
+			draw_2d_line (x, tick_30_deg_top, x, tick_30_deg_bottom, MFD_COLOUR1);
+
+			set_2d_mono_font_position (x, tick_30_deg_top);
+
+			switch (int_heading_step_10)
+			{
+				////////////////////////////////////////
+				case 0:
+				////////////////////////////////////////
+				{
+					set_mono_font_rel_position (x_adjust_single, y_adjust);
+
+					print_mono_font_char ('N');
+
+					break;
+				}
+				////////////////////////////////////////
+				case 9:
+				////////////////////////////////////////
+				{
+					set_mono_font_rel_position (x_adjust_single, y_adjust);
+
+					print_mono_font_char ('E');
+
+					break;
+				}
+				////////////////////////////////////////
+				case 18:
+				////////////////////////////////////////
+				{
+					set_mono_font_rel_position (x_adjust_single, y_adjust);
+
+					print_mono_font_char ('S');
+
+					break;
+				}
+				////////////////////////////////////////
+				case 27:
+				////////////////////////////////////////
+				{
+					set_mono_font_rel_position (x_adjust_single, y_adjust);
+
+					print_mono_font_char ('W');
+
+					break;
+				}
+				////////////////////////////////////////
+				default:
+				////////////////////////////////////////
+				{
+					if (int_heading_step_10 < 10)
+					{
+						set_mono_font_rel_position (x_adjust_single, y_adjust);
+
+						print_mono_font_char ('0' + int_heading_step_10);
+					}
+					else
+					{
+						set_mono_font_rel_position (x_adjust_double, y_adjust);
+
+						print_mono_font_char ('0' + int_heading_step_10 / 10);
+
+						print_mono_font_char ('0' + int_heading_step_10 % 10);
+					}
+
+					break;
+				}
+			}
+		}
+		else
+		{
+			draw_2d_line (x, tick_10_deg_top, x, tick_10_deg_bottom, MFD_COLOUR1);
+		}
+
+		int_heading_step_10 = (++int_heading_step_10 == 36) ? 0 : int_heading_step_10;
+
+		tick_type = (++tick_type == 3) ? 0 : tick_type;
+
+		x += heading_tick_x_spacing;
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+}
+
+
 //
 // match ground radar radius
 //
@@ -4952,6 +5239,13 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum_mask, x_origin, y_origin, MFD_COLOUR6);
 
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum, x_origin, y_origin, MFD_COLOUR1);
+	}
+	
+	// ATARIBABY added heading tape to TSD NAV display
+	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION || tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
+	{
+		set_mono_font_colour (MFD_COLOUR1);
+		draw_heading_scale_tsd (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), TRUE);
 	}
 
 	////////////////////////////////////////

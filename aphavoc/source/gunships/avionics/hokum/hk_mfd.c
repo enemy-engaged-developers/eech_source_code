@@ -1976,7 +1976,6 @@ static void draw_ground_radar_mfd (void)
 	// draw heading scale
 	//
 	////////////////////////////////////////
-
 	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), FALSE);
 
 	////////////////////////////////////////
@@ -4602,6 +4601,236 @@ static void draw_tsd_contour_map (float y_translate, float range, float scale, v
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// ATARIBABY HEADING SCALE TSD
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_heading_scale_tsd (float heading, int draw_command_heading)
+{
+	float
+		y_position,
+		mfd_vp_x_min,
+		mfd_vp_x_max,
+		mod_heading_step_10,
+		x,
+		width,
+		i,
+		j;
+
+	int
+		loop,
+		int_heading_step_10;
+
+	char
+		s[20];
+
+	//
+	// adjust 2D environment for heading scale clipping
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
+
+	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
+
+	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5)) - 0.001;
+
+	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
+
+	//
+	// large and small MFD position
+	//
+
+	if (draw_large_mfd)
+	{
+		y_position = 0.75;
+	}
+	else
+	{
+		y_position = 0.7375;
+	}
+
+	//
+	// draw heading scale line
+	//
+
+	draw_2d_line (-0.5, y_position, 0.5, y_position, MFD_COLOUR1);
+
+	//
+	// large and small MFD differences
+	//
+
+	get_2d_float_screen_coordinates (0.0, y_position, &i, &j);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_type (MONO_FONT_TYPE_6X10);
+
+		draw_mono_sprite (large_heading_scale_datum, i, j + 1.0, MFD_COLOUR1);
+	}
+	else
+	{
+		set_mono_font_type (MONO_FONT_TYPE_5X7);
+
+		draw_mono_sprite (small_heading_scale_datum, i, j + 1.0, MFD_COLOUR1);
+	}
+
+	//
+	// draw command heading carat
+	//
+
+	if (draw_command_heading)
+	{
+		if (!hokum_damage.navigation_computer)
+		{
+			entity
+				*wp;
+
+			wp = get_local_entity_current_waypoint (get_gunship_entity ());
+
+			if (wp)
+			{
+				vec3d
+					*gunship_position,
+					waypoint_position;
+
+				float
+					dx,
+					dz,
+					bearing,
+					command_heading;
+
+				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+
+				get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+
+				dx = waypoint_position.x - gunship_position->x;
+				dz = waypoint_position.z - gunship_position->z;
+
+				bearing = atan2 (dx, dz);
+
+				command_heading = bearing - heading;
+
+				if (command_heading > rad (180.0))
+				{
+					command_heading -= rad (360.0);
+				}
+				else if (command_heading < rad (-180.0))
+				{
+					command_heading += rad (360.0);
+				}
+
+				command_heading = bound (command_heading, rad (-90.0), rad (90.0));
+
+				if (draw_large_mfd)
+				{
+					get_2d_float_screen_coordinates (command_heading * ((0.5 - 0.04) / rad (90.0)), y_position, &i, &j);
+
+					draw_mono_sprite (large_command_heading_carat, i, j + 1.0, MFD_COLOUR1);
+				}
+				else
+				{
+					get_2d_float_screen_coordinates (command_heading * ((0.5 - 0.05) / rad (90.0)), y_position, &i, &j);
+
+					draw_mono_sprite (small_command_heading_carat, i, j + 1.0, MFD_COLOUR1);
+				}
+			}
+		}
+	}
+
+	//
+	// sort first major tick position (draw 2 major ticks either side of centre)
+	//
+
+	heading = deg (heading);
+
+	mod_heading_step_10 = fmod (heading, 10.0);
+
+	int_heading_step_10 = ((int) (heading * 0.1) * 10);
+
+	int_heading_step_10 -= 20;
+
+	if (int_heading_step_10 < 0)
+	{
+		int_heading_step_10 += 360;
+	}
+
+	x = - (20.0 + mod_heading_step_10) * 0.05;
+
+	//
+	// draw heading scale ticks and heading value
+	//
+
+	for (loop = 0; loop < 5; loop++)
+	{
+		//
+		// major tick every 10 degrees
+		//
+
+		draw_2d_line (x, y_position, x, y_position + 0.05, MFD_COLOUR1);
+
+		//
+		// minor tick every 5 degrees
+		//
+
+		draw_2d_line (x + 0.25, y_position, x + 0.25, y_position + 0.025, MFD_COLOUR1);
+
+		//
+		// heading value ('0' displayed as '360')
+		//
+
+		if (int_heading_step_10 != 0)
+		{
+			sprintf (s, "%d", int_heading_step_10);
+		}
+		else
+		{
+			sprintf (s, "360");
+		}
+
+		set_2d_mono_font_position (x, y_position + 0.05);
+
+		width = get_mono_font_string_width (s);
+
+		if (draw_large_mfd)
+		{
+			set_mono_font_rel_position ((-width * 0.5) + 1.0, -8.0);
+		}
+		else
+		{
+			set_mono_font_rel_position ((-width * 0.5) + 1.0, -6.0);
+		}
+
+		print_mono_font_string (s);
+
+		//
+		// next heading value
+		//
+
+		int_heading_step_10 += 10;
+
+		if (int_heading_step_10 == 360)
+		{
+			int_heading_step_10 = 0;
+		}
+
+		x += 0.5;
+	}
+
+	//
+	// restore 2D environment
+	//
+
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+}
+
 //
 // match ground radar radius
 //
@@ -5120,6 +5349,13 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum_mask, x_origin, y_origin, MFD_COLOUR6);
 
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum, x_origin, y_origin, MFD_COLOUR1);
+	}
+	
+	// ATARIBABY added heading tape to TSD NAV display
+	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION || tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
+	{
+		set_mono_font_colour (MFD_COLOUR1);
+		draw_heading_scale_tsd (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), TRUE);
 	}
 
 	////////////////////////////////////////
@@ -8014,6 +8250,51 @@ static void draw_engine_display_mfd (void)
 
 	draw_torque_bar ("Eng2", 0.350, 0.700, current_flight_dynamics->right_engine_torque.value, FALSE);
 
+	//
+	// ATARIBABY THROTTLE
+	//
+	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	if (ivalue < 60)
+		sprintf(s, "Th1 OFF ");
+	else if (ivalue == 60)
+		sprintf(s, "Th1 IDLE");
+	else if (ivalue == 110.0)
+		sprintf(s, "Th1 FLY ");
+	else
+		sprintf(s, "Th1 %03d%%", (ivalue-60) * 2);
+	
+	set_2d_mono_font_position (0.5, 0.8);
+	print_mono_font_string (s);	
+
+	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	if (ivalue < 60)
+		sprintf(s, "Th2 OFF ");
+	else if (ivalue == 60)
+		sprintf(s, "Th2 IDLE");
+	else if (ivalue == 110.0)
+		sprintf(s, "Th2 FLY ");
+	else
+		sprintf(s, "Th2 %03d%%", (ivalue-60) * 2);
+	
+	set_2d_mono_font_position (0.5, 0.7);
+	print_mono_font_string (s);	
+
+	//
+	// ATARIBABY APU
+	//
+	set_2d_mono_font_position (0.5, 0.9);
+
+	fvalue = bound (current_flight_dynamics->apu_rpm.value + 0.5, 0.0, 100.0);
+	convert_float_to_int (fvalue, &ivalue);
+
+	sprintf(s, "APU %03d%%", ivalue);
+
+	print_mono_font_string (s);	
+
 	////////////////////////////////////////
 	//
 	// fuel
@@ -8023,7 +8304,7 @@ static void draw_engine_display_mfd (void)
 	fuel_ratio = current_flight_dynamics->fuel_weight.value / current_flight_dynamics->fuel_weight.max;
 
 	fuel_ratio = bound (fuel_ratio, 0.0, 1.0);
-
+	
 	//
 	// Fuel
 	//
