@@ -632,15 +632,16 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 												draw_3d_terrain_texture_z_clipped_strip_word_face, draw_3d_terrain_texture_z_clipped_strip_byte_face,
 												draw_3d_terrain_texture_z_unclipped_strip_word_face, draw_3d_terrain_texture_z_unclipped_strip_byte_face );
 
+//VJ 060923 use mipmap levels for wall display, was draw_3d_terrain_texture_z_colour_clipped_strip_word_face etc.
    set_terrain_rendering_routines ( TERRAIN_TYPE_WALL_TOP, POLYGON_TYPE_STRIP,
-												draw_3d_terrain_colour_clipped_strip_word_face, draw_3d_terrain_colour_clipped_strip_byte_face,
-												draw_3d_terrain_colour_unclipped_strip_word_face, draw_3d_terrain_colour_unclipped_strip_byte_face );
+												draw_3d_terrain_clipped_strip_word_face, draw_3d_terrain_clipped_strip_byte_face,
+												draw_3d_terrain_unclipped_strip_word_face, draw_3d_terrain_unclipped_strip_byte_face );
    set_terrain_rendering_routines ( TERRAIN_TYPE_WALL_SIDE_X, POLYGON_TYPE_STRIP,
-												draw_3d_terrain_texture_x_colour_clipped_strip_word_face, draw_3d_terrain_texture_x_colour_clipped_strip_byte_face,
-												draw_3d_terrain_texture_x_colour_unclipped_strip_word_face, draw_3d_terrain_texture_x_colour_unclipped_strip_byte_face );
+												draw_3d_terrain_texture_x_clipped_strip_word_face, draw_3d_terrain_texture_x_clipped_strip_byte_face,
+												draw_3d_terrain_texture_x_unclipped_strip_word_face, draw_3d_terrain_texture_x_unclipped_strip_byte_face );
    set_terrain_rendering_routines ( TERRAIN_TYPE_WALL_SIDE_Z, POLYGON_TYPE_STRIP,
-												draw_3d_terrain_texture_z_colour_clipped_strip_word_face, draw_3d_terrain_texture_z_colour_clipped_strip_byte_face,
-												draw_3d_terrain_texture_z_colour_unclipped_strip_word_face, draw_3d_terrain_texture_z_colour_unclipped_strip_byte_face );
+												draw_3d_terrain_texture_z_clipped_strip_word_face, draw_3d_terrain_texture_z_clipped_strip_byte_face,
+												draw_3d_terrain_texture_z_unclipped_strip_word_face, draw_3d_terrain_texture_z_unclipped_strip_byte_face );
 
    set_terrain_rendering_routines ( TERRAIN_TYPE_TRENCH, POLYGON_TYPE_STRIP,
 												draw_3d_terrain_clipped_strip_word_face, draw_3d_terrain_clipped_strip_byte_face,
@@ -963,7 +964,8 @@ void initialise_3d_custom_terrain_types( void )
 
 
 		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land1_detail, terrain_texture_altered_land2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
+		
+		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
    	
    	if (index == terrain_texture_field1_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field1 );
    	if (index == terrain_texture_field2_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD2, terrain_texture_field2_detail, terrain_texture_field2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field2 );
