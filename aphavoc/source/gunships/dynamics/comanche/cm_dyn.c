@@ -412,7 +412,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->main_rotor_angular_position.max = PI2;
 
 	current_flight_dynamics->main_rotor_coning_angle.min = rad (-3.0);
-	current_flight_dynamics->main_rotor_coning_angle.max = rad (10.0);
+	current_flight_dynamics->main_rotor_coning_angle.max = rad (5.0);
 
 	current_flight_dynamics->main_blade_pitch.value = 2.0;
 	current_flight_dynamics->main_blade_pitch.min = rad (1.0);
@@ -1592,7 +1592,6 @@ void update_attitude_dynamics (void)
 	{
 		tail_angular_force = tail_rotor_induced_air_value * current_flight_dynamics->tail_boom_length.value;
 		tail_angular_force *= heading_inertia_value;
-		tail_angular_force *= 0.75;
 
 		position.x = 0.0;
 		position.y = -0.08022;

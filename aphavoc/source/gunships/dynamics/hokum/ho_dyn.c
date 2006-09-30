@@ -413,7 +413,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->main_rotor_angular_position.max = PI2;
 
 	current_flight_dynamics->main_rotor_coning_angle.min = rad (-3.0);
-	current_flight_dynamics->main_rotor_coning_angle.max = rad (10.0);
+	current_flight_dynamics->main_rotor_coning_angle.max = rad (5.0);
 
 	current_flight_dynamics->main_blade_pitch.value = 2.0;
 	current_flight_dynamics->main_blade_pitch.min = rad (1.0);
