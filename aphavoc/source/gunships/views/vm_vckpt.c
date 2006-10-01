@@ -502,6 +502,11 @@ void initialise_virtual_cockpit_view (void)
 	pilot_head_vp.position.x = MID_MAP_X;
 	pilot_head_vp.position.y = MID_MAP_Y;
 	pilot_head_vp.position.z = MID_MAP_Z;
+	
+	current_custom_cockpit_viewpoint.x = 0.0;
+	current_custom_cockpit_viewpoint.y = 0.0; 
+	current_custom_cockpit_viewpoint.z = 0.0;
+	
 
 	get_identity_matrix3x3 (pilot_head_vp.attitude);
 
