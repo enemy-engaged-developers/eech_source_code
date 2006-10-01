@@ -90,9 +90,6 @@ static void initialise_hms_gun_pipper (void);
 #define HUD_VIEWPORT_LARGE_SIZE		(256)
 #define HUD_VIEWPORT_SMALL_SIZE		(128)
 
-#define HUD_VIEWPORT_TEXTURE_X_ORG	(HUD_VIEWPORT_SMALL_SIZE / 2)
-#define HUD_VIEWPORT_TEXTURE_Y_ORG	(HUD_VIEWPORT_SMALL_SIZE / 2)
-
 static env_2d
 	*hud_env;
 
@@ -125,7 +122,6 @@ static float
 
 static screen
 	*hud_texture_screen,
-	*large_hud_texture_screen,
 	*large_hms_texture_screen;
 
 static rgb_colour
@@ -1221,9 +1217,21 @@ void initialise_havoc_hud (void)
 {
 	hud_env = create_2d_environment ();
 
-	hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SMALL_SIZE, HUD_VIEWPORT_SMALL_SIZE, TEXTURE_INDEX_HVCKPT_HUD_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
+	if (command_line_high_res_hud)
+	{
+		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, TEXTURE_INDEX_HVCKPT_HUD_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
+		draw_large_hud = TRUE;
+		hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
+	}
+	else
+	{
+		hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SMALL_SIZE, HUD_VIEWPORT_SMALL_SIZE, TEXTURE_INDEX_HVCKPT_HUD_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
+		draw_large_hud = FALSE;
+		hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
+	}
 
-	large_hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, LARGE_HUD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	hud_viewport_x_org = hud_viewport_size / 2;
+	hud_viewport_y_org = hud_viewport_size / 2;
 
 	large_hms_texture_screen = create_system_texture_screen (HUD_VIEWPORT_LARGE_SIZE, HUD_VIEWPORT_LARGE_SIZE, LARGE_HMS_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -1241,9 +1249,6 @@ void deinitialise_havoc_hud (void)
 	destroy_2d_environment (hud_env);
 
 	destroy_screen (hud_texture_screen);
-
-	destroy_screen (large_hud_texture_screen);
-
 	destroy_screen (large_hms_texture_screen);
 }
 
@@ -1286,25 +1291,13 @@ void draw_havoc_hud_on_cockpit (int hud_enlarge)
 
 	draw_large_hud = hud_enlarge;
 
-	if (draw_large_hud)
-	{
-		hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
-	}
-	else
-	{
-		hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
-	}
-
 	hud_viewport_x_org = full_screen_x_mid;
-
 	hud_viewport_y_org = full_screen_y_mid;
 
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
-
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
 
 	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-
 	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
@@ -1386,20 +1379,9 @@ void draw_havoc_hud_on_texture (void)
 	// viewport
 	//
 
-	draw_large_hud = FALSE;
-
-	hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
-
-	hud_viewport_x_org = HUD_VIEWPORT_TEXTURE_X_ORG;
-
-	hud_viewport_y_org = HUD_VIEWPORT_TEXTURE_Y_ORG;
-
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
-
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-
 	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-
 	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
@@ -1408,11 +1390,11 @@ void draw_havoc_hud_on_texture (void)
 	// get screen co-ords (vitural cockpit texture - scaling only works near screen centre)
 	//
 
-	hud_screen_x_min = full_screen_x_mid - ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
-	hud_screen_y_min = full_screen_y_mid - ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
+	hud_screen_x_min = full_screen_x_mid - ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width);
+	hud_screen_y_min = full_screen_y_mid - ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height);
 
-	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	hud_screen_x_max = full_screen_x_mid + ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width) - 0.001;
+	hud_screen_y_max = full_screen_y_mid + ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height) - 0.001;
 
 	hud_screen_x_scale = 640.0 / full_screen_width;
 	hud_screen_y_scale = 480.0 / full_screen_height;
@@ -1432,7 +1414,7 @@ void draw_havoc_hud_on_texture (void)
 
 		set_rgb_colour (clear_hud_colour, hud_colour.r, hud_colour.g, hud_colour.b, 0);
 
-		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
+		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
 
 		if (!havoc_damage.head_up_display)
 		{
@@ -1513,21 +1495,14 @@ void draw_external_havoc_hud (void)
 
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
-	draw_large_hud = TRUE;
-
-	hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
-
-	hud_viewport_x_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
-
-	hud_viewport_y_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
+	hud_viewport_x_org = hud_viewport_size * 0.5;
+	hud_viewport_y_org = hud_viewport_size * 0.5;
 
 	hud_viewport_x_min = 0.0;
-
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
-
-	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_x_max = hud_viewport_size - 0.001;
+	hud_viewport_y_max = hud_viewport_size - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1564,9 +1539,9 @@ void draw_external_havoc_hud (void)
 	//
 	////////////////////////////////////////
 
-	set_active_screen (large_hud_texture_screen);
+	set_active_screen (hud_texture_screen);
 
-	if (lock_screen (large_hud_texture_screen))
+	if (lock_screen (hud_texture_screen))
 	{
 	 	store_hud_colour = hud_colour;
 
@@ -1574,7 +1549,7 @@ void draw_external_havoc_hud (void)
 
 		set_mono_font_colour (hud_colour);
 
-		set_block (0, 0, HUD_VIEWPORT_LARGE_SIZE - 1, HUD_VIEWPORT_LARGE_SIZE - 1, clear_hud_colour);
+		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
 
 		draw_layout_grid ();
 
@@ -1596,9 +1571,9 @@ void draw_external_havoc_hud (void)
 
 		hud_colour = store_hud_colour;
 
-		flush_screen_texture_graphics (large_hud_texture_screen);
+		flush_screen_texture_graphics (hud_texture_screen);
 
-		unlock_screen (large_hud_texture_screen);
+		unlock_screen (hud_texture_screen);
 	}
 
 	set_active_screen (video_screen);
@@ -2538,15 +2513,12 @@ void draw_havoc_hms (void)
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	hud_viewport_x_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
-
 	hud_viewport_y_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
 
 	hud_viewport_x_min = 0.0;
-
 	hud_viewport_y_min = 0.0;
 
 	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
-
 	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
