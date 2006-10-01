@@ -531,6 +531,10 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 		vp.y += current_custom_cockpit_viewpoint.y; 
 		vp.z += current_custom_cockpit_viewpoint.z;
 
+		vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+			vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
 
@@ -1104,6 +1108,9 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		vp.y += current_custom_cockpit_viewpoint.y;
 		vp.z += current_custom_cockpit_viewpoint.z;
 		
+		vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+			vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
