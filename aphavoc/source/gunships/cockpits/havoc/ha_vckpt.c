@@ -518,6 +518,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
+		   vp.x = wide_cockpit_position[wide_cockpit_nr].x;
 		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 			//VJ 050207 included head pitch in fixed view setting
@@ -525,6 +526,10 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 			if (edit_wide_cockpit)
 				pilot_head_pitch = pilot_head_pitch_datum;
 		}
+		
+		vp.x += current_custom_cockpit_viewpoint.x;
+		vp.y += current_custom_cockpit_viewpoint.y; 
+		vp.z += current_custom_cockpit_viewpoint.z;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
@@ -1016,6 +1021,59 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 	object_3d_instance
 		*inst3d;
 
+//VJ wideview mod, date: 18-mar-03
+	////////////////////////////////////////
+	//
+	// wide cockpit position edit
+	//
+	////////////////////////////////////////
+
+	if (edit_wide_cockpit)
+	{
+		//VJ 50208 added pilot head pitch
+		if (check_key(DIK_NUMPAD7))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
+      }
+		if (check_key(DIK_NUMPAD9))
+		{
+            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
+      }
+		if (check_key(DIK_NUMPAD6))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+      }
+		if (check_key(DIK_NUMPAD4))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD8))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+      }
+		if (check_key(DIK_NUMPAD2))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD1))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD3))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+      }
+		if (check_key(DIK_NUMPAD0))
+		{
+			wide_cockpit_position[wide_cockpit_nr].x = BASE_X_HAVOC;
+			wide_cockpit_position[wide_cockpit_nr].y = BASE_Y_HAVOC;
+			wide_cockpit_position[wide_cockpit_nr].z = BASE_Z_HAVOC;
+			wide_cockpit_position[wide_cockpit_nr].p = BASE_P_HAVOC;
+      }
+   }
+
+
+
 	////////////////////////////////////////
 	//
 	// virtual cockpit viewpoint is placed at the main object origin
@@ -1038,9 +1096,14 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
+			vp.x = wide_cockpit_position[wide_cockpit_nr].x;
 		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 		}
+		vp.x += current_custom_cockpit_viewpoint.x;
+		vp.y += current_custom_cockpit_viewpoint.y;
+		vp.z += current_custom_cockpit_viewpoint.z;
+		
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 	}
@@ -1178,13 +1241,6 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 					search.result_sub_object->relative_pitch = pitch;
 
 					search.result_sub_object->relative_roll = -roll;
-				}
-
-//VJ wideview mod, date: 18-mar-03
-				if (get_global_wide_cockpit ())
-				{
-				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
-				    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 				}
 
 				memcpy (&virtual_cockpit_adi_inst3d->vp, &vp, sizeof (viewpoint));
@@ -1373,57 +1429,6 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 			}
 		}
 	}
-
-//VJ wideview mod, date: 18-mar-03
-	////////////////////////////////////////
-	//
-	// wide cockpit position edit
-	//
-	////////////////////////////////////////
-
-	if (edit_wide_cockpit)
-	{
-		//VJ 50208 added pilot head pitch
-		if (check_key(DIK_NUMPAD7))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p += 0.5;
-      }
-		if (check_key(DIK_NUMPAD9))
-		{
-            wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
-      }
-		if (check_key(DIK_NUMPAD6))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
-      }
-		if (check_key(DIK_NUMPAD4))
-		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD8))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
-      }
-		if (check_key(DIK_NUMPAD2))
-		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD1))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
-      }
-		if (check_key(DIK_NUMPAD3))
-		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
-      }
-		if (check_key(DIK_NUMPAD0))
-		{
-			wide_cockpit_position[wide_cockpit_nr].x = BASE_X_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].y = BASE_Y_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].z = BASE_Z_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].p = BASE_P_HAVOC;
-      }
-   }
 
 
 
