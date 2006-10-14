@@ -15,7 +15,7 @@ main_rotor_roll_angle value = 0.000000, min = -0.095993, max = 0.095993, modifie
 main_rotor_pitch_angle value = 0.000000, min = -0.095993, max = 0.095993, modifier = 1.000000
 main_rotor_rpm value = 0.000000, min = 0.000000, max = 100.000000, modifier = 1.000000
 main_rotor_rps value = 0.000000, min = 0.000000, max = 4.500000, modifier = 1.000000
-main_rotor_coning_angle value = 0.000000, min = -0.052360, max = 0.174533, modifier = 1.000000
+main_rotor_coning_angle value = 0.000000, min = -0.052360, max = 0.052360, modifier = 1.000000
 main_rotor_angular_position value = 0.000000, min = 0.000000, max = 6.283185, modifier = 1.000000
 main_rotor_angular_increment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 main_blade_pitch value = 2.000000, min = 0.017453, max = 0.130900, modifier = 1.000000

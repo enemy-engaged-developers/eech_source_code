@@ -15,7 +15,7 @@ main_rotor_roll_angle value = 0.000000, min = -0.095993, max = 0.095993, modifie
 main_rotor_pitch_angle value = 0.000000, min = -0.095993, max = 0.095993, modifier = 1.000000
 main_rotor_rpm value = 0.000000, min = 0.000000, max = 100.000000, modifier = 1.000000
 main_rotor_rps value = 0.000000, min = 0.000000, max = 4.500000, modifier = 1.000000
-main_rotor_coning_angle value = 0.000000, min = -0.052360, max = 0.174533, modifier = 1.000000
+main_rotor_coning_angle value = 0.000000, min = -0.052360, max = 0.069813, modifier = 1.000000
 main_rotor_angular_position value = 0.000000, min = 0.000000, max = 6.283185, modifier = 1.000000
 main_rotor_angular_increment value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 main_blade_pitch value = 2.000000, min = 0.017453, max = 0.130900, modifier = 1.000000
@@ -32,7 +32,7 @@ tail_rotor_angular_position value = 0.000000, min = 0.000000, max = 6.283185, mo
 tail_blade_pitch value = 0.000000, min = -0.034907, max = 0.034907, modifier = 1.000000
 tail_boom_length value = 10.590000, min = 0.000000, max = 0.000000, modifier = 1.000000
 cross_coupling_effect value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-power_avaliable value = 0.000000, min = 0.000000, max = 2530.000000, modifier = 1.000000
+power_avaliable value = 0.000000, min = 0.000000, max = 2300.000000, modifier = 1.000000
 power_required value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 power_induced value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 power_profile value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -40,7 +40,7 @@ power_parasite value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 power_surplus value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 velocity_x value = 0.000000, min = -11.100000, max = 11.100000, modifier = 1.000000
 velocity_y value = 0.000000, min = -1000.000000, max = 15.700000, modifier = 1.000000
-velocity_z value = 0.000000, min = -8.330000, max = 101.527863, modifier = 1.000000
+velocity_z value = 0.000000, min = -8.330000, max = 97.920273, modifier = 1.000000
 acceleration_x value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 acceleration_y value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 acceleration_z value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
@@ -73,7 +73,7 @@ angular_heading_velocity value = 0.000000, min = 0.000000, max = 0.000000, modif
 angular_pitch_velocity value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 angular_roll_velocity value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 landing_quality value = -6.000000, min = -0.750000, max = -9.000000, modifier = 1.000000
-mass value = 0.000000, min = 7480.000000, max = 0.000000, modifier = 1.000000
+mass value = 0.000000, min = 5480.000000, max = 0.000000, modifier = 1.000000
 weapon_mass value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 ground_effect value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.500000
 indicated_airspeed value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
