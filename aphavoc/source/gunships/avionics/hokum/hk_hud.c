@@ -1930,17 +1930,23 @@ void draw_external_hokum_hud (void)
 
 		draw_layout_grid ();
 
+		draw_basic_hud();
+
 		switch (hud_mode)
 		{
+			case HUD_MODE_TRANSITION:				
 			case HUD_MODE_NAVIGATION:
 			{
-				draw_navigation_mode_hud ();
+				draw_heading_scale();
+				display_waypoint_information();
+				display_g_scale();
 
 				break;
 			}
 			case HUD_MODE_WEAPON:
 			{
-				draw_weapon_mode_hud ();
+				display_weapon_information();
+				display_target_information();
 
 				break;
 			}
