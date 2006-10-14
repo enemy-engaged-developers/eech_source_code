@@ -3642,10 +3642,10 @@ void update_engine_rpm_dynamics (int engine_number)
 
 		delta = n1_rpm->max - n1_rpm->value;
 		if (delta < 0.0)
-			n1_rpm->delta = bound(delta, -5.0, 0.0);
+			n1_rpm->delta = bound(delta, -3.0, 0.0);
 		else
 		{
-			float apu_contribution = 4.0 * current_flight_dynamics->apu_rpm.value * 0.01;
+			float apu_contribution = 2.0 * current_flight_dynamics->apu_rpm.value * 0.01;
 
 			if (n1_rpm->max < 60.0)  // only APU
 				n1_rpm->delta = min(apu_contribution, delta);
