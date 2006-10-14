@@ -2141,17 +2141,23 @@ void draw_external_havoc_hud (void)
 
 		draw_layout_grid ();
 
+		draw_basic_hud();
+
 		switch (hud_mode)
 		{
+			case HUD_MODE_TRANSITION:				
 			case HUD_MODE_NAVIGATION:
 			{
-				draw_navigation_mode_hud (FALSE);
+				draw_heading_scale();
+				display_waypoint_information();
+				display_g_scale();
 
 				break;
 			}
 			case HUD_MODE_WEAPON:
 			{
-				draw_weapon_mode_hud (FALSE);
+				display_weapon_information();
+				display_target_information();
 
 				break;
 			}
@@ -2197,7 +2203,7 @@ void draw_external_havoc_hud (void)
 			set_d3d_texture_mip_filtering (FALSE);
 		}
 
-		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (LARGE_HUD_TEXTURE_INDEX));
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_HVCKPT_HUD_DISPLAY));
 
 		////////////////////////////////////////
 		//
