@@ -274,7 +274,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->landing_quality.modifier = 1.0;
 	current_flight_dynamics->mass.modifier = 1.0;
 	current_flight_dynamics->weapon_mass.modifier = 1.0;
-	current_flight_dynamics->ground_effect.modifier = 1.0;
+	current_flight_dynamics->ground_effect.modifier = 1.5;
 	current_flight_dynamics->indicated_airspeed.modifier = 1.0;
 	current_flight_dynamics->indicated_slip.modifier = 1.0;
 	current_flight_dynamics->barometric_altitude.modifier = 1.0;
@@ -412,7 +412,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->main_rotor_angular_position.max = PI2;
 
 	current_flight_dynamics->main_rotor_coning_angle.min = rad (-3.0);
-	current_flight_dynamics->main_rotor_coning_angle.max = rad (5.0);
+	current_flight_dynamics->main_rotor_coning_angle.max = rad (3.0);
 
 	current_flight_dynamics->main_blade_pitch.value = 2.0;
 	current_flight_dynamics->main_blade_pitch.min = rad (1.0);
@@ -2109,9 +2109,8 @@ void update_attitude_dynamics (void)
 
 			unnormalised_direction = direction;
 
-			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.0015 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
-//			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
+			force = 0.0025 * (horizontal_velocity * horizontal_velocity);
+			force *= current_flight_dynamics->tail_boom_length.value;
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
 
@@ -2179,7 +2178,7 @@ void update_attitude_dynamics (void)
 
 		a = 0.0823;
 
-		drag = a * command_line_dynamics_tail_rotor_drag * fabs (current_flight_dynamics->tail_blade_pitch.value);
+		drag = 0.5 * a * command_line_dynamics_tail_rotor_drag * fabs (current_flight_dynamics->tail_blade_pitch.value);
 
 		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
 

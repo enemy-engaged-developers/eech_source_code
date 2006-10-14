@@ -206,7 +206,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->right_engine_torque.modifier = 1.0;
 	current_flight_dynamics->right_engine_temp.modifier = 1.0;
 	current_flight_dynamics->main_rotor_number_of_blades.modifier = 1.0;
-	current_flight_dynamics->main_rotor_induced_air.modifier = 0.55;
+	current_flight_dynamics->main_rotor_induced_air.modifier = 0.6;
 	current_flight_dynamics->main_rotor_induced_vortex_air_flow.modifier = 0.3;
 	current_flight_dynamics->main_rotor_diameter.modifier = 1.0;
 	current_flight_dynamics->main_rotor_area.modifier = 1.0;
@@ -275,7 +275,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->landing_quality.modifier = 1.0;
 	current_flight_dynamics->mass.modifier = 1.0;
 	current_flight_dynamics->weapon_mass.modifier = 1.0;
-	current_flight_dynamics->ground_effect.modifier = 1.0;
+	current_flight_dynamics->ground_effect.modifier = 1.5;
 	current_flight_dynamics->indicated_airspeed.modifier = 1.0;
 	current_flight_dynamics->indicated_slip.modifier = 1.0;
 	current_flight_dynamics->barometric_altitude.modifier = 1.0;
@@ -2056,7 +2056,7 @@ void update_attitude_dynamics (void)
 		direction.x = 0.0;
 		direction.y = -1.0;
 		direction.z = 0.0;
-	
+
 		add_dynamic_force ("Pitch resistance", reaction_force, 0.0, &position, &direction, FALSE);
 	}
 	////////////////////////////////////////////
@@ -2088,7 +2088,7 @@ void update_attitude_dynamics (void)
 			scaling,
 			drag;
 
-		drag = -40.0;
+		drag = -50.0;
 
 		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
 
@@ -2135,6 +2135,7 @@ void update_attitude_dynamics (void)
 
 		if (!check_zero_3d_vector (&model_motion_vector))
 		{
+			float calibrated_velocity = max(horizontal_velocity - 3.0, 0.0);
 
 			vec3d
 				unnormalised_direction;
@@ -2146,7 +2147,8 @@ void update_attitude_dynamics (void)
 			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.0015 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+//			force = 0.0025 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+			force = 0.0025 * (calibrated_velocity * calibrated_velocity) * current_flight_dynamics->tail_boom_length.value;
 //			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
@@ -2215,7 +2217,7 @@ void update_attitude_dynamics (void)
 
 		a = 0.0823;
 
-		drag = a * command_line_dynamics_tail_rotor_drag * fabs (current_flight_dynamics->tail_blade_pitch.value);
+		drag = 0.5 * a * command_line_dynamics_tail_rotor_drag * fabs (current_flight_dynamics->tail_blade_pitch.value);
 
 		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
 

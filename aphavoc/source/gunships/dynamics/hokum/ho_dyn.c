@@ -275,7 +275,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->landing_quality.modifier = 1.0;
 	current_flight_dynamics->mass.modifier = 1.0;
 	current_flight_dynamics->weapon_mass.modifier = 1.0;
-	current_flight_dynamics->ground_effect.modifier = 1.0;
+	current_flight_dynamics->ground_effect.modifier = 1.5;
 	current_flight_dynamics->indicated_airspeed.modifier = 1.0;
 	current_flight_dynamics->indicated_slip.modifier = 1.0;
 	current_flight_dynamics->barometric_altitude.modifier = 1.0;
@@ -1925,13 +1925,12 @@ void update_attitude_dynamics (void)
 	////////////////////////////////////////////
 	//if (!model_landed)
 	{
-
 		float
 			a,
 			scaling,
 			drag;
 
-		drag = -40.0;
+		drag = -50.0;
 
 		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
 
@@ -1972,6 +1971,7 @@ void update_attitude_dynamics (void)
 
 		if (!check_zero_3d_vector (&model_motion_vector))
 		{
+			float calibrated_velocity = max(horizontal_velocity - 3.0, 0.0);
 
 			vec3d
 				unnormalised_direction;
@@ -1983,7 +1983,9 @@ void update_attitude_dynamics (void)
 			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.001 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+//			force = 0.003 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+			force = 0.0030 * (calibrated_velocity * calibrated_velocity) * current_flight_dynamics->tail_boom_length.value;
+
 //			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
@@ -2043,7 +2045,9 @@ void update_attitude_dynamics (void)
 	// forward drag caused by yaw input
 	////////////////////////////////////////////
 	{
-
+	// arneh 20061008 - removed this force. yaw itself doesn't cause extra drag with co-axial
+	// rotors, but drag of exposing the side of the aircraft to the airstream does increase drag
+/*
 		float
 			a;
 
@@ -2064,7 +2068,7 @@ void update_attitude_dynamics (void)
 		direction.y = 0.0;
 		direction.z = -1.0;
 	
-		add_dynamic_force ("Forward motion Yaw input drag", reaction_force, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Forward motion Yaw input drag", reaction_force, 0.0, &position, &direction, FALSE); */
 	}
 	////////////////////////////////////////////
 	// Resistance to forward movement

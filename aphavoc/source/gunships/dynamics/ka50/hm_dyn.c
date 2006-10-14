@@ -275,7 +275,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->landing_quality.modifier = 1.0;
 	current_flight_dynamics->mass.modifier = 1.0;
 	current_flight_dynamics->weapon_mass.modifier = 1.0;
-	current_flight_dynamics->ground_effect.modifier = 1.0;
+	current_flight_dynamics->ground_effect.modifier = 1.5;
 	current_flight_dynamics->indicated_airspeed.modifier = 1.0;
 	current_flight_dynamics->indicated_slip.modifier = 1.0;
 	current_flight_dynamics->barometric_altitude.modifier = 1.0;
@@ -2143,7 +2143,7 @@ void update_attitude_dynamics (void)
 			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.0015 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+			force = 0.0030 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
 //			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
@@ -2203,7 +2203,7 @@ void update_attitude_dynamics (void)
 	// forward drag caused by yaw input
 	////////////////////////////////////////////
 	{
-
+/*
 		float
 			a;
 
@@ -2225,6 +2225,7 @@ void update_attitude_dynamics (void)
 		direction.z = -1.0;
 	
 		add_dynamic_force ("Forward motion Yaw input drag", reaction_force, 0.0, &position, &direction, FALSE);
+		*/
 	}
 	////////////////////////////////////////////
 	// Resistance to forward movement

@@ -275,7 +275,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->landing_quality.modifier = 1.0;
 	current_flight_dynamics->mass.modifier = 1.0;
 	current_flight_dynamics->weapon_mass.modifier = 1.0;
-	current_flight_dynamics->ground_effect.modifier = 1.0;
+	current_flight_dynamics->ground_effect.modifier = 1.5;
 	current_flight_dynamics->indicated_airspeed.modifier = 1.0;
 	current_flight_dynamics->indicated_slip.modifier = 1.0;
 	current_flight_dynamics->barometric_altitude.modifier = 1.0;
@@ -413,7 +413,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->main_rotor_angular_position.max = PI2;
 
 	current_flight_dynamics->main_rotor_coning_angle.min = rad (-3.0);
-	current_flight_dynamics->main_rotor_coning_angle.max = rad (5.0);
+	current_flight_dynamics->main_rotor_coning_angle.max = rad (4.0);
 
 	current_flight_dynamics->main_blade_pitch.value = 2.0;
 	current_flight_dynamics->main_blade_pitch.min = rad (1.0);
@@ -469,10 +469,10 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->velocity_y.max = 15.7;
 
 	current_flight_dynamics->velocity_z.min = -8.33;
-	current_flight_dynamics->velocity_z.max = knots_to_metres_per_second (197);
+	current_flight_dynamics->velocity_z.max = knots_to_metres_per_second (190);
 
 	current_flight_dynamics->power_avaliable.min = 0.0;
-	current_flight_dynamics->power_avaliable.max = 2530.0;
+	current_flight_dynamics->power_avaliable.max = 2300.0;
 
 	current_flight_dynamics->lift.min = -10.0;
 	current_flight_dynamics->lift.max = 20.0;
@@ -510,7 +510,7 @@ void set_dynamics_defaults (entity *en)
 	// mass
 
 	current_flight_dynamics->mass.value = 0.0;
-	current_flight_dynamics->mass.min = 7480.0;
+	current_flight_dynamics->mass.min = 5480.0;
 	current_flight_dynamics->mass.max = 0.0;
 
 	current_flight_dynamics->fuel_weight.value = 1136.36;
@@ -2119,7 +2119,7 @@ void update_attitude_dynamics (void)
 			unnormalised_direction = direction;
 
 			// arneh, 20060813 - reduce banking effect on heading change at slow speed
-			force = 0.0015 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
+			force = 0.0030 * (horizontal_velocity * horizontal_velocity) * current_flight_dynamics->tail_boom_length.value;
 //			force = (motion_vector_magnitude * motion_vector_magnitude) / (3.5 * current_flight_dynamics->tail_boom_length.value);
 
 			this_reaction_force += (force - this_reaction_force) * get_model_delta_time ();
