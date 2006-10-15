@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.7</title>
+<title>EECH Community Release Version 1.7.2</title>
 <style>
 <!--
 a {
@@ -59,159 +59,74 @@ h4 {
 -->
 </style>
 </head>
-<body class="Normal" lang=SV>
+<body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.7</span></h1>
-      <div align=center style='text-align:center'>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.7.2</span></h1>
         <hr size=2 width="100%" align=center>
-        <span lang=EN-GB>THIS IS A TEST RELEASE AND MAY CONTAIN NUMEROUS BUGS<br>
-  BACKUP YOUR EXISTING COHOKUM.EXE BEFORE USING THIS FILE </span></div>
-      <div align=center style='text-align:center'>
         <hr size=2 width="100%" align=center>
-      </div>
-      <p><span lang=EN-GB>This file is a summary of the new features provided with this release of COHOKUM.EXE.  </span><span lang=EN-GB>Further information about the EECH Community Development Program and new releases of COHOKUM.EXE are available from <a
-href="http://eech.bollocks.net.nz" target="_blank"><span lang=EN-GB>http://eech.bollocks.net.nz</span></a>, <a href="http://www.eechcentral.com" target="_blank"><span lang=EN-GB>http://www.eechcentral.com</span></a> and the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ forum</a> </span></p>
+      <p>This file is a summary of the new features provided with this
+      release of COHOKUM.EXE.  Further information about the EECH
+      Community Development Program and new releases of COHOKUM.EXE
+      are available from <a
+      href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>,
+      <a
+      href="http://www.eechcentral.com">http://www.eechcentral.com</span></a>
+      and the <a
+      href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30"
+      target="_blank">SimHQ forum</a>
+      </p> 
+
       <p align=right style='text-align:right; font-style:
-      italic;'><span lang=EN-GB>Last edited by arneh: August 17, 2006</span></p>
-      <h2><span class="style40">Contents</span></h2>
-      <ul type=disc>
-        <li><span
-     lang=EN-GB><a href="#installation">Installation and addons</a></span></li>
-        <li><a href="#trouble">Troubleshooting</a></li>
-        <li><a href="#gameinfo"><span
-     lang=EN-GB>General game info</span> (flyable choppers, WUT, MP)</a> </li>
-        <li><a href="#eechini"><span
-     lang=EN-GB>The <strong>eech.ini</strong> file and <strong>mod info</strong></span></a> </li>
-        <li><a href="#ingame">New in-game key commands</a> </li>
-        <li><a href="#sourceandversion"><span
-     lang=EN-GB>Source code</span> and <span
-     lang=EN-GB>Bugs</span></a> </li>
-        <li><a href="#fan"><span
-     lang=EN-GB>Fan sites</span></a></li>
-        <li><a href="#history"><span
-     lang=EN-GB>Version history</span></a></li>
-      </ul>
-      <h2><span lang=EN-GB>What's NEW in EECH 1.7?</span></h2>
-      <p><em><strong>(since version 1.6.2 W3)</strong></em></p>
-      <dl>
-      <dt>Flight model changes</dt>
-      <dd><ol>
-	<li>Numerous changes to make autorotation work (read <a
-	href="http://www.copters.com/pilot/autorotation.html">here</a>
-	to learn how to autorotate). 
-	  <ul>
-	    <li>Rotor brake is now actually engaging/disenging rotor
-	    to engine, it's not a brake</li>
-	    <li>The collective now works also when the rotor is disengaged</li>
-	    <li>Landing with engine failures don't automaticly make
-	    the helicopter explode</li>
-	    <li>Created new aerodynamic model for rotor RPM when rotor
-	    is disengaged. Rotor RPM is now affect by autorotation
-	    which increases rotor RPM, and induced and profile drag
-	    which reduces rotor RPM.</li>
-	    <li>Rotor makes no torque when rotor is disengaged</li>
-	    <li>When the rotor is disengaged, the main rotor drives
-	    the tail rotor so that it doesn't stop.</li>
-	    <li>When the rotor is disengaged rotor rpm may exceed
-	    100%, but get it too high and the rotor might fail as well. Add
-	    collective to slow the rotor down again.</li>
-	    <li>Rotor automatically disengages if both engines fail.</li>
-	  </ul>
-	<li>Numerous changes to make engines more realistic. Read <a
-	href="http://www.eechcentral.com/index.php/Engine_operations">here</a>
-	to learn how the engines work now.
-	<ul>
-	  <li>Added modelling of gas turbine part of engine (and not
-	    only power turbine, as it used to be)</li>
-	  <li>Engine control system automaticly controls gas turbine
-	        RPM in an effort to keep rotor RPM at 100%</li>
-	  <li>Added abillity to control throttle and starters for engines,
-	        including full startup procedure</li>
-	  <li>Added option for starting mission with engines off</li>
-	  <li>Modelling of APU added</li>
-	  <li>Modelling of engine temperature added</li>
-	  <li>Engine fire due to overtemperature now happens at random
-	    time, probability depending on temperature.</li>
-	  <li>Improved engine instruments to show engine information
-	    which previously was not modelled.</li>
-	  <li>Modelled sounds for turbines and APU to correspond with
-	        RPM of turbines</li>
-	  <li>Fuel consumption depends on engine RPM</li>
-	</ul>
-	<li>Slow speed flight model tweaks.  Should make slow speed
-	handling easier and more realistic, particularly sideways flight.
-	<li>Decreased effectivness of wheel brake</li>
-	<li>Implemented rotor vibration. Used when close to entering
-	    vortex ring effect, or when main rotor slightly damaged.</li>
-      </ol></dd>
-      <dt>Avionics changes</dt>
-      <dd><ol>
-	<li>Completely new HUD for the ka-52, based on the real Hokum
-	HUD. Read <a
-	href="http://www.eechcentral.com/index.php/Hokum_HUD">here</a>
-	for instructions. This HUD is also available in high resolution.
-        <li>New HUD mode for Apache and Comanche: transition mode. Use
-      Shift+O to switch between the cruise mode (the existing
-      navigation mode) and
-      transition mode.
-        <li>Changes to existing HUDs.  For Apache and Comanche more
-	symbology is common for weapons and navigation mode.  A slip
-	indicator has been added to all modes.
-	For Russian helicopters
-	vertical speed scale is visble also in weapons mode.
-	<li>Implemented high-res MFDs for the Apache and Havoc</li>
-	<li>Made new weapons page MFD for Apache which is more like
-	the page in the real AH-64D</li>
-    
-      </ol></dd>
-      <dt>Sound changes</dt>
-      <dd><ol>
-        <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
-        <LI>Sound modifications no longer require modifying sound.dat,
-      just copy the new sound files into the audio directory!</LI>
-	<li>Closing canopy doors reduce sound volume of external
-	sounds<li>
-
-      </ol></dd>
-      <dt>Other changes</dt>
-      <dd><ol>
-
-        <li>Increased speed of main rotor animation</li>
-	<li>Added key for manually opening and closing canopy doors
-	(Comanche and Hokum only)</li>
-	<li>New, more immersive UI screens</li>
-	<li>Make F1 work as center view in mouse look (for mouse only,
-	TIR works as before)</li>
-	<li>Implemented collimation effect for HUD (the focus on
-	infinity, HUD image moves with the head effect). Currently
-	Hokum only.
-	<li>Implemented head movement with G-forces in wideview mode
-	(Comanche and Hokum only).
-	<li>Allow loading of modified 3D models from
-	COHOKUM\3DDATA\OBJECTS directory.  Use Firebird's 3D model
-	<a
-	href="http://www.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_topic;f=30;t=005013">importer</a>
-	and <a href="http://www.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_topic;f=30;t=005005">exporter</a> to edit 3D objects.
-      </ol></dd>
-      <dl>
-
-      <strong><p>IMPORTANT: This version has changed the format of save
-      games, and is incompatible with ALL previous save games.  If you
-      have any saved campaigns you want to finish keep a backup of
-      your current cohokum.exe and use it for finishing the save game.
+      italic;'>Last edited by arneh: October 15, 2006
       </p>
-      <p>It is also  multiplayer incompatible with all previous versions.</p>
-      </strong>
 
-      <p align="right"><span
-lang=EN-GB><a href="#top">[top ^]</a></span> </p>      
-      <h2><a name=installation></a><span class="style37" lang=EN-GB>Installation and addons</span></h2>
-      <p>===================================================================</p>
-      <p><strong>NEW</strong>: Go to www.eechcentral.com and download the installation tool: <A href="http://www.eechcentral.com/files/eechupdater1.0.exe" target="_blank">eechupdater1.0.exe</A></p>
-      <p>This will download and install all patches and addon packs that you need. If new packs arrive this tool will detect them and download them, keeping your database up to date. It is still a good idea to read the <br>
-      following ! </p>
-      <p>===================================================================</p>
+
+      <h2 class="style40">Contents</h2>
+      <ul type=disc>
+        <li><a href="#installation">Installation and addons</a></li>
+        <li><a href="#trouble">Troubleshooting</a></li>
+        <li><a href="#gameinfo">General game info</span> (flyable choppers, WUT, MP)</a> </li>
+        <li><a href="#eechini">The <strong>eech.ini</strong> file and
+	      <strong>mod info</strong></a> </li> 
+        <li><a href="#ingame">New in-game key commands</a> </li>
+        <li><a href="#sourceandversion">Source code and Bugs</a> </li>
+        <li><a href="#fan">Fan sites</a></li>
+        <li><a href="#history">Version history</a></li>
+      </ul>
+
+
+      <h2>What's NEW in EECH 1.7.2?</h2>
+      <p><em>(since version 1.7.1)</em></p>
+      <ul>
+        <li>New high-resolution HUD for the Mi-28 (similar to new Ka-52 HUD)
+	<li>Track-IR and G-forces can now move head position also in Mi-28
+	<li>Added heading tape to TSD for Comanche and Hokum
+	<li>Further tweaking to low and medium speed flight dynamics.
+	<li>Fixed bug with head pitch not being saved in wideview
+	<li>Fixed bug with g-force_head_movement modifier in eech.ini
+	    not working properly.
+	<li>Fixed bug with new Hokum HUD appearing only as a filled
+	    block in external view and internal view without cockpit.
+	<li>Fixed bug with tail rotor not being powerful enough to
+	    counteract torque with cross coupling disabled.
+      </ul>
+
+
+      <p align="right"><a href="#top">[top ^]</a></p>
+    
+
+      <h2 class="style37"><a name="installation"></a>Installation and addons</h2>
+      <hr>
+      <p><strong>NEW</strong>: Go to www.eechcentral.com and download
+      the installation tool: <A
+      href="http://www.eechcentral.com/files/Tools/eechupdater1.1.exe">eechupdater1.1.exe</A></p>
+      <p>This will download and install all patches and addon packs
+      that you need. If new packs arrive this tool will detect them
+      and download them, keeping your database up to date. It is still
+      a good idea to read the following! </p>
+      <hr>
+
       <h3 class="p">Basic Install </h3>
       <p class="p">If you do not own EE - Apache Havoc you can skip the first two steps </p>
       <ol>
@@ -234,6 +149,7 @@ target=_blank>EECH_KEY.pdf</A></span></FONT></li>
       <strong>advanced</strong> when in the game for full operation.
       When you delete the game.cfg and it is recreated by the game,
       the option is reset at novice! </p>
+
       <h3>Addons</h3>
       <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order below gives you the best result ;-). </p>
       <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
@@ -337,8 +253,9 @@ target=_blank>texturepackkuwait_etc.exe</A></FONT></td>
           <td >Opening screen and menu background replacements by Michael Langner</td>
         </tr>
       </table>
-      <p align="right"><span
-lang=EN-GB><a href="#top">[top ^]</a></span> </p>
+      <p align="right"><a href="#top">[top ^]</a></p>
+
+
       <h2><a name="trouble"></a>Trouble shooting </h2>
       <p>If your game doesn't run properly, there is not so much that can be done! </p>
       <ul>
@@ -1049,55 +966,207 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><a href="http://tarawa.free.fr/" target="_blank">Tarawa </a> - Great EECH site with lots of downloads, textures <li><a href="http://www.eech.de.vu/" target="_blank">www.eech.de.vu </a> - Handy links and MP info by Savage9 </li>
       </ul>
       <div align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span>      </div>
-      <h3><a name=history></a>Version h<span lang=EN-GB>istory</span></h3>
-      <p><span class="style47">Fixes/features in 1.6.2w3:<span class="style46" lang=EN-GB></span></span></p>
+
+
+
+      <h3><a name="history"></a>Version history</h3>
+
+
+      <h4>Fixes/features in 1.7.1:</h4>
       <ul>
-        <LI class="style44">
-        <div align="left">Add custom warzones without changing the code and custom warzones are treated as official warzones (dynamic water, desert textures etc).        </div>        
-        <LI class="style44">An in-game season option is activated for some maps that have two seasons: summer and winter (Alaska, Aleut, Georgia, other will follow). if you select winter it will snow instead of rain.
-        Winter textures are denoted with  &quot;name-W.bmp&quot; or &quot;name-W.dds&quot;. Also desert textures now always have the syntax: &quot;name-D.bmp&quot; or &quot;name-D.dds&quot;. 
-        <LI class="style44">A new option is added in eech.ini: &quot;extended_textures&quot;. This option increases the number of terrain textures frmo 5 to 25 to enhance the realism of the landscape (it kills repetition) but special texture packs are needed (not released yet).  
-        <LI class="style44">Working cockpit dials and lamps for Havoc (and Hind) by Firebird.
-        <LI class="style44">Alt-L toggles the high LOD feature so that when you fly above cities and your fps drops you can try switching it off.        </LI>
-        <LI class="style44">Ctrl-N adjust brightness level of the night vision, for more detail. There are 3 levels. </LI>
-        <LI class="style44">
-          <div align="left">TSD colour map display is improved and does not have such a large framerate hit when in 25km scale. </div>
-        </LI>
-        <LI class="style44">More HUD colours are added by Maverick. </LI>
-        <LI class="style44">HUD size and colour config are saved in eech.ini per gunship. </LI>
-        <LI class="style44">Three formations are added: diamond, ragged left and ragged right added by Maverick. Note you need a new files <em>FORMS.DAT</em>, included in this setup file.  </LI>
-        <LI class="style44">A keycard has been added to this setup created by MAPI</LI>
-        <LI class="style44">A GWUT configuration file  has been added: GWUT162B.csv made by KLiM. See <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </LI>
-      </ol>
+        <li>Fixed version number used for checking multiplayer compatability
+      </ul>
+      
+
+      <h4>Fixes/features in 1.7:</h4>
+
+      <dl>
+      <dt>Flight model changes</dt>
+      <dd><ol>
+	<li>Numerous changes to make autorotation work (read <a
+	href="http://www.copters.com/pilot/autorotation.html">here</a>
+	to learn how to autorotate). 
+	  <ul>
+	    <li>Rotor brake is now actually engaging/disenging rotor
+	    to engine, it's not a brake</li>
+	    <li>The collective now works also when the rotor is disengaged</li>
+	    <li>Landing with engine failures don't automaticly make
+	    the helicopter explode</li>
+	    <li>Created new aerodynamic model for rotor RPM when rotor
+	    is disengaged. Rotor RPM is now affect by autorotation
+	    which increases rotor RPM, and induced and profile drag
+	    which reduces rotor RPM.</li>
+	    <li>Rotor makes no torque when rotor is disengaged</li>
+	    <li>When the rotor is disengaged, the main rotor drives
+	    the tail rotor so that it doesn't stop.</li>
+	    <li>When the rotor is disengaged rotor rpm may exceed
+	    100%, but get it too high and the rotor might fail as well. Add
+	    collective to slow the rotor down again.</li>
+	    <li>Rotor automatically disengages if both engines fail.</li>
+	  </ul>
+	<li>Numerous changes to make engines more realistic. Read <a
+	href="http://www.eechcentral.com/index.php/Engine_operations">here</a>
+	to learn how the engines work now.
+	<ul>
+	  <li>Added modelling of gas turbine part of engine (and not
+	    only power turbine, as it used to be)</li>
+	  <li>Engine control system automaticly controls gas turbine
+	        RPM in an effort to keep rotor RPM at 100%</li>
+	  <li>Added abillity to control throttle and starters for engines,
+	        including full startup procedure</li>
+	  <li>Added option for starting mission with engines off</li>
+	  <li>Modelling of APU added</li>
+	  <li>Modelling of engine temperature added</li>
+	  <li>Engine fire due to overtemperature now happens at random
+	    time, probability depending on temperature.</li>
+	  <li>Improved engine instruments to show engine information
+	    which previously was not modelled.</li>
+	  <li>Modelled sounds for turbines and APU to correspond with
+	        RPM of turbines</li>
+	  <li>Fuel consumption depends on engine RPM</li>
+	</ul>
+	<li>Slow speed flight model tweaks.  Should make slow speed
+	handling easier and more realistic, particularly sideways flight.
+	<li>Decreased effectivness of wheel brake</li>
+	<li>Implemented rotor vibration. Used when close to entering
+	    vortex ring effect, or when main rotor slightly damaged.</li>
+      </ol></dd>
+      <dt>Avionics changes</dt>
+      <dd><ol>
+	<li>Completely new HUD for the ka-52, based on the real Hokum
+	HUD. Read <a
+	href="http://www.eechcentral.com/index.php/Hokum_HUD">here</a>
+	for instructions. This HUD is also available in high resolution.
+        <li>New HUD mode for Apache and Comanche: transition mode. Use
+      Shift+O to switch between the cruise mode (the existing
+      navigation mode) and
+      transition mode.
+        <li>Changes to existing HUDs.  For Apache and Comanche more
+	symbology is common for weapons and navigation mode.  A slip
+	indicator has been added to all modes.
+	For Russian helicopters
+	vertical speed scale is visble also in weapons mode.
+	<li>Implemented high-res MFDs for the Apache and Havoc</li>
+	<li>Made new weapons page MFD for Apache which is more like
+	the page in the real AH-64D</li>
+    
+      </ol></dd>
+      <dt>Sound changes</dt>
+      <dd><ol>
+        <LI>New engine sound comprised of three components which change during flight according to your flight maneuvers. (Rotor-slapping!)</LI>
+        <LI>Sound modifications no longer require modifying sound.dat,
+      just copy the new sound files into the audio directory!</LI>
+	<li>Closing canopy doors reduce sound volume of external
+	sounds<li>
+
+      </ol></dd>
+      <dt>Other changes</dt>
+      <dd><ol>
+
+        <li>Increased speed of main rotor animation</li>
+	<li>Added key for manually opening and closing canopy doors
+	(Comanche and Hokum only)</li>
+	<li>New, more immersive UI screens</li>
+	<li>Make F1 work as center view in mouse look (for mouse only,
+	TIR works as before)</li>
+	<li>Implemented collimation effect for HUD (the focus on
+	infinity, HUD image moves with the head effect). Currently
+	Hokum only.
+	<li>Implemented head movement with G-forces in wideview mode
+	(Comanche and Hokum only).
+	<li>Allow loading of modified 3D models from
+	COHOKUM\3DDATA\OBJECTS directory.  Use Firebird's 3D model
+	<a
+	href="http://www.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_topic;f=30;t=005013">importer</a>
+	and <a href="http://www.simhq.com/simhq3/sims/boards/bbs/ultimatebb.php?ubb=get_topic;f=30;t=005005">exporter</a> to edit 3D objects.
+      </ol></dd>
+      <dl>
+
+      <strong><p>IMPORTANT: This version has changed the format of save
+      games, and is incompatible with ALL previous save games.  If you
+      have any saved campaigns you want to finish keep a backup of
+      your current cohokum.exe and use it for finishing the save game.
+      </p>
+      <p>It is also  multiplayer incompatible with all previous versions.</p>
+      </strong>
+
+
+
+      <h4>Fixes/features in 1.6.2W3:</h4>
+
+      <ul class="style44">
+        <li>Add custom warzones without changing the code and custom
+        warzones are treated as official warzones (dynamic water,
+        desert textures etc).
+        <li>An in-game season option is activated for some maps that
+        have two seasons: summer and winter (Alaska, Aleut, Georgia,
+        other will follow). if you select winter it will snow instead
+        of rain.
+        Winter textures are denoted with  &quot;name-W.bmp&quot; or
+        &quot;name-W.dds&quot;. Also desert textures now always have
+        the syntax: &quot;name-D.bmp&quot; or &quot;name-D.dds&quot;.
+        <li>A new option is added in eech.ini:
+        &quot;extended_textures&quot;. This option increases the
+        number of terrain textures frmo 5 to 25 to enhance the realism
+        of the landscape (it kills repetition) but special texture
+        packs are needed (not released yet).
+        <li>Working cockpit dials and lamps for Havoc (and Hind) by Firebird.
+        <li>Alt-L toggles the high LOD feature so that when you fly
+        above cities and your fps drops you can try switching it off.
+        <li>Ctrl-N adjust brightness level of the night vision, for
+        more detail. There are 3 levels.
+        <li>TSD colour map display is improved and does not have such
+        a large framerate hit when in 25km scale.
+        <li>More HUD colours are added by Maverick.
+        <li>HUD size and colour config are saved in eech.ini per gunship.
+        <li>Three formations are added: diamond, ragged left and
+        ragged right added by Maverick. Note you need a new files
+        <em>FORMS.DAT</em>, included in this setup file.
+        <li>A keycard has been added to this setup created by MAPI
+        <li>A GWUT configuration file  has been added: GWUT162B.csv
+        made by KLiM. See <a
+        href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561">here</a>
+        for a description.
       <p><strong>IMPORTANT: this version needs a different texture setup. You will have to re-install the texture addon packs!</strong></p>
       <p>Known BUG: the loadout of the Apache hellfires is incorrect. It is fixed when you use one of the WUT files. </p>
       </ul>
-      <p><span class="style47">Fixes/features in 1.6.2w2:<span class="style46" lang=EN-GB></span></span></p>
-      <ul>
-        <li class="style47">In multiplayer the WUT file information is sent from the host to the client, so there is no need anymore to have the correct WUT when you want to join a game.</li>
-        <li class="style47">Standardized terrain bitmaps with mipmapping and linear filtering between identical textures (reacts to graphics card anisotropy setting).
-          
-          Set in eech.ini: texture_colour=1, mipmapping=1, texture_filtering =1 </li>
-        <li class="style44">Dynamic water textures give the impression of flowing river, reservoir and sea (eech.ini: dynamic_water=1)</li>
-        <li class="style44">For texture modders, (untested) alpha blending support for dds textures</li>
-        <li class="style44">Autosave and Quicksave (Ctrl-Z), eech.ini setting autosave=n (n= nr of minutes)</li>
-        <li class="style44">Three brightness levels of PNVS night vision, press Ctrl-N when in game. </li>
-        <li class="style44">Hardware sound support (4 speakers) </li>
-        <li class="style44">TrackIR vector support (eech.ini: TIR_6DOF=1)</li>
-        <li class="style44">Use of 24bit textures is now default, no more tweaking your NVIDIA graphics card</li>
-        <li class="style44">Screenshots can now be taken when in 32bit mode</li>
-        <li class="style44">Numerous bug fixes and code cleaning </li>
+
+      <h4>Fixes/features in 1.6.2W2:</h4>
+      <ul class="style47">
+        <li>In multiplayer the WUT file information is sent from the
+           host to the client, so there is no need anymore to have the
+	   correct WUT when you want to join a game.
+        <li>Standardized terrain bitmaps with mipmapping and linear
+	   filtering between identical textures (reacts to graphics card
+	   anisotropy setting). 
+          Set in eech.ini: texture_colour=1, mipmapping=1, texture_filtering =1
+        <li>Dynamic water textures give the impression of flowing
+	  river, reservoir and sea (eech.ini: dynamic_water=1)
+        <li>For texture modders, (untested) alpha blending support for dds textures
+        <li>Autosave and Quicksave (Ctrl-Z), eech.ini setting
+	  autosave=n (n= nr of minutes)
+        <li>Three brightness levels of PNVS night vision, press Ctrl-N when in game.
+        <li>Hardware sound support (4 speakers)
+        <li>TrackIR vector support (eech.ini: TIR_6DOF=1
+        <li>Use of 24bit textures is now default, no more tweaking
+	your NVIDIA graphics card
+        <li>Screenshots can now be taken when in 32bit mode
+        <li>Numerous bug fixes and code cleaning
       </ul>
-      <p><span class="style44" lang=EN-GB>Fixes/features in 1.6.1w5:<span class="style46" lang=EN-GB></span></span> </p>
+
+      <h4>Fixes/features in 1.6.1W5:</h4>
+      <ul class="style44">
+        <li>Texture colour mod, with special texture packs </li>
+        <li>Wideview: pilot's head pitch is added </li>
+        <li>HUD: scalable and background </li>
+        <li> View range increased.</li>
+        <li>6 Degrees of Freedom movement for TrackIR with Vector Expension</li>
+        <li>Bug fixes: new trackir.dll,  radar intialization, cannon tracking, F3/F4 in apache 3D cockpit.</li>
+        <li>Outside view zoom with mousewheel enabled.</li>
+      </ul>
+
+      <h4>Fixes/features in 1.6.1W4:</h4>
       <ul>
-        <li class="style44">Texture colour mod, with special texture packs </li>
-        <li class="style44">Wideview: pilot's head pitch is added </li>
-        <li class="style44">HUD: scalable and background </li>
-        <li class="style44"> View range increased.</li>
-        <li class="style44">6 Degrees of Freedom movement for TrackIR with Vector Expension</li>
-        <li class="style44">Bug fixes: new trackir.dll,  radar intialization, cannon tracking, F3/F4 in apache 3D cockpit.</li>
-        <li class="style44">Outside view zoom with mousewheel enabled.</li>
-      </ul>      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.1w4:</span></p>      <ul class="style44">
         <li>Saitek X52 controller fix </li>
         <li>Apache havoc maps can be read without owning EEAH </li>
         <li>Texture mod: read custom textures from user defined directories</li>
@@ -1107,7 +1176,8 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li>Make cockpit bar in apache cockpit disappear using wideview </li>
         <li>Cannon tracking boresight </li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.1w3:</span></p>
+
+      <h4>Fixes/features in 1.6.1W3:</h4>
       <ul class="style44">
         <li>NSIS installer that should help making the install process a bit easier
         <li>Fixed deadzones for controllers. All axis except collective  and FLIR zoom  now have a 1% deadzone to avoid &quot;drifting&quot;.
@@ -1120,7 +1190,8 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li>A few other &quot;under the hood&quot; changes that you should not notice :p
         <li>Added new string file that enables localization of the new controller UI. This can be found in \common\data\language\TLATE6.DAT. Volunteers for german, french, spanish, italian translations are welcome. I am not sure how and if this will work with polish/russian translations. </li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.1w1,2,3:</span></p>
+
+      <h4>Fixes/features in 1.6.1W1,2,3:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Fly_Any_Aircraft error when using GWUT-files fixed</span></li>
         <li><span lang=EN-GB>MP-changes in the following files:</span></li>
@@ -1132,26 +1203,30 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><span lang=EN-GB>Deadband around 59% throttle removed</span></li>
         <li><span lang=EN-GB>Possible to reverse pedal axis</span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0w15:</span></p>
+
+      <h4>Fixes/features in 1.6.0W15:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Default values of cpac, cgs, cpds changed</span></li>
         <li><span lang=EN-GB>Comanche loadout-error in GWUT fixed</span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W14:</span></p>
+
+      <h4>Fixes/features in 1.6.0W14:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Some bugs of 1.6.0W13 fixed </span></li>
         <li><span lang=EN-GB>Advanced flight model, should bring the helicopter closer to (assumed) reality :)</span></li>
         <li><span lang=EN-GB>Designated target list</span></li>
         <li><span lang=EN-GB>Able to read new style WUT files (Gotcha's GWUT tool) </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W13:</span></p>
+
+      <h4>Fixes/features in 1.6.0W13:</h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>More changes in the MP-code</span></li>
         <li><span lang=EN-GB>Session filter, if active it will suppress any host that runs a map &nbsp;you don't have</span></li>
         <li><span lang=EN-GB>Session filter buggy</span></li>
         <li><span lang=EN-GB>Satellite view inactive</span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W12: </span></p>
+
+      <h4>Fixes/features in 1.6.0W12: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Changes in the MP server code </span></li>
         <li><span lang=EN-GB>Full TrackIR support </span></li>
@@ -1164,14 +1239,16 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><span lang=EN-GB>Blackhawk and Hind returned to not flyable w/o faa=1 </span></li>
         <li><span lang=EN-GB>AH64-A and KA50 added as configurable choppers. Install the payload screens (see above) </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W10,11: </span></p>
+
+      <h4>Fixes/features in 1.6.0W10,11: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select and off you go (you can't choose it from the mission or group list since it has no task). </span></li>
         <li><span lang=EN-GB>Blackhawk and Hind flyable, regardless of the faa-setting in eech.ini. </span></li>
         <li><span lang=EN-GB>Blackhawk and Hind loadout configuration enabled. </span></li>
         <li><span lang=EN-GB>W11 is possibly more stable in MP. </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W9: </span></p>
+
+      <h4>Fixes/features in 1.6.0W9: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>In-game multiplayer server browser </span></li>
         <li><span lang=EN-GB>Ability to limit the number of players in a multiplayer game (default is 4) </span></li>
@@ -1182,13 +1259,15 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><span lang=EN-GB>CBAR values works for EECH campaigns now (they previously only worked for EEAH campaign) </span></li>
         <li><span lang=EN-GB>&quot;tab-2&quot; CTD fix </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W8: </span></p>
+
+      <h4>Fixes/features in 1.6.0W8: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>TrackIR included </span></li>
         <li><span lang=EN-GB>Joystick mappable, rudder pedals included </span></li>
         <li><span lang=EN-GB>Multiplayer more or less stable </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W7: </span></p>
+
+      <h4>Fixes/features in 1.6.0W7: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>Multiplayer is sort of stable </span></li>
         <li><span lang=EN-GB>downwash fixes, and a hack that allows multiplayer at the cost of the client's downwash effect </span></li>
@@ -1198,7 +1277,8 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><span lang=EN-GB>Fly any aircraft fixes. </span></li>
         <li><span lang=EN-GB>Please reset your .INI file if you created one. </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W6: </span></p>
+
+      <h4>Fixes/features in 1.6.0W6: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>random task assignments that mess up the gameplay fixed </span></li>
         <li><span lang=EN-GB>small eech.ini fixes that caused crashes (please remake eech.ini) </span></li>
@@ -1206,14 +1286,16 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
         <li><span lang=EN-GB>TrackIR not included </span></li>
         <li><span lang=EN-GB>multiplayer buggy </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>Fixes/features in 1.6.0W5: </span></p>
+
+      <h4>Fixes/features in 1.6.0W5: </h4>
       <ul type=disc class="style44">
         <li><span lang=EN-GB>&quot;eech.ini&quot; use included </span></li>
         <li><span lang=EN-GB>downwash effect included </span></li>
         <li><span lang=EN-GB>TrackIR not included </span></li>
         <li><span lang=EN-GB>multiplayer buggy </span></li>
       </ul>
-      <p class="style44"><span lang=EN-GB>1.6.0W0-1.6.0W4: undocumented test releases </span></p>
+
+      <h4>1.6.0W0-1.6.0W4: undocumented test releases </h4>
     <p align="right"><span lang=EN-GB>&nbsp;<a href="#top">[top ^]</a></span></p>
   <tr>
     <td >&nbsp;</td>
