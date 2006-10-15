@@ -1940,12 +1940,15 @@ void draw_havoc_hud_on_texture (void)
 	{
 		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
 		float y_offset, x_offset;
-		float head_offset_x = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x : 0.0;
-		float head_offset_y = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y + 0.02: 0.0;
+		float head_offset_x = 0.0, head_offset_y = 0.0;
 
+		head_offset_x = getViewpointOffsetX(head_offset_x);
+		head_offset_y = getViewpointOffsetY(head_offset_y);
+		
+		if (get_global_wide_cockpit())
 		{
-			head_offset_x = getViewpointOffsetX(head_offset_x);
-			head_offset_y = getViewpointOffsetY(head_offset_y);
+			head_offset_x += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x;
+			head_offset_y += wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y + 0.02;
 		}
 
 		x_offset = head_offset_x * -HUD_UNIT_RATIO;
