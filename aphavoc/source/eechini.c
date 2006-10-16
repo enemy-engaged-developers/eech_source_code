@@ -483,8 +483,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
 		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping		
-		if (strcmp(p, "extended_terrain") == 0) global_extended_terrain_textures = d1;	//VJ 060120 load more terrain textures
-		//z_buffer option no longer needed
+	  if (strcmp(p, "night_light") == 0) global_night_light_level = v1;	//VJ 060920 night light levels
 
 		if (strcmp(p, "dynamic_water") == 0) global_dynamic_water = d1;	//VJ 050817 dynamic water textures
 		if (strcmp(p, "autosave") == 0) command_line_autosave = d1 * 60; // Casm 17JUN05 Autosave option
@@ -662,7 +661,8 @@ void dump_ini_file(void)
 	fprintf(f,"texture_filtering=%d  # Texture blending, reacts to Anisotropic filter setting. EXPERIMENTAL (def=0) \n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
-	fprintf(f,"extended_terrain=%d  # add more terrain textures: WARNING exctra terrain packs must be present. (def=0) \n",global_extended_terrain_textures);	//VJ 060120 load extra terrain textures
+	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 dark to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
+	
 	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 for not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
@@ -670,7 +670,6 @@ void dump_ini_file(void)
 	fprintf(f,"[end of file]\n");
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
-//VJ 060120 z_buffer option no longer needed
 
 	fclose(f);
 }

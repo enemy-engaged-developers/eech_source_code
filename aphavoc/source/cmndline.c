@@ -213,7 +213,6 @@ int
 	global_PNVS_level									= 0,  // VJ 050704 light setting for PNVS
 	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures	
 //VJ 060120 OBSOLETE	global_zbuffer										= 0,	//VJ 051011 zbuffer correction //VJ 060120 OBSOLETE
-	global_extended_terrain_textures				= 0,   //VJ 060120 add more (random) terrain textures 
 //VJ 051227 no longer needed, mapinfo structure	global_season										= 1,	//VJ 051011 add winter textures
 	command_line_texture_colour					= 0,  //VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	command_line_autosave							= 0,  //Casm 17JUN05 Autosave option
@@ -245,6 +244,7 @@ float
 	command_line_flare_effectiveness							= 1.0,
 	command_line_smoke_effectiveness							= 1.0,
 	command_line_g_force_head_movment_modifier					= 1.0,
+	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0;	// VJ 050126 hud mod: size 
 
 char

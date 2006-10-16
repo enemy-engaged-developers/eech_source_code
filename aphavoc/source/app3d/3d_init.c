@@ -66,6 +66,7 @@
 
 #include "project.h"
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +93,10 @@ static void modify_3d_objects_approximations ( float factor );
 void initialise_application_3d_system (void)
 {
 
+  float light_level = max(min(1.0,global_night_light_level),0);
+	
+	
+	
 	ASSERT ( !main_3d_env );
 
 	ASSERT ( !main_3d_single_light_env );
@@ -276,7 +281,7 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( ambient_colour[2], 127, 127, 127, 0 );
 		set_rgb_colour ( ambient_colour[3], 85, 100, 110, 0 );
 		set_rgb_colour ( ambient_colour[4], 100, 40, 20, 0 );
-		set_rgb_colour ( ambient_colour[5], 19, 34, 50, 0 );
+		set_rgb_colour ( ambient_colour[5], 9, 34, 50, 0 );
 		set_rgb_colour ( ambient_colour[6], 51, 51, 61, 0 );
 		set_rgb_colour ( ambient_colour[7], 53, 53, 53, 0 );
 
@@ -290,15 +295,15 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( ambient_colour[6], 224, 224, 224, 0 );
 		set_rgb_colour ( ambient_colour[7], 224, 224, 224, 0 );
 #endif
-
+    //VJ060920 night light level mod
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[0], 0.75, SUN_RISE_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[1], 0.75, SUN_RISE_END_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[2], 0.75, MIDDAY_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[3], 0.75, SUN_SET_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[4], 0.75, SUN_SET_END_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75*light_level, NIGHT_TIME );
 
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[6], 0.675, SUN_RISE_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[1], 0.675, SUN_RISE_END_TIME );
@@ -306,8 +311,8 @@ void initialise_application_3d_system (void)
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[3], 0.675, SUN_SET_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[7], 0.675, SUN_SET_END_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675*light_level, NIGHT_TIME );
 
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[6], 0.525, SUN_RISE_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[1], 0.525, SUN_RISE_END_TIME );
@@ -315,8 +320,8 @@ void initialise_application_3d_system (void)
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[3], 0.525, SUN_SET_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[7], 0.525, SUN_SET_END_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525*light_level, NIGHT_TIME );
 
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[6], 0.6, SUN_RISE_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[1], 0.6, SUN_RISE_END_TIME );
@@ -324,8 +329,8 @@ void initialise_application_3d_system (void)
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[3], 0.6, SUN_SET_START_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[7], 0.6, SUN_SET_END_TIME );
 		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6*light_level, NIGHT_TIME );
 	}
 
 	//
@@ -400,7 +405,8 @@ void initialise_application_3d_system (void)
 		rgb_colour
 			moon_colour[3],
 			moon_light_colour[3];
-
+ 
+    
 		set_rgb_colour ( moon_colour[0],  0, 0, 0, 0 );
 		set_rgb_colour ( moon_colour[1],  255, 255, 255, 0 );
 		set_rgb_colour ( moon_colour[2],  255, 255, 255, 0 );
@@ -408,24 +414,25 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( moon_light_colour[0], 0, 0, 0, 0 );
 		set_rgb_colour ( moon_light_colour[1], 23, 33, 41, 0 ); // 24% 9pm, 12am,
 		set_rgb_colour ( moon_light_colour[2], 23, 33, 41, 0 ); // 24% 3am
-
+    
+    //VJ060920 night light level mod
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[0], 1.0, moon_light_colour[0], 1.0, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[1], 1.0, moon_light_colour[1], 1.0, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], 1.0, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], 1.0, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[1], 1.0, moon_light_colour[1], 1.0, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );//VJ was 1.0
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[1], 0.70, moon_light_colour[1], 0.90, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[1], 0.70, moon_light_colour[1], 0.90*light_level, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
@@ -433,8 +440,8 @@ void initialise_application_3d_system (void)
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[1], 0.00, moon_light_colour[1], 0.70, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
@@ -442,8 +449,8 @@ void initialise_application_3d_system (void)
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[1], 0.50, moon_light_colour[1], 0.80, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 	}
 
 

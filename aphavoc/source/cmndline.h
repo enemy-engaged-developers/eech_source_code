@@ -192,7 +192,6 @@ extern int
 	global_dynamic_water,  								//VJ 050817 dynamic water textures
 //VJ 051227 no longer needed, mapinfo structure	global_season,											//VJ 051011 add winter textures
 //VJ 060120 OBSOLETE	global_zbuffer,										//VJ 051011 zbuffer correction
-	global_extended_terrain_textures,   		//VJ 060120 add more (random) terrain textures 
 	command_line_autosave,								//Casm 17JUN05 Autosave option
 	command_line_cannontrack,								// Jabberwock 050120 Cannon tracking
 // Jabberwock 031118 Server side settings - temporary values so that ini is not overwritten with server data
@@ -223,6 +222,7 @@ extern float
 	command_line_flare_effectiveness,
 	command_line_smoke_effectiveness,
 	command_line_g_force_head_movment_modifier,
+	global_night_light_level, //VJ 060920 night light levels (0-1)
 	global_hud_size2;// VJ 050126 hud mod: size 	
 
 extern char
