@@ -1930,7 +1930,7 @@ void update_attitude_dynamics (void)
 			scaling,
 			drag;
 
-		drag = -50.0;
+		drag = -40.0;
 
 		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
 
@@ -2020,7 +2020,7 @@ void update_attitude_dynamics (void)
 		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
 	{
 	
-		reaction_force = 30.0 * (current_flight_dynamics->pitch.delta + current_flight_dynamics->main_rotor_pitch_angle.delta);
+		reaction_force = 10.0 * (current_flight_dynamics->pitch.delta + current_flight_dynamics->main_rotor_pitch_angle.delta);
 
 		if (current_flight_dynamics->velocity_z.max != 0.0)
 			reaction_force *= horizontal_velocity / current_flight_dynamics->velocity_z.max;
@@ -2044,10 +2044,10 @@ void update_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// forward drag caused by yaw input
 	////////////////////////////////////////////
-	{
+/*	{
 	// arneh 20061008 - removed this force. yaw itself doesn't cause extra drag with co-axial
 	// rotors, but drag of exposing the side of the aircraft to the airstream does increase drag
-/*
+
 		float
 			a;
 
@@ -2068,8 +2068,8 @@ void update_attitude_dynamics (void)
 		direction.y = 0.0;
 		direction.z = -1.0;
 	
-		add_dynamic_force ("Forward motion Yaw input drag", reaction_force, 0.0, &position, &direction, FALSE); */
-	}
+		add_dynamic_force ("Forward motion Yaw input drag", reaction_force, 0.0, &position, &direction, FALSE);
+	} */
 	////////////////////////////////////////////
 	// Resistance to forward movement
 	////////////////////////////////////////////
@@ -2113,7 +2113,7 @@ void update_attitude_dynamics (void)
 
 		// arneh 20060813 - reduce drag in sideway flight - compensated by reduced lift. 
 		// makes it impossible to keep flying sideways at insane bank angles without losing altitude
-		Fmax = 1.0;
+		Fmax = 0.5;
 
 		if (current_flight_dynamics->velocity_x.max != 0.0)
 			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0);
