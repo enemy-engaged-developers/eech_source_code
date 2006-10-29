@@ -84,6 +84,8 @@ extern void select_next_apache_tsd_declutter_level (void);
 
 extern void select_previous_apache_tsd_declutter_level (void);
 
+extern void select_next_tsd_underlay_level (void);
+
 extern void select_next_apache_lhs_mfd (void);
 
 extern void select_previous_apache_lhs_mfd (void);

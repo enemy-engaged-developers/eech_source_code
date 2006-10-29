@@ -616,9 +616,9 @@ static void select_next_tsd_declutter_level_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void select_previous_tsd_declutter_level_event (event *ev)
+static void select_next_tsd_underlay_level_event (event *ev)
 {
-	select_previous_apache_tsd_declutter_level ();
+	select_next_tsd_underlay_level();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1023,7 +1023,7 @@ void set_apache_avionics_events (void)
 
 	set_event (DIK_D, MODIFIER_NONE, KEY_STATE_DOWN, select_next_tsd_declutter_level_event);
 
-	set_event (DIK_D, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_tsd_declutter_level_event);
+	set_event (DIK_D, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_next_tsd_underlay_level_event);
 
 	set_event (DIK_E, MODIFIER_NONE, KEY_STATE_DOWN, select_next_tsd_ase_range_event);
 

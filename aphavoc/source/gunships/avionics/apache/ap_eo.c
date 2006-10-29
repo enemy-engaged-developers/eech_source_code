@@ -89,19 +89,19 @@ void initialise_apache_eo (void)
 	eo_elevation						= rad (0.0);
 	eo_min_elevation					= rad (-60.0);
 	eo_max_elevation					= rad (30.0);
-	eo_max_visual_range				= 5000.0;
+	eo_max_visual_range				= 6000.0;
 
 	apache_flir.field_of_view		= EO_FOV_WIDE;
 	apache_flir.min_field_of_view	= EO_FOV_NARROW;
 	apache_flir.max_field_of_view	= EO_FOV_WIDE;
 
-	apache_dtv.field_of_view		= EO_FOV_NARROW;
+	apache_dtv.field_of_view		= EO_FOV_MEDIUM;
 	apache_dtv.min_field_of_view	= EO_FOV_NARROW;
-	apache_dtv.max_field_of_view	= EO_FOV_NARROW;
+	apache_dtv.max_field_of_view	= EO_FOV_MEDIUM;
 
 	apache_dvo.field_of_view		= EO_FOV_MEDIUM;
-	apache_dvo.min_field_of_view	= EO_FOV_NARROW;
-	apache_dvo.max_field_of_view	= EO_FOV_MEDIUM;
+	apache_dvo.min_field_of_view	= EO_FOV_MEDIUM;
+	apache_dvo.max_field_of_view	= EO_FOV_WIDE;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
