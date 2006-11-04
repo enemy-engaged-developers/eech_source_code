@@ -511,31 +511,41 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 	}
 	else
 	{
-		vp.x = 0.0;
-		vp.y = 0.0;
-		vp.z = 0.0;
+		matrix3x3 head_rotation;
+		vec3d vp_position, vp_world_position;
+		
+		vp_position.x = 0.0;
+		vp_position.y = 0.0;
+		vp_position.z = 0.0;
 
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
-		   vp.x = wide_cockpit_position[wide_cockpit_nr].x;
-		   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		   vp_position.x = wide_cockpit_position[wide_cockpit_nr].x;
+		   vp_position.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp_position.z = wide_cockpit_position[wide_cockpit_nr].z;
 			//VJ 050207 included head pitch in fixed view setting
 			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 			if (edit_wide_cockpit)
 				pilot_head_pitch = pilot_head_pitch_datum;
 		}
 		
-		vp.x += current_custom_cockpit_viewpoint.x;
-		vp.y += current_custom_cockpit_viewpoint.y; 
-		vp.z += current_custom_cockpit_viewpoint.z;
+		vp_position.x += current_custom_cockpit_viewpoint.x;
+		vp_position.y += current_custom_cockpit_viewpoint.y; 
+		vp_position.z += current_custom_cockpit_viewpoint.z;
 
-		vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		vp_position.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-			vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+
+		multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_position);
+
+		vp.x = vp_world_position.x;
+		vp.y = vp_world_position.y;
+		vp.z = vp_world_position.z;
 	}
 
 	////////////////////////////////////////
@@ -1094,25 +1104,41 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 	}
 	else
 	{
-		vp.x = 0.0;
-		vp.y = 0.0;
-		vp.z = 0.0;
+		matrix3x3 head_rotation;
+		vec3d vp_position, vp_world_position;
+		
+		vp_position.x = 0.0;
+		vp_position.y = 0.0;
+		vp_position.z = 0.0;
+
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
-			vp.x = wide_cockpit_position[wide_cockpit_nr].x;
-		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		   vp_position.x = wide_cockpit_position[wide_cockpit_nr].x;
+		   vp_position.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp_position.z = wide_cockpit_position[wide_cockpit_nr].z;
+			//VJ 050207 included head pitch in fixed view setting
+			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+			if (edit_wide_cockpit)
+				pilot_head_pitch = pilot_head_pitch_datum;
 		}
-		vp.x += current_custom_cockpit_viewpoint.x;
-		vp.y += current_custom_cockpit_viewpoint.y;
-		vp.z += current_custom_cockpit_viewpoint.z;
 		
-		vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		vp_position.x += current_custom_cockpit_viewpoint.x;
+		vp_position.y += current_custom_cockpit_viewpoint.y; 
+		vp_position.z += current_custom_cockpit_viewpoint.z;
+
+		vp_position.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-			vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+
+		multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_position);
+
+		vp.x = vp_world_position.x;
+		vp.y = vp_world_position.y;
+		vp.z = vp_world_position.z;
 	}
 
 	////////////////////////////////////////
