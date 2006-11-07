@@ -574,7 +574,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 						//
 						// select next weapon
 						//
-
+/*
 						if (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS)))
 						{
 							if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
@@ -588,6 +588,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 							set_client_server_entity_int_value (launcher, INT_TYPE_SELECTED_WEAPON, next_weapon_sub_type);
 						}
+*/
 					}
 				}
 				else
