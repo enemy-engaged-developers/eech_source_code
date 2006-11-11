@@ -108,6 +108,22 @@ static void set_local_int_value (entity *en, int_types type, int value)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_LOCK_ON_AFTER_LAUNCH:
+		////////////////////////////////////////
+		{
+			raw->loal_mode = value;
+
+			break;
+		}
+		////////////////////////////////////////
+		case INT_TYPE_WEAPON_MISSILE_PHASE:
+		////////////////////////////////////////
+		{
+			raw->missile_phase = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -239,6 +255,22 @@ static int get_local_int_value (entity *en, int_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case INT_TYPE_LOCK_ON_AFTER_LAUNCH:
+		////////////////////////////////////////
+		{
+			value = raw->loal_mode;
+
+			break;
+		}
+		////////////////////////////////////////
+		case INT_TYPE_WEAPON_MISSILE_PHASE:
+		////////////////////////////////////////
+		{
+			value = raw->missile_phase;
+
+			break;
+		}
+		////////////////////////////////////////
 		case INT_TYPE_WEAPON_BURST_SIZE:
 		////////////////////////////////////////
 		{
@@ -320,6 +352,14 @@ void overload_weapon_int_value_functions (void)
 	fn_set_local_entity_raw_int_value	[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_BURST_SIZE]			= set_local_int_value;
 	fn_set_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_BURST_SIZE]			= set_local_int_value;
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_BURST_SIZE]			= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value	[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_MISSILE_PHASE]			= set_local_int_value;
+	fn_set_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_MISSILE_PHASE]			= set_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_MISSILE_PHASE]			= get_local_int_value;
+
+	fn_set_local_entity_raw_int_value	[ENTITY_TYPE_WEAPON][INT_TYPE_LOCK_ON_AFTER_LAUNCH]			= set_local_int_value;
+	fn_set_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_LOCK_ON_AFTER_LAUNCH]			= set_local_int_value;
+	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_LOCK_ON_AFTER_LAUNCH]			= get_local_int_value;
 
 	fn_get_local_entity_int_value			[ENTITY_TYPE_WEAPON][INT_TYPE_WEAPON_DECOY_TYPE]			= get_local_int_value;
 

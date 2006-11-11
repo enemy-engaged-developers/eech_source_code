@@ -349,9 +349,6 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 		*target,
 		*weapon;
 
-	entity_sub_types
-		next_weapon_sub_type;
-
 	meta_smoke_list_types
 		smoke_trail_type;
 
@@ -374,13 +371,13 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 	{
 		target = get_local_entity_parent (launcher, LIST_TYPE_TARGET);
 
-		if (weapon_database[weapon_sub_type].hellfire_flight_profile)
+/*		if (weapon_database[weapon_sub_type].hellfire_flight_profile)
 		{
 			if (get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 			{
 				target = NULL;
 			}
-		}
+		} */
 	}
 	else
 	{
@@ -409,6 +406,10 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 		if (current_weapon_count > 0)
 		{
+			int loal_mode = get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
+			
+			debug_log("LOAL: %d, launcher: %x, gunship: %x", loal_mode, launcher, get_gunship_entity());
+			
 			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 			{
 				set_force_local_entity_create_stack_attributes (TRUE);
@@ -455,6 +456,8 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 				ENTITY_INDEX_DONT_CARE,
 				ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, weapon_sub_type),
 				ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_BURST_SIZE, burst_size),
+				ENTITY_ATTR_INT_VALUE (INT_TYPE_WEAPON_MISSILE_PHASE, MISSILE_PHASE1),
+				ENTITY_ATTR_INT_VALUE (INT_TYPE_LOCK_ON_AFTER_LAUNCH, loal_mode),
 				ENTITY_ATTR_PARENT (LIST_TYPE_LAUNCHED_WEAPON, launcher),
 				ENTITY_ATTR_PARENT (LIST_TYPE_TARGET, target),
 				ENTITY_ATTR_END
@@ -577,6 +580,9 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 /*
 						if (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS)))
 						{
+							entity_sub_types
+								next_weapon_sub_type;
+
 							if (get_local_entity_int_value (launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 							{
 								next_weapon_sub_type = get_next_available_weapon_sub_type (launcher);

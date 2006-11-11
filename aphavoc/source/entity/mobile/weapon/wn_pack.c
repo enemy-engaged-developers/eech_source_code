@@ -119,6 +119,9 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			// view_weapon_link
 
+			pack_int_value (en, INT_TYPE_LOCK_ON_AFTER_LAUNCH, raw->loal_mode);
+			pack_int_value (en, INT_TYPE_WEAPON_MISSILE_PHASE, raw->missile_phase);
+
 			#if DEBUG_MODULE
 
 			debug_log ("WN_PACK: Packed %s (%d)", weapon_database [raw->mob.sub_type].full_name, get_local_entity_safe_index (en));
@@ -219,6 +222,9 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			unpack_list_link (en, LIST_TYPE_LAUNCHED_WEAPON, &raw->launched_weapon_link);
 
 			// view_weapon_link
+
+			raw->loal_mode = unpack_int_value (en, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
+			raw->missile_phase = unpack_int_value (en, INT_TYPE_WEAPON_MISSILE_PHASE);
 
 			//
 			// link into system
