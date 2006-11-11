@@ -2710,7 +2710,7 @@ void net_getServerList(void)
 										Servers[index].Version);
 					index++;
 				}
-			} while (strcmp(ReceiveBuffer, "X Done!") != 0);
+			} while (ReceiveBuffer[0] && strcmp(ReceiveBuffer, "X Done!") != 0);
 			numServers = index;
 			sprintf(Servers[index].Version, "");
 		}
