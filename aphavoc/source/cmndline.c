@@ -172,6 +172,7 @@ int
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
+	command_line_manual_laser_radar						= FALSE,	// arneh 2006-11-06
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
 	command_line_downwash										= FALSE,	//VJ 050308 changed to false for MP, // Xhit 030328, VJ 030512 changed
@@ -190,7 +191,8 @@ int
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
-	command_line_green_mfd										= 0,		// loke 030517
+	command_line_green_mfd										= TRUE,		// loke 030517
+	command_line_colour_mfd										= TRUE,		// arneh 2006-11-06
 	command_line_maxplayers							= 4,	// Werewolf 030518
 	command_line_camcom								= FALSE,	// Jabberwock 031007 Campaign Commander
 	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
@@ -243,7 +245,7 @@ float
 	command_line_chaff_effectiveness							= 1.0,
 	command_line_flare_effectiveness							= 1.0,
 	command_line_smoke_effectiveness							= 1.0,
-	command_line_g_force_head_movment_modifier					= 1.0,
+	command_line_g_force_head_movment_modifier					= 0.0,
 	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0;	// VJ 050126 hud mod: size 
 
@@ -1749,6 +1751,15 @@ void process_command_line (int argc, char *argv[])
 			}
 		}
 		////////////////////////////////////////
+		else if (s2 = strarg(s1, "manual_laser_radar"))	// arneh - 2006-11-06
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_manual_laser_radar);
+			}
+		}
+		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate
 		////////////////////////////////////////
 		{
@@ -1935,6 +1946,19 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_green_mfd = TRUE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "colour_mfd"))		// arneh 2006-11-06
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_colour_mfd);
+			}
+			else
+			{
+				command_line_colour_mfd = TRUE;
 			}
 		}
 		////////////////////////////////////////

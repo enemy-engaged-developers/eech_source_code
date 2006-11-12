@@ -453,6 +453,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "joylookst") == 0)	command_line_joylook_step = d1; // Jabberwock 031104
 		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
+		if (strcmp(p, "manual_laser/radar") == 0) 		command_line_manual_laser_radar = d1;
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
 ////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;
@@ -471,6 +472,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
 		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
+		if (strcmp(p, "colourmfd") == 0)		command_line_colour_mfd = d1; // arneh 2006-11-06
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
@@ -598,7 +600,7 @@ void dump_ini_file(void)
 	fprintf(f,"[WUT]\n");
 	fprintf(f,"wut=%s               # supply a filename of a wut text file here\n",WUT_filename);
 	fprintf(f,"\n[Wideview]\n");
-	fprintf(f, "g-force_head_movement=%.1f                # g-forces move head in wideview (default 1.0, off = 0.0, other values adjust amount of head movement)\n", command_line_g_force_head_movment_modifier);
+	fprintf(f, "g-force_head_movement=%.1f                # g-forces move head in wideview (default 0.0, off = 0.0, normal = 1.0, other values adjust amount of head movement)\n", command_line_g_force_head_movment_modifier);
 	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].x,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].y,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].z,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].p);
 	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f,%.3f  #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p);
 	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].p);
@@ -616,6 +618,7 @@ void dump_ini_file(void)
 	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
+	fprintf(f,"manual_laser/radar=%d   # have to manually enable and disable radar and laser, def = 0 (off)\n",command_line_manual_laser_radar);
 	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
@@ -652,7 +655,8 @@ void dump_ini_file(void)
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
-	fprintf(f,"greenmfd=%d          # mfd's are green (def = 0 (off), 1 = on)\n",command_line_green_mfd);
+	fprintf(f,"greenmfd=%d          # mfd's are green (def = 1 (off), 1 = on)\n",command_line_green_mfd);
+	fprintf(f,"colourmfd=%d         # mfd's use colours (only Apache currently)) (def = 1 (off), 1 = on)\n",command_line_green_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);

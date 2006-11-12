@@ -149,6 +149,7 @@ extern int
 	command_line_eo_zoom_joystick_axis,						// loke 030319
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322
+	command_line_manual_laser_radar,						// arneh 2006-11-06
 	command_line_framerate,										// VJ 030324
 //Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
 	command_line_downwash,										// Xhit 030328, VJ 030512 changed
@@ -168,6 +169,7 @@ extern int
 	command_line_tsd_render_mode,								// VJ 030511
 	command_line_tsd_palette,									// VJ 030511
 	command_line_green_mfd,										// loke 030517
+	command_line_colour_mfd,									// arneh 2006-11-06
 	command_line_maxplayers,									// Werewolf 030518
 	command_line_camcom,										// Jabberwock 031007 Campaign Commander
 	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
