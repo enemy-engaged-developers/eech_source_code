@@ -71,7 +71,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#define DEBUG_MODULE 0
+#define DEBUG_MODULE FALSE
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -492,9 +492,17 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 
 void draw_apache_internal_virtual_cockpit (unsigned int flags)
 {
+	matrix3x3
+		head_rotation;
 
 	viewpoint
 		vp;
+		
+	vec3d
+		vp_position,
+		vp_current_position,
+		vp_world_position,
+		vp_cockpit_world_position;
 
 	object_3d_sub_object_search_data
 		search;
@@ -521,22 +529,38 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	}
 	else
 	{
-		vp.x = 0.0;
-		vp.y = 0.0;
-		vp.z = 0.0;
+		vp_position.x = 0.0;
+		vp_position.y = 0.0;
+		vp_position.z = 0.0;
 
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
-			vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-			vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-			//VJ 050207 included head pitch in fixed view setting 
+		   vp_position.x = wide_cockpit_position[wide_cockpit_nr].x;
+		   vp_position.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp_position.z = wide_cockpit_position[wide_cockpit_nr].z;
+			//VJ 050207 included head pitch in fixed view setting
 			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 			if (edit_wide_cockpit)
 				pilot_head_pitch = pilot_head_pitch_datum;
 		}
 
+		vp_position.x += current_custom_cockpit_viewpoint.x;
+		vp_position.y += current_custom_cockpit_viewpoint.y; 
+		vp_position.z += current_custom_cockpit_viewpoint.z;
+
+		vp_position.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+
+		multiply_matrix3x3_vec3d(&vp_cockpit_world_position, head_rotation, &vp_position);
+
+		vp.x = vp_cockpit_world_position.x;
+		vp.y = vp_cockpit_world_position.y;
+		vp.z = vp_cockpit_world_position.z;
 	}
 
 	////////////////////////////////////////
@@ -652,12 +676,13 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 				sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f, clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p, clipx);
 				ui_display_text (buffer, 10, 100);
 				
-				#if DEBUG_MODULE
-              	sprintf(buffer,"x=%.3f y=%.3f z=%.3f clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, dx, dy, dz);
-              	ui_display_text (buffer, 10, 100);
-				#endif               
               
            }
+
+		#if DEBUG_MODULE
+           	sprintf(buffer,"x=%.3f y=%.3f z=%.3f", dx, dy, dz);
+           	ui_display_text (buffer, 10, 120);
+		#endif               
 
 			end_3d_scene ();
 		}
@@ -689,6 +714,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
 			{
+				debug_log ("non-large needles");
 				//
 				// ADI slip
 				//
@@ -803,20 +829,21 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					}
 				}
 
+/*
+   				vp_current_position = vp_position;
+				
+				vp_current_position.x += dx; // -0.019;
+				vp_current_position.y += dy; // + 0.024;
+				vp_current_position.z += dz; // -0.042;
 
-//VJ wideview mod, date: 18-mar-03
-		        if (get_global_wide_cockpit ())
-		        {
-                    vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.03;
-                    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
-                }
+				multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_current_position);
+
+				vp.x = vp_world_position.x;
+				vp.y = vp_world_position.y;
+				vp.z = vp_world_position.z;
+*/
 				memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
 
-				if (get_global_wide_cockpit ())
-				{
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-                   vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-                }
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
 			}
 
@@ -826,6 +853,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_LARGE_NEEDLES)
 			{
+				debug_log ("large needles");
 				//
 				// ADI slip
 				//
@@ -852,6 +880,18 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					search.result_sub_object->relative_roll = get_apache_virtual_cockpit_airspeed_indicator_needle_value ();
 				}
 
+  				vp_current_position = vp_position;
+
+				vp_current_position.x += -0.019;
+				vp_current_position.y += 0.024;
+				vp_current_position.z += -0.042;
+
+				multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_current_position);
+
+				vp.x = vp_world_position.x;
+				vp.y = vp_world_position.y;
+				vp.z = vp_world_position.z;
+
 				memcpy (&virtual_cockpit_instrument_large_needles_inst3d->vp, &vp, sizeof (viewpoint));
 
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_large_needles_inst3d->vp.position, virtual_cockpit_instrument_large_needles_inst3d);
@@ -868,6 +908,10 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	// draw 3D scene without lighting
 	//
 	////////////////////////////////////////
+
+	vp.x = vp_cockpit_world_position.x;
+	vp.y = vp_cockpit_world_position.y;
+	vp.z = vp_cockpit_world_position.z;
 
 	if
 	(
@@ -936,11 +980,16 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_upfront_display_inst3d->vp.position, virtual_cockpit_upfront_display_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03, 050123
-         	if (get_global_wide_cockpit ()){
-                  vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.008;
-                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005;
-            }      
+				vp_current_position = vp_position;
+				
+				vp_current_position.y += 0.008;
+				vp_current_position.z += 0.005;
+
+				multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_current_position);
+
+				vp.x = vp_world_position.x;
+				vp.y = vp_world_position.y;
+				vp.z = vp_world_position.z;
 
 				//
 				// lhs mfd
@@ -964,12 +1013,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_rhs_mfd_inst3d->vp.position, virtual_cockpit_rhs_mfd_inst3d);
 				}
 
-//VJ wideview mod, date: 18-mar-03, 050123
-	        	if (get_global_wide_cockpit ()){
-                vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-                vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-				}
-				
 				draw_3d_scene ();
 
 				end_3d_scene ();
@@ -982,6 +1025,10 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	// draw 3D scene with lighting
 	//
 	////////////////////////////////////////
+
+	vp.x = vp_cockpit_world_position.x;
+	vp.y = vp_cockpit_world_position.y;
+	vp.z = vp_cockpit_world_position.z;
 
 	//
 	// draw fillet to mask TADS display
@@ -1068,7 +1115,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-	if (edit_wide_cockpit)
+//	if (edit_wide_cockpit)
 	{
 #if DEBUG_MODULE
 		if (check_key(DIK_NUMPAD7))
@@ -1106,11 +1153,11 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		if (check_key(DIK_NUMPAD7))
 		{
             wide_cockpit_position[wide_cockpit_nr].p += 0.5;
-      }
+		}
 		if (check_key(DIK_NUMPAD9))
 		{
             wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
-      }
+		}
 		if (check_key(DIK_NUMPAD6))
 		{
             wide_cockpit_position[wide_cockpit_nr].z += 0.01;
@@ -1137,7 +1184,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
       }
   		if (check_key(DIK_NUMPAD5))
 		{
-			wide_cockpit_position[wide_cockpit_nr].x = -8.0;
+			wide_cockpit_position[wide_cockpit_nr].x = 0.0;
 		}
 
 		if (check_key(DIK_NUMPAD0))
@@ -1174,6 +1221,15 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic)
 {
+	vec3d
+		vp_position,
+		vp_current_position,
+		vp_world_position,
+		vp_cockpit_world_position;
+
+	matrix3x3
+		head_rotation;
+
 	viewpoint
 		vp;
 
@@ -1202,17 +1258,38 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 	}
 	else
 	{
-		vp.x = 0.0;
-		vp.y = 0.0;
-		vp.z = 0.0;
+		vp_position.x = 0.0;
+		vp_position.y = 0.0;
+		vp_position.z = 0.0;
 
+//VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ())
 		{
-		    vp.y = wide_cockpit_position[wide_cockpit_nr].y;
-		    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
+		   vp_position.x = wide_cockpit_position[wide_cockpit_nr].x;
+		   vp_position.y = wide_cockpit_position[wide_cockpit_nr].y;
+		   vp_position.z = wide_cockpit_position[wide_cockpit_nr].z;
+			//VJ 050207 included head pitch in fixed view setting
+//			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+//			if (edit_wide_cockpit)
+//				pilot_head_pitch = pilot_head_pitch_datum;
 		}
+		
+		vp_position.x += current_custom_cockpit_viewpoint.x;
+		vp_position.y += current_custom_cockpit_viewpoint.y; 
+		vp_position.z += current_custom_cockpit_viewpoint.z;
+
+		vp_position.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
+		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+
+		multiply_matrix3x3_vec3d(&vp_cockpit_world_position, head_rotation, &vp_position);
+
+		vp.x = vp_cockpit_world_position.x;
+		vp.y = vp_cockpit_world_position.y;
+		vp.z = vp_cockpit_world_position.z;
 	}
 
 	////////////////////////////////////////
@@ -1316,6 +1393,28 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 			// compass
 			//
 
+
+			vp_current_position = vp_position;
+
+/*			if (get_global_wide_cockpit ())
+			{
+				vp_current_position.x += -0.018 + dx;
+				vp_current_position.y += 0.019 + dy;
+				vp_current_position.z += -0.049 + dz;
+			}
+			else */
+			{
+				vp_current_position.x += 0.003;
+				vp_current_position.y += 0.000;
+				vp_current_position.z += -0.003;
+			}
+	
+			multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_current_position);
+
+			vp.x = vp_world_position.x;
+			vp.y = vp_world_position.y;
+			vp.z = vp_world_position.z;
+	
 			if (flags & VIRTUAL_COCKPIT_COMPASS)
 			{
 				search.search_depth = 0;
@@ -1327,15 +1426,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 					search.result_sub_object->relative_heading = -current_flight_dynamics->heading.value;
 				}
 
-//VJ wideview mod, date: 18-mar-03
-				if (get_global_wide_cockpit ())
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
-
 				memcpy (&virtual_cockpit_compass_inst3d->vp, &vp, sizeof (viewpoint));
-
-//VJ wideview mod, date: 18-mar-03
-				if (get_global_wide_cockpit ())
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);
 			}
@@ -1365,15 +1456,8 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 
 					search.result_sub_object->relative_roll = -roll;
 				}
-//VJ wideview mod, date: 18-mar-03
-				if (get_global_wide_cockpit ())
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.02;
 
 				memcpy (&virtual_cockpit_adi_inst3d->vp, &vp, sizeof (viewpoint));
-
-//VJ wideview mod, date: 18-mar-03
-				if (get_global_wide_cockpit ())
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_adi_inst3d->vp.position, virtual_cockpit_adi_inst3d);
 			}
@@ -1414,6 +1498,10 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 			end_3d_scene ();
 		}
 	}
+
+	vp.x = vp_cockpit_world_position.x;
+	vp.y = vp_cockpit_world_position.y;
+	vp.z = vp_cockpit_world_position.z;
 
 	////////////////////////////////////////
 	//
