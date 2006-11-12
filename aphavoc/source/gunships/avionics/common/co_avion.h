@@ -89,6 +89,8 @@
 
 #include "co_nvs.h"
 
+#include "co_pfz.h"  // arneh, 2006-11-12 - Priority Fire Zones for TSD
+
 #include "co_radar.h"
 
 #include "co_symbl.h"

@@ -779,12 +779,14 @@ void set_common_avionics_events (void)
 	set_event ((JOYSTICK_BUTTON + 1), MODIFIER_NONE, KEY_STATE_EITHER, launch_weapon_event);
 
 	set_event ((JOYSTICK_BUTTON + 2), MODIFIER_NONE, KEY_STATE_DOWN, select_next_weapon_event);
-	
+
 	// Jabberwock 030930 Mouse FLIR control
 
 	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_lock_target_event);
-
 	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_next_target_event);
+
+	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, store_point_left_event);
+	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, store_point_right_event);
 
 	set_event (MOUSE_MOVE_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_up_event);
 

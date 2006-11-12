@@ -87,6 +87,7 @@ c_object_files    += $+ &
                      $(currentdir)\co_hud.obj &
                      $(currentdir)\co_mfd.obj &
                      $(currentdir)\co_nvs.obj &
+                     $(currentdir)\co_pfz.obj &
                      $(currentdir)\co_radar.obj &
                      $(currentdir)\co_symbl.obj &
                      $(currentdir)\co_tgt.obj &

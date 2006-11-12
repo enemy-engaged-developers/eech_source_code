@@ -440,6 +440,16 @@ void update_apache_weapon_systems (void)
 
 				launch_client_server_weapon (en, weapon_sub_type);
 			}
+			
+			// when firing radar hellfires in PFZ mode automaticly select next target
+			// after each launch
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
+				&& target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR
+				&& get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH)  // TODO: remove this once radar hellfires get their target upon launch, not 3 seconds later
+				&& pfz_active())
+			{
+				get_next_ground_radar_target();	
+			}
 		}
 		else
 		{

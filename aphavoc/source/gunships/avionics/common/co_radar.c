@@ -1047,9 +1047,9 @@ static entity *get_best_ground_radar_target (void)
 	// evaluate each target
 	//
 
-	target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
-
-	while (target)
+	for (target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
+		 target;
+		 target = get_local_entity_child_succ (target, LIST_TYPE_GUNSHIP_TARGET))
 	{
 		////////////////////////////////////////
 		//
@@ -1075,8 +1075,12 @@ static entity *get_best_ground_radar_target (void)
 
 				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-				target_range = get_3d_range (source_position, target_position);
+				// arneh, 20061106 - filter away targets outside pfz for apache
+				if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
+					if (!is_valid_pfz_target(target_position))
+						continue;
 
+				target_range = get_3d_range (source_position, target_position);
 				if (target_range <= ground_radar.scan_range)
 				{
 					//
@@ -1312,7 +1316,7 @@ static entity *get_best_ground_radar_target (void)
 			}
 		}
 
-		target = get_local_entity_child_succ (target, LIST_TYPE_GUNSHIP_TARGET);
+		
 	}
 
 	return (best_target);
@@ -1369,8 +1373,14 @@ static int get_selectable_ground_radar_target (entity *target)
 
 			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-			target_range = get_3d_range (source_position, target_position);
+			debug_log("is in pfz: %d", is_valid_pfz_target(target_position));
 
+			// arneh, 20061106 - filter away targets outside pfz for apache
+			if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
+				if (!is_valid_pfz_target(target_position))
+					return FALSE;
+
+			target_range = get_3d_range (source_position, target_position);
 			if (target_range <= ground_radar.scan_range)
 			{
 				//
