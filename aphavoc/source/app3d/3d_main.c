@@ -172,9 +172,9 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			{
 //VJ 050818 PNVS brighness levels
 				switch (global_PNVS_level){
-					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
-					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE);break;
-					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_AMBER, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
 				}
 				break;
 			}
