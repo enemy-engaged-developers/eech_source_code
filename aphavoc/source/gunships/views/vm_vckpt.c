@@ -668,7 +668,7 @@ void update_virtual_cockpit_view (void)
 		float
 			temp_p,
 			temp_h;
-	
+
 		if (query_TIR_active() == FALSE)	// No TIR window, use mouse;
 		{									// ..this also means it´s NOT possible to use TIR in relative mode !!
 			static int previous_mouse_update_flag = 1;
@@ -1203,6 +1203,222 @@ void get_pilot_head_heading_and_pitch_to_target (entity *target)
 	pilot_head_pitch = bound (pitch, get_rotate_down_limit (), get_rotate_up_limit ());
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_night_vision_mask (void)
+{
+	vertex
+		quad[4];
+
+	real_colour
+		colour,
+		specular;
+
+	set_3d_active_environment (main_3d_env);
+
+	if (begin_3d_scene ())
+	{
+		colour.red		= 255;
+		colour.green	= 255;
+		colour.blue		= 255;
+		colour.alpha	= 162;
+
+		specular.red	= 0;
+		specular.green	= 0;
+		specular.blue	= 0;
+		specular.alpha	= 255;
+
+		set_d3d_transparency_on ();
+
+		set_d3d_zbuffer_comparison (FALSE);
+
+		set_d3d_culling (FALSE);
+
+		set_d3d_texture_wrapping (0, FALSE);
+
+		set_d3d_texture_filtering (FALSE);
+
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_HOKUM_COCKPIT_WSO_SCOPE_VIEW));
+
+		////////////////////////////////////////
+		//
+		// top left
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_min;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.0;
+		quad[0].v				= 0.0;
+
+		quad[1].i  				= full_screen_x_mid;
+		quad[1].j  				= full_screen_y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.75; //1.0;
+		quad[1].v  				= 0.0;
+
+		quad[2].i				= full_screen_x_mid;
+		quad[2].j  				= full_screen_y_mid;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.75; //1.0;
+		quad[2].v  				= 1.0;
+
+		quad[3].i  				= full_screen_x_min;
+		quad[3].j  				= full_screen_y_mid;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// bottom left
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_min;
+		quad[0].j  				= full_screen_y_mid;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.0;
+		quad[0].v				= 1.0;
+
+		quad[1].i  				= full_screen_x_mid;
+		quad[1].j  				= full_screen_y_mid;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.75;
+		quad[1].v  				= 1.0;
+
+		quad[2].i				= full_screen_x_mid;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.75;
+		quad[2].v  				= 0.0;
+
+		quad[3].i  				= full_screen_x_min;
+		quad[3].j  				= full_screen_y_max;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= 0.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// top right
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_mid;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.75;
+		quad[0].v				= 0.0;
+
+		quad[1].i  				= full_screen_x_max;
+		quad[1].j  				= full_screen_y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.0;
+		quad[1].v  				= 0.0;
+
+		quad[2].i				= full_screen_x_max;
+		quad[2].j  				= full_screen_y_mid;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.0;
+		quad[2].v  				= 1.0;
+
+		quad[3].i  				= full_screen_x_mid;
+		quad[3].j  				= full_screen_y_mid;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.75;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// bottom right
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_mid;
+		quad[0].j  				= full_screen_y_mid;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.75;
+		quad[0].v				= 1.0;
+
+		quad[1].i  				= full_screen_x_max;
+		quad[1].j  				= full_screen_y_mid;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.0;
+		quad[1].v  				= 1.0;
+
+		quad[2].i				= full_screen_x_max;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.0;
+		quad[2].v  				= 0.0;
+
+		quad[3].i  				= full_screen_x_mid;
+		quad[3].j  				= full_screen_y_max;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.75;
+		quad[3].v				= 0.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+
+		set_d3d_transparency_off ();
+
+		set_d3d_zbuffer_comparison (TRUE);
+
+		set_d3d_culling (TRUE);
+
+		end_3d_scene ();
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1236,6 +1452,7 @@ void draw_virtual_cockpit_3d_view (void)
 	set_pilots_full_screen_params (night_vision_system_active);
 
 	draw_main_3d_scene (&main_vp);
+
 
 	switch (get_global_gunship_type ())
 	{
@@ -1604,6 +1821,9 @@ void draw_virtual_cockpit_3d_view (void)
 
 	}
 	
+	if (night_vision_system_active)
+		draw_night_vision_mask();
+
 	// Jabberwock 031016 Inset view - cockpit
 	if (external_view_inset_target)
 	{
@@ -1640,7 +1860,7 @@ void draw_virtual_cockpit_3d_view (void)
 		}
 	}
 	// Jabberwock 031016 ends
-	
+
 	
 	//
 	// restore virtual cockpit 3D instance
