@@ -902,6 +902,16 @@ static void toggle_navigation_lights_event (event *ev)
 	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_LIGHTS_ON, status);
 }
 
+
+// arneh 2006-11-16 - manual laser control
+static void activate_laser_event(event* ev)
+{
+	if (!laser_is_active() && !ah64a_damage.laser_designator && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+		set_laser_is_active(TRUE);
+	else
+		set_laser_is_active(FALSE);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -925,9 +935,9 @@ void set_ah64a_avionics_events (void)
 
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_INSERT, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
+//	set_event (DIK_INSERT, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
 
-	set_event (DIK_HOME, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
+//	set_event (DIK_HOME, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
 
 	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
 
@@ -941,9 +951,9 @@ void set_ah64a_avionics_events (void)
 	// repeated for programmable joysticks ...
 	//
 
-	set_event (DIK_1, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
+//	set_event (DIK_1, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
 
-	set_event (DIK_2, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
+//	set_event (DIK_2, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ihadss_event);
 
@@ -982,13 +992,13 @@ void set_ah64a_avionics_events (void)
 	set_event (DIK_NUMPAD5, MODIFIER_NONE, KEY_STATE_DOWN, steer_centre_event);
 	set_event (DIK_NUMPAD5, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, steer_centre_event);
 
-	set_event (DIK_NUMPAD7, MODIFIER_NONE, KEY_STATE_DOWN, toggle_show_allied_targets_event);
+//	set_event (DIK_NUMPAD7, MODIFIER_NONE, KEY_STATE_DOWN, toggle_show_allied_targets_event);
 
-	set_event (DIK_NUMPAD9, MODIFIER_NONE, KEY_STATE_DOWN, inc_target_priority_event);
-	set_event (DIK_NUMPAD9, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, inc_target_priority_fast_event);
+//	set_event (DIK_NUMPAD9, MODIFIER_NONE, KEY_STATE_DOWN, inc_target_priority_event);
+//	set_event (DIK_NUMPAD9, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, inc_target_priority_fast_event);
 
-	set_event (DIK_NUMPAD3, MODIFIER_NONE, KEY_STATE_DOWN, dec_target_priority_event);
-	set_event (DIK_NUMPAD3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, dec_target_priority_fast_event);
+//	set_event (DIK_NUMPAD3, MODIFIER_NONE, KEY_STATE_DOWN, dec_target_priority_event);
+//	set_event (DIK_NUMPAD3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, dec_target_priority_fast_event);
 
 	set_event (DIK_NUMPAD0, MODIFIER_NONE, KEY_STATE_DOWN, select_next_target_event);
 	set_event (DIK_NUMPAD0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_target_event);
@@ -999,9 +1009,8 @@ void set_ah64a_avionics_events (void)
 	//set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
 
-	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);
-
-	set_event (DIK_DIVIDE, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function2_event);
+// arneh 2006-11-16 - manual radar/laser control
+	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, activate_laser_event);
 
 	//
 	// miscellaneous
@@ -1047,13 +1056,13 @@ void set_ah64a_avionics_events (void)
 
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
 
-	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);
+//	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);
 
-	set_event (DIK_1, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_ground_radar_mfd_event);
+//	set_event (DIK_1, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_ground_radar_mfd_event);
 
-	set_event (DIK_2, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_air_radar_mfd_event);
+//	set_event (DIK_2, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_air_radar_mfd_event);
 
-	set_event (DIK_2, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_air_radar_mfd_event);
+//	set_event (DIK_2, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_air_radar_mfd_event);
 
 	set_event (DIK_3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_tads_mfd_event);
 

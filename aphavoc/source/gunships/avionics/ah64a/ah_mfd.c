@@ -9511,7 +9511,8 @@ static mfd_modes get_next_mfd_mode (mfd_modes mfd_mode)
 		}
 		case MFD_MODE_ENGINE:
 		{
-			next_mfd_mode = MFD_MODE_GROUND_RADAR;
+//			next_mfd_mode = MFD_MODE_GROUND_RADAR;
+			next_mfd_mode = get_mfd_mode_for_eo_sensor ();
 
 			break;
 		}
@@ -9562,20 +9563,10 @@ static mfd_modes get_previous_mfd_mode (mfd_modes mfd_mode)
 			break;
 		}
 		case MFD_MODE_FLIR:
-		{
-			previous_mfd_mode = MFD_MODE_AIR_RADAR;
-
-			break;
-		}
 		case MFD_MODE_DTV:
-		{
-			previous_mfd_mode = MFD_MODE_AIR_RADAR;
-
-			break;
-		}
 		case MFD_MODE_DVO:
 		{
-			previous_mfd_mode = MFD_MODE_AIR_RADAR;
+			previous_mfd_mode = MFD_MODE_ENGINE;
 
 			break;
 		}

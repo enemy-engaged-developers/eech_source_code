@@ -219,7 +219,7 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			if (!ah64a_damage.radar)
+/*			if (!ah64a_damage.radar)
 			{
 				target_acquisition_system = system;
 
@@ -229,7 +229,7 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
-
+*/
 			damaged = ah64a_damage.radar;
 
 			break;
@@ -239,7 +239,7 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			if (!ah64a_damage.radar)
+/*			if (!ah64a_damage.radar)
 			{
 				target_acquisition_system = system;
 
@@ -249,7 +249,7 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
-
+*/
 			damaged = ah64a_damage.radar;
 
 			break;
@@ -367,7 +367,7 @@ void update_ah64a_target_acquisition_system (void)
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			update_ah64a_ground_radar ();
+/*			update_ah64a_ground_radar ();
 
 			update_common_ground_radar ();
 
@@ -375,7 +375,7 @@ void update_ah64a_target_acquisition_system (void)
 
 			slave_common_eo_to_current_target ();
 
-			slave_ah64a_eo_to_current_target ();
+			slave_ah64a_eo_to_current_target ();*/
 
 			break;
 		}
@@ -383,7 +383,7 @@ void update_ah64a_target_acquisition_system (void)
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			update_ah64a_air_radar ();
+/*			update_ah64a_air_radar ();
 
 			update_common_air_radar ();
 
@@ -391,7 +391,7 @@ void update_ah64a_target_acquisition_system (void)
 
 			slave_common_eo_to_current_target ();
 
-			slave_ah64a_eo_to_current_target ();
+			slave_ah64a_eo_to_current_target ();*/
 
 			break;
 		}
