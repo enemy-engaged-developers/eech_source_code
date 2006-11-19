@@ -347,7 +347,7 @@ void update_havoc_target_acquisition_system (void)
 		{
 			update_havoc_ground_radar ();
 
-			update_common_ground_radar ();
+			update_common_ground_radar (FALSE);
 
 			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 
