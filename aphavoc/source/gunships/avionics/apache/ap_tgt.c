@@ -104,19 +104,25 @@ void deinitialise_apache_target_acquisition_systems (void)
 
 static void deselect_apache_target_acquisition_system (target_acquisition_systems system)
 {
+	
 	switch (system)
 	{
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_OFF:
 		////////////////////////////////////////
 		{
+			// laser is on in all modes but OFF in automatic mode
+			if (!command_line_manual_laser_radar)
+				set_laser_is_active(TRUE);
+			
 			break;
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			deactivate_common_ground_radar ();
+			if (!command_line_manual_laser_radar)
+				deactivate_common_ground_radar ();
 
 			break;
 		}
@@ -124,7 +130,8 @@ static void deselect_apache_target_acquisition_system (target_acquisition_system
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			deactivate_common_air_radar ();
+			if (!command_line_manual_laser_radar)
+				deactivate_common_air_radar ();
 
 			break;
 		}
@@ -202,6 +209,9 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			target_acquisition_system = system;
 
 			set_gunship_target (NULL);
+			
+			if (!command_line_manual_laser_radar)
+				set_laser_is_active(FALSE);
 
 			#if 0
 
@@ -219,7 +229,10 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			{
 				target_acquisition_system = system;
 
-				activate_common_ground_radar ();
+				deactivate_common_air_radar();
+
+				if (!command_line_manual_laser_radar)
+					activate_common_ground_radar ();
 
 				select_apache_ground_radar_mfd ();
 
@@ -241,7 +254,10 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			{
 				target_acquisition_system = system;
 
-				activate_common_air_radar ();
+				deactivate_common_air_radar();
+
+				if (!command_line_manual_laser_radar)
+					activate_common_air_radar ();
 
 				select_apache_air_radar_mfd ();
 
@@ -351,7 +367,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		}
 	}
 
-	play_common_cpg_target_acquisition_system_speech (new_system, old_system, damaged);
+	if (!command_line_manual_laser_radar)
+		play_common_cpg_target_acquisition_system_speech (new_system, old_system, damaged);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +377,11 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 void update_apache_target_acquisition_system (void)
 {
+	if (ground_radar_is_active())
+		update_common_ground_radar(FALSE);
+	else if (air_radar_is_active())
+		update_common_air_radar();
+	
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -380,9 +402,7 @@ void update_apache_target_acquisition_system (void)
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			update_apache_ground_radar ();
-
-			update_common_ground_radar ();
+			update_apache_ground_radar ();  // this only updates scan zones etc, only need to do it when radar is active
 
 			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
 
@@ -397,8 +417,6 @@ void update_apache_target_acquisition_system (void)
 		////////////////////////////////////////
 		{
 			update_apache_air_radar ();
-
-			update_common_air_radar ();
 
 			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 
@@ -488,39 +506,20 @@ void update_apache_target_acquisition_system (void)
 
 		radar_on = FALSE;
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
-		{
-			if (ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
-		else if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
-		{
-			if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
+		if (ground_radar_is_active() && ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+			radar_on = TRUE;
+
+		else if (air_radar_is_active() && air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+			radar_on = TRUE;
 
 		if (radar_on != get_local_entity_int_value (source, INT_TYPE_RADAR_ON))
-		{
 			set_client_server_entity_int_value (source, INT_TYPE_RADAR_ON, radar_on);
-		}
 
 		//
 		// laser on/off
 		//
 
-		laser_on = FALSE;
-
-		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
-		{
-			if (!apache_damage.laser_designator)
-			{
-				laser_on = TRUE;
-			}
-		}
+		laser_on = laser_is_active() && !apache_damage.laser_designator;
 
 		if (laser_on != get_local_entity_int_value (source, INT_TYPE_LASER_ON))
 		{
@@ -904,22 +903,29 @@ void apache_target_acquisition_system_misc_function1 (void)
 {
 	switch (target_acquisition_system)
 	{
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+		case TARGET_ACQUISITION_SYSTEM_DVO:
+		case TARGET_ACQUISITION_SYSTEM_IHADSS:
 		{
-			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+			if (apache_damage.radar)
 			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				set_ground_radar_is_active(FALSE);
+				set_air_radar_is_active(FALSE);
+			}
+			else if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+			{
+				if (ground_radar_is_active())
+					ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				else
+					ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
 			}
 			else
 			{
+				set_ground_radar_is_active(ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
+				
 				ground_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
 
@@ -929,39 +935,25 @@ void apache_target_acquisition_system_misc_function1 (void)
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+			if (apache_damage.radar)
 			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				set_ground_radar_is_active(FALSE);
+				set_air_radar_is_active(FALSE);
+			}
+			else if (air_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+			{
+				if (air_radar_is_active())
+					air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				else
+					air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
 			}
 			else
 			{
+				set_air_radar_is_active(air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
+				
 				air_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DVO:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_IHADSS:
-		////////////////////////////////////////
-		{
 			break;
 		}
 	}
@@ -977,18 +969,28 @@ void apache_target_acquisition_system_misc_function2 (void)
 	{
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+		case TARGET_ACQUISITION_SYSTEM_DVO:
+		case TARGET_ACQUISITION_SYSTEM_IHADSS:
 		////////////////////////////////////////
 		{
 			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				if (!apache_damage.radar)
+				{
+					ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+					set_ground_radar_is_active(TRUE);
+				}
 			}
+			else if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+			{
+				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
+				set_ground_radar_is_active(FALSE);
+			}
+			else if (!apache_damage.radar)
+				toggle_ground_radar_active();
 
 			break;
 		}
@@ -998,33 +1000,20 @@ void apache_target_acquisition_system_misc_function2 (void)
 		{
 			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+				if (!apache_damage.radar)
+				{
+					air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
+					set_air_radar_is_active(TRUE);
+				}
 			}
+			else if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+			{
+				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
+				set_air_radar_is_active(FALSE);
+			}
+			else if (!apache_damage.radar)
+				toggle_air_radar_active();
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DVO:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_IHADSS:
-		////////////////////////////////////////
-		{
 			break;
 		}
 	}

@@ -707,6 +707,9 @@ void create_apache_pfz(int is_nfz)
 		add_pfz(&position1, &position2, &position3, &position4);
 		current_pfz = next_free_pfz - 1;
 	}
+
+	if (!ground_radar_is_active())
+		update_common_ground_radar (TRUE);  // to make suretarget list is correct with new restrictions
 }
 #undef RADIUS
 
@@ -2132,6 +2135,12 @@ static void draw_ground_radar_mfd (void)
 		// Jabberwock 031107 ends	
 	}
 
+	if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE || ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+	{
+		set_2d_mono_font_position (-0.9, 0.8);
+		print_mono_font_string ("SGL");
+	}
+
 	//
 	// scan range
 	//
@@ -2208,7 +2217,7 @@ static void draw_ground_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	if (ground_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
 
@@ -2358,6 +2367,13 @@ static void draw_air_radar_mfd (void)
 		print_mono_font_string ("ENEMY");
 	}
 
+	if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE || air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+	{
+		set_2d_mono_font_position (-0.8, 0.8);
+		set_mono_font_rel_position (1.0, y_adjust);
+		print_mono_font_string ("SGL");
+	}
+
 	//
 	// scan range
 	//
@@ -2440,7 +2456,7 @@ static void draw_air_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+	if (air_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
 
@@ -2455,7 +2471,7 @@ static void draw_air_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (!apache_damage.radar)
+	if (!apache_damage.radar && air_radar_is_active())
 	{
 		source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -3266,14 +3282,25 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	case TARGET_ACQUISITION_SYSTEM_FLIR:
 	case TARGET_ACQUISITION_SYSTEM_DTV:
 	case TARGET_ACQUISITION_SYSTEM_DVO:
-		s = "TADS";
-		sprintf(buffer, "L%04.0f", target_range);
-		break;
 	case TARGET_ACQUISITION_SYSTEM_IHADSS:
+		s = "TADS";
+		if (laser_is_active() && FALSE)
+			sprintf(buffer, "L%04.0f", target_range);
+		else
+		{
+			float range = get_triangulated_range(target);
+			if (range > 0)
+				sprintf(buffer, "A%.1f", range * 0.001);
+			else
+				sprintf(buffer, "AX.X");
+
+			debug_log("triangulation error: %f (range: %6.1f)", target_range - range, range);
+		}
+		break;
 	case TARGET_ACQUISITION_SYSTEM_OFF:
 	default:
 		s = "NONE";
-		sprintf(buffer, "A%.1", target_range * 0.001);
+		sprintf(buffer, "AX.X");
 		break;
 	}
 
@@ -3362,7 +3389,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 	// launch mode
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
-		s = "LOAL";
+		s = "LOAL-HI";
 	else
 		s = "LOBL";
 

@@ -465,6 +465,8 @@ static void damage_systems (apache_damage_flags damage)
 		if (!apache_damage.radar)
 		{
 			apache_damage.radar = TRUE;
+			set_ground_radar_is_active(FALSE);
+			set_air_radar_is_active(FALSE);
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
@@ -553,6 +555,7 @@ static void damage_systems (apache_damage_flags damage)
 		if (!apache_damage.laser_designator)
 		{
 			apache_damage.laser_designator = TRUE;
+			set_laser_is_active(FALSE);
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
