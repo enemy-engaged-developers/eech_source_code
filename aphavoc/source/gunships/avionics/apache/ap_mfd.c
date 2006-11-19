@@ -3284,7 +3284,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 	case TARGET_ACQUISITION_SYSTEM_IHADSS:
 		s = "TADS";
-		if (laser_is_active() && FALSE)
+		if (laser_is_active())
 			sprintf(buffer, "L%04.0f", target_range);
 		else
 		{
