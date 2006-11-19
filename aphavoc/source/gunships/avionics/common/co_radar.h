@@ -159,11 +159,15 @@ extern void select_next_designated_ground_radar_target (void); // Jabberwock 031
 
 extern void select_previous_designated_ground_radar_target (void);
 
-extern void update_common_ground_radar (void);
+extern void update_common_ground_radar (int inactive_check);
 
 extern void activate_common_ground_radar (void);
 
 extern void deactivate_common_ground_radar (void);
+
+extern void toggle_ground_radar_active(void);
+extern int ground_radar_is_active(void);
+extern void set_ground_radar_is_active(int is_active);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +181,7 @@ extern void get_next_air_radar_target (void);
 
 extern void get_previous_air_radar_target (void);
 
-extern void update_common_air_radar (void);
+extern void update_common_air_radar ();
 
 extern void select_next_designated_air_radar_target (void); // Jabberwock 031108 Designated targets
 
@@ -186,6 +190,10 @@ extern void select_previous_designated_air_radar_target (void);
 extern void activate_common_air_radar (void);
 
 extern void deactivate_common_air_radar (void);
+
+extern void toggle_air_radar_active(void);
+extern int air_radar_is_active(void);
+extern void set_air_radar_is_active(int is_active);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

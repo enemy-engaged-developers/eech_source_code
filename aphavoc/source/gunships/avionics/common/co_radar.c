@@ -106,6 +106,11 @@ radar_params
 	ground_radar,
 	air_radar;
 
+static int
+	ground_radar_on = FALSE,
+	air_radar_on = FALSE;
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +142,8 @@ unsigned int
 
 void initialise_common_radar (void)
 {
+	ground_radar_on = FALSE,
+	air_radar_on = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1373,8 +1380,6 @@ static int get_selectable_ground_radar_target (entity *target)
 
 			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-			debug_log("is in pfz: %d", is_valid_pfz_target(target_position));
-
 			// arneh, 20061106 - filter away targets outside pfz for apache
 			if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
 				if (!is_valid_pfz_target(target_position))
@@ -1527,7 +1532,7 @@ void get_previous_ground_radar_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_common_ground_radar (void)
+void update_common_ground_radar (int inactive_check)
 {
 	int
 		x_sec,
@@ -1583,7 +1588,8 @@ void update_common_ground_radar (void)
 	//
 	////////////////////////////////////////
 
-	if (ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+	if ((ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE && ground_radar_is_active())
+		|| inactive_check)
 	{
 		update_radar_sweep (&ground_radar, &cw_sweep_start_offset, &cw_sweep_end_offset);
 
@@ -1720,7 +1726,7 @@ void update_common_ground_radar (void)
 								sweep_direction = ground_radar.sweep_direction;
 							}
 
-							if (ground_radar.sweep_direction == sweep_direction)
+							if (ground_radar.sweep_direction == sweep_direction && !inactive_check)
 							{
 								//
 								// only update target info if the target is within range, sweep segment and los is clear
@@ -1774,7 +1780,7 @@ void update_common_ground_radar (void)
 								// reduce number of los checks by only considering 'even' entities on CW sweep and 'odd' entities on CCW sweep
 								//
 
-								if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+								if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS && !inactive_check)
 								{
 									if (get_local_entity_index (target) & 1)
 									{
@@ -1824,7 +1830,11 @@ void update_common_ground_radar (void)
 				}
 			}
 		}
-
+	}
+	
+	
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	{
 		////////////////////////////////////////
 		//
 		// update target
@@ -1904,7 +1914,28 @@ void activate_common_ground_radar (void)
 		ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
 	}
 
+	ground_radar_on = TRUE;
+	air_radar_on = FALSE;
+
 	ground_radar.target_locked = target_locked;
+}
+
+void toggle_ground_radar_active(void)
+{
+	if (ground_radar_on)
+		deactivate_common_ground_radar();
+	else
+		activate_common_ground_radar();	
+}
+
+int ground_radar_is_active(void)
+{
+	return ground_radar_on;
+}
+
+void set_ground_radar_is_active(int is_active)
+{
+	ground_radar_on = is_active;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1913,6 +1944,8 @@ void activate_common_ground_radar (void)
 
 void deactivate_common_ground_radar (void)
 {
+	ground_radar_on = FALSE;
+	
 	ground_radar.target_locked = FALSE;
 }
 
@@ -2569,7 +2602,7 @@ void update_common_air_radar (void)
 	//
 	////////////////////////////////////////
 
-	if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+	if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE && air_radar_is_active())
 	{
 		update_radar_sweep (&air_radar, &cw_sweep_start_offset, &cw_sweep_end_offset);
 
@@ -2849,8 +2882,29 @@ void activate_common_air_radar (void)
 	{
 		air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
 	}
+	
+	ground_radar_on = FALSE;
+	air_radar_on = TRUE;
 
 	air_radar.target_locked = target_locked;
+}
+
+void toggle_air_radar_active(void)
+{
+	if (air_radar_on)
+		deactivate_common_air_radar();
+	else
+		activate_common_air_radar();	
+}
+
+int air_radar_is_active(void)
+{
+	return air_radar_on;
+}
+
+void set_air_radar_is_active(int is_active)
+{
+	air_radar_on = is_active;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2859,6 +2913,8 @@ void activate_common_air_radar (void)
 
 void deactivate_common_air_radar (void)
 {
+	air_radar_on = FALSE;
+
 	air_radar.target_locked = FALSE;
 }
 
