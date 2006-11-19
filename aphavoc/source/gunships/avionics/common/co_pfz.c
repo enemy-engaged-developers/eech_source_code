@@ -53,6 +53,9 @@ void delete_nfz(unsigned int nfz_number)
 	memmove(&nfzs[nfz_number], &nfzs[nfz_number+1], (next_free_nfz - nfz_number) * sizeof(nfzs[0]));
 
 	next_free_nfz--;
+
+	if (!ground_radar_is_active())
+		update_common_ground_radar (TRUE);
 }
 
 void add_pfz(vec3d* corner1, vec3d* corner2, vec3d* corner3, vec3d* corner4)
@@ -160,6 +163,9 @@ void select_next_pfz(void)
 		
 		if (current_pfz >= next_free_pfz)
 			current_pfz = 0;
+
+		if (!ground_radar_is_active())
+			update_common_ground_radar (TRUE);
 	}
 	else
 		current_pfz = NO_PFZ;
@@ -173,6 +179,8 @@ void select_previous_pfz(void)
 		
 		if (current_pfz <= -1)
 			current_pfz = next_free_pfz-1;
+
+		update_common_ground_radar (TRUE);
 	}
 	else
 		current_pfz = NO_PFZ;
@@ -181,6 +189,8 @@ void select_previous_pfz(void)
 void deselect_pfz(void)
 {
 	current_pfz = NO_PFZ;
+	if (!ground_radar_is_active())
+		update_common_ground_radar (TRUE);
 }
 
 void delete_current_pfz(void)
