@@ -162,15 +162,24 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		return;
 	}
 
+	source = get_gunship_entity ();
+	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
+
+	// trying to fire a laser guided without laser active
+	if (weapon_database[selected_weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER
+		&& !laser_is_active())
+	{
+		weapon_lock_type = WEAPON_LOCK_NO_ACQUIRE;
+
+		return;
+	}
+
+
 	////////////////////////////////////////
 	//
 	// WEAPON_LOCK_NO_WEAPON
 	//
 	////////////////////////////////////////
-
-	source = get_gunship_entity ();
-
-	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
 
 	if (selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
