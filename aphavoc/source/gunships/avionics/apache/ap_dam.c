@@ -472,6 +472,9 @@ static void damage_systems (apache_damage_flags damage)
 
 			set_apache_upfront_display_text ("RADAR FAILURE", "", NULL, NULL);
 
+			set_ground_radar_is_active(FALSE);
+			set_air_radar_is_active(FALSE);
+
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_FAILURE);
 
 			if
