@@ -603,6 +603,8 @@ void set_gunship_target (entity *target)
 	if (!target)
 	{
 		target_locked = FALSE;
+		if (command_line_manual_laser_radar)
+			set_laser_is_active(FALSE);  // laser can only be active when we have a target
 	}
 }
 
@@ -1109,4 +1111,3 @@ void toggle_designated_target (void)
 }
 
 // Jabberwock 031107 ends
-
