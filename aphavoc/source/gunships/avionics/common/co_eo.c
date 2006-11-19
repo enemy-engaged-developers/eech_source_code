@@ -137,12 +137,17 @@ typedef struct EO_TARGET eo_target;
 static eo_target
 	*eo_target_root;
 
+static int
+	laser_active = FALSE;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void initialise_common_eo (void)
 {
+	laser_active = FALSE;
+	
 	eo_target_locked = FALSE;
 
 	eo_on_target = FALSE;
@@ -161,6 +166,36 @@ void deinitialise_common_eo (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_triangulated_range(entity* target)
+{
+	vec3d *target_position, *ownship_position;
+	entity* ownship = get_gunship_entity();
+
+	if (!target)
+		return 0.0;
+
+	ASSERT(system);
+	ASSERT(ownship);
+
+	ownship_position = get_local_entity_vec3d_ptr(ownship, VEC3D_TYPE_POSITION);
+	target_position = get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION);
+
+	if (ownship_position->y > target_position->y + 2.0)
+	{
+		float angle;
+		float range_2d = get_2d_range(ownship_position, target_position);
+		float own_altitude = current_flight_dynamics->radar_altitude.value;
+
+		// angle to target
+		angle = range_2d / (ownship_position->y - target_position->y);
+
+		// calculate range based on ground being at same altitude at target's position, add 10%
+		return 1.1 * angle * own_altitude;
+	}
+	else
+		return -1.0;
+}
 
 static void initialise_eo_target_list (void)
 {
@@ -1587,3 +1622,12 @@ void select_previous_designated_eo_target (void)
 
 // Jabberwock 031107 ends
 
+int laser_is_active(void)
+{
+	return laser_active;	
+}
+
+void set_laser_is_active(int is_active)
+{
+	laser_active = is_active;
+}
