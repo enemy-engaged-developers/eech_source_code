@@ -209,17 +209,6 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			if (!ka50_damage.radar)
-			{
-				target_acquisition_system = system;
-
-				activate_common_ground_radar ();
-
-				select_ka50_mfd_mode (MFD_MODE_GROUND_RADAR);
-
-				hud_mode = HUD_MODE_WEAPON;
-			}
-
 			damaged = ka50_damage.radar;
 
 			break;
@@ -228,17 +217,6 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			if (!ka50_damage.radar)
-			{
-				target_acquisition_system = system;
-
-				activate_common_air_radar ();
-
-				select_ka50_mfd_mode (MFD_MODE_AIR_RADAR);
-
-				hud_mode = HUD_MODE_WEAPON;
-			}
-
 			damaged = ka50_damage.radar;
 
 			break;
@@ -345,28 +323,12 @@ void update_ka50_target_acquisition_system (void)
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			update_ka50_ground_radar ();
-
-			update_common_ground_radar ();
-
-			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_GROUND_RADAR);
-
-			slave_common_eo_to_current_target ();
-
 			break;
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			update_ka50_air_radar ();
-
-			update_common_air_radar ();
-
-			update_weapon_lock_type (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
-
-			slave_common_eo_to_current_target ();
-
 			break;
 		}
 		////////////////////////////////////////

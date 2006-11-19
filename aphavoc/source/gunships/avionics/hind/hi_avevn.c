@@ -639,6 +639,15 @@ static void toggle_gear_event (event *ev)
 }
 // Retro 18Jul2004 end
 
+// arneh 2006-11-16 - manual laser control
+static void activate_laser_event(event* ev)
+{
+	if (!laser_is_active() && !hind_damage.laser_range_finder && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+		set_laser_is_active(TRUE);
+	else
+		set_laser_is_active(FALSE);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -665,10 +674,6 @@ void set_hind_avionics_events (void)
 
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_INSERT, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
-
-	set_event (DIK_HOME, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
-
 	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
 
 	set_event (DIK_END, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
@@ -678,10 +683,6 @@ void set_hind_avionics_events (void)
 	//
 	// repeated for programmable joysticks ...
 	//
-
-	set_event (DIK_1, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
-
-	set_event (DIK_2, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
@@ -735,9 +736,8 @@ void set_hind_avionics_events (void)
 //	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
 
-	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);
-
-	set_event (DIK_DIVIDE, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function2_event);
+// arneh 2006-11-16 - manual radar/laser control
+	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, activate_laser_event);
 
 	//
 	// miscellaneous
