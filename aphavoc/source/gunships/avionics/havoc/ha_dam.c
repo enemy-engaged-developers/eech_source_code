@@ -427,6 +427,9 @@ static void damage_systems (havoc_damage_flags damage)
 
 			set_havoc_ekran_display_text ("RADAR", "FAILURE", NULL, NULL);
 
+			set_ground_radar_is_active(FALSE);
+			set_air_radar_is_active(FALSE);
+
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_FAILURE);
 
 			if
@@ -497,6 +500,8 @@ static void damage_systems (havoc_damage_flags damage)
 			havoc_damage.laser_range_finder = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_laser_is_active(FALSE);
 
 			set_havoc_ekran_display_text ("LASER", "FAILURE", NULL, NULL);
 

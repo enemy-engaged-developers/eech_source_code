@@ -1783,7 +1783,7 @@ static void display_waypoint_information (void)
 			sprintf (buffer, "-:--.-");
 		}
 
-		set_2d_mono_font_position (-1.0, -0.6);
+		set_2d_mono_font_position (-1.0, -0.4);
 
 		set_hud_mono_font_rel_position (1.0, 0.0);
 
@@ -1812,7 +1812,7 @@ static void display_waypoint_information (void)
 			strcpy (buffer, "--:--:--");
 		}
 
-		set_2d_mono_font_position (-1.0, -0.7);
+		set_2d_mono_font_position (-1.0, -0.5);
 
 		set_hud_mono_font_rel_position (1.0, 0.0);
 
@@ -1850,13 +1850,13 @@ static void display_weapon_information (void)
 
 		count = get_local_entity_weapon_count (get_gunship_entity (), weapon_sub_type);
 
-		sprintf (s, "%s:%d", weapon_database[weapon_sub_type].hud_name, count);
+		sprintf (s, "%s %d", weapon_database[weapon_sub_type].hud_name, count);
 
-		set_2d_mono_font_position (-1.0, -0.6);
+		set_2d_mono_font_position (0.35, -0.7);
 
-		set_hud_mono_font_rel_position (1.0, 0.0);
+		set_mono_font_rel_position (1.0, 0.0);
 
-		print_hud_mono_font_string (s);
+		print_mono_font_string (s);
 
 		//
 		// weapon specific
@@ -1864,20 +1864,20 @@ static void display_weapon_information (void)
 
 		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
 		{
-			set_2d_mono_font_position (-1.0, -0.7);
+			set_2d_mono_font_position (0.35, -0.8);
 
-			set_hud_mono_font_rel_position (1.0, 0.0);
+			set_mono_font_rel_position (1.0, 0.0);
 
 			if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
 			{
-				print_hud_mono_font_string ("LOBL");
+				print_mono_font_string ("LOBL");
 			}
 			else
 			{
-				print_hud_mono_font_string ("LOAL");
+				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_comanche_missile_flight_time ();
+			flight_time = get_apache_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -1885,11 +1885,11 @@ static void display_weapon_information (void)
 
 				sprintf (s, "%.1f", flight_time);
 
-				set_2d_mono_font_position (-1.0, -0.8);
+				set_2d_mono_font_position (0.9, -0.8);
 
-				set_hud_mono_font_rel_position (1.0, 0.0);
+				set_mono_font_rel_position (0.8, 0.0);
 
-				print_hud_mono_font_string (s);
+				print_mono_font_string (s);
 			}
 		}
 		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261))
@@ -1903,11 +1903,11 @@ static void display_weapon_information (void)
 				sprintf (s, "Salvo:%d", rocket_salvo_size);
 			}
 
-			set_2d_mono_font_position (-1.0, -0.7);
+			set_2d_mono_font_position (0.35, -0.8);
 
-			set_hud_mono_font_rel_position (1.0, 0.0);
+			set_mono_font_rel_position (1.0, 0.0);
 
-			print_hud_mono_font_string (s);
+			print_mono_font_string (s);
 		}
 	}
 }
@@ -2444,106 +2444,6 @@ static void display_target_information (void)
 
 	set_mono_font_type (MONO_FONT_TYPE_6X7);
 
-	//
-	// target system
-	//
-
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			s = NULL;
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			s = "GND RDR";
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			s = "AIR RDR";
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			s = "FLIR";
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DTV:
-		////////////////////////////////////////
-		{
-			s = "DTV";
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_DVO:
-		////////////////////////////////////////
-		{
-			s = "DVO";
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HIDSS:
-		////////////////////////////////////////
-		{
-			s = "HIDSS";
-
-			break;
-		}
-		////////////////////////////////////////
-		default:
-		////////////////////////////////////////
-		{
-			debug_fatal ("Invalid target acquisition system = %d", target_acquisition_system);
-
-			break;
-		}
-	}
-
-	if (s)
-	{
-		width = get_mono_font_string_width (s);
-
-		set_2d_mono_font_position (0.8, -0.6);
-
-		set_hud_mono_font_rel_position (-width, 0.0);
-
-		print_hud_mono_font_string (s);
-	}
-
-	//
-	// locked
-	//
-
-	if (target_locked)
-	{
-		s = "LOCKED";
-
-		width = get_mono_font_string_width (s);
-
-		set_2d_mono_font_position (0.8, -0.7);
-
-		set_hud_mono_font_rel_position (-width, 0.0);
-
-		print_hud_mono_font_string (s);
-	}
-
 // Jabberwock 031107 Designated targets
 	
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
@@ -2556,11 +2456,12 @@ static void display_target_information (void)
 
 		set_2d_mono_font_position (-1.0, -0.8);
 
-		set_hud_mono_font_rel_position (1.0, 0.0);
+		set_mono_font_rel_position (1.0, 0.0);
 
-		print_hud_mono_font_string (s);
+		print_mono_font_string (s);
 	}
 // Jabberwock 031107 ends
+
 
 	//
 	// weapon lock
@@ -2662,9 +2563,9 @@ static void display_target_information (void)
 
 	set_2d_mono_font_position (0.0, -0.6);
 
-	set_hud_mono_font_rel_position (-width * 0.5, -9.0);
+	set_mono_font_rel_position (-width * 0.5, -9.0);
 
-	print_hud_mono_font_string (s);
+	print_mono_font_string (s);
 
 	//
 	// target name and range
@@ -2672,43 +2573,109 @@ static void display_target_information (void)
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
-	if (target)
+	if (target && s)
 	{
 		s = get_target_display_name (target, buffer, TRUE);
-
 		if (s)
 		{
 			width = get_mono_font_string_width (s);
-
+	
 			set_2d_mono_font_position (0.0, -0.8);
-
-			set_hud_mono_font_rel_position (-width * 0.5, 8.0);
-
-			print_hud_mono_font_string (s);
+	
+			set_mono_font_rel_position (-width * 0.5, 8.0);
+	
+			print_mono_font_string (s);
 		}
 
 		gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-
 		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
+	
 		target_range = get_3d_range (gunship_position, target_position);
-
-		if ((target_range < 1000.0) && (!comanche_damage.laser_designator))
+	}
+	
+	switch (target_acquisition_system)
+	{
+	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+		s = "FCR";
+		if (target)
+			sprintf(buffer, "R%.1f", target_range * 0.001);
+		else
+			sprintf(buffer, "AX.X");
+		break;
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+	case TARGET_ACQUISITION_SYSTEM_HIDSS:
+		s = "TADS";
+		if (target)
 		{
-			sprintf (buffer, "%dm", (int) target_range);
+			if (laser_is_active())
+				sprintf(buffer, "L%04.0f", target_range);
+			else
+			{
+				float range = get_triangulated_range(target);
+				if (range > 0)
+					sprintf(buffer, "A%.1f", range * 0.001);
+				else
+					sprintf(buffer, "AX.X");
+			}
 		}
 		else
-		{
-			sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-		}
+			sprintf(buffer, "AX.X");
+		break;
+	case TARGET_ACQUISITION_SYSTEM_OFF:
+	default:
+		s = "NONE";
+		sprintf(buffer, "AX.X");
+		break;
+	}
 
-		width = get_mono_font_string_width (buffer);
+	set_2d_mono_font_position (-0.95, -0.7);
+	width = 0; //get_mono_font_string_width (s) * -0.5;
+	set_mono_font_rel_position (width, 0);
+	print_mono_font_string (s);
 
-		set_2d_mono_font_position (0.8, -0.8);
+	set_2d_mono_font_position (-0.35, -0.7);
+	width = -get_mono_font_string_width (buffer); // * 0.5;
+	set_mono_font_rel_position (width, 0);
+	print_mono_font_string (buffer);
 
-		set_hud_mono_font_rel_position (-width, 0.0);
+	// target system emmision
+	set_2d_mono_font_position (-0.35, -0.8);
 
-		print_hud_mono_font_string (buffer);
+	switch (target_acquisition_system)
+	{
+		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+			if ((air_radar_is_active() && air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+				|| (ground_radar_is_active() && ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE))
+			{
+				if (laser_is_active())
+					s = "LASE/FCR";
+				else
+					s = "FCR XMIT";
+				
+				width = -get_mono_font_string_width (s);
+				set_mono_font_rel_position (width, 0);
+				print_mono_font_string(s);
+
+				break;
+			}
+			
+			// fall through
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+		case TARGET_ACQUISITION_SYSTEM_DVO:
+		case TARGET_ACQUISITION_SYSTEM_IHADSS:
+			if (laser_is_active())
+			{
+				s = "TGT LASE";
+				width = -get_mono_font_string_width (s);
+				set_mono_font_rel_position (width, 0);
+				print_mono_font_string(s);
+			}
+			break;
 	}
 }
 

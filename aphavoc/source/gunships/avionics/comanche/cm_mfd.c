@@ -1869,6 +1869,7 @@ static void draw_ground_radar_mfd (void)
 	// target details
 	//
 
+//	if (ground_radar_is_active())
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 	{
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
@@ -1945,7 +1946,8 @@ static void draw_ground_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+//	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	if (ground_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
 
@@ -2107,6 +2109,7 @@ static void draw_air_radar_mfd (void)
 	// target details
 	//
 
+//	if (air_radar_is_active())
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
 	{
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
@@ -2179,7 +2182,7 @@ static void draw_air_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+	if (air_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
 

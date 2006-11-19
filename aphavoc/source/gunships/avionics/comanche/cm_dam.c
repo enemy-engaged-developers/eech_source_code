@@ -627,6 +627,9 @@ static void damage_systems (comanche_damage_flags damage)
 
 			set_comanche_text_display_text ("RADAR FAILURE", "");
 
+			set_ground_radar_is_active(FALSE);
+			set_air_radar_is_active(FALSE);
+
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_FAILURE);
 
 			if
@@ -726,6 +729,8 @@ static void damage_systems (comanche_damage_flags damage)
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
 			set_comanche_text_display_text ("LASER DESIGNATOR", "FAILURE");
+
+			set_laser_is_active(FALSE);
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_LASER_DESIGNATOR_FAILURE);
 		}
