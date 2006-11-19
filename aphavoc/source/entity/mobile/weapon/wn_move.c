@@ -229,10 +229,10 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 				// fall through
 			
 			case MISSILE_PHASE2:
-				if (dive_ratio > -0.3)
+				if (dive_ratio > -0.25)
 				{
-					// seconds phase climb at 5%
-					float new_aim_y = weapon_position->y + range * 0.05;
+					// seconds phase climb at 4%
+					float new_aim_y = weapon_position->y + range * 0.04;
 					intercept_point->y = max(new_aim_y, intercept_point->y);
 	
 					break;
@@ -263,10 +263,10 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 			switch (raw->missile_phase)
 			{
 			case MISSILE_PHASE1:
-				if (dive_ratio > -0.25)
+				if (dive_ratio > -0.15)
 				{
-					// intial phase climb at 11%
-					float new_aim_y = weapon_position->y + range * 0.11;
+					// intial phase climb at 6%
+					float new_aim_y = weapon_position->y + range * 0.06;
 					intercept_point->y = max(new_aim_y, intercept_point->y);
 					
 					break;
@@ -274,10 +274,10 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 				
 				raw->missile_phase = MISSILE_PHASE2;
 			case MISSILE_PHASE2:
-				if (dive_ratio > -0.4)
+				if (dive_ratio > -0.3)
 				{
-					// second phase dive at 10%
-					float new_aim_y = weapon_position->y + range * -0.1;
+					// second phase dive at 3%
+					float new_aim_y = weapon_position->y + range * -0.03;
 					intercept_point->y = max(new_aim_y, intercept_point->y);
 					
 					break;
@@ -790,7 +790,13 @@ static void check_guidance_source (weapon *raw, entity *en)
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
-				new_target = get_local_entity_parent (raw->launched_weapon_link.parent, LIST_TYPE_TARGET);
+				// no target if no laser designation
+				if (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+				{
+					new_target = NULL;	
+				}
+				else
+					new_target = get_local_entity_parent (raw->launched_weapon_link.parent, LIST_TYPE_TARGET);
 
 				//
 				// check target is in weapon lock cone
