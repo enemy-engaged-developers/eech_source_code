@@ -937,6 +937,8 @@ static void toggle_gear_event (event *ev)
 }
 // Retro 18Jul2004 end
 
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -963,10 +965,6 @@ void set_blackhawk_avionics_events (void)
 
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
-	set_event (DIK_INSERT, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
-
-	set_event (DIK_HOME, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
-
 	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
 
 	set_event (DIK_END, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_dtv_event);
@@ -978,10 +976,6 @@ void set_blackhawk_avionics_events (void)
 	//
 	// repeated for programmable joysticks ...
 	//
-
-	set_event (DIK_1, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
-
-	set_event (DIK_2, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_air_radar_event);
 
 	set_event (DIK_3, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_ihadss_event);
 
@@ -1037,10 +1031,6 @@ void set_blackhawk_avionics_events (void)
 //	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
 
-	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);
-
-	set_event (DIK_DIVIDE, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function2_event);
-
 	//
 	// miscellaneous
 	//
@@ -1084,14 +1074,6 @@ void set_blackhawk_avionics_events (void)
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_rhs_mfd_event);
 
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
-
-	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);
-
-	set_event (DIK_1, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_ground_radar_mfd_event);
-
-	set_event (DIK_2, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_air_radar_mfd_event);
-
-	set_event (DIK_2, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_air_radar_mfd_event);
 
 	set_event (DIK_3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_tads_mfd_event);
 
