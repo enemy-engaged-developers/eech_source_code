@@ -266,42 +266,6 @@ static char small_hud_command_heading_carat[] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////
-//
-// rate of climb scale
-//
-////////////////////////////////////////
-
-static char large_hud_rate_of_climb_scale_pointer[] =
-{
-	15,
-	9,
-	0,
-	-4,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-};
-
-static char small_hud_rate_of_climb_scale_pointer[] =
-{
-	8,
-	5,
-	0,
-	-2,
-	0,0,1,0,0,0,0,0,
-	0,1,0,1,1,1,1,1,
-	1,0,0,0,0,0,0,1,
-	0,1,0,1,1,1,1,1,
-	0,0,1,0,0,0,0,0,
-};
-
 #define HUD_UNIT_RATIO 12.05    // ratio of HUD size with distance to HUD
 
 static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
@@ -424,18 +388,6 @@ static void draw_layout_grid (void)
 			draw_2d_line (HUD_WINDOW_X_MIN, y, HUD_WINDOW_X_MAX, y, sys_col_red);
 		}
 	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_hud_centre_datum (void)
-{
-	draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
-	draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
-	draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
-	draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -748,111 +700,6 @@ static void draw_heading_scale (void)
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_pitch_indicator (void)
-{
-	float
-		pitch,
-		y,
-		width;
-
-	char
-		s[20];
-
-	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
-
-	y = pitch * (-0.7 / (PI / 2.0));
-
-	draw_2d_line (-0.5, y, 0.7, y, hud_colour);
-
-	sprintf (s, "%d", abs ((int) (deg (pitch))));
-
-	if (draw_large_hud)
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (0.7, y);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position (-width + 1.0, -8.0);
-	}
-	else
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X7);
-
-		set_2d_mono_font_position (0.7, y);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position (-width + 1.0, -6.0);
-	}
-
-	print_mono_font_string (s);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_bank_scale (void)
-{
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+5.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-5.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+10.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-10.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+15.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-15.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+30.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-30.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+60.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-60.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, 0.0);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_aircraft_datum (void)
-{
-	float
-		roll;
-
-	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
-
-	set_2d_window_rotation (hud_env, -roll);
-
-	draw_2d_line (-0.35, +0.00, -0.15, +0.00, hud_colour);
-	draw_2d_line (+0.35, +0.00, +0.15, +0.00, hud_colour);
-	draw_2d_line (+0.00, +0.15, +0.00, +0.25, hud_colour);
-	draw_2d_line (-0.20, +0.00, -0.20, -0.04, hud_colour);
-	draw_2d_line (+0.20, +0.00, +0.20, -0.04, hud_colour);
-
-	set_2d_window_rotation (hud_env, 0.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1184,183 +1031,6 @@ static void display_altitude (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_rate_of_climb_scale (void)
-{
-	float
-		y,
-		i,
-		j,
-		width;
-
-	//
-	// draw scale
-	//
-
-	draw_2d_line (+0.800, +0.500, +0.800, -0.500, hud_colour);
-
-	draw_2d_line (+0.800, +0.500, +0.850, +0.500, hud_colour);
-	draw_2d_line (+0.800, +0.400, +0.825, +0.400, hud_colour);
-	draw_2d_line (+0.800, +0.300, +0.825, +0.300, hud_colour);
-	draw_2d_line (+0.800, +0.200, +0.825, +0.200, hud_colour);
-	draw_2d_line (+0.800, +0.100, +0.825, +0.100, hud_colour);
-	draw_2d_line (+0.800, +0.000, +0.850, +0.000, hud_colour);
-	draw_2d_line (+0.800, -0.100, +0.825, -0.100, hud_colour);
-	draw_2d_line (+0.800, -0.200, +0.825, -0.200, hud_colour);
-	draw_2d_line (+0.800, -0.300, +0.825, -0.300, hud_colour);
-	draw_2d_line (+0.800, -0.400, +0.825, -0.400, hud_colour);
-	draw_2d_line (+0.800, -0.500, +0.850, -0.500, hud_colour);
-
-	//
-	// get indicator position (fsd +/- 10m/s)
-	//
-
-	y = current_flight_dynamics->world_velocity_y.value;
-
-	y = bound (y, -10.0, 10.0);
-
-	y *= 0.05;
-
-	//
-	// draw indicator and fsd values
-	//
-
-	draw_2d_line (0.8, y, 0.85, y, hud_colour);
-
-	get_2d_float_screen_coordinates (0.85, y, &i, &j);
-
-	if (draw_large_hud)
-	{
-		draw_mono_sprite (large_hud_rate_of_climb_scale_pointer, i + 1.0, j, hud_colour);
-
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (1.0, 0.5);
-
-		width = get_mono_font_string_width ("10");
-
-		set_mono_font_rel_position (-width, -12.0);
-
-		print_mono_font_string ("10");
-
-		set_2d_mono_font_position (1.0, -0.5);
-
-		width = get_mono_font_string_width ("-10");
-
-		set_mono_font_rel_position (-width, 6.0);
-
-		print_mono_font_string ("-10");
-	}
-	else
-	{
-		draw_mono_sprite (small_hud_rate_of_climb_scale_pointer, i + 1.0, j, hud_colour);
-
-		set_mono_font_type (MONO_FONT_TYPE_6X7);
-
-		set_2d_mono_font_position (1.0, 0.5);
-
-		width = get_mono_font_string_width ("10");
-
-		set_mono_font_rel_position (-width, -8.0);
-
-		print_mono_font_string ("10");
-
-		set_2d_mono_font_position (1.0, -0.5);
-
-		width = get_mono_font_string_width ("-10");
-
-		set_mono_font_rel_position (-width, 4.0);
-
-		print_mono_font_string ("-10");
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void display_engine_torque (void)
-{
-	char
-		s[20];
-
-	int
-		torque;
-
-	float
-		x_min,
-		y_min,
-		x_max,
-		y_max,
-		width;
-
-	torque = (int) current_flight_dynamics->combined_engine_torque.value;
-
-	sprintf (s, "%d%%", torque);
-
-	if (draw_large_hud)
-	{
-		set_mono_font_type (MONO_FONT_TYPE_7X12);
-
-		set_2d_mono_font_position (0.0, 0.7);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position ((-width * 0.5) + 1.0, 0.0);
-
-		get_mono_font_position (&x_min, &y_min);
-
-		print_mono_font_string (s);
-
-		debug_log("8x14: %d, 10X16: %d", MONO_FONT_TYPE_8X14, MONO_FONT_TYPE_10X16);
-
-		if (torque >= 98)
-		{
-			x_min -= 2.0;
-			y_min -= 2.0;
-
-			x_max = x_min + width + 3.0;
-			y_max = y_min + 12.0;
-
-			draw_line (x_min, y_min, x_max, y_min, hud_colour);
-			draw_line (x_max, y_min, x_max, y_max, hud_colour);
-			draw_line (x_max, y_max, x_min, y_max, hud_colour);
-			draw_line (x_min, y_max, x_min, y_min, hud_colour);
-		}
-	}
-	else
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (0.0, 0.7);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position ((-width * 0.5) + 1.0, 0.0);
-
-		get_mono_font_position (&x_min, &y_min);
-
-		print_mono_font_string (s);
-
-		if (torque >= 98)
-		{
-			x_min -= 2.0;
-			y_min -= 2.0;
-
-			x_max = x_min + width + 3.0;
-			y_max = y_min + 10.0;
-
-			draw_line (x_min, y_min, x_max, y_min, hud_colour);
-			draw_line (x_max, y_min, x_max, y_max, hud_colour);
-			draw_line (x_max, y_max, x_min, y_max, hud_colour);
-			draw_line (x_min, y_max, x_min, y_min, hud_colour);
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static void display_waypoint_information (void)
 {
 	char
@@ -1425,167 +1095,12 @@ static void display_waypoint_information (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_bob_up_overlay (void)
-{
-	float
-		heading,
-		bearing,
-		theta,
-		length,
-		dx,
-		dz,
-		dxt,
-		dzt;
-
-	vec3d
-		*position,
-		*motion_vector;
-
-	if (hud_bob_up_overlay)
-	{
-		position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-
-		dx = hud_bob_up_position.x - position->x;
-		dz = hud_bob_up_position.z - position->z;
-
-		if (((dx * dx) + (dz * dz)) < (500.0 * 500.0))
-		{
-			heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
-
-			//
-			// hover box
-			//
-
-			dxt = (dx * cos (heading)) - (dz * sin (heading));
-			dzt = (dx * sin (heading)) + (dz * cos (heading));
-
-			dxt *= 1.0 / 100.0;
-			dzt *= 1.0 / 100.0;
-
-			clip_2d_point_to_hud_extent (&dxt, &dzt);
-
-			draw_2d_line (dxt - 0.083, dzt + 0.200, dxt + 0.083, dzt + 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt + 0.200, dxt + 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt + 0.083, dxt + 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt - 0.083, dxt + 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt - 0.200, dxt - 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt - 0.083, dzt - 0.200, dxt - 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt - 0.083, dxt - 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt + 0.083, dxt - 0.083, dzt + 0.200, hud_colour);
-
-			//
-			// velocity vector
-			//
-
-			motion_vector = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
-
-			dx = motion_vector->x;
-			dz = motion_vector->z;
-
-			length = sqrt ((dx * dx) + (dz * dz));
-
-			if ((length < kilometres_per_hour_to_metres_per_second (-0.1)) || (length > kilometres_per_hour_to_metres_per_second (0.1)))
-			{
-				length = min (length, kilometres_per_hour_to_metres_per_second (20.0));
-
-				length *= 0.5 / kilometres_per_hour_to_metres_per_second (20.0);
-
-				bearing = atan2 (dx, dz);
-
-				theta = bearing - heading;
-
-				if (theta > rad (180.0))
-				{
-					theta -= rad (360.0);
-				}
-				else if (theta < rad (-180.0))
-				{
-					theta += rad (360.0);
-				}
-			}
-			else
-			{
-				length = 0.0;
-
-				theta = 0.0;
-			}
-
-			set_2d_window_rotation (hud_env, -theta);
-
-			draw_2d_line (0.0, 0.0, 0.0, length, hud_colour);
-
-			if (draw_large_hud)
-			{
-				length = max (length - 0.008, 0.0);
-
-				draw_2d_line (-0.008, length, 0.008, length, hud_colour);
-			}
-
-			set_2d_window_rotation (hud_env, 0.0);
-		}
-		else
-		{
-			clear_hud_bob_up_overlay ();
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static void draw_basic_hud(void)
 {
 	display_altitude();
 	display_vertical_velocity();
 	display_true_airspeed();
 	draw_pitch_scale();
-}
-
-static void draw_navigation_mode_hud (void)
-{
-	draw_hud_centre_datum ();
-
-	draw_heading_scale ();
-
-	draw_pitch_indicator ();
-
-	draw_bank_scale ();
-
-	draw_aircraft_datum ();
-
-	display_true_airspeed ();
-
-	display_altitude ();
-
-	draw_rate_of_climb_scale ();
-
-	display_engine_torque ();
-
-	display_waypoint_information ();
-
-	draw_bob_up_overlay ();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_weapon_mode_hud (void)
-{
-	draw_hud_centre_datum ();
-
-	draw_heading_scale ();
-
-	display_true_airspeed ();
-
-	display_altitude ();
-
-	draw_rate_of_climb_scale ();
-
-	display_engine_torque ();
-
-	draw_bob_up_overlay ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2131,13 +1646,8 @@ static void initialise_hms_gun_pipper (void)
 static void draw_gun_pipper (float x, float y, float range, float weapon_min_range, float weapon_max_range)
 {
 	float
-		normalised_range,
 		theta,
 		max_range;
-
-	int
-		i,
-		i_max;
 
 	if (weapon_max_range > 5000)
 		max_range = 10000;
@@ -2146,15 +1656,19 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 	else
 		max_range = 2500;
 
-	normalised_range = range / max_range;
-
-	i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
-
-	i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
-
-	for (i = 0; i <= i_max; i++)
+	if (get_range_finder() != RANGEFINDER_TRIANGULATION)
 	{
-		set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
+		int i, i_max;
+		float normalised_range = range / max_range;
+	
+		i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
+	
+		i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
+	
+		for (i = 0; i <= i_max; i++)
+		{
+			set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
+		}
 	}
 
 	set_2d_instance_position (hud_env, x, y);
@@ -2174,29 +1688,6 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 	reset_2d_instance (hud_env);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-static void draw_target_marker_valid_lock (float x, float y)
-{
-	draw_2d_circle (x, y, 0.15, hud_colour);
-
-	draw_2d_line (x - 0.20, y, x - 0.25, y, hud_colour);
-	draw_2d_line (x + 0.20, y, x + 0.25, y, hud_colour);
-	draw_2d_line (x, y - 0.20, x, y - 0.25, hud_colour);
-	draw_2d_line (x, y + 0.20, x, y + 0.25, hud_colour);
-}
-*/
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-static void draw_target_marker_invalid_lock (float x, float y)
-{
-	draw_2d_circle (x, y, 0.15, hud_colour);
-}
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2256,38 +1747,6 @@ static void draw_target_marker (void)
 				target_range = get_3d_range (source_position, &target_position);
 
 				draw_gun_pipper (x, y, target_range, weapon_database[selected_weapon_type].min_range, weapon_database[selected_weapon_type].max_range);
-/*
-				if (weapon_lock_type == WEAPON_LOCK_VALID)
-				{
-					if
-					(
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND)
-					)
-					{
-						source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-						target_range = get_3d_range (source_position, &target_position);
-
-						if (target_range < weapon_database[selected_weapon_type].max_range)
-						{
-							draw_gun_pipper (x, y, target_range, weapon_database[selected_weapon_type].max_range);
-						}
-						else
-						{
-							draw_target_marker_valid_lock (x, y);
-						}
-					}
-					else
-					{
-						draw_target_marker_valid_lock (x, y);
-					}
-				}
-				else
-				{
-					draw_target_marker_invalid_lock (x, y);
-				}*/
 
 				//
 				// if unguided weapon then draw a dot in the target marker centre (except for airborne targets)
@@ -2328,162 +1787,6 @@ static void draw_target_marker (void)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-static char target_range_scale_pointer[] =
-{
-	15,
-	9,
-	0,
-	-4,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-};
-*/
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-#define NEAR_RANGE_SCALE				((float) 5000.0)
-#define FAR_RANGE_SCALE					((float) 10000.0)
-#define ONE_OVER_NEAR_RANGE_SCALE	((float) (1.0 / 5000.0))
-#define ONE_OVER_FAR_RANGE_SCALE		((float) (1.0 / 10000.0))
-
-static void draw_target_range_indicator (void)
-{
-	char
-		*s;
-
-	entity
-		*source,
-		*target;
-
-	entity_sub_types
-		selected_weapon_type;
-
-	float
-		i,
-		j,
-		y,
-		width,
-		target_range,
-		range_scale,
-		one_over_range_scale,
-		min_weapon_range,
-		max_weapon_range;
-
-	vec3d
-		*source_position,
-		*target_position;
-
-	source = get_gunship_entity ();
-
-	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-
-	//
-	// draw range scale (regardless of having a target)
-	//
-
-	draw_2d_line (-0.8, 0.5, -0.8, -0.5, hud_colour);
-
-	draw_2d_line (-0.8,  0.5, -0.85,  0.5, hud_colour);
-	draw_2d_line (-0.8,  0.3, -0.85,  0.3, hud_colour);
-	draw_2d_line (-0.8,  0.1, -0.85,  0.1, hud_colour);
-	draw_2d_line (-0.8, -0.1, -0.85, -0.1, hud_colour);
-	draw_2d_line (-0.8, -0.3, -0.85, -0.3, hud_colour);
-	draw_2d_line (-0.8, -0.5, -0.85, -0.5, hud_colour);
-
-	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
-
-	range_scale = FAR_RANGE_SCALE;
-
-	one_over_range_scale = ONE_OVER_FAR_RANGE_SCALE;
-
-	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-	{
-		min_weapon_range = weapon_database[selected_weapon_type].min_range;
-		max_weapon_range = weapon_database[selected_weapon_type].max_range;
-
-		if (max_weapon_range <= NEAR_RANGE_SCALE)
-		{
-			range_scale = NEAR_RANGE_SCALE;
-
-			one_over_range_scale = ONE_OVER_NEAR_RANGE_SCALE;
-		}
-
-		y = 1.0 - (min_weapon_range * one_over_range_scale);
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-
-		y = 1.0 - (max_weapon_range * one_over_range_scale);
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-	}
-
-	if (range_scale == NEAR_RANGE_SCALE)
-	{
-		s = "5";
-	}
-	else
-	{
-		s = "10";
-	}
-
-	set_mono_font_type (MONO_FONT_TYPE_7X12);
-
-	set_2d_mono_font_position (-0.85, 0.5);
-
-	width = get_mono_font_string_width (s);
-
-	set_mono_font_rel_position (-width - 1.0, -4.0);
-
-	print_mono_font_string (s);
-
-	//
-	// draw target range pointer
-	//
-
-	if (target)
-	{
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
-
-		if (target_range < range_scale)
-		{
-			y = 1.0 - (target_range * one_over_range_scale);
-		}
-		else
-		{
-			y = 0.0;
-		}
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-
-		get_2d_float_screen_coordinates (-0.75, 0.5 - y, &i, &j);
-
-		draw_mono_sprite (target_range_scale_pointer, i, j, hud_colour);
-	}
-}
-
-#undef NEAR_RANGE_SCALE
-#undef FAR_RANGE_SCALE
-#undef ONE_OVER_NEAR_RANGE_SCALE
-#undef ONE_OVER_FAR_RANGE_SCALE
-
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2574,6 +1877,7 @@ static void display_target_information (void)
 {
 	const char
 		*s;
+
 	char
 		buffer[200];
 
@@ -2584,6 +1888,12 @@ static void display_target_information (void)
 		*target,
 		*source;
 
+	int has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (draw_large_hud)
+		set_mono_font_type (MONO_FONT_TYPE_7X12);
+	else
+		set_mono_font_type (MONO_FONT_TYPE_5X7);
 
 	// Range
 	source = get_gunship_entity ();
@@ -2591,25 +1901,27 @@ static void display_target_information (void)
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 	if (target)
 	{
-		vec3d *target_position, *source_position;
 		float min_weapon_range, max_weapon_range, target_range;
 		entity_sub_types selected_weapon_type;
 
+		if (has_range)
+		{
+			vec3d *target_position, *source_position;
 
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		target_range = get_3d_range (source_position, target_position);
+			source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-		if (draw_large_hud)
-			set_mono_font_type (MONO_FONT_TYPE_7X12);
-		else
-			set_mono_font_type (MONO_FONT_TYPE_5X7);
+			target_range = get_3d_range (source_position, target_position);
+		}
 
-		sprintf (buffer, "%2.1f", target_range * 0.001);
-		set_2d_mono_font_position (0.0, -0.65);
-		width = get_mono_font_string_width (buffer);
-		set_mono_font_rel_position (-width * 0.5, 0.0);
-		print_mono_font_string (buffer);
+		if (has_range)
+		{
+			sprintf (buffer, "%2.1f", target_range * 0.001);
+			set_2d_mono_font_position (0.0, -0.65);
+			width = get_mono_font_string_width (buffer);
+			set_mono_font_rel_position (-width * 0.5, 0.0);
+			print_mono_font_string (buffer);
+		}
 
 		// min and max range
 		selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
@@ -2618,7 +1930,7 @@ static void display_target_information (void)
 		max_weapon_range = weapon_database[selected_weapon_type].max_range;
 		
 		// flashing X when within minimum range
-		if (target_range < min_weapon_range && (get_system_time() % 800) < 400)
+		if (has_range && target_range < min_weapon_range && (get_system_time() % 800) < 400)
 		{
 			draw_line_func(-0.5, -0.5, 0.5, 0.5, hud_colour);
 			draw_line_func(-0.5, 0.5, 0.5, -0.5, hud_colour);
@@ -2628,6 +1940,11 @@ static void display_target_information (void)
 	//
 	// weapon lock
 	//
+
+	if (draw_large_hud)
+		set_mono_font_type (MONO_FONT_TYPE_6X10);
+	else
+		set_mono_font_type (MONO_FONT_TYPE_3X6);
 
 	switch (weapon_lock_type)
 	{
@@ -2653,11 +1970,17 @@ static void display_target_information (void)
 			s = "NO SGT";
 			break;
 		case WEAPON_LOCK_MIN_RANGE:
-			s = "MIN RNG";
-			break;
+			if (has_range)
+			{
+				s = "MIN RNG";
+				break;
+			}
 		case WEAPON_LOCK_MAX_RANGE:
-			s = "MAX RNG";
-			break;
+			if (has_range)
+			{
+				s = "MAX RNG";
+				break;
+			}
 		case WEAPON_LOCK_VALID:
 			s = "LOCK";
 			break;
@@ -2666,21 +1989,29 @@ static void display_target_information (void)
 			break;
 	}
 
-	if (draw_large_hud)
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-	else
-		set_mono_font_type (MONO_FONT_TYPE_3X6);
-
 	width = get_mono_font_string_width (s);
 	set_2d_mono_font_position (-0.9, -0.2);
 	set_mono_font_rel_position (0.0, 0.0);
 	print_mono_font_string (s);
 
+	// laser and radar indicators
+	if (laser_is_active())
+	{
+		set_2d_mono_font_position (-0.8, 0.2);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("L");
+	}
+
+	if (get_local_entity_int_value(source, INT_TYPE_RADAR_ON))
+	{
+		set_2d_mono_font_position (-0.8, 0.1);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("R");
+	}
+
 	//
 	// target name
 	//
-
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	if (target)
 	{
@@ -2694,6 +2025,7 @@ static void display_target_information (void)
 			print_mono_font_string (s);
 		}
 	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

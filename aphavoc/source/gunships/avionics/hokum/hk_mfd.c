@@ -2028,7 +2028,7 @@ static void draw_ground_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	if (ground_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
 
@@ -2262,7 +2262,7 @@ static void draw_air_radar_mfd (void)
 	// sweep
 	//
 
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+	if (air_radar_is_active())
 	{
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
 
@@ -2992,13 +2992,14 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		buffer[200];
 
 	int
-		heading_readout;
+		heading_readout,
+		has_range;
 
 	float
 		width,
 		heading,
 		marker_position,
-		target_range,
+		target_range = 0.0,
 		y_adjust,
 		i,
 		j,
@@ -3011,7 +3012,6 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	vec3d
 		*source_position,
-		*target_position,
 		target_point;
 
 	viewpoint
@@ -3028,9 +3028,11 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-	if (target)
+	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (target && has_range)
 	{
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+		vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 		target_range = get_3d_range (source_position, target_position);
 	}
@@ -3278,7 +3280,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	// target range
 	//
 
-	if (target)
+	if (target && has_range)
 	{
 		if ((target_range < 1000.0) && (!hokum_damage.laser_designator))
 		{
@@ -3495,7 +3497,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR1);
 	}
 
-	if (target)
+	if (target && has_range)
 	{
 		marker_position = (min (target_range, eo_max_visual_range) / eo_max_visual_range) * -0.5;
 
@@ -5595,7 +5597,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
 	{
-		if (source_target)
+		if (source_target && get_range_finder() != RANGEFINDER_TRIANGULATION)
 		{
 			vec3d
 				*target_position;
