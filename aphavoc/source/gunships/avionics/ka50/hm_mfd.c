@@ -353,44 +353,36 @@ static void draw_damaged_mfd (void)
 static void display_radar_scan_range (float scan_range)
 {
 //VJ 030807 radar range adjustable
-////Moje 030818 Taken out until VJ looks into it
-////            Double lines means I reset the code
 	char
-////Moje 030818		s[8];
+		s[8];
 //		*s;
-                *s;
 
 	float
 		width;
 
-	if (scan_range == KA50_RADAR_SCAN_RANGE_1000)
+	if (scan_range == HIND_RADAR_SCAN_RANGE_1000)
 	{
 //		s = "1Km";
-		s = "1Km";
-		sprintf(s,"%.0fKm",KA50_RADAR_SCAN_RANGE_1000/1000);	
+		sprintf(s,"%.0fKm",HIND_RADAR_SCAN_RANGE_1000/1000);	
 	}
-	else if (scan_range == KA50_RADAR_SCAN_RANGE_2000)
+	else if (scan_range == HIND_RADAR_SCAN_RANGE_2000)
 	{
 //		s = "2Km";
-		s = "2Km";
-		sprintf(s,"%.0fKm",KA50_RADAR_SCAN_RANGE_2000/1000);	
+		sprintf(s,"%.0fKm",HIND_RADAR_SCAN_RANGE_2000/1000);	
 	}
-	else if (scan_range == KA50_RADAR_SCAN_RANGE_4000)
+	else if (scan_range == HIND_RADAR_SCAN_RANGE_4000)
 	{
 //		s = "4Km";
-		s = "4Km";
-		sprintf(s,"%.0fKm",KA50_RADAR_SCAN_RANGE_4000/1000);	
+		sprintf(s,"%.0fKm",HIND_RADAR_SCAN_RANGE_4000/1000);	
 	}
-	else if (scan_range == KA50_RADAR_SCAN_RANGE_6000)
+	else if (scan_range == HIND_RADAR_SCAN_RANGE_6000)
 	{
 //		s = "6Km";
-		s = "6Km";
-		sprintf(s,"%.0fKm",KA50_RADAR_SCAN_RANGE_6000/1000);	
+		sprintf(s,"%.0fKm",HIND_RADAR_SCAN_RANGE_6000/1000);	
 	}
 	else
 	{
 //		s = "XXX";
-		s = "XXX";
 		sprintf(s,"XXX");		
 	}
 
@@ -1091,7 +1083,6 @@ static void draw_ground_radar_mfd (void)
 		}
 		// Jabberwock 031107 ends	
 	}
-
 	//
 	// scan range
 	//
@@ -2088,7 +2079,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	vec3d
 		*source_position,
-		*target_position,
 		target_point;
 
 	viewpoint
@@ -2107,9 +2097,13 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	if (target)
 	{
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
+		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
+			target_range = get_triangulated_range(target);
+		else
+		{
+			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			target_range = get_3d_range (source_position, target_position);
+		}
 	}
 
 	////////////////////////////////////////

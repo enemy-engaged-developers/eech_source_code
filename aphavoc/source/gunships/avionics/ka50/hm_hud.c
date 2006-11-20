@@ -1335,7 +1335,6 @@ void draw_ka50_hud_on_cockpit (int hud_enlarge)
 		switch (hud_mode)
 		{
 			case HUD_MODE_NAVIGATION:
-			case HUD_MODE_TRANSITION:
 			{
 				draw_navigation_mode_hud (FALSE);
 
@@ -1441,8 +1440,8 @@ void draw_ka50_hud_on_texture (void)
 
 			switch (hud_mode)
 			{
+				case HUD_MODE_TRANSITION:				
 				case HUD_MODE_NAVIGATION:
-				case HUD_MODE_TRANSITION:
 				{
 					draw_navigation_mode_hud (TRUE);
 
@@ -1757,44 +1756,6 @@ static void initialise_hms_gun_pipper (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_gun_pipper (float x, float y, float range, float max_range)
-{
-	float
-		normalised_range,
-		theta;
-
-	int
-		i,
-		i_max;
-
-	normalised_range = range / max_range;
-
-	i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
-
-	i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
-
-	for (i = 0; i <= i_max; i++)
-	{
-		set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
-	}
-
-	set_2d_instance_position (hud_env, x, y);
-
-	draw_2d_line (0.0, 0.15, 0.0, 0.18, hud_colour);
-
-	theta = normalised_range * -PI2;
-
-	set_2d_instance_rotation (hud_env, theta);
-
-	draw_2d_line (0.0, 0.15, 0.0, 0.18, hud_colour);
-
-	reset_2d_instance (hud_env);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static void draw_target_marker_valid_lock (float x, float y)
 {
 	draw_2d_circle (x, y, 0.2, hud_colour);
@@ -1833,15 +1794,13 @@ static void draw_target_marker (void)
 		i,
 		j,
 		x,
-		y,
-		target_range;
+		y;
 
 	entity
 		*source,
 		*target;
 
 	vec3d
-		*source_position,
 		target_position,
 		intercept_point;
 
@@ -1870,36 +1829,9 @@ static void draw_target_marker (void)
 				clip_2d_point_to_hud_extent (&x, &y);
 
 				if (weapon_lock_type == WEAPON_LOCK_VALID)
-				{
-					if
-					(
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND)
-					)
-					{
-						source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-						target_range = get_3d_range (source_position, &target_position);
-
-						if (target_range < weapon_database[selected_weapon_type].max_range)
-						{
-							draw_gun_pipper (x, y, target_range, weapon_database[selected_weapon_type].max_range);
-						}
-						else
-						{
-							draw_target_marker_valid_lock (x, y);
-						}
-					}
-					else
-					{
-						draw_target_marker_valid_lock (x, y);
-					}
-				}
+					draw_target_marker_valid_lock (x, y);
 				else
-				{
 					draw_target_marker_invalid_lock (x, y);
-				}
 
 				//
 				// if unguided weapon then draw a dot in the target marker centre (except for airborne targets)
@@ -1993,13 +1925,18 @@ static void draw_target_range_indicator (void)
 		min_weapon_range,
 		max_weapon_range;
 
-	vec3d
-		*source_position,
-		*target_position;
-
 	source = get_gunship_entity ();
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+
+	set_mono_font_type (MONO_FONT_TYPE_7X12);
+	// laser indicator
+	if (laser_is_active())
+	{
+		set_2d_mono_font_position (-0.85, 0.6);
+		set_mono_font_rel_position (1.0, 0.0);
+		print_mono_font_string("L");
+	}
 
 	//
 	// draw range scale (regardless of having a target)
@@ -2050,8 +1987,6 @@ static void draw_target_range_indicator (void)
 		s = "10";
 	}
 
-	set_mono_font_type (MONO_FONT_TYPE_7X12);
-
 	set_2d_mono_font_position (-0.85, 0.5);
 
 	width = get_mono_font_string_width (s);
@@ -2066,11 +2001,19 @@ static void draw_target_range_indicator (void)
 
 	if (target)
 	{
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
+		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
+			target_range = get_triangulated_range(target);
+		else
+		{
+			vec3d
+				*source_position,
+				*target_position;
+			
+			source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	
+			target_range = get_3d_range (source_position, target_position);
+		}
 
 		if (target_range < range_scale)
 		{
@@ -2189,6 +2132,9 @@ static void display_target_information (void)
 
 	entity
 		*target;
+	
+	rangefinding_system
+		range_finder = get_range_finder();
 
 	set_mono_font_type (MONO_FONT_TYPE_6X10);
 
@@ -2332,6 +2278,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MIN_RANGE:
 		////////////////////////////////////////
+		if (range_finder != RANGEFINDER_TRIANGULATION)
 		{
 			s = "MIN RANGE";
 
@@ -2340,6 +2287,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MAX_RANGE:
 		////////////////////////////////////////
+		if (range_finder != RANGEFINDER_TRIANGULATION)
 		{
 			s = "MAX RANGE";
 
@@ -2483,14 +2431,14 @@ void draw_ka50_hms (void)
 		{
 			if (d3d_modulate_alpha)
 			{
-				heading_offset = KA50_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
+				heading_offset = HIND_INSTRUMENT_VIEW_HEADING - pilot_head_heading;
 
 				if (heading_offset < 0.0)
 				{
 					heading_offset = -heading_offset;
 				}
 
-				pitch_offset = KA50_INSTRUMENT_VIEW_PITCH - pilot_head_pitch;
+				pitch_offset = HIND_INSTRUMENT_VIEW_PITCH - pilot_head_pitch;
 
 				if (pitch_offset < 0.0)
 				{
@@ -2508,7 +2456,7 @@ void draw_ka50_hms (void)
 			}
 			else
 			{
-				if ((pilot_head_heading == KA50_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == KA50_INSTRUMENT_VIEW_PITCH))
+				if ((pilot_head_heading == HIND_INSTRUMENT_VIEW_HEADING) && (pilot_head_pitch == HIND_INSTRUMENT_VIEW_PITCH))
 				{
 					return;
 				}
