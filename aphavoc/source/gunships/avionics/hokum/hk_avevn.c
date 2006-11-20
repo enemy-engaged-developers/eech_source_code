@@ -1198,6 +1198,15 @@ static void eject_event (event *ev)
 	}
 }
 
+
+// arneh 2006-11-16 - manual laser control
+static void activate_laser_event(event* ev)
+{
+	if (!laser_is_active() && !hokum_damage.laser_designator && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+		set_laser_is_active(TRUE);
+	else
+		set_laser_is_active(FALSE);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1295,9 +1304,11 @@ void set_hokum_avionics_events (void)
 	//set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
 
-	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);
-
+// arneh 2006-11-16 - manual radar/laser control
 	set_event (DIK_DIVIDE, MODIFIER_NONE, KEY_STATE_DOWN, target_acquisition_system_misc_function2_event);
+	set_event (DIK_DIVIDE, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, target_acquisition_system_misc_function1_event);
+
+	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, activate_laser_event);
 
 	//
 	// miscellaneous
