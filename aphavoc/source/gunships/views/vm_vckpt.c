@@ -1224,7 +1224,7 @@ static void draw_night_vision_mask (void)
 		colour.red		= 255;
 		colour.green	= 255;
 		colour.blue		= 255;
-		colour.alpha	= 162;
+		colour.alpha	= 192;
 
 		specular.red	= 0;
 		specular.green	= 0;
