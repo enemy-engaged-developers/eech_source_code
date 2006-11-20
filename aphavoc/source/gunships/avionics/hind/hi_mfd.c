@@ -2079,7 +2079,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	vec3d
 		*source_position,
-		*target_position,
 		target_point;
 
 	viewpoint
@@ -2098,9 +2097,13 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	if (target)
 	{
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
+		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
+			target_range = get_triangulated_range(target);
+		else
+		{
+			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			target_range = get_3d_range (source_position, target_position);
+		}
 	}
 
 	////////////////////////////////////////
