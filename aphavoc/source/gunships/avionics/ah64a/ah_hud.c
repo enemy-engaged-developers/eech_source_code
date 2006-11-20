@@ -538,7 +538,7 @@ static void draw_heading_scale (void)
 	// draw command heading carat
 	//
 
-	if (!apache_damage.navigation_computer)
+	if (!ah64a_damage.navigation_computer)
 	{
 		entity
 			*wp;
@@ -594,7 +594,7 @@ static void draw_heading_scale (void)
 		float
 			sweep_position;
 
-		if (!apache_damage.radar)
+		if (!ah64a_damage.radar)
 		{
 			radar = NULL;
 
@@ -1651,7 +1651,7 @@ static void display_waypoint_information (void)
 
 		waypoint_range = get_2d_range (gunship_position, &waypoint_position);
 
-		if (!apache_damage.navigation_computer)
+		if (!ah64a_damage.navigation_computer)
 		{
 			if (waypoint_range < 1000.0)
 			{
@@ -1695,7 +1695,7 @@ static void display_waypoint_information (void)
 		// time to go
 		//
 
-		if ((current_flight_dynamics->velocity_z.value > 0.1) && (!apache_damage.navigation_computer))
+		if ((current_flight_dynamics->velocity_z.value > 0.1) && (!ah64a_damage.navigation_computer))
 		{
 			float
 				time_to_go,
@@ -1779,7 +1779,7 @@ static void display_weapon_information (void)
 				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_apache_missile_flight_time ();
+			flight_time = get_ah64a_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2307,7 +2307,7 @@ static void draw_target_symbology (void)
 				}
 				else
 				{
-					draw_dashed_stinger_target_marker (apache_stinger_seeker_head_x_position, apache_stinger_seeker_head_y_position);
+					draw_dashed_stinger_target_marker (ah64a_stinger_seeker_head_x_position, ah64a_stinger_seeker_head_y_position);
 				}
 
 				break;
@@ -2533,7 +2533,7 @@ static void display_target_information (void)
 	}
 
 /*
-		if ((target_range < 1000.0) && (!apache_damage.laser_designator))
+		if ((target_range < 1000.0) && (!ah64a_damage.laser_designator))
 		{
 			sprintf (buffer, "%dm", (int) target_range);
 		}
@@ -3068,7 +3068,7 @@ void draw_ah64a_hud (void)
 	//
 	////////////////////////////////////////
 
-	if (apache_damage.ihadss)
+	if (ah64a_damage.ihadss)
 	{
 		return;
 	}
