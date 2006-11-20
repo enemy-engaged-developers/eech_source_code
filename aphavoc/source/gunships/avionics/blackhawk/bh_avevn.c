@@ -1075,9 +1075,9 @@ void set_blackhawk_avionics_events (void)
 
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
 
-	set_event (DIK_3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_tads_mfd_event);
+//	set_event (DIK_3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_tads_mfd_event);
 
-	set_event (DIK_3, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_tads_mfd_event);
+//	set_event (DIK_3, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_tads_mfd_event);
 
 	set_event (DIK_4, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_tsd_mfd_event);
 

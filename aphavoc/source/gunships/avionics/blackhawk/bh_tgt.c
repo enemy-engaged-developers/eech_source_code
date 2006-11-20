@@ -237,8 +237,6 @@ void select_blackhawk_target_acquisition_system (target_acquisition_systems syst
 
 				activate_common_eo ();
 
-				select_blackhawk_tads_mfd ();
-
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -256,8 +254,6 @@ void select_blackhawk_target_acquisition_system (target_acquisition_systems syst
 
 				activate_common_eo ();
 
-				select_blackhawk_tads_mfd ();
-
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -274,8 +270,6 @@ void select_blackhawk_target_acquisition_system (target_acquisition_systems syst
 				target_acquisition_system = system;
 
 				activate_common_eo ();
-
-				select_blackhawk_tads_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}

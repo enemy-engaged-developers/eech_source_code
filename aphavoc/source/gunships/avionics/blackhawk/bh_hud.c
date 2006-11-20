@@ -2090,10 +2090,6 @@ static void display_target_information (void)
 	entity
 		*target;
 
-	vec3d
-		*gunship_position,
-		*target_position;
-
 	set_mono_font_type (MONO_FONT_TYPE_6X7);
 
 	//
@@ -2278,21 +2274,7 @@ static void display_target_information (void)
 		}
 		////////////////////////////////////////
 		case WEAPON_LOCK_MIN_RANGE:
-		////////////////////////////////////////
-		{
-			s = "MIN RANGE";
-
-			break;
-		}
-		////////////////////////////////////////
 		case WEAPON_LOCK_MAX_RANGE:
-		////////////////////////////////////////
-		{
-			s = "MAX RANGE";
-
-			break;
-		}
-		////////////////////////////////////////
 		case WEAPON_LOCK_VALID:
 		////////////////////////////////////////
 		{
@@ -2339,20 +2321,9 @@ static void display_target_information (void)
 			print_mono_font_string (s);
 		}
 
-		gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+		target_range = get_triangulated_range(target);
 
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (gunship_position, target_position);
-
-		if ((target_range < 1000.0) && (!blackhawk_damage.laser_designator))
-		{
-			sprintf (buffer, "%dm", (int) target_range);
-		}
-		else
-		{
-			sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-		}
+		sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
 
 		width = get_mono_font_string_width (buffer);
 

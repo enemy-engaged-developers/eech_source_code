@@ -9500,7 +9500,7 @@ static mfd_modes get_next_mfd_mode (mfd_modes mfd_mode)
 		}
 		case MFD_MODE_ENGINE:
 		{
-			next_mfd_mode = get_mfd_mode_for_eo_sensor ();
+			next_mfd_mode = MFD_MODE_TSD;
 
 			break;
 		}
@@ -9560,7 +9560,7 @@ static mfd_modes get_previous_mfd_mode (mfd_modes mfd_mode)
 		}
 		case MFD_MODE_TSD:
 		{
-			previous_mfd_mode = get_mfd_mode_for_eo_sensor ();
+			previous_mfd_mode = MFD_MODE_ENGINE;
 
 			break;
 		}
