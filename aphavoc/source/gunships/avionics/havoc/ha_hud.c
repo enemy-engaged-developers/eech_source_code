@@ -260,64 +260,6 @@ static char small_hud_command_heading_carat[] =
 };
 
 
-
-static char large_hud_heading_scale_datum[] =
-{
-	5,
-	6,
-	-2,
-	0,
-	0,0,1,0,0,
-	0,0,1,0,0,
-	0,1,1,1,0,
-	0,1,1,1,0,
-	1,1,1,1,1,
-	1,1,1,1,1,
-};
-
-static char small_hud_heading_scale_datum[] =
-{
-	5,
-	3,
-	-2,
-	0,
-	0,0,1,0,0,
-	0,1,1,1,0,
-	1,1,1,1,1,
-};
-
-static char large_hud_bob_up_command_heading_carat[] =
-{
-	5,
-	11,
-	-2,
-	0,
-	0,0,1,0,0,
-	0,0,1,0,0,
-	0,1,1,1,0,
-	0,1,1,1,0,
-	1,1,1,1,1,
-	1,1,1,1,1,
-	0,0,1,0,0,
-	0,0,1,0,0,
-	0,0,1,0,0,
-	0,0,1,0,0,
-	0,0,1,0,0,
-};
-
-static char small_hud_bob_up_command_heading_carat[] =
-{
-	5,
-	5,
-	-2,
-	0,
-	0,0,1,0,0,
-	0,1,1,1,0,
-	1,1,1,1,1,
-	0,0,1,0,0,
-	0,0,1,0,0,
-};
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2360,13 +2302,14 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 
 	normalised_range = range / max_range;
 
-	i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
-
-	i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
-
-	for (i = 0; i <= i_max; i++)
+	if (get_range_finder() != RANGEFINDER_TRIANGULATION)
 	{
-		set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
+		i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
+	
+		i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
+	
+		for (i = 0; i <= i_max; i++)
+			set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
 	}
 
 	set_2d_instance_position (hud_env, x, y);
@@ -2390,28 +2333,6 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_target_marker_valid_lock (float x, float y)
-{
-	draw_2d_circle (x, y, 0.2, hud_colour);
-
-	draw_2d_line (x - 0.20, y, x - 0.25, y, hud_colour);
-	draw_2d_line (x + 0.20, y, x + 0.25, y, hud_colour);
-	draw_2d_line (x, y - 0.20, x, y - 0.25, hud_colour);
-	draw_2d_line (x, y + 0.20, x, y + 0.25, hud_colour);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_target_marker_invalid_lock (float x, float y)
-{
-	draw_2d_circle (x, y, 0.2, hud_colour);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static void draw_target_marker (void)
 {
 	int
@@ -2467,38 +2388,6 @@ static void draw_target_marker (void)
 				target_range = get_3d_range (source_position, &target_position);
 
 				draw_gun_pipper (x, y, target_range, weapon_database[selected_weapon_type].min_range, weapon_database[selected_weapon_type].max_range);
-/*
-				if (weapon_lock_type == WEAPON_LOCK_VALID)
-				{
-					if
-					(
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND) ||
-						(selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND)
-					)
-					{
-						source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-						target_range = get_3d_range (source_position, &target_position);
-
-						if (target_range < weapon_database[selected_weapon_type].max_range)
-						{
-							draw_gun_pipper (x, y, target_range, weapon_database[selected_weapon_type].max_range);
-						}
-						else
-						{
-							draw_target_marker_valid_lock (x, y);
-						}
-					}
-					else
-					{
-						draw_target_marker_valid_lock (x, y);
-					}
-				}
-				else
-				{
-					draw_target_marker_invalid_lock (x, y);
-				}*/
 
 				//
 				// if unguided weapon then draw a dot in the target marker centre (except for airborne targets)
@@ -2542,161 +2431,6 @@ static void draw_target_marker (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static char target_range_scale_pointer[] =
-{
-	15,
-	9,
-	0,
-	-4,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define NEAR_RANGE_SCALE				((float) 5000.0)
-#define FAR_RANGE_SCALE					((float) 10000.0)
-#define ONE_OVER_NEAR_RANGE_SCALE	((float) (1.0 / 5000.0))
-#define ONE_OVER_FAR_RANGE_SCALE		((float) (1.0 / 10000.0))
-
-static void draw_target_range_indicator (void)
-{
-	char
-		*s;
-
-	entity
-		*source,
-		*target;
-
-	entity_sub_types
-		selected_weapon_type;
-
-	float
-		i,
-		j,
-		y,
-		width,
-		target_range,
-		range_scale,
-		one_over_range_scale,
-		min_weapon_range,
-		max_weapon_range;
-
-	vec3d
-		*source_position,
-		*target_position;
-
-	source = get_gunship_entity ();
-
-	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-
-	//
-	// draw range scale (regardless of having a target)
-	//
-
-	draw_2d_line (-0.8, 0.5, -0.8, -0.5, hud_colour);
-
-	draw_2d_line (-0.8,  0.5, -0.85,  0.5, hud_colour);
-	draw_2d_line (-0.8,  0.3, -0.85,  0.3, hud_colour);
-	draw_2d_line (-0.8,  0.1, -0.85,  0.1, hud_colour);
-	draw_2d_line (-0.8, -0.1, -0.85, -0.1, hud_colour);
-	draw_2d_line (-0.8, -0.3, -0.85, -0.3, hud_colour);
-	draw_2d_line (-0.8, -0.5, -0.85, -0.5, hud_colour);
-
-	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
-
-	range_scale = FAR_RANGE_SCALE;
-
-	one_over_range_scale = ONE_OVER_FAR_RANGE_SCALE;
-
-	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-	{
-		min_weapon_range = weapon_database[selected_weapon_type].min_range;
-		max_weapon_range = weapon_database[selected_weapon_type].max_range;
-
-		if (max_weapon_range <= NEAR_RANGE_SCALE)
-		{
-			range_scale = NEAR_RANGE_SCALE;
-
-			one_over_range_scale = ONE_OVER_NEAR_RANGE_SCALE;
-		}
-
-		y = 1.0 - (min_weapon_range * one_over_range_scale);
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-
-		y = 1.0 - (max_weapon_range * one_over_range_scale);
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-	}
-
-	if (range_scale == NEAR_RANGE_SCALE)
-	{
-		s = "5";
-	}
-	else
-	{
-		s = "10";
-	}
-
-	set_mono_font_type (MONO_FONT_TYPE_7X12);
-
-	set_2d_mono_font_position (-0.85, 0.5);
-
-	width = get_mono_font_string_width (s);
-
-	set_mono_font_rel_position (-width - 1.0, -4.0);
-
-	print_mono_font_string (s);
-
-	//
-	// draw target range pointer
-	//
-
-	if (target)
-	{
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
-
-		if (target_range < range_scale)
-		{
-			y = 1.0 - (target_range * one_over_range_scale);
-		}
-		else
-		{
-			y = 0.0;
-		}
-
-		draw_2d_line (-0.8, 0.5 - y, -0.75, 0.5 - y, hud_colour);
-
-		get_2d_float_screen_coordinates (-0.75, 0.5 - y, &i, &j);
-
-		draw_mono_sprite (target_range_scale_pointer, i, j, hud_colour);
-	}
-}
-
-#undef NEAR_RANGE_SCALE
-#undef FAR_RANGE_SCALE
-#undef ONE_OVER_NEAR_RANGE_SCALE
-#undef ONE_OVER_FAR_RANGE_SCALE
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 static void display_weapon_information (void)
 {
@@ -2782,12 +2516,14 @@ static void display_target_information (void)
 		*target,
 		*source;
 
+	rangefinding_system
+		range_finder = get_range_finder();
 
 	// Range
 	source = get_gunship_entity ();
 	ASSERT(source);
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-	if (target)
+	if (target && range_finder != RANGEFINDER_TRIANGULATION)
 	{
 		vec3d *target_position, *source_position;
 		float min_weapon_range, max_weapon_range, target_range;
@@ -2822,7 +2558,28 @@ static void display_target_information (void)
 			draw_line_func(-0.5, 0.5, 0.5, -0.5, hud_colour);
 		}
 	}
+
+	if (draw_large_hud)
+		set_mono_font_type (MONO_FONT_TYPE_6X10);
+	else
+		set_mono_font_type (MONO_FONT_TYPE_3X6);
+
+	// laser active
+	if (laser_is_active())
+	{
+		set_2d_mono_font_position (-0.8, 0.2);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("L");
+	}
+
+	if (get_local_entity_int_value(source, INT_TYPE_RADAR_ON))
+	{
+		set_2d_mono_font_position (-0.8, 0.1);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("R");
+	}
 	
+
 	//
 	// weapon lock
 	//
@@ -2851,11 +2608,19 @@ static void display_target_information (void)
 			s = "NO SGT";
 			break;
 		case WEAPON_LOCK_MIN_RANGE:
-			s = "MIN RNG";
-			break;
+			if (range_finder != RANGEFINDER_TRIANGULATION)
+			{
+				s = "MIN RNG";
+				break;
+			}
+			// fallthrough
 		case WEAPON_LOCK_MAX_RANGE:
-			s = "MAX RNG";
-			break;
+			if (range_finder != RANGEFINDER_TRIANGULATION)
+			{
+				s = "MAX RNG";
+				break;
+			}
+			// fallthrough
 		case WEAPON_LOCK_VALID:
 			s = "LOCK";
 			break;
@@ -2863,11 +2628,6 @@ static void display_target_information (void)
 			debug_fatal ("Invalid weapon lock type = %d", weapon_lock_type);
 			break;
 	}
-
-	if (draw_large_hud)
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-	else
-		set_mono_font_type (MONO_FONT_TYPE_3X6);
 
 	width = get_mono_font_string_width (s);
 	set_2d_mono_font_position (-0.9, -0.2);

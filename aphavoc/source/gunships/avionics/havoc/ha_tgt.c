@@ -201,10 +201,13 @@ void select_havoc_target_acquisition_system (target_acquisition_systems system)
 
 			set_gunship_target (NULL);
 
-			select_havoc_mfd_mode (MFD_MODE_OFF);
-
 			if (!command_line_manual_laser_radar)
+			{
+				select_havoc_mfd_mode (MFD_MODE_OFF);
 				set_laser_is_active(FALSE);
+			}
+			else if (get_havoc_mfd_mode() != MFD_MODE_GROUND_RADAR && get_havoc_mfd_mode() != MFD_MODE_AIR_RADAR)
+				select_havoc_mfd_mode (MFD_MODE_OFF);
 
 			#if 0
 
@@ -304,7 +307,12 @@ void select_havoc_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_hms ();
 
-				select_havoc_mfd_mode (MFD_MODE_OFF);
+				if (!command_line_manual_laser_radar
+					|| (get_havoc_mfd_mode() != MFD_MODE_GROUND_RADAR
+						&& get_havoc_mfd_mode() != MFD_MODE_AIR_RADAR))
+				{
+					select_havoc_mfd_mode (MFD_MODE_OFF);
+				}
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -814,7 +822,7 @@ void havoc_target_acquisition_system_misc_function1 (void)
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_DVO:
-		case TARGET_ACQUISITION_SYSTEM_HIDSS:
+		case TARGET_ACQUISITION_SYSTEM_HMS:
 		{
 			if (havoc_damage.radar)
 			{
@@ -879,7 +887,7 @@ void havoc_target_acquisition_system_misc_function2 (void)
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_DVO:
-		case TARGET_ACQUISITION_SYSTEM_HIDSS:
+		case TARGET_ACQUISITION_SYSTEM_HMS:
 		////////////////////////////////////////
 		{
 			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)

@@ -70,6 +70,8 @@ extern void deinitialise_havoc_mfd (void);
 
 extern void select_havoc_mfd_mode (mfd_modes mode);
 
+extern mfd_modes get_havoc_mfd_mode (void);
+
 extern void draw_havoc_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw_translucent_background);
 
 extern void draw_havoc_mfd_on_texture (void);

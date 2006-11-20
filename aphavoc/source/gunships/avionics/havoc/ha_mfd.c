@@ -213,6 +213,15 @@ void deinitialise_havoc_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+mfd_modes get_havoc_mfd_mode (void)
+{
+	return mfd_mode;	
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void select_havoc_mfd_mode (mfd_modes mode)
 {
 	switch (mode)
@@ -1232,11 +1241,14 @@ static void draw_ground_radar_mfd (void)
 	// sweep
 	//
 
-	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
-
-	set_2d_window_rotation (mfd_env, 0.0);
+	if (ground_radar_is_active())
+	{
+		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
+	
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+	
+		set_2d_window_rotation (mfd_env, 0.0);
+	}
 
 	////////////////////////////////////////
 	//
@@ -1430,11 +1442,14 @@ static void draw_air_radar_mfd (void)
 	// sweep
 	//
 
-	set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
-
-	set_2d_window_rotation (mfd_env, 0.0);
+	if (air_radar_is_active())
+	{
+		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
+	
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+	
+		set_2d_window_rotation (mfd_env, 0.0);
+	}
 
 	////////////////////////////////////////
 	//
@@ -2081,7 +2096,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		buffer[200];
 
 	int
-		heading_readout;
+		heading_readout,
+		has_range;
 
 	float
 		width,
@@ -2117,7 +2133,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-	if (target)
+	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (target && has_range)
 	{
 		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
@@ -2299,7 +2317,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// target range
 	//
 
-	if (target)
+	if (target && has_range)
 	{
 		if ((target_range < 1000.0) && (!havoc_damage.laser_range_finder))
 		{
@@ -2505,7 +2523,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR1);
 	}
 
-	if (target)
+	if (target && has_range)
 	{
 		marker_position = (min (target_range, eo_max_visual_range) / eo_max_visual_range) * -0.5;
 
