@@ -525,6 +525,9 @@ static void damage_systems (hokum_damage_flags damage)
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
 
+			set_ground_radar_is_active(FALSE);
+			set_air_radar_is_active(FALSE);
+
 			set_hokum_text_display_text ("RADAR", "FAILURE", "");
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_RADAR_FAILURE);
@@ -620,6 +623,8 @@ static void damage_systems (hokum_damage_flags damage)
 			hokum_damage.laser_designator = TRUE;
 
 			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_laser_is_active(FALSE);
 
 			set_hokum_text_display_text ("LASER", "DESIGNATOR", "FAILURE");
 
