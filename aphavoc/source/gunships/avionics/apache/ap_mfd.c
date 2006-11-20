@@ -3206,6 +3206,8 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 	float target_range;
 	int x_adjust, width;
+	
+	int has_range = get_range_finder != RANGEFINDER_TRIANGULATION;
 
 	entity_sub_types weapon_sub_type;
 
@@ -3293,8 +3295,6 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 				sprintf(buffer, "A%.1f", range * 0.001);
 			else
 				sprintf(buffer, "AX.X");
-
-			debug_log("triangulation error: %f (range: %6.1f)", target_range - range, range);
 		}
 		break;
 	case TARGET_ACQUISITION_SYSTEM_OFF:
@@ -3337,11 +3337,17 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 			s = "NO LOS";
 			break;
 		case WEAPON_LOCK_MIN_RANGE:
-			s = "MIN RNG";
-			break;
+			if (has_range)
+			{
+				s = "MIN RNG";
+				break;
+			}
 		case WEAPON_LOCK_MAX_RANGE:
-			s = "MAX RNG";
-			break;
+			if (has_range)
+			{
+				s = "MAX RNG";
+				break;
+			}
 		case WEAPON_LOCK_NO_BORESIGHT:
 		case WEAPON_LOCK_VALID:
 			s = "VALID LOCK";

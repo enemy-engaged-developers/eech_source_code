@@ -2338,6 +2338,9 @@ static void display_target_information (void)
 		*gunship_position,
 		*target_position;
 
+	int
+		has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
 	set_mono_font_type (MONO_FONT_TYPE_6X7);
 
 // Jabberwock 031107 Designated targets
@@ -2432,6 +2435,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MAX_RANGE:
 		////////////////////////////////////////
+		if (has_range)
 		{
 			s = "MAX RANGE";
 
@@ -2440,6 +2444,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_VALID:
 		////////////////////////////////////////
+		if (has_range)
 		{
 			s = "VALID LOCK";
 
