@@ -714,7 +714,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
 			{
-				debug_log ("non-large needles");
 				//
 				// ADI slip
 				//
@@ -853,7 +852,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_LARGE_NEEDLES)
 			{
-				debug_log ("large needles");
 				//
 				// ADI slip
 				//
