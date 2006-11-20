@@ -80,6 +80,13 @@ enum TARGET_ACQUISITION_SYSTEMS
 	NUM_TARGET_ACQUISITION_SYSTEMS
 };
 
+typedef enum 
+{
+	RANGEFINDER_FCR,
+	RANGEFINDER_LASER,
+	RANGEFINDER_TRIANGULATION
+} rangefinding_system;
+
 typedef enum TARGET_ACQUISITION_SYSTEMS target_acquisition_systems;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,6 +200,8 @@ extern void set_valid_gunship_target_safe_index (int index);
 extern void select_simple_avionics_target_acquisition_system (void);
 
 extern void play_common_cpg_target_acquisition_system_speech (target_acquisition_systems new_system, target_acquisition_systems old_system, int damaged);
+
+extern rangefinding_system get_range_finder(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
