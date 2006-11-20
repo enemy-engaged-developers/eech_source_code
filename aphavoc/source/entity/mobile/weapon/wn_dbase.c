@@ -960,8 +960,8 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"9-A-624 12.7mm Round",				  							// full_name
-			"9-A-624 12.7mm Round",																	// hud_name
-			"9-A-624 12.7mm Round",																	// mfd_name
+			"Gun",																	// hud_name
+			"Gun",																	// mfd_name
 			"12.7mm Round",																	// weapon_loading_list_name
 			"12.7mm Round",																	// weapon_loading_name_text
 
@@ -1320,7 +1320,7 @@ weapon_data
 			0.0,																	// cruise_time_max_error
 			0.0,		 															// inhibit_time
 			3.0,																	// burst_duration
-			350.0,																// rate_of_fire
+			600.0,																// rate_of_fire
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 		},
@@ -1382,7 +1382,7 @@ weapon_data
 			0.0,																	// cruise_time_max_error
 			0.0,		 															// inhibit_time
 			3.0,																	// burst_duration
-			350.0,																// rate_of_fire
+			600.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 		},
