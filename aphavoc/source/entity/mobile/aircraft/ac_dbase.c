@@ -482,9 +482,9 @@ aircraft_data
       ////Moje 030524 1st line under "OBJECT_3D_MI24_HIND" changed from "NUM_GUNSHIP_TYPES"
       ////Moje 040209 CHanged loadout schemes
       {
-         "Mi-24D Hind",															// full_name
-         "Mi-24D HIND",		 													// long_display_name
-         "Mi-24D",																// short_display_name
+         "Mi-24V Hind",															// full_name
+         "Mi-24V HIND",		 													// long_display_name
+         "Mi-24V",																// short_display_name
 			"HELICOPTER",															// easy_display_name
 
          OBJECT_3D_MI24_HIND,													// default_3d_shape
