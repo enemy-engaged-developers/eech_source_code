@@ -76,9 +76,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define FORMATION_FILENAME 				"..\\common\\data\\forms.dat"
+#define FORMATION_FILENAME				"forms.dat"
+#define FORMATION_DEFAULT_FULLPATH 				"..\\common\\data\\forms.dat"
 
-#define FORMATION_COMPONENT_FILENAME 	"..\\common\\data\\formcomp.dat"
+#define FORMATION_COMPONENT_FILENAME    "formcomp.dat"
+#define FORMATION_COMPONENT_DEFAULT_FULLPATH 	"..\\common\\data\\formcomp.dat"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,7 +248,7 @@ void initialise_formation_database (void)
 
 	current_session = get_current_game_session ();
 
-	sprintf (temp_filename, "%s", FORMATION_FILENAME);
+	sprintf (temp_filename, "%s", FORMATION_DEFAULT_FULLPATH);
 
 	file_ptr = safe_fopen (temp_filename, "r");
 
@@ -659,9 +661,37 @@ void initialise_formation_component_database (void)
 
 	current_session = get_current_game_session ();
 
-	sprintf (temp_filename, "%s", FORMATION_COMPONENT_FILENAME);
+	file_ptr = NULL;
 
-	file_ptr = safe_fopen (temp_filename, "r");
+	// check if this campaign has its own formation component database
+	if (current_game_session->data_path && current_game_session->campaign_directory)
+	{
+		sprintf (temp_filename, "%s\\%s\\%s", current_game_session->data_path, current_game_session->campaign_directory, FORMATION_COMPONENT_FILENAME);
+		if (file_exist(temp_filename))
+			file_ptr = safe_fopen (temp_filename, "r");
+
+		if (file_ptr)
+			debug_log("formcomp file: %s", temp_filename);
+	}
+
+	// check if this map has its own formation component database
+	if (!file_ptr && current_game_session->data_path)
+	{
+		sprintf (temp_filename, "%s\\%s", current_game_session->data_path, FORMATION_COMPONENT_FILENAME);
+		if (file_exist(temp_filename))
+			file_ptr = safe_fopen (temp_filename, "r");
+
+		if (file_ptr)
+			debug_log("formcomp file: %s", temp_filename);
+	}
+
+	// use default if there is no specific one
+	if (!file_ptr)
+	{
+		sprintf (temp_filename, "%s", FORMATION_COMPONENT_DEFAULT_FULLPATH);
+
+		file_ptr = safe_fopen (temp_filename, "r");
+	}
 
 	while (TRUE)
 	{
