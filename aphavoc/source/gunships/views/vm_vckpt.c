@@ -4042,7 +4042,6 @@ void get_position_nose_relative_position ( vec3d *position, vec3d *r )
 		relative_position;
 	matrix3x3*
 		attitude;
-	vec3d *xv, *xy, *xz;
 
 	ASSERT(current_flight_dynamics);
 
