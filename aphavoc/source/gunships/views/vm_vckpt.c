@@ -1821,7 +1821,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 	}
 	
-	if (night_vision_system_active)
+	if (command_line_restricted_nvg_fov && night_vision_system_active)
 		draw_night_vision_mask();
 
 	// Jabberwock 031016 Inset view - cockpit

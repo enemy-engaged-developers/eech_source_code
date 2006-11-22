@@ -185,9 +185,10 @@ int
 	command_line_collective_joystick_axis					= 3,		// loke 030418
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
-	command_line_high_res_mfd									= 1,		// loke 030420
-	command_line_high_res_hud									= 1,        // arneh 20060808
-	command_line_fly_any_airplane								= 1,     // VJ 030424
+	command_line_restricted_nvg_fov							= TRUE,     // arneh 2006-11-22
+	command_line_high_res_mfd									= TRUE,		// loke 030420
+	command_line_high_res_hud									= TRUE,     // arneh 20060808
+	command_line_fly_any_airplane								= TRUE,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
@@ -1908,6 +1909,19 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_rudder_joystick_axis);
 			}
 
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "restricted_nvg_fov"))		// loke 030420
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_restricted_nvg_fov);
+			}
+			else
+			{
+				command_line_restricted_nvg_fov = TRUE;
+			}
 		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "high_res_mfd"))		// loke 030420
