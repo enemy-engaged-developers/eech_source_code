@@ -450,6 +450,36 @@ void set_message_events (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void request_wingmen_status (message_type message)
+{
+	entity
+		*en,
+		*group,
+		*member;
+
+	en = get_pilot_entity ();
+	group = get_local_entity_safe_ptr (message.value);
+
+	if (group)
+	{
+		member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+
+		while (member)
+		{
+			if (member != get_gunship_entity())
+				set_incoming_message(member, en, MESSAGE_WINGMAN_STATUS_REPORT, NULL);
+
+			member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
+		}
+	}
+
+	stop_messaging_system (NULL);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 //
 // Function keys are not consecutive, so need look-up table ....
 //
@@ -469,7 +499,8 @@ static struct FUNCTION_KEY_TABLE
 		DIK_7,	7,
 		DIK_8,	8,
 		DIK_9,	9,
-		DIK_0,	0,
+		DIK_0,	10,
+		DIK_MINUS, 11,
 		-1,		-1
 	};
 
@@ -640,7 +671,7 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 							// 9 Options
 							//
 
-							sub_item = create_message_database_list (MESSAGE_WINGMAN_SELECT, index, message_list, 9, "Select Message");
+							sub_item = create_message_database_list (MESSAGE_WINGMAN_SELECT, index, message_list, 10, "Select Message");
 
 							//
 							// Attack My Target (F1) and Help Me (F2) - Always available
@@ -725,23 +756,37 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 
 							add_message_action_to_database (sub_item, 6, message,	index, DIK_7, "Bob-Up");
 
+							// Attack PFZ, leader only
+
+							if (leader_flag && pfz_active())
+								add_message_action_to_database (sub_item, 7, MESSAGE_WINGMAN_ATTACK_PFZ,	index, DIK_8, "Attack PFZ");
+							else
+								add_message_action_to_database (sub_item, 7, MESSAGE_NONE,	index, DIK_8, "Attack PFZ");
+
 							//
 							// Request Target List (F8) and Keyboard Message (F9) - Human wingmen only
 							//
 
 							if (human_wingman)
 							{
-								add_message_action_to_database (sub_item, 7, MESSAGE_WINGMAN_REQUEST_TARGET_LIST,	index, DIK_8, "Request Target List");
+								add_message_action_to_database (sub_item, 8, MESSAGE_WINGMAN_REQUEST_TARGET_LIST,	index, DIK_9, "Request Target List");
 
-								add_message_action_to_database (sub_item, 8, MESSAGE_WINGMAN_KEYBOARD, 					index, DIK_9, "Keyboard Message");
+								add_message_action_to_database (sub_item, 9, MESSAGE_WINGMAN_KEYBOARD, 					index, DIK_0, "Keyboard Message");
 							}
 							else
 							{
-								add_message_action_to_database (sub_item, 7, MESSAGE_NONE,	index, DIK_8, "Request Target List");
+								add_message_action_to_database (sub_item, 8, MESSAGE_NONE,	index, DIK_9, "Request Target List");
 
-								add_message_action_to_database (sub_item, 8, MESSAGE_NONE, 	index, DIK_9, "Keyboard Message");
+								add_message_action_to_database (sub_item, 9, MESSAGE_NONE, 	index, DIK_0, "Keyboard Message");
 							}
 
+/*
+							// request status
+							if (leader_flag)
+								add_message_action_to_database (sub_item, 10, MESSAGE_WINGMAN_REQUEST_STATUS,	index, DIK_MINUS, "Request Status");
+							else
+								add_message_action_to_database (sub_item, 10, MESSAGE_NONE,	index, DIK_MINUS, "Request Status");
+*/
 							create_leaf_message_action (MESSAGE_WINGMAN_ATTACK_MY_TARGET, 		index, send_wingman_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_HELP_ME, 					index, send_wingman_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_BOB_UP, 					index, send_wingman_message);
@@ -749,8 +794,10 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 							create_leaf_message_action (MESSAGE_WINGMAN_WEAPONS_FREE, 			index, send_wingman_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_HOLD_POSITION, 			index, send_wingman_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_REJOIN_FORMATION,		index, send_wingman_message);
+							create_leaf_message_action (MESSAGE_WINGMAN_ATTACK_PFZ, 			index, send_wingman_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_REQUEST_TARGET_LIST, 	index, send_simple_message);
 							create_leaf_message_action (MESSAGE_WINGMAN_KEYBOARD, 				index, send_wingman_keyboard_message);
+//							create_leaf_message_action (MESSAGE_WINGMAN_REQUEST_STATUS, 	index, send_wingman_message);
 
 							loop ++;
 						}
@@ -762,12 +809,12 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 					ASSERT (loop == count);
 
 					//
-					// Flight Group - 9 options
+					// Flight Group - 10 options
 					//
 
 					index = get_local_entity_index (group);
 
-					sub_item = create_message_database_list (MESSAGE_GROUP_LIST, 0, message_list, 9, "Select Message");
+					sub_item = create_message_database_list (MESSAGE_GROUP_LIST, 0, message_list, 10, "Select Message");
 
 					//
 					// Attack My Target (F1) and Help Me (F2) - Always available
@@ -874,17 +921,24 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 						add_message_action_to_database (sub_item, 7, MESSAGE_NONE, 							index, DIK_8, "Formation List");
 					}
 
+
+					// request status
+					if (leader_flag)
+						add_message_action_to_database (sub_item, 8, MESSAGE_WINGMAN_REQUEST_STATUS,	index, DIK_9, "Report Status");
+					else
+						add_message_action_to_database (sub_item, 8, MESSAGE_NONE,	index, DIK_9, "Report Status");
+
 					//
 					// Return To Base (F0) - Leader Only
 					//
 
 					if (leader_flag)
 					{
-						add_message_action_to_database (sub_item, 8, MESSAGE_WINGMAN_RETURN_TO_BASE, 		index, DIK_0, "Return To Base");
+						add_message_action_to_database (sub_item, 9, MESSAGE_WINGMAN_RETURN_TO_BASE, 		index, DIK_0, "Return To Base");
 					}
 					else
 					{
-						add_message_action_to_database (sub_item, 8, MESSAGE_NONE, 								index, DIK_0, "Return To Base");
+						add_message_action_to_database (sub_item, 9, MESSAGE_NONE, 					index, DIK_0, "Return To Base");
 					}
 
 					create_leaf_message_action (MESSAGE_WINGMAN_ATTACK_MY_TARGET, 	index, send_group_message);
@@ -894,6 +948,7 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 					create_leaf_message_action (MESSAGE_WINGMAN_WEAPONS_HOLD, 		index, send_group_message);
 					create_leaf_message_action (MESSAGE_WINGMAN_WEAPONS_FREE, 		index, send_group_message);
 					create_leaf_message_action (MESSAGE_WINGMAN_BOB_UP, 				index, send_group_message);
+					create_leaf_message_action (MESSAGE_WINGMAN_REQUEST_STATUS,		index, request_wingmen_status);
 					create_leaf_message_action (MESSAGE_WINGMAN_RETURN_TO_BASE, 	index, send_group_message);
 
 					sub_item = create_message_database_list (MESSAGE_FORMATION_LIST, index, message_list, 9, "Formation List");

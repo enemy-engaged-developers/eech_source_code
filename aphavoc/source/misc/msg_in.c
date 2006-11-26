@@ -347,6 +347,7 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 		}
 
 		case MESSAGE_TEXT_WINGMAN_STRING:
+		case MESSAGE_TEXT_SHORT_WINGMAN_STRING:
 		{
 			entity
 				*parent;
@@ -366,6 +367,14 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 			}
 
 			break;
+		}
+		
+		case MESSAGE_WINGMAN_STATUS_REPORT:
+		{
+			if (target == get_pilot_entity())
+				return TRUE;
+
+			break;	
 		}
 
 		default:
@@ -434,6 +443,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 	{
 		case MESSAGE_TEXT_PILOT_STRING:
 		case MESSAGE_TEXT_WINGMAN_STRING:
+		case MESSAGE_TEXT_SHORT_WINGMAN_STRING:
 		{
 			ASSERT (sender);
 
@@ -466,6 +476,82 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 			message->colour = message_side_colour [ENTITY_SIDE_NEUTRAL];
 
 			break;
+		}
+		
+		case MESSAGE_WINGMAN_STATUS_REPORT:
+		{
+			group = get_local_entity_parent (sender, LIST_TYPE_MEMBER);
+
+			ASSERT(get_local_entity_type(sender) == ENTITY_TYPE_HELICOPTER);
+
+			// callsign
+			if (group)
+			{
+				flight_name = get_local_entity_string (group, STRING_TYPE_GROUP_CALLSIGN);
+
+				member_id = get_local_entity_int_value (sender, INT_TYPE_GROUP_MEMBER_ID);
+
+				sprintf (temp_string, "%s 1-%d: ", flight_name, member_id);
+
+				get_local_entity_vec3d (sender, VEC3D_TYPE_POSITION, &(message->position));
+			}
+			else
+				temp_string[0] = '\0';
+
+			// weapons
+			{
+				weapon_count weapon_load[10];
+				unsigned i, not_first = FALSE;
+
+				get_local_entity_weapon_load(sender, weapon_load, 10);
+
+				for (i=0; weapon_load[i].weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON; i++)
+				{
+					if (weapon_load[i].weapon_type != ENTITY_SUB_TYPE_WEAPON_CHAFF
+						&& weapon_load[i].weapon_type != ENTITY_SUB_TYPE_WEAPON_FLARE
+						&& weapon_load[i].count > 0)
+					{
+						snprintf (temp_string, 511, "%s%s %s %d ", 
+							temp_string, (not_first ? "," : ""),
+							weapon_database[weapon_load[i].weapon_type].hud_name, weapon_load[i].count);
+
+						not_first = TRUE;
+					}
+				}
+
+			}
+
+			// damage
+			{
+				helicopter
+					*raw;
+			
+				int
+					percent_damaged;
+			
+				char
+					*damage;
+
+				raw = get_local_entity_data (sender);
+				percent_damaged = (100 * raw->ac.damage_level) / aircraft_database[raw->ac.mob.sub_type].initial_damage_level;
+
+				if (percent_damaged == 100)
+					damage = "No damage";
+				else if (percent_damaged > 75)
+					damage = "Slight damage";
+				else if (percent_damaged > 50)
+					damage = "Moderate damage";
+				else if (percent_damaged > 25)
+					damage = "Heavy damage";
+				else
+					damage = "Critical damage";
+				
+				snprintf (temp_string, 511, "%s, %s", temp_string, damage);
+			}
+
+			message->colour = message_side_colour [ENTITY_SIDE_NEUTRAL];
+
+			break;	
 		}
 
 		case MESSAGE_TEXT_SYSTEM_ENTITY_KILLED:
@@ -875,9 +961,25 @@ void process_radio_message (entity *en, message_categories type, int value)
 
 			break;
 		}
+		case MESSAGE_WINGMAN_ATTACK_PFZ:
+		{
+			debug_log("attack pfz");
+			
+			break;	
+		}
 		case MESSAGE_WINGMAN_RETURN_TO_BASE:
 		{
 			process_message_return_to_base (en);
+
+			break;
+		}
+		case MESSAGE_WINGMAN_REQUEST_STATUS:
+		{
+			wingman = get_local_entity_safe_ptr (value);
+			if (wingman == get_gunship_entity())
+			{
+				debug_log("request message from me!");	
+			}
 
 			break;
 		}
@@ -2291,6 +2393,7 @@ void set_new_display_message (int index)
 		log = &message_log [current_message];
 
 		ASSERT (log);
+		ASSERT (log->type < NUM_MESSAGE_TEXT_TYPES);
 
 		current_message_timer = message_text_info [log->type].display_time;
 
