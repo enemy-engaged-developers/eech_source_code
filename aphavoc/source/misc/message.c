@@ -87,8 +87,10 @@ const message_text_info_type
 		{	FALSE,				TRUE, 		FALSE,			4.0	},			// MESSAGE_TEXT_SYSTEM_TASK_COMPLETED,
 		{	FALSE,				TRUE, 		FALSE,			10.0	},			// MESSAGE_TEXT_SYSTEM_KEYSITE_CAPTURED,
 		{	FALSE,				TRUE, 		FALSE,			10.0	},			// MESSAGE_TEXT_SYSTEM_KEYSITE_DESTROYED,
+		{	FALSE,				TRUE,		FALSE,			5.0	},			// MESSAGE_WINGMAN_STATUS_REPORT,
 		{	TRUE,					TRUE, 		TRUE,				8.0	},			// MESSAGE_TEXT_PILOT_STRING,
 		{	TRUE,					TRUE, 		TRUE,				8.0	},			// MESSAGE_TEXT_WINGMAN_STRING,
+		{	TRUE,					TRUE, 		FALSE,				2.0	},			// MESSAGE_TEXT_SHORT_WINGMAN_STRING,
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
