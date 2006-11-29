@@ -1383,6 +1383,7 @@ void draw_external_hokum_hud (void)
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	draw_large_hud = TRUE;
+	draw_line_func = draw_2d_half_thick_line;
 
 	hud_viewport_size = HUD_VIEWPORT_LARGE_SIZE;
 
