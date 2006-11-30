@@ -391,6 +391,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "dtrd")==0) 	command_line_dynamics_tail_rotor_drag = v1;
 		if (strcmp(p, "dcdz")==0) 	command_line_dynamics_cyclic_dead_zone = v1;
 		if (strcmp(p, "dyal")==0) 	command_line_dynamics_yaw_altitude_loss = v1;
+		if (strcmp(p, "debug_show_force_vectors")==0) 	set_global_dynamics_options_draw_flight_path(d1); // arneh - dec 2006
 //MISC
 		if (strcmp(p, "goto")==0) 	command_line_planner_goto_button = d1;
 		if (strcmp(p, "vfm")==0) 	command_line_vector_flight_model = d1;
@@ -588,6 +589,7 @@ void dump_ini_file(void)
 	fprintf(f,"dtrd=%3.1f         # tail rotor drag, scaling factor for drag caused by tail in forward flight (default = 1.0)\n",command_line_dynamics_tail_rotor_drag);
 	fprintf(f,"dzd=%3.1f          # cyclic dead zone, percentage deadzone for the cyclic (default = 0.0)\n",command_line_dynamics_cyclic_dead_zone);
 	fprintf(f,"dyal=%3.1f         # yaw altitude loss (default = 5.0)\n",command_line_dynamics_yaw_altitude_loss);
+	fprintf(f,"debug_show_force_vectors=%d   # show force vectors on own helicopter for debuging purposes\n", get_global_dynamics_options_draw_flight_path());
 	fprintf(f,"\n[Miscellaneous]\n");
 	fprintf(f,"goto=%d              # Activates \"GOTO\" teleport button on the campaign map.\n",command_line_planner_goto_button);
 	fprintf(f,"vfm=%d               # vector flight model, activates viewer or \"UFO\" flight mode.\n",command_line_vector_flight_model);
