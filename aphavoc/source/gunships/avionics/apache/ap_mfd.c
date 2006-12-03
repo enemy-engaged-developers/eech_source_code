@@ -4157,16 +4157,7 @@ static void draw_tactical_situation_display_mfd (void)
 
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
-//VJ 030423 TSD render mod, enemy of comanche so red
-//VJ 030511 TSD render mod, enemy optional in eech.ini
-//VJ 030530 TSD render mod, corrected colour vor original view MFD_COLOUR2
-							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE) 
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
-							else	
-								if (command_line_tsd_enemy_colours)
-									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-								else				
-									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR_DARK_RED);
 						}
 					}
 				}
