@@ -191,7 +191,7 @@ float get_triangulated_range(entity* target)
 		angle = range_2d / (ownship_position->y - target_position->y);
 
 		// calculate range based on ground being at same altitude at target's position
-		return bound(angle * own_altitude, 0.0, 9.9);
+		return bound(angle * own_altitude, 0.0, 9900.0);
 	}
 	else
 		return -1.0;
