@@ -549,6 +549,30 @@ static char
 		0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
 	};
 
+static char 
+	large_display_moving_target_symbol[] =
+	{
+		3,
+		3,
+		-1,
+		-1,
+		0,1,0,
+		1,1,1,
+		0,1,0,	
+	};
+
+static char 
+	large_display_moving_target_symbol_mask[] =
+	{
+		3,
+		3,
+		-1,
+		-1,
+		1,0,1,
+		0,0,0,
+		1,0,1,
+	};
+
 static vec3d get_relative_vec_from_tsd_coordinate (float x, float y, float scale)
 {
 	float x_origin, y_origin;
@@ -1887,6 +1911,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 				target_symbol_colour = MFD_COLOUR_RED;
 				target_symbol_background_colour = MFD_COLOUR_DARK_RED;
 		}
+		
 	}		
 	else
 	{
@@ -1899,8 +1924,18 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	{
 		if (get_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR))
 		{
+			float target_true_velocity;
+			
 			draw_2d_mono_sprite (large_display_target_symbols_los_mask[target_symbol_type], dx, dy, target_symbol_background_colour);
 			draw_2d_mono_sprite (large_display_target_symbols_los[target_symbol_type], dx, dy, target_symbol_colour);
+			
+			// draw moving target mark if target is moving
+			target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
+			if (target_true_velocity > 2.0)
+			{
+				draw_2d_mono_sprite (large_display_moving_target_symbol, dx, dy, MFD_BACKGROUND_COLOUR);
+				draw_2d_mono_sprite (large_display_moving_target_symbol_mask, dx, dy, target_symbol_background_colour);
+			}
 		}
 		else
 		{
@@ -2147,18 +2182,6 @@ static void draw_ground_radar_mfd (void)
 
 	display_radar_scan_range (ground_radar.scan_range);
 
-// Jabberwock 031107 Designated targets
-
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-
-	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
-	{
-		int width = get_mono_font_string_width ("MARKED");
-		set_2d_mono_font_position (1.0, -0.7);
-		set_mono_font_rel_position (-width, 0);
-		print_mono_font_string ("MARKED");		
-	}
-// Jabberwock 031107 ends
 	////////////////////////////////////////
 	//
 	// draw heading scale
@@ -2173,6 +2196,7 @@ static void draw_ground_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
+	target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
 	draw_high_action_display(target, FALSE);
 
 	////////////////////////////////////////
@@ -3207,16 +3231,21 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	float target_range;
 	int x_adjust, width;
 	
-	int has_range = get_range_finder != RANGEFINDER_TRIANGULATION;
+	rangefinding_system rangefinder = get_range_finder();
 
 	entity_sub_types weapon_sub_type;
 
 	if (target)
 	{
-		vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
-		
-		target_range = get_3d_range (source_position, target_position);
+		if (rangefinder != RANGEFINDER_TRIANGULATION)
+		{
+			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+			
+			target_range = get_3d_range (source_position, target_position);
+		}
+		else
+			target_range = get_triangulated_range(target);
 	}
 	else
 		target_range = 0.0;
@@ -3245,11 +3274,9 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 // Jabberwock 031107 Designated targets
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 	
-	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
+	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET) == get_gunship_entity())
 	{
-//		width = get_mono_font_string_width ("MARKED");
-		
-		set_2d_mono_font_position (-0.6, 0.0);
+		set_2d_mono_font_position (0.7, -0.7);
 		set_mono_font_rel_position (0, 0);
 		print_mono_font_string ("MARKED");		
 	}
@@ -3273,34 +3300,27 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	// rang finder    range
 	// targeting status
 
-	// range finding system
-	switch (target_acquisition_system)
+	switch (rangefinder)
 	{
-	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+	case RANGEFINDER_FCR:	
 		s = "FCR";
 		sprintf(buffer, "R%.1f", target_range * 0.001);
 		break;
-	case TARGET_ACQUISITION_SYSTEM_FLIR:
-	case TARGET_ACQUISITION_SYSTEM_DTV:
-	case TARGET_ACQUISITION_SYSTEM_DVO:
-	case TARGET_ACQUISITION_SYSTEM_IHADSS:
+	case RANGEFINDER_LASER:
 		s = "TADS";
-		if (laser_is_active())
-			sprintf(buffer, "L%04.0f", target_range);
-		else
-		{
-			float range = get_triangulated_range(target);
-			if (range > 0)
-				sprintf(buffer, "A%.1f", range * 0.001);
-			else
-				sprintf(buffer, "AX.X");
-		}
+		sprintf(buffer, "L%04.0f", target_range);
 		break;
-	case TARGET_ACQUISITION_SYSTEM_OFF:
-	default:
-		s = "NONE";
-		sprintf(buffer, "AX.X");
+	case RANGEFINDER_TRIANGULATION:
+		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
+			s = "TADS";
+		else
+			s = "NONE";
+
+		if (target_range > 0.0)
+			sprintf(buffer, "A%.1f", target_range * 0.001);
+		else
+			sprintf(buffer, "AX.X");
+
 		break;
 	}
 
@@ -3337,13 +3357,13 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 			s = "NO LOS";
 			break;
 		case WEAPON_LOCK_MIN_RANGE:
-			if (has_range)
+			if (rangefinder != RANGEFINDER_TRIANGULATION)
 			{
 				s = "MIN RNG";
 				break;
 			}
 		case WEAPON_LOCK_MAX_RANGE:
-			if (has_range)
+			if (rangefinder != RANGEFINDER_TRIANGULATION)
 			{
 				s = "MAX RNG";
 				break;
