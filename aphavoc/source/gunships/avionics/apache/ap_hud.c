@@ -2338,8 +2338,8 @@ static void display_target_information (void)
 		*gunship_position,
 		*target_position;
 
-	int
-		has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+	rangefinding_system
+		rangefinder = get_range_finder();
 
 	set_mono_font_type (MONO_FONT_TYPE_6X7);
 
@@ -2427,7 +2427,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MIN_RANGE:
 		////////////////////////////////////////
-		if (has_range)
+		if (rangefinder != RANGEFINDER_TRIANGULATION)
 		{
 			s = "MIN RANGE";
 
@@ -2437,7 +2437,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MAX_RANGE:
 		////////////////////////////////////////
-		if (has_range)
+		if (rangefinder != RANGEFINDER_TRIANGULATION)
 		{
 			s = "MAX RANGE";
 
@@ -2490,47 +2490,40 @@ static void display_target_information (void)
 			print_mono_font_string (s);
 		}
 
-		gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-	
-		target_range = get_3d_range (gunship_position, target_position);
-	}
-	
-	switch (target_acquisition_system)
-	{
-	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		s = "FCR";
-		if (target)
-			sprintf(buffer, "R%.1f", target_range * 0.001);
-		else
-			sprintf(buffer, "AX.X");
-		break;
-	case TARGET_ACQUISITION_SYSTEM_FLIR:
-	case TARGET_ACQUISITION_SYSTEM_DTV:
-	case TARGET_ACQUISITION_SYSTEM_DVO:
-	case TARGET_ACQUISITION_SYSTEM_IHADSS:
-		s = "TADS";
-		if (target)
+		if (rangefinder != RANGEFINDER_TRIANGULATION)
 		{
-			if (laser_is_active())
-				sprintf(buffer, "L%04.0f", target_range);
-			else
-			{
-				float range = get_triangulated_range(target);
-				if (range > 0)
-					sprintf(buffer, "A%.1f", range * 0.001);
-				else
-					sprintf(buffer, "AX.X");
-			}
+			gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+		
+			target_range = get_3d_range (gunship_position, target_position);
 		}
 		else
-			sprintf(buffer, "AX.X");
+			target_range = get_triangulated_range(target);
+	}
+	else
+		target_range = 0.0;
+
+	switch (rangefinder)
+	{
+	case RANGEFINDER_FCR:	
+		s = "FCR";
+		sprintf(buffer, "R%.1f", target_range * 0.001);
 		break;
-	case TARGET_ACQUISITION_SYSTEM_OFF:
-	default:
-		s = "NONE";
-		sprintf(buffer, "AX.X");
+	case RANGEFINDER_LASER:
+		s = "TADS";
+		sprintf(buffer, "L%04.0f", target_range);
+		break;
+	case RANGEFINDER_TRIANGULATION:
+		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
+			s = "TADS";
+		else
+			s = "NONE";
+
+		if (target_range > 0.0)
+			sprintf(buffer, "A%.1f", target_range * 0.001);
+		else
+			sprintf(buffer, "AX.X");
+
 		break;
 	}
 
