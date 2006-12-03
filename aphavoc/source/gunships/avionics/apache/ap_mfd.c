@@ -2196,7 +2196,7 @@ static void draw_ground_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
-	target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
+	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 	draw_high_action_display(target, FALSE);
 
 	////////////////////////////////////////
@@ -4526,24 +4526,25 @@ static void draw_tactical_situation_display_mfd (void)
 	{
 		if (source_target)
 		{
-			vec3d
-				*target_position;
-
+			rangefinding_system rangefinder = get_range_finder();
+			
 			float
 				target_range;
 
-			target_position = get_local_entity_vec3d_ptr (source_target, VEC3D_TYPE_POSITION);
-
-			target_range = get_3d_range (source_position, target_position);
-
-			if ((target_range < 1000.0) && (!apache_damage.laser_designator))
+			if (rangefinder != RANGEFINDER_TRIANGULATION)
 			{
-				sprintf (buffer, "%dm", (int) target_range);
+				vec3d *target_position;
+
+				target_position = get_local_entity_vec3d_ptr (source_target, VEC3D_TYPE_POSITION);
+				target_range = get_3d_range (source_position, target_position);
 			}
 			else
-			{
-				sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-			}
+				target_range = get_triangulated_range(source_target);
+
+			if (rangefinder == RANGEFINDER_LASER)
+				sprintf (buffer, "%dm", (int) target_range);
+			else
+				sprintf (buffer, "%.1fkm", target_range * (1.0 / 1000.0));
 
 			width = get_mono_font_string_width (buffer);
 
@@ -9677,8 +9678,6 @@ static void draw_pitch_ladder (void)
 
 					draw_2d_line (+PITCH_BAR_X6, +PITCH_BAR_Y6, +PITCH_BAR_X8, +PITCH_BAR_Y8, MFD_COLOUR_BLUE);
 					draw_2d_line (-PITCH_BAR_X6, +PITCH_BAR_Y6, -PITCH_BAR_X8, +PITCH_BAR_Y8, MFD_COLOUR_BLUE);
-					
-					draw_2d_line (-0.03, -y_10_deg_step * 0.5, 0.03, -y_10_deg_step * 0.5, MFD_COLOUR_BLUE);
 				}
 				else
 				{
@@ -9687,8 +9686,6 @@ static void draw_pitch_ladder (void)
 
 					draw_2d_line (-PITCH_BAR_X6, -PITCH_BAR_Y6, -PITCH_BAR_X8, -PITCH_BAR_Y8, MFD_COLOUR_BLUE);
 					draw_2d_line (+PITCH_BAR_X6, -PITCH_BAR_Y6, +PITCH_BAR_X8, -PITCH_BAR_Y8, MFD_COLOUR_BLUE);
-
-					draw_2d_line (-0.03, y_10_deg_step * 0.5, 0.03, y_10_deg_step * 0.5, MFD_COLOUR_BLUE);
 				}
 
 				sprintf (s, "%d0", int_pitch);
