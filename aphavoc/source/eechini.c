@@ -554,7 +554,7 @@ void dump_ini_file(void)
 	fprintf(f,"usemaster=%d         # Report game to internet masterserver (0 for private games)\n",command_line_report_to_masterserver);  //Werewolf 2 Jan 04
 	fprintf(f,"pss=%s               # primary masterserver setting (server internet address)\n",command_line_primary_server_setting);  //Werewolf: Defaults changed 080403
 	fprintf(f,"sss=%s               # secondary masterserver setting (server internet address)\n",command_line_secondary_server_setting);
-	fprintf(f,"ccrs=%d              # connection receive size, initial guess of campaign data size (default = 200k)\n",command_line_comms_connection_receive_size);
+	fprintf(f,"ccrs=%d              # connection receive size, initial guess of campaign data size (default = 210k)\n",command_line_comms_connection_receive_size);
 	fprintf(f,"cdrs=%d              # data record size, similar to above…\n",command_line_comms_data_record_size);
 	fprintf(f,"cpbs=%d              # pack buffer size, similar to above…\n",command_line_comms_pack_buffer_size);
 	fprintf(f,"cpds=%d              # packet data size (def = 512)\n",command_line_comms_packet_data_size);

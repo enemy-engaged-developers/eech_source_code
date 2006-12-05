@@ -779,7 +779,7 @@ void process_command_line (int argc, char *argv[])
 			}
 			else
 			{
-				command_line_comms_connection_receive_size = (200 * 1024);
+				command_line_comms_connection_receive_size = (210 * 1024);
 			}
 
 			debug_log ("ARG:%s, RESPONSE:command_line_comms_connection_receive_size = %d", s1, command_line_comms_connection_receive_size);
@@ -794,7 +794,7 @@ void process_command_line (int argc, char *argv[])
 			}
 			else
 			{
-				command_line_comms_data_record_size = (200 * 1024);
+				command_line_comms_data_record_size = (210 * 1024);
 			}
 
 			debug_log ("ARG:%s, RESPONSE:command_line_comms_data_record_size = %d", s1, command_line_comms_data_record_size);
@@ -839,7 +839,7 @@ void process_command_line (int argc, char *argv[])
 			}
 			else
 			{
-				command_line_comms_pack_buffer_size = (200 * 1024);
+				command_line_comms_pack_buffer_size = (210 * 1024);
 			}
 
 			debug_log ("ARG:%s, RESPONSE:command_line_comms_pack_buffer_size = %d", s1, command_line_comms_pack_buffer_size);
