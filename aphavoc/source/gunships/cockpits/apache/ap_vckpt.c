@@ -907,9 +907,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-	vp.x = vp_cockpit_world_position.x;
-	vp.y = vp_cockpit_world_position.y;
-	vp.z = vp_cockpit_world_position.z;
 
 	if
 	(
