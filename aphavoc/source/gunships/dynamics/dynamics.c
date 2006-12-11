@@ -2007,18 +2007,15 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 
 	if (ev->modifier == MODIFIER_LEFT_SHIFT)
 	{
-
 		type = HOVER_HOLD_STABLE;
 	}
 
 	if (valid_dynamics_autos_on (type))
 	{
-
 		set_current_flight_dynamics_auto_hover (type);
 	}
 	else
 	{
-
 		set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 	}
 }
@@ -3102,14 +3099,10 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 		case HOVER_HOLD_NORMAL:
 		case HOVER_HOLD_STABLE:
 		{
-
-			if ((current_flight_dynamics->auto_hover == HOVER_HOLD_NORMAL) || (current_flight_dynamics->auto_hover == HOVER_HOLD_STABLE))
+			if (current_flight_dynamics->auto_hover == type)
 			{
-
 				flag = FALSE;
-	
 				speech = TRUE;
-	
 				play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 			}
 
