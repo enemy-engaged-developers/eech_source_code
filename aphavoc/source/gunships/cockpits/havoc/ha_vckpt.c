@@ -539,7 +539,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
-		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, -pilot_head_pitch, 0.0);
 
 		multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_position);
 
@@ -1132,7 +1132,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 		get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
-		get_3d_transformation_matrix(head_rotation, pilot_head_heading, pilot_head_pitch, 0.0);
+		get_3d_transformation_matrix(head_rotation, pilot_head_heading, -pilot_head_pitch, 0.0);
 
 		multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_position);
 
