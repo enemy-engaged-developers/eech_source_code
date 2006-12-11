@@ -467,7 +467,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
 		if (strcmp(p, "restricted_nvg_fov") == 0)	command_line_restricted_nvg_fov = d1; // loke 030420
-		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = d1; // loke 030420
+		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = TRUE; // arneh 20061211 - always in hi-res mode for MFDs
 		if (strcmp(p, "highreshud") == 0)	command_line_high_res_hud = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
@@ -657,7 +657,7 @@ void dump_ini_file(void)
 	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"restricted_nvg_fov=%d        # restrict night vision field of view by shading edge of screen, def = 1 (on)\n", command_line_restricted_nvg_fov);
-	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
+//	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
 	fprintf(f,"greenmfd=%d          # mfd's are green (def = 1 (off), 1 = on)\n",command_line_green_mfd);
 	fprintf(f,"colourmfd=%d         # mfd's use colours (only Apache currently)) (def = 1 (off), 1 = on)\n",command_line_green_mfd);
