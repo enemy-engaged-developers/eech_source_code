@@ -1048,14 +1048,14 @@ float get_aspect(float z1, float z2, float z3, float z4)
 	// dz/dy = N-S derivative     
 	_c = z2+z4 - (z1+z3);         
 	aspect = (_c != 0 ? atan(_b/_c) : 0);
-	if (_b <= 0 && _c <= 0) asp_corr = rad(270);
-	if (_b >  0 && _c <= 0) asp_corr = rad(-90);
-	if (_b <= 0 && _c >  0) asp_corr = rad(-270);
-	if (_b >  0 && _c >  0) asp_corr = rad(90);
+	if (_b <= 0 && _c <= 0) asp_corr = 4.7123890;// rad(270);
+	if (_b >  0 && _c <= 0) asp_corr = -1.5707963;// rad(-90);
+	if (_b <= 0 && _c >  0) asp_corr = -4.7123890;//rad(-270);
+	if (_b >  0 && _c >  0) asp_corr = 1.5707963;//rad(90);
 	// simple shader              
                                  
 	//rad(-45) is sun from NW when chopper is facing N
-	aspect = 0.5+0.25*(cos(aspect+asp_corr+rad(-45))+1);
+	aspect = 0.5+0.25*(cos(aspect+asp_corr-0.7853982)+1); //rad(-45)
 	return(aspect);               
 	                              
 }                                
@@ -1106,7 +1106,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	rgb_colour                    
 		terrain_col;               
                                  
-	int step = 1, aspect_index, nr_aspect_steps;
+	int step = 1, aspect_index, nr_aspect_steps, do_it = 0;
 	int stepmask;                 
 	                              
 //VJ 051006 simplified code, lower detail but better framerate
@@ -1167,7 +1167,11 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
                                  
 //VJ 051006 simplified code, lower detail but better framerate
 //this gives the better framerate in fact, simply drawing much less triangles
-   if (range > TSD_ASE_RANGE_10000)
+ //  if (range > TSD_ASE_RANGE_10000)
+   //  step = 2;                   
+//VJ 061213 toggle TSD colour grid detail level
+  if (global_tsd_detail == 0)
+  	if(range >= TSD_ASE_RANGE_10000)
      step = 2;                   
                                  
    stepmask = ~(step - 1);       
@@ -1229,7 +1233,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			this_row_ptr = this_row_start_ptr;
 			next_row_ptr = next_row_start_ptr;
                                  
-	      aspect_index = 0;       
+	    aspect_index = 0;       
 			for (x_index = x_min_index; x_index < x_max_index; x_index += step)
 			{                       
 				int c = 0;           
@@ -1240,14 +1244,17 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	   		{                    
 	   			oa = get_aspect(this_row_ptr[0],this_row_ptr[1],next_row_ptr[0],next_row_ptr[1]);
 					aspect = oa;      
+					
 			   	if (x_index > x_min_index && z_index == z_min_index)
             	{                 
             		aspect = (3*aspect+old_aspect_x)/4.0;
-            	}                 
-			   	if (z_index > z_min_index && z_index > z_min_index)
+            	}     
+            	            
+			   	if (z_index > z_min_index)
             	{                 
             		aspect = (4*aspect+old_aspect_x+old_aspectrow[aspect_index])/6.0;//old_aspectrow[aspect_index-1]
-            	}                 
+            	}          
+            
             	#if DEBUG_ASPECT  
 						terrain_col.r = (int)(aspect*255);
 						terrain_col.g = (int)(aspect*255);
@@ -1260,7 +1267,12 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 				     
 			// VJ 060125 split each grid cell into 4 triagles when at a low radar range
 			// else draw 1 square grid cell, gives better framerate at 10 and 25 km radar range
+	    if (global_tsd_detail == 1)
+			  do_it = 1;	    	
 			if (range < TSD_ASE_RANGE_10000)
+			  do_it = 1;
+			  
+			if (do_it == 1)	
 			{
 				float mid_z = 0.5*(dz0+dz1);  
 				float mid_x = 0.5*(dx0+dx1);

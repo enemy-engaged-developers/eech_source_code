@@ -618,6 +618,12 @@ static void select_next_tsd_declutter_level_event (event *ev)
 
 static void select_previous_tsd_declutter_level_event (event *ev)
 {
+//VJ 061213 toggle TSD colour grid detail level
+	if (global_tsd_detail == 0)
+		 global_tsd_detail = 1;
+	else
+		 global_tsd_detail = 0;
+	/*		 
 	if (get_crew_role () == CREW_ROLE_PILOT)
 	{
 		select_previous_hokum_pilot_tsd_declutter_level ();
@@ -626,6 +632,7 @@ static void select_previous_tsd_declutter_level_event (event *ev)
 	{
 		select_previous_hokum_co_pilot_tsd_declutter_level ();
 	}
+	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
