@@ -654,13 +654,7 @@ static void select_next_tsd_declutter_level_event (event *ev)
 
 static void select_next_tsd_underlay_level_event (event *ev)
 {
-//VJ 061213 toggle TSD colour grid detail level
-	if (global_tsd_detail == 0)
-		 global_tsd_detail = 1;
-	else
-		 global_tsd_detail = 0;
-			 
-	//	select_next_tsd_underlay_level();
+	select_next_tsd_underlay_level();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
