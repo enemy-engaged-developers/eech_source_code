@@ -562,8 +562,8 @@ void DumpGWutInfo(const char *filename)
 		else
 			fprintf(fout,"%s,",group_database[i].full_name);
 		fprintf(fout,"%d,",group_database[i].group_category);
-		fprintf(fout,"%d,",group_database[i].registry_list_type);
-		fprintf(fout,"%d,",group_database[i].group_list_type);
+		fprintf(fout,"%s,", list_type_database[group_database[i].registry_list_type].name);
+		fprintf(fout,"%s,", list_type_database[group_database[i].group_list_type].name);
 		fprintf(fout,"%d,",group_database[i].movement_type);
 		fprintf(fout,"%d,",group_database[i].default_landing_type);
 		fprintf(fout,"%d,",group_database[i].default_entity_type);
@@ -1141,7 +1141,23 @@ void DumpGWutInfo(const char *filename)
 
 #define IntValue(p)  atoi(strtok(NULL,","))
 #define FloatValue(p)   atof(strtok(NULL,","))
+#define ListTypeValue(p)   get_list_type_value(fname, strtok(NULL,","))
 #define TESTDUMP(s) if(testdump){fprintf(fout,"%s\n",buf);fflush(fout);}
+
+
+static list_types get_list_type_value(const char* fname, const char* p)
+{
+	list_types i;
+
+	for (i=0; i < NUM_LIST_TYPES; i++)
+	{
+		if (strcmp(p, list_type_database[i].name) == 0)
+			return i;	
+	}
+
+	debug_fatal("Invalid list type in GWUT file \"%s\": %s (did you maybe use a GWUT file for an old version of EECH? Delete the gwut line in eech.ini to generate a new, valid GWUT file)", fname, p);
+	return LIST_TYPE_INVALID;  // will never get here, just to shut up the compiler
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1473,8 +1489,10 @@ void ReadGWutInfo(const char *fname)
 		//skip full name
 
 		group_database[i].group_category                  = ( group_category_types ) IntValue(p);
-		group_database[i].registry_list_type              = ( list_types ) IntValue(p);
-		group_database[i].group_list_type                 = ( list_types ) IntValue(p);
+		group_database[i].registry_list_type              = ListTypeValue(p);
+		group_database[i].group_list_type                 = ListTypeValue(p);
+//		group_database[i].registry_list_type              = ( list_types ) IntValue(p);
+//		group_database[i].group_list_type                 = ( list_types ) IntValue(p);
 		group_database[i].movement_type                   = ( movement_types ) IntValue(p);
 		group_database[i].default_landing_type            = IntValue(p);
 		group_database[i].default_entity_type             = ( entity_types ) IntValue(p);
