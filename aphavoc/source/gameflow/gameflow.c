@@ -68,6 +68,8 @@
 
 #include "project.h"
 
+#include "version.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -765,7 +767,7 @@ void process_game_initialisation_phases (void)
 			    {
 			    	parse_WUT_file(WUT_filename);
 			    }
-			    else
+/*			    else
 			    {
 //VJ 050110 check for origwut.txt or gwut146x.csv
 //VJ 051225 reversed this, I think it is assumed by now that CSV files are used by everyone			    	
@@ -774,6 +776,16 @@ void process_game_initialisation_phases (void)
               	else	
               	if (file_exist("origwut.txt"))
               		parse_WUT_file("origwut.txt");
+			    }*/
+// arneh 20061219 - don't use a hardcoded filename if none provided. Rather use default values and generate a gwut file with the defaults
+			    else  // generate a WUT file from default value
+			    {
+			    	char dump_file[256];
+			    	
+			    	snprintf(dump_file, sizeof(dump_file)-1, "gwut-default-%d%d%d.csv", 
+			    		MAJOR_VERSION, DATA_VERSION, MINOR_VERSION);
+			    	
+			    	DumpGWutInfo(dump_file);
 			    }
 
 			    session_planner_goto_button = command_line_planner_goto_button;
