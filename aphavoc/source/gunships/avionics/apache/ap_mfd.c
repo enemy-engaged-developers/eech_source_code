@@ -182,6 +182,8 @@ static rgb_colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int radar_zoomed;
+
 ////////////////////////////////////////
 //
 // TSD and ASE
@@ -997,6 +999,8 @@ void initialise_apache_mfd (void)
 	current_pfz = NO_PFZ;
 	next_free_pfz = 0;
 	next_free_nfz = 0;
+	
+	radar_zoomed = FALSE;
 
 	tsd_threat_line_flash_timer = TSD_THREAT_LINE_FLASH_RATE;
 	tsd_draw_threat_line_status = 0;
@@ -1574,46 +1578,41 @@ static void draw_field_of_regard_and_view_boxes (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void display_radar_scan_range (float scan_range)
+static void display_radar_scan_range (float scan_range, int ground_radar)
 {
 //VJ 030807 radar range adjustable
 	char
 		s[8];
-//		*s;
 
 	float
 		width,
 		y_adjust;
 
-	if (scan_range == APACHE_RADAR_SCAN_RANGE_500)
+	if (ground_radar && radar_zoomed)
+		sprintf(s, "ZOOM");
+	else if (scan_range == APACHE_RADAR_SCAN_RANGE_500)
 	{
-//		s = "500m";
 		sprintf(s,"%.0fm",APACHE_RADAR_SCAN_RANGE_500);
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_1000)
 	{
 		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_1000/1000);
-//		s = "1Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_2000)
 	{
 		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_2000/1000);
-//		s = "2Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_4000)
 	{
 		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_4000/1000);
-//		s = "4Km";
 	}
 	else if (scan_range == APACHE_RADAR_SCAN_RANGE_8000)
 	{
 		sprintf(s,"%.0fKm",APACHE_RADAR_SCAN_RANGE_8000/1000);
-//		s = "8Km";
 	}
 	else
 	{
 		sprintf(s,"XXX");
-//		s = "XXX";
 	}
 
 	width = get_mono_font_string_width (s);
@@ -2024,6 +2023,11 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void set_radar_zoomed(int zoomed)
+{
+	radar_zoomed = zoomed;	
+}
+
 #define RADIUS	(ROOT2 - 0.05)
 
 static void draw_ground_radar_mfd (void)
@@ -2037,7 +2041,8 @@ static void draw_ground_radar_mfd (void)
 
 	entity
 		*source,
-		*target;
+		*target,
+		*selected_target;
 
 	vec3d
 		*source_position;
@@ -2050,18 +2055,22 @@ static void draw_ground_radar_mfd (void)
 
 	scale = RADIUS / ground_radar.scan_range;
 
-	if (draw_large_mfd)
-	{
-		get_2d_float_screen_coordinates (0.0, -0.65, &u, &v);
-	}
+	selected_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+
+	if (!selected_target)
+		radar_zoomed = FALSE;
+
+	if (radar_zoomed)
+		get_2d_float_screen_coordinates (0.0, 0.0, &u, &v);
 	else
-	{
-		get_2d_float_screen_coordinates (0.0, -0.7, &u, &v);
-	}
+		if (draw_large_mfd)
+			get_2d_float_screen_coordinates (0.0, -0.65, &u, &v);
+		else
+			get_2d_float_screen_coordinates (0.0, -0.7, &u, &v);
 
 	u -= mfd_viewport_x_min;
 	v -= mfd_viewport_y_min;
-
+	
 	////////////////////////////////////////
 	//
 	// draw radar clutter
@@ -2180,7 +2189,7 @@ static void draw_ground_radar_mfd (void)
 	// scan range
 	//
 
-	display_radar_scan_range (ground_radar.scan_range);
+	display_radar_scan_range (ground_radar.scan_range, TRUE);
 
 	////////////////////////////////////////
 	//
@@ -2211,44 +2220,47 @@ static void draw_ground_radar_mfd (void)
 	// max scan limits
 	//
 
-	draw_2d_line (0.0, 0.0, -0.965, 0.965, MFD_COLOUR4);
-
-	draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
-
-	draw_radar_arc (APACHE_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR4);
-
-	//
-	// scan limits and range markers
-	//
-
-	set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
-
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR1);
-
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR4);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR4);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR4);
-
-	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
-
-	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
-
-	//
-	// sweep
-	//
-
-	if (ground_radar_is_active())
+	if (!radar_zoomed)
 	{
-		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
-
+		draw_2d_line (0.0, 0.0, -0.965, 0.965, MFD_COLOUR4);
+	
+		draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
+	
+		draw_radar_arc (APACHE_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR4);
+	
+		//
+		// scan limits and range markers
+		//
+	
+		set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
+	
+		draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR1);
+	
+		draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR4);
+		draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR4);
+		draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR4);
+	
+		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)));
+	
 		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+	
+		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)));
+	
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+	
+		//
+		// sweep
+		//
+	
+		if (ground_radar_is_active())
+		{
+			set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
+	
+			draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		}
+	
+		set_2d_window_rotation (mfd_env, 0.0);
 	}
-
-	set_2d_window_rotation (mfd_env, 0.0);
 
 	////////////////////////////////////////
 	//
@@ -2262,14 +2274,19 @@ static void draw_ground_radar_mfd (void)
 
 		target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
 
+		if (radar_zoomed)
+		{
+			// in zoomed mode centre radar on selected target
+			source_position = get_local_entity_vec3d_ptr(selected_target, VEC3D_TYPE_POSITION);
+			scale = 0.004;  // 1/250 ==  250m in each axis direction from selected target
+		}
+
 		while (target)
 		{
-			if (get_gunship_target_valid_for_ground_radar (target))
+			if (target != selected_target && get_gunship_target_valid_for_ground_radar (target))
 			{
 				if (get_target_matches_ground_radar_declutter_criteria (target))
-				{
 					draw_radar_target_symbol (target, source_position, scale, FALSE, FALSE);
-				}
 			}
 
 			target = get_local_entity_child_succ (target, LIST_TYPE_GUNSHIP_TARGET);
@@ -2281,12 +2298,8 @@ static void draw_ground_radar_mfd (void)
 
 		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 		{
-			target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-
-			if (target)
-			{
-				draw_radar_target_symbol (target, source_position, scale, TRUE, FALSE);
-			}
+			if (selected_target)
+				draw_radar_target_symbol (selected_target, source_position, scale, TRUE, FALSE);
 		}
 
 		set_2d_window_rotation (mfd_env, 0.0);
@@ -2402,7 +2415,7 @@ static void draw_air_radar_mfd (void)
 	// scan range
 	//
 
-	display_radar_scan_range (air_radar.scan_range);
+	display_radar_scan_range (air_radar.scan_range, FALSE);
 
 	//
 	// target details
