@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.7.2</title>
+<title>EECH Community Release Version 1.8.0</title>
 <style>
 <!--
 a {
@@ -78,7 +78,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: October 15, 2006
+      italic;'>Last edited by arneh: December 21, 2006
       </p>
 
 
@@ -96,21 +96,122 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.7.2?</h2>
-      <p><em>(since version 1.7.1)</em></p>
+      <h2>What's NEW in EECH 1.8.0?</h2>
+      <p><em>(since version 1.7.2)</em></p>
       <ul>
-        <li>New high-resolution HUD for the Mi-28 (similar to new Ka-52 HUD)
-	<li>Track-IR and G-forces can now move head position also in Mi-28
-	<li>Added heading tape to TSD for Comanche and Hokum
-	<li>Further tweaking to low and medium speed flight dynamics.
-	<li>Fixed bug with head pitch not being saved in wideview
-	<li>Fixed bug with g-force_head_movement modifier in eech.ini
-	    not working properly.
-	<li>Fixed bug with new Hokum HUD appearing only as a filled
-	    block in external view and internal view without cockpit.
-	<li>Fixed bug with tail rotor not being powerful enough to
-	    counteract torque with cross coupling disabled.
+
+        <li>Avionics changes
+        <ol>
+        <li>Added option for manual laser and radar control. With it
+      enabled you will have to activate and deactivate the laser and
+      radar manually (keypad * and / keys respectively. Switching
+      radar to single sweep mode has been moved to SHIFT + keypad /).
+      In non-radar targeting modes the laser needs to 
+      be active to get accurate range to target, and must be active to
+      fire laser guided missiles.
+      Radar activates automatically when switching to a radar targeting
+      mode with the option off. With it on you can activate/deactivate
+      the radar at any time regardless of which targeting mode is
+      active.
+        <li>Removed radar as targeting system from all helicopters
+	except AH-64D, RAH-66, Mi-28N and Ka-52.
+	<li>Removed TADS as targeting system from Blackhawk.
+        <li>Added new MFD page for Apache: flight, which displays
+	some of the same information as the IHADSS.
+	<li>Added different underlays for the Apache TSD page;  None,
+      map and TADS imagery. Switch between the three with SHIFT+D.
+        <li>Added Priority Fire Zones (PFZs) and No Fire Zones (NFZs)
+	to Apache TSD. See [link to documentation]
+	<li>Added zoom capability to the Longbow's radar.  Press
+	SHIFT-KEYPAD- to zoom in on selected target, SHIFT-KEYPAD+ to
+        zoom out to full view again.  In zoomed view the radar view
+        shows targets in a 500x500 meter area around the selected target.
+	<li>Updated Apache TADS and radar pages to show more information
+        <li>Added colours for some of the Apache Longbow MFD pages
+        (TSD, flight page)
+	<li>Longbow's cockpit has gotten full head position movement.
+	<li>Disabled low-res mode for the MFDs as there is
+        practically no frame rate difference, and no GFX cards out
+	today which don't support 256x256 textures.
+	<li>Added option for selecting detail level of TSD map -
+        tsddetail in eech.ini (gotcha).
+      </ol>
+
+      <li>Weapons changes
+      <ol> 
+        <li>Changed Hellfire flight profiles.  LOBL Hellfires now
+      follow a slightly high trajectory (instead of going straigt for
+      target), LOAL Hellfires follow a high trajectory.
+        <li>If you have a target selected already when firing in LOAL
+      mode the Hellfire will go for that target, even if you switch
+      target before it finishes its climb. This makes riple firing
+      Hellfires in LOAL much easier (particulary in combination with
+      PFZs).
+        <li>Laser must be active for laser guided missiles (K
+      Hellfires and Vikhrs) to guide. Laser is acticated automatically
+      unless the manual laser option is enabled in eech.ini.
+      </ol>
+
+      <li>Night changes
+      <ol>
+        <li>Added eech.ini option for adjusting night level brightness
+      (thanks to gotcha).
+        <li>Changes colour of russian night vision from amber to a
+      blueish-green colour.
+        <li>Added optional shading of screen edges (restricted_nvg_fov
+      in eech.ini) with night vision active for a more realistic
+      restricted field of view.
+      </ol>
+
+      <li>Other changes
+      <ol>
+        <li>Added eech.ini option for showing force vector on own
+      helicopter. This is mostly for debugging the flight model, or if
+      you're just curious which forces are acting on the helicopter.
+        <li>Added new radio message to flight which requests status.
+      Wingmen will reply with how many weapons and how much damage
+      they have.
+        <li>Added new radio command for transfering PFZ with targets
+      to wingman and ordering him to attack all targets in it.
+        <li>Allow each campaign/skirmish to have its own formscomp.dat
+      file. Will use file in common/maps/mapx or
+      common/maps/mapx/campaignname if they exist. This allows each
+      campaign/skirmish to have its own force composition.
+        <li>Increased default initial multiplayer buffer sizes for
+      hopefully less connection problems in multiplayer (sugggested
+      by Kimchoc1).
+      </ol>
+      
+      <li>Bug fixes
+      <ol>
+        <li>Fixed the head-on-a-stick movement of the head in
+      wideview.
+        <li>Fixed a bug in the Hokum and Havoc flight model where it would
+      suddenly start doing violent yaw movements, and eventuelly go
+      out of control.
+        <li>Fixed bug where UI would sometimes freeze in session
+      screen if multiplayer master server was down.
+        <li>Fixed crash bug in Hokum's HUD view.
+	<li>Changed displayed name of Hind from Mi-24D to Mi-24V, as
+      the model simulated in EECH is clearly not a D, and appears to
+      be a V.
+	</ol>
       </ul>
+
+      <strong><p>IMPORTANT: This version has changed the format of save
+      games, and is incompatible with ALL previous save games.  If you
+      have any saved campaigns you want to finish keep a backup of
+      your current cohokum.exe and use it for finishing the save game.
+      </p>
+      <p>GWUT files from previous versions are also incompatible. A
+      new file (gwut180.csv) has been included.  You can also delete
+      the gwut line in eech.ini to generate a default GWUT file.
+      <p>eech.ini has quite a few new options.  It's probably best to
+      delete or move your old eech.ini before starting 1.8 for the first time
+      and let the program generate a new.
+      <p>It is also  multiplayer incompatible with all previous
+      versions.</p>
+      </strong>
 
 
       <p align="right"><a href="#top">[top ^]</a></p>
@@ -120,7 +221,7 @@ h4 {
       <hr>
       <p><strong>NEW</strong>: Go to www.eechcentral.com and download
       the installation tool: <A
-      href="http://www.eechcentral.com/files/Tools/eechupdater1.1.exe">eechupdater1.1.exe</A></p>
+      href="http://www.eechcentral.com/files/Game%20patches/Official%20patches/eeahmapssetup1.1.exe">eechupdater1.1.exe</A></p>
       <p>This will download and install all patches and addon packs
       that you need. If new packs arrive this tool will detect them
       and download them, keeping your database up to date. It is still
@@ -368,10 +469,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
   style='color:red;'> </span></p></td>
         </tr>
         <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><strong>Engine startup</strong></p></td>
-        </tr>
-        <tr valign="top">
           <td width="214" class="Normal">
             <p class="style43">enginestartup=0</p></td>
           <td class="Normal">
@@ -379,6 +476,18 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
 	    with engines off, and the pilot will have to start
 	    the engines as per engine start up procedures (default=0, off)</span></p></td>
         </tr>
+        <tr valign="top">
+          <td colspan=2 class="Normal"><p><strong>Debuging</strong></p></td>
+        </tr>
+	<tr>
+          <td width="214" class="Normal">
+            <p class="style43">debug_show_force_vectors=0</p></td>
+          <td class="Normal">
+            <p><style='color:black;'>Show force vectors acting on own
+	    helicopter. This is mostly for debuging the flight model
+	    (default=0, off)</p></td>
+	</tr>
+
         <tr valign="top" bgcolor="#EEEEEE">
           <td colspan=2 class="Normal">
             <h4 class="style41">[WUT]</h4></td>
@@ -423,7 +532,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
  	
         <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan="2" class="style41"><h4>[Mods]</h4></td>
+          <td colspan="2" class="style41"><h4>Controllers &amp; Track-IR</h4></td>
         </tr>
         <tr valign="top">
           <td colspan=2 class="Normal">
@@ -501,111 +610,155 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal">
             <p><span lang=EN-GB>You can now choose exactly which joystick and which axis on that joystick that should be used for cyclic, collective and throttle. See &quot;FLIR panning&quot; for DX numbers.</span></p></td>
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b>Show infantry on radar </b></p></td>
+
+        <tr valign="top" bgcolor="#EEEEEE">
+          <td colspan="2" class="style41"><h4>Gameplay</h4></td>
         </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>radarinf=1</span></p></td>
+            <p class="style43">radarinf=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB> infantry no longer visible on radar, def = 1 (on)</span></p></td>
+            <p>infantry no longer visible on radar, def = 1 (on)</p></td>
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Ground stabilised FLIR (Comanche only) </span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>grstab=1 </span></p></td>
+            <p class="style43">grstab=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>The Comanche now supports ground stabilisation for the FLIR. You toggle this feature in-flight using Ctrl-S. </span></p></td>
+            <p>The Comanche now supports ground stabilisation for the
+	       FLIR. You toggle this feature in-flight using Ctrl-S.</p></td> 
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Show framerate</span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>dfr=0 </span></p></td>
+            <p class="style43">manual_laser/radar=0</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>The framerate is displayed in the top left corner and updates about once a second. The average of 30 readings is shown for stability. Values: 0 = off; 1 = on; 2 write the framerate to a file framerate.txt in the cohokum directory. <strong>This is not a very good measure, you better use the <a href="http://www.fraps.com">FRAPS</a> tool</strong>. </span></p></td>
+            <p>Radar and laser activation/deactivation is manual, and
+	    not controlled by targeting mode, def = 0 (off)</p></td>
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Downwash effect</span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>dwash=1</span></p></td>
+            <p class="style43">faa=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>rotor downwash (dust) effect. It makes you see clouds of dust when the chopper gets close to the ground (default=1, on) . May give a framerate hit when activated. </span></p></td>
+            <p>Fly any aircraft: all helicopters available now for the
+        user. Fly your own insertions! The cockpit defaults to the
+        Apache when choosing anything else than CHAH (default = on)
+        .</p></td> 
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>High resolution MFD </span></b></p></td>
+
+
+
+        <tr valign="top" bgcolor="#EEEEEE">
+          <td colspan="2" class="style41"><h4>Graphics and textures</h4></td>
         </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>highresmfd=1 </span></p></td>
+            <p class="style43">dwash=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>The resolution of the MFD's will be doubled. Remember that there is a small framerate hit when activating this feature. </span></p></td>
+            <p>Rotor downwash (dust) effect. It makes you see clouds
+        of dust when the chopper gets close to the ground (default=1,
+        on) . May give a framerate hit when activated.</p></td> 
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>High resolution HUD</span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>highreshud=1 </span></p></td>
+            <p class="style43">restricted_nvg_fov=1</p></td>
+          <td class="Normal">
+            <p>When enabled the night vision will show a dark frame,
+            severly restricting the field of view for a more realistic
+	    night vision effect.
+	    </p></td> 
+        </tr>
+
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43">dfr=0</p></td>
+          <td class="Normal">
+            <p>The framerate is displayed in the top
+        left corner and updates about once a second. The average of 30
+        readings is shown for stability. Values: 0 = off; 1 = on; 2
+        write the framerate to a file framerate.txt in the cohokum
+        directory. <strong>This is not a very good measure, you better
+        use the <a href="http://www.fraps.com">FRAPS</a>
+        tool</strong>.</p></td>
+        </tr>
+
+        <tr valign="top">
+          <td width="214" class="Normal">
+            <p class="style43">highreshud=1</p></td>
           <td class="Normal">
             <p><span lang=EN-GB>The resolution of the HUD will be
-        doubled. Remember that there is a small framerate hit when
-        activating this feature. Currently only the Ka-52 has a high
+        doubled. Currently only the Ka-52 and Mi-28 has a high
         res mode for the HUD, for the other helicopters this setting
         has no effect.</span></p></td>
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Green MFD </span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>greenmfd=1</span></p></td>
+            <p class="style43">greenmfd=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>MFD's are green (1) or grey (0). </span></p></td>
+            <p>Camera displays (FLIR/DTV/LLTV etc.) are monochrome
+	    green or amber (1) or monochrome black/white (0).</p></td> 
         </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Fly any aircraft </span></b></p></td>
-        </tr>
+
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>faa=1 </span></p></td>
+            <p class="style43">colourmfd=1</p></td>
           <td class="Normal">
-            <p><span lang=EN-GB>Fly any aircraft: all helicopters available now for the user. Fly your own insertions! The cockpit defaults to the Apache when choosing anything else than CHAH (default = on) .</span></p></td>
+            <p>MFDs will use colours for display when available.
+	    (But the TSD map will always be in colour).</p></td> 
         </tr>
-        <tr valign="top">
+
+         <tr valign="top">
           <td colspan=2 class="Normal">
             <p><b>Special TSD render</b></p></td>
         </tr>
         <tr valign="top">
           <td width="214" height="116" class="Normal">
-            <p class="style43"><span lang=EN-GB>tsdrender=1<br>
+            <p class="style43">tsdrender=1<br>
         tsdpalette=2<br>
-        tsdenemy=0 </span></p></td>
-          <td class="Normal">            <p><span lang=EN-GB>This mod adds a color and/or shaded relief map background to the TSD of the Comanche, Hokum and Apache (the Havoc is not included). Ctrl-D cycles through the options. There are 3 palettes to choose from for the elevation (Alt-D). </span><span lang=EN-GB>The Apache has the same TSD as the Comanche. </span><span lang=EN-GB>The configuration is automatically saved in the eech.ini file when you leave the game. <br>
-          </span><span lang=EN-GB>Optional: the friendlies and enemies are shown in red and blue colours (including detection circles of SAMs). If you don't want this option set the eech.ini variable &quot;tsdenemy&quot; to 0. </span><span lang=EN-GB>There is may be a framerate hit when showing the terrain. </span><span lang=EN-GB>For more info: </span><span lang=EN-GB><a
-  href="http://home.planet.nl/%7Ejette073/gotcha">Gotcha's site </a>. </span></p></td>
+        tsdenemy=0<br>
+	tsddetail=0 </p></td>
+          <td class="Normal"><p>This mod adds a color and/or shaded
+        relief map background to the TSD of the Comanche, Hokum and
+        Apache (the Havoc is not included). Ctrl-D cycles through the
+        options. There are 3 palettes to choose from for the elevation
+        (Alt-D). The Apache has the same TSD
+        as the Comanche.The configuration is
+        automatically saved in the eech.ini file when you leave the
+        game. <br> 
+          Optional: the friendlies and enemies are shown in red and
+        blue colours (including detection circles of SAMs). If you
+        don't want this option set the eech.ini variable
+        &quot;tsdenemy&quot; to 0. There is
+        may be a framerate hit when showing the terrain.
+	If tsddetail is set to 1 the TSD map will always use high
+        detail level map, even if in 25KM range mode (might cause
+        lower frame rate).
+        For more info:<a 
+	 href="http://home.planet.nl/%7Ejette073/gotcha">Gotcha's site </a>.</p></td>
         </tr>
+
         <tr valign="top">
-          <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Campaign commander </span></strong></td>
+          <td colspan=2 class="Normal"> <strong>Campaign commander</strong></td>
         </tr>
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class=style43><span lang=EN-GB>camcom=0</span></p></td>
+            <p class=style43>camcom=0</p></td>
           <td class="Normal">
-            <p class=style33><span lang=EN-GB>When the camcom setting is set to 1 (def = 0), it is possible to designate targets on the main campaign map. Just select the enemy target and press left mouse button: a new task is created. New tasks work the same as other tasks: they may not be executed right away, may expire etc. When you press right mouse button over a task, it is immediately terminated. If it was assigned to any group, the group is sent home. Note that Campaign Commander greatly influences the gameplay balance: with the right planning the campaigns are much easier to win.</span></p></td>
+            <p class=style33>When the camcom setting is set to 1 (def
+        = 0), it is possible to designate targets on the main campaign
+        map. Just select the enemy target and press left mouse button:
+        a new task is created. New tasks work the same as other tasks:
+        they may not be executed right away, may expire etc. When you
+        press right mouse button over a task, it is immediately
+        terminated. If it was assigned to any group, the group is sent
+        home. Note that Campaign Commander greatly influences the
+        gameplay balance: with the right planning the campaigns are
+        much easier to win.</p></td> 
         </tr>
         <tr valign="top">
           <td colspan="2" class="Normal">
@@ -674,7 +827,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr valign="top">
           <td class="style43"> TIR_6DOF=0</td>
-          <td class="Normal"> Enables support for TrackIR vector in the hokum and comanche</td>
+          <td class="Normal"> Enables support for TrackIR vector</td>
         </tr>
         <tr valign="top">
           <td colspan="2" class="Normal"> <strong>Texture support </strong></td>
@@ -685,7 +838,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
             mipmapping=0<br>
             dynamic_water=0
           </p>          </td>
-          <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates fllwing water but only with the correct texture packs. </td>
+          <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates flowing water but only with the correct texture packs. </td>
         </tr>
         <tr valign="top">
           <td colspan="2" class="Normal"> <strong>Autosave</strong></td>
@@ -696,8 +849,15 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
             <p>      autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p>          </td>
         </tr>
       </table>
-      <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
+      <p align="right"><a href="#top">[top ^]</a></p>
+
+<!-- Keyboard commands -->
+
+
       <h2><a name="ingame"></a>Extra In-game commands </h2>
+
+      <h3>Flight controls</h3>
+
       <table border=0 cellpadding=4 cellspacing="4">
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB
@@ -772,6 +932,110 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td class="Normal">
             <p>Open/close canopy doors</p></td>
         </tr>
+	</table>
+
+      <h3>Avionics</h3>
+
+      <table border=0 cellpadding=4 cellspacing="4">
+        <tr>
+          <td colspan=2 class="Normal">
+            <p><b>Laser control</b></p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Keypad*</span></p></td>
+          <td class="Normal">
+            <p>Activate/deactive laser</p></td>
+        </tr>
+
+        <tr>
+          <td colspan=2 class="Normal">
+            <p><b>Radar control</b></p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Keypad/</span></p></td>
+          <td class="Normal">
+            <p>Activate/deactive radar</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Shift-Keypad/</span></p></td>
+          <td class="Normal">
+            <p>Switch radar between single sweep mode and continous sweep</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Shift-Keypad-</span></p></td>
+          <td class="Normal">
+            <p>Zoom ground radar (Longbow only)</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Shift-Keypad+</span></p></td>
+          <td class="Normal">
+            <p>Unzoom ground radar (Longbow only)</p></td>
+        </tr>
+
+        <tr>
+          <td colspan=2 class="Normal">
+            <p><b>Ground stabilised FLIR (Comanche only)</b></p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Ctrl-S</span></p></td>
+          <td class="Normal">
+            <p>Toggles ground stabilized FLIR on/off.</p></td>
+        </tr>
+
+        <tr>
+          <td colspan=2 class="Normal"> <b>TSD control</b></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center"><span class="style43">Shift-D</span></p></td>
+          <td class="Normal">
+            <p>Switch TSD underlay between none, map and TADS (Longbow
+        only)</p></td>
+        </tr>
+        <tr>
+          <td width="190" class="Normal">
+            <p align="center" class="style43">Ctrl-D<br>Alt-D</p></td>
+          <td class="Normal">
+            <p><span class="MsoNormal">Ctrl-D (as in Declutter) cycles
+        through the TSD render options: old TSD screen, the terrain
+        map with/without contours, shaded relief with/without
+        contours. Alt-D cycles through the elevation colour palettes
+        (0-2).</span></p></td> 
+        </tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong>HUD</strong> </td>
+        </tr>
+        <tr>
+          <td class="style43"><div align="center">Alt-F1<br>
+      Shift-K </div></td>
+          <td class="Normal"><span class="style33">Change the HUD size
+        from 70% to 140% and background shading colour. </span> </td>
+        </tr>
+	<tr>
+	  <td class="style43"><div align="center">Shift-O</div></td>
+          <td class="Normal"><span class="style33"><span
+	  lang=EN-GB>Switch between Cruise and Transition mode HUD
+          (Apache and Comanche only).</span></span> </td>
+	</tr>
+        <tr>
+          <td colspan=2 class="Normal"><strong><span lang=EN-GB>PNVS</span></strong></td>
+        </tr>
+        <tr>
+          <td class="style43"><div align="center">Ctrl-N</div></td>
+          <td class="Normal"><span class="style33"><span lang=EN-GB>Change brightness of night view, 3 settings. </span></span> </td>
+        </tr>
+
+	</table>
+
+      <h3>Other</h3>
+
+      <table border=0 cellpadding=4 cellspacing="4">
 
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Enhanced inset view </span></strong></td>
@@ -792,16 +1056,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           </p></td>
           <td class="Normal">
             <p><span lang=EN-GB>Activates near, normal, wide field of view (FOV) </span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Ground stabilised FLIR (Comanche only) </span></b></p></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span lang=EN-GB><span class="style43">Ctrl-S</span></span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Toggles ground stabilized FLIR on/off. </span></p></td>
         </tr>
         <tr>
           <td colspan=2 class="Normal">
@@ -852,16 +1106,7 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td valign=top class="Normal">
             <p><span lang=EN-GB> Pressing Ctrl-F9 gives you satellite view, both for your own gunship and for other groups. Moreover, pressing Space on the map view when a site is selected switches the view to satellite camera. When a group is selected you can zoom satellite view with default controls, for keysites it is also possible to pan view. Note that at the moment for debugging purposes the level of interference is selected randomly each time the satellite view is select ed. In the future it will be linked to weather/daytime.</span></p></td>
         </tr>
-        <tr>
-          <td colspan=2 class="Normal"> <span lang=EN-GB><b>Special TSD render</b></span></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43"><span lang=EN-GB>Ctrl-D<br>
-</span><span lang=EN-GB>Alt-D</span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB><span class="MsoNormal">Ctrl-D (as in Declutter) cycles through the TSD render options: old TSD screen, the terrain map with/without contours, shaded relief with/without contours. Alt-D cycles through the elevation colour palettes (0-2).</span></span></p></td>
-        </tr>
+
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Wideview editing </span></strong></td>
         </tr>
@@ -880,27 +1125,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         <tr>
           <td class="style43"><div align="center">Left and right Mouse</div></td>
           <td class="Normal"><span class="style33"><span lang=EN-GB>Just select the enemy target and press left mouse button: a new task is created. When you press right mouse button over a task, it is immediately terminated. Works when option camcom=1 in the eech.ini file. </span></span> </td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>HUD</span></strong> </td>
-        </tr>
-        <tr>
-          <td class="style43"><div align="center">Alt-F1<br>
-      Shift-K </div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>Change the HUD size from 70% to 140% and background shading colour. </span></span> </td>
-        </tr>
-	<tr>
-	  <td class="style43"><div align="center">Shift-O</div></td>
-          <td class="Normal"><span class="style33"><span
-	  lang=EN-GB>Switch between Cruise and Transition mode HUD
-          (Apache and Comanche only).</span></span> </td>
-	</tr>
-        <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>PNVS</span></strong></td>
-        </tr>
-        <tr>
-          <td class="style43"><div align="center">Ctrl-N</div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>Change brightness of night view, 3 settings. </span></span> </td>
         </tr>
         <tr>
           <td colspan=2 class="Normal"><strong><span lang=EN-GB>Quicksave</span></strong></td>
@@ -970,7 +1194,18 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
-
+      <h4>Fixes/features in 1.7.2:</h4>
+      <ul>
+        <li>New high-resolution HUD for the Mi-28 (similar to new Ka-52 HUD)
+	<li>Track-IR and G-forces can now move head position also in Mi-28
+	<li>Added heading tape to TSD for Comanche and Hokum
+	<li>Further tweaking to low and medium speed flight dynamics.
+	<li>Fixed bug with head pitch not being saved in wideview
+	<li>Fixed bug with g-force_head_movement modifier in eech.ini not working properly.
+	<li>Fixed bug with new Hokum HUD appearing only as a filled block in external view and internal view without cockpit.
+	<li>Fixed bug with tail rotor not being powerful enough to
+      counteract torque with cross coupling disabled.
+      </ul>
 
       <h4>Fixes/features in 1.7.1:</h4>
       <ul>
