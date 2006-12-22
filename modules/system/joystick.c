@@ -179,7 +179,7 @@ void initialise_joysticks (void)
 		if (di_err != DI_OK)
 		{
 
-			debug_log ("Unable to enumerate any joystick devices");
+//			debug_log ("Unable to enumerate any joystick devices");
 		}
 	}
 
@@ -805,7 +805,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		// Failed to acquire the device - release it.
 		//
 
-		debug_log ("Unable to acquire the device for a joystick");
+//		debug_log ("Unable to acquire the device for a joystick");
 
 		IDirectInputDevice7_Release (device);
 
@@ -985,7 +985,7 @@ void read_joystick_values (int joystick_device_index)
 				if (di_err != DI_OK)
 				{
 		
-					debug_log ("Unable to acquire joystick device: %s", get_dinput_error_message (di_err));
+//					debug_log ("Unable to acquire joystick device: %s", get_dinput_error_message (di_err));
 				}
 		
 				di_err = IDirectInputDevice7_Poll (joystick->input_device);
@@ -994,7 +994,7 @@ void read_joystick_values (int joystick_device_index)
 			if ((di_err != DI_OK) && (di_err != S_FALSE))
 			{
 		
-				debug_log ("Unable to poll joystick device: %s (%d)", get_dinput_error_message (di_err), di_err);
+//				debug_log ("Unable to poll joystick device: %s (%d)", get_dinput_error_message (di_err), di_err);
 		
 //				return;
 			}
@@ -1016,7 +1016,7 @@ void read_joystick_values (int joystick_device_index)
 			if (di_err != DI_OK)
 			{
 		
-				debug_log ("Unable to read joystick device state");
+//				debug_log ("Unable to read joystick device state");
 		
 //				return;
 			}
