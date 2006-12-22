@@ -264,6 +264,10 @@ extern void initialise_entity_list_default_functions (void);
 
 extern void insert_local_entity_into_parents_child_list (entity *en, list_types type, entity *parent, entity *pred);
 
+extern int local_entity_is_in_list(entity* en, list_types list, entity* search_object);
+
+extern void clear_local_entity_list(entity* en, list_types list);
+
 extern void delete_local_entity_from_parents_child_list (entity *en, list_types type);
 
 extern void unlink_local_entity_children (entity *en, list_types list);

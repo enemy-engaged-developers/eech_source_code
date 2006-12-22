@@ -386,6 +386,8 @@ void initialise_entity_list_default_functions (void)
 		i,
 		j;
 
+	ASSERT(strcmp(list_type_database[LIST_TYPE_WAYPOINT].name, "LIST_TYPE_WAYPOINT") == 0);  // if this fails there is a discrepancy between the list types in en_list.h and the ones initialised in this file!
+
 	for (i = 0; i < NUM_ENTITY_TYPES; i++)
 	{
 		for (j = 0; j < NUM_LIST_TYPES; j++)
@@ -491,6 +493,46 @@ void insert_local_entity_into_parents_child_list (entity *en, list_types type, e
 	notify_local_entity (ENTITY_MESSAGE_LINK_CHILD, parent, en, type);
 
 	notify_local_entity (ENTITY_MESSAGE_LINK_PARENT, en, parent, type);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void clear_local_entity_list(entity* en, list_types list)
+{
+	entity *tmp;
+	
+	ASSERT(en);
+	
+	for (tmp = get_local_entity_first_child (en, list);
+		 tmp;
+		 tmp = get_local_entity_first_child (en, list))
+	{
+		delete_local_entity_from_parents_child_list(tmp, list);
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int local_entity_is_in_list(entity* en, list_types list, entity* search_object)
+{
+	entity *tmp;
+	
+	ASSERT(en);
+	
+	for (tmp = get_local_entity_first_child (en, list);
+		 tmp;
+		 tmp = get_local_entity_child_succ (tmp, list))
+	{
+		if (tmp == search_object)
+			return TRUE;
+	}
+	
+	return FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -750,7 +792,8 @@ void unpack_list_link (entity *en, list_types type, list_link *link)
 
 void pack_list_type (list_types type)
 {
-	ASSERT ((type >= 0) && (type < NUM_LIST_TYPES));
+	ASSERT(type >= 0);
+	ASSERT(type < NUM_LIST_TYPES);
 
 	#if (DEBUG_MODULE_PACK_ONE || DEBUG_MODULE_PACK_ALL)
 
