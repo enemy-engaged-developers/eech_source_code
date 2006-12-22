@@ -209,8 +209,6 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 		
 		dive_ratio = (intercept_point->y - weapon_position->y) / range;
 
-		debug_log("range: %.0f, dive_ratio: %.4f", range, dive_ratio);
-	
 		if (raw->loal_mode)
 		{
 			switch (raw->missile_phase)
