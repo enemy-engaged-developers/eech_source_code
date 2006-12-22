@@ -3977,6 +3977,7 @@ static void create_fog_of_war_texture_overlay (void)
 		*sec;
 
 	ASSERT (map_overlay);
+	ASSERT (get_pilot_entity());
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 	
