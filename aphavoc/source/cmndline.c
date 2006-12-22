@@ -128,7 +128,7 @@ int
 	command_line_comms_packet_rerequest_limit				= 10,
 	command_line_comms_connection_receive_size			= (200 * 1024),
 	command_line_comms_data_record_size						= (200 * 1024),
-	command_line_comms_timeout									= (5.0),
+	command_line_comms_timeout									= (15.0),
 	command_line_comms_pack_buffer_size						= (200 * 1024),
 	command_line_comms_initial_sleep_time					= 500,
 	command_line_comms_guaranteed_send						= FALSE,  ////Moje 040304 Could be slightly better...
@@ -810,7 +810,7 @@ void process_command_line (int argc, char *argv[])
 			}
 			else
 			{
-				command_line_comms_timeout = 5.0;
+				command_line_comms_timeout = 15.0;
 			}
 
 			debug_log ("ARG:%s, RESPONSE:command_line_comms_timeout = %d", s1, command_line_comms_timeout);
