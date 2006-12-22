@@ -228,7 +228,7 @@ void helicopter_movement (entity *en)
 
 	// bound speeds to something realistic
 	max_x_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
-	max_y_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
+	max_y_vel = 0.1 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 	max_z_vel = 1.0 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 
 	normalise_any_3d_vector (&wp_vec);
