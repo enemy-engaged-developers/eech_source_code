@@ -307,7 +307,8 @@ static void update_server (entity *en)
 				//
 				// Check if gunship has a task - if not then set gunship entity to NULL
 				//
-
+// arneh 20061223 - removed this to stop helicopter going to outside view after landing a successful mission
+/*
 				if (!get_local_entity_parent (en, LIST_TYPE_FOLLOWER))
 				{
 					if (!get_local_entity_int_value (en, INT_TYPE_EJECTED))
@@ -318,7 +319,7 @@ static void update_server (entity *en)
 						}
 					}
 				}
-
+*/
 				break;
 			}
 			////////////////////////////////////////
