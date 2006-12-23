@@ -704,7 +704,7 @@ void draw_dynamic_forces (void)
 	
 			current_flight_dynamics->dynamic_forces [index].linear_force *= 10;
 	
-			size = bound (current_flight_dynamics->dynamic_forces [index].linear_force, -2.0, 2.0);
+			size = bound (current_flight_dynamics->dynamic_forces [index].linear_force * 0.25, -4.0, 4.0);
 	
 			pos.y += 2.0;
 	
@@ -733,7 +733,7 @@ void draw_dynamic_forces (void)
 
 		pos.y += 2.0;
 
-		//create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_FORCES, 0, size);
+//		create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_FORCES, 0, size);
 	}
 
 	// motion vector
@@ -755,14 +755,14 @@ void draw_dynamic_forces (void)
 
 		pos.y += 2.0;
 
-		//create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_MOVEMENT, 0, size);
+//		create_vectored_debug_3d_object (&pos, &direction, OBJECT_3D_ARROW_MOVEMENT, 0, size);
 	}
 
 	// motion line
 
 	old_position.y += 2.0;
 
-	create_debug_3d_line (&old_position, &pos, sys_col_yellow, 20.0);
+//	create_debug_3d_line (&old_position, &pos, sys_col_yellow, 20.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
