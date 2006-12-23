@@ -841,6 +841,12 @@ int mobile_check_all_members_taken_off (entity *en)
 
 			ASSERT (current_guide);
 
+			if (current_guide == new_guide)
+			{
+				member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
+				continue;
+			}
+
 			ASSERT (current_guide != new_guide);
 
 			destroy_client_server_entity (current_guide);
