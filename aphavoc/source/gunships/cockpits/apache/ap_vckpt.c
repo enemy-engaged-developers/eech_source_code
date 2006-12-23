@@ -1021,9 +1021,13 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-	vp.x = vp_cockpit_world_position.x;
-	vp.y = vp_cockpit_world_position.y;
-	vp.z = vp_cockpit_world_position.z;
+	if (get_view_mode () != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD
+		&& get_view_mode () != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
+	{
+		vp.x = vp_cockpit_world_position.x;
+		vp.y = vp_cockpit_world_position.y;
+		vp.z = vp_cockpit_world_position.z;
+	}
 
 	//
 	// draw fillet to mask TADS display
