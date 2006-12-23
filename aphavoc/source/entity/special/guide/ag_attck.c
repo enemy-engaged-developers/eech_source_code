@@ -84,7 +84,7 @@
 
 #define FIXED_WING_EGRESS_TIME		10.0
 
-#define INITIAL_BOB_UP_DISTANCE		15.0
+#define INITIAL_BOB_UP_DISTANCE		10.0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1297,7 +1297,7 @@ void set_attack_guide_fire_position (entity *en)
 			// change guide reached criteria
 			//
 	
-			set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, TRUE, 1.5);
+			set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, TRUE, 2.0);
 
 			set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, FALSE, 0.0);
 
