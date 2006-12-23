@@ -1110,8 +1110,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-//	if (edit_wide_cockpit)
-	{
 #if DEBUG_MODULE
 		if (check_key(DIK_NUMPAD7))
 		{
@@ -1144,6 +1142,8 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 			  dz-= 0.001;
 		}
 #endif		
+	if (edit_wide_cockpit)
+	{
 		//VJ 50208 added pilot head pitch
 		if (check_key(DIK_NUMPAD7))
 		{
