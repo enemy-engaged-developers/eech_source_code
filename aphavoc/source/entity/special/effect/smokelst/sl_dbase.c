@@ -1335,7 +1335,7 @@ void initialise_smoke_list_database (void)
 		item->red_2					=	 60;	// red
 		item->green_2				=	 50;	// green
 		item->blue_2				=	20;	// blue
-		item->alpha_2				=	100;	// alpha
+		item->alpha_2				=	60;	// alpha
 		item->radius_2				=	17.0;	// radius
 
 		// END COLOUR
@@ -1352,7 +1352,7 @@ void initialise_smoke_list_database (void)
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE;
 		item->texture_size				=	1.0;
-		item->animation_rate				=	1.0;
+		item->animation_rate				=	1.5;
 
 		item->additive						=	FALSE;
 		item->draw_type					=	SMOKE_DRAW_TYPE_SPRITES;
