@@ -921,7 +921,7 @@ void get_comanche_crew_viewpoint (void)
 		search_head.result_sub_object->relative_pitch = head_pitch_datum - pilot_head_pitch;
 
 		if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005
-			search_head.result_sub_object->relative_roll = -TIR_GetRoll() / 16383. * PI / 2.;	// Retro 6Feb2005
+			search_head.result_sub_object->relative_roll = TIR_GetRoll() / 16383. * PI / 2.;	// Retro 6Feb2005
 		else
 			search_head.result_sub_object->relative_roll = 0.0;
 	}
