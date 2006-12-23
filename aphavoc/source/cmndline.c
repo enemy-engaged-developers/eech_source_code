@@ -126,10 +126,10 @@ int
 	command_line_comms_resend_list_size						= 1000,
 	command_line_comms_packet_data_size						= 512,                  // Moje 040507 changed back to RW default
 	command_line_comms_packet_rerequest_limit				= 10,
-	command_line_comms_connection_receive_size			= (200 * 1024),
-	command_line_comms_data_record_size						= (200 * 1024),
+	command_line_comms_connection_receive_size			= (210 * 1024),
+	command_line_comms_data_record_size						= (210 * 1024),
 	command_line_comms_timeout									= (15.0),
-	command_line_comms_pack_buffer_size						= (200 * 1024),
+	command_line_comms_pack_buffer_size						= (210 * 1024),
 	command_line_comms_initial_sleep_time					= 500,
 	command_line_comms_guaranteed_send						= FALSE,  ////Moje 040304 Could be slightly better...
 	command_line_comms_dedicated_server						= FALSE,
