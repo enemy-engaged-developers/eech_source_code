@@ -91,6 +91,7 @@ const message_text_info_type
 		{	TRUE,					TRUE, 		TRUE,				8.0	},			// MESSAGE_TEXT_PILOT_STRING,
 		{	TRUE,					TRUE, 		TRUE,				8.0	},			// MESSAGE_TEXT_WINGMAN_STRING,
 		{	TRUE,					TRUE, 		FALSE,				2.0	},			// MESSAGE_TEXT_SHORT_WINGMAN_STRING,
+		{	FALSE,					TRUE, 		TRUE,				5.0	},			// MESSAGE_TEXT_LOCAL_MESSAGE
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
