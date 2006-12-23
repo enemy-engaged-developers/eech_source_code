@@ -76,6 +76,8 @@ extern int engage_targets_in_group (entity *group, entity *target_group, int exp
 
 extern int engage_specific_target (entity *group, entity *target, unsigned int valid_members, int expire);
 
+extern void engage_specific_targets(entity *wingman, entity *targets[]);
+
 extern unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_members);
 
 extern void terminate_all_engage_tasks (entity *group);

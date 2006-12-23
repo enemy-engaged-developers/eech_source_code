@@ -109,6 +109,14 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 
 	ASSERT (objective);
 
+	#if DEBUG_MODULE
+	
+	debug_log ("ENGAGE: Trying to engage against %s (%d)",
+									get_local_entity_string (objective, STRING_TYPE_FULL_NAME),
+									get_local_entity_index (objective));
+
+	#endif
+
 	ASSERT ((get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_AIRCRAFT)) ||
 				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_VEHICLE)) ||
 				(get_local_entity_int_value (objective, INT_TYPE_IDENTIFY_FIXED)));
@@ -672,6 +680,37 @@ int engage_specific_target (entity *group, entity *target, unsigned int valid_me
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void engage_specific_targets(entity *wingman, entity *targets[])
+{
+	entity
+		*group;
+
+	unsigned int valid_members = 0, member_number, i;
+
+	ASSERT(get_local_entity_int_value (wingman, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI);
+
+	group = get_local_entity_parent(wingman, LIST_TYPE_MEMBER);
+	
+	if (!get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
+		return;
+
+	member_number = get_local_entity_int_value(wingman, INT_TYPE_GROUP_MEMBER_NUMBER);
+	valid_members = (1 << member_number);
+	
+	for (i = 0; i < 16; i++)
+	{
+		entity* target = targets[i];
+		if (!target)
+			break;
+
+		engage_specific_target(group, target, valid_members, FALSE);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 unsigned int assign_specific_engage_task_to_group (entity *group, entity *task, unsigned int valid_members)
 {
 	entity
@@ -729,6 +768,7 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 		*guide,
 		*target,
 		*member,
+		*single_member,
 		*persuer,
 		**guide_list;
 
@@ -811,9 +851,7 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 	//
 
 	guide_list = malloc_fast_mem (sizeof (entity *) * task_count);
-
 	priority = malloc_fast_mem (sizeof (float) * task_count);
-
 	assigned_count = malloc_fast_mem (sizeof (int) * task_count);
 
 	#if DEBUG_MODULE
@@ -822,8 +860,27 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 
 	#endif
 
-	loop = 0;
+	single_member = NULL;
+	// check if we have a single member, if so assign that member to single_member
+	for (member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
+		 member;
+		 member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER))
+	{
+		member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
 
+		if (member_number & valid_members)
+		{
+			if (single_member)  // we already have a valid member, so there is more than one
+			{
+				single_member = NULL;
+				break;
+			}
+			else
+				single_member = member;
+		}
+	}
+
+	loop = 0;
 	guide = get_local_entity_first_child (group, LIST_TYPE_GUIDE_STACK);
 
 	while (guide)
@@ -946,7 +1003,7 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 			if (get_local_entity_int_value (member, INT_TYPE_ENGAGE_ENEMY))
 			{
 				member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
-		
+
 				if (member_number & valid_members)
 				{
 					member_pos = get_local_entity_vec3d_ptr (member, VEC3D_TYPE_POSITION);
