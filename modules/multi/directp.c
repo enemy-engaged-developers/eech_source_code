@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define DIRECT_PLAY_DEBUG 1 // schorpp mp debug "0"
+#define DIRECT_PLAY_DEBUG 0 // schorpp mp debug "0"
 
 #define DEBUG_DUMP_PACKET_DATA 0
 
@@ -3358,8 +3358,8 @@ void direct_play_system_message (LPDPMSG_GENERIC type)
 	char
 		buffer [200];
 
-	debug_log ( "Got Direct Play System Message" );
-
+//	debug_log ( "Got Direct Play System Message" );
+/*
 	switch ( type->dwType )
 	{
 
@@ -3474,7 +3474,7 @@ void direct_play_system_message (LPDPMSG_GENERIC type)
 			debug_log ( "DP: DPSYS_SENDCOMPLETE" );
 			break;
 		}
-	}
+	} */
 
 
 	switch (type->dwType)
