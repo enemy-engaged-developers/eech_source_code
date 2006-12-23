@@ -757,8 +757,8 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 							add_message_action_to_database (sub_item, 6, message,	index, DIK_7, "Bob-Up");
 
 							// Attack PFZ, leader only
-
-							if (leader_flag && pfz_active())
+							if (pfz_active()
+								&& get_local_entity_int_value(member, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW)
 								add_message_action_to_database (sub_item, 7, MESSAGE_WINGMAN_ATTACK_PFZ,	index, DIK_8, "Attack PFZ");
 							else
 								add_message_action_to_database (sub_item, 7, MESSAGE_NONE,	index, DIK_8, "Attack PFZ");
@@ -1522,25 +1522,73 @@ void send_text_message (entity *sender, entity *target, message_text_types type,
 void send_wingman_message (message_type message)
 {
 	entity
+		*wingman,
 		*en;
 
 	en = get_gunship_entity ();
+	wingman = get_local_entity_safe_ptr (message.value);
 
-	if (get_comms_model () == COMMS_MODEL_SERVER)
+	if (message.type == MESSAGE_WINGMAN_ATTACK_PFZ)
 	{
-		process_radio_message (en, message.type, message.value);
+		entity* targets[17];
+		entity* target;
+		unsigned int i=0;
+		pfz* p;
+		
+		ASSERT(current_pfz != NO_PFZ);
+		p = get_pfz((unsigned)current_pfz);
+
+		// collect first 16 targets in pfz and send along
+
+		for (target = get_local_entity_first_child(en, LIST_TYPE_GUNSHIP_TARGET);
+			 target;
+			 target = get_local_entity_child_succ(target, LIST_TYPE_GUNSHIP_TARGET))
+		{
+			if (get_gunship_target_valid_for_ground_radar(target)
+				&& coordinate_is_inside_square(get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION),
+											   &p->corner1, &p->corner2, &p->corner3, &p->corner4))
+			{
+				debug_log("transmitting engage for %i: %s", i, get_local_entity_string(target, STRING_TYPE_FULL_NAME));
+
+				targets[i++] = target;
+				if (i == (sizeof(targets) / sizeof(targets[0])) - 1)
+					break;
+			}
+		}
+
+		// terminate target list
+		targets[i] = NULL;
+
+		if (get_comms_model () == COMMS_MODEL_SERVER
+			&& get_local_entity_int_value (wingman, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+		{
+			engage_specific_targets(wingman, targets);
+		}
+		else
+			transmit_pfz(en, wingman,
+				p->corner1.x, p->corner1.z,
+				p->corner2.x, p->corner2.z,
+				p->corner3.x, p->corner3.z,
+				p->corner4.x, p->corner4.z,
+				targets);
+
+		if (get_comms_model () == COMMS_MODEL_SERVER)
+			process_radio_message (en, message.type, message.value);
 	}
 	else
 	{
-		transmit_entity_comms_message (ENTITY_COMMS_RADIO_MESSAGE, en, message.type, message.value);
+		if (get_comms_model () == COMMS_MODEL_SERVER)
+			process_radio_message (en, message.type, message.value);
+		else
+			transmit_entity_comms_message (ENTITY_COMMS_RADIO_MESSAGE, en, message.type, message.value);
+
+		//
+		// message value should hold the index number of the target wingman
+		// if that wingman is a human player, transmit text message as well
+		//
+
+		send_wingman_message_to_human_player (en, message.type, wingman);
 	}
-
-	//
-	// message value should hold the index number of the target wingman
-	// if that wingman is a human player, transmit text message as well
-	//
-
-	send_wingman_message_to_human_player (en, message.type, get_local_entity_safe_ptr (message.value));
 
 	stop_messaging_system (NULL);
 }

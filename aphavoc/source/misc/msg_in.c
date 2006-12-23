@@ -252,6 +252,7 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 		case MESSAGE_TEXT_SYSTEM_ENTITY_KILLED:
 		case MESSAGE_TEXT_SYSTEM_KEYSITE_CAPTURED:
 		case MESSAGE_TEXT_SYSTEM_KEYSITE_DESTROYED:
+		case MESSAGE_TEXT_LOCAL_MESSAGE:
 		{
 			//
 			// all pilots display these messages
@@ -444,14 +445,22 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 		case MESSAGE_TEXT_PILOT_STRING:
 		case MESSAGE_TEXT_WINGMAN_STRING:
 		case MESSAGE_TEXT_SHORT_WINGMAN_STRING:
+		case MESSAGE_TEXT_LOCAL_MESSAGE:
 		{
 			ASSERT (sender);
 
 			ASSERT (raw_string);
 
-			pilot_name = get_local_entity_string (sender, STRING_TYPE_PILOTS_NAME);
-
-			gunship = get_local_entity_parent (sender, LIST_TYPE_AIRCREW);
+			if (type == MESSAGE_TEXT_LOCAL_MESSAGE)
+			{
+				pilot_name = NULL;
+				gunship = sender;
+			}
+			else
+			{
+				pilot_name = get_local_entity_string (sender, STRING_TYPE_PILOTS_NAME);
+				gunship = get_local_entity_parent (sender, LIST_TYPE_AIRCREW);
+			}
 
 			if (gunship)
 			{
@@ -460,10 +469,12 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 				if (group)
 				{
 					flight_name = get_local_entity_string (group, STRING_TYPE_GROUP_CALLSIGN);
-
 					member_id = get_local_entity_int_value (gunship, INT_TYPE_GROUP_MEMBER_ID);
 
-					sprintf (temp_string, "%s (%s 1-%d): %s", pilot_name, flight_name, member_id, raw_string);
+					if (pilot_name)
+						sprintf (temp_string, "%s (%s 1-%d): %s", pilot_name, flight_name, member_id, raw_string);
+					else
+						sprintf (temp_string, "%s 1-%d: %s", flight_name, member_id, raw_string);
 
 					get_local_entity_vec3d (gunship, VEC3D_TYPE_POSITION, &(message->position));
 
@@ -963,7 +974,8 @@ void process_radio_message (entity *en, message_categories type, int value)
 		}
 		case MESSAGE_WINGMAN_ATTACK_PFZ:
 		{
-			debug_log("attack pfz");
+			wingman = get_local_entity_safe_ptr (value);
+			process_message_attack_pfz (en, wingman);
 			
 			break;	
 		}
@@ -1454,6 +1466,32 @@ void process_message_attack_my_target (entity *en, entity *wingman)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void process_message_attack_pfz(entity *en, entity *wingman)
+{
+	entity
+		*group,
+		*target;
+
+	ASSERT (en);
+	ASSERT (wingman);
+	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
+	ASSERT (get_local_entity_type(wingman) == ENTITY_TYPE_HELICOPTER);
+	ASSERT (get_local_entity_int_value(wingman, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW);
+
+	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+	if (group && get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
+	{
+		if (get_local_entity_int_value (wingman, INT_TYPE_WEAPONS_HOLD))
+			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ACKNOWLEDGE, 1.0, 10.0);
+		else
+			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_ENGAGING_TARGET, 1.0, 10.0);
+	
+		return;
+	}
+
+	play_client_server_radio_message_negative_response (wingman, SPEECH_WINGMAN_UNABLE_TO_COMPLY, 1.0, 10.0);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Help Me
@@ -1619,6 +1657,21 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 				
 				if (!state)
 				{
+					entity* target;
+
+					if (get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
+					{
+						member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
+	
+						// add engage task for all PFZ targets
+						for (target = get_local_entity_first_child (member, LIST_TYPE_DESIGNATED_TARGET);
+							 target;
+							 target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET))
+						{
+							engage_specific_target(group, target, member_number, FALSE);
+						}
+					}
+					
 					guide = get_local_entity_parent (member, LIST_TYPE_FOLLOWER);
 
 					if (guide)
@@ -1629,8 +1682,6 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 						
 						if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_TASK_ENGAGE)
 						{	
-							member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
-
 							valid_members |= member_number;
 						}
 					}
@@ -1654,6 +1705,21 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 				
 		if (!state)
 		{
+			entity* target;
+
+			member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
+
+			if (get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
+			{
+				// add engage task for all PFZ targets
+				for (target = get_local_entity_first_child (member, LIST_TYPE_DESIGNATED_TARGET);
+					 target;
+					 target = get_local_entity_child_succ (target, LIST_TYPE_DESIGNATED_TARGET))
+				{
+					engage_specific_target(group, target, member_number, FALSE);
+				}
+			}
+
 			guide = get_local_entity_parent (member, LIST_TYPE_FOLLOWER);
 
 			if (guide)
@@ -1663,11 +1729,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 				ASSERT (task);
 						
 				if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_TASK_ENGAGE)
-				{	
-					member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
-
 					valid_members |= member_number;
-				}
 			}
 		}
 	}
