@@ -98,6 +98,7 @@ enum ENTITY_COMMS_MESSAGES
 	ENTITY_COMMS_PAUSE_SOUND_TYPE,										// (entity_comms_messages message, entity *en, entity_sub_types type, float delay)
 	ENTITY_COMMS_PAUSE_WEAPON_SOUND_TYPE,								// (entity_comms_messages message, entity *en, entity_sub_types weapon_sub_type)
 	ENTITY_COMMS_PILOT_COMMUNICATION,									// (entity_comms_messages message, entity *sender, int target_id, char *message)
+	ENTITY_COMMS_PILOT_PFZ_TRANSFER,									// (entity_comms_messages message, entity *sender, entity* receiver)
 	ENTITY_COMMS_PILOT_REQUEST_ACCEPTED,								// (entity_comms_messages message, entity *sender, int destination id, int index)
 	ENTITY_COMMS_PLAY_CPG_CONTACT_MESSAGE,								// (entity_comms_messages message, entity *en, int speech_index, int speech_index, int speech_index)
 	ENTITY_COMMS_PLAY_CPG_MESSAGE,										// (entity_comms_messages message, entity *en, int speech_index, int speech_category, float delay)
@@ -178,6 +179,7 @@ extern void enable_entity_comms_messages (void);
 extern void disable_entity_comms_messages (void);
 
 extern void transmit_entity_comms_message (entity_comms_messages message, entity *en, ...);
+extern void transmit_pfz(entity* sender, entity* receiver, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, entity* targets[]);
 
 extern void process_received_entity_comms_messages (void);
 

@@ -214,6 +214,10 @@ entity_comms_message_data
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 		},
 		{
+			"ENTITY_COMMS_PILOT_PFZ_TRANSFER",						// name
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+		},
+		{
 			"ENTITY_COMMS_PILOT_REQUEST_ACCEPTED",					// name
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 		},
@@ -395,6 +399,56 @@ void disable_entity_comms_messages (void)
 	debug_log ("Setting comms messages to DISABLED");
 
 	comms_messages_enabled = FALSE;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void transmit_pfz(entity* sender, entity* receiver, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, entity* targets[])
+{
+	entity* target;
+	int i;
+
+	////////////////////////////////////////
+	//
+	// trap single player or comms messages disabled
+	//
+	////////////////////////////////////////
+
+	if ((direct_play_get_comms_mode () == DIRECT_PLAY_COMMS_MODE_NONE) || (!comms_messages_enabled))
+	{
+		return;
+	}
+
+	////////////////////////////////////////
+	//
+	// build message
+	//
+	////////////////////////////////////////
+
+	pack_entity_comms_message (ENTITY_COMMS_PILOT_PFZ_TRANSFER);
+
+	pack_entity_safe_ptr (sender);
+	pack_entity_safe_ptr (receiver);
+
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x1);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y1);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x2);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y2);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x3);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y3);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x4);
+	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y4);
+
+	// pack list of targets
+	for (target = targets[0], i=0; target && i < 16; target = targets[i], i++)
+		if (target != sender && target != receiver)
+			pack_entity_safe_ptr(target);
+
+	// end marker
+	pack_entity_safe_ptr(NULL);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1699,6 +1753,14 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			{
 				ASSERT (message == NULL);
 			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case ENTITY_COMMS_PILOT_PFZ_TRANSFER:
+		////////////////////////////////////////
+		{
+			ASSERT(!"Use transmit_pfz() function");
 
 			break;
 		}
@@ -4144,6 +4206,120 @@ void process_received_entity_comms_messages (void)
 					transmit_entity_comms_message (ENTITY_COMMS_PILOT_COMMUNICATION, sender, target, type, string);
 
 					set_comms_data_flow (COMMS_DATA_FLOW_RX);
+				}
+
+				break;
+			}
+			////////////////////////////////////////
+			case ENTITY_COMMS_PILOT_PFZ_TRANSFER:
+			////////////////////////////////////////
+			{
+				//
+				// (entity_comms_messages message, entity *sender, entity *target, int type, char *message)
+				//
+
+				entity
+					*sender,
+					*wingman;
+
+				entity
+					*targets[17];
+				
+				unsigned int i;
+
+				vec3d corner1, corner2, corner3, corner4;
+
+				sender = unpack_entity_safe_ptr ();
+				wingman = unpack_entity_safe_ptr ();
+
+				corner1.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner1.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner2.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner2.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner3.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner3.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner4.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner4.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+
+				for (i=0; i < 16; i++)
+				{
+					targets[i] = unpack_entity_safe_ptr();
+					if (!targets[i])
+						break;
+
+					if (get_gunship_entity() == wingman)  // add targets to radar
+						if (!get_local_entity_parent (targets[i], LIST_TYPE_GUNSHIP_TARGET))  // target we don't have already
+							insert_local_entity_into_parents_child_list (targets[i], LIST_TYPE_GUNSHIP_TARGET, wingman, NULL);	
+				}
+
+				// be sure to terminate
+				targets[i] = NULL;
+
+				//
+				// notify messaging system of received message
+				//
+
+				if (get_gunship_entity() == wingman)
+				{	// someone has sent us a pfz, create it
+					int pfz_number;
+					char attack_message[100];
+
+					add_pfz(&corner1, &corner2, &corner3, &corner4);
+					pfz_number = next_free_pfz;
+
+					sprintf(attack_message, "Attack PFZ %d", pfz_number);
+
+					set_incoming_message(sender, get_pilot_entity(), MESSAGE_TEXT_LOCAL_MESSAGE, attack_message);
+				}
+
+				//
+				// server needs to forward any messages on to clients (unless it was only meant for him)
+				//
+
+				if (get_comms_model () == COMMS_MODEL_SERVER)
+				{
+					//
+					// very dodgy stuff indeed...
+					//
+
+					set_comms_data_flow (COMMS_DATA_FLOW_TX);
+
+					transmit_pfz(sender, wingman,
+						corner1.x, corner1.z,
+						corner2.x, corner2.z,
+						corner3.x, corner3.z,
+						corner4.x, corner4.z,
+						targets);
+
+					set_comms_data_flow (COMMS_DATA_FLOW_RX);
+
+					// if message is for AI wingman create engage tasks
+/*					if (get_local_entity_int_value (wingman, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+					{
+						entity
+							*target,
+							*group;
+
+						unsigned int valid_members = 0, member_number;
+
+						group = get_local_entity_parent(wingman, LIST_TYPE_MEMBER);
+
+						member_number = get_local_entity_int_value(wingman, INT_TYPE_GROUP_MEMBER_NUMBER);
+						valid_members = (1 << member_number);
+						
+			//			clear_local_entity_list(wingman, LIST_TYPE_DESIGNATED_TARGET);
+				
+						for (target = targets[0];
+							 target;
+							 target++)
+						{
+							debug_log("adding engage task for %p", target);
+			//					insert_local_ry_into_parents_child_list(target, LIST_TYPE_DESIGNATED_TARGET, wingman, NULL);
+							engage_specific_target(group, target, valid_members, FALSE);
+						}
+					}*/
+					if (get_local_entity_int_value (wingman, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
+						engage_specific_targets(wingman, targets);
 				}
 
 				break;
