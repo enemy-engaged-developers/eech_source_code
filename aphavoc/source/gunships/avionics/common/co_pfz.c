@@ -10,6 +10,9 @@
 #define MAX_PFZS 16
 #define MAX_NFZS 4
 
+
+#define DEBUG_MODULE 0
+
 int current_pfz = NO_PFZ;
 unsigned int next_free_pfz = 0, next_free_nfz = 0;
 
@@ -17,6 +20,9 @@ unsigned int next_free_pfz = 0, next_free_nfz = 0;
 static pfz pfzs[MAX_PFZS];
 static pfz nfzs[MAX_NFZS];
 
+#if DEBUG_MODULE
+#define debug_print_vec(vec)   debug_log("%s = %.2f, %s = %.2f, %s = %.2f", #vec "->x", (vec)->x, #vec "->y", (vec)->y, #vec "->z", vec->z);
+#endif
 
 pfz* get_pfz(unsigned int pfz_number)
 {
@@ -63,6 +69,13 @@ void add_pfz(vec3d* corner1, vec3d* corner2, vec3d* corner3, vec3d* corner4)
 	if (next_free_pfz == MAX_PFZS)  // if full delete oldest
 		delete_pfz(0);
 
+	#if DEBUG_MODULE
+	debug_print_vec(corner1);
+	debug_print_vec(corner2);
+	debug_print_vec(corner3);
+	debug_print_vec(corner4);
+	#endif
+
 	pfzs[next_free_pfz].corner1 = *corner1;
 	pfzs[next_free_pfz].corner2 = *corner2;
 	pfzs[next_free_pfz].corner3 = *corner3;
@@ -108,30 +121,26 @@ void world_coordinate_to_relative_position (vec3d* world_coordinate, vec3d* rela
 
 
 int coordinate_is_inside_pfz(vec3d* coordinate, unsigned int pfz_number, int is_nfz)
-//static int coordinate_is_inside_square(vec3d* coordinate, 
-//	double_vec3d* corner1, double_vec3d* corner2, double_vec3d* corner3, double_vec3d* corner4)
+{
+	if (is_nfz)
+	{
+		return coordinate_is_inside_square(coordinate, 
+			&nfzs[pfz_number].corner1, &nfzs[pfz_number].corner2,
+			&nfzs[pfz_number].corner3, &nfzs[pfz_number].corner4);
+	}
+	else
+	{
+		return coordinate_is_inside_square(coordinate, 
+			&pfzs[pfz_number].corner1, &pfzs[pfz_number].corner2,
+			&pfzs[pfz_number].corner3, &pfzs[pfz_number].corner4);
+	}
+}
+
+int coordinate_is_inside_square(vec3d* coordinate, vec3d* corner1, vec3d* corner2, vec3d* corner3, vec3d* corner4)
 {
 	int negative;
 	float winding_direction;
 
-	vec3d *corner1, *corner2, *corner3, *corner4;
-
-	if (is_nfz)
-	{
-		corner1 = &nfzs[pfz_number].corner1;
-		corner2 = &nfzs[pfz_number].corner2;
-		corner3 = &nfzs[pfz_number].corner3;
-		corner4 = &nfzs[pfz_number].corner4;
-	}
-	else
-	{
-		corner1 = &pfzs[pfz_number].corner1;
-		corner2 = &pfzs[pfz_number].corner2;
-		corner3 = &pfzs[pfz_number].corner3;
-		corner4 = &pfzs[pfz_number].corner4;
-	}
-
-	
 	winding_direction = (coordinate->z - corner1->z) * (corner2->x - corner1->x)
 					  - (coordinate->x - corner1->x) * (corner2->z - corner1->z);
 	negative = (winding_direction < 0);
@@ -153,6 +162,7 @@ int coordinate_is_inside_pfz(vec3d* coordinate, unsigned int pfz_number, int is_
 
 	return TRUE;	
 }
+
 
 
 void select_next_pfz(void)
@@ -202,7 +212,7 @@ void delete_current_pfz(void)
 int is_valid_pfz_target(vec3d* target_position)
 {
 	int i;
-	
+
 	// If we have an active PFZ check that if position is inside it
 	if (current_pfz != NO_PFZ
 		&& !coordinate_is_inside_pfz(target_position, current_pfz, FALSE))

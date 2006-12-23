@@ -31,6 +31,7 @@ extern void world_coordinate_to_relative_position (vec3d* world_coordinate, vec3
 
 /// returns TRUE if the coordinate lies inside the given pfz/nfz
 extern int coordinate_is_inside_pfz(vec3d* coordinate, unsigned int pfz_number, int is_nfz);
+extern int coordinate_is_inside_square(vec3d* coordinate, vec3d* corner1, vec3d* corner2, vec3d* corner3, vec3d* corner4);
 
 extern void select_next_pfz(void);
 extern void select_previous_pfz(void);
@@ -38,6 +39,6 @@ extern void select_previous_pfz(void);
 extern void deselect_pfz(void);
 extern void delete_current_pfz(void);
 
-extern int is_valid_pfz_target(vec3d* target_positoin);
+extern int is_valid_pfz_target(vec3d* target_position);
 
 extern int pfz_active();
