@@ -140,6 +140,7 @@ void set_camera_entity (entity *en)
 {
 	camera_entity = en;
 
+/*
 	if (en)
 	{
 		debug_log ("Setting camera_entity (type = %s, index = %d)", get_local_entity_type_name (en), get_local_entity_index (en));
@@ -148,6 +149,7 @@ void set_camera_entity (entity *en)
 	{
 		debug_log ("Setting camera_entity to NULL");
 	}
+*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

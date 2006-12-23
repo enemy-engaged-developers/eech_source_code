@@ -96,7 +96,7 @@ void set_raw_external_view_entity (entity *en)
 
 	if (new_view_entity)
 	{
-		debug_log ("Setting view entity (type = %s, index = %d%)", get_local_entity_type_name (en), get_local_entity_index (en));
+//		debug_log ("Setting view entity (type = %s, index = %d%)", get_local_entity_type_name (en), get_local_entity_index (en));
 
 		switch (raw->camera_mode)
 		{
