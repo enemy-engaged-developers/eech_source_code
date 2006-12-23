@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.7"
+  !define VERSION "1.8"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -54,14 +54,22 @@
 ;Installer Sections
 
 Section "Create a backup?" SecBackup
-	!define TBACKUP1 $INSTDIR\cohokum                                                       
+	!define TBACKUP1 $INSTDIR\cohokum
+	!define DATADIR  $INSTDIR\common\data
+                                                       
 	CreateDirectory "$INSTDIR\cohokum\backup"
 	
 CopyFiles /FILESONLY ${TBACKUP1}\cohokum.exe           ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${TBACKUP1}\GWUT146X.csv          ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${TBACKUP1}\GWUT151D.csv          ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${TBACKUP1}\GWUT1613H.csv         ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${TBACKUP1}\GWUT162b.csv         ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${TBACKUP1}\eech.ini           ${TBACKUP1}\backup
+
+CopyFiles /FILESONLY ${DATADIR}\ah64a.dyn         ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\apache.dyn        ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\blckhwk.dyn       ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\comanche.dyn      ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\havoc.dyn         ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\hind.dyn          ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\hokum.dyn         ${TBACKUP1}\backup
+CopyFiles /FILESONLY ${DATADIR}\ka50.dyn          ${TBACKUP1}\backup
 	
 SectionEnd
 
@@ -86,10 +94,8 @@ Section "cohokum.exe" SectionExe
   File ${VERSION}-readme.html
   File motd.txt
   File TrackIR.dll	
-  File GWUT146X.csv
-  File GWUT151D.csv
-  File GWUT1613H.csv  
-  File GWUT162b.csv  
+  File gwut180.csv
+  File eech.ini
   File eech_key-layout.pdf
 
   SetOutPath "$INSTDIR\common\data\"
