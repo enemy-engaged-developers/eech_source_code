@@ -173,6 +173,8 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 		*target_pos,
 		en_pos;
 
+	int loal_mode = FALSE;
+
 	ASSERT (en);
 
 	raw = get_local_entity_data (en);
@@ -259,11 +261,22 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, criteria))
 		{
-			debug_log ("AC_WPN: Fire Weapon Error - NO LOS (Aircraft %s (%d), Target %s (%d))",
-								get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
-								get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
-	
-			return AIRCRAFT_FIRE_NO_LOS;
+			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
+			{
+				debug_log("AC_WPN: Switching to LOAL mode to fire at target without LOS ((Aircraft %s (%d), Target %s (%d))",
+									get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+									get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+
+				loal_mode = TRUE;
+			}
+			else
+			{
+				debug_log ("AC_WPN: Fire Weapon Error - NO LOS (Aircraft %s (%d), Target %s (%d))",
+									get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
+									get_local_entity_string (target, STRING_TYPE_FULL_NAME), get_local_entity_index (target));
+		
+				return AIRCRAFT_FIRE_NO_LOS;
+			}
 		}
 	}
 
@@ -276,6 +289,8 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 	//
 	// Fire weapon
 	//
+
+	set_local_entity_int_value(en, INT_TYPE_LOCK_ON_AFTER_LAUNCH, loal_mode);
 
 	launch_client_server_weapon (en, raw->selected_weapon);
 
