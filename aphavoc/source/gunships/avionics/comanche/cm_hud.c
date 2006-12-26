@@ -1882,10 +1882,10 @@ static void display_weapon_information (void)
 			if (flight_time > 0.01)
 			{
 				flight_time = bound (flight_time, 0.0, 99.9);
+				
+				sprintf (s, "TOF:%.0f", flight_time);
 
-				sprintf (s, "%.1f", flight_time);
-
-				set_2d_mono_font_position (0.9, -0.8);
+				set_2d_mono_font_position (0.5, -0.6);
 
 				set_mono_font_rel_position (0.8, 0.0);
 
