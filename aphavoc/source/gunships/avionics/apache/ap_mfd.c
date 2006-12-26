@@ -1060,13 +1060,13 @@ void initialise_apache_mfd (void)
 	set_rgb_colour (MFD_COLOUR6,  40,  68,  56, 255);
 
 	set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0);
-	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_NIGHT)
+	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 	{
-		set_rgb_colour (clear_green_mfd_colour, 6, 6, 1, 255);
+		set_rgb_colour (clear_green_mfd_colour, 30, 58, 44, 255);
 	}
 	else
 	{
-		set_rgb_colour (clear_green_mfd_colour, 30, 58, 44, 255);
+		set_rgb_colour (clear_green_mfd_colour, 6, 6, 1, 255);
 	}
 	
 	//VJ 030423 TSd render mod
