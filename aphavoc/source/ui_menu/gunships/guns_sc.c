@@ -585,7 +585,7 @@ void gunships_button_function (ui_object *obj, void *arg)
 		switch (get_free_flight_gunship_type())
 		{
 		case GUNSHIP_TYPE_HAVOC:
-#ifdef xDEBUG
+#ifdef DEBUG
 			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 			set_free_flight_gunship_type(GUNSHIP_TYPE_AH64A);
 			break;
@@ -599,13 +599,13 @@ void gunships_button_function (ui_object *obj, void *arg)
 			set_free_flight_gunship_type(GUNSHIP_TYPE_COMANCHE);
 			break;
 		case GUNSHIP_TYPE_COMANCHE:
-#ifdef xDEBUG
+#ifdef DEBUG
 			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 			set_free_flight_gunship_type(GUNSHIP_TYPE_BLACKHAWK);
 			break;
 #endif
 		case GUNSHIP_TYPE_BLACKHAWK:
-#ifdef xDEBUG
+#ifdef DEBUG
 			set_free_flight_gunship_type(GUNSHIP_TYPE_KA50);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
@@ -615,7 +615,7 @@ void gunships_button_function (ui_object *obj, void *arg)
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
 		case GUNSHIP_TYPE_HOKUM:
-#ifdef xDEBUG
+#ifdef DEBUG
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HIND);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
@@ -921,6 +921,9 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 	if (get_game_type() == GAME_TYPE_FREE_FLIGHT)
 	{
+		pitch = rad(4);
+		heading = rad(235);
+		
 		switch (get_free_flight_gunship_type())
 		{
 		case GUNSHIP_TYPE_AH64A:
@@ -934,15 +937,19 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			break;
 		case GUNSHIP_TYPE_BLACKHAWK:
 			apache = construct_temporary_3d_object ( OBJECT_3D_UH60_BLACKHAWK, FALSE );
+			pitch = rad(2);
 			break;
 		case GUNSHIP_TYPE_KA50:
 			apache = construct_temporary_3d_object ( OBJECT_3D_KA_50, FALSE );
+			pitch = 0;
 			break;
 		case GUNSHIP_TYPE_HOKUM:
 			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
+			pitch = 0;
 			break;
 		case GUNSHIP_TYPE_HIND:
 			apache = construct_temporary_3d_object ( OBJECT_3D_MI24_HIND, FALSE );
+			pitch = rad(-3);
 			break;
 		case GUNSHIP_TYPE_HAVOC:
 			apache = construct_temporary_3d_object ( OBJECT_3D_MI28N_HAVOC, FALSE );
