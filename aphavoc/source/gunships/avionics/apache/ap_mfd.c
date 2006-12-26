@@ -7544,19 +7544,15 @@ static void draw_large_weapon_display_mfd (mfd_locations location)
 
 	set_2d_mono_font_position (0.64, 0.7);
 
-	switch (target_acquisition_system)
+	switch (get_range_finder())
 	{
-	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+	case RANGEFINDER_FCR:
 		s_ptr = "FCR";
 		break;
-	case TARGET_ACQUISITION_SYSTEM_FLIR:
-	case TARGET_ACQUISITION_SYSTEM_DTV:
-	case TARGET_ACQUISITION_SYSTEM_DVO:
-	case TARGET_ACQUISITION_SYSTEM_IHADSS:
+	case RANGEFINDER_LASER:
 		s_ptr = "LRF";
 		break;
-	case TARGET_ACQUISITION_SYSTEM_OFF:
+	case RANGEFINDER_TRIANGULATION:
 	default:
 		s_ptr = "TRNGL";
 		break;
