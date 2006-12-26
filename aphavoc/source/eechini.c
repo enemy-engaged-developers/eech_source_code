@@ -661,7 +661,7 @@ void dump_ini_file(void)
 //	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
 	fprintf(f,"greenmfd=%d          # mfd's are green (def = 1 (off), 1 = on)\n",command_line_green_mfd);
-	fprintf(f,"colourmfd=%d         # mfd's use colours (only Apache currently)) (def = 1 (off), 1 = on)\n",command_line_green_mfd);
+	fprintf(f,"colourmfd=%d         # mfd's use colours (only Apache currently)) (def = 1 (off), 1 = on)\n",command_line_colour_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);
