@@ -77,11 +77,15 @@ static ui_object
 	*free_flight_dialog_area,
 	*free_flight_quit_campaign_area;
 
+gunship_types free_flight_gunship_type = GUNSHIP_TYPE_APACHE;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void quit_free_flight_set_events (void);
+
+static int free_flight_gunship_type_matches(entity_sub_types entity_type);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -419,13 +423,9 @@ entity *free_flight_auto_assign_gunship (void)
 			{
 				sub_type = get_local_entity_int_value (member, INT_TYPE_ENTITY_SUB_TYPE);
 
-				if ((sub_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE) || (sub_type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B))
-				{
+				if (free_flight_gunship_type_matches(sub_type))
 					if (get_local_entity_suitable_for_player (member, get_pilot_entity ()))
-					{
 						count ++;
-					}
-				}
 
 				member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 			}
@@ -459,15 +459,13 @@ entity *free_flight_auto_assign_gunship (void)
 			{
 				sub_type = get_local_entity_int_value (member, INT_TYPE_ENTITY_SUB_TYPE);
 
-				if ((sub_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE) || (sub_type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B))
-				{
+				if (free_flight_gunship_type_matches(sub_type))
 					if (get_local_entity_suitable_for_player (member, get_pilot_entity ()))
 					{
 						gunship_list [count] = member;
 
 						count ++;
 					}
-				}
 
 				member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 			}
@@ -528,6 +526,50 @@ entity *free_flight_auto_assign_gunship (void)
 	safe_free (gunship_list);
 
 	return NULL;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+gunship_types get_free_flight_gunship_type()
+{
+	return free_flight_gunship_type;
+}
+
+void set_free_flight_gunship_type(gunship_types type)
+{
+	free_flight_gunship_type = type;	
+}
+
+int free_flight_gunship_type_matches(entity_sub_types entity_type)
+{
+	switch (free_flight_gunship_type)
+	{
+		case GUNSHIP_TYPE_APACHE:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW;
+		case GUNSHIP_TYPE_AH64A:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE;
+		case GUNSHIP_TYPE_COMANCHE:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE;
+		case GUNSHIP_TYPE_BLACKHAWK:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK;
+		case GUNSHIP_TYPE_HOKUM:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B;
+		case GUNSHIP_TYPE_HAVOC:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B;
+		case GUNSHIP_TYPE_HIND:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_MI24D_HIND;
+		case GUNSHIP_TYPE_KA50:
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM;
+		case NUM_GUNSHIP_TYPES:			// if none other selected, default to comanche or hokum
+			return entity_type == ENTITY_SUB_TYPE_AIRCRAFT_RAH66_COMANCHE || entity_type == ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B;
+		default:
+			ASSERT(!"unknown gunship type");
+			break;
+	}
+	
+	return FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

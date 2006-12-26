@@ -118,6 +118,8 @@ static void notify_briefing_button ( ui_object *obj, void *arg );
 
 static void notify_gunships_back_button (ui_object *obj, void *arg);
 
+static char* get_gunship_name(void);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -474,26 +476,47 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 
 	if ( get_ui_object_drawable ( obj ) )
 	{
-	
-		if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
+		if (get_game_type () == GAME_TYPE_FREE_FLIGHT)
 		{
-			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
+			if (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL || get_free_flight_gunship_type() == NUM_GUNSHIP_TYPES)
+				
+				if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
+				{
+					set_free_flight_gunship_type(GUNSHIP_TYPE_APACHE);
+					gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+				}
+				else
+				{
+					set_free_flight_gunship_type(GUNSHIP_TYPE_HOKUM);
+					gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+				}
 
+			set_ui_object_text (gunship_screen_gunship_type_button, get_gunship_name());
 			set_ui_object_text (side_selected_area, get_trans (""));
-
-			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-
-			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_LEFT_CENTRE);
 		}
 		else
 		{
-			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
-
-			set_ui_object_text (side_selected_area, get_trans (""));
-
-			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-
-			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
+			{
+				set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
+	
+				set_ui_object_text (side_selected_area, get_trans (""));
+	
+				set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
+	
+				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			}
+			else
+			{
+				set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
+	
+				set_ui_object_text (side_selected_area, get_trans (""));
+	
+				set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
+	
+				gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			}
 		}
 	
 		set_ui_object_drawable (gunship_screen_back_button, TRUE);
@@ -557,27 +580,76 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 
 void gunships_button_function (ui_object *obj, void *arg)
 {
-
-	if ((gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE) || (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL))
+	if (get_game_type () == GAME_TYPE_FREE_FLIGHT)  // in free flight select helicopter instead of side
 	{
-		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
-
-		set_ui_object_text (side_selected_area, get_trans (""));
-
-		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-
-		gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+		switch (get_free_flight_gunship_type())
+		{
+		case GUNSHIP_TYPE_HAVOC:
+#ifdef xDEBUG
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			set_free_flight_gunship_type(GUNSHIP_TYPE_AH64A);
+			break;
+#endif
+		case GUNSHIP_TYPE_AH64A:
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			set_free_flight_gunship_type(GUNSHIP_TYPE_APACHE);
+			break;
+		case GUNSHIP_TYPE_APACHE:
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			set_free_flight_gunship_type(GUNSHIP_TYPE_COMANCHE);
+			break;
+		case GUNSHIP_TYPE_COMANCHE:
+#ifdef xDEBUG
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+			set_free_flight_gunship_type(GUNSHIP_TYPE_BLACKHAWK);
+			break;
+#endif
+		case GUNSHIP_TYPE_BLACKHAWK:
+#ifdef xDEBUG
+			set_free_flight_gunship_type(GUNSHIP_TYPE_KA50);
+			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			break;
+#endif
+		case GUNSHIP_TYPE_KA50:
+			set_free_flight_gunship_type(GUNSHIP_TYPE_HOKUM);
+			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			break;
+		case GUNSHIP_TYPE_HOKUM:
+#ifdef xDEBUG
+			set_free_flight_gunship_type(GUNSHIP_TYPE_HIND);
+			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			break;
+#endif
+		case GUNSHIP_TYPE_HIND:
+			set_free_flight_gunship_type(GUNSHIP_TYPE_HAVOC);
+			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+			break;
+		}
+		
+		set_ui_object_text(gunship_screen_gunship_type_button, get_gunship_name());
+		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_LEFT_CENTRE);
 	}
 	else
-	{
-		set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
-
-		set_ui_object_text (side_selected_area, get_trans (""));
-
-		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-
-		gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
-	}
+		if ((gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE) || (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL))
+		{
+			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
+	
+			set_ui_object_text (side_selected_area, get_trans (""));
+	
+			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
+	
+			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+		}
+		else
+		{
+			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
+	
+			set_ui_object_text (side_selected_area, get_trans (""));
+	
+			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
+	
+			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+		}
 
 	// don't leave text selected
 
@@ -847,26 +919,57 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 	get_3d_transformation_matrix ( visual_3d_vp->attitude, 0, 0, 0 );
 
-	if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+	if (get_game_type() == GAME_TYPE_FREE_FLIGHT)
 	{
-
-		apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, FALSE );
-
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003, 1 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004, 3 );
+		switch (get_free_flight_gunship_type())
+		{
+		case GUNSHIP_TYPE_AH64A:
+			apache = construct_temporary_3d_object ( OBJECT_3D_AH_64A, FALSE );
+			break;
+		case GUNSHIP_TYPE_APACHE:
+			apache = construct_temporary_3d_object ( OBJECT_3D_AH64D_APACHE_LONGBOW, FALSE );
+			break;
+		case GUNSHIP_TYPE_COMANCHE:
+			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, FALSE );
+			break;
+		case GUNSHIP_TYPE_BLACKHAWK:
+			apache = construct_temporary_3d_object ( OBJECT_3D_UH60_BLACKHAWK, FALSE );
+			break;
+		case GUNSHIP_TYPE_KA50:
+			apache = construct_temporary_3d_object ( OBJECT_3D_KA_50, FALSE );
+			break;
+		case GUNSHIP_TYPE_HOKUM:
+			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
+			break;
+		case GUNSHIP_TYPE_HIND:
+			apache = construct_temporary_3d_object ( OBJECT_3D_MI24_HIND, FALSE );
+			break;
+		case GUNSHIP_TYPE_HAVOC:
+			apache = construct_temporary_3d_object ( OBJECT_3D_MI28N_HAVOC, FALSE );
+			break;
+		}
 	}
 	else
-	{
-
-		apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
-
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
-		set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
-	}
+		if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
+		{
+	
+			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, FALSE );
+	
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__003, 1 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__004, 3 );
+		}
+		else
+		{
+	
+			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
+	
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
+			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
+		}
 
 	apache->vp.x = 0;
 
@@ -933,3 +1036,28 @@ void set_display_gunship_buttons (int flag, char *text)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+char* get_gunship_name(void)
+{
+	switch (get_free_flight_gunship_type())
+	{
+		case GUNSHIP_TYPE_AH64A:
+			return "AH-64A Apache";
+		case GUNSHIP_TYPE_APACHE:
+			return "AH-64D Longbow";
+		case GUNSHIP_TYPE_COMANCHE:
+			return "RAH-66 Comanche";
+		case GUNSHIP_TYPE_BLACKHAWK:
+			return "UH-60 Blackhawk";
+		case GUNSHIP_TYPE_KA50:
+			return "Ka-50 Black Shark";
+		case GUNSHIP_TYPE_HOKUM:
+			return "Ka-52 Alligator";
+		case GUNSHIP_TYPE_HIND:
+			return "Mi-24V \"Hind E\"";
+		case GUNSHIP_TYPE_HAVOC:
+			return "Mi-28N \"Havoc B\"";
+	}
+	
+	return "Invalid gunship";
+}
