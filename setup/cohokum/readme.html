@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.8.0</title>
+<title>EECH Community Release Version 1.8.1</title>
 <style>
 <!--
 a {
@@ -62,7 +62,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.1</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -78,7 +78,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: December 23, 2006
+      italic;'>Last edited by arneh: December 27, 2006
       </p>
 
 
@@ -96,119 +96,33 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.8.0?</h2>
-      <p><em>(since version 1.7.2)</em></p>
+
+      <h2>What's NEW in EECH 1.8.1?</h2>
+      <p><em>(since version 1.8)</em></p>
       <ul>
-
-        <li>Avionics changes
-        <ol>
-        <li>Added option for manual laser and radar control. With it
-      enabled you will have to activate and deactivate the laser and
-      radar manually (keypad * and / keys respectively. Switching
-      radar to single sweep mode has been moved to SHIFT + keypad /).
-      In non-radar targeting modes the laser needs to 
-      be active to get accurate range to target, and must be active to
-      fire laser guided missiles.
-      Radar activates automatically when switching to a radar targeting
-      mode with the option off. With it on you can activate/deactivate
-      the radar at any time regardless of which targeting mode is
-      active.
-        <li>Removed radar as targeting system from all helicopters
-	except AH-64D, RAH-66, Mi-28N and Ka-52.
-	<li>Removed TADS as targeting system from Blackhawk.
-        <li>Added new MFD page for Apache: flight, which displays
-	some of the same information as the IHADSS.
-	<li>Added different underlays for the Apache TSD page;  None,
-      map and TADS imagery. Switch between the three with SHIFT+D.
-        <li>Added Priority Fire Zones (PFZs) and No Fire Zones (NFZs)
-	to Apache TSD. See <a href="http://www.eechcentral.com/index.php?pagename=Apache%20Longbow%20TSD">documentation</a>
-	<li>Added zoom capability to the Longbow's radar.  Press
-	SHIFT-KEYPAD- to zoom in on selected target, SHIFT-KEYPAD+ to
-        zoom out to full view again.  In zoomed view the radar view
-        shows targets in a 500x500 meter area around the selected target.
-	<li>Updated Apache TADS and radar pages to show more information
-        <li>Added colours for some of the Apache Longbow MFD pages
-        (TSD, flight page)
-	<li>Longbow's cockpit has gotten full head position movement.
-	<li>Disabled low-res mode for the MFDs as there is
-        practically no frame rate difference, and no GFX cards out
-	today which don't support 256x256 textures.
-	<li>Added option for selecting detail level of TSD map -
-        tsddetail in eech.ini (gotcha).
-      </ol>
-
-      <li>Weapons changes
-      <ol> 
-        <li>Changed Hellfire flight profiles.  LOBL Hellfires now
-      follow a slightly high trajectory (instead of going straigt for
-      target), LOAL Hellfires follow a high trajectory.
-        <li>If you have a target selected already when firing in LOAL
-      mode the Hellfire will go for that target, even if you switch
-      target before it finishes its climb. This makes riple firing
-      Hellfires in LOAL much easier (particulary in combination with
-      PFZs).
-        <li>Laser must be active for laser guided missiles (K
-      Hellfires and Vikhrs) to guide. Laser is acticated automatically
-      unless the manual laser option is enabled in eech.ini.
-      </ol>
-
-      <li>Night changes
-      <ol>
-        <li>Added eech.ini option for adjusting night level brightness
-      (thanks to gotcha).
-        <li>Changes colour of russian night vision from amber to a
-      blueish-green colour.
-        <li>Added optional shading of screen edges (restricted_nvg_fov
-      in eech.ini) with night vision active for a more realistic
-      restricted field of view.
-      </ol>
-
-      <li>Other changes
-      <ol>
-        <li>Added eech.ini option for showing force vector on own
-      helicopter. This is mostly for debugging the flight model, or if
-      you're just curious which forces are acting on the helicopter.
-        <li>Added new radio message to flight which requests status.
-      Wingmen will reply with how many weapons and how much damage
-      they have.
-        <li>Added new radio command for transfering PFZ with targets
-      to wingman and ordering him to attack all targets in it.
-        <li>Allow each campaign/skirmish to have its own formscomp.dat
-      file. Will use file in common/maps/mapx or
-      common/maps/mapx/campaignname if they exist. This allows each
-      campaign/skirmish to have its own force composition.
-        <li>Increased default initial multiplayer buffer sizes for
-      hopefully less connection problems in multiplayer (sugggested
-      by Kimchoc1).
-      </ol>
-      
-      <li>Bug fixes
-      <ol>
-        <li>Fixed the head-on-a-stick movement of the head in
-      wideview.
-        <li>Fixed a bug in the Hokum and Havoc flight model where it would
-      suddenly start doing violent yaw movements, and eventuelly go
-      out of control.
-        <li>Fixed bug where UI would sometimes freeze in session
-      screen if multiplayer master server was down.
-        <li>Fixed crash bug in Hokum's HUD view.
-	<li>Changed displayed name of Hind from Mi-24D to Mi-24V, as
-      the model simulated in EECH is clearly not a D, and appears to
-      be a V.
-	</ol>
+	<li>Longbow's threat warning MFD page (ASE) has got
+	colours.  SAM sites have RED rings, AAA yellow.  IR missiles
+	are red, radar missiles are yellow, and laser guided missiles
+	are blue.
+	<li>Longbow's ASE has threat identification. Below the threat
+	symbol is a number identifying the type (19 for a SA-19, 29
+	for a MiG-29 etc.  The only non obvious id is N which stands
+	for naval, i.e. the air defence system of a ship).
+	<li>Changed side selection screen for free flight to select
+	specific helicopter type.  It's not perfect yet, if the
+	helicopter is not available in the selected campaign it will
+	crash (although all helicopters are available in most
+	campaigns). Also the 3D model for the other helicopters are a
+	little weird with too many subobjects.
+        <li>Fixed crash bug in Comanche when using manual laser
+	<li>Fixed background colour in some Longbow MFD pages
+	appearing too bright at dusk and dawn
+	<li>Fixed mixup of greenmfd and colourmfd in eech.ini
+	<li>Fixed position of hellfire time of flight for US HUDs
+	<li>Fixed that Longbow weapons MFD page would list laser as
+	range finding system even when laser was off. It now displays
+	TRNGL (for triangulation) when laser is off.
       </ul>
-
-      <strong><p>IMPORTANT: This version has changed the format of save
-      games, and is incompatible with ALL previous save games.  If you
-      have any saved campaigns you want to finish keep a backup of
-      your current cohokum.exe and use it for finishing the save game.
-      </p>
-      <p>It is also  multiplayer incompatible with all previous
-      versions.</p>
-      <p>eech.ini has quite a few new options.  A new eech.ini file
-      has been included, your old one has been moved to backup (if you
-      chose to make a backup).
-      </strong>
 
 
       <p align="right"><a href="#top">[top ^]</a></p>
@@ -218,7 +132,7 @@ h4 {
       <hr>
       <p><strong>NEW</strong>: Go to www.eechcentral.com and download
       the installation tool: <A
-      href="http://www.eechcentral.com/files/Game%20patches/Official%20patches/eeahmapssetup1.1.exe">eechupdater1.1.exe</A></p>
+      href="http://www.planet.nl/~ek000114/gotcha/download/eechupdater1.3.exe">eechupdater1.3.exe</A></p>
       <p>This will download and install all patches and addon packs
       that you need. If new packs arrive this tool will detect them
       and download them, keeping your database up to date. It is still
@@ -232,11 +146,6 @@ h4 {
         <li><span lang=EN-GB>Patch EEAH up to <a href="http://www.razorworks.com/enemyengaged/mainframe.html#Patches" target="_blank">patch 1.1E</a>, run once. </span></li>
         <li>Install EE - Comanche Hokum from the CD. </li>
         <li><strong>Do not forget this: </strong>Download and install <a href="http://www.razorworks.com/enemyengaged/chpatch/EECH_Patch.exe">patch 141C</a> from the Razorworks site: documentation is <a href="http://www.razorworks.com/enemyengaged/chpatch/index.html" target="_blank">here</a></li>
-        <li>Download and install the latest relatively bugfree EECHDEV version <a href="http://home.planet.nl/~jette073/gotcha/download/eechsetup162W3.exe">eechsetup162W3.exe</a>. This file contains the latest exe, and <strong>all auxillary files that you need</strong> to run it. They will be automatically put into the correct directories.<br>
-        <strong>Note</strong>: the setup files <strong>eech.ini</strong> and <strong>game.cfg</strong> are automatically created when you run the game and they don't exist: please read <a href="#trouble">this</a>.</li>
-        <li><FONT face="Verdana, Arial"><span class="style52">Download <strong>Mapi's</strong> keycard with all the new commands (save-as): <A 
-href="http://www.planet.nl/~jette073/gotcha/download/eech_key-layout_1_bata.pdf" 
-target=_blank>EECH_KEY.pdf</A></span></FONT></li>
       </ol>
       <p>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </p>
       <p>IMPORTANT: when you have just installed eech by default the
@@ -1196,6 +1105,106 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.8.0:</h4>
+      <ul>
+        <li>Avionics changes
+        <ol>
+        <li>Added option for manual laser and radar control. With it
+      enabled you will have to activate and deactivate the laser and
+      radar manually (keypad * and / keys respectively. Switching
+      radar to single sweep mode has been moved to SHIFT + keypad /).
+      In non-radar targeting modes the laser needs to 
+      be active to get accurate range to target, and must be active to
+      fire laser guided missiles.
+      Radar activates automatically when switching to a radar targeting
+      mode with the option off. With it on you can activate/deactivate
+      the radar at any time regardless of which targeting mode is
+      active.
+        <li>Removed radar as targeting system from all helicopters
+	except AH-64D, RAH-66, Mi-28N and Ka-52.
+	<li>Removed TADS as targeting system from Blackhawk.
+        <li>Added new MFD page for Apache: flight, which displays
+	some of the same information as the IHADSS.
+	<li>Added different underlays for the Apache TSD page;  None,
+      map and TADS imagery. Switch between the three with SHIFT+D.
+        <li>Added Priority Fire Zones (PFZs) and No Fire Zones (NFZs)
+	to Apache TSD. See <a href="http://www.eechcentral.com/index.php?pagename=Apache%20Longbow%20TSD">documentation</a>
+	<li>Added zoom capability to the Longbow's radar.  Press
+	SHIFT-KEYPAD- to zoom in on selected target, SHIFT-KEYPAD+ to
+        zoom out to full view again.  In zoomed view the radar view
+        shows targets in a 500x500 meter area around the selected target.
+	<li>Updated Apache TADS and radar pages to show more information
+        <li>Added colours for some of the Apache Longbow MFD pages
+        (TSD, flight page)
+	<li>Longbow's cockpit has gotten full head position movement.
+	<li>Disabled low-res mode for the MFDs as there is
+        practically no frame rate difference, and no GFX cards out
+	today which don't support 256x256 textures.
+	<li>Added option for selecting detail level of TSD map -
+        tsddetail in eech.ini (gotcha).
+      </ol>
+
+      <li>Weapons changes
+      <ol> 
+        <li>Changed Hellfire flight profiles.  LOBL Hellfires now
+      follow a slightly high trajectory (instead of going straigt for
+      target), LOAL Hellfires follow a high trajectory.
+        <li>If you have a target selected already when firing in LOAL
+      mode the Hellfire will go for that target, even if you switch
+      target before it finishes its climb. This makes riple firing
+      Hellfires in LOAL much easier (particulary in combination with
+      PFZs).
+        <li>Laser must be active for laser guided missiles (K
+      Hellfires and Vikhrs) to guide. Laser is acticated automatically
+      unless the manual laser option is enabled in eech.ini.
+      </ol>
+
+      <li>Night changes
+      <ol>
+        <li>Added eech.ini option for adjusting night level brightness
+      (thanks to gotcha).
+        <li>Changes colour of russian night vision from amber to a
+      blueish-green colour.
+        <li>Added optional shading of screen edges (restricted_nvg_fov
+      in eech.ini) with night vision active for a more realistic
+      restricted field of view.
+      </ol>
+
+      <li>Other changes
+      <ol>
+        <li>Added eech.ini option for showing force vector on own
+      helicopter. This is mostly for debugging the flight model, or if
+      you're just curious which forces are acting on the helicopter.
+        <li>Added new radio message to flight which requests status.
+      Wingmen will reply with how many weapons and how much damage
+      they have.
+        <li>Added new radio command for transfering PFZ with targets
+      to wingman and ordering him to attack all targets in it.
+        <li>Allow each campaign/skirmish to have its own formscomp.dat
+      file. Will use file in common/maps/mapx or
+      common/maps/mapx/campaignname if they exist. This allows each
+      campaign/skirmish to have its own force composition.
+        <li>Increased default initial multiplayer buffer sizes for
+      hopefully less connection problems in multiplayer (sugggested
+      by Kimchoc1).
+      </ol>
+      
+      <li>Bug fixes
+      <ol>
+        <li>Fixed the head-on-a-stick movement of the head in
+      wideview.
+        <li>Fixed a bug in the Hokum and Havoc flight model where it would
+      suddenly start doing violent yaw movements, and eventuelly go
+      out of control.
+        <li>Fixed bug where UI would sometimes freeze in session
+      screen if multiplayer master server was down.
+        <li>Fixed crash bug in Hokum's HUD view.
+	<li>Changed displayed name of Hind from Mi-24D to Mi-24V, as
+      the model simulated in EECH is clearly not a D, and appears to
+      be a V.
+	</ol>
+      </ul>
+
       <h4>Fixes/features in 1.7.2:</h4>
       <ul>
         <li>New high-resolution HUD for the Mi-28 (similar to new Ka-52 HUD)
