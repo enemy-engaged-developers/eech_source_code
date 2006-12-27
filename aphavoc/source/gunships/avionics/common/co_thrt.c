@@ -167,3 +167,57 @@ void activate_common_threat_warning_system (entity *threat)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+char* get_threat_id_number(entity* threat)
+{
+	// only lists US systems, as russian threat warning displays are unable
+	// of distinguishing types	
+	char* id = NULL;
+	entity_sub_types sub_type = get_local_entity_int_value(threat, INT_TYPE_ENTITY_SUB_TYPE);
+	
+	if (get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_VEHICLE))
+	{
+		switch (sub_type)
+		{
+		case ENTITY_SUB_TYPE_VEHICLE_SA19_GRISON:
+			id = "19";
+			break;
+		case ENTITY_SUB_TYPE_VEHICLE_SA13_GOPHER:
+			id = "13";
+			break;
+		case ENTITY_SUB_TYPE_VEHICLE_KIEV_CLASS:
+			id = "N";
+			break;
+		case ENTITY_SUB_TYPE_VEHICLE_KRIVAK_II_CLASS:
+			id = "N";
+			break;
+		}
+	}
+	else if (get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_AIRCRAFT))
+	{
+		switch (sub_type)
+		{
+		case ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B:
+			id = "28";
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
+			id = "52";
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_MIG29_FULCRUM:
+			id = "29";
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_YAK41_FREESTYLE:
+			id = "41";
+			break;
+		case ENTITY_SUB_TYPE_AIRCRAFT_SU33_FLANKER:
+			id = "33";
+			break;
+		}
+	}
+	
+	return id;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
