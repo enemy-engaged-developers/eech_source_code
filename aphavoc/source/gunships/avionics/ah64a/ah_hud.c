@@ -2427,6 +2427,7 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_MIN_RANGE:
 		////////////////////////////////////////
+		if (has_range)
 		{
 			s = "MIN RANGE";
 
@@ -2444,7 +2445,6 @@ static void display_target_information (void)
 		////////////////////////////////////////
 		case WEAPON_LOCK_VALID:
 		////////////////////////////////////////
-		if (has_range)
 		{
 			s = "VALID LOCK";
 
