@@ -324,8 +324,8 @@ aircraft_data
       //
       ////////////////////////////////////////
       {
-         "Ka-52 Hokum B",														// full_name
-         "Ka-52 HOKUM B",														// long_display_name
+         "Ka-52 Alligator",														// full_name
+         "Ka-52 ALLIGATOR",														// long_display_name
          "Ka-52",	  																// short_display_name
 			"HELICOPTER",															// easy_display_name
 
@@ -403,8 +403,8 @@ aircraft_data
       ////Moje 030524 1st line under "OBJECT_3D_UH60_BLACKHAWK" changed from "NUM_GUNSHIP_TYPES"
       ////Moje 040209 CHanged loadout schemes
       {
-         "UH-60 Black Hawk",									// full_name
-         "UH-60 BLACK HAWK",	 								// long_display_name
+         "UH-60 Blackhawk",									// full_name
+         "UH-60 BLACKHAWK",	 								// long_display_name
          "UH-60",	  									// short_display_name
 			"HELICOPTER",								// easy_display_name
 
@@ -1724,8 +1724,8 @@ aircraft_data
 		////////////////////////////////////////
       ////Moje 030816 1st line under "OBJECT_3D_KA_50" changed from "NUM_GUNSHIP_TYPES"
       {
-         "Ka-50 Hokum",															// full_name
-         "Ka-50 HOKUM",		  													// long_display_name
+         "Ka-50 Black Shark",															// full_name
+         "Ka-50 Black Shark",		  													// long_display_name
          "Ka-50",													  				// short_display_name
 			"HELICOPTER",															// easy_display_name
 
@@ -1955,7 +1955,7 @@ aircraft_data
 		//
 		////////////////////////////////////////
       {
-         "AH-1T SeaCobra",														// full_name
+         "AH-1T Sea Cobra",														// full_name
          "AH-1T SEACOBRA",														// long_display_name
          "AH-1T",																	// short_display_name
 			"HELICOPTER",															// easy_display_name
@@ -2032,7 +2032,7 @@ aircraft_data
 		//
 		////////////////////////////////////////
       {
-         "AH-1W SuperCobra",													// full_name
+         "AH-1W Super Cobra",													// full_name
          "AH-1W SUPERCOBRA",													// long_display_name
          "AH-1W",																	// short_display_name
 			"HELICOPTER",															// easy_display_name
