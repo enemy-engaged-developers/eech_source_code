@@ -94,6 +94,8 @@
 // - dds are 24 bit RGB format and may contains mipmaps, and may contain an alpha channel
 //   the format with alpha is: unsigned 32 bit A8R8G8B8
 // - eech wants the format BRG so red and blue channel are swapped on reading
+
+//texture names are in eech-new\modules\3d\textname.h
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2382,8 +2384,7 @@ int match_system_texture_name ( const char *name )
 
 	int
 		count, camo = 0;
-
-
+  
 	ptr = real_name;
 	// convert to uppercase and strip filename extention
 	while ( ( *name != '\0' ) && ( *name != '.' ) )
@@ -2417,7 +2418,7 @@ int match_system_texture_name ( const char *name )
    {
 		//check for _DESERT
        *p = '\0';
-       camo = 1;
+       camo = 1;       
    }
    else
    if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_2)))
@@ -2439,8 +2440,13 @@ int match_system_texture_name ( const char *name )
 	{
 		if ( strcmp ( system_texture_names[count], real_name ) == 0 )
 		{
-
 			system_textures_referenced[count] = TRUE;
+			
+      //VJ 061230 if the original name does not have _DESERT then do not increase camo
+      // not all textures have a desert version of course so assuming that messes up the texture numbers!
+      //OLD bug ;)
+			if (camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
+				 camo = 0;
 
 			return ( count + camo );
 		}
