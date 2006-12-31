@@ -121,6 +121,30 @@ const char
 		"NUM_GUNSHIP_TYPES"
 	};
 
+const char*
+	long_gunship_names[] =
+	{
+		"AH-64D Apache Longbow",
+		"Mi-28N Havoc B",
+		"RAH-66 Comanche",
+		"Ka-52 Alligator",
+		"UH-60 Blackhawk",
+		"Mi-24V Hind",
+		"AH-64A Apache",
+		"Ka-50 Black Shark"
+	};
+
+gunship_types alphabetical_gunship_types[] = {
+		GUNSHIP_TYPE_AH64A,     // AH
+		GUNSHIP_TYPE_APACHE,    // AH
+	 	GUNSHIP_TYPE_KA50,      // Ka
+		GUNSHIP_TYPE_HOKUM,     // Ka
+		GUNSHIP_TYPE_HIND,      // Mi
+		GUNSHIP_TYPE_HAVOC,     // Mi
+		GUNSHIP_TYPE_COMANCHE,  // RAH
+		GUNSHIP_TYPE_BLACKHAWK, // UH
+ 	};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
