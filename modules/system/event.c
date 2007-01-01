@@ -457,13 +457,14 @@ void set_event (int event, int modifier, int notify_state, void (*func) ( struct
 
    debug_log ("EVENT: SET EVENT: event %d, modifier %d, notify_state %d, function %d", event, modifier, notify_state, func);
 
-   #endif
 
 	if (registered_events [event][modifier].in_use == TRUE)
 	{
 
 		debug_log ("SET EVENT WARNING: event %d (%c) modifier %s is already in use", event, dinput_to_ascii (event), modifier_type_names [modifier]);
 	}
+
+   #endif
 
    registered_events [event][modifier].in_use = TRUE;
 
