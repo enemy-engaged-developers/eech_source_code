@@ -263,22 +263,46 @@ void assign_entity_to_user (entity *en)
 
 	if (gunship_entity)
 	{
+		int
+			alive = get_local_entity_int_value(gunship_entity, INT_TYPE_ALIVE),
+			side = get_global_gunship_side();
+				
+		player_log_type
+			*log = get_current_player_log();
+		
 		//
 		// Award Points for mission
 		//
 
 		primary_task = get_local_entity_primary_task (gunship_entity);
 
-		if (primary_task)
+		if (primary_task
+			&& get_local_entity_int_value (primary_task, INT_TYPE_TASK_STATE) == TASK_STATE_COMPLETED)
 		{
-			if (get_local_entity_int_value (primary_task, INT_TYPE_TASK_STATE) == TASK_STATE_COMPLETED)
-			{
-				//
-				// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
-				//
+			//
+			// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
+			//
 
-				notify_gunship_entity_mission_terminated (gunship_entity, primary_task);
+			notify_gunship_entity_mission_terminated (gunship_entity, primary_task);
+		}
+		else if (!alive)
+			inc_player_log_missions_flown(side, log);
+
+		if (alive)
+		{
+			// if landed somewhere other than a keysite (base), then it's a lost helicopter
+			if (!get_local_entity_int_value(gunship_entity, INT_TYPE_AIRBORNE_AIRCRAFT)
+				&& !get_keysite_currently_landed_at())
+			{
+				debug_log("lost gunship - landed outside base");
+				inc_player_log_helicopters_lost(side, log);
 			}
+		}
+		else
+		{
+			debug_log("pilot killed");
+			inc_player_log_deaths(side, log);			
+			inc_player_log_helicopters_lost(side, log);
 		}
 
 		//
@@ -374,6 +398,10 @@ void assign_entity_to_user (entity *en)
 		set_valid_helicopter (TRUE);
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
+
+		// backup pilot log
+
+		backup_current_player_log();
 
 		//
 		// Initialise avionics, cockpits and flight model

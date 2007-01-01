@@ -185,11 +185,11 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	float
 		damage_modifier;
 
-	#if DEBUG_MODULE
+//	#if DEBUG_MODULE
 
 	debug_log_entity_message (message, receiver, sender, pargs);
 
-	#endif
+//	#endif
 
 	ASSERT (receiver);
 
@@ -326,7 +326,8 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 
 		if (get_local_entity_int_value (receiver, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL)
 		{
-			inc_player_log_kills (get_global_gunship_side (), get_current_player_log (), receiver);
+			// deaths moved to landing assessment - player dies upon hitting the ground with enough force
+//			inc_player_log_kills (get_global_gunship_side (), get_current_player_log (), receiver);
 
 			dynamics_kill_model (DYNAMICS_DESTROY_SHOT_DOWN, aggressor);
 		}
