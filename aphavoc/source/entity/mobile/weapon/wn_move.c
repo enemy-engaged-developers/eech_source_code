@@ -86,7 +86,8 @@
 
 //HELLFIRE//
 
-#define HELLFIRE_LOAL_CLIMB1_TIME	(-2.0)
+#define HELLFIRE_MINIMUM_CLIMB_TIME (3.0)  // 1 seconds of burm, 3 remaining
+#define HELLFIRE_LOAL_CLIMB1_TIME	(0.0)
 #define HELLFIRE_LOAL_CLIMB2_TIME	(-12.0)
 #define HELLFIRE_LOAL_CLIMB1_XZ	(1000.0)
 #define HELLFIRE_LOAL_CLIMB1_Y		(300.0)
@@ -140,10 +141,6 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 		target_position,
 		target_motion_vector;
 
-	weapon* 
-		raw = get_local_entity_data (weapon_entity);
-		
-
 	ASSERT (weapon_entity);
 
 	ASSERT (target);
@@ -192,100 +189,6 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 				intercept_point->x = target_position.x + (target_motion_vector.x * target_move_distance);
 				intercept_point->y = target_position.y + (target_motion_vector.y * target_move_distance);
 				intercept_point->z = target_position.z + (target_motion_vector.z * target_move_distance);
-			}
-		}
-	}
-
-	if (weapon_database[raw->mob.sub_type].hellfire_flight_profile && raw->missile_phase != MISSILE_FINAL_PHASE)
-	{
-		float range, dive_ratio;
-		vec3d horizontal_range_point = *intercept_point;
-
-		horizontal_range_point.y = weapon_position->y;
-		range = get_3d_range (weapon_position, &horizontal_range_point);
-		
-		if (range < 200.0)
-			return;
-		
-		dive_ratio = (intercept_point->y - weapon_position->y) / range;
-
-		if (raw->loal_mode)
-		{
-			switch (raw->missile_phase)
-			{
-			case MISSILE_PHASE1:
-				if (raw->weapon_lifetime > HELLFIRE_LOAL_CLIMB1_TIME)
-				{
-					// initial climb of 30%
-					float new_aim_y = weapon_position->y + range * 0.3;
-					intercept_point->y = max(new_aim_y, intercept_point->y);
-	
-					break;
-				}
-	
-				raw->missile_phase = MISSILE_PHASE2;
-				// fall through
-			
-			case MISSILE_PHASE2:
-				if (dive_ratio > -0.25)
-				{
-					// seconds phase climb at 4%
-					float new_aim_y = weapon_position->y + range * 0.04;
-					intercept_point->y = max(new_aim_y, intercept_point->y);
-	
-					break;
-				}
-	
-				raw->missile_phase = MISSILE_PHASE3;
-				// fall through
-	
-			case MISSILE_PHASE3:
-				if (dive_ratio > -0.55)
-				{
-					// third phase dive at 20%
-					float new_aim_y = weapon_position->y + range * -0.2;
-					intercept_point->y = max(new_aim_y, intercept_point->y);
-	
-					break;
-				}
-	
-				// final phase goes straigt for target (in approximate 60% dive)
-				raw->missile_phase = MISSILE_FINAL_PHASE;
-				break;
-			default:
-				ASSERT(FALSE);
-			}
-		}
-		else  // lobl mode
-		{
-			switch (raw->missile_phase)
-			{
-			case MISSILE_PHASE1:
-				if (dive_ratio > -0.15)
-				{
-					// intial phase climb at 6%
-					float new_aim_y = weapon_position->y + range * 0.06;
-					intercept_point->y = max(new_aim_y, intercept_point->y);
-					
-					break;
-				}
-				
-				raw->missile_phase = MISSILE_PHASE2;
-			case MISSILE_PHASE2:
-				if (dive_ratio > -0.3)
-				{
-					// second phase dive at 3%
-					float new_aim_y = weapon_position->y + range * -0.03;
-					intercept_point->y = max(new_aim_y, intercept_point->y);
-					
-					break;
-				}
-				
-				raw->missile_phase = MISSILE_FINAL_PHASE;
-				
-				break;
-			default:
-				ASSERT(FALSE);
 			}
 		}
 	}
@@ -353,6 +256,8 @@ static int get_target_position (entity *en, vec3d *position)
 		{
 			get_local_entity_target_point (target, position);
 		}
+		
+
 
 		target_position_valid = TRUE;
 	}
@@ -411,6 +316,128 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	#endif
 
+	// adjust for high trajectory
+	if (weapon_database[raw->mob.sub_type].hellfire_flight_profile && raw->missile_phase != MISSILE_FINAL_PHASE)
+	{
+		float range, dive_ratio;
+		vec3d
+			horizontal_range_point = *intercept_point,
+			*weapon_position;
+
+		weapon_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+		horizontal_range_point.y = weapon_position->y;
+		range = get_2d_range (weapon_position, &horizontal_range_point);
+		
+		dive_ratio = (intercept_point->y - weapon_position->y) / range;
+
+		if (raw->loal_mode)
+		{
+				switch (raw->missile_phase)
+				{
+				case MISSILE_PHASE1:
+					if (raw->weapon_lifetime > HELLFIRE_LOAL_CLIMB1_TIME)
+					{
+						if (range < 10.0)
+							raw->missile_phase = MISSILE_FINAL_PHASE;
+						else
+						{
+						// initial climb of 30%
+							float new_aim_y = weapon_position->y + range * 0.3;
+							intercept_point->y = max(new_aim_y, intercept_point->y);
+						}
+						break;
+					}
+		
+					raw->missile_phase = MISSILE_PHASE2;
+					// fall through
+				
+				case MISSILE_PHASE2:
+					if (range < 800.0)
+					{
+						raw->missile_phase = MISSILE_FINAL_PHASE;
+						break;
+					}
+					else if (dive_ratio > -0.25)
+					{
+						// seconds phase climb at 4%
+						float new_aim_y = weapon_position->y + range * 0.04;
+						intercept_point->y = max(new_aim_y, intercept_point->y);
+		
+						break;
+					}
+		
+					raw->missile_phase = MISSILE_PHASE3;
+					// fall through
+		
+				case MISSILE_PHASE3:
+					if (range < 500.0)
+					{
+						raw->missile_phase = MISSILE_FINAL_PHASE;
+						break;
+					}
+					else if (dive_ratio > -0.55)
+					{
+						// third phase dive at 20%
+						float new_aim_y = weapon_position->y + range * -0.2;
+						intercept_point->y = max(new_aim_y, intercept_point->y);
+		
+						break;
+					}
+		
+					// final phase goes straigt for target (in approximate 60% dive)
+					raw->missile_phase = MISSILE_FINAL_PHASE;
+					break;
+				default:
+					ASSERT(FALSE);
+				}
+		}
+		else  // lobl mode
+		{
+				switch (raw->missile_phase)
+				{
+				case MISSILE_PHASE1:
+					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 800.0)
+					{
+						raw->missile_phase = MISSILE_FINAL_PHASE;
+						break;
+					}
+
+					if (dive_ratio > -0.15)
+					{
+						// intial phase climb at 6%
+						float new_aim_y = weapon_position->y + range * 0.06;
+						intercept_point->y = max(new_aim_y, intercept_point->y);
+						
+						break;
+					}
+					
+					raw->missile_phase = MISSILE_PHASE2;
+				case MISSILE_PHASE2:
+					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 600.0)
+					{
+						raw->missile_phase = MISSILE_FINAL_PHASE;
+						break;
+					}
+
+					if (dive_ratio > -0.3)
+					{
+						// second phase dive at 3%
+						float new_aim_y = weapon_position->y + range * -0.03;
+						intercept_point->y = max(new_aim_y, intercept_point->y);
+						
+						break;
+					}
+					
+					raw->missile_phase = MISSILE_FINAL_PHASE;
+					
+					break;
+				default:
+					ASSERT(FALSE);
+				}
+		}
+	}
+
 	//
 	// get unit vector to intercept point
 	//
@@ -444,11 +471,18 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	// check for overshot target
 	//
 
-	if (cos_turn_demand < 0.0)
+	if (cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
+		set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
 
-		return;
+		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
+		{
+			debug_log("%s self destructed due to turn demand too high (%0.1f degrees)", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)));
+			
+			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
+	
+			return;
+		}
 	}
 
 	//
@@ -534,6 +568,15 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	raw->mob.velocity += acceleration * get_delta_time ();
 
 	raw->mob.velocity = max (raw->mob.velocity, 0.0);
+
+	if (raw->weapon_lifetime < 0.0 && raw->mob.velocity < 20.0)  // self destruct if speed drops too low (after motor has burned out)
+	{
+		debug_log("%s self destructed due to speed dropping too low (%0.1f m/s)", weapon_database[raw->mob.sub_type].full_name, raw->mob.velocity);
+		
+		raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
+
+		return;
+	}
 
 	//
 	// motion vector
@@ -755,7 +798,7 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void check_guidance_source (weapon *raw, entity *en)
+static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 {
 	entity
 		*new_target;
@@ -789,7 +832,7 @@ static void check_guidance_source (weapon *raw, entity *en)
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
 				// no target if no laser designation
-				if (!get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+				if (laser_guided && !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
 				{
 					new_target = NULL;	
 				}
@@ -982,7 +1025,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR:
 		////////////////////////////////////////
 		{
-			check_guidance_source (raw, en);
+			check_guidance_source (raw, en, FALSE);
 
 			intercept_point_valid = get_target_position (en, &intercept_point);
 
@@ -1002,7 +1045,7 @@ void weapon_movement (entity *en)
 				{
 					if (!weapon_database[raw->mob.sub_type].hellfire_flight_profile)
 					{
-						check_guidance_source (raw, en);
+						check_guidance_source (raw, en, FALSE);
 					}
 					else
 					{
@@ -1014,7 +1057,7 @@ void weapon_movement (entity *en)
 
 						if (raw->weapon_lifetime < HELLFIRE_LOAL_CLIMB1_TIME)
 						{
-							check_guidance_source (raw, en);
+							check_guidance_source (raw, en, FALSE);
 						}
 
 						//HELLFIRE//
@@ -1073,7 +1116,7 @@ void weapon_movement (entity *en)
 
 			if (do_guidance_source_check)
 			{
-				check_guidance_source (raw, en);
+				check_guidance_source (raw, en, TRUE);
 			}
 
 			intercept_point_valid = get_target_position (en, &intercept_point);
@@ -1084,7 +1127,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER_BEAM_RIDING:
 		////////////////////////////////////////
 		{
-			check_guidance_source (raw, en);
+			check_guidance_source (raw, en, TRUE);
 
 			intercept_point_valid = get_target_position (en, &intercept_point);
 
@@ -1102,7 +1145,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_RADIO_COMMAND:
 		////////////////////////////////////////
 		{
-			check_guidance_source (raw, en);
+			check_guidance_source (raw, en, FALSE);
 
 			intercept_point_valid = get_target_position (en, &intercept_point);
 
@@ -1112,7 +1155,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_WIRE_GUIDED:
 		////////////////////////////////////////
 		{
-			check_guidance_source (raw, en);
+			check_guidance_source (raw, en, FALSE);
 
 			intercept_point_valid = get_target_position (en, &intercept_point);
 
