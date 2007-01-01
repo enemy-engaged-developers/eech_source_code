@@ -84,6 +84,7 @@ c_object_files    += $+ &
                      $(currentdir)\play_gn.obj &
                      $(currentdir)\play_wp.obj &
                      $(currentdir)\play_md.obj &
+                     $(currentdir)\play_hours.obj &
                      $-
 
 asm_object_files  += $+ &

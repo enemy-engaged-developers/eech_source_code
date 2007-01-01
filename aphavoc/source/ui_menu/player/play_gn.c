@@ -107,9 +107,6 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 	char
 		buf [100];
 
-		float
-			float_flying_hours;
-
 		set_ui_list_spacing_proportional_to_font (general_log_text_list, -0.2);
 
 		set_ui_list_spacing_proportional_to_font (general_log_output_list, -0.2);
@@ -125,18 +122,37 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 		}
 
 		// Air kills
-		add_to_pop_up_list (get_trans ("Air Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+//		add_to_pop_up_list (get_trans ("Air Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+//		sprintf (buf, "%d", player_log->side_log[side].kills.air );
+//		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
-		sprintf (buf, "%d", player_log->side_log[side].kills.air );
+		sprintf (buf, "%d", player_log->side_log[side].kills.fixed_wing);
+		add_to_pop_up_list (get_trans ("Aircraft kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
+		sprintf (buf, "%d", player_log->side_log[side].kills.helicopter);
+		add_to_pop_up_list (get_trans ("Helicopter kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
 		// Ground kills
 		sprintf (buf, "%d", player_log->side_log[side].kills.ground );
-
 		add_to_pop_up_list (get_trans ("Ground Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
 		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		sprintf (buf, "%d", player_log->side_log[side].kills.air_defence );
+		add_to_pop_up_list (get_trans ("  Air defence"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		sprintf (buf, "%d", player_log->side_log[side].kills.armour );
+		add_to_pop_up_list (get_trans ("  Armour"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		if (global_options.visual_screen_height >= 756)
+		{
+			sprintf (buf, "%d", player_log->side_log[side].kills.artillery );
+			add_to_pop_up_list (get_trans ("  Artillery"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+			add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		}
 
 		// Sea kills
 		sprintf (buf, "%d", player_log->side_log[side].kills.sea );
@@ -171,37 +187,6 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 		add_to_pop_up_list ("   ", general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
 
 
-		//
-		// Flying hours
-		debug_log ( "Flying seconds: %f", player_log->side_log[side].flying_seconds );
-
-		float_flying_hours = ((float) (player_log->side_log[side].flying_seconds / ONE_HOUR ));
-
-		sprintf (buf, "%.1f", float_flying_hours );
-
-		add_to_pop_up_list (get_trans ("Flying Hours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		// Successful tours
-		sprintf (buf, "%d", player_log->side_log[side].successful_tours );
-
-		add_to_pop_up_list (get_trans ("Successful Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		// Failed tours
-		sprintf (buf, "%d", player_log->side_log[side].failed_tours );
-
-		add_to_pop_up_list (get_trans ("Failed Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-
-		add_to_pop_up_list ("   ", general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
-
-		add_to_pop_up_list ("   ", general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
-
 
 		// Missions flown
 		sprintf (buf, "%d", player_log->side_log[side].missions_flown );
@@ -216,6 +201,22 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 		add_to_pop_up_list (get_trans ("Success Rate"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
 		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		// Successful tours
+
+		sprintf (buf, "%d", player_log->side_log[side].successful_tours );
+
+		add_to_pop_up_list (get_trans ("Successful Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		// Failed tours
+		sprintf (buf, "%d", player_log->side_log[side].failed_tours );
+
+		add_to_pop_up_list (get_trans ("Failed Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+
 
 		// Total points
 //		sprintf (buf, "%d", ( int ) ( player_log->side_log[side].experience ));
@@ -245,11 +246,11 @@ void define_general_log_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// general Log Area
 
-	x1 = 0.623;
-	y1 = 0.286;
+	x1 = 0.523;
+	y1 = 0.270;
 //	x2 = 0.271;
-	x2 = 0.3;
-	y2 = 0.464;
+	x2 = 0.4;
+	y2 = 0.480;
 
 	log_page [LOG_PAGE_GENERAL] = create_ui_object
 			(

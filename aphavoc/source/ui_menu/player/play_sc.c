@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+#include "play_hours.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +95,7 @@ static ui_object
 	*player_name_input,
 
 	*player_general_log_selection_button,
+	*player_flight_hours_selection_button,
 	*player_weapon_log_selection_button,
 	*player_medals_selection_button,
 	
@@ -137,6 +139,8 @@ static void player_callsign_entry_function (ui_object *obj, void *arg);
 static void player_callsign_input_function (ui_object *obj, void *arg);
 
 static void notify_player_entry_create_button (ui_object *obj, void *arg);
+
+static void notify_select_player_restore_button(ui_object* obj, void* arg);
 
 static void player_rename_function ( ui_object *obj, void *arg );
 
@@ -223,8 +227,10 @@ void initialise_select_player_screen (void)
 
 	define_general_log_page_objects ();
 
-	define_weapon_log_page_objects ();
+	define_flight_hours_page_objects();
 
+	define_weapon_log_page_objects ();
+	
 	y2 = 0.038;
 
 	define_medals_page_objects ();
@@ -545,56 +551,11 @@ void initialise_select_player_screen (void)
 	set_text_option_backdrop_object (option_bdrop, player_blue_side_selection_button);
 
 	////////////////////////////////////////////////
-	// Weapon Log Selection Button
-	
-	x1 = 0.633;
-	y1 = 0.764;
-	x2 = 0.312;
-	y2 = 0.042;
-
-	option_bdrop = create_ui_object
-	(
-		UI_TYPE_AREA,
-		UI_ATTR_PARENT (select_player_screen),
-		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
-		UI_ATTR_COLOUR_START (255, 255, 255, 255),
-		UI_ATTR_COLOUR_END (255, 255, 255, 255),
-		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
-		UI_ATTR_OFFSET_TIME (0),
-		UI_ATTR_TIME_LENGTH (500),
-		UI_ATTR_END
-	);
-
-	player_weapon_log_selection_button = create_ui_object
-												(
-													UI_TYPE_BUTTON,
-													UI_ATTR_PARENT (select_player_screen),
-													UI_ATTR_VIRTUAL_POSITION (x1, y1),
-													UI_ATTR_VIRTUAL_SIZE (x2, y2),
-													UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
-													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
-													UI_ATTR_TEXT (get_trans ("Weapons Log")),
-													UI_ATTR_FUNCTION (notify_show_weapon_log_page),
-            									UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-         								   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-   								         	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
-													UI_ATTR_HIGHLIGHTABLE (TRUE),
-													UI_ATTR_CLEAR ( TRUE ),
-													UI_ATTR_END
-												);
-
-	preprocess_translation_object_size (player_weapon_log_selection_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
-
-	set_text_option_backdrop_object (option_bdrop, player_weapon_log_selection_button);
-
-	////////////////////////////////////////////////
 	// General Log Selection Button
-	
-	x1 = 0.759;
-	y1 = 0.816;
-	x2 = 0.220;
+
+	x1 = 0.580;
+	y1 = 0.750;
+	x2 = 0.312;
 	y2 = 0.042;
 
 	option_bdrop = create_ui_object
@@ -617,7 +578,7 @@ void initialise_select_player_screen (void)
 													UI_ATTR_PARENT (select_player_screen),
 													UI_ATTR_VIRTUAL_POSITION (x1, y1),
 													UI_ATTR_VIRTUAL_SIZE (x2, y2),
-													UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+													UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
 													UI_ATTR_TEXT (get_trans ("Flight Log")),
 													UI_ATTR_FUNCTION (notify_show_general_log_page),
@@ -633,6 +594,97 @@ void initialise_select_player_screen (void)
 	preprocess_translation_object_size (player_general_log_selection_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 	set_text_option_backdrop_object (option_bdrop, player_general_log_selection_button);
+
+	////////////////////////////////////////////////
+	// Flight Hours Log Selection Button
+
+	x1 = 0.620;
+	y1 = 0.800;
+	x2 = 0.312;
+	y2 = 0.042;
+
+	option_bdrop = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (select_player_screen),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 255),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_TIME_LENGTH (500),
+		UI_ATTR_END
+	);
+
+	player_flight_hours_selection_button = create_ui_object
+												(
+													UI_TYPE_BUTTON,
+													UI_ATTR_PARENT (select_player_screen),
+													UI_ATTR_VIRTUAL_POSITION (x1, y1),
+													UI_ATTR_VIRTUAL_SIZE (x2, y2),
+													UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
+													UI_ATTR_TEXT (get_trans ("Flight Hours")),
+													UI_ATTR_FUNCTION (notify_show_flight_hours_page),
+            									UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+         								   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   								         	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+													UI_ATTR_HIGHLIGHTABLE (TRUE),
+													UI_ATTR_CLEAR ( TRUE ),
+													UI_ATTR_END
+												);
+
+	preprocess_translation_object_size (player_flight_hours_selection_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
+
+	set_text_option_backdrop_object (option_bdrop, player_flight_hours_selection_button);
+
+
+	////////////////////////////////////////////////
+	// Weapon Log Selection Button
+
+	x1 = 0.660;
+	y1 = 0.850;
+	x2 = 0.220;
+	y2 = 0.042;
+	
+	option_bdrop = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (select_player_screen),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 255),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_TIME_LENGTH (500),
+		UI_ATTR_END
+	);
+
+	player_weapon_log_selection_button = create_ui_object
+												(
+													UI_TYPE_BUTTON,
+													UI_ATTR_PARENT (select_player_screen),
+													UI_ATTR_VIRTUAL_POSITION (x1, y1),
+													UI_ATTR_VIRTUAL_SIZE (x2, y2),
+													UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+													UI_ATTR_FONT_TYPE (UI_FONT_STRETCH_ITALIC_ARIAL_18),
+													UI_ATTR_TEXT (get_trans ("Weapons Log")),
+													UI_ATTR_FUNCTION (notify_show_weapon_log_page),
+            									UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+         								   	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      								      	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+   								         	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+													UI_ATTR_HIGHLIGHTABLE (TRUE),
+													UI_ATTR_CLEAR ( TRUE ),
+													UI_ATTR_END
+												);
+
+	preprocess_translation_object_size (player_weapon_log_selection_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
+
+	set_text_option_backdrop_object (option_bdrop, player_weapon_log_selection_button);
 
 	/////////////////////////////////////////////////////////////////
 	// Ok Button
@@ -673,6 +725,53 @@ void initialise_select_player_screen (void)
 			
 	set_text_option_backdrop_object (option_bdrop, temp_obj);
 
+	/////////////////////////////////////////////////////////////////
+	// Restore Button
+
+	x1 = OPTIONS_OK_BUTTON_POS_X + 0.020;
+	y1 = OPTIONS_OK_BUTTON_POS_Y + 0.050;
+	x2 = OPTIONS_OK_BUTTON_X;
+	y2 = OPTIONS_OK_BUTTON_Y;
+
+	option_bdrop = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (select_player_screen),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 255),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_TIME_LENGTH (500),
+		UI_ATTR_END
+	);
+
+	temp_obj = create_ui_object
+			(
+				UI_TYPE_BUTTON,
+				UI_ATTR_PARENT (select_player_screen),
+				UI_ATTR_VIRTUAL_POSITION (x1, y1),
+				UI_ATTR_VIRTUAL_SIZE (x2, y2),
+				UI_ATTR_TEXT ("Restore log"),
+				UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+				UI_ATTR_FUNCTION (notify_select_player_restore_button),
+				UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+           	UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+           	UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+           	UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+				UI_ATTR_HIGHLIGHTABLE (TRUE),
+				UI_ATTR_CLEAR (TRUE),
+				UI_ATTR_END
+			);
+			
+	set_text_option_backdrop_object (option_bdrop, temp_obj);
+
+	
+	///////////////////////////////////////////
+	// Player name entry area
 
 	x1 = get_ui_object_virtual_x (player_list);
 	y1 = get_ui_object_virtual_y (player_list);
@@ -714,7 +813,7 @@ void initialise_select_player_screen (void)
 	// Text Areas
 
 	x1 = 0.584;
-	y1 = 0.889;
+	y1 = 0.900;
 	x2 = 0.195;
 	y2 = 0.030;
 
@@ -734,7 +833,7 @@ void initialise_select_player_screen (void)
             );
 
 	x1 = 0.462;
-	y1 = 0.926;
+	y1 = 0.946;
 	x2 = 0.317;
 	y2 = 0.030;
 
@@ -774,17 +873,31 @@ void display_player_log_page (player_log_pages page)
 	if (page == LOG_PAGE_GENERAL)
 	{
 		set_ui_object_state (log_page [LOG_PAGE_GENERAL], UI_OBJECT_STATE_ON);
+		set_ui_object_state (log_page [LOG_PAGE_FLIGHT_HOURS], UI_OBJECT_STATE_OFF);
 		set_ui_object_state (log_page [LOG_PAGE_WEAPON], UI_OBJECT_STATE_OFF);
 
 		set_ui_object_state (player_general_log_selection_button, UI_OBJECT_STATE_ON);
+		set_ui_object_state (player_flight_hours_selection_button, UI_OBJECT_STATE_OFF);
 		set_ui_object_state (player_weapon_log_selection_button, UI_OBJECT_STATE_OFF);
+	}
+	else if (page == LOG_PAGE_FLIGHT_HOURS)
+	{
+		set_ui_object_state (log_page [LOG_PAGE_GENERAL], UI_OBJECT_STATE_OFF);
+		set_ui_object_state (log_page [LOG_PAGE_FLIGHT_HOURS], UI_OBJECT_STATE_ON);
+		set_ui_object_state (log_page [LOG_PAGE_WEAPON], UI_OBJECT_STATE_OFF);
+
+		set_ui_object_state (player_weapon_log_selection_button, UI_OBJECT_STATE_OFF);
+		set_ui_object_state (player_flight_hours_selection_button, UI_OBJECT_STATE_ON);
+		set_ui_object_state (player_general_log_selection_button, UI_OBJECT_STATE_OFF);
 	}
 	else
 	{
 		set_ui_object_state (log_page [LOG_PAGE_GENERAL], UI_OBJECT_STATE_OFF);
+		set_ui_object_state (log_page [LOG_PAGE_FLIGHT_HOURS], UI_OBJECT_STATE_OFF);
 		set_ui_object_state (log_page [LOG_PAGE_WEAPON], UI_OBJECT_STATE_ON);
 
 		set_ui_object_state (player_weapon_log_selection_button, UI_OBJECT_STATE_ON);
+		set_ui_object_state (player_flight_hours_selection_button, UI_OBJECT_STATE_OFF);
 		set_ui_object_state (player_general_log_selection_button, UI_OBJECT_STATE_OFF);
 	}
 
@@ -899,6 +1012,19 @@ void notify_medals_button (ui_object *obj, void *arg)
 	arg;
 
 	push_ui_screen (player_medals_screen);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_select_player_restore_button(ui_object* obj, void* arg)
+{
+	obj; arg;  // just to silence the compiler
+	
+	if (restore_log_from_backup())
+		rebuild_player_log_list();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1319,6 +1445,7 @@ void load_player_list (void)
 {
 
 	int
+		version = 0,
 		level;
 
 	player_log_type
@@ -1337,17 +1464,25 @@ void load_player_list (void)
 
 	ui_object_destroy_list_items ( player_list );
 
-	if (file_exist ( "players.bin" ))
+	if (file_exist ( "players2.bin" ))
 	{
+		version = 2;
+		file_ptr = safe_fopen ( "players2.bin", "rb" );
+	}
+	else if (file_exist ( "players.bin" ))
+	{
+		version = 1;
+		file_ptr = safe_fopen ( "players.bin", "rb" );
+	}
 
+	if (version)
+	{
 		int
 			side,
 			loop,
 			num_entries,
 			current_player_index,
 			string_length;
-
-		file_ptr = safe_fopen ( "players.bin", "rb" );
 
 		fread ( &num_entries, sizeof ( int ), 1, file_ptr );
 
@@ -1390,8 +1525,30 @@ void load_player_list (void)
 
 			for (side = 0; side <= NUM_ENTITY_SIDES; side ++ )
 			{
+				// size of original side log element was 756, it has changed now
+				if (version == 1)
+				{
+					version1_player_side_log_type v1_log;
+					
+					fread ( &v1_log, sizeof(v1_log), 1, file_ptr );
 
-				fread ( &new_player->side_log[side], sizeof ( player_side_log_type ), 1, file_ptr );
+					// the first values are in the same positoin so we'll just copy them
+					memcpy(&new_player->side_log[side], &v1_log, sizeof(v1_log));
+					
+					// reset the kill values which didn't exist and now have been overwritten by later values
+					new_player->side_log[side].kills.fixed_wing = 0;
+					new_player->side_log[side].kills.helicopter = new_player->side_log[side].kills.air;  // assume all airkills are helicopters... most probably are
+					new_player->side_log[side].kills.air_defence = 0;
+					new_player->side_log[side].kills.armour = 0;
+					new_player->side_log[side].kills.artillery = 0;
+
+					// recopy weapons usage data
+					memcpy(&new_player->side_log[side].weapon_usage, &v1_log.weapon_usage, sizeof(v1_log.weapon_usage));
+				}
+				else
+					fread ( &new_player->side_log[side], sizeof(player_side_log_type), 1, file_ptr );
+
+				new_player->side_log[side].warzone_log = NULL;
 
 				for ( level = 0; level < NUM_PLAYER_LEVELS; level ++ )
 				{
@@ -1483,7 +1640,7 @@ void save_player_list (void)
 			string_length,
 			current_player_index;
 	
-		file_ptr = safe_fopen ("players.bin", "wb");
+		file_ptr = safe_fopen ("players2.bin", "wb");
 	
 		num_entries = 0;
 
@@ -1689,7 +1846,6 @@ player_log_type *create_empty_player_log ( void )
 		*list;
 
 	int
-		level,
 		side,
 		d,
 		m,
@@ -1698,19 +1854,6 @@ player_log_type *create_empty_player_log ( void )
 	new_player_log = (player_log_type *) malloc_heap_mem (sizeof (player_log_type));
 
 	memset (new_player_log, 0, sizeof (player_log_type));
-
-	for (side = 0; side < NUM_ENTITY_SIDES; side++)
-	{
-
-		memset (&new_player_log->side_log [side], 0, sizeof (player_side_log_type));
-
-		for (level = 0; level < NUM_PLAYER_LEVELS; level ++)
-		{
-
-			new_player_log->side_log [side].level [level] = 1;
-		}
-
-	}
 
 	new_player_log->unique_id = get_player_log_unique_id ();
 
@@ -1722,13 +1865,11 @@ player_log_type *create_empty_player_log ( void )
 
 	for (side = 0; side < NUM_ENTITY_SIDES; side++)
 	{
-
 		memset (&new_player_log->side_log [side], 0, sizeof (player_side_log_type));
 
 		new_player_log->side_log [side].rank = bound (command_line_player_start_rank, PILOT_RANK_LIEUTENANT, PILOT_RANK_COLONEL);
 
 		new_player_log->side_log [side].experience = get_player_points_from_rank ( command_line_player_start_rank );
-
 	}
 
 	new_player_log->next = NULL;
@@ -1919,9 +2060,9 @@ void rebuild_player_log_list ( void )
 		buf2[100];
 
 		rebuild_general_log_list (current_log, player_log_current_side);
-	
-		rebuild_weapon_log_list (current_log, player_log_current_side);
-	
+		rebuild_flight_hours_list (current_log, player_log_current_side);
+		rebuild_weapon_log_list (current_log, player_log_current_side);		
+
 		// set this log to selected
 	
 		set_ui_object_state (selected_item, UI_OBJECT_STATE_ON);

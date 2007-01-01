@@ -82,7 +82,8 @@
 
 static player_log_type
 	*player_log_list,
-	*current_player_log;
+	*current_player_log,
+	current_backup_log;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +133,6 @@ static void inc_player_log_ground_kills (int side, player_log_type *log);
 static void inc_player_log_sea_kills (int side, player_log_type *log);
 static void inc_player_log_fixed_kills (int side, player_log_type *log);
 static void inc_player_log_friendly_kills (int side, player_log_type *log);
-static void inc_player_log_deaths (int side, player_log_type *log);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +360,8 @@ player_log_type *get_current_player_log ()
 void set_current_player_log (player_log_type *log)
 {
 	current_player_log = log;
+	if (log)
+		current_backup_log = *log;
 
 	// debug
 	unregister_file_tag_variable ("TRAINING1_LEVEL");
@@ -606,11 +608,16 @@ void set_player_log_missions_flown (int side, player_log_type *log, int missions
 
 void inc_player_log_missions_flown (int side, player_log_type *log)
 {
+	gunship_types type = get_global_gunship_type();
+
 	ASSERT (log);
 
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	log->side_log [side].missions_flown += 1;
+
+	if (type < NUM_GUNSHIP_TYPES)
+		log->side_log [side].gunship_missions[type] += 1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -762,11 +769,20 @@ void set_player_log_flying_seconds (int side, player_log_type *log, float flying
 
 void inc_player_log_flying_seconds (int side, player_log_type *log, float delta_flying_seconds)
 {
+	gunship_types type = get_global_gunship_type();
+	player_warzone_log* warzone_log = get_current_warzone_log(log, side);
+	
 	ASSERT (log);
 
 	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	log->side_log [side].flying_seconds += delta_flying_seconds;
+	
+	if (type < NUM_GUNSHIP_TYPES)
+		log->side_log [side].gunship_flying_seconds[type] += delta_flying_seconds;
+
+	if (warzone_log)
+		warzone_log->flying_seconds += delta_flying_seconds;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -851,9 +867,54 @@ void inc_player_log_deaths (int side, player_log_type *log)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void inc_player_log_helicopters_lost(int side, player_log_type *log)
+{
+	ASSERT (log);
+
+	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
+
+	log->side_log [side].helicopters_lost++;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void inc_player_log_fixed_wing_kills(int side, player_log_type *log)
+{
+	log->side_log [side].kills.fixed_wing++;
+}
+
+static void inc_player_log_helicopter_kills (int side, player_log_type *log)
+{
+	log->side_log [side].kills.helicopter++;
+}
+
+static void inc_player_log_ada_kills(int side, player_log_type *log)
+{
+	log->side_log [side].kills.air_defence++;
+}
+
+static void inc_player_log_armour_kills(int side, player_log_type *log)
+{
+	log->side_log [side].kills.armour++;
+}
+
+static void inc_player_log_artillery_kills(int side, player_log_type *log)
+{
+	log->side_log [side].kills.artillery++;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void inc_player_log_kills (int side, player_log_type *log, entity *victim)
 {
 	ASSERT (victim);
+	ASSERT (log);
+	ASSERT ((side >= 0) && (side <= NUM_ENTITY_SIDES));
 
 	if (victim == get_gunship_entity ())
 	{
@@ -866,39 +927,45 @@ void inc_player_log_kills (int side, player_log_type *log, entity *victim)
 			switch (get_local_entity_type (victim))
 			{
 				case ENTITY_TYPE_FIXED_WING:
-				case ENTITY_TYPE_HELICOPTER:
-				{
+					inc_player_log_fixed_wing_kills(side, log);
 					inc_player_log_air_kills (side, log);
-		
+
 					break;
-				}
+				case ENTITY_TYPE_HELICOPTER:
+					inc_player_log_helicopter_kills (side, log);
+					inc_player_log_air_kills (side, log);
+
+					break;
 				case ENTITY_TYPE_ANTI_AIRCRAFT:
+					inc_player_log_ada_kills(side, log);
+					// fallthrough
 				case ENTITY_TYPE_ROUTED_VEHICLE:
-				{
-					inc_player_log_ground_kills (side, log);
-		
-					break;
-				}
+					{
+						int	map_icon = vehicle_database[get_local_entity_int_value(victim, INT_TYPE_ENTITY_SUB_TYPE)].map_icon;
+
+						inc_player_log_ground_kills (side, log);
+						
+						if (map_icon == MAP_ICON_TANK || map_icon == MAP_ICON_APC)
+							inc_player_log_armour_kills(side, log);
+						else if (map_icon == MAP_ICON_ARTILLERY)
+							inc_player_log_artillery_kills(side, log);
+
+						break;
+					}
 				case ENTITY_TYPE_SHIP_VEHICLE:
-				{
 					inc_player_log_sea_kills (side, log);
 		
 					break;
-				}
 				case ENTITY_TYPE_BRIDGE:
 				case ENTITY_TYPE_CITY_BUILDING:
 				case ENTITY_TYPE_SCENIC:
 				case ENTITY_TYPE_SITE:
 				case ENTITY_TYPE_SITE_UPDATABLE:
-				{
 					inc_player_log_fixed_kills (side, log);
 		
 					break;
-				}
 				default:
-				{
 					break;
-				}
 			}
 		}
 		else
@@ -1078,4 +1145,39 @@ void inc_player_weapon_log_hit (int side, player_log_type *log, int weapon)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void backup_current_player_log(void)
+{
+	if (!current_player_log || current_player_log->unique_id == 0)
+	{
+		current_backup_log.unique_id = 0;  // invalid
+		return;
+	}
 
+	current_backup_log = *current_player_log;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int restore_log_from_backup(void)
+{
+	player_log_type* next_in_list;
+
+	if (!current_player_log || current_player_log->unique_id == 0
+		|| current_player_log->unique_id != current_backup_log.unique_id)
+	{
+		return FALSE;
+	}
+
+	next_in_list = current_player_log->next;   // make sure next pointer is retained
+
+	*current_player_log = current_backup_log;
+	current_player_log->next = next_in_list;
+
+	return TRUE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
