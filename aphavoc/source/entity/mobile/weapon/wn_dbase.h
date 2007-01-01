@@ -142,7 +142,8 @@ struct WEAPON_DATA
 		burst_duration,					// seconds
 		rate_of_fire,						// rounds/minute
 		reload_time,						// seconds
-		max_launch_angle_error;			// radians
+		max_launch_angle_error,			// radians
+		max_seeker_limit;				// cos of angle (usually cos(max_launch_angle_error))
 };
 
 typedef struct WEAPON_DATA weapon_data;

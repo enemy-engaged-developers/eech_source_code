@@ -191,6 +191,7 @@ weapon_data
 			0.0,																	// rate_of_fire
 			0.0,																	// reload_time
 			0.0,																	// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +261,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -324,6 +326,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -386,6 +389,7 @@ weapon_data
 			750.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -448,6 +452,7 @@ weapon_data
 			1650.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -510,6 +515,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -572,6 +578,7 @@ weapon_data
 			2100.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -634,6 +641,7 @@ weapon_data
 			625.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -699,6 +707,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -764,6 +773,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -825,6 +835,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -890,6 +901,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -952,6 +964,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//	 
@@ -1014,6 +1027,7 @@ weapon_data
 			4000.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1076,6 +1090,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			12.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1138,6 +1153,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1200,6 +1216,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1261,6 +1278,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1323,6 +1341,7 @@ weapon_data
 			600.0,																// rate_of_fire
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1385,6 +1404,7 @@ weapon_data
 			600.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1447,6 +1467,7 @@ weapon_data
 			350.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1509,6 +1530,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			16.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1571,6 +1593,7 @@ weapon_data
 			100.0,																// rate_of_fire
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1632,6 +1655,7 @@ weapon_data
 			1000.0,																// rate_of_fire
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1693,6 +1717,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1754,6 +1779,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1815,6 +1841,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			22.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1880,6 +1907,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -1945,6 +1973,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2006,6 +2035,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2074,6 +2104,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2135,6 +2166,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2196,6 +2228,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2257,6 +2290,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2318,6 +2352,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2379,6 +2414,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2447,6 +2483,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2508,6 +2545,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2569,6 +2607,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2630,6 +2669,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2691,6 +2731,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2752,6 +2793,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2813,6 +2855,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2874,6 +2917,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -2935,6 +2979,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3003,6 +3048,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3064,6 +3110,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3125,6 +3172,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3186,6 +3234,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3247,6 +3296,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3308,6 +3358,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3369,6 +3420,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,					// rate_of_fire
 			0.0,							// reload_time
 			rad (20.0),						// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3430,6 +3482,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3491,6 +3544,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3559,6 +3613,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3620,6 +3675,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3681,6 +3737,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3742,6 +3799,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3803,6 +3861,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3864,6 +3923,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3925,6 +3985,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -3986,6 +4047,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			25.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4047,6 +4109,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			24.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4115,6 +4178,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			30.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4176,6 +4240,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			30.0,																	// reload_time
 			rad (15.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4237,6 +4302,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4298,6 +4364,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4366,6 +4433,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4427,6 +4495,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4488,6 +4557,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4556,6 +4626,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4624,6 +4695,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4685,6 +4757,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4746,6 +4819,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4807,6 +4881,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 		////////////////////////////////////////
 		//
@@ -4868,6 +4943,7 @@ weapon_data
 			FIRE_SINGLE_WEAPON,												// rate_of_fire
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
 		},
 	};
 
@@ -5000,6 +5076,26 @@ void validate_weapon_database (void)
 		}
 
 		debug_assert (weapon_database[sub_type].max_launch_angle_error >= 0.0);
+		
+		debug_assert (weapon_database[sub_type].max_seeker_limit >= 0.0 && weapon_database[sub_type].max_seeker_limit <= 1.0);
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void calculate_seeker_limits_from_launch_angle(void)
+{
+	entity_sub_types
+		sub_type;
+
+
+	for (sub_type = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON + 1; sub_type < NUM_ENTITY_SUB_TYPE_WEAPONS; sub_type++)
+	{
+		if (weapon_database[sub_type].max_seeker_limit == 0.0)
+			weapon_database[sub_type].max_seeker_limit = cos(weapon_database[sub_type].max_launch_angle_error + 0.2);
 	}
 }
 
@@ -5179,6 +5275,8 @@ void initialise_target_point_offsets (void)
 		*bounding_box;
 
 	debug_assert (get_3d_objects_initialised ());
+
+	calculate_seeker_limits_from_launch_angle();
 
 	target_point_offsets[OBJECT_3D_INVALID_OBJECT_INDEX].x = 0.0;
 	target_point_offsets[OBJECT_3D_INVALID_OBJECT_INDEX].y = 0.0;
