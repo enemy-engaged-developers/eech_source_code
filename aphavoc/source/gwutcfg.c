@@ -1402,6 +1402,7 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].rate_of_fire              = FloatValue(p);
 		weapon_database[i].reload_time               = FloatValue(p);
 		weapon_database[i].max_launch_angle_error    = rad(FloatValue(p));
+		weapon_database[i].max_seeker_limit			 = cos(weapon_database[i].max_launch_angle_error + 0.25);
 
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);
