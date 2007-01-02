@@ -1453,6 +1453,8 @@ void draw_virtual_cockpit_3d_view (void)
 
 	draw_main_3d_scene (&main_vp);
 
+	if (command_line_restricted_nvg_fov && night_vision_system_active && !get_global_draw_cockpit_graphics ())
+		draw_night_vision_mask();
 
 	switch (get_global_gunship_type ())
 	{
@@ -1515,9 +1517,9 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_apache_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
+					draw_overlaid_apache_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
 
-					draw_overlaid_apache_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+					draw_overlaid_apache_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
 				}
 			}
 
@@ -1560,7 +1562,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_havoc_mfd (68.0, 412.0, 128.0);
+					draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
 
 					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
 				}
@@ -1821,7 +1823,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 	}
 	
-	if (command_line_restricted_nvg_fov && night_vision_system_active)
+	if (command_line_restricted_nvg_fov && night_vision_system_active && get_global_draw_cockpit_graphics ())
 		draw_night_vision_mask();
 
 	// Jabberwock 031016 Inset view - cockpit
