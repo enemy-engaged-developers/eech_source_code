@@ -726,7 +726,7 @@ void initialise_select_player_screen (void)
 	set_text_option_backdrop_object (option_bdrop, temp_obj);
 
 	/////////////////////////////////////////////////////////////////
-	// Restore Button
+	// Undo Button
 
 	x1 = OPTIONS_OK_BUTTON_POS_X + 0.020;
 	y1 = OPTIONS_OK_BUTTON_POS_Y + 0.050;
@@ -753,7 +753,7 @@ void initialise_select_player_screen (void)
 				UI_ATTR_PARENT (select_player_screen),
 				UI_ATTR_VIRTUAL_POSITION (x1, y1),
 				UI_ATTR_VIRTUAL_SIZE (x2, y2),
-				UI_ATTR_TEXT ("Restore log"),
+				UI_ATTR_TEXT ("Undo Last Mission"),
 				UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
 				UI_ATTR_FUNCTION (notify_select_player_restore_button),
 				UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
