@@ -770,7 +770,6 @@ void set_player_log_flying_seconds (int side, player_log_type *log, float flying
 void inc_player_log_flying_seconds (int side, player_log_type *log, float delta_flying_seconds)
 {
 	gunship_types type = get_global_gunship_type();
-	player_warzone_log* warzone_log = get_current_warzone_log(log, side);
 	
 	ASSERT (log);
 
@@ -780,9 +779,6 @@ void inc_player_log_flying_seconds (int side, player_log_type *log, float delta_
 	
 	if (type < NUM_GUNSHIP_TYPES)
 		log->side_log [side].gunship_flying_seconds[type] += delta_flying_seconds;
-
-	if (warzone_log)
-		warzone_log->flying_seconds += delta_flying_seconds;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
