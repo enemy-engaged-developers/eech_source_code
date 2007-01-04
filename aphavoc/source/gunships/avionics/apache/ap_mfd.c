@@ -10729,9 +10729,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_rgb_colour (clear_mfd_colour, 0, 0, 0, 0);
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
-				set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0);
 
 				draw_layout_grid ();
 
@@ -11077,99 +11075,39 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 		}
 		////////////////////////////////////////
 		case MFD_MODE_FLIR:
+		case MFD_MODE_DTV:
+		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
 			if (!apache_damage.flir)
 			{
-				draw_overlaid_3d_eo_display (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
+				if (*mfd_mode == MFD_MODE_FLIR)
+					draw_overlaid_3d_eo_display (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
+				else if (*mfd_mode == MFD_MODE_DTV)
+					draw_overlaid_3d_eo_display (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
+				else
+					draw_overlaid_3d_eo_display (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
 			}
 			else
-			{
 				draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
-			}
-
+			
 			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
 			set_active_screen (mfd_texture_screen);
 
 			if (lock_screen (mfd_texture_screen))
 			{
 				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
+				
 				draw_layout_grid ();
 
-				draw_2d_flir_mfd (TRUE, TRUE);
+				if (*mfd_mode == MFD_MODE_FLIR)
+					draw_2d_flir_mfd (TRUE, TRUE);
+				else if (*mfd_mode == MFD_MODE_DTV)
+					draw_2d_dtv_mfd (TRUE, TRUE);
+				else
+					draw_2d_dvo_mfd (TRUE, TRUE);
 
 				flush_screen_texture_graphics (mfd_texture_screen);
-
-				unlock_screen (mfd_texture_screen);
-			}
-
-			set_pilots_full_screen_params (FALSE);
-
-			break;
-		}
-		////////////////////////////////////////
-		case MFD_MODE_DTV:
-		////////////////////////////////////////
-		{
-			if (!apache_damage.dtv)
-			{
-				draw_overlaid_3d_eo_display (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
-			}
-			else
-			{
-				draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
-			}
-
-			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
-			set_active_screen (mfd_texture_screen);
-
-			if (lock_screen (mfd_texture_screen))
-			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
-				draw_layout_grid ();
-
-				draw_2d_dtv_mfd (TRUE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
-
-				unlock_screen (mfd_texture_screen);
-			}
-
-			set_pilots_full_screen_params (FALSE);
-
-			break;
-		}
-		////////////////////////////////////////
-		case MFD_MODE_DVO:
-		////////////////////////////////////////
-		{
-			if (!apache_damage.dvo)
-			{
-				draw_overlaid_3d_eo_display (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
-			}
-			else
-			{
-				draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
-			}
-
-			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
-			set_active_screen (mfd_texture_screen);
-
-			if (lock_screen (mfd_texture_screen))
-			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
-				draw_layout_grid ();
-
-				draw_2d_dvo_mfd (TRUE, TRUE);
-
-				flush_screen_texture_graphics (mfd_texture_screen);
-
 				unlock_screen (mfd_texture_screen);
 			}
 
@@ -11181,17 +11119,23 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 		case MFD_MODE_TSD:
 		////////////////////////////////////////
 		{
-			draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
+
+/*			if (tsd_tads_underlay_active)
+			{
+				if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
+					draw_overlaid_3d_eo_display (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
+				else
+					draw_overlaid_3d_eo_display (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV, mfd_screen_x_min, mfd_screen_y_min, mfd_screen_size);
+			}
+			else */
+				draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
 
 			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
 			set_active_screen (mfd_texture_screen);
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
-
-				draw_layout_grid ();
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
 
 				draw_tactical_situation_display_mfd ();
 
@@ -11199,6 +11143,9 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 
 				unlock_screen (mfd_texture_screen);
 			}
+
+			if (tsd_tads_underlay_active)
+				set_pilots_full_screen_params (FALSE);
 
 			break;
 		}
@@ -11214,7 +11161,7 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -11294,6 +11241,31 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 				draw_layout_grid ();
 
 				draw_engine_display_mfd ();
+
+				flush_screen_texture_graphics (mfd_texture_screen);
+
+				unlock_screen (mfd_texture_screen);
+			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case MFD_MODE_FLIGHT:
+		////////////////////////////////////////
+		{
+			draw_translucent_mfd_background (mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max);
+
+			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+			set_active_screen (mfd_texture_screen);
+
+			if (lock_screen (mfd_texture_screen))
+			{
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_green_mfd_colour);
+
+				draw_layout_grid ();
+
+				draw_flight_display_mfd();
 
 				flush_screen_texture_graphics (mfd_texture_screen);
 
