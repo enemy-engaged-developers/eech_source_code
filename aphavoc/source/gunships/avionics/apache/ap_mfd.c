@@ -11436,7 +11436,7 @@ static mfd_modes get_mfd_mode_for_eo_sensor (void)
 
 static mfd_modes get_mfd_mode_for_radar (void)
 {
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR || air_radar_is_active())
 		return MFD_MODE_AIR_RADAR;
 
 	return MFD_MODE_GROUND_RADAR;
@@ -11556,7 +11556,7 @@ static mfd_modes get_next_mfd_mode (mfd_modes mfd_mode)
 	{
 		case MFD_MODE_OFF:
 		{
-			next_mfd_mode = MFD_MODE_TSD;
+			next_mfd_mode = MFD_MODE_ENGINE;
 
 			break;
 		}
