@@ -506,9 +506,16 @@ static char
 
 void initialise_ah64a_mfd (void)
 {
-	select_ah64a_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
-
-	select_ah64a_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
+	if (command_line_dynamics_engine_startup)
+	{
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+	}
+	else
+	{
+		select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
+	}
 
 	tsd_ase_range = TSD_ASE_RANGE_5000;
 

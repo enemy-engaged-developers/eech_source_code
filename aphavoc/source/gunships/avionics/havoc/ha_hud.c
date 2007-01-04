@@ -1762,7 +1762,7 @@ void deinitialise_havoc_hud (void)
 
 void draw_havoc_hud_on_cockpit (int hud_enlarge)
 {
-	if (havoc_damage.head_up_display)
+	if (havoc_damage.head_up_display || !electrical_system_active())
 	{
 		return;
 	}
@@ -1940,7 +1940,7 @@ void draw_havoc_hud_on_texture (void)
 
 		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
 
-		if (!havoc_damage.head_up_display)
+		if (!havoc_damage.head_up_display && electrical_system_active())
 		{
 			set_mono_font_colour (hud_colour);
 
@@ -2684,7 +2684,7 @@ void draw_havoc_hms (void)
 	//
 	////////////////////////////////////////
 
-	if (havoc_damage.helmet_mounted_sight)
+	if (havoc_damage.helmet_mounted_sight || !electrical_system_active())
 	{
 		return;
 	}

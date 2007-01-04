@@ -108,6 +108,9 @@ static void display_messages (float x_org, float y_org)
 		y_line3,
 		y_line4;
 
+	if (!electrical_system_active())
+		return;
+
 	x_min = x_org;
 	y_min = y_org;
 	x_max = x_org + VIEWPORT_WIDTH - 0.001;
@@ -183,6 +186,9 @@ void update_apache_upfront_display (void)
 		hours,
 		minutes,
 		seconds;
+
+//	if (!electrical_system_active())
+//		return;
 
 	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 

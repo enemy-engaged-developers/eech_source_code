@@ -2648,7 +2648,7 @@ void draw_blackhawk_hud (void)
 	//
 	////////////////////////////////////////
 
-	if (blackhawk_damage.ihadss)
+	if (blackhawk_damage.ihadss	|| !electrical_system_active())
 	{
 		return;
 	}

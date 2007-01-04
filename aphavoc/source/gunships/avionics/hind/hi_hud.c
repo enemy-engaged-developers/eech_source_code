@@ -1251,7 +1251,7 @@ void deinitialise_hind_hud (void)
 
 void draw_hind_hud_on_cockpit (int hud_enlarge)
 {
-	if (hind_damage.head_up_display)
+	if (hind_damage.head_up_display || !electrical_system_active())
 	{
 		return;
 	}
@@ -1432,7 +1432,7 @@ void draw_hind_hud_on_texture (void)
 
 		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 
-		if (!hind_damage.head_up_display)
+		if (!hind_damage.head_up_display && electrical_system_active())
 		{
 			set_mono_font_colour (hud_colour);
 
@@ -2407,7 +2407,7 @@ void draw_hind_hms (void)
 	//
 	////////////////////////////////////////
 
-	if (hind_damage.helmet_mounted_sight)
+	if (hind_damage.helmet_mounted_sight || !electrical_system_active())
 	{
 		return;
 	}

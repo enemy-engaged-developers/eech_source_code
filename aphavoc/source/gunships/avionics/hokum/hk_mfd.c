@@ -10086,8 +10086,16 @@ static void draw_text_display (screen *text_screen)
 
 void initialise_hokum_mfd (void)
 {
-	select_hokum_mfd_mode (HOKUM_MFD_MODE_ENGINE, HOKUM_MFD_LOCATION_PILOT_LHS);
-	select_hokum_mfd_mode (HOKUM_MFD_MODE_TSD, HOKUM_MFD_LOCATION_PILOT_RHS);
+	if (command_line_dynamics_engine_startup)
+	{
+		select_hokum_mfd_mode (HOKUM_MFD_MODE_OFF, HOKUM_MFD_LOCATION_PILOT_LHS);
+		select_hokum_mfd_mode (HOKUM_MFD_MODE_OFF, HOKUM_MFD_LOCATION_PILOT_RHS);
+	}
+	else
+	{
+		select_hokum_mfd_mode (HOKUM_MFD_MODE_ENGINE, HOKUM_MFD_LOCATION_PILOT_LHS);
+		select_hokum_mfd_mode (HOKUM_MFD_MODE_TSD, HOKUM_MFD_LOCATION_PILOT_RHS);
+	}
 
 	select_hokum_mfd_mode (HOKUM_MFD_MODE_MISSION, HOKUM_MFD_LOCATION_CO_PILOT_LHS);
 	select_hokum_mfd_mode (HOKUM_MFD_MODE_TSD, HOKUM_MFD_LOCATION_CO_PILOT_RHS);

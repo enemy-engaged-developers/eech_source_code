@@ -988,9 +988,16 @@ int pointer_active (void)
 
 void initialise_apache_mfd (void)
 {
-	select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
-
-	select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
+	if (command_line_dynamics_engine_startup)
+	{
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+	}
+	else
+	{
+		select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
+	}
 
 	tsd_ase_range = TSD_ASE_RANGE_5000;
 
@@ -10381,6 +10388,12 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
+/*	if (!electrical_system_active())
+	{
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+	}
+*/
 	update_pointer_position();
 
 	if (location == MFD_LOCATION_LHS)
@@ -10849,6 +10862,12 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
+/*	if (!electrical_system_active())
+	{
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+	}
+*/
 	if (location == MFD_LOCATION_LHS)
 	{
 		mfd_mode = &lhs_mfd_mode;
@@ -12157,7 +12176,8 @@ void toggle_apache_lhs_mfd_on_off (void)
 	}
 	else
 	{
-		select_next_apache_lhs_mfd ();
+		select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
+//		select_next_apache_lhs_mfd ();
 	}
 }
 
@@ -12173,7 +12193,8 @@ void toggle_apache_rhs_mfd_on_off (void)
 	}
 	else
 	{
-		select_next_apache_rhs_mfd ();
+		select_apache_mfd_mode (MFD_MODE_FLIGHT, MFD_LOCATION_RHS);
+//		select_next_apache_rhs_mfd ();
 	}
 }
 

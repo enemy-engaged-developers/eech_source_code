@@ -1292,7 +1292,7 @@ void draw_hokum_hud (void)
 
 		set_block (0, 0, hud_viewport_size - 1, hud_viewport_size - 1, clear_hud_colour);
 
-		if (!hokum_damage.head_up_display)
+		if (!hokum_damage.head_up_display && electrical_system_active())
 		{
 			set_mono_font_colour (hud_colour);
 
@@ -2059,7 +2059,7 @@ void draw_hokum_hms (void)
 	//
 	////////////////////////////////////////
 
-	if (hokum_damage.helmet_mounted_sight)
+	if (hokum_damage.helmet_mounted_sight || !electrical_system_active())
 	{
 		return;
 	}

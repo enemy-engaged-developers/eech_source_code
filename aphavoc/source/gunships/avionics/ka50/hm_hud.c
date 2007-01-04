@@ -1251,7 +1251,7 @@ void deinitialise_ka50_hud (void)
 
 void draw_ka50_hud_on_cockpit (int hud_enlarge)
 {
-	if (ka50_damage.head_up_display)
+	if (ka50_damage.head_up_display || !electrical_system_active())
 	{
 		return;
 	}
@@ -1432,7 +1432,7 @@ void draw_ka50_hud_on_texture (void)
 
 		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 
-		if (!ka50_damage.head_up_display)
+		if (!ka50_damage.head_up_display && electrical_system_active())
 		{
 			set_mono_font_colour (hud_colour);
 
@@ -2407,7 +2407,7 @@ void draw_ka50_hms (void)
 	//
 	////////////////////////////////////////
 
-	if (ka50_damage.helmet_mounted_sight)
+	if (ka50_damage.helmet_mounted_sight || !electrical_system_active())
 	{
 		return;
 	}

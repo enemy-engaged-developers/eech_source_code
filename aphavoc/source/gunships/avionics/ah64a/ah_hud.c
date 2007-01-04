@@ -3068,7 +3068,7 @@ void draw_ah64a_hud (void)
 	//
 	////////////////////////////////////////
 
-	if (ah64a_damage.ihadss)
+	if (ah64a_damage.ihadss || !electrical_system_active())
 	{
 		return;
 	}

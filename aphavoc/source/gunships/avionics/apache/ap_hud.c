@@ -3041,7 +3041,7 @@ void draw_apache_hud (void)
 	//
 	////////////////////////////////////////
 
-	if (apache_damage.ihadss)
+	if (apache_damage.ihadss || !electrical_system_active())
 	{
 		return;
 	}

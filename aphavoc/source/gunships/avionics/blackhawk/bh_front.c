@@ -108,6 +108,9 @@ static void display_messages (float x_org, float y_org)
 		y_line3,
 		y_line4;
 
+	if (!electrical_system_active())
+		return;
+
 	x_min = x_org;
 	y_min = y_org;
 	x_max = x_org + VIEWPORT_WIDTH - 0.001;
