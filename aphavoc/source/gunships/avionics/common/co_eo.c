@@ -138,7 +138,8 @@ static eo_target
 	*eo_target_root;
 
 static int
-	laser_active = FALSE;
+	laser_active = FALSE,
+	electrical_system_on = TRUE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +154,8 @@ void initialise_common_eo (void)
 	eo_on_target = FALSE;
 
 	eo_low_light = FALSE;
+	
+	electrical_system_on = !command_line_dynamics_engine_startup;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1630,4 +1633,14 @@ int laser_is_active(void)
 void set_laser_is_active(int is_active)
 {
 	laser_active = is_active;
+}
+
+int electrical_system_active(void)
+{
+	return electrical_system_on;
+}
+
+void set_electrical_system_active(int active)
+{
+	electrical_system_on = active;
 }
