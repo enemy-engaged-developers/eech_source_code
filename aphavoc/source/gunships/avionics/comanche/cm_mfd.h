@@ -162,6 +162,7 @@ extern void select_comanche_main_mfd_mode (comanche_main_mfd_modes mfd_mode, com
 
 extern void select_comanche_side_mfd_mode (comanche_side_mfd_modes mfd_mode, comanche_side_mfd_locations mfd_location);
 
+extern void select_next_comanche_side_mfd (comanche_side_mfd_locations mfd_location);
 extern void select_next_comanche_main_mfd (comanche_main_mfd_locations mfd_location);
 
 extern void select_previous_comanche_main_mfd (comanche_main_mfd_locations mfd_location);

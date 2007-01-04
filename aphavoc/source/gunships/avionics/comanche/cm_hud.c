@@ -3088,7 +3088,7 @@ char buffer[255];
 	//
 	////////////////////////////////////////
 
-	if (comanche_damage.hidss)
+	if (comanche_damage.hidss || !electrical_system_active())
 	{
 		return;
 	}

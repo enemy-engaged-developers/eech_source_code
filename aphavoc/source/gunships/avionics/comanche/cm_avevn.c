@@ -1141,32 +1141,20 @@ static void toggle_rhs_main_mfd_on_off_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void toggle_lhs_side_mfd_on_off_event (event *ev)
+static void select_lhs_side_mfd_event (event *ev)
 {
 	if (get_crew_role () == CREW_ROLE_PILOT)
-	{
-		toggle_comanche_side_mfd_on_off (COMANCHE_SIDE_MFD_LOCATION_PILOT_LHS);
-	}
+		select_next_comanche_side_mfd(COMANCHE_SIDE_MFD_LOCATION_PILOT_LHS);
 	else
-	{
-		toggle_comanche_side_mfd_on_off (COMANCHE_SIDE_MFD_LOCATION_CO_PILOT_LHS);
-	}
+		select_next_comanche_side_mfd(COMANCHE_SIDE_MFD_LOCATION_CO_PILOT_LHS);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void toggle_rhs_side_mfd_on_off_event (event *ev)
+static void select_rhs_side_mfd_event (event *ev)
 {
 	if (get_crew_role () == CREW_ROLE_PILOT)
-	{
-		toggle_comanche_side_mfd_on_off (COMANCHE_SIDE_MFD_LOCATION_PILOT_RHS);
-	}
+		select_next_comanche_side_mfd(COMANCHE_SIDE_MFD_LOCATION_PILOT_RHS);
 	else
-	{
-		toggle_comanche_side_mfd_on_off (COMANCHE_SIDE_MFD_LOCATION_CO_PILOT_RHS);
-	}
+		select_next_comanche_side_mfd(COMANCHE_SIDE_MFD_LOCATION_CO_PILOT_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1418,12 +1406,12 @@ void set_comanche_avionics_events (void)
 	set_event (DIK_LBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_lhs_main_mfd_event);
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_lhs_main_mfd_event);
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_lhs_main_mfd_on_off_event);
-	set_event (DIK_LBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lhs_side_mfd_on_off_event);
+	set_event (DIK_LBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_lhs_side_mfd_event);
 
 	set_event (DIK_RBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_rhs_main_mfd_event);
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_rhs_main_mfd_event);
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_main_mfd_on_off_event);
-	set_event (DIK_RBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_rhs_side_mfd_on_off_event);
+	set_event (DIK_RBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_side_mfd_event);
 
 	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_main_mfd_event);
 	set_event (DIK_1, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_rhs_ground_radar_main_mfd_event);

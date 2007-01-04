@@ -11891,10 +11891,20 @@ static void draw_text_display (screen *text_screen)
 
 void initialise_comanche_mfd (void)
 {
-	select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_ASE, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
-	select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_TSD, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
-	select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_ENGINE, COMANCHE_SIDE_MFD_LOCATION_PILOT_LHS);
-	select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_FLIGHT, COMANCHE_SIDE_MFD_LOCATION_PILOT_RHS);
+	if (command_line_dynamics_engine_startup)
+	{
+		select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_OFF, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
+		select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_OFF, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
+		select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_OFF, COMANCHE_SIDE_MFD_LOCATION_PILOT_LHS);
+		select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_OFF, COMANCHE_SIDE_MFD_LOCATION_PILOT_RHS);
+	}
+	else
+	{
+		select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_ASE, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
+		select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_TSD, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
+		select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_ENGINE, COMANCHE_SIDE_MFD_LOCATION_PILOT_LHS);
+		select_comanche_side_mfd_mode (COMANCHE_SIDE_MFD_MODE_FLIGHT, COMANCHE_SIDE_MFD_LOCATION_PILOT_RHS);
+	}
 
 	select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_MISSION, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
 	select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_TSD, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_RHS);
@@ -14140,6 +14150,39 @@ void select_comanche_side_mfd_mode (comanche_side_mfd_modes mfd_mode, comanche_s
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static comanche_side_mfd_modes get_next_side_mfd_mode (comanche_side_mfd_modes mfd_mode, comanche_side_mfd_locations mfd_location)
+{
+	comanche_side_mfd_modes
+		next_mfd_mode;
+
+	ASSERT (comanche_side_mfd_mode_valid (mfd_mode));
+	ASSERT (comanche_side_mfd_location_valid (mfd_location));
+	
+	next_mfd_mode = mfd_mode++;
+		next_mfd_mode++;
+
+	if (get_side_mfd_damage(mfd_location))
+	{
+		if (mfd_mode == COMANCHE_SIDE_MFD_MODE_DAMAGED)
+			next_mfd_mode = COMANCHE_SIDE_MFD_MODE_OFF;
+		else
+			next_mfd_mode = COMANCHE_SIDE_MFD_MODE_DAMAGED;
+	}
+	else
+	{
+		if (next_mfd_mode == NUM_COMANCHE_SIDE_MFD_MODES)
+			next_mfd_mode = COMANCHE_SIDE_MFD_MODE_OFF;
+		else if (next_mfd_mode == COMANCHE_SIDE_MFD_MODE_DAMAGED)
+			next_mfd_mode++;
+	}
+
+	return next_mfd_mode;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static comanche_main_mfd_modes get_next_main_mfd_mode (comanche_main_mfd_modes mfd_mode, comanche_main_mfd_locations mfd_location)
 {
 	comanche_main_mfd_modes
@@ -14398,6 +14441,34 @@ static comanche_main_mfd_modes get_previous_main_mfd_mode (comanche_main_mfd_mod
 	}
 
 	return (previous_mfd_mode);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_next_comanche_side_mfd (comanche_side_mfd_locations mfd_location)
+{
+	comanche_side_mfd_modes
+		*mfd_mode_ptr1,
+		*mfd_mode_ptr2,
+		next_mfd_mode;
+
+	ASSERT (comanche_side_mfd_location_valid (mfd_location));
+
+	mfd_mode_ptr1 = side_mfd_mode_ptrs[mfd_location];
+	mfd_mode_ptr2 = opposite_side_mfd_mode_ptrs[mfd_location];
+	next_mfd_mode = get_next_side_mfd_mode (*mfd_mode_ptr1, mfd_location);
+
+	if (next_mfd_mode != COMANCHE_SIDE_MFD_MODE_DAMAGED && next_mfd_mode != COMANCHE_SIDE_MFD_MODE_OFF)
+	{
+		if (next_mfd_mode == *mfd_mode_ptr2)
+			next_mfd_mode = get_next_side_mfd_mode (next_mfd_mode, mfd_location);
+
+		ASSERT (next_mfd_mode != *mfd_mode_ptr2);
+	}
+
+	select_comanche_side_mfd_mode (next_mfd_mode, mfd_location);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
