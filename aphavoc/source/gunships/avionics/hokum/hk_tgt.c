@@ -237,7 +237,8 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 				if (!command_line_manual_laser_radar)
 					activate_common_ground_radar ();
 
-				select_hokum_ground_radar_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_hokum_ground_radar_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -258,7 +259,8 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 				if (!command_line_manual_laser_radar)
 					activate_common_air_radar ();
 
-				select_hokum_air_radar_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_hokum_air_radar_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -277,7 +279,8 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_hokum_eo_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_hokum_eo_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -296,7 +299,8 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_hokum_eo_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_hokum_eo_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -325,7 +329,8 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
 				}
 
-				select_hokum_eo_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_hokum_eo_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}

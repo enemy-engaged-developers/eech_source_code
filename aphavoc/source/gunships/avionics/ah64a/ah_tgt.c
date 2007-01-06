@@ -264,7 +264,8 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_ah64a_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_ah64a_tads_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -283,7 +284,8 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_ah64a_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_ah64a_tads_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
@@ -302,7 +304,8 @@ void select_ah64a_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_ah64a_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_ah64a_tads_mfd ();
 
 				hud_mode = HUD_MODE_WEAPON;
 			}

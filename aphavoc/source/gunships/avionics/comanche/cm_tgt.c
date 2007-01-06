@@ -232,7 +232,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 				if (!command_line_manual_laser_radar)
 					activate_common_ground_radar ();
 
-				select_comanche_ground_radar_main_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_comanche_ground_radar_main_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -255,7 +256,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 				if (!command_line_manual_laser_radar)
 					activate_common_air_radar ();
 
-				select_comanche_air_radar_main_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_comanche_air_radar_main_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -276,7 +278,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				activate_common_eo ();
 
-				select_comanche_tads_main_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_comanche_tads_main_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -297,7 +300,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				activate_common_eo ();
 
-				select_comanche_tads_main_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_comanche_tads_main_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -318,7 +322,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 				activate_common_eo ();
 
-				select_comanche_tads_main_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_comanche_tads_main_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
