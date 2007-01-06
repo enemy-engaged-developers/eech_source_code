@@ -10559,6 +10559,19 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
+			switch (target_acquisition_system)
+			{
+			case TARGET_ACQUISITION_SYSTEM_FLIR:
+				*mfd_mode = MFD_MODE_FLIR;
+				break;
+			case TARGET_ACQUISITION_SYSTEM_DTV:
+				*mfd_mode = MFD_MODE_DTV;
+				break;
+			case TARGET_ACQUISITION_SYSTEM_DVO:
+				*mfd_mode = MFD_MODE_DVO;
+				break;
+			}
+			
 			if ((d3d_can_render_to_texture) && (!apache_damage.flir))
 			{
 				ASSERT (eo_3d_texture_screen);
