@@ -1133,6 +1133,9 @@ void slave_common_eo_to_current_target (void)
 	matrix3x3
 		m;
 
+	int
+		target_in_fov = FALSE;
+
 	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	get_eo_centred_viewpoint (&vp);
@@ -1149,13 +1152,20 @@ void slave_common_eo_to_current_target (void)
 
 		aiming_eo_azimuth = atan2 (offset_vector.x, offset_vector.z);
 
-		aiming_eo_azimuth = bound (aiming_eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+		if (aiming_eo_azimuth < eo_min_azimuth || aiming_eo_azimuth > eo_max_azimuth)
+			aiming_eo_azimuth = bound (aiming_eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+		else
+			target_in_fov = TRUE;
 
 		flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
 
 		aiming_eo_elevation = atan2 (offset_vector.y, flat_range);
 
-		aiming_eo_elevation = bound (aiming_eo_elevation, eo_min_elevation, eo_max_elevation);
+		if (aiming_eo_elevation < eo_min_azimuth || aiming_eo_elevation > eo_max_azimuth)
+		{
+			aiming_eo_elevation = bound (aiming_eo_elevation, eo_min_elevation, eo_max_elevation);
+			target_in_fov = FALSE;
+		}
 	}
 	else
 	{
@@ -1205,13 +1215,18 @@ void slave_common_eo_to_current_target (void)
 			)
 			{
 				eo_on_target = TRUE;
-				if (!command_line_manual_laser_radar)
-					set_laser_is_active(TRUE);
+				
 			}
-			else
-				set_laser_is_active(FALSE);
 		}
 	}
+	
+	if (target_in_fov && eo_on_target)
+	{
+		if (!command_line_manual_laser_radar)
+			set_laser_is_active(TRUE);
+	}
+	else
+		set_laser_is_active(FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
