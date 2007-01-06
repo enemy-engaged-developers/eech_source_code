@@ -10463,6 +10463,11 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
+	if (*mfd_mode == MFD_MODE_AIR_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+		*mfd_mode = MFD_MODE_GROUND_RADAR;
+	else if (*mfd_mode == MFD_MODE_GROUND_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+		*mfd_mode = MFD_MODE_AIR_RADAR;
+
 	////////////////////////////////////////
 	//
 	// draw MFD display
