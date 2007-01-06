@@ -11867,9 +11867,6 @@ void select_apache_ground_radar_mfd (void)
 		return;
 	}
 
-	if (lhs_mfd_mode == MFD_MODE_TSD || rhs_mfd_mode == MFD_MODE_TSD)
-		return;
-
 	if ((lhs_mfd_mode == MFD_MODE_OFF) && (!apache_damage.lh_mfd))
 	{
 		select_apache_mfd_mode (MFD_MODE_GROUND_RADAR, MFD_LOCATION_LHS);
@@ -12005,7 +12002,7 @@ void select_apache_tads_mfd (void)
 	}
 
 	if (tsd_tads_underlay_active)
-		return;
+		tsd_underlay = TSD_UNDERLAY_NONE;
 
 	if ((lhs_mfd_mode == MFD_MODE_FLIR) || (lhs_mfd_mode == MFD_MODE_DTV) || (lhs_mfd_mode == MFD_MODE_DVO))
 	{
