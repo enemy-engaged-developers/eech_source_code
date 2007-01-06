@@ -8310,6 +8310,25 @@ void draw_ah64a_mfd_on_texture (mfd_locations location)
 	//
 	////////////////////////////////////////
 
+	if (*mfd_mode == MFD_MODE_FLIR
+		|| *mfd_mode == MFD_MODE_DTV
+		|| *mfd_mode == MFD_MODE_DVO)
+	{
+		// switch MFD mode to actual targeting system
+		switch (target_acquisition_system)
+		{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			*mfd_mode = MFD_MODE_FLIR;
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+			*mfd_mode = MFD_MODE_DTV;
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DVO:
+			*mfd_mode = MFD_MODE_DVO;
+			break;
+		}
+	}
+
 	switch (*mfd_mode)
 	{
 		////////////////////////////////////////
