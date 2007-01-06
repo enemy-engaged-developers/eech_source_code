@@ -455,6 +455,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 		if (strcmp(p, "manual_laser/radar") == 0) 		command_line_manual_laser_radar = d1;
+		if (strcmp(p, "targeting_system_auto_page") == 0) 		command_line_targeting_system_auto_page = d1;
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
 ////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;
@@ -623,6 +624,7 @@ void dump_ini_file(void)
 	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"manual_laser/radar=%d   # have to manually enable and disable radar and laser, def = 0 (off)\n",command_line_manual_laser_radar);
+	fprintf(f,"targeting_system_auto_page = %d   # changing targeting system will also bring up the targeting systems MFD page. def = 1 (on)\n", command_line_targeting_system_auto_page);
 	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking

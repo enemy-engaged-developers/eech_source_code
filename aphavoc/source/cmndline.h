@@ -150,6 +150,7 @@ extern int
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322
 	command_line_manual_laser_radar,						// arneh 2006-11-06
+	command_line_targeting_system_auto_page,				// arneh 2007-01-06
 	command_line_framerate,										// VJ 030324
 //Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
 	command_line_downwash,										// Xhit 030328, VJ 030512 changed

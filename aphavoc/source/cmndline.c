@@ -173,6 +173,7 @@ int
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_manual_laser_radar						= FALSE,	// arneh 2006-11-06
+	command_line_targeting_system_auto_page				= TRUE,     // arneh 2007-01-06
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
 	command_line_downwash										= FALSE,	//VJ 050308 changed to false for MP, // Xhit 030328, VJ 030512 changed

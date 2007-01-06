@@ -234,7 +234,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 				if (!command_line_manual_laser_radar)
 					activate_common_ground_radar ();
 
-				select_apache_ground_radar_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_apache_ground_radar_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -259,7 +260,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 				if (!command_line_manual_laser_radar)
 					activate_common_air_radar ();
 
-				select_apache_air_radar_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_apache_air_radar_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -281,7 +283,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_apache_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_apache_tads_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -303,7 +306,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_apache_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_apache_tads_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
@@ -325,7 +329,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_apache_tads_mfd ();
+				if (command_line_targeting_system_auto_page)
+					select_apache_tads_mfd ();
 
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
