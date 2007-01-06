@@ -3221,7 +3221,7 @@ void draw_overlaid_havoc_mfd (float x_org, float y_org, float size)
 	//
 	////////////////////////////////////////
 
-	if (get_global_unscaled_displays ())
+/*	if (get_global_unscaled_displays ())
 	{
 		float
 			org_offset;
@@ -3243,7 +3243,7 @@ void draw_overlaid_havoc_mfd (float x_org, float y_org, float size)
 		mfd_screen_x_max = mfd_screen_x_org + mfd_screen_half_size - 0.001;
 		mfd_screen_y_max = mfd_screen_y_org + mfd_screen_half_size - 0.001;
 	}
-	else
+	else */
 	{
 		mfd_screen_size = size * full_screen_width * (1.0 / 640.0);
 
@@ -3499,13 +3499,14 @@ void draw_overlaid_havoc_mfd (float x_org, float y_org, float size)
 
 			set_d3d_texture_wrapping (0, FALSE);
 
+/*
 			if ((application_video_width == 640) || (get_global_unscaled_displays ()))
 			{
 				set_d3d_texture_mag_filtering (FALSE);
 				set_d3d_texture_min_filtering (FALSE);
 				set_d3d_texture_mip_filtering (FALSE);
 			}
-			else
+			else */
 			{
 				set_d3d_texture_mag_filtering (TRUE);
 				set_d3d_texture_min_filtering (TRUE);
