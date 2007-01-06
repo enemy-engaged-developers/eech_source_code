@@ -5254,11 +5254,8 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 	// auto-countermeasures
 	//
 
-	if (get_global_auto_counter_measures ())
+	if (get_global_auto_counter_measures() || get_global_ase_auto_page())
 	{
-		s = "AUTO";
-
-		width = get_mono_font_string_width (s);
 
 		if (draw_large_mfd)
 		{
@@ -5269,19 +5266,29 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 			y_adjust = -19.0;
 		}
 
-		set_2d_mono_font_position (-0.8, -1.0);
+		if (get_global_auto_counter_measures())
+		{
+			s = "AUTO C/M";
+			width = get_mono_font_string_width (s);
+			
+			set_2d_mono_font_position (0.8, -1.0);
+			set_mono_font_rel_position (-width, y_adjust);
+	
+			print_mono_font_string(s);
+		}
 
-		set_mono_font_rel_position (1.0, y_adjust);
-
-		print_mono_font_string (s);
-
-		set_2d_mono_font_position (0.8, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string (s);
+		if (get_global_ase_auto_page())
+		{
+			s = "AUTO PAGE";
+			width = get_mono_font_string_width (s);
+	
+			set_2d_mono_font_position (0.9, 0.9);
+			set_mono_font_rel_position (-width, 5.0);
+	
+			print_mono_font_string (s);
+		}
 	}
-
+	
 	//
 	// chaff
 	//
@@ -10896,7 +10903,9 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 	//
 	////////////////////////////////////////
 
-	if (get_global_unscaled_displays ())
+	debug_log("unscaled: %d", get_global_unscaled_displays());
+
+/*	if (get_global_unscaled_displays ())
 	{
 		float
 			org_offset;
@@ -10926,7 +10935,7 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 		mfd_screen_x_max = mfd_screen_x_org + mfd_screen_half_size - 0.001;
 		mfd_screen_y_max = mfd_screen_y_org + mfd_screen_half_size - 0.001;
 	}
-	else
+	else*/
 	{
 		mfd_screen_size = size * full_screen_width * (1.0 / 640.0);
 
@@ -11322,13 +11331,13 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 
 			set_d3d_texture_wrapping (0, FALSE);
 
-			if ((application_video_width == 640) || (get_global_unscaled_displays ()))
+/*			if ((application_video_width == 640) || (get_global_unscaled_displays ()))
 			{
 				set_d3d_texture_mag_filtering (FALSE);
 				set_d3d_texture_min_filtering (FALSE);
 				set_d3d_texture_mip_filtering (FALSE);
 			}
-			else
+			else */
 			{
 				set_d3d_texture_mag_filtering (TRUE);
 				set_d3d_texture_min_filtering (TRUE);
