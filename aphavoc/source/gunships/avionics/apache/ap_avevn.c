@@ -978,7 +978,7 @@ void set_apache_avionics_events (void)
 	// select target acquisition system
 	//
 
-	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
+	set_event (DIK_DELETE, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_target_acquisition_system_off_event);
 
 	set_event (DIK_INSERT, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_ground_radar_event);
 
@@ -1062,9 +1062,9 @@ void set_apache_avionics_events (void)
 
 	set_event (DIK_DECIMAL, MODIFIER_NONE, KEY_STATE_DOWN, select_next_pfz_event);
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_pfz_event);
-	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, deselect_pfz_event);
+	set_event (DIK_DECIMAL, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, deselect_pfz_event);
 
-	set_event (DIK_NUMPAD3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, delete_current_pfz_event);
+	set_event (DIK_DECIMAL, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, delete_current_pfz_event);
 
 	//
 	// miscellaneous
