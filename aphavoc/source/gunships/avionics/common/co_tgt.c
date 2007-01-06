@@ -1072,7 +1072,7 @@ void play_common_cpg_target_acquisition_system_speech (target_acquisition_system
 	{
 		if ((new_system != TARGET_ACQUISITION_SYSTEM_GROUND_RADAR) && (new_system != TARGET_ACQUISITION_SYSTEM_AIR_RADAR))
 		{
-			if (!command_line_manual_laser_radar && (old_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR) || (old_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR))
+			if (!command_line_manual_laser_radar && (old_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR || old_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR))
 			{
 				play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_RADAR_OFF);
 			}
