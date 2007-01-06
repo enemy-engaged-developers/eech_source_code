@@ -1205,7 +1205,11 @@ void slave_common_eo_to_current_target (void)
 			)
 			{
 				eo_on_target = TRUE;
+				if (!command_line_manual_laser_radar)
+					set_laser_is_active(TRUE);
 			}
+			else
+				set_laser_is_active(FALSE);
 		}
 	}
 }
