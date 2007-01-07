@@ -235,6 +235,14 @@ static float
 static int
 	tsd_draw_threat_line_status;
 
+#define TADS_LASE_FLASH_RATE  (0.5)
+
+static float
+	tads_lase_flash_timer;
+	
+static int
+	tads_display_lase_status;
+
 #define ASE_THREAT_LINE_FLASH_RATE	(0.1)
 
 static float
@@ -1009,6 +1017,9 @@ void initialise_apache_mfd (void)
 	next_free_nfz = 0;
 	
 	radar_zoomed = FALSE;
+
+	tads_lase_flash_timer = TADS_LASE_FLASH_RATE;
+	tads_display_lase_status = FALSE;
 
 	tsd_threat_line_flash_timer = TSD_THREAT_LINE_FLASH_RATE;
 	tsd_draw_threat_line_status = 0;
@@ -3468,10 +3479,24 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	print_mono_font_string (s);
 
 	// launch mode
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
-		s = "LOAL-HI";
-	else
-		s = "LOBL";
+	s = NULL;
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE || ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
+	{
+		float flight_time = get_apache_missile_flight_time ();
+
+		if (flight_time > 0.01)
+		{
+			flight_time = bound (flight_time, 0.0, 99.9);
+			sprintf (buffer, "TOF:%.0f", flight_time);
+			s = buffer;
+		}
+	}
+
+	if (!s)
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+			s = "LOAL-HI";
+		else
+			s = "LOBL";
 
 	set_2d_mono_font_position (0.37, -0.83);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
@@ -3693,6 +3718,24 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		print_mono_font_string ("LOCKED");
 	}
 
+	if (laser_is_active())
+	{
+		tads_lase_flash_timer -= get_delta_time();
+		
+		if (tads_lase_flash_timer < 0.0)
+		{
+			tads_lase_flash_timer = TADS_LASE_FLASH_RATE;
+
+			tads_display_lase_status ^= 1;
+		}
+		
+		if (tads_display_lase_status)
+		{
+			set_2d_mono_font_position (0.2, -0.25);
+			set_mono_font_rel_position (0, 0);
+			print_mono_font_string ("L");
+		}
+	}
 
 	draw_high_action_display (target, TRUE);
 
