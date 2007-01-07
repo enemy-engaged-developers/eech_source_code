@@ -397,7 +397,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 				switch (raw->missile_phase)
 				{
 				case MISSILE_PHASE1:
-					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 800.0)
+					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 900.0)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
@@ -414,7 +414,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 					
 					raw->missile_phase = MISSILE_PHASE2;
 				case MISSILE_PHASE2:
-					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 600.0)
+					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 750.0)
 					{
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
