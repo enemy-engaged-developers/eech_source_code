@@ -206,7 +206,6 @@ void initialise_flight_dynamics (entity *en)
 						default:
             case GUNSHIP_TYPE_APACHE:
             {
-
                initialise_apache_advanced_dynamics (en);
 
                break;
@@ -3356,7 +3355,7 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	}
 
 	// double throttle down with RPM under 62% shuts down engine
-	if (engine_rpm->value < 62.0 && engine_rpm->max == 60.0 && rpm_delta < 0.0)
+	if (engine_rpm->value < 62.0 && engine_rpm->max <= 60.0 && rpm_delta < 0.0)
 	{
 		if (double_count[engine_number-1] < 0)
 		{
