@@ -128,6 +128,23 @@ static rgb_alpha_masked_sprite_data
 #define LAMP1_VIEWPORT_TEXTURE_X_ORG	(LAMP1_TEXTURE_SIZE / 2)
 #define LAMP1_VIEWPORT_TEXTURE_Y_ORG	(LAMP1_TEXTURE_SIZE / 2)
 
+static object_3d_instance
+	*virtual_cockpit_level1_inst3d,
+	*virtual_cockpit_level2_inst3d,
+	*virtual_cockpit_level3_inst3d,
+	*virtual_cockpit_fillet_level1_inst3d,
+	*virtual_cockpit_fillet_level2_inst3d,
+	*virtual_cockpit_fillet_level3_inst3d,
+	*virtual_cockpit_main_rotor_inst3d,
+	*virtual_cockpit_adi_inst3d,
+	*virtual_cockpit_large_adi_inst3d,
+	*virtual_cockpit_compass_inst3d,
+	*virtual_cockpit_instrument_needles_inst3d,
+	*virtual_cockpit_instrument_large_needles_inst3d,
+	*virtual_cockpit_upfront_display_inst3d,
+	*virtual_cockpit_lhs_mfd_inst3d,
+	*virtual_cockpit_rhs_mfd_inst3d,
+	*virtual_cockpit_display_view_mfd_inst3d;
 
 static env_2d
 	*lamp1_env;
