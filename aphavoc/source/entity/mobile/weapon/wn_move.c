@@ -405,8 +405,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 					if (dive_ratio > -0.15)
 					{
-						// intial phase climb at 6%
-						float new_aim_y = weapon_position->y + range * 0.06;
+						// intial phase climb at 7%
+						float new_aim_y = weapon_position->y + range * 0.07;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
 						
 						break;
