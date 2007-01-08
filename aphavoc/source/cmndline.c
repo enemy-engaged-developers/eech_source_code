@@ -81,7 +81,7 @@ int
 	command_line_dynamics_advanced_engine_model			= TRUE,  //Werewolf 5 Feb 06
 	command_line_dynamics_advanced_flight_model			= FALSE,  //Werewolf 3 Jan 04
 	command_line_dynamics_engine_startup                = FALSE,  // arneh - july 06
-	command_line_report_to_masterserver						= TRUE,  //Werewolf 2 Jan 04
+	command_line_report_to_masterserver						= FALSE,  //Werewolf 2 Jan 04 (arneh changed default to off - jan 2007)
 	command_line_debug_input									= FALSE,
 	command_line_debug_log_timing_info						= TRUE,
 	command_line_dump_session									= FALSE,
