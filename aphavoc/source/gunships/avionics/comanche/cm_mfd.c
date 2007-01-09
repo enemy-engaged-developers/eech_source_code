@@ -13871,7 +13871,7 @@ static comanche_main_mfd_modes get_default_main_mfd_mode (comanche_main_mfd_loca
 		case COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS:
 		////////////////////////////////////////
 		{
-			mfd_mode = COMANCHE_MAIN_MFD_MODE_ASE;
+			mfd_mode = COMANCHE_MAIN_MFD_MODE_ENGINE;
 
 			break;
 		}
@@ -13887,7 +13887,7 @@ static comanche_main_mfd_modes get_default_main_mfd_mode (comanche_main_mfd_loca
 		case COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS:
 		////////////////////////////////////////
 		{
-			mfd_mode = COMANCHE_MAIN_MFD_MODE_ASE;
+			mfd_mode = COMANCHE_MAIN_MFD_MODE_ENGINE;
 
 			break;
 		}

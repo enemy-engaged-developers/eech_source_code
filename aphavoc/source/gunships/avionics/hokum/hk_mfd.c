@@ -12133,7 +12133,7 @@ static hokum_mfd_modes get_default_mfd_mode (hokum_mfd_locations mfd_location)
 		case HOKUM_MFD_LOCATION_PILOT_LHS:
 		////////////////////////////////////////
 		{
-			mfd_mode = HOKUM_MFD_MODE_ASE;
+			mfd_mode = HOKUM_MFD_MODE_ENGINE;
 
 			break;
 		}
@@ -12149,7 +12149,7 @@ static hokum_mfd_modes get_default_mfd_mode (hokum_mfd_locations mfd_location)
 		case HOKUM_MFD_LOCATION_CO_PILOT_LHS:
 		////////////////////////////////////////
 		{
-			mfd_mode = HOKUM_MFD_MODE_ASE;
+			mfd_mode = HOKUM_MFD_MODE_WEAPON;
 
 			break;
 		}
