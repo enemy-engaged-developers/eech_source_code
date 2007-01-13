@@ -408,8 +408,6 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 		{
 			int loal_mode = get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
 			
-			debug_log("LOAL: %d, launcher: %x, gunship: %x", loal_mode, launcher, get_gunship_entity());
-			
 			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 			{
 				set_force_local_entity_create_stack_attributes (TRUE);
