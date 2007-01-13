@@ -242,6 +242,7 @@ void attack_guide_fly_to_cover_reached (entity *en)
 void attack_guide_take_cover_reached (entity *en)
 {
 	entity
+		*last_weapon,
 		*group,
 		*leader,
 		*task,
@@ -316,6 +317,20 @@ void attack_guide_take_cover_reached (entity *en)
 			set_client_server_entity_int_value (aggressor, INT_TYPE_SELECTED_WEAPON, best_weapon);
 		}
 	}
+
+	//
+	// wait if it still has guided AG missiles fired at the same target
+	//
+
+	last_weapon = get_local_entity_first_child (aggressor, LIST_TYPE_LAUNCHED_WEAPON);
+	if (last_weapon
+		&& weapon_database[best_weapon].weapon_class == WEAPON_CLASS_AIR_TO_SURFACE
+		&& weapon_database[best_weapon].guidance_type != WEAPON_GUIDANCE_TYPE_NONE
+		&& get_local_entity_parent(last_weapon, LIST_TYPE_TARGET) == target)
+	{
+		return;
+	}
+	
 
 	//
 	// notify the group leader that the cover position has been reached
@@ -1287,7 +1302,7 @@ void set_attack_guide_fire_position (entity *en)
 
 			get_local_entity_vec3d (aggressor, VEC3D_TYPE_POSITION, &position);
 
-			position.y += INITIAL_BOB_UP_DISTANCE;
+//			position.y += INITIAL_BOB_UP_DISTANCE;
 		
 			set_client_server_guide_entity_new_position (en, &position, NULL);
 
