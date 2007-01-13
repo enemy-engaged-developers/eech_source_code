@@ -9177,6 +9177,8 @@ void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int dr
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
+	update_pointer_position();
+
 	if (location == MFD_LOCATION_LHS)
 	{
 		mfd_mode = &lhs_mfd_mode;
@@ -10930,12 +10932,8 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
-/*	if (!electrical_system_active())
-	{
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
-	}
-*/
+	update_pointer_position();
+
 	if (location == MFD_LOCATION_LHS)
 	{
 		mfd_mode = &lhs_mfd_mode;
@@ -10963,8 +10961,6 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 	// scale position and size wrt screen resolution
 	//
 	////////////////////////////////////////
-
-	debug_log("unscaled: %d", get_global_unscaled_displays());
 
 /*	if (get_global_unscaled_displays ())
 	{
