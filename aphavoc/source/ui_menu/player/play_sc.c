@@ -1536,6 +1536,7 @@ void load_player_list (void)
 					memcpy(&new_player->side_log[side], &v1_log, sizeof(v1_log));
 					
 					// reset the kill values which didn't exist and now have been overwritten by later values
+					new_player->side_log[side].helicopters_lost = new_player->side_log[side].kills.deaths;
 					new_player->side_log[side].kills.fixed_wing = 0;
 					new_player->side_log[side].kills.helicopter = new_player->side_log[side].kills.air;  // assume all airkills are helicopters... most probably are
 					new_player->side_log[side].kills.air_defence = 0;
