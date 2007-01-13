@@ -1469,8 +1469,7 @@ void process_message_attack_my_target (entity *en, entity *wingman)
 void process_message_attack_pfz(entity *en, entity *wingman)
 {
 	entity
-		*group,
-		*target;
+		*group;
 
 	ASSERT (en);
 	ASSERT (wingman);
