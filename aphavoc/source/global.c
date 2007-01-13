@@ -160,9 +160,10 @@ global_options_data
 
 static int
 	// Jabberwock 040915 Minor version included in the number so it is recognized by MP server
+	application_version_number = ( MAJOR_VERSION << 16 ) | (DATA_VERSION << 8) | MINOR_VERSION;
 
-////041009 Moje Gives us trouble with saved games :( Original resotred.            application_version_number = ( MAJOR_VERSION << 16 ) | (DATA_VERSION << 8) | MINOR_VERSION;
-	application_version_number = ( MAJOR_VERSION << 8 ) | DATA_VERSION;
+////041009 Moje Gives us trouble with saved games :( Original resotred.            
+//	application_version_number = ( MAJOR_VERSION << 8 ) | DATA_VERSION;
 
 #else
 
