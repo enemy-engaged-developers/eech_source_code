@@ -616,8 +616,10 @@ void inc_player_log_missions_flown (int side, player_log_type *log)
 
 	log->side_log [side].missions_flown += 1;
 
-	if (type < NUM_GUNSHIP_TYPES)
+	if (type >= 0 && type < NUM_GUNSHIP_TYPES)
 		log->side_log [side].gunship_missions[type] += 1;
+	else
+		debug_log("Uknown gunship type: %d", type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -993,11 +995,12 @@ void update_player_log_mission_success_rate (int side, player_log_type *log, flo
 
 	total_success_rate += success_rate;
 
-	missions_flown += 1;
+//	arneh - commented out this, as mission count has already been updated by inc_player_log_missions_flown
+//	missions_flown += 1;
 
 	log->side_log [side].mission_success_rate = (total_success_rate / missions_flown);
 
-	log->side_log [side].missions_flown = missions_flown;
+//	log->side_log [side].missions_flown = missions_flown;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
