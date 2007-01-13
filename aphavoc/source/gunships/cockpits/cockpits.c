@@ -596,6 +596,9 @@ void draw_cockpit (cockpit_panels panel)
 
 			draw_blackhawk_cockpit (panel);
 
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
+
 			break;
 		}
 		////Moje 030518 End
@@ -607,6 +610,9 @@ void draw_cockpit (cockpit_panels panel)
 			set_pilots_full_screen_params (FALSE);
 
 			draw_hind_cockpit (panel);
+
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
 
 			break;
 		}
@@ -620,6 +626,9 @@ void draw_cockpit (cockpit_panels panel)
 
 			draw_ah64a_cockpit (panel);
 
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
+
 			break;
 		}
 		////////////////////////////////////////
@@ -629,6 +638,9 @@ void draw_cockpit (cockpit_panels panel)
 			set_pilots_full_screen_params (FALSE);
 
 			draw_ka50_cockpit (panel);
+
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
 
 			break;
 		}
