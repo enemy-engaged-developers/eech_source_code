@@ -123,6 +123,8 @@ extern padlock_modes
 
 extern void get_position_nose_relative_position( vec3d *position, vec3d *r );
 
+extern void draw_night_vision_mask (void);
+
 extern enum OBJECT_3D_VISIBILITY get_position_nose_relative_coordinates ( vec3d *position, float *x, float *y );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
