@@ -363,16 +363,20 @@ static void kill_local (entity *en)
 
 		task = get_local_entity_primary_task (en);
 
-		if (task)
+		if (task && get_local_entity_int_value (task, INT_TYPE_TASK_STATE) == TASK_STATE_COMPLETED)
 		{
-			if (get_local_entity_int_value (task, INT_TYPE_TASK_STATE) == TASK_STATE_COMPLETED)
-			{
-				//
-				// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
-				//
-
-				notify_gunship_entity_mission_terminated (en, task);
-			}
+			// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
+			notify_gunship_entity_mission_terminated (en, task);
+		}
+		else if (!player_mission_logged())
+		{
+			int side = get_global_gunship_side();
+			player_log_type* log = get_current_player_log();
+		
+			debug_log("Helicopter destroyed, logging pilot mission");
+			
+			inc_player_log_missions_flown(side, log);
+			update_player_log_mission_success_rate (side, log, 0.0);	
 		}
 	}
 

@@ -87,6 +87,17 @@ entity
 static void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality_types locality, sound_sample_indices looping_effect, sound_sample_indices wind_up_effect, sound_sample_indices wind_down_effect, sound_sample_indices turbine_effect, sound_sample_indices rotorslap_effect);
 static float kill_sound_effect(entity* en, entity_sub_types type);
 
+static int mission_logged = FALSE;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int player_mission_logged(void)
+{
+	return mission_logged;	
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,14 +290,8 @@ void assign_entity_to_user (entity *en)
 		if (primary_task
 			&& get_local_entity_int_value (primary_task, INT_TYPE_TASK_STATE) == TASK_STATE_COMPLETED)
 		{
-			//
-			// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
-			//
-
 			notify_gunship_entity_mission_terminated (gunship_entity, primary_task);
 		}
-		else if (!alive)
-			inc_player_log_missions_flown(side, log);
 
 		if (alive)
 		{
@@ -402,6 +407,7 @@ void assign_entity_to_user (entity *en)
 		// backup pilot log
 
 		backup_current_player_log();
+		mission_logged = FALSE;
 
 		//
 		// Initialise avionics, cockpits and flight model
@@ -665,6 +671,7 @@ void notify_gunship_entity_mission_terminated (entity *en, entity *task)
 
 	rank = PILOT_RANK_NONE;
 
+
 	points = get_local_entity_int_value (task, INT_TYPE_TASK_SCORE);
 
 	// increment player experience points
@@ -795,6 +802,8 @@ void notify_gunship_entity_mission_terminated (entity *en, entity *task)
 	//
 
 	autoselect_debriefing_page (task, TRUE);
+	
+	mission_logged = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
