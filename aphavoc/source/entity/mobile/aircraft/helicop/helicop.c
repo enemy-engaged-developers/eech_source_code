@@ -293,21 +293,24 @@ void assign_entity_to_user (entity *en)
 			notify_gunship_entity_mission_terminated (gunship_entity, primary_task);
 		}
 
-		if (alive)
+		if (get_game_type() != GAME_TYPE_FREE_FLIGHT)
 		{
-			// if landed somewhere other than a keysite (base), then it's a lost helicopter
-			if (!get_local_entity_int_value(gunship_entity, INT_TYPE_AIRBORNE_AIRCRAFT)
-				&& !get_keysite_currently_landed_at())
+			if (alive)
 			{
-				debug_log("lost gunship - landed outside base");
+				// if landed somewhere other than a keysite (base), then it's a lost helicopter
+				if (!get_local_entity_int_value(gunship_entity, INT_TYPE_AIRBORNE_AIRCRAFT)
+					&& !get_keysite_currently_landed_at())
+				{
+					debug_log("lost gunship - landed outside base");
+					inc_player_log_helicopters_lost(side, log);
+				}
+			}
+			else
+			{
+				debug_log("pilot killed");
+				inc_player_log_deaths(side, log);			
 				inc_player_log_helicopters_lost(side, log);
 			}
-		}
-		else
-		{
-			debug_log("pilot killed");
-			inc_player_log_deaths(side, log);			
-			inc_player_log_helicopters_lost(side, log);
 		}
 
 		//

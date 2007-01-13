@@ -368,7 +368,7 @@ static void kill_local (entity *en)
 			// Only award points for COMPLETE missions (also means player can't rejoin that mission and get points again)
 			notify_gunship_entity_mission_terminated (en, task);
 		}
-		else if (!player_mission_logged())
+		else if (!player_mission_logged() && get_game_type() != GAME_TYPE_FREE_FLIGHT)
 		{
 			int side = get_global_gunship_side();
 			player_log_type* log = get_current_player_log();
