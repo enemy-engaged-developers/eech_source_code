@@ -552,6 +552,9 @@ void draw_cockpit (cockpit_panels panel)
 			set_pilots_full_screen_params (FALSE);
 
 			draw_apache_cockpit (panel);
+			
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
 
 			break;
 		}
@@ -562,6 +565,9 @@ void draw_cockpit (cockpit_panels panel)
 			set_pilots_full_screen_params (FALSE);
 
 			draw_havoc_cockpit (panel);
+
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
 
 			break;
 		}
