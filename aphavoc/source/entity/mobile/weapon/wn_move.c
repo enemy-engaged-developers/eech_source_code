@@ -468,10 +468,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	cos_turn_demand = get_3d_unit_vector_dot_product (&raw->mob.zv, &uvec_intercept_point);
 
 	//
-	// check for overshot target
+	// check for overshot target (but only when speed is high enough, otherwise intercept point might be
+	// unusually much offset
 	//
 
-	if (cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
+	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
 		set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
 
@@ -1175,7 +1176,8 @@ void weapon_movement (entity *en)
 	}
 	else
 	{
-		if (!weapon_database[raw->mob.sub_type].hellfire_flight_profile)
+		// unless missile is a LOAL hellfire in phase 1 or 2, move as an unguided weapon when no target
+		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2)
 		{
 			move_unguided_weapon (en, &new_position);
 		}
