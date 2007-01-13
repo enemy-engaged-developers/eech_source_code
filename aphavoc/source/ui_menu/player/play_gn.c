@@ -127,96 +127,96 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 //		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
 		sprintf (buf, "%d", player_log->side_log[side].kills.fixed_wing);
-		add_to_pop_up_list (get_trans ("Aircraft kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Aircraft kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		sprintf (buf, "%d", player_log->side_log[side].kills.helicopter);
-		add_to_pop_up_list (get_trans ("Helicopter kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Helicopter kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		// Ground kills
 		sprintf (buf, "%d", player_log->side_log[side].kills.ground );
-		add_to_pop_up_list (get_trans ("Ground Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Ground Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		sprintf (buf, "%d", player_log->side_log[side].kills.air_defence );
-		add_to_pop_up_list (get_trans ("  Air defence"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("  Air defence"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		sprintf (buf, "%d", player_log->side_log[side].kills.armour );
-		add_to_pop_up_list (get_trans ("  Armour"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("  Armour"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		if (global_options.visual_screen_height >= 756)
-		{
-			sprintf (buf, "%d", player_log->side_log[side].kills.artillery );
-			add_to_pop_up_list (get_trans ("  Artillery"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-			add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-		}
+		sprintf (buf, "%d", player_log->side_log[side].kills.artillery );
+		add_to_pop_up_list (get_trans ("  Artillery"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		// Sea kills
 		sprintf (buf, "%d", player_log->side_log[side].kills.sea );
 
-		add_to_pop_up_list (get_trans ("Sea Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Sea Kills"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-
-		add_to_pop_up_list ("   ", general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
-
-		add_to_pop_up_list ("   ", general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
-
-
-		// Deaths
-		sprintf (buf, "%d", player_log->side_log[side].kills.deaths );
-
-		add_to_pop_up_list (get_trans ("KIA"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
 		// Fratricides
 		sprintf (buf, "%d", player_log->side_log[side].kills.friendly );
 
-		add_to_pop_up_list (get_trans ("Fratricides"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Fratricides"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 
 		add_to_pop_up_list ("   ", general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
-
 		add_to_pop_up_list ("   ", general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
 
+
+
+		// helicopters lost
+		sprintf (buf, "%d", player_log->side_log[side].helicopters_lost);
+		add_to_pop_up_list (get_trans ("Helicopters lost"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+	
+		// KIA
+		sprintf (buf, "%d", player_log->side_log[side].kills.deaths );
+		add_to_pop_up_list (get_trans ("KIA"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
+
+
+		add_to_pop_up_list ("   ", general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
+		add_to_pop_up_list ("   ", general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_10), ui_option_title_text_colour);
 
 
 		// Missions flown
 		sprintf (buf, "%d", player_log->side_log[side].missions_flown );
 
-		add_to_pop_up_list (get_trans ("Missions Flown"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Missions Flown"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		// Success rate
 		sprintf (buf, "%d%%", (int) (player_log->side_log[side].mission_success_rate * 100.0));
 
-		add_to_pop_up_list (get_trans ("Success Rate"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Success Rate"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
 		// Successful tours
 
 		sprintf (buf, "%d", player_log->side_log[side].successful_tours );
 
-		add_to_pop_up_list (get_trans ("Successful Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (get_trans ("Successful Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
-		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
+		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_14), ui_option_title_text_colour);
 
+/*
 		// Failed tours
 		sprintf (buf, "%d", player_log->side_log[side].failed_tours );
 
 		add_to_pop_up_list (get_trans ("Failed Tours"), general_log_text_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
 
 		add_to_pop_up_list (buf, general_log_output_list, NULL, ENTITY_INDEX_DONT_CARE, get_current_language_font (UI_FONT_ARIAL_16), ui_option_title_text_colour);
-
+*/
 
 		// Total points
 //		sprintf (buf, "%d", ( int ) ( player_log->side_log[side].experience ));
