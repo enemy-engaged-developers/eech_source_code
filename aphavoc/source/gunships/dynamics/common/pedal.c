@@ -274,7 +274,22 @@ void update_pedal_pressure_inputs (void)
 			}
 			// Retro 17Jul2004 end
 
-			current_flight_dynamics->input_data.pedal.delta = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+			if (command_line_nonlinear_cyclic)
+			{
+				// in non-linear mode it uses a curve described by f(x) = x*x + x
+				// gives a not so sensitive control around centre
+				float input = 2.0 * ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+				if (input >= 0)
+					input *= input;
+				else
+					input *= -input;
+				input += input;
+				input *= 50.0;
+
+				current_flight_dynamics->input_data.pedal.delta = input;
+			}
+			else
+				current_flight_dynamics->input_data.pedal.delta = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 
 			if (current_flight_dynamics->input_data.pedal.delta < -0.5)
 			{

@@ -452,7 +452,20 @@ void update_cyclic_pressure_inputs (void)
 				joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
 			}
 
-			input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+			if (command_line_nonlinear_cyclic)
+			{
+				// in non-linear mode it uses a curve described by f(x) = x*x + x
+				// gives a not so sensitive control around centre
+				input = (2.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+				if (input >= 0)
+					input *= input;
+				else
+					input *= -input;
+				input += input;
+				input *= 50;
+			}
+			else
+				input = (float) (200.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 
 			if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
 			{
@@ -475,7 +488,20 @@ void update_cyclic_pressure_inputs (void)
 				joyval = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
 			}
 
-			input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
+			if (command_line_nonlinear_cyclic)
+			{
+				// in non-linear mode it uses a curve described by f(x) = x*x + x
+				// gives a not so sensitive control around centre
+				input = -2.0 * ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+				if (input >= 0)
+					input *= input;
+				else
+					input *= -input;
+				input += input;
+				input *= 50.0;
+			}
+			else
+				input = -(float) (200.0 * joyval) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM);
 
 			if (fabs (input) < command_line_dynamics_cyclic_dead_zone)
 			{

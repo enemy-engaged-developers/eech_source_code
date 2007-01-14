@@ -70,6 +70,39 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int
+	non_linear_collective = FALSE;
+
+static float
+	zone_1_scale,
+	zone_2_scale,
+	zone_3_scale;
+
+void initialise_collective(void)
+{
+	if (command_line_collective_zone_1_limit > 0.0 && command_line_collective_zone_2_limit > 0.0)
+	{
+		non_linear_collective = TRUE;
+		
+		// some sanity checking of the values. have to be in range <0.0, 1.0], and zone2 must be above zone1
+		command_line_collective_zone_1_limit = bound(command_line_collective_zone_1_limit, 0.0, 0.99);
+		command_line_collective_zone_2_limit = bound(command_line_collective_zone_2_limit, command_line_collective_zone_1_limit + 0.01, 1.0);
+		
+		zone_1_scale = 1.0 / command_line_collective_zone_1_limit;
+		zone_2_scale = 1.0 / (command_line_collective_zone_2_limit - command_line_collective_zone_1_limit);
+		zone_3_scale = 1.0 / (1.0 - command_line_collective_zone_2_limit);
+	}
+	else
+	{
+		non_linear_collective = FALSE;
+		zone_1_scale = zone_2_scale = zone_3_scale = 1.0;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void collective_forward (event *ev)
 {
 
@@ -184,7 +217,32 @@ void update_collective_pressure_inputs (void)
 				joyval = get_joystick_axis (command_line_collective_joystick_index, command_line_collective_joystick_axis);
 			}
 
-			input = (float) (120.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+
+			if (non_linear_collective)
+			{
+				input = 0.5 + ((float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
+
+				if (input < command_line_collective_zone_1_limit)
+				{
+					input *= 60.0 * zone_1_scale;
+					input -= 60.0;  // 0% -> -60
+				}
+				else if (input < command_line_collective_zone_2_limit)
+				{
+					// find amount over limit
+					input -= command_line_collective_zone_1_limit;
+					input *= 40.0 * zone_2_scale;
+				}
+				else
+				{
+					// find amount over limit
+					input -= command_line_collective_zone_2_limit;
+					input *= 20.0 * zone_3_scale;
+					input += 40.0;   // 100% -> +40
+				}
+			}
+			else
+				input = (float) (120.0 * (float) joyval ) / ((float) JOYSTICK_AXIS_MAXIMUM - (float) JOYSTICK_AXIS_MINIMUM);
 
 			if ((current_flight_dynamics->auto_hover != HOVER_HOLD_STABLE) && (current_flight_dynamics->auto_hover != HOVER_HOLD_ALTITUDE_LOCK))
 			{
