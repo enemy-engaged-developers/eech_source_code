@@ -936,7 +936,9 @@ void inc_player_log_kills (int side, player_log_type *log, entity *victim)
 					break;
 				case ENTITY_TYPE_ANTI_AIRCRAFT:
 					inc_player_log_ada_kills(side, log);
-					// fallthrough
+					inc_player_log_ground_kills (side, log);
+
+					break;
 				case ENTITY_TYPE_ROUTED_VEHICLE:
 					{
 						int	map_icon = vehicle_database[get_local_entity_int_value(victim, INT_TYPE_ENTITY_SUB_TYPE)].map_icon;
