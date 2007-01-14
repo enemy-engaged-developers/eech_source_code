@@ -703,6 +703,8 @@ void initialise_flight_dynamics_input_devices (void)
 #else
 	current_flight_dynamics->input_data.cyclic_joystick_device_index = command_line_cyclic_joystick_index;
 #endif	// Retro 18Jul2004 end
+
+	initialise_collective();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2533,8 +2535,6 @@ void dynamics_land (void)
 		struct OBJECT_3D_BOUNDS
 			*bounding_box;
 	
-		debug_log ("DYNAMICS: landed close to keysite %s (range %f)", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), actual_range);
-
 		xmin = 0.0;
 		xmax = 0.0;
 		zmin = 0.0;
@@ -3492,7 +3492,7 @@ void update_engine_temperature_dynamics (int engine_number)
 			rpm_factor += (n1_rpm->value - n2_rpm->value) * 5.0;
 
 		if (engine_torque->value > 100.0)   // increase temp more when overtorqueing
-			rpm_factor += (engine_torque->value - 100.0) * 10.0;
+			rpm_factor += (engine_torque->value - 100.0) * 7.5;
 
 		engine_temp->min = (1.0 - (0.5 * get_model_delta_time())) * engine_temp->min + 0.5 * get_model_delta_time() * rpm_factor;
 
@@ -3514,7 +3514,7 @@ void update_engine_temperature_dynamics (int engine_number)
 	// if temp above 820 degrees, randomly damage engine. probability depending on temperature	
 	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
 	{
-		int probability = (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
+		int probability = 5.0 * (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
 		debug_log("fire probability: %f", get_model_delta_time() * (float)probability);
 		if ((rand16() % (int)probability) == 0)
 			dynamics_damage_model (engine_fire, FALSE);
