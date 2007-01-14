@@ -182,10 +182,12 @@ int
 	command_line_cyclic_joystick_index						= -1,		// loke 030418
 	command_line_cyclic_joystick_x_axis						= 1,		// loke 030418
 	command_line_cyclic_joystick_y_axis						= 2,		// loke 030418
+	command_line_nonlinear_cyclic							= TRUE,		// arneh 2007-01-14
 	command_line_collective_joystick_index					= -1,		// loke 030418
 	command_line_collective_joystick_axis					= 3,		// loke 030418
 	command_line_rudder_joystick_index						= -1,		// loke 030418
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
+	command_line_nonlinear_pedals							= TRUE,		// arneh 2007-01-14
 	command_line_restricted_nvg_fov							= TRUE,     // arneh 2006-11-22
 	command_line_high_res_mfd									= TRUE,		// loke 030420
 	command_line_high_res_hud									= TRUE,     // arneh 20060808
@@ -238,6 +240,8 @@ float
 	command_line_dynamics_tail_rotor_drag					= 1.0,
 	command_line_dynamics_cyclic_dead_zone					= 0.0,
 	command_line_dynamics_yaw_altitude_loss 				= 5.0,
+	command_line_collective_zone_1_limit					= 0.3,		// arneh 2007-01-14
+	command_line_collective_zone_2_limit					= 0.7,		// arneh 2007-01-14
 	command_line_aitool_grid_pitch 							= 0.0,
 	command_line_comms_resend_timeout						= 2.0,
 	command_line_comms_packet_resend_timer 				= 5.0,

@@ -463,10 +463,14 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
 		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1 - 1;
 		if (strcmp(p, "cyclicv") == 0)		command_line_cyclic_joystick_y_axis = d1 - 1;
+		if (strcmp(p, "nonlinear-cyclic") == 0)		command_line_nonlinear_cyclic = d1;
 		if (strcmp(p, "collectiven") == 0)	command_line_collective_joystick_index = d1;
 		if (strcmp(p, "collectiveax") == 0) command_line_collective_joystick_axis = d1 - 1;
+		if (strcmp(p, "nonlinear-collective-zone1") == 0)		command_line_collective_zone_1_limit = v1;
+		if (strcmp(p, "nonlinear-collective-zone2") == 0)		command_line_collective_zone_2_limit = v1;
 		if (strcmp(p, "ruddern") == 0)		command_line_rudder_joystick_index = d1;
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
+		if (strcmp(p, "nonlinear-pedals") == 0)		command_line_nonlinear_pedals = d1;
 		if (strcmp(p, "restricted_nvg_fov") == 0)	command_line_restricted_nvg_fov = d1; // loke 030420
 		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = TRUE; // arneh 20061211 - always in hi-res mode for MFDs
 		if (strcmp(p, "highreshud") == 0)	command_line_high_res_hud = d1; // loke 030420
@@ -637,10 +641,15 @@ void dump_ini_file(void)
 	fprintf(f,"cyclicn=%d           # Joystick no. for the cyclic\n",command_line_cyclic_joystick_index);
 	fprintf(f,"cyclich=%d           # Joystick DirectX axis for cyclic horizontal\n",command_line_cyclic_joystick_x_axis+1);  //VJ 030531 added +1
 	fprintf(f,"cyclicv=%d           # Joystick DirectX axis for cyclic vertical\n",command_line_cyclic_joystick_y_axis+1);   //VJ 030531 added +1
+	fprintf(f,"nonlinear-cyclic=%d  # Use non-linear control for cyclic. Less sensitive around center. 1 = On (default), 0 = off\n", command_line_nonlinear_pedals);
 	fprintf(f,"collectiven=%d       # Joystick no. for the collective\n",command_line_collective_joystick_index);
 	fprintf(f,"collectiveax=%d      # Joystick DirectX acis for the collective\n",command_line_collective_joystick_axis+1);  //VJ 030531 added +1
+	fprintf(f,"nonlinear-pedals=%d  # Use non-linear control for pedals. Gives finer around center. 1 = On (default), 0 = off\n", command_line_nonlinear_cyclic);
+	fprintf(f,"nonlinear-collective-zone1=%.2f   # Putting the controller at this position will give 60% collective. 0.0 to use linear collective. Valid values are in range 0.0 to 1.0, default is 0.3.\n", command_line_collective_zone_1_limit);
+	fprintf(f,"nonlinear-collective-zone2=%.2f   # Putting the controller at this position will give 100% collective (max is 120%). 0.0 to use linear collective. Valid values are in range from nonlinear-collective-zone1 to 1.0, default is 0.7.\n", command_line_collective_zone_2_limit);
 	fprintf(f,"ruddern=%d           # Joystick no. for the rudder\n",command_line_rudder_joystick_index);
 	fprintf(f,"rudderax=%d          # Joystick DirectX axis for the rudder\n",command_line_rudder_joystick_axis+1);   //VJ 030531 added +1
+	fprintf(f,"nonlinear-pedals=%d  # Use non-linear control for pedals. Gives finer around center. 1 = On (default), 0 = off\n", command_line_nonlinear_pedals);
 	fprintf(f,"joylookn=%d          # joystick no. used for joystick look\n",command_line_joylook_joystick_index); //Jabberwock 031104
 	fprintf(f,"joylookh=%d          # joystick DirectX axis used for horizontal joystick look\n",command_line_joylookh_joystick_axis+1);   //Jabberwock 031104
 	fprintf(f,"joylookv=%d          # joystick DirectX axis used for vertical joystick look\n",command_line_joylookv_joystick_axis+1); //Jabberwock 031104

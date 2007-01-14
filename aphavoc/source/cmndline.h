@@ -159,10 +159,12 @@ extern int
 	command_line_cyclic_joystick_index,						// loke 030418
 	command_line_cyclic_joystick_x_axis,					// loke 030418
 	command_line_cyclic_joystick_y_axis,					// loke 030418
-	command_line_collective_joystick_index,				// loke 030418
+	command_line_nonlinear_cyclic,							// arneh 2007-01-14
+	command_line_collective_joystick_index,					// loke 030418
 	command_line_collective_joystick_axis,					// loke 030418
 	command_line_rudder_joystick_index,						// loke 030418
 	command_line_rudder_joystick_axis,						// loke 030418
+	command_line_nonlinear_pedals,							// arneh 2007-01-14
 	command_line_restricted_nvg_fov,						// arneh 2006-11-22
 	command_line_high_res_mfd,									// loke 030420
 	command_line_high_res_hud,									// arneh 2006-07-18
@@ -211,6 +213,8 @@ extern float
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,
 	command_line_dynamics_rudder_acceleration,
+	command_line_collective_zone_1_limit,					// arneh 2007-01-14
+	command_line_collective_zone_2_limit,					// arneh 2007-01-14
 	command_line_dynamics_main_rotor_drag,
 	command_line_dynamics_main_rotor_lift,
 	command_line_dynamics_tail_rotor_drag,
