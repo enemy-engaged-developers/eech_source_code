@@ -4,7 +4,7 @@
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <meta name=ProgId content=FrontPage.Editor.Document>
 <link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.8.1</title>
+<title>EECH Community Release Version 1.8.3</title>
 <style>
 <!--
 a {
@@ -62,15 +62,13 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.1</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.3</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
       release of COHOKUM.EXE.  Further information about the EECH
       Community Development Program and new releases of COHOKUM.EXE
       are available from <a
-      href="http://eech.bollocks.net.nz">http://eech.bollocks.net.nz</a>,
-      <a
       href="http://www.eechcentral.com">http://www.eechcentral.com</span></a>
       and the <a
       href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30"
@@ -78,7 +76,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: December 27, 2006
+      italic;'>Last edited by arneh: January 21, 2007
       </p>
 
 
@@ -97,38 +95,30 @@ h4 {
 
 
 
-      <h2>What's NEW in EECH 1.8.1?</h2>
-      <p><em>(since version 1.8)</em></p>
+      <h2>What's NEW in EECH 1.8.3?</h2>
+      <p><em>(since version 1.8.2)</em></p>
       <ul>
-	<li>Longbow's threat warning MFD page (ASE) has got
-	colours.  SAM sites have RED rings, AAA yellow.  IR missiles
-	are red, radar missiles are yellow, and laser guided missiles
-	are blue.
-	<li>Longbow's ASE has threat identification. Below the threat
-	symbol is a number identifying the type (19 for a SA-19, 29
-	for a MiG-29 etc.  The only non obvious id is N which stands
-	for naval, i.e. the air defence system of a ship).
-	<li>Changed side selection screen for free flight to select
-	specific helicopter type.  It's not perfect yet, if the
-	helicopter is not available in the selected campaign it will
-	crash (although all helicopters are available in most
-	campaigns). Also the 3D model for the other helicopters are a
-	little weird with too many subobjects.
-        <li>Fixed crash bug in Comanche when using manual laser
-	<li>Fixed background colour in some Longbow MFD pages
-	appearing too bright at dusk and dawn
-	<li>Fixed mixup of greenmfd and colourmfd in eech.ini
-	<li>Fixed position of hellfire time of flight for US HUDs
-	<li>Fixed that Longbow weapons MFD page would list laser as
-	range finding system even when laser was off. It now displays
-	TRNGL (for triangulation) when laser is off.
+        <li>Fixed bug where save games would come up as invalid even
+	if saved with same version.
+	<li>Reverted Gotcha's camo fix as it caused more problems than
+	it solved.
+      <ul>
+  
       </ul>
 
-
+      <p><strong>
+      Important!<br>
+      This version is incompatible with all previous versions in save
+      games and multiplayer.<br>
+      Also note that this version uses non-linear controls by default,
+      so if the helicopter responds differently from what you're used
+      to that is the reason.  But the flight model has not changed.
+      You can disable the non-linear controls in eech.ini.</strong></p>
+      
       <p align="right"><a href="#top">[top ^]</a></p>
     
 
-      <h2 class="style37"><a name="installation"></a>Installation and addons</h2>
+      <h2><a name="installation"></a>Installation and addons</h2>
       <hr>
       <p><strong>NEW</strong>: Go to www.eechcentral.com and download
       the installation tool: <A
@@ -775,61 +765,48 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         style='color:black;'>Rotor control</span></strong></td>
         </tr>
         <tr>
-          <td width="190" class="style43">
-	    <div align="center">R</div>
-	  </td>
-          <td class="Normal">
-            <p><span class="MsoNormal">
-	      <span lang=EN-GB style='color:black;'>
+          <td width="190" class="style43">R</td>
+          <td>
 	      Engage/disengage rotor (used to be rotor brake. Not much
 	      difference when on ground, but airborne a disengaged
 	      rotor will autorotate).
-	      </span></span>
-	    </p></td>
+	      </td>
         </tr>
         <tr>
-          <td colspan=2 class="Normal"> <strong><span
-        lang=EN-GB>Engine controls </span></strong></td>
+          <td colspan=2 class="Normal"> <strong>Engine controls</strong></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">,</p></td>
+          <td width="190" class="style43">,</td>
           <td class="Normal">
             <p>Throttle up left engine</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">.</p></td>
+          <td width="190" class="style43">.</td>
           <td class="Normal">
             <p>Throttle up right engine</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Shift-,</p></td>
+          <td width="190" class="style43">Shift-,</td>
           <td class="Normal">
             <p>Throttle down left engine</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Shift-.</p></td>
+          <td width="190" class="style43">Shift-.</td>
           <td class="Normal">
             <p>Throttle down right engine</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Ctrl-,</p></td>
+          <td width="190" class="style43">Ctrl-,</td>
           <td class="Normal">
             <p>Left engine starter</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Ctrl-.</p></td>
+          <td width="190" class="style43">Ctrl-.</td>
           <td class="Normal">
             <p>Right engine starter</p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Ctrl-/</p></td>
+          <td width="190" class="style43">Ctrl-/</td>
           <td class="Normal">
             <p>APU on/off</p></td>
         </tr>
@@ -838,10 +815,8 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td colspan=2 class="Normal"> <strong>Canopy</strong></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43">Alt-C</p></td>
-          <td class="Normal">
-            <p>Open/close canopy doors</p></td>
+          <td width="190" class="style43">Alt-C</td>
+          <td>Open/close canopy doors</td>
         </tr>
 	</table>
 
@@ -849,43 +824,40 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
 
       <table border=0 cellpadding=4 cellspacing="4">
         <tr>
-          <td colspan=2 class="Normal">
-            <p><b>Laser control</b></p></td>
+          <td colspan=2 class="Normal"><b>Targeting system control</b></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Keypad*</span></p></td>
-          <td class="Normal">
-            <p>Activate/deactive laser</p></td>
+          <td width="190" class="style43">Shift-DEL</td>
+          <td>Deactive targeting system</td>
+        </tr>
+
+        <tr>
+          <td colspan=2 class="Normal"><b>Laser control</b></td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">Keypad*</td>
+          <td>Activate/deactive laser</td>
         </tr>
 
         <tr>
           <td colspan=2 class="Normal">
-            <p><b>Radar control</b></p></td>
+            <b>Radar control</b></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Keypad/</span></p></td>
-          <td class="Normal">
-            <p>Activate/deactive radar</p></td>
+          <td width="190" class="style43">Keypad/</td>
+          <td>Activate/deactive radar</td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Shift-Keypad/</span></p></td>
-          <td class="Normal">
-            <p>Switch radar between single sweep mode and continous sweep</p></td>
+          <td width="190" class="style43">Shift-Keypad/</td>
+          <td>Switch radar between single sweep mode and continous sweep</td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Shift-Keypad-</span></p></td>
-          <td class="Normal">
-            <p>Zoom ground radar (Longbow only)</p></td>
+          <td width="190" class="style43">Shift-Keypad-</td>
+          <td>Zoom ground radar (Longbow only)</td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Shift-Keypad+</span></p></td>
-          <td class="Normal">
-            <p>Unzoom ground radar (Longbow only)</p></td>
+          <td width="190" class="style43">Shift-Keypad+</td>
+          <td>Unzoom ground radar (Longbow only)</p></td>
         </tr>
 
         <tr>
@@ -893,10 +865,8 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
             <p><b>Ground stabilised FLIR (Comanche only)</b></p></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">Ctrl-S</span></p></td>
-          <td class="Normal">
-            <p>Toggles ground stabilized FLIR on/off.</p></td>
+          <td width="190" class="style43">Ctrl-S</td>
+          <td>Toggles ground stabilized FLIR on/off.</td>
         </tr>
 
         <tr>
@@ -904,14 +874,14 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
         <tr>
           <td width="190" class="Normal">
-            <p align="center"><span class="style43">Shift-D</span></p></td>
+            <p><span class="style43">Shift-D</span></p></td>
           <td class="Normal">
             <p>Switch TSD underlay between none, map and TADS (Longbow
         only)</p></td>
         </tr>
         <tr>
           <td width="190" class="Normal">
-            <p align="center" class="style43">Ctrl-D<br>Alt-D</p></td>
+            <p class="style43">Ctrl-D<br>Alt-D</p></td>
           <td class="Normal">
             <p><span class="MsoNormal">Ctrl-D (as in Declutter) cycles
         through the TSD render options: old TSD screen, the terrain
@@ -919,27 +889,51 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         contours. Alt-D cycles through the elevation colour palettes
         (0-2).</span></p></td> 
         </tr>
+
+        <tr>
+          <td colspan=2 class="Normal"><strong>PFZs</strong> </td>
+        </tr>
+        <tr>
+          <td class="style43">KeypadDEL</td>
+	  <td>Select next PFZ</td>
+        </tr>
+	<tr>
+	  <td class="style43">Shift-KeypadDEL</td>
+	  <td>Select previous PFZ</td>
+	</tr>
+	<tr>
+	  <td class="style43">ALT-KeypadDEL</td>
+	  <td>Deselect PFZ</td>
+	</tr>
+	<tr>
+	  <td class="style43">CTRL-KeypadDEL</td>
+	  <td>Delete current PFZ</td>
+	</tr>
+
+
         <tr>
           <td colspan=2 class="Normal"><strong>HUD</strong> </td>
         </tr>
         <tr>
-          <td class="style43"><div align="center">Alt-F1<br>
-      Shift-K </div></td>
-          <td class="Normal"><span class="style33">Change the HUD size
-        from 70% to 140% and background shading colour. </span> </td>
+          <td class="style43">Alt-F1<br>Shift-K</td>
+          <td>Change the HUD size
+	  from 70% to 140% and background shading colour.</td>
         </tr>
 	<tr>
-	  <td class="style43"><div align="center">Shift-O</div></td>
-          <td class="Normal"><span class="style33"><span
-	  lang=EN-GB>Switch between Cruise and Transition mode HUD
-          (Apache and Comanche only).</span></span> </td>
+	  <td class="style43">Ctrl-K</td>
+          <td>Activate/deactivate HUD</td>
+	</tr>
+	<tr>
+	  <td class="style43">Shift-O</td>
+          <td>Switch between Cruise and Transition mode HUD
+          (Apache and Comanche only).</td>
 	</tr>
         <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>PNVS</span></strong></td>
+          <td colspan=2><strong>PNVS</strong></td>
         </tr>
         <tr>
-          <td class="style43"><div align="center">Ctrl-N</div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>Change brightness of night view, 3 settings. </span></span> </td>
+          <td class="style43">Ctrl-N</td>
+          <td>Change brightness of night view, 3 settings.</td>
         </tr>
 
 	</table>
@@ -949,107 +943,133 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
       <table border=0 cellpadding=4 cellspacing="4">
 
         <tr>
-          <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Enhanced inset view </span></strong></td>
+          <td colspan=2> <strong>Enhanced inset view</strong></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43"><span lang=EN-GB> Alt-F12</span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Inset view in the cockpit. Pressing 0 selects the target (default). Pressing keys 2-6 select the same views as corresponding padlock commands.</span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Field of view</span></b></p></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span class="style43">7,8,9</span><br>
-          </p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Activates near, normal, wide field of view (FOV) </span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal">
-            <p class=style33><span class=style341><strong>Mouse controlled view panning </strong></span></p></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center" class=style33><span lang=EN-GB> </span><span class="style43" lang=EN-GB>Middle mouse<br>
-        / Ctrl-Del</span></p></td>
-          <td class="Normal">
-            <p class=style33><span lang=EN-GB>Switches between mouselook for panning and fixed view (whre F1 and F2 work). Fixed view means that the mouse can be used for the FLIR. </span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal">
-            <p class=style33><span class=style341><strong>Mouse controlled FLIR</strong></span> </p></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center" class=style43>Left-mouse<br>
-              Right-mouse<br>
-              Middle mouse/Ctrl-Del</p></td>
-          <td class="Normal">
-            <p class=style33><span lang=EN-GB>When mouselook is off (msl=0), you can use mouse for <strong>FLIR</strong> panning. Additionally, when you press <em>left </em>mouse button you <em>lock/unlock</em> target, with <em>right </em>button you can <em>select next target </em>and with mouse <em>wheel</em> you control <em>zoom </em>level. It is also possible to switch mouselook on/off with<strong> ctrl-delete </strong>key combination or with a middle mouse button. </span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>Cannon tracking </span></strong></td>
-        </tr>
-        <tr>
-          <td class="style43"><div align="center">Ctrl-Num Del</div></td>
-          <td class="Normal"><span class="style33">Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is turned off (Ctrl-NumDel), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </span> </td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Mouse map control</span></strong></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43"><span lang=EN-GB> Mouse wheel </span></p></td>
-          <td valign=top class="Normal">
-            <p><span lang=EN-GB>The map view may be zoomed in/out with a mouse wheel. It is also possible to pan the map when the right button is pressed (it needs some improvement still). When the small 3d preview window is selected, mouse movements and wheel with <em>ctrl </em>pressed will pan/zoom the camera.</span></p></td>
-        </tr>
-        <tr>
-          <td colspan=2 class="Normal">
-            <p><strong><span lang=EN-GB>Satellite view</span></strong></p></td>
-        </tr>
-        <tr>
-          <td width="190" class="Normal">
-            <p align="center" class="style43"><span lang=EN-GB>Ctrl-F9</span></p></td>
-          <td valign=top class="Normal">
-            <p><span lang=EN-GB> Pressing Ctrl-F9 gives you satellite view, both for your own gunship and for other groups. Moreover, pressing Space on the map view when a site is selected switches the view to satellite camera. When a group is selected you can zoom satellite view with default controls, for keysites it is also possible to pan view. Note that at the moment for debugging purposes the level of interference is selected randomly each time the satellite view is select ed. In the future it will be linked to weather/daytime.</span></p></td>
+          <td width="190" class="style43">Alt-F12</td>
+          <td>Inset view in the cockpit. Pressing 0 selects the target (default). Pressing keys 2-6 select the same views as corresponding padlock commands.</td>
         </tr>
 
         <tr>
-          <td colspan=2 class="Normal"> <strong><span lang=EN-GB>Wideview editing </span></strong></td>
+          <td colspan=2>
+            <b>Field of view</b></td>
         </tr>
         <tr>
-          <td width="190" class="Normal">
-            <p align="center"><span lang=EN-GB> <span class="style43">\ <br>
-              </span></span><span class="style43" lang=EN-GB>Crtl-\<br>
-        numpad keys 1-9</span><span class="style43" lang=EN-GB></span> </p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Switch between normal view and wideview by pressing &quot;\&quot;, toggle wideview edit by pressing &quot;Ctrl-\&quot; and then the numpad keys to change the setting.  The values are stored in eech.ini. Note that on non-English keyboards a different key may be needed (instead of &quot;\&quot;). Numpad keys can be used to shift the viewpoint: num-8 and num-2 for the vertical, num-4 and num-6 for the distance, num-1 and num-3 for the x direction and num-7 and num-9 for the pilot's head pitch. </span></p>
-            <p>Note: when you fly the Apache and you don't like the heavy black bars in front of your face, you can switch to wideview and make it partly disappear by pressing: first Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine tune. The bar starts to disappear if X reaches a value of about -8.200.</p></td>
+          <td width="190" class="style43">7,8,9</td>
+          <td>Activates near, normal, wide field of view (FOV)</td>
+        </tr>
+
+        <tr>
+          <td colspan=2><strong>Mouse controlled view panning </strong></td>
         </tr>
         <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>Campaign commander </span></strong> </td>
+          <td width="190" class="style43">Middle mouse<br>
+            Ctrl-DEL</td>
+          <td>Switches between mouselook for panning and fixed view
+	  (where F1 and F2 work). Fixed view means that the mouse can be
+	  used for the FLIR.</td>
+        </tr>
+
+        <tr>
+          <td colspan=2><strong>Mouse controlled FLIR</strong></td>
         </tr>
         <tr>
-          <td class="style43"><div align="center">Left and right Mouse</div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>Just select the enemy target and press left mouse button: a new task is created. When you press right mouse button over a task, it is immediately terminated. Works when option camcom=1 in the eech.ini file. </span></span> </td>
+          <td width="190" class="style43">Left-mouse<br>
+              Right-mouse<br>
+              Middle mouse/Ctrl-Del</td>
+          <td>When mouselook is off (msl=0), you can use mouse for
+        <strong>FLIR</strong> panning. Additionally, when you press
+        <em>left </em>mouse button you <em>lock/unlock</em> target,
+        with <em>right </em>button you can <em>select next target
+        </em>and with mouse <em>wheel</em> you control <em>zoom
+        </em>level. It is also possible to switch mouselook on/off
+        with<strong> ctrl-delete </strong>key combination or with a
+        middle mouse button.</td> 
+        </tr>
+
+        <tr>
+          <td colspan=2><strong>Cannon tracking</strong></td>
         </tr>
         <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>Quicksave</span></strong></td>
+          <td class="style43">Ctrl-Num Del</td>
+          <td>Cannon is tracking the pilot's view. Three settings are
+        available: 0 = tracking off, 1 = tracking only when no
+        acquisition system is turned off (Ctrl-NumDel), 2 = tracking
+        only when IHADSS/HIDSS/HMS system is active.</td>
+        </tr>
+
+        <tr>
+          <td colspan=2> <strong>Mouse map control</strong></td>
         </tr>
         <tr>
-          <td class="style43"><div align="center">Ctrl-Z</div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>save the game anytime </span></span> </td>
+          <td width="190" class="style43">Mouse wheel</td>
+          <td>The map view may be zoomed in/out with a mouse wheel. It
+        is also possible to pan the map when the right button is
+        pressed (it needs some improvement still). When the small 3d
+        preview window is selected, mouse movements and wheel with
+        <em>ctrl </em>pressed will pan/zoom the camera.</td>
         </tr>
         <tr>
-          <td colspan=2 class="Normal"><strong><span lang=EN-GB>high LOD on/off </span></strong></td>
+          <td colspan=2><strong>Satellite view</strong></td>
         </tr>
         <tr>
-          <td width="190" class="style43"><div align="center">Alt-L</div></td>
-          <td class="Normal"><span class="style33"><span lang=EN-GB>Toggle High &quot;level of detail&quot; </span></span> for objects in game </td>
+          <td width="190" class="style43">Ctrl-F9</td>
+          <td> Pressing Ctrl-F9 gives you satellite view, both for
+        your own gunship and for other groups. Moreover, pressing
+        Space on the map view when a site is selected switches the
+        view to satellite camera. When a group is selected you can
+        zoom satellite view with default controls, for keysites it is
+        also possible to pan view. Note that at the moment for
+        debugging purposes the level of interference is selected
+        randomly each time the satellite view is select ed. In the
+        future it will be linked to weather/daytime.</td>
+        </tr>
+
+        <tr>
+          <td colspan=2> <strongWideview editing</strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">\ <br>
+              Crtl-\<br>numpad keys 1-9</td>
+          <td>Switch between normal view and wideview by pressing
+        &quot;\&quot;, toggle wideview edit by pressing
+        &quot;Ctrl-\&quot; and then the numpad keys to change the
+        setting.  The values are stored in eech.ini. Note that on
+        non-English keyboards a different key may be needed (instead
+        of &quot;\&quot;). Numpad keys can be used to shift the
+        viewpoint: num-8 and num-2 for the vertical, num-4 and num-6
+        for the distance, num-1 and num-3 for the x direction and
+        num-7 and num-9 for the pilot's head pitch.
+            <p>Note: when you fly the Apache and you don't like the
+        heavy black bars in front of your face, you can switch to
+        wideview and make it partly disappear by pressing: first
+        Ctrl-\, then num-5 to set X=-8 and num-1 and num-3 to fine
+        tune. The bar starts to disappear if X reaches a value of
+        about -8.200.</p></td>
+        </tr>
+        <tr>
+          <td colspan=2><strong>Campaign commander</strong> </td>
+        </tr>
+        <tr>
+          <td class="style43">Left and right Mouse</td>
+          <td>Just select the enemy target and press
+        left mouse button: a new task is created. When you press right
+        mouse button over a task, it is immediately terminated. Works
+        when option camcom=1 in the eech.ini file.</td>
+        </tr>
+        <tr>
+          <td colspan=2><strong>Quicksave</strong></td>
+        </tr>
+        <tr>
+          <td class="style43">Ctrl-Z</td>
+          <td>save the game anytime</td>
+        </tr>
+        <tr>
+          <td colspan=2><strong>high LOD on/off</strong></td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">Alt-L</td>
+          <td>Toggle High &quot;level of detail&quot; for objects in game </td>
         </tr>
       </table>
       <p align="right"><span
@@ -1105,6 +1125,160 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+
+      <h4>Fixes/features in 1.8.2:</h4>
+     <ul>
+        <li>Several changes to guided missile flight model
+	  <ul>
+	    <li>Missiles might now lose guidance if target moves
+	    outside seeker's limit. Air-to-air missile will self
+	    destruct if this happens, air-to-ground missiles will
+	    continue on unguided.
+	    <li>Hellfires launched in LOBL mode should now be able to
+	    hit targets at close and medium ranges again :)
+	    <li>Hellfires launched in LOAL mode now always does the
+	    initial climb and hence won't be able to hit targets at
+	    close range (closer than 2km).
+	    <li>Seeker field of view reduced for the Russian Anti-tank
+	    missiles (Ataka, Vikhr, Spiral). Used to be around 25
+	    degrees from center, now is 10-15 degrees (if using the new
+	    gwut file).
+	    <li>Anti tank missiles and other missiles with shaped
+	    charges will do less collateral damage now, as most of the
+	    blast is concentrated on the target hit directly.
+	    <li>Air-to-ground missiles which lose their lock will
+	    not self destruct but continue on (until hitting the
+	    ground, getting too slow, or if a semi-active missile
+	    until it has a new target inside seeker limits).
+	  </ul>
+	<li>Several Additions to the pilot log
+	  <ul>
+	    <li>New option to restore log to what it was before last
+	    mission (i.e. erase last mission). Useful if e.g. the game
+	    bugs causing you do die. Only works if you do it right
+	    after the mission, if you exit EECH you won't be able
+	    to erase the mission the next time you start.
+	    <li>New page with flying hours and number of missions for
+	    each helicopter type.
+	    <li>More detailed statistics on which types of targets
+	    have been destroyed by the pilot.
+	    <li>New statistic for number of helicopters lost. This is
+	    the number of helicopters crashed, or landed outside of a
+	    base. For converted logs this will start with the same
+	    number as KIA.
+	    <li>KIA value will now be increased if you die also before
+	    the mission is completed.
+	    <li>A mission in which you crash is now counted as a
+	    mission flown, even if mission was not over at the time of
+	    the crash. You will however not get any points (used for
+	    calculating promotions and medals).
+	    <li>As a result of these changes this version uses a new
+	    format for the pilot log, and a new file (player2.bin).
+	    Old logs will be converted to the new format on first
+	    start of 1.8.2.  But the unknown values (the ones which
+	    were not stored previously) will be 0, except for
+	    helicopter kills which gets set to the number of air kills
+	    the old log had (even though some of those kills might
+	    have been fixed wing aircraft).
+	    <li>Fixed bug where some missions were logged twice (and
+	    not necessarily with the same result).
+	  </ul>
+	<li>MFD changes
+	   <ul>
+	   	<li>When using manual startup, the helicopter will now start
+		with HUD system and MFDs powered down (except for the
+		co-pilot's, he has already activated his own). Use Ctrl-K to
+		active HUD, and Ctrl-[ and ] to active the MFDs.
+		<li>ALT [ and ] will now not only activate and
+		deactive the Comanches side MFDs, but also cycle their
+		mode.
+		<li>Apache's TADS and radar MFD pages now has time
+		until impact for hellfires in the high action display
+		area. And in TADS a flashing L has been added below
+		and to the right of the target gates when the laser is
+		active.
+		<li>Fixed overlaid MFDs being too dark with night vision in
+		pilot view without cockpit.
+		<li>Fixed some of the Longbow's new MFD modes which didn't
+		work in overlaid mode.
+		<li>Fixed TSD's mouse pointer which didn't work in
+		overlaid mode.
+		<li>Increased size of overlaid MFDs a little for Longbow and
+		Havoc, to make them easier to read.
+		<li>Overlaid MFDs now always use big size, no matter
+		what HUD size you're using.
+		<li>New eech option (targeting_system_auto_page) to control if
+		changing targeting system will also automaticly switch to the
+		targeting system's MFD page.
+	   </ul>
+	<li>Other changes
+	  <ul>
+	<li>Implemented non-linear axis for cyclic, collective and
+	pedals. Cyclic and pedals are less sensitive around centre,
+	making fine adjustments easier. Collective can be adjusted to
+	have bigger range around 60-100%, where most of the time is
+	spent. Makes hovering easier with better control and finer
+	adjustments.
+	<li>The laser will deactivate when target moves outside of
+	TADS's field of view (or similar targeting system). It will
+	also lose lock on target if target or lasing helicopter makes
+	too violent manouvers for the targeting system to follow.
+	The laser will most likely also disengage when switching
+	targets in manual laser mode.
+	<li>AI wingmen won't any longer need to climb to get line of
+	sight to target when firing radar guided hellfires. They will
+	instead use LOAL mode and fire from behind cover.
+	<li>AI will no longer waste guided air-to-surface missiles.
+	They will not refire a guided missile at the same target until
+	the first missile has missed (or hit but failed to destroy
+	target). Not just fire a new missile every few seconds even if
+	they have several missiles heading for the target already.
+        <li>Fixed crash with A-model Apache, and all other helicopters
+	using its cockpit.
+	<li>Fixed bug which caused trying to throttle engine down
+	before it was started to actually start the engine.
+	<li>There was a conflict of keys in last build. Both deselect
+	PFZ and deactivate targeting system was on CTRL NUMPAD DEL. So
+	now things have moved a little.  Deactive targeting system has
+	moved to SHIFT-DEL (normal DEL).  Should hopefully be a little
+	more logical to keep all select targeting system commands in
+	that keygroup.  And now all the PFZ commands are at
+	NUMPAD DEL. ALT deselects current PFZ, and CTRL delets it (and
+	SHIFT and plain cycle PFZs like it used to do).
+	<li>Changed "use master server" eech.ini option to default to
+	off. That way you won't be broadscasting your IP (and other
+	info) just by enabeling multiplayer.
+	<li>Fixed bug with desert camo (gotcha)
+	</ul>
+      </ul>
+
+
+      <h4>Fixes/features in 1.8.1:</h4>
+      <ul>
+	<li>Longbow's threat warning MFD page (ASE) has got
+	colours.  SAM sites have RED rings, AAA yellow.  IR missiles
+	are red, radar missiles are yellow, and laser guided missiles
+	are blue.
+	<li>Longbow's ASE has threat identification. Below the threat
+	symbol is a number identifying the type (19 for a SA-19, 29
+	for a MiG-29 etc.  The only non obvious id is N which stands
+	for naval, i.e. the air defence system of a ship).
+	<li>Changed side selection screen for free flight to select
+	specific helicopter type.  It's not perfect yet, if the
+	helicopter is not available in the selected campaign it will
+	crash (although all helicopters are available in most
+	campaigns). Also the 3D model for the other helicopters are a
+	little weird with too many subobjects.
+        <li>Fixed crash bug in Comanche when using manual laser
+	<li>Fixed background colour in some Longbow MFD pages
+	appearing too bright at dusk and dawn
+	<li>Fixed mixup of greenmfd and colourmfd in eech.ini
+	<li>Fixed position of hellfire time of flight for US HUDs
+	<li>Fixed that Longbow weapons MFD page would list laser as
+	range finding system even when laser was off. It now displays
+	TRNGL (for triangulation) when laser is off.
+      </ul>
+
       <h4>Fixes/features in 1.8.0:</h4>
       <ul>
         <li>Avionics changes
