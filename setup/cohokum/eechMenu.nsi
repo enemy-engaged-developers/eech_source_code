@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.8.1"
+  !define VERSION "1.8.3"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -60,7 +60,6 @@ Section "Create a backup?" SecBackup
 	CreateDirectory "$INSTDIR\cohokum\backup"
 	
 CopyFiles /FILESONLY ${TBACKUP1}\cohokum.exe           ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${TBACKUP1}\eech.ini           ${TBACKUP1}\backup
 
 CopyFiles /FILESONLY ${DATADIR}\ah64a.dyn         ${TBACKUP1}\backup
 CopyFiles /FILESONLY ${DATADIR}\apache.dyn        ${TBACKUP1}\backup
@@ -94,8 +93,7 @@ Section "cohokum.exe" SectionExe
   File ${VERSION}-readme.html
   File motd.txt
   File TrackIR.dll	
-  File gwut180.csv
-  File eech.ini
+  File gwut182.csv
   File eech_keyguide_2.pdf
 
   SetOutPath "$INSTDIR\common\data\"
