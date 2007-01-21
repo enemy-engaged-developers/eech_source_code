@@ -70,11 +70,14 @@
  * MAJOR_VERSION or DATA_VERSION changes.
  */
 
+// major version max value: 3
 #define MAJOR_VERSION	1
 
+// data version max value: 127
 #define DATA_VERSION	8
 
-#define MINOR_VERSION	2
+// minor version max value: 127
+#define MINOR_VERSION	3
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME
@@ -86,7 +89,7 @@
 #define BUILD_TYPE	""
 
 // used in comms/comm_man.c to make sure client and server use same version
-#define VERSION_NUMBER_INT 10802   // two digits for DATA and MINOR verions
+#define VERSION_NUMBER_INT 10803   // two digits for DATA and MINOR verions
 
 #define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.8.2"
 
