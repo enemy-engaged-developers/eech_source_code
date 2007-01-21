@@ -2441,12 +2441,14 @@ int match_system_texture_name ( const char *name )
 		if ( strcmp ( system_texture_names[count], real_name ) == 0 )
 		{
 			system_textures_referenced[count] = TRUE;
-			
+
+
+	  //arneh 070121 - reverted this fix as it caused completly white units in some campaigns
       //VJ 061230 if the original name does not have _DESERT then do not increase camo
       // not all textures have a desert version of course so assuming that messes up the texture numbers!
       //OLD bug ;)
-			if (camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
-				 camo = 0;
+//			if (camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
+//				 camo = 0;
 
 			return ( count + camo );
 		}
