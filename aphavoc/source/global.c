@@ -158,12 +158,14 @@ global_options_data
 
 #ifdef MAJOR_VERSION
 
-static int
+static unsigned short
 	// Jabberwock 040915 Minor version included in the number so it is recognized by MP server
-	application_version_number = ( MAJOR_VERSION << 16 ) | (DATA_VERSION << 8) | MINOR_VERSION;
+	// version number is saved with only 16 bits. Use 2 bits for major version, and 7 each for data and minor version
+	// assumes major version will never be more than 3, data and minor never more than 127
+//	application_version_number = ( MAJOR_VERSION << 14 ) | (DATA_VERSION << 7) | MINOR_VERSION;
 
 ////041009 Moje Gives us trouble with saved games :( Original resotred.            
-//	application_version_number = ( MAJOR_VERSION << 8 ) | DATA_VERSION;
+	application_version_number = ( MAJOR_VERSION << 8 ) | DATA_VERSION;
 
 #else
 
