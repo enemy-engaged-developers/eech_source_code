@@ -540,15 +540,15 @@ void dump_ini_file(void)
 	fprintf(f,"chaff=%3.1f        # Effectivness of chaff where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_chaff_effectiveness);
 	fprintf(f,"flare=%3.1f        # Effectivness of flares where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_flare_effectiveness);
 	fprintf(f,"smoke=%3.1f        # Effectivness of smoke where n = 0.0 (ineffective) to 1.0 (fully effective - default)\n",command_line_smoke_effectiveness);
-	fprintf(f,"fog=%.0f            # Sets the time (sec) taken for the \"fog of war\" to reshroud enemy sector info (def 4 hours).\n",command_line_fog_of_war_maximum_value);
-	fprintf(f,"cpac=%d              # capture aircraft: aircraft landed at captured bases or FARPS become usable by your side.\n",command_line_capture_aircraft);
-	fprintf(f,"uit=%3.1f            # user invulnerable time (default 5 sec), when starting mission\n",command_line_user_invulnerable_time);
+	fprintf(f,"fog=%.0f            # Sets the time (sec) taken for the \"fog of war\" to reshroud enemy sector info (def = 14400 (4 hours)).\n",command_line_fog_of_war_maximum_value);
+	fprintf(f,"cpac=%d              # Capture aircraft landed at captured bases or FARPS become usable by your side.\n",command_line_capture_aircraft);
+	fprintf(f,"uit=%3.1f            # User invulnerable time (in seconds), when starting mission (def = 5.0)\n",command_line_user_invulnerable_time);
 	fprintf(f,"\n[Graphics]\n");
-	fprintf(f,"cbar=%.0f            # distance in meters that city blocks resolve\n",command_line_city_block_approximation_range);
-	fprintf(f,"fs=%d                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen)\n",command_line_full_screen);
-	fprintf(f,"mfr=%d               # Max visual frame rate, (defaults = 30)\n",command_line_max_frame_rate);
-	fprintf(f,"32bit=%d             # Activates 32bit rendering if your video card supports it\n", command_line_display_bpp != 16);
-	fprintf(f,"nrt=%d               # Turns off rendering to texture in case of visual problems with MFDs or TADS\n",command_line_no_render_to_texture);
+	fprintf(f,"cbar=%.0f            # distance (in meters) that city blocks resolve\n",command_line_city_block_approximation_range);
+	fprintf(f,"fs=%d                # Switch for turning off the default FULL SCREEN video mode, (def = 1, full screen, 0 = windows mode)\n",command_line_full_screen);
+	fprintf(f,"mfr=%d               # Max visual frame rate (default = 30)\n",command_line_max_frame_rate);
+	fprintf(f,"32bit=%d             # Activates 32bit rendering if your video card supports it (default 1 (on))\n", command_line_display_bpp != 16);
+	fprintf(f,"nrt=%d               # Turns off rendering to texture in case of visual problems with MFDs or TADS (default 0 (off))\n",command_line_no_render_to_texture);
 	fprintf(f,"notnl=%d             # Turns off GeForce \"TnL\" support for troubleshooting\n",command_line_no_hardware_tnl);
 	fprintf(f,"3dreset=0            # Reset screen resolution to 640x480 (def = 0)\n");
 	fprintf(f,"dxtm=%d              # directx texture management, should fix \"unable to allocate hardware slot\" error (def = 0)\n",command_line_d3d_use_texture_management);
@@ -671,8 +671,8 @@ void dump_ini_file(void)
 	fprintf(f,"restricted_nvg_fov=%d        # restrict night vision field of view by shading edge of screen, def = 1 (on)\n", command_line_restricted_nvg_fov);
 //	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
-	fprintf(f,"greenmfd=%d          # targeting cameras use monochrome green (will use monochrome grey if off)(def = 1 (on), 1 = on)\n",command_line_green_mfd);
-	fprintf(f,"colourmfd=%d         # mfd's use colours (only Apache currently)) (def = 1 (off), 1 = on)\n",command_line_colour_mfd);
+	fprintf(f,"greenmfd=%d          # targeting cameras use monochrome green (will use monochrome grey if off)(def = 1 (on))\n",command_line_green_mfd);
+	fprintf(f,"colourmfd=%d         # MFDs use colours (only Apache currently)) (def = 1 (on))\n",command_line_colour_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);
@@ -682,12 +682,12 @@ void dump_ini_file(void)
 	fprintf(f,"texture_filtering=%d  # Texture blending, reacts to Anisotropic filter setting. EXPERIMENTAL (def=0) \n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
-	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 dark to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
+	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 (dark) to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
 	
 	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
-	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 for not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
-	fprintf(f,"dfr=%d               # display framerate, 0 = off, 1 = on, 2 = log to file \"framerate.txt\"\n",command_line_framerate);
+	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
+	fprintf(f,"dfr=%d               # display framerate (0 = off (default), 1 = on, 2 = log to file \"framerate.txt\")\n",command_line_framerate);
 	fprintf(f,"[end of file]\n");
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
