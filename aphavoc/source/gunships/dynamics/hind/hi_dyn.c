@@ -2086,7 +2086,7 @@ void update_attitude_dynamics (void)
 			scaling,
 			drag;
 
-		drag = -50.0;
+		drag = -40.0;
 
 		reaction_force = drag * current_flight_dynamics->heading.delta * current_flight_dynamics->tail_boom_length.value;
 
