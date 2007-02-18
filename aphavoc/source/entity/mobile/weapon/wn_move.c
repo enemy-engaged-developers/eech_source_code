@@ -474,8 +474,6 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	if (raw->mob.velocity > 20.0 && cos_turn_demand < weapon_database[raw->mob.sub_type].max_seeker_limit)   // lost guidance
 	{
-		set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
-
 		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
 		{
 			debug_log("%s self destructed due to turn demand too high (%0.1f degrees)", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)));
@@ -484,6 +482,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	
 			return;
 		}
+		else
+			set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
 	}
 
 	//
@@ -832,6 +832,8 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
+				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
+				
 				// no target if no laser designation
 				if (laser_guided && !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
 				{
@@ -882,6 +884,7 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 		if (new_target != raw->mob.target_link.parent)
 		{
+			debug_log("Resetting weapon target. Weapon: %s, target: %s", entity_type_names[en->type], entity_type_names[new_target->type]);
 			set_client_server_entity_parent (en, LIST_TYPE_TARGET, new_target);
 		}
 	}
