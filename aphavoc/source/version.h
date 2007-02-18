@@ -77,7 +77,7 @@
 #define DATA_VERSION	8
 
 // minor version max value: 127
-#define MINOR_VERSION	3
+#define MINOR_VERSION	4
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME
@@ -89,9 +89,9 @@
 #define BUILD_TYPE	""
 
 // used in comms/comm_man.c to make sure client and server use same version
-#define VERSION_NUMBER_INT 10803   // two digits for DATA and MINOR verions
+#define VERSION_NUMBER_INT ((MAJOR_VERION << 14) | (DATA_VERSION << 7) | MINOR_VERSION)
 
-#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.8.2"
+#define APP_NAME	"Enemy Engaged RAH66 Comanche Vs KA52 Hokum v1.8.4"
 
 /* NOTE: EECHDEV Team have hijacked BUILD_TYPE from it's original Razorworks usage
  *
