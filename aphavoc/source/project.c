@@ -566,6 +566,8 @@ void set_comanche_hokum_installation_path(void)
 
 		RegQueryValueEx ( comanche_hokum_key, "Installation Path", NULL, &type, ( LPBYTE ) comanche_hokum_installation_path, ( LPDWORD ) &string_length );
 	}
+	else if (!GetCurrentDirectory(sizeof(comanche_hokum_installation_path) - 1, comanche_hokum_installation_path))
+		comanche_hokum_installation_path[0] = '\0';
 
 	RegCloseKey ( comanche_hokum_key );
 }
@@ -615,6 +617,20 @@ void set_apache_havoc_installation_path ( void )
 		}
 
 		RegCloseKey ( software_key );
+	}
+
+	if (!apache_havoc_installation_path_valid)  // check if we have aphavoc directory anyway
+	{
+		char aphavoc_path[2048], aphavoc_file[2048];
+		
+		snprintf(aphavoc_path, sizeof(aphavoc_path)-1, "%s\\..", comanche_hokum_installation_path);
+		snprintf(aphavoc_file, sizeof(aphavoc_file)-1, "%s\\aphavoc\\aphavoc.exe", aphavoc_path);
+
+		if (file_exist(aphavoc_file))
+		{
+			strncpy(apache_havoc_installation_path, aphavoc_path, sizeof(apache_havoc_installation_path)-1);
+			apache_havoc_installation_path_valid = TRUE;
+		}
 	}
 }
 
