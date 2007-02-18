@@ -277,6 +277,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		////////////////////////////////////////
 		{
+			reset_mfd_mouse_buttons();
+			
 			if (!apache_damage.flir)
 			{
 				target_acquisition_system = system;
@@ -300,6 +302,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		////////////////////////////////////////
 		{
+			reset_mfd_mouse_buttons();
+			
 			if (!apache_damage.dtv)
 			{
 				target_acquisition_system = system;
@@ -323,6 +327,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		case TARGET_ACQUISITION_SYSTEM_DVO:
 		////////////////////////////////////////
 		{
+			reset_mfd_mouse_buttons();
+			
 			if (!apache_damage.dvo)
 			{
 				target_acquisition_system = system;

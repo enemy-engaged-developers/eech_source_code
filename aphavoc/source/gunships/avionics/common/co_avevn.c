@@ -576,6 +576,7 @@ static void load_scout_weapons_event (event *ev)
 	#endif
 }
 
+
 // Jabberwock 030930 FLIR mouse control
 // Retro 27Nov2004 - new mouselook enum
 
@@ -649,6 +650,40 @@ static void mouse_wheel_up_event (event *ev)
 
 
 // Jabberwock 030930 ends
+
+static void mouse_left_button_event (event* ev)
+{
+	switch (target_acquisition_system)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+		if (ev->state == BUTTON_STATE_DOWN)
+			mouse_lock_target_event(ev);
+		break;
+	default:
+		store_point_left_event(ev);
+	}
+}
+
+static void mouse_right_button_event (event* ev)
+{
+	switch (target_acquisition_system)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+		if (ev->state == BUTTON_STATE_DOWN)
+			mouse_next_target_event(ev);
+		break;
+	default:
+		store_point_right_event(ev);
+	}
+}
 
 
 static void mouselook_toggle (event *ev)
@@ -787,22 +822,15 @@ void set_common_avionics_events (void)
 
 	// Jabberwock 030930 Mouse FLIR control
 
-	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_lock_target_event);
-	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouse_next_target_event);
-
-	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, store_point_left_event);
-	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, store_point_right_event);
+	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_left_button_event);
+	set_event (MOUSE_RIGHT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_right_button_event);
 
 	set_event (MOUSE_MOVE_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_up_event);
-
 	set_event (MOUSE_MOVE_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_down_event);
-
 	set_event (MOUSE_MOVE_LEFT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_left_event);
-
 	set_event (MOUSE_MOVE_RIGHT, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_right_event);
 
 	set_event (MOUSE_WHEEL_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_up_event);
-
 	set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_down_event);
 
 	// Jabberwock 030930 ends
@@ -810,7 +838,6 @@ void set_common_avionics_events (void)
 	// Jabberwock 031016 Mouselook toggle
 	
 	set_event (MOUSE_MIDDLE_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouselook_toggle);
-	
 	set_event (DIK_DELETE, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, mouselook_toggle);
 	
 	// Jabberwock 031016 ends
