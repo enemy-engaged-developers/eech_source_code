@@ -2,9 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<meta name=ProgId content=FrontPage.Editor.Document>
-<link rel=Edit-Time-Data href="file:///C|/gms/Razorworks/eech-new/setup/cohokum/./readme-filer/editdata.mso">
-<title>EECH Community Release Version 1.8.3</title>
+<title>EECH Community Release Version 1.8.4</title>
 <style>
 <!--
 a {
@@ -62,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.3</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.4</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -76,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: January 21, 2007
+      italic;'>Last edited by arneh: February 20, 2007
       </p>
 
 
@@ -95,26 +93,22 @@ h4 {
 
 
 
-      <h2>What's NEW in EECH 1.8.3?</h2>
-      <p><em>(since version 1.8.2)</em></p>
+      <h2>What's NEW in EECH 1.8.4?</h2>
+      <p><em>(since version 1.8.3)</em></p>
       <ul>
-        <li>Fixed bug where save games would come up as invalid even
-	if saved with same version.
-	<li>Reverted Gotcha's camo fix as it caused more problems than
-	it solved.
-      <ul>
-  
+        <li>Fixed Hind's flight model which caused it to be suddently
+	do violent manouvers and crash.
+	<li>Reverted fix which caused some missiles to continue
+	unguided when they lost guidance.  They will now self destruct
+	again.  The unguided fix caused crashes in multiplayer.
+	<li>Fixed so that mouse buttons can be used with the EO
+	cameras again.
+	<li>If the registry doesn't contain a Apache Havoc entry, EECH
+	will now check if the aphavoc directory exists in the same
+	directory as cohokum, and use it if it does (only used for Apache
+	and Havoc cockpit textures).
       </ul>
 
-      <p><strong>
-      Important!<br>
-      This version is incompatible with all previous versions in save
-      games and multiplayer.<br>
-      Also note that this version uses non-linear controls by default,
-      so if the helicopter responds differently from what you're used
-      to that is the reason.  But the flight model has not changed.
-      You can disable the non-linear controls in eech.ini.</strong></p>
-      
       <p align="right"><a href="#top">[top ^]</a></p>
     
 
@@ -1125,6 +1119,14 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+
+      <h4>Fixes/features in 1.8.3:</h4>
+      <ul>
+        <li>Fixed bug where save games would come up as invalid even
+	if saved with same version.
+	<li>Reverted Gotcha's camo fix as it caused more problems than
+	it solved.
+      </ul>
 
       <h4>Fixes/features in 1.8.2:</h4>
      <ul>
