@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.8.3"
+  !define VERSION "1.8.4"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
