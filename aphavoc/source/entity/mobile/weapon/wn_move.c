@@ -482,8 +482,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	
 			return;
 		}
-		else
-			set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
+//		else
+//			set_client_server_entity_parent (en, LIST_TYPE_TARGET, NULL);
 	}
 
 	//
