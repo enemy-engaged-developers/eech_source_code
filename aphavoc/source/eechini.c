@@ -645,8 +645,8 @@ void dump_ini_file(void)
 	fprintf(f,"collectiven=%d       # Joystick no. for the collective\n",command_line_collective_joystick_index);
 	fprintf(f,"collectiveax=%d      # Joystick DirectX acis for the collective\n",command_line_collective_joystick_axis+1);  //VJ 030531 added +1
 	fprintf(f,"nonlinear-pedals=%d  # Use non-linear control for pedals. Gives finer around center. 1 = On (default), 0 = off\n", command_line_nonlinear_cyclic);
-	fprintf(f,"nonlinear-collective-zone1=%.2f   # Putting the controller at this position will give 60% collective. 0.0 to use linear collective. Valid values are in range 0.0 to 1.0, default is 0.3.\n", command_line_collective_zone_1_limit);
-	fprintf(f,"nonlinear-collective-zone2=%.2f   # Putting the controller at this position will give 100% collective (max is 120%). 0.0 to use linear collective. Valid values are in range from nonlinear-collective-zone1 to 1.0, default is 0.7.\n", command_line_collective_zone_2_limit);
+	fprintf(f,"nonlinear-collective-zone1=%.2f   # Putting the controller at this position will give 60%% collective. 0.0 to use linear collective. Valid values are in range 0.0 to 1.0, default is 0.3.\n", command_line_collective_zone_1_limit);
+	fprintf(f,"nonlinear-collective-zone2=%.2f   # Putting the controller at this position will give 100%% collective (max is 120%%). 0.0 to use linear collective. Valid values are in range from nonlinear-collective-zone1 to 1.0, default is 0.7.\n", command_line_collective_zone_2_limit);
 	fprintf(f,"ruddern=%d           # Joystick no. for the rudder\n",command_line_rudder_joystick_index);
 	fprintf(f,"rudderax=%d          # Joystick DirectX axis for the rudder\n",command_line_rudder_joystick_axis+1);   //VJ 030531 added +1
 	fprintf(f,"nonlinear-pedals=%d  # Use non-linear control for pedals. Gives finer around center. 1 = On (default), 0 = off\n", command_line_nonlinear_pedals);
