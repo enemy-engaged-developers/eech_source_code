@@ -168,7 +168,7 @@ void initialise_avionics (void)
 			initialise_havoc_threat_warning_system ();
 
 			// Casm 10SEP05 Havoc Instruments
-			initialise_havoc_instruments ();
+ 			initialise_havoc_instruments ();
 
 			//
 			// push events after avionics have been initialised
@@ -334,8 +334,8 @@ void initialise_avionics (void)
 			initialise_hind_threat_warning_system ();
 
 			// Casm 10SEP05 Havoc Instruments - temporary used for Hind too
-			initialise_havoc_instrument_colours ();
-			initialise_havoc_instruments ();
+ 			initialise_havoc_instrument_colours ();
+ 			initialise_havoc_instruments ();
 
 			//
 			// push events after avionics have been initialised
@@ -539,7 +539,7 @@ void deinitialise_avionics (void)
 			deinitialise_havoc_threat_warning_system ();
 
 			// Casm 10SEP05 Havoc Instruments
-			deinitialise_havoc_instruments ();
+ 			deinitialise_havoc_instruments ();
 
 			break;
 		}
@@ -717,7 +717,7 @@ void deinitialise_avionics (void)
 			deinitialise_hind_threat_warning_system ();
 
 			// Casm 10SEP05 Havoc Instruments - temporary used for Hind
-			deinitialise_havoc_instruments ();
+ 			deinitialise_havoc_instruments ();
 
 			break;
 		}
@@ -824,6 +824,12 @@ void update_avionics (void)
 		return;
 	}
 
+	if (command_line_shared_mem_export != 0)
+	{
+		update_dynamics_shared_mem ();	// Retro 8Mar2005 - all this stuff should MAYBE get moved 2-3 calls up the call
+										// stack to a place where it is also done if we are in the campaign map..
+	}
+
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
@@ -844,6 +850,9 @@ void update_avionics (void)
 
 			update_apache_upfront_display ();
 
+			if (command_line_shared_mem_export != 0)
+				update_apache_avionics_shared_mem ();	// Retro 8Mar2005
+
 			break;
 		}
 		////////////////////////////////////////
@@ -862,6 +871,9 @@ void update_avionics (void)
 
 			update_havoc_ekran_display ();
 
+			if (command_line_shared_mem_export != 0)
+				update_havoc_avionics_shared_mem ();	// Retro 8Mar2005
+
 			break;
 		}
 		////////////////////////////////////////
@@ -878,6 +890,9 @@ void update_avionics (void)
 
 			update_comanche_threat_warning_system ();
 
+			if (command_line_shared_mem_export != 0)
+				update_comanche_avionics_shared_mem ();	// Retro 8Mar2005
+
 			break;
 		}
 		////////////////////////////////////////
@@ -893,6 +908,9 @@ void update_avionics (void)
 			update_hokum_lamp_avionics ();
 
 			update_hokum_threat_warning_system ();
+
+			if (command_line_shared_mem_export != 0)
+				update_hokum_avionics_shared_mem ();	// Retro 8Mar2005
 
 			break;
 		}
@@ -912,6 +930,9 @@ void update_avionics (void)
 			update_blackhawk_threat_warning_system ();
 
 			update_blackhawk_upfront_display ();
+
+			if (command_line_shared_mem_export != 0)
+				update_blackhawk_avionics_shared_mem ();	// Retro 8Mar2005
 
 			break;
 		}
@@ -933,6 +954,9 @@ void update_avionics (void)
 
 			update_hind_ekran_display ();
 
+			if (command_line_shared_mem_export != 0)
+				update_hind_avionics_shared_mem ();	// Retro 8Mar2005
+
 			break;
 		}
 		////Moje 030612 end
@@ -952,6 +976,9 @@ void update_avionics (void)
 
 			update_ah64a_upfront_display ();
 
+			if (command_line_shared_mem_export != 0)
+				update_ah64a_avionics_shared_mem ();	// Retro 8Mar2005
+
 			break;
 		}
 		case GUNSHIP_TYPE_KA50:
@@ -970,6 +997,9 @@ void update_avionics (void)
 			update_ka50_ekran_display ();
 
 			update_ka50_ekran_display ();
+
+			if (command_line_shared_mem_export != 0)
+				update_ka50_avionics_shared_mem ();	// Retro 8Mar2005
 
 			break;
 		}

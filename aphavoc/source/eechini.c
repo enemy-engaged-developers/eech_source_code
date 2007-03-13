@@ -489,6 +489,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "external_trackir_dir") == 0) command_line_external_trackir_direction = d1;	// Retro 31Jan2005
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "TIR_6DOF") == 0) command_line_TIR_6DOF = d1;	// Retro 6Feb2005
+		if (strcmp(p, "MEMEXPORT") == 0) command_line_shared_mem_export = d1;	// Retro 14Aug2006
 		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
@@ -688,6 +689,7 @@ void dump_ini_file(void)
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
 	fprintf(f,"dfr=%d               # display framerate (0 = off (default), 1 = on, 2 = log to file \"framerate.txt\")\n",command_line_framerate);
+	fprintf(f,"MEMEXPORT=%d         # enables export of cockpit information to a shared memory area\n", command_line_shared_mem_export);
 	fprintf(f,"[end of file]\n");
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);

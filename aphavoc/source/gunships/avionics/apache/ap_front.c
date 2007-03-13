@@ -274,6 +274,9 @@ void set_apache_upfront_display_text (char *s1, char *s2, char *s3, char *s4)
 
 		line4[MAX_STRING_LENGTH] = '\0';
 	}
+
+	if (command_line_shared_mem_export != 0)
+		update_upfront_display_shared_mem(s1, s2, s3, s4); // Retro 14Aug2006
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

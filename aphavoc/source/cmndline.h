@@ -189,6 +189,7 @@ extern int
 	command_line_high_lod_hack,									// Retro 31Oct2004
 	command_line_TIR_6DOF,										// Retro 6Feb2005
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
+	command_line_shared_mem_export,								// Retro 14Aug2006
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha, 									// VJ 050126 hud mod: background 
 	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly

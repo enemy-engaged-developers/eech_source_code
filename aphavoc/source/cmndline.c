@@ -212,6 +212,7 @@ int
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_TIR_6DOF							= 0,	// Retro 6Feb2005
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
+	command_line_shared_mem_export					= 0,	// Retro 14Aug2006
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
 	global_hud_alpha									= 0,  // VJ 050126 hud mod: background 
 	global_mipmapping									= 0,  //VJ 050530 mipmapping on/off
@@ -685,6 +686,23 @@ void process_command_line (int argc, char *argv[])
 			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_TIR_6DOF);
 		}
 		// Retro 6Feb2005
+		// Retro 14Aug2006
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "MEMEXPORT"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_shared_mem_export);
+			}
+			else
+			{
+				command_line_shared_mem_export = FALSE;
+			}
+
+			debug_log ("ARG:%s, RESPONSE:= %d", s1, command_line_shared_mem_export);
+		}
+		// Retro 14Aug2006
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "fog"))
 		////////////////////////////////////////

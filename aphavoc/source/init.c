@@ -747,6 +747,28 @@ void full_initialise_game (void)
 
 	////////////////////////////////////////
 	//
+	// INIT SHARED MEM 
+	//
+	////////////////////////////////////////
+	
+	// Retro 8Mar2005 - 14Aug2006
+	if (command_line_shared_mem_export != 0)
+	{
+		debug_log ( "Initialising Shared Memory" );
+		
+		sprintf (buffer, "%s...%s", get_trans ("Loading"), "Shared Memory");
+
+		set_ui_object_text (initialising_text, buffer);
+
+		if (Initialise_Shared_Memory() == 0)
+		{
+			debug_log ( "Failed to initialise shared memory" );
+			command_line_shared_mem_export = 0;
+		}
+	}
+
+	////////////////////////////////////////
+	//
 	// INITIALISE UPDATE FUNCTIONS
 	//
 	////////////////////////////////////////

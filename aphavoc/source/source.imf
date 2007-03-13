@@ -96,6 +96,7 @@ c_object_files    += $+ &
                      $(currentdir)\gwutcfg.obj &
                      $(currentdir)\eechini.obj &
                      $(currentdir)\servlog.obj &
+                     $(currentdir)\sharedmem.obj &
                      $-
 
 asm_object_files  += $+ &
