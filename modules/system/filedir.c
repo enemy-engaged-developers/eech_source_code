@@ -104,13 +104,8 @@ directory_file_list *get_first_directory_file ( const char *path )
 			return ( first_file );
 		}
 	}
-	else
-	{
 
-		free_mem ( first_file );
-
-		return ( NULL );
-	}
+	return ( NULL );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
