@@ -123,6 +123,7 @@ void damage_virtual_cockpit_main_rotors (int seed)
 	switch (get_global_gunship_type ())
 	{
 		// JB 030313 Fly any aircraft
+		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			damage_apache_virtual_cockpit_main_rotors (seed);
@@ -165,7 +166,6 @@ void damage_virtual_cockpit_main_rotors (int seed)
 		}
 		////Moje 030612 End
 		////Moje 030816 Start
-		default:
 		case GUNSHIP_TYPE_AH64A:
 		{
 			damage_ah64a_virtual_cockpit_main_rotors (seed);
