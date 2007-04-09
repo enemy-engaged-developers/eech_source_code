@@ -85,10 +85,15 @@ static void toggle_high_LOD_event (event *ev)
 
 static void set_next_hud_colour_event (event *ev)
 {
-	set_next_hud_colour ();
+	gunship_types type = get_global_gunship_type();
 	
+	if (type >= (sizeof(hud_code) / sizeof(hud_code[0])))
+		type = GUNSHIP_TYPE_AH64A;
+	
+	set_next_hud_colour ();
+
 	//VJ 060211 hud_code: store hud info
-	hud_code[(int)get_global_gunship_type ()][0] = get_global_hud_colour();
+	hud_code[(int)type][0] = get_global_hud_colour();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,12 +113,17 @@ static void set_next_hud_colour_event (event *ev)
 //VJ 050205 hijacked this key for HUD background colour
 static void set_next_hud_alpha_event (event *ev)
 {
+	gunship_types type = get_global_gunship_type();
+	
+	if (type >= (sizeof(hud_code) / sizeof(hud_code[0])))
+		type = GUNSHIP_TYPE_AH64A;
+
 	global_hud_alpha += 16;	   
 	if (global_hud_alpha > 160)
 		global_hud_alpha = 0;
 		
 	//VJ 060211 hud_code: store hud info
-	hud_code[(int)get_global_gunship_type ()][1] = global_hud_alpha;
+	hud_code[(int)type][1] = global_hud_alpha;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
