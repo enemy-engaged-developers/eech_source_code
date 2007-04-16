@@ -882,7 +882,10 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 
 	frame += index;
 
-	while (frame >= number_of_frames) frame -= number_of_frames;
+    // stump - checking that we don't enter an infinite loop for smoke.
+    ASSERT ( number_of_frames != 0 );
+
+	while (number_of_frames != 0 && frame >= number_of_frames) frame -= number_of_frames;
 
 	spr->texture = get_texture_animation_texture_pointer ( smoke_info->texture, frame );
 
