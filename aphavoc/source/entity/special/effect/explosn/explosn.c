@@ -1064,8 +1064,7 @@ void damage_objects_within_explosion_damage_radius (entity *en, entity *target, 
 									// arneh - for armour piercing warheads (i.e. shaped charge), damage is much less severe for targets not hit directly
 									if (get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE) == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK
 										|| get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE) == WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING)
-									{
-										debug_log("Damage level reduced from %.2f to %.2f for armour piercing charge");
+										debug_log("Damage level reduced from %.2f to %.2f for armour piercing charge", damage_modifier, damage_modifier*damage_modifier);
 										damage_modifier *= damage_modifier;
 									}
 
