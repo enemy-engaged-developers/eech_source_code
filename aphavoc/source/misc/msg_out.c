@@ -997,6 +997,8 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 
 		entity
 			*guide;
+		entity
+			*group;
 
 		recon_flag = FALSE;
 
@@ -1016,25 +1018,32 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 			// 4 options
 			//
 
-			sub_item = create_message_database_list (MESSAGE_LOCAL_BASE_LIST, 0, message_list, 4, "Select Message");
+			group = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER);
 
-			add_message_action_to_database (sub_item, 0, MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE,	index, DIK_1, "Request Airstrike");
-			add_message_action_to_database (sub_item, 1, MESSAGE_LOCAL_BASE_REQUEST_ARTILLERY,	index, DIK_2, "Request Artillery");
-			add_message_action_to_database (sub_item, 2, MESSAGE_LOCAL_BASE_REQUEST_ASSISTANCE,	index, DIK_3, "Request Assistance");
-
-			if (recon_flag)
+			if (group)
 			{
-				add_message_action_to_database (sub_item, 3, MESSAGE_LOCAL_BASE_TRANSMIT_RECON,	index, DIK_4, "Transmit Recon");
-			}
-			else
-			{
-				add_message_action_to_database (sub_item, 3, MESSAGE_NONE,								index, DIK_4, "Transmit Recon");
-			}
+				index = get_local_entity_index (group);
 
-			create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE, 	index, send_local_base_message);
-			create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_ARTILLERY, 	index, send_local_base_message);
-			create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_ASSISTANCE,	index, send_local_base_message);
-			create_leaf_message_action (MESSAGE_LOCAL_BASE_TRANSMIT_RECON,	index, send_local_base_message);
+				sub_item = create_message_database_list (MESSAGE_LOCAL_BASE_LIST, 0, message_list, 4, "Select Message");
+
+				add_message_action_to_database (sub_item, 0, MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE,	index, DIK_1, "Request Airstrike");
+				add_message_action_to_database (sub_item, 1, MESSAGE_LOCAL_BASE_REQUEST_ARTILLERY,	index, DIK_2, "Request Artillery");
+				add_message_action_to_database (sub_item, 2, MESSAGE_LOCAL_BASE_REQUEST_ASSISTANCE,	index, DIK_3, "Request Assistance");
+
+				if (recon_flag)
+				{
+					add_message_action_to_database (sub_item, 3, MESSAGE_LOCAL_BASE_TRANSMIT_RECON,	index, DIK_4, "Transmit Recon");
+				}
+				else
+				{
+					add_message_action_to_database (sub_item, 3, MESSAGE_NONE,								index, DIK_4, "Transmit Recon");
+				}
+
+				create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE, 	index, send_local_base_message);
+				create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_ARTILLERY, 	index, send_local_base_message);
+				create_leaf_message_action (MESSAGE_LOCAL_BASE_REQUEST_ASSISTANCE,	index, send_local_base_message);
+				create_leaf_message_action (MESSAGE_LOCAL_BASE_TRANSMIT_RECON,	index, send_local_base_message);
+			}
 		}
 	}
 
