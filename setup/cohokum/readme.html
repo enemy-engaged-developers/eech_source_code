@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.8.4</title>
+<title>EECH Community Release Version 1.8.5</title>
 <style>
 <!--
 a {
@@ -74,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: February 20, 2007
+      italic;'>Last edited by arneh: May 28, 2007
       </p>
 
 
@@ -93,20 +93,20 @@ h4 {
 
 
 
-      <h2>What's NEW in EECH 1.8.4?</h2>
-      <p><em>(since version 1.8.3)</em></p>
+      <h2>What's NEW in EECH 1.8.5?</h2>
+      <p><em>(since version 1.8.4)</em></p>
       <ul>
-        <li>Fixed Hind's flight model which caused it to be suddently
-	do violent manouvers and crash.
-	<li>Reverted fix which caused some missiles to continue
-	unguided when they lost guidance.  They will now self destruct
-	again.  The unguided fix caused crashes in multiplayer.
-	<li>Fixed so that mouse buttons can be used with the EO
-	cameras again.
-	<li>If the registry doesn't contain a Apache Havoc entry, EECH
-	will now check if the aphavoc directory exists in the same
-	directory as cohokum, and use it if it does (only used for Apache
-	and Havoc cockpit textures).
+        <li>Added arrow keys as fine adjustment of trim.  Useful in
+	when helicopter is mostly trimmed, but just
+        need some fine adjustment. Only works when using a joystick
+	for cyclic control.
+	<li>Added shared memory export of flight data (thanks to
+	Retro)
+	<li>Added waypoint, weapon and NG RPM data to shared memory
+	export.
+	<li>Several crash fixes including when taking damagine in
+	Cobra and other helicopters with general modelling (thanks to
+	Richard Evans for all the crash fixes).
       </ul>
 
       <p align="right"><a href="#top">[top ^]</a></p>
@@ -1119,6 +1119,21 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+
+      <h4>Fixes/features in 1.8.4:</h4>
+      <ul>
+        <li>Fixed Hind's flight model which caused it to be suddently
+	do violent manouvers and crash.
+	<li>Reverted fix which caused some missiles to continue
+	unguided when they lost guidance.  They will now self destruct
+	again.  The unguided fix caused crashes in multiplayer.
+	<li>Fixed so that mouse buttons can be used with the EO
+	cameras again.
+	<li>If the registry doesn't contain a Apache Havoc entry, EECH
+	will now check if the aphavoc directory exists in the same
+	directory as cohokum, and use it if it does (only used for Apache
+	and Havoc cockpit textures).
+      </ul>
 
       <h4>Fixes/features in 1.8.3:</h4>
       <ul>
