@@ -418,7 +418,7 @@ unpacked_value >>= 1;
 void pack_signed_data (int unpacked_data, int number_of_bits_to_pack)
 {
 	int
-		count, max_count, min_count;
+		count;
 
 	#if PACKING_STATS
 
@@ -459,23 +459,23 @@ void pack_signed_data (int unpacked_data, int number_of_bits_to_pack)
 	}
 	#endif
 
+	count = number_of_bits_to_pack;
+
 	// arneh - filter out any excess bits, if there are any
 	if (number_of_bits_to_pack < 32)
 	{
-		max_count = (1 << (number_of_bits_to_pack - 1)) - 1;
-		min_count = -max_count - 1;
+		int max_value = (1 << (number_of_bits_to_pack - 1)) - 1;
+		int min_value = -max_value - 1;
 
-		if (count > max_count)
-			count = max_count;
-		else if (count < min_count)
-			count = min_count;
+		if (unpacked_data > max_value)
+			unpacked_data = max_value;
+		else if (unpacked_data < min_value)
+			unpacked_data = min_value;
 	}
 
 	//
 	// pack data
 	//
-
-	count = number_of_bits_to_pack;
 
 	while (count--)
 	{
@@ -506,7 +506,7 @@ void pack_signed_data (int unpacked_data, int number_of_bits_to_pack)
 void pack_unsigned_data (unsigned int unpacked_data, int number_of_bits_to_pack)
 {
 	int
-		count, max_count;
+		count;
 
 	#if PACKING_STATS
 
@@ -553,9 +553,10 @@ void pack_unsigned_data (unsigned int unpacked_data, int number_of_bits_to_pack)
 	// arneh - filter out any excess bits, if there are any
 	if (number_of_bits_to_pack < 32)
 	{
-		max_count = (1 << number_of_bits_to_pack) - 1;
-		if (count > max_count)
-			count = max_count;
+		int max_value = (1 << (number_of_bits_to_pack - 1)) - 1;
+
+		if (unpacked_data > max_value)
+			unpacked_data = max_value;
 	}
 
 	//
