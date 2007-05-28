@@ -119,6 +119,12 @@ void set_flight_dynamics_events (void)
 					current_flight_dynamics->input_data.cyclic_joystick_device = joystick_devices [command_line_cyclic_joystick_index];
 				}
 
+				// arneh 2007-05-28  arrow keys make fine trim adjustments
+				set_event (DIK_LEFT, MODIFIER_NONE, KEY_STATE_DOWN, adjust_roll_trim);
+				set_event (DIK_RIGHT, MODIFIER_NONE, KEY_STATE_DOWN, adjust_roll_trim);
+				set_event (DIK_UP, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pitch_trim);
+				set_event (DIK_DOWN, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pitch_trim);
+
 				break;
 			}
 		}
