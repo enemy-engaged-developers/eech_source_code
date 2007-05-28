@@ -4,6 +4,12 @@
 
 #include "project.h"
 
+/********* IMPORTANT ************************************************
+ * please increase this number when changing the layout of the data, 
+ * it makes life so much easier for those using the data
+ *******************************************************************/
+#define SHARED_MEM_DATA_VERSION 2
+
 static HANDLE gHandleSharedMemory;
 
 void* gPtrSharedMemory = (void*)0;
@@ -23,7 +29,7 @@ int Initialise_Shared_Memory()
 	{ 
 		gPtrSharedMemory = MapViewOfFile(gHandleSharedMemory, FILE_MAP_WRITE, 0, 0, 0);
 
-		((shared_memory_t*)gPtrSharedMemory)->version = 1;
+		((shared_memory_t*)gPtrSharedMemory)->version = SHARED_MEM_DATA_VERSION;
 
 		return 1;
 	}
@@ -207,10 +213,12 @@ void update_dynamics_shared_mem ()
 	((shared_memory_t*)gPtrSharedMemory)->g_force				= current_flight_dynamics->g_force.value;
 
 	((shared_memory_t*)gPtrSharedMemory)->left_engine_rpm		= current_flight_dynamics->left_engine_rpm.value;
+	((shared_memory_t*)gPtrSharedMemory)->left_engine_n1_rpm	= current_flight_dynamics->left_engine_n1_rpm.value;
 	((shared_memory_t*)gPtrSharedMemory)->left_engine_torque	= current_flight_dynamics->left_engine_torque.value;
 	((shared_memory_t*)gPtrSharedMemory)->left_engine_temp		= current_flight_dynamics->left_engine_temp.value;
 
 	((shared_memory_t*)gPtrSharedMemory)->right_engine_rpm		= current_flight_dynamics->right_engine_rpm.value;
+	((shared_memory_t*)gPtrSharedMemory)->right_engine_n1_rpm	= current_flight_dynamics->right_engine_n1_rpm.value;
 	((shared_memory_t*)gPtrSharedMemory)->right_engine_torque	= current_flight_dynamics->right_engine_torque.value;
 	((shared_memory_t*)gPtrSharedMemory)->right_engine_temp		= current_flight_dynamics->right_engine_temp.value;
 
@@ -218,4 +226,77 @@ void update_dynamics_shared_mem ()
 	((shared_memory_t*)gPtrSharedMemory)->combined_engine_torque= current_flight_dynamics->combined_engine_torque.value;
 
 	((shared_memory_t*)gPtrSharedMemory)->fuel_weight			= current_flight_dynamics->fuel_weight.value;
+}
+
+void update_waypoint_shared_mem()
+{
+	entity* wp;
+
+	if (!gPtrSharedMemory || !get_gunship_entity())
+		return;
+
+	wp = get_local_entity_current_waypoint(get_gunship_entity());
+
+	if (wp)
+	{
+		vec3d
+			*gunship_position,
+			waypoint_position;
+
+		float
+			dx,
+			dz,
+			bearing;
+
+		gunship_position = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_POSITION);
+		get_waypoint_display_position (get_gunship_entity(), wp, &waypoint_position);
+
+		((shared_memory_t*)gPtrSharedMemory)->waypoint_data.waypoint = get_local_entity_char_value(wp, CHAR_TYPE_TAG);
+		((shared_memory_t*)gPtrSharedMemory)->waypoint_data.waypoint_range = get_2d_range (gunship_position, &waypoint_position);
+
+		dx = waypoint_position.x - gunship_position->x;
+		dz = waypoint_position.z - gunship_position->z;
+
+		bearing = deg(atan2(dx, dz));
+		if (bearing < 0.0)
+			bearing += 360.0;
+
+		((shared_memory_t*)gPtrSharedMemory)->waypoint_data.waypoint_bearing = bearing;
+	}
+	else
+		memset(&((shared_memory_t*)gPtrSharedMemory)->waypoint_data, 0, sizeof(waypoint_data_t));
+}
+
+void update_weapon_load_shared_mem()
+{
+	weapon_package_status
+		*package_status;
+
+	unsigned next_free = 0;
+
+	if (!gPtrSharedMemory || !get_gunship_entity())
+		return;
+
+	package_status = get_local_entity_ptr_value(get_gunship_entity(), PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+
+	if (package_status)
+	{
+		int package;
+		weapon_config_types config_type = get_local_entity_int_value (get_gunship_entity(), INT_TYPE_WEAPON_CONFIG_TYPE);
+
+		for (package = 0; package < MAX_WEAPON_LOAD_DATA; package++)
+		{
+			entity_sub_types weapon_type;
+			int number;
+
+			weapon_type = weapon_config_database[config_type][package].sub_type;
+			number = package_status[package].number;
+
+			((shared_memory_t*)gPtrSharedMemory)->weapon_load[next_free].weapon_type = weapon_type;
+			((shared_memory_t*)gPtrSharedMemory)->weapon_load[next_free].weapon_count = number;
+			next_free++;
+		}
+	}
+	else
+		memset(((shared_memory_t*)gPtrSharedMemory)->weapon_load, 0, sizeof(((shared_memory_t*)gPtrSharedMemory)->weapon_load));
 }

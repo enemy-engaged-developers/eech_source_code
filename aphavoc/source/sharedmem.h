@@ -2,6 +2,20 @@
 
 #define MAX_UFD_STRINGLEN 14
 #define MAX_EKRAN_STRINGLEN 9
+#define MAX_WEAPON_LOAD_DATA 14
+
+typedef struct
+{
+	entity_sub_types   weapon_type;
+	int                weapon_count;
+} weapon_load_data_t;
+
+typedef struct
+{
+	char waypoint;            // capital letter of selected waypoint
+	float waypoint_range;     // in meters
+	float waypoint_bearing;	  // absolute bearing to waypoint in degrees
+} waypoint_data_t;
 
 typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 {
@@ -26,10 +40,12 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 		g_force,
 
 		left_engine_rpm,
+		left_engine_n1_rpm,
 		left_engine_torque,
 		left_engine_temp,
 
 		right_engine_rpm,
+		right_engine_n1_rpm,
 		right_engine_torque,
 		right_engine_temp,
 
@@ -71,6 +87,8 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 		comanche_lamps;
 	} cockpit_lamps;
 
+	waypoint_data_t waypoint_data;
+	weapon_load_data_t weapon_load[MAX_WEAPON_LOAD_DATA];
 } shared_memory_t;
 
 extern void* gPtrSharedMemory;
@@ -93,3 +111,5 @@ void update_ka50_avionics_shared_mem ();
 
 void update_dynamics_shared_mem ();
 void update_texture_shared_mem (void* target);
+void update_waypoint_shared_mem();
+void update_weapon_load_shared_mem();

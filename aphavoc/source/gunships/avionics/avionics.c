@@ -828,6 +828,8 @@ void update_avionics (void)
 	{
 		update_dynamics_shared_mem ();	// Retro 8Mar2005 - all this stuff should MAYBE get moved 2-3 calls up the call
 										// stack to a place where it is also done if we are in the campaign map..
+		update_waypoint_shared_mem();
+		update_weapon_load_shared_mem();
 	}
 
 	switch (gunship_type)
