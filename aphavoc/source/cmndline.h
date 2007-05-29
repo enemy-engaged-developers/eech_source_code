@@ -206,7 +206,20 @@ extern int
 	session_planner_goto_button,
 	session_vector_flight_model,
 	session_ground_radar_ignores_infantry,
-	session_camcom;
+	session_camcom,
+// mue 070223 export_mfd
+	command_line_export_mfd,
+	command_line_export_mfd_adapter,
+	command_line_export_mfd_screen_width,
+	command_line_export_mfd_screen_height,
+	command_line_export_mfd_left_pos_left,
+	command_line_export_mfd_left_pos_top,
+	command_line_export_mfd_left_pos_right,
+	command_line_export_mfd_left_pos_bottom,
+	command_line_export_mfd_right_pos_left,
+	command_line_export_mfd_right_pos_top,
+	command_line_export_mfd_right_pos_right,
+	command_line_export_mfd_right_pos_bottom;
 
  
 

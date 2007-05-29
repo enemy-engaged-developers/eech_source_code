@@ -229,8 +229,21 @@ int
 	session_planner_goto_button					= FALSE, // Jabberwock 040521 Variables HAVE to be intialised...
 	session_vector_flight_model					= FALSE, // camcom bugs removed
 	session_ground_radar_ignores_infantry		= 1,
-	session_camcom										= 0;
+	session_camcom										= 0,
 // Jabberwock 031118 ends
+// mue 070223 export_mfd
+	command_line_export_mfd						=FALSE,
+	command_line_export_mfd_adapter					=0,
+	command_line_export_mfd_screen_width				=640,
+	command_line_export_mfd_screen_height				=400,
+	command_line_export_mfd_left_pos_left				=0,
+	command_line_export_mfd_left_pos_top				=0,
+	command_line_export_mfd_left_pos_right				=256,
+	command_line_export_mfd_left_pos_bottom				=256,
+	command_line_export_mfd_right_pos_left				=384,
+	command_line_export_mfd_right_pos_top				=0,
+	command_line_export_mfd_right_pos_right				=640,
+	command_line_export_mfd_right_pos_bottom			=256;
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,

@@ -263,6 +263,8 @@ extern BOOL ddraw_destroy_surface ( LPDIRECTDRAWSURFACEX surface );
 
 extern BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level );
 
+extern int ddraw_internal_set_cooperative_level( void *data );
+
 extern const char *get_ddraw_error_message ( HRESULT error );
 
 extern void ddraw_validate_display_devices ( void );

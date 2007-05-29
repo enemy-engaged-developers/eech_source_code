@@ -1584,7 +1584,11 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_comanche_mfd ();
+					//mue 070223 if mfd export enabled draw normal mfd which can be exported
+					if(command_line_export_mfd)
+						draw_comanche_mfd();
+					else
+						draw_overlaid_comanche_mfd ();
 				}
 			}
 
@@ -1604,7 +1608,11 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_hokum_mfd ();
+					//mue 070223 if mfd export enabled draw normal mfd which can be exported
+					if(command_line_export_mfd)
+						draw_hokum_mfd();
+					else
+						draw_overlaid_hokum_mfd ();
 				}
 			}
 
