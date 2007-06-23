@@ -12116,6 +12116,14 @@ static hokum_mfd_modes get_mfd_mode_for_eo_sensor (void)
 	return (mfd_mode);
 }
 
+static mfd_modes get_mfd_mode_for_radar (void)
+{
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR || air_radar_is_active())
+		return HOKUM_MFD_MODE_AIR_RADAR;
+
+	return HOKUM_MFD_MODE_GROUND_RADAR;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12300,13 +12308,6 @@ static hokum_mfd_modes get_next_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mfd_lo
 		}
 		////////////////////////////////////////
 		case HOKUM_MFD_MODE_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			next_mfd_mode = HOKUM_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case HOKUM_MFD_MODE_AIR_RADAR:
 		////////////////////////////////////////
 		{
@@ -12390,7 +12391,7 @@ static hokum_mfd_modes get_next_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mfd_lo
 		case HOKUM_MFD_MODE_MISSION:
 		////////////////////////////////////////
 		{
-			next_mfd_mode = HOKUM_MFD_MODE_GROUND_RADAR;
+			next_mfd_mode = get_mfd_mode_for_radar();
 
 			break;
 		}
@@ -12432,6 +12433,7 @@ static hokum_mfd_modes get_previous_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mf
 		}
 		////////////////////////////////////////
 		case HOKUM_MFD_MODE_GROUND_RADAR:
+		case HOKUM_MFD_MODE_AIR_RADAR:
 		////////////////////////////////////////
 		{
 			previous_mfd_mode = HOKUM_MFD_MODE_MISSION;
@@ -12439,34 +12441,12 @@ static hokum_mfd_modes get_previous_mfd_mode (hokum_mfd_modes mfd_mode, hokum_mf
 			break;
 		}
 		////////////////////////////////////////
-		case HOKUM_MFD_MODE_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = HOKUM_MFD_MODE_GROUND_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case HOKUM_MFD_MODE_FLIR:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = HOKUM_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case HOKUM_MFD_MODE_LLLTV:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = HOKUM_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case HOKUM_MFD_MODE_PERISCOPE:
 		////////////////////////////////////////
 		{
-			previous_mfd_mode = HOKUM_MFD_MODE_AIR_RADAR;
+			previous_mfd_mode = get_mfd_mode_for_radar();
 
 			break;
 		}
