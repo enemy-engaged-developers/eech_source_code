@@ -11579,15 +11579,15 @@ static void draw_mission_display_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes mode, comanche_main_mfd_locations location)
+static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes* mode, comanche_main_mfd_locations location)
 {
 	ASSERT (mfd_screen);
 
-	ASSERT (comanche_main_mfd_mode_valid (mode));
+	ASSERT (comanche_main_mfd_mode_valid (*mode));
 
 	ASSERT (comanche_main_mfd_location_valid (location));
 
-	if ((get_undamaged_eo_display_mode (mode) && d3d_can_render_to_texture))
+	if ((get_undamaged_eo_display_mode (*mode) && d3d_can_render_to_texture))
 	{
 		return;
 	}
@@ -11602,7 +11602,12 @@ static void draw_main_mfd (screen *mfd_screen, comanche_main_mfd_modes mode, com
 
 		draw_layout_grid ();
 
-		switch (mode)
+		if (*mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+			*mode = COMANCHE_MAIN_MFD_MODE_GROUND_RADAR;
+		else if (*mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+			*mode = COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
+
+		switch (*mode)
 		{
 			////////////////////////////////////////
 			case COMANCHE_MAIN_MFD_MODE_OFF:
@@ -12529,12 +12534,12 @@ void draw_comanche_mfd (void)
 
 	if (display_mask & PILOT_LHS_MAIN_MFD)
 	{
-		draw_main_mfd (pilot_lhs_main_mfd_texture_screen, pilot_lhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
+		draw_main_mfd (pilot_lhs_main_mfd_texture_screen, &pilot_lhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
 	}
 
 	if (display_mask & PILOT_RHS_MAIN_MFD)
 	{
-		draw_main_mfd (pilot_rhs_main_mfd_texture_screen, pilot_rhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
+		draw_main_mfd (pilot_rhs_main_mfd_texture_screen, &pilot_rhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
 	}
 
 	if (display_mask & PILOT_LHS_SIDE_MFD)
@@ -12554,12 +12559,12 @@ void draw_comanche_mfd (void)
 
 	if (display_mask & CO_PILOT_LHS_MAIN_MFD)
 	{
-		draw_main_mfd (co_pilot_lhs_main_mfd_texture_screen, co_pilot_lhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
+		draw_main_mfd (co_pilot_lhs_main_mfd_texture_screen, &co_pilot_lhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
 	}
 
 	if (display_mask & CO_PILOT_RHS_MAIN_MFD)
 	{
-		draw_main_mfd (co_pilot_rhs_main_mfd_texture_screen, co_pilot_rhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_RHS);
+		draw_main_mfd (co_pilot_rhs_main_mfd_texture_screen, &co_pilot_rhs_main_mfd_mode, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_RHS);
 	}
 
 	if (display_mask & CO_PILOT_LHS_SIDE_MFD)
@@ -14922,6 +14927,20 @@ void select_comanche_ground_radar_main_mfd (void)
 		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_GROUND_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
+	
+			return;
+		}
+
+		if (pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_GROUND_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
+	
+			return;
+		}
+
+		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_GROUND_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
 
 			return;
 		}
@@ -15078,6 +15097,20 @@ void select_comanche_air_radar_main_mfd (void)
 		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
+	
+			return;
+		}
+
+		if (pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
+	
+			return;
+		}
+
+		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
 
 			return;
 		}
@@ -15149,6 +15182,20 @@ void select_comanche_air_radar_main_mfd (void)
 			return;
 		}
 
+		if (co_pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
+	
+			return;
+		}
+
+		if (co_pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
+		{
+			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_RHS);
+	
+			return;
+		}
+	
 		if (co_pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
