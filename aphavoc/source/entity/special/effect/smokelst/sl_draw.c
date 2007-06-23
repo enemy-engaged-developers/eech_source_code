@@ -769,6 +769,9 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 		blue_end,
 		alpha_end,
 		radius_end,
+		red_lightlevel,
+		green_lightlevel,
+		blue_lightlevel,
 		// Xhit: added scale and alpha for downwash effect (030328)
 		scale;
 	
@@ -786,16 +789,22 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	scale = raw->scale;
 	alpha_percentage = raw->alpha_percentage;
 
+	// adjust downwash for ambient light, so that it won't "glow" in the dark
+	get_3d_ambient_light_level(&red_lightlevel, &green_lightlevel, &blue_lightlevel);
+	red_lightlevel = bound(red_lightlevel * 2.5, 0.1, 1.0);
+	green_lightlevel = bound(green_lightlevel * 2.5, 0.1, 1.0);
+	blue_lightlevel = bound(blue_lightlevel * 2.5, 0.1, 1.0);
+
 	if ( lifescale < smoke_info->colour_change_1 )
 	{
-		red_start = (float)smoke_info->red_start;
-		red_end = (float)smoke_info->red_1;
+		red_start = (float)smoke_info->red_start * red_lightlevel;
+		red_end = (float)smoke_info->red_1 * red_lightlevel;
 
-		green_start = (float)smoke_info->green_start;
-		green_end = (float)smoke_info->green_1;
+		green_start = (float)smoke_info->green_start * green_lightlevel;
+		green_end = (float)smoke_info->green_1 * green_lightlevel;
 
-		blue_start = (float)smoke_info->blue_start;
-		blue_end = (float)smoke_info->blue_1;
+		blue_start = (float)smoke_info->blue_start * blue_lightlevel;
+		blue_end = (float)smoke_info->blue_1 * blue_lightlevel;
 
 		alpha_start = (float)smoke_info->alpha_start;
 		alpha_end = (float)smoke_info->alpha_1;
@@ -807,14 +816,14 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	}
 	else if ( lifescale < smoke_info->colour_change_2 )
 	{
-		red_start = (float)smoke_info->red_1;
-		red_end = (float)smoke_info->red_2;
+		red_start = (float)smoke_info->red_1 * red_lightlevel;
+		red_end = (float)smoke_info->red_2 * red_lightlevel;
 
-		green_start = (float)smoke_info->green_1;
-		green_end = (float)smoke_info->green_2;
+		green_start = (float)smoke_info->green_1 * green_lightlevel;
+		green_end = (float)smoke_info->green_2 * green_lightlevel;
 
-		blue_start = (float)smoke_info->blue_1;
-		blue_end = (float)smoke_info->blue_2;
+		blue_start = (float)smoke_info->blue_1 * blue_lightlevel;
+		blue_end = (float)smoke_info->blue_2 * blue_lightlevel;
 
 		alpha_start = (float)smoke_info->alpha_1;
 		alpha_end = (float)smoke_info->alpha_2;
@@ -826,14 +835,14 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	}
 	else
 	{
-		red_start = (float)smoke_info->red_2;
-		red_end = (float)smoke_info->red_end;
+		red_start = (float)smoke_info->red_2 * red_lightlevel;
+		red_end = (float)smoke_info->red_end * red_lightlevel;
 
-		green_start = (float)smoke_info->green_2;
-		green_end = (float)smoke_info->green_end;
+		green_start = (float)smoke_info->green_2 * green_lightlevel;
+		green_end = (float)smoke_info->green_end * green_lightlevel;
 
-		blue_start = (float)smoke_info->blue_2;
-		blue_end = (float)smoke_info->blue_end;
+		blue_start = (float)smoke_info->blue_2 * blue_lightlevel;
+		blue_end = (float)smoke_info->blue_end * blue_lightlevel;
 
 		alpha_start = (float)smoke_info->alpha_2;
 		alpha_end = (float)smoke_info->alpha_end;
