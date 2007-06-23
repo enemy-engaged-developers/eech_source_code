@@ -13854,6 +13854,14 @@ static comanche_main_mfd_modes get_main_mfd_mode_for_eo_sensor (void)
 	return (mfd_mode);
 }
 
+static mfd_modes get_mfd_mode_for_radar (void)
+{
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR || air_radar_is_active())
+		return COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
+
+	return COMANCHE_MAIN_MFD_MODE_GROUND_RADAR;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14212,13 +14220,6 @@ static comanche_main_mfd_modes get_next_main_mfd_mode (comanche_main_mfd_modes m
 		}
 		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			next_mfd_mode = COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_AIR_RADAR:
 		////////////////////////////////////////
 		{
@@ -14302,7 +14303,7 @@ static comanche_main_mfd_modes get_next_main_mfd_mode (comanche_main_mfd_modes m
 		case COMANCHE_MAIN_MFD_MODE_MISSION:
 		////////////////////////////////////////
 		{
-			next_mfd_mode = COMANCHE_MAIN_MFD_MODE_GROUND_RADAR;
+			next_mfd_mode = get_mfd_mode_for_radar();
 
 			break;
 		}
@@ -14344,6 +14345,7 @@ static comanche_main_mfd_modes get_previous_main_mfd_mode (comanche_main_mfd_mod
 		}
 		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_GROUND_RADAR:
+		case COMANCHE_MAIN_MFD_MODE_AIR_RADAR:
 		////////////////////////////////////////
 		{
 			previous_mfd_mode = COMANCHE_MAIN_MFD_MODE_MISSION;
@@ -14351,34 +14353,12 @@ static comanche_main_mfd_modes get_previous_main_mfd_mode (comanche_main_mfd_mod
 			break;
 		}
 		////////////////////////////////////////
-		case COMANCHE_MAIN_MFD_MODE_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = COMANCHE_MAIN_MFD_MODE_GROUND_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_FLIR:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_DTV:
-		////////////////////////////////////////
-		{
-			previous_mfd_mode = COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
-
-			break;
-		}
-		////////////////////////////////////////
 		case COMANCHE_MAIN_MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
-			previous_mfd_mode = COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
+			previous_mfd_mode = get_mfd_mode_for_radar();
 
 			break;
 		}
