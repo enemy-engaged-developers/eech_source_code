@@ -9852,15 +9852,15 @@ static void draw_mission_display_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_mfd_locations location)
+static void draw_mfd (screen *mfd_screen, hokum_mfd_modes* mode, hokum_mfd_locations location)
 {
 	ASSERT (mfd_screen);
 
-	ASSERT (hokum_mfd_mode_valid (mode));
+	ASSERT (hokum_mfd_mode_valid (*mode));
 
 	ASSERT (hokum_mfd_location_valid (location));
 
-	if ((get_undamaged_eo_display_mode (mode) && d3d_can_render_to_texture))
+	if ((get_undamaged_eo_display_mode (*mode) && d3d_can_render_to_texture))
 	{
 		return;
 	}
@@ -9873,7 +9873,12 @@ static void draw_mfd (screen *mfd_screen, hokum_mfd_modes mode, hokum_mfd_locati
 
 		draw_layout_grid ();
 
-		switch (mode)
+		if (*mode == HOKUM_MFD_MODE_AIR_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+			*mode = HOKUM_MFD_MODE_GROUND_RADAR;
+		else if (*mode == HOKUM_MFD_MODE_GROUND_RADAR && target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+			*mode = HOKUM_MFD_MODE_AIR_RADAR;
+
+		switch (*mode)
 		{
 			////////////////////////////////////////
 			case HOKUM_MFD_MODE_OFF:
@@ -10541,22 +10546,22 @@ void draw_hokum_mfd (void)
 
 	if (display_mask & PILOT_LHS_MFD)
 	{
-		draw_mfd (pilot_lhs_mfd_texture_screen, pilot_lhs_mfd_mode, HOKUM_MFD_LOCATION_PILOT_LHS);
+		draw_mfd (pilot_lhs_mfd_texture_screen, &pilot_lhs_mfd_mode, HOKUM_MFD_LOCATION_PILOT_LHS);
 	}
 
 	if (display_mask & PILOT_RHS_MFD)
 	{
-		draw_mfd (pilot_rhs_mfd_texture_screen, pilot_rhs_mfd_mode, HOKUM_MFD_LOCATION_PILOT_RHS);
+		draw_mfd (pilot_rhs_mfd_texture_screen, &pilot_rhs_mfd_mode, HOKUM_MFD_LOCATION_PILOT_RHS);
 	}
 
 	if (display_mask & CO_PILOT_LHS_MFD)
 	{
-		draw_mfd (co_pilot_lhs_mfd_texture_screen, co_pilot_lhs_mfd_mode, HOKUM_MFD_LOCATION_CO_PILOT_LHS);
+		draw_mfd (co_pilot_lhs_mfd_texture_screen, &co_pilot_lhs_mfd_mode, HOKUM_MFD_LOCATION_CO_PILOT_LHS);
 	}
 
 	if (display_mask & CO_PILOT_RHS_MFD)
 	{
-		draw_mfd (co_pilot_rhs_mfd_texture_screen, co_pilot_rhs_mfd_mode, HOKUM_MFD_LOCATION_CO_PILOT_RHS);
+		draw_mfd (co_pilot_rhs_mfd_texture_screen, &co_pilot_rhs_mfd_mode, HOKUM_MFD_LOCATION_CO_PILOT_RHS);
 	}
 
 	if (display_mask & EKRAN_DISPLAY)
