@@ -320,11 +320,6 @@ SOURCE=..\aphavoc\source\app3d\3d_main.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\aphavoc\source\app3d\app3d.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
 SOURCE=..\aphavoc\source\app3d\app3d.h
 # End Source File
 # End Group
@@ -490,11 +485,6 @@ SOURCE=..\aphavoc\source\gameflow\gameflow.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai_extrn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\aphavoc\source\aphavoc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
