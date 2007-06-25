@@ -302,7 +302,7 @@ void process_ini_file(int argc, char *argv[])
 			q = strtok(NULL,"#");
 		}   
 
-		while(q[i]!=' ')
+		while(q[i] && q[i]!=' ')
 		 i++;
 		q[i] = '\0';
 
@@ -562,8 +562,8 @@ void dump_ini_file(void)
 	fprintf(f,"pss=%s               # primary masterserver setting (server internet address)\n",command_line_primary_server_setting);  //Werewolf: Defaults changed 080403
 	fprintf(f,"sss=%s               # secondary masterserver setting (server internet address)\n",command_line_secondary_server_setting);
 	fprintf(f,"ccrs=%d              # connection receive size, initial guess of campaign data size (default = 210k)\n",command_line_comms_connection_receive_size);
-	fprintf(f,"cdrs=%d              # data record size, similar to above…\n",command_line_comms_data_record_size);
-	fprintf(f,"cpbs=%d              # pack buffer size, similar to above…\n",command_line_comms_pack_buffer_size);
+	fprintf(f,"cdrs=%d              # data record size, similar to above\n",command_line_comms_data_record_size);
+	fprintf(f,"cpbs=%d              # pack buffer size, similar to above\n",command_line_comms_pack_buffer_size);
 	fprintf(f,"cpds=%d              # packet data size (def = 512)\n",command_line_comms_packet_data_size);
 	fprintf(f,"cgs=%d               # force the comms to use DirectPlay guaranteed send instead of its own (def=0).\n",command_line_comms_guaranteed_send);
 	fprintf(f,"crls=%d              # packet history list size, increase if client keeps getting kicked out by server (default = 1000)\n",command_line_comms_resend_list_size);
