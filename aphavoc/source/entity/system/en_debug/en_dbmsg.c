@@ -583,7 +583,7 @@ void debug_log_entity_message (entity_messages message, entity *receiver, entity
 	// restore pargs
 	//
 
-	memcpy (pargs, tmp, sizeof (va_list));
+	memcpy (pargs, &tmp, sizeof (va_list));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
