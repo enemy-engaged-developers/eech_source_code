@@ -94,7 +94,6 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_anim\en_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -103,12 +102,10 @@ SOURCE=..\aphavoc\source\entity\en_misc\en_anim\en_anim.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_anim\key_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_anim\sub_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "en_maths"
@@ -117,7 +114,6 @@ SOURCE=..\aphavoc\source\entity\en_misc\en_anim\sub_anim.c
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_maths\en_cllsn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -126,13 +122,11 @@ SOURCE=..\aphavoc\source\entity\en_misc\en_maths\en_cllsn.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_maths\en_maths.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\en_misc\en_misc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "fixed"
@@ -1012,7 +1006,6 @@ SOURCE=..\aphavoc\source\entity\fixed\fx_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_comms\en_comms.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1021,7 +1014,6 @@ SOURCE=..\aphavoc\source\entity\system\en_comms\en_comms.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_comms\en_sessn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1230,17 +1222,14 @@ SOURCE=..\aphavoc\source\entity\system\en_funcs\en_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_main\en_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_main\en_heap.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_main\en_init.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1249,7 +1238,6 @@ SOURCE=..\aphavoc\source\entity\system\en_main\en_main.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_main\en_world.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1306,7 +1294,6 @@ SOURCE=..\aphavoc\source\entity\system\en_types\en_route.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_types\en_sbtyp.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1331,7 +1318,6 @@ SOURCE=..\aphavoc\source\entity\system\en_types\en_state.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_types\en_suply.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1356,7 +1342,6 @@ SOURCE=..\aphavoc\source\entity\system\en_types\en_thrt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\system\en_types\en_types.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 

@@ -97,7 +97,6 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fixwing.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -106,7 +105,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fixwing.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -118,12 +116,10 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_creat.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -144,7 +140,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_draw.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_dstry.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -153,7 +148,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_dstry.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -170,7 +164,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -190,12 +183,9 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_move.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
-
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -210,12 +200,9 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_msgs.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
-
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -227,7 +214,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -254,7 +240,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_tgt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -275,7 +260,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\fixwing\fw_wpn.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -285,7 +269,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_anim.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_creat.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -294,7 +277,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_draw.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -304,7 +286,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_draw.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_dstry.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -313,7 +294,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_dstry.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -330,7 +310,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -339,7 +318,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -349,7 +327,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_list.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_move.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -359,7 +336,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_move.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_msgs.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -368,7 +344,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -399,7 +374,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_tgt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -408,7 +382,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_vec3d.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -427,7 +400,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\hc_wpn.h
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\helicop.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -437,7 +409,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\helicop\helicop.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -459,12 +430,10 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_dbase.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -476,7 +445,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_dbase.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -493,7 +461,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -502,7 +469,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -514,12 +480,9 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_msgs.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
-
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -531,7 +494,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -548,7 +510,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_ptr.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_str.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -557,7 +518,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_str.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_tgt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -566,7 +526,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_tgt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_vec3d.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -575,7 +534,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_wpn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -584,7 +542,6 @@ SOURCE=..\aphavoc\source\entity\mobile\aircraft\ac_wpn.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\aircraft\aircraft.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1050,7 +1007,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_anim.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1067,7 +1023,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_draw.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1101,7 +1056,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_move.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\aa_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1147,12 +1101,10 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\anti_air.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -1168,7 +1120,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\anti_air\anti_air.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\person.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1177,7 +1128,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\person.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1186,7 +1136,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_anim.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1203,7 +1152,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_draw.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1236,7 +1184,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_move.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1245,7 +1192,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_move.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1274,7 +1220,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\person\ps_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\routed.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1283,7 +1228,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\routed.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1295,12 +1239,10 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_creat.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -1324,7 +1266,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_draw.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1333,7 +1274,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_dstry.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1350,7 +1290,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1367,7 +1306,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_move.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1376,7 +1314,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_move.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1385,7 +1322,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1412,7 +1348,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_tgt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1434,7 +1369,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\routed\rv_wpn.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1446,12 +1380,10 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_creat.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -1471,7 +1403,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_draw.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1512,7 +1443,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_move.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1524,12 +1454,10 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_msgs.c
 
 !IF  "$(CFG)" == "entity_mobile - Win32 Release"
 
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_mobile - Win32 Debug"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -1584,7 +1512,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\sh_wpn.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\ship.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1594,7 +1521,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\ship\ship.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\vehicle.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1603,7 +1529,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\vehicle.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\vh_anim.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1630,7 +1555,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\vh_dbase.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\vh_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1647,7 +1571,6 @@ SOURCE=..\aphavoc\source\entity\mobile\vehicle\vh_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\vehicle\vh_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1897,7 +1820,6 @@ SOURCE=..\aphavoc\source\entity\mobile\mb_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\mobile\mobile.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 

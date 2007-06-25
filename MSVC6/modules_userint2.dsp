@@ -178,7 +178,6 @@ SOURCE=..\modules\userint2\ui_draw\uiwindow.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_col.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -187,7 +186,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_col.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -196,7 +194,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_creat.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_draw.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -205,7 +202,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_draw.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_flags.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -222,7 +218,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_fns.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_funcs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -231,7 +226,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_funcs.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_graph.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -240,7 +234,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_graph.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_links.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -265,7 +258,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_org.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_pos.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -286,7 +278,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_ptr.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_size.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -303,7 +294,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_slid.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_txt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -312,7 +302,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_txt.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\ar_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -321,7 +310,6 @@ SOURCE=..\modules\userint2\ui_obj\area\ar_updt.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\area\area.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -374,7 +362,6 @@ SOURCE=..\modules\userint2\ui_obj\slider\ms_updt.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\slider\mslider.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -399,7 +386,6 @@ SOURCE=..\modules\userint2\ui_obj\slider\sl_slid.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\slider\slider.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -440,7 +426,6 @@ SOURCE=..\modules\userint2\ui_obj\slider\vs_updt.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\slider\vslider.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -922,7 +907,6 @@ SOURCE=..\modules\userint2\ui_obj\toggle\toggle.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_obj\ui_obj.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -938,7 +922,6 @@ SOURCE=..\modules\userint2\ui_obj\ui_obj.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_color.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -963,7 +946,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_draw.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_flags.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -980,7 +962,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_fns.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_funcs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -989,7 +970,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_funcs.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_graph.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1054,7 +1034,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_slid.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_funcs\ui_txt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1096,7 +1075,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_types\ui_types.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_sys\ui_sys.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1106,7 +1084,6 @@ SOURCE=..\modules\userint2\ui_sys\ui_sys.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_man.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1115,7 +1092,6 @@ SOURCE=..\modules\userint2\ui_man.h
 # Begin Source File
 
 SOURCE=..\modules\userint2\ui_paint.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "Header Files"

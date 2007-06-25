@@ -103,7 +103,6 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\ai_misc\ai_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -112,7 +111,6 @@ SOURCE=..\aphavoc\source\ai\ai_misc\ai_dbase.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\ai_misc\ai_misc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -121,7 +119,6 @@ SOURCE=..\aphavoc\source\ai\ai_misc\ai_misc.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\ai_misc\ai_route.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "faction"
@@ -130,12 +127,10 @@ SOURCE=..\aphavoc\source\ai\ai_misc\ai_route.c
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\faction\briefing.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\faction\faction.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -155,12 +150,10 @@ SOURCE=..\aphavoc\source\ai\faction\faction.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\faction\popread.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\faction\routegen.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -184,7 +177,6 @@ SOURCE=..\aphavoc\source\ai\faction\routegen.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\highlevl.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -204,27 +196,22 @@ SOURCE=..\aphavoc\source\ai\highlevl\highlevl.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\imaps.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\order.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\reaction.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\setup.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\highlevl\suitable.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "parser"
@@ -233,7 +220,6 @@ SOURCE=..\aphavoc\source\ai\highlevl\suitable.c
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\parser\parsgen.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -257,22 +243,18 @@ SOURCE=..\aphavoc\source\ai\parser\parsgen.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\taskgen\assign.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\taskgen\croute.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\taskgen\engage.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\taskgen\taskgen.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -282,7 +264,6 @@ SOURCE=..\aphavoc\source\ai\taskgen\taskgen.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ai\ai.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -314,7 +295,6 @@ SOURCE=..\aphavoc\source\app3d\3d_data.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\app3d\3d_draw.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -324,7 +304,6 @@ SOURCE=..\aphavoc\source\app3d\3d_draw.h
 
 SOURCE=..\aphavoc\source\app3d\3d_init.c
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -402,7 +381,6 @@ SOURCE=..\aphavoc\source\appsound\gc_data.h
 
 SOURCE=..\aphavoc\source\appsound\snd_data.c
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -453,12 +431,10 @@ SOURCE=..\aphavoc\source\appsound\wm2_data.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\comms\comm_man.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\comms\comms.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -479,12 +455,10 @@ SOURCE=..\aphavoc\source\comms\commsserver.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\events\ev_debug.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\events\ev_fns.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -493,7 +467,6 @@ SOURCE=..\aphavoc\source\events\events.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\events\userdef.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "misc"
@@ -502,7 +475,6 @@ SOURCE=..\aphavoc\source\events\userdef.c
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\airspeed.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -511,7 +483,6 @@ SOURCE=..\aphavoc\source\misc\airspeed.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\gameexit.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -520,7 +491,6 @@ SOURCE=..\aphavoc\source\misc\gameexit.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\language.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -529,7 +499,6 @@ SOURCE=..\aphavoc\source\misc\language.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\message.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -538,7 +507,6 @@ SOURCE=..\aphavoc\source\misc\message.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\miscell.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -547,7 +515,6 @@ SOURCE=..\aphavoc\source\misc\miscell.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\msg_in.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -556,7 +523,6 @@ SOURCE=..\aphavoc\source\misc\msg_in.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\msg_out.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -565,7 +531,6 @@ SOURCE=..\aphavoc\source\misc\msg_out.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\scrnshot.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -582,7 +547,6 @@ SOURCE=..\aphavoc\source\misc\secure.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\tags.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -591,7 +555,6 @@ SOURCE=..\aphavoc\source\misc\tags.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\terr_db.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -600,7 +563,6 @@ SOURCE=..\aphavoc\source\misc\terr_db.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\timeaccl.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -609,7 +571,6 @@ SOURCE=..\aphavoc\source\misc\timeaccl.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\misc\tod.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -651,7 +612,6 @@ SOURCE=..\aphavoc\source\cdmusic.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\cmndline.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -676,7 +636,6 @@ SOURCE=..\aphavoc\source\eechini.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\flight.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -693,7 +652,6 @@ SOURCE=..\aphavoc\source\game.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\gfxfiles.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -702,7 +660,6 @@ SOURCE=..\aphavoc\source\gfxfiles.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\global.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -719,7 +676,6 @@ SOURCE=..\aphavoc\source\gwutcfg.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\init.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -736,7 +692,6 @@ SOURCE=..\aphavoc\source\install.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\project.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -761,7 +716,6 @@ SOURCE=..\aphavoc\source\sharedmem.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\test.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -770,7 +724,6 @@ SOURCE=..\aphavoc\source\test.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\update.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 

@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="modules_graphics" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
 CFG=modules_graphics - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "modules_graphics.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "modules_graphics.mak" CFG="modules_graphics - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "modules_graphics - Win32 Release" (basierend auf  "Win32 (x86) Static Library")
-!MESSAGE "modules_graphics - Win32 Debug" (basierend auf  "Win32 (x86) Static Library")
+!MESSAGE "modules_graphics - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "modules_graphics - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -105,19 +105,6 @@ SOURCE=..\modules\graphics\d3dshare.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\modules\graphics\heckfill.c
-
-!IF  "$(CFG)" == "modules_graphics - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "modules_graphics - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\modules\graphics\polyfill.c
 # PROP Exclude_From_Build 1
 # End Source File
@@ -130,19 +117,6 @@ SOURCE=..\modules\graphics\polygon.c
 
 SOURCE=..\modules\graphics\polyscan.c
 # PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
-SOURCE=..\modules\graphics\shadfill.c
-
-!IF  "$(CFG)" == "modules_graphics - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "modules_graphics - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Source File
@@ -204,6 +178,10 @@ SOURCE=..\modules\graphics\dresol.c
 # Begin Source File
 
 SOURCE=..\modules\graphics\gfxzoom.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\modules\graphics\heckfill.c
 # End Source File
 # Begin Source File
 
@@ -281,6 +259,10 @@ SOURCE=..\modules\graphics\rle.c
 # Begin Source File
 
 SOURCE=..\modules\graphics\screens.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\modules\graphics\shadfill.c
 # End Source File
 # Begin Source File
 

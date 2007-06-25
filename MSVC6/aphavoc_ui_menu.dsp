@@ -95,12 +95,10 @@ SOURCE=..\aphavoc\source\ui_menu\main\main.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\main\main_fn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\main\main_sc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "multiop"
@@ -109,12 +107,10 @@ SOURCE=..\aphavoc\source\ui_menu\main\main_sc.c
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\multiop\mult_fn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\multiop\mult_sc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -127,42 +123,34 @@ SOURCE=..\aphavoc\source\ui_menu\multiop\multiop.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_commn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_ctrlr.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_dynam.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_grafx.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_insnd.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_real.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\op_snd.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\options\options.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -175,7 +163,6 @@ SOURCE=..\aphavoc\source\ui_menu\options\options.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\player\play_gn.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -192,7 +179,6 @@ SOURCE=..\aphavoc\source\ui_menu\player\play_hours.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\player\play_md.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -201,7 +187,6 @@ SOURCE=..\aphavoc\source\ui_menu\player\play_md.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\player\play_sc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -210,7 +195,6 @@ SOURCE=..\aphavoc\source\ui_menu\player\play_sc.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\player\play_wp.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -219,7 +203,6 @@ SOURCE=..\aphavoc\source\ui_menu\player\play_wp.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\player\player.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -232,12 +215,10 @@ SOURCE=..\aphavoc\source\ui_menu\player\player.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\session\mission.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\session\sess_sc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -262,7 +243,6 @@ SOURCE=..\aphavoc\source\ui_menu\sessparm\sessparm.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\sessparm\sparm_sc.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # Begin Group "ingame"
@@ -446,7 +426,6 @@ SOURCE=..\aphavoc\source\ui_menu\ingame\campaign\campaign.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\common\common.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -455,12 +434,10 @@ SOURCE=..\aphavoc\source\ui_menu\ingame\common\common.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\common\infobar.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\common\map.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -473,22 +450,18 @@ SOURCE=..\aphavoc\source\ui_menu\ingame\common\map.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\fflight\ff_info.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\fflight\ff_map.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\fflight\ff_selct.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
 SOURCE=..\aphavoc\source\ui_menu\ingame\fflight\fflight.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 

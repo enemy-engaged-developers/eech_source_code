@@ -179,7 +179,6 @@ SOURCE=..\aphavoc\source\entity\special\bridge\br_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\bridge\bridge.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -192,7 +191,6 @@ SOURCE=..\aphavoc\source\entity\special\bridge\bridge.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\division.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -201,7 +199,6 @@ SOURCE=..\aphavoc\source\entity\special\division\division.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -210,7 +207,6 @@ SOURCE=..\aphavoc\source\entity\special\division\dv_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -219,7 +215,6 @@ SOURCE=..\aphavoc\source\entity\special\division\dv_dbase.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -236,7 +231,6 @@ SOURCE=..\aphavoc\source\entity\special\division\dv_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -245,7 +239,6 @@ SOURCE=..\aphavoc\source\entity\special\division\dv_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -262,7 +255,6 @@ SOURCE=..\aphavoc\source\entity\special\division\dv_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\division\dv_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -331,7 +323,6 @@ SOURCE=..\aphavoc\source\entity\special\force\fc_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\force\fc_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -340,7 +331,6 @@ SOURCE=..\aphavoc\source\entity\special\force\fc_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\force\fc_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -357,7 +347,6 @@ SOURCE=..\aphavoc\source\entity\special\force\fc_str.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\force\fc_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -366,7 +355,6 @@ SOURCE=..\aphavoc\source\entity\special\force\fc_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\force\force.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -387,7 +375,6 @@ SOURCE=..\aphavoc\source\entity\special\group\gp_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\group\gp_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -436,7 +423,6 @@ SOURCE=..\aphavoc\source\entity\special\group\gp_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\group\gp_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -445,7 +431,6 @@ SOURCE=..\aphavoc\source\entity\special\group\gp_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\group\gp_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -486,7 +471,6 @@ SOURCE=..\aphavoc\source\entity\special\group\gp_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\group\group.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -499,7 +483,6 @@ SOURCE=..\aphavoc\source\entity\special\group\group.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\aa_attck.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -508,7 +491,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\aa_attck.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\ag_attck.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -517,7 +499,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\ag_attck.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_attck.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -526,7 +507,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_attck.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_cover.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -591,7 +571,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -600,7 +579,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -617,7 +595,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_nav.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -642,7 +619,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\gd_vec3d.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -651,7 +627,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\gd_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\guide\guide.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -664,7 +639,6 @@ SOURCE=..\aphavoc\source\entity\special\guide\guide.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\keysite.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -673,7 +647,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\keysite.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -682,7 +655,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -701,7 +673,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_draw.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -726,7 +697,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -743,7 +713,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -752,7 +721,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\keysite\ks_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -789,7 +757,6 @@ SOURCE=..\aphavoc\source\entity\special\keysite\ks_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\landing\landing.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -856,7 +823,6 @@ SOURCE=..\aphavoc\source\entity\special\landing\ld_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\landing\ld_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -934,7 +900,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pi_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\pilot\pi_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -943,7 +908,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pi_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\pilot\pi_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -969,7 +933,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pi_name.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\pilot\pi_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -978,7 +941,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pi_pack.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\pilot\pi_str.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -996,7 +958,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pi_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\pilot\pilot.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1009,7 +970,6 @@ SOURCE=..\aphavoc\source\entity\special\pilot\pilot.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\regen.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1022,7 +982,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\regen_private.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1041,7 +1000,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_dbase.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1050,7 +1008,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_dstry.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1067,7 +1024,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1076,7 +1032,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1085,7 +1040,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1094,7 +1048,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1103,7 +1056,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_pack.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_updt.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1112,7 +1064,6 @@ SOURCE=..\aphavoc\source\entity\special\regen\rg_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\regen\rg_vec3d.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1133,12 +1084,10 @@ SOURCE=..\aphavoc\source\entity\special\session\session.c
 !IF  "$(CFG)" == "entity_special - Win32 Release"
 
 # ADD CPP /Zd
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "entity_special - Win32 Debug"
 
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 
 !ENDIF 
 
@@ -1150,7 +1099,6 @@ SOURCE=..\aphavoc\source\entity\special\session\session.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_creat.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1159,7 +1107,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_dstry.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1168,7 +1115,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_dstry.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_float.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1185,7 +1131,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_funcs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_int.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1194,7 +1139,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_int.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_list.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1203,7 +1147,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1212,7 +1155,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1222,7 +1164,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_pack.h
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_updt.c
 # ADD CPP /Zi
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1231,7 +1172,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_updt.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\session\ss_vec3d.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1244,7 +1184,6 @@ SOURCE=..\aphavoc\source\entity\special\session\ss_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\task\task.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1261,7 +1200,6 @@ SOURCE=..\aphavoc\source\entity\special\task\ts_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\task\ts_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1310,7 +1248,6 @@ SOURCE=..\aphavoc\source\entity\special\task\ts_list.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\task\ts_msgs.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1319,7 +1256,6 @@ SOURCE=..\aphavoc\source\entity\special\task\ts_msgs.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\task\ts_pack.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1364,7 +1300,6 @@ SOURCE=..\aphavoc\source\entity\special\task\ts_vec3d.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\waypoint\waypoint.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1389,7 +1324,6 @@ SOURCE=..\aphavoc\source\entity\special\waypoint\wp_creat.h
 # Begin Source File
 
 SOURCE=..\aphavoc\source\entity\special\waypoint\wp_dbase.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
