@@ -4481,11 +4481,11 @@ void map_draw_grid (ui_object *obj)
 		}
 
 		set_ui_font_type (UI_FONT_ARIAL_14);
-	
+
 		set_ui_font_colour (ui_colour_white);
-	
+
 		// along the X
-	
+
 		for (grid_loop = inew_wxmin; grid_loop <= inew_wxmax; grid_loop += grid_spacing)
 		{
 
@@ -4496,37 +4496,37 @@ void map_draw_grid (ui_object *obj)
 
 			if ((grid_loop >= wxmin) && (grid_loop <= wxmax))
 			{
-		
+
 				map_get_screen_coords_from_world (obj, &pos1, &pos1);
-	
+
 				map_get_screen_coords_from_world (obj, &pos2, &pos2);
-	
+
 				if ((grid_loop % SECTOR_SIDE_LENGTH) == 0)
 				{
-	
+
 					// sector boundary
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_white);
-		
+
 					sprintf (grid_number, "%03d", (int) (grid_loop * one_over_sector_side_length));
-		
+
 					ui_display_text (grid_number, pos1.x, pos1.z - Y_BORDER);
 				}
 				else
 				{
-	
+
 					// sub_sector division
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_slate_grey);
 				}
 			}
 		}
-	
+
 		// down the Z
-	
+
 		for (grid_loop = inew_wzmin; grid_loop <= inew_wzmax; grid_loop += grid_spacing)
 		{
-	
+
 			pos1.x = wxmin;
 			pos1.z = grid_loop;
 			pos2.x = wxmax;
@@ -4534,70 +4534,57 @@ void map_draw_grid (ui_object *obj)
 
 			if ((grid_loop >= wzmax) && (grid_loop <= wzmin))
 			{
-		
+
 				map_get_screen_coords_from_world (obj, &pos1, &pos1);
-		
+
 				map_get_screen_coords_from_world (obj, &pos2, &pos2); 
-	
+
 				if ((grid_loop % SECTOR_SIDE_LENGTH) == 0)
 				{
 	
 					// sector boundary
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_white);
-		
+
 					sprintf (grid_number, "%03d", (int) (grid_loop * one_over_sector_side_length));
-		
+
 					ui_display_text (grid_number, pos1.x + X_BORDER, pos1.z - ui_get_font_height ());
 				}
 				else
 				{
-	
+
 					// sub_sector division
 			
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_slate_grey);
 				}
 			}
 		}
-	}
 
-	//
-	// Draw scale (Im not proud of this - TG)
-	//
+		//
+		// Draw scale
+		//
 
-	if (grid_spacing >= 1024.0)
-	{
-	
-		sprintf (scale_text, "%s : %d km", get_trans ("Grid"), (int) (grid_spacing / 1024.0));
-	}
-	else
-	{
-
-		if (grid_spacing == 128.0)
 		{
+			int value = (grid_spacing / 128) * 125; // binary -> decimal
+			if (value >= 1000) {
+				value /= 1000;	// m->km
+			}
 
-			sprintf (scale_text, "%s : 125 m", get_trans ("Grid"));
+			sprintf(scale_text, "%s : %d %sm",
+					get_trans("Grid"),
+					value,
+					(grid_spacing >= 1024) ? "k" : "");
 		}
-		else if (grid_spacing == 256.0)
-		{
 
-			sprintf (scale_text, "%s : 250 m", get_trans ("Grid"));
-		}
-		else if (grid_spacing == 512.0)
-		{
+		pos1.x = wxmax;
+		pos1.z = wzmax;
 
-			sprintf (scale_text, "%s : 500 m", get_trans ("Grid"));
-		}
+		map_get_screen_coords_from_world (obj, &pos1, &pos1);
+		
+		set_ui_font_colour (sys_col_slate_grey);
+		
+		ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 	}
-
-	pos1.x = wxmax;
-	pos1.z = wzmax;
-
-	map_get_screen_coords_from_world (obj, &pos1, &pos1);
-	
-	set_ui_font_colour (sys_col_slate_grey);
-	
-	ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
