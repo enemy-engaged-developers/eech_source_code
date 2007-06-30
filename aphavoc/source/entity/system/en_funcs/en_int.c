@@ -2387,7 +2387,7 @@ void debug_check_pack_types (void)
 	ASSERT(NUM_ENTITY_SUB_TYPE_WEAPON_BITS < (1 << NUM_ENTITY_SUB_TYPE_WEAPON_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_ENTITY_TYPES < (1 << NUM_ENTITY_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
 
-	assert(NUM_FLOAT_TYPES < (1 << NUM_FLOAT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_FLOAT_TYPES < (1 << NUM_FLOAT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_FORMATION_TYPES < (1 << NUM_FORMATION_BITS) || NUM_FORMATION_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GROUP_MODE_TYPES < (1 << NUM_GROUP_MODE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_GUIDE_CRITERIA_TYPES < (1 << NUM_GUIDE_CRITERIA_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
