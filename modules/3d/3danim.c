@@ -221,6 +221,14 @@ screen *get_texture_animation_texture_pointer ( enum TEXTURE_ANIMATION_INDICES i
 	{
 
 		debug_log ( "Trying to get texture animation frame %d", frame );
+		frame = 0;
+		ASSERT(FALSE);
+	}
+	if (index >= TEXTURE_INDEX_LAST)
+	{
+		debug_log ( "Trying to get texture index %d", index );
+		index = 0;
+		ASSERT(FALSE);
 	}
 
 	return ( system_textures[ texture_animations[index].texture_indices[frame] ] );
