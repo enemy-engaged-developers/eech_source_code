@@ -167,6 +167,8 @@ extern void load_contour_map_colours ( const char *filename );
 
 extern float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 );
 
+extern void draw_2d_shaded_terrain_contour_map ( void );
+
 extern void draw_2d_terrain_contour_map ( void );
 
 extern void set_2d_terrain_map_dimensions ( float world_xmin, float world_zmin, float world_xmax, float world_zmax,
