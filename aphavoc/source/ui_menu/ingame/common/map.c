@@ -418,7 +418,7 @@ void draw_2d_map (ui_object *obj, void *arg)
  
 	terrain_2d_map_contour_lines_drawn = TRUE;
 
-   draw_2d_terrain_contour_map ();
+	draw_2d_shaded_terrain_contour_map ();
 
 	//
 	// draw texture overlays
@@ -2748,7 +2748,7 @@ void map_draw_towns (ui_object *obj)
 	rgb_colour
 		*col;
 
-	col = &ui_colour_grey;
+	col = &ui_colour_white;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -2760,7 +2760,7 @@ void map_draw_towns (ui_object *obj)
 	{
 		if (item->type == POPULATION_TYPE_TOWN)
 		{
-			if (map_dimensions->size <= item->zoom)
+			if (map_dimensions->size <= (item->zoom * 2))
 			{
 				pos.x = item->x;
 				pos.y = 0.0;
@@ -2772,7 +2772,7 @@ void map_draw_towns (ui_object *obj)
 
 				ASSERT (item->name);
 
-				map_draw_string (obj, &pos, item->name, UI_FONT_ARIAL_16, col, FALSE);
+				map_draw_string (obj, &pos, item->name, UI_FONT_ARIAL_14, col, FALSE);
 			}
 		}
 
