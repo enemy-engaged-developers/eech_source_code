@@ -476,6 +476,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "highreshud") == 0)	command_line_high_res_hud = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
+		if (strcmp(p, "campaign_map_mode") == 0)	command_line_campaign_map = d1;
+		if (strcmp(p, "campaign_map_palette") == 0)	command_line_campaign_map_palette = d1;
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
 		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
 		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
@@ -625,14 +627,17 @@ void dump_ini_file(void)
 		hud_code[3][0],hud_code[3][1],hud_code[3][2]);
 
 	fprintf(f,"\n[Gameplay]\n");	
-	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
-	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
-	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
+	fprintf(f,"faa=%d                  # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
+	fprintf(f,"radarinf=%d             # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
+	fprintf(f,"grstab=%d               # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"manual_laser/radar=%d   # have to manually enable and disable radar and laser, def = 0 (off)\n",command_line_manual_laser_radar);
 	fprintf(f,"targeting_system_auto_page = %d   # changing targeting system will also bring up the targeting systems MFD page. def = 1 (on)\n", command_line_targeting_system_auto_page);
-	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
-	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
-	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
+	fprintf(f,"camcom=%d               # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
+	fprintf(f,"campaign_map_mode=%d    # 1 = default resolution and 2 is high resolution map (only for fast PCs\n",command_line_campaign_map);
+	fprintf(f,"campaign_map_palette=%d # Which palette to use for the new campaign map.  1 is the default shades from green via red to white, 2 is more like a paper map\n",command_line_campaign_map_palette);
+	fprintf(f,"destgt=%d               # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
+	fprintf(f,"cannontrack=%d          # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
+
 	fprintf(f,"\n[Joysticks and TIR]\n");	
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
 	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1

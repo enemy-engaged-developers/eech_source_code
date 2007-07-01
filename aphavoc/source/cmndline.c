@@ -199,6 +199,8 @@ int
 	command_line_colour_mfd										= TRUE,		// arneh 2006-11-06
 	command_line_maxplayers							= 4,	// Werewolf 030518
 	command_line_camcom								= FALSE,	// Jabberwock 031007 Campaign Commander
+	command_line_campaign_map						= 1,		// campaign map mode
+	command_line_campaign_map_palette				= 1,		// palette used for campaign map
 	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis				= 1,	// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
@@ -2006,6 +2008,32 @@ void process_command_line (int argc, char *argv[])
 			if (*s2 == ':')
 			{
 				sscanf (s2 + 1, "%d", &command_line_camcom);
+			}
+			else
+			{
+				command_line_camcom = FALSE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "campaign_map_mode"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_campaign_map);
+			}
+			else
+			{
+				command_line_camcom = FALSE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "campaign_map_palette"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_campaign_map_palette);
 			}
 			else
 			{

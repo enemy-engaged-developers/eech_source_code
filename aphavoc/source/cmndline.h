@@ -176,6 +176,8 @@ extern int
 	command_line_colour_mfd,									// arneh 2006-11-06
 	command_line_maxplayers,									// Werewolf 030518
 	command_line_camcom,										// Jabberwock 031007 Campaign Commander
+	command_line_campaign_map,									// arneh 2007-07-01 campaign map mode
+	command_line_campaign_map_palette,							// arneh 2007-07-01 pallette used for campaign map
 	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis,						// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis,						// Jabberwock 031104 Joystick look
