@@ -2178,8 +2178,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 		mipmap_distance_factor,
 		terrain_height_data_x_distance,
 		terrain_height_data_z_distance,
-		inv_data_x_distance,
-		inv_data_z_distance,
+		contour_shading_zoom_adjustment,
 		*terrain_height_data;
 
 	float
@@ -2364,8 +2363,10 @@ void draw_2d_shaded_terrain_contour_map ( void )
 
 		terrain_height_data_x_distance = terrain_3d_simple_elevation_x_grid_size * mipmap_distance_factor;
 		terrain_height_data_z_distance = terrain_3d_simple_elevation_z_grid_size * mipmap_distance_factor;
-		inv_data_x_distance = 1.0 / terrain_height_data_x_distance;
-		inv_data_z_distance = 1.0 / terrain_height_data_z_distance;
+
+		// this is just an ad-hoc method for getting an adjustment for
+		// relief shading at different zoom levels
+		contour_shading_zoom_adjustment = 1.0 / (log(terrain_height_data_x_distance / 10.0));
 	}
 
 	terrain_height_data_width += 1;
@@ -2579,10 +2580,10 @@ void draw_2d_shaded_terrain_contour_map ( void )
 				vertices[3].i = i_coordinates[1]; vertices[3].j = j_coordinates[1]; vertices[3].y = elevation_grid[2][2];
 
 				// add shading
-				vertices[0].x = 2 * (elevation_grid[1][0] - elevation_grid[1][2]) + (elevation_grid[0][1] - elevation_grid[2][1]);
-				vertices[1].x = 2 * (elevation_grid[2][0] - elevation_grid[2][2]) + (elevation_grid[1][1] - elevation_grid[3][1]);
-				vertices[2].x = 2 * (elevation_grid[1][1] - elevation_grid[1][3]) + (elevation_grid[0][2] - elevation_grid[2][2]);
-				vertices[3].x = 2 * (elevation_grid[2][1] - elevation_grid[2][3]) + (elevation_grid[1][2] - elevation_grid[3][2]);
+				vertices[0].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[1][0] - elevation_grid[1][2]) + (elevation_grid[0][1] - elevation_grid[2][1]));
+				vertices[1].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[2][0] - elevation_grid[2][2]) + (elevation_grid[1][1] - elevation_grid[3][1]));
+				vertices[2].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[1][1] - elevation_grid[1][3]) + (elevation_grid[0][2] - elevation_grid[2][2]));
+				vertices[3].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[2][1] - elevation_grid[2][3]) + (elevation_grid[1][2] - elevation_grid[3][2]));
 
 				vertices[0].outcode = outcode_top_left;
 				vertices[1].outcode = outcode_top | outcode_right;
@@ -3313,96 +3314,6 @@ void render_contour_terrain_quad_quad ( vertex *vertices, int contour_start_inde
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-void render_contour_terrain_poly ( vertex *poly, real_colour contour_colour, float contour_height_difference_reciprocal )
-{
-
-	int
-		number_of_vertices;
-
-	LPD3DTLVERTEX
-		vertices,
-		vptr;
-
-	float
-		source_red,
-		source_green,
-		source_blue;
-
-	real_colour
-		specular;
-
-	vertices = get_d3d_vertices_address ( poly, &number_of_vertices );
-
-	specular.red = 0;
-	specular.green = 0;
-	specular.blue = 0;
-	specular.alpha = 255;
-
-	source_red = contour_colour.red;
-	source_green = contour_colour.green;
-	source_blue = contour_colour.blue;
-
-	vptr = vertices;
-
-	while ( poly )
-	{
-
-		float
-			r,
-			g,
-			b,
-			factor,
-			shadow_factor;
-
-		int
-			ir,
-			ig,
-			ib;
-
-		real_colour
-			col;
-
-		// adjust shade for height difference within contour
-		factor = ( poly->y - contour_minimum_height ) * contour_height_difference_reciprocal * CONTOUR_SHADING_FACTOR;
-		factor -= ( CONTOUR_SHADING_FACTOR / 2 );
-
-		shadow_factor = -poly->x * 0.1;
-//		shadow_factor = 0;
-//		poly->z = 10;
-//		poly->q = 0.1;
-
-		r = source_red + ( source_red * factor) + source_red * shadow_factor;
-		g = source_green + ( source_green * factor) + source_green * shadow_factor;
-		b = source_blue + ( source_blue * factor) + source_blue * shadow_factor;
-
-		convert_float_to_int ( r, &ir );
-		convert_float_to_int ( g, &ig );
-		convert_float_to_int ( b, &ib );
-
-		ir = bound ( ir, 0, 255 );
-		ig = bound ( ig, 0, 255 );
-		ib = bound ( ib, 0, 255 );
-
-		col.red = ir;
-		col.green = ig;
-		col.blue = ib;
-
-		vptr->sx = poly->i;
-		vptr->sy = poly->j;
-		vptr->rhw = poly->q;
-		vptr->sz = poly->q;
-		vptr->color = col.colour;
-		vptr->specular = specular.colour;
-
-		vptr++;
-
-		poly = poly->next_vertex;
-	}
-
-	draw_fan_primitive ( number_of_vertices, vertices );
-}
-*/
 
 void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colour)
 {
@@ -3439,7 +3350,9 @@ void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colou
 		b = contour_colour.blue;
 	
 		// adjust shade for steepness
-		shadow_factor = 1 - poly->x * 0.0003;
+		shadow_factor = 1 - poly->x * 0.0025; // 0.0003;
+		if (shadow_factor < 0.25)
+			shadow_factor = 0.25;
 	
 		r *= shadow_factor;
 		g *= shadow_factor;
