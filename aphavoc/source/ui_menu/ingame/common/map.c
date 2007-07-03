@@ -2394,6 +2394,9 @@ static void map_draw_group (ui_object *obj, entity *en)
 	map_dimension_type
 		*map_dimensions;
 
+	int
+		is_friendly;
+
 	ASSERT (en);
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
@@ -2401,7 +2404,8 @@ static void map_draw_group (ui_object *obj, entity *en)
 	ASSERT (map_dimensions);
 		
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
-		
+	is_friendly = side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+
 	if (get_gunship_entity ())
 	{
 		player_group = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER);
@@ -2420,7 +2424,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 		current_page_group = NULL;
 	}
 
-	if ((en == player_group) || (en == current_page_group) || (map_dimensions->size < FORCE_DRAW_GROUP_MEMBERS_RADIUS))
+	if (is_friendly && ((en == player_group) || (en == current_page_group) || (map_dimensions->size < FORCE_DRAW_GROUP_MEMBERS_RADIUS)))
 	{
 		//
 		// Draw individual members
@@ -2463,9 +2467,9 @@ static void map_draw_group (ui_object *obj, entity *en)
 				
 				map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
 			
-				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP)
+				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP && is_friendly)
 				{
-					if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
+//					if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
 					{
 						if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
 						{
