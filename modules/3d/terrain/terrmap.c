@@ -2834,9 +2834,9 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 	specular.blue = 0;
 	specular.alpha = 255;
 
-	contour_line_colour.red = 90;
-	contour_line_colour.green = 60;
-	contour_line_colour.blue = 30;
+	contour_line_colour.red = 60;
+	contour_line_colour.green = 40;
+	contour_line_colour.blue = 20;
 
 	vertices[0].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 	vertices[1].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
@@ -3214,7 +3214,6 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 
 					if ( ( line_vertex_index > 0 ) && ( terrain_2d_map_contour_lines_drawn ) )
 					{
-		
 						draw_contour_line ( &contour_line_vertices[0], contour_line_colour );
 		
 						if ( line_vertex_index > 2 )
