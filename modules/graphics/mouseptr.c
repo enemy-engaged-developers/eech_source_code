@@ -192,6 +192,7 @@ void initialise_mouse_pointer ( rgb_packed *pointer )
 
 	destpitch = get_screen_pitch ( active_screen );
 
+#if 0  // disabled as it doesn't work for all gfx-cards (gives cyan pointer)
 	if (destpitch == mouse_pointer_width * 4) // 32bpp
 	{
 		rgb_colour* dest_rgba = (rgb_colour*)destptr;
@@ -203,13 +204,14 @@ void initialise_mouse_pointer ( rgb_packed *pointer )
 			for ( x = 0; x < mouse_pointer_width; x++ )
 			{
 				dest_rgba[x] = get_rgb_colour_value(*ptr++);
-				dest_rgba[x].a = 0;
+//				dest_rgba[x].a = 0;
 			}
 			
 			dest_rgba += destpitch;
 		}
 	}
 	else // (hopefully) 16bpp
+#endif
 	{
 		destpitch >>= 1; // bytes -> shorts's
 
