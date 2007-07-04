@@ -493,6 +493,9 @@ struct ENV_3D
 	float
 		time_of_day,
 		delta_time;
+
+	int
+		monochrome_mode;
 };
 
 typedef struct ENV_3D env_3d;
@@ -538,6 +541,8 @@ extern void set_3d_ambient_light ( env_3d *env, light_colour *colour );
 
 extern void set_3d_fog_colour ( env_3d *env, struct REAL_COLOUR fog_colour );
 
+extern void set_monochrome_mode (env_3d *env, int monochrome_mode);
+
 //
 // Adding information to the environment
 //
@@ -578,6 +583,7 @@ extern enum INFRARED_MODES get_3d_infrared_mode ( env_3d *env );
 
 extern rgb_colour get_3d_fog_colour ( env_3d *env );
 
+extern int get_monochrome_mode (env_3d* env);
 //
 // Recalculating the environment
 //

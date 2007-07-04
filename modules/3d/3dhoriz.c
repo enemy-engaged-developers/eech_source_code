@@ -74,7 +74,7 @@ static void insert_3d_horizon_image ( env_3d *env, weathermodes mode, horizon_im
 
 static void transform_3d_horizon ( object_3d *object );
 
-static void render_3d_horizon_face ( object_3d_face *this_face, int surface_index, int reference_offset, struct OBJECT_3D_INFO *object_base );
+static void render_3d_horizon_face ( object_3d_face *this_face, int surface_index, int reference_offset, struct OBJECT_3D_INFO *object_base, int apply_filter, rgb_colour colour_filter);
 
 static void render_3d_horizon_infrared_face ( object_3d_face *this_face, int surface_index, int reference_offset, struct OBJECT_3D_INFO *object_base );
 
@@ -121,6 +121,8 @@ void initialise_3d_horizon ( env_3d *env, object_3d_index_numbers index )
 	maximum_height = object->bounding_box.ymax;
 
 	env->horizon_maximum_height = maximum_height;
+	
+	set_monochrome_mode(env, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -851,10 +853,17 @@ void draw_3d_horizon ( void )
 		int
 			surface,
 			surface_face_count,
-			number_of_surface_points;
+			number_of_surface_points,
+			apply_monochrome_filter;
 
 		int
 			point_reference_index;
+			
+		rgb_colour
+			colour_filter;
+
+		apply_monochrome_filter = get_monochrome_mode(active_3d_environment);
+		colour_filter = get_3d_fog_colour(active_3d_environment);
 
 		point_reference_index = 0;
 
@@ -877,7 +886,7 @@ void draw_3d_horizon ( void )
 				if ( faces->number_of_points > 2 )
 				{
 	
-					render_3d_horizon_face ( faces, surface, point_reference_index, this_object_3d_info );
+					render_3d_horizon_face ( faces, surface, point_reference_index, this_object_3d_info, apply_monochrome_filter, colour_filter);
 				}
 	
 				point_reference_index += faces->number_of_points;
@@ -1126,7 +1135,7 @@ void transform_3d_horizon ( object_3d *object )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void render_3d_horizon_face ( object_3d_face *this_face, int surface_index, int reference_offset, struct OBJECT_3D_INFO *object_base )
+static void render_3d_horizon_face ( object_3d_face *this_face, int surface_index, int reference_offset, struct OBJECT_3D_INFO *object_base, int apply_filter, rgb_colour colour_filter)
 {
 
 	face_surface_description
@@ -1191,7 +1200,7 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 					transformed_points = transformed_3d_points;	//[object_base->points_base];
 				
 					destination_vertices = get_d3d_vertices_points_address ( this_face->number_of_points );
-				
+
 					for ( count = 0; count < this_face->number_of_points; count++ )
 					{
 
@@ -1204,7 +1213,12 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 						destination_vertices[count].sy = vert->j;
 						destination_vertices[count].sz = POLYGON_ZDISTANCE_FARTHEST;
 						destination_vertices[count].rhw = vert->q;
-						destination_vertices[count].color = vert->colour;
+
+						if (apply_filter)
+							destination_vertices[count].color = colour_filter.colour;
+						else
+							destination_vertices[count].color = vert->colour;
+
 						destination_vertices[count].specular = 0;	//RGBA_MAKE ( 0, 0, 0, 0 );	//vert->colour;
 					}
 				
@@ -1265,7 +1279,12 @@ static void render_3d_horizon_face ( object_3d_face *this_face, int surface_inde
 									destination_vertices[count].sy = poly->j;
 									destination_vertices[count].sz = POLYGON_ZDISTANCE_FARTHEST;
 									destination_vertices[count].rhw = poly->q;
-									destination_vertices[count].color = poly->colour;
+
+									if (apply_filter)
+										destination_vertices[count].color = colour_filter.colour;
+									else
+										destination_vertices[count].color = poly->colour;
+
 									destination_vertices[count].specular = RGBA_MAKE ( 0, 0, 0, 0 );
 
 									poly = poly->next_vertex;
