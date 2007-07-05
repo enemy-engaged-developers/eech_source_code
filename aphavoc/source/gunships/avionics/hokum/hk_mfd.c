@@ -144,7 +144,7 @@ static hokum_mfd_locations
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[13];
+	mfd_colours[20];
 
 #define MFD_COLOUR1 		  		(mfd_colours[0])
 #define MFD_COLOUR2 		  		(mfd_colours[1])
@@ -159,6 +159,12 @@ static rgb_colour
 #define MFD_CLEAR_COLOUR		(mfd_colours[10])
 #define MFD_COLOUR7				(mfd_colours[11])
 #define MFD_COLOUR8				(mfd_colours[12])
+#define MFD_COLOUR_GREEN		(mfd_colours[13])
+#define MFD_COLOUR_DARK_GREEN	(mfd_colours[14])
+#define MFD_COLOUR_YELLOW    	(mfd_colours[15])
+#define MFD_COLOUR_LIGHT_BLUE	(mfd_colours[16])
+#define MFD_COLOUR_BLUE      	(mfd_colours[17])
+#define MFD_COLOUR_RED 			(mfd_colours[18])
 
 static rgb_colour
    clear_mfd_colour;
@@ -2677,6 +2683,9 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+
 	ASSERT (eo);
 
 	ASSERT (eo_3d_texture_screen);
@@ -2731,6 +2740,8 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_GREEN;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
@@ -2739,6 +2750,8 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
@@ -2746,6 +2759,8 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 			light_level = periscope_light_levels[weather_mode][day_segment_type];
 
 			noise_level = periscope_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
 		}
@@ -2761,7 +2776,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	set_active_screen (eo_3d_texture_screen);
 
-	set_main_3d_params (DISPLAY_3D_TINT_ORANGE, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	//
 	// draw 3D scene (temporarily adjust the virtual cockpit position relative to EO sensor position)
@@ -3043,7 +3058,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	//
 	////////////////////////////////////////
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
@@ -3369,59 +3384,59 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	if (draw_large_mfd)
 	{
-		draw_2d_line (-0.075, 0.0, -0.025, 0.0, MFD_COLOUR1);
+		draw_2d_line (-0.075, 0.0, -0.025, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.035, 0.0, 0.08, 0.0, MFD_COLOUR1);
+		draw_2d_line (0.035, 0.0, 0.08, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, -0.075, 0.0, -0.025, MFD_COLOUR1);
+		draw_2d_line (0.0, -0.075, 0.0, -0.025, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, 0.035, 0.0, 0.08, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.035, 0.0, 0.08, MFD_COLOUR_GREEN);
 	}
 	else
 	{
-		draw_2d_line (-0.075, 0.0, -0.025, 0.0, MFD_COLOUR1);
+		draw_2d_line (-0.075, 0.0, -0.025, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.035, 0.0, 0.09, 0.0, MFD_COLOUR1);
+		draw_2d_line (0.035, 0.0, 0.09, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, -0.075, 0.0, -0.025, MFD_COLOUR1);
+		draw_2d_line (0.0, -0.075, 0.0, -0.025, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, 0.035, 0.0, 0.09, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.035, 0.0, 0.09, MFD_COLOUR_GREEN);
 	}
 
 	//
 	// azimuth
 	//
 
-	draw_2d_line (-0.5, 0.8, 0.5, 0.8, MFD_COLOUR1);
+	draw_2d_line (-0.5, 0.8, 0.5, 0.8, MFD_COLOUR_GREEN);
 
 	marker_position = (eo_azimuth / eo_max_azimuth) * 0.5;
 
 	if (draw_large_mfd)
 	{
-		draw_2d_line (-0.5, 0.8 - 0.02, -0.5, 0.8 + 0.02, MFD_COLOUR1);
+		draw_2d_line (-0.5, 0.8 - 0.02, -0.5, 0.8 + 0.02, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.5, 0.8 - 0.02, 0.5, 0.8 + 0.02, MFD_COLOUR1);
+		draw_2d_line (0.5, 0.8 - 0.02, 0.5, 0.8 + 0.02, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, 0.8 - 0.01, 0.0, 0.8 + 0.01, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.8 - 0.01, 0.0, 0.8 + 0.01, MFD_COLOUR_GREEN);
 
-		draw_2d_mono_sprite (large_azimuth_marker, marker_position, 0.8, MFD_COLOUR1);
+		draw_2d_mono_sprite (large_azimuth_marker, marker_position, 0.8, MFD_COLOUR_GREEN);
 	}
 	else
 	{
-		draw_2d_line (-0.5, 0.8 - 0.03, -0.5, 0.8 + 0.03, MFD_COLOUR1);
+		draw_2d_line (-0.5, 0.8 - 0.03, -0.5, 0.8 + 0.03, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.5, 0.8 - 0.03, 0.5, 0.8 + 0.03, MFD_COLOUR1);
+		draw_2d_line (0.5, 0.8 - 0.03, 0.5, 0.8 + 0.03, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.0, 0.8 - 0.02, 0.0, 0.8 + 0.02, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.8 - 0.02, 0.0, 0.8 + 0.02, MFD_COLOUR_GREEN);
 
-		draw_2d_mono_sprite (small_azimuth_marker, marker_position, 0.8, MFD_COLOUR1);
+		draw_2d_mono_sprite (small_azimuth_marker, marker_position, 0.8, MFD_COLOUR_GREEN);
 	}
 
 	//
 	// elevation
 	//
 
-	draw_2d_line (-0.9, 0.2, -0.9, -0.6, MFD_COLOUR1);
+	draw_2d_line (-0.9, 0.2, -0.9, -0.6, MFD_COLOUR_GREEN);
 
 	if (eo_elevation < 0.0)
 	{
@@ -3434,67 +3449,67 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	if (draw_large_mfd)
 	{
-		draw_2d_line (-0.9 - 0.02, 0.2, -0.9 + 0.02, 0.2, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.02, 0.2, -0.9 + 0.02, 0.2, MFD_COLOUR_GREEN);
 
-		draw_2d_line (-0.9 - 0.02, -0.6, -0.9 + 0.02, -0.6, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.02, -0.6, -0.9 + 0.02, -0.6, MFD_COLOUR_GREEN);
 
-		draw_2d_line (-0.9 - 0.01, 0.0, -0.9 + 0.01, 0.0, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.01, 0.0, -0.9 + 0.01, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_mono_sprite (large_elevation_marker, -0.9, marker_position, MFD_COLOUR1);
+		draw_2d_mono_sprite (large_elevation_marker, -0.9, marker_position, MFD_COLOUR_GREEN);
 	}
 	else
 	{
-		draw_2d_line (-0.9 - 0.03, 0.2, -0.9 + 0.03, 0.2, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.03, 0.2, -0.9 + 0.03, 0.2, MFD_COLOUR_GREEN);
 
-		draw_2d_line (-0.9 - 0.03, -0.6, -0.9 + 0.03, -0.6, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.03, -0.6, -0.9 + 0.03, -0.6, MFD_COLOUR_GREEN);
 
-		draw_2d_line (-0.9 - 0.02, 0.0, -0.9 + 0.02, 0.0, MFD_COLOUR1);
+		draw_2d_line (-0.9 - 0.02, 0.0, -0.9 + 0.02, 0.0, MFD_COLOUR_GREEN);
 
-		draw_2d_mono_sprite (small_elevation_marker, -0.9, marker_position, MFD_COLOUR1);
+		draw_2d_mono_sprite (small_elevation_marker, -0.9, marker_position, MFD_COLOUR_GREEN);
 	}
 
 	//
 	// range
 	//
 
-	draw_2d_line (0.9, 0.0, 0.9, -0.5, MFD_COLOUR1);
+	draw_2d_line (0.9, 0.0, 0.9, -0.5, MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
-		draw_2d_line (0.9,  0.000, 0.9 + 0.02,  0.000, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.025, 0.9 + 0.01, -0.025, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.050, 0.9 + 0.01, -0.050, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.075, 0.9 + 0.01, -0.075, MFD_COLOUR1);
+		draw_2d_line (0.9,  0.000, 0.9 + 0.02,  0.000, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.025, 0.9 + 0.01, -0.025, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.050, 0.9 + 0.01, -0.050, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.075, 0.9 + 0.01, -0.075, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.100, 0.9 + 0.02, -0.100, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.125, 0.9 + 0.01, -0.125, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.150, 0.9 + 0.01, -0.150, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.175, 0.9 + 0.01, -0.175, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.100, 0.9 + 0.02, -0.100, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.125, 0.9 + 0.01, -0.125, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.150, 0.9 + 0.01, -0.150, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.175, 0.9 + 0.01, -0.175, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.200, 0.9 + 0.02, -0.200, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.225, 0.9 + 0.01, -0.225, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.250, 0.9 + 0.01, -0.250, MFD_COLOUR1);
-		draw_2d_line (0.9, -0.275, 0.9 + 0.01, -0.275, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.200, 0.9 + 0.02, -0.200, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.225, 0.9 + 0.01, -0.225, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.250, 0.9 + 0.01, -0.250, MFD_COLOUR_GREEN);
+		draw_2d_line (0.9, -0.275, 0.9 + 0.01, -0.275, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.300, 0.9 + 0.02, -0.300, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.300, 0.9 + 0.02, -0.300, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.400, 0.9 + 0.02, -0.400, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.400, 0.9 + 0.02, -0.400, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.500, 0.9 + 0.02, -0.500, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.500, 0.9 + 0.02, -0.500, MFD_COLOUR_GREEN);
 	}
 	else
 	{
-		draw_2d_line (0.9,  0.000, 0.9 + 0.03,  0.000, MFD_COLOUR1);
+		draw_2d_line (0.9,  0.000, 0.9 + 0.03,  0.000, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.100, 0.9 + 0.03, -0.100, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.100, 0.9 + 0.03, -0.100, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.200, 0.9 + 0.03, -0.200, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.200, 0.9 + 0.03, -0.200, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.300, 0.9 + 0.03, -0.300, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.300, 0.9 + 0.03, -0.300, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.400, 0.9 + 0.03, -0.400, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.400, 0.9 + 0.03, -0.400, MFD_COLOUR_GREEN);
 
-		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR1);
+		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR_GREEN);
 	}
 
 	if (target && has_range)
@@ -3503,11 +3518,11 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 		if (draw_large_mfd)
 		{
-			draw_2d_mono_sprite (large_range_marker, 0.9, marker_position, MFD_COLOUR1);
+			draw_2d_mono_sprite (large_range_marker, 0.9, marker_position, MFD_COLOUR_GREEN);
 		}
 		else
 		{
-			draw_2d_mono_sprite (small_range_marker, 0.9, marker_position, MFD_COLOUR1);
+			draw_2d_mono_sprite (small_range_marker, 0.9, marker_position, MFD_COLOUR_GREEN);
 		}
 	}
 
@@ -3535,14 +3550,14 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 					get_2d_world_position (i, j, &x, &y);
 
-					draw_2d_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR1);
+					draw_2d_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR_GREEN);
+					draw_2d_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR_GREEN);
+					draw_2d_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR_GREEN);
+					draw_2d_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR_GREEN);
+					draw_2d_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR_GREEN);
+					draw_2d_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR_GREEN);
+					draw_2d_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR_GREEN);
+					draw_2d_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR_GREEN);
 				}
 
 				main_vp = tmp;
@@ -5757,12 +5772,19 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		}
 	}
 //VJ 030423 TSD render mod
-	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
+/*	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
 	set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
 	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
 	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);	
+	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);*/
+	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
+	set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
+	set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
+	set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
+	set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
+	set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
+
 }
 
 #undef RADIUS
@@ -10145,22 +10167,36 @@ void initialise_hokum_mfd (void)
 
 	full_mfd_texture_screen = create_system_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
-	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
+	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
+	set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
+	set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
+	set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
+	set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
+	set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
+/*	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
 	set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
 	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
 	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);
+	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);*/
+	set_rgb_colour (MFD_COLOUR_GREEN,         0, 240,   0, 255);
+	set_rgb_colour (MFD_COLOUR_DARK_GREEN,    0, 120,   0, 255);
+	set_rgb_colour (MFD_COLOUR_YELLOW,      240, 240,   0, 255);
+	set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  128, 128, 240, 255);
+	set_rgb_colour (MFD_COLOUR_BLUE,          0,   0, 240, 255);
+	set_rgb_colour (MFD_COLOUR_RED,         240,   0,   0, 255);
+
 	set_rgb_colour (MFD_CONTOUR_COLOUR,     200,  35,   0, 255);
 	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
 	set_rgb_colour (MFD_ROAD_COLOUR,        255, 225,   0, 255);
 	set_rgb_colour (MFD_BACKGROUND_COLOUR,   35,  10,   0, 255);
-	set_rgb_colour (MFD_CLEAR_COLOUR,         0,   0,   0,   0);
+	set_rgb_colour (MFD_CLEAR_COLOUR,         0,   0,   0, 255);
 
 	set_rgb_colour (TEXT_COLOUR1,             0, 243,  97, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,   0,  60,  34, 255);
 
-   set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
+//   set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
+   set_rgb_colour (clear_mfd_colour, 0, 0, 0, 255);
 
 	////////////////////////////////////////
 	//
