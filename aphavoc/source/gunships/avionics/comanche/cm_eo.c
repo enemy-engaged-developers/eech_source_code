@@ -117,11 +117,11 @@ void initialise_comanche_eo (void)
 	comanche_flir.min_zoom				= 1.0;
 	comanche_flir.max_zoom				= 1.0 / 128.0;
 
-	comanche_dtv.zoom						= 1.0;
-	comanche_dtv.min_zoom				= 1.0 / 128.0; // Jabberwock 031002 1.0 to zoom (out) DTV
+	comanche_dtv.zoom						= 1.0 / 2.0;
+	comanche_dtv.min_zoom				= 1.0 / 2.0; // Jabberwock 031002 1.0 to zoom (out) DTV
 	comanche_dtv.max_zoom				= 1.0 / 128.0;
 
-	comanche_dvo.zoom						= 1.0;
+	comanche_dvo.zoom						= 1.0 / 8.0;
 	comanche_dvo.min_zoom				= 1.0 / 8.0;
 	comanche_dvo.max_zoom				= 1.0 / 128.0;
 #endif

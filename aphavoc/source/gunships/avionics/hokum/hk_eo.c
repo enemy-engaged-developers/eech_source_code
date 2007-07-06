@@ -108,8 +108,8 @@ void initialise_hokum_eo (void)
 	hokum_flir.min_zoom						= 1.0;
 	hokum_flir.max_zoom						= 1.0 / 128.0;
 
-	hokum_llltv.zoom							= 1.0;
-	hokum_llltv.min_zoom						= 1.0 / 128.0;
+	hokum_llltv.zoom							= 1.0 / 2.0;
+	hokum_llltv.min_zoom						= 1.0 / 2.0;
 	hokum_llltv.max_zoom						= 1.0 / 128.0;
 
 	hokum_periscope.zoom						= 1.0;
