@@ -2468,17 +2468,12 @@ static void map_draw_group (ui_object *obj, entity *en)
 				map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
 			
 				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP && is_friendly)
-				{
-//					if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
+					if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
 					{
-						if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
-						{
-							name = get_local_entity_string (en, STRING_TYPE_GROUP_CALLSIGN);
-						
-							map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
-						}
+						name = get_local_entity_string (en, STRING_TYPE_GROUP_CALLSIGN);
+					
+						map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
 					}
-				}
 			}
 		}
 	}
