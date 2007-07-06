@@ -163,7 +163,7 @@ int begin_3d_scene ( void )
 	// Set the visual effects flags ( for infrared stuff )
 	//
 
-	if ( ( active_3d_environment ) && ( active_3d_environment->infrared_mode == INFRARED_ON ) )
+	if (( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 	{
 
 		textured_object_rendering_enabled = FALSE;

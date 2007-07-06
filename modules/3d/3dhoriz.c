@@ -121,8 +121,6 @@ void initialise_3d_horizon ( env_3d *env, object_3d_index_numbers index )
 	maximum_height = object->bounding_box.ymax;
 
 	env->horizon_maximum_height = maximum_height;
-	
-	set_monochrome_mode(env, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -847,7 +845,7 @@ void draw_3d_horizon ( void )
 	current_object_3d_surface = objects_3d_data[object_number].surfaces;
 	current_object_3d_surface_point_list = objects_3d_data[object_number].surface_points;
 
-	if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+	if (active_3d_environment->render_filter != RENDER_INFRARED )
 	{
 
 		int
@@ -862,7 +860,7 @@ void draw_3d_horizon ( void )
 		rgb_colour
 			colour_filter;
 
-		apply_monochrome_filter = get_monochrome_mode(active_3d_environment);
+		apply_monochrome_filter = active_3d_environment->render_filter == RENDER_MONOCHROME; //  // get_monochrome_mode(active_3d_environment);
 		colour_filter = get_3d_fog_colour(active_3d_environment);
 
 		point_reference_index = 0;

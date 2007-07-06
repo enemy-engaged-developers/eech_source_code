@@ -989,7 +989,7 @@ void initialise_3d_custom_terrain_types( void )
    	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
    	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
 
-		if ( ( active_3d_environment ) && ( active_3d_environment->infrared_mode == INFRARED_ON ) )
+		if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 		{
 			if (index == terrain_texture_builtup_area1_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1_infrared );
 			if (index == terrain_texture_builtup_area2_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2_infrared );
@@ -1118,7 +1118,7 @@ void initialise_3d_terrain_types ( void )
    set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_road );
    set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_track );
 
-	if ( ( active_3d_environment ) && ( active_3d_environment->infrared_mode == INFRARED_ON ) )
+	if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 	{
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1_infrared );
 		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2_infrared );

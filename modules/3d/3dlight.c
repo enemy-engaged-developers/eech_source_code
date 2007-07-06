@@ -431,7 +431,7 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 	green *= 1.8666;
 	blue *= 1.8666;
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
 
 		float

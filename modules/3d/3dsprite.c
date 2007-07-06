@@ -195,7 +195,7 @@ void draw_3d_sprite ( object_3d_sprite *sprite )
 		set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
 		set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
 
-		if ( active_3d_environment->infrared_mode == INFRARED_ON )
+		if (active_3d_environment->render_filter != RENDER_CLEAR )
 		{
 
 			float

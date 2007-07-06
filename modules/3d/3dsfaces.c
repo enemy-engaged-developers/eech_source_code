@@ -81,7 +81,7 @@ static void calculate_lightmap_luminous_colour ( real_colour *colour );
 static void calculate_luminous_colour ( real_colour *colour )
 {
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
 	
 
@@ -189,7 +189,7 @@ void calculate_lightmap_luminous_colour ( real_colour *colour )
 		igreen,
 		iblue;
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
 	
 		float
