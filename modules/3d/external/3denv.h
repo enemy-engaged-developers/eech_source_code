@@ -65,15 +65,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-enum INFRARED_MODES
-{
+typedef enum INFRARED_MODES infrared_modes;
 
-	INFRARED_INVALID,
-	INFRARED_OFF,
-	INFRARED_ON,
+enum RENDER_FILTERS
+{
+	RENDER_INVALID,
+	RENDER_CLEAR,
+	INFRARED_OFF = RENDER_CLEAR,
+	RENDER_INFRARED,
+	INFRARED_ON = RENDER_INFRARED,
+	RENDER_MONOCHROME,
 };
 
-typedef enum INFRARED_MODES infrared_modes;
+typedef enum RENDER_FILTERS render_filters;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +247,7 @@ struct MAIN_LIGHT_SETTING
 		*succ;
 
 	light_colour
-		light_colour,
+		light__colour,
 		object_colour;
 
 	float
@@ -462,8 +466,8 @@ struct ENV_3D
 	// Infrared modes
 	//
 
-	infrared_modes
-		infrared_mode;
+	render_filters
+		render_filter;
 
 	//
 	// Weather mode - set to the current weather state - you must set this value
@@ -493,6 +497,9 @@ struct ENV_3D
 	float
 		time_of_day,
 		delta_time;
+
+	int
+		monochrome_mode;
 };
 
 typedef struct ENV_3D env_3d;
@@ -530,13 +537,17 @@ extern void set_3d_target_weathermode ( env_3d *env, weathermodes mode );
 
 extern void set_3d_target_weathermode_transitional_status ( env_3d *env, float value );
 
-extern void set_3d_infrared_mode ( env_3d *env, infrared_modes mode );
+extern void set_3d_infrared_mode ( env_3d *env, render_filters mode );
+
+extern void set_3d_render_filter ( env_3d *env, render_filters mode );
 
 extern void set_3d_main_light_source ( env_3d *env, light_colour *colour, vec3d *direction, int shadows_enabled );
 
 extern void set_3d_ambient_light ( env_3d *env, light_colour *colour );
 
-extern void set_3d_fog_colour ( env_3d *env, rgb_colour fog_colour );
+extern void set_3d_fog_colour ( env_3d *env, struct REAL_COLOUR fog_colour );
+
+extern void set_monochrome_mode (env_3d *env, int monochrome_mode);
 
 //
 // Adding information to the environment
@@ -574,10 +585,11 @@ extern weathermodes get_3d_target_weathermode ( env_3d *env );
 
 extern float get_3d_target_weathermode_transitional_status ( env_3d *env );
 
-extern enum INFRARED_MODES get_3d_infrared_mode ( env_3d *env );
+extern render_filters get_3d_render_filter ( env_3d *env );
 
 extern rgb_colour get_3d_fog_colour ( env_3d *env );
 
+extern int get_monochrome_mode (env_3d* env);
 //
 // Recalculating the environment
 //
