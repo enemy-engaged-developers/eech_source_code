@@ -186,12 +186,12 @@ void initialise_havoc_mfd (void)
 
 	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
-	set_rgb_colour (MFD_COLOUR1, 255, 255,   0, 255);
-	set_rgb_colour (MFD_COLOUR2, 200, 200,   0, 255);
-	set_rgb_colour (MFD_COLOUR3, 176, 176,   0, 255);
-	set_rgb_colour (MFD_COLOUR4, 151, 151,   0, 255);
-	set_rgb_colour (MFD_COLOUR5, 140, 140,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,  80,  52,   8, 255);
+	set_rgb_colour (MFD_COLOUR1, 255, 160,   0, 255);
+	set_rgb_colour (MFD_COLOUR2, 200, 130,   0, 255);
+	set_rgb_colour (MFD_COLOUR3, 176, 126,   0, 255);
+	set_rgb_colour (MFD_COLOUR4, 151, 100,   0, 255);
+	set_rgb_colour (MFD_COLOUR5, 140,  90,   0, 255);
+	set_rgb_colour (MFD_COLOUR6,  80,  62,   8, 255);
 
 	set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
 }
@@ -1808,6 +1808,9 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+
 	ASSERT (eo);
 
 	ASSERT (eo_3d_texture_screen);
@@ -1860,6 +1863,8 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_AMBER;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
@@ -1867,6 +1872,8 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 			light_level = llltv_light_levels[weather_mode][day_segment_type];
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_AMBER_VISUAL;
 
 			break;
 		}
@@ -1882,7 +1889,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	set_active_screen (eo_3d_texture_screen);
 
-	set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, 0.0, 0.0, mfd_texture_size - 0.001, mfd_texture_size - 0.001, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, 0.0, 0.0, mfd_texture_size - 0.001, mfd_texture_size - 0.001, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
