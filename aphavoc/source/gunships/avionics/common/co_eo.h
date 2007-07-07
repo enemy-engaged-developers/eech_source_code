@@ -165,6 +165,7 @@ extern int laser_is_active(void);
 extern void set_laser_is_active(int is_active);
 
 extern float get_triangulated_range(entity* target);
+extern float get_triangulated_by_position_range(vec3d* source, vec3d* target);
 
 extern int electrical_system_active(void);
 extern void set_electrical_system_active(int active);

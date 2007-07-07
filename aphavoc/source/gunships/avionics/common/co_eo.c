@@ -184,6 +184,12 @@ float get_triangulated_range(entity* target)
 	ownship_position = get_local_entity_vec3d_ptr(ownship, VEC3D_TYPE_POSITION);
 	target_position = get_local_entity_vec3d_ptr(target, VEC3D_TYPE_POSITION);
 
+	return get_triangulated_by_position_range(ownship_position, target_position);
+}
+
+float get_triangulated_by_position_range(vec3d *ownship_position, vec3d *target_position)
+{
+	ASSERT(ownship_position && target_position);
 	if (ownship_position->y > target_position->y + 2.0)
 	{
 		float angle;
