@@ -72,6 +72,18 @@
 
 int get_angle_of_projection (const vec3d *source, const vec3d *target, float velocity, float *angle_of_projection)
 {
+	if (velocity > 0.001)
+	{
+		float range = get_2d_range (source, target);
+		return get_angle_of_projection_with_range(source, target, velocity, angle_of_projection, range);
+	}
+	else
+		return FALSE;
+}
+
+
+int get_angle_of_projection_with_range (const vec3d *source, const vec3d *target, float velocity, float *angle_of_projection, float range)
+{
 	float
 		x,
 		y,
@@ -96,7 +108,7 @@ int get_angle_of_projection (const vec3d *source, const vec3d *target, float vel
 
 	if (velocity > 0.001)
 	{
-		x = get_2d_range (source, target);
+		x = range;
 
 		if (x > 0.001)
 		{
