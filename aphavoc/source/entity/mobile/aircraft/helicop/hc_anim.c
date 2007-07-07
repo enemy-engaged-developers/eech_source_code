@@ -242,14 +242,14 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-			blade_factor = 13.0;
+			blade_factor = 11.0;
 			break;
 	
 		// three rotor blades		
 		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
 		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
-			blade_factor = 16.0;
+			blade_factor = 15.0;
 			break;
 
 		// two rotor blades
