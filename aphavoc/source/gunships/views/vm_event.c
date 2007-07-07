@@ -1011,7 +1011,7 @@ static void TSD_render_event (event *ev)
 static void TSD_render_palette_event (event *ev)
 {
 	tsd_render_palette++;
-	if (tsd_render_palette == 3)
+	if (tsd_render_palette == 4)
 	   tsd_render_palette = 0; 
 // update commandline option	
 	command_line_tsd_palette = tsd_render_palette;
