@@ -3542,7 +3542,7 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * engine).  However, changing turbine speed is not instant, and even
 	 * when N1 speed has changed it might take a little longer before the extra
 	 * energy reaches the N2 turbine and is converted into shaft power.  Hence
-	 * it might not be able to keep N2 speed at exactly 100% at all times, espically
+	 * it might not be able to keep N2 speed at exactly 100% at all times, especally
 	 * initially after sudden changes of rotor drag (i.e. by changing rotor pitch 
 	 * suddenly (fast pulling collective), or by sudden heavy rotor load (increase
 	 * in g-force by hard manouvering).
