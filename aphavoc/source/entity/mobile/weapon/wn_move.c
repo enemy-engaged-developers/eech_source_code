@@ -637,8 +637,16 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 		//
 
 		raw->mob.velocity += acceleration * get_delta_time ();
-
 		raw->mob.velocity = max (raw->mob.velocity, 0.0);
+	}
+
+	if (weapon_database[raw->mob.sub_type].ignore_gravity)
+	{
+		////////////////////////////////////////
+		//
+		// move unguided unpowered weapon (ignore gravity)
+		//
+		////////////////////////////////////////
 
 		//
 		// motion vector
@@ -658,140 +666,113 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 	}
 	else
 	{
-		if (weapon_database[raw->mob.sub_type].ignore_gravity)
+		////////////////////////////////////////
+		//
+		// move unguided unpowered weapon (with gravity)
+		//
+		////////////////////////////////////////
+
+		//
+		// motion vector
+		//
+
+		raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
+		raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
+		raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
+
+		//
+		// position
+		//
+
+		new_position->x += raw->mob.motion_vector.x * get_delta_time ();
+		new_position->y += raw->mob.motion_vector.y * get_delta_time () - (0.5 * G * get_delta_time () * get_delta_time ());
+		new_position->z += raw->mob.motion_vector.z * get_delta_time ();
+
+		//
+		// apply gravity (after moving weapon)
+		//
+
+		heading = get_heading_from_attitude_matrix (raw->mob.attitude);
+
+		pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
+
+		h_vel = cos (pitch) * raw->mob.velocity;
+
+		v_vel = (sin (pitch) * raw->mob.velocity) - (G * get_delta_time ());
+
+		////////////////////////////////////////
+		//
+		// fudge for ejector seat and crates
+		//
+
+		switch (raw->mob.sub_type)
 		{
-			////////////////////////////////////////
-			//
-			// move unguided unpowered weapon (ignore gravity)
-			//
-			////////////////////////////////////////
+			case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
+			case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
+			{
+				if (raw->parachute_status == PARACHUTE_STATUS_OPEN1)
+				{
+					h_vel = bound (h_vel, -7.5, 7.5);
 
-			//
-			// motion vector
-			//
+					v_vel = max (v_vel, -15.0);
+				}
+				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
+				{
+					h_vel = bound (h_vel, -5.0, 5.0);
 
-			raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-			raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-			raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
+					v_vel = max (v_vel, -10.0);
+				}
+				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
+				{
+					h_vel = bound (h_vel, -2.5, 2.5);
 
-			//
-			// position
-			//
+					v_vel = max (v_vel, -5.0);
+				}
 
-			new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-			new_position->y += raw->mob.motion_vector.y * get_delta_time ();
-			new_position->z += raw->mob.motion_vector.z * get_delta_time ();
+				break;
+			}
+			case ENTITY_SUB_TYPE_WEAPON_CRATE:
+			{
+				h_vel = bound (h_vel, -10.0, 10.0);
+
+				v_vel = max (v_vel, -20.0);
+
+				break;
+			}
 		}
-		else
+
+		//
+		////////////////////////////////////////
+
+		raw->mob.velocity = sqrt ((h_vel * h_vel) + (v_vel * v_vel));
+
+		pitch = atan2 (v_vel, h_vel);
+
+		get_3d_transformation_matrix (raw->mob.attitude, heading, pitch, 0.0);
+
+		//
+		// artillery error
+		//
+
+		#if !DEBUG_MODULE_DISABLE_ARTILLERY_ERROR
+
+		if (weapon_database[raw->mob.sub_type].max_range_error_ratio > 0.0)
 		{
-			////////////////////////////////////////
-			//
-			// move unguided unpowered weapon (with gravity)
-			//
-			////////////////////////////////////////
+			int
+				seed;
 
-			//
-			// motion vector
-			//
+			float
+				h_error;
 
-			raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-			raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-			raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
+			seed = get_client_server_entity_random_number_seed (en);
 
-			//
-			// position
-			//
+			h_error = h_vel * get_delta_time () * weapon_database[raw->mob.sub_type].max_range_error_ratio;
 
-			new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-			new_position->y += raw->mob.motion_vector.y * get_delta_time () - (0.5 * G * get_delta_time () * get_delta_time ());
-			new_position->z += raw->mob.motion_vector.z * get_delta_time ();
-
-			//
-			// apply gravity (after moving weapon)
-			//
-
-			heading = get_heading_from_attitude_matrix (raw->mob.attitude);
-
-			pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
-
-			h_vel = cos (pitch) * raw->mob.velocity;
-
-			v_vel = (sin (pitch) * raw->mob.velocity) - (G * get_delta_time ());
-
-			////////////////////////////////////////
-			//
-			// fudge for ejector seat and crates
-			//
-
-			switch (raw->mob.sub_type)
-			{
-				case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
-				case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
-				{
-					if (raw->parachute_status == PARACHUTE_STATUS_OPEN1)
-					{
-						h_vel = bound (h_vel, -7.5, 7.5);
-
-						v_vel = max (v_vel, -15.0);
-					}
-					else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
-					{
-						h_vel = bound (h_vel, -5.0, 5.0);
-
-						v_vel = max (v_vel, -10.0);
-					}
-					else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
-					{
-						h_vel = bound (h_vel, -2.5, 2.5);
-
-						v_vel = max (v_vel, -5.0);
-					}
-
-					break;
-				}
-				case ENTITY_SUB_TYPE_WEAPON_CRATE:
-				{
-					h_vel = bound (h_vel, -10.0, 10.0);
-
-					v_vel = max (v_vel, -20.0);
-
-					break;
-				}
-			}
-
-			//
-			////////////////////////////////////////
-
-			raw->mob.velocity = sqrt ((h_vel * h_vel) + (v_vel * v_vel));
-
-			pitch = atan2 (v_vel, h_vel);
-
-			get_3d_transformation_matrix (raw->mob.attitude, heading, pitch, 0.0);
-
-			//
-			// artillery error
-			//
-
-			#if !DEBUG_MODULE_DISABLE_ARTILLERY_ERROR
-
-			if (weapon_database[raw->mob.sub_type].max_range_error_ratio > 0.0)
-			{
-				int
-					seed;
-
-				float
-					h_error;
-
-				seed = get_client_server_entity_random_number_seed (en);
-
-				h_error = h_vel * get_delta_time () * weapon_database[raw->mob.sub_type].max_range_error_ratio;
-
-				new_position->x += h_error * sfrand1x (&seed);
-				new_position->z += h_error * sfrand1x (&seed);
-			}
-
-			#endif
+			new_position->x += h_error * sfrand1x (&seed);
+			new_position->z += h_error * sfrand1x (&seed);
 		}
+
+		#endif
 	}
 }
 
