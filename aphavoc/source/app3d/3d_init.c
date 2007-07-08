@@ -1091,6 +1091,90 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_fog_colour ( main_3d_env, fog_colour );
 
 			break;
+			
+		}
+
+		case DISPLAY_3D_TINT_BLUE:
+		{
+
+			//
+			// Set the light modes
+			//
+
+			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
+
+			set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+
+			//
+			// Set the light in the scene
+			//
+
+			switch ( current_3d_light_level )
+			{
+				case DISPLAY_3D_LIGHT_LEVEL_LOW:
+				{
+
+					ambient_light.red = 0.3;
+					ambient_light.green = 0.3;
+					ambient_light.blue = 0.5;
+
+					main_light.red = 0.0;
+					main_light.green = 0.0;
+					main_light.blue = 0.2;
+
+					break;
+				}
+
+				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
+				{
+
+					ambient_light.red = 0.4;
+					ambient_light.green = 0.4;
+					ambient_light.blue = 0.6;
+
+					main_light.red = 0.0;
+					main_light.green = 0.0;
+					main_light.blue = 0.25;
+
+					break;
+				}
+
+				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
+				{
+					ambient_light.red = 0.6;
+					ambient_light.green = 0.6;
+					ambient_light.blue = 0.9;
+
+					main_light.red = 0.3;
+					main_light.green = 0.3;
+					main_light.blue = 0.4;
+
+					break;
+				}
+			}
+
+			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
+
+			direction.x = -main_vp.zv.x;
+			direction.y = -main_vp.zv.y;
+			direction.z = -main_vp.zv.z;
+
+			set_3d_main_light_source ( main_3d_env, &main_light, &direction, FALSE );
+
+			//
+			// Set the fogmode
+			//
+
+			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
+
+			fog_colour.r = ambient_light.red * 128;
+			fog_colour.g = ambient_light.green * 128;
+			fog_colour.b = ambient_light.blue * 128;
+			fog_colour.a = 0;
+
+			set_3d_fog_colour ( main_3d_env, fog_colour );
+
+			break;
 		}
 
 		case DISPLAY_3D_TINT_AMBER:
@@ -1503,7 +1587,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 		}
 
 		// Jabberwock 031009 Satellite tint for satellite view
-		case DISPLAY_3D_TINT_BLUE:
+		case DISPLAY_3D_TINT_BLUE_HAZE:
 		{
 			
 			int
