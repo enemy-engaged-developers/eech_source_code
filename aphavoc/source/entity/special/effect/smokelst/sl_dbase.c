@@ -115,21 +115,21 @@ void initialise_smoke_list_database (void)
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	0;			// red
-		item->green_2				=	0;			// green
-		item->blue_2				=	0;			// blue
+		item->red_2					=	150;			// red
+		item->green_2				=	150;			// green
+		item->blue_2				=	150;			// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	5.0;		// radius
+		item->radius_2				=	10.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	100;		// red
 		item->green_end			=	100;		// green
 		item->blue_end				=	100;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	5.0;		// radius
+		item->radius_end			=	15.0;		// radius
 
-		item->final_vertical_velocity	=	-1.0;
-		item->vertical_acceleration	=	1.0;
+		item->final_vertical_velocity	=	0.5;
+		item->vertical_acceleration	=	-0.5;
 
 		item->initial_velocity_noise	=	0.5;
 
