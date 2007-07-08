@@ -269,6 +269,50 @@ const layer_control_button_type
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"TRACK",
 	};
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static vec3d* get_last_known_position(entity* en)
+{
+	// arneh, 2007-07-08 - only update map position if update interval has passed
+
+	int
+		side,
+		is_enemy;
+
+	vec3d* pos;
+
+	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	is_enemy = side != get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+
+	if (command_line_campaign_map_update_interval && is_enemy && en->type == ENTITY_TYPE_GROUP)
+	{
+		// arneh, 2007-07-08 - only update map position if update interval has passed
+
+		int day = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY);
+		float current_time = current_time = (day * 24 *3600) + get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+		
+		float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+		float time_since_last_update = current_time - last_update;
+
+		if (time_since_last_update > command_line_campaign_map_update_interval)
+		{
+			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+			set_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, current_time);
+			set_local_entity_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, pos);
+		}
+		else
+			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_LAST_KNOWN_POSITION);
+	}
+	else
+		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+	return pos;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,7 +513,8 @@ void draw_2d_map (ui_object *obj, void *arg)
 
 	map_draw_waypoint_routes (obj, this_side);
 
-	map_draw_events (obj);
+//	this causes map flicker, so removed
+//	map_draw_events (obj);
 
 	en = get_ui_mouse_over_entity ();
 
@@ -837,7 +882,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 		if (target)
 		{
-			target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			target_pos = get_last_known_position(target);
 
 			if (target_pos)
 			{
@@ -2193,7 +2238,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 		return;
 	}
 
-	pos = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
+	pos = get_last_known_position(group);
 
 	ASSERT (pos);
 
@@ -2462,8 +2507,27 @@ static void map_draw_group (ui_object *obj, entity *en)
 			if (icon != MAP_ICON_NONE)
 			{
 				group_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
-		
-				pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+//				if (!is_friendly && command_line_campaign_map_update_interval)
+					pos = get_last_known_position(en);
+/*				{
+					// arneh, 2007-07-08 - only update map position if update interval has passed
+
+					float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+					float time_since_last_update = current_time - last_update;
+
+					if (time_since_last_update > command_line_campaign_map_update_interval)
+					{
+						pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+						set_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, current_time);
+						set_local_entity_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, pos);
+					}
+					else
+						pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_LAST_KNOWN_POSITION);
+				}*/
+//				else
+//					pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 				
 				map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
 			
@@ -2891,7 +2955,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	
 						if (objective)
 						{
-							pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+							pos = get_last_known_position(objective);
 	
 							if (pos)
 							{
@@ -2924,7 +2988,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	
 						if (objective)
 						{
-							pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+							pos = get_last_known_position(objective);
 	
 							ASSERT (pos);
 	
@@ -3250,16 +3314,14 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
 
-	// get entity position
-	en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-
-	ASSERT (en_pos);
-	
 	// get mission position
 	mission_pos = NULL;
 
 	if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
 	{
+		// get entity position
+		en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);  // known to be friendly
+
 		if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 		{
 			mission = get_local_group_primary_task (en);
@@ -3277,7 +3339,7 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 	
 				if (objective)
 				{
-					mission_pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+					mission_pos = get_last_known_position (objective);
 
 					if (mission_pos)
 					{
@@ -3306,10 +3368,14 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 			}
 		}
 	}
+	else
+		en_pos = get_last_known_position(en);
 
 	//
 	// Draw Group / Member Icon
 	//
+
+	ASSERT (en_pos);
 
 	icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
 
@@ -3368,7 +3434,7 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 
 	if (objective)
 	{
-		mission_pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+		mission_pos = get_last_known_position(objective);
 
 		ASSERT (mission_pos);
 	}
