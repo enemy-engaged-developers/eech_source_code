@@ -180,6 +180,12 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			raw->side = get_local_entity_int_value (raw->group_link.parent, INT_TYPE_SIDE);
 		}
 
+		// for intermittent map updates of enemy
+		raw->last_seen_time = 0.0;
+		raw->last_known_position.x = MID_MAP_X;
+		raw->last_known_position.y = MID_MAP_Y;
+		raw->last_known_position.z = MID_MAP_Z;
+
 		//
 		// formation
 		//

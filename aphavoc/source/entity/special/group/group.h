@@ -231,7 +231,11 @@ struct GROUP
 
 	float
 		sleep,
+		last_seen_time,
 		assist_timer;
+
+	vec3d
+		last_known_position;
 
 	supply_type
 		supplies;

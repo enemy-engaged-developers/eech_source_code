@@ -164,7 +164,13 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			pack_float_value (en, FLOAT_TYPE_SLEEP, raw->sleep);
 
+			pack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, raw->last_seen_time);
+
 			pack_float_value (en, FLOAT_TYPE_ASSIST_TIMER, raw->assist_timer);
+
+			pack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, raw->last_seen_time);
+
+			pack_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, &raw->last_known_position);
 
 			// supplies
 			
@@ -274,6 +280,10 @@ static void pack_local_data (entity *en, pack_modes mode)
 			// sleep
 
 			// assist timer
+
+			pack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, raw->last_seen_time);
+
+			pack_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, &raw->last_known_position);
 
 			// supplies
 			
@@ -395,7 +405,13 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->sleep = unpack_float_value (en, FLOAT_TYPE_SLEEP);
 
+			raw->last_seen_time = unpack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+
 			raw->assist_timer = unpack_float_value (en, FLOAT_TYPE_ASSIST_TIMER);
+
+			raw->last_seen_time = unpack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+
+			unpack_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, &raw->last_known_position);
 
 			// supplies
 
@@ -522,6 +538,10 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// sleep
 
 			// assist timer
+
+			raw->last_seen_time = unpack_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+
+			unpack_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, &raw->last_known_position);
 
 			// supplies
 

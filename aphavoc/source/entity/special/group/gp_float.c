@@ -136,6 +136,14 @@ static void set_local_float_value (entity *en, float_types type, float value)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_LAST_SEEN_TIME:
+		////////////////////////////////////////
+		{
+			raw->last_seen_time = value;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -261,6 +269,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_LAST_SEEN_TIME:
+		////////////////////////////////////////
+		{
+			value = raw->last_seen_time;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -306,6 +322,12 @@ void overload_group_float_value_functions (void)
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_GROUP][FLOAT_TYPE_SLEEP][COMMS_MODEL_SERVER]		= set_server_float_value;
 	fn_set_client_server_entity_float_value	[ENTITY_TYPE_GROUP][FLOAT_TYPE_SLEEP][COMMS_MODEL_CLIENT]		= set_client_float_value;
 	fn_get_local_entity_float_value				[ENTITY_TYPE_GROUP][FLOAT_TYPE_SLEEP]									= get_local_float_value;
+
+	fn_set_local_entity_raw_float_value			[ENTITY_TYPE_GROUP][FLOAT_TYPE_LAST_SEEN_TIME]								= set_local_float_value;
+	fn_set_local_entity_float_value				[ENTITY_TYPE_GROUP][FLOAT_TYPE_LAST_SEEN_TIME]								= set_local_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_GROUP][FLOAT_TYPE_LAST_SEEN_TIME][COMMS_MODEL_SERVER]	= set_server_float_value;
+	fn_set_client_server_entity_float_value	[ENTITY_TYPE_GROUP][FLOAT_TYPE_LAST_SEEN_TIME][COMMS_MODEL_CLIENT]	= set_client_float_value;
+	fn_get_local_entity_float_value				[ENTITY_TYPE_GROUP][FLOAT_TYPE_LAST_SEEN_TIME]								= get_local_float_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
