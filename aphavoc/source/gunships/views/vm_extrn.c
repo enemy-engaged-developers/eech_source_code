@@ -668,7 +668,7 @@ void draw_external_3d_view (void)
 	
 	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_SATELLITE)
 	{
-		set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUE, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_MEDIUM);
+		set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUE_HAZE, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_MEDIUM);
 	}
 	else
 	{
