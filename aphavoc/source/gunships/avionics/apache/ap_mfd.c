@@ -2973,6 +2973,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_GREEN;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_DTV:
@@ -2980,6 +2982,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 			light_level = dtv_light_levels[weather_mode][day_segment_type];
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
 		}
@@ -2989,6 +2993,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = dvo_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+
 			break;
 		}
 		default:
@@ -2997,15 +3003,6 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			break;
 		}
-	}
-
-	if (command_line_green_mfd)
-	{
-		tint = DISPLAY_3D_TINT_GREEN;
-	}
-	else
-	{
-		tint = DISPLAY_3D_TINT_GREY;
 	}
 
 	if (draw_large_mfd)
@@ -3161,16 +3158,6 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	set_active_screen (eo_3d_texture_screen);
 
-/*
-	if (command_line_green_mfd)
-	{
-		tint = DISPLAY_3D_TINT_GREEN;
-	}
-	else
-	{
-		tint = DISPLAY_3D_TINT_GREY;
-	}
-*/
 	set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (fov), rad(fov));
 
 	draw_eo_3d_scene = TRUE;
