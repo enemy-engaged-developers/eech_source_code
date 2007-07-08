@@ -172,12 +172,12 @@ extern int
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511
 	command_line_tsd_palette,									// VJ 030511
-	command_line_green_mfd,										// loke 030517
 	command_line_colour_mfd,									// arneh 2006-11-06
 	command_line_maxplayers,									// Werewolf 030518
 	command_line_camcom,										// Jabberwock 031007 Campaign Commander
 	command_line_campaign_map,									// arneh 2007-07-01 campaign map mode
 	command_line_campaign_map_palette,							// arneh 2007-07-01 pallette used for campaign map
+	command_line_campaign_map_update_interval,					// arneh 2007-07-08 how often enemy units are updated on campaign map
 	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis,						// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis,						// Jabberwock 031104 Joystick look

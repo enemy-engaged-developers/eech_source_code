@@ -478,10 +478,9 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
 		if (strcmp(p, "campaign_map_mode") == 0)	command_line_campaign_map = d1;
 		if (strcmp(p, "campaign_map_palette") == 0)	command_line_campaign_map_palette = d1;
+		if (strcmp(p, "map_update_interval") == 0)	command_line_campaign_map_update_interval = d1;
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
 		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
-		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
-		if (strcmp(p, "colourmfd") == 0)		command_line_colour_mfd = d1; // arneh 2006-11-06
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
@@ -635,6 +634,7 @@ void dump_ini_file(void)
 	fprintf(f,"camcom=%d               # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"campaign_map_mode=%d    # 1 = default resolution and 2 is high resolution map (only for fast PCs\n",command_line_campaign_map);
 	fprintf(f,"campaign_map_palette=%d # Which palette to use for the new campaign map.  1 is the default shades from green via red to white, 2 is more like a paper map\n",command_line_campaign_map_palette);
+	fprintf(f,"map_update_interval=%d  # How often (in seconds) enemy units are updated on campaign map  120 seconds is the default\n",command_line_campaign_map_update_interval);
 	fprintf(f,"destgt=%d               # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d          # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 
@@ -677,8 +677,6 @@ void dump_ini_file(void)
 	fprintf(f,"restricted_nvg_fov=%d        # restrict night vision field of view by shading edge of screen, def = 1 (on)\n", command_line_restricted_nvg_fov);
 //	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
-	fprintf(f,"greenmfd=%d          # targeting cameras use monochrome green (will use monochrome grey if off)(def = 1 (on))\n",command_line_green_mfd);
-	fprintf(f,"colourmfd=%d         # MFDs use colours (only Apache currently)) (def = 1 (on))\n",command_line_colour_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);

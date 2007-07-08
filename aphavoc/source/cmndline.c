@@ -195,12 +195,12 @@ int
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
-	command_line_green_mfd										= TRUE,		// loke 030517
 	command_line_colour_mfd										= TRUE,		// arneh 2006-11-06
 	command_line_maxplayers							= 4,	// Werewolf 030518
 	command_line_camcom								= FALSE,	// Jabberwock 031007 Campaign Commander
 	command_line_campaign_map						= 1,		// campaign map mode
 	command_line_campaign_map_palette				= 1,		// palette used for campaign map
+	command_line_campaign_map_update_interval       = 120,      // seconds
 	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis				= 1,	// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
@@ -1973,19 +1973,6 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_maxplayers = 4;
-			}
-		}
-		////////////////////////////////////////
-		else if (s2 = strarg (s1, "green_mfd"))		// loke 030517
-		////////////////////////////////////////
-		{
-			if (*s2 == ':')
-			{
-				sscanf (s2 + 1, "%d", &command_line_green_mfd);
-			}
-			else
-			{
-				command_line_green_mfd = TRUE;
 			}
 		}
 		////////////////////////////////////////
