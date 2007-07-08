@@ -200,7 +200,7 @@ static comanche_side_mfd_modes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static rgb_colour
-	mfd_colours[13];
+	mfd_colours[20];
 
 #define MFD_COLOUR1 		  		(mfd_colours[0])
 #define MFD_COLOUR2 		  		(mfd_colours[1])
@@ -215,7 +215,13 @@ static rgb_colour
 #define MFD_CLEAR_COLOUR		(mfd_colours[10])
 #define MFD_COLOUR7				(mfd_colours[11])
 #define MFD_COLOUR8				(mfd_colours[12])
-
+#define MFD_COLOUR_BLUE			(mfd_colours[12])
+#define MFD_COLOUR_YELLOW		(mfd_colours[13])
+#define MFD_COLOUR_DARK_YELLOW	(mfd_colours[14])
+#define MFD_COLOUR_RED			(mfd_colours[15])
+#define MFD_COLOUR_CYAN			(mfd_colours[16])
+#define MFD_COLOUR_DARK_BLUE	(mfd_colours[17])
+#define MFD_COLOUR_DARK_RED		(mfd_colours[18])
 static rgb_colour
    clear_mfd_colour;
 
@@ -2654,7 +2660,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN;
+			tint = DISPLAY_3D_TINT_BLUE;
 
 			break;
 		}
@@ -3152,30 +3158,6 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	print_mono_font_string (s);
 
 	//
-	// target name
-	//
-
-	if (draw_large_mfd)
-	{
-		y_adjust = -12.0;
-	}
-	else
-	{
-		y_adjust = -5.0;
-	}
-
-	s = get_target_display_name (target, buffer, draw_large_mfd);
-
-	if (s)
-	{
-		set_2d_mono_font_position (-1.0, -1.0);
-
-		set_mono_font_rel_position (1.0, y_adjust);
-
-		print_mono_font_string (s);
-	}
-
-	//
 	// target range
 	//
 
@@ -3347,18 +3329,42 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 				if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 				{
+					float x_adjust;
 					transform_mfd_screen_co_ords_to_mfd_texture_co_ords (&i, &j);
 
 					get_2d_world_position (i, j, &x, &y);
 
-					draw_2d_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR1);
-					draw_2d_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR1);
-					draw_2d_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR1);
+
+					//
+					// target name
+					//
+				
+					s = get_target_display_name (target, buffer, FALSE);
+				
+					if (s)
+					{
+						y_adjust = -12.0;
+						x_adjust = -get_mono_font_string_width (s) / 2.0;
+				
+						set_mono_font_colour (MFD_COLOUR_RED);
+						set_2d_mono_font_position (x, y - 0.33);
+				
+						set_mono_font_rel_position (x_adjust, y_adjust);
+				
+						print_mono_font_string (s);
+					}
+				
+					set_mono_font_colour (MFD_COLOUR1);
+									
+					
+					draw_2d_line (x - 0.30, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
+					draw_2d_line (x + 0.30, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
+					draw_2d_line (x - 0.30, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
+					draw_2d_line (x + 0.30, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
+					draw_2d_line (x - 0.30, y + 0.20, x - 0.30, y + 0.15, MFD_COLOUR1);
+					draw_2d_line (x - 0.30, y - 0.20, x - 0.30, y - 0.15, MFD_COLOUR1);
+					draw_2d_line (x + 0.30, y + 0.20, x + 0.30, y + 0.15, MFD_COLOUR1);
+					draw_2d_line (x + 0.30, y - 0.20, x + 0.30, y - 0.15, MFD_COLOUR1);
 				}
 
 				main_vp = tmp;
@@ -11984,6 +11990,14 @@ void initialise_comanche_mfd (void)
 	set_rgb_colour (MFD_BACKGROUND_COLOUR,   15,  24,  16, 255);
 	set_rgb_colour (MFD_CLEAR_COLOUR,         0,   0,   0,   0);
 
+	set_rgb_colour (MFD_COLOUR_BLUE,          60, 160, 255,  255);
+	set_rgb_colour (MFD_COLOUR_DARK_BLUE,	   0,   0,  96,  255);
+	set_rgb_colour (MFD_COLOUR_YELLOW,       230, 230,  40,  255);
+	set_rgb_colour (MFD_COLOUR_DARK_YELLOW,  165, 165,  30,  255);
+	set_rgb_colour (MFD_COLOUR_RED,          255,  40,  40,  255);	
+	set_rgb_colour (MFD_COLOUR_DARK_RED,	 148,   8,   8,  255);
+	set_rgb_colour (MFD_COLOUR_CYAN,          60, 255, 230,  255);	
+	
 	set_rgb_colour (TEXT_COLOUR1,           254, 204,   1, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,  66,  35,  11, 255);
 
