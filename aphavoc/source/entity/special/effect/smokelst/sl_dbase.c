@@ -99,34 +99,34 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	220;		// red
-		item->green_start			=	220;		// green
-		item->blue_start 			=	220;		// blue
+		item->red_start			=	240;		// red
+		item->green_start			=	240;		// green
+		item->blue_start 			=	240;		// blue
 		item->alpha_start 		=	255;		// alpha
 		item->radius_start		=	0.1;		// radius
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;		// colour change 1 lifescale
-		item->red_1					=	200;		// red
-		item->green_1 				=	200;		// green
-		item->blue_1 				=	200;		// blue
+		item->red_1					=	220;		// red
+		item->green_1 				=	220;		// green
+		item->blue_1 				=	220;		// blue
 		item->alpha_1 				=	0;			// alpha
 		item->radius_1 			=	5.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
-		item->red_2					=	180;			// red
-		item->green_2				=	180;			// green
-		item->blue_2				=	180;			// blue
+		item->red_2					=	200;			// red
+		item->green_2				=	200;			// green
+		item->blue_2				=	200;			// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2				=	10.0;		// radius
+		item->radius_2 			=	7.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	100;		// red
 		item->green_end			=	100;		// green
 		item->blue_end				=	100;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end			=	15.0;		// radius
+		item->radius_end 			=	10.0;		// radius
 
 		item->final_vertical_velocity	=	1.5;
 		item->vertical_acceleration	=	-0.5;
@@ -327,24 +327,24 @@ void initialise_smoke_list_database (void)
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	0.05;		// colour change 1 lifescale
-		item->red_1					=	30;		// red
-		item->green_1 				=	30;		// green
-		item->blue_1 				=	30;		// blue
+		item->red_1					=	40;		// red
+		item->green_1 				=	40;		// green
+		item->blue_1 				=	40;		// blue
 		item->alpha_1 				=	90;		// alpha
 		item->radius_1 			=	30.5;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	0.125;		// colour change 2 lifescale
-		item->red_2					=	00;		// red
-		item->green_2				=	00;		// green
-		item->blue_2				=	00;		// blue
+		item->red_2					=	 60;		// red
+		item->green_2				=	 60;		// green
+		item->blue_2				=	 60;		// blue
 		item->alpha_2				=	30;		// alpha
 		item->radius_2				=	101.5;		// radius
 
 		// END COLOUR
-		item->red_end				=	60;		// red
-		item->green_end			=	60;		// green
-		item->blue_end				=	60;		// blue
+		item->red_end				=	80;		// red
+		item->green_end			=	80;		// green
+		item->blue_end				=	80;		// blue
 		item->alpha_end			=	0;			// alpha
 		item->radius_end			=	300.0;		// radius
 
