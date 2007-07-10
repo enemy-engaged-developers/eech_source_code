@@ -325,6 +325,7 @@ void process_ini_file(int argc, char *argv[])
 		 if (d1 == 1)
 			command_line_display_bpp=32;
 		}
+		if (strcmp(p, "persistent_smoke")==0)  command_line_persistent_smoke = d1;
 
 		if (strcmp(p, "nrt")==0)  	command_line_no_render_to_texture = d1;
 		if (strcmp(p, "notnl")==0) 	command_line_no_hardware_tnl = d1;
@@ -666,6 +667,7 @@ void dump_ini_file(void)
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"TIR_6DOF=%d          # Enables support for TrackIR vector in the hokum and comanche\n",command_line_TIR_6DOF); // Retro 6Feb2005
+
 	fprintf(f,"\n[Graphics and textures]\n");
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov0=%d            # general field of view maximum for Apache pits, linked to key '9'\n",command_line_max_fov0);
@@ -687,6 +689,7 @@ void dump_ini_file(void)
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 (dark) to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
+	fprintf(f,"persistent_smoke=%d   # Make smoke from burning targets keep burning for a long time (CPU intensive)\n", command_line_persistent_smoke);
 	
 	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210

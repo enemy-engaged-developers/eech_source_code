@@ -2000,7 +2000,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 400.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 400.0;
+	else
+		explosion_info->generator_lifetime		= 5.0;
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 100.0;
 
@@ -2020,7 +2023,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 120.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 120.0;
+	else
+		explosion_info->generator_lifetime		= 5.0;
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -2040,7 +2046,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 200.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 200.0;
+	else
+		explosion_info->generator_lifetime		= 5.0;
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 
@@ -2234,7 +2243,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 1200.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 1200.0;
+	else
+		explosion_info->generator_lifetime		= 10.0;
 	explosion_info->frequency					= 1.0;
 	explosion_info->smoke_lifetime			= 200.0;
 
@@ -2254,7 +2266,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 120.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 120.0;
+	else
+		explosion_info->generator_lifetime		= 5.0;
 	explosion_info->frequency					= 0.3;
 	explosion_info->smoke_lifetime			= 4.0;
 
@@ -2274,7 +2289,10 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->trail_count 				=	1;
 
-	explosion_info->generator_lifetime		= 200.0;
+	if (command_line_persistent_smoke)
+		explosion_info->generator_lifetime		= 200.0;
+	else
+		explosion_info->generator_lifetime		= 10.0;
 	explosion_info->frequency					= 0.2;
 	explosion_info->smoke_lifetime			= 3.0;
 

@@ -134,6 +134,7 @@ extern int
 	command_line_no_hardware_tnl,
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
+	command_line_persistent_smoke,								// arneh 2007-07-10
 	command_line_no_mission_complete_music,
 	command_line_mouse_look,									// Retro 030317
 	command_line_mouse_look_speed,							// Retro 030317

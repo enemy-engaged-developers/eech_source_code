@@ -157,6 +157,7 @@ int
 	command_line_no_hardware_tnl								= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
+	command_line_persistent_smoke								= TRUE,
 	command_line_no_mission_complete_music					= FALSE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
 	command_line_mouse_look_speed								= 15,		// Retro 030317
