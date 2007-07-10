@@ -438,6 +438,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 		}
 	}
 
+
 	//
 	// get unit vector to intercept point
 	//
@@ -541,7 +542,22 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	get_3d_transformation_matrix (m1, frame_turn_rate, 0.0, 0.0);
 
-	multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
+	// arneh - make vikhrs spiral
+	if (raw->mob.sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR && raw->weapon_lifetime > 0.0
+		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2)
+	{
+		matrix3x3 spiral_matrix, tmp;
+
+		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.3;
+		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.3;
+
+		get_3d_transformation_matrix (spiral_matrix, heading, pitch, 0.0);
+
+		multiply_matrix3x3_matrix3x3 (tmp, m1, raw->mob.attitude);
+		multiply_matrix3x3_matrix3x3 (m2, tmp, spiral_matrix);
+	}
+	else
+		multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
 
 	//
 	// set roll to zero to remove jitter on weapon view
@@ -865,7 +881,6 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 		if (new_target != raw->mob.target_link.parent)
 		{
-			debug_log("Resetting weapon target. Weapon: %s, target: %s", entity_type_names[en->type], entity_type_names[new_target->type]);
 			set_client_server_entity_parent (en, LIST_TYPE_TARGET, new_target);
 		}
 	}
