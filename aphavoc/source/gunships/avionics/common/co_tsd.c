@@ -488,7 +488,8 @@ set_rgb_colour(terrain_colour[2][61],105,59,27,255);
 set_rgb_colour(terrain_colour[2][62],98,59,27,255);
 set_rgb_colour(terrain_colour[2][63],90,59,27,255);
 set_rgb_colour(terrain_colour[2][64],90,59,27,255);
- 
+
+// Made with hue: 0.32 - 0.02, value: 0.40 - 0.60, saturation: 0.50 - 0.45
 set_rgb_colour(terrain_colour[3][ 0],100,150,240,255);
 set_rgb_colour(terrain_colour[3][ 1], 55,102, 51,255);
 set_rgb_colour(terrain_colour[3][ 2], 58,103, 51,255);
