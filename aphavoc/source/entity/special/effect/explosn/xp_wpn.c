@@ -261,7 +261,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
 	////////////////////////////////////////
 
@@ -285,8 +285,8 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 10, 999, MEDIUM_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, 99, SMALL_EARTH_META_EXPLOSION, table);
+	add_explosion_criteria (1, kill_code, 10, 999, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
 
 	////////////////////////////////////////
@@ -313,7 +313,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, 99, SMALL_AP_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
 	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
 
@@ -327,7 +327,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
 	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
 
@@ -341,7 +341,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
 	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
 }
@@ -826,6 +826,7 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 		case WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE:
 		{
 			damage_capability = get_local_entity_int_value (en, INT_TYPE_SOFT_DAMAGE_CAPABILITY);
+			debug_log("damage cap: %d, code: %d", damage_capability, kill_code);
 
 			criteria_table = &high_explosive_explosion_criteria_table;
 
@@ -834,6 +835,7 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 		case WEAPON_WARHEAD_TYPE_ARMOUR_PIERCING:
 		{
 			damage_capability = get_local_entity_int_value (en, INT_TYPE_HARD_DAMAGE_CAPABILITY);
+			debug_log("damage cap: %d, code: %d", damage_capability, kill_code);
 
 			criteria_table = &armour_piercing_explosion_criteria_table;
 
