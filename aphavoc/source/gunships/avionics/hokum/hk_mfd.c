@@ -10189,7 +10189,7 @@ void initialise_hokum_mfd (void)
 	set_rgb_colour (MFD_CONTOUR_COLOUR,     200,  35,   0, 255);
 	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
 	set_rgb_colour (MFD_ROAD_COLOUR,        255, 225,   0, 255);
-	set_rgb_colour (MFD_BACKGROUND_COLOUR,   35,  10,   0, 255);
+	set_rgb_colour (MFD_BACKGROUND_COLOUR,   20,  20,  30, 255);
 	set_rgb_colour (MFD_CLEAR_COLOUR,         0,   0,   0, 255);
 
 	set_rgb_colour (TEXT_COLOUR1,             0, 243,  97, 255);
