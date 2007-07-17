@@ -587,7 +587,7 @@ void dump_ini_file(void)
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
 	fprintf(f,"path=%s              # Path to map, campaign, skirmish\n",command_line_game_initialisation_phase_path);
 	fprintf(f,"\n[Dynamics]\n");
-	fprintf(f,"advancedfm=%d      # advanced (more complex) flight model, off by default.\n",command_line_dynamics_advanced_flight_model);
+	fprintf(f,"advancedfm=%d      # advanced flight model, off by default. Makes sideways flight easier, but not realistic\n",command_line_dynamics_advanced_flight_model);
 	fprintf(f,"enginerealism=%d      # realistic engine workload simulation model, on by default.\n",command_line_dynamics_advanced_engine_model);
 	fprintf(f,"enginestartup=%d      # manual engine start up, off by default.\n", command_line_dynamics_engine_startup);
 	fprintf(f,"drbs=%3.1f         # retreating blade stall, floating point scaling factor for RBS effect (default = 1.0)\n",command_line_dynamics_retreating_blade_stall_effect);
