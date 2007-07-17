@@ -99,9 +99,9 @@ void initialise_smoke_list_database (void)
 		item = &(smoke_list_database [SMOKE_LIST_TYPE_GREY_TRAIL]);
 
 		// START COLOUR
-		item->red_start			=	240;		// red
-		item->green_start			=	240;		// green
-		item->blue_start 			=	240;		// blue
+		item->red_start			=	200;		// red
+		item->green_start			=	200;		// green
+		item->blue_start 			=	200;		// blue
 		item->alpha_start 		=	255;		// alpha
 		item->radius_start		=	0.1;		// radius
 
@@ -1324,17 +1324,17 @@ void initialise_smoke_list_database (void)
 
 		// COLOUR CHANGE 1
 		item->colour_change_1	=	1.0;	// colour change 1 lifescale
-		item->red_1					=	 240;	// red
-		item->green_1 				=	225;	// green
-		item->blue_1 				=	190;	// blue
+		item->red_1					=	 220;	// red
+		item->green_1 				=	180;	// green
+		item->blue_1 				=	120;	// blue
 		item->alpha_1 				=	80;	// alpha
 		item->radius_1 			=	12.0;	// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;	// colour change 2 lifescale
 		item->red_2					=	 160;	// red
-		item->green_2				=	 150;	// green
-		item->blue_2				=	120;	// blue
+		item->green_2				=	 120;	// green
+		item->blue_2				=	80;	// blue
 		item->alpha_2				=	20;	// alpha
 		item->radius_2				=	17.0;	// radius
 
