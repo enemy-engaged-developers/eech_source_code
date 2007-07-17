@@ -3192,8 +3192,8 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 										delta_i = (new_v->i - vertices[0].i) * i_scale;
 										delta_j = (new_v->j - vertices[0].j) * j_scale;
 
-										ASSERT(delta_i >= 0.0 && delta_i <= 1.0);
-										ASSERT(delta_j >= 0.0 && delta_j <= 1.0);
+//										ASSERT(delta_i >= 0.0 && delta_i <= 1.0);
+//										ASSERT(delta_j >= 0.0 && delta_j <= 1.0);
 
 										// weighted average of corner xs (weighted according to distance to each corner
 										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) + 
