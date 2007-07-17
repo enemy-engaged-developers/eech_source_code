@@ -2118,7 +2118,7 @@ int helicopter_within_keysite_area (entity *en)
 			zmin,
 			zmax;
 	
-		debug_log ("DYNAMICS: landed close to keysite %s (range %f)", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), actual_range);
+//		debug_log ("DYNAMICS: landed close to keysite %s (range %f)", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), actual_range);
 
 		xmin = 0.0;
 		xmax = 0.0;
