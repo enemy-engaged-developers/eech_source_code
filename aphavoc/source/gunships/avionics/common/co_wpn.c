@@ -703,3 +703,35 @@ void reset_good_tone (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_weapon_drop(entity_sub_types wpn_type, entity* target)
+{
+	float range = 1000.0;
+	vec3d *source_position, target_position;
+	float angle_of_projection;
+	float pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+	float time_of_flight;
+
+	get_local_entity_target_point (target, &target_position);
+	source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+
+	if (get_range_finder() == RANGEFINDER_TRIANGULATION)
+	{
+		range = get_triangulated_by_position_range(source_position, &target_position);
+		if (range == -1.0)
+			range = 1000.0;  // use 1000 meters if unable to triangulate range
+	}
+	else
+		range = get_3d_range (source_position, &target_position);
+
+	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, 0.0, &time_of_flight);
+	else
+	{
+		float weapon_velocity = weapon_database[wpn_type].cruise_velocity;
+		if (!get_angle_of_projection_with_range(source_position, &target_position, weapon_velocity, &angle_of_projection, range))
+			angle_of_projection = 0.0;
+	}
+
+	return angle_of_projection;
+}
