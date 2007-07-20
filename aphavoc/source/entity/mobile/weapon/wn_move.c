@@ -1707,7 +1707,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
  *  The tables are calculated by simulating a firing and measuring drop at
  *  at various distances
  */
-void generate_ballistics_tables()
+void generate_ballistics_tables(void)
 {
 	weapon
 		wpn;
@@ -1746,6 +1746,21 @@ void generate_ballistics_tables()
 		fclose(write_file);
 }
 
+void delete_ballistics_tables(void)
+{
+	entity_sub_types wpn_type;
+	unsigned pitch_index;
+
+	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
+		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		{
+			for(pitch_index = 0; pitch_index < TOTAL_PITCH_INDICES; pitch_index++)
+			{
+				safe_free(ballistics_table[wpn_type][pitch_index]);
+				ballistics_table[wpn_type][pitch_index] = NULL;
+			}
+		}
+}
 
 /**
  * Looks up om the ballistics tables how much drop and time of flight a projectile

@@ -236,7 +236,10 @@ void deinitialise_game (void)
 	// Retro 8Mar2005 - 14Aug2006
 
 	DeInitialise_Shared_Memory(); // we do this in any case, even if it was not set up..
-		
+
+	// arneh - delete the ballistics tables
+	delete_ballistics_tables();
+
 	////////////////////////////////////////
 	//
 	// DEINITIALISE MEMORY BLOCK SYSTEM

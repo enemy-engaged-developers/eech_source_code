@@ -73,7 +73,8 @@ extern int
 
 extern void weapon_movement (entity *en);
 
-extern void generate_ballistics_tables();
+extern void generate_ballistics_tables(void);
+extern void delete_ballistics_tables(void);
 
 extern float get_projectile_flight_time_fast(entity_sub_types wpn_type, float range, float height_difference);
 extern float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* time_of_flight);
