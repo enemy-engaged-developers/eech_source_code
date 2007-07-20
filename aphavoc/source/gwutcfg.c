@@ -377,7 +377,10 @@ void DumpGWutInfo(const char *filename)
 	fprintf(fout,"%s,","burst_duration");
 	fprintf(fout,"%s,","rate_of_fire");
 	fprintf(fout,"%s,","reload_time");
-	fprintf(fout,"%s\n","max_launch_angle_error");
+	fprintf(fout,"%s,","max_launch_angle_error");
+	fprintf(fout,"%s,","max_seeker_limit");
+	fprintf(fout,"%s,","drag_factor");
+	fprintf(fout,"%s\n","spiral_flightpath");
 	}
 	for (i = 0; i < NUM_ENTITY_SUB_TYPE_WEAPONS; i++)
 	{
@@ -441,7 +444,11 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%g,",weapon_database[i].burst_duration);// seconds
 		fprintf(fout,"%g,",weapon_database[i].rate_of_fire);// rounds/minute
 		fprintf(fout,"%g,",weapon_database[i].reload_time);// seconds
-		fprintf(fout,"%g\n",deg(weapon_database[i].max_launch_angle_error));// radians
+		fprintf(fout,"%g",deg(weapon_database[i].max_launch_angle_error));
+		fprintf(fout,"%g",deg(acos(weapon_database[i].max_seeker_limit)));
+		fprintf(fout,"%g",weapon_database[i].drag_factor);
+		fprintf(fout,"%d",weapon_database[i].spiral_flightpath);
+		fputs("\n", fout);
 	}
 
 	//aphavoc\source\entity\special\keysite\ks_dbase.h
@@ -1403,6 +1410,15 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].reload_time               = FloatValue(p);
 		weapon_database[i].max_launch_angle_error    = rad(FloatValue(p));
 		weapon_database[i].max_seeker_limit			 = cos(weapon_database[i].max_launch_angle_error + 0.25);
+
+		// these values were introduced later, so might not exists in old GWUT files
+		p = strtok(NULL,",");
+		if (p)
+		{
+			weapon_database[i].max_seeker_limit		 = cos(rad(atof(p)));
+			weapon_database[i].drag_factor			 = FloatValue(p);
+			weapon_database[i].spiral_flightpath	 = IntValue(p);
+		}
 
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);
