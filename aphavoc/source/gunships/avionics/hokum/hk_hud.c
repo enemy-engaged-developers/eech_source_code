@@ -1587,6 +1587,57 @@ void draw_external_hokum_hud (void)
 
 static void draw_hms_centre_datum (void)
 {
+/*	vec3d
+		*source_position,
+		position;
+
+	object_3d_visibility
+		visibility;
+
+	int
+		angle;
+
+	float
+		i,
+		j,
+		x,
+		y;
+
+	float pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+
+	source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+	for (angle = -5; angle <= 5; angle++)
+	{
+		float dist = 1000.0;
+		float heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
+		rgb_colour c;
+		
+		if (angle == 0)
+			c = sys_col_red;
+		else
+		{
+			c.r = 255;
+			c.g = 255;
+			c.b = 0;
+			c.a = 255;
+		}
+		
+		position.x = source_position->x + dist * sin(heading);
+		position.y = source_position->y + dist * atan(rad(angle) + pitch);
+		position.z = source_position->z + dist * cos(heading);
+	
+		visibility = get_position_3d_screen_coordinates (&position, &i, &j);
+		if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
+		{
+			transform_hud_screen_co_ords_to_hud_texture_co_ords (&i, &j);
+			get_2d_world_position (i, j, &x, &y);
+//			clip_2d_point_to_hud_extent (&x, &y);
+
+			draw_2d_line(-1.0, y, 1.0, y, c);
+		}
+	}
+	draw_2d_line(x, 1.0, x, -1.0, sys_col_red);
+	*/
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
 	{
 		draw_2d_circle(0.0, 0.0, 0.3, hud_colour);
@@ -1793,7 +1844,7 @@ static void draw_target_marker (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+extern float dbg_delta_y;
 static void display_weapon_information (void)
 {
 	entity_sub_types weapon_sub_type;
@@ -1847,15 +1898,30 @@ static void display_weapon_information (void)
 			weapon_type = "ATA";
 		else
 		{
+			entity* target;
 			float x,y;
+			float angle_of_drop = 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z : 0.0;
+			float drop_hud_distance;
+			float roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
 				weapon_type = "GUN";
 			else
 				weapon_type = "RKT";
 
+			target = get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET);
+			if (target)
+				angle_of_drop = get_weapon_drop(weapon_sub_type, target);
+
 			x = 0.0;
-			y = get_global_wide_cockpit() ? 0.36 : 0.80;
+			y = get_global_wide_cockpit() ? 0.38 : 0.80;
+
+			// this magic formula translates the angle to a HUD distance
+			// the magic values are just arrived at by measuring in game
+			drop_hud_distance = atan(angle_of_drop) * ((head_offset_z * 0.84) + 0.66) * HUD_UNIT_RATIO;
+			y -= cos(roll) * drop_hud_distance;
+			x += sin(roll) * drop_hud_distance;
 
 			draw_2d_circle(x, y, 0.1, hud_colour);
 			set_2d_pixel(x, y, hud_colour); 
