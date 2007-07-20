@@ -970,11 +970,6 @@ void full_initialise_game (void)
 
 	initialise_game_initialisation_phases ();
 
-	debug_log ( "Finished Full initialise" );
-	set_ui_object_text ( initialising_text, get_trans ("Finished Initialisation") );
-
-	ui_force_update ();
-
 //VJ WUT mod 26-mar-03	
 
 	////////////////////////////////////////
@@ -1001,6 +996,18 @@ void full_initialise_game (void)
     net_init_heartbeat();
 
 //	play_avi ( "wenesday.avi", 0 );
+
+	debug_log ( "Initialising ballistics tables" );
+	set_ui_object_text ( initialising_text, "Initialising ballistics tables");
+
+	ui_force_update ();
+
+	generate_ballistics_tables();
+
+	debug_log ( "Finished Full initialise" );
+	set_ui_object_text ( initialising_text, get_trans ("Finished Initialisation") );
+
+	ui_force_update ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
