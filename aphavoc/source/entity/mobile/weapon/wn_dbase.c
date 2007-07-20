@@ -170,6 +170,7 @@ weapon_data
 			0,																		// viewable_weapon
 			0,																		// boresight_weapon
 			0,																		// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			0,																		// weapon_class
 
 			0.0,																	// weight
@@ -192,6 +193,7 @@ weapon_data
 			0.0,																	// reload_time
 			0.0,																	// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +241,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -262,6 +265,7 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -302,6 +306,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE +
 			WEAPON_CLASS_SURFACE_TO_AIR +
@@ -327,6 +332,7 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -367,6 +373,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -390,6 +397,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -430,6 +438,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -453,6 +462,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -493,6 +503,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -516,6 +527,7 @@ weapon_data
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -556,6 +568,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -579,6 +592,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.25,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -619,6 +633,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -642,6 +657,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -686,6 +702,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -708,6 +725,7 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -752,6 +770,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -774,6 +793,7 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.5,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -814,6 +834,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -836,6 +857,7 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -880,6 +902,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -902,6 +925,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -942,6 +966,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -965,6 +990,7 @@ weapon_data
 			10.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//	 
@@ -1005,6 +1031,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1028,6 +1055,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1068,6 +1096,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -1091,6 +1120,7 @@ weapon_data
 			12.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1131,6 +1161,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			TRUE,																	// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1154,6 +1185,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1194,6 +1226,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1217,6 +1250,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1257,6 +1291,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -1279,6 +1314,7 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1319,6 +1355,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -1342,6 +1379,7 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1382,6 +1420,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1405,6 +1444,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1445,6 +1485,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1468,6 +1509,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.6,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1508,6 +1550,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR +									// weapon_class
 			WEAPON_CLASS_SURFACE_TO_SURFACE,
 
@@ -1531,6 +1574,7 @@ weapon_data
 			16.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1571,6 +1615,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
@@ -1594,6 +1639,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1634,6 +1680,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -1656,6 +1703,7 @@ weapon_data
 			9.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1696,6 +1744,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -1718,6 +1767,7 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1758,6 +1808,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -1780,6 +1831,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1820,6 +1872,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -1842,6 +1895,7 @@ weapon_data
 			22.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1886,6 +1940,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -1908,6 +1963,7 @@ weapon_data
 			20.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -1952,6 +2008,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -1974,6 +2031,7 @@ weapon_data
 			15.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.5,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2014,6 +2072,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -2036,6 +2095,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (1.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.7,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2083,6 +2143,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			TRUE,			  														// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			6.0,																	// weight
@@ -2105,6 +2166,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2145,6 +2207,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			TRUE,				 													// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			6.0,																	// weight
@@ -2167,6 +2230,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2207,6 +2271,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -2229,6 +2294,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2269,6 +2335,7 @@ weapon_data
 			TRUE,				  													// viewable_weapon
 			FALSE,					// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -2291,6 +2358,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2331,6 +2399,7 @@ weapon_data
 			TRUE,			  				// viewable_weapon
 			TRUE,							// boresight_weapon
 			FALSE,							// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,				// weapon_class
 
 			11.3,																	// weight
@@ -2353,6 +2422,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2393,6 +2463,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			TRUE,	  																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			68.0,																	// weight
@@ -2415,6 +2486,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.1),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.3,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -2462,6 +2534,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			13.6,																	// weight
@@ -2484,6 +2557,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2524,6 +2598,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			0.0,																	// weight
@@ -2546,6 +2621,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2586,6 +2662,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			0.0,																	// weight
@@ -2608,6 +2685,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2648,6 +2726,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			18.2,																	// weight
@@ -2670,6 +2749,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2710,6 +2790,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			0.0,																	// weight
@@ -2732,6 +2813,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2772,6 +2854,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			0.0,																	// weight
@@ -2794,6 +2877,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2834,6 +2918,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			0.0,																	// weight
@@ -2856,6 +2941,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2896,6 +2982,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			1.0,																	// weight
@@ -2918,6 +3005,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -2958,6 +3046,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
 			1.0,																	// weight
@@ -2980,6 +3069,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3027,6 +3117,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			TRUE,																	// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			45.0,																	// weight
@@ -3049,6 +3140,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3089,6 +3181,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			TRUE,																	// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			45.0,																	// weight
@@ -3111,6 +3204,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3151,6 +3245,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -3173,6 +3268,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3213,6 +3309,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -3235,6 +3332,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3275,6 +3373,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			42.5,																	// weight
@@ -3297,6 +3396,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3337,6 +3437,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            TRUE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			45.0,																	// weight
@@ -3359,6 +3460,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3399,6 +3501,7 @@ weapon_data
 			TRUE,			  					// viewable_weapon
 			FALSE,								// boresight_weapon
 			FALSE,								// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,					// weapon_class
 
 			0.0,								// weight
@@ -3421,6 +3524,7 @@ weapon_data
 			0.0,							// reload_time
 			rad (20.0),						// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3461,6 +3565,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -3483,6 +3588,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3523,6 +3629,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
 			0.0,																	// weight
@@ -3545,6 +3652,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (10.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -3592,6 +3700,7 @@ weapon_data
 			TRUE,				 													// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3614,6 +3723,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3654,6 +3764,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3676,6 +3787,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (40.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3716,6 +3828,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3738,6 +3851,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3778,6 +3892,7 @@ weapon_data
 			TRUE,																	// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3800,6 +3915,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3840,6 +3956,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3862,6 +3979,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3902,6 +4020,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3924,6 +4043,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (25.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -3964,6 +4084,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -3986,6 +4107,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (60.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4026,6 +4148,7 @@ weapon_data
 			TRUE,						 											// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -4048,6 +4171,7 @@ weapon_data
 			25.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4088,6 +4212,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_AIR,									// weapon_class
 
 			0.0,																	// weight
@@ -4110,6 +4235,7 @@ weapon_data
 			24.0,																	// reload_time
 			rad (45.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4157,6 +4283,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -4179,6 +4306,7 @@ weapon_data
 			30.0,																	// reload_time
 			rad (30.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4219,6 +4347,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -4241,6 +4370,7 @@ weapon_data
 			30.0,																	// reload_time
 			rad (15.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4281,6 +4411,7 @@ weapon_data
 			TRUE,			  														// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -4303,6 +4434,7 @@ weapon_data
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4343,6 +4475,7 @@ weapon_data
 			TRUE,		  															// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_SURFACE_TO_SURFACE,								// weapon_class
 
 			0.0,																	// weight
@@ -4365,6 +4498,7 @@ weapon_data
 			30.0,																	// reload_time
 			rad (20.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4412,6 +4546,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DECOY,												// weapon_class
 
 			0.0,																	// weight
@@ -4434,6 +4569,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4474,6 +4610,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DECOY,												// weapon_class
 
 			0.0,																	// weight
@@ -4496,6 +4633,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4536,6 +4674,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DECOY,												// weapon_class
 
 			0.0,																	// weight
@@ -4558,6 +4697,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4605,6 +4745,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_CARGO,												// weapon_class
 
 			0.0,																	// weight
@@ -4627,6 +4768,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -4674,6 +4816,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
 			0.0,																	// weight
@@ -4696,6 +4839,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4736,6 +4880,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
 			0.0,																	// weight
@@ -4758,6 +4903,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4798,6 +4944,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
 			0.0,																	// weight
@@ -4820,6 +4967,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4860,6 +5008,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
 			0.0,																	// weight
@@ -4882,6 +5031,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 		////////////////////////////////////////
 		//
@@ -4922,6 +5072,7 @@ weapon_data
 			FALSE,																// viewable_weapon
 			FALSE,																// boresight_weapon
 			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_DEBRIS,												// weapon_class
 
 			0.0,																	// weight
@@ -4944,6 +5095,7 @@ weapon_data
 			0.0,																	// reload_time
 			rad (0.0),															// max_launch_angle_error
 			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
 		},
 	};
 

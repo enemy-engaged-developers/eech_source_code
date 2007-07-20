@@ -118,7 +118,8 @@ struct WEAPON_DATA
 		in_flight_collision_check,
 		viewable_weapon,
 		boresight_weapon,					// meaningful for featured helicopters only
-		hellfire_flight_profile;		// meaningful for Hellfire missiles only
+		hellfire_flight_profile,		// meaningful for Hellfire missiles only
+		spiral_flightpath;              // has a spiral flight path (vikhrs)
 
 	unsigned int
 		weapon_class;
@@ -143,7 +144,8 @@ struct WEAPON_DATA
 		rate_of_fire,						// rounds/minute
 		reload_time,						// seconds
 		max_launch_angle_error,			// radians
-		max_seeker_limit;				// cos of angle (usually cos(max_launch_angle_error))
+		max_seeker_limit,				// cos of angle (usually cos(max_launch_angle_error))
+		drag_factor;                    // projectile drag, used for calculating deceleration
 };
 
 typedef struct WEAPON_DATA weapon_data;
