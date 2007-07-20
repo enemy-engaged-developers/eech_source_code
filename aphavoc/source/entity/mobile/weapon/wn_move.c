@@ -1664,7 +1664,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 				ASSERT(stop_index >= range_mark);
 
-				// if the projectile is really fast we might actually have passed several samle values, so set the value for all of them
+				// if the projectile is really fast we might actually have passed several sample values, so set the value for all of them
 				for (; range_mark <= stop_index; range_mark++)
 				{
 					data[pitch_index][range_mark].drop_angle = drop_angle;
@@ -1793,7 +1793,7 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 
 	ASSERT(range >= 0.0);
 
-	range = bound(range, 0.0, weapon_database[wpn_type].max_range);
+	range = bound(range, 0.01, weapon_database[wpn_type].max_range);
 	range_index = (int)(range / RANGE_STEP);
 	range_error = range - (range_index * RANGE_STEP);
 	range_delta = (range_error / RANGE_STEP);   // normalize to [0..1]
@@ -1815,6 +1815,7 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 			pitch_compensation[2],
 			compensation_grid[2][2];
 
+		// first average the next ranges
 		compensation_grid[0][0].drop_angle = drop_compensation;
 		compensation_grid[0][0].flight_time = tof;
 
@@ -1827,17 +1828,14 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		compensation_grid[1][1].drop_angle = ballistics_table[wpn_type][pitch_index+1][range_index+1].drop_angle;
 		compensation_grid[1][1].flight_time = ballistics_table[wpn_type][pitch_index+1][range_index+1].flight_time;
 
-		debug_log("wpn: %d, range: %.0f, index: %d, drop [0,0]: %.2f, drop [0,1]: %.2f, drop [1,0]: %.2f, drop [1,1]: %.2f",
-			wpn_type, range, range_index,
-			deg(compensation_grid[0][0].drop_angle), deg(compensation_grid[0][1].drop_angle),
-			deg(compensation_grid[1][0].drop_angle), deg(compensation_grid[1][1].drop_angle));
-
+		// then average oover next pitch
 		pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
 		pitch_compensation[0].flight_time = (pitch_delta * compensation_grid[0][0].flight_time) + ((1 - pitch_delta) * compensation_grid[1][0].flight_time);
 
 		pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);		
 		pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);		
 
+		// and finally get a total
 		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
 		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
 	}
