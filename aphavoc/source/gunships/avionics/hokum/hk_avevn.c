@@ -1202,8 +1202,13 @@ static void eject_event (event *ev)
 // arneh 2006-11-16 - manual laser control
 static void activate_laser_event(event* ev)
 {
-	if (!laser_is_active() && !hokum_damage.laser_designator && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
-		set_laser_is_active(TRUE);
+	if (!laser_is_active() && !havoc_damage.laser_range_finder)
+	{
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+			lase_range_for_ballistics_sight();
+		else if (get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+			set_laser_is_active(TRUE);
+	}
 	else
 		set_laser_is_active(FALSE);
 }
