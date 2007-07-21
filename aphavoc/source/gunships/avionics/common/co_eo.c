@@ -97,9 +97,11 @@ target_acquisition_systems
 
 float
 	eo_azimuth,
+	eo_requested_azimuth,
 	eo_min_azimuth,
 	eo_max_azimuth,
 	eo_elevation,
+	eo_requested_elevation,
 	eo_min_elevation,
 	eo_max_elevation,
 	eo_max_visual_range;
@@ -154,6 +156,9 @@ void initialise_common_eo (void)
 	eo_on_target = FALSE;
 
 	eo_low_light = FALSE;
+	
+	eo_requested_elevation = 0.0;
+	eo_requested_azimuth = 0.0;
 	
 	electrical_system_on = !command_line_dynamics_engine_startup;
 }
@@ -481,7 +486,45 @@ static float get_eo_boresight_terrain_los_clear_range (vec3d* position)
 
 		if (point_below_ground (position))
 		{
-			return (los_clear_range);
+			// refine range by backing up to last range and do smaller steps
+			float max_range = los_clear_range;
+			los_clear_range -= LARGE_TERRAIN_LOS_STEP;
+
+			position->x -= step.x;
+			position->y -= step.y;
+			position->z -= step.z;
+
+			step.x = SMALL_TERRAIN_LOS_STEP * eo_vp.zv.x;
+			step.y = SMALL_TERRAIN_LOS_STEP * eo_vp.zv.y;
+			step.z = SMALL_TERRAIN_LOS_STEP * eo_vp.zv.z;
+
+			while (los_clear_range < max_range)
+			{
+				los_clear_range += SMALL_TERRAIN_LOS_STEP;
+		
+				position->x += step.x;
+				position->y += step.y;
+				position->z += step.z;
+		
+				if (draw_eo_terrain_los_markers && (get_view_mode () == VIEW_MODE_EXTERNAL))
+				{
+					create_rotated_debug_3d_object
+					(
+						position,
+						0.0,
+						0.0,
+						0.0,
+						TERRAIN_LOS_MARKER_SMALL_STEP_3D_OBJECT,
+						TERRAIN_LOS_MARKER_LIFETIME,
+						TERRAIN_LOS_MARKER_SCALE
+					);
+				}
+		
+				if (point_below_ground (position))
+					return (los_clear_range);
+			}
+			
+			return max_range;
 		}
 	}
 
@@ -1113,46 +1156,101 @@ void deactivate_common_eo (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void slew_eo_to_direction(float elevation, float azimuth)
+{
+	eo_requested_azimuth = azimuth;
+	eo_requested_elevation = elevation;	
+}
+
+static void slew_eo(float elevation, float azimuth)
+{
+	float
+		 delta_eo_azimuth,
+		 frame_delta_eo_azimuth,
+		 delta_eo_elevation,
+		 frame_delta_eo_elevation;
+
+	
+	float frame_slew_rate = rad (45.0) * get_delta_time ();
+
+	viewpoint
+		vp;
+
+	matrix3x3
+		m;
+
+	get_eo_centred_viewpoint (&vp);
+
+	delta_eo_azimuth = azimuth - eo_azimuth;
+	frame_delta_eo_azimuth = bound (delta_eo_azimuth, -frame_slew_rate, frame_slew_rate);
+	eo_azimuth += frame_delta_eo_azimuth;
+
+	delta_eo_elevation = elevation - eo_elevation;
+	frame_delta_eo_elevation = bound (delta_eo_elevation, -frame_slew_rate, frame_slew_rate);
+	eo_elevation += frame_delta_eo_elevation;
+
+	eo_vp.position = vp.position;
+
+	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
+	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
+
+
+	eo_on_target = FALSE;
+
+	if (!eo_low_light && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+	{
+		if
+		(
+			(delta_eo_azimuth >= rad (-5.0)) &&
+			(delta_eo_azimuth <= rad (5.0)) &&
+			(delta_eo_elevation >= rad (-5.0)) &&
+			(delta_eo_elevation <= rad (5.0))
+		)
+		{
+			eo_on_target = TRUE;
+		}
+	}
+}
+
 void slave_common_eo_to_current_target (void)
+{
+	vec3d position;
+	entity* current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+
+	if (current_target)
+	{
+		get_local_entity_target_point (current_target, &position);
+		slave_common_eo_to_position (&position);
+	}
+	else
+		slave_common_eo_to_position (NULL);
+}
+
+
+void slave_common_eo_to_position (vec3d* target_position)
 {
 	float
 		flat_range,
 		aiming_eo_azimuth,
-		aiming_eo_elevation,
-		delta_eo_azimuth,
-		delta_eo_elevation,
-		frame_delta_eo_azimuth,
-		frame_delta_eo_elevation,
-		frame_slew_rate;
-
-	entity
-		*current_target;
+		aiming_eo_elevation;
 
 	viewpoint
 		vp;
 
 	vec3d
-		target_position,
 		target_vector,
 		offset_vector;
-
-	matrix3x3
-		m;
 
 	int
 		target_in_fov = FALSE;
 
-	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-
 	get_eo_centred_viewpoint (&vp);
 
-	if (current_target)
+	if (target_position)
 	{
-		get_local_entity_target_point (current_target, &target_position);
-
-		target_vector.x = target_position.x - vp.position.x;
-		target_vector.y = target_position.y - vp.position.y;
-		target_vector.z = target_position.z - vp.position.z;
+		target_vector.x = target_position->x - vp.position.x;
+		target_vector.y = target_position->y - vp.position.y;
+		target_vector.z = target_position->z - vp.position.z;
 
 		multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &target_vector);
 
@@ -1175,57 +1273,20 @@ void slave_common_eo_to_current_target (void)
 	}
 	else
 	{
-		aiming_eo_azimuth = rad (0.0);
+		aiming_eo_azimuth = eo_requested_azimuth;
 
-		aiming_eo_elevation = rad (0.0);
+		aiming_eo_elevation = eo_requested_elevation;
 	}
 
-	frame_slew_rate = rad (45.0) * get_delta_time ();
 
-	delta_eo_azimuth = aiming_eo_azimuth - eo_azimuth;
-
-	frame_delta_eo_azimuth = bound (delta_eo_azimuth, -frame_slew_rate, frame_slew_rate);
-
-	eo_azimuth += frame_delta_eo_azimuth;
-
-	delta_eo_elevation = aiming_eo_elevation - eo_elevation;
-
-	frame_delta_eo_elevation = bound (delta_eo_elevation, -frame_slew_rate, frame_slew_rate);
-
-	eo_elevation += frame_delta_eo_elevation;
-
-	eo_vp.position = vp.position;
-
-	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
-
-	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
+	slew_eo(aiming_eo_elevation, aiming_eo_azimuth);
 
 	//
 	// flag eo on target for "CP/G IDENTIFYING..." message
 	//
 
-	eo_on_target = FALSE;
-
 	update_eo_visibility ();
 
-	if (current_target)
-	{
-		if (!eo_low_light)
-		{
-			if
-			(
-				(delta_eo_azimuth >= rad (-5.0)) &&
-				(delta_eo_azimuth <= rad (5.0)) &&
-				(delta_eo_elevation >= rad (-5.0)) &&
-				(delta_eo_elevation <= rad (5.0))
-			)
-			{
-				eo_on_target = TRUE;
-				
-			}
-		}
-	}
-	
 	if (target_in_fov && eo_on_target)
 	{
 		if (!command_line_manual_laser_radar)

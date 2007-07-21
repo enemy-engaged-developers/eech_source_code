@@ -144,7 +144,10 @@ extern void activate_common_eo (void);
 
 extern void deactivate_common_eo (void);
 
+extern void slew_eo_to_direction(float elevation, float azimuth);
+
 extern void slave_common_eo_to_current_target (void);
+extern void slave_common_eo_to_position (vec3d* target_position);
 
 extern void select_next_eo_target (void);
 
