@@ -1898,7 +1898,6 @@ static void display_weapon_information (void)
 			weapon_type = "ATA";
 		else
 		{
-			entity* target;
 			float x,y;
 			float angle_of_drop = 0.0;
 			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z : 0.0;
