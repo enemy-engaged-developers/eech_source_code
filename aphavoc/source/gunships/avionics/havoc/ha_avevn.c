@@ -621,11 +621,11 @@ static void toggle_navigation_lights_event (event *ev)
 // arneh 2006-11-16 - manual laser control
 static void activate_laser_event(event* ev)
 {
-	if (!laser_is_active() && !havoc_damage.laser_range_finder)  // TODO only enable if target or ballistic aiming?
+	if (!laser_is_active() && !havoc_damage.laser_range_finder)
 	{
 		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
 			lase_range_for_ballistics_sight();
-		else
+		else if (get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
 			set_laser_is_active(TRUE);
 	}
 	else
