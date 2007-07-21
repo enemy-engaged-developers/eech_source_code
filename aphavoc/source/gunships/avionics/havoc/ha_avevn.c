@@ -561,6 +561,19 @@ static void toggle_radar_jammer_event (event *ev)
 	toggle_havoc_radar_jammer_manual ();
 }
 
+static void select_next_mfd_event (event *ev)
+{
+	select_next_havoc_mfd_mode ();
+}
+
+static void toggle_mfd_on_off_event (event *ev)
+{
+	if (get_havoc_mfd_mode == MFD_MODE_OFF)
+		select_next_havoc_mfd_mode ();
+	else
+		select_havoc_mfd_mode (MFD_MODE_OFF);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -608,8 +621,13 @@ static void toggle_navigation_lights_event (event *ev)
 // arneh 2006-11-16 - manual laser control
 static void activate_laser_event(event* ev)
 {
-	if (!laser_is_active() && !havoc_damage.laser_range_finder && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
-		set_laser_is_active(TRUE);
+	if (!laser_is_active() && !havoc_damage.laser_range_finder)  // TODO only enable if target or ballistic aiming?
+	{
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+			lase_range_for_ballistics_sight();
+		else
+			set_laser_is_active(TRUE);
+	}
 	else
 		set_laser_is_active(FALSE);
 }
@@ -736,6 +754,9 @@ void set_havoc_avionics_events (void)
 	set_event (DIK_I, MODIFIER_NONE, KEY_STATE_DOWN, toggle_infra_red_jammer_event);
 
 	set_event (DIK_J, MODIFIER_NONE, KEY_STATE_DOWN, toggle_radar_jammer_event);
+
+	set_event (DIK_LBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_mfd_event);
+	set_event (DIK_LBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_mfd_on_off_event);
 
 	////////////////////////////////////////
 	//

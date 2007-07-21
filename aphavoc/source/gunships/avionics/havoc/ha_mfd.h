@@ -69,6 +69,7 @@ extern void initialise_havoc_mfd (void);
 extern void deinitialise_havoc_mfd (void);
 
 extern void select_havoc_mfd_mode (mfd_modes mode);
+extern void select_next_havoc_mfd_mode (void);
 
 extern mfd_modes get_havoc_mfd_mode (void);
 
