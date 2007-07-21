@@ -1910,9 +1910,11 @@ static void display_weapon_information (void)
 			else
 				weapon_type = "RKT";
 
-			target = get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET);
-			if (target)
-				angle_of_drop = get_weapon_drop(weapon_sub_type, target);
+			angle_of_drop = get_weapon_drop(weapon_sub_type);
+
+			// move eo to hit point
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+				slew_eo_to_direction(-angle_of_drop, 0.0);
 
 			x = 0.0;
 			y = get_global_wide_cockpit() ? 0.38 : 0.80;
