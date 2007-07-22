@@ -565,7 +565,6 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	get_3d_transformation_matrix (m1, frame_turn_rate, 0.0, 0.0);
 
 	// arneh - make vikhrs spiral
-//	if (raw->mob.sub_type == ENTITY_SUB_TYPE_WEAPON_VIKHR && raw->weapon_lifetime > 0.0
 	if (weapon_database[raw->mob.sub_type].spiral_flightpath && raw->weapon_lifetime > 0.0
 		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2)
 	{
@@ -1575,9 +1574,9 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 	for (i=0; i < num_range_values; i++)
 	{
-		data[0][i].drop_angle = rad(-90);
+		data[0][i].drop_angle = 0.0;
 		data[0][i].flight_time = 0.0;
-		data[TOTAL_PITCH_INDICES-1][i].drop_angle = rad(90);
+		data[TOTAL_PITCH_INDICES-1][i].drop_angle = 0.0;
 		data[TOTAL_PITCH_INDICES-1][i].flight_time = 0.0;
 	}
 
@@ -1638,7 +1637,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 			wpn->weapon_lifetime -= delta_time;
 			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
 
-			// increase delta_time when projectile slows down a lot so as to easy amount of calculations a little
+			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
 			if (wpn->mob.velocity < 150.0)
 			{
 				delta_time = 0.04;
@@ -1679,7 +1678,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 						last_write_range, wpn->mob.velocity, time, -wpn->mob.position.y, deg(drop_angle));
 				}
 
-				if (range_mark == num_range_values || drop_angle < -rad(45.0))
+				if (range_mark == num_range_values)
 					break;
 			}
 		}
@@ -1759,7 +1758,8 @@ void delete_ballistics_tables(void)
 		{
 			for(pitch_index = 0; pitch_index < TOTAL_PITCH_INDICES; pitch_index++)
 			{
-				safe_free(ballistics_table[wpn_type][pitch_index]);
+				if (ballistics_table[wpn_type][pitch_index])
+					safe_free(ballistics_table[wpn_type][pitch_index]);
 				ballistics_table[wpn_type][pitch_index] = NULL;
 			}
 		}
