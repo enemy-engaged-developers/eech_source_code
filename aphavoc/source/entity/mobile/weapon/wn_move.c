@@ -1734,12 +1734,15 @@ void generate_ballistics_tables(void)
 					weapon_database[wpn_type].full_name,
 					weapon_database[wpn_type].max_range, 
 					weapon_database[wpn_type].muzzle_velocity, 
-					weapon_database[wpn_type].cruise_time_max_error);
+					weapon_database[wpn_type].drag_factor);
 			}
 		
 			wpn.mob.sub_type = wpn_type;
 			calculate_projectory(&wpn, write_file);
 		}
+
+		if (write_file)
+			fflush(write_file);
 	}
 
 	if (write_file)
