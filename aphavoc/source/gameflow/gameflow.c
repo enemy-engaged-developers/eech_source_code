@@ -778,7 +778,7 @@ void process_game_initialisation_phases (void)
               		parse_WUT_file("origwut.txt");
 			    }*/
 // arneh 20061219 - don't use a hardcoded filename if none provided. Rather use default values and generate a gwut file with the defaults
-			    else  // generate a WUT file from default value
+/*			    else  // generate a WUT file from default value
 			    {
 			    	char dump_file[256];
 			    	
@@ -787,7 +787,7 @@ void process_game_initialisation_phases (void)
 			    	
 			    	DumpGWutInfo(dump_file);
 			    }
-
+*/
 			    session_planner_goto_button = command_line_planner_goto_button;
 
 			    session_vector_flight_model = command_line_vector_flight_model;
