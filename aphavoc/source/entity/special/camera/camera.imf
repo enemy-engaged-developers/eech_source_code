@@ -97,6 +97,7 @@ c_object_files    += $+ &
                      $(currentdir)\cm_explo.obj &
                      $(currentdir)\cm_float.obj &
                      $(currentdir)\cm_flyby.obj &
+                     $(currentdir)\cm_free.obj &
                      $(currentdir)\cm_funcs.obj &
                      $(currentdir)\cm_int.obj &
                      $(currentdir)\cm_list.obj &

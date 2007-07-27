@@ -450,6 +450,22 @@ void set_camera_action (camera *raw, camera_actions action)
 			break;
 		}
 		////////////////////////////////////////
+		case CAMERA_ACTION_FREE:
+		////////////////////////////////////////
+		{
+			if (get_view_mode () != VIEW_MODE_EXTERNAL)
+			{
+				if (!set_view_mode (VIEW_MODE_EXTERNAL))
+				{
+					break;
+				}
+			}
+
+			set_camera_mode (raw, CAMERA_MODE_FREE, FALSE);
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{

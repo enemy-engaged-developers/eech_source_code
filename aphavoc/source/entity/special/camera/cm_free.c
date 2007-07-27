@@ -60,11 +60,14 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define DEBUG_MODULE 0
+
+#define FREE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
+#define FREE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,148 +78,120 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// The camera entity is a 'local only' entity.
-//
-// It must be created before any client/server entities to ensure that the index number corresponds on each machine.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_local_camera_entity (void)
+void reset_free_camera (camera *raw)
 {
-	create_local_entity (ENTITY_TYPE_CAMERA, ENTITY_INDEX_DONT_CARE, ENTITY_ATTR_END);
+	// get heading and velocity from previous camera
+	raw->chase_camera_heading = get_heading_from_attitude_matrix(raw->attitude);
+	multiply_transpose_matrix3x3_vec3d(&raw->velocity, raw->attitude, &raw->motion_vector);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static entity *create_local (entity_types type, int index, char *pargs)
+void update_free_camera (camera *raw)
 {
-	entity
-		*en;
+	float
+		acceleration,
+		combined_heading;
 
-	camera
-		*raw;
+	float
+		max_velocity = 100.0;
 
-	////////////////////////////////////////
-  	//
-  	// VALIDATE
-  	//
-	////////////////////////////////////////
+	float dh, dp;
 
-	validate_local_create_entity_index (index);
+	// adjust direction (pan)
 
-	#if DEBUG_MODULE
-
-	debug_log_entity_args (ENTITY_DEBUG_LOCAL, ENTITY_DEBUG_CREATE, NULL, type, index);
-
-	#endif
-
-	en = get_free_entity (index);
-
-	ASSERT (!get_camera_entity ());
-
-	if (en)
+	if (camera_previous_mouse_update_flag != get_mouse_update_flag())
 	{
-		////////////////////////////////////////
-   	//
-   	// MALLOC ENTITY DATA
-   	//
-		////////////////////////////////////////
+		dh = get_mouse_move_delta_x() * -180 / 8000.0;
+		dp = get_mouse_move_delta_y() * -90 / 8000.0;
 
-		set_local_entity_type (en, type);
-
-		raw = malloc_fast_mem (sizeof (camera));
-
-		set_local_entity_data (en, raw);
-
-		////////////////////////////////////////
-   	//
-   	// INITIALISE ALL ENTITY DATA TO 'WORKING' DEFAULT VALUES
-		//
-		// DO NOT USE ACCESS FUNCTIONS
-		//
-		// DO NOT USE RANDOM VALUES
-		//
-		////////////////////////////////////////
-
-		memset (raw, 0, sizeof (camera));
-
-		raw->position.x = MID_MAP_X;
-		raw->position.y = MID_MAP_Y;
-		raw->position.z = MID_MAP_Z;
-
-		raw->offset.x = 0;
-		raw->offset.y = 0;
-		raw->offset.z = 0;
-
-		raw->offset_movement.x = 0;
-		raw->offset_movement.y = 0;
-		raw->offset_movement.z = 0;
-
+		camera_previous_mouse_update_flag = get_mouse_update_flag();
 	
-		raw->turbulence_offset.x = 0.0;
-		raw->turbulence_offset.y = 0.0;
-		raw->turbulence_offset.z = 0.0;
-	
-		raw->turbulence_movement.x = 0.0;
-		raw->turbulence_movement.y = 0.0;
-		raw->turbulence_movement.z = 0.0;
-	
-		get_identity_matrix3x3 (raw->attitude);
-
-		raw->camera_mode = CAMERA_MODE_CHASE;
-
-		raw->chase_camera_lock_rotate = TRUE;
-
-		reset_chase_camera_position (raw);
-
-		reset_cinematic_camera_for_new_view_entity (raw);
-
-		////////////////////////////////////////
-		//
-		// OVERWRITE DEFAULT VALUES WITH GIVEN ATTRIBUTES
-		//
-		////////////////////////////////////////
-
-		set_local_entity_attributes (en, pargs);
-
-		////////////////////////////////////////
-		//
-		// CHECK MANDATORY ATTRIBUTES HAVE BEEN GIVEN
-		//
-		////////////////////////////////////////
-
-		////////////////////////////////////////
-		//
-		// RESOLVE DEFAULT VALUES
-		//
-		////////////////////////////////////////
-
-		////////////////////////////////////////
-		//
-		// LINK INTO SYSTEM
-		//
-		////////////////////////////////////////
-
-		insert_local_entity_into_parents_child_list (en, LIST_TYPE_UPDATE, get_update_entity (), NULL);
-
-		set_camera_entity (en);
+		raw->chase_camera_pitch += rad(dp);
+		raw->chase_camera_heading -= rad(dh);
 	}
 
-	return (en);
-}
+	raw->chase_camera_pitch = bound(raw->chase_camera_pitch, FREE_CAMERA_ROTATE_DOWN_LIMIT, FREE_CAMERA_ROTATE_UP_LIMIT);
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	combined_heading = raw->chase_camera_heading;
 
-void overload_camera_create_functions (void)
-{
-	fn_create_local_entity[ENTITY_TYPE_CAMERA] = create_local;
+	get_3d_transformation_matrix (raw->attitude, combined_heading, raw->chase_camera_pitch, 0.0);
+
+
+	// adjustposition (move camera)
+
+	// forward/backwards
+	if (move_view_forward_key)
+	{
+		if (raw->velocity.z < -12.5)
+			acceleration = -4.0 * raw->velocity.z;
+		else
+			acceleration = 50.0;
+
+		acceleration *= move_view_forward_key;
+		max_velocity *= move_view_forward_key;
+	}
+	else if (move_view_backward_key)
+	{
+		if (raw->velocity.z > 12.5)
+			acceleration = -4.0 * raw->velocity.z;
+		else
+			acceleration = -50.0;
+
+		acceleration *= move_view_backward_key;
+		max_velocity *= move_view_backward_key;
+	}
+	else
+		acceleration = -2.0 * raw->velocity.z;
+
+	raw->velocity.z = bound(raw->velocity.z + acceleration * get_delta_time(), -max_velocity, max_velocity);
+
+	// sideways
+	max_velocity = 100.0;
+	if (move_view_right_key)
+	{
+		if (raw->velocity.x < -12.5)
+			acceleration = -4.0 * raw->velocity.x;
+		else
+			acceleration = 50.0;
+
+		acceleration *= move_view_right_key;
+		max_velocity *= move_view_right_key;
+	}
+	else if (move_view_left_key)
+	{
+		if (raw->velocity.x > 12.5)
+			acceleration = -4.0 * raw->velocity.x;
+		else
+			acceleration = -50.0;
+
+		acceleration *= move_view_left_key;
+		max_velocity *= move_view_left_key;
+	}
+	else
+		acceleration = -2.0 * raw->velocity.x;
+
+	raw->velocity.x = bound(raw->velocity.x + acceleration * get_delta_time(), -max_velocity, max_velocity);
+
+	acceleration = -2.0 * raw->velocity.y;
+	raw->velocity.y += acceleration * get_delta_time();
+
+	// rotate velocity in view diretion:
+	multiply_matrix3x3_vec3d(&raw->motion_vector, raw->attitude, &raw->velocity);
+
+	// move in direction of velocity
+	raw->position.x += raw->motion_vector.x * get_delta_time();
+	raw->position.y += raw->motion_vector.y * get_delta_time();
+	raw->position.z += raw->motion_vector.z * get_delta_time();
+
+	// keep point above ground (unless point off map)
+	if (point_inside_map_area (&raw->position))
+	{
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + CAMERA_MIN_HEIGHT_ABOVE_GROUND);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

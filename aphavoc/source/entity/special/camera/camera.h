@@ -82,6 +82,7 @@ enum CAMERA_MODES
 	CAMERA_MODE_RECOGNITION_GUIDE_SIDE_VIEW,
 	CAMERA_MODE_RECOGNITION_GUIDE_FRONT_VIEW,
 	CAMERA_MODE_RECOGNITION_GUIDE_3D_VIEW,
+	CAMERA_MODE_FREE,
 	NUM_CAMERA_MODES
 };
 
@@ -112,6 +113,7 @@ enum CAMERA_ACTIONS
 	CAMERA_ACTION_RECOGNITION_GUIDE_SIDE_VIEW,
 	CAMERA_ACTION_RECOGNITION_GUIDE_FRONT_VIEW,
 	CAMERA_ACTION_RECOGNITION_GUIDE_3D_VIEW,
+	CAMERA_ACTION_FREE,
 	NUM_CAMERA_ACTIONS
 };
 
@@ -250,6 +252,14 @@ struct CAMERA
 	entity
 		*external_view_entity;
 
+	vec3d
+		velocity;
+
+	vec3d
+		offset,      // adjustment for not looking directly at object
+		offset_movement,  // for smooth movement
+		turbulence_offset,   // offset for wobbly external camera
+		turbulence_movement; // movement of wobbly camera
 };
 
 typedef struct CAMERA camera;
@@ -282,6 +292,15 @@ extern void set_camera_entity (entity *en);
 extern entity *get_local_entity_view_list_pred (entity *en);
 
 extern const char *get_camera_mode_name (camera_modes mode);
+
+extern int camera_previous_mouse_update_flag;
+
+extern void adjust_camera_smooth(camera* raw, vec3d* new_position);
+
+extern void adjust_offset(camera*);
+extern void reset_offset(camera*);
+
+extern void add_turbulence(camera*, vec3d* position);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,6 +347,8 @@ extern const char *get_camera_mode_name (camera_modes mode);
 #include "cm_float.h"
 
 #include "cm_flyby.h"
+
+#include "cm_free.h"
 
 #include "cm_funcs.h"
 
