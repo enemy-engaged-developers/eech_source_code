@@ -1415,7 +1415,9 @@ void ReadGWutInfo(const char *fname)
 		p = strtok(NULL,",");
 		if (p)
 		{
-			weapon_database[i].max_seeker_limit		 = cos(rad(atof(p)));
+			float seeker_limit = atof(p);
+			if (seeker_limit > 0.0)
+				weapon_database[i].max_seeker_limit		 = cos(rad(seeker_limit));
 			weapon_database[i].drag_factor			 = FloatValue(p);
 			weapon_database[i].spiral_flightpath	 = IntValue(p);
 		}
