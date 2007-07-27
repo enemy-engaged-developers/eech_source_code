@@ -1114,9 +1114,9 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.3;
-					ambient_light.green = 0.3;
-					ambient_light.blue = 0.5;
+					ambient_light.red = 0.25;
+					ambient_light.green = 0.25;
+					ambient_light.blue = 0.7;
 
 					main_light.red = 0.0;
 					main_light.green = 0.0;
@@ -1130,7 +1130,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 					ambient_light.red = 0.4;
 					ambient_light.green = 0.4;
-					ambient_light.blue = 0.6;
+					ambient_light.blue = 0.8;
 
 					main_light.red = 0.0;
 					main_light.green = 0.0;
@@ -1143,7 +1143,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 					ambient_light.red = 0.6;
 					ambient_light.green = 0.6;
-					ambient_light.blue = 0.9;
+					ambient_light.blue = 1.0;
 
 					main_light.red = 0.3;
 					main_light.green = 0.3;
