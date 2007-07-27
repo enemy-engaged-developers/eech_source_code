@@ -326,6 +326,7 @@ void process_ini_file(int argc, char *argv[])
 			command_line_display_bpp=32;
 		}
 		if (strcmp(p, "persistent_smoke")==0)  command_line_persistent_smoke = d1;
+		if (strcmp(p, "wobbly-camera")==0)  command_line_wobbly_camera = d1;
 
 		if (strcmp(p, "nrt")==0)  	command_line_no_render_to_texture = d1;
 		if (strcmp(p, "notnl")==0) 	command_line_no_hardware_tnl = d1;
@@ -690,6 +691,7 @@ void dump_ini_file(void)
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 (dark) to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
 	fprintf(f,"persistent_smoke=%d   # Make smoke from burning targets keep burning for a long time (CPU intensive)\n", command_line_persistent_smoke);
+	fprintf(f,"wobbly-camera=%d     # If enabled (=1) will make movement of external cameras wobbly (and smoother)\n", command_line_wobbly_camera);
 	
 	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210

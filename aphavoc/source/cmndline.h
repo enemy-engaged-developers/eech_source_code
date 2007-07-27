@@ -189,6 +189,7 @@ extern int
 	command_line_reverse_pedal,									// Retro 17Jul2004
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_external_trackir_direction,					// Retro 31Jan2005 (spooky, eh ?)
+	command_line_wobbly_camera,									// arneh - makes external cameras wobbly in movement
 	command_line_high_lod_hack,									// Retro 31Oct2004
 	command_line_TIR_6DOF,										// Retro 6Feb2005
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
