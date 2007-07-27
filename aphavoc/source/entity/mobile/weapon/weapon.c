@@ -843,7 +843,6 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 	float
 		range,
-		new_pitch,
 		time_of_flight,
 		target_true_velocity,
 		target_move_distance;
@@ -911,15 +910,18 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			new_intercept_point = *intercept_point;
 
 			// refine ballistic calulation
-			number_of_iterations = 5;
+			if (source == get_gunship_entity())
+				number_of_iterations = 5;
+			else
+				number_of_iterations = 3;
 			while (number_of_iterations--)
 			{
-				*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight);
+				int high_accuracy = (number_of_iterations == 1);   // only calculate with highest accuracy the last time
+				*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight, high_accuracy);
 				*intercept_point = new_intercept_point;
 
 				if (number_of_iterations > 0)
 				{
-					float old_tof;
 					if (triangulate_range)
 					{
 						range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
@@ -953,7 +955,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			//
 
 			result = TRUE;
-			*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight);
+			*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight, FALSE);
 		}
 	}
 	else

@@ -1772,7 +1772,7 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* time_of_flight)
+float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* time_of_flight, int simplified)
 {
 	float
 		pitch_delta,
@@ -1783,6 +1783,7 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		straight_pitch = -atan(height_difference / range);
 	
 	int
+		iterations = (simplified ? 3 : 5),
 		i,
 		pitch_index,
 		range_index;
@@ -1805,19 +1806,22 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 	// refine drop_compensation - do it several times because as we adjust
 	// cannon pitch we have to use a different ballistics table.  Do it a few
 	// times so that it stabalizes somewhat
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < iterations; i++)
 	{
 		pitch_index = get_floor_pitch_index(straight_pitch + drop_compensation, &pitch_delta);
-		ASSERT(pitch_index >= 0);
+		ASSERT(pitch_delta >= 0 && pitch_delta < TOTAL_PITCH_INDICES);
 		drop_compensation = ballistics_table[wpn_type][pitch_index][range_index].drop_angle;
 		tof = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
 	}
 
 	// average between next pitch and range:
+	if (!simplified)
 	{
 		ballistics_data
 			pitch_compensation[2],
 			compensation_grid[2][2];
+
+		int next_pitch_index = min(pitch_index + 1, TOTAL_PITCH_INDICES-1);
 
 		// first average the next ranges
 		compensation_grid[0][0].drop_angle = drop_compensation;
