@@ -909,6 +909,7 @@ void select_external_view (void)
 			case CAMERA_MODE_STATIC:
 //			case CAMERA_MODE_SATELLITE:		// Jabberwock 031009 Satellite view
 			case CAMERA_MODE_EJECT:
+			case CAMERA_MODE_FREE:
 			//case CAMERA_MODE_FLY_BY:
 			//case CAMERA_MODE_CINEMATIC:
 			case CAMERA_MODE_BUILDING:
@@ -924,6 +925,10 @@ void select_external_view (void)
 
 				break;
 			}
+			case CAMERA_MODE_CHASE:
+//				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_FREE);
+
+				break;
 		}
 	}
 }
