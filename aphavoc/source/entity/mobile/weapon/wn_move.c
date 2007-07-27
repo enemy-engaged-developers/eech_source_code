@@ -499,7 +499,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
 		{
-			debug_log("%s self destructed due to turn demand too high (%0.1f degrees)", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)));
+			debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), 
+				deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
 			
 			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
 	
