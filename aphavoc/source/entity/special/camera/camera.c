@@ -67,7 +67,7 @@
 #define DEBUG_MODULE 0
 
 #define CAMERA_MOVEMENT_RATE 8.0
-#define OFFSET_MOVEMENT_RATE 10.0
+#define OFFSET_MOVEMENT_RATE 20.0
 #define MAX_OFFSET 20.0
 
 #define CHASE_CAMERA_ZOOM_RATE			(0.5)
@@ -341,7 +341,7 @@ void adjust_offset(camera* raw)
 		else if (move_view_backward_key)
 			acceleration = -OFFSET_MOVEMENT_RATE * move_view_backward_key;
 		else
-			acceleration = -2.0 * raw->offset_movement.y;
+			acceleration = -4.0 * raw->offset_movement.y;
 	
 		raw->offset_movement.y += acceleration * get_delta_time();
 
@@ -350,7 +350,7 @@ void adjust_offset(camera* raw)
 		else if (move_view_left_key)
 			acceleration = -OFFSET_MOVEMENT_RATE * move_view_left_key;
 		else
-			acceleration = -2.0 * raw->offset_movement.x;
+			acceleration = -4.0 * raw->offset_movement.x;
 	
 		raw->offset_movement.x += acceleration * get_delta_time();
 	}
@@ -446,9 +446,6 @@ void add_turbulence(camera* cam, vec3d* position)
 		cam->turbulence_movement.y += sfrand1() * velocity_factor * zoom_factor;
 	if (velocity_factor > 0.1 && (rand() % (int)(get_one_over_delta_time())) == 0)
 		cam->turbulence_movement.z += sfrand1() * velocity_factor * zoom_factor;
-
-	if (move_view_forward_key)
-		cam->turbulence_movement.x += 1.0;
 
 	// bungy effect of camera trying to get itself back in position
 	acceleration = -cam->turbulence_offset.x * 0.5 ;
