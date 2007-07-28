@@ -83,6 +83,7 @@ void reset_free_camera (camera *raw)
 {
 	// get heading and velocity from previous camera
 	raw->chase_camera_heading = get_heading_from_attitude_matrix(raw->attitude);
+	raw->chase_camera_pitch = get_pitch_from_attitude_matrix(raw->attitude);
 	multiply_transpose_matrix3x3_vec3d(&raw->velocity, raw->attitude, &raw->motion_vector);
 }
 
