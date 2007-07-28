@@ -70,6 +70,10 @@
 #define OFFSET_MOVEMENT_RATE 10.0
 #define MAX_OFFSET 20.0
 
+#define CHASE_CAMERA_ZOOM_RATE			(0.5)
+#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0)
+#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,4 +475,39 @@ void add_turbulence(camera* cam, vec3d* position)
 	cam->position.x += cam->turbulence_offset.x;
 	cam->position.y += cam->turbulence_offset.y;
 	cam->position.z += cam->turbulence_offset.z;
+}
+
+void adjust_camera_zoom(camera* raw)
+{
+	if (adjust_view_zoom_in_key)
+	{
+		raw->chase_camera_zoom -= CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
+
+		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
+	}
+	else if (adjust_view_zoom_out_key)
+	{
+		raw->chase_camera_zoom += CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
+
+		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
+	}
+
+	// Jabberwock 050103 - Mouse wheel zoom for external view
+	if (mouse_wheel_up)
+	{
+		raw->chase_camera_zoom -= 2 * get_delta_time ();
+
+		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
+
+		mouse_wheel_up--;
+	}
+	else if (mouse_wheel_down)
+	{
+		raw->chase_camera_zoom += 2 * get_delta_time ();
+
+		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
+
+		mouse_wheel_down--;
+	}
+	// Jabberwock 050103 ends	
 }

@@ -163,6 +163,9 @@ void reset_weapon_camera (camera *raw)
 	raw->weapon_camera_direction.y = 0.0;
 	raw->weapon_camera_direction.z = 0.0;
 
+	reset_offset(raw);
+	raw->chase_camera_zoom = 0.1;
+
 	//
 	// motion vector
 	//
@@ -205,6 +208,8 @@ void update_weapon_camera (camera *raw)
 	//
 	////////////////////////////////////////
 
+	adjust_camera_zoom(raw);
+	
 	//
 	// camera position and attitude
 	//
@@ -237,9 +242,11 @@ void update_weapon_camera (camera *raw)
 
 	get_matrix3x3_from_unit_vec3d (raw->attitude, &direction);
 
-	raw->position.x = weapon_position->x - (raw->attitude[2][0] * 10.0) + (raw->attitude[1][0] * 2.0);
-	raw->position.y = weapon_position->y - (raw->attitude[2][1] * 10.0) + (raw->attitude[1][1] * 2.0);
-	raw->position.z = weapon_position->z - (raw->attitude[2][2] * 10.0) + (raw->attitude[1][2] * 2.0);
+	raw->position.x = weapon_position->x - (raw->attitude[2][0] * (5.0 + 100.0 * raw->chase_camera_zoom)) + (raw->attitude[1][0] * 1.0);
+	raw->position.y = weapon_position->y - (raw->attitude[2][1] * (5.0 + 100.0 * raw->chase_camera_zoom)) + (raw->attitude[1][1] * 1.0);
+	raw->position.z = weapon_position->z - (raw->attitude[2][2] * (5.0 + 100.0 * raw->chase_camera_zoom)) + (raw->attitude[1][2] * 1.0);
+
+	add_turbulence(raw, &raw->position);
 
 	if (point_inside_map_area (&raw->position))
 	{

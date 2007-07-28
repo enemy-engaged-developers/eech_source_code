@@ -80,10 +80,6 @@
 #define CHASE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
 #define CHASE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
 
-#define CHASE_CAMERA_ZOOM_RATE			(0.5)
-#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0)
-#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0)
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,40 +250,9 @@ void update_chase_camera (camera *raw)
 
 		raw->chase_camera_pitch = max (CHASE_CAMERA_ROTATE_DOWN_LIMIT, raw->chase_camera_pitch);
 		raw->chase_camera_pitch = min (CHASE_CAMERA_ROTATE_UP_LIMIT, raw->chase_camera_pitch);
-
-		// Jabberwock 050103 - Mouse wheel zoom for external view
-		if (mouse_wheel_up)
-		{
-			raw->chase_camera_zoom -= 2 * get_delta_time ();
-
-			raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
-
-			mouse_wheel_up--;
-		}
-		else if (mouse_wheel_down)
-		{
-			raw->chase_camera_zoom += 2 * get_delta_time ();
-
-			raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
-
-			mouse_wheel_down--;
-		}
-		// Jabberwock 050103 ends
-
 	} // Retro 31Oct2004 end
 
-	if (adjust_view_zoom_in_key)
-	{
-		raw->chase_camera_zoom -= CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
-
-		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
-	}
-	else if (adjust_view_zoom_out_key)
-	{
-		raw->chase_camera_zoom += CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
-
-		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
-	}
+	adjust_camera_zoom(raw);
 
 	//
 	// get camera attitude
