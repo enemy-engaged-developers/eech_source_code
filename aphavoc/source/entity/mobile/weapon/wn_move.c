@@ -571,8 +571,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		matrix3x3 spiral_matrix, tmp;
 
-		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.3;
-		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.3;
+		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
+		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
 
 		get_3d_transformation_matrix (spiral_matrix, heading, pitch, 0.0);
 
