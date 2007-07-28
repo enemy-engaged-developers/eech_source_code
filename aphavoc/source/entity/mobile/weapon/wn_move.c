@@ -1830,11 +1830,11 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		compensation_grid[0][1].drop_angle = ballistics_table[wpn_type][pitch_index][range_index+1].drop_angle;
 		compensation_grid[0][1].flight_time = ballistics_table[wpn_type][pitch_index][range_index+1].flight_time;
 
-		compensation_grid[1][0].drop_angle = ballistics_table[wpn_type][pitch_index+1][range_index].drop_angle;
-		compensation_grid[1][0].flight_time = ballistics_table[wpn_type][pitch_index+1][range_index].flight_time;
+		compensation_grid[1][0].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index].drop_angle;
+		compensation_grid[1][0].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index].flight_time;
 
-		compensation_grid[1][1].drop_angle = ballistics_table[wpn_type][pitch_index+1][range_index+1].drop_angle;
-		compensation_grid[1][1].flight_time = ballistics_table[wpn_type][pitch_index+1][range_index+1].flight_time;
+		compensation_grid[1][1].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index+1].drop_angle;
+		compensation_grid[1][1].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index+1].flight_time;
 
 		// then average oover next pitch
 		pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
