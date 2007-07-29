@@ -1737,11 +1737,9 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define RADIUS	(ROOT2 - 0.05)
-
-static void draw_radar_range_arcs(void)
+static void draw_radar_range_arcs(float radius)
 {
-	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR_YELLOW);
+	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, radius, MFD_COLOUR_YELLOW);
 
 	// heading scale
 	set_mono_font_type(MONO_FONT_TYPE_5X7);
@@ -1762,16 +1760,19 @@ static void draw_radar_range_arcs(void)
 			char s[20];
 			float x_adjust;
 
-			set_2d_window_rotation (mfd_env, relative_heading);
-			draw_2d_line(0.0, RADIUS, 0.0, RADIUS + 0.05, MFD_COLOUR_YELLOW);
-
-			sprintf(s, "%d", int_heading);
-			x_adjust = -get_mono_font_string_width(s) / 2;
-
-			set_2d_mono_font_position(0.0, RADIUS + 0.1);
-			set_mono_font_rel_position(x_adjust, -4.0);
-
-			print_mono_font_string(s);
+			if (relative_heading <= rad(45))
+			{
+				set_2d_window_rotation (mfd_env, relative_heading);
+				draw_2d_line(0.0, radius, 0.0, radius + 0.03, MFD_COLOUR_YELLOW);
+	
+				sprintf(s, "%d", int_heading);
+				x_adjust = -get_mono_font_string_width(s) / 2;
+	
+				set_2d_mono_font_position(0.0, radius + 0.06);
+				set_mono_font_rel_position(x_adjust, -2.0);
+	
+				print_mono_font_string(s);
+			}
 			
 			int_heading += 10;
 			if (int_heading > 360)
@@ -1786,16 +1787,18 @@ static void draw_radar_range_arcs(void)
 
 	set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
 
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, radius, MFD_COLOUR_YELLOW);
 
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR_YELLOW);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR_YELLOW);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, radius * 0.25, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, radius * 0.50, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, radius * 0.75, MFD_COLOUR_YELLOW);
 
 	set_2d_window_rotation (mfd_env, 0.0);
 
-	draw_2d_line(0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
+	draw_2d_line(0.0, 0.0, 0.0, radius, MFD_COLOUR_YELLOW);
 }
+
+#define RADIUS	(ROOT2 - 0.05)
 
 static void draw_ground_radar_mfd (void)
 {
@@ -1973,21 +1976,6 @@ static void draw_ground_radar_mfd (void)
 
 	////////////////////////////////////////
 	//
-	// draw heading scale
-	//
-	////////////////////////////////////////
-//	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), FALSE);
-
-	////////////////////////////////////////
-	//
-	// draw field of regard and view boxes
-	//
-	////////////////////////////////////////
-
-//	draw_field_of_regard_and_view_boxes ();
-
-	////////////////////////////////////////
-	//
 	// line graphics
 	//
 	////////////////////////////////////////
@@ -1998,33 +1986,8 @@ static void draw_ground_radar_mfd (void)
 	// max scan limits
 	//
 
-//	draw_2d_line (0.0, 0.0, -0.965, 0.965, MFD_COLOUR4);
+	draw_radar_range_arcs(RADIUS);
 
-//	draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
-
-	draw_radar_range_arcs();
-/*	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR_YELLOW);
-
-	//
-	// scan limits and range markers
-	//
-
-	set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
-
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR_YELLOW);
-
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR_YELLOW);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR_YELLOW);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR_YELLOW);
-
-	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
-
-	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)));
-
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
-*/
 	//
 	// sweep
 	//
@@ -3672,1176 +3635,6 @@ static void draw_2d_periscope_mfd (int valid_3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 030423 TSD render mod, code moved to co_tsd.c in ../common
-/* 
-static int
-	contour_spacing,
-	contour_samples;
-
-#define OPTIMISE_CONTOURS	0
-
-#define OPTIMISE_PATHS		0
-
-#if OPTIMISE_CONTOURS
-
-static int
-	num_contour_loops,
-	num_contour_lines;
-
-#endif
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
-{
-	int
-		y,
-		y1,
-		y2,
-		y3,
-		dy,
-		y_tmp,
-		contour_samples_minus_one;
-
-	float
-		x1,
-		z1,
-		x2,
-		z2,
-		x3,
-		z3,
-		dx1,
-		dz1,
-		dx2,
-		dz2,
-		x_tmp,
-		z_tmp,
-		one_over_dy;
-
-	x1 = p1->x;
-	convert_float_to_int (p1->y, &y1);
-	z1 = p1->z;
-
-	x2 = p2->x;
-	convert_float_to_int (p2->y, &y2);
-	z2 = p2->z;
-
-	x3 = p3->x;
-	convert_float_to_int (p3->y, &y3);
-	z3 = p3->z;
-
-	//
-	// ensure above sea level
-	//
-
-	y1 = max (y1, 0);
-
-	y2 = max (y2, 0);
-
-	y3 = max (y3, 0);
-
-	//
-	// scale height values for contour line spacing
-	//
-
-	y1 /= contour_spacing;
-	y2 /= contour_spacing;
-	y3 /= contour_spacing;
-
-	contour_samples_minus_one = contour_samples - 1;
-
-	//
-	// check if flat
-	//
-
-	if ((y1 == y2) && (y2 == y3))
-	{
-		return;
-	}
-
-	//
-	// sort height values (y1 = lowest, y3 = highest)
-	//
-
-	if (y1 > y3)
-	{
-		x_tmp = x1;
-		y_tmp = y1;
-		z_tmp = z1;
-
-		x1 = x3;
-		y1 = y3;
-		z1 = z3;
-
-		x3 = x_tmp;
-		y3 = y_tmp;
-		z3 = z_tmp;
-	}
-
-	if (y2 > y3)
-	{
-		x_tmp = x2;
-		y_tmp = y2;
-		z_tmp = z2;
-
-		x2 = x3;
-		y2 = y3;
-		z2 = z3;
-
-		x3 = x_tmp;
-		y3 = y_tmp;
-		z3 = z_tmp;
-	}
-
-	if (y1 > y2)
-	{
-		x_tmp = x1;
-		y_tmp = y1;
-		z_tmp = z1;
-
-		x1 = x2;
-		y1 = y2;
-		z1 = z2;
-
-		x2 = x_tmp;
-		y2 = y_tmp;
-		z2 = z_tmp;
-	}
-
-	//
-	// draw contour lines
-	//
-
-	if (y1 == y2)
-	{
-		dy = y3 - y1;
-
-		one_over_dy = 1.0 / (float) dy;
-
-		dx1 = (x3 - x1) * one_over_dy;
-		dz1 = (z3 - z1) * one_over_dy;
-		dx2 = (x3 - x2) * one_over_dy;
-		dz2 = (z3 - z2) * one_over_dy;
-
-		y = contour_samples_minus_one - ((y1 - 1) % contour_samples);
-
-		while (dy--)
-		{
-			#if OPTIMISE_CONTOURS
-
-			num_contour_loops++;
-
-			#endif
-
-			if (y == 0)
-			{
-				#if OPTIMISE_CONTOURS
-
-				num_contour_lines++;
-
-				#endif
-
-				y = contour_samples;
-
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
-			}
-
-			y--;
-
-			x1 += dx1;
-			z1 += dz1;
-			x2 += dx2;
-			z2 += dz2;
-		}
-	}
-	else if (y2 == y3)
-	{
-		dy = y2 - y1;
-
-		one_over_dy = 1.0 / (float) dy;
-
-		dx1 = (x2 - x1) * one_over_dy;
-		dz1 = (z2 - z1) * one_over_dy;
-		dx2 = (x3 - x1) * one_over_dy;
-		dz2 = (z3 - z1) * one_over_dy;
-
-		y = contour_samples_minus_one - ((y1 - 1) % contour_samples);
-
-		x2 = x1;
-		z2 = z1;
-
-		while (dy--)
-		{
-			#if OPTIMISE_CONTOURS
-
-			num_contour_loops++;
-
-			#endif
-
-			if (y == 0)
-			{
-				#if OPTIMISE_CONTOURS
-
-				num_contour_lines++;
-
-				#endif
-
-				y = contour_samples;
-
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
-			}
-
-			y--;
-
-			x1 += dx1;
-			z1 += dz1;
-			x2 += dx2;
-			z2 += dz2;
-		}
-	}
-	else
-	{
-		dy = y3 - y1;
-
-		one_over_dy = 1.0 / (float) dy;
-
-		dx1 = (x3 - x1) * one_over_dy;
-		dz1 = (z3 - z1) * one_over_dy;
-
-		dy = y2 - y1;
-
-		one_over_dy = 1.0 / (float) dy;
-
-		dx2 = (x2 - x1) * one_over_dy;
-		dz2 = (z2 - z1) * one_over_dy;
-
-		y = contour_samples_minus_one - ((y1 - 1) % contour_samples);
-
-		x2 = x1;
-		z2 = z1;
-
-		while (dy--)
-		{
-			#if OPTIMISE_CONTOURS
-
-			num_contour_loops++;
-
-			#endif
-
-			if (y == 0)
-			{
-				#if OPTIMISE_CONTOURS
-
-				num_contour_lines++;
-
-				#endif
-
-				y = contour_samples;
-
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
-			}
-
-			y--;
-
-			x1 += dx1;
-			z1 += dz1;
-			x2 += dx2;
-			z2 += dz2;
-		}
-
-		dy = y3 - y2;
-
-		one_over_dy = 1.0 / (float) dy;
-
-		dx2 = (x3 - x2) * one_over_dy;
-		dz2 = (z3 - z2) * one_over_dy;
-
-		y = contour_samples_minus_one - ((y2 - 1) % contour_samples);
-
-		while (dy--)
-		{
-			#if OPTIMISE_CONTOURS
-
-			num_contour_loops++;
-
-			#endif
-
-			if (y == 0)
-			{
-				#if OPTIMISE_CONTOURS
-
-				num_contour_lines++;
-
-				#endif
-
-				y = contour_samples;
-
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
-			}
-
-			y--;
-
-			x1 += dx1;
-			z1 += dz1;
-			x2 += dx2;
-			z2 += dz2;
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_path_lines
-(
-	int number_of_paths,
-	contour_path *paths,
-	vec3d *nodes,
-	rgb_colour colour,
-	int detail_level,
-	float x_world_min,
-	float z_world_min,
-	float x_world_mid,
-	float z_world_mid,
-	float x_world_max,
-	float z_world_max,
-	float scale,
-	int draw_thick_lines
-)
-{
-	int
-		this_path,
-		outcode1,
-		outcode2,
-		index,
-		step_size;
-
-	#if OPTIMISE_PATHS
-
-	int
-		num_paths_traversed,
-		num_lines_drawn;
-
-	#endif
-
-	float
-		x1,
-		z1,
-		x2,
-		z2;
-
-	vec3d
-		*sub_positions;
-
-	ASSERT (number_of_paths > 0);
-
-	ASSERT (paths);
-
-	ASSERT (nodes);
-
-	#if OPTIMISE_PATHS
-
-	num_paths_traversed = 0;
-
-	num_lines_drawn = 0;
-
-	#endif
-
-	step_size = max (detail_level << 3, 1);
-
-	for (this_path = 0; this_path < number_of_paths; this_path++)
-	{
-		if
-		(
-			(paths[this_path].type != TEMP_TERRAIN_TYPE_COASTAL_RIVER) &&
-			(paths[this_path].type != TEMP_TERRAIN_TYPE_LAKE) &&
-			(paths[this_path].type != TEMP_TERRAIN_TYPE_OFFROAD)
-		)
-		{
-			//
-			// trivially reject path
-			//
-
-			outcode1 = 0;
-
-			if (paths[this_path].xmin < x_world_min) outcode1 |= CLIP_LEFT;
-			if (paths[this_path].xmin > x_world_max) outcode1 |= CLIP_RIGHT;
-			if (paths[this_path].zmin < z_world_min) outcode1 |= CLIP_TOP;
-			if (paths[this_path].zmin > z_world_max) outcode1 |= CLIP_BOTTOM;
-
-			outcode2 = 0;
-
-			if (paths[this_path].xmax < x_world_min) outcode2 |= CLIP_LEFT;
-			if (paths[this_path].xmax > x_world_max) outcode2 |= CLIP_RIGHT;
-			if (paths[this_path].zmax < z_world_min) outcode2 |= CLIP_TOP;
-			if (paths[this_path].zmax > z_world_max) outcode2 |= CLIP_BOTTOM;
-
-			if (!(outcode1 & outcode2))
-			{
-				#if OPTIMISE_PATHS
-
-				num_paths_traversed++;
-
-				#endif
-
-				//
-				// this also catches conditions where (count == 0)
-				//
-
-				if (paths[this_path].count <= step_size)
-				{
-					////////////////////////////////////////
-					//
-					// draw path as a single line
-					//
-					////////////////////////////////////////
-
-					x1 = (nodes[paths[this_path].from].x - x_world_mid) * scale;
-					z1 = (nodes[paths[this_path].from].z - z_world_mid) * scale;
-
-					x2 = (nodes[paths[this_path].to].x - x_world_mid) * scale;
-					z2 = (nodes[paths[this_path].to].z - z_world_mid) * scale;
-
-					if (draw_thick_lines && draw_large_mfd)
-					{
-						draw_2d_half_thick_line (x1, z1, x2, z2, colour);
-					}
-					else
-					{
-						draw_2d_line (x1, z1, x2, z2, colour);
-					}
-
-					#if OPTIMISE_PATHS
-
-					num_lines_drawn++;
-
-					#endif
-				}
-				else
-				{
-					////////////////////////////////////////
-					//
-					// draw path with variable detail level
-					//
-					////////////////////////////////////////
-
-					sub_positions = paths[this_path].points;
-
-					index = step_size - 1;;
-
-					//
-					// draw line from start node to first sub-position
-					//
-
-					x1 = (nodes[paths[this_path].from].x - x_world_mid) * scale;
-					z1 = (nodes[paths[this_path].from].z - z_world_mid) * scale;
-
-					x2 = (sub_positions[index].x - x_world_mid) * scale;
-					z2 = (sub_positions[index].z - z_world_mid) * scale;
-
-					if (draw_thick_lines && draw_large_mfd)
-					{
-						draw_2d_half_thick_line (x1, z1, x2, z2, colour);
-					}
-					else
-					{
-						draw_2d_line (x1, z1, x2, z2, colour);
-					}
-
-					#if OPTIMISE_PATHS
-
-					num_lines_drawn++;
-
-					#endif
-
-					//
-					// draw sub-position lines
-					//
-
-					index += step_size;
-
-					while (index < paths[this_path].count)
-					{
-						x1 = x2;
-						z1 = z2;
-
-						x2 = (sub_positions[index].x - x_world_mid) * scale;
-						z2 = (sub_positions[index].z - z_world_mid) * scale;
-
-						if (draw_thick_lines && draw_large_mfd)
-						{
-							draw_2d_half_thick_line (x1, z1, x2, z2, colour);
-						}
-						else
-						{
-							draw_2d_line (x1, z1, x2, z2, colour);
-						}
-
-						#if OPTIMISE_PATHS
-
-						num_lines_drawn++;
-
-						#endif
-
-						index += step_size;
-					}
-
-					//
-					// draw line from last sub-position to end node
-					//
-
-					x1 = x2;
-					z1 = z2;
-
-					x2 = (nodes[paths[this_path].to].x - x_world_mid) * scale;
-					z2 = (nodes[paths[this_path].to].z - z_world_mid) * scale;
-
-					if (draw_thick_lines && draw_large_mfd)
-					{
-						draw_2d_half_thick_line (x1, z1, x2, z2, colour);
-					}
-					else
-					{
-						draw_2d_line (x1, z1, x2, z2, colour);
-					}
-
-					#if OPTIMISE_PATHS
-
-					num_lines_drawn++;
-
-					#endif
-				}
-			}
-		}
-	}
-
-	#if OPTIMISE_PATHS
-
-	debug_filtered_log ("paths=%d, paths drawn=%d, lines drawn=%d", number_of_paths, num_paths_traversed, num_lines_drawn);
-
-	#endif
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_tsd_contour_map (float y_translate, float range, float scale, vec3d *position, float heading)
-{
-	int
-		x_index,
-		z_index,
-		row_add_on,
-		x_min_index,
-		z_min_index,
-		x_max_index,
-		z_max_index,
-		path_detail_level,
-		contour_granularity,
-		contour_granularity_mask;
-
-	float
-		x_min,
-		z_min,
-		x_mid,
-		z_mid,
-		x_max,
-		z_max,
-		radius,
-		distance,
-		dx0,
-		dz0,
-		dx1,
-		dz1,
-		dx_grid,
-		dz_grid,
-		dx_start,
-		dz_start,
-		*this_row_ptr,
-		*next_row_ptr,
-		*this_row_start_ptr,
-		*next_row_start_ptr;
-
-	vec3d
-		p1,
-		p2,
-		p3;
-
-	ASSERT (position);
-
-	#if OPTIMISE_CONTOURS
-
-	num_contour_loops = 0;
-
-	num_contour_lines = 0;
-
-	#endif
-
-	//
-	// rotate map
-	//
-
-	set_2d_window_rotation (mfd_env, heading);
-
-	//
-	// get map centre position
-	//
-
-	distance = y_translate / scale;
-
-	x_mid = position->x + (distance * sin (heading));
-	z_mid = position->z + (distance * cos (heading));
-
-	//
-	// get map area (increased by one grid, where hypotenuse is approx (x + z))
-	//
-
-	radius = range + terrain_3d_simple_elevation_x_grid_size + terrain_3d_simple_elevation_z_grid_size;
-
-	x_min = x_mid - radius;
-	z_min = z_mid - radius;
-
-	x_max = x_mid + radius;
-	z_max = z_mid + radius;
-
-	//
-	// clip map area
-	//
-
-	x_min = max (x_min, MIN_MAP_X);
-	z_min = max (z_min, MIN_MAP_Z);
-
-	x_max = min (x_max, MAX_MAP_X);
-	z_max = min (z_max, MAX_MAP_Z);
-
-	////////////////////////////////////////
-	//
-	// DRAW CONTOURS
-	//
-	////////////////////////////////////////
-
-	//
-	// get simple terrain map indices
-	//
-
-	convert_float_to_int ((x_min * terrain_3d_simple_elevation_x_grid_size_reciprocal), &x_min_index);
-	convert_float_to_int ((z_min * terrain_3d_simple_elevation_z_grid_size_reciprocal), &z_min_index);
-
-	convert_float_to_int ((x_max * terrain_3d_simple_elevation_x_grid_size_reciprocal), &x_max_index);
-	convert_float_to_int ((z_max * terrain_3d_simple_elevation_z_grid_size_reciprocal), &z_max_index);
-
-	////////////////////////////////////////
-	//
-	// contour_granularity: chunks the terrain grid
-	// contour_samples    : culls the number of contour line samples
-	// contour_spacing    : height between contour lines (meters)
-	// path_detail_level  : 0 = highest detail (ie draw all sub-lines)
-	//
-	////////////////////////////////////////
-
-	////////////////////////////////////////
-	if (range == TSD_ASE_RANGE_2000)
-	////////////////////////////////////////
-	{
-		contour_granularity = 1;
-
-		contour_samples = 5;
-
-		contour_spacing = 100;
-
-		if (draw_large_mfd)
-		{
-			path_detail_level = 0;
-		}
-		else
-		{
-			path_detail_level = 2;
-		}
-	}
-	////////////////////////////////////////
-	else if (range == TSD_ASE_RANGE_5000)
-	////////////////////////////////////////
-	{
-		if (draw_large_mfd)
-		{
-			contour_granularity = 1;
-
-			contour_samples = 10;
-
-			path_detail_level = 0;
-		}
-		else
-		{
-			contour_granularity = 2;
-
-			contour_samples = 10;
-
-			path_detail_level = 2;
-		}
-
-		contour_spacing = 100;
-	}
-	////////////////////////////////////////
-	else if (range == TSD_ASE_RANGE_10000)
-	////////////////////////////////////////
-	{
-		if (draw_large_mfd)
-		{
-			contour_granularity = 2;
-
-			contour_samples = 10;
-
-			path_detail_level = 1;
-		}
-		else
-		{
-			contour_granularity = 4;
-
-			contour_samples = 20;
-
-			path_detail_level = 3;
-		}
-
-		contour_spacing = 100;
-	}
-	////////////////////////////////////////
-	else if (range == TSD_ASE_RANGE_25000)
-	////////////////////////////////////////
-	{
-		if (draw_large_mfd)
-		{
-			contour_granularity = 4;
-
-			contour_samples = 10;
-
-			path_detail_level = 2;
-		}
-		else
-		{
-			contour_granularity = 8;
-
-			contour_samples = 15;
-
-			path_detail_level = 4;
-		}
-
-		contour_spacing = 250;
-	}
-	////////////////////////////////////////
-	else
-	////////////////////////////////////////
-	{
-		debug_fatal ("Unknown TSD/ASE range %.2f", range);
-	}
-
-	contour_spacing /= contour_samples;
-
-	contour_granularity_mask = ~(contour_granularity - 1);
-
-	//
-	// scan map
-	//
-
-	x_min_index &= contour_granularity_mask;
-	z_min_index &= contour_granularity_mask;
-
-	x_max_index += contour_granularity - 1;
-	z_max_index += contour_granularity - 1;
-
-	x_max_index &= contour_granularity_mask;
-	z_max_index &= contour_granularity_mask;
-
-	if (x_max_index >= terrain_3d_simple_elevation_width)
-	{
-		x_max_index = terrain_3d_simple_elevation_width & contour_granularity_mask;
-	}
-
-	if (z_max_index >= terrain_3d_simple_elevation_height)
-	{
-		z_max_index = terrain_3d_simple_elevation_height & contour_granularity_mask;
-	}
-
-	if ((x_min_index < x_max_index) && (z_min_index < z_max_index))
-	{
-		this_row_start_ptr = &terrain_3d_simple_elevation_grid[(z_min_index * terrain_3d_simple_elevation_width) + x_min_index];
-
-		row_add_on = terrain_3d_simple_elevation_width * contour_granularity;
-
-		next_row_start_ptr = this_row_start_ptr + row_add_on;
-
-		dx_start = ((((float) x_min_index) * terrain_3d_simple_elevation_x_grid_size) - x_mid) * scale;
-		dz_start = ((((float) z_min_index) * terrain_3d_simple_elevation_z_grid_size) - z_mid) * scale;
-
-		dx_grid = terrain_3d_simple_elevation_x_grid_size * (float) contour_granularity * scale;
-		dz_grid = terrain_3d_simple_elevation_z_grid_size * (float) contour_granularity * scale;
-
-		dz0 = dz_start;
-		dz1 = dz_start + dz_grid;
-
-		for (z_index = z_min_index; z_index < z_max_index; z_index += contour_granularity)
-		{
-			dx0 = dx_start;
-			dx1 = dx_start + dx_grid;
-
-			this_row_ptr = this_row_start_ptr;
-			next_row_ptr = next_row_start_ptr;
-
-			for (x_index = x_min_index; x_index < x_max_index; x_index += contour_granularity)
-			{
-				//
-				// offset [z=0][x=0]
-				//
-
-				p1.x = dx0;
-				p1.y = this_row_ptr[0];
-				p1.z = dz0;
-
-				//
-				// offset [z=0][x=1]
-				//
-
-				p2.x = dx1;
-				p2.y = this_row_ptr[contour_granularity];
-				p2.z = dz0;
-
-				//
-				// offset [z=1][x=0]
-				//
-
-				p3.x = dx0;
-				p3.y = next_row_ptr[0];
-				p3.z = dz1;
-
-				draw_contour_lines (&p1, &p2, &p3);
-
-				//
-				// offset [z=1][x=1]
-				//
-
-				p1.x = dx1;
-				p1.y = next_row_ptr[contour_granularity];
-				p1.z = dz1;
-
-				draw_contour_lines (&p1, &p2, &p3);
-
-				//
-				// next column
-				//
-
-				dx0 += dx_grid;
-				dx1 += dx_grid;
-
-				this_row_ptr += contour_granularity;
-				next_row_ptr += contour_granularity;
-			}
-
-			//
-			// next row
-			//
-
-			dz0 += dz_grid;
-			dz1 += dz_grid;
-
-			this_row_start_ptr += row_add_on;
-			next_row_start_ptr += row_add_on;
-		}
-	}
-
-	#if OPTIMISE_CONTOURS
-
-	debug_filtered_log ("num_contour_loops = %d, num_contour_lines = %d", num_contour_loops, num_contour_lines);
-
-	#endif
-
-	////////////////////////////////////////
-	//
-	// DRAW RIVERS
-	//
-	////////////////////////////////////////
-
-	draw_path_lines
-	(
-		contour_map_number_of_river_paths,
-		contour_map_river_paths,
-		contour_map_river_nodes,
-		MFD_RIVER_COLOUR,
-		path_detail_level,
-		x_min,
-		z_min,
-		x_mid,
-		z_mid,
-		x_max,
-		z_max,
-		scale,
-		TRUE
-	);
-
-	////////////////////////////////////////
-	//
-	// DRAW ROADS
-	//
-	////////////////////////////////////////
-
-	draw_path_lines
-	(
-		contour_map_number_of_road_paths,
-		contour_map_road_paths,
-		contour_map_road_nodes,
-		MFD_ROAD_COLOUR,
-		path_detail_level,
-		x_min,
-		z_min,
-		x_mid,
-		z_mid,
-		x_max,
-		z_max,
-		scale,
-		FALSE
-	);
-
-	//
-	// reset window rotation
-	//
-
-	set_2d_window_rotation (mfd_env, 0.0);
-}
-*/ //VJ 030423 TSD render mod, code moved to co_tsd.c in ../common
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// ATARIBABY HEADING SCALE TSD
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_heading_scale_tsd (float heading, int draw_command_heading)
-{
-	float
-		y_position,
-		mfd_vp_x_min,
-		mfd_vp_x_max,
-		mod_heading_step_10,
-		x,
-		width,
-		i,
-		j;
-
-	int
-		loop,
-		int_heading_step_10;
-
-	char
-		s[20];
-
-	//
-	// adjust 2D environment for heading scale clipping
-	//
-
-	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
-
-	mfd_vp_x_min = mfd_viewport_x_org - (mfd_viewport_size * (0.5 * 0.5));
-
-	mfd_vp_x_max = mfd_viewport_x_org + (mfd_viewport_size * (0.5 * 0.5)) - 0.001;
-
-	set_2d_viewport (mfd_env, mfd_vp_x_min, mfd_viewport_y_min, mfd_vp_x_max, mfd_viewport_y_max);
-
-	//
-	// large and small MFD position
-	//
-
-	if (draw_large_mfd)
-	{
-		y_position = 0.75;
-	}
-	else
-	{
-		y_position = 0.7375;
-	}
-
-	//
-	// draw heading scale line
-	//
-
-	draw_2d_line (-0.5, y_position, 0.5, y_position, MFD_COLOUR1);
-
-	//
-	// large and small MFD differences
-	//
-
-	get_2d_float_screen_coordinates (0.0, y_position, &i, &j);
-
-	if (draw_large_mfd)
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		draw_mono_sprite (large_heading_scale_datum, i, j + 1.0, MFD_COLOUR1);
-	}
-	else
-	{
-		set_mono_font_type (MONO_FONT_TYPE_5X7);
-
-		draw_mono_sprite (small_heading_scale_datum, i, j + 1.0, MFD_COLOUR1);
-	}
-
-	//
-	// draw command heading carat
-	//
-
-	if (draw_command_heading)
-	{
-		if (!hokum_damage.navigation_computer)
-		{
-			entity
-				*wp;
-
-			wp = get_local_entity_current_waypoint (get_gunship_entity ());
-
-			if (wp)
-			{
-				vec3d
-					*gunship_position,
-					waypoint_position;
-
-				float
-					dx,
-					dz,
-					bearing,
-					command_heading;
-
-				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-
-				get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
-
-				dx = waypoint_position.x - gunship_position->x;
-				dz = waypoint_position.z - gunship_position->z;
-
-				bearing = atan2 (dx, dz);
-
-				command_heading = bearing - heading;
-
-				if (command_heading > rad (180.0))
-				{
-					command_heading -= rad (360.0);
-				}
-				else if (command_heading < rad (-180.0))
-				{
-					command_heading += rad (360.0);
-				}
-
-				command_heading = bound (command_heading, rad (-90.0), rad (90.0));
-
-				if (draw_large_mfd)
-				{
-					get_2d_float_screen_coordinates (command_heading * ((0.5 - 0.04) / rad (90.0)), y_position, &i, &j);
-
-					draw_mono_sprite (large_command_heading_carat, i, j + 1.0, MFD_COLOUR1);
-				}
-				else
-				{
-					get_2d_float_screen_coordinates (command_heading * ((0.5 - 0.05) / rad (90.0)), y_position, &i, &j);
-
-					draw_mono_sprite (small_command_heading_carat, i, j + 1.0, MFD_COLOUR1);
-				}
-			}
-		}
-	}
-
-	//
-	// sort first major tick position (draw 2 major ticks either side of centre)
-	//
-
-	heading = deg (heading);
-
-	mod_heading_step_10 = fmod (heading, 10.0);
-
-	int_heading_step_10 = ((int) (heading * 0.1) * 10);
-
-	int_heading_step_10 -= 20;
-
-	if (int_heading_step_10 < 0)
-	{
-		int_heading_step_10 += 360;
-	}
-
-	x = - (20.0 + mod_heading_step_10) * 0.05;
-
-	//
-	// draw heading scale ticks and heading value
-	//
-
-	for (loop = 0; loop < 5; loop++)
-	{
-		//
-		// major tick every 10 degrees
-		//
-
-		draw_2d_line (x, y_position, x, y_position + 0.05, MFD_COLOUR1);
-
-		//
-		// minor tick every 5 degrees
-		//
-
-		draw_2d_line (x + 0.25, y_position, x + 0.25, y_position + 0.025, MFD_COLOUR1);
-
-		//
-		// heading value ('0' displayed as '360')
-		//
-
-		if (int_heading_step_10 != 0)
-		{
-			sprintf (s, "%d", int_heading_step_10);
-		}
-		else
-		{
-			sprintf (s, "360");
-		}
-
-		set_2d_mono_font_position (x, y_position + 0.05);
-
-		width = get_mono_font_string_width (s);
-
-		if (draw_large_mfd)
-		{
-			set_mono_font_rel_position ((-width * 0.5) + 1.0, -8.0);
-		}
-		else
-		{
-			set_mono_font_rel_position ((-width * 0.5) + 1.0, -6.0);
-		}
-
-		print_mono_font_string (s);
-
-		//
-		// next heading value
-		//
-
-		int_heading_step_10 += 10;
-
-		if (int_heading_step_10 == 360)
-		{
-			int_heading_step_10 = 0;
-		}
-
-		x += 0.5;
-	}
-
-	//
-	// restore 2D environment
-	//
-
-	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
-
-	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-}
 
 //
 // match ground radar radius
@@ -4984,6 +3777,13 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		set_rgb_colour (MFD_COLOUR8,    0,   0,  0, 255);
 	
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
+	   
+	   	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
+		set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
+		set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
+		set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
+		set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
+		set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
 	}
 	
 	////////////////////////////////////////
@@ -4995,70 +3795,22 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 //VJ 030423 TSD render mod, added mfd_env
 	draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
 
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
 	////////////////////////////////////////
 	//
 	// radar scan
 	//
 	////////////////////////////////////////
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
 	{
-		float
-			radius;
+		float radius;
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
-		{
-			set_2d_viewport_origin (mfd_env, u, v);
+		radius = scale * tsd_ase_range;
 
-			radius = ground_radar.scan_range * scale;
-
-			set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
-
-			draw_radar_arc (ground_radar.scan_arc_size, radius, MFD_COLOUR4);
-
-			set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)));
-
-			draw_2d_line (0.0, 0.0, 0.0, radius, MFD_COLOUR4);
-
-			set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)));
-
-			draw_2d_line (0.0, 0.0, 0.0, radius, MFD_COLOUR4);
-
-			set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
-			set_2d_window_rotation (mfd_env, 0.0);
-		}
-		else if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
-		{
-			set_2d_viewport_origin (mfd_env, u, v);
-
-			radius = air_radar.scan_range * scale;
-
-			if (air_radar.scan_arc_size == HOKUM_RADAR_SCAN_ARC_SIZE_360)
-			{
-				draw_2d_circle (0.0, 0.0, radius, MFD_COLOUR4);
-			}
-			else
-			{
-				set_2d_window_rotation (mfd_env, -air_radar.scan_datum);
-
-				draw_radar_arc (air_radar.scan_arc_size, radius, MFD_COLOUR4);
-
-				draw_2d_line (0.0, 0.0, 0.0, radius, MFD_COLOUR4);
-
-				set_2d_window_rotation (mfd_env, -(air_radar.scan_datum - (air_radar.scan_arc_size * 0.5)));
-
-				draw_2d_line (0.0, 0.0, 0.0, radius, MFD_COLOUR4);
-
-				set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + (air_radar.scan_arc_size * 0.5)));
-
-				draw_2d_line (0.0, 0.0, 0.0, radius, MFD_COLOUR4);
-
-				set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
-
-				set_2d_window_rotation (mfd_env, 0.0);
-			}
-		}
+		set_2d_viewport_origin (mfd_env, u, v);
+		draw_radar_range_arcs(radius);
+		set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 	}
 
 	////////////////////////////////////////
@@ -5105,11 +3857,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 				if (draw_large_mfd)
 				{
-					draw_2d_half_thick_line (wp1_rel_position.x, wp1_rel_position.z, wp2_rel_position.x, wp2_rel_position.z, MFD_COLOUR2);
+					draw_2d_half_thick_line (wp1_rel_position.x, wp1_rel_position.z, wp2_rel_position.x, wp2_rel_position.z, MFD_COLOUR_BLUE);
 				}
 				else
 				{
-					draw_2d_line (wp1_rel_position.x, wp1_rel_position.z, wp2_rel_position.x, wp2_rel_position.z, MFD_COLOUR2);
+					draw_2d_line (wp1_rel_position.x, wp1_rel_position.z, wp2_rel_position.x, wp2_rel_position.z, MFD_COLOUR_BLUE);
 				}
 
 				wp1 = wp2;
@@ -5123,7 +3875,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 			// waypoint markers
 			//
 
-			set_mono_font_colour (MFD_COLOUR6);
+			set_mono_font_colour (MFD_COLOUR2);
 
 			if (draw_large_mfd)
 			{
@@ -5145,7 +3897,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 				if (draw_large_mfd)
 				{
-					draw_2d_mono_sprite (large_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR2);
+					draw_2d_mono_sprite (large_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR_BLUE);
 
 					set_2d_mono_font_position (wp1_rel_position.x, wp1_rel_position.z);
 
@@ -5153,7 +3905,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 				}
 				else
 				{
-					draw_2d_mono_sprite (small_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR2);
+					draw_2d_mono_sprite (small_tsd_waypoint_marker, wp1_rel_position.x, wp1_rel_position.z, MFD_COLOUR_BLUE);
 
 					set_2d_mono_font_position (wp1_rel_position.x, wp1_rel_position.z);
 
@@ -5234,12 +3986,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
-//VJ 030423 TSD render mod, enemy of comanche so blue
-//VJ 030511 TSD render mod, enemy optional in eech.ini
-							if (command_line_tsd_enemy_colours)
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
-							else				
-								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
+							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR_RED);
 							
 						}
 					}
@@ -5344,31 +4091,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		}
 	}
 
-	////////////////////////////////////////
-	//
-	// aircraft datum symbol
-	//
-	////////////////////////////////////////
-
-	if (draw_large_mfd)
-	{
-		draw_2d_mono_sprite (large_tsd_ase_aircraft_datum_mask, x_origin, y_origin, MFD_COLOUR6);
-
-		draw_2d_mono_sprite (large_tsd_ase_aircraft_datum, x_origin, y_origin, MFD_COLOUR1);
-	}
-	else
-	{
-		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum_mask, x_origin, y_origin, MFD_COLOUR6);
-
-		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum, x_origin, y_origin, MFD_COLOUR1);
-	}
-	
-	// ATARIBABY added heading tape to TSD NAV display
-	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION || tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
-	{
-		set_mono_font_colour (MFD_COLOUR1);
-		draw_heading_scale_tsd (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), TRUE);
-	}
+	draw_2d_box(-1.0, 1.0, 1.0, 0.87, TRUE, MFD_BACKGROUND_COLOUR);
+	draw_2d_box(-1.0, -1.0, 1.0, y_origin, TRUE, MFD_BACKGROUND_COLOUR);
 
 	////////////////////////////////////////
 	//
@@ -5376,7 +4100,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	//
 	////////////////////////////////////////
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
@@ -5387,131 +4111,6 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		set_mono_font_type (MONO_FONT_TYPE_5X7);
 	}
 
-	//
-	// sensor type
-	//
-
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
-	{
-		switch (target_acquisition_system)
-		{
-			case TARGET_ACQUISITION_SYSTEM_OFF:
-			{
-				s = "NO ACQ";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-			case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-			{
-				s = "FCR";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_FLIR:
-			case TARGET_ACQUISITION_SYSTEM_LLLTV:
-			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-			{
-				s = "EOS";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_HMS:
-			{
-				s = "HMS";
-
-				break;
-			}
-			default:
-			{
-				s = "XXX";
-
-				break;
-			}
-		}
-
-		if (draw_large_mfd)
-		{
-			y_adjust = 5.0;
-		}
-		else
-		{
-			y_adjust = 2.0;
-		}
-
-		set_2d_mono_font_position (-1.0, 1.0);
-
-		set_mono_font_rel_position (1.0, y_adjust);
-
-		print_mono_font_string (s);
-
-		switch (target_acquisition_system)
-		{
-			case TARGET_ACQUISITION_SYSTEM_OFF:
-			{
-				s = "";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-			{
-				s = "GND";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-			{
-				s = "AIR";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_FLIR:
-			{
-				s = "FLIR";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_LLLTV:
-			{
-				s = "LLLTV";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-			{
-				s = "SCOPE";
-
-				break;
-			}
-			case TARGET_ACQUISITION_SYSTEM_HMS:
-			{
-				s = "";
-
-				break;
-			}
-			default:
-			{
-				s = "XXX";
-
-				break;
-			}
-		}
-
-		if (draw_large_mfd)
-		{
-			y_adjust = 18.0;
-		}
-		else
-		{
-			y_adjust = 9.0;
-		}
-
-		set_2d_mono_font_position (-1.0, 1.0);
-
-		set_mono_font_rel_position (1.0, y_adjust);
-
-		print_mono_font_string (s);
-	}
 
 	//
 	// TSD range
@@ -5519,19 +4118,19 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 	if (tsd_ase_range == TSD_ASE_RANGE_2000)
 	{
-		s = "2Km";
+		s = "2.5KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_5000)
 	{
-		s = "5Km";
+		s = "5KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_10000)
 	{
-		s = "10Km";
+		s = "10KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_25000)
 	{
-		s = "25Km";
+		s = "25KM";
 	}
 	else
 	{
@@ -5565,50 +4164,128 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
 	{
-		s = "ALL";
+		s = "COMBINED";
 	}
 	else if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_TARGET)
 	{
-		s = "TGT";
+		s = "TARGETING";
 	}
 	else if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION)
 	{
-		s = "NAV";
+		s = "NAVIGATION";
 	}
 	else
 	{
 		s = "XXX";
 	}
 
-	width = get_mono_font_string_width (s);
-
 	if (draw_large_mfd)
 	{
 		width += 2.0;
 
-		y_adjust = 18.0;
+		y_adjust = 5.0;
 	}
 	else
 	{
 		width += 1.0;
 
-		y_adjust = 9.0;
+		y_adjust = 5.0;
 	}
 
-	set_2d_mono_font_position (1.0, 1.0);
+	set_2d_mono_font_position (-0.95, 1.0);
 
-	set_mono_font_rel_position (-width, y_adjust);
+	set_mono_font_rel_position (2.0, y_adjust);
 
 	print_mono_font_string (s);
+	//
+	// sensor type
+	//
+
+	set_mono_font_colour (MFD_COLOUR3);
+	set_mono_font_type(MONO_FONT_TYPE_5X9);
+
+//	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
+	{
+		switch (target_acquisition_system)
+		{
+			case TARGET_ACQUISITION_SYSTEM_OFF:
+			{
+				s = "NO ACQ";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+			{
+				s = "FCR GND";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+			{
+				s = "FCR AIR";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_FLIR:
+			{
+				s = "EOS FLIR";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			{
+				s = "EOS LLLTV";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+			{
+				s = "EOS SCOPE";
+
+				break;
+			}
+			case TARGET_ACQUISITION_SYSTEM_HMS:
+			{
+				s = "HMS";
+
+				break;
+			}
+			default:
+			{
+				s = "XXX";
+
+				break;
+			}
+		}
+
+		if (draw_large_mfd)
+		{
+			y_adjust = 5.0;
+		}
+		else
+		{
+			y_adjust = 2.0;
+		}
+
+		set_2d_mono_font_position (0.5, -0.65);
+
+		set_mono_font_rel_position (1.0, y_adjust);
+
+		print_mono_font_string (s);
+	}
+
 
 	//
 	// target range
 	//
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
+//	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
 	{
-		if (source_target && get_range_finder() != RANGEFINDER_TRIANGULATION)
+		if (source_target)
 		{
+			rangefinding_system
+				range_finder;
+
 			vec3d
 				*target_position;
 
@@ -5617,35 +4294,26 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 			target_position = get_local_entity_vec3d_ptr (source_target, VEC3D_TYPE_POSITION);
 
-			target_range = get_3d_range (source_position, target_position);
+			target_range = get_target_range(target_position, &range_finder);
 
-			if ((target_range < 1000.0) && (!hokum_damage.laser_designator))
-			{
-				sprintf (buffer, "%dm", (int) target_range);
-			}
-			else
-			{
-				sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-			}
-
-			width = get_mono_font_string_width (buffer);
+			sprintf (buffer, "%   4d M", (int) target_range);
 
 			if (draw_large_mfd)
 			{
 				width += 2.0;
 
-				y_adjust = -12.0;
+				y_adjust = 5.0;
 			}
 			else
 			{
 				width += 1.0;
 
-				y_adjust = -5.0;
+				y_adjust = 2.0;
 			}
 
-			set_2d_mono_font_position (1.0, -1.0);
+			set_2d_mono_font_position (0.5, -0.75);
 
-			set_mono_font_rel_position (-width, y_adjust);
+			set_mono_font_rel_position (1.0, y_adjust);
 
 			print_mono_font_string (buffer);
 		}
@@ -5655,7 +4323,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	// waypoint information
 	//
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+//	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
 	{
 		entity
 			*wp;
@@ -5665,6 +4333,20 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 		float
 			waypoint_range;
+
+		// sector:
+		{
+			int sz, sx;
+			entity* sec = get_local_sector_entity(source_position);
+	
+			sx = get_local_entity_int_value(sec, INT_TYPE_X_SECTOR);
+			sz = get_local_entity_int_value(sec, INT_TYPE_Z_SECTOR);
+	
+			sprintf(buffer, "SECTOR: %d,%d", sx, sz);
+			set_2d_mono_font_position (-1.0, -0.65);
+			set_mono_font_rel_position (5.0, 5.0);
+			print_mono_font_string (buffer);
+		}
 
 		wp = get_local_entity_current_waypoint (source);
 
@@ -5680,11 +4362,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 			if (!hokum_damage.navigation_computer)
 			{
-				if (waypoint_range < 1000.0)
-				{
-					sprintf (buffer, "%c:%dm", get_local_entity_char_value (wp, CHAR_TYPE_TAG), (int) waypoint_range);
-				}
-				else if (waypoint_range < 100000.0)
+				if (waypoint_range < 100000.0)
 				{
 					int
 						i;
@@ -5700,11 +4378,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 					f = (float) i * (1.0 / 10.0);
 
-					sprintf (buffer, "%c:%.1fKm", get_local_entity_char_value (wp, CHAR_TYPE_TAG), f);
+					sprintf (buffer, "%c: %.1f KM", get_local_entity_char_value (wp, CHAR_TYPE_TAG), f);
 				}
 				else
 				{
-					sprintf (buffer, "%c:%dKm", get_local_entity_char_value (wp, CHAR_TYPE_TAG), (int) (waypoint_range * (1.0 / 1000.0)));
+					sprintf (buffer, "%c: %d KM", get_local_entity_char_value (wp, CHAR_TYPE_TAG), (int) (waypoint_range * (1.0 / 1000.0)));
 				}
 			}
 			else
@@ -5714,16 +4392,16 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 			if (draw_large_mfd)
 			{
-				y_adjust = -25.0;
+				y_adjust = 5.0;
 			}
 			else
 			{
-				y_adjust = -12.0;
+				y_adjust = 2.0;
 			}
 
-			set_2d_mono_font_position (-1.0, -1.0);
+			set_2d_mono_font_position (-1.0, -0.75);
 
-			set_mono_font_rel_position (1.0, y_adjust);
+			set_mono_font_rel_position (5.0, y_adjust);
 
 			print_mono_font_string (buffer);
 
@@ -5752,34 +4430,20 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 
 			if (draw_large_mfd)
 			{
-				y_adjust = -12.0;
+				y_adjust = 5.0;
 			}
 			else
 			{
-				y_adjust = -5.0;
+				y_adjust = 2.0;
 			}
 
-			set_2d_mono_font_position (-1.0, -1.0);
+			set_2d_mono_font_position (-1.0, -0.85);
 
-			set_mono_font_rel_position (1.0, y_adjust);
+			set_mono_font_rel_position (5.0, y_adjust);
 
 			print_mono_font_string (buffer);
 		}
 	}
-//VJ 030423 TSD render mod
-/*	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
-	set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
-	set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
-	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);*/
-	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
-	set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
-	set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
-	set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
-	set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
-	set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
-
 }
 
 #undef RADIUS
