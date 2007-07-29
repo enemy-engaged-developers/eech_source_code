@@ -1124,70 +1124,6 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// FIELD OF REGARD AND VIEW BOXES
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_field_of_regard_and_view_boxes (void)
-{
-	float
-		x,
-		y;
-
-	if (draw_large_mfd)
-	{
-		draw_2d_line (-0.3000, -0.6500,  0.3000, -0.6500, MFD_COLOUR1);
-		draw_2d_line (-0.3000, -0.8682,  0.3000, -0.8682, MFD_COLOUR1);
-		draw_2d_line (-0.3000, -0.6500, -0.3000, -0.8682, MFD_COLOUR1);
-		draw_2d_line ( 0.3000, -0.6500,  0.3000, -0.8682, MFD_COLOUR1);
-
-		draw_2d_line ( 0.0000, -0.6500,  0.0000, -0.6700, MFD_COLOUR1);
-		draw_2d_line (-0.2454, -0.6500, -0.2454, -0.6700, MFD_COLOUR1);
-		draw_2d_line ( 0.2454, -0.6500,  0.2454, -0.6700, MFD_COLOUR1);
-
-		draw_2d_line ( 0.0000, -0.8482,  0.0000, -0.8682, MFD_COLOUR1);
-		draw_2d_line (-0.2454, -0.8482, -0.2454, -0.8682, MFD_COLOUR1);
-		draw_2d_line ( 0.2454, -0.8482,  0.2454, -0.8682, MFD_COLOUR1);
-
-		draw_2d_line (-0.3000, -0.7046, -0.2800, -0.7046, MFD_COLOUR1);
-		draw_2d_line ( 0.3000, -0.7046,  0.2800, -0.7046, MFD_COLOUR1);
-
-		x = eo_azimuth / eo_max_azimuth * 0.3;
-		y = (eo_elevation / eo_min_elevation * -0.1636) - 0.7046;
-
-		draw_2d_circle (x, y, 0.04, MFD_COLOUR1);
-	}
-	else
-	{
-		draw_2d_line (-0.2000, -0.7250,  0.2000, -0.7250, MFD_COLOUR1);
-		draw_2d_line (-0.2000, -0.8705,  0.2000, -0.8705, MFD_COLOUR1);
-		draw_2d_line (-0.2000, -0.7250, -0.2000, -0.8705, MFD_COLOUR1);
-		draw_2d_line ( 0.2000, -0.7250,  0.2000, -0.8705, MFD_COLOUR1);
-
-		draw_2d_line ( 0.0000, -0.7250,  0.0000, -0.7475, MFD_COLOUR1);
-		draw_2d_line (-0.1636, -0.7250, -0.1636, -0.7475, MFD_COLOUR1);
-		draw_2d_line ( 0.1636, -0.7250,  0.1636, -0.7475, MFD_COLOUR1);
-
-		draw_2d_line ( 0.0000, -0.8480,  0.0000, -0.8705, MFD_COLOUR1);
-		draw_2d_line (-0.1636, -0.8480, -0.1636, -0.8705, MFD_COLOUR1);
-		draw_2d_line ( 0.1636, -0.8480,  0.1636, -0.8705, MFD_COLOUR1);
-
-		draw_2d_line (-0.2000, -0.7614, -0.1775, -0.7614, MFD_COLOUR1);
-		draw_2d_line ( 0.2000, -0.7614,  0.1775, -0.7614, MFD_COLOUR1);
-
-		x = eo_azimuth / eo_max_azimuth * 0.2;
-		y = (eo_elevation / eo_min_elevation * -0.1091) - 0.7614;
-
-		draw_2d_circle (x, y, 0.04, MFD_COLOUR1);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 // GROUND AND AIR RADAR
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1534,17 +1470,17 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			if (command_line_tsd_enemy_colours)
 			{
 				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-					target_symbol_colour = MFD_COLOUR1;
+					target_symbol_colour = MFD_COLOUR_YELLOW;
 				else
-					target_symbol_colour = MFD_COLOUR3;
+					target_symbol_colour = MFD_COLOUR_RED;
 			}
 			else
 			{
-					target_symbol_colour = MFD_COLOUR8;
+					target_symbol_colour = MFD_COLOUR_RED;
 			}
 		}		
 		else
-			target_symbol_colour = MFD_COLOUR2;
+			target_symbol_colour = MFD_COLOUR_RED;
 	}
 	else
 	{
@@ -1555,17 +1491,17 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			if (command_line_tsd_enemy_colours)
 			{
 				if (source_side == get_local_entity_int_value (target, INT_TYPE_SIDE))
-					target_symbol_colour = MFD_COLOUR2;
+					target_symbol_colour = MFD_COLOUR_YELLOW;
 				else
-					target_symbol_colour = MFD_COLOUR4;
+					target_symbol_colour = MFD_COLOUR_RED;
 			}
 			else
 			{
-					target_symbol_colour = MFD_COLOUR7;
+					target_symbol_colour = MFD_COLOUR_RED;
 			}
 		}		
 		else
-			target_symbol_colour = MFD_COLOUR1;
+			target_symbol_colour = MFD_COLOUR_RED;
 	}
 
 	if (draw_large_mfd)
@@ -1803,6 +1739,66 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 
 #define RADIUS	(ROOT2 - 0.05)
 
+static void draw_radar_range_arcs(void)
+{
+	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR_YELLOW);
+
+	// heading scale
+	set_mono_font_type(MONO_FONT_TYPE_5X7);
+	set_mono_font_colour(MFD_COLOUR_YELLOW);
+
+	{
+		float heading = deg(get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING));
+		int int_heading = (int)((heading + 0.5) / 10.0) * 10;
+		float mod_heading = rad(heading - int_heading);
+		float relative_heading = mod_heading + rad(60);
+
+		int_heading -= 60;
+		if (int_heading <= 0)
+			int_heading += 360;
+
+		while (relative_heading > -rad(45.0))
+		{
+			char s[20];
+			float x_adjust;
+
+			debug_log("hdg: %.0f relative: %.0f int_mark: %d", heading, deg(relative_heading), int_heading);
+
+			set_2d_window_rotation (mfd_env, relative_heading);
+			draw_2d_line(0.0, RADIUS, 0.0, RADIUS + 0.05, MFD_COLOUR_YELLOW);
+
+			sprintf(s, "%d", int_heading);
+			x_adjust = -get_mono_font_string_width(s) / 2;
+
+			set_2d_mono_font_position(0.0, RADIUS + 0.1);
+			set_mono_font_rel_position(x_adjust, -4.0);
+
+			print_mono_font_string(s);
+			
+			int_heading += 10;
+			if (int_heading > 360)
+				int_heading -= 360;
+			relative_heading -= rad(10.0);
+		}
+	}
+
+	//
+	// scan limits and range markers
+	//
+
+	set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
+
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR_YELLOW);
+
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR_YELLOW);
+
+	set_2d_window_rotation (mfd_env, 0.0);
+
+	draw_2d_line(0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
+}
+
 static void draw_ground_radar_mfd (void)
 {
 	float
@@ -1878,7 +1874,7 @@ static void draw_ground_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
@@ -1982,7 +1978,7 @@ static void draw_ground_radar_mfd (void)
 	// draw heading scale
 	//
 	////////////////////////////////////////
-	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), FALSE);
+//	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), FALSE);
 
 	////////////////////////////////////////
 	//
@@ -1990,7 +1986,7 @@ static void draw_ground_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
-	draw_field_of_regard_and_view_boxes ();
+//	draw_field_of_regard_and_view_boxes ();
 
 	////////////////////////////////////////
 	//
@@ -2004,11 +2000,12 @@ static void draw_ground_radar_mfd (void)
 	// max scan limits
 	//
 
-	draw_2d_line (0.0, 0.0, -0.965, 0.965, MFD_COLOUR4);
+//	draw_2d_line (0.0, 0.0, -0.965, 0.965, MFD_COLOUR4);
 
-	draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
+//	draw_2d_line (0.0, 0.0, 0.965, 0.965, MFD_COLOUR4);
 
-	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR4);
+	draw_radar_range_arcs();
+/*	draw_radar_arc (HOKUM_RADAR_SCAN_ARC_SIZE_90, RADIUS, MFD_COLOUR_YELLOW);
 
 	//
 	// scan limits and range markers
@@ -2016,20 +2013,20 @@ static void draw_ground_radar_mfd (void)
 
 	set_2d_window_rotation (mfd_env, -ground_radar.scan_datum);
 
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR1);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS, MFD_COLOUR_YELLOW);
 
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR4);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR4);
-	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR4);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.25, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.50, MFD_COLOUR_YELLOW);
+	draw_radar_arc (ground_radar.scan_arc_size, RADIUS * 0.75, MFD_COLOUR_YELLOW);
 
 	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)));
 
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 
 	set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)));
 
-	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
-
+	draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
+*/
 	//
 	// sweep
 	//
@@ -2038,7 +2035,7 @@ static void draw_ground_radar_mfd (void)
 	{
 		set_2d_window_rotation (mfd_env, -(ground_radar.scan_datum + ground_radar.sweep_offset));
 
-		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 	}
 
 	set_2d_window_rotation (mfd_env, 0.0);
@@ -2097,8 +2094,8 @@ static void draw_ground_radar_mfd (void)
 
 	if (hokum_damage.radar)
 	{
-		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR1);
-		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR1);
+		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR_YELLOW);
+		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR_YELLOW);
 	}
 }
 
@@ -7534,910 +7531,208 @@ static void draw_system_display_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static float get_rpm_scale_value (float rpm_value)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_engine_dial(char* name, float x_pos, float y_pos, float size, float value, float top_value, unsigned green_zone, unsigned yellow_zone, unsigned red_zone)
 {
-	float
-		scale_value,
-		a,
-		b,
-		c,
-		d;
+	float x_adjust, y_adjust;
+	char s[20];
+	
+	draw_2d_arc(x_pos, y_pos, size, green_zone, MFD_COLOUR_GREEN);
+	if (yellow_zone)
+		draw_2d_arc(x_pos, y_pos, size, yellow_zone, MFD_COLOUR_YELLOW);
+	if (red_zone)
+		draw_2d_arc(x_pos, y_pos, size, red_zone, MFD_COLOUR_RED);
 
-	ASSERT ((rpm_value >= 0.0) && (rpm_value <= 120.0));
+	// print value
+	sprintf (s, "%d", (int)(value + 0.5));
+	set_2d_mono_font_position (x_pos + size, y_pos - 0.1);
 
-	if (rpm_value <= 50.0)
-	{
-		a = 0.0;
-		b = 50.0;
-		c = 0.0;
-		d = 0.1333;
-	}
-	else if (rpm_value <= 90.0)
-	{
-		a = 50.0;
-		b = 90.0;
-		c = 0.1333;
-		d = 0.4;
-	}
-	else
-	{
-		a = 90.0;
-		b = 120.0;
-		c = 0.4;
-		d = 1.0;
-	}
-
-	scale_value = ((rpm_value - a) * ((d - c) / (b - a))) + c;
-
-	return (scale_value);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define BAR_WIDTH		((float) (0.1))
-#define BAR_HEIGHT	((float) (1.5))
-
-static void draw_rpm_bar (char *title, float xv_org, float yv_org, float rpm_value, int numeric_scale)
-{
-	char
-		s[80];
-
-	int
-		ix1,
-		iy1,
-		ix2,
-		iy2,
-		digital_readout;
-
-	float
-		x_adjust,
-		y_adjust,
-		bar_xvmin,
-		bar_yvmin,
-		bar_xvmax,
-		bar_yvmax,
-		tick_length,
-		tick_xw1,
-		tick_xw2,
-		tick_xw3,
-		tick_xw4,
-		tick_yw,
-		text_xw1,
-		text_xw2;
-
-	ASSERT (title);
-
-	////////////////////////////////////////
-
-	bar_xvmin = xv_org - (BAR_WIDTH * 0.5);
-	bar_yvmin = yv_org - BAR_HEIGHT;
-	bar_xvmax = xv_org + (BAR_WIDTH * 0.5);
-	bar_yvmax = yv_org;
-
-	////////////////////////////////////////
-
-	set_2d_mono_font_position (xv_org, yv_org + 0.1);
-
-	x_adjust = get_mono_font_string_width (title) * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string (title);
-
-	////////////////////////////////////////
-
-	rpm_value = bound (rpm_value, 0.0, 120.0);
-
-	convert_float_to_int (rpm_value, &digital_readout);
-
-	sprintf (s, "%03d", digital_readout);
-
-	set_2d_mono_font_position (xv_org, bar_yvmin - 0.1);
-
-	x_adjust = get_mono_font_string_width (s) * -0.5;
-
-	y_adjust = draw_large_mfd ? -6.0 : -3.0;
+	x_adjust = -get_mono_font_string_width (s);
+	y_adjust = -6.0;
 
 	set_mono_font_rel_position (x_adjust, y_adjust);
-
 	print_mono_font_string (s);
 
-	////////////////////////////////////////
-
-	if (numeric_scale)
-	{
-		if (draw_large_mfd)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_5X9);
-
-			y_adjust = -3.0;
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_3X6);
-
-			y_adjust = -2.0;
-		}
-
-		get_2d_float_screen_x_coordinate (bar_xvmin - 0.1, &text_xw1);
-		get_2d_float_screen_x_coordinate (bar_xvmax + 0.1, &text_xw2);
-	}
-
-	////////////////////////////////////////
-
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmin, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmax, bar_yvmax, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmax, bar_yvmax, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmin, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	tick_length = draw_large_mfd ? 2.0 : 1.0;
-
-	get_2d_float_screen_x_coordinate (bar_xvmin, &tick_xw1);
-	tick_xw2 = tick_xw1 - tick_length;
-
-	get_2d_float_screen_x_coordinate (bar_xvmax, &tick_xw3);
-	tick_xw4 = tick_xw3 + tick_length;
-
-	////////////////////////////////////////
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (120.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("120") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("120");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("120");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (110.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("110") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("110");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("110");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (108.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (106.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (104.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (102.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (100.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("100") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("100");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("100");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (98.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (96.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (94.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (92.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (90.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("90") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("90");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("90");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (70.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("70") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("70");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("70");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (50.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("50") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("50");
-
-		set_mono_font_position (text_xw2, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("50");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_rpm_scale_value (0.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	get_2d_int_screen_coordinates (bar_xvmin, bar_yvmin + (get_rpm_scale_value (rpm_value) * BAR_HEIGHT), &ix1, &iy1);
-	get_2d_int_screen_coordinates (bar_xvmax, bar_yvmin, &ix2, &iy2);
-	set_block (ix1, iy1, ix2, iy2, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	if (numeric_scale)
-	{
-		if (draw_large_mfd)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_6X10);
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_3X6);
-		}
-	}
-}
-
-#undef BAR_WIDTH
-#undef BAR_HEIGHT
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static float get_torque_scale_value (float torque_value)
-{
-	ASSERT ((torque_value >= 0.0) && (torque_value <= 120.0));
-
-	return (torque_value * ((float) (1.0 / 120.0)));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define BAR_WIDTH		((float) (0.1))
-#define BAR_HEIGHT	((float) (1.5))
-
-static void draw_torque_bar (char *title, float xv_org, float yv_org, float torque_value, int numeric_scale)
-{
-	char
-		s[80];
-
-	int
-		ix1,
-		iy1,
-		ix2,
-		iy2,
-		digital_readout;
-
-	float
-		x_adjust,
-		y_adjust,
-		bar_xvmin,
-		bar_yvmin,
-		bar_xvmax,
-		bar_yvmax,
-		tick_length,
-		tick_xw1,
-		tick_xw2,
-		tick_xw3,
-		tick_xw4,
-		tick_yw,
-		text_xw1;
-
-	ASSERT (title);
-
-	////////////////////////////////////////
-
-	bar_xvmin = xv_org - (BAR_WIDTH * 0.5);
-	bar_yvmin = yv_org - BAR_HEIGHT;
-	bar_xvmax = xv_org + (BAR_WIDTH * 0.5);
-	bar_yvmax = yv_org;
-
-	////////////////////////////////////////
-
-	set_2d_mono_font_position (xv_org, yv_org + 0.1);
-
-	x_adjust = get_mono_font_string_width (title) * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string (title);
-
-	////////////////////////////////////////
-
-	torque_value = bound (torque_value, 0.0, 120.0);
-
-	convert_float_to_int (torque_value, &digital_readout);
-
-	sprintf (s, "%03d", digital_readout);
-
-	set_2d_mono_font_position (xv_org, bar_yvmin - 0.1);
-
-	x_adjust = get_mono_font_string_width (s) * -0.5;
-
-	y_adjust = draw_large_mfd ? -6.0 : -3.0;
+	// print name
+	set_2d_mono_font_position (x_pos + 0.05, y_pos - 0.2);
+
+	x_adjust = 1.0;
+	y_adjust = -6.0;
 
 	set_mono_font_rel_position (x_adjust, y_adjust);
+	print_mono_font_string (name);
 
-	print_mono_font_string (s);
-
-	////////////////////////////////////////
-
-	if (numeric_scale)
+	// draw dial
 	{
-		if (draw_large_mfd)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_5X9);
+		float dial_angle = rad(180.0) + (PI * (value / top_value));
+		float dial_x, dial_y;
 
-			y_adjust = -3.0;
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_3X6);
+		dial_angle = bound(dial_angle, rad(180.0), rad(405.0));
+		dial_x = x_pos + sin(dial_angle) * size;
+		dial_y = y_pos + cos(dial_angle) * size;
 
-			y_adjust = -2.0;
-		}
-
-		get_2d_float_screen_x_coordinate (bar_xvmax + 0.1, &text_xw1);
-	}
-
-	////////////////////////////////////////
-
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmin, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmax, bar_yvmax, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmax, bar_yvmax, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmin, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	tick_length = draw_large_mfd ? 2.0 : 1.0;
-
-	get_2d_float_screen_x_coordinate (bar_xvmin, &tick_xw1);
-	tick_xw2 = tick_xw1 - tick_length;
-
-	get_2d_float_screen_x_coordinate (bar_xvmax, &tick_xw3);
-	tick_xw4 = tick_xw3 + tick_length;
-
-	////////////////////////////////////////
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (120.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("120") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("120");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (110.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (100.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("100") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("100");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (70.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("70") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("70");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (50.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	if (numeric_scale)
-	{
-		x_adjust = get_mono_font_string_width ("50") * -0.5;
-
-		set_mono_font_position (text_xw1, tick_yw);
-
-		set_mono_font_rel_position (x_adjust, y_adjust);
-
-		print_mono_font_string ("50");
-	}
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_torque_scale_value (0.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	get_2d_int_screen_coordinates (bar_xvmin, bar_yvmin + (get_torque_scale_value (torque_value) * BAR_HEIGHT), &ix1, &iy1);
-	get_2d_int_screen_coordinates (bar_xvmax, bar_yvmin, &ix2, &iy2);
-	set_block (ix1, iy1, ix2, iy2, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	if (numeric_scale)
-	{
-		if (draw_large_mfd)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_6X10);
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_3X6);
-		}
+		draw_2d_half_thick_line(x_pos, y_pos, dial_x, dial_y, MFD_COLOUR1);
 	}
 }
-
-#undef BAR_WIDTH
-#undef BAR_HEIGHT
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static float get_temp_scale_value (float temp_value)
-{
-	ASSERT ((temp_value >= 0.0) && (temp_value <= 999.0));
-
-	return (temp_value * ((float) (1.0 / 999.0)));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define BAR_WIDTH		((float) (0.1))
-#define BAR_HEIGHT	((float) (0.5))
-
-static void draw_temp_bar (char *title, float xv_org, float yv_org, float temp_value)
-{
-	char
-		s[80];
-
-	int
-		ix1,
-		iy1,
-		ix2,
-		iy2,
-		digital_readout;
-
-	float
-		x_adjust,
-		y_adjust,
-		bar_xvmin,
-		bar_yvmin,
-		bar_xvmax,
-		bar_yvmax,
-		tick_length,
-		tick_xw1,
-		tick_xw2,
-		tick_xw3,
-		tick_xw4,
-		tick_yw;
-
-	ASSERT (title);
-
-	////////////////////////////////////////
-
-	bar_xvmin = xv_org - (BAR_WIDTH * 0.5);
-	bar_yvmin = yv_org - BAR_HEIGHT;
-	bar_xvmax = xv_org + (BAR_WIDTH * 0.5);
-	bar_yvmax = yv_org;
-
-	////////////////////////////////////////
-
-	set_2d_mono_font_position (xv_org, yv_org + 0.1);
-
-	x_adjust = get_mono_font_string_width (title) * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string (title);
-
-	////////////////////////////////////////
-
-	temp_value = bound (temp_value, 0.0, 999.0);
-
-	convert_float_to_int (temp_value, &digital_readout);
-
-	sprintf (s, "%03d", digital_readout);
-
-	set_2d_mono_font_position (xv_org, bar_yvmin - 0.1);
-
-	x_adjust = get_mono_font_string_width (s) * -0.5;
-
-	y_adjust = draw_large_mfd ? -6.0 : -3.0;
-
-	set_mono_font_rel_position (x_adjust, y_adjust);
-
-	print_mono_font_string (s);
-
-	////////////////////////////////////////
-
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmin, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmax, bar_yvmax, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmax, bar_xvmax, bar_yvmax, MFD_COLOUR1);
-	draw_2d_line (bar_xvmin, bar_yvmin, bar_xvmax, bar_yvmin, MFD_COLOUR1);
-
-	////////////////////////////////////////
-
-	tick_length = draw_large_mfd ? 2.0 : 1.0;
-
-	get_2d_float_screen_x_coordinate (bar_xvmin, &tick_xw1);
-	tick_xw2 = tick_xw1 - tick_length;
-
-	get_2d_float_screen_x_coordinate (bar_xvmax, &tick_xw3);
-	tick_xw4 = tick_xw3 + tick_length;
-
-	////////////////////////////////////////
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_temp_scale_value (900.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_temp_scale_value (800.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_float_screen_y_coordinate (bar_yvmin + (get_temp_scale_value (0.0) * BAR_HEIGHT), &tick_yw);
-	draw_line (tick_xw1, tick_yw, tick_xw2, tick_yw, MFD_COLOUR1);
-	draw_line (tick_xw3, tick_yw, tick_xw4, tick_yw, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (bar_xvmin, bar_yvmin + (get_temp_scale_value (temp_value) * BAR_HEIGHT), &ix1, &iy1);
-	get_2d_int_screen_coordinates (bar_xvmax, bar_yvmin, &ix2, &iy2);
-	set_block (ix1, iy1, ix2, iy2, MFD_COLOUR1);
-}
-
-#undef BAR_WIDTH
-#undef BAR_HEIGHT
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void draw_engine_display_mfd (void)
 {
 	char
 		s[80];
 
-	int
-		ix1,
-		iy1,
-		ix2,
-		iy2,
-		ivalue;
-
-	float
-		fvalue,
-		fuel_ratio,
-		x_adjust,
-		y_adjust;
-
 	set_mono_font_colour (MFD_COLOUR1);
 
-	if (draw_large_mfd)
+	draw_2d_box(-0.9, 0.9, -0.4, -0.9, FALSE, MFD_COLOUR1);
+	draw_2d_box( 0.9, 0.9,  0.4, -0.9, FALSE, MFD_COLOUR1);
+
+	set_mono_font_type(MONO_FONT_TYPE_6X10);
+
+	// engine NG RPM
 	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
+		float rpm;
+
+		rpm = bound (current_flight_dynamics->left_engine_n1_rpm.value, 0.0, 120.0);
+		draw_engine_dial("NG", -0.65, 0.65, 0.2, rpm, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
+
+		rpm = bound (current_flight_dynamics->right_engine_n1_rpm.value, 0.0, 120.0);
+		draw_engine_dial("NG", 0.65, 0.65, 0.2, rpm, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
 	}
-	else
+
+	// engine NP RPM
 	{
-		set_mono_font_type (MONO_FONT_TYPE_3X6);
+		float rpm;
+
+		rpm = bound (current_flight_dynamics->left_engine_rpm.value, 0.0, 120.0);
+		draw_engine_dial("NP", -0.65, 0.22, 0.2, rpm, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT | ARC_TOP_LEFT, ARC_TOP_RIGHT, 0);
+
+		rpm = bound (current_flight_dynamics->right_engine_rpm.value, 0.0, 120.0);
+		draw_engine_dial("NP", 0.65, 0.22, 0.2, rpm, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT | ARC_TOP_LEFT, ARC_TOP_RIGHT, 0);
 	}
 
-	////////////////////////////////////////
-	//
-	// engine and rotor rpm
-	//
-	////////////////////////////////////////
-
-	set_2d_mono_font_position (-0.600, 0.900);
-
-	x_adjust = get_mono_font_string_width ("Np/Nr") * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string ("Np/Nr");
-
-	draw_rpm_bar ("Np1", -0.900, 0.700, current_flight_dynamics->left_engine_rpm.value, FALSE);
-
-	draw_rpm_bar ("Nr", -0.600, 0.700, current_flight_dynamics->main_rotor_rpm.value, TRUE);
-
-	draw_rpm_bar ("Np2", -0.300, 0.700, current_flight_dynamics->right_engine_rpm.value, FALSE);
-
-	////////////////////////////////////////
-	//
 	// engine torque
-	//
-	////////////////////////////////////////
+	{
+		float torque;
 
-	set_2d_mono_font_position (0.200, 0.900);
+		torque = bound (current_flight_dynamics->left_engine_torque.value, 0.0, 120.0);
+		draw_engine_dial("TRQ", -0.65, -0.22, 0.2, torque, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
 
-	x_adjust = get_mono_font_string_width ("Torque") * -0.5;
+		torque = bound (current_flight_dynamics->right_engine_torque.value, 0.0, 120.0);
+		draw_engine_dial("TRQ", 0.65, -0.22, 0.2, torque, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
+	}
 
-	set_mono_font_rel_position (x_adjust, 0.0);
+	// engine temp
+	{
+		float temp;
 
-	print_mono_font_string ("Torque");
+		temp = bound (current_flight_dynamics->left_engine_temp.value, 0.0, 1000.0);
+		draw_engine_dial("TGT", -0.65, -0.65, 0.2, temp, 800.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
 
-	draw_torque_bar ("Eng1", 0.050, 0.700, current_flight_dynamics->left_engine_torque.value, TRUE);
+		temp = bound (current_flight_dynamics->right_engine_temp.value, 0.0, 1000.0);
+		draw_engine_dial("TGT", 0.65, -0.65, 0.2, temp, 800.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
+	}
 
-	draw_torque_bar ("Eng2", 0.350, 0.700, current_flight_dynamics->right_engine_torque.value, FALSE);
+	// rotor RPM
+	{
+		float rpm;
 
-	//
-	// ATARIBABY THROTTLE
-	//
-	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
-	convert_float_to_int (fvalue, &ivalue);
+		rpm = bound (current_flight_dynamics->main_rotor_rpm.value, 0.0, 125.0);
+		draw_engine_dial("NR", 0.0, 0.55, 0.25, rpm, 100.0, ARC_TOP_LEFT, ARC_LEFT_UP | ARC_TOP_RIGHT, ARC_LEFT_DOWN | ARC_BOTTOM_LEFT);
+	}
 
-	if (ivalue < 60)
-		sprintf(s, "Th1 OFF ");
-	else if (ivalue == 60)
-		sprintf(s, "Th1 IDLE");
-	else if (ivalue == 110.0)
-		sprintf(s, "Th1 FLY ");
-	else
-		sprintf(s, "Th1 %03d%%", (ivalue-60) * 2);
-	
-	set_2d_mono_font_position (0.5, 0.8);
-	print_mono_font_string (s);	
+	// combined torque
+	{
+		float torque;
 
-	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
-	convert_float_to_int (fvalue, &ivalue);
+		torque = bound (current_flight_dynamics->combined_engine_torque.value, 0.0, 120.0);
+		draw_engine_dial("TRQ", 0.0, 0.0, 0.25, torque, 100.0, ARC_LEFT_UP | ARC_LEFT_DOWN | ARC_BOTTOM_LEFT, ARC_TOP_LEFT, ARC_TOP_RIGHT);
+	}
 
-	if (ivalue < 60)
-		sprintf(s, "Th2 OFF ");
-	else if (ivalue == 60)
-		sprintf(s, "Th2 IDLE");
-	else if (ivalue == 110.0)
-		sprintf(s, "Th2 FLY ");
-	else
-		sprintf(s, "Th2 %03d%%", (ivalue-60) * 2);
-	
-	set_2d_mono_font_position (0.5, 0.7);
-	print_mono_font_string (s);	
+	set_mono_font_type(MONO_FONT_TYPE_5X9);
 
-	//
-	// ATARIBABY APU
-	//
-	set_2d_mono_font_position (0.5, 0.9);
-
-	fvalue = bound (current_flight_dynamics->apu_rpm.value + 0.5, 0.0, 100.0);
-	convert_float_to_int (fvalue, &ivalue);
-
-	sprintf(s, "APU %03d%%", ivalue);
-
-	print_mono_font_string (s);	
-
-	////////////////////////////////////////
-	//
 	// fuel
-	//
-	////////////////////////////////////////
+	{
+		int i;
+		float digital_readout;
 
-	fuel_ratio = current_flight_dynamics->fuel_weight.value / current_flight_dynamics->fuel_weight.max;
-
-	fuel_ratio = bound (fuel_ratio, 0.0, 1.0);
+		set_2d_mono_font_position (-0.4, -0.4);
+		set_mono_font_rel_position (8.0, -8.0);
 	
-	//
-	// Fuel
-	//
-
-	set_2d_mono_font_position (0.800, 0.550);
-
-	x_adjust = get_mono_font_string_width ("Fuel") * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string ("Fuel");
-
-	fvalue = bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0);
-
-	convert_float_to_int (fvalue, &ivalue);
-
-	sprintf (s, "%04d", ivalue);
-
-	set_2d_mono_font_position (0.800, 0.450);
-
-	x_adjust = get_mono_font_string_width (s) * -0.5;
-
-	set_mono_font_rel_position (x_adjust, 0.0);
-
-	print_mono_font_string (s);
-
-	//
-	// Fwd
-	//
-
-	set_2d_mono_font_position (0.650, 0.225);
-
-	x_adjust = -get_mono_font_string_width ("Fwd");
-
-	if (draw_large_mfd)
-	{
-		x_adjust -= 2.0;
-
-		y_adjust = -3.0;
-	}
-	else
-	{
-		x_adjust -= 1.0;
-
-		y_adjust = -2.0;
+		digital_readout = bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0);
+		convert_float_to_int (digital_readout, &i);
+		sprintf (s, "FUEL      %4d", i);
+		
+		print_mono_font_string(s);
 	}
 
-	set_mono_font_rel_position (x_adjust, y_adjust);
-
-	print_mono_font_string ("Fwd");
-
-	draw_2d_line ( 0.650,  0.300,  0.650,  0.150, MFD_COLOUR1);
-	draw_2d_line ( 0.950,  0.300,  0.950,  0.150, MFD_COLOUR1);
-	draw_2d_line ( 0.650,  0.300,  0.950,  0.300, MFD_COLOUR1);
-	draw_2d_line ( 0.650,  0.150,  0.950,  0.150, MFD_COLOUR1);
-
-	draw_2d_line ( 0.710,  0.300,  0.710,  0.325, MFD_COLOUR1);
-	draw_2d_line ( 0.710,  0.150,  0.710,  0.125, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (0.650, 0.300, &ix1, &iy1);
-	get_2d_int_screen_coordinates (0.650 + (0.3 * fuel_ratio), 0.150, &ix2, &iy2);
-	set_block (ix1, iy1, ix2, iy2, MFD_COLOUR1);
-
-	//
-	// Aft
-	//
-
-	set_2d_mono_font_position (0.650, 0.025);
-
-	x_adjust = -get_mono_font_string_width ("Aft");
-
-	if (draw_large_mfd)
+	// oil pressure
 	{
-		x_adjust -= 2.0;
+		set_2d_mono_font_position (-0.4, -0.5);
+		set_mono_font_rel_position (8.0, -8.0);
 
-		y_adjust = -3.0;
-	}
-	else
-	{
-		x_adjust -= 1.0;
-
-		y_adjust = -2.0;
+		if (get_dynamics_damage_type (DYNAMICS_DAMAGE_LOW_OIL_PRESSURE))
+			print_mono_font_string("OIL PRES. LOW");
+		else
+			print_mono_font_string("OIL PRES. NORM");
 	}
 
-	set_mono_font_rel_position (x_adjust, y_adjust);
+	// APU
+	{
+		float digital_readout;
 
-	print_mono_font_string ("Aft");
+		set_2d_mono_font_position (-0.4, -0.6);
+		set_mono_font_rel_position (8.0, -8.0);
+	
+		digital_readout = bound (current_flight_dynamics->apu_rpm.value, 0.0, 100.0);
+		sprintf (s, "APU       %3.0f%%", digital_readout);
+		
+		print_mono_font_string(s);
+	}
+	
+	// Throttle
+	{
+		int i;
+		float x_adjust;
+		float digital_readout;
+		char buffer2[64];
 
-	draw_2d_line ( 0.650,  0.100,  0.650, -0.050, MFD_COLOUR1);
-	draw_2d_line ( 0.950,  0.100,  0.950, -0.050, MFD_COLOUR1);
-	draw_2d_line ( 0.650,  0.100,  0.950,  0.100, MFD_COLOUR1);
-	draw_2d_line ( 0.650, -0.050,  0.950, -0.050, MFD_COLOUR1);
+		set_2d_mono_font_position (-0.4, -0.8);
+		set_mono_font_rel_position (28.0, -8.0);
 
-	draw_2d_line ( 0.710,  0.100,  0.710,  0.125, MFD_COLOUR1);
-	draw_2d_line ( 0.710, -0.050,  0.710, -0.075, MFD_COLOUR1);
+		print_mono_font_string("THROTTLE");
 
-	get_2d_int_screen_coordinates (0.650, 0.100, &ix1, &iy1);
-	get_2d_int_screen_coordinates (0.650 + (0.3 * fuel_ratio), -0.050, &ix2, &iy2);
-	set_block (ix1, iy1, ix2, iy2, MFD_COLOUR1);
+		digital_readout = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
+		convert_float_to_int (digital_readout, &i);
+	
+		if (i < 60)
+			sprintf(buffer2, "OFF ");
+		else if (i == 60)
+			sprintf(buffer2, "IDLE");
+		else if (i == 110.0)
+			sprintf(buffer2, "FLY ");
+		else
+			sprintf(buffer2, "%03d%%", (i-60) * 2);
 
-	////////////////////////////////////////
-	//
-	// engine temperature
-	//
-	////////////////////////////////////////
+		digital_readout = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
+		convert_float_to_int (digital_readout, &i);
+	
+		if (i< 60)
+			sprintf(s, " %s OFF ", buffer2);
+		else if (i == 60)
+			sprintf(s, " %s IDLE", buffer2);
+		else if (i == 110.0)
+			sprintf(s, " %s FLY ", buffer2);
+		else
+			sprintf(s, " %s %03d%%", buffer2, (i-60) * 2);
+	
+		x_adjust = get_mono_font_string_width (s) * -0.5;
 
-	draw_temp_bar ("TGT1", 0.600, -0.300, current_flight_dynamics->left_engine_temp.value);
-
-	draw_temp_bar ("TGT2", 0.850, -0.300, current_flight_dynamics->right_engine_temp.value);
+		set_2d_mono_font_position (0.0, -0.9);
+		set_mono_font_rel_position (x_adjust, -8.0);
+		print_mono_font_string (s);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10179,12 +9474,12 @@ void initialise_hokum_mfd (void)
 	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
 	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);*/
-	set_rgb_colour (MFD_COLOUR_GREEN,         0, 240,   0, 255);
+	set_rgb_colour (MFD_COLOUR_GREEN,        40, 220,  40, 255);
 	set_rgb_colour (MFD_COLOUR_DARK_GREEN,    0, 120,   0, 255);
-	set_rgb_colour (MFD_COLOUR_YELLOW,      240, 240,   0, 255);
+	set_rgb_colour (MFD_COLOUR_YELLOW,      220, 220,  20, 255);
 	set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  128, 128, 240, 255);
-	set_rgb_colour (MFD_COLOUR_BLUE,          0,   0, 240, 255);
-	set_rgb_colour (MFD_COLOUR_RED,         240,   0,   0, 255);
+	set_rgb_colour (MFD_COLOUR_BLUE,         20,  20, 220, 255);
+	set_rgb_colour (MFD_COLOUR_RED,         200,  50,  50, 255);
 
 	set_rgb_colour (MFD_CONTOUR_COLOUR,     200,  35,   0, 255);
 	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
