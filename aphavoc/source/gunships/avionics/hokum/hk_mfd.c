@@ -1762,8 +1762,6 @@ static void draw_radar_range_arcs(void)
 			char s[20];
 			float x_adjust;
 
-			debug_log("hdg: %.0f relative: %.0f int_mark: %d", heading, deg(relative_heading), int_heading);
-
 			set_2d_window_rotation (mfd_env, relative_heading);
 			draw_2d_line(0.0, RADIUS, 0.0, RADIUS + 0.05, MFD_COLOUR_YELLOW);
 
