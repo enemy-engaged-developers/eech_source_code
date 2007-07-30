@@ -1752,10 +1752,16 @@ static void key_right_event (event *ev)
 
 static void chase_camera_event (event *ev)
 {
-	if (get_camera_mode(get_camera_entity()) == CAMERA_ACTION_CHASE)
+	switch (get_camera_mode(get_camera_entity()))
+	{
+	case CAMERA_MODE_CHASE:
+	case CAMERA_MODE_WEAPON:
 		notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_FREE);
-	else
+		break;
+	default:
 		notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CHASE);
+		break;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
