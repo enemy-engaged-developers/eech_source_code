@@ -2107,7 +2107,7 @@ static void draw_air_radar_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
@@ -2182,18 +2182,18 @@ static void draw_air_radar_mfd (void)
 	// datum markers
 	//
 
-	draw_2d_line ( 0.00,  TICK1,  0.00,  TICK2, MFD_COLOUR4);
-	draw_2d_line ( TICK1,  0.00,  TICK2,  0.00, MFD_COLOUR4);
-	draw_2d_line ( 0.00, -TICK1,  0.00, -TICK2, MFD_COLOUR4);
-	draw_2d_line (-TICK1,  0.00, -TICK2,  0.00, MFD_COLOUR4);
+	draw_2d_line ( 0.00,  TICK1,  0.00,  TICK2, MFD_COLOUR_YELLOW);
+	draw_2d_line ( TICK1,  0.00,  TICK2,  0.00, MFD_COLOUR_YELLOW);
+	draw_2d_line ( 0.00, -TICK1,  0.00, -TICK2, MFD_COLOUR_YELLOW);
+	draw_2d_line (-TICK1,  0.00, -TICK2,  0.00, MFD_COLOUR_YELLOW);
 
 	//
 	// range markers
 	//
 
-	draw_2d_circle (0.0, 0.0, RADIUS * 0.25, MFD_COLOUR4);
-	draw_2d_circle (0.0, 0.0, RADIUS * 0.50, MFD_COLOUR4);
-	draw_2d_circle (0.0, 0.0, RADIUS * 0.75, MFD_COLOUR4);
+	draw_2d_circle (0.0, 0.0, RADIUS * 0.25, MFD_COLOUR_YELLOW);
+	draw_2d_circle (0.0, 0.0, RADIUS * 0.50, MFD_COLOUR_YELLOW);
+	draw_2d_circle (0.0, 0.0, RADIUS * 0.75, MFD_COLOUR_YELLOW);
 
 	//
 	// scan limits
@@ -2201,25 +2201,25 @@ static void draw_air_radar_mfd (void)
 
 	if (air_radar.scan_arc_size == HOKUM_RADAR_SCAN_ARC_SIZE_360)
 	{
-		draw_2d_circle (0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_circle (0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 	}
 	else
 	{
-		draw_2d_circle (0.0, 0.0, RADIUS, MFD_COLOUR4);
+		draw_2d_circle (0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 
 		set_2d_window_rotation (mfd_env, -air_radar.scan_datum);
 
-		draw_radar_arc (air_radar.scan_arc_size, RADIUS, MFD_COLOUR1);
+		draw_radar_arc (air_radar.scan_arc_size, RADIUS, MFD_COLOUR_YELLOW);
 
-		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum - (air_radar.scan_arc_size * 0.5)));
 
-		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + (air_radar.scan_arc_size * 0.5)));
 
-		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 	}
 
 	//
@@ -2230,7 +2230,7 @@ static void draw_air_radar_mfd (void)
 	{
 		set_2d_window_rotation (mfd_env, -(air_radar.scan_datum + air_radar.sweep_offset));
 
-		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.0, 0.0, RADIUS, MFD_COLOUR_YELLOW);
 	}
 
 	set_2d_window_rotation (mfd_env, 0.0);
@@ -2291,8 +2291,8 @@ static void draw_air_radar_mfd (void)
 
 	if (hokum_damage.radar)
 	{
-		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR1);
-		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR1);
+		draw_2d_line (-0.5, -0.5,  0.5, 0.5, MFD_COLOUR_YELLOW);
+		draw_2d_line ( 0.5, -0.5, -0.5, 0.5, MFD_COLOUR_YELLOW);
 	}
 }
 
@@ -4689,7 +4689,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 
 						air_scan_range = get_local_entity_float_value (threat, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
-						draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
+						draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR_RED);
 					}
 				}
 			}
@@ -4768,7 +4768,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 									dx = (threat_position->x - source_position->x) * scale;
 									dy = (threat_position->z - source_position->z) * scale;
 
-									draw_2d_line (0.0, 0.0, dx, dy, MFD_COLOUR1);
+									draw_2d_line (0.0, 0.0, dx, dy, MFD_COLOUR_RED);
 								}
 							}
 						}
@@ -4835,7 +4835,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum, 0.0, 0.0, MFD_COLOUR1);
 	}
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	if (draw_large_mfd)
 	{
@@ -4936,19 +4936,19 @@ static void draw_aircraft_survivability_equipment_display_mfd (hokum_mfd_locatio
 
 	if (tsd_ase_range == TSD_ASE_RANGE_2000)
 	{
-		s = "2Km";
+		s = "2.5KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_5000)
 	{
-		s = "5Km";
+		s = "5KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_10000)
 	{
-		s = "10Km";
+		s = "10KM";
 	}
 	else if (tsd_ase_range == TSD_ASE_RANGE_25000)
 	{
-		s = "25Km";
+		s = "25KM";
 	}
 	else
 	{
@@ -5260,41 +5260,20 @@ static void draw_weapon_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (draw_large_mfd)
+	i = 0;
+
+	while (i < num_weapon_line_points)
 	{
-		i = 0;
+		draw_2d_line
+		(
+			weapon_line_points[i].x,
+			weapon_line_points[i].y,
+			weapon_line_points[i + 1].x,
+			weapon_line_points[i + 1].y,
+			MFD_COLOUR_YELLOW
+		);
 
-		while (i < num_weapon_line_points)
-		{
-			draw_2d_half_thick_line
-			(
-				weapon_line_points[i].x,
-				weapon_line_points[i].y,
-				weapon_line_points[i + 1].x,
-				weapon_line_points[i + 1].y,
-				MFD_COLOUR4
-			);
-
-			i += 2;
-		}
-	}
-	else
-	{
-		i = 0;
-
-		while (i < num_weapon_line_points)
-		{
-			draw_2d_line
-			(
-				weapon_line_points[i].x,
-				weapon_line_points[i].y,
-				weapon_line_points[i + 1].x,
-				weapon_line_points[i + 1].y,
-				MFD_COLOUR4
-			);
-
-			i += 2;
-		}
+		i += 2;
 	}
 
 	////////////////////////////////////////
@@ -5699,9 +5678,9 @@ static void draw_weapon_display_mfd (void)
 
 		if (draw_large_mfd)
 		{
-			draw_2d_half_thick_line (0.2375, -0.26, 0.2375, -0.425, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.2375, -0.26, 0.2375, -0.425, MFD_COLOUR_YELLOW);
 
-			draw_2d_half_thick_line (0.1875, -0.425, 0.2375, -0.425, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.1875, -0.425, 0.2375, -0.425, MFD_COLOUR_YELLOW);
 
 			if (hokum_damage.gun_jammed)
 			{
@@ -5712,9 +5691,9 @@ static void draw_weapon_display_mfd (void)
 		}
 		else
 		{
-			draw_2d_line (0.233, -0.27, 0.233, -0.42, MFD_COLOUR4);
+			draw_2d_line (0.233, -0.27, 0.233, -0.42, MFD_COLOUR_YELLOW);
 
-			draw_2d_line (0.2, -0.42, 0.233, -0.42, MFD_COLOUR4);
+			draw_2d_line (0.2, -0.42, 0.233, -0.42, MFD_COLOUR_YELLOW);
 
 			if (hokum_damage.gun_jammed)
 			{
@@ -5764,9 +5743,9 @@ static void draw_weapon_display_mfd (void)
 
 		if (draw_large_mfd)
 		{
-			draw_2d_half_thick_line (-0.52, -0.14, -0.52, -0.63, MFD_COLOUR4);
+			draw_2d_half_thick_line (-0.52, -0.14, -0.52, -0.63, MFD_COLOUR_YELLOW);
 
-			draw_2d_half_thick_line (-0.47, -0.63, -0.52, -0.63, MFD_COLOUR4);
+			draw_2d_half_thick_line (-0.47, -0.63, -0.52, -0.63, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5777,9 +5756,9 @@ static void draw_weapon_display_mfd (void)
 		}
 		else
 		{
-			draw_2d_line (-0.52, -0.16, -0.52, -0.63, MFD_COLOUR4);
+			draw_2d_line (-0.52, -0.16, -0.52, -0.63, MFD_COLOUR_YELLOW);
 
-			draw_2d_line (-0.47, -0.63, -0.52, -0.63, MFD_COLOUR4);
+			draw_2d_line (-0.47, -0.63, -0.52, -0.63, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5845,9 +5824,9 @@ static void draw_weapon_display_mfd (void)
 
 		if (draw_large_mfd)
 		{
-			draw_2d_half_thick_line (0.52, -0.14, 0.52, -0.63, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.52, -0.14, 0.52, -0.63, MFD_COLOUR_YELLOW);
 
-			draw_2d_half_thick_line (0.47, -0.63, 0.52, -0.63, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.47, -0.63, 0.52, -0.63, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5858,9 +5837,9 @@ static void draw_weapon_display_mfd (void)
 		}
 		else
 		{
-			draw_2d_line (0.52, -0.16, 0.52, -0.63, MFD_COLOUR4);
+			draw_2d_line (0.52, -0.16, 0.52, -0.63, MFD_COLOUR_YELLOW);
 
-			draw_2d_line (0.47, -0.63, 0.52, -0.63, MFD_COLOUR4);
+			draw_2d_line (0.47, -0.63, 0.52, -0.63, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5912,9 +5891,9 @@ static void draw_weapon_display_mfd (void)
 
 		if (draw_large_mfd)
 		{
-			draw_2d_half_thick_line (-0.695, -0.14, -0.695, -0.785, MFD_COLOUR4);
+			draw_2d_half_thick_line (-0.695, -0.14, -0.695, -0.785, MFD_COLOUR_YELLOW);
 
-			draw_2d_half_thick_line (-0.47, -0.785, -0.695, -0.785, MFD_COLOUR4);
+			draw_2d_half_thick_line (-0.47, -0.785, -0.695, -0.785, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5925,9 +5904,9 @@ static void draw_weapon_display_mfd (void)
 		}
 		else
 		{
-			draw_2d_line (-0.695, -0.16, -0.695, -0.785, MFD_COLOUR4);
+			draw_2d_line (-0.695, -0.16, -0.695, -0.785, MFD_COLOUR_YELLOW);
 
-			draw_2d_line (-0.47, -0.785, -0.695, -0.785, MFD_COLOUR4);
+			draw_2d_line (-0.47, -0.785, -0.695, -0.785, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -5993,9 +5972,9 @@ static void draw_weapon_display_mfd (void)
 
 		if (draw_large_mfd)
 		{
-			draw_2d_half_thick_line (0.695, -0.14, 0.695, -0.785, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.695, -0.14, 0.695, -0.785, MFD_COLOUR_YELLOW);
 
-			draw_2d_half_thick_line (0.47, -0.785, 0.695, -0.785, MFD_COLOUR4);
+			draw_2d_half_thick_line (0.47, -0.785, 0.695, -0.785, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -6006,9 +5985,9 @@ static void draw_weapon_display_mfd (void)
 		}
 		else
 		{
-			draw_2d_line (0.695, -0.16, 0.695, -0.785, MFD_COLOUR4);
+			draw_2d_line (0.695, -0.16, 0.695, -0.785, MFD_COLOUR_YELLOW);
 
-			draw_2d_line (0.47, -0.785, 0.695, -0.785, MFD_COLOUR4);
+			draw_2d_line (0.47, -0.785, 0.695, -0.785, MFD_COLOUR_YELLOW);
 
 			if (damaged)
 			{
@@ -7414,9 +7393,9 @@ static void draw_mission_display_mfd (void)
 		// title
 		//
 
-		set_mono_font_colour (MFD_COLOUR1);
+		set_mono_font_colour (MFD_COLOUR_GREEN);
 
-		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR1);
+		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR_GREEN);
 
 		y_adjust += 2.0;
 
@@ -7433,7 +7412,7 @@ static void draw_mission_display_mfd (void)
 			y_adjust -= 1.0;
 		}
 
-		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR1);
+		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR_GREEN);
 
 		if (draw_large_mfd)
 		{
@@ -7573,9 +7552,9 @@ static void draw_mission_display_mfd (void)
 		// title
 		//
 
-		set_mono_font_colour (MFD_COLOUR1);
+		set_mono_font_colour (MFD_COLOUR_GREEN);
 
-		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR1);
+		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR_GREEN);
 
 		y_adjust += 2.0;
 
@@ -7592,7 +7571,7 @@ static void draw_mission_display_mfd (void)
 			y_adjust -= 1.0;
 		}
 
-		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR1);
+		draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR_GREEN);
 
 		if (draw_large_mfd)
 		{
@@ -7798,13 +7777,13 @@ static void draw_mission_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	set_mono_font_colour (MFD_COLOUR1);
+	set_mono_font_colour (MFD_COLOUR_GREEN);
 
 	get_2d_float_screen_y_coordinate (-0.9, &y_adjust);
 
 	y_adjust -= 2.0;
 
-	draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR1);
+	draw_line (x_min, y_adjust, x_max, y_adjust, MFD_COLOUR_GREEN);
 
 	y_adjust += 2.0;
 
