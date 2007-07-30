@@ -125,25 +125,29 @@ void update_free_camera (camera *raw)
 	// adjustposition (move camera)
 
 	// forward/backwards
-	if (move_view_forward_key)
+	if (move_view_forward_key || mouse_wheel_up)
 	{
+		int movement = mouse_wheel_up ? 5 * mouse_wheel_up-- : move_view_forward_key;
+	
 		if (raw->velocity.z < -12.5)
 			acceleration = -4.0 * raw->velocity.z;
 		else
 			acceleration = 50.0;
 
-		acceleration *= move_view_forward_key;
-		max_velocity *= move_view_forward_key;
+		acceleration *= movement;
+		max_velocity *= movement;
 	}
-	else if (move_view_backward_key)
+	else if (move_view_backward_key || mouse_wheel_down)
 	{
+		int movement = mouse_wheel_down ? 5 * mouse_wheel_down-- : move_view_forward_key;
+	
 		if (raw->velocity.z > 12.5)
 			acceleration = -4.0 * raw->velocity.z;
 		else
 			acceleration = -50.0;
 
-		acceleration *= move_view_backward_key;
-		max_velocity *= move_view_backward_key;
+		acceleration *= movement;
+		max_velocity *= movement;
 	}
 	else
 		acceleration = -2.0 * raw->velocity.z;
