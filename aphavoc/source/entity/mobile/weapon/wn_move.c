@@ -1772,7 +1772,7 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* time_of_flight, int simplified)
+float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* aiming_pitch, float* time_of_flight, int simplified)
 {
 	float
 		pitch_delta,
@@ -1789,11 +1789,12 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		range_index;
 
 	ASSERT(time_of_flight);
+	ASSERT(aiming_pitch);
 
 	if (!ballistics_table[wpn_type][0])
 	{
 		ASSERT(FALSE);
-		return 0.0;
+		return FALSE;
 	}
 
 	ASSERT(range >= 0.0);
@@ -1813,6 +1814,10 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
 		ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);
 		drop_compensation = ballistics_table[wpn_type][pitch_index][range_index].drop_angle;
+
+		if (drop_compensation > rad(45.0))
+			return FALSE;
+
 		tof = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
 	}
 
@@ -1850,7 +1855,8 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
 	}
 
-	return straight_pitch + drop_compensation;
+	*aiming_pitch = straight_pitch + drop_compensation;
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

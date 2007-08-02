@@ -917,7 +917,8 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			while (number_of_iterations--)
 			{
 				int high_accuracy = (number_of_iterations == 1);   // only calculate with highest accuracy the last time
-				*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight, high_accuracy);
+				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, high_accuracy))
+					return FALSE;
 				*intercept_point = new_intercept_point;
 
 				if (number_of_iterations > 0)
@@ -944,8 +945,9 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 						break;
 				}
 			}
+			#ifdef DEBUG_MODULE
 			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
-
+			#endif
 		}
 		else
 		{
@@ -955,7 +957,8 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			//
 
 			result = TRUE;
-			*angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, &time_of_flight, FALSE);
+			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, TRUE))
+				return FALSE;
 		}
 	}
 	else

@@ -713,10 +713,10 @@ void lase_range_for_ballistics_sight(void)
 	float time_of_flight;
 	entity_sub_types wpn_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
 
+	angle_of_drop = 0.0;
+
 	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-		angle_of_drop = get_ballistic_pitch_deflection(wpn_type, range, 0.0, &time_of_flight, FALSE);
-	else
-		angle_of_drop = 0.0;
+		get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_drop, &time_of_flight, FALSE);
 
 	ballistics_sight_calibrated_drop = angle_of_drop;
 }
@@ -744,7 +744,10 @@ float get_weapon_drop(entity_sub_types wpn_type)
 			range = get_3d_range (source_position, &target_position);
 
 		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-			angle_of_projection = get_ballistic_pitch_deflection(wpn_type, range, 0.0, &time_of_flight, FALSE);
+		{
+			angle_of_projection = 0.0;
+			get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_projection, &time_of_flight, FALSE);
+		}
 		else
 		{
 			float weapon_velocity = weapon_database[wpn_type].cruise_velocity;
