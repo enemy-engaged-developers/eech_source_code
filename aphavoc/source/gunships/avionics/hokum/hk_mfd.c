@@ -2772,7 +2772,10 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN;
+			if (command_line_colour_mfd)
+				tint = DISPLAY_3D_TINT_GREEN;
+			else
+				tint = DISPLAY_3D_TINT_AMBER;
 
 			break;
 		}
@@ -2782,7 +2785,10 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			if (command_line_colour_mfd)
+				tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			else
+				tint = DISPLAY_3D_TINT_AMBER_VISUAL;
 
 			break;
 		}
@@ -3851,13 +3857,25 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		set_rgb_colour (MFD_COLOUR8,    0,   0,  0, 255);
 	
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
-	   
-	   	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
-		set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
-		set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
-		set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
-		set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
-		set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
+
+		if (command_line_colour_mfd)
+		{	   
+		   	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
+			set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
+			set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
+			set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
+			set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
+			set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
+		}
+		else
+		{
+			set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
+			set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
+			set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
+			set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
+			set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
+			set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);
+		}
 	}
 	
 	////////////////////////////////////////
@@ -8278,24 +8296,38 @@ void initialise_hokum_mfd (void)
 
 	full_mfd_texture_screen = create_system_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 
-	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
-	set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
-	set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
-	set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
-	set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
-	set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
-/*	set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
-	set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
-	set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
-	set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);*/
-	set_rgb_colour (MFD_COLOUR_GREEN,        40, 220,  40, 255);
-	set_rgb_colour (MFD_COLOUR_DARK_GREEN,    0, 120,   0, 255);
-	set_rgb_colour (MFD_COLOUR_YELLOW,      220, 220,  20, 255);
-	set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  192, 192, 255, 255);
-	set_rgb_colour (MFD_COLOUR_BLUE,         20,  20, 180, 255);
-	set_rgb_colour (MFD_COLOUR_RED,         200,  50,  50, 255);
+	if (command_line_colour_mfd)
+	{
+		set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
+		set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
+		set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
+		set_rgb_colour (MFD_COLOUR4,            151, 151, 151, 255);
+		set_rgb_colour (MFD_COLOUR5,            128, 128, 128, 255);
+		set_rgb_colour (MFD_COLOUR6,             40,  40,  40, 255);
+
+		set_rgb_colour (MFD_COLOUR_GREEN,        40, 220,  40, 255);
+		set_rgb_colour (MFD_COLOUR_DARK_GREEN,    0, 120,   0, 255);
+		set_rgb_colour (MFD_COLOUR_YELLOW,      220, 220,  20, 255);
+		set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  192, 192, 255, 255);
+		set_rgb_colour (MFD_COLOUR_BLUE,         20,  20, 180, 255);
+		set_rgb_colour (MFD_COLOUR_RED,         200,  50,  50, 255);
+	}
+	else
+	{
+		set_rgb_colour (MFD_COLOUR1,            255, 135,   0, 255);
+		set_rgb_colour (MFD_COLOUR2,            255,  90,   0, 255);
+		set_rgb_colour (MFD_COLOUR3,            200,  65,   0, 255);
+		set_rgb_colour (MFD_COLOUR4,            130,  50,   0, 255);
+		set_rgb_colour (MFD_COLOUR5,            100,  50,   0, 255);
+		set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);
+
+		set_rgb_colour (MFD_COLOUR_GREEN,       200,  65,   0, 255);
+		set_rgb_colour (MFD_COLOUR_DARK_GREEN,  100,  50,   0, 255);
+		set_rgb_colour (MFD_COLOUR_YELLOW,      255, 135,   0, 255);
+		set_rgb_colour (MFD_COLOUR_LIGHT_BLUE,  255, 135,   0, 255);
+		set_rgb_colour (MFD_COLOUR_BLUE,        200,  65,   0, 255);
+		set_rgb_colour (MFD_COLOUR_RED,         200,  65,   0, 255);
+	}
 
 	set_rgb_colour (MFD_CONTOUR_COLOUR,     200,  35,   0, 255);
 	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
@@ -8306,8 +8338,8 @@ void initialise_hokum_mfd (void)
 	set_rgb_colour (TEXT_COLOUR1,             0, 243,  97, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,   0,  60,  34, 255);
 
-//   set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
-   set_rgb_colour (clear_mfd_colour, 0, 0, 0, 255);
+    set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
+    set_rgb_colour (clear_mfd_colour, 0, 0, 0, 255);
 
 	////////////////////////////////////////
 	//

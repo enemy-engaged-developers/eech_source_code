@@ -3169,7 +3169,10 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_BLUE;
+			if (command_line_colour_mfd)
+				tint = DISPLAY_3D_TINT_BLUE;
+			else
+				tint = DISPLAY_3D_TINT_GREEN;
 
 			break;
 		}
@@ -3179,7 +3182,10 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
 
-			tint = DISPLAY_3D_TINT_CLEAR;
+			if (command_line_colour_mfd)
+				tint = DISPLAY_3D_TINT_CLEAR;
+			else
+				tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
 		}
