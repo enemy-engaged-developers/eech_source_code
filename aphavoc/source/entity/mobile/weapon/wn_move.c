@@ -1808,8 +1808,10 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 	// times so that it stabalizes somewhat
 	for (i = 0; i < iterations; i++)
 	{
-		pitch_index = get_floor_pitch_index(straight_pitch + drop_compensation, &pitch_delta);
-		ASSERT(pitch_delta >= 0 && pitch_delta < TOTAL_PITCH_INDICES);
+		float use_pitch = min(straight_pitch + drop_compensation, rad(90.0));
+
+		pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
+		ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);
 		drop_compensation = ballistics_table[wpn_type][pitch_index][range_index].drop_angle;
 		tof = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
 	}
