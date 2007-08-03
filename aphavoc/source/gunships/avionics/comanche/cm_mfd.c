@@ -14268,7 +14268,7 @@ void draw_overlaid_comanche_mfd (void)
 	//
 	////////////////////////////////////////
 
-   if (application_video_width >= 1280)
+//   if (application_video_width >= 1280)
    {
       draw_large_mfd = TRUE;
 
@@ -14286,7 +14286,7 @@ void draw_overlaid_comanche_mfd (void)
 
       eo_3d_texture_screen = large_eo_3d_texture_screen;
    }
-   else
+/*   else
    {
       draw_large_mfd = FALSE;
 
@@ -14304,7 +14304,7 @@ void draw_overlaid_comanche_mfd (void)
 
       eo_3d_texture_screen = small_eo_3d_texture_screen;
    }
-
+*/
 	set_system_texture_screen (pilot_lhs_main_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
 	set_system_texture_screen (pilot_rhs_main_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD3);
 	set_system_texture_screen (pilot_lhs_side_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD1);
