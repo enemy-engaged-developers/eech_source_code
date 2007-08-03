@@ -2920,6 +2920,13 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 	
 	switch (eo->field_of_view)
 	{
+		case EO_FOV_ZOOM:
+		{
+			ASSERT(system == TARGET_ACQUISITION_SYSTEM_FLIR);
+			fov = 1.6;
+
+			break;
+		}
 		case EO_FOV_NARROW:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
@@ -3070,10 +3077,17 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	switch (eo->field_of_view)
 	{
+		case EO_FOV_ZOOM:
+		{
+			ASSERT(system == TARGET_ACQUISITION_SYSTEM_FLIR);
+			fov = 1.6;
+
+			break;
+		}
 		case EO_FOV_NARROW:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 1.6;
+				fov = 3.6;
 			else  // DTV
 				fov = 0.9;
 
@@ -3082,7 +3096,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		case EO_FOV_MEDIUM:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 3.6;
+				fov = 10.1;
 			else  // DTV or DVO
 				fov = 4.0;
 
@@ -3091,7 +3105,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		case EO_FOV_WIDE:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 10.1;
+				fov = 50.0;
 			else  // DVO
 				fov = 18.0;
 
@@ -3201,9 +3215,15 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 	switch (eo->field_of_view)
 	{
-		case EO_FOV_NARROW:
+		case EO_FOV_ZOOM:
 		{
 			zoom = 1.0 / 128.0;
+
+			break;
+		}
+		case EO_FOV_NARROW:
+		{
+			zoom = 1.0 / 32.0;
 
 			break;
 		}
@@ -3672,6 +3692,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	switch (eo->field_of_view)
 	{
+		case EO_FOV_ZOOM:
+			s = "ZOOM";
+			break;
 		case EO_FOV_NARROW:
 			s = "NAR";
 			break;

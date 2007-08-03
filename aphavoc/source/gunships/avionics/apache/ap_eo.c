@@ -92,7 +92,7 @@ void initialise_apache_eo (void)
 	eo_max_visual_range				= 6000.0;
 
 	apache_flir.field_of_view		= EO_FOV_WIDE;
-	apache_flir.min_field_of_view	= EO_FOV_NARROW;
+	apache_flir.min_field_of_view	= EO_FOV_ZOOM;
 	apache_flir.max_field_of_view	= EO_FOV_WIDE;
 
 	apache_dtv.field_of_view		= EO_FOV_MEDIUM;
@@ -270,16 +270,30 @@ void update_apache_eo (eo_params *eo)
 	switch (eo->field_of_view)
 	{
 		////////////////////////////////////////
+		case EO_FOV_ZOOM:
+		////////////////////////////////////////
+		{
+			fine_slew_rate = rad (0.1) * get_delta_time ();
+
+			medium_slew_rate = rad (0.5) * get_delta_time ();
+
+			mouse_slew_rate = rad (1.2) * get_delta_time ();	// Jabberwock 030930
+			
+			coarse_slew_rate = rad (2.0) * get_delta_time ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case EO_FOV_NARROW:
 		////////////////////////////////////////
 		{
-			fine_slew_rate = rad (0.05) * get_delta_time ();
+			fine_slew_rate = rad (0.25) * get_delta_time ();
 
-			medium_slew_rate = rad (0.25) * get_delta_time ();
+			medium_slew_rate = rad (1.0) * get_delta_time ();
 
-			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+			mouse_slew_rate = rad (2.0) * get_delta_time ();	// Jabberwock 030930
 			
-			coarse_slew_rate = rad (1.0) * get_delta_time ();
+			coarse_slew_rate = rad (4.0) * get_delta_time ();
 
 			break;
 		}
