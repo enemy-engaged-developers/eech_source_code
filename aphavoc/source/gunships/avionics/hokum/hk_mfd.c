@@ -8339,7 +8339,6 @@ void initialise_hokum_mfd (void)
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,   0,  60,  34, 255);
 
     set_rgb_colour (clear_mfd_colour, 255, 255, 255, 0);
-    set_rgb_colour (clear_mfd_colour, 0, 0, 0, 255);
 
 	////////////////////////////////////////
 	//
