@@ -1818,7 +1818,11 @@ static void display_radar_target_details (entity *target, float target_range, ra
 	{
 		float x_adjust = -get_mono_font_string_width(s) / 2;
 
-		set_2d_mono_font_position (0.0, -0.7);
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
+			set_2d_mono_font_position (0.0, -0.9);
+		else
+			set_2d_mono_font_position (0.0, -0.7);
+
 		set_mono_font_rel_position (x_adjust, -4.0);
 
 		print_mono_font_string (s);
