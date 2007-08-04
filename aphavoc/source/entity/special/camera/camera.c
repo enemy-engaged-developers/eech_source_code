@@ -466,8 +466,6 @@ void add_turbulence(camera* cam, vec3d* position)
 	cam->turbulence_movement.z += acceleration * get_delta_time();
 	cam->turbulence_offset.z += cam->turbulence_movement.z * get_delta_time();
 
-	debug_log("before, x: %f  y: %f  <: %f", cam->position.x, cam->position.y, cam->position.z);
-
 	// move due to turbulence
 	cam->position.x += cam->turbulence_offset.x;
 	cam->position.y += cam->turbulence_offset.y;
