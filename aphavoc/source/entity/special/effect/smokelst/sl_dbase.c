@@ -131,7 +131,7 @@ void initialise_smoke_list_database (void)
 		item->final_vertical_velocity	=	1.5;
 		item->vertical_acceleration	=	-0.5;
 
-		item->initial_velocity_noise	=	0.5;
+		item->initial_velocity_noise	=	1.0;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
 		item->texture_size				=	16.0;
