@@ -846,9 +846,82 @@ void animate_hokum_virtual_cockpit_eo (object_3d_instance *inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void inc_hokum_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			dec_eo_field_of_view(&hokum_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			dec_eo_field_of_view(&hokum_llltv);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+			dec_eo_field_of_view(&hokum_periscope);
+			break;
+		default:
+			break;
+	}
+}
+
+void dec_hokum_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			inc_eo_field_of_view(&hokum_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			inc_eo_field_of_view(&hokum_llltv);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+			inc_eo_field_of_view(&hokum_periscope);
+			break;
+		default:
+			break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_hokum_eo_system(void)
+{
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_LLLTV;
+
+		copy_eo_zoom(&hokum_flir, &hokum_llltv);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_LLLTV;
+
+		break;
+	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		copy_eo_zoom(&hokum_llltv, &hokum_flir);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV ||
+			target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+		{
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+		}
+
+		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void slave_hokum_eo_to_current_target (void)
 {
-	if (eo_on_target)
+/*	if (eo_on_target)
 	{
 		switch (eo_sensor)
 		{
@@ -919,7 +992,7 @@ void slave_hokum_eo_to_current_target (void)
 				break;
 			}
 		}
-	}
+	}*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
