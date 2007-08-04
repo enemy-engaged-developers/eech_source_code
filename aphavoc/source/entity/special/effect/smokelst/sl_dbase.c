@@ -111,7 +111,7 @@ void initialise_smoke_list_database (void)
 		item->green_1 				=	220;		// green
 		item->blue_1 				=	220;		// blue
 		item->alpha_1 				=	0;			// alpha
-		item->radius_1 			=	5.0;		// radius
+		item->radius_1 			=	10.0;		// radius
 
 		// COLOUR CHANGE 2
 		item->colour_change_2	=	1.0;		// colour change 2 lifescale
@@ -119,19 +119,19 @@ void initialise_smoke_list_database (void)
 		item->green_2				=	200;			// green
 		item->blue_2				=	200;			// blue
 		item->alpha_2				=	0;			// alpha
-		item->radius_2 			=	7.0;		// radius
+		item->radius_2 			=	20.0;		// radius
 
 		// END COLOUR
 		item->red_end				=	100;		// red
 		item->green_end			=	100;		// green
 		item->blue_end				=	100;		// blue
 		item->alpha_end			=	0;			// alpha
-		item->radius_end 			=	10.0;		// radius
+		item->radius_end 			=	30.0;		// radius
 
 		item->final_vertical_velocity	=	1.5;
 		item->vertical_acceleration	=	-0.5;
 
-		item->initial_velocity_noise	=	1.5;
+		item->initial_velocity_noise	=	0.5;
 
 		item->texture						=	TEXTURE_ANIMATION_INDEX_SMOKE_TRAIL;
 		item->texture_size				=	16.0;
