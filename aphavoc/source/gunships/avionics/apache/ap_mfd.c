@@ -10629,7 +10629,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
-			switch (target_acquisition_system)
+			switch (eo_sensor)
 			{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 				*mfd_mode = MFD_MODE_FLIR;
