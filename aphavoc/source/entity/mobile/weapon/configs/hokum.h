@@ -119,6 +119,10 @@
 		#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-37.0))
 		#define CANNON_BARREL_MAX_PITCH_LIMIT		(rad (3.0))
 
+		#define VIKHR_RACK_PITCH_RATE					(rad (20.0))
+		#define VIKHR_RACK_MIN_PITCH_LIMIT			(rad (-10.0))
+		#define VIKHR_RACK_MAX_PITCH_LIMIT			(rad (2.0))
+
 		////////////////////////////////////////
 		//
 		// WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1
@@ -2624,14 +2628,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -2646,14 +2650,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -3103,14 +3107,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -3125,14 +3129,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -3578,14 +3582,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -3600,14 +3604,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -4053,14 +4057,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -4075,14 +4079,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -4528,14 +4532,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
@@ -4550,14 +4554,14 @@
 				VIKHR_RACK,														// pitch_depth
 				0,																	// muzzle_depth
 				FALSE,															// make_weapon_system_ready
-				FALSE,															// rotate
+				TRUE,															// rotate
 				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
+				VIKHR_RACK_PITCH_RATE,											// pitch_rate
+				VIKHR_RACK_MIN_PITCH_LIMIT,										// min_pitch_limit
+				VIKHR_RACK_MAX_PITCH_LIMIT,										// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
 				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
