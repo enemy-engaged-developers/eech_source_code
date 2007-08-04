@@ -162,6 +162,8 @@ extern float convert_linear_view_value (eo_params_dynamic_move *eo);
 
 extern float make_panning_offset_from_axis (long state);
 
+extern void copy_eo_zoom(eo_params_dynamic_move* from, eo_params_dynamic_move* to);
+
 // returns range to point as return value, point in parameter
 extern float get_eo_los_intercept_point(vec3d* intercept_point);
 
