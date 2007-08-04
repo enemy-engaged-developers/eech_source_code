@@ -731,6 +731,28 @@ static void toggle_electrical_sytem_event(event* ev)
 	set_electrical_system_active(!electrical_system_active());	
 }
 
+
+#ifdef DEBUG
+float debug_var = 0.0;
+static void inc_debug_var(event* ev)
+{
+	debug_var += 1.0;
+}
+
+static void inc_debug_var_fine(event* ev)
+{
+	debug_var += 0.1;
+}
+static void dec_debug_var(event* ev)
+{
+	debug_var -= 1.0;
+}
+static void dec_debug_var_fine(event* ev)
+{
+	debug_var -= 0.1;
+}
+#endif // DEBUG
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -867,6 +889,12 @@ void set_common_avionics_events (void)
 
 // arneh 20070103 - electrical system
 	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_electrical_sytem_event);
+#ifdef DEBUG
+	set_event (DIK_UP, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var);
+	set_event (DIK_UP, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, inc_debug_var_fine);
+	set_event (DIK_DOWN, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, dec_debug_var);
+	set_event (DIK_DOWN, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, dec_debug_var_fine);
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
