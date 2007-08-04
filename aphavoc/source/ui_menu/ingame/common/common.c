@@ -819,10 +819,10 @@ void ingame_screen_set_events (void)
 
    set_event (DIK_P, MODIFIER_NONE, KEY_STATE_DOWN, toggle_pause_time_acceleration);
 
-   set_event (DIK_ADD, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_inc_time_acceleration);
+ //  set_event (DIK_ADD, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_inc_time_acceleration);
    set_event (DIK_EQUALS, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_inc_time_acceleration);
 
-   set_event (DIK_SUBTRACT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_dec_time_acceleration);
+//   set_event (DIK_SUBTRACT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_dec_time_acceleration);
    set_event (DIK_MINUS, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, set_small_dec_time_acceleration);
 
 	//
