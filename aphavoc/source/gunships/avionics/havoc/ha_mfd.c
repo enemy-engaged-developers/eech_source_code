@@ -3100,6 +3100,11 @@ void draw_havoc_mfd_on_texture (void)
 
 				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
 
+				if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
+					mfd_mode = MFD_MODE_FLIR;
+				else
+					mfd_mode = MFD_MODE_LLLTV;
+
 				if (mfd_mode == MFD_MODE_FLIR)
 					draw_3d_eo_display_on_texture (&havoc_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
 				else

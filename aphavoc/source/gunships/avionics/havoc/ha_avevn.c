@@ -374,6 +374,29 @@ static void dec_range_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void inc_eo_zoom_event (event *ev)
+{
+	inc_havoc_eo_zoom();
+}
+
+static void dec_eo_zoom_event (event *ev)
+{
+	dec_havoc_eo_zoom();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void toggle_eo_system_event(event* ev)
+{
+	toggle_havoc_eo_system();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void dec_range_fast_event (event *ev)
 {
 	single_target_acquisition_system_dec_range_fast_key++;
@@ -662,6 +685,7 @@ void set_havoc_avionics_events (void)
 	set_event (DIK_DELETE, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_flir_event);
 
 	set_event (DIK_END, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_llltv_event);
+	set_event (DIK_END, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_eo_system_event);
 
 	set_event (DIK_PRIOR, MODIFIER_NONE, KEY_STATE_DOWN, select_target_acquisition_system_hms_event);
 
@@ -701,9 +725,11 @@ void set_havoc_avionics_events (void)
 
 	set_event (DIK_ADD, MODIFIER_NONE, KEY_STATE_DOWN, inc_range_event);
 	set_event (DIK_ADD, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, inc_range_fast_event);
+	set_event (DIK_ADD, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, inc_eo_zoom_event);
 
 	set_event (DIK_SUBTRACT, MODIFIER_NONE, KEY_STATE_DOWN, dec_range_event);
 	set_event (DIK_SUBTRACT, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, dec_range_fast_event);
+	set_event (DIK_SUBTRACT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, dec_eo_zoom_event);
 
 	set_event (DIK_NUMPAD5, MODIFIER_NONE, KEY_STATE_DOWN, steer_centre_event);
 	set_event (DIK_NUMPAD5, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, steer_centre_event);
