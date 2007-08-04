@@ -3474,22 +3474,22 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	// elevation
 	//
 
-	draw_2d_line (-0.9, 0.2, -0.9, -0.6, MFD_COLOUR_GREEN);
+	draw_2d_line (-0.9, 0.4, -0.9, -0.3, MFD_COLOUR_GREEN);
 
 	if (eo_elevation < 0.0)
 	{
-		marker_position = (eo_elevation / eo_min_elevation) * -0.6;
+		marker_position = (eo_elevation / eo_min_elevation) * -0.3;
 	}
 	else
 	{
-		marker_position = (eo_elevation / eo_max_elevation) * 0.2;
+		marker_position = (eo_elevation / eo_max_elevation) * 0.4;
 	}
 
 	if (draw_large_mfd)
 	{
-		draw_2d_line (-0.9 - 0.02, 0.2, -0.9 + 0.02, 0.2, MFD_COLOUR_GREEN);
+		draw_2d_line (-0.9 - 0.02, 0.4, -0.9 + 0.02, 0.4, MFD_COLOUR_GREEN);
 
-		draw_2d_line (-0.9 - 0.02, -0.6, -0.9 + 0.02, -0.6, MFD_COLOUR_GREEN);
+		draw_2d_line (-0.9 - 0.02, -0.3, -0.9 + 0.02, -0.3, MFD_COLOUR_GREEN);
 
 		draw_2d_line (-0.9 - 0.01, 0.0, -0.9 + 0.01, 0.0, MFD_COLOUR_GREEN);
 
@@ -7146,19 +7146,6 @@ static char large_rate_of_climb_scale_pointer[] =
 	0,0,1,1,1,
 	0,0,0,1,1,
 	0,0,0,0,1,
-};
-
-static char small_mfd_rate_of_climb_scale_pointer[] =
-{
-	8,
-	5,
-	0,
-	-2,
-	0,0,1,0,0,0,0,0,
-	0,1,0,1,1,1,1,1,
-	1,0,0,0,0,0,0,1,
-	0,1,0,1,1,1,1,1,
-	0,0,1,0,0,0,0,0,
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,11 +84,11 @@ void initialise_hokum_eo (void)
 	eo_sensor									= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth									= rad (0.0);
-	eo_min_azimuth								= rad (-35.0);
-	eo_max_azimuth								= rad (35.0);
+	eo_min_azimuth								= rad (-70.0);
+	eo_max_azimuth								= rad (70.0);
 	eo_elevation								= rad (0.0);
-	eo_min_elevation							= rad (-80.0);
-	eo_max_elevation							= rad (15.0);
+	eo_min_elevation							= rad (-15.0);
+	eo_max_elevation							= rad (25.0);
 	eo_max_visual_range						= 5000.0;
 
 #ifdef OLD_EO
