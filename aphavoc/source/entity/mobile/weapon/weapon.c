@@ -891,13 +891,9 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 	if (point_inside_map_area (intercept_point))
 	{
-		// helicopters have their centre in the rotor, so adjust by aiming a little lower
-		if (target->type == ENTITY_TYPE_HELICOPTER)
-			intercept_point->y -= 2.0;
-
 		target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
 
-		if (target_true_velocity > 0.001)
+		if (target_true_velocity > 0.1)
 		{
 			//
 			// moving target
@@ -916,8 +912,8 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 				number_of_iterations = 3;
 			while (number_of_iterations--)
 			{
-				int high_accuracy = (number_of_iterations == 1);   // only calculate with highest accuracy the last time
-				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, high_accuracy))
+				int simplified = (number_of_iterations > 1);   // only calculate with highest accuracy the last time
+				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, simplified))
 					return FALSE;
 				*intercept_point = new_intercept_point;
 
@@ -957,7 +953,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			//
 
 			result = TRUE;
-			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, TRUE))
+			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, FALSE))
 				return FALSE;
 		}
 	}
