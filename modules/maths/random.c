@@ -122,9 +122,10 @@ int get_random_number_seed (void)
 
 double sfrand1norm()
 {
-	 double value = (((double) (rand16 () - 16384)) * (1.0 / 16384.0));
-	 
-	 return value*value;
+	double value = (((double) (rand16 () - 16384)) * (1.0 / 16384.0));
+	double positive_value = fabs(value);
+
+	return value * positive_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
