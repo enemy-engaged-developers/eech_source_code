@@ -139,7 +139,7 @@ void update_free_camera (camera *raw)
 	}
 	else if (move_view_backward_key || mouse_wheel_down)
 	{
-		int movement = mouse_wheel_down ? 5 * mouse_wheel_down-- : move_view_forward_key;
+		int movement = mouse_wheel_down ? 5 * mouse_wheel_down-- : move_view_backward_key;
 	
 		if (raw->velocity.z > 12.5)
 			acceleration = -4.0 * raw->velocity.z;
@@ -149,10 +149,16 @@ void update_free_camera (camera *raw)
 		acceleration *= movement;
 		max_velocity *= movement;
 	}
+	else if (raw->velocity.z > 0.0 && raw->velocity.z < 1.0)
+		acceleration = -2.0;
+	else if (raw->velocity.z < 0.0 && raw->velocity.z > -1.0)
+		acceleration = 2.0;
 	else
 		acceleration = -2.0 * raw->velocity.z;
 
 	raw->velocity.z = bound(raw->velocity.z + acceleration * get_delta_time(), -max_velocity, max_velocity);
+	if (raw->velocity.z > -0.1 && raw->velocity.z < 0.1)
+		raw->velocity.z = 0.0;
 
 	// sideways
 	max_velocity = 100.0;
@@ -176,11 +182,18 @@ void update_free_camera (camera *raw)
 		acceleration *= move_view_left_key;
 		max_velocity *= move_view_left_key;
 	}
+	else if (raw->velocity.x > 0.0 && raw->velocity.x < 1.0)
+		acceleration = -2.0;
+	else if (raw->velocity.x < 0.0 && raw->velocity.x > -1.0)
+		acceleration = 2.0;
 	else
-		acceleration = -2.0 * raw->velocity.x;
+		acceleration = -2.0 * (raw->velocity.x - 0.1);
 
 	raw->velocity.x = bound(raw->velocity.x + acceleration * get_delta_time(), -max_velocity, max_velocity);
+	if (raw->velocity.x > -0.1 && raw->velocity.x < 0.1)
+		raw->velocity.x = 0.0;
 
+	// up/down
 	acceleration = -2.0 * raw->velocity.y;
 	raw->velocity.y += acceleration * get_delta_time();
 
