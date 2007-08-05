@@ -1524,7 +1524,7 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 	{
 		int_pitch = (int)(floor(deg_pitch / PITCH_STEP));
 
-		*closeness = ((deg_pitch / PITCH_STEP) - int_pitch);
+		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
 
 		return int_pitch + (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES;
 	}	
@@ -1532,7 +1532,7 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 	{
 		int_pitch = (int)(floor(deg_pitch));
 
-		*closeness = (deg_pitch - int_pitch);
+		*closeness = 1.0 - (deg_pitch - int_pitch);
 
 		return int_pitch + NUM_NEGATIVE_PITCH_VALUES + 10;
 	}
@@ -1540,7 +1540,7 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 	{
 		int_pitch = (int)(floor(deg_pitch / PITCH_STEP));
 
-		*closeness = ((deg_pitch / PITCH_STEP) - int_pitch);
+		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
 
 		return int_pitch - (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES - 1;
 	}
@@ -1802,7 +1802,11 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 	range = bound(range, 0.01, weapon_database[wpn_type].max_range);
 	range_index = (int)(range / RANGE_STEP);
 	range_error = range - (range_index * RANGE_STEP);
-	range_delta = (range_error / RANGE_STEP);   // normalize to [0..1]
+	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]
+
+	#ifdef DEBUG_MODULE
+	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_difference);
+	#endif
 
 	// refine drop_compensation - do it several times because as we adjust
 	// cannon pitch we have to use a different ballistics table.  Do it a few
@@ -1853,9 +1857,17 @@ float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, flo
 		// and finally get a total
 		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
 		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
+
+		#ifdef DEBUG_MODULE
+		debug_log("average over drop: (%.3f, %.3f, %.3f, %.3f) result: %.3f",
+			deg(compensation_grid[0][0].drop_angle), deg(compensation_grid[0][1].drop_angle),
+			deg(compensation_grid[1][0].drop_angle), deg(compensation_grid[1][1].drop_angle),
+			deg(drop_compensation));
+		#endif
 	}
 
 	*aiming_pitch = straight_pitch + drop_compensation;
+
 	return TRUE;
 }
 
