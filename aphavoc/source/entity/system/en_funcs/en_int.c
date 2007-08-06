@@ -1924,6 +1924,13 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"INT_TYPE_WEAPON_MISSILE_PHASE",								// name
+			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
+			NUM_WEAPON_MISSILE_PHASE_BITS,								// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
 			"INT_TYPE_WEAPON_ON_GROUND",								// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			NUM_WEAPON_ON_GROUND_BITS,									// num_pack_bits (including sign bit)
@@ -2414,7 +2421,7 @@ void debug_check_pack_types (void)
 	ASSERT(NUM_TASK_STATE_TYPES < (1 << NUM_TASK_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_TARGET_CLASS_TYPES < (1 << NUM_TASK_TARGET_CLASS_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_TARGET_SOURCE_TYPES < (1 << NUM_TASK_TARGET_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_TARGET_TYPES < (1 << NUM_TASK_TARGET_TYPE_BITS) || NUM_TASK_TARGET_TYPE_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
+	ASSERT(NUM_TASK_TARGET_TYPE_BITS >= 32 || NUM_TASK_TARGET_TYPES < (1 << NUM_TASK_TARGET_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
 	ASSERT(NUM_TASK_TERMINATED_TYPES < (1 << NUM_TASK_TERMINATED_BITS) || !"Read the comment in the function to find out how to fix this assert");
 
 	ASSERT(NUM_VEC3D_TYPES < (1 << NUM_VEC3D_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
@@ -2449,6 +2456,8 @@ void initialise_entity_int_value_default_functions (void)
 			fn_get_local_entity_int_value[i][j]											= default_get_entity_int_value;
 		}
 	}
+
+	ASSERT(int_type_database[INT_TYPE_Z_SECTOR].name && strcmp(int_type_database[INT_TYPE_Z_SECTOR].name, "INT_TYPE_Z_SECTOR") == 0);  // if this fails then initialization order and defines differ in number!
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
