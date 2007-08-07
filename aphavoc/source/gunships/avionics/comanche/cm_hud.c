@@ -2172,7 +2172,7 @@ static void display_target_information (void)
 	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		s = "FCR";
 		if (target)
-			sprintf(buffer, "FCR    R4.1f", target_range * 0.001);
+			sprintf(buffer, "FCR    R%4.1f", target_range * 0.001);
 		else
 			sprintf(buffer, "FCR    A X.X");
 		break;
