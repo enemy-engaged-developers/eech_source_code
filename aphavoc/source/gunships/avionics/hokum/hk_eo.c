@@ -921,7 +921,10 @@ void toggle_hokum_eo_system(void)
 
 void slave_hokum_eo_to_current_target (void)
 {
-/*	if (eo_on_target)
+	if (command_line_manual_laser_radar)
+		return;
+	
+	if (eo_on_target)
 	{
 		switch (eo_sensor)
 		{
@@ -992,7 +995,7 @@ void slave_hokum_eo_to_current_target (void)
 				break;
 			}
 		}
-	}*/
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

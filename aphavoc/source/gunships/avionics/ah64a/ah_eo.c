@@ -677,7 +677,10 @@ void toggle_ah64a_eo_system(void)
 
 void slave_ah64a_eo_to_current_target (void)
 {
-/*	if (eo_on_target)
+	if (command_line_manual_laser_radar)
+		return;
+	
+	if (eo_on_target)
 	{
 		switch (eo_sensor)
 		{
@@ -724,7 +727,7 @@ void slave_ah64a_eo_to_current_target (void)
 				break;
 			}
 		}
-	}*/
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
