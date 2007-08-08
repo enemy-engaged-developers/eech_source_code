@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.8.6</title>
+<title>EECH Community Release Version 1.9</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.8.6</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.9</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -74,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: June 3, 2007
+      italic;'>Last edited by arneh: August 6, 2007
       </p>
 
 
@@ -93,13 +93,106 @@ h4 {
 
 
 
-      <h2>What's NEW in EECH 1.8.6?</h2>
-      <p><em>(since version 1.8.5)</em></p>
-      <ul>
-        <li>Fix for save games and multiplayer crashing in 1.8.5.
-	<li>Export also the upfront display/ekran data to shared
-	memory (fix by Retro).
-      </ul>
+      <h2>What's NEW in EECH 1.9?</h2>
+      <p><em>(since version 1.8.6)</em></p>
+      <dl>
+      <dt>Weapons modelling
+      <dd>
+          <ul>
+	     <li>Gun projectiles and unguided rockets are now affected
+	           by gravity, drag and dispersion.  As a result
+		   rounds take longer to reach their target and with
+		   less accuracy.
+	     <li>Vikhr missiles now follow a spiral flight path
+	     <li>Vikhr launch racks will depress up to 12 degrees to
+	     align with target direction.  This helps as the Vikhr now
+	     has very narrow launch restrictions for weapon launch.
+	     <li>Rockets and missiles will now only create smoke for
+	     as long as the rocket engine is burning.
+	     <li>Rockets adjusted to have shorter burn time and faster
+	     acceleration.
+	     <li>Muzzle velocity adjusted for many weapons to better
+	     match real world values.
+	     <li>New values for GWUT file for changing weapons drag,
+	     spiral path and seeker limits.  These are included in
+	     gwut190.csv, but note that the GWUT editor (version 1.3)
+	     is not yet capable of editing these values, and will delete them
+	     from any file which contains them.  So you will have to edit the
+	     file with a text editor until a new version of the GWUT editor
+	     comes out
+	  </ul>
+      <dt>Avionics changes
+      <dd>
+          <ul>
+	    <li>New weapons aiming avionics for ballistic weapons. See
+	    <a
+	          href="http://www.eechcentral.com/wiki/index.php?title=Firing_guns_and_rockets">
+		  wiki article</a> for details.
+            <li>New flight MFD page, revised TADS page and added
+	    colour to many other MFD pages for Comanche.
+	    <li>New HUD for Comanche
+	    <li>New flight, TSD, radar and engine pages for Alligator.  Added
+	    colour to several other pages.
+            <li>DTV/LLLTV will now show a full-colour(for
+	    Comanche) or monochrome (for the others) TV view, not a IR-view.
+	    <li>DTV/LLLTV in Comanche and Ka-52 is now capable changing zoom
+	    level.
+	    <li>EO zoom level can now be changed even if EO is not
+	    active targeting system.  Use CTRL + keypad +/- for this.
+	    <li>EO camera can now be changed even if EO is not active
+	    targeting system.  Use Shift + END for this.
+          </ul>
+
+      <dt>Campaign map changes
+      <dd>      
+          <ul>
+	    <li>New relief shaded topographical campaign map
+	    <li>Hi-res campaign map and alternative map palette also
+	          available (campaign_map_mode and campaign_map_palette in
+		  eech.ini)
+            <li>Adjustable how often enemy units update.  By default
+	          the position of known enemy units are updated once every 2
+		  minutes.  Configurable by map_update_interval in eech.ini.
+            <li>Fixed bug where undiscovered enemy units would show up
+	          if you just zoomed the map enough.
+            <li>Campaign map in free flight mode now allows adding and
+	          moving waypoints.
+	  </ul>
+      <dt>External cameras
+      <dd>
+          <ul>
+            <li>New free camera mode.  Press F9 when
+	    already in chase or weapons camera view.  Use mouse to
+	    pan, arrow keys or mouse wheel to move camera.
+	    <li>New wobbly camera option (wobbly-camera in eech.ini)
+	    for chase and weapons camera.  Gives the impression of the camera
+	    being mounted in a chase plane/helicopter which is not always
+	    able to keep perfect view of object.
+	    <li>Chase camera allows a limited amount of movement from
+	    object being chased.  Use arrow keys for this.
+	  </ul>
+      <dt>Smoke fixes
+      <dd>
+          <ul>
+	    <li>You can now disable the persistent smoke
+	    (persistent_smoke=0 in eech.ini).  With it enabled smoke 
+	    will only be created for about 10 seconds, instead of minutes.
+	     <li>Rockets and missiles only generate smoke as long as
+	     the rocket engine is burning.
+	    <li>Slightly adjusted smoke colour.
+	    <li>Fixed a crash which would sometimes happen with smoke.
+	  </ul>
+      <dt>Other changes
+      <dd>
+         <ul>
+	    <li>Fixed a problem for multiplayer/saved games where
+	    data would get corrupted
+	    <li>Trim does no longer affect helicopter attitude in
+	    hover hold mode.
+	    <li>... and probably some more changes I've forgotten to
+	    mention, and numerous bugs I haven't discovered yet :)
+	 <ul>
+      </dl>
 
       <p align="right"><a href="#top">[top ^]</a></p>
     
@@ -585,14 +678,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
 
         <tr valign="top">
           <td width="214" class="Normal">
-            <p class="style43">greenmfd=1</p></td>
-          <td class="Normal">
-            <p>Camera displays (FLIR/DTV/LLTV etc.) are monochrome
-	    green or amber (1) or monochrome black/white (0).</p></td> 
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
             <p class="style43">colourmfd=1</p></td>
           <td class="Normal">
             <p>MFDs will use colours for display when available.
@@ -818,14 +903,6 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         </tr>
 
         <tr>
-          <td colspan=2 class="Normal"><b>Laser control</b></td>
-        </tr>
-        <tr>
-          <td width="190" class="style43">Keypad*</td>
-          <td>Activate/deactive laser</td>
-        </tr>
-
-        <tr>
           <td colspan=2 class="Normal">
             <b>Radar control</b></td>
         </tr>
@@ -848,11 +925,27 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
 
         <tr>
           <td colspan=2 class="Normal">
-            <p><b>Ground stabilised FLIR (Comanche only)</b></p></td>
+            <p><b>EO system control</b></p></td>
+        </tr>
+	<tr>
+          <td width="190" class="style43">Shift-END</td>
+          <td>Switch EO system</td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">CTRL-Keypad-</td>
+          <td>Zoom out EO</td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">CTRL-Keypad+</td>
+          <td>Zoom in EO</p></td>
         </tr>
         <tr>
           <td width="190" class="style43">Ctrl-S</td>
-          <td>Toggles ground stabilized FLIR on/off.</td>
+          <td>Toggles ground stabilized FLIR on/off (Comanche only).</td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">Keypad*</td>
+          <td>Activate/deactive laser</td>
         </tr>
 
         <tr>
@@ -996,6 +1089,19 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
         <em>ctrl </em>pressed will pan/zoom the camera.</td>
         </tr>
         <tr>
+          <td colspan=2><strong>Free flight view</strong></td>
+        </tr>
+        <tr>
+          <td class="style43">F9<td>When already in chase view (F5, F6 or F9)
+	  pressing F9 will switch the camera to Free camera mode.
+	<tr>
+	  <td class="style43">arrowkeys and mousewheel<td>Arrowkeys and mousewheel
+	  will move free camera around.
+	<tr>
+	  <td class="style43">mousemovement<td>Moving the mouse will pan the free camera
+        </tr>
+
+        <tr>
           <td colspan=2><strong>Satellite view</strong></td>
         </tr>
         <tr>
@@ -1111,6 +1217,13 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.8.6:</h4>
+      <ul>
+        <li>Fix for save games and multiplayer crashing in 1.8.5.
+	<li>Export also the upfront display/ekran data to shared
+	memory (fix by Retro).
+      </ul>
+
 
       <h4>Fixes/features in 1.8.5:</h4>
       <ul>
@@ -1122,7 +1235,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	Retro)
 	<li>Added waypoint, weapon and NG RPM data to shared memory
 	export.
-	<li>Several crash fixes including when taking damagine in
+	<li>Several crash fixes including when taking damage in
 	Cobra and other helicopters with general modelling (thanks to
 	Richard Evans for all the crash fixes).
       </ul>
