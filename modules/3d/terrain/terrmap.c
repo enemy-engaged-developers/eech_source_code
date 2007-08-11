@@ -2537,8 +2537,8 @@ void draw_2d_shaded_terrain_contour_map ( void )
 			if ( !outcode_whole2 )  // not entire grid outside view
 			{
 				float
-					min_height,
-					max_height;
+					min_height = FLT_MAX,
+					max_height = FLT_MIN;
 
 				int
 					contour_start_index,
