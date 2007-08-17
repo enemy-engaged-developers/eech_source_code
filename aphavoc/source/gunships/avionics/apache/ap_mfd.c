@@ -70,6 +70,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//mue 070223
+void copy_export_mfd(screen* export_left, screen* export_right);
+
 static mfd_modes
 	lhs_mfd_mode = MFD_MODE_OFF,
 	rhs_mfd_mode = MFD_MODE_OFF;
@@ -1065,9 +1068,16 @@ void initialise_apache_mfd (void)
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
 
+	if(command_line_export_mfd)
+	{
+	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
+	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+	}
+	else
+	{
 	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-
+	}
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -1078,7 +1088,6 @@ void initialise_apache_mfd (void)
 	set_rgb_colour (MFD_COLOUR5,   0, 149,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,  40,  68,  56, 255);
 
-	set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0);
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 	{
 		set_rgb_colour (clear_green_mfd_colour, 30, 58, 44, 255);
@@ -1086,6 +1095,14 @@ void initialise_apache_mfd (void)
 	else
 	{
 		set_rgb_colour (clear_green_mfd_colour, 6, 6, 1, 255);
+	}
+	if(command_line_export_mfd)
+	{
+		clear_mfd_colour=clear_green_mfd_colour;
+	}
+	else
+	{
+		set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0); 
 	}
 	
 	//VJ 030423 TSd render mod
@@ -10436,7 +10453,9 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		*mfd_mode;
 
 	screen
-		*mfd_texture_screen;
+		*mfd_texture_screen,
+		*left_export,
+		*right_export;
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
@@ -10826,8 +10845,20 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 			break;
 		}
 	}
-
 	set_active_screen (video_screen);
+	if(command_line_export_mfd)
+	{
+		if(location == MFD_LOCATION_LHS)
+		{
+			left_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+			copy_export_mfd(left_export,NULL);
+		}
+		else
+		{
+			right_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+			copy_export_mfd(NULL,right_export);
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

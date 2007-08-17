@@ -1517,9 +1517,16 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_apache_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
-
-					draw_overlaid_apache_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
+					if(command_line_export_mfd)
+					{
+						draw_apache_mfd_on_texture(MFD_LOCATION_LHS);
+						draw_apache_mfd_on_texture(MFD_LOCATION_RHS);
+					}
+					else
+					{
+						draw_overlaid_apache_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
+						draw_overlaid_apache_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
+					}
 				}
 			}
 
@@ -1562,8 +1569,14 @@ void draw_virtual_cockpit_3d_view (void)
 
 				if (get_global_draw_overlaid_instruments ())
 				{
-					draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
-
+					if(command_line_export_mfd)
+					{
+						draw_havoc_mfd_on_texture();
+					}
+					else
+					{
+						draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
+					}
 					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
 				}
 			}

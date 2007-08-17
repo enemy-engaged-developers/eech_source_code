@@ -66,6 +66,8 @@
 
 #include "graphics.h"
 #include "cmndline.h"
+#include "global.h"
+//#include "external\pixel.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +368,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 
 	non_display_flag = FALSE;
 
-	ret = DirectDrawEnumerateEx ( ddraw_enumerate_drivers, &non_display_flag, DDENUM_ATTACHEDSECONDARYDEVICES );// | DDENUM_NONDISPLAYDEVICES );
+	ret = DirectDrawEnumerateEx ( ddraw_enumerate_drivers, &non_display_flag, DDENUM_DETACHEDSECONDARYDEVICES|DDENUM_ATTACHEDSECONDARYDEVICES );// | DDENUM_NONDISPLAYDEVICES );
 
 	if ( FAILED ( ret ) )
 	{
@@ -909,10 +911,20 @@ BOOL ddraw_flip_surface_export ( void )
 	DDBLTFX
 		ddbltfx;
 	RECT dst, src;
-	dst.left=command_line_export_mfd_left_pos_left;
-	dst.top=command_line_export_mfd_left_pos_top;
-	dst.right=command_line_export_mfd_left_pos_right;
-	dst.bottom=command_line_export_mfd_left_pos_bottom;
+	if(get_global_gunship_type()==GUNSHIP_TYPE_HAVOC)
+	{
+	dst.left=command_line_export_mfd_single_pos[0];
+	dst.top=command_line_export_mfd_single_pos[1];
+	dst.right=command_line_export_mfd_single_pos[2];
+	dst.bottom=command_line_export_mfd_single_pos[3];
+	}
+	else
+	{
+	dst.left=command_line_export_mfd_left_pos[0];
+	dst.top=command_line_export_mfd_left_pos[1];
+	dst.right=command_line_export_mfd_left_pos[2];
+	dst.bottom=command_line_export_mfd_left_pos[3];
+	}
 	src.left=0;
 	src.top=0;
 	src.right=256;
@@ -924,10 +936,13 @@ BOOL ddraw_flip_surface_export ( void )
        //	ddrval	= IDirectDrawSurface7_Flip ( ddraw2.lpFrontBuffer, NULL, DDFLIP_WAIT );
 	ddrval = IDirectDrawSurface7_Blt ( ddraw_export.lpFrontBuffer, &dst, ddraw_export.lpBackBuffer, &src, 0, NULL);
 
-	dst.left=command_line_export_mfd_right_pos_left;
-	dst.top=command_line_export_mfd_right_pos_top;
-	dst.right=command_line_export_mfd_right_pos_right;
-	dst.bottom=command_line_export_mfd_right_pos_bottom;
+	if(get_global_gunship_type()==GUNSHIP_TYPE_HAVOC)
+		return TRUE;
+
+	dst.left=command_line_export_mfd_right_pos[0];
+	dst.top=command_line_export_mfd_right_pos[1];
+	dst.right=command_line_export_mfd_right_pos[2];
+	dst.bottom=command_line_export_mfd_right_pos[3];
 	src.left=272;	
 	src.top=0;
 	src.right=528;
@@ -1183,7 +1198,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		// Set the cooperative mode settings.
 		//
 	
-		//mue 070223 according to microsoft cooperative level must be set by the same thread theat created the application window
+		//mue 070223 cooperative level must be set by the same thread that created the application window
 		ddraw_cooperative_level coop_level=COOPERATIVE_LEVEL_EXCLUSIVE; 
 		system_thread_function (ddraw_internal_set_cooperative_level,&coop_level  );
 
@@ -2803,7 +2818,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 	}
 
 // mue 070223 enumerate all  devices. 3D capabilities not necessary for mfd export?
-//	if ( DriverCaps.dwCaps & DDCAPS_3D )
+	if ( DriverCaps.dwCaps & DDCAPS_3D || command_line_export_mfd)
 	{
 
 		display_device
@@ -3282,6 +3297,7 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 		src_ddsd,
 		dest_ddsd;
 	HRESULT ddrval;
+
 	//
 	// Lock the surface memory
 	//
@@ -3303,7 +3319,42 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 
 		int
 			width,height, w, h;
+/*		int 
+		src_surface_red_mask,
+		src_surface_green_mask,
+		src_surface_blue_mask,
+		src_surface_red_shift,
+		src_surface_green_shift,
+		src_surface_blue_shift,
+		dst_surface_red_mask,
+		dst_surface_green_mask,
+		dst_surface_blue_mask,
+		dst_surface_red_shift,
+		dst_surface_green_shift,
+		dst_surface_blue_shift;
+		unsigned int
+		red,
+		green,
+		blue;
+
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwRBitMask, &src_surface_red_mask, &src_surface_red_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwGBitMask, &src_surface_green_mask, &src_surface_green_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwBBitMask, &src_surface_blue_mask, &src_surface_blue_shift);
+
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwRBitMask, &dst_surface_red_mask, &dst_surface_red_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwGBitMask, &dst_surface_green_mask, &dst_surface_green_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwBBitMask, &dst_surface_blue_mask, &dst_surface_blue_shift);
 			
+		dst_surface_red_mask&=src_surface_red_mask;
+		dst_surface_green_mask&=src_surface_green_mask;
+		dst_surface_blue_mask&=src_surface_blue_mask;
+//		dst_surface_red_mask|=(dst_surface_red_mask>>16);
+//		dst_surface_green_mask|=(dst_surface_green_mask>>16);
+//		dst_surface_blue_mask|=(dst_surface_blue_mask>>16);
+//		dst_surface_red_mask>>=src_surface_red_shift;
+//		dst_surface_green_mask>>=src_surface_green_shift;
+//		dst_surface_blue_mask>>=src_surface_blue_shift;
+*/
 		w=src_rect.right-src_rect.left;
 		h=src_rect.bottom-src_rect.top;
 
@@ -3312,22 +3363,44 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 				
 		for ( height=0; height < h; height++ )
 		{
-		double
+			double
 			*source,
 			*dest;
 
 			source = ( double * ) source_screen;
 			dest = ( double * ) dest_screen;
 				
+	/*		unsigned short int
+			*source,
+			*dest;
+
+			source = ( unsigned short int* ) source_screen;
+			dest = ( unsigned short int* ) dest_screen;
+	*/			
 			for ( width = w; width > 0; width -= 16 )
 			{
-
+/*
+				red=*source<<src_surface_red_shift;
+				green=*source<<src_surface_green_shift;
+				blue=*source<<src_surface_blue_shift;
+				red&=dst_surface_red_mask;
+				green&=dst_surface_green_mask;
+				blue&=dst_surface_blue_mask;
+				red>>=dst_surface_red_shift;
+				green>>=dst_surface_green_shift;
+				blue>>=dst_surface_blue_shift;
+				
+				*dest=(red|green|blue);
+				dest++;
+				source++;
+*/
 				dest[0] = source[0];
 				dest[1] = source[1];
 				dest[2] = source[2];
 				dest[3] = source[3];
 				dest += 4;
 				source += 4;
+
 			}
 		
 			dest_screen += dest_ddsd.lPitch;
@@ -3342,6 +3415,17 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 	ddrval=IDirectDrawSurface7_Unlock ( src, NULL );
 	if ( ddrval != DD_OK )
 		debug_log ( "Unable to unlock src%s", get_ddraw_error_message ( ddrval ) );
+}
+
+void clear_export_mfd_screen()
+{
+	DDBLTFX fx;
+
+	memset(&fx, 0, sizeof(fx));
+	fx.dwSize = sizeof(fx);
+	fx.dwFillColor = 0;
+
+	IDirectDrawSurface7_Blt ( ddraw_export.lpBackBuffer,NULL, NULL, NULL, DDBLT_COLORFILL|DDBLT_WAIT, &fx);
 }
 
 void copy_export_mfd(screen* export_left, screen* export_right)
@@ -3359,6 +3443,10 @@ void copy_export_mfd(screen* export_left, screen* export_right)
 
 	if(export_right)
 	{
+	src_rect.left=0;
+	src_rect.top=0;
+	src_rect.right=export_right->width;
+	src_rect.bottom=export_right->height;
 	dst_rect.left=272;
 	dst_rect.top=0;
 	dst_rect.right=528;

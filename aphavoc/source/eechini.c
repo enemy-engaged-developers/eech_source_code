@@ -160,37 +160,21 @@ void read_hud_parameters (char *q)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//mue 070223 read export mfd position
-void read_export_mfd_pos_left (char *q)
-{
-	char *p = strtok(q,",");         
-	if (p) 
-		command_line_export_mfd_left_pos_left= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
-		command_line_export_mfd_left_pos_top= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
-		command_line_export_mfd_left_pos_right= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
-		command_line_export_mfd_left_pos_bottom= atoi(p);
-}
 
-void read_export_mfd_pos_right (char *q)
+void read_export_mfd_pos(char *q, int *pos)
 {
 	char *p = strtok(q,",");         
 	if (p) 
-		command_line_export_mfd_right_pos_left= atoi(p);
+		pos[0]= atoi(p);
 	p = strtok(NULL,",");	     
 	if (p) 
-		command_line_export_mfd_right_pos_top= atoi(p);
+		pos[1]= atoi(p);
 	p = strtok(NULL,",");	     
 	if (p) 
-		command_line_export_mfd_right_pos_right= atoi(p);
+		pos[2]= atoi(p);
 	p = strtok(NULL,",");	     
 	if (p) 
-		command_line_export_mfd_right_pos_bottom= atoi(p);
+		pos[3]= atoi(p);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -554,8 +538,9 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223 
 		if (strcmp(p, "export_mfd_screen_width") == 0) command_line_export_mfd_screen_width= d1;	// mue 070223 
 		if (strcmp(p, "export_mfd_screen_height") == 0) command_line_export_mfd_screen_height= d1;	// mue 070223 
-		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos_left(q);	// mue 070223 
-		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos_right(q);		// mue 070223 
+		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_left_pos);	// mue 070223 
+		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_right_pos);		// mue 070223 
+		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223 
 
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
@@ -732,15 +717,17 @@ void dump_ini_file(void)
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
 	fprintf(f,"dfr=%d               # display framerate (0 = off (default), 1 = on, 2 = log to file \"framerate.txt\")\n",command_line_framerate);
 	fprintf(f,"MEMEXPORT=%d         # enables export of cockpit information to a shared memory area\n", command_line_shared_mem_export);
-	fprintf(f,"export_mfd=%d               # EXPERIMENTAL! mfd export on multimon systems (0 = off (default), 1 = on\n",command_line_export_mfd);
-	fprintf(f,"export_mfd_adapter=%d               # EXPERIMENTAL! graphicadapter for mfd export(0=first, 1=second, ...)\n",command_line_export_mfd_adapter);
-	fprintf(f,"export_mfd_screen_width=%d               # EXPERIMENTAL! resolution of export screen (width)\n",command_line_export_mfd_screen_width);
-	fprintf(f,"export_mfd_screen_height=%d               # EXPERIMENTAL! resolution of export screen (height)\n",command_line_export_mfd_screen_height);
+	fprintf(f,"export_mfd=%d               # mfd export on multimon systems (0 = off (default), 1 = on\n",command_line_export_mfd);
+	fprintf(f,"export_mfd_adapter=%d               # graphicadapter for mfd export(0=first, 1=second, ...)\n",command_line_export_mfd_adapter);
+	fprintf(f,"export_mfd_screen_width=%d               # resolution of export screen (width)\n",command_line_export_mfd_screen_width);
+	fprintf(f,"export_mfd_screen_height=%d               # resolution of export screen (height)\n",command_line_export_mfd_screen_height);
 
-	fprintf(f,"export_mfd_left_pos=%d,%d,%d,%d               # EXPERIMENTAL! left export mfd position\n",command_line_export_mfd_left_pos_left,
-			command_line_export_mfd_left_pos_top,command_line_export_mfd_left_pos_right,command_line_export_mfd_left_pos_bottom);
-	fprintf(f,"export_mfd_right_pos=%d,%d,%d,%d               # EXPERIMENTAL! right export mfd position\n",command_line_export_mfd_right_pos_left,
-			command_line_export_mfd_right_pos_top,command_line_export_mfd_right_pos_right,command_line_export_mfd_right_pos_bottom);
+	fprintf(f,"export_mfd_left_pos=%d,%d,%d,%d               # left mfd position\n",command_line_export_mfd_left_pos[0],
+			command_line_export_mfd_left_pos[1],command_line_export_mfd_left_pos[2],command_line_export_mfd_left_pos[3]);
+	fprintf(f,"export_mfd_right_pos=%d,%d,%d,%d               #  right mfd position\n",command_line_export_mfd_right_pos[0],
+			command_line_export_mfd_right_pos[1],command_line_export_mfd_right_pos[2],command_line_export_mfd_right_pos[3]);
+	fprintf(f,"export_mfd_single_pos=%d,%d,%d,%d               #  single (havoc) mfd position\n",command_line_export_mfd_single_pos[0],
+			command_line_export_mfd_single_pos[1],command_line_export_mfd_single_pos[2],command_line_export_mfd_single_pos[3]);
 	fprintf(f,"[end of file]\n");
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);

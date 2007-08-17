@@ -236,14 +236,9 @@ int
 	command_line_export_mfd_adapter					=0,
 	command_line_export_mfd_screen_width				=640,
 	command_line_export_mfd_screen_height				=400,
-	command_line_export_mfd_left_pos_left				=0,
-	command_line_export_mfd_left_pos_top				=0,
-	command_line_export_mfd_left_pos_right				=256,
-	command_line_export_mfd_left_pos_bottom				=256,
-	command_line_export_mfd_right_pos_left				=384,
-	command_line_export_mfd_right_pos_top				=0,
-	command_line_export_mfd_right_pos_right				=640,
-	command_line_export_mfd_right_pos_bottom			=256;
+	command_line_export_mfd_left_pos[4]				={0,0,256,256},
+	command_line_export_mfd_right_pos[4]				={384,0,640,256},
+	command_line_export_mfd_single_pos[4]				={0,0,256,256};
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,

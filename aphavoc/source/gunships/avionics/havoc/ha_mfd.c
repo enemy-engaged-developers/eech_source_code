@@ -69,6 +69,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//mue 070223
+void copy_export_mfd(screen* export_left, screen* export_right);
 
 static mfd_modes
 	mfd_mode;
@@ -182,7 +184,12 @@ void initialise_havoc_mfd (void)
 	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
 
-	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
+	if(command_line_export_mfd)
+	{
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SCREEN);
+	}
+	else
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
 
 	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -193,7 +200,14 @@ void initialise_havoc_mfd (void)
 	set_rgb_colour (MFD_COLOUR5, 140, 140,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,  80,  52,   8, 255);
 
-	set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
+	if(command_line_export_mfd)
+	{
+		set_rgb_colour (clear_mfd_colour,80,  52,   8, 0);
+	}
+	else
+	{
+		set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2909,6 +2923,7 @@ void draw_havoc_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int dra
 
 void draw_havoc_mfd_on_texture (void)
 {
+	screen* export_screen;
 	if (havoc_damage.tv_display)
 	{
 		if (mfd_mode != MFD_MODE_OFF)
@@ -3102,6 +3117,11 @@ void draw_havoc_mfd_on_texture (void)
 	}
 
 	set_active_screen (video_screen);
+	if(command_line_export_mfd)
+	{
+		export_screen=create_screen_for_system_texture (TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
+		copy_export_mfd(export_screen,NULL);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
