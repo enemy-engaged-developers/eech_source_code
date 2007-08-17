@@ -154,7 +154,7 @@ int
 	command_line_3d_visual_clear_edges						= FALSE,
 	command_line_cpu_blit_textures							= FALSE,
 	command_line_d3d_use_texture_management				= FALSE, //VJ 030511 changed to FALSE, was TRUE,
-	command_line_no_hardware_tnl								= FALSE,
+	command_line_no_hardware_tnl								= TRUE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
 	command_line_persistent_smoke								= TRUE,
