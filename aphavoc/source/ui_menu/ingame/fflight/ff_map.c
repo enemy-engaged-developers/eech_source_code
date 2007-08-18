@@ -130,6 +130,69 @@ static void draw_page_map (ui_object *obj, void *arg)
 
 static void free_flight_map_left_click_function (ui_object *obj, void *arg)
 {
+	entity
+		*en;
+
+	map_dimension_type
+		*map_dimensions;
+
+	entity_sides
+		side;
+
+	ASSERT (obj);
+
+	if ((int)arg != BUTTON_STATE_DOWN)
+	{
+		return;
+	}
+
+	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
+
+	ASSERT (map_dimensions);
+
+	map_dimensions->selected_entity = NULL;
+
+	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	
+	//
+	// Get current mouse-over entity
+	//
+
+	en = get_map_mouse_over_entity (map_dimensions);
+
+	if (en)
+	{
+		switch (get_local_entity_type (en))
+		{
+			case ENTITY_TYPE_WAYPOINT:
+			{
+				if (get_local_entity_int_value (en, INT_TYPE_PLANNER_MOVEABLE))
+				{
+					set_active_map_object (obj);
+	
+					map_dimensions->selected_entity = en;
+	
+					push_event (map_move_waypoint_events, "move waypoint events");
+				}
+				
+				break;
+			}
+		}
+		
+		return;
+	}
+		
+	
+	//
+	// Check Insert Waypoint Icons
+	//
+
+	if (map_insert_waypoint_function (obj))
+	{
+		return;
+	}
+	
+
 	//
 	// Goto
 	//

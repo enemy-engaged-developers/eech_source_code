@@ -475,7 +475,8 @@ void update_cyclic_pressure_inputs (void)
 
 			current_flight_dynamics->input_data.cyclic_x.value = input;
 
-			current_flight_dynamics->input_data.cyclic_x.value += current_flight_dynamics->input_data.cyclic_x_trim.value;
+			if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE)
+				current_flight_dynamics->input_data.cyclic_x.value += current_flight_dynamics->input_data.cyclic_x_trim.value;
 
 			// y
 
@@ -511,7 +512,8 @@ void update_cyclic_pressure_inputs (void)
 
 			current_flight_dynamics->input_data.cyclic_y.value = input;
 
-			current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
+			if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE)
+				current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
 
 			/*
 			debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),

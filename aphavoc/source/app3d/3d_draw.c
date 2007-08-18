@@ -235,7 +235,6 @@ void draw_application_3d_scene (void)
 
 	if ( begin_3d_scene () )
 	{
-
 		clear_zbuffer_screen ();
 
 		if ( active_screen != video_screen )
@@ -246,7 +245,7 @@ void draw_application_3d_scene (void)
 
 		scan_3d_terrain ();
 
-		if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF )
+		if ( get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
 		{
 
 			scan_3d_clouds ();
@@ -256,7 +255,7 @@ void draw_application_3d_scene (void)
 
 		draw_3d_horizon ();
 
-		if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF )
+		if (get_3d_render_filter ( main_3d_env ) == RENDER_CLEAR )
 		{
 
 			draw_3d_stars ();
@@ -268,7 +267,7 @@ void draw_application_3d_scene (void)
 
 		draw_3d_scene ();
 
-		if ( ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF ) && ( application_3d_rain_active ) )
+		if ( ( get_3d_render_filter ( main_3d_env ) != RENDER_INFRARED ) && ( application_3d_rain_active ) )
 		{
 
 			draw_3d_rain ();
@@ -279,7 +278,7 @@ void draw_application_3d_scene (void)
 		end_3d_scene ();
 	}
 
-	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_ON ) 
+	if ( get_3d_render_filter ( main_3d_env ) != RENDER_CLEAR ) 
 	{
 
 		switch ( current_3d_noise_level )
@@ -563,7 +562,7 @@ void draw_application_ui_3d_scene (void)
 
 	scan_3d_terrain ();
 
-	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF )
+	if ( get_3d_render_filter ( main_3d_env ) == INFRARED_OFF )
 	{
 
 		scan_3d_clouds ();
@@ -573,7 +572,7 @@ void draw_application_ui_3d_scene (void)
 
 	draw_3d_horizon ();
 
-	if ( get_3d_infrared_mode ( main_3d_env ) == INFRARED_OFF )
+	if ( get_3d_render_filter ( main_3d_env ) == INFRARED_OFF )
 	{
 
 		draw_3d_stars ();

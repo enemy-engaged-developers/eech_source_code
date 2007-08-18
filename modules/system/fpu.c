@@ -222,7 +222,7 @@ void set_fpu_mode_default ( void )
 
 #ifdef DEBUG
 
-static const char *status[2] = { "disabled", "enabled" };
+static const char* const status[2] = { "disabled", "enabled" };
 
 #endif
 

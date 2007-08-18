@@ -1145,6 +1145,11 @@ void comms_process_data (void)
 
 							size += sizeof (int);
 
+							// arneh - send campaign map update interval
+							quick_set_list_item (ptr, int, command_line_campaign_map_update_interval);
+
+							size += sizeof (int);
+
 							send_packet (received_id, PACKET_TYPE_SETTINGS_DATA, new_connection->connection_receive_buffer, new_connection->connection_receive_buffer_size + size, SEND_TYPE_PERSONAL);
 
 						}
@@ -1394,6 +1399,9 @@ void comms_process_data (void)
 
 							add_to_pop_up_list_with_word_wrap (get_trans(seasons[season]), session_info_list, NULL, 0, UI_FONT_ARIAL_10, sys_col_white);
 						}
+
+						command_line_campaign_map_update_interval = get_list_item(ptr, int);
+						size += sizeof (int);
 
                	set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 

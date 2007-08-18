@@ -76,6 +76,16 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+camera_modes get_camera_mode (entity* cam)
+{
+	camera* raw;
+
+	ASSERT(cam);
+
+	raw = get_local_entity_data (cam);
+	return raw->camera_mode;
+}
+
 void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 {
 	ASSERT (raw);
@@ -299,6 +309,18 @@ void set_camera_mode (camera *raw, camera_modes mode, int auto_edit)
 				mode = CAMERA_MODE_CHASE;
 
 				reset_chase_camera (raw);
+			}
+
+			break;
+		}
+		////////////////////////////////////////
+		case CAMERA_MODE_FREE:
+		////////////////////////////////////////
+		{
+			{
+				mode = CAMERA_MODE_FREE;
+
+				reset_free_camera (raw);
 			}
 
 			break;

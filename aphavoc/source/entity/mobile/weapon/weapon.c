@@ -666,16 +666,20 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 (
 	vec3d *pitch_device_position,
 	float weapon_velocity,
+	entity *source,
 	entity *target,
 	vec3d *intercept_point,
 	float *angle_of_projection
 )
 {
 	int
+		airborne_target,
+		triangulate_range,
 		result,
 		number_of_iterations;
 
 	float
+		range,
 		new_pitch,
 		time_of_flight,
 		target_true_velocity,
@@ -699,8 +703,22 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 	*angle_of_projection = 0.0;
 
 	get_local_entity_target_point (target, &current_target_position);
-
 	*intercept_point = current_target_position;
+
+	airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
+
+	triangulate_range = (source == get_gunship_entity() && get_range_finder() == RANGEFINDER_TRIANGULATION);
+	if (triangulate_range)
+	{
+		range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
+		if (range == -1.0)
+			range = 1000.0;  // use 200 meters if unable to triangulate range
+		#ifdef DEBUG_MODULE
+		debug_log("triangulated range: %.0f (real range: %.0f)", range, get_2d_range (pitch_device_position, intercept_point));
+		#endif
+	}
+	else
+		range = get_2d_range (pitch_device_position, intercept_point);
 
 	//
 	// target point differs to position so test inside map area before terrain elevation check
@@ -708,7 +726,8 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 
 	if (point_inside_map_area (intercept_point))
 	{
-		intercept_point->y = get_3d_terrain_elevation (intercept_point->x, intercept_point->z);
+		if (!airborne_target)
+			intercept_point->y = get_3d_terrain_elevation (intercept_point->x, intercept_point->z);
 
 		target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
 
@@ -726,9 +745,10 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 
 			number_of_iterations = 3;
 
+			// refine ballistic calulation
 			while (number_of_iterations--)
 			{
-				if (get_angle_of_projection (pitch_device_position, &new_intercept_point, weapon_velocity, &new_pitch))
+				if (get_angle_of_projection_with_range(pitch_device_position, &new_intercept_point, weapon_velocity, &new_pitch, range))
 				{
 					result = TRUE;
 
@@ -738,7 +758,20 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 
 					if (number_of_iterations > 0)
 					{
-						time_of_flight = 2.0 * weapon_velocity * sin (new_pitch) * ONE_OVER_G;
+						if (triangulate_range)
+						{
+							range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
+							if (range == -1.0)
+								range = 1000.0;  // use 200 meters if unable to triangulate range
+						}
+						else
+							range = get_2d_range (pitch_device_position, intercept_point);
+						
+						if (airborne_target)
+							// no use calulating ballistic trajectory to point on ground at target's distance
+							time_of_flight = range / weapon_velocity;
+						else
+							time_of_flight = 2.0 * weapon_velocity * sin (new_pitch) * ONE_OVER_G;
 
 						target_move_distance = time_of_flight * target_true_velocity;
 
@@ -746,9 +779,13 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 						new_intercept_point.y = current_target_position.y + (target_motion_vector.y * target_move_distance);
 						new_intercept_point.z = current_target_position.z + (target_motion_vector.z * target_move_distance);
 
+						#ifdef DEBUG_MODULE
+						debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+						#endif
 						if (point_inside_map_area (&new_intercept_point))
 						{
-							new_intercept_point.y = get_3d_terrain_elevation (new_intercept_point.x, new_intercept_point.z);
+							if (!airborne_target)
+								new_intercept_point.y = get_3d_terrain_elevation (new_intercept_point.x, new_intercept_point.z);
 						}
 						else
 						{
@@ -769,6 +806,155 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 			//
 
 			result = get_angle_of_projection (pitch_device_position, intercept_point, weapon_velocity, angle_of_projection);
+		}
+	}
+	else
+	{
+		//
+		// target off map
+		//
+
+		result = get_angle_of_projection (pitch_device_position, intercept_point, weapon_velocity, angle_of_projection);
+	}
+
+	return (result);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
+(
+	vec3d *pitch_device_position,
+	entity_sub_types wpn_type,
+	float weapon_velocity,
+	entity *source,
+	entity *target,
+	vec3d *intercept_point,
+	float *angle_of_projection
+)
+{
+	int
+		airborne_target,
+		triangulate_range,
+		result,
+		number_of_iterations;
+
+	float
+		range,
+		time_of_flight,
+		target_true_velocity,
+		target_move_distance;
+
+	vec3d
+		current_target_position,
+		new_intercept_point,
+		target_motion_vector;
+
+	ASSERT (pitch_device_position);
+
+	ASSERT (target);
+
+	ASSERT (intercept_point);
+
+	ASSERT (angle_of_projection);
+
+	result = FALSE;
+
+	*angle_of_projection = 0.0;
+
+	get_local_entity_target_point (target, &current_target_position);
+	*intercept_point = current_target_position;
+
+	airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
+
+	triangulate_range = (source == get_gunship_entity() && get_range_finder() == RANGEFINDER_TRIANGULATION);
+	if (triangulate_range)
+	{
+		range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
+		if (range == -1.0)
+			range = 1000.0;  // use 1000 meters if unable to triangulate range
+		#ifdef DEBUG_MODULE
+		debug_log("triangulated range: %.0f (real range: %.0f)", range, get_2d_range (pitch_device_position, intercept_point));
+		#endif
+	}
+	else
+		range = get_2d_range (pitch_device_position, intercept_point);
+
+	if (range < 0.001)
+		return FALSE;
+
+	//
+	// target point differs to position so test inside map area before terrain elevation check
+	//
+
+	if (point_inside_map_area (intercept_point))
+	{
+		target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
+
+		if (target_true_velocity > 0.1)
+		{
+			//
+			// moving target
+			//
+
+			result = TRUE;
+
+			get_local_entity_vec3d (target, VEC3D_TYPE_MOTION_VECTOR, &target_motion_vector);
+			normalise_3d_vector_given_magnitude (&target_motion_vector, target_true_velocity);
+			new_intercept_point = *intercept_point;
+
+			// refine ballistic calulation
+			if (source == get_gunship_entity())
+				number_of_iterations = 5;
+			else
+				number_of_iterations = 3;
+			while (number_of_iterations--)
+			{
+				int simplified = (number_of_iterations > 1);   // only calculate with highest accuracy the last time
+				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, simplified))
+					return FALSE;
+				*intercept_point = new_intercept_point;
+
+				if (number_of_iterations > 0)
+				{
+					if (triangulate_range)
+					{
+						range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
+						if (range == -1.0)
+							range = 1000.0;  // use 200 meters if unable to triangulate range
+					}
+					else
+						range = get_2d_range (pitch_device_position, intercept_point);
+
+					target_move_distance = time_of_flight * target_true_velocity;
+
+					new_intercept_point.x = current_target_position.x + (target_motion_vector.x * target_move_distance);
+					new_intercept_point.y = current_target_position.y + (target_motion_vector.y * target_move_distance);
+					new_intercept_point.z = current_target_position.z + (target_motion_vector.z * target_move_distance);
+
+					#ifdef DEBUG_MODULE
+					debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+					#endif
+					if (!point_inside_map_area (&new_intercept_point))
+						break;
+				}
+			}
+			#ifdef DEBUG_MODULE
+			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+			#endif
+		}
+		else
+		{
+			float time_of_flight;
+			//
+			// stationary target
+			//
+
+			result = TRUE;
+			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, FALSE))
+				return FALSE;
 		}
 	}
 	else
@@ -896,6 +1082,7 @@ static int get_pitch_device_to_target_vector
 		}
 		////////////////////////////////////////
 		case WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION:
+		case WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC:
 		////////////////////////////////////////
 		{
 			weapon_velocity = weapon_database[weapon_sub_type].cruise_velocity;
@@ -907,7 +1094,10 @@ static int get_pitch_device_to_target_vector
 
 			if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
 			{
-				result = get_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_velocity, target, &target_position, &pitch);
+				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
+					result = get_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_velocity, source, target, &target_position, &pitch);
+				else
+					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_velocity, source, target, &target_position, &pitch);
 			}
 			else
 			{
@@ -922,7 +1112,10 @@ static int get_pitch_device_to_target_vector
 					target_position.y = get_3d_terrain_elevation (target_position.x, target_position.z);
 				}
 
-				result = get_angle_of_projection (pitch_device_position, &target_position, weapon_velocity, &pitch);
+				if (weapon_database[weapon_sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
+					result = get_angle_of_projection (pitch_device_position, &target_position, weapon_velocity, &pitch);
+				else
+					result = get_lead_and_ballistic_intercept_point_and_angle_of_projection (pitch_device_position, weapon_sub_type, weapon_velocity, source, target, &target_position, &pitch);
 			}
 
 			if (result)

@@ -60,89 +60,157 @@
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define DEBUG_MODULE 0
+
+#define FREE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
+#define FREE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-enum WEAPON_LOCK_TYPES
+#include "project.h"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void reset_free_camera (camera *raw)
 {
-	WEAPON_LOCK_NO_ACQUIRE,
-	WEAPON_LOCK_NO_WEAPON,
-	WEAPON_LOCK_NO_TARGET,
-	WEAPON_LOCK_INVALID_TARGET,
-	WEAPON_LOCK_SEEKER_LIMIT,
-	WEAPON_LOCK_NO_LOS,
-	WEAPON_LOCK_NO_BORESIGHT,
-	WEAPON_LOCK_MIN_RANGE,
-	WEAPON_LOCK_MAX_RANGE,
-	WEAPON_LOCK_VALID,
-	NUM_WEAPON_LOCK_TYPES
-};
-
-typedef enum WEAPON_LOCK_TYPES weapon_lock_types;
+	// get heading and velocity from previous camera
+	raw->chase_camera_heading = get_heading_from_attitude_matrix(raw->attitude);
+	raw->chase_camera_pitch = get_pitch_from_attitude_matrix(raw->attitude);
+	multiply_transpose_matrix3x3_vec3d(&raw->velocity, raw->attitude, &raw->motion_vector);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define ROCKET_SALVO_SIZE_ALL	(1000)
+void update_free_camera (camera *raw)
+{
+	float
+		acceleration,
+		combined_heading;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	float
+		max_velocity = 100.0;
 
-extern weapon_lock_types
-	weapon_lock_type;
+	float dh, dp;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// adjust direction (pan)
 
-extern int
-	fire_continuous_weapon,
-	fire_single_weapon,
-	rocket_salvo_size,
-	rocket_salvo_count;
+	if (camera_previous_mouse_update_flag != get_mouse_update_flag())
+	{
+		dh = get_mouse_move_delta_x() * -180 / 8000.0;
+		dp = get_mouse_move_delta_y() * -90 / 8000.0;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		camera_previous_mouse_update_flag = get_mouse_update_flag();
+	
+		raw->chase_camera_pitch += rad(dp);
+		raw->chase_camera_heading -= rad(dh);
+	}
 
-extern int
-	good_tone;
+	raw->chase_camera_pitch = bound(raw->chase_camera_pitch, FREE_CAMERA_ROTATE_DOWN_LIMIT, FREE_CAMERA_ROTATE_UP_LIMIT);
 
-extern float
-	good_tone_delay;
+	combined_heading = raw->chase_camera_heading;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	get_3d_transformation_matrix (raw->attitude, combined_heading, raw->chase_camera_pitch, 0.0);
 
-extern void initialise_common_weapon_systems (void);
 
-extern void deinitialise_common_weapon_systems (void);
+	// adjustposition (move camera)
 
-extern void update_weapon_lock_type (target_acquisition_systems system);
+	// forward/backwards
+	if (move_view_forward_key || mouse_wheel_up)
+	{
+		int movement = mouse_wheel_up ? 5 * mouse_wheel_up-- : move_view_forward_key;
+	
+		if (raw->velocity.z < -12.5)
+			acceleration = -4.0 * raw->velocity.z;
+		else
+			acceleration = 50.0;
 
-extern void increase_rocket_salvo_size (void);
+		acceleration *= movement;
+		max_velocity *= movement;
+	}
+	else if (move_view_backward_key || mouse_wheel_down)
+	{
+		int movement = mouse_wheel_down ? 5 * mouse_wheel_down-- : move_view_backward_key;
+	
+		if (raw->velocity.z > 12.5)
+			acceleration = -4.0 * raw->velocity.z;
+		else
+			acceleration = -50.0;
 
-extern void decrease_rocket_salvo_size (void);
+		acceleration *= movement;
+		max_velocity *= movement;
+	}
+	else if (raw->velocity.z > 0.0 && raw->velocity.z < 1.0)
+		acceleration = -2.0;
+	else if (raw->velocity.z < 0.0 && raw->velocity.z > -1.0)
+		acceleration = 2.0;
+	else
+		acceleration = -2.0 * raw->velocity.z;
 
-extern void set_gunship_weapon (entity_sub_types weapon_sub_type);
+	raw->velocity.z = bound(raw->velocity.z + acceleration * get_delta_time(), -max_velocity, max_velocity);
+	if (raw->velocity.z > -0.1 && raw->velocity.z < 0.1)
+		raw->velocity.z = 0.0;
 
-extern void play_common_cpg_radar_jammer_speech (int damaged);
+	// sideways
+	max_velocity = 100.0;
+	if (move_view_right_key)
+	{
+		if (raw->velocity.x < -12.5)
+			acceleration = -4.0 * raw->velocity.x;
+		else
+			acceleration = 50.0;
 
-extern void play_common_cpg_infra_red_jammer_speech (int damaged);
+		acceleration *= move_view_right_key;
+		max_velocity *= move_view_right_key;
+	}
+	else if (move_view_left_key)
+	{
+		if (raw->velocity.x > 12.5)
+			acceleration = -4.0 * raw->velocity.x;
+		else
+			acceleration = -50.0;
 
-extern void play_common_cpg_failed_launch_speech (weapon_lock_types type);
+		acceleration *= move_view_left_key;
+		max_velocity *= move_view_left_key;
+	}
+	else if (raw->velocity.x > 0.0 && raw->velocity.x < 1.0)
+		acceleration = -2.0;
+	else if (raw->velocity.x < 0.0 && raw->velocity.x > -1.0)
+		acceleration = 2.0;
+	else
+		acceleration = -2.0 * (raw->velocity.x - 0.1);
 
-extern void update_good_tone (void);
+	raw->velocity.x = bound(raw->velocity.x + acceleration * get_delta_time(), -max_velocity, max_velocity);
+	if (raw->velocity.x > -0.1 && raw->velocity.x < 0.1)
+		raw->velocity.x = 0.0;
 
-extern void reset_good_tone (void);
+	// up/down
+	acceleration = -2.0 * raw->velocity.y;
+	raw->velocity.y += acceleration * get_delta_time();
 
-extern float get_weapon_drop(entity_sub_types wpn_type);
+	// rotate velocity in view diretion:
+	multiply_matrix3x3_vec3d(&raw->motion_vector, raw->attitude, &raw->velocity);
 
-extern void lase_range_for_ballistics_sight(void);
+	// move in direction of velocity
+	raw->position.x += raw->motion_vector.x * get_delta_time();
+	raw->position.y += raw->motion_vector.y * get_delta_time();
+	raw->position.z += raw->motion_vector.z * get_delta_time();
+
+	// keep point above ground (unless point off map)
+	if (point_inside_map_area (&raw->position))
+	{
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + CAMERA_MIN_HEIGHT_ABOVE_GROUND);
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

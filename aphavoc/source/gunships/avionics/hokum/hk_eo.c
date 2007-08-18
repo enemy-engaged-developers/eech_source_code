@@ -84,11 +84,11 @@ void initialise_hokum_eo (void)
 	eo_sensor									= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth									= rad (0.0);
-	eo_min_azimuth								= rad (-110.0);
-	eo_max_azimuth								= rad (110.0);
+	eo_min_azimuth								= rad (-70.0);
+	eo_max_azimuth								= rad (70.0);
 	eo_elevation								= rad (0.0);
-	eo_min_elevation							= rad (-30.0);
-	eo_max_elevation							= rad (10.0);
+	eo_min_elevation							= rad (-15.0);
+	eo_max_elevation							= rad (25.0);
 	eo_max_visual_range						= 5000.0;
 
 #ifdef OLD_EO
@@ -108,8 +108,8 @@ void initialise_hokum_eo (void)
 	hokum_flir.min_zoom						= 1.0;
 	hokum_flir.max_zoom						= 1.0 / 128.0;
 
-	hokum_llltv.zoom							= 1.0;
-	hokum_llltv.min_zoom						= 1.0 / 128.0;
+	hokum_llltv.zoom							= 1.0 / 2.0;
+	hokum_llltv.min_zoom						= 1.0 / 2.0;
 	hokum_llltv.max_zoom						= 1.0 / 128.0;
 
 	hokum_periscope.zoom						= 1.0;
@@ -846,8 +846,84 @@ void animate_hokum_virtual_cockpit_eo (object_3d_instance *inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void inc_hokum_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			dec_eo_field_of_view(&hokum_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			dec_eo_field_of_view(&hokum_llltv);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+			dec_eo_field_of_view(&hokum_periscope);
+			break;
+		default:
+			break;
+	}
+}
+
+void dec_hokum_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			inc_eo_field_of_view(&hokum_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+			inc_eo_field_of_view(&hokum_llltv);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+			inc_eo_field_of_view(&hokum_periscope);
+			break;
+		default:
+			break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_hokum_eo_system(void)
+{
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_LLLTV;
+
+		copy_eo_zoom(&hokum_flir, &hokum_llltv);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_LLLTV;
+
+		break;
+	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		copy_eo_zoom(&hokum_llltv, &hokum_flir);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV ||
+			target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+		{
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+		}
+
+		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void slave_hokum_eo_to_current_target (void)
 {
+	if (command_line_manual_laser_radar)
+		return;
+	
 	if (eo_on_target)
 	{
 		switch (eo_sensor)

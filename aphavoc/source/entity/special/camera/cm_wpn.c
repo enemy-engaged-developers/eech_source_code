@@ -163,6 +163,9 @@ void reset_weapon_camera (camera *raw)
 	raw->weapon_camera_direction.y = 0.0;
 	raw->weapon_camera_direction.z = 0.0;
 
+	reset_offset(raw);
+	raw->chase_camera_zoom = 0.1;
+
 	//
 	// motion vector
 	//
@@ -186,6 +189,7 @@ void update_weapon_camera (camera *raw)
 		direction;
 
 	float
+		lifetime_zoom_factor,
 		length;
 
 	int
@@ -205,6 +209,8 @@ void update_weapon_camera (camera *raw)
 	//
 	////////////////////////////////////////
 
+	adjust_camera_zoom(raw);
+	
 	//
 	// camera position and attitude
 	//
@@ -223,6 +229,12 @@ void update_weapon_camera (camera *raw)
 
 		if (length > 0.001)
 		{
+			if (length < 50.0)
+			{
+				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_FREE);
+				return;
+			}
+			
 			normalise_3d_vector_given_magnitude (&direction, length);
 		}
 		else
@@ -237,9 +249,13 @@ void update_weapon_camera (camera *raw)
 
 	get_matrix3x3_from_unit_vec3d (raw->attitude, &direction);
 
-	raw->position.x = weapon_position->x - (raw->attitude[2][0] * 10.0) + (raw->attitude[1][0] * 2.0);
-	raw->position.y = weapon_position->y - (raw->attitude[2][1] * 10.0) + (raw->attitude[1][1] * 2.0);
-	raw->position.z = weapon_position->z - (raw->attitude[2][2] * 10.0) + (raw->attitude[1][2] * 2.0);
+	lifetime_zoom_factor = 10.0 * max(get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME), 0.0);
+
+	raw->position.x = weapon_position->x - (raw->attitude[2][0] * (5.0 + 100.0 * raw->chase_camera_zoom + lifetime_zoom_factor)) + (raw->attitude[1][0] * 1.0);
+	raw->position.y = weapon_position->y - (raw->attitude[2][1] * (5.0 + 100.0 * raw->chase_camera_zoom + lifetime_zoom_factor)) + (raw->attitude[1][1] * 1.0);
+	raw->position.z = weapon_position->z - (raw->attitude[2][2] * (5.0 + 100.0 * raw->chase_camera_zoom + lifetime_zoom_factor)) + (raw->attitude[1][2] * 1.0);
+
+	add_turbulence(raw, &raw->position);
 
 	if (point_inside_map_area (&raw->position))
 	{

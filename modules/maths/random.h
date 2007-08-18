@@ -143,6 +143,9 @@ extern int get_random_number_seed (void);
 
 #define sfrand1x(SEED) (((double) (rand16x ((SEED)) - 16384)) * (1.0 / 16384.0))
 
+// normalized value (higher probability of close to zero
+double sfrand1norm();
+
 //
 // get random value in range 0.0 to 1.0
 //

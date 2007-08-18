@@ -66,6 +66,7 @@
 
 enum EO_FOV_LEVELS
 {
+	EO_FOV_ZOOM,
 	EO_FOV_NARROW,
 	EO_FOV_MEDIUM,
 	EO_FOV_WIDE,
@@ -144,7 +145,10 @@ extern void activate_common_eo (void);
 
 extern void deactivate_common_eo (void);
 
+extern void slew_eo_to_direction(float elevation, float azimuth);
+
 extern void slave_common_eo_to_current_target (void);
+extern void slave_common_eo_to_position (vec3d* target_position);
 
 extern void select_next_eo_target (void);
 
@@ -158,6 +162,8 @@ extern float convert_linear_view_value (eo_params_dynamic_move *eo);
 
 extern float make_panning_offset_from_axis (long state);
 
+extern void copy_eo_zoom(eo_params_dynamic_move* from, eo_params_dynamic_move* to);
+
 // returns range to point as return value, point in parameter
 extern float get_eo_los_intercept_point(vec3d* intercept_point);
 
@@ -165,6 +171,7 @@ extern int laser_is_active(void);
 extern void set_laser_is_active(int is_active);
 
 extern float get_triangulated_range(entity* target);
+extern float get_triangulated_by_position_range(vec3d* source, vec3d* target);
 
 extern int electrical_system_active(void);
 extern void set_electrical_system_active(int active);

@@ -71,6 +71,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void initialise_hms_gun_pipper (void);
+static void display_weapon_information (void);
+static void display_target_information (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,8 +129,7 @@ static screen
 static rgb_colour
 	clear_hud_colour;
 
-// TODO check what this really is for havoc
-#define HUD_UNIT_RATIO 15.0    // ratio of HUD size with distance to HUD
+#define HUD_UNIT_RATIO 14.6    // ratio of HUD size with distance to HUD
 
 static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
 
@@ -2472,15 +2473,32 @@ static void display_weapon_information (void)
 			weapon_type = "ATA %02d";
 		else
 		{
+			entity* target;
 			float x,y;
+			float angle_of_drop = 0.0;
+			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z : 0.0;
+			float drop_hud_distance;
+			float roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
 				weapon_type = "GUN %03d";
 			else
 				weapon_type = "RKT %03d";
 
+			angle_of_drop = get_weapon_drop(weapon_sub_type);
+
+			// move eo to hit point
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+				slew_eo_to_direction(-angle_of_drop, 0.0);
+
 			x = 0.0;
-			y = get_global_wide_cockpit() ? 0.25 : 0.0;
+			y = get_global_wide_cockpit() ? 0.26 : 0.0;
+
+			// this magic formula translates the angle to a HUD distance
+			// the magic values are just arrived at by measuring in game
+			drop_hud_distance = atan(angle_of_drop) * ((head_offset_z * 0.82) + 0.56) * HUD_UNIT_RATIO;
+			y -= cos(roll) * drop_hud_distance;
+			x += sin(roll) * drop_hud_distance;
 
 			draw_2d_circle(x, y, 0.1, hud_colour);
 			set_2d_pixel(x, y, hud_colour); 

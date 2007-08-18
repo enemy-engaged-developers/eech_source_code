@@ -167,7 +167,7 @@ float_type_data
 			"FLOAT_TYPE_AMPLIFICATION", 								// name
 			FLOAT_PACK_TYPE_UNSIGNED_VALUE,                    // pack_type
 			1,																	// pack_num_whole_bits (excluding sign bit)
-			4,																	// pack_num_fractional_bits
+			5,																	// pack_num_fractional_bits
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -565,6 +565,14 @@ float_type_data
 		},
 		{
 			"FLOAT_TYPE_LAND_URGENCY",                         // name
+			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_LAST_SEEN_TIME",                         // name
 			FLOAT_PACK_TYPE_UNPACKED,                          // pack_type
 			0,																	// pack_num_whole_bits (excluding sign bit)
 			0,																	// pack_num_fractional_bits

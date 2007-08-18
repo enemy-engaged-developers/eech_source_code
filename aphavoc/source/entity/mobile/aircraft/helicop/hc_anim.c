@@ -227,7 +227,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
-			blade_factor = 5.0;
+			blade_factor = 7.0;
 			break;
 
 		// four rotor blades
@@ -235,31 +235,31 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		case ENTITY_SUB_TYPE_AIRCRAFT_UH60_BLACK_HAWK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH64A_APACHE:
 		case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
-			blade_factor = 7.5;
+			blade_factor = 10.0;
 			break;
 
 		// coaxial three rotor blades
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
 		case ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM:
-			blade_factor = 9.0;
+			blade_factor = 11.0;
 			break;
 	
 		// three rotor blades		
 		case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
 		case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
 		case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
-			blade_factor = 12.0;
+			blade_factor = 15.0;
 			break;
 
 		// two rotor blades
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
 		case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
-			blade_factor = 16.0;
+			blade_factor = 25.0;
 			break;
 		
 		default:
-			blade_factor = 10.0;
+			blade_factor = 15.0;
 		}
 
 		rotor_angular_speed = bound(blade_factor * main_rotor_rpm, 180, blade_factor*100);

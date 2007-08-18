@@ -81,13 +81,13 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 	list_types
 		list_type;
 
+	list_type = va_arg (pargs, list_types);
+
 	#if DEBUG_MODULE
 
 	debug_log_entity_message (message, receiver, sender, pargs);
 
 	#endif
-
-	list_type = va_arg (pargs, list_types);
 
 	switch (list_type)
 	{
@@ -185,15 +185,18 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	float
 		damage_modifier;
 
-//	#if DEBUG_MODULE
-
-	debug_log_entity_message (message, receiver, sender, pargs);
-
-//	#endif
-
 	ASSERT (receiver);
 
 	damage_modifier = va_arg (pargs, double);
+	
+	ASSERT(damage_modifier >= 0 && damage_modifier <= 1.0);
+
+	#if DEBUG_MODULE
+
+	// IMPORTANT: this muct come after we read va_arg, or it will clobber it!
+	debug_log_entity_message (message, receiver, sender, pargs);
+
+	#endif
 
 	if (sender)
 	{

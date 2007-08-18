@@ -73,6 +73,8 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
+#define DEFAULT_GWUT_FILE "gwut190.csv"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,7 +324,7 @@ void process_ini_file(int argc, char *argv[])
 			q = strtok(NULL,"#");
 		}   
 
-		while(q[i]!=' ')
+		while(q[i] && q[i]!=' ')
 		 i++;
 		q[i] = '\0';
 
@@ -345,6 +347,8 @@ void process_ini_file(int argc, char *argv[])
 		 if (d1 == 1)
 			command_line_display_bpp=32;
 		}
+		if (strcmp(p, "persistent_smoke")==0)  command_line_persistent_smoke = d1;
+		if (strcmp(p, "wobbly-camera")==0)  command_line_wobbly_camera = d1;
 
 		if (strcmp(p, "nrt")==0)  	command_line_no_render_to_texture = d1;
 		if (strcmp(p, "notnl")==0) 	command_line_no_hardware_tnl = d1;
@@ -426,6 +430,8 @@ void process_ini_file(int argc, char *argv[])
 		{
 			if (strlen(q)!=0)
 				strcpy(WUT_filename, q);
+			else
+				strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 
 			debug_log("wutfile ini [%s]",WUT_filename);
 
@@ -492,14 +498,16 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "rudderax") == 0)		command_line_rudder_joystick_axis = d1 - 1;
 		if (strcmp(p, "nonlinear-pedals") == 0)		command_line_nonlinear_pedals = d1;
 		if (strcmp(p, "restricted_nvg_fov") == 0)	command_line_restricted_nvg_fov = d1; // loke 030420
-		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = TRUE; // arneh 20061211 - always in hi-res mode for MFDs
+//		if (strcmp(p, "highresmfd") == 0)	command_line_high_res_mfd = TRUE; // arneh 20061211 - always in hi-res mode for MFDs
+		if (strcmp(p, "colourmfd") == 0)	command_line_colour_mfd = d1; // arneh 20061211 - always in hi-res mode for MFDs
 		if (strcmp(p, "highreshud") == 0)	command_line_high_res_hud = d1; // loke 030420
 		if (strcmp(p, "maxplayers") == 0)	command_line_maxplayers = d1; // Werewolf 030518
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
+		if (strcmp(p, "campaign_map_mode") == 0)	command_line_campaign_map = d1;
+		if (strcmp(p, "campaign_map_palette") == 0)	command_line_campaign_map_palette = d1;
+		if (strcmp(p, "map_update_interval") == 0)	command_line_campaign_map_update_interval = d1;
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
 		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
-		if (strcmp(p, "greenmfd") == 0)		command_line_green_mfd = d1; // loke 030518
-		if (strcmp(p, "colourmfd") == 0)		command_line_colour_mfd = d1; // arneh 2006-11-06
 		if (strcmp(p, "tsdrender") == 0)		command_line_tsd_render_mode = d1; // VJ 030511
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
@@ -589,8 +597,8 @@ void dump_ini_file(void)
 	fprintf(f,"pss=%s               # primary masterserver setting (server internet address)\n",command_line_primary_server_setting);  //Werewolf: Defaults changed 080403
 	fprintf(f,"sss=%s               # secondary masterserver setting (server internet address)\n",command_line_secondary_server_setting);
 	fprintf(f,"ccrs=%d              # connection receive size, initial guess of campaign data size (default = 210k)\n",command_line_comms_connection_receive_size);
-	fprintf(f,"cdrs=%d              # data record size, similar to above…\n",command_line_comms_data_record_size);
-	fprintf(f,"cpbs=%d              # pack buffer size, similar to above…\n",command_line_comms_pack_buffer_size);
+	fprintf(f,"cdrs=%d              # data record size, similar to above\n",command_line_comms_data_record_size);
+	fprintf(f,"cpbs=%d              # pack buffer size, similar to above\n",command_line_comms_pack_buffer_size);
 	fprintf(f,"cpds=%d              # packet data size (def = 512)\n",command_line_comms_packet_data_size);
 	fprintf(f,"cgs=%d               # force the comms to use DirectPlay guaranteed send instead of its own (def=0).\n",command_line_comms_guaranteed_send);
 	fprintf(f,"crls=%d              # packet history list size, increase if client keeps getting kicked out by server (default = 1000)\n",command_line_comms_resend_list_size);
@@ -612,7 +620,7 @@ void dump_ini_file(void)
 	fprintf(f,"gunship_type=%d      # Gunship_types are, 0 = Apache, 1 = Havoc, 2 = Comanche, 3 = Hokum\n",command_line_game_initialisation_phase_gunship_type);
 	fprintf(f,"path=%s              # Path to map, campaign, skirmish\n",command_line_game_initialisation_phase_path);
 	fprintf(f,"\n[Dynamics]\n");
-	fprintf(f,"advancedfm=%d      # advanced (more complex) flight model, off by default.\n",command_line_dynamics_advanced_flight_model);
+	fprintf(f,"advancedfm=%d      # advanced flight model, off by default. Makes sideways flight easier, but not realistic\n",command_line_dynamics_advanced_flight_model);
 	fprintf(f,"enginerealism=%d      # realistic engine workload simulation model, on by default.\n",command_line_dynamics_advanced_engine_model);
 	fprintf(f,"enginestartup=%d      # manual engine start up, off by default.\n", command_line_dynamics_engine_startup);
 	fprintf(f,"drbs=%3.1f         # retreating blade stall, floating point scaling factor for RBS effect (default = 1.0)\n",command_line_dynamics_retreating_blade_stall_effect);
@@ -652,14 +660,18 @@ void dump_ini_file(void)
 		hud_code[3][0],hud_code[3][1],hud_code[3][2]);
 
 	fprintf(f,"\n[Gameplay]\n");	
-	fprintf(f,"faa=%d               # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
-	fprintf(f,"radarinf=%d          # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
-	fprintf(f,"grstab=%d            # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
+	fprintf(f,"faa=%d                  # fligh any aircraft, def = 1 (on)\n",command_line_fly_any_airplane);
+	fprintf(f,"radarinf=%d             # infantry no longer visible on radar, def = 1 (on)\n",command_line_ground_radar_ignores_infantry);
+	fprintf(f,"grstab=%d               # ground stabilisation of FLIR, def = 1 (on)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"manual_laser/radar=%d   # have to manually enable and disable radar and laser, def = 0 (off)\n",command_line_manual_laser_radar);
 	fprintf(f,"targeting_system_auto_page = %d   # changing targeting system will also bring up the targeting systems MFD page. def = 1 (on)\n", command_line_targeting_system_auto_page);
-	fprintf(f,"camcom=%d            # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
-	fprintf(f,"destgt=%d            # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
-	fprintf(f,"cannontrack=%d       # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
+	fprintf(f,"camcom=%d               # Activates the Campaign Commander\n",command_line_camcom); // Jabberwock 031007
+	fprintf(f,"campaign_map_mode=%d    # 1 = default resolution and 2 is high resolution map (only for fast PCs\n",command_line_campaign_map);
+	fprintf(f,"campaign_map_palette=%d # Which palette to use for the new campaign map.  1 is the default shades from green via red to white, 2 is more like a paper map\n",command_line_campaign_map_palette);
+	fprintf(f,"map_update_interval=%d  # How often (in seconds) enemy units are updated on campaign map  120 seconds is the default\n",command_line_campaign_map_update_interval);
+	fprintf(f,"destgt=%d               # Activates designated target list\n",command_line_designated_targets); // Jabberwock 031107
+	fprintf(f,"cannontrack=%d          # Cannon tracking boresight (def=1, 0 = no tracking, 1 = track if no acq, 2 = track in IHADSS/HIDSS/HMS \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
+
 	fprintf(f,"\n[Joysticks and TIR]\n");	
 	fprintf(f,"eopann=%d            # joystick no. used for FLIR panning\n",command_line_eo_pan_joystick_index);
 	fprintf(f,"eopanv=%d            # joystick DirectX axis used for vertical FLIR panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1
@@ -688,6 +700,7 @@ void dump_ini_file(void)
 	fprintf(f,"msl=%d               # activates mouselook, and TrackIR when present. '0' is OFF, '1' is internal-only, '2' is external-only, '3' is both.\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed when activated (def=15, must be > 0) otherwise POV speed (min=1,def=13,max=20)\n",command_line_mouse_look_speed);
 	fprintf(f,"TIR_6DOF=%d          # Enables support for TrackIR vector in the hokum and comanche\n",command_line_TIR_6DOF); // Retro 6Feb2005
+
 	fprintf(f,"\n[Graphics and textures]\n");
 	fprintf(f,"minfov=%d            # general field of view minimum, linked to key '7', normal fov (60) = key '8'\n",command_line_min_fov);
 	fprintf(f,"maxfov0=%d            # general field of view maximum for Apache pits, linked to key '9'\n",command_line_max_fov0);
@@ -697,10 +710,9 @@ void dump_ini_file(void)
 	fprintf(f,"high_lod_hack=%d     # EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities)\n",command_line_high_lod_hack);	// Retro 31Oct2004
 	fprintf(f,"dwash=%d             # visible rotor downwash (dust), def = 1 (on)\n",command_line_downwash);
 	fprintf(f,"restricted_nvg_fov=%d        # restrict night vision field of view by shading edge of screen, def = 1 (on)\n", command_line_restricted_nvg_fov);
+	fprintf(f,"colourmfd=%d         # MFDs will use colour when available, def = 1 (on)\n",command_line_colour_mfd);
 //	fprintf(f,"highresmfd=%d        # high resolution mfd's, def = 1 (on)\n",command_line_high_res_mfd);
 	fprintf(f,"highreshud=%d        # high resolution HUD, def = 1 (on)\n",command_line_high_res_hud);
-	fprintf(f,"greenmfd=%d          # targeting cameras use monochrome green (will use monochrome grey if off)(def = 1 (on))\n",command_line_green_mfd);
-	fprintf(f,"colourmfd=%d         # MFDs use colours (only Apache currently)) (def = 1 (on))\n",command_line_colour_mfd);
 	fprintf(f,"tsdrender=%d         # TSD render options (0-4) def = 0 (contours only)\n",command_line_tsd_render_mode);
 	fprintf(f,"tsdpalette=%d        # TSD palette options (0-2) def = 0 \n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d          # TSD showing enemy colours (red, blue) def = 0 (off)\n",command_line_tsd_enemy_colours);
@@ -711,6 +723,8 @@ void dump_ini_file(void)
 	fprintf(f,"mipmapping=%d        # Use mipmnapped textures (dds files). WARNING: only use with correct texture packs (def=0) \n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d     # Use dynamic water textures (def=0) \n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"night_light=%3.1f     # Make night light levels darker (fraction 0 (dark) to 1 default light) \n",global_night_light_level);	//VJ 060920 night light levels
+	fprintf(f,"persistent_smoke=%d   # Make smoke from burning targets keep burning for a long time (CPU intensive)\n", command_line_persistent_smoke);
+	fprintf(f,"wobbly-camera=%d     # If enabled (=1) will make movement of external cameras wobbly (and smoother)\n", command_line_wobbly_camera);
 	
 	fprintf(f,"\n[Misc]\n");
 	fprintf(f,"filter=%d            # Turns on session filtering\n",command_line_session_filter); // Jabberwock 031210

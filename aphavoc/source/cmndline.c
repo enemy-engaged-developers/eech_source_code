@@ -157,6 +157,7 @@ int
 	command_line_no_hardware_tnl								= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
+	command_line_persistent_smoke								= TRUE,
 	command_line_no_mission_complete_music					= FALSE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
 	command_line_mouse_look_speed								= 15,		// Retro 030317
@@ -195,10 +196,12 @@ int
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
 	command_line_tsd_palette									= 0,		// VJ 030511
-	command_line_green_mfd										= TRUE,		// loke 030517
 	command_line_colour_mfd										= TRUE,		// arneh 2006-11-06
 	command_line_maxplayers							= 4,	// Werewolf 030518
 	command_line_camcom								= FALSE,	// Jabberwock 031007 Campaign Commander
+	command_line_campaign_map						= 1,		// campaign map mode
+	command_line_campaign_map_palette				= 1,		// palette used for campaign map
+	command_line_campaign_map_update_interval       = 120,      // seconds
 	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis				= 1,	// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
@@ -209,6 +212,7 @@ int
 	command_line_reverse_pedal						= 0,	// Retro 17Jul2004
 	command_line_external_trackir					= 0,	// Retro 31Oct2004
 	command_line_external_trackir_direction	= 0,	// Retro 31Jan2005
+	command_line_wobbly_camera				= TRUE,
 	command_line_high_lod_hack						= 0,	// Retro 31Oct2004
 	command_line_TIR_6DOF							= 0,	// Retro 6Feb2005
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
@@ -1982,19 +1986,6 @@ void process_command_line (int argc, char *argv[])
 			}
 		}
 		////////////////////////////////////////
-		else if (s2 = strarg (s1, "green_mfd"))		// loke 030517
-		////////////////////////////////////////
-		{
-			if (*s2 == ':')
-			{
-				sscanf (s2 + 1, "%d", &command_line_green_mfd);
-			}
-			else
-			{
-				command_line_green_mfd = TRUE;
-			}
-		}
-		////////////////////////////////////////
 		else if (s2 = strarg (s1, "colour_mfd"))		// arneh 2006-11-06
 		////////////////////////////////////////
 		{
@@ -2014,6 +2005,32 @@ void process_command_line (int argc, char *argv[])
 			if (*s2 == ':')
 			{
 				sscanf (s2 + 1, "%d", &command_line_camcom);
+			}
+			else
+			{
+				command_line_camcom = FALSE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "campaign_map_mode"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_campaign_map);
+			}
+			else
+			{
+				command_line_camcom = FALSE;
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "campaign_map_palette"))
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_campaign_map_palette);
 			}
 			else
 			{

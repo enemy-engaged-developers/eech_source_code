@@ -799,7 +799,7 @@ void render_bounding_box_line ( vertex *points, int pt1, int pt2, real_colour co
 void calculate_luminous_colour ( real_colour *colour )
 {
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if (active_3d_environment->render_filter == RENDER_INFRARED )
 	{
 	
 
@@ -943,7 +943,7 @@ void calculate_lightmap_luminous_colour ( real_colour *colour )
 		igreen,
 		iblue;
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
 	
 		float

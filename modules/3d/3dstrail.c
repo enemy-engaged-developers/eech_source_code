@@ -398,7 +398,7 @@ real_colour light_smoke_colour ( real_colour colour, int additive )
 	if ( additive )
 	{
 
-		if ( active_3d_environment->infrared_mode == INFRARED_ON )
+		if (active_3d_environment->render_filter != RENDER_CLEAR )
 		{
 
 			//

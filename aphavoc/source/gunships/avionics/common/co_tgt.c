@@ -1128,3 +1128,20 @@ rangefinding_system get_range_finder(void)
 	
 	return RANGEFINDER_TRIANGULATION;
 }
+
+float get_target_range(vec3d* target_position, rangefinding_system* rf_system)
+{
+	rangefinding_system system = get_range_finder();
+	vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+
+	if (!target_position)
+		return 0.0;
+
+	if (rf_system)
+		*rf_system = system;
+
+	if (get_range_finder() != RANGEFINDER_TRIANGULATION)
+		return get_3d_range(source_position, target_position);
+	else
+		return get_triangulated_by_position_range(source_position, target_position);
+}

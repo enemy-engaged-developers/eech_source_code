@@ -117,11 +117,11 @@ void initialise_comanche_eo (void)
 	comanche_flir.min_zoom				= 1.0;
 	comanche_flir.max_zoom				= 1.0 / 128.0;
 
-	comanche_dtv.zoom						= 1.0;
-	comanche_dtv.min_zoom				= 1.0 / 128.0; // Jabberwock 031002 1.0 to zoom (out) DTV
+	comanche_dtv.zoom						= 1.0 / 2.0;
+	comanche_dtv.min_zoom				= 1.0 / 2.0; // Jabberwock 031002 1.0 to zoom (out) DTV
 	comanche_dtv.max_zoom				= 1.0 / 128.0;
 
-	comanche_dvo.zoom						= 1.0;
+	comanche_dvo.zoom						= 1.0 / 8.0;
 	comanche_dvo.min_zoom				= 1.0 / 8.0;
 	comanche_dvo.max_zoom				= 1.0 / 128.0;
 #endif
@@ -891,8 +891,74 @@ void animate_comanche_eo (object_3d_instance *inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void inc_comanche_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			dec_eo_field_of_view(&comanche_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+			dec_eo_field_of_view(&comanche_dtv);
+			break;
+		default:
+			break;
+	}
+}
+
+void dec_comanche_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			inc_eo_field_of_view(&comanche_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+			inc_eo_field_of_view(&comanche_dtv);
+			break;
+		default:
+			break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_comanche_eo_system(void)
+{
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_DTV;
+
+		copy_eo_zoom(&comanche_flir, &comanche_dtv);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_DTV;
+
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		copy_eo_zoom(&comanche_dtv, &comanche_flir);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void slave_comanche_eo_to_current_target (void)
 {
+	if (command_line_manual_laser_radar)
+		return;
+	
 	if (eo_on_target)
 	{
 		switch (eo_sensor)

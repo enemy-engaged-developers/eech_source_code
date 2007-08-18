@@ -553,8 +553,7 @@ void pack_unsigned_data (unsigned int unpacked_data, int number_of_bits_to_pack)
 	// arneh - filter out any excess bits, if there are any
 	if (number_of_bits_to_pack < 32)
 	{
-		int max_value = (1 << (number_of_bits_to_pack - 1)) - 1;
-
+		unsigned int max_value = (1 << number_of_bits_to_pack) - 1;
 		if (unpacked_data > max_value)
 			unpacked_data = max_value;
 	}

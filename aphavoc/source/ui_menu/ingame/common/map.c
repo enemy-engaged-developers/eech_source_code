@@ -269,6 +269,50 @@ const layer_control_button_type
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"TRACK",
 	};
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static vec3d* get_last_known_position(entity* en)
+{
+	// arneh, 2007-07-08 - only update map position if update interval has passed
+
+	int
+		side,
+		is_enemy;
+
+	vec3d* pos;
+
+	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	is_enemy = side != get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+
+	if (command_line_campaign_map_update_interval && is_enemy && en->type == ENTITY_TYPE_GROUP)
+	{
+		// arneh, 2007-07-08 - only update map position if update interval has passed
+
+		int day = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY);
+		float current_time = current_time = (day * 24 *3600) + get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+		
+		float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+		float time_since_last_update = current_time - last_update;
+
+		if (time_since_last_update > command_line_campaign_map_update_interval)
+		{
+			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+			set_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, current_time);
+			set_local_entity_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, pos);
+		}
+		else
+			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_LAST_KNOWN_POSITION);
+	}
+	else
+		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+	return pos;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -418,7 +462,7 @@ void draw_2d_map (ui_object *obj, void *arg)
  
 	terrain_2d_map_contour_lines_drawn = TRUE;
 
-   draw_2d_terrain_contour_map ();
+	draw_2d_shaded_terrain_contour_map ();
 
 	//
 	// draw texture overlays
@@ -469,7 +513,8 @@ void draw_2d_map (ui_object *obj, void *arg)
 
 	map_draw_waypoint_routes (obj, this_side);
 
-	map_draw_events (obj);
+//	this causes map flicker, so removed
+//	map_draw_events (obj);
 
 	en = get_ui_mouse_over_entity ();
 
@@ -837,7 +882,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 		if (target)
 		{
-			target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			target_pos = get_last_known_position(target);
 
 			if (target_pos)
 			{
@@ -2193,7 +2238,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 		return;
 	}
 
-	pos = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
+	pos = get_last_known_position(group);
 
 	ASSERT (pos);
 
@@ -2394,6 +2439,9 @@ static void map_draw_group (ui_object *obj, entity *en)
 	map_dimension_type
 		*map_dimensions;
 
+	int
+		is_friendly;
+
 	ASSERT (en);
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
@@ -2401,7 +2449,8 @@ static void map_draw_group (ui_object *obj, entity *en)
 	ASSERT (map_dimensions);
 		
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
-		
+	is_friendly = side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+
 	if (get_gunship_entity ())
 	{
 		player_group = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER);
@@ -2420,7 +2469,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 		current_page_group = NULL;
 	}
 
-	if ((en == player_group) || (en == current_page_group) || (map_dimensions->size < FORCE_DRAW_GROUP_MEMBERS_RADIUS))
+	if (is_friendly && ((en == player_group) || (en == current_page_group) || (map_dimensions->size < FORCE_DRAW_GROUP_MEMBERS_RADIUS)))
 	{
 		//
 		// Draw individual members
@@ -2458,23 +2507,37 @@ static void map_draw_group (ui_object *obj, entity *en)
 			if (icon != MAP_ICON_NONE)
 			{
 				group_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
-		
-				pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+//				if (!is_friendly && command_line_campaign_map_update_interval)
+					pos = get_last_known_position(en);
+/*				{
+					// arneh, 2007-07-08 - only update map position if update interval has passed
+
+					float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
+					float time_since_last_update = current_time - last_update;
+
+					if (time_since_last_update > command_line_campaign_map_update_interval)
+					{
+						pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+
+						set_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME, current_time);
+						set_local_entity_vec3d (en, VEC3D_TYPE_LAST_KNOWN_POSITION, pos);
+					}
+					else
+						pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_LAST_KNOWN_POSITION);
+				}*/
+//				else
+//					pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 				
 				map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
 			
-				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP)
-				{
-					if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
+				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP && is_friendly)
+					if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
 					{
-						if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
-						{
-							name = get_local_entity_string (en, STRING_TYPE_GROUP_CALLSIGN);
-						
-							map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
-						}
+						name = get_local_entity_string (en, STRING_TYPE_GROUP_CALLSIGN);
+					
+						map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
 					}
-				}
 			}
 		}
 	}
@@ -2748,7 +2811,7 @@ void map_draw_towns (ui_object *obj)
 	rgb_colour
 		*col;
 
-	col = &ui_colour_grey;
+	col = &ui_colour_white;
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
@@ -2760,7 +2823,7 @@ void map_draw_towns (ui_object *obj)
 	{
 		if (item->type == POPULATION_TYPE_TOWN)
 		{
-			if (map_dimensions->size <= item->zoom)
+			if (map_dimensions->size <= (item->zoom * 2))
 			{
 				pos.x = item->x;
 				pos.y = 0.0;
@@ -2772,7 +2835,7 @@ void map_draw_towns (ui_object *obj)
 
 				ASSERT (item->name);
 
-				map_draw_string (obj, &pos, item->name, UI_FONT_ARIAL_16, col, FALSE);
+				map_draw_string (obj, &pos, item->name, UI_FONT_ARIAL_14, col, FALSE);
 			}
 		}
 
@@ -2892,7 +2955,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	
 						if (objective)
 						{
-							pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+							pos = get_last_known_position(objective);
 	
 							if (pos)
 							{
@@ -2925,7 +2988,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	
 						if (objective)
 						{
-							pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+							pos = get_last_known_position(objective);
 	
 							ASSERT (pos);
 	
@@ -3251,16 +3314,14 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
 
-	// get entity position
-	en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-
-	ASSERT (en_pos);
-	
 	// get mission position
 	mission_pos = NULL;
 
 	if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
 	{
+		// get entity position
+		en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);  // known to be friendly
+
 		if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 		{
 			mission = get_local_group_primary_task (en);
@@ -3278,7 +3339,7 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 	
 				if (objective)
 				{
-					mission_pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+					mission_pos = get_last_known_position (objective);
 
 					if (mission_pos)
 					{
@@ -3307,10 +3368,14 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 			}
 		}
 	}
+	else
+		en_pos = get_last_known_position(en);
 
 	//
 	// Draw Group / Member Icon
 	//
+
+	ASSERT (en_pos);
 
 	icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
 
@@ -3369,7 +3434,7 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 
 	if (objective)
 	{
-		mission_pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
+		mission_pos = get_last_known_position(objective);
 
 		ASSERT (mission_pos);
 	}
@@ -4481,11 +4546,11 @@ void map_draw_grid (ui_object *obj)
 		}
 
 		set_ui_font_type (UI_FONT_ARIAL_14);
-	
+
 		set_ui_font_colour (ui_colour_white);
-	
+
 		// along the X
-	
+
 		for (grid_loop = inew_wxmin; grid_loop <= inew_wxmax; grid_loop += grid_spacing)
 		{
 
@@ -4496,37 +4561,37 @@ void map_draw_grid (ui_object *obj)
 
 			if ((grid_loop >= wxmin) && (grid_loop <= wxmax))
 			{
-		
+
 				map_get_screen_coords_from_world (obj, &pos1, &pos1);
-	
+
 				map_get_screen_coords_from_world (obj, &pos2, &pos2);
-	
+
 				if ((grid_loop % SECTOR_SIDE_LENGTH) == 0)
 				{
-	
+
 					// sector boundary
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_white);
-		
+
 					sprintf (grid_number, "%03d", (int) (grid_loop * one_over_sector_side_length));
-		
+
 					ui_display_text (grid_number, pos1.x, pos1.z - Y_BORDER);
 				}
 				else
 				{
-	
+
 					// sub_sector division
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_slate_grey);
 				}
 			}
 		}
-	
+
 		// down the Z
-	
+
 		for (grid_loop = inew_wzmin; grid_loop <= inew_wzmax; grid_loop += grid_spacing)
 		{
-	
+
 			pos1.x = wxmin;
 			pos1.z = grid_loop;
 			pos2.x = wxmax;
@@ -4534,70 +4599,57 @@ void map_draw_grid (ui_object *obj)
 
 			if ((grid_loop >= wzmax) && (grid_loop <= wzmin))
 			{
-		
+
 				map_get_screen_coords_from_world (obj, &pos1, &pos1);
-		
+
 				map_get_screen_coords_from_world (obj, &pos2, &pos2); 
-	
+
 				if ((grid_loop % SECTOR_SIDE_LENGTH) == 0)
 				{
 	
 					// sector boundary
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_white);
-		
+
 					sprintf (grid_number, "%03d", (int) (grid_loop * one_over_sector_side_length));
-		
+
 					ui_display_text (grid_number, pos1.x + X_BORDER, pos1.z - ui_get_font_height ());
 				}
 				else
 				{
-	
+
 					// sub_sector division
 			
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_slate_grey);
 				}
 			}
 		}
-	}
 
-	//
-	// Draw scale (Im not proud of this - TG)
-	//
+		//
+		// Draw scale
+		//
 
-	if (grid_spacing >= 1024.0)
-	{
-	
-		sprintf (scale_text, "%s : %d km", get_trans ("Grid"), (int) (grid_spacing / 1024.0));
-	}
-	else
-	{
-
-		if (grid_spacing == 128.0)
 		{
+			int value = (grid_spacing / 128) * 125; // binary -> decimal
+			if (value >= 1000) {
+				value /= 1000;	// m->km
+			}
 
-			sprintf (scale_text, "%s : 125 m", get_trans ("Grid"));
+			sprintf(scale_text, "%s : %d %sm",
+					get_trans("Grid"),
+					value,
+					(grid_spacing >= 1024) ? "k" : "");
 		}
-		else if (grid_spacing == 256.0)
-		{
 
-			sprintf (scale_text, "%s : 250 m", get_trans ("Grid"));
-		}
-		else if (grid_spacing == 512.0)
-		{
+		pos1.x = wxmax;
+		pos1.z = wzmax;
 
-			sprintf (scale_text, "%s : 500 m", get_trans ("Grid"));
-		}
+		map_get_screen_coords_from_world (obj, &pos1, &pos1);
+		
+		set_ui_font_colour (sys_col_slate_grey);
+		
+		ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 	}
-
-	pos1.x = wxmax;
-	pos1.z = wzmax;
-
-	map_get_screen_coords_from_world (obj, &pos1, &pos1);
-	
-	set_ui_font_colour (sys_col_slate_grey);
-	
-	ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

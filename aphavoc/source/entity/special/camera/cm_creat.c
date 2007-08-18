@@ -149,6 +149,23 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->position.y = MID_MAP_Y;
 		raw->position.z = MID_MAP_Z;
 
+		raw->offset.x = 0;
+		raw->offset.y = 0;
+		raw->offset.z = 0;
+
+		raw->offset_movement.x = 0;
+		raw->offset_movement.y = 0;
+		raw->offset_movement.z = 0;
+
+	
+		raw->turbulence_offset.x = 0.0;
+		raw->turbulence_offset.y = 0.0;
+		raw->turbulence_offset.z = 0.0;
+	
+		raw->turbulence_movement.x = 0.0;
+		raw->turbulence_movement.y = 0.0;
+		raw->turbulence_movement.z = 0.0;
+	
 		get_identity_matrix3x3 (raw->attitude);
 
 		raw->camera_mode = CAMERA_MODE_CHASE;

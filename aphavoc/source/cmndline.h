@@ -134,6 +134,7 @@ extern int
 	command_line_no_hardware_tnl,
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
+	command_line_persistent_smoke,								// arneh 2007-07-10
 	command_line_no_mission_complete_music,
 	command_line_mouse_look,									// Retro 030317
 	command_line_mouse_look_speed,							// Retro 030317
@@ -172,10 +173,12 @@ extern int
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511
 	command_line_tsd_palette,									// VJ 030511
-	command_line_green_mfd,										// loke 030517
 	command_line_colour_mfd,									// arneh 2006-11-06
 	command_line_maxplayers,									// Werewolf 030518
 	command_line_camcom,										// Jabberwock 031007 Campaign Commander
+	command_line_campaign_map,									// arneh 2007-07-01 campaign map mode
+	command_line_campaign_map_palette,							// arneh 2007-07-01 pallette used for campaign map
+	command_line_campaign_map_update_interval,					// arneh 2007-07-08 how often enemy units are updated on campaign map
 	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis,						// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis,						// Jabberwock 031104 Joystick look
@@ -186,6 +189,7 @@ extern int
 	command_line_reverse_pedal,									// Retro 17Jul2004
 	command_line_external_trackir,								// Retro 31Oct2004
 	command_line_external_trackir_direction,					// Retro 31Jan2005 (spooky, eh ?)
+	command_line_wobbly_camera,									// arneh - makes external cameras wobbly in movement
 	command_line_high_lod_hack,									// Retro 31Oct2004
 	command_line_TIR_6DOF,										// Retro 6Feb2005
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod

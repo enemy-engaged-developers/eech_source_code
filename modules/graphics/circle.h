@@ -58,13 +58,24 @@
 // 	as expressly permitted by  this Agreement.
 // 
 
-
+enum {
+	ARC_TOP_RIGHT = 0x01,
+	ARC_BOTTOM_RIGHT = 0x02,
+	ARC_TOP_LEFT = 0x04,
+	ARC_BOTTOM_LEFT = 0x08,
+	ARC_RIGHT_UP = 0x10,
+	ARC_RIGHT_DOWN = 0x20,
+	ARC_LEFT_UP = 0x40,
+	ARC_LEFT_DOWN = 0x80
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern void draw_circle (const float x, const float y, const float r, const rgb_colour colour);
+
+extern void draw_arc (const float x, const float y, const float r, unsigned part, const rgb_colour colour);
 
 extern void draw_hatched_filled_circle ( const float x, const float y, const float r, const rgb_colour colour );
 

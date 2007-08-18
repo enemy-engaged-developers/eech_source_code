@@ -91,6 +91,7 @@ int
 	good_tone;
 
 float
+	ballistics_sight_calibrated_drop = 0.0,
 	good_tone_delay;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -703,3 +704,60 @@ void reset_good_tone (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void lase_range_for_ballistics_sight(void)
+{
+	vec3d target_position;
+	float range = get_eo_los_intercept_point(&target_position);
+	float angle_of_drop;
+	float time_of_flight;
+	entity_sub_types wpn_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
+
+	angle_of_drop = 0.0;
+
+	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_drop, &time_of_flight, FALSE);
+
+	ballistics_sight_calibrated_drop = angle_of_drop;
+}
+
+float get_weapon_drop(entity_sub_types wpn_type)
+{
+	entity* target = get_local_entity_parent (get_gunship_entity(), LIST_TYPE_TARGET);
+
+	if (target)
+	{
+		float range = 1000.0;
+		vec3d *source_position, target_position;
+		float angle_of_projection;
+		float time_of_flight;
+		source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+		
+		get_local_entity_target_point (target, &target_position);
+		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
+		{
+			range = get_triangulated_by_position_range(source_position, &target_position);
+			if (range == -1.0)
+				range = 1000.0;  // use 1000 meters if unable to triangulate range
+		}
+		else
+			range = get_3d_range (source_position, &target_position);
+
+		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		{
+			angle_of_projection = 0.0;
+			get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_projection, &time_of_flight, FALSE);
+		}
+		else
+		{
+			float weapon_velocity = weapon_database[wpn_type].cruise_velocity;
+			if (!get_angle_of_projection_with_range(source_position, &target_position, weapon_velocity, &angle_of_projection, range))
+				angle_of_projection = 0.0;
+		}
+
+		ballistics_sight_calibrated_drop = angle_of_projection;
+	}
+
+	return ballistics_sight_calibrated_drop;
+}
+

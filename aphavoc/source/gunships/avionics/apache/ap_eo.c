@@ -92,7 +92,7 @@ void initialise_apache_eo (void)
 	eo_max_visual_range				= 6000.0;
 
 	apache_flir.field_of_view		= EO_FOV_WIDE;
-	apache_flir.min_field_of_view	= EO_FOV_NARROW;
+	apache_flir.min_field_of_view	= EO_FOV_ZOOM;
 	apache_flir.max_field_of_view	= EO_FOV_WIDE;
 
 	apache_dtv.field_of_view		= EO_FOV_MEDIUM;
@@ -270,16 +270,30 @@ void update_apache_eo (eo_params *eo)
 	switch (eo->field_of_view)
 	{
 		////////////////////////////////////////
+		case EO_FOV_ZOOM:
+		////////////////////////////////////////
+		{
+			fine_slew_rate = rad (0.1) * get_delta_time ();
+
+			medium_slew_rate = rad (0.5) * get_delta_time ();
+
+			mouse_slew_rate = rad (1.2) * get_delta_time ();	// Jabberwock 030930
+			
+			coarse_slew_rate = rad (2.0) * get_delta_time ();
+
+			break;
+		}
+		////////////////////////////////////////
 		case EO_FOV_NARROW:
 		////////////////////////////////////////
 		{
-			fine_slew_rate = rad (0.05) * get_delta_time ();
+			fine_slew_rate = rad (0.25) * get_delta_time ();
 
-			medium_slew_rate = rad (0.25) * get_delta_time ();
+			medium_slew_rate = rad (1.0) * get_delta_time ();
 
-			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+			mouse_slew_rate = rad (2.0) * get_delta_time ();	// Jabberwock 030930
 			
-			coarse_slew_rate = rad (1.0) * get_delta_time ();
+			coarse_slew_rate = rad (4.0) * get_delta_time ();
 
 			break;
 		}
@@ -506,7 +520,7 @@ void update_apache_eo (eo_params *eo)
 
 	////////////////////////////////////////
 
-	// Retro 31Oct2004 - copy+paste of loke's comanche EO slew code
+	// Retro 31Oct2004 - copy+paste of loke's COMANCHE EO slew code
 	// loke 030315
 	// added code to allow the user to slew the eo device using joystick axes
 
@@ -615,8 +629,70 @@ void animate_apache_eo (object_3d_instance *inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void inc_apache_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			dec_eo_field_of_view(&apache_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+			dec_eo_field_of_view(&apache_dtv);
+			break;
+		default:
+			break;
+	}
+}
+
+void dec_apache_eo_zoom(void)
+{
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+			inc_eo_field_of_view(&apache_flir);
+			break;
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+			inc_eo_field_of_view(&apache_dtv);
+			break;
+		default:
+			break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_apache_eo_system(void)
+{
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_DTV;
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_DTV;
+
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+
+		break;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void slave_apache_eo_to_current_target (void)
 {
+	if (command_line_manual_laser_radar)
+		return;
+	
 	if (eo_on_target)
 	{
 		switch (eo_sensor)

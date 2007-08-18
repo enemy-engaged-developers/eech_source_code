@@ -459,7 +459,7 @@ void scan_3d_terrain ( void )
 	// Set the rendering routines dependant on infrared mode
 	//
 
-	if ( active_3d_environment->infrared_mode == INFRARED_ON )
+	if ( active_3d_environment->render_filter == RENDER_INFRARED )
 	{
 
 		if ( get_3d_terrain_dual_pass_rendering () )

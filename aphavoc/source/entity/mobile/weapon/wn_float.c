@@ -198,6 +198,14 @@ static float get_local_float_value (entity *en, float_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case FLOAT_TYPE_WEAPON_LIFETIME:
+		////////////////////////////////////////
+		{
+			value = raw->weapon_lifetime;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -219,6 +227,7 @@ void overload_weapon_float_value_functions (void)
 	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_MAX_3D_OBJECT_VISUAL_RANGE]	= get_local_float_value;
 
 	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_WEIGHT]							= get_local_float_value;
+	fn_get_local_entity_float_value	[ENTITY_TYPE_WEAPON][FLOAT_TYPE_WEAPON_LIFETIME]				= get_local_float_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

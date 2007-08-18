@@ -437,6 +437,37 @@ void draw_2d_circle (float x, float y, const float r, const rgb_colour col)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void draw_2d_arc (float x, float y, const float r, unsigned part, const rgb_colour col)
+{
+	float
+		xt,
+		yt,
+		rt;
+
+	ASSERT (active_2d_environment);
+
+	validate_2d_composite_transformation_matrix (active_2d_environment);
+
+	xt = (x * active_2d_environment->composite_transformation[0][0]) +
+		  (y * active_2d_environment->composite_transformation[1][0]) +
+		  active_2d_environment->composite_transformation[2][0];
+
+	yt = (x * active_2d_environment->composite_transformation[0][1]) +
+		  (y * active_2d_environment->composite_transformation[1][1]) +
+		  active_2d_environment->composite_transformation[2][1];
+
+	rt = r * active_2d_environment->window_scaling[0][0];
+
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+
+	draw_arc (xt, yt, rt, part, col);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_colour col)
 {
 	float
@@ -514,3 +545,32 @@ void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour c
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
+{
+	float x1, x2, y1, y2;
+	
+	get_2d_float_screen_coordinates (x1_c, y1_c, &x1, &y1);
+	get_2d_float_screen_coordinates (x2_c, y2_c, &x2, &y2);
+
+	x1 = bound(x1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
+	x2 = bound(x2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
+	y1 = bound(y1, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
+	y2 = bound(y2, active_2d_environment->vp.x_min, active_2d_environment->vp.x_max);
+
+	if (filled)
+	{
+		float x_min = min(x1, x2), x_max = max(x1, x2);
+		float y_min = min(y1, y2), y_max = max(y1, y2);
+
+		// set block likes to have its smallest arguments first		
+		set_block(x_min, y_min, x_max, y_max, colour);
+	}
+	else
+	{
+		draw_line(x1, y1, x2, y1, colour);
+		draw_line(x1, y1, x1, y2, colour);
+		draw_line(x1, y2, x2, y2, colour);
+		draw_line(x2, y1, x2, y2, colour);
+	}
+}

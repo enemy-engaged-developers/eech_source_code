@@ -82,17 +82,21 @@ extern void get_2d_int_screen_coordinates (const float wx, const float wy, int *
 
 extern void get_2d_float_screen_coordinates (float wx, float wy, float *x, float *y);
 
-extern void get_2d_float_screen_x_coordinate (float wx, float *x);
+extern void get_2d_float_screen_x_coordinate (const float wx, float *x);
 
-extern void get_2d_float_screen_y_coordinate (float wy, float *y);
+extern void get_2d_float_screen_y_coordinate (const float wy, float *y);
 
 extern void draw_2d_mono_sprite (const char *sprite_ptr, float x, float y, const rgb_colour colour);
 
-extern void draw_2d_circle (float x, float y, float r, const rgb_colour col);
+extern void draw_2d_circle (float x, float y, const float r, const rgb_colour col);
+
+extern void draw_2d_arc (const float x, const float y, const float r, unsigned part, const rgb_colour colour);
 
 extern void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_colour col);
 
 extern void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour col);
+
+extern void draw_2d_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

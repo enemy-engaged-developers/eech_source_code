@@ -524,6 +524,8 @@ int create_meta_smoke_list_sprites( meta_smoke_list_component *smoke_list_compon
 
 int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_component, entity *parent, vec3d *relative_position, float width_adjustment, int *entity_index_list )
 {
+	float
+		lifetime = 0.0;
 
 	entity
 		*new_entity,
@@ -576,6 +578,16 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 		effect_list_parent = NULL;
 	}
 
+	// arneh - let rockets generate smoke only as long as the rocket engine burns
+	if (parent && parent->type == ENTITY_TYPE_WEAPON)
+	{
+		weapon* raw = get_local_entity_data (parent);
+		lifetime = weapon_database[raw->mob.sub_type].burn_time;
+	}
+
+	if (lifetime == 0.0)
+		lifetime = smoke_list_component->generator_lifetime;
+
 	//
 	// create entity
 	//
@@ -589,7 +601,7 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
      	ENTITY_ATTR_INT_VALUE (INT_TYPE_SMOKE_TYPE, smoke_list_component->trail_type),
      	ENTITY_ATTR_INT_VALUE (INT_TYPE_ENTITY_SUB_TYPE, smoke_list_component->entity_sub_type),
 		ENTITY_ATTR_INT_VALUE (INT_TYPE_INFINITE_GENERATOR, smoke_list_component->infinite),
-     	ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, smoke_list_component->generator_lifetime),
+     	ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_GENERATOR_LIFETIME, lifetime),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_FREQUENCY, smoke_list_component->frequency),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_SMOKE_LIFETIME, smoke_list_component->smoke_lifetime),
 		ENTITY_ATTR_FLOAT_VALUE (FLOAT_TYPE_WIDTH_ADJUSTMENT, width_adjustment),

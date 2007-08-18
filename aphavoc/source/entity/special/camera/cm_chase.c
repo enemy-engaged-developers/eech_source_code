@@ -80,10 +80,6 @@
 #define CHASE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
 #define CHASE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
 
-#define CHASE_CAMERA_ZOOM_RATE			(0.5)
-#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0)
-#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0)
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +95,10 @@ void reset_chase_camera (camera *raw)
 	//
 
 	get_local_entity_vec3d (raw->external_view_entity, VEC3D_TYPE_MOTION_VECTOR, &raw->motion_vector);
+
+	get_local_entity_target_point (raw->external_view_entity, &raw->position);
+
+	reset_offset(raw);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,6 +122,17 @@ void reset_chase_camera_position (camera *raw)
 	raw->chase_camera_pitch = CHASE_CAMERA_RESET_PITCH;
 
 	raw->chase_camera_zoom = CHASE_CAMERA_RESET_ZOOM;
+
+	if (raw->external_view_entity)
+		get_local_entity_target_point (raw->external_view_entity, &raw->position);
+	else
+	{
+		raw->position.x = MID_MAP_X;
+		raw->position.y = MID_MAP_Y;
+		raw->position.z = MID_MAP_Z;
+	}
+
+	reset_offset(raw);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +150,7 @@ void update_chase_camera (camera *raw)
 		z_max;
 
 	vec3d
+		new_position,
 		rel_camera_position;
 
 	//
@@ -210,11 +222,11 @@ void update_chase_camera (camera *raw)
 
 			// wrap horizontal pan.. vertical is limited to +- 180 degree
 			// it is 179 because of rounding.. it never gets 180 but 179.999...
-			if (temp_h <= -179)
+			if (temp_h <= -179.999)
 			{
 				set_absolute_mouse_x(-16383);
 			}
-			else if (temp_h >= 179)
+			else if (temp_h >= 179.999)
 			{
 				set_absolute_mouse_x(16383);
 			}
@@ -238,50 +250,19 @@ void update_chase_camera (camera *raw)
 
 		raw->chase_camera_pitch = max (CHASE_CAMERA_ROTATE_DOWN_LIMIT, raw->chase_camera_pitch);
 		raw->chase_camera_pitch = min (CHASE_CAMERA_ROTATE_UP_LIMIT, raw->chase_camera_pitch);
-
-		// Jabberwock 050103 - Mouse wheel zoom for external view
-		if (mouse_wheel_up)
-		{
-			raw->chase_camera_zoom -= 2 * get_delta_time ();
-
-			raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
-
-			mouse_wheel_up--;
-		}
-		else if (mouse_wheel_down)
-		{
-			raw->chase_camera_zoom += 2 * get_delta_time ();
-
-			raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
-
-			mouse_wheel_down--;
-		}
-		// Jabberwock 050103 ends
-
 	} // Retro 31Oct2004 end
 
-	if (adjust_view_zoom_in_key)
-	{
-		raw->chase_camera_zoom -= CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
-
-		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
-	}
-	else if (adjust_view_zoom_out_key)
-	{
-		raw->chase_camera_zoom += CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
-
-		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
-	}
+	adjust_camera_zoom(raw);
 
 	//
 	// get camera attitude
 	//
 
-	if (get_local_entity_int_value (en, INT_TYPE_ALIVE) && raw->chase_camera_lock_rotate)
+/*	if (get_local_entity_int_value (en, INT_TYPE_ALIVE) && raw->chase_camera_lock_rotate)
 	{
 		combined_heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 	}
-	else
+	else */
 	{
 		combined_heading = 0.0;
 	}
@@ -307,26 +288,26 @@ void update_chase_camera (camera *raw)
 
 	ASSERT (z_min < z_max);
 
-	rel_camera_position.x = 0.0;
-	rel_camera_position.y = 0.0;
-	rel_camera_position.z = -(((z_max - z_min) * raw->chase_camera_zoom * raw->chase_camera_zoom) + z_min);
+	// add offset	
+	adjust_offset(raw);
+
+	// add zoom
+	rel_camera_position.x = raw->offset.x;
+	rel_camera_position.y = raw->offset.y;
+	rel_camera_position.z = raw->offset.z - (((z_max - z_min) * raw->chase_camera_zoom * raw->chase_camera_zoom) + z_min);
 
 	multiply_matrix3x3_vec3d (&rel_camera_position, raw->attitude, &rel_camera_position);
 
-	get_local_entity_target_point (en, &raw->position);
+	get_local_entity_target_point (en, &new_position);
 
-	raw->position.x += rel_camera_position.x;
-	raw->position.y += rel_camera_position.y;
-	raw->position.z += rel_camera_position.z;
+	new_position.x += rel_camera_position.x;
+	new_position.y += rel_camera_position.y;
+	new_position.z += rel_camera_position.z;
 
-	//
-	// keep point above ground (unless point off map)
-	//
+	adjust_camera_smooth(raw, &new_position);
 
-	if (point_inside_map_area (&raw->position))
-	{
-		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + CAMERA_MIN_HEIGHT_ABOVE_GROUND);
-	}
+	add_turbulence(raw, &raw->position);
+
 
 	//
 	// motion vector

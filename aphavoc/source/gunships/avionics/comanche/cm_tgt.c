@@ -140,6 +140,8 @@ static void deselect_comanche_target_acquisition_system (target_acquisition_syst
 		{
 			deactivate_common_eo ();
 
+			copy_eo_zoom(&comanche_flir, &comanche_dtv);
+
 			break;
 		}
 		////////////////////////////////////////
@@ -147,6 +149,8 @@ static void deselect_comanche_target_acquisition_system (target_acquisition_syst
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
+
+			copy_eo_zoom(&comanche_dtv, &comanche_flir);
 
 			break;
 		}

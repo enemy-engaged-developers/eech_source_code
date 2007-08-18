@@ -66,6 +66,14 @@
 
 #define DEBUG_MODULE 0
 
+#define CAMERA_MOVEMENT_RATE 8.0
+#define OFFSET_MOVEMENT_RATE 20.0
+#define MAX_OFFSET 20.0
+
+#define CHASE_CAMERA_ZOOM_RATE			(0.5)
+#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0)
+#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +103,7 @@ const char
 		"CAMERA_MODE_RECOGNITION_GUIDE_SIDE_VIEW",
 		"CAMERA_MODE_RECOGNITION_GUIDE_FRONT_VIEW",
 		"CAMERA_MODE_RECOGNITION_GUIDE_3D_VIEW",
+		"CAMERA_MODE_FREE",
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +132,7 @@ const char
 		"CAMERA_ACTION_RECOGNITION_GUIDE_SIDE_VIEW",
 		"CAMERA_ACTION_RECOGNITION_GUIDE_FRONT_VIEW",
 		"CAMERA_ACTION_RECOGNITION_GUIDE_3D_VIEW",
+		"CAMERA_ACTION_FREE",
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,6 +141,15 @@ const char
 
 entity
 	*camera_entity = NULL;
+
+int camera_previous_mouse_update_flag = 1;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define same_sign(f1, f2) (((f1) >= 0.0 && (f2) >= 0.0 ) || ((f1) < 0.0 && (f2) < 0.0))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,6 +291,14 @@ const char *get_camera_mode_name (camera_modes mode)
 			break;
 		}
 		////////////////////////////////////////
+		case CAMERA_MODE_FREE:
+		////////////////////////////////////////
+		{
+			s = "Free camera";
+
+			break;
+		}
+		////////////////////////////////////////
 		case CAMERA_MODE_END_OF_MISSION:
 		case CAMERA_MODE_EJECT:
 		case CAMERA_MODE_WEAPON_EXPLOSION:
@@ -302,3 +329,180 @@ const char *get_camera_mode_name (camera_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void adjust_offset(camera* raw)
+{
+	float acceleration = 0.0;
+
+	if (command_line_wobbly_camera)
+	{
+		if (move_view_forward_key)
+			acceleration = OFFSET_MOVEMENT_RATE * move_view_forward_key;
+		else if (move_view_backward_key)
+			acceleration = -OFFSET_MOVEMENT_RATE * move_view_backward_key;
+		else
+			acceleration = -4.0 * raw->offset_movement.y;
+	
+		raw->offset_movement.y += acceleration * get_delta_time();
+
+		if (move_view_right_key)
+			acceleration = OFFSET_MOVEMENT_RATE * move_view_right_key;
+		else if (move_view_left_key)
+			acceleration = -OFFSET_MOVEMENT_RATE * move_view_left_key;
+		else
+			acceleration = -4.0 * raw->offset_movement.x;
+	
+		raw->offset_movement.x += acceleration * get_delta_time();
+	}
+	else
+	{
+		if (move_view_forward_key)
+			raw->offset_movement.y = OFFSET_MOVEMENT_RATE * move_view_forward_key;
+		else if (move_view_backward_key)
+			raw->offset_movement.y = -OFFSET_MOVEMENT_RATE * move_view_backward_key;
+		else
+			raw->offset_movement.y = 0.0;
+
+		if (move_view_right_key)
+			raw->offset_movement.x = OFFSET_MOVEMENT_RATE * move_view_right_key;
+		else if (move_view_left_key)
+			raw->offset_movement.x = -OFFSET_MOVEMENT_RATE * move_view_left_key;
+		else
+			raw->offset_movement.x = 0.0;
+	}
+
+
+	raw->offset.x = bound(raw->offset.x + raw->offset_movement.x * get_delta_time(), -MAX_OFFSET, MAX_OFFSET);
+	raw->offset.y = bound(raw->offset.y + raw->offset_movement.y * get_delta_time(), -MAX_OFFSET, MAX_OFFSET);
+}
+
+void reset_offset(camera* raw)
+{
+	raw->offset.x = 0.0;
+	raw->offset.y = 0.0;
+	raw->offset.z = 0.0;
+
+#if 0
+	raw->post_adjust_position.x = MID_MAP_X;
+	raw->post_adjust_position.y = MID_MAP_Y;
+	raw->post_adjust_position.z = MID_MAP_Z;
+#endif
+	raw->turbulence_offset.x = 0.0;
+	raw->turbulence_offset.y = 0.0;
+	raw->turbulence_offset.z = 0.0;
+
+	raw->turbulence_movement.x = 0.0;
+	raw->turbulence_movement.y = 0.0;
+	raw->turbulence_movement.z = 0.0;
+}
+
+void adjust_camera_smooth(camera* raw, vec3d* new_position)
+{
+#if 0
+	if (command_line_wobbly_camera)
+	{
+		vec3d adjust;
+
+		adjust.x = new_position->x - raw->post_adjust_position.x;
+		adjust.y = new_position->y - raw->post_adjust_position.y;
+		adjust.z = new_position->z - raw->post_adjust_position.z;
+	
+		adjust.x *= CAMERA_MOVEMENT_RATE * get_delta_time();
+		adjust.y *= CAMERA_MOVEMENT_RATE * get_delta_time();
+		adjust.z *= CAMERA_MOVEMENT_RATE * get_delta_time();
+
+		raw->position.x += adjust.x;
+		raw->position.y += adjust.y;
+		raw->position.z += adjust.z;
+		raw->post_adjust_position = raw->position;
+	}
+	else
+#endif
+		raw->position = *new_position;
+
+	// keep point above ground (unless point off map)
+	if (point_inside_map_area (&raw->position))
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + CAMERA_MIN_HEIGHT_ABOVE_GROUND);
+}
+
+void add_turbulence(camera* cam, vec3d* position)
+{
+	float
+		velocity_factor,
+		zoom_factor = 0.1,
+		acceleration;
+
+	if (!command_line_wobbly_camera)
+		return;
+
+	velocity_factor = bound(fabs(cam->motion_vector.x) + fabs(cam->motion_vector.y) + fabs(cam->motion_vector.z) * 1/200.0, 0.0, 1.0);
+	if (cam->chase_camera_zoom)
+		zoom_factor = cam->chase_camera_zoom + 0.25;
+
+	// add random turbulence
+	if (velocity_factor > 0.1 && (rand() % (int)(get_one_over_delta_time())) == 0)
+		cam->turbulence_movement.x += sfrand1() * velocity_factor * zoom_factor;
+	if (velocity_factor > 0.1 && (rand() % (int)(get_one_over_delta_time())) == 0)
+		cam->turbulence_movement.y += sfrand1() * velocity_factor * zoom_factor;
+	if (velocity_factor > 0.1 && (rand() % (int)(get_one_over_delta_time())) == 0)
+		cam->turbulence_movement.z += sfrand1() * velocity_factor * zoom_factor;
+
+	// bungy effect of camera trying to get itself back in position
+	acceleration = -cam->turbulence_offset.x * 0.5 ;
+	if (same_sign(acceleration, cam->turbulence_movement.x))
+		acceleration *= 0.5;
+	cam->turbulence_movement.x += acceleration * get_delta_time();
+	cam->turbulence_offset.x += cam->turbulence_movement.x * get_delta_time();
+
+	acceleration = -cam->turbulence_offset.y * 0.5 ;
+	if (same_sign(acceleration, cam->turbulence_movement.y))
+		acceleration *= 0.5;
+	cam->turbulence_movement.y += acceleration * get_delta_time();
+	cam->turbulence_offset.y += cam->turbulence_movement.y * get_delta_time();
+
+	acceleration = -cam->turbulence_offset.z * 0.5 ;
+	if (same_sign(acceleration, cam->turbulence_movement.z))
+		acceleration *= 0.5;
+	cam->turbulence_movement.z += acceleration * get_delta_time();
+	cam->turbulence_offset.z += cam->turbulence_movement.z * get_delta_time();
+
+	// move due to turbulence
+	cam->position.x += cam->turbulence_offset.x;
+	cam->position.y += cam->turbulence_offset.y;
+	cam->position.z += cam->turbulence_offset.z;
+}
+
+void adjust_camera_zoom(camera* raw)
+{
+	if (adjust_view_zoom_in_key)
+	{
+		raw->chase_camera_zoom -= CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
+
+		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
+	}
+	else if (adjust_view_zoom_out_key)
+	{
+		raw->chase_camera_zoom += CHASE_CAMERA_ZOOM_RATE * get_delta_time ();
+
+		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
+	}
+
+	// Jabberwock 050103 - Mouse wheel zoom for external view
+	if (mouse_wheel_up)
+	{
+		raw->chase_camera_zoom -= 2 * get_delta_time ();
+
+		raw->chase_camera_zoom = max (CHASE_CAMERA_ZOOM_IN_LIMIT, raw->chase_camera_zoom);
+
+		mouse_wheel_up--;
+	}
+	else if (mouse_wheel_down)
+	{
+		raw->chase_camera_zoom += 2 * get_delta_time ();
+
+		raw->chase_camera_zoom = min (CHASE_CAMERA_ZOOM_OUT_LIMIT, raw->chase_camera_zoom);
+
+		mouse_wheel_down--;
+	}
+	// Jabberwock 050103 ends	
+}

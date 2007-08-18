@@ -183,6 +183,11 @@ vec3d_type_data
 			VEC3D_PACK_TYPE_UNPACKED,						// pack_type
 			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
 		},
+		{
+			"VEC3D_TYPE_LAST_KNOWN_POSITION",					// name
+			VEC3D_PACK_TYPE_UNPACKED,						// pack_type
+			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
+		},
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -71,6 +71,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
+   move_view_left_key,
+   move_view_right_key,
+   move_view_forward_key,
+   move_view_backward_key,
    adjust_view_left_key,
    adjust_view_right_key,
    adjust_view_up_key,
@@ -711,6 +715,41 @@ static void adjust_view_down_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void move_view_position_left_event (event* ev)
+{
+	move_view_left_key = (ev->state == KEY_STATE_DOWN);
+}
+
+static void move_view_position_right_event (event* ev)
+{
+	move_view_right_key = (ev->state == KEY_STATE_DOWN);
+}
+
+static void move_view_position_forward_event (event* ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+		if (ev->modifier == MODIFIER_LEFT_SHIFT)
+			move_view_forward_key = 3;
+		else
+			move_view_forward_key = 1;
+	else
+		move_view_forward_key = 0;
+}
+
+static void move_view_position_backward_event (event* ev)
+{
+	if (ev->state == KEY_STATE_DOWN)
+		if (ev->modifier == MODIFIER_LEFT_SHIFT)
+			move_view_backward_key = 3;
+		else
+			move_view_backward_key = 1;
+	else
+		move_view_backward_key = 0;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void release_virtual_cockpit_event (event *ev)
 {
 	if (view_mode == VIEW_MODE_VIRTUAL_COCKPIT)
@@ -1011,7 +1050,7 @@ static void TSD_render_event (event *ev)
 static void TSD_render_palette_event (event *ev)
 {
 	tsd_render_palette++;
-	if (tsd_render_palette == 3)
+	if (tsd_render_palette == 4)
 	   tsd_render_palette = 0; 
 // update commandline option	
 	command_line_tsd_palette = tsd_render_palette;
@@ -1648,6 +1687,62 @@ static void previous_view_range_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void key_up_event (event *ev)
+{
+	if (get_global_cyclic_input() == KEYBOARD_INPUT)
+		cyclic_forward(ev);
+	else if (get_view_mode() != VIEW_MODE_EXTERNAL)
+	{
+		if (ev->state == KEY_STATE_DOWN)
+			adjust_pitch_trim(ev);
+	}
+	else
+		move_view_position_forward_event(ev);		
+}
+
+static void key_down_event (event *ev)
+{
+	if (get_global_cyclic_input() == KEYBOARD_INPUT)
+		cyclic_backward(ev);
+	else if (get_view_mode() != VIEW_MODE_EXTERNAL)
+	{
+		if (ev->state == KEY_STATE_DOWN)
+			adjust_pitch_trim(ev);
+	}
+	else
+		move_view_position_backward_event(ev);		
+}
+
+static void key_left_event (event *ev)
+{
+	if (get_global_cyclic_input() == KEYBOARD_INPUT)
+		cyclic_left(ev);
+	else if (get_view_mode() != VIEW_MODE_EXTERNAL)
+	{
+		if (ev->state == KEY_STATE_DOWN)
+			adjust_roll_trim(ev);
+	}
+	else
+		move_view_position_left_event(ev);		
+}
+
+static void key_right_event (event *ev)
+{
+	if (get_global_cyclic_input() == KEYBOARD_INPUT)
+		cyclic_right(ev);
+	else if (get_view_mode() != VIEW_MODE_EXTERNAL)
+	{
+		if (ev->state == KEY_STATE_DOWN)
+			adjust_roll_trim(ev);
+	}
+	else
+		move_view_position_right_event(ev);		
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // SELECT CAMERA
 //
@@ -1657,7 +1752,16 @@ static void previous_view_range_event (event *ev)
 
 static void chase_camera_event (event *ev)
 {
-	notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CHASE);
+	switch (get_camera_mode(get_camera_entity()))
+	{
+	case CAMERA_MODE_CHASE:
+	case CAMERA_MODE_WEAPON:
+		notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_FREE);
+		break;
+	default:
+		notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CHASE);
+		break;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2056,6 +2160,21 @@ void set_view_mode_events (void)
 
 	////////////////////////////////////////
 	//
+	// move
+	//
+	////////////////////////////////////////
+
+	set_event (DIK_LEFT, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, key_left_event);
+	set_event (DIK_RIGHT, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, key_right_event);
+	set_event (DIK_UP, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, key_up_event);
+	set_event (DIK_DOWN, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, key_down_event);
+	set_event (DIK_LEFT, MODIFIER_NONE, KEY_STATE_EITHER, key_left_event);
+	set_event (DIK_RIGHT, MODIFIER_NONE, KEY_STATE_EITHER, key_right_event);
+	set_event (DIK_UP, MODIFIER_NONE, KEY_STATE_EITHER, key_up_event);
+	set_event (DIK_DOWN, MODIFIER_NONE, KEY_STATE_EITHER, key_down_event);
+
+	////////////////////////////////////////
+	//
 	// hi-res support
 	//
 	////////////////////////////////////////
@@ -2166,11 +2285,12 @@ void set_gunship_view_mode_events (void)
 		set_event (DIK_RIGHT, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, look_rel_right_event);
 		set_event (DIK_UP, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, look_rel_up_event);
 		set_event (DIK_DOWN, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, look_rel_down_event);
-
+/*
 		set_event (DIK_LEFT, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, look_abs_left_event);
 		set_event (DIK_RIGHT, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, look_abs_right_event);
 		set_event (DIK_UP, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, look_abs_up_event);
 		set_event (DIK_DOWN, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, look_abs_down_event);
+*/
 	}
 
 	set_event (DIK_LALT, MODIFIER_LEFT_ALT, KEY_STATE_UP, release_virtual_cockpit_event);
@@ -2214,11 +2334,12 @@ void set_gunship_view_mode_events (void)
 		set_event (DIK_UP, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, forward_view_event);
 		set_event (DIK_DOWN, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, instrument_view_event);
 
+/*
 		set_event (DIK_LEFT, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, look_at_special1_event);
 		set_event (DIK_RIGHT, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, look_at_special2_event);
 		set_event (DIK_UP, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_pilot_seat_position_event);
 		set_event (DIK_DOWN, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_co_pilot_seat_position_event);
-
+*/
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
 	}
 

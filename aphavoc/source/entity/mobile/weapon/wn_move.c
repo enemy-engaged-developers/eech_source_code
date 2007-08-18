@@ -109,6 +109,27 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define RANGE_STEP 20.0
+#define WRITE_STEP 250.0
+#define PITCH_STEP 5
+#define NUM_SINGLE_DEGREE_VALUES 21
+#define NUM_NEGATIVE_PITCH_VALUES (((90 - 10) / PITCH_STEP))
+#define TOTAL_PITCH_INDICES (2*NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES)
+#define LAST_WEAPON ENTITY_SUB_TYPE_WEAPON_S13
+
+typedef struct
+{
+	float drop_angle;
+	float flight_time;
+} ballistics_data;
+
+static ballistics_data*
+	ballistics_table[LAST_WEAPON+1][TOTAL_PITCH_INDICES + 2];
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////
 //
 // NOTE: KEEP THIS FUNCTION IN SYNC WITH THE SIMILAR FUNCTION IN WEAPON.C
@@ -268,6 +289,7 @@ static int get_target_position (entity *en, vec3d *position)
 
 	return (target_position_valid);
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,6 +460,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 		}
 	}
 
+
 	//
 	// get unit vector to intercept point
 	//
@@ -476,7 +499,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
 		{
-			debug_log("%s self destructed due to turn demand too high (%0.1f degrees)", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)));
+			debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), 
+				deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
 			
 			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
 	
@@ -541,7 +565,22 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	get_3d_transformation_matrix (m1, frame_turn_rate, 0.0, 0.0);
 
-	multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
+	// arneh - make vikhrs spiral
+	if (weapon_database[raw->mob.sub_type].spiral_flightpath && raw->weapon_lifetime > 0.0
+		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2)
+	{
+		matrix3x3 spiral_matrix, tmp;
+
+		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
+		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
+
+		get_3d_transformation_matrix (spiral_matrix, heading, pitch, 0.0);
+
+		multiply_matrix3x3_matrix3x3 (tmp, m1, raw->mob.attitude);
+		multiply_matrix3x3_matrix3x3 (m2, tmp, spiral_matrix);
+	}
+	else
+		multiply_matrix3x3_matrix3x3 (m2, m1, raw->mob.attitude);
 
 	//
 	// set roll to zero to remove jitter on weapon view
@@ -600,11 +639,8 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void move_unguided_weapon (entity *en, vec3d *new_position)
+static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_time, int disperse)
 {
-	weapon
-		*raw;
-
 	float
 		acceleration,
 		heading,
@@ -612,11 +648,8 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 		h_vel,
 		v_vel;
 
-	ASSERT (en);
-
+	ASSERT (raw);
 	ASSERT (new_position);
-
-	raw = get_local_entity_data (en);
 
 	if (raw->weapon_lifetime > 0.0)
 	{
@@ -636,9 +669,33 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 		// velocity
 		//
 
-		raw->mob.velocity += acceleration * get_delta_time ();
+		raw->mob.velocity += acceleration * delta_time;
+		raw->mob.velocity = bound (raw->mob.velocity, 0.0, weapon_database[raw->mob.sub_type].cruise_velocity);
+	}
+	else if (weapon_database[raw->mob.sub_type].drag_factor > 0.0 && 
+		weapon_database[raw->mob.sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+	{
+		// arneh - simulate drag as decelleration
+		float
+			 // adjust velocity in steps to avoid difference because of different delta times (i.e. different behaviour drag depending on frame rate)
+			adjusted_velocity = (int)(raw->mob.velocity * 0.1) * 10; 
 
+		acceleration = -0.001 * weapon_database[raw->mob.sub_type].drag_factor * adjusted_velocity * adjusted_velocity;
+
+		// velocity
+
+		raw->mob.velocity += acceleration * delta_time;
 		raw->mob.velocity = max (raw->mob.velocity, 0.0);
+	}
+		
+
+	if (weapon_database[raw->mob.sub_type].ignore_gravity)
+	{
+		////////////////////////////////////////
+		//
+		// move unguided unpowered weapon (ignore gravity)
+		//
+		////////////////////////////////////////
 
 		//
 		// motion vector
@@ -652,146 +709,95 @@ static void move_unguided_weapon (entity *en, vec3d *new_position)
 		// position
 		//
 
-		new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-		new_position->y += raw->mob.motion_vector.y * get_delta_time ();
-		new_position->z += raw->mob.motion_vector.z * get_delta_time ();
+		new_position->x += raw->mob.motion_vector.x * delta_time;
+		new_position->y += raw->mob.motion_vector.y * delta_time;
+		new_position->z += raw->mob.motion_vector.z * delta_time;
 	}
 	else
 	{
-		if (weapon_database[raw->mob.sub_type].ignore_gravity)
+		////////////////////////////////////////
+		//
+		// move unguided unpowered weapon (with gravity)
+		//
+		////////////////////////////////////////
+
+		//
+		// motion vector
+		//
+
+		raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
+		raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
+		raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
+
+		//
+		// position
+		//
+
+		new_position->x += raw->mob.motion_vector.x * delta_time;
+		new_position->y += raw->mob.motion_vector.y * delta_time - (0.5 * G * delta_time * delta_time);
+		new_position->z += raw->mob.motion_vector.z * delta_time;
+
+		//
+		// apply gravity (after moving weapon)
+		//
+
+		heading = get_heading_from_attitude_matrix (raw->mob.attitude);
+
+		pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
+
+		h_vel = cos (pitch) * raw->mob.velocity;
+
+		v_vel = (sin (pitch) * raw->mob.velocity) - (G * delta_time);
+
+		////////////////////////////////////////
+		//
+		// fudge for ejector seat and crates
+		//
+
+		switch (raw->mob.sub_type)
 		{
-			////////////////////////////////////////
-			//
-			// move unguided unpowered weapon (ignore gravity)
-			//
-			////////////////////////////////////////
-
-			//
-			// motion vector
-			//
-
-			raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-			raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-			raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
-
-			//
-			// position
-			//
-
-			new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-			new_position->y += raw->mob.motion_vector.y * get_delta_time ();
-			new_position->z += raw->mob.motion_vector.z * get_delta_time ();
-		}
-		else
-		{
-			////////////////////////////////////////
-			//
-			// move unguided unpowered weapon (with gravity)
-			//
-			////////////////////////////////////////
-
-			//
-			// motion vector
-			//
-
-			raw->mob.motion_vector.x = raw->mob.zv.x * raw->mob.velocity;
-			raw->mob.motion_vector.y = raw->mob.zv.y * raw->mob.velocity;
-			raw->mob.motion_vector.z = raw->mob.zv.z * raw->mob.velocity;
-
-			//
-			// position
-			//
-
-			new_position->x += raw->mob.motion_vector.x * get_delta_time ();
-			new_position->y += raw->mob.motion_vector.y * get_delta_time () - (0.5 * G * get_delta_time () * get_delta_time ());
-			new_position->z += raw->mob.motion_vector.z * get_delta_time ();
-
-			//
-			// apply gravity (after moving weapon)
-			//
-
-			heading = get_heading_from_attitude_matrix (raw->mob.attitude);
-
-			pitch = get_pitch_from_attitude_matrix (raw->mob.attitude);
-
-			h_vel = cos (pitch) * raw->mob.velocity;
-
-			v_vel = (sin (pitch) * raw->mob.velocity) - (G * get_delta_time ());
-
-			////////////////////////////////////////
-			//
-			// fudge for ejector seat and crates
-			//
-
-			switch (raw->mob.sub_type)
+			case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
+			case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
 			{
-				case ENTITY_SUB_TYPE_WEAPON_HOKUM_PILOT:
-				case ENTITY_SUB_TYPE_WEAPON_HOKUM_CO_PILOT:
+				if (raw->parachute_status == PARACHUTE_STATUS_OPEN1)
 				{
-					if (raw->parachute_status == PARACHUTE_STATUS_OPEN1)
-					{
-						h_vel = bound (h_vel, -7.5, 7.5);
+					h_vel = bound (h_vel, -7.5, 7.5);
 
-						v_vel = max (v_vel, -15.0);
-					}
-					else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
-					{
-						h_vel = bound (h_vel, -5.0, 5.0);
-
-						v_vel = max (v_vel, -10.0);
-					}
-					else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
-					{
-						h_vel = bound (h_vel, -2.5, 2.5);
-
-						v_vel = max (v_vel, -5.0);
-					}
-
-					break;
+					v_vel = max (v_vel, -15.0);
 				}
-				case ENTITY_SUB_TYPE_WEAPON_CRATE:
+				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
 				{
-					h_vel = bound (h_vel, -10.0, 10.0);
+					h_vel = bound (h_vel, -5.0, 5.0);
 
-					v_vel = max (v_vel, -20.0);
-
-					break;
+					v_vel = max (v_vel, -10.0);
 				}
+				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
+				{
+					h_vel = bound (h_vel, -2.5, 2.5);
+
+					v_vel = max (v_vel, -5.0);
+				}
+
+				break;
 			}
-
-			//
-			////////////////////////////////////////
-
-			raw->mob.velocity = sqrt ((h_vel * h_vel) + (v_vel * v_vel));
-
-			pitch = atan2 (v_vel, h_vel);
-
-			get_3d_transformation_matrix (raw->mob.attitude, heading, pitch, 0.0);
-
-			//
-			// artillery error
-			//
-
-			#if !DEBUG_MODULE_DISABLE_ARTILLERY_ERROR
-
-			if (weapon_database[raw->mob.sub_type].max_range_error_ratio > 0.0)
+			case ENTITY_SUB_TYPE_WEAPON_CRATE:
 			{
-				int
-					seed;
+				h_vel = bound (h_vel, -10.0, 10.0);
 
-				float
-					h_error;
+				v_vel = max (v_vel, -20.0);
 
-				seed = get_client_server_entity_random_number_seed (en);
-
-				h_error = h_vel * get_delta_time () * weapon_database[raw->mob.sub_type].max_range_error_ratio;
-
-				new_position->x += h_error * sfrand1x (&seed);
-				new_position->z += h_error * sfrand1x (&seed);
+				break;
 			}
-
-			#endif
 		}
+
+		//
+		////////////////////////////////////////
+
+		raw->mob.velocity = sqrt ((h_vel * h_vel) + (v_vel * v_vel));
+
+		pitch = atan2 (v_vel, h_vel);
+
+		get_3d_transformation_matrix (raw->mob.attitude, heading, pitch, 0.0);
 	}
 }
 
@@ -884,7 +890,6 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 		if (new_target != raw->mob.target_link.parent)
 		{
-			debug_log("Resetting weapon target. Weapon: %s, target: %s", entity_type_names[en->type], entity_type_names[new_target->type]);
 			set_client_server_entity_parent (en, LIST_TYPE_TARGET, new_target);
 		}
 	}
@@ -1182,7 +1187,8 @@ void weapon_movement (entity *en)
 		// unless missile is a LOAL hellfire in phase 1 or 2, move as an unguided weapon when no target
 		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2)
 		{
-			move_unguided_weapon (en, &new_position);
+			weapon* weapon = get_local_entity_data (en);
+			move_unguided_weapon (weapon, &new_position, get_delta_time(), TRUE);
 		}
 		else
 		{
@@ -1496,3 +1502,376 @@ void weapon_movement (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/** calculates the index for the pitch value in the ballistics table.  Rounded down.
+ *
+ *  Closeness will be set to a value from 0.0 to 1.0 describing how
+ *  close the index is to the returned index (compared to the next
+ *  higher index.  1.0 means it is the exact index,  0.5 means
+ *  halfway between return value and return value + 1, etc.
+ *  Used for making a weighted average of value.
+ */
+static int get_floor_pitch_index(float pitch, float* closeness)
+{
+	float deg_pitch = deg(pitch);
+
+	int
+		int_pitch;
+
+	ASSERT(closeness);
+
+	if (deg_pitch < -10.0)
+	{
+		int_pitch = (int)(floor(deg_pitch / PITCH_STEP));
+
+		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
+
+		return int_pitch + (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES;
+	}	
+	else if (deg_pitch < (10.0 + PITCH_STEP))
+	{
+		int_pitch = (int)(floor(deg_pitch));
+
+		*closeness = 1.0 - (deg_pitch - int_pitch);
+
+		return int_pitch + NUM_NEGATIVE_PITCH_VALUES + 10;
+	}
+	else
+	{
+		int_pitch = (int)(floor(deg_pitch / PITCH_STEP));
+
+		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
+
+		return int_pitch - (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES - 1;
+	}
+}
+
+
+/** calculates a ballistics table for the specified weapon
+ *  if output is non-NULL part of the table will also be written
+ *  to that file
+ */
+void calculate_projectory(weapon* wpn, FILE* output)
+{
+	float
+		dummy;
+	
+	int
+		i,
+		pitch_index = 0,
+		zero_pitch = get_floor_pitch_index(0, &dummy),
+		num_range_values;
+
+	float
+		pitch;
+
+	ballistics_data** data = ballistics_table[wpn->mob.sub_type];
+
+	num_range_values = (int)(weapon_database[wpn->mob.sub_type].max_range / RANGE_STEP) + 2;
+
+	// initialize -90 and +90
+	data[0] = safe_malloc(sizeof(ballistics_data) * num_range_values);
+	data[TOTAL_PITCH_INDICES - 1] = safe_malloc(sizeof(ballistics_data) * num_range_values);
+
+	for (i=0; i < num_range_values; i++)
+	{
+		data[0][i].drop_angle = 0.0;
+		data[0][i].flight_time = 0.0;
+		data[TOTAL_PITCH_INDICES-1][i].drop_angle = 0.0;
+		data[TOTAL_PITCH_INDICES-1][i].flight_time = 0.0;
+	}
+
+	// write header for ballistics data:
+	if (output)
+		fputs("range     velocity    time   drop\n", output);
+
+	// initialize all the other pitches
+	pitch_index = 1;
+	pitch = rad(-90.0 + PITCH_STEP);
+	while (pitch_index < (TOTAL_PITCH_INDICES - 1))
+	{
+		float
+			#ifdef DEBUG
+			dummy,
+			#endif
+			time = 0.0,
+			pitch_ratio,
+			max_range,
+			delta_time = 0.02;
+
+		int
+			last_write_range = 0,
+			range_mark = 0;
+
+
+		ASSERT(get_floor_pitch_index(pitch + rad(0.1), &dummy) == pitch_index);
+
+		data[pitch_index] = safe_malloc(sizeof(ballistics_data) * num_range_values);
+
+		// initialize weapon for new firing	
+		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].burn_time;
+		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity;
+	
+		wpn->mob.position.x = 0.0;
+		wpn->mob.position.y = 0.0;
+		wpn->mob.position.z = 0.0;
+	
+		get_identity_matrix3x3(&wpn->mob.attitude);
+		get_3d_transformation_matrix(wpn->mob.attitude, 0.0, pitch, 0.0);
+
+		// initialize 0-range:
+		data[pitch_index][range_mark].drop_angle = 0.0;
+		data[pitch_index][range_mark].flight_time = 0.0;
+		range_mark++;
+
+		pitch_ratio = tan(pitch);
+
+		// don't calculate out to entire range for very high or low pitch values (takes too long)
+		max_range = min(weapon_database[wpn->mob.sub_type].max_range,
+			weapon_database[wpn->mob.sub_type].max_range * cos(pitch) * 1.25);
+
+		while (wpn->mob.position.z < max_range)
+		{
+			float drop;
+	
+			time += delta_time;
+			wpn->weapon_lifetime -= delta_time;
+			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
+
+			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
+			if (wpn->mob.velocity < 150.0)
+			{
+				delta_time = 0.04;
+				if (wpn->mob.velocity < 75.0)
+					delta_time = 0.1;
+
+				if (wpn->mob.velocity < 20.0)
+					break;
+			}
+	
+			if (wpn->mob.position.z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
+			{
+				int
+					stop_index = (int)((wpn->mob.position.z + 1) / RANGE_STEP);
+				float
+					drop_angle,
+					expected_height;
+
+				// adjust for expected height if there was no drop, so as to calculate real drop
+				expected_height = pitch_ratio * wpn->mob.position.z;
+				drop = (expected_height - wpn->mob.position.y) / wpn->mob.position.z;
+				drop_angle = atan(drop);
+
+				ASSERT(stop_index >= range_mark);
+
+				// if the projectile is really fast we might actually have passed several sample values, so set the value for all of them
+				for (; range_mark <= stop_index; range_mark++)
+				{
+					data[pitch_index][range_mark].drop_angle = drop_angle;
+					data[pitch_index][range_mark].flight_time = time;
+				}
+
+				// output to file every WRITE_STEP steps
+				if (output && wpn->mob.position.z > (last_write_range + WRITE_STEP - 1) && pitch_index == zero_pitch)
+				{
+					last_write_range += WRITE_STEP;
+					fprintf(output, "%5d m  %6.1f m/s %5.1f s %6.1f m (%.1f degrees)\n", 
+						last_write_range, wpn->mob.velocity, time, -wpn->mob.position.y, deg(drop_angle));
+				}
+
+				if (range_mark == num_range_values)
+					break;
+			}
+		}
+
+		// if there's any spots left just copy the last to those (it will be wrong, but better than arbitrary values)
+		for (; range_mark < num_range_values; range_mark++)
+		{
+			data[pitch_index][range_mark] = data[pitch_index][range_mark-1];	
+		}
+
+		// we have smaller steps around 0 pitch to get a little better accuracy there
+		pitch_index++;
+		if (pitch_index <= NUM_NEGATIVE_PITCH_VALUES)
+			pitch += rad(PITCH_STEP);
+		else if (pitch_index < (NUM_NEGATIVE_PITCH_VALUES + NUM_SINGLE_DEGREE_VALUES))
+			pitch += rad(1.0);
+		else
+			pitch += rad(PITCH_STEP);
+	}
+}
+
+/** precalculates ballistics tables for all weapons with ballistic aiming.
+ *  for certain range and angle intervals
+ * 
+ *  The tables are calculated by simulating a firing and measuring drop at
+ *  at various distances
+ */
+void generate_ballistics_tables(void)
+{
+	weapon
+		wpn;
+
+	entity_sub_types
+		wpn_type;
+
+	FILE*
+		write_file = NULL;
+
+	write_file = fopen("ballistics-data.txt", "w");
+
+	fputs("Note: this file only lists ballistics data generated from the currently used GWUT File\n"
+		  "Changing the values will have no effect, change the GWUT file to see change\n"
+		  "This file can be used to help getting good values for the GWUT file\n\n", write_file);
+
+	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
+	{
+		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		{
+			if (write_file)
+			{
+				fprintf(write_file, "\n%s   max_range: %.0f m, muzzle velocity: %.0f m/s, drag: %.2f\n",
+					weapon_database[wpn_type].full_name,
+					weapon_database[wpn_type].max_range, 
+					weapon_database[wpn_type].muzzle_velocity, 
+					weapon_database[wpn_type].drag_factor);
+			}
+		
+			wpn.mob.sub_type = wpn_type;
+			calculate_projectory(&wpn, write_file);
+		}
+
+		if (write_file)
+			fflush(write_file);
+	}
+
+	if (write_file)
+		fclose(write_file);
+}
+
+void delete_ballistics_tables(void)
+{
+	entity_sub_types wpn_type;
+	unsigned pitch_index;
+
+	for (wpn_type = 1; wpn_type <= LAST_WEAPON; wpn_type++)
+		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		{
+			for(pitch_index = 0; pitch_index < TOTAL_PITCH_INDICES; pitch_index++)
+			{
+				if (ballistics_table[wpn_type][pitch_index])
+					safe_free(ballistics_table[wpn_type][pitch_index]);
+				ballistics_table[wpn_type][pitch_index] = NULL;
+			}
+		}
+}
+
+/**
+ * Looks up om the ballistics tables how much drop and time of flight a projectile
+ * of wpn_type will have at the given range.
+ * As we probably don't have the value for the exact range/pitch requested it
+ * will make a weighted average of the closeset values we have.
+ */
+float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* aiming_pitch, float* time_of_flight, int simplified)
+{
+	float
+		pitch_delta,
+		range_error,
+		range_delta,
+		drop_compensation = 0.0,
+		tof,
+		straight_pitch = -atan(height_difference / range);
+	
+	int
+		iterations = (simplified ? 3 : 5),
+		i,
+		pitch_index,
+		range_index;
+
+	ASSERT(time_of_flight);
+	ASSERT(aiming_pitch);
+
+	if (!ballistics_table[wpn_type][0])
+	{
+		ASSERT(FALSE);
+		return FALSE;
+	}
+
+	ASSERT(range >= 0.0);
+
+	range = bound(range, 0.01, weapon_database[wpn_type].max_range);
+	range_index = (int)(range / RANGE_STEP);
+	range_error = range - (range_index * RANGE_STEP);
+	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]
+
+	#ifdef DEBUG_MODULE
+	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_difference);
+	#endif
+
+	// refine drop_compensation - do it several times because as we adjust
+	// cannon pitch we have to use a different ballistics table.  Do it a few
+	// times so that it stabalizes somewhat
+	for (i = 0; i < iterations; i++)
+	{
+		float use_pitch = min(straight_pitch + drop_compensation, rad(90.0));
+
+		pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
+		ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);
+		drop_compensation = ballistics_table[wpn_type][pitch_index][range_index].drop_angle;
+
+		if (drop_compensation > rad(45.0))
+			return FALSE;
+
+		tof = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
+	}
+
+	// average between next pitch and range:
+	if (!simplified)
+	{
+		ballistics_data
+			pitch_compensation[2],
+			compensation_grid[2][2];
+
+		int next_pitch_index = min(pitch_index + 1, TOTAL_PITCH_INDICES-1);
+
+		// first average the next ranges
+		compensation_grid[0][0].drop_angle = drop_compensation;
+		compensation_grid[0][0].flight_time = tof;
+
+		compensation_grid[0][1].drop_angle = ballistics_table[wpn_type][pitch_index][range_index+1].drop_angle;
+		compensation_grid[0][1].flight_time = ballistics_table[wpn_type][pitch_index][range_index+1].flight_time;
+
+		compensation_grid[1][0].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index].drop_angle;
+		compensation_grid[1][0].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index].flight_time;
+
+		compensation_grid[1][1].drop_angle = ballistics_table[wpn_type][next_pitch_index][range_index+1].drop_angle;
+		compensation_grid[1][1].flight_time = ballistics_table[wpn_type][next_pitch_index][range_index+1].flight_time;
+
+		// then average oover next pitch
+		pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
+		pitch_compensation[0].flight_time = (pitch_delta * compensation_grid[0][0].flight_time) + ((1 - pitch_delta) * compensation_grid[1][0].flight_time);
+
+		pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);		
+		pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);		
+
+		// and finally get a total
+		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
+		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
+
+		#ifdef DEBUG_MODULE
+		debug_log("average over drop: (%.3f, %.3f, %.3f, %.3f) result: %.3f",
+			deg(compensation_grid[0][0].drop_angle), deg(compensation_grid[0][1].drop_angle),
+			deg(compensation_grid[1][0].drop_angle), deg(compensation_grid[1][1].drop_angle),
+			deg(drop_compensation));
+		#endif
+	}
+
+	*aiming_pitch = straight_pitch + drop_compensation;
+
+	return TRUE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+

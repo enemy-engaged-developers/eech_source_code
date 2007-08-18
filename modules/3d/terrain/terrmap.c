@@ -72,7 +72,15 @@
 
 #define MAX_3D_CLIP_COORDINATES 16
 
-#define CONTOUR_SHADING_FACTOR 0.15
+#define CONTOUR_SHADING_FACTOR 0.05
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern int
+	command_line_campaign_map,
+	command_line_campaign_map_palette;	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +94,6 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static float
-
 	terrain_2d_map_world_xmin,
 	terrain_2d_map_world_xmax,
 	terrain_2d_map_world_xcentre,
@@ -112,45 +119,156 @@ static int
 rgb_colour
 	*terrain_2d_contour_colours = NULL,
 	*terrain_2d_contour_intensities = NULL,
-	*terrain_2d_current_contour_colours = NULL;
-/*
+	*terrain_2d_current_contour_colours = NULL,
+
 	contour_colours[1024] =
 	{
-		{ 0,96,200 },
-		{ 228,228,228 },
-		{ 255,0,255 },
-		{ 128,128,255 },
-		{ 96,0,0 },
-		{ 255,96,0 },
-		{ 255,0,0 },
-		{ 0,255,0 },
-		{ 0,128,255 },
-		{ 255,255,255 },
+		{ 240,190,130 },  // water colour
+
+		// Made with hue: 0.32 - 0.02, value: 0.40 - 0.60, saturation: 0.70 - 0.65
+		{ 30, 102,  36},
+		{ 31, 103,  41},
+		{ 32, 105,  47},
+		{ 32, 107,  53},
+		{ 33, 109,  59},
+		{ 34, 111,  65},
+		{ 35, 112,  71},
+		{ 35, 114,  77},
+		{ 36, 116,  84},
+		{ 37, 118,  90},
+		{ 38, 120,  97},
+		{ 39, 122, 104},
+		{ 39, 123, 111},
+		{ 40, 125, 118},
+		{ 41, 127, 125},
+		{ 42, 125, 129},
+		{ 43, 121, 131},
+		{ 43, 117, 132},
+		{ 44, 113, 134},
+		{ 45, 109, 136},
+		{ 46, 104, 138},
+		{ 47, 100, 140},
+		{ 48,  95, 142},
+		{ 49,  90, 143},
+		{ 49,  86, 145},
+		{ 50,  81, 147},
+		{ 51,  76, 149},
+		{ 52,  70, 151},
+		{ 53,  65, 152},
+		{ 74,  84, 161},
+		{ 96, 105, 169},
+		{120, 127, 178},
+		{146, 151, 186},
+		{174, 176, 195},
+		{203, 203, 203},
+		{212, 212, 212},
+		{221, 221, 221},
+		{229, 229, 229},
+		{238, 238, 238},
+		{246, 246, 246},
+		{255, 255, 255},
+	},
+
+	contour_paper_colours[1024] =
+	{
+		// made with hue: 0.32 - 0.04, value 0.6 - 0.7, saturation 0.3 - 0.2
+		{ 240,190,130 },  // water colour
+		{108, 153, 114},
+		{109, 154, 118},
+		{110, 155, 122},
+		{111, 156, 126},
+		{113, 157, 129},
+		{114, 158, 133},
+		{115, 159, 137},
+		{116, 160, 141},
+		{118, 161, 144},
+		{119, 162, 148},
+		{120, 163, 151},
+		{121, 163, 155},
+		{123, 164, 158},
+		{124, 165, 162},
+		{125, 166, 165},
+		{126, 165, 167},
+		{128, 164, 168},
+		{129, 163, 169},
+		{130, 161, 170},
+		{132, 160, 171},
+		{133, 158, 172},
+		{134, 157, 173},
+		{136, 156, 173},
+		{137, 155, 174},
+		{138, 154, 175},
+		{140, 153, 176},
+		{141, 152, 177},
+		{142, 142, 178},
+		{155, 152, 184},
+		{167, 163, 190},
+		{179, 173, 196},
+		{190, 184, 202},
+		{201, 196, 207},
+		{210, 207, 213},
+		{219, 219, 219},
+		{225, 225, 225},
+		{231, 231, 231},
+		{237, 237, 237},
+		{243, 243, 243},
+		{249, 249, 249},
+		{255, 255, 255},
 	};
-	*/
 
 float
-	*terrain_2d_contour_heights = NULL;
-	/*
+	*terrain_2d_contour_heights = NULL,
+	contour_heights[] =
 	{
 		-1000,
 		-0.0001,
+		10,
+		25,
+		50,
+		75,
+		100,
+		150,
+		200,
 		250,
+		300,
+		350,
+		400,
+		450,
 		500,
-		750,
+		600,
+		700,
+		800,
+		900,
 		1000,
-		1750,
+		1100,
+		1200,
+		1300,
+		1400,
+		1500,
+		1600,
+		1700,
+		1800,
+		1900,
+		2000,
+		2100,
+		2200,
+		2300,
+		2400,
 		2500,
-		3200,
-		3700,
+		2750,
+		3000,
+		3250,
+		3500,
+		3750,
+		4000,
+		6000
 	};
-	*/
 
 float
 	*contour_height_difference_reciprocals;
 
 int
-	number_of_contour_height_lines = 9;
+	number_of_contour_height_lines = 42;
 
 static vertex
 	*this_point,
@@ -230,7 +348,9 @@ static unsigned char generate_contour_outcode ( float i, float j );
 static void render_contour_terrain_quad ( vertex *vertices, int start_contour, int end_contour );
 
 /*static*/ void render_contour_terrain_quad_quad ( vertex *vertices, int contour_start_index, int contour_end_index );
-static void render_contour_terrain_poly ( vertex *poly, real_colour contour_colour, float contour_height_difference_reciprocal );
+//static void render_contour_terrain_poly ( vertex *poly, real_colour contour_colour, float contour_height_difference_reciprocal );
+
+static void render_shaded_contour_terrain_poly ( vertex *poly, real_colour contour_colour);
 
 void render_contour_node_database ( int number_of_nodes, contour_path *paths, vec3d *nodes, real_colour colour, int mipmap_level );
 
@@ -257,6 +377,8 @@ static void insert_xmax_contour_coordinate ( vertex *point1, vertex *point2 );
 static void insert_ymin_contour_coordinate ( vertex *point1, vertex *point2 );
 
 static void insert_ymax_contour_coordinate ( vertex *point1, vertex *point2 );
+
+int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_filename );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -875,6 +997,9 @@ void generate_2d_terrain_contour_mipmaps ( void )
 
 void set_2d_terrain_contour_colour ( int flag )
 {
+#if 0   // arneh - unused code with new map
+	if (command_line_campaign_map != 0)
+		return;
 
 	ASSERT ( ( terrain_2d_contour_colours ) && ( terrain_2d_contour_intensities ) );
 
@@ -888,6 +1013,7 @@ void set_2d_terrain_contour_colour ( int flag )
 
 		terrain_2d_current_contour_colours = terrain_2d_contour_intensities;
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -896,21 +1022,28 @@ void set_2d_terrain_contour_colour ( int flag )
 
 void set_2d_terrain_contour_heights ( int number_of_heights, float *heights )
 {
+	terrain_2d_contour_heights = contour_heights;
 
+#if 0  // arneh - unused code with new map
 	ASSERT ( number_of_heights );
 	ASSERT ( heights );
 
-	if ( terrain_2d_contour_heights )
+	if ( terrain_2d_contour_heights && terrain_2d_contour_heights != contour_heights)
 	{
-
 		safe_free ( terrain_2d_contour_heights );
 
 		terrain_2d_contour_heights = NULL;
 	}
 
-	terrain_2d_contour_heights = safe_malloc ( sizeof ( float ) * number_of_heights );
-
-	memcpy ( terrain_2d_contour_heights, heights, ( sizeof ( float ) * number_of_heights ) );
+	if (command_line_campaign_map != 0)
+		terrain_2d_contour_heights = contour_heights;
+	else
+	{
+		terrain_2d_contour_heights = safe_malloc ( sizeof ( float ) * number_of_heights );
+	
+		memcpy ( terrain_2d_contour_heights, heights, ( sizeof ( float ) * number_of_heights ) );
+	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1610,19 +1743,8 @@ void set_lake_database_extents ( int number_of_triangle_sets, contour_lake *lake
 
 void load_contour_map_colours ( const char *filename )
 {
-
-	int
-		count,
-		width,
-		height,
-		channels;
-
-	char
-		*data;
-
-	if ( terrain_2d_contour_colours )
+	if ( terrain_2d_contour_colours && terrain_2d_contour_colours != contour_colours)
 	{
-
 		safe_free ( terrain_2d_contour_colours );
 
 		terrain_2d_contour_colours = NULL;
@@ -1630,47 +1752,63 @@ void load_contour_map_colours ( const char *filename )
 
 	if ( terrain_2d_contour_intensities )
 	{
-
 		safe_free ( terrain_2d_contour_intensities );
 
 		terrain_2d_contour_intensities = NULL;
 	}
 
-	data = load_psd_file ( filename, &width, &height, &channels );
-
-	ASSERT ( channels == 3 );
-
-	terrain_2d_contour_colours = safe_malloc ( sizeof ( rgb_colour ) * height );
-
-	terrain_2d_contour_intensities = safe_malloc ( sizeof ( rgb_colour ) * height );
-
-	terrain_2d_current_contour_colours = terrain_2d_contour_colours;
-
-	for ( count = 0; count < height; count++ )
+//	if (command_line_campaign_map != 0)
 	{
-
-		float
-			intensity;
-
-		int
-			iintensity;
-
-		terrain_2d_contour_colours[count].r = data[ width * channels * count + 0];
-		terrain_2d_contour_colours[count].g = data[ width * channels * count + 1];
-		terrain_2d_contour_colours[count].b = data[ width * channels * count + 2];
-
-		intensity = ( float ) terrain_2d_contour_colours[count].r * 0.30;
-		intensity += ( float ) terrain_2d_contour_colours[count].g * 0.59;
-		intensity += ( float ) terrain_2d_contour_colours[count].b * 0.11;
-
-		iintensity = intensity;
-
-		terrain_2d_contour_intensities[count].r = intensity;
-		terrain_2d_contour_intensities[count].g = intensity;
-		terrain_2d_contour_intensities[count].b = intensity;
+		if (command_line_campaign_map_palette == 1)
+			terrain_2d_contour_colours = contour_colours;
+		else
+			terrain_2d_contour_colours = contour_paper_colours;
 	}
+#if 0   // arneh - unused code with new map
+	else
+	{
+		int
+			count,
+			width,
+			height,
+			channels;
+	
+		char
+			*data;
 
-	safe_free ( data );
+		data = load_psd_file ( filename, &width, &height, &channels );
+	
+		ASSERT ( channels == 3 );
+	
+		terrain_2d_contour_colours = safe_malloc ( sizeof ( rgb_colour ) * height );
+	
+		terrain_2d_contour_intensities = safe_malloc ( sizeof ( rgb_colour ) * height );
+	
+		terrain_2d_contour_intensities = safe_malloc(sizeof(contour_colours));
+	
+		for ( count = 0; count < height; count++ )
+		{
+	
+			float
+				intensity;
+
+			terrain_2d_contour_colours[count].r = data[ width * channels * count + 0];
+			terrain_2d_contour_colours[count].g = data[ width * channels * count + 1];
+			terrain_2d_contour_colours[count].b = data[ width * channels * count + 2];
+
+			intensity = ( float ) terrain_2d_contour_colours[count].r * 0.30;
+			intensity += ( float ) terrain_2d_contour_colours[count].g * 0.59;
+			intensity += ( float ) terrain_2d_contour_colours[count].b * 0.11;
+	
+			terrain_2d_contour_intensities[count].r = intensity;
+			terrain_2d_contour_intensities[count].g = intensity;
+			terrain_2d_contour_intensities[count].b = intensity;
+		}
+	
+		safe_free ( data );
+	}
+#endif
+	terrain_2d_current_contour_colours = terrain_2d_contour_colours;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2012,9 +2150,8 @@ float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_2d_terrain_contour_map ( void )
+void draw_2d_shaded_terrain_contour_map ( void )
 {
-
 	int
 		current_x,
 		current_z,
@@ -2041,6 +2178,7 @@ void draw_2d_terrain_contour_map ( void )
 		mipmap_distance_factor,
 		terrain_height_data_x_distance,
 		terrain_height_data_z_distance,
+		contour_shading_zoom_adjustment,
 		*terrain_height_data;
 
 	float
@@ -2055,9 +2193,7 @@ void draw_2d_terrain_contour_map ( void )
 		count,
 		mipmap_index,
 		mipmap_level,
-		new_total,
-		next_x_valid,
-		next_z_valid;
+		new_total;
 
 	vertex
 		vertices[9];
@@ -2067,10 +2203,10 @@ void draw_2d_terrain_contour_map ( void )
 		road_colour,
 		boundary_colour;
 
-	river_colour.red = 125;
-	river_colour.green = 177;
-	river_colour.blue = 239;
-	river_colour.alpha = 255;
+	river_colour.red = 90;
+	river_colour.green = 120;
+	river_colour.blue = 180;
+	river_colour.alpha = 192;
 
 	road_colour.red = 0;
 	road_colour.green = 0;
@@ -2141,7 +2277,8 @@ void draw_2d_terrain_contour_map ( void )
 	//
 
 	{
-
+		int map_resolution = (command_line_campaign_map == 2) ? 120 : 60;
+		
 		new_total = x_total;
 
 		screen_width = fabs ( terrain_2d_map_screen_xmax - terrain_2d_map_screen_xmin );
@@ -2158,7 +2295,9 @@ void draw_2d_terrain_contour_map ( void )
 		terrain_height_data_width = terrain_3d_simple_elevation_width - 1;
 		terrain_height_data_height = terrain_3d_simple_elevation_height - 1;
 
-		while ( ( ratio > 60 ) && ( mipmap_index < ( contour_map_number_of_mipmaps - 1 ) ) && ( mipmap_level < 64 ) )
+		
+
+		while ( ( ratio > map_resolution ) && ( mipmap_index < ( contour_map_number_of_mipmaps - 1 ) ) && ( mipmap_level < 64 ) )
 		{
 
 			mipmap_level *= 2;
@@ -2224,6 +2363,10 @@ void draw_2d_terrain_contour_map ( void )
 
 		terrain_height_data_x_distance = terrain_3d_simple_elevation_x_grid_size * mipmap_distance_factor;
 		terrain_height_data_z_distance = terrain_3d_simple_elevation_z_grid_size * mipmap_distance_factor;
+
+		// this is just an ad-hoc method for getting an adjustment for
+		// relief shading at different zoom levels
+		contour_shading_zoom_adjustment = 1.0 / (log(terrain_height_data_x_distance / 10.0));
 	}
 
 	terrain_height_data_width += 1;
@@ -2235,7 +2378,7 @@ void draw_2d_terrain_contour_map ( void )
 
 	for ( count = 0; count < 9; count++ )
 	{
-
+		vertices[count].x = 0.0;
 		vertices[count].z = 10;
 		vertices[count].q = 0.1;
 	}
@@ -2259,123 +2402,140 @@ void draw_2d_terrain_contour_map ( void )
 
 	current_z = minimum_z;
 
-	for ( z_count = 0; z_count < z_total; z_count += 2 )
+	for ( z_count = 0; z_count < z_total; z_count++ )
 	{
-
-		float
-			heights[9];
-
-		int
-			z_offsets[3],
-			x_offsets[3];
-
+#define GET_ELEVATION(x,z) terrain_height_data[(z_indices[z] * terrain_height_data_width) + x_indices[x]]
 		float
 			i_coordinates[3],
 			j_coordinates[3];
 
 		int
-			c;
+			i,
+			next_x_valid,
+			next_z_valid,
+			next_two_z_valid;
 
-		for (c = 0 ; c < 9 ; c++)
-		{
-			heights[c] = 0;
-		}
+		float
+			*elevation_grid[4],
+			elevation_data[4][4];
+	
+		int
+			z_indices[4],
+			x_indices[4];
 
-		next_z_valid = ( z_count < ( z_total - 1 ) ) ? TRUE : FALSE;
+		for (i = 0; i <4 ; i++)
+			elevation_grid[i] = elevation_data[i];
+
+		next_z_valid = z_count < (z_total - 1);
+		next_two_z_valid = z_count < (z_total - 2);
 
 		current_x = minimum_x;
 
-		z_offsets[0] = current_z;
-		z_offsets[1] = z_offsets[0] + z_increment;
-		z_offsets[2] = z_offsets[1] + z_increment;
-
-		x_offsets[2] = current_x;
-
-		heights[2] = terrain_height_data[ ( z_offsets[0] * terrain_height_data_width ) + x_offsets[2] ];
-		heights[5] = terrain_height_data[ ( z_offsets[1] * terrain_height_data_width ) + x_offsets[2] ];
-
-		if ( next_z_valid )
+		// x and z coordinates we want to get height for
+		z_indices[0] = current_z - z_increment;
+		x_indices[0] = current_x - x_increment;
+		for (i=1; i<4; i++)
 		{
-	
-			heights[8] = terrain_height_data[ ( z_offsets[2] * terrain_height_data_width ) + x_offsets[2] ];
+			z_indices[i] = z_indices[i-1] + z_increment;
+			x_indices[i] = x_indices[i-1] + x_increment;
 		}
 
-		i_coordinates[2] = ( ( ( x_offsets[2] * terrain_height_data_x_distance ) - terrain_2d_map_world_xcentre ) * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre;
-
-		j_coordinates[0] = ( ( ( z_offsets[0] * terrain_height_data_z_distance ) - terrain_2d_map_world_zcentre ) * terrain_2d_map_screen_yscale ) + terrain_2d_map_screen_ycentre;
-		j_coordinates[1] = j_coordinates[0] + screen_j_increment;
-		j_coordinates[2] = j_coordinates[1] + screen_j_increment;
-
-		for ( x_count = 0; x_count < x_total; x_count += 2 )
+		// initialize elevation grid
+		for (i = 2; i < 4; i++)  // iterate over columns, will be shifted one to left
 		{
+			elevation_grid[i][1] = GET_ELEVATION(i-1, 1);
+			elevation_grid[i][2] = GET_ELEVATION(i-1, 2);
+
+			if (z_count > 0)
+				elevation_grid[i][0] = GET_ELEVATION(i-1, 0);
+			else  // it is outside, initalize to same as the one below
+				elevation_grid[i][0] = elevation_grid[i][1];
+
+			if (next_z_valid)
+				elevation_grid[i][3] = GET_ELEVATION(i-1, 3);
+			else   // it is outside, initalize to same as the one above
+				elevation_grid[i][3] = elevation_grid[i][2];
+		}
+		// initialize second column (which really is outside view) to same as third
+		for (i = 0; i < 4; i++)
+			elevation_grid[1][i] = elevation_grid[2][i];
+
+		// get screen coordinates
+		i_coordinates[1] = (((x_indices[1] * terrain_height_data_x_distance) - terrain_2d_map_world_xcentre) * terrain_2d_map_screen_xscale) + terrain_2d_map_screen_xcentre;
+
+		j_coordinates[0] = (((z_indices[1] * terrain_height_data_z_distance) - terrain_2d_map_world_zcentre) * terrain_2d_map_screen_yscale) + terrain_2d_map_screen_ycentre;
+		j_coordinates[1] = j_coordinates[0] + screen_j_increment;
+
+		x_indices[1] = x_indices[0];
+
+		// fill out the other rows of the height grid
+		for ( x_count = 0; x_count < x_total; x_count++ )
+		{
+			float* next_free_row;
 
 			unsigned char
 				outcode_top_left,
-				outcode_middle,
 				outcode_bottom_right,
 
 				outcode_left,
 				outcode_right,
 				outcode_top,
 				outcode_bottom,
-				outcode_middle_leftright,
-				outcode_middle_topbottom,
 				outcode_whole1,
 				outcode_whole2;
 
-			next_x_valid = ( x_count < ( x_total - 1 ) ) ? TRUE : FALSE;
+			next_x_valid = x_count < (x_total - 2);
 
-			x_offsets[0] = x_offsets[2];
-			x_offsets[1] = x_offsets[0] + x_increment;
-			x_offsets[2] = x_offsets[1] + x_increment;
+			// shift coordinates
+			x_indices[0] = x_indices[1];
+			for (i=1; i<4; i++)
+				x_indices[i] = x_indices[i-1] + x_increment;
 
-			i_coordinates[0] = i_coordinates[2];
+			// shift screen coordinates
+			i_coordinates[0] = i_coordinates[1];
 			i_coordinates[1] = i_coordinates[0] + screen_i_increment;
-			i_coordinates[2] = i_coordinates[1] + screen_i_increment;
 
-			heights[0] = heights[2];
-			heights[3] = heights[5];
-			heights[6] = heights[8];
+			// shift one row right
+			next_free_row = elevation_grid[0];  // we'll overwrite this one
+			elevation_grid[0] = elevation_grid[1];
+			elevation_grid[1] = elevation_grid[2];
+			elevation_grid[2] = elevation_grid[3];
+			elevation_grid[3] = next_free_row;
 
-			heights[1] = terrain_height_data[ ( z_offsets[0] * terrain_height_data_width ) + x_offsets[1] ];
-			heights[4] = terrain_height_data[ ( z_offsets[1] * terrain_height_data_width ) + x_offsets[1] ];
-
-			if ( next_z_valid )
+			// get height values for next column
+			if (next_x_valid)
 			{
+				elevation_grid[3][1] = GET_ELEVATION(3, 1);
+				elevation_grid[3][2] = GET_ELEVATION(3, 2);
 	
-				heights[7] = terrain_height_data[ ( z_offsets[2] * terrain_height_data_width ) + x_offsets[1] ];
+				if (z_count > 0)
+					elevation_grid[3][0] = GET_ELEVATION(3, 0);
+				else  // it is outside, initalize to same as the one below
+					elevation_grid[3][0] = elevation_grid[3][1];
+
+				if (next_z_valid)
+					elevation_grid[3][3] = GET_ELEVATION(3, 3);
+				else   // it is outside, initalize to same as the one above
+					elevation_grid[3][3] = elevation_grid[3][2];
 			}
-
-			if ( next_x_valid )
-			{
-
-				heights[2] = terrain_height_data[ ( z_offsets[0] * terrain_height_data_width ) + x_offsets[2] ];
-				heights[5] = terrain_height_data[ ( z_offsets[1] * terrain_height_data_width ) + x_offsets[2] ];
-
-				if ( next_z_valid )
-				{
-	
-					heights[8] = terrain_height_data[ ( z_offsets[2] * terrain_height_data_width ) + x_offsets[2] ];
-				}
-			}
+			else  // if we don't have any then copy last column
+				for (i=0; i<4; i++)
+					elevation_grid[3][i] = elevation_grid[2][i];
+#undef GET_ELEVATION
 
 			outcode_top_left = generate_contour_outcode ( i_coordinates[0], j_coordinates[0] );
-			outcode_middle = generate_contour_outcode ( i_coordinates[1], j_coordinates[1] );
-			outcode_bottom_right = generate_contour_outcode ( i_coordinates[2], j_coordinates[2] );
+			outcode_bottom_right = generate_contour_outcode ( i_coordinates[1], j_coordinates[1] );
 
 			outcode_left = outcode_top_left & ( CLIP_LEFT | CLIP_RIGHT );
 			outcode_right = outcode_bottom_right & ( CLIP_LEFT | CLIP_RIGHT );
 			outcode_top = outcode_top_left & ( CLIP_TOP | CLIP_BOTTOM );
 			outcode_bottom = outcode_bottom_right & ( CLIP_TOP | CLIP_BOTTOM );
-			outcode_middle_leftright = outcode_middle & ( CLIP_LEFT | CLIP_RIGHT );
-			outcode_middle_topbottom = outcode_middle & ( CLIP_TOP | CLIP_BOTTOM );
 
-			outcode_whole1 = outcode_top_left | outcode_middle | outcode_bottom_right;
-			outcode_whole2 = outcode_top_left & outcode_middle & outcode_bottom_right;
+			outcode_whole1 = outcode_top_left | outcode_bottom_right;
+			outcode_whole2 = outcode_top_left & outcode_bottom_right;
 
-			if ( !outcode_whole2 )
+			if ( !outcode_whole2 )  // not entire grid outside view
 			{
-
 				float
 					min_height,
 					max_height;
@@ -2383,172 +2543,60 @@ void draw_2d_terrain_contour_map ( void )
 				int
 					contour_start_index,
 					contour_end_index;
-	
-				min_height = min ( heights[0], heights[1] );
-				min_height = min ( min_height, heights[2] );
-				min_height = min ( min_height, heights[3] );
-				min_height = min ( min_height, heights[4] );
-				min_height = min ( min_height, heights[5] );
-				min_height = min ( min_height, heights[6] );
-				min_height = min ( min_height, heights[7] );
-				min_height = min ( min_height, heights[8] );
 
-				max_height = max ( heights[0], heights[1] );
-				max_height = max ( max_height, heights[2] );
-				max_height = max ( max_height, heights[3] );
-				max_height = max ( max_height, heights[4] );
-				max_height = max ( max_height, heights[5] );
-				max_height = max ( max_height, heights[6] );
-				max_height = max ( max_height, heights[7] );
-				max_height = max ( max_height, heights[8] );
+				min_height = min (elevation_grid[1][1], min_height);
+				min_height = min (elevation_grid[1][2], min_height);
+				min_height = min (elevation_grid[2][1], min_height);
+				min_height = min (elevation_grid[2][2], min_height);
 
-				contour_start_index = -1;
-				contour_end_index = -1;
+				max_height = max (elevation_grid[1][1], max_height);
+				max_height = max (elevation_grid[1][2], max_height);
+				max_height = max (elevation_grid[2][1], max_height);
+				max_height = max (elevation_grid[2][2], max_height);
 
+				// find index of starting contour
 				for ( contour_start_index = 0; contour_start_index < number_of_contour_height_lines; contour_start_index++ )
 				{
-
 					if ( min_height <= terrain_2d_contour_heights[contour_start_index] )
 					{
-
 						contour_start_index--;
 
+						// found it, now find ending contour
 						for ( contour_end_index = contour_start_index; contour_end_index < number_of_contour_height_lines; contour_end_index++ )
-						{
-
 							if ( max_height < terrain_2d_contour_heights[contour_end_index] )
 							{
-
 								contour_end_index--;
-
 								break;
 							}
-						}
 
 						break;
 					}
 				}
 
-				if ( ( outcode_whole1 ) || ( contour_start_index != contour_end_index ) || ( !next_x_valid ) || ( !next_z_valid ) )
-				{
+				// render quad
+				vertices[0].i = i_coordinates[0]; vertices[0].j = j_coordinates[0]; vertices[0].y = elevation_grid[1][1];
+				vertices[1].i = i_coordinates[1]; vertices[1].j = j_coordinates[0]; vertices[1].y = elevation_grid[2][1];
+				vertices[2].i = i_coordinates[0]; vertices[2].j = j_coordinates[1]; vertices[2].y = elevation_grid[1][2];
+				vertices[3].i = i_coordinates[1]; vertices[3].j = j_coordinates[1]; vertices[3].y = elevation_grid[2][2];
 
-					vertices[0].i = i_coordinates[0]; vertices[0].j = j_coordinates[0]; vertices[0].y = heights[0];
-					vertices[1].i = i_coordinates[1]; vertices[1].j = j_coordinates[0]; vertices[1].y = heights[1];
-					vertices[2].i = i_coordinates[0]; vertices[2].j = j_coordinates[1]; vertices[2].y = heights[3];
-					vertices[3].i = i_coordinates[1]; vertices[3].j = j_coordinates[1]; vertices[3].y = heights[4];
+				// add shading
+				vertices[0].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[1][0] - elevation_grid[1][2]) + (elevation_grid[0][1] - elevation_grid[2][1]));
+				vertices[1].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[2][0] - elevation_grid[2][2]) + (elevation_grid[1][1] - elevation_grid[3][1]));
+				vertices[2].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[1][1] - elevation_grid[1][3]) + (elevation_grid[0][2] - elevation_grid[2][2]));
+				vertices[3].x = contour_shading_zoom_adjustment * (2 * (elevation_grid[2][1] - elevation_grid[2][3]) + (elevation_grid[1][2] - elevation_grid[3][2]));
 
-					vertices[0].outcode = outcode_top_left;
-					vertices[1].outcode = outcode_top | outcode_middle_leftright;
-					vertices[2].outcode = outcode_left | outcode_middle_topbottom;
-					vertices[3].outcode = outcode_middle;
+				vertices[0].outcode = outcode_top_left;
+				vertices[1].outcode = outcode_top | outcode_right;
+				vertices[2].outcode = outcode_left | outcode_bottom;
+				vertices[3].outcode = outcode_bottom_right;
 
-					if ( !( outcode_top_left & outcode_middle_leftright & outcode_left & outcode_middle_topbottom ) )
-					{
-		
-						render_contour_terrain_quad ( vertices, contour_start_index, contour_end_index );
-					}
-
-					if ( next_x_valid )
-					{
-	
-						vertices[0].i = i_coordinates[1]; vertices[0].j = j_coordinates[0]; vertices[0].y = heights[1];
-						vertices[1].i = i_coordinates[2]; vertices[1].j = j_coordinates[0]; vertices[1].y = heights[2];
-						vertices[2].i = i_coordinates[1]; vertices[2].j = j_coordinates[1]; vertices[2].y = heights[4];
-						vertices[3].i = i_coordinates[2]; vertices[3].j = j_coordinates[1]; vertices[3].y = heights[5];
-		
-						vertices[0].outcode = outcode_top | outcode_middle_leftright;
-						vertices[1].outcode = outcode_top | outcode_right;
-						vertices[2].outcode = outcode_middle;
-						vertices[3].outcode = outcode_middle | outcode_right;
-		
-						if ( !( outcode_top & outcode_middle_leftright & outcode_middle & outcode_right ) )
-						{
-
-							render_contour_terrain_quad ( vertices, contour_start_index, contour_end_index );
-						}
-					}
-
-					if ( next_z_valid )
-					{
-	
-						vertices[0].i = i_coordinates[0]; vertices[0].j = j_coordinates[1]; vertices[0].y = heights[3];
-						vertices[1].i = i_coordinates[1]; vertices[1].j = j_coordinates[1]; vertices[1].y = heights[4];
-						vertices[2].i = i_coordinates[0]; vertices[2].j = j_coordinates[2]; vertices[2].y = heights[6];
-						vertices[3].i = i_coordinates[1]; vertices[3].j = j_coordinates[2]; vertices[3].y = heights[7];
-	
-						vertices[0].outcode = outcode_left | outcode_middle_topbottom;
-						vertices[1].outcode = outcode_middle;
-						vertices[2].outcode = outcode_bottom | outcode_left;
-						vertices[3].outcode = outcode_bottom | outcode_middle_leftright;
-		
-						if ( !( outcode_left & outcode_middle & outcode_bottom ) )
-						{
-
-							render_contour_terrain_quad ( vertices, contour_start_index, contour_end_index );
-						}
-
-						if ( next_x_valid )
-						{
-
-							vertices[0].i = i_coordinates[1]; vertices[0].j = j_coordinates[1]; vertices[0].y = heights[4];
-							vertices[1].i = i_coordinates[2]; vertices[1].j = j_coordinates[1]; vertices[1].y = heights[5];
-							vertices[2].i = i_coordinates[1]; vertices[2].j = j_coordinates[2]; vertices[2].y = heights[7];
-							vertices[3].i = i_coordinates[2]; vertices[3].j = j_coordinates[2]; vertices[3].y = heights[8];
-		
-							vertices[0].outcode = outcode_middle;
-							vertices[1].outcode = outcode_middle_topbottom | outcode_right;
-							vertices[2].outcode = outcode_bottom | outcode_middle_leftright;
-							vertices[3].outcode = outcode_bottom_right;
-
-							if ( !( outcode_middle & outcode_right & outcode_bottom ) )
-							{
-		
-								render_contour_terrain_quad ( vertices, contour_start_index, contour_end_index );
-							}
-						}
-					}
-				}
-				else
-				{
-	
-					vertices[0].i = i_coordinates[0];
-					vertices[1].i = i_coordinates[1];
-					vertices[2].i = i_coordinates[2];
-					vertices[3].i = i_coordinates[0];
-					vertices[4].i = i_coordinates[1];
-					vertices[5].i = i_coordinates[2];
-					vertices[6].i = i_coordinates[0];
-					vertices[7].i = i_coordinates[1];
-					vertices[8].i = i_coordinates[2];
-	
-					vertices[0].j = j_coordinates[0];
-					vertices[1].j = j_coordinates[0];
-					vertices[2].j = j_coordinates[0];
-					vertices[3].j = j_coordinates[1];
-					vertices[4].j = j_coordinates[1];
-					vertices[5].j = j_coordinates[1];
-					vertices[6].j = j_coordinates[2];
-					vertices[7].j = j_coordinates[2];
-					vertices[8].j = j_coordinates[2];
-	
-					vertices[0].y = heights[0];
-					vertices[1].y = heights[1];
-					vertices[2].y = heights[2];
-					vertices[3].y = heights[3];
-					vertices[4].y = heights[4];
-					vertices[5].y = heights[5];
-					vertices[6].y = heights[6];
-					vertices[7].y = heights[7];
-					vertices[8].y = heights[8];
-	
-					render_contour_terrain_quad_quad ( vertices, contour_start_index, contour_end_index );
-				}
+				render_contour_terrain_quad ( vertices, contour_start_index, contour_end_index );
 			}
 
-			current_x += ( 2 * x_increment );
+			current_x += x_increment;
 		}
 
-		current_z += ( 2 * z_increment );
+		current_z += z_increment;
 	}
 
 	//
@@ -2773,7 +2821,6 @@ void render_contour_triangle_database ( int number_of_triangle_sets, contour_lak
 
 void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, int contour_end_index )
 {
-
 	int
 		count;
 
@@ -2787,16 +2834,16 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 	specular.blue = 0;
 	specular.alpha = 255;
 
-	contour_line_colour.red = 90;
-	contour_line_colour.green = 60;
-	contour_line_colour.blue = 30;
+	contour_line_colour.red = 60;
+	contour_line_colour.green = 40;
+	contour_line_colour.blue = 20;
 
 	vertices[0].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 	vertices[1].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 	vertices[2].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 	vertices[3].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 
-	if ( contour_start_index == contour_end_index )
+	if ( contour_start_index == contour_end_index )	// no contour line in this quad
 	{
 
 		int
@@ -2839,7 +2886,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			vertices[2].next_vertex = &vertices[0];
 			vertices[0].next_vertex = NULL;
 
-			render_contour_terrain_poly ( &vertices[1], contour_colour, contour_height_difference_reciprocals[contour_start_index] );
+			render_shaded_contour_terrain_poly ( &vertices[1], contour_colour);
 		}
 		else
 		{
@@ -2867,7 +2914,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 				if ( poly )
 				{
 				
-					render_contour_terrain_poly ( poly, contour_colour, contour_height_difference_reciprocals[contour_start_index] );
+					render_shaded_contour_terrain_poly ( poly, contour_colour);
 				}
 			}
 	
@@ -2894,13 +2941,16 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 				if ( poly )
 				{
 				
-					render_contour_terrain_poly ( poly, contour_colour, contour_height_difference_reciprocals[contour_start_index] );
+					render_shaded_contour_terrain_poly ( poly, contour_colour);
 				}
 			}
 		}
 	}
-	else
+	else  // contains contour line(s)
 	{
+		float
+			i_scale = 1.0 / (vertices[3].i - vertices[0].i),
+			j_scale = 1.0 / (vertices[3].j - vertices[0].j);
 
 		for ( count = contour_start_index; count <= contour_end_index; count++ )
 		{
@@ -2925,7 +2975,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			contour_colour.red = terrain_2d_current_contour_colours[count].r;
 			contour_colour.green = terrain_2d_current_contour_colours[count].g;
 			contour_colour.blue = terrain_2d_current_contour_colours[count].b;
-	
+
 			//
 			// Add in height outcodes
 			//
@@ -2934,19 +2984,7 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 			vertices[1].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 			vertices[2].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
 			vertices[3].outcode &= CLIP_LEFT | CLIP_RIGHT | CLIP_TOP | CLIP_BOTTOM;
-/*
-			if ( vertices[0].y < contour_minimum_height ) vertices[0].outcode |= CLIP_HITHER;
-			if ( vertices[0].y > contour_maximum_height ) vertices[0].outcode |= CLIP_YONDER;
 
-			if ( vertices[1].y < contour_minimum_height ) vertices[1].outcode |= CLIP_HITHER;
-			if ( vertices[1].y > contour_maximum_height ) vertices[1].outcode |= CLIP_YONDER;
-
-			if ( vertices[2].y < contour_minimum_height ) vertices[2].outcode |= CLIP_HITHER;
-			if ( vertices[2].y > contour_maximum_height ) vertices[2].outcode |= CLIP_YONDER;
-
-			if ( vertices[3].y < contour_minimum_height ) vertices[3].outcode |= CLIP_HITHER;
-			if ( vertices[3].y > contour_maximum_height ) vertices[3].outcode |= CLIP_YONDER;
-*/
 			{
 	
 				unsigned int
@@ -2997,33 +3035,29 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 	
 			if ( quad_outcode2 == 0 )
 			{
-	
 				quad_outcode |= triangle1_outcode;
 				quad_outcode |= triangle2_outcode;
-	
+
 				if ( quad_outcode == 0 )
 				{
-			
 					vertices[1].next_vertex = &vertices[3];
 					vertices[3].next_vertex = &vertices[2];
 					vertices[2].next_vertex = &vertices[0];
 					vertices[0].next_vertex = NULL;
 	
-					render_contour_terrain_poly ( &vertices[1], contour_colour, contour_height_difference_reciprocals[count] );
+					render_shaded_contour_terrain_poly ( &vertices[1], contour_colour);
 				}
-				else
+				else  // contour line goes through quad, split into triangles
 				{
-	
 					if ( triangle1_outcode2 == 0 )
 					{
-			
 						vertex
 							*poly;
-			
+
 						vertices[0].next_vertex = &vertices[1];
 						vertices[1].next_vertex = &vertices[2];
 						vertices[2].next_vertex = NULL;
-		
+
 						poly = &vertices[0];
 			
 						clip_3d_coord = 0;
@@ -3032,7 +3066,8 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 						{
 			
 							poly = bottom_clip_contour_polygon ( poly, &triangle1_outcode );
-		
+
+							// set coordinates for the contour itself:
 							contour_line_vertices[line_vertex_index].i = clip_3d_crds[0].i;
 							contour_line_vertices[line_vertex_index].j = clip_3d_crds[0].j;
 							contour_line_vertices[line_vertex_index].outcode = clip_3d_crds[0].outcode;
@@ -3045,29 +3080,45 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 		
 							line_vertex_index++;
 						}
-			
+
 						if ( poly )
 						{
-			
 							if ( triangle1_outcode & CLIP_YONDER )
-							{
-			
 								poly = top_clip_contour_polygon ( poly, &triangle1_outcode );
-							}
 			
 							if ( poly )
 							{
 			
 								if ( triangle1_outcode )
-								{
-						
 									poly = clip_contour_polygon ( poly, triangle1_outcode );
-								}
 						
 								if ( poly )
 								{
-								
-									render_contour_terrain_poly ( poly, contour_colour, contour_height_difference_reciprocals[count] );
+									vertex* new_v;
+
+									for (new_v = poly; new_v; new_v = new_v->next_vertex)
+									{
+										float delta_i, delta_j;
+
+										if (new_v == &vertices[0]
+											|| new_v == &vertices[1]
+											|| new_v == &vertices[2]
+											|| new_v == &vertices[3])
+										{
+											continue;
+										}
+										
+										delta_i = (new_v->i - vertices[0].i) * i_scale;
+										delta_j = (new_v->j - vertices[0].j) * j_scale;
+
+										// weighted average of corner xs (weighted according to distance to each corner
+										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) + 
+												   (delta_i       * (1 - delta_j) * vertices[1].x) +
+												   ((1 - delta_i) * delta_j       * vertices[2].x) +
+												   (delta_i       * delta_j       * vertices[3].x);
+									}
+
+									render_shaded_contour_terrain_poly ( poly, contour_colour);
 								}
 							}
 						}
@@ -3125,8 +3176,33 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 						
 								if ( poly )
 								{
-								
-									render_contour_terrain_poly ( poly, contour_colour, contour_height_difference_reciprocals[count] );
+									vertex* new_v;
+									for (new_v = poly; new_v; new_v = new_v->next_vertex)
+									{
+										float delta_i, delta_j;
+
+										if (new_v == &vertices[0]
+											|| new_v == &vertices[1]
+											|| new_v == &vertices[2]
+											|| new_v == &vertices[3])
+										{
+											continue;
+										}
+										
+										delta_i = (new_v->i - vertices[0].i) * i_scale;
+										delta_j = (new_v->j - vertices[0].j) * j_scale;
+
+//										ASSERT(delta_i >= 0.0 && delta_i <= 1.0);
+//										ASSERT(delta_j >= 0.0 && delta_j <= 1.0);
+
+										// weighted average of corner xs (weighted according to distance to each corner
+										new_v->x = ((1 - delta_i) * (1 - delta_j) * vertices[0].x) + 
+												   (delta_i       * (1 - delta_j) * vertices[1].x) +
+												   ((1 - delta_i) * delta_j       * vertices[2].x) +
+												   (delta_i       * delta_j       * vertices[3].x);
+									}
+
+									render_shaded_contour_terrain_poly ( poly, contour_colour);
 								}
 							}
 						}
@@ -3135,10 +3211,9 @@ void render_contour_terrain_quad ( vertex *vertices, int contour_start_index, in
 					//
 					// Draw the contour lines if there are any
 					//
-	
+
 					if ( ( line_vertex_index > 0 ) && ( terrain_2d_map_contour_lines_drawn ) )
 					{
-		
 						draw_contour_line ( &contour_line_vertices[0], contour_line_colour );
 		
 						if ( line_vertex_index > 2 )
@@ -3239,7 +3314,7 @@ void render_contour_terrain_quad_quad ( vertex *vertices, int contour_start_inde
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void render_contour_terrain_poly ( vertex *poly, real_colour contour_colour, float contour_height_difference_reciprocal )
+void render_shaded_contour_terrain_poly (vertex *poly, real_colour contour_colour)
 {
 
 	int
@@ -3249,69 +3324,54 @@ void render_contour_terrain_poly ( vertex *poly, real_colour contour_colour, flo
 		vertices,
 		vptr;
 
-	float
-		source_red,
-		source_green,
-		source_blue;
-
-	real_colour
-		specular;
-
 	vertices = get_d3d_vertices_address ( poly, &number_of_vertices );
-
-	specular.red = 0;
-	specular.green = 0;
-	specular.blue = 0;
-	specular.alpha = 255;
-
-	source_red = contour_colour.red;
-	source_green = contour_colour.green;
-	source_blue = contour_colour.blue;
 
 	vptr = vertices;
 
 	while ( poly )
 	{
+		real_colour
+			col;
 
 		float
 			r,
 			g,
 			b,
-			factor;
-
+			shadow_factor;
+	
 		int
 			ir,
 			ig,
 			ib;
 
-		real_colour
-			col;
-
-		factor = ( poly->y - contour_minimum_height ) * contour_height_difference_reciprocal * CONTOUR_SHADING_FACTOR;
-		factor -= ( CONTOUR_SHADING_FACTOR / 2 );
-
-		r = source_red + ( source_red * factor );
-		g = source_green + ( source_green * factor );
-		b = source_blue + ( source_blue * factor );
+		r = contour_colour.red;
+		g = contour_colour.green;
+		b = contour_colour.blue;
+	
+		// adjust shade for steepness
+		shadow_factor = 1 - poly->x * 0.0025; // 0.0003;
+		if (shadow_factor < 0.25)
+			shadow_factor = 0.25;
+	
+		r *= shadow_factor;
+		g *= shadow_factor;
+		b *= shadow_factor;
 
 		convert_float_to_int ( r, &ir );
 		convert_float_to_int ( g, &ig );
 		convert_float_to_int ( b, &ib );
 
-		ir = bound ( ir, 0, 255 );
-		ig = bound ( ig, 0, 255 );
-		ib = bound ( ib, 0, 255 );
 
-		col.red = ir;
-		col.green = ig;
-		col.blue = ib;
+		col.red = bound ( ir, 0, 255 );
+		col.green = bound ( ig, 0, 255 );
+		col.blue = bound ( ib, 0, 255 );
 
 		vptr->sx = poly->i;
 		vptr->sy = poly->j;
 		vptr->rhw = poly->q;
 		vptr->sz = poly->q;
 		vptr->color = col.colour;
-		vptr->specular = specular.colour;
+		vptr->specular = 0x000000ff;  // solid black
 
 		vptr++;
 

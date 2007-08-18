@@ -139,6 +139,8 @@ static void deselect_hokum_target_acquisition_system (target_acquisition_systems
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
+			copy_eo_zoom(&hokum_flir, &hokum_llltv);
+			copy_eo_zoom(&hokum_flir, &hokum_periscope);
 
 			break;
 		}
@@ -147,6 +149,8 @@ static void deselect_hokum_target_acquisition_system (target_acquisition_systems
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
+			copy_eo_zoom(&hokum_llltv, &hokum_flir);
+			copy_eo_zoom(&hokum_llltv, &hokum_periscope);
 
 			break;
 		}
@@ -155,6 +159,8 @@ static void deselect_hokum_target_acquisition_system (target_acquisition_systems
 		////////////////////////////////////////
 		{
 			deactivate_common_eo ();
+			copy_eo_zoom(&hokum_periscope, &hokum_flir);
+			copy_eo_zoom(&hokum_periscope, &hokum_llltv);
 
 			if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
 			{

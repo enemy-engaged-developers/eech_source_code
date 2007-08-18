@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.8.4"
+  !define VERSION "1.9"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -93,7 +93,7 @@ Section "cohokum.exe" SectionExe
   File ${VERSION}-readme.html
   File motd.txt
   File TrackIR.dll	
-  File gwut182.csv
+  File gwut190.csv
   File eech_keyguide_2.pdf
 
   SetOutPath "$INSTDIR\common\data\"

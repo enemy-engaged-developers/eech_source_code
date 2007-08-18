@@ -283,7 +283,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						// Hack in here to pre-load any textures on the object
 						//
 
-						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -399,7 +399,7 @@ void insert_zbiased_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES type, vo
 						// Hack in here to pre-load any textures on the object
 						//
 
-						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -656,7 +656,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 						// Hack in here to pre-load any textures on the object
 						//
 
-						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -721,7 +721,7 @@ void insert_zbiased_relative_object_into_3d_scene ( enum OBJECT_3D_DRAWING_TYPES
 						// Hack in here to pre-load any textures on the object
 						//
 
-						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
+//						if ( active_3d_environment->infrared_mode == INFRARED_OFF )
 						{
 	
 //							pre_render_3d_object ( object );
@@ -1948,7 +1948,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-				if ( active_3d_environment->infrared_mode == INFRARED_ON )
+				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
 	
 					draw_3d_terrain_3d_clipped_bw_sector ( object_order );
@@ -1968,7 +1968,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-				if ( active_3d_environment->infrared_mode == INFRARED_ON )
+				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
 
 					draw_3d_terrain_2d_clipped_bw_sector ( object_order );
@@ -1988,7 +1988,7 @@ void draw_normal_scene_objects ( scene_slot_drawing_list *object_order )
 				set_d3d_int_state ( D3DRENDERSTATE_CLIPPING, FALSE );
 				set_d3d_int_state ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-				if ( active_3d_environment->infrared_mode == INFRARED_ON )
+				if ( active_3d_environment->render_filter != RENDER_CLEAR )
 				{
 
 					draw_3d_terrain_unclipped_bw_sector ( object_order );

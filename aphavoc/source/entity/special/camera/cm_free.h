@@ -60,42 +60,14 @@
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void set_2d_terrain_map_textured ( int flag );
+extern void reset_free_camera (camera *raw);
 
-extern void draw_2d_terrain_map ( void );
-
-extern void generate_2d_terrain_contour_mipmaps ( void );
-
-extern void set_2d_terrain_contour_colour ( int flag );
-
-extern void set_2d_terrain_contour_heights ( int number_of_heights, float *heights );
-
-extern int load_2d_terrain_contour_river_data ( const char *nodes_filename, const char *path_filename );
-
-extern int load_2d_terrain_contour_road_data ( const char *nodes_filename, const char *path_filename );
-
-extern void load_contour_map_colours ( const char *filename );
-
-extern void load_contour_map_lakes ( const char *filename );
-
-extern float check_coastal_river_intersection ( float x1, float z1, float x2, float z2 );
-
-extern void draw_2d_shaded_terrain_contour_map ( void );
-
-extern void draw_2d_terrain_contour_map ( void );
-
-extern void set_2d_terrain_map_dimensions ( float world_xmin, float world_zmin, float world_xmax, float world_zmax,
-													float screen_xmin, float screen_ymin, float screen_xmax, float screen_ymax );
-
-extern void get_2d_terrain_map_world_dimensions ( float *wxmin, float *wzmin, float *wxmax, float *wzmax );
-
-extern void get_2d_terrain_map_screen_dimensions ( float *sxmin, float *symin, float *sxmax, float *symax );
+extern void update_free_camera (camera *raw);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

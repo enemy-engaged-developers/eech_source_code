@@ -65,6 +65,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
+   move_view_left_key,
+   move_view_right_key,
+   move_view_forward_key,
+   move_view_backward_key,
    adjust_view_left_key,
    adjust_view_right_key,
    adjust_view_up_key,

@@ -187,25 +187,47 @@ void initialise_mouse_pointer ( rgb_packed *pointer )
 
 		Sleep ( 100 );
 	}
-	
+
 	destptr = ( unsigned short int * ) get_screen_data ( active_screen );
-	
+
 	destpitch = get_screen_pitch ( active_screen );
-	
-	destpitch >>= 1;
-	
-	for ( y = 0; y < mouse_pointer_height; y++ )
+
+#if 0  // disabled as it doesn't work for all gfx-cards (gives cyan pointer)
+	if (destpitch == mouse_pointer_width * 4) // 32bpp
 	{
-		
-		for ( x = 0; x < mouse_pointer_width; x++ )
+		rgb_colour* dest_rgba = (rgb_colour*)destptr;
+
+		destpitch >>= 2; // bytes -> int's
+
+		for ( y = 0; y < mouse_pointer_height; y++ )
+		{
+			for ( x = 0; x < mouse_pointer_width; x++ )
+			{
+				dest_rgba[x] = get_rgb_colour_value(*ptr++);
+//				dest_rgba[x].a = 0;
+			}
+			
+			dest_rgba += destpitch;
+		}
+	}
+	else // (hopefully) 16bpp
+#endif
+	{
+		destpitch >>= 1; // bytes -> shorts's
+
+		for ( y = 0; y < mouse_pointer_height; y++ )
 		{
 			
-			destptr[x] = *ptr++;
+			for ( x = 0; x < mouse_pointer_width; x++ )
+			{
+				
+				destptr[x] = *ptr++;
+			}
+			
+			destptr += destpitch;
 		}
-		
-		destptr += destpitch;
 	}
-	
+
 	unlock_screen ( active_screen );
 
 	set_active_screen (old_active_screen);

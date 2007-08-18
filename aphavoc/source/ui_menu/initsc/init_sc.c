@@ -113,7 +113,7 @@ void initialise_init_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.35;
+	x1 = 0.425;
 	y1 = 0.951;
 	x2 = 0.3;
 	y2 = 0.0625;
@@ -152,7 +152,7 @@ void initialise_init_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.65;
+	x1 = 0.80;
 	y1 = 0.951;
 	x2 = 0.3;
 	y2 = 0.0625;

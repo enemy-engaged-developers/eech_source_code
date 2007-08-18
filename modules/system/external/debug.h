@@ -205,6 +205,9 @@ extern void update_debug_windows ( void );
 #define debug_watch4();
 #define debug_colour_watch4();
 #define BREAKOUT();
+# if defined(_MSC_VER)
+#  pragma warning(disable: 4002) // too many actual parameters for macro
+# endif
 #else
 #define debug_log(a, x...) do { } while(0);
 #define debug_colour_log(a, b, x...) do { } while(0);

@@ -108,6 +108,8 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 	if (en)
 	{
+		float dispersion;
+		
 		////////////////////////////////////////
    	//
    	// MALLOC ENTITY DATA
@@ -209,7 +211,22 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->mob.position = vp.position;
 
-		memcpy (raw->mob.attitude, vp.attitude, sizeof (matrix3x3));
+		// arneh - add dispersion as random rotation in heading and pitch up to max error angle
+		dispersion = weapon_database[raw->mob.sub_type].max_range_error_ratio;
+		if (dispersion > 0.0)
+		{
+			matrix3x3
+				m;
+
+			float
+				heading = dispersion * sfrand1norm(),
+				pitch = dispersion * sfrand1norm();
+
+			get_3d_transformation_matrix(m, heading, pitch, 0.0);
+			multiply_matrix3x3_matrix3x3(raw->mob.attitude, vp.attitude, m);
+		}
+		else
+			memcpy (raw->mob.attitude, vp.attitude, sizeof (matrix3x3));
 
 		//
 		// interest level
