@@ -228,6 +228,7 @@ void process_ini_file(int argc, char *argv[])
 	 char fname[12] = "eech.ini";
 	 float v1;
 	 int d1, k;
+     size_t str_length = 0;
 
 //VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
 	 wide_cockpit_initialize();
@@ -242,6 +243,7 @@ void process_ini_file(int argc, char *argv[])
 		  debug_fatal ("Could not allocate buffer");
 		  return;
 	 }
+     *buf = '\0';
 
 //VJ 030414, commandline /ini:0 starts up without ini file
 	 while(argc--)
@@ -283,20 +285,21 @@ void process_ini_file(int argc, char *argv[])
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
 		j=0;
-      for (i = 0; i < strlen(buf); i++){
-      	if (buf[i] != ' '){
-      		buf1[j] = buf[i];
-	   		j++;
-      	}  
-      }
-      buf1[j] = '\0';
-      
+		str_length = strlen(buf);
+		for (i = 0; i < str_length; i++){
+			if (buf[i] != ' '){
+				buf1[j] = buf[i];
+				j++;
+			}
+		}
+		buf1[j] = '\0';
+
 //VJ 041002 bug fix: if variable is empty so # follows = the # is overwritten by NULL 
 //after the first call to strtok, this causes an error because q then contains the comment 
 //without spaces. fix: empty q when that is the case.
 		r = strchr(buf1, '=');
 		r++;
-		if (r[0] == '#'){       
+		if (r[0] == '#'){
   			p = strtok(buf1,"=");
 			q[0] = '\0';
 		}else{
@@ -304,12 +307,9 @@ void process_ini_file(int argc, char *argv[])
 			q = strtok(NULL,"#");
 		}   
 
-		while(q[i] && q[i]!=' ')
-		 i++;
-		q[i] = '\0';
-
 		sscanf(q,"%f",&v1);
 		sscanf(q,"%d",&d1);
+		str_length = strlen(q);
 //GAME
 		if (strcmp(p, "chaff")==0)  command_line_chaff_effectiveness = v1;
 		if (strcmp(p, "flare")==0)  command_line_flare_effectiveness = v1;
@@ -324,8 +324,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "32bit")==0)
 		{
 			command_line_display_bpp=16;
-		 if (d1 == 1)
-			command_line_display_bpp=32;
+			if (d1 == 1)
+				command_line_display_bpp=32;
 		}
 		if (strcmp(p, "persistent_smoke")==0)  command_line_persistent_smoke = d1;
 		if (strcmp(p, "wobbly-camera")==0)  command_line_wobbly_camera = d1;
@@ -345,13 +345,13 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "palette")==0) 	d3d_allow_paletted_textures = d1; //Casm 20JUN05 External switch of .pal/.bin for textures
 //COMMS
 		if (strcmp(p, "ipa")==0)
-		  if(strlen(q)!=0)
+			if (str_length > 0 && str_length < 128)
 				strcpy(command_line_ip_address, q);
 		if (strcmp(p, "pss")==0)
-		  if(strlen(q)!=0)
+		if (str_length > 0 && str_length < 128)
 				strcpy(command_line_primary_server_setting, q);
 		if (strcmp(p, "sss")==0)
-		  if(strlen(q)!=0)
+			if (str_length > 0 && str_length < 128)
 				strcpy(command_line_secondary_server_setting, q);
 
 		if (strcmp(p, "usemaster")==0) 	command_line_report_to_masterserver = d1; //Werewolf 2 Jan 04
@@ -374,15 +374,15 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "css")==0) 	command_line_comms_show_stats = d1;
 		if (strcmp(p, "cist")==0) 	command_line_comms_initial_sleep_time = d1;
 		if (strcmp(p, "servlog")==0) // Jabberwock 031119 Server log
-		  if (strlen(q)!=0)
-			  strcpy(command_line_server_log_filename, q); 
+			if (str_length > 0 && str_length < 128)
+				strcpy(command_line_server_log_filename, q); 
 		if (strcmp(p, "pauseserv")==0) 	command_line_pause_server = d1; // Jabberwock 040220 Pause server
 		if (strcmp(p, "dedicated")==0) 	command_line_comms_dedicated_server = d1;
 		if (strcmp(p, "game_type")==0) 	command_line_game_initialisation_phase_game_type = d1;
 		if (strcmp(p, "gunship_type")==0) command_line_game_initialisation_phase_gunship_type = d1;
 		if (strcmp(p, "path")==0)
-		  if (strlen(q)!=0)
-			  strcpy(command_line_game_initialisation_phase_path, q);
+			if (str_length > 0 && str_length < 128)
+				strcpy(command_line_game_initialisation_phase_path, q);
 //DYN
 		if (strcmp(p, "advancedfm")==0) command_line_dynamics_advanced_flight_model = d1; //Werewolf 3 Jan 04
 		if (strcmp(p, "enginerealism")==0) command_line_dynamics_advanced_engine_model = d1; //Werewolf 5 Feb 06
@@ -408,7 +408,7 @@ void process_ini_file(int argc, char *argv[])
 //VJ 030511 WUT is a separate part of the eech.ini
 		if (strcmp(p, "wut") == 0)
 		{
-			if (strlen(q)!=0)
+			if (str_length > 0 && 128)
 				strcpy(WUT_filename, q);
 			else
 				strcpy(WUT_filename, DEFAULT_GWUT_FILE);
@@ -502,7 +502,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
 		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping		
-	  if (strcmp(p, "night_light") == 0) global_night_light_level = v1;	//VJ 060920 night light levels
+		if (strcmp(p, "night_light") == 0) global_night_light_level = v1;	//VJ 060920 night light levels
 
 		if (strcmp(p, "dynamic_water") == 0) global_dynamic_water = d1;	//VJ 050817 dynamic water textures
 		if (strcmp(p, "autosave") == 0) command_line_autosave = d1 * 60; // Casm 17JUN05 Autosave option
