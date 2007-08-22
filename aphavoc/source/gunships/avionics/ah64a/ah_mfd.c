@@ -66,6 +66,7 @@
 
 #include "project.h"
 
+void copy_export_mfd(screen* export_left, screen* export_right);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,8 +532,16 @@ void initialise_ah64a_mfd (void)
 
 	mfd_env = create_2d_environment ();
 
+	if(command_line_export_mfd)
+	{
+	lhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
+	rhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+	}
+	else
+	{
 	lhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	}
 
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
@@ -562,6 +571,10 @@ void initialise_ah64a_mfd (void)
 	set_rgb_colour (TEXT_COLOUR1,           254, 204,   1, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,  66,  35,  11, 255);
 
+	if(command_line_export_mfd)
+	{
+		clear_mfd_colour=MFD_COLOUR6;
+	}
    Initialise_TSD_render_terrain();
 
 }
@@ -8235,7 +8248,9 @@ void draw_ah64a_mfd_on_texture (mfd_locations location)
 		*mfd_mode;
 
 	screen
-		*mfd_texture_screen;
+		*mfd_texture_screen,
+		*left_export,
+		*right_export;
 
 	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
 
@@ -8673,6 +8688,19 @@ void draw_ah64a_mfd_on_texture (mfd_locations location)
 	}
 
 	set_active_screen (video_screen);
+	if(command_line_export_mfd)
+	{
+		if(location == MFD_LOCATION_LHS)
+		{
+			left_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+			copy_export_mfd(left_export,NULL);
+		}
+		else
+		{
+			right_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+			copy_export_mfd(NULL,right_export);
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -65,6 +65,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "cmndline.h"
+#include "global.h"
+//#include "external\pixel.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,8 +151,33 @@ struct direct_draw_data
 		0,								//	int windows_depth;
 
 		16,							// int application_display_depth
-	};
+	},
 
+	ddraw_export =
+	{
+		NULL,							// LPDIRECTDRAW7 ddrawX
+
+		TRUE,							// BOOL use_double_buffer
+		TRUE,							// BOOL use_full_screen,
+		FALSE,						// BOOL use_software_driver
+		FALSE,						// BOOL use_system_memory
+		FALSE,						// BOOL use_z_buffer,
+
+		NULL,							//	LPDIRECTDRAWSURFACE lpFrontBuffer
+		NULL,							//	LPDIRECTDRAWSURFACE lpBackBuffer
+		NULL,							//	LPDIRECTDRAWSURFACE lpRenderBuffer
+		NULL,							//	LPDIRECTDRAWSURFACE lpZBuffer
+
+		NULL,							//	LPDIRECTDRAWCLIPPER lpClipper
+
+		FALSE,						//	BOOL application_windowed
+
+		0,								//	int windows_width,
+		0,								//	int windows_height,
+		0,								//	int windows_depth;
+
+		16,							// int application_display_depth
+	};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,9 +346,13 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	int
 		non_display_flag;
 
+	display_device *export_display_device;
+
 	ddraw.ddraw = NULL;
+	ddraw_export.ddraw = NULL;
 
 	ddraw.ddraw_valid = FALSE;
+	ddraw_export.ddraw_valid = FALSE;
 
 	number_of_display_devices = 0;
 
@@ -338,7 +370,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 
 	non_display_flag = FALSE;
 
-	ret = DirectDrawEnumerateEx ( ddraw_enumerate_drivers, &non_display_flag, DDENUM_DETACHEDSECONDARYDEVICES );// | DDENUM_NONDISPLAYDEVICES );
+	ret = DirectDrawEnumerateEx ( ddraw_enumerate_drivers, &non_display_flag, DDENUM_DETACHEDSECONDARYDEVICES|DDENUM_ATTACHEDSECONDARYDEVICES );// | DDENUM_NONDISPLAYDEVICES );
 
 	if ( FAILED ( ret ) )
 	{
@@ -524,6 +556,31 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	set_ddraw_memory_config ();
 
 	ddraw.ddraw_valid = TRUE;
+	
+	if(command_line_export_mfd)
+	{
+		int index;
+		export_display_device=display_devices;
+		for(index=0;index<command_line_export_mfd_adapter;index++)
+		{
+			export_display_device=export_display_device->succ;
+			if(!export_display_device)
+			{
+				debug_log ( "wrong adapternumber (export_mfd):");
+				return (FALSE);
+			}
+		}
+
+		ret = DirectDrawCreateEx ( &export_display_device->guid, ( LPVOID * ) &ddraw_export.ddraw, &IID_IDirectDraw7, NULL );
+		if ( FAILED ( ret ) )
+		{
+			debug_log ( "Unable to create direct draw object (export_mfd): %s", get_ddraw_error_message ( ret ) );
+			direct_draw_initialisation_error = DDRAW_INIT_UNABLE_TO_CREATE_DDRAW;
+			return (FALSE);
+		}
+		ddraw_export.ddraw_valid=TRUE;
+		
+	}	
 
 	return ( TRUE );
 }
@@ -597,6 +654,11 @@ static void ddraw_restore_objects ( int activate )
 				d3d.recreate_d3d = TRUE;
 			}
 		}
+			if ( ddraw_export.ddraw )
+			{
+	
+				IDirectDraw7_RestoreAllSurfaces ( ddraw_export.ddraw );
+			}
 	}
 }
 
@@ -845,6 +907,78 @@ BOOL ddraw_unlock_surface ( LPDIRECTDRAWSURFACE7 surface, unsigned char * memory
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+BOOL ddraw_flip_surface_export ( void )
+{
+	HRESULT	ddrval;
+	DDBLTFX
+		ddbltfx;
+	RECT dst, src;
+	int size;
+	switch(get_global_gunship_type())
+	{
+		case GUNSHIP_TYPE_HAVOC:
+		case GUNSHIP_TYPE_KA50:
+		case GUNSHIP_TYPE_HIND:
+			dst.left=command_line_export_mfd_single_pos[0];
+			dst.top=command_line_export_mfd_single_pos[1];
+			dst.right=command_line_export_mfd_single_pos[2];
+			dst.bottom=command_line_export_mfd_single_pos[3];
+		case GUNSHIP_TYPE_COMANCHE:
+		case GUNSHIP_TYPE_HOKUM:
+		case GUNSHIP_TYPE_APACHE:
+		case GUNSHIP_TYPE_BLACKHAWK:
+		default:
+			dst.left=command_line_export_mfd_left_pos[0];
+			dst.top=command_line_export_mfd_left_pos[1];
+			dst.right=command_line_export_mfd_left_pos[2];
+			dst.bottom=command_line_export_mfd_left_pos[3];
+	}
+	switch(get_global_gunship_type())
+	{
+		case GUNSHIP_TYPE_HAVOC:
+		case GUNSHIP_TYPE_COMANCHE:
+		case GUNSHIP_TYPE_HOKUM:
+		case GUNSHIP_TYPE_APACHE:
+			size=256;
+			break;
+		case GUNSHIP_TYPE_BLACKHAWK:
+		case GUNSHIP_TYPE_HIND:
+		case GUNSHIP_TYPE_KA50:
+		case GUNSHIP_TYPE_AH64A:
+		default:
+			size=128;
+			break;
+	}
+	src.left=0;
+	src.top=0;
+	src.right=size;
+	src.bottom=size;
+
+	ddbltfx.dwSize = sizeof ( ddbltfx );
+
+	ddbltfx.dwROP = SRCCOPY;
+       //	ddrval	= IDirectDrawSurface7_Flip ( ddraw2.lpFrontBuffer, NULL, DDFLIP_WAIT );
+	ddrval = IDirectDrawSurface7_Blt ( ddraw_export.lpFrontBuffer, &dst, ddraw_export.lpBackBuffer, &src, 0, NULL);
+
+	if(get_global_gunship_type()==GUNSHIP_TYPE_HAVOC)
+		return TRUE;
+
+	dst.left=command_line_export_mfd_right_pos[0];
+	dst.top=command_line_export_mfd_right_pos[1];
+	dst.right=command_line_export_mfd_right_pos[2];
+	dst.bottom=command_line_export_mfd_right_pos[3];
+	src.left=272;	
+	src.top=0;
+	src.right=272+size;
+	src.bottom=size;
+	ddrval = IDirectDrawSurface7_Blt ( ddraw_export.lpFrontBuffer, &dst, ddraw_export.lpBackBuffer, &src, 0, NULL);
+	if ( ddrval != DD_OK )
+	{
+		debug_log ( "Unable to perform surface flip (export): %s", get_ddraw_error_message ( ddrval ) );
+		return ( FALSE );
+	}
+	return TRUE;
+}
 
 BOOL ddraw_flip_surface ( void )
 {
@@ -863,6 +997,8 @@ BOOL ddraw_flip_surface ( void )
 
 		return ( FALSE );
 	}
+	if(ddraw_export.ddraw)
+		ddraw_flip_surface_export();
 
 	total_number_of_d3d_triangles = running_total_number_of_d3d_triangles;
 
@@ -1085,8 +1221,10 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		//
 		// Set the cooperative mode settings.
 		//
-
-		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_EXCLUSIVE );
+	
+		//mue 070223 cooperative level must be set by the same thread that created the application window
+		ddraw_cooperative_level coop_level=COOPERATIVE_LEVEL_EXCLUSIVE; 
+		system_thread_function (ddraw_internal_set_cooperative_level,&coop_level  );
 
 		//
 		// Setup the window style for a fullscreen application
@@ -1308,7 +1446,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 
 		create_video_screen ( width, height, ddraw.lpRenderBuffer );
 
-		return ( TRUE );
+//		return ( TRUE );
 	}
 	else
 	{
@@ -1565,8 +1703,66 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 
 		create_video_screen ( width, height, ddraw.lpRenderBuffer );
 
-		return ( TRUE );
+//		return ( TRUE );
 	}
+
+	//mue 070223 init export_display
+	if(ddraw_export.ddraw)
+	{
+		memset ( &ddsd, 0, sizeof ( ddsd ) );
+
+		ddsd.dwSize = sizeof ( ddsd );
+		
+		ddsd.dwFlags = DDSD_CAPS;
+
+		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+//		ddsd.ddsCaps.dwCaps2 = DDSCAPS2_HINTANTIALIASING;
+
+		if ( ddraw_export.use_double_buffer )
+		{
+			
+			ddsd.dwFlags |= DDSD_BACKBUFFERCOUNT;
+			
+			ddsd.dwBackBufferCount = 1;
+			
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_FLIP | DDSCAPS_COMPLEX;
+		}
+		
+		ddrval = IDirectDraw7_CreateSurface ( ddraw_export.ddraw, &ddsd, &ddraw_export.lpFrontBuffer, NULL);
+		
+		if ( ddrval != DD_OK )
+		{
+			
+			debug_log ( "Unable to create primary surface: %s", get_ddraw_error_message ( ddrval ) );
+			
+			return ( FALSE );
+		}
+
+		if ( ddraw.use_double_buffer )
+		{
+			
+			//
+			// Get the back screen from this surface.
+			//
+
+			memset ( &caps, 0, sizeof ( caps ) );
+
+			caps.dwCaps = DDSCAPS_BACKBUFFER;
+			
+			ddrval = IDirectDrawSurface7_GetAttachedSurface ( ddraw_export.lpFrontBuffer, &caps, &ddraw_export.lpBackBuffer );
+			
+			if ( ddrval != DD_OK )
+			{
+				
+				debug_fatal ( "Unable to get backbuffer: %s", get_ddraw_error_message ( ddrval ) );
+				
+				return ( FALSE );
+			}
+			ddraw_export.lpRenderBuffer=ddraw_export.lpBackBuffer;
+		}
+	}
+	return ( TRUE );
+	// mue 070223 end init export_display
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2298,6 +2494,8 @@ int ddraw_internal_set_display_mode ( void *data )
 	ptr = ( int * ) data;
 
 	ret = IDirectDraw7_SetDisplayMode ( ddraw.ddraw, ptr[0], ptr[1], ptr[2], 0, 0 );
+	if(ddraw_export.ddraw)
+		ret = IDirectDraw7_SetDisplayMode ( ddraw_export.ddraw, command_line_export_mfd_screen_width, command_line_export_mfd_screen_height, 16 , 0, 0 );
 
 	return ( ret );
 }
@@ -2643,7 +2841,8 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 		return ( DDENUMRET_OK );
 	}
 
-	if ( DriverCaps.dwCaps & DDCAPS_3D )
+// mue 070223 enumerate all  devices. 3D capabilities not necessary for mfd export?
+	if ( DriverCaps.dwCaps & DDCAPS_3D || command_line_export_mfd)
 	{
 
 		display_device
@@ -2694,7 +2893,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 		if ( assessment >= 0 )
 		{
 
-			if ( device->is_primary )
+/*			if ( device->is_primary )
 			{
 
 				if ( assessment > 10 )
@@ -2703,7 +2902,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 					assessment = 10;
 				}
 			}
-	
+*/	
 			device->assessment = assessment;
 	
 			if ( assessment > best_assessment )
@@ -2713,7 +2912,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 				// This driver has better 3D capabilities than the previous best
 				//
 
-				debug_log ( "Setting the best display device" );
+				debug_log ( "Setting the best display device: %s assessment: %d",device->name, assessment );
 	
 				best_assessment = assessment;
 	
@@ -2735,6 +2934,13 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//mue 070223 wrapper function for calling as a thread function
+int ddraw_internal_set_cooperative_level( void *data )
+{
+	return ddraw_set_cooperative_level(*(ddraw_cooperative_level*) data);
+}
+
+
 BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level )
 {
 
@@ -2743,6 +2949,11 @@ BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level )
 
 	static int
 		cooperative_level = UNSET_COOPERATIVE_LEVEL;
+				
+	if(ddraw_export.ddraw)
+	{
+		ddrval = IDirectDraw7_SetCooperativeLevel ( ddraw_export.ddraw, application_window,DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_FPUPRESERVE );	//DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN );
+	}
 
 	if ( ddraw.ddraw )
 	{
@@ -2752,10 +2963,16 @@ BOOL ddraw_set_cooperative_level ( ddraw_cooperative_level level )
 	
 			if ( cooperative_level != COOPERATIVE_LEVEL_EXCLUSIVE )
 			{
-				
+				if(ddraw_export.ddraw)
+				{
+				ddrval = IDirectDraw7_SetCooperativeLevel ( ddraw.ddraw, application_window,DDSCL_SETFOCUSWINDOW );	//DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN );
+				ddrval = IDirectDraw7_SetCooperativeLevel ( ddraw.ddraw, application_window,DDSCL_SETDEVICEWINDOW| DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_FPUPRESERVE );	//DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN );
+				}
+				else
+				{				
 				ddrval = IDirectDraw7_SetCooperativeLevel ( ddraw.ddraw, application_window, DDSCL_EXCLUSIVE | DDSCL_FPUPRESERVE | DDSCL_FULLSCREEN );	//DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN );
 //				ddrval = IDirectDraw7_SetCooperativeLevel ( ddraw.ddraw, application_window, DDSCL_EXCLUSIVE | DDSCL_MULTITHREADED | DDSCL_FULLSCREEN );	//DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN );
-				
+				}
 				if ( ddrval != DD_OK )
 				{
 					
@@ -3096,6 +3313,171 @@ const char * get_ddraw_error_message ( HRESULT error )
 	}
 
 	return ( ddraw_error_table[count].error_string );
+}
+
+void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDRAWSURFACEX dst, RECT dst_rect )
+{
+	DDSURFACEDESC2
+		src_ddsd,
+		dest_ddsd;
+	HRESULT ddrval;
+
+	//
+	// Lock the surface memory
+	//
+	src_ddsd.dwSize = sizeof ( src_ddsd );
+	dest_ddsd.dwSize = sizeof ( dest_ddsd );
+	ddrval=IDirectDrawSurface7_Lock ( dst, &dst_rect, &dest_ddsd, DDLOCK_NOSYSLOCK|DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL );
+	if ( ddrval != DD_OK )
+		debug_log ( "Unable to lock dst%s", get_ddraw_error_message ( ddrval ) );
+	debug_log("size:dst %d %d",dest_ddsd.dwHeight,dest_ddsd.dwWidth);	
+	ddrval=IDirectDrawSurface7_Lock ( src, &src_rect, &src_ddsd, DDLOCK_NOSYSLOCK|DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL );
+	debug_log("size:src %d %d",src_ddsd.dwHeight,src_ddsd.dwWidth);	
+	if ( ddrval != DD_OK )
+		debug_log ( "Unable to lock src%s", get_ddraw_error_message ( ddrval ) );
+	{
+
+		unsigned char
+			*source_screen,
+			*dest_screen;
+
+		int
+			width,height, w, h;
+/*		int 
+		src_surface_red_mask,
+		src_surface_green_mask,
+		src_surface_blue_mask,
+		src_surface_red_shift,
+		src_surface_green_shift,
+		src_surface_blue_shift,
+		dst_surface_red_mask,
+		dst_surface_green_mask,
+		dst_surface_blue_mask,
+		dst_surface_red_shift,
+		dst_surface_green_shift,
+		dst_surface_blue_shift;
+		unsigned int
+		red,
+		green,
+		blue;
+
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwRBitMask, &src_surface_red_mask, &src_surface_red_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwGBitMask, &src_surface_green_mask, &src_surface_green_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwBBitMask, &src_surface_blue_mask, &src_surface_blue_shift);
+
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwRBitMask, &dst_surface_red_mask, &dst_surface_red_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwGBitMask, &dst_surface_green_mask, &dst_surface_green_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwBBitMask, &dst_surface_blue_mask, &dst_surface_blue_shift);
+			
+		dst_surface_red_mask&=src_surface_red_mask;
+		dst_surface_green_mask&=src_surface_green_mask;
+		dst_surface_blue_mask&=src_surface_blue_mask;
+//		dst_surface_red_mask|=(dst_surface_red_mask>>16);
+//		dst_surface_green_mask|=(dst_surface_green_mask>>16);
+//		dst_surface_blue_mask|=(dst_surface_blue_mask>>16);
+//		dst_surface_red_mask>>=src_surface_red_shift;
+//		dst_surface_green_mask>>=src_surface_green_shift;
+//		dst_surface_blue_mask>>=src_surface_blue_shift;
+*/
+		w=src_rect.right-src_rect.left;
+		h=src_rect.bottom-src_rect.top;
+
+		source_screen = src_ddsd.lpSurface;
+		dest_screen = dest_ddsd.lpSurface;
+				
+		for ( height=0; height < h; height++ )
+		{
+			double
+			*source,
+			*dest;
+
+			source = ( double * ) source_screen;
+			dest = ( double * ) dest_screen;
+				
+	/*		unsigned short int
+			*source,
+			*dest;
+
+			source = ( unsigned short int* ) source_screen;
+			dest = ( unsigned short int* ) dest_screen;
+	*/			
+			for ( width = w; width > 0; width -= 16 )
+			{
+/*
+				red=*source<<src_surface_red_shift;
+				green=*source<<src_surface_green_shift;
+				blue=*source<<src_surface_blue_shift;
+				red&=dst_surface_red_mask;
+				green&=dst_surface_green_mask;
+				blue&=dst_surface_blue_mask;
+				red>>=dst_surface_red_shift;
+				green>>=dst_surface_green_shift;
+				blue>>=dst_surface_blue_shift;
+				
+				*dest=(red|green|blue);
+				dest++;
+				source++;
+*/
+				dest[0] = source[0];
+				dest[1] = source[1];
+				dest[2] = source[2];
+				dest[3] = source[3];
+				dest += 4;
+				source += 4;
+
+			}
+		
+			dest_screen += dest_ddsd.lPitch;
+			source_screen += src_ddsd.lPitch;
+		}
+	}
+
+	ddrval=IDirectDrawSurface7_Unlock ( dst, NULL );
+	if ( ddrval != DD_OK )
+		debug_log ( "Unable to unlock dst%s", get_ddraw_error_message ( ddrval ) );
+					
+	ddrval=IDirectDrawSurface7_Unlock ( src, NULL );
+	if ( ddrval != DD_OK )
+		debug_log ( "Unable to unlock src%s", get_ddraw_error_message ( ddrval ) );
+}
+
+void clear_export_mfd_screen()
+{
+	DDBLTFX fx;
+
+	memset(&fx, 0, sizeof(fx));
+	fx.dwSize = sizeof(fx);
+	fx.dwFillColor = 0;
+
+	IDirectDrawSurface7_Blt ( ddraw_export.lpBackBuffer,NULL, NULL, NULL, DDBLT_COLORFILL|DDBLT_WAIT, &fx);
+	IDirectDrawSurface7_Blt ( ddraw_export.lpFrontBuffer,NULL, NULL, NULL, DDBLT_COLORFILL|DDBLT_WAIT, &fx);
+}
+
+void copy_export_mfd(screen* export_left, screen* export_right)
+{
+	RECT src_rect, dst_rect;
+
+	if(export_left)
+	{
+	src_rect.left=0;
+	src_rect.top=0;
+	src_rect.right=export_left->width;
+	src_rect.bottom=export_left->height;
+	copy_surface_to_surface(export_left->surface, src_rect, ddraw_export.lpBackBuffer,src_rect);	
+	}
+
+	if(export_right)
+	{
+	src_rect.left=0;
+	src_rect.top=0;
+	src_rect.right=export_right->width;
+	src_rect.bottom=export_right->height;
+	dst_rect.left=272;
+	dst_rect.top=0;
+	dst_rect.right=272+export_right->width;
+	dst_rect.bottom=export_right->height;
+	copy_surface_to_surface(export_right->surface, src_rect, ddraw_export.lpBackBuffer,dst_rect);	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

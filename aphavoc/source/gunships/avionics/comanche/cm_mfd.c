@@ -70,6 +70,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//mue 070223
+void copy_export_mfd(screen* export_left, screen* export_right);
+
 #ifdef DEBUG
 
 static char
@@ -12568,15 +12571,26 @@ void initialise_comanche_mfd (void)
 	mfd_env = create_2d_environment ();
 
 	////////////////////////////////////////
-
-	large_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	//mue 070223 quick and dirty hack: for mfd export the mfd screen textures must be in format TEXTURE_TYPE_SCREEN, so i can easily copy the
+	//bitmapdata to the exportsurface without data(color) conversion
+	if(command_line_export_mfd)
+	{
+		large_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SCREEN, 0);
+		large_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SCREEN, 0);
+		large_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SCREEN, 0);
+		large_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SCREEN, 0);
+	}
+	else
+	{
+		large_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+		large_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+		large_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+		large_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
+	}
 	large_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 	large_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 	large_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 
-	large_co_pilot_lhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
-	large_co_pilot_rhs_main_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 	large_co_pilot_lhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 	large_co_pilot_rhs_side_mfd_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
 	large_co_pilot_text_display_texture_screen = create_user_texture_screen (LARGE_MFD_VIEWPORT_SIZE, LARGE_MFD_VIEWPORT_SIZE, TEXTURE_TYPE_SINGLEALPHA, 0);
@@ -12819,6 +12833,8 @@ void deinitialise_comanche_mfd (void)
 
 void draw_comanche_mfd (void)
 {
+	screen *export_left, *export_right;
+	
 	////////////////////////////////////////
 	//
 	// SELECT LARGE OR SMALL MFD TEXTURES
@@ -12897,6 +12913,17 @@ void draw_comanche_mfd (void)
 		co_pilot_text_display_texture_screen = small_co_pilot_text_display_texture_screen;
 
 		eo_3d_texture_screen = small_eo_3d_texture_screen;
+	}
+
+	if (get_crew_role () == CREW_ROLE_PILOT)
+	{
+		export_left=pilot_lhs_main_mfd_texture_screen; 
+		export_right=pilot_rhs_main_mfd_texture_screen; 
+	}
+	else
+	{
+		export_left=co_pilot_lhs_main_mfd_texture_screen; 
+		export_right=co_pilot_rhs_main_mfd_texture_screen; 
 	}
 
 	set_system_texture_screen (pilot_lhs_main_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
@@ -13090,6 +13117,7 @@ void draw_comanche_mfd (void)
 			if (get_undamaged_eo_display_mode (pilot_lhs_main_mfd_mode) && (display_mask & PILOT_LHS_MAIN_MFD))
 			{
 				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
+				export_left=eo_3d_texture_screen;
 
 				draw_eo_display = TRUE;
 			}
@@ -13097,6 +13125,7 @@ void draw_comanche_mfd (void)
 			if (get_undamaged_eo_display_mode (pilot_rhs_main_mfd_mode) && (display_mask & PILOT_RHS_MAIN_MFD))
 			{
 				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_COMANCHE_MFD3);
+				export_right=eo_3d_texture_screen;
 
 				draw_eo_display = TRUE;
 			}
@@ -13104,6 +13133,7 @@ void draw_comanche_mfd (void)
 			if (get_undamaged_eo_display_mode (co_pilot_lhs_main_mfd_mode) && (display_mask & CO_PILOT_LHS_MAIN_MFD))
 			{
 				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_COMANCHE_MFD6);
+				export_left=eo_3d_texture_screen;
 
 				draw_eo_display = TRUE;
 			}
@@ -13111,6 +13141,7 @@ void draw_comanche_mfd (void)
 			if (get_undamaged_eo_display_mode (co_pilot_rhs_main_mfd_mode) && (display_mask & CO_PILOT_RHS_MAIN_MFD))
 			{
 				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_COMANCHE_MFD7);
+				export_right=eo_3d_texture_screen;
 
 				draw_eo_display = TRUE;
 			}
@@ -13234,6 +13265,9 @@ void draw_comanche_mfd (void)
 	{
 		draw_text_display (co_pilot_text_display_texture_screen);
 	}
+	if(command_line_export_mfd)
+		copy_export_mfd(export_left,export_right);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

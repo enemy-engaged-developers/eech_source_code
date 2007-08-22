@@ -66,6 +66,7 @@
 
 #include "project.h"
 
+void copy_export_mfd(screen* export_left, screen* export_right);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +155,14 @@ void initialise_hind_mfd (void)
 
 	mfd_env = create_2d_environment ();
 
-	mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
+	if(command_line_export_mfd)
+	{
+		mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SCREEN);
+	}
+	else
+	{
+		mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
+	}
 
 	overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -165,7 +173,14 @@ void initialise_hind_mfd (void)
 	set_rgb_colour (MFD_COLOUR5, 140, 140,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,  80,  52,   8, 255);
 
-	set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
+	if(command_line_export_mfd)
+	{
+		clear_mfd_colour=MFD_COLOUR6;
+	}
+	else
+	{
+		set_rgb_colour (clear_mfd_colour, 255, 255, 0, 0);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2873,6 +2888,7 @@ void draw_hind_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int draw
 
 void draw_hind_mfd_on_texture (void)
 {
+	screen* export_screen;
 	if (hind_damage.tv_display)
 	{
 		if (mfd_mode != MFD_MODE_OFF)
@@ -3127,6 +3143,11 @@ void draw_hind_mfd_on_texture (void)
 	}
 
 	set_active_screen (video_screen);
+	if(command_line_export_mfd)
+	{
+		export_screen=create_screen_for_system_texture (TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
+		copy_export_mfd(export_screen,NULL);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

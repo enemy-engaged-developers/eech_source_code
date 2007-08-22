@@ -1515,11 +1515,18 @@ void draw_virtual_cockpit_3d_view (void)
 			}
 			else
 			{
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_apache_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
-
-					draw_overlaid_apache_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
+					draw_apache_mfd_on_texture(MFD_LOCATION_LHS);
+					draw_apache_mfd_on_texture(MFD_LOCATION_RHS);
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_apache_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
+						draw_overlaid_apache_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
+					}
 				}
 			}
 
@@ -1560,11 +1567,21 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				draw_external_havoc_hud ();
 
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
-
-					draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					draw_havoc_mfd_on_texture();
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_havoc_mfd (100.0, 380.0, 192.0);
+						draw_overlaid_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
 				}
 			}
 
@@ -1582,9 +1599,16 @@ void draw_virtual_cockpit_3d_view (void)
 
 			if (!get_global_draw_cockpit_graphics ())
 			{
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_comanche_mfd ();
+					draw_comanche_mfd();
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_comanche_mfd ();
+					}
 				}
 			}
 
@@ -1602,9 +1626,16 @@ void draw_virtual_cockpit_3d_view (void)
 
 			if (!get_global_draw_cockpit_graphics ())
 			{
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_hokum_mfd ();
+					draw_hokum_mfd();
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_hokum_mfd ();
+					}
 				}
 			}
 
@@ -1669,11 +1700,18 @@ void draw_virtual_cockpit_3d_view (void)
 			}
 			else
 			{
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_blackhawk_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
-
-					draw_overlaid_blackhawk_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+					draw_blackhawk_mfd_on_texture(MFD_LOCATION_LHS);
+					draw_blackhawk_mfd_on_texture(MFD_LOCATION_RHS);
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_blackhawk_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
+						draw_overlaid_blackhawk_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+					}
 				}
 			}
 
@@ -1718,11 +1756,21 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				draw_external_hind_hud ();
 
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
-
-					draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					draw_hind_mfd_on_texture();
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_hind_mfd (68.0, 412.0, 128.0);
+						draw_overlaid_hind_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
 				}
 			}
 
@@ -1761,11 +1809,18 @@ void draw_virtual_cockpit_3d_view (void)
 			}
 			else
 			{
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_ah64a_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
-
-					draw_overlaid_ah64a_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+					draw_ah64a_mfd_on_texture(MFD_LOCATION_LHS);
+					draw_ah64a_mfd_on_texture(MFD_LOCATION_RHS);
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_ah64a_mfd (68.0, 412.0, 128.0, MFD_LOCATION_LHS);
+						draw_overlaid_ah64a_mfd (572.0, 412.0, 128.0, MFD_LOCATION_RHS);
+					}
 				}
 			}
 
@@ -1807,11 +1862,21 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				draw_external_ka50_hud ();
 
-				if (get_global_draw_overlaid_instruments ())
+				if(command_line_export_mfd)
 				{
-					draw_overlaid_ka50_mfd (68.0, 412.0, 128.0);
-
-					draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					draw_ka50_mfd_on_texture();
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_ka50_mfd (68.0, 412.0, 128.0);
+						draw_overlaid_ka50_threat_warning_display (int_full_screen_width - 64, int_full_screen_height - 84);
+					}
 				}
 			}
 

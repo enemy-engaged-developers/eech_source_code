@@ -158,6 +158,26 @@ void read_hud_parameters (char *q)
 				 
 	}	
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void read_export_mfd_pos(char *q, int *pos)
+{
+	char *p = strtok(q,",");         
+	if (p) 
+		pos[0]= atoi(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		pos[1]= atoi(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		pos[2]= atoi(p);
+	p = strtok(NULL,",");	     
+	if (p) 
+		pos[3]= atoi(p);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,6 +542,13 @@ void process_ini_file(int argc, char *argv[])
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}
+		if (strcmp(p, "export_mfd") == 0) command_line_export_mfd= d1;	// mue 070223 
+		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223 
+		if (strcmp(p, "export_mfd_screen_width") == 0) command_line_export_mfd_screen_width= d1;	// mue 070223 
+		if (strcmp(p, "export_mfd_screen_height") == 0) command_line_export_mfd_screen_height= d1;	// mue 070223 
+		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_left_pos);	// mue 070223 
+		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_right_pos);		// mue 070223 
+		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223 
 
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
@@ -704,6 +731,17 @@ void dump_ini_file(void)
 	fprintf(f,"autosave=%d          # Autosave every n minutes or 0 not to autosave\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
 	fprintf(f,"dfr=%d               # display framerate (0 = off (default), 1 = on, 2 = log to file \"framerate.txt\")\n",command_line_framerate);
 	fprintf(f,"MEMEXPORT=%d         # enables export of cockpit information to a shared memory area\n", command_line_shared_mem_export);
+	fprintf(f,"export_mfd=%d               # enables mfd export on multimon systems (0 = off (default), 1 = on\n",command_line_export_mfd);
+	fprintf(f,"export_mfd_adapter=%d               # graphicadapter for mfd export screen(0=first, 1=second, ...)\n",command_line_export_mfd_adapter);
+	fprintf(f,"export_mfd_screen_width=%d               # resolution of export screen (width)\n",command_line_export_mfd_screen_width);
+	fprintf(f,"export_mfd_screen_height=%d               # resolution of export screen (height)\n",command_line_export_mfd_screen_height);
+
+	fprintf(f,"export_mfd_left_pos=%d,%d,%d,%d               # left mfd position\n",command_line_export_mfd_left_pos[0],
+			command_line_export_mfd_left_pos[1],command_line_export_mfd_left_pos[2],command_line_export_mfd_left_pos[3]);
+	fprintf(f,"export_mfd_right_pos=%d,%d,%d,%d               #  right mfd position\n",command_line_export_mfd_right_pos[0],
+			command_line_export_mfd_right_pos[1],command_line_export_mfd_right_pos[2],command_line_export_mfd_right_pos[3]);
+	fprintf(f,"export_mfd_single_pos=%d,%d,%d,%d               #  single mfd position (havoc/hind/ka50)\n",command_line_export_mfd_single_pos[0],
+			command_line_export_mfd_single_pos[1],command_line_export_mfd_single_pos[2],command_line_export_mfd_single_pos[3]);
 	fprintf(f,"[end of file]\n");
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d            # key mapping, def = 0 (off)\n",command_line_key_mapping);
