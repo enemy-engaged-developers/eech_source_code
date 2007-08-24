@@ -923,6 +923,7 @@ BOOL ddraw_flip_surface_export ( void )
 			dst.top=command_line_export_mfd_single_pos[1];
 			dst.right=command_line_export_mfd_single_pos[2];
 			dst.bottom=command_line_export_mfd_single_pos[3];
+			break;
 		case GUNSHIP_TYPE_COMANCHE:
 		case GUNSHIP_TYPE_HOKUM:
 		case GUNSHIP_TYPE_APACHE:
