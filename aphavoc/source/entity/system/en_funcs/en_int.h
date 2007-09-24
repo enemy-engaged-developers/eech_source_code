@@ -342,6 +342,22 @@ enum INT_TYPES
 	INT_TYPE_WIND_INCREASING,
 	INT_TYPE_X_SECTOR,
 	INT_TYPE_Z_SECTOR,
+
+    /*
+     :ADDING NEW INT TYPES:
+     There are a few steps to follow when adding new int types to be consistent with past development practices.
+
+     1) Add your type here.
+     2) Add a preprocessor define in the next section to indicate the number of bits to pack your new type.
+        This is used in networked games and save files. 
+     3) Add a section to the end of the int_type_database defined in file en_int.c; using the other entries as examples.
+        Use the preprocessor define you declare below for the number of pack bits.
+     4) Add a compile time check to the debug_check_pack_types() function in file en_int.c , again use the other
+        entries as examples.
+     5) Consider whether it is appropriate to add a default value to the function default_get_entity_int_value() also
+        in file en_int.c. This function is also an appropriate place to possibly assert your int type lookup, to 
+        see that it is only used in appropriate whys.
+     */
 	NUM_INT_TYPES
 };
 
@@ -457,7 +473,7 @@ typedef enum INT_TYPES int_types;
 #define NUM_POSITION_TYPE_BITS							(2)
 #define NUM_RADAR_JAMMER_ON_BITS							(1)
 #define NUM_RADAR_ON_BITS									(1)
-#define NUM_RADIO_MESSAGE_TYPE_BITS						(5)
+#define NUM_RADIO_MESSAGE_TYPE_BITS						(8)
 #define NUM_RADIO_MESSAGE_VALUE_BITS					(32)
 #define NUM_READY_TO_FIRE_BITS							(1)
 #define NUM_REARMING_BITS									(1)
