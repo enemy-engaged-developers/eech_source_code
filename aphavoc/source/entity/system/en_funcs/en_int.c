@@ -2373,6 +2373,15 @@ static int default_get_entity_int_value (entity *en, int_types type)
 	return (value);
 }
 
+/*
+   The definition below is used to offer a compile time check for bits packing. It 
+   uses the fact that you can't define a zero length array. It is only usable with 
+   a num_bits argument of less than 32 since a left shift of one by 32 overflows.
+ */
+#define COMPILE_ASSERT_PACK(max_value, num_bits, msg) {\
+    char l__array[((num_bits) < 32) && (((1 << (num_bits)) - (max_value)) > 0)]; l__array[0] = 0; \
+}
+
 void debug_check_pack_types (void)
 {
 	// arneh - june 2006
@@ -2386,47 +2395,50 @@ void debug_check_pack_types (void)
 	// format too often (you can find warnings in the debug log).  And remember
 	// to mention it in the release notes, and on the dev mailing list.
 
-	ASSERT(NUM_DAY_SEGMENT_TYPES < (1 << NUM_DAY_SEGMENT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_DAY_SEGMENT_TYPES, NUM_DAY_SEGMENT_TYPE_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_ENTITY_ATTRIBUTES < (1 << NUM_ENTITY_ATTRIBUTE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_ENTITY_COMMS_MESSAGES < (1 << NUM_ENTITY_COMMS_MESSAGE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_ENTITY_SUB_TYPE_FIXED < (1 << NUM_ENTITY_SUB_TYPE_FIXED_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_ENTITY_SUB_TYPE_WEAPON_BITS < (1 << NUM_ENTITY_SUB_TYPE_WEAPON_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_ENTITY_TYPES < (1 << NUM_ENTITY_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_ENTITY_ATTRIBUTES, NUM_ENTITY_ATTRIBUTE_PACK_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_ENTITY_COMMS_MESSAGES, NUM_ENTITY_COMMS_MESSAGE_PACK_BITS, "Not enough bits, increase definition of second argument");
+    COMPILE_ASSERT_PACK(NUM_MESSAGE_CATEGORIES, NUM_RADIO_MESSAGE_TYPE_BITS, "Not enough bits, increase definition of second argument");
+    COMPILE_ASSERT_PACK(NUM_ENTITY_SUB_TYPE_FIXED, NUM_ENTITY_SUB_TYPE_FIXED_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_ENTITY_SUB_TYPE_WEAPON_BITS, NUM_ENTITY_SUB_TYPE_WEAPON_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_ENTITY_TYPES, NUM_ENTITY_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_FLOAT_TYPES < (1 << NUM_FLOAT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_FORMATION_TYPES < (1 << NUM_FORMATION_BITS) || NUM_FORMATION_BITS >= 32 || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_GROUP_MODE_TYPES < (1 << NUM_GROUP_MODE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_GUIDE_CRITERIA_TYPES < (1 << NUM_GUIDE_CRITERIA_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_GUIDE_POSITION_TYPES < (1 << NUM_GUIDE_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_GUNSHIP_TYPES < (1 << NUM_GUNSHIP_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_INT_TYPES < (1 << NUM_INT_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_LIST_TYPES < (1 << NUM_LIST_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_FLOAT_TYPES, NUM_FLOAT_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
+	//COMPILE_ASSERT_PACK(NUM_FORMATION_TYPES, NUM_FORMATION_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_GROUP_MODE_TYPES, NUM_GROUP_MODE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_GUIDE_CRITERIA_TYPES, NUM_GUIDE_CRITERIA_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_GUIDE_POSITION_TYPES, NUM_GUIDE_POSITION_TYPE_BITS, !"Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_GUNSHIP_TYPES, NUM_GUNSHIP_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_INT_TYPES, NUM_INT_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_LIST_TYPES, NUM_LIST_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_MESSAGE_TEXT_TYPES < (1 << NUM_MESSAGE_TEXT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_META_EXPLOSION_TYPES < (1 << NUM_META_EXPLOSION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_META_SMOKE_LIST_TYPES < (1 << NUM_META_SMOKE_LIST_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert"); 
-	ASSERT(NUM_MOVEMENT_TYPES < (1 << NUM_MOVEMENT_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_OPERATIONAL_STATE_TYPES < (1 << NUM_OPERATIONAL_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_POSITION_TYPES < (1 << NUM_POSITION_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_RESUPPLY_SOURCE_TYPES < (1 << NUM_RESUPPLY_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_MESSAGE_TEXT_TYPES, NUM_MESSAGE_TEXT_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_META_EXPLOSION_TYPES, NUM_META_EXPLOSION_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_META_SMOKE_LIST_TYPES, NUM_META_SMOKE_LIST_TYPE_BITS, "Not enough bits, increase definition of second argument"); 
+	COMPILE_ASSERT_PACK(NUM_MOVEMENT_TYPES, NUM_MOVEMENT_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_OPERATIONAL_STATE_TYPES, NUM_OPERATIONAL_STATE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_POSITION_TYPES, NUM_POSITION_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_RESUPPLY_SOURCE_TYPES, NUM_RESUPPLY_SOURCE_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_SOUND_CHANNEL_TYPES < (1 << NUM_SOUND_CHANNEL_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_SOUND_LOCALITY_TYPES < (1 << NUM_SOUND_LOCALITY_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_SPEECH_CATEGORY_TYPES < (1 << NUM_SPEECH_CATEGORY_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_STRING_TYPES < (1 << NUM_STRING_TYPE_PACK_BITS)  || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_SOUND_CHANNEL_TYPES, NUM_SOUND_CHANNEL_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_SOUND_LOCALITY_TYPES, NUM_SOUND_LOCALITY_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_SPEECH_CATEGORY_TYPES, NUM_SPEECH_CATEGORY_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_STRING_TYPES, NUM_STRING_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_TASK_COMPLETED_TYPES < (1 << NUM_TASK_COMPLETED_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_ROE_TYPES < (1 << NUM_TASK_ROE_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_STATE_TYPES < (1 << NUM_TASK_STATE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_TARGET_CLASS_TYPES < (1 << NUM_TASK_TARGET_CLASS_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_TARGET_SOURCE_TYPES < (1 << NUM_TASK_TARGET_SOURCE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_TARGET_TYPE_BITS >= 32 || NUM_TASK_TARGET_TYPES < (1 << NUM_TASK_TARGET_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_TASK_TERMINATED_TYPES < (1 << NUM_TASK_TERMINATED_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_TASK_COMPLETED_TYPES, NUM_TASK_COMPLETED_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_TASK_ROE_TYPES, NUM_TASK_ROE_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_TASK_STATE_TYPES, NUM_TASK_STATE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_TASK_TARGET_CLASS_TYPES, NUM_TASK_TARGET_CLASS_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_TASK_TARGET_SOURCE_TYPES, NUM_TASK_TARGET_SOURCE_BITS, "Not enough bits, increase definition of second argument");
+	//COMPILE_ASSERT_PACK(NUM_TASK_TARGET_TYPES, NUM_TASK_TARGET_TYPE_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_TASK_TERMINATED_TYPES, NUM_TASK_TERMINATED_BITS, "Not enough bits, increase definition of second argument");
 
-	ASSERT(NUM_VEC3D_TYPES < (1 << NUM_VEC3D_TYPE_PACK_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_WAYPOINT_REACHED_TYPES < (1 << NUM_WAYPOINT_REACHED_BITS) || !"Read the comment in the function to find out how to fix this assert");
-	ASSERT(NUM_WEAPON_CONFIG_TYPES < (1 << NUM_WEAPON_CONFIG_TYPE_BITS) || !"Read the comment in the function to find out how to fix this assert");
+	COMPILE_ASSERT_PACK(NUM_VEC3D_TYPES, NUM_VEC3D_TYPE_PACK_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_WAYPOINT_REACHED_TYPES, NUM_WAYPOINT_REACHED_BITS, "Not enough bits, increase definition of second argument");
+	COMPILE_ASSERT_PACK(NUM_WEAPON_CONFIG_TYPES, NUM_WEAPON_CONFIG_TYPE_BITS, "Not enough bits, increase definition of second argument");
+
+    COMPILE_ASSERT_PACK(TEXTURE_ANIMATION_INDEX_LAST, NUM_ANIMATED_TEXTURE_BITS, "Not enough bits, increase definition of second argument");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
