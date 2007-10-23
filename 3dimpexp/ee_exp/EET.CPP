@@ -1,0 +1,75 @@
+// Slashes are correct!
+#define TEXTURES_ROOT ":TEXTURES/"
+
+class EET
+{
+ private:
+
+ struct Texture
+ {
+  unsigned long index;
+  char name[64];
+ };
+ Array<Texture> textures;
+ unsigned long index;
+ char textures_drive;
+
+ public:
+
+ EET(char drive = 'D');
+ void Clear(void);
+ unsigned long GetIndex(LWO_File& lwofile, unsigned textindex);
+};
+
+EET::EET(char drive)
+ : index(0), textures_drive(drive)
+{
+ FILE* file;
+
+ file = fopen("TEXTURES.TXT", "r");
+ if (!file)
+  return;
+ Texture texture;
+ texture.index = 0;
+ while (fgets(texture.name, sizeof(texture.name), file) != NULL)
+  {
+   texture.name[strlen(texture.name) - 1] = '\0';
+   if (!*texture.name)
+    break;
+   textures.Append(texture);
+  }
+ fclose(file);
+}
+
+void EET::Clear(void)
+{
+ for (unsigned i = 0; i < !textures; i++)
+  textures[i].index = 0;
+ index = 0;
+}
+
+unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
+{
+ LWO_Chunk* chunk;
+ LWO_SubChunk* subchunk;
+ char buf[1024];
+
+ if (textindex < !textures)
+  {
+   if (textures[textindex].index == 0)
+    {
+     chunk = new LWO_Chunk("CLIP", 0, NULL);
+     lwofile.AddSubChunk(chunk);
+     chunk->AddData(4, &index);
+     subchunk = new LWO_SubChunk("STIL", 0, NULL);
+     chunk->AddSubChunk(subchunk);
+     sprintf(buf, "%c%s%s.bmp", textures_drive, TEXTURES_ROOT, textures[textindex].name);
+     subchunk->AddBasicData(strlen(buf) + 1, buf);
+     subchunk = new LWO_SubChunk("FLAG", 2, "\0\x80");
+     chunk->AddSubChunk(subchunk);
+    }
+
+   return textures[textindex].index;
+  }
+ return 0;
+}
