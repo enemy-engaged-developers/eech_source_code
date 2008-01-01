@@ -1,5 +1,7 @@
 @echo off
-REM SET EECH_ROOTDIR=c:\watcom\eech-new
+SET EECH_ROOTDIR=e:\Work\eech-new
+
+del project.exe
 
 echo ################### Make Timings ####################### >> maketime.txt
 time < dmake.bat >> maketime.txt

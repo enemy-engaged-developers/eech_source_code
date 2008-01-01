@@ -1,4 +1,5 @@
 @echo off
+SET EECH_ROOTDIR=e:\Work\eech-new
 
 	cd %EECH_ROOTDIR%\aphavoc
 

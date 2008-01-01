@@ -440,7 +440,7 @@ void application_main (int argc, char **argv)
 	{
 
 		//
-		// We're running in a window - that means 640x480 only
+		// These are the supported screen resolutions for windowed mode, where we can't query DirectX for supported screen dimensions
 		//
 
 		number_of_graphics_resolution_modes_available = 11;

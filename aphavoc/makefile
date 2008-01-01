@@ -457,23 +457,20 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files) linkcl
         @ for %i in ($(asm_module_object_files)) do @ %append $^@ %i
 
 !else
-
         @ %create $^@
         @ %append $^@ OPTION VERBOSE
         @ %append $^@ SYSTEM Win95
         @ %append $^@ OPTION SYMF
         @ %append $^@ OPTION MAP
+!ifdef debug
+        @ %append $^@ DEBUG ALL
+!endif
         @ %append $^@ NAME $^&
                 @ %append $^@ OPTION INCREMENTAL=$(project).ilk
                 @ %append $^@ OPTION VERSION=1.6
                 @ %append $^@ OPTION STATICS
                 @ %append $^@ OPTION RESOURCE=cohokum.res
 #               @ %append $^@ OPTION ELIMINATE
-!ifdef debug
-!ifndef nolinkdebug
-        @ %append $^@ DEBUG ALL
-!endif
-!endif
         @ %append $^@ OPTION STACK=128000
         @ for %i in ($(lib_files)) do @ %append $^@ LIBRARY %i
         @ for %i in ($(c_module_object_files)) do @ %append $^@ FILE %i
@@ -499,7 +496,7 @@ $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).l
 !else
 
 $(projectname).exe : $(c_object_files) $(c_module_object_files) $(projectname).lnk
-                wlink library winmm library ws2_32 @$(projectname).lnk
+                wlink debug all library winmm library ws2_32 @$(projectname).lnk
 
 !endif
 

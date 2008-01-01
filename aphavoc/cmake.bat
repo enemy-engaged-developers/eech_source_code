@@ -1,3 +1,4 @@
 @echo off
-REM SET EECH_ROOTDIR=c:\watcom\eech-new
-	wmake optimise=1 commercial=1
+SET EECH_ROOTDIR=e:\Work\eech-new
+del project.exe
+wmake optimise=1 commercial=1
