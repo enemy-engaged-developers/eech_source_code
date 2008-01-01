@@ -443,7 +443,7 @@ void application_main (int argc, char **argv)
 		// We're running in a window - that means 640x480 only
 		//
 
-		number_of_graphics_resolution_modes_available = 10;
+		number_of_graphics_resolution_modes_available = 11;
 
 		graphics_resolution_modes_available[0].width = 640;
 		graphics_resolution_modes_available[0].height = 480;
@@ -484,6 +484,10 @@ void application_main (int argc, char **argv)
 		graphics_resolution_modes_available[9].width = 1920;
 		graphics_resolution_modes_available[9].height = 1200;
 		graphics_resolution_modes_available[9].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[10].width = 2048;
+		graphics_resolution_modes_available[10].height = 1536;
+		graphics_resolution_modes_available[10].compressed_texture_mode = FALSE;
 	}
 
 	//
