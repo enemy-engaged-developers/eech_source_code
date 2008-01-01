@@ -443,7 +443,7 @@ void application_main (int argc, char **argv)
 		// We're running in a window - that means 640x480 only
 		//
 
-		number_of_graphics_resolution_modes_available = 8;
+		number_of_graphics_resolution_modes_available = 10;
 
 		graphics_resolution_modes_available[0].width = 640;
 		graphics_resolution_modes_available[0].height = 480;
@@ -470,12 +470,20 @@ void application_main (int argc, char **argv)
 		graphics_resolution_modes_available[5].compressed_texture_mode = FALSE;
 
 		graphics_resolution_modes_available[6].width = 1680; //Werewolf
-		graphics_resolution_modes_available[6].height = 1050;
+		graphics_resolution_modes_available[6].height = 900;
 		graphics_resolution_modes_available[6].compressed_texture_mode = FALSE;
 
-		graphics_resolution_modes_available[7].width = 1600;
-		graphics_resolution_modes_available[7].height = 1200;
+		graphics_resolution_modes_available[7].width = 1680; //Werewolf
+		graphics_resolution_modes_available[7].height = 1050;
 		graphics_resolution_modes_available[7].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[8].width = 1600;
+		graphics_resolution_modes_available[8].height = 1200;
+		graphics_resolution_modes_available[8].compressed_texture_mode = FALSE;
+
+		graphics_resolution_modes_available[9].width = 1920;
+		graphics_resolution_modes_available[9].height = 1200;
+		graphics_resolution_modes_available[9].compressed_texture_mode = FALSE;
 	}
 
 	//
