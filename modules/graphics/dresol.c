@@ -96,20 +96,6 @@ int
 graphics_resolution_mode
 	graphics_resolution_modes_available[MAX_GRAPHICS_RESOLUTION_MODES];
 
-resolution_info resolutions_supported[] =
-	{
-
-		{ 640, 480 },
-		{ 800, 600 },
-		{ 1024, 768 },
-		{ 1280, 800 }, //Werewolf
-		{ 1280, 960 },
-		{ 1280, 1024 }, //Werewolf
-		{ 1680, 900 }, //Werewolf
-		{ 1680, 1050 }, //Werewolf
-		{ 1600, 1200 },
-		{ 2048, 1536 }, //Werewolf
-	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +293,7 @@ int assess_graphic_device_resolutions ( void )
 							debug_log ( "%d x %d failed video resolution test!", width, height );
 					}
 					else
-						debug_log ( "%d x %d is not in supported modes list!", width, height );
+						debug_log ( "%d x %d is below minimum resolution dimensions 640x480!", width, height );
 
 				}
 			}
@@ -781,23 +767,14 @@ void release_test_d3d_device ( void )
 int supported_resolution ( int width, int height )
 {
 
-	int
-		count,
-		total;
+	//Minimum supported screen resolution: 640x480
+	//The maximum depends on your monitor and graphics card, and will be determined by DirectX.
 
-
-	total = sizeof ( resolutions_supported ) / sizeof ( resolution_info );
-
-	for ( count = 0; count < total; count++ )
+	if ( ( width >= 640 ) && ( height >= 480 ) )
 	{
-
-		if ( ( resolutions_supported[count].width == width ) && ( resolutions_supported[count].height == height ) )
-		{
-
-			return ( TRUE );
-		}
+		return ( TRUE );
 	}
-
+	
 	return ( FALSE );
 }
 
