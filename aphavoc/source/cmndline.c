@@ -270,6 +270,7 @@ float
 	global_hud_size2												= 1.0;	// VJ 050126 hud mod: size 
 
 char
+	command_line_themes[128] = "", // Casm 21DEC07
 	command_line_game_initialisation_phase_path [128]			= "\0",
 	command_line_game_initialisation_phase_directory [128]	= "\0",
 	command_line_game_initialisation_phase_filename [128]		= "\0",

@@ -73,6 +73,9 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
+// Casm 21DEC07
+char psd_theme[128];
+
 #define DEFAULT_GWUT_FILE "gwut190.csv"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +180,66 @@ void read_export_mfd_pos(char *q, int *pos)
 	p = strtok(NULL,",");	     
 	if (p) 
 		pos[3]= atoi(p);
+}
+
+// Casm 21DEC07
+void set_themes(const char* themes)
+{
+	int
+		nthemes;
+	char
+		allthemes[1024],
+		*ptr,
+		*ptrs[64];
+
+	strcpy(command_line_themes, themes);
+
+	if (themes[0] == '\0')
+		return;
+	if (themes[1] == '\0' && isdigit(themes[0]))
+	{
+		int
+			rc;
+		long
+			handle;
+		struct _finddata_t
+			fi;
+
+		if (themes[0] == '0')
+			return;
+
+		allthemes[0] = '\0';
+		handle = _findfirst("GRAPHICS\\UI\\COHOKUM\\*.*", &fi);
+		for (rc = handle; rc != -1; rc = _findnext(handle, &fi))
+		{
+			if (!(fi.attrib & _A_SUBDIR))
+				continue;
+			if (!strcmp(fi.name, ".") || !strcmp(fi.name, ".."))
+				continue;
+			if (!stricmp(fi.name, "ICONS") || !stricmp(fi.name, "KEY") || !stricmp(fi.name, "MAP"))
+				continue;
+			strcat(allthemes, fi.name);
+			strcat(allthemes, ",");
+		}
+		_findclose(handle);
+
+		if (themes[0] == '1' && allthemes[0])
+			allthemes[strlen(allthemes) - 1] = '\0';
+	}
+	else
+		strcpy(allthemes, themes);
+
+	nthemes = 1;
+	ptr = allthemes;
+	for (ptrs[0] = ptr; *ptr; ptr++)
+	{
+		if (*ptr != ',')
+			continue;
+		ptrs[nthemes++] = ptr + 1;
+		*ptr = '\0';
+	}
+
+	strcpy(psd_theme, ptrs[time(NULL) % nthemes]);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -549,6 +612,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_left_pos);	// mue 070223 
 		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_right_pos);		// mue 070223 
 		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223 
+		if (strcmp(p, "themes") == 0) if (str_length < 128) set_themes(q); // Casm 21DEC07
 
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
@@ -639,6 +703,7 @@ void dump_ini_file(void)
 	fprintf(f,"dynamic_water=%d      # dynamic water textures (0 = off, 1 = on) (def = 0)\n",global_dynamic_water);	//VJ 050817 dynamic water textures
 	fprintf(f,"night_light=%3.1f      # night light darkness level (0.0 - 1.0) (0.0 = fully dark, 1.0 = less dark) (def = 1.0)\n",global_night_light_level);	//VJ 060920 night light levels
 	fprintf(f,"persistent_smoke=%d   # Burning targets emitting smoke for a long time. [Warning!] CPU intensive. (0 = off, 1 = on) (def = 1)\n", command_line_persistent_smoke);
+	fprintf(f, "themes=%s #comma-separated list of directories for alternate psd files\n", command_line_themes); // Casm 21DEC07
 
 	fprintf(f,"\n[Views and Cameras]\n");
 	fprintf(f,"# minfov is linked to key 7, maxfov is linked to key 9, normal fov is linked to key 8, normal fov = 60\n");

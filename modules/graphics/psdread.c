@@ -68,6 +68,8 @@
 
 #include "misc.h"
 
+#include "global.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +143,27 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 		}
 	}
 
-	fp = safe_fopen ( filename, "rb" );
+	// Casm 21DEC07
+	{
+		char
+			fn[1024];
+
+		if (*psd_theme)
+		{
+			char
+				*ptr = strrchr(filename, '\\');
+
+			if (ptr)
+				sprintf(fn, "%.*s\\%s\\%s", ptr - filename, filename, psd_theme, ptr + 1);
+			else
+				sprintf(fn, "%s\\%s", psd_theme, filename);
+			if (!file_exist(fn))
+				strcpy(fn, filename);
+		}
+		else
+			strcpy(fn, filename);
+		fp = safe_fopen(fn, "rb");
+	}
 
 	//
 	// Reset the number of layers

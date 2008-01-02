@@ -248,6 +248,7 @@ extern float
 	global_hud_size2;// VJ 050126 hud mod: size 	
 
 extern char
+	command_line_themes[], //Casm 21DEC07
 	command_line_game_initialisation_phase_path [],
 	command_line_game_initialisation_phase_directory [],
 	command_line_game_initialisation_phase_filename [],
