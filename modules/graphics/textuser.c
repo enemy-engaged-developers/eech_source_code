@@ -291,6 +291,9 @@ custom_map_info
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static unsigned get_hash(const char* name);
+static void add_texture_to_name_hash(unsigned texture_index);
+
 static void create_internal_texture_palettes ( void );
 
 void convert_no_alpha_texture_map_data ( unsigned char *data, int width, int height, screen *this_texture, FILE *fp );
@@ -486,26 +489,13 @@ int get_system_texture_index ( const char *name )
 {
 
 	int
-		letter,
-		length,
 		hash,
 		hash_index;
 
 	texture_name_hash_entry
 		*entry;
 
-	length = strlen ( name );
-
-	hash = length;
-
-	for ( letter = 0; letter < length; letter++ )
-	{
-
-		hash += name[letter];
-
-		hash <<= 1;
-	}
-
+	hash = get_hash(name);
 	hash_index = hash & 0xff;
 
 	entry = system_texture_name_hash_table[hash_index];
@@ -528,8 +518,6 @@ int get_system_texture_index ( const char *name )
 			entry = entry->succ;
 		}
 	}
-
-	debug_log ( "Unable to find texture: %s", name );
 
 	return ( -1 );
 }
@@ -615,7 +603,7 @@ BOOL load_texturemap_data ( const char *path )
 	create_internal_texture_palettes ();
 
 	fread ( &number_of_system_textures, 4, 1, fp );
-
+	
 	debug_log ( "Reading in %d textures", number_of_system_textures );
 
 	if ( d3d_paletted_textures_supported )
@@ -628,8 +616,6 @@ BOOL load_texturemap_data ( const char *path )
 				temp,
 				length,
 				letter,
-				hash,
-				hash_index,
 				number_of_mipmaps;
 
 			unsigned int
@@ -656,27 +642,9 @@ BOOL load_texturemap_data ( const char *path )
 			fread ( system_texture_names[count], length, 1, fp );
 
 			for ( letter = 0; letter < 128; letter++ )
-			{
-
 				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
-			}
 
-			hash = strlen ( system_texture_names[count] );
-
-			for ( letter = 0; letter < strlen ( system_texture_names[count] ); letter++ )
-			{
-
-				hash += system_texture_names[count][letter];
-
-				hash <<= 1;
-			}
-
-			hash_index = hash & 0xff;
-
-			system_texture_name_hashes[count].hash = hash;
-			system_texture_name_hashes[count].texture_index = count;
-			system_texture_name_hashes[count].succ = system_texture_name_hash_table[hash_index];
-			system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[count];
+			add_texture_to_name_hash(count);
 
 			if ( flags.reserved_texture )
 			{
@@ -1185,6 +1153,9 @@ BOOL load_texturemap_data ( const char *path )
 			}
 		}//for count to number_of_system_textures
 	}//else  24 bit: !d3d_paletted_textures_supported
+
+	// adjust for texture indices added since EECH was released (i.e. not in the big texures-file)
+	number_of_system_textures += TEXTURE_INDEX_LAST - TEXTURE_INDEX_LAST_DEFAULT_INDEX - 1;
 
 	//VJ 050619 make a backup of the original pointers to the screens
 	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
@@ -3341,8 +3312,15 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 		*override_screen;
 
 	// Now that all the screens are loaded we check to see if there is are any overrides
-	for( count=0; count < MAX_TEXTURES; count++ )
+	for( count=0; count < number_of_system_textures; count++ )
 	{
+		if (count >= TEXTURE_INDEX_LAST &&
+			// need to provide all these textures ourselves
+			system_texture_override_names[count].type != 1 &&
+			system_texture_override_names[count].type != 2)
+		{
+			debug_fatal("Missing texture (%d): %s", count, get_system_texture_name(count));
+		}
 
 		// if flagged as bmp file
 		if( system_texture_override_names[count].type == 1)
@@ -3789,9 +3767,9 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 	}
 
 	//VJ only 8 and 24 bit uncompressed bitmaps are read
-	if (bmih.biBitCount != 8 && bmih.biBitCount != 24)
+	if (bmih.biBitCount != 8 && bmih.biBitCount != 24 && bmih.biBitCount != 32)
 	{
-		debug_log ("%s is not 24 bit!", full_override_texture_filename );
+		debug_fatal ("%s is not 8, 24 or 32 bit! (it is : %d)", full_override_texture_filename, bmih.biBitCount);
 		return 0;
 	}
    /* unlimited size
@@ -4183,6 +4161,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		*buffer, *bufferswap;
 
 	int
+		type,
 		width, height,
 		buffer_size,
 		x, y, mipmap, temp = 0;
@@ -4221,15 +4200,19 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	//VJ 050426 create a new texture map with mipmap levels if needed
 	width = bmih.biWidth;
 	height = bmih.biHeight;
+
+	type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
+
 	//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
-	override_screen = create_texture_map (width, height, TEXTURE_TYPE_NOALPHA_NOPALETTE,
+	override_screen = create_texture_map (width, height, type,
         	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
 
-   if (bmih.biBitCount == 8)
+	if (bmih.biBitCount == 8)
       buffer_size = width * height;
-
-   if (bmih.biBitCount == 24)
+	else if (bmih.biBitCount == 24)
 	   buffer_size = width * height * 3;
+	else if (bmih.biBitCount == 32)
+	   buffer_size = width * height * 4;
 	// note color depth is assumed here
 
 	buffer = safe_malloc (buffer_size);
@@ -4252,6 +4235,20 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 			}
 		}
 	}
+	if (bmih.biBitCount == 32)
+	{
+		for ( y = 0; y < height; y++ )
+		{
+			for ( x = 0; x < width; x++ )
+			{
+				// ignore alpha channel
+				 bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*4 + x*4 + 2];
+				 bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*4 + x*4 + 1];
+				 bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*4 + x*4 + 0];
+//				 bufferswap[(height-y-1)*width*4 + x*4 + 3] = buffer[y*width*4 + x*4 + 3];
+			}
+		}
+	}
 
 	while ( !lock_texture ( override_screen, temp ) )
 	{
@@ -4259,9 +4256,9 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	}
 
 	//only for NON PALETTE files
-   if (bmih.biBitCount == 24)
+   if (bmih.biBitCount == 24 || bmih.biBitCount == 32)
 		convert_no_alpha_24bit_texture_map_data ( bufferswap, width, height , override_screen, fp );
-   if (bmih.biBitCount == 8)
+   else if (bmih.biBitCount == 8)
 		convert_no_alpha_texture_map_data ( buffer, width, height, override_screen , fp );
 
 	unlock_texture ( override_screen );
@@ -4505,3 +4502,58 @@ void read_map_info_data ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int add_new_texture(char* texture_name)
+{
+	int texture_index = get_system_texture_index(texture_name);
+	unsigned letter;
+
+	if (texture_index != -1)
+		return texture_index;
+
+	if (number_of_system_textures >= MAX_TEXTURES)
+		return 0;
+
+	strncpy(system_texture_names[number_of_system_textures], texture_name, 127);
+	system_texture_names[number_of_system_textures][127] = '\0';
+
+	for ( letter = 0; letter < 128; letter++ )
+		system_texture_names[number_of_system_textures][letter] = toupper(system_texture_names[number_of_system_textures][letter]);
+
+	add_texture_to_name_hash(number_of_system_textures);
+
+//	debug_log(texture_name);
+
+	debug_log("tex: %s: %d", texture_name, number_of_system_textures);
+
+	number_of_system_textures++;
+	return number_of_system_textures-1;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+unsigned get_hash(const char* name)
+{
+	unsigned letter;
+	unsigned hash = strlen(name);
+
+	for ( letter = 0; letter < strlen(name); letter++ )
+	{
+		hash += name[letter];
+		hash <<= 1;
+	}
+
+	return hash;
+}
+
+void add_texture_to_name_hash(unsigned texture_index)
+{
+	unsigned hash = get_hash(system_texture_names[texture_index]);
+	unsigned hash_index = hash & 0xff;
+
+	system_texture_name_hashes[texture_index].hash = hash;
+	system_texture_name_hashes[texture_index].texture_index = texture_index;
+	system_texture_name_hashes[texture_index].succ = system_texture_name_hash_table[hash_index];
+	system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[texture_index];
+}
