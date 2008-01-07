@@ -104,6 +104,14 @@ typedef struct OBJECT_SHORT_3D_POINT object_short_3d_point;
 
 struct OBJECT_3D_HEADING_PITCH_NORMAL
 {
+	/** 
+	 *  normal encoded as a pitch / heading angle offset measured from a 
+	 *  vector pointing along x axis.
+	 *  The angles are stored as an index into a 256-elemnt table with
+	 *  radians from -PI to PI for heading; -PI/2 to +PI/2 for pitch
+	 * 
+	 *  So for heading 0 = -PI, 255 = PI and 128 = 0 radians
+	 */
 
 	unsigned char
 		heading,
@@ -317,7 +325,7 @@ struct FACE_SURFACE_DESCRIPTION
 				luminosity_texture_wrapped_v:1;
 
 			unsigned char
-				number_of_points;
+				number_of_points;  // 0 = is 256 points (since it makes no sense for a surface to have no points)
 		};
 	
 		unsigned int
@@ -448,9 +456,9 @@ struct OBJECT_3D
 		number_of_point_normals,
 		number_of_surfaces,
 		number_of_lighting_normals,
-//		number_of_surface_points,					//
+//		number_of_surface_points,					//  given by number of faces, and faces list
 //		number_of_surface_point_normals,			//
-//		number_of_surface_texture_points,		//
+//		number_of_surface_texture_points,		//      same as number of surface points if a textured surface
 		culling_normals_offset;
 
 	float
@@ -477,12 +485,20 @@ struct OBJECT_3D
 //	object_3d_point_normal
 //		*point_normals;
 
+	/* All the points of the faces in the same order (i.e. first all the points
+	 * of face 0, then all for face 1 etc.
+	 * This is an index into the surface_points array which is itself an index into
+	 * the points array.  The index is local to each surface (so index 1 for one 
+	 * surface is a different point in the surface_point array than one for another
+	 * surface).  Since it's a char each surface is limited to 256 points. */
 	struct POINT_3D_SHORT_REFERENCE
 		*object_faces_point_plain_list;
 
 	struct FACE_SURFACE_DESCRIPTION
 		*surfaces;
 
+	/* Index into the point_normals array.  One normal for each face, in the order
+	 * of the faces in surfaces */
 	struct POINT_3D_PLAIN_REFERENCE
 		*object_face_normal_references;
 
@@ -561,6 +577,11 @@ struct OBJECT_3D_INSTANCE // 92 bytes
 	int
 		*texture_animations;
 
+  	/* array with all subobjects an object of this type has (not just immediate
+  	 * sub objects,but also  children's children etc.).
+  	 * Array has length of 
+  	 * objects_3d_scene_database[object_number].total_number_of_sub_objects 
+  	 * and is malloced individually for each object_3d_instance */
 	struct OBJECT_3D_SUB_INSTANCE
 		*sub_objects;
 };
