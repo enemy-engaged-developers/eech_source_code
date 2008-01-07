@@ -118,6 +118,7 @@ static int sub_scene_has_parent_scene ( object_3d_database_entry *parent, object
 
 static object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_3d_database_entry *sub_scene, object_3d_instance *object );
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -823,7 +824,7 @@ enum SUB_OBJECT_SEARCH_RESULT_TYPES find_object_3d_sub_object ( struct OBJECT_3D
 	object_3d_sub_object_index_numbers
 		search_index;
 
-	object_3d_scene_sub_object_table_entry
+	object_3d_scene_sub_object_table_entry   // table of the named sub objects (from scene)
 		*table;
 
 #if REPORT_SUB_OBJECT_SEARCHES
@@ -1099,6 +1100,7 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 
 	this_scene = sub_scene;
 
+	// build path up to parent
 	while ( this_scene )
 	{
 
@@ -1107,18 +1109,21 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 		this_scene = this_scene->parent;
 
 		number_of_sub_scenes++;
+
+		ASSERT(number_of_sub_scenes < (sizeof(sub_scenes) / sizeof(sub_scenes[0])));
 	}
 
 	//
-	// Get the offset from the main scene / object
+	// Get the offset of parent from the main scene / object
 	//
 
 	offset = sub_scenes[ ( number_of_sub_scenes - 1 ) ] - objects_3d_scene_database[scene_index].sub_objects;
 
-	this_sub_object = &object->sub_objects[offset];
+	this_sub_object = &object->sub_objects[offset];  // get the parent object
 
-	this_scene = sub_scenes[ ( number_of_sub_scenes -1 ) ];
+	this_scene = sub_scenes[ ( number_of_sub_scenes -1 ) ];  // parent scene
 
+	// traverse down the object tree with the same path as the scenes, and we should get the corresponding object
 	for ( count = ( number_of_sub_scenes - 2 ); count >= 0; count-- )
 	{
 
