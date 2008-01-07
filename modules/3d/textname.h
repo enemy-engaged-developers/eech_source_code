@@ -85,6 +85,13 @@ typedef int texture_camoflage_index_numbers;
 
 enum TEXTURE_INDEX_NUMBERS
 {
+	/*************** IMPORTANT! ***********************************************
+	 * 
+	 * Only insert new texture indices at the end (right before TEXTURE_INDEX_LAST)
+	 * 
+	 * Otherwise old models will get the wrong texture used
+	 *
+	 *************************************************************************/
 
 	TEXTURE_INDEX_5_ROUND_ROCKET_POD,
 	TEXTURE_INDEX_A10,
@@ -2398,6 +2405,14 @@ enum TEXTURE_INDEX_NUMBERS
 	TEXTURE_INDEX_VULCAN_GUN_BARREL,
 	TEXTURE_INDEX_WOOD_PLANK_Y,
 	TEXTURE_INDEX_WOOD_PLANK,
+
+	TEXTURE_INDEX_LAST_DEFAULT_INDEX = TEXTURE_INDEX_WOOD_PLANK,
+
+	TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD,
+	TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD,
+	TEXTURE_INDEX_AVCKPT_DISPLAY_ORT,
+
+	// INSERT NEW TEXTURE INDICES HERE (before TEXTURE_INDEX_LAST, after everything else)
 
 	TEXTURE_INDEX_LAST,
 };
