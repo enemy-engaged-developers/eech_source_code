@@ -108,7 +108,7 @@ struct OBJECT_3D_SUB_OBJECT_INDEX
 		sub_object_index;
 
 	unsigned short int
-		object_index;
+		object_index;   /// index into parent object's sub_objects array where the database_entry resides
 };
 
 typedef struct OBJECT_3D_SUB_OBJECT_INDEX object_3d_sub_object_index;
@@ -192,13 +192,13 @@ typedef struct OBJECT_3D_SPRITE_LIGHT object_3d_sprite_light;
 struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
 {
 
-	object_3d_sub_object_index_numbers
+	object_3d_sub_object_index_numbers  // typedefed int.  Used for searching for specific sub objects, this is the index we search for
 		sub_object_index;
 
 	int
 		number_of_sub_objects;
 
-	struct OBJECT_3D_DATABASE_ENTRY
+	struct OBJECT_3D_DATABASE_ENTRY   // The sub object itself.  One for each depth (used for detail levels?)
 		**sub_objects;
 };
 
@@ -210,6 +210,9 @@ typedef struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY object_3d_scene_sub_object
 
 struct OBJECT_3D_SCENE_DATABASE_ENTRY
 {
+	/* used to create object_3d_instance and its object_3d_sub_instance objects,
+	 * the instances are the actual objects drawn on screen */
+
 
 	int
 		index,
@@ -244,9 +247,20 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 	struct OBJECT_3D_SPRITE_LIGHT
 		*sprite_lights;
 
+	/* Array with pointer to all named subobject types used in the scene
+	 * Length of array given by number_of_sub_object_table_entries
+	 * 
+	 * Allocated and initialised (from scene_sub_object_indices_array)
+	 * in initialise_scene_quick_sub_object_search()
+	 * 
+	 * Used for finding named subobjects in find_object_3d_sub_object() */
 	struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY
 		*sub_object_indices_table;
 
+	/** Used for animations.  Animates by interpolating between the various
+	 *  key frames
+	 * 
+	 *  Every sub object MUST have at least one keyframe */
 	struct OBJECT_3D_SUB_OBJECT_KEYFRAME
 		*keyframes;
 
@@ -279,12 +293,20 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 	object_3d_sub_object_index
 		*scene_sub_object_indices_array;
 
+	// Unused?
 	struct OBJECT_3D_DATABASE_ENTRY
 		*scene_sub_object_array;
 
 	object_3d_sub_object_index
 		*sub_object_indices;
 
+	/* how to create the objects subobjects.  Length of array is
+	 * total_number_of_sub_objects and includes all sub objects in width first
+	 * order (i.e. all immediate sub objects first, then all their sub objects etc)
+	 * 
+	 * Is a pointer into a global array of all (sub) objects, although each one
+	 * is unique (i.e. used only once for only one parent).  All an object's
+	 * sub objects follow the object itself directly */
 	struct OBJECT_3D_DATABASE_ENTRY
 		*sub_objects;
 };
@@ -327,6 +349,7 @@ struct OBJECT_3D_DATABASE_ENTRY
 	float
 		object_dissolve,
 
+		// limits for how much this sub object may rotate relative to parent
 		relative_heading_minimum,
 		relative_heading_maximum,
 
@@ -555,6 +578,9 @@ extern int get_object_3d_camera_position ( struct OBJECT_3D_INSTANCE *obj, objec
 extern void report_all_3d_objects_statistics ( void );
 
 extern void report_objects_not_destructed ( void );
+
+extern void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level);
+extern void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
