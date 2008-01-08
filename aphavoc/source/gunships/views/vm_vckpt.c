@@ -568,6 +568,14 @@ void reinitialise_virtual_cockpit_view (void)
 	if (get_gunship_entity ())
 	{
 		unlink_local_entity_children (get_gunship_entity (), LIST_TYPE_PADLOCK);
+
+		switch (get_global_gunship_type())
+		{
+		case GUNSHIP_TYPE_APACHE:
+			stored_pilot_head_pitch = rad(wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p);
+			stored_co_pilot_head_pitch = rad(wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].p);
+			break;
+		}
 	}
 
 	padlock_mode = PADLOCK_MODE_NONE;
@@ -1449,12 +1457,12 @@ void draw_virtual_cockpit_3d_view (void)
 		}
 	}
 
-	set_pilots_full_screen_params (night_vision_system_active);
+	set_pilots_full_screen_params (night_vision_active());
 
 	draw_main_3d_scene (&main_vp);
 
-	if (command_line_restricted_nvg_fov && night_vision_system_active && !get_global_draw_cockpit_graphics ())
-		draw_night_vision_mask();
+//	if (command_line_restricted_nvg_fov && night_vision_active() && !get_global_draw_cockpit_graphics ())
+//		draw_night_vision_mask();
 
 	switch (get_global_gunship_type ())
 	{
@@ -1468,6 +1476,7 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
+#if 0  // the old experimental 3D cockpit by gotcha - not used anymore
 				if (command_line_3d_cockpit)
 				{
 					
@@ -1491,6 +1500,7 @@ void draw_virtual_cockpit_3d_view (void)
 					);
 				}
 				else
+#endif
 				{
 					draw_apache_external_virtual_cockpit
 					(
@@ -1502,15 +1512,25 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_MAIN_ROTOR,
 						NULL
 					);
-            	
-					draw_apache_internal_virtual_cockpit
-					(
-						VIRTUAL_COCKPIT_COCKPIT |
-						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
-						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
-						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
-						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-					);
+
+					if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+						draw_apache_internal_virtual_cockpit
+						(
+							VIRTUAL_COCKPIT_COCKPIT |
+							VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+							VIRTUAL_COCKPIT_PILOT_LHS_MFD_DISPLAY |
+							VIRTUAL_COCKPIT_PILOT_RHS_MFD_DISPLAY |
+							VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+						);
+					else
+						draw_apache_internal_virtual_cockpit
+						(
+							VIRTUAL_COCKPIT_COCKPIT |
+							VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+							VIRTUAL_COCKPIT_CPG_LHS_MFD_DISPLAY |
+							VIRTUAL_COCKPIT_CPG_RHS_MFD_DISPLAY |
+							VIRTUAL_COCKPIT_ORT_DISPLAY
+						);
 				}
 			}
 			else
@@ -1888,7 +1908,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 	}
 	
-	if (command_line_restricted_nvg_fov && night_vision_system_active && get_global_draw_cockpit_graphics ())
+	if (command_line_restricted_nvg_fov && night_vision_active() && get_global_draw_cockpit_graphics ())
 		draw_night_vision_mask();
 
 	// Jabberwock 031016 Inset view - cockpit
@@ -2584,7 +2604,7 @@ void switch_seat_position (void)
 
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (!get_apache_havoc_gunship ());
+	ASSERT (!get_apache_havoc_gunship () || get_global_gunship_type () == GUNSHIP_TYPE_APACHE);
 
 	if (get_time_acceleration () == 0)
 	{
@@ -2609,12 +2629,17 @@ void switch_seat_position (void)
 
 		restore_co_pilot_seat_values ();
 
-//VJ wideview mod, date: 18-mar-03	
-//VJ 050210 update wideview
-        if (wide_cockpit_nr == WIDEVIEW_COMANCHE_PILOT) 
-           wide_cockpit_nr = WIDEVIEW_COMANCHE_COPILOT;	
-        if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT) 
-           wide_cockpit_nr = WIDEVIEW_HOKUM_COPILOT;	
+		switch (wide_cockpit_nr)
+		{
+		case WIDEVIEW_COMANCHE_PILOT:
+		case WIDEVIEW_HOKUM_PILOT:
+		case WIDEVIEW_APACHE_PILOT:
+		case WIDEVIEW_HIND_PILOT:
+			wide_cockpit_nr++;  // swtiches to co-pilot
+			break;
+		default:
+			break;
+		}
 	}
 	else
 	{
@@ -2630,12 +2655,17 @@ void switch_seat_position (void)
 
 		restore_pilot_seat_values ();
 
-//VJ wideview mod, date: 18-mar-03	
-//VJ 050210 update wideview
-        if (wide_cockpit_nr == WIDEVIEW_COMANCHE_COPILOT) 
-           wide_cockpit_nr = WIDEVIEW_COMANCHE_PILOT;	
-        if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT) 
-           wide_cockpit_nr = WIDEVIEW_HOKUM_PILOT;	
+		switch (wide_cockpit_nr)
+		{
+		case WIDEVIEW_COMANCHE_COPILOT:
+		case WIDEVIEW_HOKUM_COPILOT:
+		case WIDEVIEW_APACHE_COPILOT:
+		case WIDEVIEW_HIND_COPILOT:
+			wide_cockpit_nr--;  // swtiches to pilot
+			break;
+		default:
+			break;
+		}
 	}
 }
 
