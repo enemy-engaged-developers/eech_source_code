@@ -622,14 +622,14 @@ static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///vj draws internal cockpit, dashboad, dials including frame/////////////////////////////////////
+///  Positions and rotates the viewpoint to the correct position for the pilot and view selected
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 {
 	object_3d_sub_instance *head_object;
-
 	int is_copilot = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT;
+	int left_mfd_view;
 
 	viewpoint
 		vp;
@@ -670,45 +670,66 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 	virtual_cockpit_inst3d->vp.y = 0.0;
 	virtual_cockpit_inst3d->vp.z = 0.0;
 
-	// adjust pitch according to user preferance
-	if (edit_wide_cockpit)
-		pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-
-
-	// rotate head
-	head_object->relative_heading = -pilot_head_heading;
-	head_object->relative_pitch = -pilot_head_pitch;
-
-	// adjust position according to user preferance
-	head_object->relative_position.x = wide_cockpit_position[wide_cockpit_nr].x;
-	head_object->relative_position.y = wide_cockpit_position[wide_cockpit_nr].y;
-	head_object->relative_position.z = wide_cockpit_position[wide_cockpit_nr].z;
-
-	// adjust for track-IR position
-	if (query_TIR_active())
+	left_mfd_view = get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD;
+	if (left_mfd_view || get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
 	{
-		head_object->relative_position.x -= current_custom_cockpit_viewpoint.x;
-		head_object->relative_position.y -= current_custom_cockpit_viewpoint.y;
-		head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
+		if (is_copilot)
+		{
+			head_object->relative_position.x = left_mfd_view ? -0.10 : 0.10;
+			head_object->relative_position.y = -0.47;
+			head_object->relative_position.z =  1.52;
+	
+			head_object->relative_heading = left_mfd_view ? rad(-4.0) : rad(4.0);
+			head_object->relative_pitch = rad(21.0);
+		}		
+		else
+		{
+			head_object->relative_position.x = left_mfd_view ? -0.10 : 0.10;
+			head_object->relative_position.y = -0.28;
+			head_object->relative_position.z =  0.40;
+	
+			head_object->relative_heading = left_mfd_view ? rad(-4.0) : rad(4.0);
+			head_object->relative_pitch = rad(17.0);
+		}
 	}
-
-
-	// keep head inside reasonable limimts
-	head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
-	head_object->relative_position.y = bound(head_object->relative_position.y, head_limits[is_copilot][0].y, head_limits[is_copilot][1].y);
-	head_object->relative_position.z = bound(head_object->relative_position.z, head_limits[is_copilot][0].z, head_limits[is_copilot][1].z);
-
-	if (is_copilot)
+	else
 	{
-		// adjust for offset of co-pilot's cockpit compared to pilot's
-		head_object->relative_position.y += -0.30;
-		head_object->relative_position.z += 1.32;
+		// adjust pitch according to user preferance
+		if (edit_wide_cockpit)
+			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
+	
+		// rotate head
+		head_object->relative_heading = -pilot_head_heading;
+		head_object->relative_pitch = -pilot_head_pitch;
+	
+		// adjust position according to user preferance
+		head_object->relative_position.x = wide_cockpit_position[wide_cockpit_nr].x;
+		head_object->relative_position.y = wide_cockpit_position[wide_cockpit_nr].y;
+		head_object->relative_position.z = wide_cockpit_position[wide_cockpit_nr].z;
+	
+		// adjust for track-IR position
+		if (query_TIR_active())
+		{
+			head_object->relative_position.x -= current_custom_cockpit_viewpoint.x;
+			head_object->relative_position.y -= current_custom_cockpit_viewpoint.y;
+			head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
+		}
+	
+		// keep head inside reasonable limimts
+		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
+		head_object->relative_position.y = bound(head_object->relative_position.y, head_limits[is_copilot][0].y, head_limits[is_copilot][1].y);
+		head_object->relative_position.z = bound(head_object->relative_position.z, head_limits[is_copilot][0].z, head_limits[is_copilot][1].z);
+	
+		if (is_copilot)
+		{
+			// adjust for offset of co-pilot's cockpit compared to pilot's
+			head_object->relative_position.y += -0.30;
+			head_object->relative_position.z += 1.32;
+		}
 	}
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
-
 	get_3d_sub_object_world_viewpoint (head_object, &vp);
-
 	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &main_vp.position);
 
 	main_vp.x += vp.x;
@@ -726,7 +747,9 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 	memcpy (crew_viewpoint, &virtual_cockpit_inst3d->vp, sizeof (viewpoint));
 }
 
-extern float debug_var_x, debug_var_y, debug_var_z;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///vj draws internal cockpit, dashboad, dials including frame/////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void draw_apache_internal_virtual_cockpit (unsigned int flags)
 {
@@ -757,18 +780,18 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-	if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
-	{
-		get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD, &vp);
-	}
-	else if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
-	{
-		get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD, &vp);
-	}
+	if (custom_3d_models.arneh_ah64d_cockpit)
+		get_apache_crew_viewpoint(&vp);
 	else
 	{
-		if (custom_3d_models.arneh_ah64d_cockpit)
-			get_apache_crew_viewpoint(&vp);
+		if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
+		{
+			get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD, &vp);
+		}
+		else if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
+		{
+			get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD, &vp);
+		}
 		else
 		{
 			vp_position.x = 0.0;
@@ -1609,18 +1632,18 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 	//
 	////////////////////////////////////////
 
-	if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
-	{
-		get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD, &vp);
-	}
-	else if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
-	{
-		get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD, &vp);
-	}
+	if (custom_3d_models.arneh_ah64d_cockpit)
+		get_apache_crew_viewpoint(&vp);
 	else
 	{
-		if (custom_3d_models.arneh_ah64d_cockpit)
-			get_apache_crew_viewpoint(&vp);
+		if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
+		{
+			get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD, &vp);
+		}
+		else if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
+		{
+			get_display_viewpoint (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD, &vp);
+		}
 		else
 		{
 			vp_position.x = 0.0;
