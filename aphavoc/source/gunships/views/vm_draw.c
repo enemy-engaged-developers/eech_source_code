@@ -622,7 +622,15 @@ void draw_view (void)
 			}
 			else
 			{
+				float old_angle = full_screen_width_view_angle;
+
+				full_screen_width_view_angle = rad(59.99);
+				full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
+				
 				draw_virtual_cockpit_3d_display_view ();
+
+				full_screen_width_view_angle = old_angle;
+				full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 			}
 
 			break;
@@ -637,7 +645,15 @@ void draw_view (void)
 			}
 			else
 			{
+				float old_angle = full_screen_width_view_angle;
+
+				full_screen_width_view_angle = rad(59.99);
+				full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
+				
 				draw_virtual_cockpit_3d_display_view ();
+
+				full_screen_width_view_angle = old_angle;
+				full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 			}
 
 			break;
