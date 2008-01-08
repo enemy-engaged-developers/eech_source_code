@@ -1064,6 +1064,13 @@ static void TSD_render_palette_event (event *ev)
 //VJ 050213 bug fixes for pitch
 static void toggle_wideview_event (event *ev)
 {
+	if (get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
+	{
+		// wideview always enabled for apache
+		set_global_wide_cockpit(TRUE);
+		return;
+	}
+	
 	set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
    edit_wide_cockpit = FALSE;
    //VJ 050211 restore pitch when switching of wideview
@@ -2340,9 +2347,11 @@ void set_gunship_view_mode_events (void)
 		set_event (DIK_UP, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_pilot_seat_position_event);
 		set_event (DIK_DOWN, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, set_co_pilot_seat_position_event);
 */
-		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
 	}
 
+	if (!get_apache_havoc_gunship () || get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
+		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
+		
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
 
 //VJ wideview mod, date: 18-mar-03	
