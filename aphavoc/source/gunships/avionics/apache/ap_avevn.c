@@ -932,6 +932,15 @@ static void toggle_rhs_mfd_on_off_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void toggle_ort_on_off_event (event *ev)
+{
+	toggle_apache_ort_on_off ();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void toggle_radar_jammer_event (event *ev)
 {
 	toggle_apache_radar_jammer_manual ();
@@ -1146,15 +1155,12 @@ void set_apache_avionics_events (void)
 	set_event (DIK_BACKSPACE, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_cannon_event);
 
 	set_event (DIK_LBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_lhs_mfd_event);
-
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_lhs_mfd_event);
-
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_lhs_mfd_on_off_event);
+	set_event (DIK_LBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_ort_on_off_event);
 
 	set_event (DIK_RBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_rhs_mfd_event);
-
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_rhs_mfd_event);
-
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
 
 	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);
