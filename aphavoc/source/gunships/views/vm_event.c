@@ -75,6 +75,8 @@ int
    move_view_right_key,
    move_view_forward_key,
    move_view_backward_key,
+   increase_fov_key_down,
+   decrease_fov_key_down,
    adjust_view_left_key,
    adjust_view_right_key,
    adjust_view_up_key,
@@ -2130,6 +2132,17 @@ static void hi_fov_event(event *ev)
 	full_screen_width_view_angle	= rad (max_fov);
 	full_screen_height_view_angle	= rad (max_fov / full_screen_aspect_ratio);
 }
+
+static void increase_fov_event(event* ev)
+{
+	increase_fov_key_down = (ev->state == KEY_STATE_DOWN);
+}
+
+static void decrease_fov_event(event* ev)
+{
+	decrease_fov_key_down = (ev->state == KEY_STATE_DOWN);
+}
+
 static void reset_mouse_event(event* ev)
 {
 	reset_absolute_mouse ();
@@ -2332,8 +2345,12 @@ void set_gunship_view_mode_events (void)
 		set_event (DIK_F4, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, increase_cockpit_detail_event);
 	}
 
-	set_event (DIK_F3, MODIFIER_NONE, KEY_STATE_DOWN, look_at_special1_event);
+	set_event (DIK_F3, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, decrease_fov_event);
+	set_event (DIK_F4, MODIFIER_LEFT_ALT, KEY_STATE_EITHER, increase_fov_event);
+	set_event (DIK_F3, MODIFIER_NONE, KEY_STATE_UP, decrease_fov_event);
+	set_event (DIK_F4, MODIFIER_NONE, KEY_STATE_UP, increase_fov_event);
 
+	set_event (DIK_F3, MODIFIER_NONE, KEY_STATE_DOWN, look_at_special1_event);
 	set_event (DIK_F4, MODIFIER_NONE, KEY_STATE_DOWN, look_at_special2_event);
 
 	if (!get_apache_havoc_gunship ())
