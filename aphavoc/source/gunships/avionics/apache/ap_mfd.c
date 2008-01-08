@@ -74,7 +74,10 @@ void copy_export_mfd(screen* export_left, screen* export_right);
 
 static mfd_modes
 	lhs_mfd_mode = MFD_MODE_OFF,
-	rhs_mfd_mode = MFD_MODE_OFF;
+	rhs_mfd_mode = MFD_MODE_OFF,
+	cpg_lhs_mfd_mode = MFD_MODE_OFF,
+	cpg_rhs_mfd_mode = MFD_MODE_OFF,
+	ort_mode = MFD_MODE_OFF;
 
 static void draw_high_action_display (entity* target, int fill_boxes);
 static void display_waypoint_information (rgb_colour box_colour);
@@ -176,11 +179,15 @@ static float
 static screen
 	*lhs_mfd_texture_screen,
 	*rhs_mfd_texture_screen,
+	*cpg_lhs_mfd_texture_screen,
+	*cpg_rhs_mfd_texture_screen,
+	*ort_texture_screen,
 	*lhs_overlaid_mfd_texture_screen,
 	*rhs_overlaid_mfd_texture_screen,
 	*eo_3d_texture_screen;
 
 static rgb_colour
+	off_mfd_colour,
 	clear_mfd_colour,
 	clear_green_mfd_colour;
 
@@ -202,7 +209,8 @@ static int radar_zoomed;
 #define TSD_ASE_RANGE_25000	((float) 25000.0)
 
 static float
-	tsd_ase_range;
+	pilot_tsd_ase_range,
+	cpg_tsd_ase_range;
 
 enum TSD_DECLUTTER_LEVELS
 {
@@ -215,7 +223,8 @@ enum TSD_DECLUTTER_LEVELS
 typedef enum TSD_DECLUTTER_LEVELS tsd_declutter_levels;
 
 static tsd_declutter_levels
-	tsd_declutter_level;
+	pilot_tsd_declutter_level,
+	cpg_tsd_declutter_level;
 
 enum TSD_UNDERLAY_LEVELS
 {
@@ -227,7 +236,8 @@ enum TSD_UNDERLAY_LEVELS
 typedef enum TSD_UNDERLAY_LEVELS tsd_underlay_levels;
 
 static tsd_underlay_levels
-	tsd_underlay;
+	pilot_tsd_underlay,
+	cpg_tsd_underlay;
 
 static short
 	tsd_tads_underlay_active = FALSE;
@@ -255,7 +265,6 @@ static float
 
 static int
 	ase_draw_threat_line_status;
-
 
 static char
 	large_tsd_ase_aircraft_datum[] =
@@ -698,7 +707,12 @@ static void draw_pfzs(void)
 {
 	int i;
 	matrix3x3 rotation_matrix;
-	float scale = RADIUS / tsd_ase_range;
+	float scale;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		scale = RADIUS / pilot_tsd_ase_range;
+	else
+		scale = RADIUS / cpg_tsd_ase_range;
 
 	get_3d_transformation_matrix(rotation_matrix, -current_flight_dynamics->heading.value, 0.0, 0.0);
 
@@ -719,7 +733,12 @@ void create_apache_pfz(int is_nfz)
 	matrix3x3 rotation_matrix;
 	vec3d relative_position;
 	vec3d position1, position2, position3, position4;
-	float scale = RADIUS / tsd_ase_range;
+	float scale;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		scale = RADIUS / pilot_tsd_ase_range;
+	else
+		scale = RADIUS / cpg_tsd_ase_range;
 
 	// don't create too small pfzs
 	if (fabs(pointer_position_x - clicked_position_x) < 0.05
@@ -1012,10 +1031,18 @@ void initialise_apache_mfd (void)
 		select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_RHS);
 	}
 
-	tsd_ase_range = TSD_ASE_RANGE_5000;
+	select_apache_mfd_mode (MFD_MODE_WEAPON, MFD_LOCATION_CPG_LHS);
+	select_apache_mfd_mode (MFD_MODE_TSD, MFD_LOCATION_CPG_RHS);
+	select_apache_mfd_mode (MFD_MODE_FLIR, MFD_LOCATION_ORT);
 
-	tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
-	tsd_underlay = TSD_UNDERLAY_NONE;
+	pilot_tsd_ase_range = TSD_ASE_RANGE_5000;
+	cpg_tsd_ase_range = TSD_ASE_RANGE_5000;
+
+	pilot_tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
+	cpg_tsd_declutter_level = TSD_DECLUTTER_LEVEL_TARGET;
+
+	pilot_tsd_underlay = TSD_UNDERLAY_NONE;
+	cpg_tsd_underlay = TSD_UNDERLAY_NONE;
 	
 	current_pfz = NO_PFZ;
 	next_free_pfz = 0;
@@ -1072,13 +1099,19 @@ void initialise_apache_mfd (void)
 
 	if(command_line_export_mfd)
 	{
-	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
-	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+		lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
+		rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+		cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
+		cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
 	}
 	else
 	{
-	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SINGLEALPHA);
 	}
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
@@ -1090,23 +1123,10 @@ void initialise_apache_mfd (void)
 	set_rgb_colour (MFD_COLOUR5,   0, 149,   0, 255);
 	set_rgb_colour (MFD_COLOUR6,  40,  68,  56, 255);
 
-	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
-	{
-		set_rgb_colour (clear_green_mfd_colour, 30, 58, 44, 255);
-	}
-	else
-	{
-		set_rgb_colour (clear_green_mfd_colour, 6, 6, 1, 255);
-	}
-
-	if(command_line_export_mfd)
-	{
-		clear_mfd_colour=clear_green_mfd_colour;
-	}
-	else
-	{
-		set_rgb_colour (clear_mfd_colour, 0, 255, 0, 0); 
-	}
+	set_rgb_colour (clear_green_mfd_colour, 10, 30, 15, 255);
+	set_rgb_colour (off_mfd_colour, 10, 20, 15, 255);
+	
+	clear_mfd_colour=clear_green_mfd_colour;
 	
 	//VJ 030423 TSd render mod
 	set_rgb_colour (MFD_COLOUR1,              0, 255,   0, 255);
@@ -1158,6 +1178,9 @@ void deinitialise_apache_mfd (void)
 
 	destroy_screen (lhs_mfd_texture_screen);
 	destroy_screen (rhs_mfd_texture_screen);
+	destroy_screen (cpg_lhs_mfd_texture_screen);
+	destroy_screen (cpg_rhs_mfd_texture_screen);
+	destroy_screen (ort_texture_screen);
 
 	destroy_screen (lhs_overlaid_mfd_texture_screen);
 	destroy_screen (rhs_overlaid_mfd_texture_screen);
@@ -1173,61 +1196,70 @@ void select_apache_mfd_mode (mfd_modes mfd_mode, mfd_locations location)
 
 	ASSERT (mfd_mode != MFD_MODE_LLLTV);
 
-	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
+	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
+			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS)
+			|| (location == MFD_LOCATION_ORT));
 
-	// don't let both a MFD show TADS, and have TADS as TSD underlay
-	if ((mfd_mode == MFD_MODE_DVO
+	// don't let both a MFD show TADS, and have TADS as TSD underlay for pilot (co-pilot can't have TADS as underlay)
+	if (((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS))
+		&&
+		(mfd_mode == MFD_MODE_DVO
 		 || mfd_mode == MFD_MODE_DTV
 		 || mfd_mode == MFD_MODE_FLIR)
-		&& tsd_underlay == TSD_UNDERLAY_TADS)
+		&& pilot_tsd_underlay == TSD_UNDERLAY_TADS)
 	{
-		tsd_underlay = TSD_UNDERLAY_NONE;
+		pilot_tsd_underlay = TSD_UNDERLAY_NONE;
 	}
 
-	if (location == MFD_LOCATION_LHS)
+	if (location == MFD_LOCATION_PILOT_LHS)
 	{
 		if ((mfd_mode == MFD_MODE_DAMAGED) && (lhs_mfd_mode == MFD_MODE_OFF))
-		{
-			mfd_mode = MFD_MODE_OFF;
-		}
+			return;
 
-		if (apache_damage.lh_mfd)
-		{
-			if (mfd_mode != MFD_MODE_OFF)
-			{
-				mfd_mode = MFD_MODE_DAMAGED;
-			}
-		}
-
-		if ((mfd_mode != MFD_MODE_OFF) && (mfd_mode != MFD_MODE_DAMAGED) && (mfd_mode == rhs_mfd_mode))
-		{
-			rhs_mfd_mode = MFD_MODE_OFF;
-		}
+		if (apache_damage.lh_mfd && mfd_mode != MFD_MODE_OFF)
+			mfd_mode = MFD_MODE_DAMAGED;
 
 		lhs_mfd_mode = mfd_mode;
 	}
-	else
+	else if (location == MFD_LOCATION_PILOT_RHS)
 	{
 		if ((mfd_mode == MFD_MODE_DAMAGED) && (rhs_mfd_mode == MFD_MODE_OFF))
-		{
-			mfd_mode = MFD_MODE_OFF;
-		}
+			return;
 
-		if (apache_damage.rh_mfd)
-		{
-			if (mfd_mode != MFD_MODE_OFF)
-			{
-				mfd_mode = MFD_MODE_DAMAGED;
-			}
-		}
-
-		if ((mfd_mode != MFD_MODE_OFF) && (mfd_mode != MFD_MODE_DAMAGED) && (mfd_mode == lhs_mfd_mode))
-		{
-			lhs_mfd_mode = MFD_MODE_OFF;
-		}
+		if (apache_damage.rh_mfd && mfd_mode != MFD_MODE_OFF)
+			mfd_mode = MFD_MODE_DAMAGED;
 
 		rhs_mfd_mode = mfd_mode;
 	}
+	else if (location == MFD_LOCATION_CPG_LHS)
+	{
+		if ((mfd_mode == MFD_MODE_DAMAGED) && (cpg_lhs_mfd_mode == MFD_MODE_OFF))
+			return;
+
+		if (apache_damage.cpg_lh_mfd && mfd_mode != MFD_MODE_OFF)
+			mfd_mode = MFD_MODE_DAMAGED;
+
+		cpg_lhs_mfd_mode = mfd_mode;
+	}
+	else if (location == MFD_LOCATION_CPG_RHS)
+	{
+		if ((mfd_mode == MFD_MODE_DAMAGED) && (cpg_rhs_mfd_mode == MFD_MODE_OFF))
+			return;
+
+		if (apache_damage.cpg_rh_mfd && mfd_mode != MFD_MODE_OFF)
+			mfd_mode = MFD_MODE_DAMAGED;
+
+		cpg_rhs_mfd_mode = mfd_mode;
+	}
+	else if (location == MFD_LOCATION_ORT)
+	{
+		if ((mfd_mode == MFD_MODE_DAMAGED) && (ort_mode == MFD_MODE_OFF))
+			return;
+
+		ort_mode = mfd_mode;
+	}
+	else
+		debug_fatal("Unknown MFD location");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3030,32 +3062,12 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 	}
 
 	if (draw_large_mfd)
-	{
-		if (location == MFD_LOCATION_LHS)
-		{
-			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, rad(fov), rad(fov));
-		}
-		else
-		{
-			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, rad(fov), rad(fov));
-		}
-	}
+		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, rad(fov), rad(fov));
 	else
-	{
-		if (location == MFD_LOCATION_LHS)
-		{
-			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad(fov), rad(fov));
-		}
-		else
-		{
-			set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad(fov), rad(fov));
-		}
-	}
+		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad(fov), rad(fov));
 
 	draw_eo_3d_scene = TRUE;
-
 	draw_main_3d_scene (&eo_vp);
-
 	draw_eo_3d_scene = FALSE;
 }
 
@@ -3968,6 +3980,7 @@ static void draw_tactical_situation_display_mfd (void)
 		y_origin,
 		width,
 		y_adjust,
+		tsd_ase_range,
 		source_heading;
 
 	entity
@@ -3977,19 +3990,25 @@ static void draw_tactical_situation_display_mfd (void)
 	vec3d
 		*source_position;
 
+	int
+		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
+
+	tsd_underlay_levels
+		tsd_underlay = is_pilot ? pilot_tsd_underlay : cpg_tsd_underlay;
+
+	tsd_declutter_levels
+		tsd_declutter_level = is_pilot ? pilot_tsd_declutter_level : cpg_tsd_declutter_level;
 
 	rgb_colour tsd_basic_colour = MFD_COLOUR2;
 
+
 	source = get_gunship_entity ();
-
 	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
-
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
-
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
 	source_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
+	tsd_ase_range = is_pilot ? pilot_tsd_ase_range : cpg_tsd_ase_range;
 	scale = RADIUS / tsd_ase_range;
 
 	//
@@ -4841,6 +4860,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 		source_side;
 
 	float
+		tsd_ase_range,
 		scale,
 		width,
 		y_adjust,
@@ -4866,6 +4886,11 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
 	source_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		tsd_ase_range = pilot_tsd_ase_range;
+	else
+		tsd_ase_range = cpg_tsd_ase_range;
 
 	scale = RADIUS / tsd_ase_range;
 
@@ -8058,16 +8083,8 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 
 	if (draw_large_mfd)
 	{
-		if (location == MFD_LOCATION_LHS)
-		{
-			weapon_x_offset = (int) mfd_viewport_x_min + 38 - 4;
-			weapon_y_offset = (int) mfd_viewport_y_min + 32 - 4;
-		}
-		else
-		{
-			weapon_x_offset = (int) mfd_viewport_x_min + 38 - 4;
-			weapon_y_offset = (int) mfd_viewport_y_min + 32 - 4;
-		}
+		weapon_x_offset = (int) mfd_viewport_x_min + 38 - 4;
+		weapon_y_offset = (int) mfd_viewport_y_min + 32 - 4;
 
 		//
 		// helicopter
@@ -8168,16 +8185,8 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 		}
 		else
 		{
-			if (location == MFD_LOCATION_LHS)
-			{
-				weapon_x_offset = (int) mfd_viewport_x_min - 4;
-				weapon_y_offset = (int) mfd_viewport_y_min - 262 - 3;
-			}
-			else
-			{
-				weapon_x_offset = (int) mfd_viewport_x_min - 4;
-				weapon_y_offset = (int) mfd_viewport_y_min - 262 - 3;
-			}
+			weapon_x_offset = (int) mfd_viewport_x_min - 4;
+			weapon_y_offset = (int) mfd_viewport_y_min - 262 - 3;
 		}
 
 		//
@@ -9212,18 +9221,19 @@ void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd, int dr
 	mfd_modes
 		*mfd_mode;
 
-	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
+	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
+			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS));
 
 	update_pointer_position();
 
-	if (location == MFD_LOCATION_LHS)
-	{
+	if (location == MFD_LOCATION_PILOT_LHS)
 		mfd_mode = &lhs_mfd_mode;
-	}
-	else
-	{
+	else if (location == MFD_LOCATION_PILOT_RHS)
 		mfd_mode = &rhs_mfd_mode;
-	}
+	else if (location == MFD_LOCATION_CPG_LHS)
+		mfd_mode = &cpg_lhs_mfd_mode;
+	else
+		mfd_mode = &cpg_rhs_mfd_mode;
 
 	////////////////////////////////////////
 	//
@@ -10477,34 +10487,62 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		*left_export,
 		*right_export;
 
-	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
+	int
+		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
 
-/*	if (!electrical_system_active())
-	{
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
-	}
-*/
+	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
+			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS)
+			|| (location == MFD_LOCATION_ORT));
+
 	update_pointer_position();
 
-	if (location == MFD_LOCATION_LHS)
+	if (location == MFD_LOCATION_PILOT_LHS)
 	{
 		mfd_mode = &lhs_mfd_mode;
-
 		mfd_texture_screen = lhs_mfd_texture_screen;
-
-		set_system_texture_screen (lhs_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+	}
+	else if (location == MFD_LOCATION_PILOT_RHS)
+	{
+		mfd_mode = &rhs_mfd_mode;
+		mfd_texture_screen = rhs_mfd_texture_screen;
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+	}
+	else if (location == MFD_LOCATION_CPG_LHS)
+	{
+		mfd_mode = &cpg_lhs_mfd_mode;
+		mfd_texture_screen = cpg_lhs_mfd_texture_screen;
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+	}
+	else if (location == MFD_LOCATION_CPG_RHS)
+	{
+		mfd_mode = &cpg_rhs_mfd_mode;
+		mfd_texture_screen = cpg_rhs_mfd_texture_screen;
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
 	}
 	else
 	{
-		mfd_mode = &rhs_mfd_mode;
+		if (ort_mode != MFD_MODE_DAMAGED && ort_mode != MFD_MODE_OFF)
+		{
+			ort_mode = get_mfd_mode_for_eo_sensor();
+			mfd_texture_screen = eo_3d_texture_screen;
+		}
+		else
+			mfd_texture_screen = ort_texture_screen;
+		mfd_mode = &ort_mode;
+		
+		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT);
 
-		mfd_texture_screen = rhs_mfd_texture_screen;
-
-		set_system_texture_screen (rhs_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+		if (ort_mode != MFD_MODE_DAMAGED && ort_mode != MFD_MODE_OFF)
+			if (cpg_lhs_mfd_mode == ort_mode || cpg_rhs_mfd_mode == ort_mode)
+			{
+				// use same texture as MFD if it also shows TADS
+				return;
+			}
 	}
 
-	if (tsd_underlay == TSD_UNDERLAY_TADS
+	if (is_pilot
+		&& pilot_tsd_underlay == TSD_UNDERLAY_TADS
 		&& (d3d_can_render_to_texture)
 		&& !apache_damage.flir
 		&& (lhs_mfd_mode == MFD_MODE_TSD
@@ -10568,7 +10606,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, off_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -10665,10 +10703,16 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 			{
 				ASSERT (eo_3d_texture_screen);
 
-				if (location == MFD_LOCATION_LHS)
+				if (location == MFD_LOCATION_PILOT_LHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-				else
+				else if (location == MFD_LOCATION_PILOT_RHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+				else if (location == MFD_LOCATION_CPG_LHS)
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+				else if (location == MFD_LOCATION_CPG_RHS)
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
+				else if (location == MFD_LOCATION_ORT)
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT);
 
 				if (*mfd_mode == MFD_MODE_FLIR)
 					draw_3d_eo_display_on_texture (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
@@ -10727,10 +10771,12 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		{
 			if (tsd_tads_underlay_active)
 			{
-				if (location == MFD_LOCATION_LHS)
+				if (location == MFD_LOCATION_PILOT_LHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-				else
+				else if (location == MFD_LOCATION_PILOT_RHS)
 					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+				else
+					debug_fatal("Only pilot's MFDs support TADS underlay!");
 
 				if (eo_sensor == TARGET_ACQUISITION_SYSTEM_FLIR)
 					draw_3d_eo_display_on_texture (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
@@ -10981,7 +11027,8 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 		mfd_screen_x_max,
 		mfd_screen_y_max;
 
-	ASSERT ((location == MFD_LOCATION_LHS) || (location == MFD_LOCATION_RHS));
+	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
+			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS));
 
 	update_pointer_position();
 
@@ -11565,18 +11612,19 @@ static mfd_modes get_mfd_mode_for_radar (void)
 
 void select_next_apache_tsd_ase_range (void)
 {
-	if (tsd_ase_range == TSD_ASE_RANGE_2000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_5000;
-	}
-	else if (tsd_ase_range == TSD_ASE_RANGE_5000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_10000;
-	}
-	else if (tsd_ase_range == TSD_ASE_RANGE_10000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_25000;
-	}
+	float *tsd_ase_range;
+	
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		tsd_ase_range = &pilot_tsd_ase_range;
+	else
+		tsd_ase_range = &cpg_tsd_ase_range;
+
+	if (*tsd_ase_range == TSD_ASE_RANGE_2000)
+		*tsd_ase_range = TSD_ASE_RANGE_5000;
+	else if (*tsd_ase_range == TSD_ASE_RANGE_5000)
+		*tsd_ase_range = TSD_ASE_RANGE_10000;
+	else if (*tsd_ase_range == TSD_ASE_RANGE_10000)
+		*tsd_ase_range = TSD_ASE_RANGE_25000;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11585,18 +11633,19 @@ void select_next_apache_tsd_ase_range (void)
 
 void select_previous_apache_tsd_ase_range (void)
 {
-	if (tsd_ase_range == TSD_ASE_RANGE_25000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_10000;
-	}
-	else if (tsd_ase_range == TSD_ASE_RANGE_10000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_5000;
-	}
-	else if (tsd_ase_range == TSD_ASE_RANGE_5000)
-	{
-		tsd_ase_range = TSD_ASE_RANGE_2000;
-	}
+	float *tsd_ase_range;
+	
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		tsd_ase_range = &pilot_tsd_ase_range;
+	else
+		tsd_ase_range = &cpg_tsd_ase_range;
+
+	if (*tsd_ase_range == TSD_ASE_RANGE_25000)
+		*tsd_ase_range = TSD_ASE_RANGE_10000;
+	else if (*tsd_ase_range == TSD_ASE_RANGE_10000)
+		*tsd_ase_range = TSD_ASE_RANGE_5000;
+	else if (*tsd_ase_range == TSD_ASE_RANGE_5000)
+		*tsd_ase_range = TSD_ASE_RANGE_2000;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11605,39 +11654,19 @@ void select_previous_apache_tsd_ase_range (void)
 
 void select_next_apache_tsd_declutter_level (void)
 {
-	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
-	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_TARGET;
-	}
-	else if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_TARGET)
-	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_NAVIGATION;
-	}
+	tsd_declutter_levels *tsd_declutter_level;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		tsd_declutter_level = &pilot_tsd_declutter_level;
 	else
-	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void select_next_tsd_underlay_level(void)
-{
-	int tads_active = (lhs_mfd_mode == MFD_MODE_DVO
-		 || lhs_mfd_mode == MFD_MODE_DTV
-		 || lhs_mfd_mode == MFD_MODE_FLIR
-		 || rhs_mfd_mode == MFD_MODE_DVO
-		 || rhs_mfd_mode == MFD_MODE_DTV
-		 || rhs_mfd_mode == MFD_MODE_FLIR);
+		tsd_declutter_level = &cpg_tsd_declutter_level;
 	
-	if (tsd_underlay == TSD_UNDERLAY_NONE)
-		tsd_underlay = TSD_UNDERLAY_MAP;
-	else if (tsd_underlay == TSD_UNDERLAY_MAP && !tads_active)
-		tsd_underlay = TSD_UNDERLAY_TADS;
+	if (*tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_TARGET;
+	else if (*tsd_declutter_level == TSD_DECLUTTER_LEVEL_TARGET)
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_NAVIGATION;
 	else
-		tsd_underlay = TSD_UNDERLAY_NONE;
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11646,17 +11675,49 @@ void select_next_tsd_underlay_level(void)
 
 void select_previous_apache_tsd_declutter_level (void)
 {
-	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION)
-	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_TARGET;
-	}
-	else if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_TARGET)
-	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
-	}
+	tsd_declutter_levels *tsd_declutter_level;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		tsd_declutter_level = &pilot_tsd_declutter_level;
 	else
+		tsd_declutter_level = &cpg_tsd_declutter_level;
+	
+	if (*tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_NAVIGATION;
+	else if (*tsd_declutter_level == TSD_DECLUTTER_LEVEL_TARGET)
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_ALL;
+	else
+		*tsd_declutter_level = TSD_DECLUTTER_LEVEL_TARGET;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_next_tsd_underlay_level(void)
+{
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
 	{
-		tsd_declutter_level = TSD_DECLUTTER_LEVEL_NAVIGATION;
+		int tads_active = (lhs_mfd_mode == MFD_MODE_DVO
+			 || lhs_mfd_mode == MFD_MODE_DTV
+			 || lhs_mfd_mode == MFD_MODE_FLIR
+			 || rhs_mfd_mode == MFD_MODE_DVO
+			 || rhs_mfd_mode == MFD_MODE_DTV
+			 || rhs_mfd_mode == MFD_MODE_FLIR);
+		
+		if (pilot_tsd_underlay == TSD_UNDERLAY_NONE)
+			pilot_tsd_underlay = TSD_UNDERLAY_MAP;
+		else if (pilot_tsd_underlay == TSD_UNDERLAY_MAP && !tads_active)
+			pilot_tsd_underlay = TSD_UNDERLAY_TADS;
+		else
+			pilot_tsd_underlay = TSD_UNDERLAY_NONE;
+	}
+	else  // co-pilot.  doesn't have tads underlay (co-pilot can just use ORT for TADS instead)
+	{
+		if (cpg_tsd_underlay == TSD_UNDERLAY_NONE)
+			cpg_tsd_underlay = TSD_UNDERLAY_MAP;
+		else
+			cpg_tsd_underlay = TSD_UNDERLAY_NONE;
 	}
 }
 
@@ -11840,96 +11901,89 @@ static mfd_modes get_previous_mfd_mode (mfd_modes mfd_mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void select_next_apache_lhs_mfd (void)
+static void cycle_apache_mfd (int forward, mfd_locations location)
 {
+	mfd_modes*
+		change_mfd;
+
 	mfd_modes
+		oposite_mode,
 		next_mfd_mode;
 
-	next_mfd_mode = get_next_mfd_mode (lhs_mfd_mode);
+	if (location == MFD_LOCATION_PILOT_LHS)
+	{
+		change_mfd = &lhs_mfd_mode;
+		oposite_mode = rhs_mfd_mode;
+	}
+	else if (location == MFD_LOCATION_CPG_LHS)
+	{
+		change_mfd = &cpg_lhs_mfd_mode;
+		oposite_mode = cpg_rhs_mfd_mode;
+	}
+	else if (location == MFD_LOCATION_PILOT_RHS)
+	{
+		change_mfd = &rhs_mfd_mode;
+		oposite_mode = lhs_mfd_mode;
+	}
+	else
+	{
+		change_mfd = &cpg_rhs_mfd_mode;
+		oposite_mode = cpg_lhs_mfd_mode;
+	}
+
+	if (forward)
+		next_mfd_mode = get_next_mfd_mode(*change_mfd);
+	else
+		next_mfd_mode = get_previous_mfd_mode(*change_mfd);
 
 	if (next_mfd_mode != MFD_MODE_DAMAGED)
 	{
-		if (next_mfd_mode == rhs_mfd_mode)
-		{
-			next_mfd_mode = get_next_mfd_mode (next_mfd_mode);
-		}
-
-		ASSERT (next_mfd_mode != rhs_mfd_mode);
+		if (next_mfd_mode == oposite_mode)
+			if (forward)
+				next_mfd_mode = get_next_mfd_mode(next_mfd_mode);
+			else
+				next_mfd_mode = get_previous_mfd_mode(next_mfd_mode);
+		
+		ASSERT (next_mfd_mode != oposite_mode);
 	}
 
-	select_apache_mfd_mode (next_mfd_mode, MFD_LOCATION_LHS);
+	select_apache_mfd_mode (next_mfd_mode, location);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void select_next_apache_lhs_mfd (void)
+{
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		cycle_apache_mfd(TRUE, MFD_LOCATION_PILOT_LHS);
+	else
+		cycle_apache_mfd(TRUE, MFD_LOCATION_CPG_LHS);
+}
 
 void select_previous_apache_lhs_mfd (void)
 {
-	mfd_modes
-		previous_mfd_mode;
-
-	previous_mfd_mode = get_previous_mfd_mode (lhs_mfd_mode);
-
-	if (previous_mfd_mode != MFD_MODE_DAMAGED)
-	{
-		if (previous_mfd_mode == rhs_mfd_mode)
-		{
-			previous_mfd_mode = get_previous_mfd_mode (previous_mfd_mode);
-		}
-
-		ASSERT (previous_mfd_mode != rhs_mfd_mode);
-	}
-
-	select_apache_mfd_mode (previous_mfd_mode, MFD_LOCATION_LHS);
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		cycle_apache_mfd(FALSE, MFD_LOCATION_PILOT_LHS);
+	else
+		cycle_apache_mfd(FALSE, MFD_LOCATION_CPG_LHS);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void select_next_apache_rhs_mfd (void)
 {
-	mfd_modes
-		next_mfd_mode;
-
-	next_mfd_mode = get_next_mfd_mode (rhs_mfd_mode);
-
-	if (next_mfd_mode != MFD_MODE_DAMAGED)
-	{
-		if (next_mfd_mode == lhs_mfd_mode)
-		{
-			next_mfd_mode = get_next_mfd_mode (next_mfd_mode);
-		}
-
-		ASSERT (next_mfd_mode != lhs_mfd_mode);
-	}
-
-	select_apache_mfd_mode (next_mfd_mode, MFD_LOCATION_RHS);
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		cycle_apache_mfd(TRUE, MFD_LOCATION_PILOT_RHS);
+	else
+		cycle_apache_mfd(TRUE, MFD_LOCATION_CPG_RHS);
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void select_previous_apache_rhs_mfd (void)
 {
-	mfd_modes
-		previous_mfd_mode;
-
-	previous_mfd_mode = get_previous_mfd_mode (rhs_mfd_mode);
-
-	if (previous_mfd_mode != MFD_MODE_DAMAGED)
-	{
-		if (previous_mfd_mode == lhs_mfd_mode)
-		{
-			previous_mfd_mode = get_previous_mfd_mode (previous_mfd_mode);
-		}
-
-		ASSERT (previous_mfd_mode != lhs_mfd_mode);
-	}
-
-	select_apache_mfd_mode (previous_mfd_mode, MFD_LOCATION_RHS);
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		cycle_apache_mfd(FALSE, MFD_LOCATION_PILOT_RHS);
+	else
+		cycle_apache_mfd(FALSE, MFD_LOCATION_CPG_RHS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12089,6 +12143,10 @@ void select_apache_air_radar_mfd (void)
 
 void select_apache_tads_mfd (void)
 {
+	// co-pilot has ORT as TADS display, doesn't need to use a MFD
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
+		return;
+	
 	if (get_view_mode () == VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD)
 	{
 		if (!apache_damage.lh_mfd)
@@ -12110,7 +12168,7 @@ void select_apache_tads_mfd (void)
 	}
 
 	if (tsd_tads_underlay_active)
-		tsd_underlay = TSD_UNDERLAY_NONE;
+		pilot_tsd_underlay = TSD_UNDERLAY_NONE;
 
 	if ((lhs_mfd_mode == MFD_MODE_FLIR) || (lhs_mfd_mode == MFD_MODE_DTV) || (lhs_mfd_mode == MFD_MODE_DVO))
 	{
@@ -12284,15 +12342,24 @@ void auto_page_apache_ase_mfd (void)
 
 void toggle_apache_lhs_mfd_on_off (void)
 {
-	if (lhs_mfd_mode != MFD_MODE_OFF)
+	mfd_locations location;
+	mfd_modes mfd_mode;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
 	{
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		location = MFD_LOCATION_PILOT_LHS;
+		mfd_mode = lhs_mfd_mode;
 	}
 	else
 	{
-		select_apache_mfd_mode (MFD_MODE_ENGINE, MFD_LOCATION_LHS);
-//		select_next_apache_lhs_mfd ();
+		location = MFD_LOCATION_CPG_LHS;
+		mfd_mode = cpg_lhs_mfd_mode;
 	}
+	
+	if (mfd_mode != MFD_MODE_OFF)
+		select_apache_mfd_mode (MFD_MODE_OFF, location);
+	else
+		select_apache_mfd_mode (MFD_MODE_ENGINE, location);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12301,15 +12368,39 @@ void toggle_apache_lhs_mfd_on_off (void)
 
 void toggle_apache_rhs_mfd_on_off (void)
 {
-	if (rhs_mfd_mode != MFD_MODE_OFF)
+	mfd_locations location;
+	mfd_modes mfd_mode;
+
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
 	{
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+		location = MFD_LOCATION_PILOT_RHS;
+		mfd_mode = rhs_mfd_mode;
 	}
 	else
 	{
-		select_apache_mfd_mode (MFD_MODE_FLIGHT, MFD_LOCATION_RHS);
-//		select_next_apache_rhs_mfd ();
+		location = MFD_LOCATION_CPG_RHS;
+		mfd_mode = cpg_rhs_mfd_mode;
 	}
+
+	if (mfd_mode != MFD_MODE_OFF)
+		select_apache_mfd_mode (MFD_MODE_OFF, location);
+	else
+		select_apache_mfd_mode (MFD_MODE_FLIGHT, location);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void toggle_apache_ort_on_off(void)
+{
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) != CREW_ROLE_CO_PILOT)
+		return;
+
+	if (ort_mode != MFD_MODE_OFF)
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_ORT);
+	else
+		select_apache_mfd_mode (get_mfd_mode_for_eo_sensor(), MFD_LOCATION_ORT);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12324,14 +12415,14 @@ int get_apache_mfd_has_focus (mfd_locations mfd_location)
 	mfd_modes
 		mfd_mode;
 
-	if (mfd_location == MFD_LOCATION_LHS)
-	{
+	if (mfd_location == MFD_LOCATION_PILOT_LHS)
 		mfd_mode = lhs_mfd_mode;
-	}
-	else
-	{
+	else if (mfd_location == MFD_LOCATION_PILOT_RHS)
 		mfd_mode = rhs_mfd_mode;
-	}
+	else if (mfd_location == MFD_LOCATION_CPG_LHS)
+		mfd_mode = cpg_lhs_mfd_mode;
+	else if (mfd_location == MFD_LOCATION_CPG_RHS)
+		mfd_mode = cpg_rhs_mfd_mode;
 
 	switch (target_acquisition_system)
 	{
