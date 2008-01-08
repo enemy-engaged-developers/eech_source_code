@@ -87,7 +87,6 @@ static object_3d_instance
 void initialise_apache_virtual_cockpit_wiper_and_rain_effect (void)
 {
 	virtual_cockpit_wiper_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_WIPER);
-
 	virtual_cockpit_rain_effect_inst3d = construct_3d_object (OBJECT_3D_APACHE_GLASS);
 
 	pilot_wiper = TRUE;
@@ -101,6 +100,18 @@ void initialise_apache_virtual_cockpit_wiper_and_rain_effect (void)
 	co_pilot_wiped_rain_texture_screen = create_screen_for_system_texture (TEXTURE_INDEX_APACHE_COPILOT_RAIN_WIPE);
 
 	co_pilot_wipe_type = WIPE_TYPE_UP_THEN_DOWN;
+
+	// move wipers to where they need to be with the new cockpit
+	if (custom_3d_models.arneh_ah64d_cockpit)
+	{
+		virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.x = -0.395;
+		virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.y = -0.180;
+		virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.z =  1.895;
+	
+		virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.x =  0.365;
+		virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.y = -0.490;
+		virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.z =  2.190;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,6 +139,18 @@ void draw_apache_virtual_cockpit_wiper (viewpoint *vp)
 		state;
 
 	ASSERT (vp);
+
+#if 0
+	debug_log("x: %.3f,  y: %.3f,  z: %.3f", debug_var_x * 0.01, debug_var_y * 0.01, debug_var_z * 0.01);
+
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.x = -0.415 + debug_var_x * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.y = -0.170 + debug_var_y * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.z =  1.865 + debug_var_z * 0.01;
+
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.x =  0.365 + debug_var_x * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.y = -0.490 + debug_var_y * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.z =  2.190 + debug_var_z * 0.01;
+#endif
 
 	//
 	// rotate wiper
