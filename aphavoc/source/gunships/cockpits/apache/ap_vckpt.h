@@ -92,33 +92,13 @@ extern void draw_apache_internal_virtual_cockpit_3d (unsigned int flags);
 
 extern void draw_apache_external_virtual_cockpit_3d (unsigned int flags);
 
-extern void get_apache_crew_viewpoint (int index, object_3d_instance   *virtual_cockpit_inst3d);
-
 extern void draw_apache_indicator_lamps_3d( void );
 
-/*
-extern  object_3d_instance
-	*virtual_cockpit_level1_inst3d,
-	*virtual_cockpit_level2_inst3d,
-	*virtual_cockpit_level3_inst3d,
-	*virtual_cockpit_fillet_level1_inst3d,
-	*virtual_cockpit_fillet_level2_inst3d,
-	*virtual_cockpit_fillet_level3_inst3d,
-	*virtual_cockpit_main_rotor_inst3d,
-	*virtual_cockpit_adi_inst3d,
-	*virtual_cockpit_large_adi_inst3d,
-	*virtual_cockpit_compass_inst3d,
-	*virtual_cockpit_instrument_needles_inst3d,
-	*virtual_cockpit_instrument_large_needles_inst3d,
-	*virtual_cockpit_upfront_display_inst3d,
-	*virtual_cockpit_lhs_mfd_inst3d,
-	*virtual_cockpit_rhs_mfd_inst3d,
-	*virtual_cockpit_display_view_mfd_inst3d;
-*/
+extern void initialise_apache_lamp_screen (void);
+extern void deinitialise_apache_lamp_screen (void);
+extern void draw_apache_lamp_on_texture (void);
 
-void initialise_apache_lamp_screen (void);
-void deinitialise_apache_lamp_screen (void);
-void draw_apache_lamp_on_texture (void);
+extern int apache_pnvs_active(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
