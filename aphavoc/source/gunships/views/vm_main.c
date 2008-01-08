@@ -1053,10 +1053,18 @@ static void enter_view_mode (view_modes mode)
 
 			if (!get_apache_havoc_gunship_fixed_cockpit ())
 			{
+				gunship_types type = get_global_gunship_type();
 				//VJ 050211 needed for wideview pitch setting
 				//VJ 060910 use correct pitch in comanche and hokum
-				if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||	wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
-					 pilot_head_pitch = pilot_head_pitch_datum;
+				// arneh - adjusted for helicopter types which have several crew positions
+				if (type != GUNSHIP_TYPE_COMANCHE && type != GUNSHIP_TYPE_HOKUM)
+				{
+					if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
+						pilot_head_pitch = co_pilot_head_pitch_datum;
+					else
+						pilot_head_pitch = pilot_head_pitch_datum;
+				}
+
 				mode = VIEW_MODE_VIRTUAL_COCKPIT;
 			}
 
