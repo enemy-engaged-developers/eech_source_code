@@ -112,6 +112,8 @@ int
 #define UP     (-1)
 #define DOWN   (1)
 
+#define DEFAULT_FOV 60.0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2085,12 +2087,12 @@ static void toggle_display_in_flight_intelligence_messages_event (event *ev)
 static void lo_fov_event(event *ev)
 {
 	full_screen_width_view_angle	= rad (command_line_min_fov);
-	full_screen_height_view_angle	= rad (command_line_min_fov/1.2812);
+	full_screen_height_view_angle	= rad (command_line_min_fov / full_screen_aspect_ratio);
 }
 static void std_fov_event(event *ev)
 {
-	full_screen_width_view_angle	= rad (59.99);
-	full_screen_height_view_angle	= rad (46.82);
+	full_screen_width_view_angle	= rad (DEFAULT_FOV);
+	full_screen_height_view_angle	= rad (DEFAULT_FOV / full_screen_aspect_ratio);
 }
 static void hi_fov_event(event *ev)
 {
@@ -2126,7 +2128,7 @@ static void hi_fov_event(event *ev)
 			break;
 	}
 	full_screen_width_view_angle	= rad (max_fov);
-	full_screen_height_view_angle	= rad (max_fov/1.2812);
+	full_screen_height_view_angle	= rad (max_fov / full_screen_aspect_ratio);
 }
 static void reset_mouse_event(event* ev)
 {

@@ -90,6 +90,7 @@ float
 	full_screen_y_mid								= FULL_SCREEN_HEIGHT / 2.0,
 	full_screen_x_max								= FULL_SCREEN_WIDTH - 0.001,
 	full_screen_y_max								= FULL_SCREEN_HEIGHT - 0.001,
+	full_screen_aspect_ratio                        = 59.99 / 46.82,
 	full_screen_width_view_angle				= rad (59.99),
 	full_screen_height_view_angle				= rad (46.82);
 
@@ -186,9 +187,11 @@ void set_3d_resolutions (float width, float height)
 	// set resolution
 
 	set_global_3d_visual_screen_width (width);
-
 	set_global_3d_visual_screen_height (height);
 
+	// arneh - calulate aspect from width and height, and use aspect to set view angle
+	full_screen_aspect_ratio = width / height;
+	full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 
 	full_screen_hi_res		= width > 640.0;
 

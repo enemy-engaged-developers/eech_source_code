@@ -133,6 +133,7 @@ extern float
 	full_screen_y_mid,
 	full_screen_x_max,
 	full_screen_y_max,
+	full_screen_aspect_ratio,
 	full_screen_width_view_angle,
 	full_screen_height_view_angle;
 
