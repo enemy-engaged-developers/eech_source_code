@@ -926,37 +926,79 @@ float get_apache_virtual_cockpit_airspeed_indicator_needle_value (void)
 	//
 	// non-linear scale
 	//
-
-	if (airspeed_needle_value <= 50.0)
+	if (custom_3d_models.arneh_ah64d_cockpit)
 	{
-		fraction = airspeed_needle_value * (1.0 / 50.0);
-
-		roll = fraction * rad (60.0);
-	}
-	else if (airspeed_needle_value <= 100.0)
-	{
-		fraction = (airspeed_needle_value - 50.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (150.0) - rad (60.0))) + rad (60.0);
-	}
-	else if (airspeed_needle_value <= 150.0)
-	{
-		fraction = (airspeed_needle_value - 100.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (210.0) - rad (150.0))) + rad (150.0);
-	}
-	else if (airspeed_needle_value <= 200.0)
-	{
-		fraction = (airspeed_needle_value - 150.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (270.0) - rad (210.0))) + rad (210.0);
+		if (airspeed_needle_value <= 20.0)
+		{
+			fraction = airspeed_needle_value * (1.0 / 20.0);
+	
+			roll = fraction * rad (10.0);
+		}
+		else if (airspeed_needle_value <= 40.0)
+		{
+			fraction = (airspeed_needle_value - 20.0) * (1.0 / 20.0);
+	
+			roll = (fraction * (rad (30.0) - rad (10.0))) + rad (10.0);
+		}
+		else if (airspeed_needle_value <= 100.0)
+		{
+			fraction = (airspeed_needle_value - 40.0) * (1.0 / 60.0);
+	
+			roll = (fraction * (rad (147.0) - rad (30.0))) + rad (30.0);
+		}
+		else if (airspeed_needle_value <= 150.0)
+		{
+			fraction = (airspeed_needle_value - 100.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (213.0) - rad (147.0))) + rad (147.0);
+		}
+		else if (airspeed_needle_value <= 200.0)
+		{
+			fraction = (airspeed_needle_value - 150.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (270.0) - rad (213.0))) + rad (213.0);
+		}
+		else
+		{
+			fraction = (airspeed_needle_value - 200.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (335.0) - rad (270.0))) + rad (270.0);
+		}
 	}
 	else
 	{
-		fraction = (airspeed_needle_value - 200.0) * (1.0 / 50.0);
-
-		roll = (fraction * (rad (330.0) - rad (270.0))) + rad (270.0);
+		if (airspeed_needle_value <= 50.0)
+		{
+			fraction = airspeed_needle_value * (1.0 / 50.0);
+	
+			roll = fraction * rad (60.0);
+		}
+		else if (airspeed_needle_value <= 100.0)
+		{
+			fraction = (airspeed_needle_value - 50.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (150.0) - rad (60.0))) + rad (60.0);
+		}
+		else if (airspeed_needle_value <= 150.0)
+		{
+			fraction = (airspeed_needle_value - 100.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (210.0) - rad (150.0))) + rad (150.0);
+		}
+		else if (airspeed_needle_value <= 200.0)
+		{
+			fraction = (airspeed_needle_value - 150.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (270.0) - rad (210.0))) + rad (210.0);
+		}
+		else
+		{
+			fraction = (airspeed_needle_value - 200.0) * (1.0 / 50.0);
+	
+			roll = (fraction * (rad (330.0) - rad (270.0))) + rad (270.0);
+		}
 	}
+
 
 	return (-roll);
 }
