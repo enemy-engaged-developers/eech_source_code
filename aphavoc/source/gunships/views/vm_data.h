@@ -194,8 +194,7 @@ struct COCKPIT_POSITION {
 
 typedef struct COCKPIT_POSITION cockpit_position;
 
-extern cockpit_position wide_cockpit_position[6];
-// 4 helicopters with 2 copilots
+extern cockpit_position wide_cockpit_position[];
 
 //VJ 030318 wideview mod
 extern int wide_cockpit_nr;
@@ -208,9 +207,13 @@ enum WIDEVIEW_NRS
 	WIDEVIEW_HOKUM_PILOT,
 	WIDEVIEW_HOKUM_COPILOT,
 	WIDEVIEW_APACHE_PILOT,
+	WIDEVIEW_APACHE_COPILOT,
 	WIDEVIEW_HAVOC_PILOT,
+	WIDEVIEW_HIND_PILOT,
+	WIDEVIEW_HIND_COPILOT,
 	NUM_WIDEVIEW_NRS
 };
+
 typedef enum WIDEVIEW_NRS wideview_nrs;
 
 #define BASE_X_APACHE  0.0

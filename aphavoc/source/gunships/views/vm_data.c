@@ -444,7 +444,7 @@ int
        edit_wide_cockpit = FALSE;
        
 cockpit_position 
-       wide_cockpit_position[6];  
+       wide_cockpit_position[NUM_WIDEVIEW_NRS];  
 
 int 
        wide_cockpit_nr;       

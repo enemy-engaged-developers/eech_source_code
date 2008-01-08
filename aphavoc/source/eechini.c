@@ -73,9 +73,6 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
-// Casm 21DEC07
-char psd_theme[128];
-
 #define DEFAULT_GWUT_FILE "gwut190.csv"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,15 +103,30 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
 //VJ 050210 defined in vm_data.h
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = BASE_X_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = BASE_Y_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = BASE_Z_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = BASE_P_APACHE;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = -7.0;
+
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].p = -10.0;
 
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = BASE_X_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = BASE_Y_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = BASE_P_HAVOC;
+
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].p = -5.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -509,20 +521,26 @@ void process_ini_file(int argc, char *argv[])
 //VJ 050207 cleaning up the wideview code
 	 	if (strcmp(p, "comanche_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_PILOT);
-	 	if (strcmp(p, "comanche_co-pilot")==0)
+	 	else if (strcmp(p, "comanche_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_COPILOT);
-	 	if (strcmp(p, "hokum_pilot")==0)
+	 	else if (strcmp(p, "hokum_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_PILOT);
-	 	if (strcmp(p, "hokum_co-pilot")==0)
+	 	else if (strcmp(p, "hokum_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_COPILOT);
-	 	if (strcmp(p, "apache_pilot")==0)
+	 	else if (strcmp(p, "apache_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
-	 	if (strcmp(p, "havoc_pilot")==0)
+	 	else if (strcmp(p, "apache_copilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_APACHE_COPILOT);
+	 	else if (strcmp(p, "havoc_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HAVOC_PILOT);
+	 	else if (strcmp(p, "hind_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HIND_PILOT);
+	 	else if (strcmp(p, "hind_copilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HIND_COPILOT);
 		//VJ 060211 save hud config info
-	 	if (strcmp(p, "hud_code")==0)
+	 	else if (strcmp(p, "hud_code")==0)
 	 		read_hud_parameters(q);
-	 	if (strcmp(p, "g-force_head_movement")==0)
+	 	else if (strcmp(p, "g-force_head_movement")==0)
 	 		command_line_g_force_head_movment_modifier = v1;
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
@@ -581,7 +599,6 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "TIR_6DOF") == 0) command_line_TIR_6DOF = d1;	// Retro 6Feb2005
 		if (strcmp(p, "MEMEXPORT") == 0) command_line_shared_mem_export = d1;	// Retro 14Aug2006
-		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
 		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping		
@@ -696,7 +713,6 @@ void dump_ini_file(void)
 	fprintf(f,"tsdpalette=%d         # TSD palette options (0 - 2) (def = 0)\n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d           # TSD showing red force blue force colours (0 = off, 1 = on) (def = 1)\n",command_line_tsd_enemy_colours);
 	fprintf(f,"tsddetail=%d          # TSD in high detail (0 = off, 1 = on) (def = 0)\n",global_tsd_detail); // VJ 061215 detailed TSD
-	fprintf(f,"3d_cockpit=%d         # [EXPERIMENTAL!] 3D Apache cockpit (0 = off, 1 = on) (def = 0)\n",command_line_3d_cockpit);	// VJ 050101
 	fprintf(f,"texture_colour=%d     # Use texture colours directly. [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",command_line_texture_colour);	//VJ 050303 texture colour mod
 	fprintf(f,"texture_filtering=%d  # [EXPERIMENTAL!] texture blending (reacts to anisotropic filter setting) (0 = off, 1 = on) (def = 0)\n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d         # mipmapped textures (dds files). [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",global_mipmapping);	//VJ 050530 mipmapping
@@ -718,8 +734,11 @@ void dump_ini_file(void)
 	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f,%.3f    #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p);
 	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f,%.3f          #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].p);
 	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f,%.3f       #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].x,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].y,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].z,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].p);
-	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
+	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f         #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
+	fprintf(f, "apache_copilot=%.3f,%.3f,%.3f,%.3f       #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].p);
 	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f,%.3f          #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].p);	
+//	fprintf(f, "hind_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].p);	
+//	fprintf(f, "hind_copilot=%.3f,%.3f,%.3f,%.3f         #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].p);	
 	//VJ 060212 hud info mod
 	fprintf(f, "hud_code=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d         #hud code for 4 gunships\n",
 		hud_code[0][0],hud_code[0][1],hud_code[0][2],
