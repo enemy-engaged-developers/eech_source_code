@@ -88,12 +88,12 @@ union APACHE_DAMAGE_FLAGS
 			radar_warning_system		:1,	// 14
 			ihadss						:1,	// 15
 			lh_mfd						:1,	// 16
-			spare_5						:1,	// 17
+			cpg_lh_mfd					:1,	// 17
 			rh_mfd						:1,	// 18
 			pnvs							:1,	// 19
 			gun_jammed					:1,	// 20
 			lh_wing_tip_mount			:1,	// 21
-			spare_6						:1,	// 22
+			cpg_rh_mfd					:1,	// 22
 			lh_outer_pylon				:1,	// 23
 			lh_inner_pylon				:1,	// 24
 			spare_7						:1,	// 25

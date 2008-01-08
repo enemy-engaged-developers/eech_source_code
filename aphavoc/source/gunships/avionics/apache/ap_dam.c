@@ -183,7 +183,14 @@ void fully_repair_apache_damage (void)
 	{
 		apache_damage.lh_mfd = FALSE;
 
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_PILOT_LHS);
+	}
+
+	if (apache_damage.cpg_lh_mfd)
+	{
+		apache_damage.cpg_lh_mfd = FALSE;
+
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_CPG_LHS);
 	}
 
 	////////////////////////////////////////
@@ -192,7 +199,14 @@ void fully_repair_apache_damage (void)
 	{
 		apache_damage.rh_mfd = FALSE;
 
-		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_PILOT_RHS);
+	}
+
+	if (apache_damage.cpg_rh_mfd)
+	{
+		apache_damage.cpg_rh_mfd = FALSE;
+
+		select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_CPG_RHS);
 	}
 
 	////////////////////////////////////////
@@ -335,7 +349,17 @@ void partially_repair_apache_damage (void)
 
 		if (!apache_damage.lh_mfd)
 		{
-			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_LHS);
+			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_PILOT_LHS);
+		}
+	}
+
+	if (apache_damage.cpg_lh_mfd)
+	{
+		apache_damage.cpg_lh_mfd = frand1 () > 0.90;
+
+		if (!apache_damage.cpg_lh_mfd)
+		{
+			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_CPG_LHS);
 		}
 	}
 
@@ -347,7 +371,17 @@ void partially_repair_apache_damage (void)
 
 		if (!apache_damage.rh_mfd)
 		{
-			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_RHS);
+			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_PILOT_RHS);
+		}
+	}
+
+	if (apache_damage.cpg_rh_mfd)
+	{
+		apache_damage.cpg_rh_mfd = frand1 () > 0.90;
+
+		if (!apache_damage.cpg_rh_mfd)
+		{
+			select_apache_mfd_mode (MFD_MODE_OFF, MFD_LOCATION_CPG_RHS);
 		}
 	}
 
@@ -700,6 +734,22 @@ static void damage_systems (apache_damage_flags damage)
 		}
 	}
 
+	if (damage.cpg_lh_mfd)
+	{
+		if (!apache_damage.cpg_lh_mfd)
+		{
+			apache_damage.cpg_lh_mfd = TRUE;
+
+			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_apache_upfront_display_text ("MFD FAILURE", "", NULL, NULL);
+
+			play_client_server_warning_message (en, SPEECH_SYSTEM_MFD_FAILURE);
+
+			select_apache_mfd_mode (MFD_MODE_DAMAGED, MFD_LOCATION_CPG_LHS);
+		}
+	}
+
 	////////////////////////////////////////
 
 	if (damage.rh_mfd)
@@ -715,6 +765,22 @@ static void damage_systems (apache_damage_flags damage)
 			play_client_server_warning_message (en, SPEECH_SYSTEM_MFD_FAILURE);
 
 			select_apache_mfd_mode (MFD_MODE_DAMAGED, MFD_LOCATION_RHS);
+		}
+	}
+
+	if (damage.cpg_rh_mfd)
+	{
+		if (!apache_damage.cpg_rh_mfd)
+		{
+			apache_damage.cpg_rh_mfd = TRUE;
+
+			dynamics_damage_model (DYNAMICS_DAMAGE_AVIONICS, FALSE);
+
+			set_apache_upfront_display_text ("MFD FAILURE", "", NULL, NULL);
+
+			play_client_server_warning_message (en, SPEECH_SYSTEM_MFD_FAILURE);
+
+			select_apache_mfd_mode (MFD_MODE_DAMAGED, MFD_LOCATION_CPG_RHS);
 		}
 	}
 
