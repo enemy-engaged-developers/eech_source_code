@@ -733,23 +733,62 @@ static void toggle_electrical_sytem_event(event* ev)
 
 
 #ifdef DEBUG
-float debug_var = 0.0;
-static void inc_debug_var(event* ev)
+float debug_var_x = 0.0;
+float debug_var_y = 0.0;
+float debug_var_z = 0.0;
+
+static void inc_debug_var_x(event* ev)
 {
-	debug_var += 1.0;
+	debug_var_x += 1.0;
 }
 
-static void inc_debug_var_fine(event* ev)
+static void inc_debug_var_x_fine(event* ev)
 {
-	debug_var += 0.1;
+	debug_var_x += 0.1;
 }
-static void dec_debug_var(event* ev)
+static void dec_debug_var_x(event* ev)
 {
-	debug_var -= 1.0;
+	debug_var_x -= 1.0;
 }
-static void dec_debug_var_fine(event* ev)
+static void dec_debug_var_x_fine(event* ev)
 {
-	debug_var -= 0.1;
+	debug_var_x -= 0.1;
+}
+
+static void inc_debug_var_y(event* ev)
+{
+	debug_var_y += 1.0;
+}
+
+static void inc_debug_var_y_fine(event* ev)
+{
+	debug_var_y += 0.1;
+}
+static void dec_debug_var_y(event* ev)
+{
+	debug_var_y -= 1.0;
+}
+static void dec_debug_var_y_fine(event* ev)
+{
+	debug_var_y -= 0.1;
+}
+
+static void inc_debug_var_z(event* ev)
+{
+	debug_var_z += 1.0;
+}
+
+static void inc_debug_var_z_fine(event* ev)
+{
+	debug_var_z += 0.1;
+}
+static void dec_debug_var_z(event* ev)
+{
+	debug_var_z -= 1.0;
+}
+static void dec_debug_var_z_fine(event* ev)
+{
+	debug_var_z -= 0.1;
 }
 #endif // DEBUG
 
@@ -890,10 +929,20 @@ void set_common_avionics_events (void)
 // arneh 20070103 - electrical system
 	set_event (DIK_K, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_electrical_sytem_event);
 #ifdef DEBUG
-	set_event (DIK_UP, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var);
-	set_event (DIK_UP, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, inc_debug_var_fine);
-	set_event (DIK_DOWN, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, dec_debug_var);
-	set_event (DIK_DOWN, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, dec_debug_var_fine);
+	set_event (DIK_RIGHT, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var_x);
+	set_event (DIK_RIGHT, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, inc_debug_var_x_fine);
+	set_event (DIK_LEFT, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, dec_debug_var_x);
+	set_event (DIK_LEFT, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, dec_debug_var_x_fine);
+
+	set_event (DIK_UP, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var_y);
+	set_event (DIK_UP, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, inc_debug_var_y_fine);
+	set_event (DIK_DOWN, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, dec_debug_var_y);
+	set_event (DIK_DOWN, MODIFIER_RIGHT_ALT, KEY_STATE_DOWN, dec_debug_var_y_fine);
+
+	set_event (DIK_INSERT, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, inc_debug_var_z);
+	set_event (DIK_INSERT, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, inc_debug_var_z_fine);
+	set_event (DIK_DELETE, MODIFIER_RIGHT_CONTROL, KEY_STATE_DOWN, dec_debug_var_z);
+	set_event (DIK_DELETE, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, dec_debug_var_z_fine);
 #endif
 }
 
