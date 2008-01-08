@@ -557,7 +557,7 @@ void draw_cockpit (cockpit_panels panel)
 
 			draw_apache_cockpit (panel);
 			
-			if (command_line_restricted_nvg_fov && night_vision_system_active)
+			if (command_line_restricted_nvg_fov && night_vision_active())
 				draw_night_vision_mask();
 
 			break;
