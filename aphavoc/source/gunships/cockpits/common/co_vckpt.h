@@ -70,7 +70,9 @@
 #define VIRTUAL_COCKPIT_HUD_DISPLAY    				(1 << 3)
 #define VIRTUAL_COCKPIT_CRT_DISPLAY    				(1 << 4)
 #define VIRTUAL_COCKPIT_LHS_MFD_DISPLAY 				(1 << 5)
+#define VIRTUAL_COCKPIT_PILOT_LHS_MFD_DISPLAY 				(1 << 5)  // same as not specifying pilot
 #define VIRTUAL_COCKPIT_RHS_MFD_DISPLAY 				(1 << 6)
+#define VIRTUAL_COCKPIT_PILOT_RHS_MFD_DISPLAY 				(1 << 6)  // same as not specifying pilot
 #define VIRTUAL_COCKPIT_ADI            				(1 << 7)
 #define VIRTUAL_COCKPIT_LARGE_ADI						(1 << 8)
 #define VIRTUAL_COCKPIT_HSI								(1 << 9)
@@ -78,13 +80,17 @@
 #define VIRTUAL_COCKPIT_EKRAN_DISPLAY					(1 << 11)
 #define VIRTUAL_COCKPIT_MAIN_ROTOR     				(1 << 12)
 #define VIRTUAL_COCKPIT_RENDERED_WIPER 				(1 << 13)
-#define VIRTUAL_COCKPIT_STOWED_WIPER					(1 << 14)
-#define VIRTUAL_COCKPIT_MOVING_WIPER					(1 << 15)
-#define VIRTUAL_COCKPIT_RAIN_EFFECT						(1 << 16)
+#define VIRTUAL_COCKPIT_STOWED_WIPER				(1 << 14)
+#define VIRTUAL_COCKPIT_MOVING_WIPER				(1 << 15)
+#define VIRTUAL_COCKPIT_RAIN_EFFECT					(1 << 16)
 #define VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES			(1 << 17)
 #define VIRTUAL_COCKPIT_INSTRUMENT_LARGE_NEEDLES	(1 << 18)
 #define VIRTUAL_COCKPIT_UPFRONT_DISPLAY				(1 << 19)
-#define VIRTUAL_COCKPIT_DISPLAY_VIEW					(1 << 20)
+#define VIRTUAL_COCKPIT_DISPLAY_VIEW				(1 << 20)
+#define VIRTUAL_COCKPIT_CPG_LHS_MFD_DISPLAY 		(1 << 21)
+#define VIRTUAL_COCKPIT_CPG_RHS_MFD_DISPLAY 		(1 << 22)
+#define VIRTUAL_COCKPIT_ORT_DISPLAY 				(1 << 23)
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
