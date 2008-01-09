@@ -171,6 +171,8 @@ int
 	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
 	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
+	command_line_field_of_view_joystick_index               = -1,	
+	command_line_field_of_view_joystick_axis                = 4,
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_manual_laser_radar						= FALSE,	// arneh 2006-11-06

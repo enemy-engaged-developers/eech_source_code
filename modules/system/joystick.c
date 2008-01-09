@@ -130,6 +130,10 @@ static BOOL axis_has_deadzone ( const int deviceIndex, const int deviceAxis )
 	{
 		retval = FALSE;
 	}
+	else if ((deviceIndex == command_line_field_of_view_joystick_index) && (deviceAxis == command_line_field_of_view_joystick_axis))
+	{
+		retval = FALSE;
+	}
 	else
 	{
 		retval = TRUE;

@@ -555,6 +555,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1 - 1;
 		if (strcmp(p, "eozoomn") == 0)		command_line_eo_zoom_joystick_index = d1;
 		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1 - 1;
+		if (strcmp(p, "field_of_viewn") == 0)		command_line_field_of_view_joystick_index = d1;
+		if (strcmp(p, "field_of_viewax") == 0)		command_line_field_of_view_joystick_axis = d1 - 1;
 		if (strcmp(p, "joylookn") == 0)		command_line_joylook_joystick_index = d1; // Jabberwock 031104
 		if (strcmp(p, "joylookh") == 0)		command_line_joylookh_joystick_axis = d1 - 1; // Jabberwock 031104
 		if (strcmp(p, "joylookv") == 0)		command_line_joylookv_joystick_axis = d1 - 1; // Jabberwock 031104
@@ -791,6 +793,8 @@ void dump_ini_file(void)
 	fprintf(f,"eopanh=%d             # joystick DirectX axis for horizontal EO-camera panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1
 	fprintf(f,"eozoomn=%d          # joystick number for EO-camera zooming\n",command_line_eo_zoom_joystick_index);
 	fprintf(f,"eozoomax=%d         # joystick DirectX axis for EO-camera zooming\n",command_line_eo_zoom_joystick_axis+1);  //VJ 030531 added +1
+	fprintf(f,"field_of_viewn=%d    # joystick number for field of view (zoom) of main view\n",command_line_field_of_view_joystick_index);
+	fprintf(f,"field_of_viewax=%d   # joystick DirectX axis for field of view (zoom) of main view\n",command_line_field_of_view_joystick_axis+1);
 	fprintf(f,"cyclicn=%d           # Joystick number for cyclic\n",command_line_cyclic_joystick_index);
 	fprintf(f,"cyclich=%d            # Joystick DirectX axis for cyclic horizontal\n",command_line_cyclic_joystick_x_axis+1);  //VJ 030531 added +1
 	fprintf(f,"cyclicv=%d            # Joystick DirectX axis for cyclic vertical\n",command_line_cyclic_joystick_y_axis+1);   //VJ 030531 added +1
