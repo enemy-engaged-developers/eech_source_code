@@ -249,6 +249,23 @@ void initialise_apache_virtual_cockpit (void)
 
 		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_heading = rad(-135);
 
+		// throttles
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.x = -0.552;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.y = -0.700;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.z = 0.298;
+
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.x = -0.544;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.y = -0.700;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.z = 0.298;
+
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.x = -0.502;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.y = -0.974;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.z = 1.588;
+	
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.x = -0.494;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.y = -0.974;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.z = 1.588;
+
 		// don't show clock or sideslip
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[1].visible_object = FALSE;  // sideslip
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[3].visible_object = FALSE;
@@ -344,6 +361,32 @@ static void animate_pnvs(object_3d_instance* inst3d)
 	heading_movement = bound(heading_movement, -PNVS_MOVEMENT_RATE * get_delta_time(), PNVS_MOVEMENT_RATE * get_delta_time());
 
 	pnvs_object->relative_heading += heading_movement;
+}
+extern float debug_var_x, debug_var_y, debug_var_z;
+static void animate_throttles(object_3d_instance* inst3d)
+{
+	float
+		left_throttle = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0),
+		right_throttle = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0),
+		throttle_angle = 0.0;
+
+	object_3d_sub_instance* cockpit_object = &inst3d->sub_objects[0];
+
+	// left throttle
+	if (left_throttle < 60.0)  // idle at -45 deg
+		throttle_angle = -45.0;
+	else  // otherwise somewhere between -30 and +10 deg
+		throttle_angle = rad(-30.0) + rad(40.0 * (left_throttle - 60.0) / 50.0);
+	cockpit_object->sub_objects[1].relative_pitch = throttle_angle;
+	cockpit_object->sub_objects[3].relative_pitch = throttle_angle;
+
+	// right throttle
+	if (right_throttle < 60.0)  // idle at -45 deg
+		throttle_angle = -45.0;
+	else  // otherwise somewhere between -30 and +10 deg
+		throttle_angle = rad(-30.0) + rad(40.0 * (right_throttle - 60.0) / 50.0);
+	cockpit_object->sub_objects[2].relative_pitch = throttle_angle;
+	cockpit_object->sub_objects[4].relative_pitch = throttle_angle;
 }
 
 int apache_pnvs_active(void)
@@ -943,6 +986,9 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 				virtual_cockpit_inst3d = virtual_cockpit_level1_inst3d;
 
 				#endif
+
+				if (custom_3d_models.arneh_ah64d_cockpit)
+					animate_throttles(virtual_cockpit_inst3d);
 
 				memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
 

@@ -919,8 +919,8 @@ static void initialise_custom_scenes(const char* directory)
 		
 	// internal occkpit
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT];
-	scene->number_of_sub_objects = 1;
-	scene->total_number_of_sub_objects = 2;
+	scene->number_of_sub_objects = 1;  // the entire cockpit
+	scene->total_number_of_sub_objects = 7;
 
 	scene->object_dissolve = 1.0;
 	scene->radius = 10.0;
@@ -933,20 +933,47 @@ static void initialise_custom_scenes(const char* directory)
 	// the sub-objects:
 	{
 		object_3d_database_entry* entry = &scene->sub_objects[0];
+		object_3d_database_entry* main_entry = entry;
 
 		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-cockpit.eeo", directory);
 		if (read_object(&objects_3d_data[next_free_custom_object], filename))
 		{
 			initialise_sub_object(entry, next_free_custom_object++);
 
-			entry->number_of_sub_objects = 1;
+			entry->number_of_sub_objects = 5;  // one for view + 4 for the throttles
 			entry->sub_objects = &scene->sub_objects[1];
 
-			// make one empty sub-object
-			entry->sub_objects[0].parent = entry;
-			entry = &entry->sub_objects[0];
-			initialise_sub_object(entry, next_free_custom_object++);
-			custom_3d_models.arneh_ah64d_cockpit = TRUE;
+			// make an empty sub-object for views
+			entry = &main_entry->sub_objects[0];
+			entry->parent = main_entry;
+
+			initialise_sub_object(entry, 0);
+
+			// make sub-objects for the throttles
+			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-left.eeo", directory);
+			if (read_object(&objects_3d_data[next_free_custom_object], filename))
+			{
+				int
+					left_throttle = next_free_custom_object++,
+					right_throttle = next_free_custom_object++;
+
+				snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-right.eeo", directory);
+				if (read_object(&objects_3d_data[right_throttle], filename))
+				{
+					int i;
+					
+					for (i= 0; i < 4; i++)
+					{
+						entry = &main_entry->sub_objects[i+1];
+						entry->parent = main_entry;
+
+						// left throttle in position 0 and 2, right in 1 and 3
+						initialise_sub_object(entry, (i % 2) ? right_throttle : left_throttle);
+					}
+	
+					custom_3d_models.arneh_ah64d_cockpit = TRUE;
+				}
+			}
 		}
 	}
 
