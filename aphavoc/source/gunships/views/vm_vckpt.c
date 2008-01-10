@@ -82,11 +82,12 @@
 
 //VJ 050208 gives the possibility to look behind you (since you can't turn your body) 
 #define MAX_LOOK_ANGLE_LEFT_RIGHT1  135.0   //Comanche and Hokum
-#define MAX_LOOK_ANGLE_LEFT_RIGHT2  90.0   //the rest
+#define MAX_LOOK_ANGLE_LEFT_RIGHT2  100.0   //the rest
 #define MAX_LOOK_ANGLE_UP1  75.0	//comanche, hokum   //was 45
 #define MAX_LOOK_ANGLE_UP2  75.0 //rest              //was 40
 #define MAX_LOOK_ANGLE_DOWN1  60.0 //comanche, hokum //was 45
 #define MAX_LOOK_ANGLE_DOWN2  25.0 //rest            //was 20
+#define MAX_LOOK_ANGLE_DOWN3  45.0 //apache
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -409,10 +410,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
-			if (command_line_3d_cockpit)
-				limit = rad (-MAX_LOOK_ANGLE_DOWN1);
-			else
-				limit = rad (-MAX_LOOK_ANGLE_DOWN2);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN3);
 
 			break;
 		}
@@ -2319,6 +2317,26 @@ void draw_virtual_cockpit_3d_display_view (void)
 		{
 			set_pilots_full_screen_params (FALSE);
 
+			if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+				draw_apache_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+					VIRTUAL_COCKPIT_PILOT_LHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_PILOT_RHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+				);
+			else
+				draw_apache_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+					VIRTUAL_COCKPIT_CPG_LHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_CPG_RHS_MFD_DISPLAY |
+					VIRTUAL_COCKPIT_ORT_DISPLAY
+				);
+
+#if 0
 			draw_apache_internal_virtual_cockpit
 			(
 				VIRTUAL_COCKPIT_DISPLAY_VIEW |
@@ -2326,7 +2344,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 				VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
 				VIRTUAL_COCKPIT_RHS_MFD_DISPLAY
 			);
-
+#endif
 			break;
 		}
 		////////////////////////////////////////
