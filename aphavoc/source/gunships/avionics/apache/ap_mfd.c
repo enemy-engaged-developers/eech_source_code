@@ -1111,7 +1111,7 @@ void initialise_apache_mfd (void)
 		rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 		cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
 		cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SINGLEALPHA);
+		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
 	}
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
@@ -10606,7 +10606,13 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, off_mfd_colour);
+				int width;
+				if (location == MFD_LOCATION_ORT)
+					width = mfd_texture_size * 2 - 1;
+				else
+					width = mfd_texture_size - 1;
+
+				set_block (0, 0, width, mfd_texture_size - 1, off_mfd_colour);
 
 				draw_layout_grid ();
 
