@@ -186,6 +186,8 @@ void update_ah64a_weapon_systems (void)
 	entity_sub_types
 		weapon_sub_type;
 
+	gun_is_firing = FALSE;
+
 	en = get_gunship_entity ();
 
 	weapon_sub_type = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
@@ -443,6 +445,8 @@ void update_ah64a_weapon_systems (void)
 		}
 		else
 		{
+			gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
+
 			apply_weapon_recoil_effect (en, weapon_sub_type);
 
 			launch_client_server_weapon (en, weapon_sub_type);

@@ -2841,7 +2841,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 		rotated_eo_vp.position = centered_eo_vp.position;
 
-		get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
+		get_3d_transformation_matrix (m, get_heading_from_attitude_matrix(eo_vp.attitude), get_pitch_from_attitude_matrix(eo_vp.attitude), 0.0);
 
 		multiply_matrix3x3_matrix3x3 (rotated_eo_vp.attitude, m, centered_eo_vp.attitude);
 
@@ -9159,7 +9159,7 @@ void draw_hokum_virtual_cockpit_periscope_view (void)
 
 		rotated_eo_vp.position = centered_eo_vp.position;
 
-		get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
+		get_3d_transformation_matrix (m, get_heading_from_attitude_matrix(eo_vp.attitude), get_pitch_from_attitude_matrix(eo_vp.attitude), 0.0);
 
 		multiply_matrix3x3_matrix3x3 (rotated_eo_vp.attitude, m, centered_eo_vp.attitude);
 

@@ -177,6 +177,8 @@ void update_havoc_weapon_systems (void)
 	entity_sub_types
 		weapon_sub_type;
 
+	gun_is_firing = FALSE;
+
 	en = get_gunship_entity ();
 
 	weapon_sub_type = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
@@ -440,6 +442,8 @@ void update_havoc_weapon_systems (void)
 		}
 		else
 		{
+			gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
+
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
 			{
 				apply_weapon_recoil_effect (en, weapon_sub_type);
