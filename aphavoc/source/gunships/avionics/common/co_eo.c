@@ -82,6 +82,8 @@
 
 #define TERRAIN_LOS_MARKER_LARGE_STEP_3D_OBJECT	(OBJECT_3D_INTERCEPT_POINT_RED)
 
+#define MAX_GUN_SHAKE_DEFLECTION  rad(0.1)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1020,6 +1022,8 @@ static entity *get_eo_boresight_target (void)
 void update_common_eo (void)
 {
 	float
+		adjusted_elevation,
+		adjusted_azimuth,
 		flat_range;
 
 	entity
@@ -1096,6 +1100,7 @@ void update_common_eo (void)
 		}
 	}
 
+
 	eo_vp.position = vp.position;
 
 	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
@@ -1135,6 +1140,24 @@ void update_common_eo (void)
 	//
 
 	eo_on_target = new_target != NULL;
+
+	// apply camera shake
+	// do this after check for boresight, otherwise the shaking will make it
+	// lose lock on target
+	if (gun_is_firing)
+	{
+		adjusted_elevation = eo_elevation + sfrand1norm() * MAX_GUN_SHAKE_DEFLECTION;
+		adjusted_azimuth = eo_azimuth + sfrand1norm() * 0.5 * MAX_GUN_SHAKE_DEFLECTION;
+	}
+	else
+	{
+		adjusted_elevation = eo_elevation;
+		adjusted_azimuth = eo_azimuth;
+	}
+
+	eo_vp.position = vp.position;
+	get_3d_transformation_matrix (m, adjusted_azimuth, adjusted_elevation, 0.0);
+	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1170,6 +1193,8 @@ void slew_eo_to_direction(float elevation, float azimuth)
 static void slew_eo(float elevation, float azimuth)
 {
 	float
+		adjusted_elevation,
+		adjusted_azimuth,
 		 delta_eo_azimuth,
 		 frame_delta_eo_azimuth,
 		 delta_eo_elevation,
@@ -1194,11 +1219,22 @@ static void slew_eo(float elevation, float azimuth)
 	frame_delta_eo_elevation = bound (delta_eo_elevation, -frame_slew_rate, frame_slew_rate);
 	eo_elevation += frame_delta_eo_elevation;
 
+	// apply camera shake
+	if (gun_is_firing)
+	{
+		adjusted_elevation = eo_elevation + sfrand1norm() * MAX_GUN_SHAKE_DEFLECTION;
+		adjusted_azimuth = eo_azimuth + sfrand1norm() * 0.5 * MAX_GUN_SHAKE_DEFLECTION;
+	}
+	else
+	{
+		adjusted_elevation = eo_elevation;
+		adjusted_azimuth = eo_azimuth;
+	}
+
 	eo_vp.position = vp.position;
 
-	get_3d_transformation_matrix (m, eo_azimuth, eo_elevation, 0.0);
+	get_3d_transformation_matrix (m, adjusted_azimuth, adjusted_elevation, 0.0);
 	multiply_matrix3x3_matrix3x3 (eo_vp.attitude, m, vp.attitude);
-
 
 	eo_on_target = FALSE;
 
