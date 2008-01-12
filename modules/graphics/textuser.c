@@ -4064,9 +4064,10 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 */
 		mipmap = ddsh.dwMipMapCount;
 
-		if ( mipmap <= 1 )
+		if ( mipmap < 1 )
 		{
-		 	debug_fatal("Only mipmapped dds files allowed, use bmps otherwise: %s",full_override_texture_filename);
+			mipmap = 1;
+//		 	debug_fatal("Only mipmapped dds files allowed, use bmps otherwise: %s",full_override_texture_filename);
 		}
 
 		//eech-new\modules\graphics\textsys.h
