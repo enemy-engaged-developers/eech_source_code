@@ -1113,7 +1113,10 @@ void update_common_eo (void)
 
 	update_eo_visibility ();
 
-	new_target = get_eo_boresight_target ();
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
+		new_target = NULL;
+	else
+		new_target = get_eo_boresight_target ();
 
 	if (eo_target_locked)
 	{
