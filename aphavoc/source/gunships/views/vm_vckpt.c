@@ -2278,19 +2278,35 @@ void draw_virtual_cockpit_3d_hud_view (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void draw_virtual_cockpit_3d_periscope_view (void)
 {
+	int
+		x_min,
+		x_max,
+		x_excess;
+
+	
 	ASSERT (get_gunship_entity ());
 
-	ASSERT (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM);
-
-	draw_hokum_virtual_cockpit_periscope_view ();
-
-	draw_hokum_virtual_cockpit_periscope_mask ();
-
-	draw_hokum_virtual_cockpit_periscope_symbology ();
-
+	switch (get_global_gunship_type())
+	{
+	case  GUNSHIP_TYPE_APACHE:
+		x_excess = ((full_screen_x_max - full_screen_x_min) - (full_screen_y_max - full_screen_y_min)) / 2;
+		x_min = full_screen_x_min + x_excess;
+		x_max = full_screen_x_max - x_excess;
+	
+		draw_apache_virtual_cockpit_ort_view(x_min, x_max - x_excess);
+		draw_virtual_cockpit_periscope_mask (x_min, x_max, TRUE);
+		draw_apache_virtual_cockpit_ort_symbology();
+		break;
+	case GUNSHIP_TYPE_HOKUM:
+		draw_hokum_virtual_cockpit_periscope_view ();
+		draw_virtual_cockpit_periscope_mask (full_screen_x_min, full_screen_x_max, FALSE);
+		draw_hokum_virtual_cockpit_periscope_symbology ();
+		break;
+	default:
+		ASSERT(FALSE);
+	}
 	//
 	// restore virtual cockpit 3D instance
 	//

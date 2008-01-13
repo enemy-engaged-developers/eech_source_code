@@ -81,6 +81,7 @@ static mfd_modes
 
 static void draw_high_action_display (entity* target, int fill_boxes);
 static void display_waypoint_information (rgb_colour box_colour);
+static const char* get_weapon_status(char* buffer, unsigned buffer_len);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,6 +141,9 @@ static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NU
 
 #define MFD_TEXTURE_SMALL_SIZE			(128)
 #define MFD_TEXTURE_LARGE_SIZE			(256)
+
+#define ALNUM_DISPLAY_WIDTH   256
+#define ALNUM_DISPLAY_HEIGHT   64
 //#define MFD_TEXTURE_SIZE			(128)
 
 //#define MFD_VIEWPORT_TEXTURE_X_ORG	(MFD_TEXTURE_SIZE / 2)
@@ -184,6 +188,7 @@ static screen
 	*ort_texture_screen,
 	*lhs_overlaid_mfd_texture_screen,
 	*rhs_overlaid_mfd_texture_screen,
+	*alnum_display_screen,
 	*eo_3d_texture_screen;
 
 static rgb_colour
@@ -1115,6 +1120,7 @@ void initialise_apache_mfd (void)
 	}
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	alnum_display_screen = create_system_texture_screen(ALNUM_DISPLAY_WIDTH, ALNUM_DISPLAY_HEIGHT, TEXTURE_INDEX_AVCKPT_ALNUM_DISPLAY, TEXTURE_TYPE_NOALPHA);
 
 	set_rgb_colour (MFD_COLOUR1,   0, 255,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,   0, 200,   0, 255);
@@ -1184,6 +1190,8 @@ void deinitialise_apache_mfd (void)
 
 	destroy_screen (lhs_overlaid_mfd_texture_screen);
 	destroy_screen (rhs_overlaid_mfd_texture_screen);
+	
+	destroy_screen (alnum_display_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2310,7 +2318,7 @@ static void draw_ground_radar_mfd (void)
 	////////////////////////////////////////
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	draw_high_action_display(target, FALSE);
+	draw_high_action_display(target, 1);
 
 	////////////////////////////////////////
 	//
@@ -2941,38 +2949,18 @@ static display_3d_noise_levels
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system, mfd_locations location)
+static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 {
-	float
-		fov = 18.0;
-
-	display_3d_light_levels
-		light_level;
-
-	display_3d_noise_levels
-		noise_level;
-
-	vec3d
-		*position;
-
-	weathermodes
-		weather_mode;
-
-	day_segment_types
-		day_segment_type;
-
-	int
-		tint;
-
-	ASSERT (eo);
-
+	float fov = 10.0;
 	
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_ZOOM:
 		{
-			ASSERT(system == TARGET_ACQUISITION_SYSTEM_FLIR);
-			fov = 1.6;
+			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
+				fov = 1.6;
+			else  // DTV
+				fov = 0.45;
 
 			break;
 		}
@@ -3011,14 +2999,40 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
+	return fov;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void set_eo_view_params(target_acquisition_systems system, int x_min, int y_min, int x_max, int y_max, float xfov, float yfov)
+{
+	display_3d_light_levels
+		light_level;
+
+	display_3d_noise_levels
+		noise_level;
+
+	vec3d
+		*position;
+
+	weathermodes
+		weather_mode;
+
+	day_segment_types
+		day_segment_type;
+
+	int
+		tint;
+
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
 	weather_mode = get_simple_session_weather_at_point (position);
-
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
 	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
-
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
 	switch (system)
@@ -3026,9 +3040,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
 		{
 			light_level = flir_light_levels[weather_mode][day_segment_type];
-
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
-
 			tint = DISPLAY_3D_TINT_GREEN;
 
 			break;
@@ -3036,9 +3048,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		{
 			light_level = dtv_light_levels[weather_mode][day_segment_type];
-
 			noise_level = dtv_noise_levels[weather_mode][day_segment_type];
-
 			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
 
 			break;
@@ -3046,10 +3056,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		case TARGET_ACQUISITION_SYSTEM_DVO:
 		{
 			light_level = dvo_light_levels[weather_mode][day_segment_type];
-
 			noise_level = dvo_noise_levels[weather_mode][day_segment_type];
-
-			tint = DISPLAY_3D_TINT_GREEN_VISUAL;
+			tint = DISPLAY_3D_TINT_CLEAR;
 
 			break;
 		}
@@ -3061,10 +3069,87 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
+	set_main_3d_params (tint, light_level, noise_level, x_min, y_min, x_max, y_max, xfov, yfov);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_apache_virtual_cockpit_ort_view (int x_min, int x_max)
+{
+	float
+		fov;
+	
+	eo_params*
+		eo;
+
+	target_acquisition_systems
+		system;
+
+	rgb_colour
+		black;
+
+	int
+		damaged = FALSE;
+
+	switch (get_mfd_mode_for_eo_sensor())
+	{
+	default:
+	case MFD_MODE_FLIR:
+		eo = &apache_flir;
+		system = TARGET_ACQUISITION_SYSTEM_FLIR;
+		damaged = apache_damage.flir;
+		break;
+	case MFD_MODE_DTV:
+		eo = &apache_dtv;
+		system = TARGET_ACQUISITION_SYSTEM_DTV;
+		damaged = apache_damage.dtv;
+		break;
+	case MFD_MODE_DVO:
+		eo = &apache_dvo;
+		system = TARGET_ACQUISITION_SYSTEM_DVO;
+		damaged = apache_damage.dvo;
+		break;
+	}
+
+	black.r = 0;
+	black.g = 0;
+	black.b = 0;
+	black.a = 255;
+
+	// clear background, since we won't be drawing the 3D view over the entire screen
+	set_block(0, 0, full_screen_x_max, full_screen_y_max, black);
+
+	if (!damaged)
+	{
+		fov = rad(get_eo_sensor_fov(eo, system));
+	
+		set_eo_view_params(system, x_min, full_screen_y_min, x_max, full_screen_y_max, fov, fov);
+
+		draw_eo_3d_scene = TRUE;
+		draw_main_3d_scene (&eo_vp);
+		draw_eo_3d_scene = FALSE;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system, mfd_locations location)
+{
+	float
+		fov = 18.0;
+
+	ASSERT (eo);
+
+	fov = rad(get_eo_sensor_fov(eo, system));
+
 	if (draw_large_mfd)
-		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, rad(fov), rad(fov));
+		set_eo_view_params(system, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, MFD_VIEWPORT_LARGE_SIZE, MFD_VIEWPORT_LARGE_SIZE, fov, fov);
 	else
-		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, 128.0, 128.0, rad(fov), rad(fov));
+		set_eo_view_params(system, mfd_viewport_x_min - 1.5, mfd_viewport_y_min - 1.5, 128.0, 128.0, fov, fov);
 
 	draw_eo_3d_scene = TRUE;
 	draw_main_3d_scene (&eo_vp);
@@ -3108,8 +3193,10 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 	{
 		case EO_FOV_ZOOM:
 		{
-			ASSERT(system == TARGET_ACQUISITION_SYSTEM_FLIR);
-			fov = 1.6;
+			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
+				fov = 1.6;
+			else  // DTV
+				fov = 0.45;
 
 			break;
 		}
@@ -3344,8 +3431,6 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	
 	rangefinding_system rangefinder = get_range_finder();
 
-	entity_sub_types weapon_sub_type;
-
 	if (target)
 	{
 		if (rangefinder != RANGEFINDER_TRIANGULATION)
@@ -3367,7 +3452,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	else
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
 
-	if (fill_boxes)
+	if (fill_boxes == 2)
 	{
 		rgb_colour bg_colour;
 
@@ -3376,7 +3461,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 		draw_bordered_box(-0.98, -1.0, -0.35, -0.8, bg_colour, MFD_COLOUR1);
 		draw_bordered_box(0.98, -1.0, 0.35, -0.8, bg_colour, MFD_COLOUR1);
 	}
-	else
+	else if (fill_boxes == 1)
 	{
 		draw_box(-0.98, -1.0, -0.35, -0.8, FALSE, MFD_COLOUR1);
 		draw_box(0.98, -1.0, 0.35, -0.8, FALSE, MFD_COLOUR1);
@@ -3405,6 +3490,25 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 		set_2d_mono_font_position (0.0, -0.7);
 		set_mono_font_rel_position (-width * 0.5, 0);
 		print_mono_font_string (s);
+	}
+
+	// airspeed and altitude
+	{
+		int airspeed = (int)knots(current_flight_dynamics->velocity_z.value);
+		int altitude = get_apache_display_radar_altitude();
+
+		sprintf(buffer, "%3d", airspeed);
+		set_2d_mono_font_position (-0.7, -0.72);
+		set_mono_font_rel_position (0, 0);
+		print_mono_font_string (buffer);
+
+		if (altitude < 1500.0)
+		{
+			sprintf(buffer, "%4d", altitude);
+			set_2d_mono_font_position (0.4, -0.72);
+			set_mono_font_rel_position (0, 0);
+			print_mono_font_string (buffer);
+		}
 	}
 
 	// lower left box:
@@ -3446,7 +3550,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	print_mono_font_string (buffer);
 
 	// targeting status
-	
+
 	switch (weapon_lock_type)
 	{
 		case WEAPON_LOCK_NO_ACQUIRE:
@@ -3496,87 +3600,23 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	// lower right box:
 	// weapon type
 	// launch mode
-	weapon_sub_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
-	switch (weapon_sub_type)
-	{
-		case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
-			s = "CANNON";
-			break;
-		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
-		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
-			s = "MSL";
-			break;
-		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
-		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
-			s = "RKT";
-			break;
-		case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
-			s = "ATA";
-			break;
-		case ENTITY_SUB_TYPE_WEAPON_NO_WEAPON:
-		default:
-			s = "NONE";
-			break;
-	}
+
+	s = get_weapon_status(buffer, sizeof(buffer));
 
 	set_2d_mono_font_position (0.37, -0.83);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0);
 	print_mono_font_string (s);
 
-	// launch mode
-	s = NULL;
-	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE || ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II)
-	{
-		float flight_time = get_apache_missile_flight_time ();
-
-		if (flight_time > 0.01)
-		{
-			flight_time = bound (flight_time, 0.0, 99.9);
-			sprintf (buffer, "TOF:%.0f", flight_time);
-			s = buffer;
-		}
-	}
-
-	if (!s)
-		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
-			s = "LOAL-HI";
-		else
-			s = "LOBL";
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+		s = "LOAL-HI";
+	else
+		s = "LOBL";
 
 	set_2d_mono_font_position (0.37, -0.83);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 9);
 	print_mono_font_string (s);
-
-
-
-	/*
-
-	//
-	// target range
-	//
-
-	if (target)
-	{
-		if ((target_range < 1000.0) && (!apache_damage.laser_designator))
-		{
-			sprintf (buffer, "%dm", (int) target_range);
-		}
-		else
-		{
-			sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-		}
-
-		width = get_mono_font_string_width (buffer);
-
-		set_2d_mono_font_position (0.8, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string (buffer);
-	}
-	*/
 
 	////////////////////////////////////////
 	//
@@ -3786,7 +3826,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 	}
 
-	draw_high_action_display (target, TRUE);
+	draw_high_action_display (target, scaled_3d ? 0 : 2);
 
 	////////////////////////////////////////
 	//
@@ -3806,20 +3846,12 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// datum
 	//
 
-//	if (draw_large_mfd)
 	{
 		draw_2d_line (-0.200, 0.0, -0.050, 0.0, MFD_COLOUR1);
 		draw_2d_line (0.050, 0.0, 0.20, 0.0, MFD_COLOUR1);
 		draw_2d_line (0.0, -0.200, 0.0, -0.050, MFD_COLOUR1);
 		draw_2d_line (0.0, 0.050, 0.0, 0.20, MFD_COLOUR1);
 	}
-/*	else
-	{
-		draw_2d_line (-0.075, 0.0, -0.025, 0.0, MFD_COLOUR1);
-		draw_2d_line (0.035, 0.0, 0.09, 0.0, MFD_COLOUR1);
-		draw_2d_line (0.0, -0.075, 0.0, -0.025, MFD_COLOUR1);
-		draw_2d_line (0.0, 0.035, 0.0, 0.09, MFD_COLOUR1);
-	}*/
 
 	//
 	// target gates
@@ -3837,6 +3869,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			visibility = get_position_3d_screen_coordinates (&target_point, &i, &j);
 
+			//debug_log("i: %d, j: %d", i, j);
+//			debug_log("i: %.2f, i: %.2f", i, j);
+				
 			if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 			{
 				if (scaled_3d)
@@ -3849,6 +3884,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 				}
 
 				get_2d_world_position (i, j, &x, &y);
+
+//				debug_log("x: %.2f, y: %.2f", x, y);
 
 				draw_2d_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
 				draw_2d_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
@@ -10047,7 +10084,6 @@ static void display_altitude (void)
 {
 	float
 		radar_altitude,
-		barometric_altitude,
 		width;
 
 	char
@@ -10057,11 +10093,11 @@ static void display_altitude (void)
 
 	if (radar_altitude <= 1500.0)
 	{
-		sprintf (s, "R%d", (int) radar_altitude);
+		sprintf (s, "R%d", get_apache_display_radar_altitude());
 	}
 	else
 	{
-		barometric_altitude = feet (current_flight_dynamics->barometric_altitude.value);
+		int barometric_altitude = 10 * (int)((feet(current_flight_dynamics->barometric_altitude.value) + 5.0) / 10.0);
 
 		sprintf (s, "%d", (int) barometric_altitude);
 	}
@@ -10470,6 +10506,398 @@ static void draw_flight_display_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_alnum_weapons(void)
+{
+	int pylon;
+	char weapons_status[8][4];  // all missile positions.  two rows of eight missiles, two chars per missile
+	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
+	int i,j;
+	float x, y;
+	int string_width = get_mono_font_string_width("1234567");
+
+	memset(weapons_status, ' ', sizeof(weapons_status));
+
+	for (pylon = APACHE_LHS_INNER_PYLON; pylon <= APACHE_RHS_OUTER_PYLON; pylon++)
+	{
+		entity_sub_types weapon_sub_type;
+		int number, damaged;
+		int pylon_index = 0;
+		
+		if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+			pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
+			&weapon_sub_type, &number, &damaged))
+		{
+			switch (pylon)
+			{
+			case APACHE_LHS_OUTER_PYLON:
+				pylon_index = 0;
+				break;
+			case APACHE_LHS_INNER_PYLON:
+				pylon_index = 2;
+				break;
+			case APACHE_RHS_INNER_PYLON:
+				pylon_index = 4;
+				break;
+			case APACHE_RHS_OUTER_PYLON:
+				pylon_index = 6;
+				break;
+			}
+	
+			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+			{
+				// outer missiles are fired first, so need to know which side the pylon is on
+				int right_side = pylon == APACHE_RHS_INNER_PYLON || pylon == APACHE_RHS_OUTER_PYLON;
+				
+				if (damaged || selected_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				{
+					char* status = damaged ? "FAIL" : "SAFE";
+					for (i=0; i<4; i++)
+					{
+						weapons_status[pylon_index    ][i] = status[i];
+						weapons_status[pylon_index + 1][i] = status[i];
+					}
+				}
+				else
+				{
+					// From AH-64A flight manual.  First letter is type (L for Laser, R for Radar), second is status (T for Tracking, R for Ready)
+					char type = (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) ? 'R' : 'L';
+					char status = ((type == 'L') && (weapon_lock_type == WEAPON_LOCK_VALID)) ? 'T' : 'R';
+
+					switch (number)
+					{
+					case 4:
+						weapons_status[pylon_index + right_side][0] = type;
+						weapons_status[pylon_index + right_side][1] = status;
+					case 3:
+						weapons_status[pylon_index + !right_side][0] = type;
+						weapons_status[pylon_index + !right_side][1] = status;
+					case 2:
+						weapons_status[pylon_index + right_side][2] = type;
+						weapons_status[pylon_index + right_side][3] = status;
+					case 1:
+						weapons_status[pylon_index + !right_side][2] = type;
+						weapons_status[pylon_index + !right_side][3] = status;
+					}
+				}
+			}
+		}
+	}
+
+	// print the missiles statuses
+	y = 0.8;
+	for (j = 0; j < 4; j++)
+	{
+		float line_height = 0.45;
+		char buffer[20];
+
+		// left side missiles
+		x = -0.85;
+		sprintf(buffer, "%c %c %c %c", weapons_status[0][j], weapons_status[1][j], weapons_status[2][j], weapons_status[3][j]);
+		set_2d_mono_font_position(x, y);
+		set_mono_font_rel_position(-string_width / 2, 0);
+		print_mono_font_string(buffer);
+		
+		// right side missiles
+		x = -x;
+		sprintf(buffer, "%c %c %c %c", weapons_status[4][j], weapons_status[5][j], weapons_status[6][j], weapons_status[7][j]);
+		set_2d_mono_font_position(x, y);
+		set_mono_font_rel_position(-string_width / 2, 0);
+		print_mono_font_string(buffer);
+
+		y -= line_height;
+	}
+}
+
+static const char* get_sight_status(void)
+{
+	// sight status
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		if (apache_damage.flir)
+			return "FLIR FAIL";
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+		if (apache_damage.dtv)
+			return "TV FAIL";
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+		if (apache_damage.dvo)
+			return "DVO FAIL";
+		break;	
+	}
+
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR
+		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV
+		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
+	{
+		if (eo_target_locked)
+			return "RECORDING";
+		else
+			return "BORESIGHT";
+	}
+	else
+		return "SLAVE TG";
+}
+
+static const char* get_weapon_status(char* buffer, unsigned buffer_len)
+{
+	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
+
+	switch (selected_weapon)
+	{
+	case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
+		{
+			int number = get_local_entity_weapon_count (get_gunship_entity (), selected_weapon);
+			if (apache_damage.gun_jammed)
+				return "GUN FAIL";
+
+			snprintf(buffer, buffer_len, "RNDS%4d", number);
+			return buffer;
+		}
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
+	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
+		return "ROCKETS";
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
+	case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		{
+			float flight_time;
+
+			flight_time = get_apache_missile_flight_time();
+			if (flight_time <= 0.0)  // no missiles in flight
+				return "MSL LNCH";
+
+			snprintf(buffer, buffer_len, "TOF=%d", (int)(flight_time + 0.5));
+			return buffer;
+		}
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+		return "ATA";
+		break;
+	}
+
+	return "";
+}
+
+static const char* get_tracker_status(void)
+{
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR
+		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV
+		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
+	{
+		if (laser_is_active())
+			return "LASE...TARGET";
+		if (eo_target_locked)
+			return "IAT TRACKING";
+	
+		// TODO: add this when we implement locking onto random terrain
+		// return "IAT OFFSET";
+	}
+
+	return "TADS FORWARD";
+	
+	// TODO add Laser spot tracking if we implement tracking other units' lasers
+}
+
+static const char* get_lst_and_lrf_codes_status(void)
+{
+#if 0  // enable this if we add laser spot tracker
+	if (laser_spot_tracker_is_active())
+		return "LST=C RFD=D";
+	else
+#endif
+
+	if (!apache_damage.laser_designator)
+		return "RFD=D";
+	else
+		return "";
+}
+
+static void draw_apache_ort_symbology(int dummy)
+{
+	// TODO: check for damage
+	switch (eo_sensor)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+		draw_2d_flir_mfd(TRUE, TRUE);
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+		draw_2d_dtv_mfd(TRUE, TRUE);
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+		{
+			// DVO doesn't have symbology over image, just a simple cross
+			draw_2d_line (-1.00, 0.0, -0.10, 0.0, sys_col_white);
+			draw_2d_line (0.10, 0.0, 1.00, 0.0, sys_col_white);
+			draw_2d_line (0.0, -1.00, 0.0, -0.10, sys_col_white);
+			draw_2d_line (0.0, 0.10, 0.0, 1.00, sys_col_white);
+		}
+
+		break;
+	}
+}
+
+static void draw_apache_tads_alnum_display(int dummy)
+{
+	draw_2d_line(-1.1, 1.1, 1.1, 1.1, sys_col_white);
+	draw_2d_line(-1.1, -1.1, -1.1, 1.1, sys_col_white);
+	draw_2d_line(-1.1, -1.1, -1.1, 1.1, sys_col_white);
+	draw_2d_line(1.1, -1.1, 1.1, 1.1, sys_col_white);
+
+	draw_2d_line(-0.6, -1.1, -0.6, 1.1, sys_col_white);
+	draw_2d_line(0.6, -1.1, 0.6, 1.1, sys_col_white);
+
+	set_mono_font_colour(sys_col_white);
+	set_mono_font_type(MONO_FONT_TYPE_5X9);
+
+	// weapons 
+	draw_alnum_weapons();
+
+	// text status displays
+	{
+		char buffer[80];
+		const char *s = NULL;
+		float x = -0.55;
+		float y = 0.8;
+		float line_height = 0.45;
+
+		s = get_sight_status();
+		set_2d_mono_font_position(x, y);
+		set_mono_font_rel_position(0, 0);
+		print_mono_font_string(s);
+
+		// weapon status
+		s = get_weapon_status(buffer, sizeof(buffer));
+		set_2d_mono_font_position(0.0, y);
+		print_mono_font_string(s);
+
+		y -= line_height;
+		
+		// tracker status
+		s = get_tracker_status();
+		set_2d_mono_font_position(x, y);
+		print_mono_font_string(s);
+		
+		y -= line_height;
+
+		// get spot tracker and range finder codes
+		s = get_lst_and_lrf_codes_status();
+		set_2d_mono_font_position(x, y);
+		print_mono_font_string(s);
+	}
+}
+
+void draw_apache_virtual_cockpit_ort_symbology(void)
+{
+	int
+		mfd_screen_x_min, mfd_screen_y_min, mfd_screen_x_max, mfd_screen_y_max;
+
+	rgb_colour
+		background_colour,
+		symbology_colour;
+
+	set_3d_active_environment (main_3d_env);
+
+	//
+	// set up MFD 2D environment
+	//
+
+	set_2d_active_environment (mfd_env);
+	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	draw_large_mfd = TRUE;
+	mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+
+	mfd_viewport_x_org = MFD_VIEWPORT_LARGE_SIZE * 0.5;
+	mfd_viewport_y_org = MFD_VIEWPORT_LARGE_SIZE * 0.5;
+
+	mfd_viewport_x_min = 0.0;
+	mfd_viewport_y_min = 0.0;
+
+	mfd_viewport_x_max = MFD_VIEWPORT_LARGE_SIZE - 0.001;
+	mfd_viewport_y_max = MFD_VIEWPORT_LARGE_SIZE - 0.001;
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+	mfd_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
+	mfd_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
+
+	mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
+	mfd_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+
+	i_translate_3d = mfd_screen_x_min;
+	j_translate_3d = mfd_screen_y_min;
+
+	i_scale_3d = 640.0 / full_screen_width;
+	j_scale_3d = 480.0 / full_screen_height;
+
+	if (eo_sensor == TARGET_ACQUISITION_SYSTEM_DVO)
+	{
+		set_rgb_colour(symbology_colour, 160, 160, 160, 192);
+	}
+	else
+	{
+		set_rgb_colour(symbology_colour, 96, 192, 96, 255);
+	}
+	set_rgb_colour(background_colour, 255, 255, 255, 0);
+
+	draw_symbology_to_texture(
+		rhs_mfd_texture_screen,
+		TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD,
+		mfd_viewport_size,
+		mfd_viewport_size,
+		mfd_screen_x_min,
+		mfd_screen_y_min,
+		mfd_screen_x_max,
+		mfd_screen_y_max,
+		symbology_colour,
+		background_colour,
+		draw_apache_ort_symbology);
+	
+	
+	// Draw alphanumerical display part of ORT view	set_2d_window (mfd_env, MFD_WINDOW_X_MIN, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX, MFD_WINDOW_Y_MAX);
+
+	mfd_viewport_x_org = ALNUM_DISPLAY_WIDTH * 0.5;
+	mfd_viewport_y_org = ALNUM_DISPLAY_HEIGHT * 0.5;
+
+	mfd_viewport_x_min = 0.0;
+	mfd_viewport_y_min = 0.0;
+
+	mfd_viewport_x_max = ALNUM_DISPLAY_WIDTH - 0.001;
+	mfd_viewport_y_max = ALNUM_DISPLAY_HEIGHT - 0.001;
+
+	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
+
+	mfd_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
+	mfd_screen_y_min = full_screen_y_max - ((128.0 / (480.0 * 2.0)) * full_screen_height);
+
+	mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
+	mfd_screen_y_max = full_screen_y_max - 0.001;
+
+//	set_rgb_colour(symbology_colour, 32, 192, 32, 255);
+	set_rgb_colour(symbology_colour, 220, 64, 64, 255);
+	set_rgb_colour(background_colour, 0, 0, 0, 255);
+
+	draw_symbology_to_texture(
+		alnum_display_screen,
+		TEXTURE_INDEX_AVCKPT_ALNUM_DISPLAY,
+		ALNUM_DISPLAY_WIDTH,
+		ALNUM_DISPLAY_HEIGHT,
+		mfd_screen_x_min,
+		mfd_screen_y_min,
+		mfd_screen_x_max,
+		mfd_screen_y_max,
+		symbology_colour,
+		background_colour,
+		draw_apache_tads_alnum_display);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // DRAW MFD ON TEXTURE
 //
@@ -10692,20 +11120,26 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		case MFD_MODE_DVO:
 		////////////////////////////////////////
 		{
+			int damaged;
+
 			switch (eo_sensor)
 			{
 			case TARGET_ACQUISITION_SYSTEM_FLIR:
 				*mfd_mode = MFD_MODE_FLIR;
+				damaged = apache_damage.flir;
 				break;
 			case TARGET_ACQUISITION_SYSTEM_DTV:
 				*mfd_mode = MFD_MODE_DTV;
+				damaged = apache_damage.dtv;
 				break;
 			case TARGET_ACQUISITION_SYSTEM_DVO:
+				ASSERT(location == MFD_LOCATION_ORT);  // only ORT can view DVO
 				*mfd_mode = MFD_MODE_DVO;
+				damaged = apache_damage.dvo;
 				break;
 			}
 			
-			if ((d3d_can_render_to_texture) && (!apache_damage.flir))
+			if ((d3d_can_render_to_texture) && !damaged)
 			{
 				ASSERT (eo_3d_texture_screen);
 

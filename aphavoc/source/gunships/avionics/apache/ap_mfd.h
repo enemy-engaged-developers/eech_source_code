@@ -74,6 +74,8 @@ extern void draw_apache_mfd_on_cockpit (float x_org, float y_org, int large_mfd,
 
 extern void draw_apache_mfd_on_texture (mfd_locations location);
 
+extern void draw_apache_virtual_cockpit_ort_view (int x_min, int x_max);
+
 extern void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locations location);
 
 extern void select_next_apache_tsd_ase_range (void);
@@ -117,6 +119,8 @@ extern int get_apache_tads_display_visible (void);
 extern void create_apache_pfz(int is_nfz);
 
 extern void set_radar_zoomed(int zoomed);
+
+extern void draw_apache_virtual_cockpit_ort_symbology(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
