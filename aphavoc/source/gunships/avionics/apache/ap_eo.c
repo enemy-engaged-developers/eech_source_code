@@ -96,10 +96,10 @@ void initialise_apache_eo (void)
 	apache_flir.max_field_of_view	= EO_FOV_WIDE;
 
 	apache_dtv.field_of_view		= EO_FOV_MEDIUM;
-	apache_dtv.min_field_of_view	= EO_FOV_NARROW;
+	apache_dtv.min_field_of_view	= EO_FOV_ZOOM;
 	apache_dtv.max_field_of_view	= EO_FOV_MEDIUM;
 
-	apache_dvo.field_of_view		= EO_FOV_MEDIUM;
+	apache_dvo.field_of_view		= EO_FOV_WIDE;
 	apache_dvo.min_field_of_view	= EO_FOV_MEDIUM;
 	apache_dvo.max_field_of_view	= EO_FOV_WIDE;
 };
