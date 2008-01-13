@@ -410,11 +410,12 @@ static int view_mode_available (view_modes mode)
 			{
 				if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
 				{
-					if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
+					if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM
+						|| get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
 					{
 						if (get_crew_role () == CREW_ROLE_CO_PILOT)
 						{
-							if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+							if (get_global_gunship_type () == GUNSHIP_TYPE_APACHE || target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
 							{
 								available = TRUE;
 							}
@@ -722,6 +723,14 @@ static void leave_view_mode (view_modes mode)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
+			// DVO only available in ORT view
+			if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE
+				&& !get_global_simple_avionics ()
+				&& target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
+			{
+				select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DTV);
+			}
+			
 			break;
 		}
 		////////////////////////////////////////
@@ -1415,7 +1424,8 @@ static void enter_view_mode (view_modes mode)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
-			if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
+			if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM
+				|| get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
 			{
 				pilot_head_heading = HOKUM_INSTRUMENT_VIEW_HEADING;
 
