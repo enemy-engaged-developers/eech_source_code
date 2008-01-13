@@ -346,14 +346,14 @@ void update_apache_virtual_cockpit (void)
 
 static void animate_pnvs(object_3d_instance* inst3d)
 {
-#define PNVS_MOVEMENT_RATE  PI
+#define PNVS_MOVEMENT_RATE  (0.67 * PI)   // 120 deg per second
 	float heading = 0.0, current_heading, heading_movement;
 	object_3d_sub_instance* pnvs_object = &inst3d->sub_objects[0].sub_objects[0];  // hacky way of getting the pnvs sub object
 
 	if (night_vision_system_active)
 		heading = -pilot_head_heading;
 	else
-		heading = rad(-135);   // PNVS is stowed pointing to the back and left when not active
+		heading = rad(-120);   // PNVS is stowed pointing to the back and left when not active
 
 	current_heading = pnvs_object->relative_heading;
 	heading_movement = heading - pnvs_object->relative_heading;
