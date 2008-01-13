@@ -494,10 +494,12 @@ float get_apache_missile_flight_time (void)
 	en = get_gunship_entity ();
 
 	//
-	// find most recently launched Hellfire with a target (first found on list)
+	// find first launched Hellfire with a target (first found on list)
 	//
 
 	weapon = get_local_entity_first_child (en, LIST_TYPE_LAUNCHED_WEAPON);
+	if (weapon)
+		weapon = get_local_entity_child_pred_circular(weapon, LIST_TYPE_LAUNCHED_WEAPON);
 
 	while (weapon)
 	{
@@ -509,13 +511,17 @@ float get_apache_missile_flight_time (void)
 
 			if (target)
 			{
+				float cruise_velocity = weapon_database[weapon_sub_type].cruise_velocity * 0.75;
+				
 				weapon_position = get_local_entity_vec3d_ptr (weapon, VEC3D_TYPE_POSITION);
-
 				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
 				target_range = get_3d_range (weapon_position, target_position);
 
-				weapon_velocity = get_local_entity_float_value (weapon, FLOAT_TYPE_VELOCITY);
+				// if rocket still burning and accelerating, use cruise velocity
+				if (get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME) > 0.0)
+					weapon_velocity = cruise_velocity;
+				else
+					weapon_velocity = bound(get_local_entity_float_value (weapon, FLOAT_TYPE_VELOCITY), 0.0, cruise_velocity);
 
 				if (weapon_velocity > 0.0)
 				{
@@ -526,7 +532,7 @@ float get_apache_missile_flight_time (void)
 			}
 		}
 
-		weapon = get_local_entity_child_succ (weapon, LIST_TYPE_LAUNCHED_WEAPON);
+		weapon = get_local_entity_child_pred (weapon, LIST_TYPE_LAUNCHED_WEAPON);
 	}
 
 	return (flight_time);
