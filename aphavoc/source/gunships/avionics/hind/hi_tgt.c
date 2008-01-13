@@ -693,7 +693,7 @@ void toggle_hind_lock_target (void)
 
 			if (hms_target_locked)
 			{
-				if (in_cockpit)
+				if (in_cockpit && !query_TIR_active())
 				{
 					set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET);
 				}

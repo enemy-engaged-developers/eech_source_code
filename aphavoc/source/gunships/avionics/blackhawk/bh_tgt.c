@@ -745,7 +745,7 @@ void toggle_blackhawk_lock_target (void)
 		{
 			hms_target_locked ^= 1;
 
-			if (hms_target_locked)
+			if (hms_target_locked && !query_TIR_active())
 			{
 				if (in_cockpit)
 				{
