@@ -1418,17 +1418,16 @@ static void display_true_airspeed (void)
 static void display_barometric_altitude (void)
 {
 	float
-		barometric_altitude,
 		width;
 
 	char
 		s[20];
 
-	barometric_altitude = feet (current_flight_dynamics->barometric_altitude.value);
+	int barometric_altitude = 10 * (int)((feet(current_flight_dynamics->barometric_altitude.value) + 5.0) / 10.0);
 
 	set_mono_font_type (MONO_FONT_TYPE_6X10);
 
-	sprintf (s, "%d", (int) barometric_altitude);
+	sprintf (s, "%d", barometric_altitude);
 
 	width = get_mono_font_string_width (s);
 
@@ -1532,7 +1531,7 @@ static void draw_rate_of_climb_scale (void)
 	{
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-		sprintf (s, "%d", (int) radar_altitude);
+		sprintf (s, "%d", get_apache_display_radar_altitude());
 
 		width = get_mono_font_string_width (s);
 
@@ -3337,3 +3336,13 @@ void draw_apache_hud (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int get_apache_display_radar_altitude(void)
+{
+	float radar_altitude = feet (current_flight_dynamics->radar_altitude.value);
+	
+	if (radar_altitude <= 50.0)
+		return (int)(radar_altitude + 0.5);
+	else
+		return 10 * (int)((radar_altitude + 5.0) / 10.0);
+}
