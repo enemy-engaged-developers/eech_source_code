@@ -9191,12 +9191,8 @@ void draw_hokum_virtual_cockpit_periscope_view (void)
 
 void draw_hokum_virtual_cockpit_periscope_symbology (void)
 {
-	vertex
-		quad[4];
-
 	real_colour
-		colour,
-		specular;
+		colour;
 
 	//
 	// set active 3D environment now else 2D clipping will be affected
@@ -9263,122 +9259,20 @@ void draw_hokum_virtual_cockpit_periscope_symbology (void)
 	// draw MFD on texture
 	//
 
-	set_active_screen (full_mfd_texture_screen);
+	set_rgb_colour(colour, 255, 255, 255, 255);
 
-	if (lock_screen (full_mfd_texture_screen))
-	{
-		rgb_colour
-			store_mfd_colour;
-
-		store_mfd_colour = MFD_COLOUR1;
-
-		set_rgb_colour (MFD_COLOUR1, 255, 255, 255, 255);
-
-      set_block (0, 0, LARGE_MFD_VIEWPORT_SIZE - 1, LARGE_MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
-
-		draw_layout_grid ();
-
-		draw_2d_periscope_mfd (TRUE);
-
-		MFD_COLOUR1 = store_mfd_colour;
-
-		flush_screen_texture_graphics (full_mfd_texture_screen);
-
-		unlock_screen (full_mfd_texture_screen);
-	}
-
-	set_active_screen (video_screen);
-
-	//
-	// render MFD to screen
-	//
-
-	set_3d_active_environment (main_3d_env);
-
-	if (begin_3d_scene ())
-	{
-		set_d3d_transparency_on ();
-
-		set_d3d_zbuffer_comparison (FALSE);
-
-		set_d3d_culling (FALSE);
-
-		set_d3d_texture_wrapping (0, FALSE);
-
-		if ((application_video_width == 640) || (get_global_unscaled_displays ()))
-		{
-			set_d3d_texture_mag_filtering (FALSE);
-			set_d3d_texture_min_filtering (FALSE);
-			set_d3d_texture_mip_filtering (FALSE);
-		}
-		else
-		{
-			set_d3d_texture_mag_filtering (TRUE);
-			set_d3d_texture_min_filtering (TRUE);
-			set_d3d_texture_mip_filtering (FALSE);
-		}
-
-		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD));
-
-      ////////////////////////////////////////
-      //
-
-		colour.red				= hud_colour_table[get_global_hud_colour ()].r;
-		colour.green			= hud_colour_table[get_global_hud_colour ()].g;
-		colour.blue				= hud_colour_table[get_global_hud_colour ()].b;
-		colour.alpha			= 255;
-
-		specular.red			= 0;
-		specular.green			= 0;
-		specular.blue			= 0;
-		specular.alpha			= 255;
-
-		quad[0].i				= mfd_screen_x_min;
-		quad[0].j	  			= mfd_screen_y_min;
-		quad[0].z	  			= 0.5;
-		quad[0].q	  			= 0.5;
-		quad[0].u	  			= 0.0;
-		quad[0].v	  			= 0.0;
-
-		quad[1].i				= mfd_screen_x_max;
-		quad[1].j  				= mfd_screen_y_min;
-		quad[1].z  				= 0.5;
-		quad[1].q  				= 0.5;
-		quad[1].u  				= 1.0;
-		quad[1].v  				= 0.0;
-
-		quad[2].i				= mfd_screen_x_max;
-		quad[2].j 				= mfd_screen_y_max;
-		quad[2].z  				= 0.5;
-		quad[2].q  				= 0.5;
-		quad[2].u  				= 1.0;
-		quad[2].v  				= 1.0;
-
-		quad[3].i				= mfd_screen_x_min;
-		quad[3].j				= mfd_screen_y_max;
-		quad[3].z				= 0.5;
-		quad[3].q				= 0.5;
-		quad[3].u				= 0.0;
-		quad[3].v				= 1.0;
-
-		quad[0].next_vertex	= &quad[1];
-		quad[1].next_vertex	= &quad[2];
-		quad[2].next_vertex	= &quad[3];
-		quad[3].next_vertex	= NULL;
-
-      //
-      ////////////////////////////////////////
-
-		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
-
-		set_d3d_transparency_off ();
-
-		set_d3d_zbuffer_comparison (TRUE);
-
-		set_d3d_culling (TRUE);
-
-		end_3d_scene ();
-	}
+	draw_symbology_to_texture(
+		full_mfd_texture_screen,
+		TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD,
+		mfd_viewport_size,
+		mfd_viewport_size,
+		mfd_screen_x_min,
+		mfd_screen_y_min,
+		mfd_screen_x_max,
+		mfd_screen_y_max,
+		colour,
+		clear_mfd_colour,
+		draw_2d_periscope_mfd);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

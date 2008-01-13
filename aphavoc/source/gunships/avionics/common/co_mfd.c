@@ -258,3 +258,133 @@ void update_pointer_position (void)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_symbology_to_texture(
+	screen* texture_screen,
+	texture_index_numbers texture_index,
+	int texture_width,
+	int texture_height,
+	int x_min,
+	int y_min,
+	int x_max,
+	int y_max,
+	rgb_colour colour,
+	rgb_colour background_colour,
+	void (*draw_2d_symbols_function)(int))
+{
+	vertex
+		quad[4];
+
+	real_colour
+		specular;
+
+	//
+	// draw MFD on texture
+	//
+
+	set_active_screen (texture_screen);
+
+	if (lock_screen (texture_screen))
+	{
+//		set_block (x_min, y_min, x_max, y_max, clear_colour);
+		set_block (0, 0, texture_width-1, texture_height-1, background_colour);
+
+//		draw_layout_grid ();
+
+		draw_2d_symbols_function(TRUE);
+
+		flush_screen_texture_graphics (texture_screen);
+		unlock_screen (texture_screen);
+	}
+
+	set_active_screen (video_screen);
+
+	//
+	// render MFD to screen
+	//
+
+	set_3d_active_environment (main_3d_env);
+
+	if (begin_3d_scene ())
+	{
+		set_d3d_transparency_on ();
+		set_d3d_zbuffer_comparison (FALSE);
+		set_d3d_culling (FALSE);
+		set_d3d_texture_wrapping (0, FALSE);
+
+		if ((application_video_width == 640) || (get_global_unscaled_displays ()))
+		{
+			set_d3d_texture_mag_filtering (FALSE);
+			set_d3d_texture_min_filtering (FALSE);
+			set_d3d_texture_mip_filtering (FALSE);
+		}
+		else
+		{
+			set_d3d_texture_mag_filtering (TRUE);
+			set_d3d_texture_min_filtering (TRUE);
+			set_d3d_texture_mip_filtering (FALSE);
+		}
+
+//		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_AVCKPT_DISPLAY_ORT));
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (texture_index));
+
+      ////////////////////////////////////////
+      //
+
+/*		colour.red				= hud_colour_table[get_global_hud_colour ()].r;
+		colour.green			= hud_colour_table[get_global_hud_colour ()].g;
+		colour.blue				= hud_colour_table[get_global_hud_colour ()].b;
+		colour.alpha			= 255;
+*/
+		specular.red			= 0;
+		specular.green			= 0;
+		specular.blue			= 0;
+		specular.alpha			= 255;
+
+		quad[0].i				= x_min;
+		quad[0].j	  			= y_min;
+		quad[0].z	  			= 0.5;
+		quad[0].q	  			= 0.5;
+		quad[0].u	  			= 0.0;
+		quad[0].v	  			= 0.0;
+
+		quad[1].i				= x_max;
+		quad[1].j  				= y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 1.0;
+		quad[1].v  				= 0.0;
+
+		quad[2].i				= x_max;
+		quad[2].j 				= y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 1.0;
+		quad[2].v  				= 1.0;
+
+		quad[3].i				= x_min;
+		quad[3].j				= y_max;
+		quad[3].z				= 0.5;
+		quad[3].q				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+      //
+      ////////////////////////////////////////
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		set_d3d_transparency_off ();
+		set_d3d_zbuffer_comparison (TRUE);
+		set_d3d_culling (TRUE);
+		end_3d_scene ();
+	}
+}
