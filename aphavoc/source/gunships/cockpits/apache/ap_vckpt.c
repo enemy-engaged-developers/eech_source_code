@@ -73,6 +73,8 @@
 
 #define DEBUG_MODULE FALSE
 
+#define PNVS_MOVEMENT_RATE  rad(120)   // 120 deg per second
+#define THROTTLE_MOVEMENT_RATE rad(60.0)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -346,7 +348,6 @@ void update_apache_virtual_cockpit (void)
 
 static void animate_pnvs(object_3d_instance* inst3d)
 {
-#define PNVS_MOVEMENT_RATE  (0.67 * PI)   // 120 deg per second
 	float heading = 0.0, current_heading, heading_movement;
 	object_3d_sub_instance* pnvs_object = &inst3d->sub_objects[0].sub_objects[0];  // hacky way of getting the pnvs sub object
 
@@ -368,25 +369,33 @@ static void animate_throttles(object_3d_instance* inst3d)
 	float
 		left_throttle = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0),
 		right_throttle = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0),
+		throttle_movement,
+		max_movement = THROTTLE_MOVEMENT_RATE * get_delta_time(),
 		throttle_angle = 0.0;
 
 	object_3d_sub_instance* cockpit_object = &inst3d->sub_objects[0];
 
 	// left throttle
 	if (left_throttle < 60.0)  // idle at -45 deg
-		throttle_angle = -45.0;
+		throttle_angle = rad(-45.0);
 	else  // otherwise somewhere between -30 and +10 deg
 		throttle_angle = rad(-30.0) + rad(40.0 * (left_throttle - 60.0) / 50.0);
-	cockpit_object->sub_objects[1].relative_pitch = throttle_angle;
-	cockpit_object->sub_objects[3].relative_pitch = throttle_angle;
+
+	throttle_movement = bound(throttle_angle - cockpit_object->sub_objects[1].relative_pitch, -max_movement, max_movement);
+
+	cockpit_object->sub_objects[1].relative_pitch += throttle_movement;
+	cockpit_object->sub_objects[3].relative_pitch += throttle_movement;
 
 	// right throttle
 	if (right_throttle < 60.0)  // idle at -45 deg
-		throttle_angle = -45.0;
+		throttle_angle = rad(-45.0);
 	else  // otherwise somewhere between -30 and +10 deg
 		throttle_angle = rad(-30.0) + rad(40.0 * (right_throttle - 60.0) / 50.0);
-	cockpit_object->sub_objects[2].relative_pitch = throttle_angle;
-	cockpit_object->sub_objects[4].relative_pitch = throttle_angle;
+
+	throttle_movement = bound(throttle_angle - cockpit_object->sub_objects[2].relative_pitch, -max_movement, max_movement);
+
+	cockpit_object->sub_objects[2].relative_pitch += throttle_movement;
+	cockpit_object->sub_objects[4].relative_pitch += throttle_movement;
 }
 
 int apache_pnvs_active(void)
