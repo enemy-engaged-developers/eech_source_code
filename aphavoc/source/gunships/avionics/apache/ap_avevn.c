@@ -129,10 +129,16 @@ static void select_target_acquisition_system_dtv_event (event *ev)
 
 static void select_target_acquisition_system_dvo_event (event *ev)
 {
-	if (!get_global_simple_avionics ())
+	// If ORT is not active then first press activates it
+	if (view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
 	{
-		select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
+		if (!get_global_simple_avionics ())
+		{
+			select_apache_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_DVO);
+		}
 	}
+	else
+		set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
