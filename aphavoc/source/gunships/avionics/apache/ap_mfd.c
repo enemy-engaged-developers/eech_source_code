@@ -10844,6 +10844,8 @@ void draw_apache_virtual_cockpit_ort_symbology(void)
 	}
 	set_rgb_colour(background_colour, 255, 255, 255, 0);
 
+	set_system_texture_screen (rhs_mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+
 	draw_symbology_to_texture(
 		rhs_mfd_texture_screen,
 		TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD,
@@ -10877,7 +10879,6 @@ void draw_apache_virtual_cockpit_ort_symbology(void)
 	mfd_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
 	mfd_screen_y_max = full_screen_y_max - 0.001;
 
-//	set_rgb_colour(symbology_colour, 32, 192, 32, 255);
 	set_rgb_colour(symbology_colour, 220, 64, 64, 255);
 	set_rgb_colour(background_colour, 0, 0, 0, 255);
 
