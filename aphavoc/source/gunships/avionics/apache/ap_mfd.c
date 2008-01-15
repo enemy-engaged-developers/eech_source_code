@@ -3426,26 +3426,10 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	const char* s;
 	char buffer[200];
 
-	float target_range;
-	int x_adjust, width;
-	
 	rangefinding_system rangefinder = get_range_finder();
 
-	if (target)
-	{
-		if (rangefinder != RANGEFINDER_TRIANGULATION)
-		{
-			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-			vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
-			
-			target_range = get_3d_range (source_position, target_position);
-		}
-		else
-			target_range = get_triangulated_range(target);
-	}
-	else
-		target_range = 0.0;
-
+	float target_range = get_range_to_target();
+	int x_adjust, width;
 
 	if (draw_large_mfd)
 		set_mono_font_type (MONO_FONT_TYPE_5X9);
@@ -4736,17 +4720,7 @@ static void draw_tactical_situation_display_mfd (void)
 			rangefinding_system rangefinder = get_range_finder();
 			
 			float
-				target_range;
-
-			if (rangefinder != RANGEFINDER_TRIANGULATION)
-			{
-				vec3d *target_position;
-
-				target_position = get_local_entity_vec3d_ptr (source_target, VEC3D_TYPE_POSITION);
-				target_range = get_3d_range (source_position, target_position);
-			}
-			else
-				target_range = get_triangulated_range(source_target);
+				target_range = get_range_to_target();
 
 			if (rangefinder == RANGEFINDER_LASER)
 				sprintf (buffer, "%dm", (int) target_range);
