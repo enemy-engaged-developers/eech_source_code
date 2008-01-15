@@ -2770,7 +2770,8 @@ void switch_seat_position (void)
 			break;
 		default:
 			break;
-			
+		}
+	
 		// start periscope check by GCsDriver  08-12-2007
 	  	// as copilot is no longer periscopes default position it can already be active
 		if(command_line_pilot_as_periscope_default){
