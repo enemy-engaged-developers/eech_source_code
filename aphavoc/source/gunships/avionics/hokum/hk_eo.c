@@ -920,29 +920,19 @@ void toggle_hokum_eo_system(void)
 
 		break;
 	case TARGET_ACQUISITION_SYSTEM_LLLTV:
-
-	// insert periscope mfd by GCsDriver  08-12-2007
-	// mfd page gets already displayed for pilot and copilot in periscope mode
-	// this just adds it to toggle
-		eo_sensor = TARGET_ACQUISITION_SYSTEM_PERISCOPE;
-
-		copy_eo_zoom(&hokum_llltv, &hokum_periscope);
-
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV)
-			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_PERISCOPE;
-
-		break;
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
 
-		copy_eo_zoom(&hokum_periscope, &hokum_flir);
+		copy_eo_zoom(&hokum_llltv, &hokum_flir);
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV ||
+			target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+		{
 			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+		}
 
 		break;
 	}
-	// end insert periscope mfd by GCsDriver 08-12-2007
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
