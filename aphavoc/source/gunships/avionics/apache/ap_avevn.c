@@ -1016,8 +1016,8 @@ static void toggle_navigation_lights_event (event *ev)
 // arneh 2006-11-16 - manual laser control
 static void activate_laser_event(event* ev)
 {
-	if (!laser_is_active() && !apache_damage.laser_designator && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
-		set_laser_is_active(TRUE);
+	if (!laser_is_active() && !apache_damage.laser_designator)
+		set_laser_is_active(eo_is_tracking_point() || get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET));
 	else
 		set_laser_is_active(FALSE);
 }
@@ -1172,16 +1172,12 @@ void set_apache_avionics_events (void)
 	set_event (DIK_BACKSPACE, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_cannon_event);
 
 	set_event (DIK_LBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_lhs_mfd_event);
-
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_lhs_mfd_event);
-
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_lhs_mfd_on_off_event);
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_ort_on_off_event);
 
 	set_event (DIK_RBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_rhs_mfd_event);
-
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_rhs_mfd_event);
-
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
 
 	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);
