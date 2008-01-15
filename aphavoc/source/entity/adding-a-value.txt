@@ -1,0 +1,11 @@
+To add a new value to an entity follow these steps (yes it's cumbersome!)
+
+* add a type and bits to entity/system/en_funcs/en_<type>.h
+* add packing info to entity/system/en_type.c
+* add a variable of correct type to the struct which needs it (e.g. in
+struct HELICOPTER in helicop.h if it's a value every helicopter should have)
+* add type to structtype_create
+* add type to structtype_pack/unpack - important that pack and unpack have values in same order!
+* add type to structtype_attrs
+* add overload for attrs to set/get attr functions
+* check if new gwut needed
