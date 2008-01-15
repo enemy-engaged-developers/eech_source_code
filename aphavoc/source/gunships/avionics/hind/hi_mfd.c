@@ -66,10 +66,10 @@
 
 #include "project.h"
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void copy_export_mfd(screen* export_left, screen* export_right);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static mfd_modes
 	mfd_mode;
@@ -104,12 +104,11 @@ static rgb_colour
 #define MFD_WINDOW_Y_MAX				(0.999)
 
 #define MFD_VIEWPORT_SMALL_SIZE		(114)
-#define MFD_VIEWPORT_LARGE_SIZE		(332)
+//#define MFD_VIEWPORT_LARGE_SIZE		(332)
+#define MFD_VIEWPORT_LARGE_SIZE		(210)
 
-#define MFD_TEXTURE_SIZE				(128)
-
-#define MFD_VIEWPORT_TEXTURE_X_ORG	(MFD_TEXTURE_SIZE / 2)
-#define MFD_VIEWPORT_TEXTURE_Y_ORG	(MFD_TEXTURE_SIZE / 2)
+#define MFD_TEXTURE_SMALL_SIZE			(128)
+#define MFD_TEXTURE_LARGE_SIZE			(256)
 
 static env_2d
 	*mfd_env;
@@ -124,6 +123,9 @@ static float
 	mfd_viewport_y_max;
 
 static int
+	mfd_texture_size,
+	mfd_viewport_texture_x_org,
+	mfd_viewport_texture_y_org,
 	draw_large_mfd;
 
 static float
@@ -140,6 +142,7 @@ static float
 
 static screen
 	*mfd_texture_screen,
+	*eo_3d_texture_screen,
 	*overlaid_mfd_texture_screen;
 
 static rgb_colour
@@ -155,23 +158,49 @@ void initialise_hind_mfd (void)
 
 	mfd_env = create_2d_environment ();
 
-	if(command_line_export_mfd)
+
+	if (command_line_high_res_mfd)
 	{
-		mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SCREEN);
+		draw_large_mfd = TRUE;
+		
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+		mfd_texture_size = MFD_TEXTURE_LARGE_SIZE;
+		eo_3d_texture_screen = large_eo_3d_texture_screen;
 	}
 	else
 	{
-		mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
+		draw_large_mfd = FALSE;
+
+		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+		mfd_texture_size = MFD_TEXTURE_SMALL_SIZE;
+		eo_3d_texture_screen = small_eo_3d_texture_screen;
+	}
+	
+	mfd_viewport_texture_x_org = mfd_texture_size / 2;
+	mfd_viewport_texture_y_org = mfd_texture_size / 2;
+
+	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
+	mfd_viewport_y_min = mfd_viewport_y_org - (mfd_viewport_size * 0.5);
+	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
+	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
+
+	if(command_line_export_mfd)
+	{
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SCREEN);
+	}
+	else
+	{
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
 	}
 
-	overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
-	set_rgb_colour (MFD_COLOUR1, 255, 255,   0, 255);
-	set_rgb_colour (MFD_COLOUR2, 200, 200,   0, 255);
-	set_rgb_colour (MFD_COLOUR3, 176, 176,   0, 255);
-	set_rgb_colour (MFD_COLOUR4, 151, 151,   0, 255);
-	set_rgb_colour (MFD_COLOUR5, 140, 140,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,  80,  52,   8, 255);
+	set_rgb_colour (MFD_COLOUR1, 255, 160,   0, 255);
+	set_rgb_colour (MFD_COLOUR2, 200, 130,   0, 255);
+	set_rgb_colour (MFD_COLOUR3, 176, 126,   0, 255);
+	set_rgb_colour (MFD_COLOUR4, 151, 100,   0, 255);
+	set_rgb_colour (MFD_COLOUR5, 140,  90,   0, 255);
+	set_rgb_colour (MFD_COLOUR6,  80,  62,   8, 255);
 
 	if(command_line_export_mfd)
 	{
@@ -195,6 +224,12 @@ void deinitialise_hind_mfd (void)
 
 	destroy_screen (overlaid_mfd_texture_screen);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -811,14 +846,7 @@ static void draw_ground_radar_heading_scale (void)
 	// large and small MFD position
 	//
 
-	if (draw_large_mfd)
-	{
-		y_position = 0.9;
-	}
-	else
-	{
-		y_position = 0.8375;
-	}
+	y_position = 0.8375;
 
 	//
 	// draw heading scale line
@@ -1681,6 +1709,9 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+		
 	ASSERT (eo);
 
 	switch (eo->field_of_view)
@@ -1729,6 +1760,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_AMBER;
+			
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
@@ -1737,6 +1770,8 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_AMBER_VISUAL;
+			
 			break;
 		}
 		default:
@@ -1749,11 +1784,13 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	if (draw_large_mfd)
 	{
-		set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, mfd_viewport_x_min - 78.0, mfd_viewport_y_min - 17.0, 488.0, 366.0, rad (59.99) * zoom, rad (46.82) * zoom);
+//		set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, mfd_viewport_x_min - 78.0, mfd_viewport_y_min - 17.0, 488.0, 366.0, rad (59.99) * zoom, rad (46.82) * zoom);
+		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 78.0, mfd_viewport_y_min - 17.0, 488.0, 366.0, rad (59.99) * zoom, rad (46.82) * zoom);
 	}
 	else
 	{
-		set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, mfd_viewport_x_min - 31.0, mfd_viewport_y_min - 10.0, 176.0, 132.0, rad (59.99) * zoom, rad (46.82) * zoom);
+//		set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, mfd_viewport_x_min - 31.0, mfd_viewport_y_min - 10.0, 176.0, 132.0, rad (59.99) * zoom, rad (46.82) * zoom);
+		set_main_3d_params (tint, light_level, noise_level, mfd_viewport_x_min - 31.0, mfd_viewport_y_min - 10.0, 176.0, 132.0, rad (59.99) * zoom, rad (46.82) * zoom);
 	}
 
 	draw_eo_3d_scene = TRUE;
@@ -1787,9 +1824,12 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+
 	ASSERT (eo);
 
-	ASSERT (small_eo_3d_texture_screen);
+	ASSERT (eo_3d_texture_screen);
 
 	ASSERT (d3d_can_render_to_texture);
 
@@ -1839,6 +1879,8 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_AMBER;
+
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
@@ -1846,6 +1888,8 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 			light_level = llltv_light_levels[weather_mode][day_segment_type];
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_AMBER_VISUAL;
 
 			break;
 		}
@@ -1857,11 +1901,12 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		}
 	}
 
-	set_3d_render_target (small_eo_3d_texture_screen);
+	set_3d_render_target (eo_3d_texture_screen);
 
-	set_active_screen (small_eo_3d_texture_screen);
+	set_active_screen (eo_3d_texture_screen);
 
-	set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, 0.0, 0.0, MFD_TEXTURE_SIZE - 0.001, MFD_TEXTURE_SIZE - 0.001, rad (59.99) * zoom, rad (59.99) * zoom);
+//	set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_size, mfd_viewport_size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, 0.0, 0.0, mfd_texture_size - 0.001, mfd_texture_size - 0.001, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -1869,7 +1914,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	draw_eo_3d_scene = FALSE;
 
-	finalise_3d_render_target_texture (small_eo_3d_texture_screen);
+	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
 
@@ -1900,6 +1945,9 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 	day_segment_types
 		day_segment_type;
 
+	display_3d_tints
+		tint;
+		
 	ASSERT (eo);
 
 	switch (eo->field_of_view)
@@ -1948,6 +1996,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 			noise_level = flir_noise_levels[weather_mode][day_segment_type];
 
+			tint = DISPLAY_3D_TINT_AMBER;
+			
 			break;
 		}
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
@@ -1955,6 +2005,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 			light_level = llltv_light_levels[weather_mode][day_segment_type];
 
 			noise_level = llltv_noise_levels[weather_mode][day_segment_type];
+
+			tint = DISPLAY_3D_TINT_AMBER_VISUAL;
 
 			break;
 		}
@@ -1966,7 +2018,8 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 		}
 	}
 
-	set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
+//	set_main_3d_params (DISPLAY_3D_TINT_AMBER, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
+	set_main_3d_params (tint, light_level, noise_level, x, y, size, size, rad (59.99) * zoom, rad (59.99) * zoom);
 
 	draw_eo_3d_scene = TRUE;
 
@@ -2075,7 +2128,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		buffer[200];
 
 	int
-		heading_readout;
+		heading_readout,
+		has_range;		// from havoc
 
 	float
 		width,
@@ -2110,6 +2164,15 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
+	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (target && has_range)
+	{
+		vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+		target_range = get_3d_range (source_position, target_position);
+	}
+/*
 	if (target)
 	{
 		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
@@ -2120,7 +2183,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 			target_range = get_3d_range (source_position, target_position);
 		}
 	}
-
+*/
 	////////////////////////////////////////
 	//
 	// text
@@ -2361,6 +2424,32 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		print_mono_font_string ("MARKED");		
 	}
 // Jabberwock 031107 ends
+
+// added ground stabi by GCsDriver 08-12-2007
+	//
+	// 030418 loke
+	// draw an indication if ground stablisation is enabled
+	//
+
+	if (eo_ground_stabilised)
+	{
+		if (draw_large_mfd) // Jabberwock 031107 Designated targets - moved the stab indicator one line up, sorry!
+		{
+			y_adjust = -38.0;
+		}
+		else
+		{
+			y_adjust = -19.0;
+		}
+
+		width = get_mono_font_string_width ("S");
+
+		set_2d_mono_font_position (1.0, -1.0);
+
+		set_mono_font_rel_position (-width, y_adjust);
+
+		print_mono_font_string ("S");
+	}
 
 	////////////////////////////////////////
 	//
@@ -2924,22 +3013,20 @@ void draw_hind_mfd_on_texture (void)
 	// viewport
 	//
 
-	draw_large_mfd = FALSE;
+	if (draw_large_mfd)
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+	else
+		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
 
-	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
-	ASSERT (mfd_viewport_size <= MFD_TEXTURE_SIZE);
 
-	mfd_viewport_x_org = MFD_VIEWPORT_TEXTURE_X_ORG;
-
-	mfd_viewport_y_org = MFD_VIEWPORT_TEXTURE_Y_ORG;
+	mfd_viewport_x_org = mfd_viewport_texture_x_org;
+	mfd_viewport_y_org = mfd_viewport_texture_y_org;
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
-
 	mfd_viewport_y_min = mfd_viewport_y_org - (mfd_viewport_size * 0.5);
-
 	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
-
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
@@ -2960,7 +3047,7 @@ void draw_hind_mfd_on_texture (void)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -2979,7 +3066,7 @@ void draw_hind_mfd_on_texture (void)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3000,7 +3087,7 @@ void draw_hind_mfd_on_texture (void)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3021,7 +3108,7 @@ void draw_hind_mfd_on_texture (void)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3046,23 +3133,23 @@ void draw_hind_mfd_on_texture (void)
 				(get_view_mode () != VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30)
 			)
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
-				set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
+				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
 
 				draw_3d_eo_display_on_texture (&hind_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
 					draw_2d_flir_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
 
-					unlock_screen (small_eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -3073,7 +3160,7 @@ void draw_hind_mfd_on_texture (void)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
@@ -3099,23 +3186,23 @@ void draw_hind_mfd_on_texture (void)
 				(get_view_mode () != VIEW_MODE_COCKPIT_PANEL_DOWN20_RIGHT30)
 			)
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
-				set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
+				set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT);
 
 				draw_3d_eo_display_on_texture (&hind_llltv, TARGET_ACQUISITION_SYSTEM_LLLTV);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
 					draw_2d_llltv_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
 
-					unlock_screen (small_eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -3126,7 +3213,7 @@ void draw_hind_mfd_on_texture (void)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
@@ -3140,6 +3227,7 @@ void draw_hind_mfd_on_texture (void)
 
 			break;
 		}
+
 	}
 
 	set_active_screen (video_screen);
@@ -3267,7 +3355,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 	//
 	////////////////////////////////////////
 
-	if (get_global_unscaled_displays ())
+/*	if (get_global_unscaled_displays ())
 	{
 		float
 			org_offset;
@@ -3289,7 +3377,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 		mfd_screen_x_max = mfd_screen_x_org + mfd_screen_half_size - 0.001;
 		mfd_screen_y_max = mfd_screen_y_org + mfd_screen_half_size - 0.001;
 	}
-	else
+	else*/
 	{
 		mfd_screen_size = size * full_screen_width * (1.0 / 640.0);
 
@@ -3322,15 +3410,11 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 	// viewport
 	//
 
-	draw_large_mfd = FALSE;
+//	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
-	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+	mfd_viewport_x_org = mfd_viewport_texture_x_org;
 
-	ASSERT (mfd_viewport_size <= MFD_TEXTURE_SIZE);
-
-	mfd_viewport_x_org = MFD_VIEWPORT_TEXTURE_X_ORG;
-
-	mfd_viewport_y_org = MFD_VIEWPORT_TEXTURE_Y_ORG;
+	mfd_viewport_y_org = mfd_viewport_texture_y_org;
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
 
@@ -3339,7 +3423,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
 
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
-
+	
 	//
 	// translate & scale values (EO 3D display does not match texture)
 	//
@@ -3347,8 +3431,8 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 	i_translate_3d = mfd_screen_x_min;
 	j_translate_3d = mfd_screen_y_min;
 
-	i_scale_3d = MFD_TEXTURE_SIZE / mfd_screen_size;
-	j_scale_3d = MFD_TEXTURE_SIZE / mfd_screen_size;
+	i_scale_3d = mfd_texture_size / mfd_screen_size;
+	j_scale_3d = mfd_texture_size / mfd_screen_size;
 
 	////////////////////////////////////////
 	//
@@ -3368,7 +3452,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3391,7 +3475,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3416,7 +3500,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3441,7 +3525,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3473,7 +3557,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3507,7 +3591,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			if (lock_screen (overlaid_mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -3551,13 +3635,14 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 
 			set_d3d_texture_wrapping (0, FALSE);
 
+/*
 			if ((application_video_width == 640) || (get_global_unscaled_displays ()))
 			{
 				set_d3d_texture_mag_filtering (FALSE);
 				set_d3d_texture_min_filtering (FALSE);
 				set_d3d_texture_mip_filtering (FALSE);
 			}
-			else
+			else*/
 			{
 				set_d3d_texture_mag_filtering (TRUE);
 				set_d3d_texture_min_filtering (TRUE);

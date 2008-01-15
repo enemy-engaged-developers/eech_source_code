@@ -171,11 +171,10 @@ int
 	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
 	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
-	command_line_field_of_view_joystick_index               = -1,	
-	command_line_field_of_view_joystick_axis                = 4,
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_manual_laser_radar						= FALSE,	// arneh 2006-11-06
+	command_line_laser_workaround						= FALSE,	// GCsDriver 08-12-2007
 	command_line_targeting_system_auto_page				= TRUE,     // arneh 2007-01-06
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
@@ -192,8 +191,15 @@ int
 	command_line_rudder_joystick_axis						= 6,		// loke 030418
 	command_line_nonlinear_pedals							= TRUE,		// arneh 2007-01-14
 	command_line_restricted_nvg_fov							= TRUE,     // arneh 2006-11-22
+	command_line_russian_nvg_no_ir							= 0,		// GCsDriver 08-12-2007
 	command_line_high_res_mfd									= TRUE,		// loke 030420
 	command_line_high_res_hud									= TRUE,     // arneh 20060808
+	command_line_hokum_ammo_count							= 0,     // GCsDriver  08-12-2007
+	command_line_unpadlock_on_handover							= 0,     // GCsDriver  08-12-2007
+	command_line_pilot_as_periscope_default							= 0,     // GCsDriver  08-12-2007
+	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
+	command_line_eo_full_range						= 0,		// GCsDriver  08-12-2007
+	command_line_render_tree_shadows							= 1,     // GCsDriver  08-12-2007
 	command_line_fly_any_airplane								= TRUE,     // VJ 030424
 	command_line_tsd_enemy_colours							= 0,		// VJ 030511
 	command_line_tsd_render_mode								= 0,		// VJ 030511
@@ -257,6 +263,7 @@ float
 	command_line_dynamics_yaw_altitude_loss 				= 5.0,
 	command_line_collective_zone_1_limit					= 0.3,		// arneh 2007-01-14
 	command_line_collective_zone_2_limit					= 0.7,		// arneh 2007-01-14
+	command_line_collective_percentage_at_zone1					= 60.0,		// GCsDriver  08-12-2007
 	command_line_aitool_grid_pitch 							= 0.0,
 	command_line_comms_resend_timeout						= 2.0,
 	command_line_comms_packet_resend_timer 				= 5.0,
@@ -1799,6 +1806,15 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_manual_laser_radar);
 			}
 		}
+				////////////////////////////////////////
+		else if (s2 = strarg(s1, "laser_workaround"))	// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_laser_workaround);
+			}
+		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate
 		////////////////////////////////////////
@@ -1962,6 +1978,69 @@ void process_command_line (int argc, char *argv[])
 				command_line_restricted_nvg_fov = TRUE;
 			}
 		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "russian_nvg_no_ir"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_russian_nvg_no_ir);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "hokumammocount"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_hokum_ammo_count);
+			}
+		}	
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "unpadlock_on_handover"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_unpadlock_on_handover);
+			}
+		}	
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "pilot_as_periscope_default"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_pilot_as_periscope_default);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "autoreturn_to_pilot_after_periscope"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_pilot_as_periscope_default);
+			}
+		}
+		////////////////////////////////////////
+		else if (s2 = strarg (s1, "eofullrange"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_eo_full_range);
+			}
+		}
+				////////////////////////////////////////
+		else if (s2 = strarg (s1, "render-tree-shadows"))		// GCsDriver 08-12-2007
+		////////////////////////////////////////
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_render_tree_shadows);
+			}
+		}				
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "high_res_mfd"))		// loke 030420
 		////////////////////////////////////////

@@ -940,15 +940,23 @@ BOOL ddraw_flip_surface_export ( void )
 		case GUNSHIP_TYPE_COMANCHE:
 		case GUNSHIP_TYPE_HOKUM:
 		case GUNSHIP_TYPE_APACHE:
+// start high-res mfds for all helis by GCsDriver 08-12-2007
+		case GUNSHIP_TYPE_AH64A:
+		case GUNSHIP_TYPE_BLACKHAWK:
+		case GUNSHIP_TYPE_KA50:
+		case GUNSHIP_TYPE_HIND:
+		default:
 			size=256;
 			break;
+/*
 		case GUNSHIP_TYPE_BLACKHAWK:
 		case GUNSHIP_TYPE_HIND:
 		case GUNSHIP_TYPE_KA50:
 		case GUNSHIP_TYPE_AH64A:
-		default:
 			size=128;
 			break;
+*/
+// end high-res mfds for all helis by GCsDriver 08-12-2007
 	}
 	src.left=0;
 	src.top=0;

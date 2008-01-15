@@ -75,6 +75,7 @@ ui_object
 	*main_screen,
 	*pilots_button,
 	*credits_button,
+	*modcredits_button,
 	*ghost_pilots_button,
 	*ghost_credits_button;
 
@@ -504,6 +505,53 @@ void initialise_main_screen (void)
 										UI_ATTR_END
 									);
 
+
+// Modder Credits by GCsDriver  08-12-2007
+
+
+	i++;
+	
+	option_bdrop = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (main_screen),
+		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (TEXT_OPTION_BDROP_WIDTH, TEXT_OPTION_BDROP_HEIGHT),
+		UI_ATTR_COLOUR_START (255, 255, 255, 0),
+		UI_ATTR_COLOUR_END (255, 255, 255, 255),
+		UI_ATTR_OFFSET_TIME (0),
+		UI_ATTR_TIME_LENGTH (500),
+		UI_ATTR_TEXTURE_GRAPHIC (text_option_bdrop),
+		UI_ATTR_END
+	);
+
+   modcredits_button = create_ui_object
+            (
+               UI_TYPE_BUTTON,
+               UI_ATTR_PARENT (main_screen),
+					UI_ATTR_POSITION_START (0, 0.883),
+					UI_ATTR_POSITION_END (0.780, 0.883),
+					UI_ATTR_TIME_LENGTH (200),
+					UI_ATTR_OFFSET_TIME (700),
+					UI_ATTR_VIRTUAL_SIZE (0.185, 0.042),
+					UI_ATTR_TEXT (get_trans ("Mod-Team")),
+					UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_22),
+					UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+					UI_ATTR_FUNCTION (notify_main_modcredits_button),
+      	      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+   	         UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+	            UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+	            UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+					UI_ATTR_HIGHLIGHTABLE (TRUE),
+					UI_ATTR_CLEAR (TRUE),
+               UI_ATTR_END
+            );
+
+	preprocess_translation_object_size (modcredits_button, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
+
+	set_text_option_backdrop_object (option_bdrop, modcredits_button);
+
+// Modder Credits by GCsDriver end  08-12-2007
 
 	/////////////////////////////////////////////////////////////////
 	// Exit Button

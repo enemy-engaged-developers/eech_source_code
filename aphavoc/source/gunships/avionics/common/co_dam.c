@@ -89,7 +89,7 @@ void fully_repair_gunship_damage (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -154,6 +154,16 @@ void fully_repair_gunship_damage (void)
 			break;
 		}
 		////Moje 020816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			fully_repair_default_damage ();
+
+			break;
+		}
 	}
 }
 
@@ -167,7 +177,7 @@ void partially_repair_gunship_damage (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -231,6 +241,16 @@ void partially_repair_gunship_damage (void)
 		}
 		////////////////////////////////////////
 		////Moje 020817 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			partially_repair_default_damage ();
+
+			break;
+		}
 	}
 }
 
@@ -244,7 +264,7 @@ void repair_gunship_weapon_damage (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -305,6 +325,17 @@ void repair_gunship_weapon_damage (void)
 			break;
 		}
 		////Moje 030817 end
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			repair_default_weapon_damage ();
+
+			break;
+		}
+
 	}
 }
 
@@ -318,7 +349,7 @@ void damage_gunship (gunship_damage_levels damage_level)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -380,6 +411,17 @@ void damage_gunship (gunship_damage_levels damage_level)
 			break;
 		}
 		////Moje 030817 end
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			damage_default (damage_level);
+
+			break;
+		}
+
 	}
 }
 
@@ -459,10 +501,12 @@ int get_gunship_comms_equipment_ok (void)
 		}
 		////Moje 030817 end
 		////////////////////////////////////////
+		// GCsDriver  08-12-2007
 		default:
 		////////////////////////////////////////
 		{
-			status = FALSE;
+			//status = FALSE;
+			status = !default_damage.communications;
 
 			break;
 		}
@@ -481,7 +525,7 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -542,6 +586,17 @@ void notify_avionics_of_dynamics_fault (unsigned int damage)
 			break;
 		}
 		////Moje 030817 end
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			notify_default_avionics_of_dynamics_fault (damage);
+
+			break;
+		}
+
 	}
 }
 
@@ -580,7 +635,7 @@ void fully_repair_local_entity_avionics (entity *en)
 		{
 			////////////////////////////////////////
 			// JB 030313 Fly any aircraft
-			default:
+//			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -655,6 +710,19 @@ void fully_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+
+			////////////////////////////////////////
+			// GCsDriver  08-12-2007
+			default:
+			////////////////////////////////////////
+			{
+				fully_repair_default_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, default_damage.flags);
+
+				break;
+			}
+
 		}
 	}
 }
@@ -673,7 +741,7 @@ void partially_repair_local_entity_avionics (entity *en)
 		{
 			////////////////////////////////////////
 			// JB 030313 Fly any aircraft
-			default:
+//			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -748,6 +816,18 @@ void partially_repair_local_entity_avionics (entity *en)
 				break;
 			}
 			////Moje 030817 end
+
+			////////////////////////////////////////
+			// GCsDriver  08-12-2007
+			default:
+			////////////////////////////////////////
+			{
+				partially_repair_default_damage ();
+
+				set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, default_damage.flags);
+
+				break;
+			}
 		}
 	}
 }
@@ -764,7 +844,7 @@ void load_gunship_avionics_damage (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -856,6 +936,21 @@ void load_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 030817 end
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			default_damage.flags = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS);
+
+			set_default_weapon_damage_status ();
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Load default damage: %x", default_damage.flags);
+
+			break;
+		}
+
 	}
 }
 
@@ -869,7 +964,7 @@ void save_gunship_avionics_damage (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -946,6 +1041,18 @@ void save_gunship_avionics_damage (void)
 			break;
 		}
 		////Moje 0300817 end
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			set_local_entity_int_value (get_gunship_entity (), INT_TYPE_HELICOPTER_DAMAGE_FLAGS, default_damage.flags);
+
+			debug_colour_log (DEBUG_COLOUR_AMBER, "Save default damage: %x", default_damage);
+
+			break;
+		}
 	}
 }
 

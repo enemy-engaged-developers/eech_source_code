@@ -381,6 +381,22 @@ void dynamics_damage_model (unsigned int damage, int random)
 				case DYNAMICS_DAMAGE_TAIL_ROTOR:
 				{
 
+				// start no tail rotor damage on coaxial helis by GCsDriver 08-12-2007
+				{
+					entity *en;
+					int type;
+
+					en = get_gunship_entity ();
+					type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+
+					if (    (type != ENTITY_SUB_TYPE_AIRCRAFT_KA52_HOKUM_B)
+						||(type != ENTITY_SUB_TYPE_AIRCRAFT_KA50_HOKUM)
+						||(type != ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B) )
+					{
+						break;
+					}
+				// end no tail rotor damage on coaxial helis by GCsDriver 08-12-2007
+
 					//#if DYNAMICS_DEBUG
 
 					debug_log ("DYNAMICS: tail rotor damage");
@@ -404,6 +420,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 					set_current_flight_dynamics_auto_pilot (FALSE);
 
 					break;
+				} // GCsDriver 08-12-2007
 				}
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				{

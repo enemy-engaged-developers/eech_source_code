@@ -107,6 +107,10 @@ static float
 static int
 	draw_large_hud;
 
+//
+// HUD screen co-ords
+//
+
 static float
 	hud_screen_x_min,
 	hud_screen_y_min,
@@ -129,20 +133,9 @@ static screen
 static rgb_colour
 	clear_hud_colour;
 
-#define HUD_UNIT_RATIO 14.6    // ratio of HUD size with distance to HUD
-
-static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////
-//
-// heading scale
-//
-////////////////////////////////////////
-
 
 ////////////////////////////////////////
 //
@@ -260,7 +253,6 @@ static char small_hud_command_heading_carat[] =
 	1,0,0,0,1,
 };
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,41 +271,10 @@ static char small_hud_command_heading_carat[] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////
-//
-// rate of climb scale
-//
-////////////////////////////////////////
+#define HUD_UNIT_RATIO 14.6    // ratio of HUD size with distance to HUD
 
-static char large_hud_rate_of_climb_scale_pointer[] =
-{
-	15,
-	9,
-	0,
-	-4,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,
-	0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
-	0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-};
+static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
 
-static char small_hud_rate_of_climb_scale_pointer[] =
-{
-	8,
-	5,
-	0,
-	-2,
-	0,0,1,0,0,0,0,0,
-	0,1,0,1,1,1,1,1,
-	1,0,0,0,0,0,0,1,
-	0,1,0,1,1,1,1,1,
-	0,0,1,0,0,0,0,0,
-};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -400,12 +361,122 @@ static void draw_layout_grid (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_hud_centre_datum (void)
+static void draw_pitch_scale (void)
 {
-	draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
-	draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
-	draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
-	draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
+	float
+		pitch,
+		roll,
+		mod_pitch_step_10,
+		y,
+		width;
+
+	int
+		loop,
+		int_pitch_step_10;
+
+	char
+		s[20];
+
+	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+	pitch = deg(pitch);
+
+	mod_pitch_step_10 = fmod (pitch, 10.0);
+
+	int_pitch_step_10 = ((int)(pitch * 0.1)) * 10;
+	int_pitch_step_10 -= 30;
+
+	y = - (30.0 + mod_pitch_step_10) * 0.04;
+
+
+	//
+	// draw pitch scale ticks and pitch value
+	//
+
+	for (loop = 0; loop < 6; loop++)
+	{
+		//
+		// major tick every 10 degrees
+		//
+
+		if (y >= -0.6)
+		{
+			if (int_pitch_step_10 != 0)
+			{
+				int pnum;
+				
+				draw_line_func (-0.22, y, -0.07, y, hud_colour);
+				draw_line_func (0.07, y, 0.22, y, hud_colour);
+				
+				if (draw_large_hud)
+					set_mono_font_type (MONO_FONT_TYPE_6X10);
+				else
+					set_mono_font_type (MONO_FONT_TYPE_3X6);
+				set_2d_mono_font_position (0.0, y);
+		
+				pnum = abs(int_pitch_step_10);
+				if (pnum > 90)
+					pnum = 180 - pnum;
+				sprintf(s, "%2d", pnum);
+				width = get_mono_font_string_width(s);
+		
+				if (draw_large_hud)
+					set_mono_font_rel_position ((-width * 0.5), -4.0);
+				else
+					set_mono_font_rel_position ((-width * 0.5), -2.0);
+		
+				print_mono_font_string (s);
+			}
+			else
+				draw_line_func(0.005, y, 0.005, y, hud_colour);
+		}
+
+		//
+		// minor tick every 5 degrees
+		//
+
+		if (y + 0.2 < 0.6 && y + 0.2 >= -0.6)
+			draw_line_func(-0.05, y + 0.2, 0.05, y + 0.2, hud_colour);
+
+
+		//
+		// next pitch value
+		//
+
+		int_pitch_step_10 += 10;
+		y += 0.4;
+		
+		if (y > 0.6)
+			break;
+	}
+	
+	// draw datum
+	set_2d_instance_rotation (hud_env, -roll);
+	
+	draw_line_func(-0.2, 0.0, -0.08, 0.0, hud_colour);
+	draw_line_func(-0.08, 0.0, -0.08, -0.04, hud_colour);
+	draw_line_func(-0.08, -0.04, -0.04, -0.08, hud_colour);
+	draw_line_func(-0.04, -0.08, 0.04, -0.08, hud_colour);
+	draw_line_func(0.08, -0.04, 0.04, -0.08, hud_colour);
+	draw_line_func(0.08, 0.0, 0.08, -0.04, hud_colour);
+	draw_line_func(0.2, 0.0, 0.08, 0.0, hud_colour);
+	
+	reset_2d_instance (hud_env);
+	
+	// draw bank angle marks
+	draw_2d_line(0.35, 0.0, 0.45, 0.0, hud_colour);
+	draw_2d_line(-0.35, 0.0, -0.45, 0.0, hud_colour);
+	
+	draw_2d_line(0.303, -0.175, 0.390, -0.225, hud_colour);
+	draw_2d_line(-0.303, -0.175, -0.390, -0.225, hud_colour);
+	draw_2d_line(0.175, -0.303, 0.225, -0.390, hud_colour);
+	draw_2d_line(-0.175, -0.303, -0.225, -0.390, hud_colour);
+
+	// reset view
+	reset_2d_instance (hud_env);
+	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
+	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,7 +615,7 @@ static void draw_heading_scale (void)
 	// draw command heading carat
 	//
 
-	if (!hokum_damage.navigation_computer)
+	if (!havoc_damage.navigation_computer)
 	{
 		entity
 			*wp;
@@ -596,111 +667,6 @@ static void draw_heading_scale (void)
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_pitch_indicator (void)
-{
-	float
-		pitch,
-		y,
-		width;
-
-	char
-		s[20];
-
-	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
-
-	y = pitch * (-0.7 / (PI / 2.0));
-
-	draw_2d_line (-0.5, y, 0.7, y, hud_colour);
-
-	sprintf (s, "%d", abs ((int) (deg (pitch))));
-
-	if (draw_large_hud)
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (0.7, y);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position (-width + 1.0, -8.0);
-	}
-	else
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X7);
-
-		set_2d_mono_font_position (0.7, y);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position (-width + 1.0, -6.0);
-	}
-
-	print_mono_font_string (s);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_bank_scale (void)
-{
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+5.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-5.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+10.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-10.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MINOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+15.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-15.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+30.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-30.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, rad (+60.0));
-	draw_2d_line (-BANK_SCALE_TICK_START, 0.0, -BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-	set_2d_window_rotation (hud_env, rad (-60.0));
-	draw_2d_line (+BANK_SCALE_TICK_START, 0.0, +BANK_SCALE_MAJOR_TICK, 0.0, hud_colour);
-
-	set_2d_window_rotation (hud_env, 0.0);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_aircraft_datum (void)
-{
-	float
-		roll;
-
-	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
-
-	set_2d_window_rotation (hud_env, -roll);
-
-	draw_2d_line (-0.35, +0.00, -0.15, +0.00, hud_colour);
-	draw_2d_line (+0.35, +0.00, +0.15, +0.00, hud_colour);
-	draw_2d_line (+0.00, +0.15, +0.00, +0.25, hud_colour);
-	draw_2d_line (-0.20, +0.00, -0.20, -0.04, hud_colour);
-	draw_2d_line (+0.20, +0.00, +0.20, -0.04, hud_colour);
-
-	set_2d_window_rotation (hud_env, 0.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -827,208 +793,6 @@ static void display_true_airspeed (void)
 	else
 		draw_velocity_scale(true_airspeed);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_pitch_scale (void)
-{
-	float
-		pitch,
-		roll,
-		mod_pitch_step_10,
-		y,
-		width;
-
-	int
-		loop,
-		int_pitch_step_10;
-
-	char
-		s[20];
-
-	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
-	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
-	pitch = deg(pitch);
-
-	mod_pitch_step_10 = fmod (pitch, 10.0);
-
-	int_pitch_step_10 = ((int)(pitch * 0.1)) * 10;
-	int_pitch_step_10 -= 30;
-
-	y = - (30.0 + mod_pitch_step_10) * 0.04;
-
-
-	//
-	// draw pitch scale ticks and pitch value
-	//
-
-	for (loop = 0; loop < 6; loop++)
-	{
-		//
-		// major tick every 10 degrees
-		//
-
-		if (y >= -0.6)
-		{
-			if (int_pitch_step_10 != 0)
-			{
-				int pnum;
-				
-				draw_line_func (-0.22, y, -0.07, y, hud_colour);
-				draw_line_func (0.07, y, 0.22, y, hud_colour);
-				
-				if (draw_large_hud)
-					set_mono_font_type (MONO_FONT_TYPE_6X10);
-				else
-					set_mono_font_type (MONO_FONT_TYPE_3X6);
-				set_2d_mono_font_position (0.0, y);
-		
-				pnum = abs(int_pitch_step_10);
-				if (pnum > 90)
-					pnum = 180 - pnum;
-				sprintf(s, "%2d", pnum);
-				width = get_mono_font_string_width(s);
-		
-				if (draw_large_hud)
-					set_mono_font_rel_position ((-width * 0.5), -4.0);
-				else
-					set_mono_font_rel_position ((-width * 0.5), -2.0);
-		
-				print_mono_font_string (s);
-			}
-			else
-				draw_line_func(0.005, y, 0.005, y, hud_colour);
-		}
-
-		//
-		// minor tick every 5 degrees
-		//
-
-		if (y + 0.2 < 0.6 && y + 0.2 >= -0.6)
-			draw_line_func(-0.05, y + 0.2, 0.05, y + 0.2, hud_colour);
-
-
-		//
-		// next pitch value
-		//
-
-		int_pitch_step_10 += 10;
-		y += 0.4;
-		
-		if (y > 0.6)
-			break;
-	}
-	
-	// draw datum
-	set_2d_instance_rotation (hud_env, -roll);
-	
-	draw_line_func(-0.2, 0.0, -0.08, 0.0, hud_colour);
-	draw_line_func(-0.08, 0.0, -0.08, -0.04, hud_colour);
-	draw_line_func(-0.08, -0.04, -0.04, -0.08, hud_colour);
-	draw_line_func(-0.04, -0.08, 0.04, -0.08, hud_colour);
-	draw_line_func(0.08, -0.04, 0.04, -0.08, hud_colour);
-	draw_line_func(0.08, 0.0, 0.08, -0.04, hud_colour);
-	draw_line_func(0.2, 0.0, 0.08, 0.0, hud_colour);
-	
-	reset_2d_instance (hud_env);
-	
-	// draw bank angle marks
-	draw_2d_line(0.35, 0.0, 0.45, 0.0, hud_colour);
-	draw_2d_line(-0.35, 0.0, -0.45, 0.0, hud_colour);
-	
-	draw_2d_line(0.303, -0.175, 0.390, -0.225, hud_colour);
-	draw_2d_line(-0.303, -0.175, -0.390, -0.225, hud_colour);
-	draw_2d_line(0.175, -0.303, 0.225, -0.390, hud_colour);
-	draw_2d_line(-0.175, -0.303, -0.225, -0.390, hud_colour);
-
-	// reset view
-	reset_2d_instance (hud_env);
-	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
-	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_altitude_scale(float altitude)
-{
-	float y_offset = altitude * 0.016;
-	
-	draw_2d_line(0.55, 0.0, 0.55, 0.8, hud_colour);
-	
-	// the vertical tick marks
-	draw_2d_line(0.525, 0.0, 0.575, 0.0, hud_colour);
-	draw_2d_line(0.55, 0.16, 0.575, 0.16, hud_colour);
-	draw_2d_line(0.55, 0.32, 0.575, 0.32, hud_colour);
-	draw_2d_line(0.55, 0.48, 0.575, 0.48, hud_colour);
-	draw_2d_line(0.55, 0.64, 0.575, 0.64, hud_colour);
-	draw_2d_line(0.55, 0.80, 0.575, 0.80, hud_colour);
-	
-	if (draw_large_hud)
-		set_mono_font_type(MONO_FONT_TYPE_6X10);
-	else
-		set_mono_font_type(MONO_FONT_TYPE_5X7);
-
-	set_2d_mono_font_position(0.6, 0.8);
-	set_mono_font_rel_position (0.0, -2.0);
-
-	print_mono_font_string("50");
-	
-	if (draw_large_hud)
-		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
-	else
-		draw_2d_mono_sprite(small_right_carat, 0.55, y_offset, hud_colour);
-}
-
-static void display_altitude (void)
-{
-	float altitude = current_flight_dynamics->radar_altitude.value;
-	char
-		s[20];
-
-	if (altitude < 300.0)
-	{
-		if (altitude <= 50.0)
-			draw_altitude_scale(altitude);
-		
-		sprintf (s, "%03d", (int) current_flight_dynamics->radar_altitude.value);
-		
-		if (draw_large_hud)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_7X12);
-			set_2d_mono_font_position (0.87, 0.95);			
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_5X7);
-			set_2d_mono_font_position (0.9, 0.95);
-		}
-
-		print_mono_font_string("R");
-	}
-	else
-	{
-		sprintf (s, "%04d", 10 * (((int)(current_flight_dynamics->barometric_altitude.value + 5.0)) / 10));
-	}
-
-	if (draw_large_hud)
-	{
-		set_mono_font_type (MONO_FONT_TYPE_10X16);
-		set_2d_mono_font_position (0.8, 0.95);
-		set_mono_font_rel_position (-25.0, -4.0);
-	}
-	else
-	{
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-		set_2d_mono_font_position (0.8, 0.9);
-		set_mono_font_rel_position (-15.0, -5.0);
-	}
-
-	print_mono_font_string (s);
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1037,7 +801,7 @@ static void display_altitude (void)
 static void display_g_scale(void)
 {
 	float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
-	
+
 	draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
 
 	draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
@@ -1066,7 +830,7 @@ static void display_g_scale(void)
 	else
 		draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1153,202 +917,96 @@ static void display_vertical_velocity(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_rate_of_climb_scale (void)
+static void draw_altitude_scale(float altitude)
 {
-	float
-		y,
-		i,
-		j,
-		width;
+	float y_offset = altitude * 0.016;
+	
+	draw_2d_line(0.55, 0.0, 0.55, 0.8, hud_colour);
+	
+	// the vertical tick marks
+	draw_2d_line(0.525, 0.0, 0.575, 0.0, hud_colour);
+	draw_2d_line(0.55, 0.16, 0.575, 0.16, hud_colour);
+	draw_2d_line(0.55, 0.32, 0.575, 0.32, hud_colour);
+	draw_2d_line(0.55, 0.48, 0.575, 0.48, hud_colour);
+	draw_2d_line(0.55, 0.64, 0.575, 0.64, hud_colour);
+	draw_2d_line(0.55, 0.80, 0.575, 0.80, hud_colour);
+	
+	if (draw_large_hud)
+		set_mono_font_type(MONO_FONT_TYPE_6X10);
+	else
+		set_mono_font_type(MONO_FONT_TYPE_5X7);
 
-	//
-	// draw scale
-	//
+	set_2d_mono_font_position(0.6, 0.8);
+	set_mono_font_rel_position (0.0, -2.0);
+	print_mono_font_string("50");
 
-	draw_2d_line (+0.800, +0.500, +0.800, -0.500, hud_colour);
-
-	draw_2d_line (+0.800, +0.500, +0.850, +0.500, hud_colour);
-	draw_2d_line (+0.800, +0.400, +0.825, +0.400, hud_colour);
-	draw_2d_line (+0.800, +0.300, +0.825, +0.300, hud_colour);
-	draw_2d_line (+0.800, +0.200, +0.825, +0.200, hud_colour);
-	draw_2d_line (+0.800, +0.100, +0.825, +0.100, hud_colour);
-	draw_2d_line (+0.800, +0.000, +0.850, +0.000, hud_colour);
-	draw_2d_line (+0.800, -0.100, +0.825, -0.100, hud_colour);
-	draw_2d_line (+0.800, -0.200, +0.825, -0.200, hud_colour);
-	draw_2d_line (+0.800, -0.300, +0.825, -0.300, hud_colour);
-	draw_2d_line (+0.800, -0.400, +0.825, -0.400, hud_colour);
-	draw_2d_line (+0.800, -0.500, +0.850, -0.500, hud_colour);
-
-	//
-	// get indicator position (fsd +/- 10m/s)
-	//
-
-	y = current_flight_dynamics->world_velocity_y.value;
-
-	y = bound (y, -10.0, 10.0);
-
-	y *= 0.05;
-
-	//
-	// draw indicator and fsd values
-	//
-
-	draw_2d_line (0.8, y, 0.85, y, hud_colour);
-
-	get_2d_float_screen_coordinates (0.85, y, &i, &j);
 
 	if (draw_large_hud)
-	{
-		draw_mono_sprite (large_hud_rate_of_climb_scale_pointer, i + 1.0, j, hud_colour);
-
-		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (1.0, 0.5);
-
-		width = get_mono_font_string_width ("10");
-
-		set_mono_font_rel_position (-width, -12.0);
-
-		print_mono_font_string ("10");
-
-		set_2d_mono_font_position (1.0, -0.5);
-
-		width = get_mono_font_string_width ("-10");
-
-		set_mono_font_rel_position (-width, 6.0);
-
-		print_mono_font_string ("-10");
-	}
+		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
 	else
-	{
-		draw_mono_sprite (small_hud_rate_of_climb_scale_pointer, i + 1.0, j, hud_colour);
-
-		set_mono_font_type (MONO_FONT_TYPE_6X7);
-
-		set_2d_mono_font_position (1.0, 0.5);
-
-		width = get_mono_font_string_width ("10");
-
-		set_mono_font_rel_position (-width, -8.0);
-
-		print_mono_font_string ("10");
-
-		set_2d_mono_font_position (1.0, -0.5);
-
-		width = get_mono_font_string_width ("-10");
-
-		set_mono_font_rel_position (-width, 4.0);
-
-		print_mono_font_string ("-10");
-	}
+		draw_2d_mono_sprite(small_right_carat, 0.55, y_offset, hud_colour);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void display_engine_torque (void)
+static void display_altitude (void)
 {
+	float altitude = current_flight_dynamics->radar_altitude.value;
 	char
 		s[20];
 
-	int
-		torque;
+	if (altitude < 300.0)
+	{
+		if (altitude <= 50.0)
+			draw_altitude_scale(altitude);
+		
+		sprintf (s, "%03d", (int) current_flight_dynamics->radar_altitude.value);
+		
+		if (draw_large_hud)
+		{
+			set_mono_font_type (MONO_FONT_TYPE_7X12);
+			set_2d_mono_font_position (0.87, 0.95);			
+		}
+		else
+		{
+			set_mono_font_type (MONO_FONT_TYPE_5X7);
+			set_2d_mono_font_position (0.9, 0.95);
+		}
 
-	float
-		x_min,
-		y_min,
-		x_max,
-		y_max,
-		width;
-
-	torque = (int) current_flight_dynamics->combined_engine_torque.value;
-
-	sprintf (s, "%d%%", torque);
+		print_mono_font_string("R");
+	}
+	else
+	{
+		sprintf (s, "%04d", 10 * (((int)(current_flight_dynamics->barometric_altitude.value + 5.0)) / 10));
+	}
 
 	if (draw_large_hud)
 	{
-		set_mono_font_type (MONO_FONT_TYPE_7X12);
-
-		set_2d_mono_font_position (0.0, 0.7);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position ((-width * 0.5) + 1.0, 0.0);
-
-		get_mono_font_position (&x_min, &y_min);
-
-		print_mono_font_string (s);
-
-		if (torque >= 98)
-		{
-			x_min -= 2.0;
-			y_min -= 2.0;
-
-			x_max = x_min + width + 3.0;
-			y_max = y_min + 12.0;
-
-			draw_line (x_min, y_min, x_max, y_min, hud_colour);
-			draw_line (x_max, y_min, x_max, y_max, hud_colour);
-			draw_line (x_max, y_max, x_min, y_max, hud_colour);
-			draw_line (x_min, y_max, x_min, y_min, hud_colour);
-		}
+		set_mono_font_type (MONO_FONT_TYPE_10X16);
+		set_2d_mono_font_position (0.8, 0.95);
+		set_mono_font_rel_position (-25.0, -4.0);
 	}
 	else
 	{
 		set_mono_font_type (MONO_FONT_TYPE_6X10);
-
-		set_2d_mono_font_position (0.0, 0.7);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position ((-width * 0.5) + 1.0, 0.0);
-
-		get_mono_font_position (&x_min, &y_min);
-
-		print_mono_font_string (s);
-
-		if (torque >= 98)
-		{
-			x_min -= 2.0;
-			y_min -= 2.0;
-
-			x_max = x_min + width + 3.0;
-			y_max = y_min + 10.0;
-
-			draw_line (x_min, y_min, x_max, y_min, hud_colour);
-			draw_line (x_max, y_min, x_max, y_max, hud_colour);
-			draw_line (x_max, y_max, x_min, y_max, hud_colour);
-			draw_line (x_min, y_max, x_min, y_min, hud_colour);
-		}
+		set_2d_mono_font_position (0.8, 0.9);
+		set_mono_font_rel_position (-15.0, -5.0);
 	}
+
+	print_mono_font_string (s);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void display_flight_path_marker_and_waypoint_information (int draw_on_virtual_cockpit_texture)
+static void display_waypoint_information (void)
 {
 	char
 		s[100],
 		tag;
 
-	int
-		draw_flight_path_marker;
-
 	float
-		i,
-		j,
-		x,
-		y,
 		flat_range,
-		width,
-		dx,
-		dz,
-		bearing,
-		heading,
-		relative_heading;
+		width;
 
 	entity
 		*en,
@@ -1357,9 +1015,6 @@ static void display_flight_path_marker_and_waypoint_information (int draw_on_vir
 	vec3d
 		*en_position,
 		wp_position;
-
-	object_3d_visibility
-		visibility;
 
 	en = get_gunship_entity ();
 
@@ -1370,82 +1025,6 @@ static void display_flight_path_marker_and_waypoint_information (int draw_on_vir
 		en_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 		get_waypoint_display_position (en, wp, &wp_position);
-
-		//
-		// flight path marker
-		//
-
-		draw_flight_path_marker = FALSE;
-
-		if (draw_on_virtual_cockpit_texture)
-		{
-			if
-			(
-				(pilot_head_heading >= rad (-5.0)) &&
-				(pilot_head_heading <= rad (5.0)) &&
-				(pilot_head_pitch >= rad (-5.0)) &&
-				(pilot_head_pitch <= rad (5.0))
-			)
-			{
-				draw_flight_path_marker = TRUE;
-			}
-		}
-		else
-		{
-			draw_flight_path_marker = TRUE;
-		}
-
-		if (draw_flight_path_marker)
-		{
-			if (!havoc_damage.navigation_computer)
-			{
-				visibility = get_position_3d_screen_coordinates (&wp_position, &i, &j);
-
-				if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
-				{
-					transform_hud_screen_co_ords_to_hud_texture_co_ords (&i, &j);
-
-					get_2d_world_position (i, j, &x, &y);
-
-					clip_2d_point_to_hud_extent (&x, &y);
-
-					draw_2d_circle (x, y, 0.125, hud_colour);
-				}
-				else
-				{
-					dx = wp_position.x - en_position->x;
-					dz = wp_position.z - en_position->z;
-
-					bearing = atan2 (dx, dz);
-
-					heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
-
-					relative_heading = bearing - heading;
-
-					if (relative_heading < rad (-180.0))
-					{
-						relative_heading += rad (360.0);
-					}
-					else if (relative_heading > rad (180.0))
-					{
-						relative_heading -= rad (360.0);
-					}
-
-					if (relative_heading < 0.0)
-					{
-						draw_2d_circle (-1.0, 0.0, 0.125, hud_colour);
-					}
-					else
-					{
-						draw_2d_circle (1.0, 0.0, 0.125, hud_colour);
-					}
-				}
-			}
-		}
-
-		//
-		// waypoint information
-		//
 
 		if (!havoc_damage.navigation_computer)
 		{
@@ -1483,233 +1062,12 @@ static void display_flight_path_marker_and_waypoint_information (int draw_on_vir
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void display_waypoint_information (void)
-{
-	char
-		s[100],
-		tag;
-
-	float
-		flat_range,
-		width;
-
-	entity
-		*en,
-		*wp;
-
-	vec3d
-		*en_position,
-		wp_position;
-
-	en = get_gunship_entity ();
-
-	wp = get_local_entity_current_waypoint (en);
-
-	if (wp)
-	{
-		en_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-
-		get_waypoint_display_position (en, wp, &wp_position);
-
-		if (!hokum_damage.navigation_computer)
-		{
-			tag = get_local_entity_char_value (wp, CHAR_TYPE_TAG);
-
-			flat_range = get_2d_range (en_position, &wp_position);
-
-			sprintf (s, "%c:%.1f", tag, flat_range * (1.0 / 1000.0));
-		}
-		else
-		{
-			sprintf (s, "-:--.-");
-		}
-
-		if (draw_large_hud)
-		{
-			set_mono_font_type (MONO_FONT_TYPE_6X10);
-		}
-		else
-		{
-			set_mono_font_type (MONO_FONT_TYPE_6X7);
-		}
-
-		set_2d_mono_font_position (0.0, -0.8);
-
-		width = get_mono_font_string_width (s);
-
-		set_mono_font_rel_position ((-width * 0.5) + 1.0, 0.0);
-
-		print_mono_font_string (s);
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_bob_up_overlay (void)
-{
-	float
-		heading,
-		bearing,
-		theta,
-		length,
-		dx,
-		dz,
-		dxt,
-		dzt;
-
-	vec3d
-		*position,
-		*motion_vector;
-
-	if (hud_bob_up_overlay)
-	{
-		position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-
-		dx = hud_bob_up_position.x - position->x;
-		dz = hud_bob_up_position.z - position->z;
-
-		if (((dx * dx) + (dz * dz)) < (500.0 * 500.0))
-		{
-			heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
-
-			//
-			// hover box
-			//
-
-			dxt = (dx * cos (heading)) - (dz * sin (heading));
-			dzt = (dx * sin (heading)) + (dz * cos (heading));
-
-			dxt *= 1.0 / 100.0;
-			dzt *= 1.0 / 100.0;
-
-			clip_2d_point_to_hud_extent (&dxt, &dzt);
-
-			draw_2d_line (dxt - 0.083, dzt + 0.200, dxt + 0.083, dzt + 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt + 0.200, dxt + 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt + 0.083, dxt + 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt + 0.200, dzt - 0.083, dxt + 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt + 0.083, dzt - 0.200, dxt - 0.083, dzt - 0.200, hud_colour);
-			draw_2d_line (dxt - 0.083, dzt - 0.200, dxt - 0.200, dzt - 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt - 0.083, dxt - 0.200, dzt + 0.083, hud_colour);
-			draw_2d_line (dxt - 0.200, dzt + 0.083, dxt - 0.083, dzt + 0.200, hud_colour);
-
-			//
-			// velocity vector
-			//
-
-			motion_vector = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR);
-
-			dx = motion_vector->x;
-			dz = motion_vector->z;
-
-			length = sqrt ((dx * dx) + (dz * dz));
-
-			if ((length < kilometres_per_hour_to_metres_per_second (-0.1)) || (length > kilometres_per_hour_to_metres_per_second (0.1)))
-			{
-				length = min (length, kilometres_per_hour_to_metres_per_second (20.0));
-
-				length *= 0.5 / kilometres_per_hour_to_metres_per_second (20.0);
-
-				bearing = atan2 (dx, dz);
-
-				theta = bearing - heading;
-
-				if (theta > rad (180.0))
-				{
-					theta -= rad (360.0);
-				}
-				else if (theta < rad (-180.0))
-				{
-					theta += rad (360.0);
-				}
-			}
-			else
-			{
-				length = 0.0;
-
-				theta = 0.0;
-			}
-
-			set_2d_window_rotation (hud_env, -theta);
-
-			draw_2d_line (0.0, 0.0, 0.0, length, hud_colour);
-
-			if (draw_large_hud)
-			{
-				length = max (length - 0.008, 0.0);
-
-				draw_2d_line (-0.008, length, 0.008, length, hud_colour);
-			}
-
-			set_2d_window_rotation (hud_env, 0.0);
-		}
-		else
-		{
-			clear_hud_bob_up_overlay ();
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static void draw_basic_hud(void)
 {
 	display_altitude();
 	display_vertical_velocity();
 	display_true_airspeed();
 	draw_pitch_scale();
-}
-
-static void draw_navigation_mode_hud (int draw_on_virtual_cockpit_texture)
-{
-	draw_hud_centre_datum ();
-
-	draw_heading_scale ();
-
-	draw_pitch_indicator ();
-
-	draw_bank_scale ();
-
-	draw_aircraft_datum ();
-
-	display_true_airspeed ();
-
-	display_altitude ();
-
-	draw_rate_of_climb_scale ();
-
-	display_engine_torque ();
-
-	display_flight_path_marker_and_waypoint_information (draw_on_virtual_cockpit_texture);
-
-	draw_bob_up_overlay ();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_weapon_mode_hud (int draw_on_virtual_cockpit_texture)
-{
-	if (get_view_mode () != VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD)
-	{
-		draw_hud_centre_datum ();
-	}
-
-	draw_heading_scale ();
-
-	display_true_airspeed ();
-
-	display_altitude ();
-
-	draw_rate_of_climb_scale ();
-
-	display_engine_torque ();
-
-	draw_bob_up_overlay ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1754,6 +1112,7 @@ void deinitialise_havoc_hud (void)
 	destroy_2d_environment (hud_env);
 
 	destroy_screen (hud_texture_screen);
+
 	destroy_screen (large_hms_texture_screen);
 }
 
@@ -1836,13 +1195,16 @@ void draw_havoc_hud_on_cockpit (int hud_enlarge)
 		{
 			case HUD_MODE_NAVIGATION:
 			{
-				draw_navigation_mode_hud (FALSE);
+					draw_heading_scale();
+					display_waypoint_information();
+					display_g_scale();
 
 				break;
 			}
 			case HUD_MODE_WEAPON:
 			{
-				draw_weapon_mode_hud (FALSE);
+					display_weapon_information();
+					display_target_information();
 
 				break;
 			}
@@ -1873,11 +1235,6 @@ void draw_havoc_hud_on_texture (void)
 	////////////////////////////////////////
 
 	set_2d_active_environment (hud_env);
-
-	//
-	// window
-	//
-
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	{
@@ -1926,7 +1283,7 @@ void draw_havoc_hud_on_texture (void)
 
 	////////////////////////////////////////
 	//
-	// draw HUD
+	// draw HUD on texture
 	//
 	////////////////////////////////////////
 
@@ -1951,13 +1308,12 @@ void draw_havoc_hud_on_texture (void)
 
 			switch (hud_mode)
 			{
-				case HUD_MODE_TRANSITION:				
+				case HUD_MODE_TRANSITION:
 				case HUD_MODE_NAVIGATION:
 				{
 					draw_heading_scale();
 					display_waypoint_information();
 					display_g_scale();
-//					draw_navigation_mode_hud (TRUE);
 
 					break;
 				}
@@ -1965,7 +1321,6 @@ void draw_havoc_hud_on_texture (void)
 				{
 					display_weapon_information();
 					display_target_information();
-//					draw_weapon_mode_hud (TRUE);
 
 					break;
 				}
@@ -1977,9 +1332,9 @@ void draw_havoc_hud_on_texture (void)
 		unlock_screen (hud_texture_screen);
 	}
 
-	set_active_screen (video_screen);
-
 	reset_2d_view_offset(hud_env);
+
+	set_active_screen (video_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2154,12 +1509,12 @@ void draw_external_havoc_hud (void)
 		////////////////////////////////////////
 		//
 
-		colour.red 				= hud_colour_table[get_global_hud_colour ()].r;
-		colour.green 			= hud_colour_table[get_global_hud_colour ()].g;
-		colour.blue	  			= hud_colour_table[get_global_hud_colour ()].b;
-		colour.alpha 			= 255;
+		colour.red				= hud_colour_table[get_global_hud_colour ()].r;
+		colour.green			= hud_colour_table[get_global_hud_colour ()].g;
+		colour.blue				= hud_colour_table[get_global_hud_colour ()].b;
+		colour.alpha			= 255;
 
-		specular.red 			= 0;
+		specular.red			= 0;
 		specular.green			= 0;
 		specular.blue			= 0;
 		specular.alpha			= 255;
@@ -2192,10 +1547,10 @@ void draw_external_havoc_hud (void)
 		quad[3].u				= 0.0;
 		quad[3].v				= 1.0;
 
-		quad[0].next_vertex	= &quad[1];
-		quad[1].next_vertex	= &quad[2];
-		quad[2].next_vertex	= &quad[3];
-		quad[3].next_vertex	= NULL;
+		quad[0].next_vertex		= &quad[1];
+		quad[1].next_vertex		= &quad[2];
+		quad[2].next_vertex		= &quad[3];
+		quad[3].next_vertex		= NULL;
 
 		//
 		////////////////////////////////////////
@@ -2286,13 +1641,8 @@ static void initialise_hms_gun_pipper (void)
 static void draw_gun_pipper (float x, float y, float range, float weapon_min_range, float weapon_max_range)
 {
 	float
-		normalised_range,
 		theta,
 		max_range;
-
-	int
-		i,
-		i_max;
 
 	if (weapon_max_range > 5000)
 		max_range = 10000;
@@ -2301,16 +1651,19 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 	else
 		max_range = 2500;
 
-	normalised_range = range / max_range;
-
 	if (get_range_finder() != RANGEFINDER_TRIANGULATION)
 	{
+		int i, i_max;
+		float normalised_range = range / max_range;
+	
 		i_max = (int) (normalised_range * NUM_GUN_PIPPER_POINTS);
 	
 		i_max = bound (i_max, 0, NUM_GUN_PIPPER_POINTS - 1);
 	
 		for (i = 0; i <= i_max; i++)
+		{
 			set_2d_pixel (x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
+		}
 	}
 
 	set_2d_instance_position (hud_env, x, y);
@@ -2457,7 +1810,7 @@ static void display_weapon_information (void)
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_ATAKA)
 		{
-			float flight_time = get_hokum_missile_flight_time ();
+			float flight_time = get_havoc_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2473,7 +1826,6 @@ static void display_weapon_information (void)
 			weapon_type = "ATA %02d";
 		else
 		{
-			entity* target;
 			float x,y;
 			float angle_of_drop = 0.0;
 			float head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z : 0.0;
@@ -2483,7 +1835,7 @@ static void display_weapon_information (void)
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
 				weapon_type = "GUN %03d";
 			else
-				weapon_type = "RKT %03d";
+				weapon_type = "RKT %d";
 
 			angle_of_drop = get_weapon_drop(weapon_sub_type);
 
@@ -2509,10 +1861,25 @@ static void display_weapon_information (void)
 		else
 			set_mono_font_type (MONO_FONT_TYPE_3X6);
 
-		set_2d_mono_font_position (-0.85, -0.1);
+		set_2d_mono_font_position (-0.9, -0.1);
 		set_mono_font_rel_position (0.0, 0.0);
 		sprintf(s, weapon_type, count);
 		print_mono_font_string (s);
+
+		// start salvo info by GCsDriver		
+		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
+		{
+			if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
+			{
+				sprintf (s, "Salvo:ALL");
+			}else{
+				sprintf (s, "Salvo:%d", rocket_salvo_size);
+			}
+			set_2d_mono_font_position (-0.9, -0.2);
+			set_mono_font_rel_position (0.0, 0.0);
+			print_mono_font_string (s);
+		}
+		// end salvo info by GCsDriver
 	}
 }
 
@@ -2524,6 +1891,7 @@ static void display_target_information (void)
 {
 	const char
 		*s;
+
 	char
 		buffer[200];
 
@@ -2534,34 +1902,40 @@ static void display_target_information (void)
 		*target,
 		*source;
 
-	rangefinding_system
-		range_finder = get_range_finder();
+	int has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
+
+	if (draw_large_hud)
+		set_mono_font_type (MONO_FONT_TYPE_7X12);
+	else
+		set_mono_font_type (MONO_FONT_TYPE_5X7);
 
 	// Range
 	source = get_gunship_entity ();
 	ASSERT(source);
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-	if (target && range_finder != RANGEFINDER_TRIANGULATION)
+	if (target)
 	{
-		vec3d *target_position, *source_position;
 		float min_weapon_range, max_weapon_range, target_range;
 		entity_sub_types selected_weapon_type;
 
+		if (has_range)
+		{
+			vec3d *target_position, *source_position;
 
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		target_range = get_3d_range (source_position, target_position);
+			source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
-		if (draw_large_hud)
-			set_mono_font_type (MONO_FONT_TYPE_7X12);
-		else
-			set_mono_font_type (MONO_FONT_TYPE_5X7);
+			target_range = get_3d_range (source_position, target_position);
+		}
 
-		sprintf (buffer, "%2.1f", target_range * 0.001);
-		set_2d_mono_font_position (0.0, -0.65);
-		width = get_mono_font_string_width (buffer);
-		set_mono_font_rel_position (-width * 0.5, 0.0);
-		print_mono_font_string (buffer);
+		if (has_range)
+		{
+			sprintf (buffer, "%2.1f", target_range * 0.001);
+			set_2d_mono_font_position (0.0, -0.65);
+			width = get_mono_font_string_width (buffer);
+			set_mono_font_rel_position (-width * 0.5, 0.0);
+			print_mono_font_string (buffer);
+		}
 
 		// min and max range
 		selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
@@ -2570,37 +1944,21 @@ static void display_target_information (void)
 		max_weapon_range = weapon_database[selected_weapon_type].max_range;
 		
 		// flashing X when within minimum range
-		if (target_range < min_weapon_range && (get_system_time() % 800) < 400)
+		if (has_range && target_range < min_weapon_range && (get_system_time() % 800) < 400)
 		{
 			draw_line_func(-0.5, -0.5, 0.5, 0.5, hud_colour);
 			draw_line_func(-0.5, 0.5, 0.5, -0.5, hud_colour);
 		}
 	}
+	
+	//
+	// weapon lock
+	//
 
 	if (draw_large_hud)
 		set_mono_font_type (MONO_FONT_TYPE_6X10);
 	else
 		set_mono_font_type (MONO_FONT_TYPE_3X6);
-
-	// laser active
-	if (laser_is_active())
-	{
-		set_2d_mono_font_position (-0.8, 0.2);
-		set_mono_font_rel_position (0.0, 0.0);
-		print_mono_font_string("L");
-	}
-
-	if (get_local_entity_int_value(source, INT_TYPE_RADAR_ON))
-	{
-		set_2d_mono_font_position (-0.8, 0.1);
-		set_mono_font_rel_position (0.0, 0.0);
-		print_mono_font_string("R");
-	}
-	
-
-	//
-	// weapon lock
-	//
 
 	switch (weapon_lock_type)
 	{
@@ -2626,19 +1984,17 @@ static void display_target_information (void)
 			s = "NO SGT";
 			break;
 		case WEAPON_LOCK_MIN_RANGE:
-			if (range_finder != RANGEFINDER_TRIANGULATION)
+			if (has_range)
 			{
 				s = "MIN RNG";
 				break;
 			}
-			// fallthrough
 		case WEAPON_LOCK_MAX_RANGE:
-			if (range_finder != RANGEFINDER_TRIANGULATION)
+			if (has_range)
 			{
 				s = "MAX RNG";
 				break;
 			}
-			// fallthrough
 		case WEAPON_LOCK_VALID:
 			s = "LOCK";
 			break;
@@ -2648,15 +2004,34 @@ static void display_target_information (void)
 	}
 
 	width = get_mono_font_string_width (s);
-	set_2d_mono_font_position (-0.9, -0.2);
+
+	// make place for salvo info by GCsDriver 08-12-2007
+	//	set_2d_mono_font_position (-0.9, -0.2);
+		set_2d_mono_font_position (-0.9, -0.3);
+	// end salvo info by GCsDriver 08-12-2007
+
 	set_mono_font_rel_position (0.0, 0.0);
+
 	print_mono_font_string (s);
+
+	// laser and radar indicators
+	if (laser_is_active())
+	{
+		set_2d_mono_font_position (-0.8, 0.2);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("L");
+	}
+
+	if (get_local_entity_int_value(source, INT_TYPE_RADAR_ON))
+	{
+		set_2d_mono_font_position (-0.8, 0.1);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string("R");
+	}
 
 	//
 	// target name
 	//
-
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	if (target)
 	{
@@ -2670,6 +2045,7 @@ static void display_target_information (void)
 			print_mono_font_string (s);
 		}
 	}
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2780,12 +2156,15 @@ void draw_havoc_hms (void)
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	hud_viewport_x_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
+
 	hud_viewport_y_org = HUD_VIEWPORT_LARGE_SIZE * 0.5;
 
 	hud_viewport_x_min = 0.0;
+
 	hud_viewport_y_min = 0.0;
 
 	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+
 	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);

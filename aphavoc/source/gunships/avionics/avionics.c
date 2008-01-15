@@ -97,7 +97,7 @@ void initialise_avionics (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -419,6 +419,11 @@ void initialise_avionics (void)
 
 			initialise_ka50_threat_warning_system ();
 
+			// added by GCsDriver  08-12-2007
+			// Casm 10SEP05 Havoc Instruments - temporary used for Hind too
+ 			initialise_havoc_instrument_colours ();
+ 			initialise_havoc_instruments ();
+
 			//
 			// push events after avionics have been initialised
 			//
@@ -432,6 +437,51 @@ void initialise_avionics (void)
 			break;
 		}
 		////Moje 030815 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			load_gunship_avionics_damage ();
+
+			initialise_common_hud ();
+
+			initialise_common_mfd ();
+
+			initialise_common_weapon_systems ();
+
+			initialise_common_target_acquisition_systems ();
+
+			initialise_common_night_vision_system ();
+
+			initialise_default_hud ();
+
+			initialise_default_mfd ();
+
+			initialise_default_weapon_systems ();
+
+			initialise_default_upfront_display ();
+
+			initialise_default_target_acquisition_systems ();
+
+			initialise_default_lamp_avionics ();
+
+			initialise_default_threat_warning_system ();
+
+			//
+			// push events after avionics have been initialised
+			//
+
+			push_event_overlay (set_common_avionics_events, "common avionics events");
+
+			push_event_overlay (set_default_avionics_events, "default avionics events");
+
+			push_event_overlay (set_gunship_view_mode_events, "gunship view mode events");
+
+			break;
+		}
+
 	}
 }
 
@@ -452,7 +502,7 @@ void deinitialise_avionics (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -807,9 +857,61 @@ void deinitialise_avionics (void)
 
 			deinitialise_ka50_threat_warning_system ();
 
+			// added by GCsDriver  08-12-2007
+			// Casm 10SEP05 Havoc Instruments - temporary used for Hind
+ 			deinitialise_havoc_instruments ();
+
 			break;
 		}
 		//// Moje 030517 End of insertion 2
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			//
+			// pop 'overlaid' target acquisition events first
+			//
+
+			deinitialise_common_target_acquisition_systems ();
+
+			//
+			// pop events before avionics are de-initialised
+			//
+
+			pop_event (set_gunship_view_mode_events);
+
+			pop_event (set_default_avionics_events);
+
+			pop_event (set_common_avionics_events);
+
+			save_gunship_avionics_damage ();
+
+			deinitialise_common_hud ();
+
+			deinitialise_common_mfd ();
+
+			deinitialise_common_weapon_systems ();
+
+			deinitialise_common_night_vision_system ();
+
+			deinitialise_default_hud ();
+
+			deinitialise_default_mfd ();
+
+			deinitialise_default_upfront_display ();
+
+			deinitialise_default_target_acquisition_systems ();
+
+			deinitialise_default_lamp_avionics ();
+
+			deinitialise_default_threat_warning_system ();
+
+			break;
+		}
+
+
 	}
 }
 
@@ -836,7 +938,7 @@ void update_avionics (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -1006,6 +1108,30 @@ void update_avionics (void)
 			break;
 		}
 		////Moje 030815 End of 3rd insertion
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			update_common_target_acquisition_systems ();
+
+			update_default_target_acquisition_system ();
+
+			update_default_weapon_systems ();
+
+			update_default_lamp_avionics ();
+
+			update_default_threat_warning_system ();
+
+			update_default_upfront_display ();
+
+			if (command_line_shared_mem_export != 0)
+				update_default_avionics_shared_mem ();	// Retro 8Mar2005
+
+			break;
+		}
+
 
 	}
 }

@@ -104,7 +104,7 @@ void initialise_cockpits (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -261,6 +261,30 @@ void initialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			initialise_common_cockpits ();
+
+			initialise_default_cockpits ();
+
+			//
+			// order is critical
+			//
+//VJ 050101 3d cockpit mod
+			if (command_line_3d_cockpit)
+				initialise_default_virtual_cockpit_3d ();
+			else
+				initialise_default_virtual_cockpit ();
+
+			initialise_common_virtual_cockpit ();
+
+			break;
+		}
+
 	}
 }
 
@@ -281,7 +305,7 @@ void deinitialise_cockpits (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -393,6 +417,24 @@ void deinitialise_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			deinitialise_common_cockpits ();
+
+			deinitialise_common_virtual_cockpit ();
+
+			deinitialise_default_cockpits ();
+			
+			deinitialise_default_virtual_cockpit ();
+
+			break;
+		}
+
+
 	}
 
 	if(command_line_export_mfd)
@@ -414,7 +456,7 @@ void update_cockpits (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -532,6 +574,24 @@ void update_cockpits (void)
 			break;
 		}
 		////Moje 030816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			update_common_cockpits ();
+
+			update_common_virtual_cockpit ();
+
+			update_default_cockpits ();
+
+			update_default_virtual_cockpit ();
+
+			break;
+		}
+
+
 	}
 }
 
@@ -650,6 +710,22 @@ void draw_cockpit (cockpit_panels panel)
 		}
 
 		////Moje 030816 End
+/*
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007  for later use 
+		default:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_default_cockpit (panel);
+			
+			if (command_line_restricted_nvg_fov && night_vision_system_active)
+				draw_night_vision_mask();
+
+			break;
+		}
+*/
 	}
 }
 

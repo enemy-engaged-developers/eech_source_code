@@ -89,6 +89,9 @@ void initialise_ui_menus (void)
 
 	initialise_credits_screen ();
 
+// GCsDriver  08-12-2007
+	initialise_modcredits_screen ();
+
 	initialise_game_type_screen ();
 
 	initialise_session_screen ();

@@ -131,6 +131,8 @@ static screen
 static rgb_colour
 	clear_hud_colour;
 
+//new
+#define HUD_UNIT_RATIO 14.6    // ratio of HUD size with distance to HUD
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2054,6 +2056,8 @@ static void display_weapon_information (void)
 
 	entity_sub_types
 		weapon_sub_type;
+			
+	float x,y,angle_of_drop,head_offset_z,drop_hud_distance,roll;	
 
 	weapon_sub_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
 
@@ -2067,7 +2071,7 @@ static void display_weapon_information (void)
 
 		count = get_local_entity_weapon_count (get_gunship_entity (), weapon_sub_type);
 
-		sprintf (s, "%s:%d", weapon_database[weapon_sub_type].hud_name, count);
+		sprintf (s, "%s %d", weapon_database[weapon_sub_type].hud_name, count);
 
 		set_2d_mono_font_position (-1.0, -0.7);
 
@@ -2096,7 +2100,7 @@ static void display_weapon_information (void)
 				print_mono_font_string (s);
 			}
 		}
-		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
+		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
 		{
 			if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
 			{
@@ -2112,6 +2116,36 @@ static void display_weapon_information (void)
 			set_mono_font_rel_position (1.0, 0.0);
 
 			print_mono_font_string (s);
+			
+//added by GCsDriver 08-12-2007
+
+			x,y;
+			angle_of_drop = 0.0;
+			head_offset_z = get_global_wide_cockpit() ? wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z : 0.0;
+			drop_hud_distance;
+			roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+
+
+			angle_of_drop = get_weapon_drop(weapon_sub_type);
+
+			// move eo to hit point
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+				slew_eo_to_direction(-angle_of_drop, 0.0);
+
+			x = 0.0;
+			y = get_global_wide_cockpit() ? 0.26 : 0.0;
+
+			// this magic formula translates the angle to a HUD distance
+			// the magic values are just arrived at by measuring in game
+			drop_hud_distance = atan(angle_of_drop) * ((head_offset_z * 0.82) + 0.56) * HUD_UNIT_RATIO;
+			y -= cos(roll) * drop_hud_distance;
+			x += sin(roll) * drop_hud_distance;
+
+			draw_2d_circle(x, y, 0.1, hud_colour);
+			set_2d_pixel(x, y, hud_colour); 
+			
+//end GCsDriver	08-12-2007		
+			
 		}
 	}
 }

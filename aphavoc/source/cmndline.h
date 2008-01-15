@@ -148,11 +148,10 @@ extern int
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
 	command_line_eo_zoom_joystick_index,					// loke 030319
 	command_line_eo_zoom_joystick_axis,						// loke 030319
-	command_line_field_of_view_joystick_index,	
-	command_line_field_of_view_joystick_axis,	
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322
 	command_line_manual_laser_radar,						// arneh 2006-11-06
+	command_line_laser_workaround,						// GCsDriver 08-12-2007
 	command_line_targeting_system_auto_page,				// arneh 2007-01-06
 	command_line_framerate,										// VJ 030324
 //Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
@@ -169,8 +168,15 @@ extern int
 	command_line_rudder_joystick_axis,						// loke 030418
 	command_line_nonlinear_pedals,							// arneh 2007-01-14
 	command_line_restricted_nvg_fov,						// arneh 2006-11-22
+	command_line_russian_nvg_no_ir,						// GCsDriver 08-12-2007
 	command_line_high_res_mfd,									// loke 030420
 	command_line_high_res_hud,									// arneh 2006-07-18
+	command_line_hokum_ammo_count,									// GCsDriver  08-12-2007
+	command_line_unpadlock_on_handover,									// GCsDriver  08-12-2007
+	command_line_pilot_as_periscope_default,									// GCsDriver  08-12-2007
+	command_line_autoreturn_to_pilot_after_periscope,									// GCsDriver  08-12-2007
+	command_line_eo_full_range,						// GCsDriver  08-12-2007
+	command_line_render_tree_shadows,						// GCsDriver  08-12-2007
 	command_line_fly_any_airplane,							// VJ 030424
 	command_line_tsd_enemy_colours,							// VJ 030511
 	command_line_tsd_render_mode,								// VJ 030511
@@ -230,6 +236,7 @@ extern float
 	command_line_dynamics_rudder_acceleration,
 	command_line_collective_zone_1_limit,					// arneh 2007-01-14
 	command_line_collective_zone_2_limit,					// arneh 2007-01-14
+	command_line_collective_percentage_at_zone1,					// GCsDriver  08-12-2007
 	command_line_dynamics_main_rotor_drag,
 	command_line_dynamics_main_rotor_lift,
 	command_line_dynamics_tail_rotor_drag,

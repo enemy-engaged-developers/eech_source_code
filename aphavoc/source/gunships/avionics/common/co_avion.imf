@@ -94,6 +94,7 @@ c_object_files    += $+ &
                      $(currentdir)\co_thrt.obj &
                      $(currentdir)\co_wp.obj &
                      $(currentdir)\co_wpn.obj &
+                     $(currentdir)\co_grstab.obj &
                      $-
 
 asm_object_files  += $+ &

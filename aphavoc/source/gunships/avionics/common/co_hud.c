@@ -270,7 +270,7 @@ void display_hud_on_external_view (void)
 		{
 			////////////////////////////////////////
 			// JB 030313 Fly any aircraft
-			default:
+//			default:
 			case GUNSHIP_TYPE_APACHE:
 			////////////////////////////////////////
 			{
@@ -344,6 +344,17 @@ void display_hud_on_external_view (void)
 				break;
 			}
 			////Moje 030816 end
+
+			////////////////////////////////////////
+			// GCsDriver  08-12-2007
+			default:
+			////////////////////////////////////////
+			{
+				draw_default_hud ();
+
+				break;
+			}
+
 		}
 	}
 }

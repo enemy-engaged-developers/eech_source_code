@@ -141,8 +141,8 @@ int activate_accept_selections_button (void)
 		//
 		// player currently has a gunship 
 		//
-
-		ASSERT ((member == get_gunship_entity ()) || (member == NULL));
+// GCsDriver
+		//ASSERT ((member == get_gunship_entity ()) || (member == NULL));
 
 		set_ui_object_drawable (cockpit_button, TRUE);
 
@@ -331,6 +331,12 @@ static void set_raw_currently_selected_mission (int index)
 	}
 
 	set_ui_object_item_number (select_mission_button, index);
+
+	// reactivate channels when crashed or new mission by GCsDriver 08-12-2007
+	set_sound_channel_muted (SOUND_CHANNEL_AIR_TRAFFIC_CONTROLLER, FALSE);
+	set_sound_channel_muted (SOUND_CHANNEL_FORWARD_AIR_CONTROLLER, FALSE);
+	set_sound_channel_muted (SOUND_CHANNEL_GROUND_CONTROLLER, FALSE);
+	set_sound_channel_muted (SOUND_CHANNEL_WINGMAN, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

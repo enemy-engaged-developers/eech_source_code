@@ -240,6 +240,7 @@ extern ui_object
 	*main_screen,
 	*pilots_button,
 	*credits_button,
+	*modcredits_button,
 	*ghost_pilots_button,
 	*ghost_credits_button;
 

@@ -1018,7 +1018,14 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_lightmode ( main_3d_env, LIGHTMODE_MANUAL_LIGHT );
 
-			set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+			// start russian NVG WITHOUT FLIR by GCsDriver  08-12-2007
+			if(command_line_russian_nvg_no_ir)
+			{
+				set_3d_infrared_mode ( main_3d_env, RENDER_MONOCHROME );
+			}else{
+				set_3d_infrared_mode ( main_3d_env, INFRARED_ON );
+			}
+			// end russian NVG WITHOUT FLIR by GCsDriver  08-12-2007
 
 			//
 			// Set the light in the scene
@@ -1026,11 +1033,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			switch ( current_3d_light_level )
 			{
-
+				// start no red to avoid purple trees by GCsDriver  08-12-2007
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.2;
+					ambient_light.red = 0.0;
 					ambient_light.green = 0.468;
 					ambient_light.blue = 0.4;
 
@@ -1044,7 +1051,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.25;
+					ambient_light.red = 0.0;
 					ambient_light.green = 0.574;
 					ambient_light.blue = 0.5;
 
@@ -1057,7 +1064,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
-					ambient_light.red = 0.3;
+					ambient_light.red = 0.0;
 					ambient_light.green = 0.7;
 					ambient_light.blue = 0.6;
 
@@ -1068,6 +1075,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 					break;
 				}
 			}
+			// end no red to avoid purple trees by GCsDriver  08-12-2007
 
 			set_3d_ambient_light_source ( main_3d_env, &ambient_light );
 
@@ -1198,16 +1206,16 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			switch ( current_3d_light_level )
 			{
-
+				// start 3d effect by GCsDriver  08-12-2007
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.6;
-					ambient_light.green = 0.3;
+					ambient_light.red = 0.7;
+					ambient_light.green = 0.35;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.15;
-					main_light.green = 0.0;
+					main_light.red = 0.24;
+					main_light.green = 0.12;
 					main_light.blue = 0.0;
 
 					break;
@@ -1216,12 +1224,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.8;
-					ambient_light.green = 0.35;
+					ambient_light.red = 0.9;
+					ambient_light.green = 0.45;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.2;
-					main_light.green = 0.0;
+					main_light.red = 0.32;
+					main_light.green = 0.16;
 					main_light.blue = 0.0;
 
 					break;
@@ -1229,17 +1237,18 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
-
-					ambient_light.red = 1.0;
-					ambient_light.green = 0.5;
+					ambient_light.red = 1.1;
+					ambient_light.green = 0.55;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.25;
-					main_light.green = 0.0;
+					main_light.red = 0.4;
+					main_light.green = 0.2;
 					main_light.blue = 0.0;
 
 					break;
 				}
+
+				// end 3d effect by GCsDriver  08-12-2007
 /* buggy
 //VJ 060105 extra light level for PNVS
 				case DISPLAY_3D_LIGHT_LEVEL_VERY_HIGH:
@@ -1272,7 +1281,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 
 			fog_colour.r = ambient_light.red * 128;
-			fog_colour.g = ambient_light.green * 100;
+			fog_colour.g = ambient_light.green * 128;
 			fog_colour.b = ambient_light.blue * 0;
 			fog_colour.a = 0;
 

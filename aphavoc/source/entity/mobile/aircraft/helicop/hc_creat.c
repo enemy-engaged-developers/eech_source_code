@@ -563,6 +563,35 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
 				break;
 			}
+			// start new entities by GCsDriver  08-12-2007
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1T_SEACOBRA:
+			case ENTITY_SUB_TYPE_AIRCRAFT_AH1W_SUPERCOBRA:
+			case ENTITY_SUB_TYPE_AIRCRAFT_OH58D_KIOWA_WARRIOR:
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH46E_SEA_KNIGHT:
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH3_JOLLY_GREEN_GIANT:
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH47D_CHINOOK:
+			case ENTITY_SUB_TYPE_AIRCRAFT_MV22_OSPREY:
+			case ENTITY_SUB_TYPE_AIRCRAFT_CH53E_SUPER_STALLION:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_APACHE_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_APACHE_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
+			case ENTITY_SUB_TYPE_AIRCRAFT_KA29_HELIX_B:
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI17_HIP:
+			case ENTITY_SUB_TYPE_AIRCRAFT_MI6_HOOK:
+			{
+				mca_effect_index = SOUND_SAMPLE_INDEX_HOKUM_MCA;
+				lock_on_effect_index = SOUND_SAMPLE_INDEX_HOKUM_LOCK_ON;
+				tracked_effect_index = SOUND_SAMPLE_INDEX_WARNING_TRACKED_BY_RADAR;
+				locked_effect_index = SOUND_SAMPLE_INDEX_WARNING_LOCKED_BY_RADAR;
+				incoming_effect_index = SOUND_SAMPLE_INDEX_WARNING_INCOMING_MISSILE;
+				break;
+			}
+			// end new entities by GCsDriver  08-12-2007
 		}
 
 		create_helicopter_cockpit_sound_effect (new_entity, ENTITY_SUB_TYPE_EFFECT_SOUND_MCA, mca_effect_index);

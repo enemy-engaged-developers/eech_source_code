@@ -70,10 +70,10 @@
 		#define RHS_HARDPOINT1	(1)
 		#define LHS_HARDPOINT2	(2)
 		#define RHS_HARDPOINT2	(3)
-		#define CHAFF_DISPENSER	(4)
-		#define FLARE_DISPENSER	(4)
+		#define CHAFF_DISPENSER	(HELIX_CHAFF_DISPENSER)
+		#define FLARE_DISPENSER	(HELIX_FLARE_DISPENSER)
 
-		#define B8_POD				(0)
+		#define B8_POD				(1)
 		#define B5_POD				(1)
 		#define CHAFF_VECTOR	  	(0)
 		#define FLARE_VECTOR	  	(0)

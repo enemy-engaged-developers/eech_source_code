@@ -60,6 +60,9 @@ extern hind_lamp_flags hind_lamps;
 extern hokum_lamp_flags hokum_lamps;
 extern ka50_lamp_flags ka50_lamps;
 
+// GCsDriver  08-12-2007
+extern default_lamp_flags default_lamps;
+
 void update_ah64a_avionics_shared_mem ()
 {
 	if (gPtrSharedMemory == 0)
@@ -130,6 +133,16 @@ void update_ka50_avionics_shared_mem ()
 
     ((shared_memory_t*)gPtrSharedMemory)->current_gunship = GUNSHIP_TYPE_KA50;
 	memcpy(&((shared_memory_t*)gPtrSharedMemory)->cockpit_lamps.ka50_lamps, &ka50_lamps, sizeof(ka50_lamp_flags));
+}
+
+// GCsDriver  08-12-2007
+void update_default_avionics_shared_mem ()
+{
+	if (gPtrSharedMemory == 0)
+		return;
+
+    ((shared_memory_t*)gPtrSharedMemory)->current_gunship = GUNSHIP_TYPE_APACHE;
+	memcpy(&((shared_memory_t*)gPtrSharedMemory)->cockpit_lamps.default_lamps, &default_lamps, sizeof(default_lamp_flags));
 }
 
 void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4)

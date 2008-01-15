@@ -87,6 +87,8 @@ void initialise_collective(void)
 		// some sanity checking of the values. have to be in range <0.0, 1.0], and zone2 must be above zone1
 		command_line_collective_zone_1_limit = bound(command_line_collective_zone_1_limit, 0.0, 0.99);
 		command_line_collective_zone_2_limit = bound(command_line_collective_zone_2_limit, command_line_collective_zone_1_limit + 0.01, 1.0);
+		// GCsDriver 08-12-2007
+		command_line_collective_percentage_at_zone1 = bound(command_line_collective_percentage_at_zone1, 1.0, 99.0);
 		
 		zone_1_scale = 1.0 / command_line_collective_zone_1_limit;
 		zone_2_scale = 1.0 / (command_line_collective_zone_2_limit - command_line_collective_zone_1_limit);
@@ -224,21 +226,33 @@ void update_collective_pressure_inputs (void)
 
 				if (input < command_line_collective_zone_1_limit)
 				{
-					input *= 60.0 * zone_1_scale;
-					input -= 60.0;  // 0% -> -60
+					// start variable percentage at zone1 by GCsDriver 08-12-2007
+					input *= command_line_collective_percentage_at_zone1 * zone_1_scale;
+					input -= command_line_collective_percentage_at_zone1;  // 0% -> -60
+					// original
+					//input *= 60.0 * zone_1_scale;
+					//input -= 60.0;  // 0% -> -60
 				}
 				else if (input < command_line_collective_zone_2_limit)
 				{
 					// find amount over limit
 					input -= command_line_collective_zone_1_limit;
-					input *= 40.0 * zone_2_scale;
+					input *= (100.0-command_line_collective_percentage_at_zone1) * zone_2_scale;
+					// original
+					//input -= command_line_collective_zone_1_limit;
+					//input *= 40.0 * zone_2_scale;
 				}
 				else
 				{
 					// find amount over limit
 					input -= command_line_collective_zone_2_limit;
 					input *= 20.0 * zone_3_scale;
-					input += 40.0;   // 100% -> +40
+					input += (100.0-command_line_collective_percentage_at_zone1);   // 100% -> +40
+					// original
+					//input -= command_line_collective_zone_2_limit;
+					//input *= 20.0 * zone_3_scale;
+					//input += 40.0;   // 100% -> +40
+					// end variable percentage at zone1 by GCsDriver 08-12-2007
 				}
 			}
 			else

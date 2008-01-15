@@ -305,6 +305,32 @@ int get_local_entity_undercarriage_state (entity *en)
 	return state;
 }
 
+// start add loading and cargo doors for separate switching in helis by GCsDriver 08-12-2007
+int get_local_entity_loading_door_state (entity *en)
+{
+	int
+		state;
+
+	ASSERT (en);
+
+	get_keyframed_animation_state (get_local_entity_float_value (en, FLOAT_TYPE_LOADING_DOOR_STATE), &state, NULL);
+
+	return state;
+}
+
+int get_local_entity_cargo_door_state (entity *en)
+{
+	int
+		state;
+
+	ASSERT (en);
+
+	get_keyframed_animation_state (get_local_entity_float_value (en, FLOAT_TYPE_CARGO_DOOR_STATE), &state, NULL);
+
+	return state;
+}
+// end add loading and cargo doors for separate switching in helis by GCsDriver 08-12-2007
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -86,7 +86,8 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 		switch (selected_weapon)
 		{
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND:
+			case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND:
 			////////////////////////////////////////
 			{
 				duration = 0.3;
@@ -96,22 +97,22 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 				break;
 			}
 			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
+			////////////////////////////////////////
+			{
+				duration = 0.6;
+
+				strength = 7.5;
+
+				break;
+			}
+			////////////////////////////////////////
+			case ENTITY_SUB_TYPE_WEAPON_VIKHR:
 			////////////////////////////////////////
 			{
 				duration = 0.7;
 
 				strength = 9.0;
-
-				break;
-			}
-			////////////////////////////////////////
-			case ENTITY_SUB_TYPE_WEAPON_S5:
-			////////////////////////////////////////
-			{
-				duration = 0.5;
-
-				strength = 7.5;
 
 				break;
 			}
@@ -122,6 +123,26 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 				duration = 0.4;
 
 				strength = 10.0;
+
+				break;
+			}
+			////////////////////////////////////////
+			case ENTITY_SUB_TYPE_WEAPON_S13:
+			////////////////////////////////////////
+			{
+				duration = 0.5;
+
+				strength = 7.5;
+
+				break;
+			}
+			////////////////////////////////////////
+			case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
+			////////////////////////////////////////
+			{
+				duration = 0.1;
+
+				strength = 2.5;
 
 				break;
 			}
@@ -160,7 +181,7 @@ void update_ka50_weapon_systems (void)
 
 	weapon_sub_type = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
-/*	////////////////////////////////////////
+	////////////////////////////////////////
 	//
 	// Igla lock tone
 	//
@@ -178,7 +199,7 @@ void update_ka50_weapon_systems (void)
 
 		reset_good_tone ();
 	}
-*/
+
 	////////////////////////////////////////
 	//
 	// weapon launch interlocks
@@ -190,7 +211,8 @@ void update_ka50_weapon_systems (void)
 	switch (weapon_sub_type)
 	{
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+		case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND:
+		case ENTITY_SUB_TYPE_WEAPON_2A42_30MM_AP_ROUND:
 		////////////////////////////////////////
 		{
 			if
@@ -213,7 +235,7 @@ void update_ka50_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+		case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
 		////////////////////////////////////////
 		{
 			if
@@ -236,20 +258,20 @@ void update_ka50_weapon_systems (void)
 			break;
 		}
 		////////////////////////////////////////
-		case ENTITY_SUB_TYPE_WEAPON_S5:
+		case ENTITY_SUB_TYPE_WEAPON_VIKHR:
 		////////////////////////////////////////
 		{
 			if
 			(
-				//WEAPON_LOCK_NO_ACQUIRE
-				(weapon_lock_type == WEAPON_LOCK_NO_WEAPON)
-				//WEAPON_LOCK_NO_TARGET
-				//WEAPON_LOCK_INVALID_TARGET
-				//WEAPON_LOCK_SEEKER_LIMIT
+				(weapon_lock_type == WEAPON_LOCK_NO_ACQUIRE) ||
+				(weapon_lock_type == WEAPON_LOCK_NO_WEAPON) ||
+				(weapon_lock_type == WEAPON_LOCK_NO_TARGET) ||
+				(weapon_lock_type == WEAPON_LOCK_INVALID_TARGET) ||
+				(weapon_lock_type == WEAPON_LOCK_SEEKER_LIMIT) ||
 				//WEAPON_LOCK_NO_LOS
 				//WEAPON_LOCK_NO_BORESIGHT
 				//WEAPON_LOCK_MIN_RANGE
-				//WEAPON_LOCK_MAX_RANGE
+				(weapon_lock_type == WEAPON_LOCK_MAX_RANGE)
 				//WEAPON_LOCK_VALID
 			)
 			{
@@ -281,7 +303,52 @@ void update_ka50_weapon_systems (void)
 
 			break;
 		}
+		////////////////////////////////////////
+		case ENTITY_SUB_TYPE_WEAPON_S13:
+		////////////////////////////////////////
+		{
+			if
+			(
+				//WEAPON_LOCK_NO_ACQUIRE
+				(weapon_lock_type == WEAPON_LOCK_NO_WEAPON)
+				//WEAPON_LOCK_NO_TARGET
+				//WEAPON_LOCK_INVALID_TARGET
+				//WEAPON_LOCK_SEEKER_LIMIT
+				//WEAPON_LOCK_NO_LOS
+				//WEAPON_LOCK_NO_BORESIGHT
+				//WEAPON_LOCK_MIN_RANGE
+				//WEAPON_LOCK_MAX_RANGE
+				//WEAPON_LOCK_VALID
+			)
+			{
+				inhibit_launch = TRUE;
+			}
 
+			break;
+		}
+		////////////////////////////////////////
+		case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
+		////////////////////////////////////////
+		{
+			if
+			(
+				//WEAPON_LOCK_NO_ACQUIRE
+				(weapon_lock_type == WEAPON_LOCK_NO_WEAPON)
+				//WEAPON_LOCK_NO_TARGET
+				//WEAPON_LOCK_INVALID_TARGET
+				//WEAPON_LOCK_SEEKER_LIMIT
+				//WEAPON_LOCK_NO_LOS
+				//WEAPON_LOCK_NO_BORESIGHT
+				//WEAPON_LOCK_MIN_RANGE
+				//WEAPON_LOCK_MAX_RANGE
+				//WEAPON_LOCK_VALID
+			)
+			{
+				inhibit_launch = TRUE;
+			}
+
+			break;
+		}
 	}
 
 	if (inhibit_launch)
@@ -322,7 +389,7 @@ void update_ka50_weapon_systems (void)
 	//
 	////////////////////////////////////////
 
-	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8))
+	if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
 	{
 		if (fire_single_weapon)
 		{
@@ -373,9 +440,22 @@ void update_ka50_weapon_systems (void)
 		}
 		else
 		{
-			apply_weapon_recoil_effect (en, weapon_sub_type);
+			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
+			{
+				apply_weapon_recoil_effect (en, weapon_sub_type);
 
-			launch_client_server_weapon (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type);
+
+				apply_weapon_recoil_effect (en, weapon_sub_type);
+
+				launch_client_server_weapon (en, weapon_sub_type);
+			}
+			else
+			{
+				apply_weapon_recoil_effect (en, weapon_sub_type);
+
+				launch_client_server_weapon (en, weapon_sub_type);
+			}
 		}
 	}
 
@@ -407,14 +487,14 @@ float get_ka50_missile_flight_time (void)
 	en = get_gunship_entity ();
 
 	//
-	// find most recently launched Ataka with a target (first found on list)
+	// find most recently launched Vikhr with a target (first found on list)
 	//
 
 	weapon = get_local_entity_first_child (en, LIST_TYPE_LAUNCHED_WEAPON);
 
 	while (weapon)
 	{
-		if (get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL)
+		if (get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WEAPON_VIKHR)
 		{
 			target = get_local_entity_parent (weapon, LIST_TYPE_TARGET);
 

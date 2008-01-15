@@ -154,10 +154,11 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			////Moje 030816 end
 			{
 //VJ 050818 PNVS brighness levels
+// switched 0 and 2 so high level is default by GCsDriver 08-12-2007
 				switch (global_PNVS_level){
-					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE); break;
 					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE); break;
-					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE); break;
+					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_GREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE); break;
 				}
 				break;
 			}
@@ -171,10 +172,11 @@ void set_pilots_full_screen_params (int night_vision_system_active)
 			////Moje 030816 End
 			{
 //VJ 050818 PNVS brighness levels
+// switched 0 and 2 so high level is default by GCsDriver 08-12-2007
 				switch (global_PNVS_level){
-					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 0 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
 					case 1 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_MEDIUM, DISPLAY_3D_NOISE_LEVEL_NONE);break;
-					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);break;
+					case 2 : set_main_3d_full_screen_params (DISPLAY_3D_TINT_BLUEGREEN, DISPLAY_3D_LIGHT_LEVEL_LOW, DISPLAY_3D_NOISE_LEVEL_NONE);break;
 				}
 				break;
 			}

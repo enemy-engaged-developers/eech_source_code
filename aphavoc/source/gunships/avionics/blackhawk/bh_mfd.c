@@ -102,6 +102,7 @@ static rgb_colour
 #define TEXT_COLOUR1					(text_display_colours[0])
 #define TEXT_BACKGROUND_COLOUR	(text_display_colours[1])
 
+static void (*draw_line_func)(float, float, float, float, const rgb_colour) = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,19 +113,23 @@ static rgb_colour
 // main 2D environment
 //
 ////////////////////////////////////////
+//Maverick fix the apache MFD font
 
-#define MFD_WINDOW_X_MIN				(-1.0)
-#define MFD_WINDOW_Y_MIN				(-1.0)
-#define MFD_WINDOW_X_MAX				(0.999)
-#define MFD_WINDOW_Y_MAX				(0.999)
+#define MFD_WINDOW_X_MIN				(-1.1)
+#define MFD_WINDOW_Y_MIN				(-1.1)
+#define MFD_WINDOW_X_MAX				(1.100)
+#define MFD_WINDOW_Y_MAX				(1.100)
 
 #define MFD_VIEWPORT_SMALL_SIZE		(128)
-#define MFD_VIEWPORT_LARGE_SIZE		(331)
+//#define MFD_VIEWPORT_LARGE_SIZE		(331)
+#define MFD_VIEWPORT_LARGE_SIZE		(256)
 
-#define MFD_TEXTURE_SIZE				(128)
+#define MFD_TEXTURE_SMALL_SIZE			(128)
+#define MFD_TEXTURE_LARGE_SIZE			(256)
+//#define MFD_TEXTURE_SIZE			(128)
 
-#define MFD_VIEWPORT_TEXTURE_X_ORG	(MFD_TEXTURE_SIZE / 2)
-#define MFD_VIEWPORT_TEXTURE_Y_ORG	(MFD_TEXTURE_SIZE / 2)
+//#define MFD_VIEWPORT_TEXTURE_X_ORG	(MFD_TEXTURE_SIZE / 2)
+//#define MFD_VIEWPORT_TEXTURE_Y_ORG	(MFD_TEXTURE_SIZE / 2)
 
 static env_2d
 	*mfd_env;
@@ -139,7 +144,10 @@ static float
 	mfd_viewport_y_max;
 
 static int
-	draw_large_mfd;
+	draw_large_mfd,
+	mfd_texture_size,
+	mfd_viewport_texture_x_org,
+	mfd_viewport_texture_y_org;
 
 static float
 	i_translate_3d,
@@ -158,7 +166,8 @@ static screen
 	*lhs_mfd_texture_screen,
 	*rhs_mfd_texture_screen,
 	*lhs_overlaid_mfd_texture_screen,
-	*rhs_overlaid_mfd_texture_screen;
+	*rhs_overlaid_mfd_texture_screen,
+	*eo_3d_texture_screen;
 
 static rgb_colour
 	clear_mfd_colour;
@@ -501,6 +510,195 @@ static char
 		0,1,1,0,
 	};
 
+////////////////////////////////////////
+//
+// WEAPONS
+//
+////////////////////////////////////////
+
+static char
+	hellfire_missile_data[] =
+	{
+		15,
+		39,
+		-7,
+		-19,
+		0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+		0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,
+		0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,
+		0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,
+		1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,
+		1,0,0,1,0,0,0,0,0,0,0,1,0,0,1,
+		1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,
+		1,0,0,0,0,1,0,0,0,1,0,0,0,0,1,
+		1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	};
+
+static char
+	inverted_hellfire_missile_data[] =
+	{
+		15,
+		39,
+		-7,
+		-19,
+		0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,
+		0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+		0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,
+		1,1,0,1,1,1,1,1,1,1,1,1,0,1,1,
+		1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,
+		1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,
+		1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,
+		1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	};
+
+static char
+	stinger_missile_data[] =
+	{
+		15,
+		31,
+		-7,
+		-15,
+		0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+		0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,
+		0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,
+		0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,
+		1,0,0,1,0,0,0,0,0,0,0,1,0,0,1,
+		1,0,0,1,0,0,0,0,0,0,0,1,0,0,1,
+		1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+	};
+	
+static char
+	inverted_stinger_missile_data[] =
+	{
+		15,
+		31,
+		-7,
+		-15,
+		0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+		0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+		0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,
+		0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
+	};
+
+static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour);
+static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour);
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -532,19 +730,54 @@ void initialise_blackhawk_mfd (void)
 
 	mfd_env = create_2d_environment ();
 
-	if(command_line_export_mfd)
+
+	if (!command_line_high_res_mfd)
 	{
-	lhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
-	rhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+		switch (get_view_mode ())
+		{
+		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY:
+		case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
+			draw_large_mfd = TRUE;
+			break;
+		default:
+			draw_large_mfd = FALSE;
+			break;
+		}
+	}
+	else
+		draw_large_mfd = TRUE;
+		
+	if (draw_large_mfd)
+	{
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+		mfd_texture_size = MFD_TEXTURE_LARGE_SIZE;
+		eo_3d_texture_screen = large_eo_3d_texture_screen;
+		draw_line_func = draw_2d_half_thick_line;
 	}
 	else
 	{
-	lhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-	rhs_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+		mfd_texture_size = MFD_TEXTURE_SMALL_SIZE;
+		eo_3d_texture_screen = small_eo_3d_texture_screen;
+		draw_line_func = draw_2d_line;
 	}
+	mfd_viewport_texture_x_org = mfd_texture_size / 2;
+	mfd_viewport_texture_y_org = mfd_texture_size / 2;
 
-	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
-	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (MFD_TEXTURE_SIZE, MFD_TEXTURE_SIZE, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	if(command_line_export_mfd)
+	{
+	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
+	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
+	}
+	else
+	{
+	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	}
+	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
+	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
 	set_rgb_colour (MFD_COLOUR1,   0, 255,   0, 255);
 	set_rgb_colour (MFD_COLOUR2,   0, 200,   0, 255);
@@ -2503,7 +2736,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	ASSERT (eo);
 
-	ASSERT (small_eo_3d_texture_screen);
+	ASSERT (eo_3d_texture_screen);
 
 	ASSERT (d3d_can_render_to_texture);
 
@@ -2579,9 +2812,9 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		}
 	}
 
-	set_3d_render_target (small_eo_3d_texture_screen);
+	set_3d_render_target (eo_3d_texture_screen);
 
-	set_active_screen (small_eo_3d_texture_screen);
+	set_active_screen (eo_3d_texture_screen);
 
 	tint = DISPLAY_3D_TINT_GREEN;
 
@@ -2593,7 +2826,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	draw_eo_3d_scene = FALSE;
 
-	finalise_3d_render_target_texture (small_eo_3d_texture_screen);
+	finalise_3d_render_target_texture (eo_3d_texture_screen);
 
 	set_3d_render_target (video_screen);
 
@@ -6731,6 +6964,581 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour)
+{
+	int x1, x2, y1, y2;
+	int inner_x1, inner_x2, inner_y1, inner_y2;
+	
+	get_2d_int_screen_coordinates (min(x1_c, x2_c), max(y1_c, y2_c), &x1, &y1);
+	get_2d_int_screen_coordinates (max(x1_c, x2_c), min(y1_c, y2_c), &x2, &y2);
+	
+	inner_x1 = x1+1;
+	inner_x2 = x2-1;
+	inner_y1 = y1+1;
+	inner_y2 = y2-1;
+
+	if (inner_x1 < inner_x2 && inner_y1 < inner_y2)
+		set_block(inner_x1 * 2, inner_y1, inner_x2 * 2, inner_y2, fill_colour);
+
+	draw_line(x1, y1, x2, y1, border_colour);
+	draw_line(x1, y1, x1, y2, border_colour);
+	draw_line(x1, y2, x2, y2, border_colour);
+	draw_line(x2, y1, x2, y2, border_colour);
+}
+
+static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
+{
+	float x1, x2, y1, y2;
+	
+	get_2d_float_screen_coordinates (x1_c, y1_c, &x1, &y1);
+	get_2d_float_screen_coordinates (x2_c, y2_c, &x2, &y2);
+
+	if (filled)
+	{
+		float x_min = min(x1, x2), x_max = max(x1, x2);
+		float y_min = min(y1, y2), y_max = max(y1, y2);
+
+		// set block likes to have its smallest arguments first		
+		set_block(x_min, y_min, x_max, y_max, colour);
+	}
+	else
+	{
+		draw_line(x1, y1, x2, y1, colour);
+		draw_line(x1, y1, x1, y2, colour);
+		draw_line(x1, y2, x2, y2, colour);
+		draw_line(x2, y1, x2, y2, colour);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_large_weapon_display_mfd (mfd_locations location)
+{
+	float x1, x2, x3, x4, y1, y2, y3;
+	float forward_wing, rear_wing, wing_tip_left, wing_tip_right;
+	char s[80], *s_ptr;
+	float x_adjust;
+	int number, damaged, selected_weapon, pylon;
+	entity_sub_types weapon_sub_type;
+
+
+	ASSERT(draw_large_mfd);
+
+	selected_weapon = get_local_entity_int_value(get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
+
+	set_mono_font_type (MONO_FONT_TYPE_7X12);
+
+	// draw helicopter outline
+	// nose
+	
+	get_2d_float_screen_coordinates (-0.25, 0.5, &x1, &y1);
+	get_2d_float_screen_coordinates (-0.1, 0.525, &x2, &y2);
+	get_2d_float_screen_coordinates (-0.075, 0.6, &x3, &y3);
+	get_2d_float_screen_x_coordinate (0.075, &x4);
+	
+	draw_line (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_line (x2, y2, x3, y3, MFD_COLOUR1);
+	draw_line (x3, y3, x4, y3, MFD_COLOUR1);
+
+	get_2d_float_screen_x_coordinate (0.1, &x3);
+	get_2d_float_screen_x_coordinate (0.25, &x2);
+
+	draw_line (x4, y3, x3, y2, MFD_COLOUR1);
+	draw_line (x3, y2, x2, y1, MFD_COLOUR1);
+
+	// body
+	
+	get_2d_float_screen_y_coordinate (-0.1, &forward_wing);
+	get_2d_float_screen_y_coordinate (-0.5, &rear_wing);
+	get_2d_float_screen_x_coordinate (-0.97, &wing_tip_left);
+	get_2d_float_screen_x_coordinate (0.97, &wing_tip_right);
+
+	draw_line (x1, y1, x1, forward_wing, MFD_COLOUR1);
+	draw_line (x2, y1, x2, forward_wing, MFD_COLOUR1);
+	draw_line (x1, forward_wing, wing_tip_left, forward_wing, MFD_COLOUR1);
+	draw_line (x2, forward_wing, wing_tip_right, forward_wing, MFD_COLOUR1);
+
+	draw_line (wing_tip_left, forward_wing, wing_tip_left, rear_wing, MFD_COLOUR1);
+	draw_line (wing_tip_right, forward_wing, wing_tip_right, rear_wing, MFD_COLOUR1);
+	draw_line (x1, rear_wing, wing_tip_left, rear_wing, MFD_COLOUR1);
+	draw_line (x2, rear_wing, wing_tip_right, rear_wing, MFD_COLOUR1);
+
+	get_2d_float_screen_y_coordinate (-0.8, &y2);
+
+	draw_line (x1, rear_wing, x1, y2, MFD_COLOUR1);
+	draw_line (x2, rear_wing, x2, y2, MFD_COLOUR1);
+	draw_line (x1, y2, x2, y2, MFD_COLOUR1);
+
+
+	// cannon
+	if ( get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+		APACHE_CHAIN_GUN_TURRET, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON, 
+		&weapon_sub_type, &number, &damaged))
+	{
+		int selected = (weapon_sub_type == selected_weapon) && !damaged;
+
+		get_2d_float_screen_coordinates (-0.01, 0.575, &x1, &y1);
+		get_2d_float_screen_x_coordinate (0.01, &x2);
+		get_2d_float_screen_y_coordinate (0.35, &y2);
+		get_2d_float_screen_x_coordinate (-0.08, &x3);
+		get_2d_float_screen_x_coordinate (0.08, &x4);
+		get_2d_float_screen_y_coordinate (0.2, &y3);
+		
+		if (selected)
+		{
+			set_block (x1, y1, x2, y2, MFD_COLOUR1);
+			set_block (x3, y2, x4, y3, MFD_COLOUR1);	
+		}
+		else
+		{
+			draw_line (x1, y1, x2, y1, MFD_COLOUR1);
+			draw_line (x1, y1, x1, y2, MFD_COLOUR1);
+			draw_line (x2, y1, x2, y2, MFD_COLOUR1);
+			draw_line (x1, y2, x3, y2, MFD_COLOUR1);
+			draw_line (x2, y2, x4, y2, MFD_COLOUR1);
+			draw_line (x3, y2, x3, y3, MFD_COLOUR1);
+			draw_line (x4, y2, x4, y3, MFD_COLOUR1);
+		}
+		
+		get_2d_float_screen_coordinates (-0.2, 0.2, &x1, &y1);
+		get_2d_float_screen_coordinates (0.2, 0.05, &x2, &y2);
+		
+		set_mono_font_colour (MFD_COLOUR1);	
+		draw_line (x1, y1, x2, y1, MFD_COLOUR1);
+		draw_line (x1, y1, x1, y2, MFD_COLOUR1);
+		draw_line (x1, y2, x2, y2, MFD_COLOUR1);
+		draw_line (x2, y1, x2, y2, MFD_COLOUR1);
+
+		set_2d_mono_font_position (0.0, 0.15);
+
+		if (!damaged)
+			sprintf (s, "%4d", number);
+		else
+			sprintf (s, "XXXX");
+	
+		x_adjust = get_mono_font_string_width (s) * -0.5;
+		set_mono_font_rel_position (x_adjust, 0.0);
+		print_mono_font_string (s);
+	}
+
+	// Chaff
+	set_2d_mono_font_position (0.0, -0.2);
+
+	s_ptr = "CHAFF";
+		
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	set_2d_mono_font_position (0.0, -0.3);
+
+	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+		BLACKHAWK_CHAFF_DISPENSER, ENTITY_SUB_TYPE_WEAPON_CHAFF,
+		&weapon_sub_type, &number, &damaged))
+	{
+		if (!damaged)
+			sprintf (s, "%2d", number);
+		else
+			sprintf (s, "XX");
+	
+		x_adjust = get_mono_font_string_width (s) * -0.5;
+		set_mono_font_rel_position (x_adjust, 0.0);
+		print_mono_font_string (s);
+	}
+
+	// Flares
+	set_2d_mono_font_position (0.0, -0.45);
+
+	s_ptr = "FLARE";
+		
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	set_2d_mono_font_position (0.0, -0.55);
+	
+	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+		BLACKHAWK_FLARE_DISPENSER, ENTITY_SUB_TYPE_WEAPON_FLARE,
+		&weapon_sub_type, &number, &damaged))
+	{
+		if (!damaged)
+			sprintf (s, "%2d", number);
+		else
+			sprintf (s, "XX");
+	
+		x_adjust = get_mono_font_string_width (s) * -0.5;
+		set_mono_font_rel_position (x_adjust, 0.0);
+		print_mono_font_string (s);
+	}
+
+	// auto CM
+	set_2d_mono_font_position (0.0, -0.7);
+
+	if (get_global_auto_counter_measures ())
+		s_ptr = "AUTO";
+	else
+		s_ptr = "MAN";
+		
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+	
+	// master arm box
+
+	set_2d_mono_font_position (0.0, 0.89);
+
+	if (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+	{
+		draw_box(-0.25, 0.7, 0.25, 1.0, TRUE, MFD_COLOUR1);
+
+		set_mono_font_colour (MFD_CLEAR_COLOUR);
+		s_ptr = "ARM";
+		
+		draw_box(-0.14, 0.93,-0.09, 1.00, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box(-0.03, 0.93, 0.03, 1.00, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box( 0.10, 0.93, 0.15, 1.00, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box(-0.25, 0.93,-0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box(-0.25, 0.77,-0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box( 0.25, 0.93, 0.19, 0.88, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box( 0.25, 0.77, 0.19, 0.82, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box(-0.14, 0.77,-0.09, 0.70, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box(-0.03, 0.77, 0.03, 0.70, TRUE, MFD_CLEAR_COLOUR);	
+		draw_box( 0.10, 0.77, 0.15, 0.70, TRUE, MFD_CLEAR_COLOUR);
+		
+		draw_box(-0.25, 0.7, 0.25, 1.0, FALSE, MFD_COLOUR1);
+	}
+	else
+	{
+		draw_box(-0.25, 0.7, 0.25, 1.0, FALSE, MFD_COLOUR1);
+		s_ptr = "SAFE";
+	}
+		
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	// targeting system
+	draw_box(-0.85, 0.8, -0.4, 0.55, FALSE, MFD_COLOUR1);
+
+	set_2d_mono_font_position (-0.63, 0.7);
+	set_mono_font_colour (MFD_COLOUR1);
+
+	switch (target_acquisition_system)
+	{
+	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+	case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+		s_ptr = "FCR";
+		break;
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+		s_ptr = "TADS";
+		break;
+	case TARGET_ACQUISITION_SYSTEM_IHADSS:
+		s_ptr = "IHADSS";
+		break;
+	case TARGET_ACQUISITION_SYSTEM_OFF:
+	default:
+		s_ptr = "NONE";
+		break;
+	}
+
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+	
+	// range finding system
+	draw_box(0.85, 0.8, 0.4, 0.55, FALSE, MFD_COLOUR1);
+
+	set_2d_mono_font_position (0.64, 0.7);
+
+	switch (get_range_finder())
+	{
+	case RANGEFINDER_FCR:
+		s_ptr = "FCR";
+		break;
+	case RANGEFINDER_LASER:
+		s_ptr = "LRF";
+		break;
+	case RANGEFINDER_TRIANGULATION:
+	default:
+		s_ptr = "TRNGL";
+		break;
+	}
+
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	// launch mode
+	draw_box(-0.9, 0.45, -0.45, 0.2, FALSE, MFD_COLOUR1);
+
+	set_2d_mono_font_position (-0.65, 0.35);
+
+	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+		s_ptr = "LOAL";
+	else
+		s_ptr = "LOBL";
+
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	// rocket salve
+	draw_box(0.9, 0.45, 0.45, 0.2, FALSE, MFD_COLOUR1);
+
+	set_2d_mono_font_position (0.67, 0.42);
+	s_ptr = "SALVO";
+
+	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s_ptr);
+
+	set_2d_mono_font_position (0.67, 0.31);
+	if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
+		sprintf(s, "ALL");
+	else
+		sprintf(s, "%2d", rocket_salvo_size);
+
+	x_adjust = get_mono_font_string_width (s) * -0.6;
+	set_mono_font_rel_position (x_adjust, 0.0);
+	print_mono_font_string (s);
+
+	// weapon pylons
+	for (pylon = APACHE_LHS_INNER_PYLON; pylon <= APACHE_RHS_WING_TIP_MOUNT; pylon++)
+	{
+		float pylon_x, pylon_y;
+		
+		pylon_y = -0.35;
+		switch (pylon)
+		{
+		case APACHE_LHS_INNER_PYLON:
+			pylon_x = -0.42;
+			break;
+		case APACHE_RHS_INNER_PYLON:
+			pylon_x = 0.42;
+			break;
+		case APACHE_LHS_OUTER_PYLON:
+			pylon_x = -0.74;
+			break;
+		case APACHE_RHS_OUTER_PYLON:
+			pylon_x = 0.74;
+			break;
+		case APACHE_LHS_WING_TIP_MOUNT:
+			pylon_x = -0.97;
+			break;
+		case APACHE_RHS_WING_TIP_MOUNT:
+			pylon_x = 0.97;
+			break;
+		}
+		
+		if (get_local_entity_weapon_hardpoint_info (get_gunship_entity (),
+			pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
+			&weapon_sub_type, &number, &damaged))
+		{
+			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
+			{
+				int i;
+				float last_offset;  // is last missile on the left or right side of pylon
+				
+				if (pylon == APACHE_LHS_INNER_PYLON || pylon == APACHE_LHS_OUTER_PYLON)
+					last_offset = 0.07;
+				else
+					last_offset = -0.07;
+				
+				for (i = 1; i <= number; i++)
+				{
+					float missile_x, missile_y;
+					
+					switch(i)
+					{
+						case 1:
+							missile_x = pylon_x + last_offset;
+							missile_y = pylon_y - 0.18;
+							break;
+						case 2:
+							missile_x = pylon_x - last_offset;
+							missile_y = pylon_y - 0.18;
+							break;
+						case 3:
+							missile_x = pylon_x + last_offset;
+							missile_y = pylon_y + 0.22;
+							break;
+						case 4:
+							missile_x = pylon_x - last_offset;
+							missile_y = pylon_y + 0.22;
+							break;
+						default:
+							ASSERT(!"more than 4 hellfires on Apache pylon");
+					}
+
+					// remove wing
+					get_2d_float_screen_x_coordinate(missile_x + 0.06, &x1);
+					get_2d_float_screen_x_coordinate(missile_x - 0.06, &x2);
+	
+					if (missile_y > pylon_y)
+						draw_line(x1, forward_wing, x2, forward_wing, MFD_CLEAR_COLOUR);
+					else
+						draw_line(x1, rear_wing, x2, rear_wing, MFD_CLEAR_COLOUR);
+		
+					// draw missile
+					if ((weapon_sub_type == selected_weapon) && !damaged)
+					{
+						draw_2d_mono_sprite(inverted_hellfire_missile_data, missile_x, missile_y, MFD_COLOUR1);
+						set_mono_font_colour (MFD_CLEAR_COLOUR);
+					}
+					else
+					{
+						draw_2d_mono_sprite(hellfire_missile_data, missile_x, missile_y, MFD_COLOUR1);
+						set_mono_font_colour (MFD_COLOUR1);
+					}
+					set_mono_font_type (MONO_FONT_TYPE_7X12);
+					set_2d_mono_font_position (missile_x, missile_y-0.05);
+		
+					if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
+						sprintf(s, "R");
+					else
+						sprintf(s, "L");
+						
+					x_adjust = get_mono_font_string_width (s) * -0.4;
+					set_mono_font_rel_position (x_adjust, 0.0);
+					print_mono_font_string (s);
+				}
+			}
+			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255 ||
+					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
+			{
+				int selected = (weapon_sub_type == selected_weapon) && !damaged;
+				rgb_colour text_colour = selected ? MFD_CLEAR_COLOUR : MFD_COLOUR1;
+
+				set_mono_font_colour (text_colour);
+
+				// remove wing under pod
+				get_2d_float_screen_x_coordinate(pylon_x + 0.11, &x1);
+				get_2d_float_screen_x_coordinate(pylon_x - 0.11, &x2);
+
+				draw_line(x1, forward_wing, x2, forward_wing, MFD_CLEAR_COLOUR);
+				draw_line(x1, rear_wing, x2, rear_wing, MFD_CLEAR_COLOUR);
+
+				// draw rocket pod
+				get_2d_float_screen_coordinates (pylon_x - 0.11, pylon_y + 0.3, &x1, &y1);
+				get_2d_float_screen_coordinates (pylon_x + 0.11, pylon_y - 0.3, &x2, &y2);
+
+				if (selected)
+					set_block (x1, y1, x2, y2, MFD_COLOUR1);
+				else
+				{
+					draw_line (x1, y1, x2, y1, MFD_COLOUR1);
+					draw_line (x1, y1, x1, y2, MFD_COLOUR1);
+					draw_line (x1, y2, x2, y2, MFD_COLOUR1);
+					draw_line (x2, y1, x2, y2, MFD_COLOUR1);
+				}
+
+				set_mono_font_type (MONO_FONT_TYPE_7X12);
+				set_2d_mono_font_position (pylon_x, pylon_y);
+	
+				if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255)
+					sprintf(s, "MP");
+				else
+					sprintf(s, "RC");
+					
+				x_adjust = get_mono_font_string_width (s) * -0.4;
+				set_mono_font_rel_position (x_adjust, 0.0);
+				print_mono_font_string (s);
+				
+				set_2d_mono_font_position (pylon_x, pylon_y - 0.1);
+				sprintf(s, "%2d", number);
+				x_adjust = get_mono_font_string_width (s) * -0.4;
+				set_mono_font_rel_position (x_adjust, 0.0);
+				print_mono_font_string (s);
+			}
+			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
+			{
+				int selected = (weapon_sub_type == selected_weapon) && !damaged;
+				int left_tip = pylon == APACHE_LHS_WING_TIP_MOUNT;
+				float tip;
+
+				if (number == 2)
+				{
+					// remove wing drawing
+					if (left_tip)
+					{
+						tip = wing_tip_left;
+						get_2d_float_screen_x_coordinate(-0.93, &x1);
+						get_2d_float_screen_y_coordinate(-0.22, &y1);
+					}
+					else
+					{
+						tip = wing_tip_right;
+						get_2d_float_screen_x_coordinate(0.93, &x1);
+						get_2d_float_screen_y_coordinate(-0.22, &y1);
+					}
+					draw_line(x1, forward_wing, tip, forward_wing, MFD_CLEAR_COLOUR);
+					draw_line(tip, forward_wing, tip, y1, MFD_CLEAR_COLOUR);
+
+					// draw missile
+					if (selected)
+						draw_2d_mono_sprite(inverted_stinger_missile_data, pylon_x, pylon_y + 0.25, MFD_COLOUR1);
+					else
+						draw_2d_mono_sprite(stinger_missile_data, pylon_x, pylon_y + 0.25, MFD_COLOUR1);
+				}
+
+				if (number >= 1)
+				{
+					// remove wing drawing
+					if (left_tip)
+					{
+						tip = wing_tip_left;
+						get_2d_float_screen_x_coordinate(-0.91, &x1);
+						get_2d_float_screen_y_coordinate(-0.27, &y1);
+					}
+					else
+					{
+						tip = wing_tip_right;
+						get_2d_float_screen_x_coordinate(0.91, &x1);
+						get_2d_float_screen_y_coordinate(-0.27, &y1);
+					}
+					draw_line(x1, rear_wing, tip, rear_wing, MFD_CLEAR_COLOUR);
+					draw_line(tip, rear_wing, tip, y1, MFD_CLEAR_COLOUR);
+
+					// draw missile
+					if (selected)
+						draw_2d_mono_sprite(inverted_stinger_missile_data, pylon_x, pylon_y - 0.05, MFD_COLOUR1);
+					else
+						draw_2d_mono_sprite(stinger_missile_data, pylon_x, pylon_y - 0.05, MFD_COLOUR1);
+				}
+			}
+			
+			// if damaged, draw X across pylon
+			if (damaged)
+			{
+				float width, height = 0.7, x1, y1, x2, y2, y_offset = 0.0;
+				
+				if (pylon == APACHE_LHS_WING_TIP_MOUNT || pylon == APACHE_RHS_WING_TIP_MOUNT)
+				{
+					// stingers are narrower and drawn more forward than other pylons
+					y_offset = 0.1;
+					width = 0.125;
+				}
+				else
+					width = 0.25;
+
+				get_2d_float_screen_coordinates(pylon_x - 0.5 * width, pylon_y - 0.5 * height, &x1, &y1);
+				get_2d_float_screen_coordinates(pylon_x + 0.5 * width, pylon_y + y_offset + 0.5 * height, &x2, &y2);
+				
+				draw_half_thick_line(x1, y1, x2, y2, MFD_COLOUR1);
+				draw_half_thick_line(x1, y2, x2, y1, MFD_COLOUR1);
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture)
 {
 	char
@@ -6744,6 +7552,13 @@ static void draw_weapon_display_mfd (mfd_locations location, int draw_on_texture
 
 	float
 		u;
+
+	if (draw_large_mfd)
+	{
+		draw_large_weapon_display_mfd (location);
+
+		return;
+	}
 
 	////////////////////////////////////////
 	//
@@ -7083,9 +7898,9 @@ static void draw_system_display_mfd (void)
 
 	if (draw_large_mfd)
 	{
-		set_mono_font_type (MONO_FONT_TYPE_7X12);
+		set_mono_font_type (MONO_FONT_TYPE_6X10);
 
-		y_adjust = 5.0;
+		y_adjust = 2.0;
 	}
 	else
 	{
@@ -8274,15 +9089,11 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 	// viewport
 	//
 
-	draw_large_mfd = FALSE;
+	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
-	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+	mfd_viewport_x_org = mfd_viewport_texture_x_org;
 
-	ASSERT (mfd_viewport_size <= MFD_TEXTURE_SIZE);
-
-	mfd_viewport_x_org = MFD_VIEWPORT_TEXTURE_X_ORG;
-
-	mfd_viewport_y_org = MFD_VIEWPORT_TEXTURE_Y_ORG;
+	mfd_viewport_y_org = mfd_viewport_texture_y_org;
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
 
@@ -8310,7 +9121,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8329,7 +9140,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8350,7 +9161,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8371,7 +9182,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8390,30 +9201,30 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		{
 			if ((d3d_can_render_to_texture) && (!blackhawk_damage.flir))
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
 				if (location == MFD_LOCATION_LHS)
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 				}
 				else
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 				}
 
 				draw_3d_eo_display_on_texture (&blackhawk_flir, TARGET_ACQUISITION_SYSTEM_FLIR);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
 					draw_2d_flir_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
 
-					unlock_screen (small_eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -8424,7 +9235,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
@@ -8444,30 +9255,30 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		{
 			if ((d3d_can_render_to_texture) && (!blackhawk_damage.dtv))
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
 				if (location == MFD_LOCATION_LHS)
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 				}
 				else
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 				}
 
 				draw_3d_eo_display_on_texture (&blackhawk_dtv, TARGET_ACQUISITION_SYSTEM_DTV);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
 					draw_2d_dtv_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
 
-					unlock_screen (small_eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -8478,7 +9289,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
@@ -8498,30 +9309,30 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 		{
 			if ((d3d_can_render_to_texture) && (!blackhawk_damage.dvo))
 			{
-				ASSERT (small_eo_3d_texture_screen);
+				ASSERT (eo_3d_texture_screen);
 
 				if (location == MFD_LOCATION_LHS)
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
 				}
 				else
 				{
-					set_system_texture_screen (small_eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+					set_system_texture_screen (eo_3d_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
 				}
 
 				draw_3d_eo_display_on_texture (&blackhawk_dvo, TARGET_ACQUISITION_SYSTEM_DVO);
 
-				set_active_screen (small_eo_3d_texture_screen);
+				set_active_screen (eo_3d_texture_screen);
 
-				if (lock_screen (small_eo_3d_texture_screen))
+				if (lock_screen (eo_3d_texture_screen))
 				{
 					draw_layout_grid ();
 
 					draw_2d_dvo_mfd (TRUE, FALSE);
 
-					flush_screen_texture_graphics (small_eo_3d_texture_screen);
+					flush_screen_texture_graphics (eo_3d_texture_screen);
 
-					unlock_screen (small_eo_3d_texture_screen);
+					unlock_screen (eo_3d_texture_screen);
 				}
 
 				set_pilots_full_screen_params (FALSE);
@@ -8532,7 +9343,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
@@ -8554,7 +9365,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8575,7 +9386,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8596,7 +9407,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8617,7 +9428,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8638,7 +9449,7 @@ void draw_blackhawk_mfd_on_texture (mfd_locations location)
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8799,7 +9610,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 	//
 	////////////////////////////////////////
 
-	if (get_global_unscaled_displays ())
+/*	if (get_global_unscaled_displays ())
 	{
 		float
 			org_offset;
@@ -8829,7 +9640,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 		mfd_screen_x_max = mfd_screen_x_org + mfd_screen_half_size - 0.001;
 		mfd_screen_y_max = mfd_screen_y_org + mfd_screen_half_size - 0.001;
 	}
-	else
+	else*/
 	{
 		mfd_screen_size = size * full_screen_width * (1.0 / 640.0);
 
@@ -8851,8 +9662,8 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 	i_translate_3d = mfd_screen_x_min;
 	j_translate_3d = mfd_screen_y_min;
 
-	i_scale_3d = MFD_TEXTURE_SIZE / mfd_screen_size;
-	j_scale_3d = MFD_TEXTURE_SIZE / mfd_screen_size;
+	i_scale_3d = mfd_texture_size / mfd_screen_size;
+	j_scale_3d = mfd_texture_size / mfd_screen_size;
 
 	////////////////////////////////////////
 	//
@@ -8872,15 +9683,16 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 	// viewport
 	//
 
-	draw_large_mfd = FALSE;
+	if (draw_large_mfd)
+		mfd_viewport_size = MFD_VIEWPORT_LARGE_SIZE;
+	else
+		mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
 
-	mfd_viewport_size = MFD_VIEWPORT_SMALL_SIZE;
+	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
-	ASSERT (mfd_viewport_size <= MFD_TEXTURE_SIZE);
+	mfd_viewport_x_org = mfd_viewport_texture_x_org;
 
-	mfd_viewport_x_org = MFD_VIEWPORT_TEXTURE_X_ORG;
-
-	mfd_viewport_y_org = MFD_VIEWPORT_TEXTURE_Y_ORG;
+	mfd_viewport_y_org = mfd_viewport_texture_y_org;
 
 	mfd_viewport_x_min = mfd_viewport_x_org - (mfd_viewport_size * 0.5);
 
@@ -8908,7 +9720,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8931,7 +9743,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8956,7 +9768,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -8981,7 +9793,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9013,7 +9825,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9047,7 +9859,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9081,7 +9893,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9108,7 +9920,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9133,7 +9945,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9158,7 +9970,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9183,7 +9995,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 
@@ -9208,7 +10020,7 @@ void draw_overlaid_blackhawk_mfd (float x_org, float y_org, float size, mfd_loca
 
 			if (lock_screen (mfd_texture_screen))
 			{
-				set_block (0, 0, MFD_TEXTURE_SIZE - 1, MFD_TEXTURE_SIZE - 1, clear_mfd_colour);
+				set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
 
 				draw_layout_grid ();
 

@@ -86,6 +86,12 @@ extern void raise_client_server_entity_undercarriage( entity *en );
 
 extern int get_local_entity_undercarriage_state (entity *en);
 
+// start add loading and cargo doors for separate switching in helis by GCsDriver  08-12-2007
+extern int get_local_entity_loading_door_state (entity *en);
+
+extern int get_local_entity_cargo_door_state (entity *en);
+// end add loading and cargo doors for separate switching in helis by GCsDriver   08-12-2007
+
 extern void open_entity_weapon_system_ready( entity *en );
 
 extern void close_entity_weapon_system_ready( entity *en );

@@ -921,12 +921,12 @@ static void toggle_gear_event (event *ev)
 			if ((state == AIRCRAFT_UNDERCARRIAGE_UP) || (state == AIRCRAFT_UNDERCARRIAGE_RAISING))
 			{
 				lower_client_server_entity_undercarriage (get_gunship_entity ());
-				open_client_server_entity_loading_doors (get_gunship_entity ());
+//				open_client_server_entity_loading_doors (get_gunship_entity ());
 			}
 			else if ((state == AIRCRAFT_UNDERCARRIAGE_DOWN) || (state == AIRCRAFT_UNDERCARRIAGE_LOWERING))
 			{
 				raise_client_server_entity_undercarriage (get_gunship_entity ());
-				close_client_server_entity_loading_doors (get_gunship_entity ());
+//				close_client_server_entity_loading_doors (get_gunship_entity ());
 			}
 			else
 			{
@@ -937,7 +937,40 @@ static void toggle_gear_event (event *ev)
 }
 // Retro 18Jul2004 end
 
+// separated gear and door events by GCsDriver  08-12-2007
+static void toggle_door_event (event *ev)
+{
+	int
+		state;
 
+	entity *en;
+
+	en = get_gunship_entity ();
+
+	state = get_local_entity_loading_door_state (get_gunship_entity ());
+
+	switch ( state )
+	{
+		//////////////////////////////////////////////////
+		case 0:
+		//////////////////////////////////////////////////
+		{
+			open_client_server_entity_loading_doors( en );
+			open_client_server_entity_cargo_doors( en );
+
+			break;
+		}
+		//////////////////////////////////////////////////
+		case 2:
+		//////////////////////////////////////////////////
+		{
+			close_client_server_entity_loading_doors( en );
+			close_client_server_entity_cargo_doors( en );
+
+			break;
+		}
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -957,8 +990,9 @@ void set_blackhawk_avionics_events (void)
 	////////////////////////////////////////
 
 	// Retro 18Jul2004
-	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
-
+// does not need gear event by GCsDriver 08-12-2007
+//	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
+	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_door_event);
 	//
 	// select target acquisition system
 	//

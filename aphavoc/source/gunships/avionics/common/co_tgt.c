@@ -476,7 +476,7 @@ void set_common_target_acquisition_system_lock_target (int lock)
 	switch (get_global_gunship_type ())
 	{
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
 			set_apache_lock_target (lock);
@@ -530,6 +530,15 @@ void set_common_target_acquisition_system_lock_target (int lock)
 			break;
 		}
 		////Moje 030816 end
+
+		//  GCsDriver  08-12-2007
+		default:
+		{
+			set_default_lock_target (lock);
+
+			break;
+		}
+
 	}
 }
 
@@ -899,7 +908,7 @@ void select_simple_avionics_target_acquisition_system (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -962,6 +971,17 @@ void select_simple_avionics_target_acquisition_system (void)
 			break;
 		}
 		////Moje 030816 end
+
+		////////////////////////////////////////
+		//  GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_IHADSS);
+
+			break;
+		}
+
 	}
 }
 

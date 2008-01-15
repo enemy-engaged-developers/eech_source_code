@@ -172,7 +172,10 @@ void initialise_game_type_screen (void)
 			(
 				UI_TYPE_BUTTON,
 				UI_ATTR_PARENT (game_type_screen),
-				UI_ATTR_VIRTUAL_POSITION (x, y),
+// set to same position as on main screen by GCsDriver  08-12-2007
+//				UI_ATTR_VIRTUAL_POSITION (x, y),
+					UI_ATTR_POSITION_START (0.0, 0.329),
+					UI_ATTR_POSITION_END (0.663, 0.329),
 				UI_ATTR_VIRTUAL_SIZE (x_size, y_size),
 				UI_ATTR_ITEM_NUMBER (GAME_TYPE_CAMPAIGN),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
@@ -243,7 +246,10 @@ void initialise_game_type_screen (void)
 			(
 				UI_TYPE_BUTTON,
 				UI_ATTR_PARENT (game_type_screen),
-				UI_ATTR_VIRTUAL_POSITION (x, y),
+// set to same position as on main screen by GCsDriver  08-12-2007
+//				UI_ATTR_VIRTUAL_POSITION (x, y),
+					UI_ATTR_POSITION_START (0, 0.435),
+					UI_ATTR_POSITION_END (0.785, 0.435),
 				UI_ATTR_VIRTUAL_SIZE (x_size, y_size),
 				UI_ATTR_ITEM_NUMBER (GAME_TYPE_SKIRMISH),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
@@ -312,7 +318,10 @@ void initialise_game_type_screen (void)
 			(
 				UI_TYPE_BUTTON,
 				UI_ATTR_PARENT (game_type_screen),
-				UI_ATTR_VIRTUAL_POSITION (x, y),
+// set to same position as on main screen by GCsDriver  08-12-2007
+//				UI_ATTR_VIRTUAL_POSITION (x, y),
+					UI_ATTR_POSITION_START (0, 0.595),
+					UI_ATTR_POSITION_END (0.735, 0.595),
 				UI_ATTR_VIRTUAL_SIZE (x_size, y_size),
 				UI_ATTR_ITEM_NUMBER (GAME_TYPE_FREE_FLIGHT),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
@@ -362,7 +371,10 @@ void initialise_game_type_screen (void)
 			(
 				UI_TYPE_BUTTON,
 				UI_ATTR_PARENT (game_type_screen),
-				UI_ATTR_VIRTUAL_POSITION (x, y),
+// set to same position as on main screen by GCsDriver  08-12-2007
+//				UI_ATTR_VIRTUAL_POSITION (x, y),
+					UI_ATTR_POSITION_START (0, 0.704),
+					UI_ATTR_POSITION_END (0.637, 0.704),
 				UI_ATTR_VIRTUAL_SIZE (x_size, y_size),
 				UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 				UI_ATTR_ITEM_NUMBER (GAME_TYPE_DEMO),

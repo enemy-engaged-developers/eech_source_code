@@ -115,6 +115,9 @@ asm_object_files	+=	$+ &
 
 !include $(projectdir)\source\gunships\avionics\ka50\hm_avion.imf
 
+# GCsDriver 08-12-2007
+!include $(projectdir)\source\gunships\avionics\default\df_avion.imf
+
 #////Moje 030815 End
 
 #################################################################################################################################

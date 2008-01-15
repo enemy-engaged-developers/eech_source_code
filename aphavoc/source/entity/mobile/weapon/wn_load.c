@@ -1295,7 +1295,9 @@ void weapon_loading_update_currently_selected_weapons (entity *en)
 		}
 		case GUNSHIP_TYPE_KA50:
 		{
-			get_hokum_weapons_from_weapon_config
+			// GCsDriver 08-12-2007
+			//get_hokum_weapons_from_weapon_config
+			get_ka50_weapons_from_weapon_config
 			(
 				get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE),
 				&current_weapon [WEAPON_LOADING_HARDPOINT_INNER],

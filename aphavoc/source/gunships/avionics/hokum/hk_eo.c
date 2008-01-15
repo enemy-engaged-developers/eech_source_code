@@ -89,7 +89,8 @@ void initialise_hokum_eo (void)
 	eo_elevation								= rad (0.0);
 	eo_min_elevation							= rad (-15.0);
 	eo_max_elevation							= rad (25.0);
-	eo_max_visual_range						= 5000.0;
+	eo_max_visual_range						= 5000.0,
+	eo_ground_stabilised					= 0;
 
 #ifdef OLD_EO
 	hokum_flir.field_of_view				= EO_FOV_WIDE;
@@ -408,6 +409,15 @@ void update_hokum_eo (eo_params_dynamic_move *eo)
 
 	////////////////////////////////////////
 
+	while (toggle_ground_stabilisation_key)
+	{
+		toggle_ground_stabilisation ();
+
+		toggle_ground_stabilisation_key--;
+	}
+
+	////////////////////////////////////////
+
 	if (command_line_eo_zoom_joystick_index != -1)
 	{
 		long pos = get_joystick_axis (command_line_eo_zoom_joystick_index, command_line_eo_zoom_joystick_axis);
@@ -701,6 +711,16 @@ void update_hokum_eo (eo_params_dynamic_move *eo)
 
 	////////////////////////////////////////
 
+	// loke 030322
+	// handle the ground stabilisation
+
+	if (eo_ground_stabilised)
+	{
+		handle_ground_stabilisation();
+	}
+
+	////////////////////////////////////////
+
 	while (single_target_acquisition_system_select_next_target_key)
 	{
 		select_next_eo_target ();
@@ -900,19 +920,29 @@ void toggle_hokum_eo_system(void)
 
 		break;
 	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+
+	// insert periscope mfd by GCsDriver  08-12-2007
+	// mfd page gets already displayed for pilot and copilot in periscope mode
+	// this just adds it to toggle
+		eo_sensor = TARGET_ACQUISITION_SYSTEM_PERISCOPE;
+
+		copy_eo_zoom(&hokum_llltv, &hokum_periscope);
+
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV)
+			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_PERISCOPE;
+
+		break;
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
 
-		copy_eo_zoom(&hokum_llltv, &hokum_flir);
+		copy_eo_zoom(&hokum_periscope, &hokum_flir);
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_LLLTV ||
-			target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
-		{
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
 			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
-		}
 
 		break;
 	}
+	// end insert periscope mfd by GCsDriver 08-12-2007
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -110,6 +110,10 @@ static void deselect_ka50_target_acquisition_system (target_acquisition_systems 
 		case TARGET_ACQUISITION_SYSTEM_OFF:
 		////////////////////////////////////////
 		{
+			// laser is on in all modes but OFF in automatic mode
+			if (!command_line_manual_laser_radar)
+				set_laser_is_active(TRUE);
+			
 			break;
 		}
 		////////////////////////////////////////
@@ -196,6 +200,10 @@ void select_ka50_target_acquisition_system (target_acquisition_systems system)
 			set_gunship_target (NULL);
 
 			select_ka50_mfd_mode (MFD_MODE_OFF);
+			if (!command_line_manual_laser_radar)
+			{
+				set_laser_is_active(FALSE);
+			}
 
 			#if 0
 
@@ -421,6 +429,9 @@ void update_ka50_target_acquisition_system (void)
 		// laser on/off
 		//
 
+		laser_on = laser_is_active() && !ka50_damage.laser_range_finder;
+
+/*
 		laser_on = FALSE;
 
 		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
@@ -430,7 +441,7 @@ void update_ka50_target_acquisition_system (void)
 				laser_on = TRUE;
 			}
 		}
-
+*/
 		if (laser_on != get_local_entity_int_value (source, INT_TYPE_LASER_ON))
 		{
 			set_client_server_entity_int_value (source, INT_TYPE_LASER_ON, laser_on);

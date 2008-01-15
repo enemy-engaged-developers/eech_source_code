@@ -140,6 +140,15 @@ enum MESSAGE_CATEGORIES
 	// pilot
 
 	MESSAGE_PILOT_KEYBOARD,
+	
+	// GCsDriver  08-12-2007 , if put to other destinations above the normal menu entries get irritated
+	MESSAGE_CHANNEL_LIST,
+
+	// GCsDriver  08-12-2007
+	MESSAGE_ATC,
+	MESSAGE_FAC,
+	MESSAGE_GC,
+	MESSAGE_WM,
 
 	/////////////////////////////////////////////////////////////////
 

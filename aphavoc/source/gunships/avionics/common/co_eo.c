@@ -106,7 +106,9 @@ float
 	eo_requested_elevation,
 	eo_min_elevation,
 	eo_max_elevation,
-	eo_max_visual_range;
+	eo_max_visual_range,
+	fog_start, 
+	fog_end;
 
 viewpoint
 	eo_vp;
@@ -395,12 +397,13 @@ static void get_eo_centred_viewpoint (viewpoint *vp)
 		}
 		////Moje 030816 end
 		////////////////////////////////////////
-		// JB 030313 Fly any aircraft
+		// GCsDriver  08-12-2007
 		default:
 		////////////////////////////////////////
 		{
-			get_apache_eo_centred_viewpoint (vp);
-//			debug_fatal ("Invalid gunship type = %d", get_global_gunship_type ());
+			get_default_eo_centred_viewpoint (vp);
+			// get_apache_eo_centred_viewpoint (vp);
+			// //debug_fatal ("Invalid gunship type = %d", get_global_gunship_type ());
 		}
 	}
 }
@@ -606,7 +609,26 @@ static void update_eo_visibility (void)
 	vec3d
 		*position;
 
+	entity
+		*current_target;
+
 	eo_low_light = FALSE;
+
+	// start full_eo_range by GCsDriver  08-12-2007
+	if (command_line_eo_full_range)
+	{
+		update_eo_max_visual_range();
+
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+		if (current_target)
+		{
+			if (!get_selectable_eo_target(current_target))
+			{
+				eo_target_locked = FALSE;
+			}
+		}
+	}
+	// end full_eo_range by GCsDriver  08-12-2007
 
 	switch (eo_sensor)
 	{
@@ -1172,6 +1194,13 @@ void activate_common_eo (void)
 	eo_target_locked = target_locked;
 
 	eo_sensor = target_acquisition_system;
+
+	// start full_eo_range by GCsDriver  08-12-2007
+	if (command_line_eo_full_range)
+	{
+		update_eo_max_visual_range();
+	}
+	// end full_eo_range by GCsDriver  08-12-2007
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1331,13 +1360,17 @@ void slave_common_eo_to_position (vec3d* target_position)
 
 	update_eo_visibility ();
 
-	if (target_in_fov && eo_on_target)
-	{
-		if (!command_line_manual_laser_radar)
-			set_laser_is_active(TRUE);
+	// GCsDriver 08-12-2007
+	if (command_line_laser_workaround){
+	}else{
+		if (target_in_fov && eo_on_target)
+		{
+			if (!command_line_manual_laser_radar)
+				set_laser_is_active(TRUE);
+		}
+		else
+			set_laser_is_active(FALSE);
 	}
-	else
-		set_laser_is_active(FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1774,3 +1807,47 @@ void set_electrical_system_active(int active)
 {
 	electrical_system_on = active;
 }
+
+// start full_eo_range by GCsDriver  08-12-2007
+void update_eo_max_visual_range(void)
+{
+	//see 3d_init.c & 3dview.c
+	//eo_max_visual_range = main_3d_env->fog_end;
+
+	get_3d_fog_distances (main_3d_env, &fog_start, &fog_end);
+
+	//eo_max_visual_range = fog_end;
+	
+	switch (eo_sensor)
+	{
+		case TARGET_ACQUISITION_SYSTEM_DTV:
+		case TARGET_ACQUISITION_SYSTEM_DVO:
+		{
+			eo_max_visual_range = fog_end - 2000.0;
+			break;
+		}
+		case TARGET_ACQUISITION_SYSTEM_FLIR:
+		{
+			eo_max_visual_range = fog_end - 500.0;
+			break;
+		}
+		case TARGET_ACQUISITION_SYSTEM_LLLTV:
+		{
+			eo_max_visual_range = fog_end - 2000.0;
+			break;
+		}
+		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+		{
+			eo_max_visual_range = fog_end - 500.0;
+			break;
+		}
+		default:
+		{
+			debug_fatal ("Invalid eo sensor = %d", eo_sensor);
+			break;
+		}
+	}
+}
+// end full_eo_range by GCsDriver  08-12-2007
+
+

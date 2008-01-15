@@ -84,7 +84,7 @@ void activate_common_threat_warning_system (entity *threat)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -161,6 +161,17 @@ void activate_common_threat_warning_system (entity *threat)
 			//debug_fatal ("Invalid gunship type = %d", get_global_gunship_type ());
 		}
 */
+
+		////////////////////////////////////////
+		//  GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			activate_default_threat_warning_system (threat);
+
+			break;
+		}
+
 	}
 }
 

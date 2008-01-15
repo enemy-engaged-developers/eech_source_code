@@ -66,10 +66,12 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 
-		#define LHS_CHAFF_DISPENSER	(0)
-		#define RHS_CHAFF_DISPENSER	(1)
-		#define LHS_FLARE_DISPENSER	(0)
-		#define RHS_FLARE_DISPENSER	(1)
+		// this is fake to avoid compile error "macro ...dispenser different than previous definition"
+		// 0 and 1 values are hardcoded in weapon packages
+		#define LHS_CHAFF_DISPENSER					(COBRA_LHS_CHAFF_DISPENSER)
+		#define RHS_CHAFF_DISPENSER					(COBRA_RHS_CHAFF_DISPENSER)
+		#define LHS_FLARE_DISPENSER					(COBRA_LHS_FLARE_DISPENSER)
+		#define RHS_FLARE_DISPENSER					(COBRA_RHS_FLARE_DISPENSER)
 
 		#define CHAFF_VECTOR	 		 	(0)
 		#define FLARE_VECTOR	 		 	(0)
@@ -87,7 +89,7 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
 				NUM_CHAFFS,	 	  												// number
-				LHS_CHAFF_DISPENSER,											// heading_depth
+				0,											// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
@@ -109,7 +111,7 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_CHAFF,								// sub_type
 				NUM_CHAFFS,	 	  												// number
-				RHS_CHAFF_DISPENSER,											// heading_depth
+				1,											// heading_depth
 				CHAFF_VECTOR,													// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
@@ -131,7 +133,7 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
 				NUM_FLARES,	 													// number
-				LHS_FLARE_DISPENSER,											// heading_depth
+				0,											// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready
@@ -153,7 +155,7 @@
 			{
 				ENTITY_SUB_TYPE_WEAPON_FLARE,								// sub_type
 				NUM_FLARES,	 													// number
-				RHS_FLARE_DISPENSER,											// heading_depth
+				1,											// heading_depth
 				FLARE_VECTOR,			  										// pitch_depth
 				0,						  				 							// muzzle_depth
 				FALSE,				  				 							// make_weapon_system_ready

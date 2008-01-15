@@ -89,7 +89,8 @@ void initialise_apache_eo (void)
 	eo_elevation						= rad (0.0);
 	eo_min_elevation					= rad (-60.0);
 	eo_max_elevation					= rad (30.0);
-	eo_max_visual_range				= 6000.0;
+	eo_max_visual_range				= 6000.0,
+	eo_ground_stabilised					= 0;
 
 	apache_flir.field_of_view		= EO_FOV_WIDE;
 	apache_flir.min_field_of_view	= EO_FOV_ZOOM;
@@ -260,6 +261,17 @@ void update_apache_eo (eo_params *eo)
 
 		single_target_acquisition_system_dec_range_fast_key--;
 	}
+
+	////////////////////////////////////////
+
+	while (toggle_ground_stabilisation_key)
+	{
+		toggle_ground_stabilisation ();
+
+		toggle_ground_stabilisation_key--;
+	}
+
+	////////////////////////////////////////
 
 	////////////////////////////////////////
 	//
@@ -565,6 +577,18 @@ void update_apache_eo (eo_params *eo)
 			eo_elevation = max (eo_elevation, eo_min_elevation);
 		}
 	}
+
+	////////////////////////////////////////
+
+	// loke 030322
+	// handle the ground stabilisation
+
+	if (eo_ground_stabilised)
+	{
+		handle_ground_stabilisation();
+	}
+
+	////////////////////////////////////////
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

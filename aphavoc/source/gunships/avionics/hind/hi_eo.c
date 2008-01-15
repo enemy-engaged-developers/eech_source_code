@@ -88,7 +88,8 @@ void initialise_hind_eo (void)
 	eo_elevation						= rad (0.0);
 	eo_min_elevation					= rad (-40.0);
 	eo_max_elevation					= rad (13.0);
-	eo_max_visual_range				= 5000.0;
+	eo_max_visual_range				= 5000.0,
+	eo_ground_stabilised					= 0;
 
 	hind_flir.field_of_view		= EO_FOV_WIDE;
 	hind_flir.min_field_of_view	= EO_FOV_NARROW;
@@ -255,6 +256,17 @@ void update_hind_eo (eo_params *eo)
 
 		single_target_acquisition_system_dec_range_fast_key--;
 	}
+
+	////////////////////////////////////////
+
+	while (toggle_ground_stabilisation_key)
+	{
+		toggle_ground_stabilisation ();
+
+		toggle_ground_stabilisation_key--;
+	}
+
+	////////////////////////////////////////
 
 	////////////////////////////////////////
 	//
@@ -546,6 +558,19 @@ void update_hind_eo (eo_params *eo)
 			eo_elevation = max (eo_elevation, eo_min_elevation);
 		}
 	}
+
+	////////////////////////////////////////
+
+	// loke 030322
+	// handle the ground stabilisation
+
+	if (eo_ground_stabilised)
+	{
+		handle_ground_stabilisation();
+	}
+
+	////////////////////////////////////////
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

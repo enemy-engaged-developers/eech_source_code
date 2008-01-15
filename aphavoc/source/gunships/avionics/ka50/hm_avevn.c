@@ -491,6 +491,15 @@ static void toggle_lock_target_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void toggle_ground_stabilisation_event (event *ev)
+{
+	toggle_ground_stabilisation_key++;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void acknowledge_master_caution_event (event *ev)
 {
 	deactivate_ka50_master_caution_lamp ();
@@ -623,12 +632,12 @@ static void toggle_gear_event (event *ev)
 			if ((state == AIRCRAFT_UNDERCARRIAGE_UP) || (state == AIRCRAFT_UNDERCARRIAGE_RAISING))
 			{
 				lower_client_server_entity_undercarriage (get_gunship_entity ());
-				open_client_server_entity_loading_doors (get_gunship_entity ());
+//				open_client_server_entity_loading_doors (get_gunship_entity ());
 			}
 			else if ((state == AIRCRAFT_UNDERCARRIAGE_DOWN) || (state == AIRCRAFT_UNDERCARRIAGE_LOWERING))
 			{
 				raise_client_server_entity_undercarriage (get_gunship_entity ());
-				close_client_server_entity_loading_doors (get_gunship_entity ());
+//				close_client_server_entity_loading_doors (get_gunship_entity ());
 			}
 			else
 			{
@@ -638,16 +647,55 @@ static void toggle_gear_event (event *ev)
 	}
 }
 // Retro 18Jul2004 end
-
-
-// arneh 2006-11-16 - manual laser control
-/*static void activate_laser_event(event* ev)
+// separated gear and door events by GCsDriver 08-12-2007
+static void toggle_door_event (event *ev)
 {
-	if (!laser_is_active() && !ka50_damage.laser_range_finder && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
-		set_laser_is_active(TRUE);
+	int
+		state;
+
+	entity *en;
+
+	en = get_gunship_entity ();
+
+	state = get_local_entity_loading_door_state (get_gunship_entity ());
+
+	switch ( state )
+	{
+		//////////////////////////////////////////////////
+		case 0:
+		//////////////////////////////////////////////////
+		{
+			open_client_server_entity_loading_doors( en );
+			open_client_server_entity_cargo_doors( en );
+
+			break;
+		}
+		//////////////////////////////////////////////////
+		case 2:
+		//////////////////////////////////////////////////
+		{
+			close_client_server_entity_loading_doors( en );
+			close_client_server_entity_cargo_doors( en );
+
+			break;
+		}
+	}
+}
+
+// added lase for ballistics by GCsDriver 08-12-2007
+// arneh 2006-11-16 - manual laser control
+static void activate_laser_event(event* ev)
+{
+	if (!laser_is_active() && !ka50_damage.laser_range_finder)
+	{
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+			lase_range_for_ballistics_sight();
+		else if (get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+			set_laser_is_active(TRUE);
+	}
 	else
 		set_laser_is_active(FALSE);
-}*/
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -668,7 +716,7 @@ void set_ka50_avionics_events (void)
 
 	// Retro 18Jul2004
 	set_event (DIK_G, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_gear_event);
-
+	set_event (DIK_C, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_door_event);
 	//
 	// select target acquisition system
 	//
@@ -736,6 +784,10 @@ void set_ka50_avionics_events (void)
 	set_event (DIK_NUMPADENTER, MODIFIER_NONE, KEY_STATE_DOWN, toggle_lock_target_event);
 //	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_lock_target_event); // Jabberwock 031107 Designated targets
 	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, toggle_lock_target_event);
+
+	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, activate_laser_event);
+
+	set_event (DIK_S, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_ground_stabilisation_event);
 
 	//
 	// miscellaneous

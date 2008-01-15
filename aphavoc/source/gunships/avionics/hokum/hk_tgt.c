@@ -164,6 +164,12 @@ static void deselect_hokum_target_acquisition_system (target_acquisition_systems
 
 			if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
 			{
+				// start autoreturn to pilot by GCsDriver  08-12-2007					
+				if(command_line_autoreturn_to_pilot_after_periscope){
+					set_pilot_seat_position ();
+				}
+				// end autoreturn to pilot by GCsDriver	 08-12-2007				
+
 				set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
 			}
 
@@ -327,7 +333,12 @@ void select_hokum_target_acquisition_system (target_acquisition_systems system)
 
 	 			if (get_crew_role () == CREW_ROLE_PILOT)
 				{
-					set_co_pilot_seat_position ();
+					// stay as pilot by GCsDriver  08-12-2007
+					if(command_line_pilot_as_periscope_default){
+					}else{
+						set_co_pilot_seat_position ();
+					}
+					// stay as pilot by GCsDriver  08-12-2007
 				}
 
 				if (get_crew_role () == CREW_ROLE_CO_PILOT)

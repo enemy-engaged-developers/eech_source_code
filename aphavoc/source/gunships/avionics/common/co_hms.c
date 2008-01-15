@@ -848,6 +848,18 @@ void deactivate_common_hms (void)
 
 		pop_numpad_cockpit_view_events_overlay ();
 	}
+
+	// start unpadlock on target handover by GCsDriver  08-12-2007	
+	if(command_line_unpadlock_on_handover)
+	{
+		if (get_view_mode () == VIEW_MODE_VIRTUAL_COCKPIT_TRACK_TARGET)
+		{
+			select_padlock_view_event (PADLOCK_MODE_NONE);
+			set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
+			//set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
+		}
+	}
+	// end unpadlock on target handover by GCsDriver  08-12-2007
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

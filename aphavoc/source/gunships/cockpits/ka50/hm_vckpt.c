@@ -551,6 +551,15 @@ void draw_ka50_internal_virtual_cockpit (unsigned int flags)
 		draw_ka50_mfd_on_texture ();
 	}
 
+	// added by GCsDriver  08-12-2007
+	// Casm 10SEP05 Havoc Instruments
+	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
+	{
+		memcpy (&havoc_lamps, &ka50_lamps, sizeof (havoc_lamps));
+		draw_havoc_virtual_cockpit_instruments_on_texture ();
+	}
+
+
 	////////////////////////////////////////
 	//
 	// draw 3D scene with lighting

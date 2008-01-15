@@ -568,6 +568,15 @@ static void target_acquisition_system_misc_function2_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void toggle_ground_stabilisation_event (event *ev)
+{
+	toggle_ground_stabilisation_key++;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void acknowledge_master_caution_event (event *ev)
 {
 	deactivate_apache_master_caution ();
@@ -1120,6 +1129,8 @@ void set_apache_avionics_events (void)
 
 	set_event (DIK_MULTIPLY, MODIFIER_NONE, KEY_STATE_DOWN, activate_laser_event);
 
+	set_event (DIK_S, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_ground_stabilisation_event);
+
 	set_event (DIK_DECIMAL, MODIFIER_NONE, KEY_STATE_DOWN, select_next_pfz_event);
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_pfz_event);
 	set_event (DIK_DECIMAL, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, deselect_pfz_event);
@@ -1161,12 +1172,16 @@ void set_apache_avionics_events (void)
 	set_event (DIK_BACKSPACE, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_cannon_event);
 
 	set_event (DIK_LBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_lhs_mfd_event);
+
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_lhs_mfd_event);
+
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_lhs_mfd_on_off_event);
 	set_event (DIK_LBRACKET, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, toggle_ort_on_off_event);
 
 	set_event (DIK_RBRACKET, MODIFIER_NONE, KEY_STATE_DOWN, select_next_rhs_mfd_event);
+
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, select_previous_rhs_mfd_event);
+
 	set_event (DIK_RBRACKET, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_rhs_mfd_on_off_event);
 
 	set_event (DIK_1, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_lhs_ground_radar_mfd_event);

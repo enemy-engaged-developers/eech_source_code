@@ -68,8 +68,8 @@
 
 		#define LHS_HARDPOINT1							(0)
 		#define RHS_HARDPOINT1 							(1)
-		#define CHAFF_DISPENSER							(2)
-		#define FLARE_DISPENSER							(2)
+		#define CHAFF_DISPENSER							(KIOWA_CHAFF_DISPENSER)
+		#define FLARE_DISPENSER							(KIOWA_FLARE_DISPENSER)
 
 		#define HELLFIRE_RACK							(0)
 		#define STINGER_TUBES		  					(0)

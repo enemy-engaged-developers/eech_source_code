@@ -4646,7 +4646,9 @@ void map_draw_grid (ui_object *obj)
 
 		map_get_screen_coords_from_world (obj, &pos1, &pos1);
 		
-		set_ui_font_colour (sys_col_slate_grey);
+// GCsDriver  08-12-2007
+//		set_ui_font_colour (sys_col_slate_grey);
+		set_ui_font_colour (ui_colour_white);
 		
 		ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 	}

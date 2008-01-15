@@ -985,8 +985,11 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 	if ( visibility != OBJECT_3D_NOT_VISIBLE )
 	{
 
-		if ( shadows_enabled )
+// start render_tree_shadows-mod by GCsDriver 08-12-2007
+//		if ( shadows_enabled )
+		if ( shadows_enabled && command_line_render_tree_shadows )
 		{
+// end render_tree_shadows-mod by GCsDriver 08-12-2007
 
 			float
 				dissolve;

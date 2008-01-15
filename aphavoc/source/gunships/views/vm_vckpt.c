@@ -1466,7 +1466,7 @@ void draw_virtual_cockpit_3d_view (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -1904,9 +1904,86 @@ void draw_virtual_cockpit_3d_view (void)
 		}
 		////Moje 030816 End
 
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			if (get_global_draw_cockpit_graphics ())
+			{
+				set_pilots_full_screen_params (FALSE);
+
+				if (command_line_3d_cockpit)
+				{
+					
+					draw_default_external_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR//,NULL
+					);
+      
+					draw_default_internal_virtual_cockpit_3d
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES 
+					);
+				}
+				else
+				{
+					draw_default_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
+            	
+					draw_default_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
+						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+					);
+				}
+			}
+			else
+			{
+				if(command_line_export_mfd)
+				{
+					draw_default_mfd_on_texture(MFD_LOCATION_LHS);
+					draw_default_mfd_on_texture(MFD_LOCATION_RHS);
+				}
+				else
+				{
+					if (get_global_draw_overlaid_instruments ())
+					{
+						draw_overlaid_default_mfd (100.0, 380.0, 192.0, MFD_LOCATION_LHS);
+						draw_overlaid_default_mfd (540.0, 380.0, 192.0, MFD_LOCATION_RHS);
+					}
+				}
+			}
+
+			draw_default_hud ();
+
+			break;
+		}
+
+
 	}
 	
-	if (command_line_restricted_nvg_fov && night_vision_active() && get_global_draw_cockpit_graphics ())
+	if (command_line_restricted_nvg_fov && night_vision_system_active && get_global_draw_cockpit_graphics ())
 		draw_night_vision_mask();
 
 	// Jabberwock 031016 Inset view - cockpit
@@ -2278,6 +2355,7 @@ void draw_virtual_cockpit_3d_hud_view (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void draw_virtual_cockpit_3d_periscope_view (void)
 {
 	int
@@ -2327,7 +2405,7 @@ void draw_virtual_cockpit_3d_display_view (void)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -2476,6 +2554,25 @@ void draw_virtual_cockpit_3d_display_view (void)
 			break;
 		}
 		////Moje 030816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			set_pilots_full_screen_params (FALSE);
+
+			draw_default_internal_virtual_cockpit
+			(
+				VIRTUAL_COCKPIT_DISPLAY_VIEW |
+				VIRTUAL_COCKPIT_COCKPIT |
+				VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
+				VIRTUAL_COCKPIT_RHS_MFD_DISPLAY
+			);
+
+			break;
+		}
+
 	}
 
 	//
@@ -2673,7 +2770,17 @@ void switch_seat_position (void)
 			break;
 		default:
 			break;
+			
+		// start periscope check by GCsDriver  08-12-2007
+	  	// as copilot is no longer periscopes default position it can already be active
+		if(command_line_pilot_as_periscope_default){
+	  	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_PERISCOPE)
+	  	{
+			set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
 		}
+		}
+		// end periscope check by GCsDriver  08-12-2007
+
 	}
 	else
 	{

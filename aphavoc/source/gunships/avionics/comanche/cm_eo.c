@@ -79,14 +79,6 @@ eo_params_dynamic_move
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float
-	eo_ground_stabilisation_value_heading,
-	eo_ground_stabilisation_value_pitch;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void initialise_comanche_eo (void)
 {
 	eo_sensor								= TARGET_ACQUISITION_SYSTEM_FLIR;
@@ -321,36 +313,6 @@ static void fast_dec_eo_field_of_view (eo_params_dynamic_move *eo)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void comanche_toggle_ground_stabilisation (void)
-{
-	if (command_line_ground_stabilisation_available)
-	{
-		if (eo_ground_stabilised)
-		{
-			eo_ground_stabilised = 0;
-		}
-		else
-		{
-			matrix3x3
-				attitude;
-
-			eo_ground_stabilised = 1;
-
-			get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-
-			eo_ground_stabilisation_value_heading = atan2 (attitude [2][0], attitude [2][2]);
-
-			eo_ground_stabilisation_value_pitch = asin (attitude [2][1]);
-
-//			eo_ground_stabilisation_value_roll = atan2 (-attitude [0][1], attitude [1][1]);
-		}
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void update_comanche_eo (eo_params_dynamic_move *eo)
 {
 	float
@@ -401,7 +363,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 	while (toggle_ground_stabilisation_key)
 	{
-		comanche_toggle_ground_stabilisation ();
+		toggle_ground_stabilisation ();
 
 		toggle_ground_stabilisation_key--;
 	}
@@ -751,53 +713,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 	if (eo_ground_stabilised)
 	{
-		matrix3x3
-			attitude;
-
-		float
-			heading,
-			pitch;
-
-		float
-			horizontal_pan_offset,
-			vertical_pan_offset;
-
-		get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-
-		heading = atan2 (attitude [2][0], attitude [2][2]);
-
-		pitch = asin (attitude [2][1]);
-
-		horizontal_pan_offset = eo_ground_stabilisation_value_heading - heading;
-
-		eo_azimuth += horizontal_pan_offset;
-
-		if (horizontal_pan_offset > 0)
-		{
-			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
-		}
-		else
-		{
-			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
-		}
-		
-
-		vertical_pan_offset = eo_ground_stabilisation_value_pitch - pitch;
-
-		eo_elevation += vertical_pan_offset;
-
-		if (vertical_pan_offset > 0)
-		{
-			eo_elevation = min (eo_elevation, eo_max_elevation);
-		}
-		else
-		{
-			eo_elevation = max (eo_elevation, eo_min_elevation);
-		}
-
-		eo_ground_stabilisation_value_heading = heading;
-
-		eo_ground_stabilisation_value_pitch = pitch;
+		handle_ground_stabilisation();
 	}
 
 	////////////////////////////////////////

@@ -138,14 +138,14 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
-				NUM_HYDRA_ROCKETS,											// number
+				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
+				NUM_HELLFIRE_MISSILES,										// number
 				LHS_HARDPOINT1,												// heading_depth
-				HYDRA_POD,														// pitch_depth
+				HELLFIRE_RACK,													// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -160,9 +160,31 @@
 			},
 			// WEAPON PACKAGE 4
 			{
+				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
+				NUM_HELLFIRE_MISSILES,										// number
+				RHS_HARDPOINT1,												// heading_depth
+				HELLFIRE_RACK,													// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				1,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 	 														// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
 				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
 				NUM_HYDRA_ROCKETS,											// number
-				RHS_HARDPOINT1,												// heading_depth
+				LHS_HARDPOINT2,												// heading_depth
 				HYDRA_POD,														// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
@@ -180,38 +202,16 @@
 				0,		 	 														// pitch_share_mask
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
 			},
-			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
-				NUM_HELLFIRE_MISSILES,										// number
-				LHS_HARDPOINT2,												// heading_depth
-				HELLFIRE_RACK,													// pitch_depth
-				0,					  												// muzzle_depth
-				FALSE,			  												// make_weapon_system_ready
-				FALSE,															// rotate
-				1,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,		 															// heading_share_mask
-				0,		 	 														// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
-				NUM_HELLFIRE_MISSILES,										// number
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
+				NUM_HYDRA_ROCKETS,											// number
 				RHS_HARDPOINT2,												// heading_depth
-				HELLFIRE_RACK,													// pitch_depth
+				HYDRA_POD,														// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -330,14 +330,14 @@
 			},
 			// WEAPON PACKAGE 3
 			{
-				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
-				NUM_HELLFIRE_MISSILES,										// number
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
+				NUM_HYDRA_ROCKETS,											// number
 				LHS_HARDPOINT1,												// heading_depth
-				HELLFIRE_RACK,													// pitch_depth
+				HYDRA_POD,														// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				1,																	// salvo_size
+				2,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit
@@ -352,9 +352,31 @@
 			},
 			// WEAPON PACKAGE 4
 			{
+				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
+				NUM_HYDRA_ROCKETS,											// number
+				RHS_HARDPOINT1,												// heading_depth
+				HYDRA_POD,														// pitch_depth
+				0,					  												// muzzle_depth
+				FALSE,			  												// make_weapon_system_ready
+				FALSE,															// rotate
+				2,																	// salvo_size
+				rad (0.0),														// heading_rate
+				rad (0.0),														// min_heading_limit
+				rad (0.0),														// max_heading_limit
+				rad (0.0),														// pitch_rate
+				rad (0.0),														// min_pitch_limit
+				rad (0.0),														// max_pitch_limit
+				rad (0.0),														// muzzle_rotate_rate
+				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				0,		 															// heading_share_mask
+				0,		 	 														// pitch_share_mask
+				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
+			},
+			// WEAPON PACKAGE 5
+			{
 				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
 				NUM_HELLFIRE_MISSILES,										// number
-				RHS_HARDPOINT1,												// heading_depth
+				LHS_HARDPOINT2,												// heading_depth
 				HELLFIRE_RACK,													// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
@@ -372,38 +394,16 @@
 				0,		 	 														// pitch_share_mask
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
 			},
-			// WEAPON PACKAGE 5
-			{
-				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
-				NUM_HYDRA_ROCKETS,											// number
-				LHS_HARDPOINT2,												// heading_depth
-				HYDRA_POD,														// pitch_depth
-				0,					  												// muzzle_depth
-				FALSE,			  												// make_weapon_system_ready
-				FALSE,															// rotate
-				2,																	// salvo_size
-				rad (0.0),														// heading_rate
-				rad (0.0),														// min_heading_limit
-				rad (0.0),														// max_heading_limit
-				rad (0.0),														// pitch_rate
-				rad (0.0),														// min_pitch_limit
-				rad (0.0),														// max_pitch_limit
-				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
-				0,		 															// heading_share_mask
-				0,		 	 														// pitch_share_mask
-				MUZZLE_FLASH_INVALID,										// muzzle_flash_type
-			},
 			// WEAPON PACKAGE 6
 			{
-				ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261,					// sub_type
-				NUM_HYDRA_ROCKETS,											// number
+				ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE,	// sub_type
+				NUM_HELLFIRE_MISSILES,										// number
 				RHS_HARDPOINT2,												// heading_depth
-				HYDRA_POD,														// pitch_depth
+				HELLFIRE_RACK,													// pitch_depth
 				0,					  												// muzzle_depth
 				FALSE,			  												// make_weapon_system_ready
 				FALSE,															// rotate
-				2,																	// salvo_size
+				1,																	// salvo_size
 				rad (0.0),														// heading_rate
 				rad (0.0),														// min_heading_limit
 				rad (0.0),														// max_heading_limit

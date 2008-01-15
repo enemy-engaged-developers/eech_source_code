@@ -1561,6 +1561,32 @@ typedef int weapon_config_types;
 #define AH64A_CHAFF_DISPENSER	  		(7)
 #define AH64A_FLARE_DISPENSER	  		(7)
 
+// added by GCsDriver
+#define COBRA_LHS_INNER_PYLON	  		(1)
+#define COBRA_RHS_INNER_PYLON	  		(2)
+#define COBRA_LHS_OUTER_PYLON	  		(3)
+#define COBRA_RHS_OUTER_PYLON	  		(4)
+#define COBRA_CANNON_TURRET	  		(0)
+#define COBRA_LHS_CHAFF_DISPENSER	  		(5)
+#define COBRA_RHS_CHAFF_DISPENSER	  		(6)
+#define COBRA_LHS_FLARE_DISPENSER	  		(5)
+#define COBRA_RHS_FLARE_DISPENSER	  		(6)
+
+#define KIOWA_CHAFF_DISPENSER	  		(2)
+#define KIOWA_FLARE_DISPENSER	  		(2)
+  		
+#define HELIX_CHAFF_DISPENSER	  		(4)
+#define HELIX_FLARE_DISPENSER	  		(4)
+
+#define DEFAULT_CHAFF_DISPENSER	  		(0)
+#define DEFAULT_FLARE_DISPENSER	  		(1)
+
+#define HIP_LHS_CHAFF_DISPENSER	  		(6)
+#define HIP_RHS_CHAFF_DISPENSER	  		(7)
+#define HIP_LHS_FLARE_DISPENSER	  		(6)
+#define HIP_RHS_FLARE_DISPENSER	  		(7)
+// end GCsDriver
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

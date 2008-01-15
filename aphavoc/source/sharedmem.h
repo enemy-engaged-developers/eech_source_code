@@ -85,6 +85,11 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 
 	comanche_lamp_flags
 		comanche_lamps;
+
+// GCsDriver  08-12-2007
+	default_lamp_flags
+		default_lamps;
+
 	} cockpit_lamps;
 
 	waypoint_data_t waypoint_data;
@@ -108,6 +113,9 @@ void update_havoc_avionics_shared_mem ();
 void update_hind_avionics_shared_mem ();
 void update_hokum_avionics_shared_mem ();
 void update_ka50_avionics_shared_mem ();
+
+// GCsDriver  08-12-2007
+void update_default_avionics_shared_mem ();
 
 void update_dynamics_shared_mem ();
 void update_texture_shared_mem (void* target);

@@ -333,7 +333,7 @@ static void weapons_safe_event (event *ev)
 	{
 		////////////////////////////////////////
 		// JB 030313 Fly any aircraft
-		default:
+//		default:
 		case GUNSHIP_TYPE_APACHE:
 		////////////////////////////////////////
 		{
@@ -423,6 +423,19 @@ static void weapons_safe_event (event *ev)
 			break;
 		}
 		////Moje 030816 End
+
+		////////////////////////////////////////
+		// GCsDriver  08-12-2007
+		default:
+		////////////////////////////////////////
+		{
+			if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS)
+			{
+				select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_OFF);
+			}
+
+			break;
+		}
 	}
 }
 

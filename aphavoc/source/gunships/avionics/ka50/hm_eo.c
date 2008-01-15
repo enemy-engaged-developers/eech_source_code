@@ -88,7 +88,8 @@ void initialise_ka50_eo (void)
 	eo_elevation						= rad (0.0);
 	eo_min_elevation					= rad (-80.0);
 	eo_max_elevation					= rad (15.0);
-	eo_max_visual_range				= 5000.0;
+	eo_max_visual_range				= 5000.0,
+	eo_ground_stabilised					= 0;
 
 	ka50_flir.field_of_view		= EO_FOV_WIDE;
 	ka50_flir.min_field_of_view	= EO_FOV_NARROW;
@@ -257,6 +258,17 @@ void update_ka50_eo (eo_params *eo)
 	}
 
 	////////////////////////////////////////
+
+	while (toggle_ground_stabilisation_key)
+	{
+		toggle_ground_stabilisation ();
+
+		toggle_ground_stabilisation_key--;
+	}
+
+	////////////////////////////////////////
+
+	////////////////////////////////////////
 	//
 	// slew optics
 	//
@@ -418,7 +430,6 @@ void update_ka50_eo (eo_params *eo)
 		single_target_acquisition_system_select_previous_target_key--;
 	}
 
-
 // Jabberwock 031107 Designated targets
 	
 	while (single_target_acquisition_system_select_next_designated_key)
@@ -547,8 +558,20 @@ void update_ka50_eo (eo_params *eo)
 			eo_elevation = max (eo_elevation, eo_min_elevation);
 		}
 	}
-}
 
+	////////////////////////////////////////
+
+	// loke 030322
+	// handle the ground stabilisation
+
+	if (eo_ground_stabilised)
+	{
+		handle_ground_stabilisation();
+	}
+
+	////////////////////////////////////////
+
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

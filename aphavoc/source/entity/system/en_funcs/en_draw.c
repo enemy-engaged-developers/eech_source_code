@@ -128,7 +128,9 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 		hither,
       range,
 		env_max_range,
-      object_max_range;
+		object_max_range,
+		fog_start, 
+		fog_end;
 
    entity
       *sctr,
@@ -201,7 +203,19 @@ void scan_local_entity_3d_objects (viewpoint *vp)
 					{
 						if (draw_eo_3d_scene)
 						{
-							object_max_range = 6000.0;
+							// start full_eo_range by GCsDriver  08-12-2007
+							// this is for object rendering up to max fog distance
+							if (command_line_eo_full_range)
+							{
+								get_3d_fog_distances (env, &fog_start, &fog_end);
+								object_max_range = fog_end;
+							}
+							else
+							{
+								//original hardcoded value
+								object_max_range = 6000.0;
+							}
+							// end full_eo_range by GCsDriver  08-12-2007
 						}
 						else
 						{

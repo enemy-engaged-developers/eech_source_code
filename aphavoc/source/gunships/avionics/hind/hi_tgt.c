@@ -110,6 +110,10 @@ static void deselect_hind_target_acquisition_system (target_acquisition_systems 
 		case TARGET_ACQUISITION_SYSTEM_OFF:
 		////////////////////////////////////////
 		{
+			// laser is on in all modes but OFF in automatic mode
+			if (!command_line_manual_laser_radar)
+				set_laser_is_active(TRUE);
+			
 			break;
 		}
 		////////////////////////////////////////
@@ -421,6 +425,8 @@ void update_hind_target_acquisition_system (void)
 		// laser on/off
 		//
 
+		laser_on = laser_is_active() && !hind_damage.laser_range_finder;
+/*
 		laser_on = FALSE;
 
 		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
@@ -430,7 +436,7 @@ void update_hind_target_acquisition_system (void)
 				laser_on = TRUE;
 			}
 		}
-
+*/
 		if (laser_on != get_local_entity_int_value (source, INT_TYPE_LASER_ON))
 		{
 			set_client_server_entity_int_value (source, INT_TYPE_LASER_ON, laser_on);

@@ -225,6 +225,8 @@ static const char *get_wingman_message_text (message_categories message_type);
 
 static const char *get_wingman_attack_my_target_text (entity *sender, entity *wingman);
 
+// GCsDriver  08-12-2007
+static void send_channel_message (message_type message);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -584,12 +586,15 @@ void initialise_message_database (void)
 	//
 	/////////////////////////////////////////////////////////////////
 
-	new_item = create_message_database_list (MESSAGE_DESTINATION_LIST, 0, message_list, 4, "Select Destination");
+	new_item = create_message_database_list (MESSAGE_DESTINATION_LIST, 0, message_list, 5, "Select Destination");
 
 	add_message_action_to_database (new_item, 0, MESSAGE_GROUP_LIST, 0, DIK_1, "Flight Group");
 	add_message_action_to_database (new_item, 1, MESSAGE_WINGMAN_LIST, 0, DIK_2, "Wingmen");
 	add_message_action_to_database (new_item, 2, MESSAGE_LOCAL_BASE_LIST, 0, DIK_3, "Local Base");
 	add_message_action_to_database (new_item, 3, MESSAGE_PILOT_LIST, 0, DIK_4, "Other Players");
+
+	// GCsDriver  08-12-2007
+	add_message_action_to_database (new_item, 4, MESSAGE_CHANNEL_LIST, 0, DIK_5, "COMM Channels");
 
 	/////////////////////////////////////////////////////////////////
 	//
@@ -1188,6 +1193,66 @@ Commented out by Retro because of change '//VJ for JvS 030411' below */
 
 		create_leaf_message_action (MESSAGE_PILOT_KEYBOARD, unique_id, send_pilot_keyboard_message);
 	}
+
+	/////////////////////////////////////////////////////////////////
+	//
+	// COMM Channels by GCsDriver  08-12-2007
+	//
+	/////////////////////////////////////////////////////////////////
+	{
+
+		entity
+			*group;
+
+		if (get_gunship_entity ())
+		{
+
+			//
+			// 4 options
+			//
+
+			group = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER);
+
+			if (group)
+			{
+				index = get_local_entity_index (group);
+
+				sub_item = create_message_database_list (MESSAGE_CHANNEL_LIST, 0, message_list, 4, "Select Message");
+
+
+				if (get_sound_channel_muted (SOUND_CHANNEL_AIR_TRAFFIC_CONTROLLER))
+				{
+					add_message_action_to_database (sub_item, 0, MESSAGE_ATC,	index, DIK_1, "Air Traffic Controller OFF");
+				}else{
+					add_message_action_to_database (sub_item, 0, MESSAGE_ATC,	index, DIK_1, "Air Traffic Controller ON");
+				}
+				if (get_sound_channel_muted (SOUND_CHANNEL_FORWARD_AIR_CONTROLLER))
+				{
+					add_message_action_to_database (sub_item, 1, MESSAGE_FAC,	index, DIK_2, "Forward Air Controller OFF");
+				}else{
+					add_message_action_to_database (sub_item, 1, MESSAGE_FAC,	index, DIK_2, "Forward Air Controller ON");
+				}
+				if (get_sound_channel_muted (SOUND_CHANNEL_GROUND_CONTROLLER))
+				{
+					add_message_action_to_database (sub_item, 2, MESSAGE_GC,	index, DIK_3, "Ground Controller OFF");
+				}else{
+					add_message_action_to_database (sub_item, 2, MESSAGE_GC,	index, DIK_3, "Ground Controller ON");
+				}
+				if (get_sound_channel_muted (SOUND_CHANNEL_WINGMAN))
+				{
+					add_message_action_to_database (sub_item, 3, MESSAGE_WM,	index, DIK_4, "Wingmen OFF");
+				}else{
+					add_message_action_to_database (sub_item, 3, MESSAGE_WM,	index, DIK_4, "Wingmen ON");
+				}
+				create_leaf_message_action (MESSAGE_ATC, 	index, send_channel_message);
+				create_leaf_message_action (MESSAGE_FAC, 	index, send_channel_message);
+				create_leaf_message_action (MESSAGE_GC,	index, send_channel_message);
+				create_leaf_message_action (MESSAGE_WM,	index, send_channel_message);
+			}
+		}
+	}
+	// GCsDriver  08-12-2007
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2114,6 +2179,61 @@ void display_in_flight_outgoing_messages (void)
 
 		ui_display_text (s, 2, y);
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// GCsDriver  08-12-2007
+void send_channel_message (message_type message)
+{
+	int channel;
+
+	entity
+		*en;
+
+	en = get_gunship_entity ();
+
+	switch (message.type)
+	{
+		case MESSAGE_ATC:
+		{
+			channel = SOUND_CHANNEL_AIR_TRAFFIC_CONTROLLER;
+			break;
+		}
+		case MESSAGE_FAC:
+		{
+			channel = SOUND_CHANNEL_FORWARD_AIR_CONTROLLER;
+			break;
+		}
+		case MESSAGE_GC:
+		{
+  			channel = SOUND_CHANNEL_GROUND_CONTROLLER;
+			break;
+		}
+		case MESSAGE_WM:
+		{
+  			channel = SOUND_CHANNEL_WINGMAN;
+			break;
+		}
+	}
+
+	if (get_sound_channel_muted (channel))
+	{
+		set_sound_channel_muted (channel, FALSE);
+	}else{
+		set_sound_channel_muted (channel, TRUE);
+	}
+
+	// menu off as change is not displayed
+	//stop_messaging_system (NULL);
+
+	// reinit for change in text
+	//initialise_message_database ();
+	initialise_messages ();
+	// set current menu again to show change
+	current_message = message;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
