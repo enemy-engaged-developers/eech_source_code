@@ -176,6 +176,16 @@ extern float get_triangulated_by_position_range(vec3d* source, vec3d* target);
 extern int electrical_system_active(void);
 extern void set_electrical_system_active(int active);
 
+extern int eo_is_tracking_point(void);
+extern vec3d* get_eo_tracking_point(void);
+extern void eo_start_tracking(vec3d* tracking_point);
+extern void eo_stop_tracking(void);
+
+extern float get_range_to_target(void);
+
+//extern void keyboard_slew_eo_system(float slew_rate);
+extern void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

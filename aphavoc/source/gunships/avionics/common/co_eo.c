@@ -84,6 +84,8 @@
 
 #define MAX_GUN_SHAKE_DEFLECTION  rad(0.1)
 
+#define NOT_TRACKING    -10000.0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +118,9 @@ viewpoint
 int
 	draw_eo_boresight = FALSE,
 	draw_eo_terrain_los_markers = FALSE;
+
+static vec3d
+	eo_tracking_point;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +170,10 @@ void initialise_common_eo (void)
 	eo_requested_azimuth = 0.0;
 	
 	electrical_system_on = !command_line_dynamics_engine_startup;
+
+	eo_tracking_point.x = 0.0;
+	eo_tracking_point.y = NOT_TRACKING;
+	eo_tracking_point.z = 0.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -609,14 +618,14 @@ static void update_eo_visibility (void)
 	vec3d
 		*position;
 
-	entity
-		*current_target;
-
 	eo_low_light = FALSE;
 
 	// start full_eo_range by GCsDriver  08-12-2007
 	if (command_line_eo_full_range)
 	{
+		entity
+			*current_target;
+
 		update_eo_max_visual_range();
 
 		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
@@ -1067,25 +1076,38 @@ void update_common_eo (void)
 
 	if (eo_target_locked)
 	{
-		if (!current_target)
+		if (!current_target && !eo_is_tracking_point())
 		{
-			eo_target_locked = FALSE;
+			// try locking onto point on ground
+			if (get_eo_los_intercept_point(&eo_tracking_point) >= eo_max_visual_range)
+				eo_target_locked = FALSE;
 		}
 	}
+	else
+		eo_tracking_point.y = NOT_TRACKING;
 
 	get_eo_centred_viewpoint (&vp);
 
 	//
-	// track locked target
+	// track locked target or point
 	//
 
 	if (eo_target_locked)
 	{
-		get_local_entity_target_point (current_target, &target_position);
+		if (current_target)
+		{
+			get_local_entity_target_point (current_target, &target_position);
 
-		target_vector.x = target_position.x - vp.position.x;
-		target_vector.y = target_position.y - vp.position.y;
-		target_vector.z = target_position.z - vp.position.z;
+			target_vector.x = target_position.x - vp.position.x;
+			target_vector.y = target_position.y - vp.position.y;
+			target_vector.z = target_position.z - vp.position.z;
+		}
+		else
+		{
+			target_vector.x = eo_tracking_point.x - vp.position.x;
+			target_vector.y = eo_tracking_point.y - vp.position.y;
+			target_vector.z = eo_tracking_point.z - vp.position.z;
+		}
 
 		multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &target_vector);
 
@@ -1142,7 +1164,7 @@ void update_common_eo (void)
 
 	if (eo_target_locked)
 	{
-		if (new_target != current_target)
+		if (new_target != current_target)  // FIXME
 		{
 			eo_target_locked = FALSE;
 		}
@@ -1210,6 +1232,8 @@ void activate_common_eo (void)
 void deactivate_common_eo (void)
 {
 	eo_target_locked = FALSE;
+
+	eo_stop_tracking();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1360,17 +1384,13 @@ void slave_common_eo_to_position (vec3d* target_position)
 
 	update_eo_visibility ();
 
-	// GCsDriver 08-12-2007
-	if (command_line_laser_workaround){
-	}else{
-		if (target_in_fov && eo_on_target)
-		{
-			if (!command_line_manual_laser_radar)
-				set_laser_is_active(TRUE);
-		}
-		else
-			set_laser_is_active(FALSE);
+	if (target_in_fov && eo_on_target)
+	{
+		if (!command_line_manual_laser_radar)
+			set_laser_is_active(TRUE);
 	}
+	else
+		set_laser_is_active(FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1808,6 +1828,206 @@ void set_electrical_system_active(int active)
 	electrical_system_on = active;
 }
 
+
+int eo_is_tracking_point(void)
+{
+//	ASSERT(eo_tracking_point.y != NOT_TRACKING || (eo_tracking_point.x == 0 && eo_tracking_point.z == 0));
+	
+	return eo_tracking_point.y != NOT_TRACKING;	
+}
+
+vec3d* get_eo_tracking_point(void)
+{
+	if (eo_tracking_point.y == NOT_TRACKING)
+		return NULL;
+
+	return &eo_tracking_point;
+}
+
+void eo_stop_tracking(void)
+{
+	eo_tracking_point.x = 0.0;
+	eo_tracking_point.y = NOT_TRACKING;
+	eo_tracking_point.z = 0.0;	
+}
+
+void eo_start_tracking(vec3d* tracking_point)
+{
+	eo_tracking_point = *tracking_point;
+}
+
+float get_range_to_target(void)
+{
+	rangefinding_system rangefinder = get_range_finder();
+	entity* target = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET);
+
+	if (target || eo_is_tracking_point())
+	{
+		vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
+		vec3d* target_position;
+
+		if (target)
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+		else
+			target_position = get_eo_tracking_point();
+
+		if (rangefinder != RANGEFINDER_TRIANGULATION)
+			return get_3d_range (source_position, target_position);
+		else
+			return get_triangulated_by_position_range(source_position, target_position);
+	}
+	else
+		return 0.0;
+}
+
+void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate)
+{
+#define FINE_TRACKING_RATE 5.0
+#define MEDIUM_TRACKING_RATE 20.0
+#define COARSE_TRACKING_RATE 100.0
+
+	if (eo_is_tracking_point())
+	{
+		float
+			movement_rate = 0.0,
+			movement,
+			eo_heading = get_heading_from_attitude_matrix (eo_vp.attitude),
+			sin_heading = sin(eo_heading),
+			cos_heading = cos(eo_heading);
+
+		int
+			has_moved;
+		
+		// move tracking point perpendicular
+		if (continuous_target_acquisition_system_steer_left_fast_key)
+			movement_rate -= COARSE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_left_fine_key)
+			movement_rate -= FINE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_left_key)
+			movement_rate -= MEDIUM_TRACKING_RATE;
+	
+		////////////////////////////////////////
+	
+		if (continuous_target_acquisition_system_steer_right_fast_key)
+			movement_rate += COARSE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_right_fine_key)
+			movement_rate += FINE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_right_key)
+			movement_rate += MEDIUM_TRACKING_RATE;
+
+		has_moved = movement_rate != 0.0;
+
+		movement = movement_rate * get_delta_time();
+
+		eo_tracking_point.x += cos_heading * movement;
+		eo_tracking_point.z -= sin_heading * movement;
+
+		movement_rate = 0.0;
+		// move closer farther
+		if (continuous_target_acquisition_system_steer_up_fast_key)
+			movement_rate += COARSE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_up_fine_key)
+			movement_rate += FINE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_up_key)
+			movement_rate += MEDIUM_TRACKING_RATE;
+	
+		////////////////////////////////////////
+	
+		if (continuous_target_acquisition_system_steer_down_fast_key)
+			movement_rate -= COARSE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_down_fine_key)
+			movement_rate -= FINE_TRACKING_RATE;
+		else if (continuous_target_acquisition_system_steer_down_key)
+			movement_rate -= MEDIUM_TRACKING_RATE;
+
+		has_moved = has_moved || (movement_rate != 0.0);
+
+		movement = movement_rate * 2* get_delta_time();  // multiply vertical rate by two since it appears much smaller from usual angles
+
+		eo_tracking_point.x += sin_heading * movement;
+		eo_tracking_point.z += cos_heading * movement;
+
+			// keep point on ground (unless point off map)
+		if (has_moved && point_inside_map_area (&eo_tracking_point))
+		{
+			helicopter *raw = get_local_entity_data(get_gunship_entity());
+			eo_tracking_point.y = get_3d_terrain_point_data(eo_tracking_point.x, eo_tracking_point.z, &raw->ac.terrain_info);
+		}
+	}
+	else
+	{
+		if (continuous_target_acquisition_system_steer_left_fast_key)
+		{
+			eo_azimuth -= coarse_slew_rate;
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+		else if (continuous_target_acquisition_system_steer_left_fine_key)
+		{
+			eo_azimuth -= fine_slew_rate;
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+		else if (continuous_target_acquisition_system_steer_left_key)
+		{
+			eo_azimuth -= medium_slew_rate;
+			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+		}
+	
+		////////////////////////////////////////
+	
+		if (continuous_target_acquisition_system_steer_right_fast_key)
+		{
+			eo_azimuth += coarse_slew_rate;
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+		else if (continuous_target_acquisition_system_steer_right_fine_key)
+		{
+			eo_azimuth += fine_slew_rate;
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+		else if (continuous_target_acquisition_system_steer_right_key)
+		{
+			eo_azimuth += medium_slew_rate;
+			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+		}
+	
+		////////////////////////////////////////
+	
+		if (continuous_target_acquisition_system_steer_up_fast_key)
+		{
+			eo_elevation += coarse_slew_rate;
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+		else if (continuous_target_acquisition_system_steer_up_fine_key)
+		{
+			eo_elevation += fine_slew_rate;
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+		else if (continuous_target_acquisition_system_steer_up_key)
+		{
+			eo_elevation += medium_slew_rate;
+			eo_elevation = min (eo_elevation, eo_max_elevation);
+		}
+	
+		////////////////////////////////////////
+	
+		if (continuous_target_acquisition_system_steer_down_fast_key)
+		{
+			eo_elevation -= coarse_slew_rate;
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+		else if (continuous_target_acquisition_system_steer_down_fine_key)
+		{
+			eo_elevation -= fine_slew_rate;
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+		else if (continuous_target_acquisition_system_steer_down_key)
+		{
+			eo_elevation -= medium_slew_rate;
+			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+	}
+}
+
 // start full_eo_range by GCsDriver  08-12-2007
 void update_eo_max_visual_range(void)
 {
@@ -1849,5 +2069,4 @@ void update_eo_max_visual_range(void)
 	}
 }
 // end full_eo_range by GCsDriver  08-12-2007
-
 
