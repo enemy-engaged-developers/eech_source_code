@@ -104,7 +104,6 @@ int night_vision_active(void)
 {
 	switch (get_global_gunship_type ())
 	{
-	default:
 	case GUNSHIP_TYPE_APACHE:
 		return apache_pnvs_active();
 	}
