@@ -609,10 +609,10 @@ void set_gunship_target (entity *target)
 		}
 	}
 
-	if (!target)
+	if (!target  && !eo_is_tracking_point())
 	{
 		target_locked = FALSE;
-		if (command_line_manual_laser_radar)
+		if (command_line_manual_laser_radar && !eo_is_tracking_point())
 			set_laser_is_active(FALSE);  // laser can only be active when we have a target
 	}
 }
@@ -1145,7 +1145,7 @@ rangefinding_system get_range_finder(void)
 	}
 	else if (laser_is_active())
 		return RANGEFINDER_LASER;
-	
+
 	return RANGEFINDER_TRIANGULATION;
 }
 
