@@ -834,37 +834,37 @@ static void display_true_airspeed (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void display_g_scale(void)
-{
-	float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
-
-	draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
-
-	draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
-	draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
-	draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
+	{
+		float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
+		
+		draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
 	
-	if (draw_large_hud)
-		set_mono_font_type(MONO_FONT_TYPE_6X10);
-	else
-		set_mono_font_type(MONO_FONT_TYPE_3X6);
+		draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
+		draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
+		draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
+		
+		if (draw_large_hud)
+			set_mono_font_type(MONO_FONT_TYPE_6X10);
+		else
+			set_mono_font_type(MONO_FONT_TYPE_3X6);
 
-	set_2d_mono_font_position(-0.78, -0.25);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("3");
-	
-	set_2d_mono_font_position(-0.78, -0.55);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("0");
+		set_2d_mono_font_position(-0.78, -0.25);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("3");
+		
+		set_2d_mono_font_position(-0.78, -0.55);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("0");
 
-	set_2d_mono_font_position(-0.78, -0.65);
-	set_mono_font_rel_position (0.0, -3.0);
-	print_mono_font_string("1");
+		set_2d_mono_font_position(-0.78, -0.65);
+		set_mono_font_rel_position (0.0, -3.0);
+		print_mono_font_string("1");
 
-	if (draw_large_hud)
-		draw_2d_mono_sprite(large_left_carat, -0.7, -0.55 + y_offset, hud_colour);
-	else
-		draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
-}
+		if (draw_large_hud)
+			draw_2d_mono_sprite(large_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+		else
+			draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -973,9 +973,9 @@ static void draw_altitude_scale(float altitude)
 
 	set_2d_mono_font_position(0.6, 0.8);
 	set_mono_font_rel_position (0.0, -2.0);
+
 	print_mono_font_string("50");
-
-
+	
 	if (draw_large_hud)
 		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
 	else
@@ -1134,7 +1134,7 @@ void deinitialise_hokum_hud (void)
 	destroy_2d_environment (hud_env);
 
 	destroy_screen (outside_hud_texture_screen);
-	
+
 	destroy_screen (hud_texture_screen);
 }
 
@@ -1555,10 +1555,10 @@ void draw_external_hokum_hud (void)
 		quad[3].u				= 0.0;
 		quad[3].v				= 1.0;
 
-		quad[0].next_vertex		= &quad[1];
-		quad[1].next_vertex		= &quad[2];
-		quad[2].next_vertex		= &quad[3];
-		quad[3].next_vertex		= NULL;
+		quad[0].next_vertex 	= &quad[1];
+		quad[1].next_vertex 	= &quad[2];
+		quad[2].next_vertex 	= &quad[3];
+		quad[3].next_vertex 	= NULL;
 
 		//
 		////////////////////////////////////////
@@ -1850,13 +1850,7 @@ static void display_weapon_information (void)
 	entity_sub_types weapon_sub_type;
 	char s[80], *weapon_type;
 
-	int
-		weapon_count;
-
 	weapon_sub_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
-
-	weapon_count = get_local_entity_weapon_count (get_gunship_entity (), weapon_sub_type);
-
 
 	if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
@@ -1939,34 +1933,9 @@ static void display_weapon_information (void)
 		else
 			set_mono_font_type (MONO_FONT_TYPE_3X6);
 
-		// start ammo counter by GCsDriver  08-12-2007
-		if (!command_line_hokum_ammo_count)
-		{
-			set_2d_mono_font_position (-0.85, -0.1);
-			set_mono_font_rel_position (0.0, 0.0);
-			print_mono_font_string (weapon_type);
-		}
-		else
-		{
-			sprintf (s, "%s %d", weapon_type, weapon_count);
-			set_2d_mono_font_position (-0.9, -0.1);
-			set_mono_font_rel_position (0.0, 0.0);
-			print_mono_font_string (s);
-
-			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S5) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S8) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_S13))
-			{
-				if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
-				{
-					sprintf (s, "Salvo:ALL");
-				}else{
-					sprintf (s, "Salvo:%d", rocket_salvo_size);
-				}
-				set_2d_mono_font_position (-0.9, -0.2);
-				set_mono_font_rel_position (0.0, 0.0);
-				print_mono_font_string (s);
-			}
-		}
-		// end ammo counter by GCsDriver  08-12-2007
+		set_2d_mono_font_position (-0.85, -0.1);
+		set_mono_font_rel_position (0.0, 0.0);
+		print_mono_font_string (weapon_type);
 	}
 }
 
@@ -2091,21 +2060,8 @@ static void display_target_information (void)
 	}
 
 	width = get_mono_font_string_width (s);
-
-	// start ammo counter by GCsDriver  08-12-2007
-	// if counter is active this has to go down a row (for salvo info)
-	if (!command_line_hokum_ammo_count)
-	{
-		set_2d_mono_font_position (-0.9, -0.2);
-	}
-	else
-	{
-		set_2d_mono_font_position (-0.9, -0.3);
-	}
-	// end ammo counter by GCsDriver  08-12-2007
-
+	set_2d_mono_font_position (-0.9, -0.2);
 	set_mono_font_rel_position (0.0, 0.0);
-
 	print_mono_font_string (s);
 
 	// laser and radar indicators
