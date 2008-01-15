@@ -2488,19 +2488,9 @@ static void display_target_information (void)
 	
 			print_mono_font_string (s);
 		}
-
-		if (rangefinder != RANGEFINDER_TRIANGULATION)
-		{
-			gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		
-			target_range = get_3d_range (gunship_position, target_position);
-		}
-		else
-			target_range = get_triangulated_range(target);
 	}
-	else
-		target_range = 0.0;
+
+	target_range = get_range_to_target();
 
 	switch (rangefinder)
 	{
