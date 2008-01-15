@@ -264,3 +264,229 @@ void restore_virtual_cockpit_main_rotors (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
+{
+	vertex
+		quad[4];
+
+	real_colour
+		colour,
+		specular;
+
+	float
+		x_texture_limit = 1.0,
+		y_texture_limit = 0.0;
+
+	if (monoccular)
+	{
+		x_texture_limit = 0.6;
+		y_texture_limit = 0.15;
+	}
+
+	set_3d_active_environment (main_3d_env);
+
+	if (begin_3d_scene ())
+	{
+		colour.red		= 255;
+		colour.green	= 255;
+		colour.blue		= 255;
+		colour.alpha	= 255;
+
+		specular.red	= 0;
+		specular.green	= 0;
+		specular.blue	= 0;
+		specular.alpha	= 255;
+
+		set_d3d_transparency_on ();
+
+		set_d3d_zbuffer_comparison (FALSE);
+
+		set_d3d_culling (FALSE);
+
+		set_d3d_texture_wrapping (0, FALSE);
+
+		set_d3d_texture_filtering (FALSE);
+
+		set_d3d_flat_shaded_textured_renderstate (get_system_texture_ptr (TEXTURE_INDEX_HOKUM_COCKPIT_WSO_SCOPE_VIEW));
+
+		////////////////////////////////////////
+		//
+		// top left
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= x_min;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.0;
+		quad[0].v				= y_texture_limit;
+
+		quad[1].i  				= full_screen_x_mid;
+		quad[1].j  				= full_screen_y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= x_texture_limit;
+		quad[1].v  				= y_texture_limit;
+
+		quad[2].i				= full_screen_x_mid;
+		quad[2].j  				= full_screen_y_mid;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= x_texture_limit;
+		quad[2].v  				= 1.0;
+
+		quad[3].i  				= x_min;
+		quad[3].j  				= full_screen_y_mid;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// bottom left
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= x_min;
+		quad[0].j  				= full_screen_y_mid;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= 0.0;
+		quad[0].v				= 1.0;
+
+		quad[1].i  				= full_screen_x_mid;
+		quad[1].j  				= full_screen_y_mid;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= x_texture_limit;
+		quad[1].v  				= 1.0;
+
+		quad[2].i				= full_screen_x_mid;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= x_texture_limit;
+		quad[2].v  				= y_texture_limit;
+
+		quad[3].i  				= x_min;
+		quad[3].j  				= full_screen_y_max;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= 0.0;
+		quad[3].v				= y_texture_limit;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// top right
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_mid;
+		quad[0].j  				= full_screen_y_min;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= x_texture_limit;
+		quad[0].v				= y_texture_limit;
+
+		quad[1].i  				= x_max;
+		quad[1].j  				= full_screen_y_min;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.0;
+		quad[1].v  				= y_texture_limit;
+
+		quad[2].i				= x_max;
+		quad[2].j  				= full_screen_y_mid;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.0;
+		quad[2].v  				= 1.0;
+
+		quad[3].i  				= full_screen_x_mid;
+		quad[3].j  				= full_screen_y_mid;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= x_texture_limit;
+		quad[3].v				= 1.0;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+		//
+		// bottom left
+		//
+		////////////////////////////////////////
+
+		quad[0].i 				= full_screen_x_mid;
+		quad[0].j  				= full_screen_y_mid;
+		quad[0].z  				= 0.5;
+		quad[0].q  				= 0.5;
+		quad[0].u  				= x_texture_limit;
+		quad[0].v				= 1.0;
+
+		quad[1].i  				= x_max;
+		quad[1].j  				= full_screen_y_mid;
+		quad[1].z  				= 0.5;
+		quad[1].q  				= 0.5;
+		quad[1].u  				= 0.0;
+		quad[1].v  				= 1.0;
+
+		quad[2].i				= x_max;
+		quad[2].j  				= full_screen_y_max;
+		quad[2].z  				= 0.5;
+		quad[2].q  				= 0.5;
+		quad[2].u  				= 0.0;
+		quad[2].v  				= y_texture_limit;
+
+		quad[3].i  				= full_screen_x_mid;
+		quad[3].j  				= full_screen_y_max;
+		quad[3].z  				= 0.5;
+		quad[3].q  				= 0.5;
+		quad[3].u				= x_texture_limit;
+		quad[3].v				= y_texture_limit;
+
+		quad[0].next_vertex	= &quad[1];
+		quad[1].next_vertex	= &quad[2];
+		quad[2].next_vertex	= &quad[3];
+		quad[3].next_vertex	= NULL;
+
+		draw_wbuffered_flat_shaded_textured_polygon (quad, colour, specular);
+
+		////////////////////////////////////////
+
+		set_d3d_transparency_off ();
+
+		set_d3d_zbuffer_comparison (TRUE);
+
+		set_d3d_culling (TRUE);
+
+		end_3d_scene ();
+	}
+}
