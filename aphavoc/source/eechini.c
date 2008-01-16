@@ -73,9 +73,6 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
-// Casm 21DEC07
-char psd_theme[128];
-
 #define DEFAULT_GWUT_FILE "gwut190.csv"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,15 +103,30 @@ static void wide_cockpit_initialize(void)
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
 //VJ 050210 defined in vm_data.h
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = BASE_X_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = BASE_Y_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = BASE_Z_APACHE;
-		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = BASE_P_APACHE;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].p = -7.0;
+
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_APACHE_COPILOT].p = -10.0;
 
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].x = BASE_X_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].y = BASE_Y_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].z = BASE_Z_HAVOC;
 		wide_cockpit_position[WIDEVIEW_HAVOC_PILOT].p = BASE_P_HAVOC;
+
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_PILOT].p = -5.0;
+
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].x = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].y = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].z = 0.0;
+		wide_cockpit_position[WIDEVIEW_HIND_COPILOT].p = -5.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,14 +295,13 @@ static void initialize_radar_ranges(void)
 		radar_range_hind[1] = 2000;
 		radar_range_hind[2] = 4000;
 		radar_range_hind[3] = 6000;
-
+		
 		// GCsDriver  08-12-2007
 		radar_range_default[0] = 500;
 		radar_range_default[1] = 1000;
 		radar_range_default[2] = 2000;
 		radar_range_default[3] = 4000;
 		radar_range_default[4] = 8000;
-
 		
 		//VJ 060212 hud info mod
 		memset(	hud_code, 0, 8*3*sizeof(int));		
@@ -518,20 +529,26 @@ void process_ini_file(int argc, char *argv[])
 //VJ 050207 cleaning up the wideview code
 	 	if (strcmp(p, "comanche_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_PILOT);
-	 	if (strcmp(p, "comanche_co-pilot")==0)
+	 	else if (strcmp(p, "comanche_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_COPILOT);
-	 	if (strcmp(p, "hokum_pilot")==0)
+	 	else if (strcmp(p, "hokum_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_PILOT);
-	 	if (strcmp(p, "hokum_co-pilot")==0)
+	 	else if (strcmp(p, "hokum_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_COPILOT);
-	 	if (strcmp(p, "apache_pilot")==0)
+	 	else if (strcmp(p, "apache_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
-	 	if (strcmp(p, "havoc_pilot")==0)
+	 	else if (strcmp(p, "apache_copilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_APACHE_COPILOT);
+	 	else if (strcmp(p, "havoc_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HAVOC_PILOT);
+	 	else if (strcmp(p, "hind_pilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HIND_PILOT);
+	 	else if (strcmp(p, "hind_copilot")==0)
+			read_wideview_parameters(q, WIDEVIEW_HIND_COPILOT);
 		//VJ 060211 save hud config info
-	 	if (strcmp(p, "hud_code")==0)
+	 	else if (strcmp(p, "hud_code")==0)
 	 		read_hud_parameters(q);
-	 	if (strcmp(p, "g-force_head_movement")==0)
+	 	else if (strcmp(p, "g-force_head_movement")==0)
 	 		command_line_g_force_head_movment_modifier = v1;
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
@@ -546,6 +563,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "eopanh") == 0) 		command_line_eo_pan_horizontal_joystick_axis = d1 - 1;
 		if (strcmp(p, "eozoomn") == 0)		command_line_eo_zoom_joystick_index = d1;
 		if (strcmp(p, "eozoomax") == 0)		command_line_eo_zoom_joystick_axis = d1 - 1;
+		if (strcmp(p, "field_of_viewn") == 0)		command_line_field_of_view_joystick_index = d1;
+		if (strcmp(p, "field_of_viewax") == 0)		command_line_field_of_view_joystick_axis = d1 - 1;
 		if (strcmp(p, "joylookn") == 0)		command_line_joylook_joystick_index = d1; // Jabberwock 031104
 		if (strcmp(p, "joylookh") == 0)		command_line_joylookh_joystick_axis = d1 - 1; // Jabberwock 031104
 		if (strcmp(p, "joylookv") == 0)		command_line_joylookv_joystick_axis = d1 - 1; // Jabberwock 031104
@@ -553,7 +572,6 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "radarinf") == 0)		command_line_ground_radar_ignores_infantry = d1;
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 		if (strcmp(p, "manual_laser/radar") == 0) 		command_line_manual_laser_radar = d1;
-		if (strcmp(p, "laser_workaround") == 0) 		command_line_laser_workaround = d1; //GCsDriver 08-12-2007
 		if (strcmp(p, "targeting_system_auto_page") == 0) 		command_line_targeting_system_auto_page = d1;
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
@@ -593,7 +611,6 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "high_lod_hack") == 0) command_line_high_lod_hack = d1;	// Retro 31Oct2004
 		if (strcmp(p, "TIR_6DOF") == 0) command_line_TIR_6DOF = d1;	// Retro 6Feb2005
 		if (strcmp(p, "MEMEXPORT") == 0) command_line_shared_mem_export = d1;	// Retro 14Aug2006
-		if (strcmp(p, "3d_cockpit") == 0) command_line_3d_cockpit = d1;	// VJ 050101 3d cockpit mod
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
 		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping		
@@ -602,7 +619,6 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "dynamic_water") == 0) global_dynamic_water = d1;	//VJ 050817 dynamic water textures
 		if (strcmp(p, "autosave") == 0) command_line_autosave = d1 * 60; // Casm 17JUN05 Autosave option
 		if (strcmp(p, "cannontrack") == 0) command_line_cannontrack = d1;	// Jabberwock 050120 Cannon tracking
-		if (strcmp(p, "hokumammocount") == 0)	command_line_hokum_ammo_count = d1; // GCsDriver  08-12-2007
 		if (strcmp(p, "unpadlock_on_handover") == 0)	command_line_unpadlock_on_handover = d1; // GCsDriver  08-12-2007
 		if (strcmp(p, "pilot_as_periscope_default") == 0)	command_line_pilot_as_periscope_default = d1; // GCsDriver  08-12-2007
 		if (strcmp(p, "autoreturn_to_pilot_after_periscope") == 0)	command_line_autoreturn_to_pilot_after_periscope = d1; // GCsDriver  08-12-2007
@@ -716,7 +732,6 @@ void dump_ini_file(void)
 	fprintf(f,"tsdpalette=%d         # TSD palette options (0 - 2) (def = 0)\n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d           # TSD showing red force blue force colours (0 = off, 1 = on) (def = 1)\n",command_line_tsd_enemy_colours);
 	fprintf(f,"tsddetail=%d          # TSD in high detail (0 = off, 1 = on) (def = 0)\n",global_tsd_detail); // VJ 061215 detailed TSD
-	fprintf(f,"3d_cockpit=%d         # [EXPERIMENTAL!] 3D Apache cockpit (0 = off, 1 = on) (def = 0)\n",command_line_3d_cockpit);	// VJ 050101
 	fprintf(f,"texture_colour=%d     # Use texture colours directly. [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",command_line_texture_colour);	//VJ 050303 texture colour mod
 	fprintf(f,"texture_filtering=%d  # [EXPERIMENTAL!] texture blending (reacts to anisotropic filter setting) (0 = off, 1 = on) (def = 0)\n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d         # mipmapped textures (dds files). [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",global_mipmapping);	//VJ 050530 mipmapping
@@ -738,8 +753,11 @@ void dump_ini_file(void)
 	fprintf(f, "comanche_co-pilot=%.3f,%.3f,%.3f,%.3f    #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z,wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p);
 	fprintf(f, "hokum_pilot=%.3f,%.3f,%.3f,%.3f          #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HOKUM_PILOT     ].p);
 	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f,%.3f       #wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].x,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].y,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].z,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].p);
-	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f        #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
+	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f         #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
+	fprintf(f, "apache_copilot=%.3f,%.3f,%.3f,%.3f       #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].p);
 	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f,%.3f          #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].p);	
+//	fprintf(f, "hind_pilot=%.3f,%.3f,%.3f,%.3f           #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].p);	
+//	fprintf(f, "hind_copilot=%.3f,%.3f,%.3f,%.3f         #wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].p);	
 	//VJ 060212 hud info mod
 	fprintf(f, "hud_code=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d         #hud code for 4 gunships\n",
 		hud_code[0][0],hud_code[0][1],hud_code[0][2],
@@ -778,7 +796,6 @@ void dump_ini_file(void)
 	fprintf(f,"radarinf=%d                      # infantry invisible and undetectable by radar (0 = off, 1 = on) (def = 1)\n",command_line_ground_radar_ignores_infantry);
 	fprintf(f,"grstab=%d                        # ground stabilisation of FLIR (0 = off, 1 = on) (def = 1)\n",command_line_ground_stabilisation_available);
 	fprintf(f,"manual_laser/radar=%d            # operate radar and laser manually (0 = off, 1 = on) (def = 0)\n",command_line_manual_laser_radar);
-	fprintf(f,"laser_workaround=%d            # replaces erratic laser behaviour (try Hokum especially at night) with permanently on (0 = off, 1 = on) (def = 0)\n",command_line_laser_workaround);
 	fprintf(f,"targeting_system_auto_page = %d  # autoswitch MFD to according targeting system (0 = off, 1 = on) (def = 1)\n", command_line_targeting_system_auto_page);
 	fprintf(f,"camcom=%d                        # Campaign Commander (0 = off, 1 = on) (def = 0)\n",command_line_camcom); // Jabberwock 031007
 	fprintf(f,"campaign_map_mode=%d             # campaign map resolution (1 = default resolution, 2 = high resolution) (def = 1)\n",command_line_campaign_map);
@@ -786,10 +803,8 @@ void dump_ini_file(void)
 	fprintf(f,"map_update_interval=%d         # enemy units update rate (n = seconds) (def = 120)\n",command_line_campaign_map_update_interval);
 	fprintf(f,"destgt=%d                        # designated target list (0 = off, 1 = on) (def = 0)\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d                   # cannon tracking boresight (0 = no tracking, 1 = track if no acquire, 2 = always track IHADSS/HIDSS/HMS) (def = 1) \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
-	fprintf(f,"hokumammocount=%d         # ammo counter in Hokum HUD def = 0 (off)\n",command_line_hokum_ammo_count);  //GCsDriver  08-12-2007
 	fprintf(f,"unpadlock_on_handover=%d         # unpadlock on handover from HMS to TADS = 0 (off)\n",command_line_unpadlock_on_handover);  //GCsDriver  08-12-2007
 	fprintf(f,"pilot_as_periscope_default=%d         # stay in pilot seat when switching to periscope = 0 (off)\n",command_line_pilot_as_periscope_default);  //GCsDriver  08-12-2007
-	fprintf(f,"autoreturn_to_pilot_after_periscope=%d         # switch to pilot seat when deactivating periscope = 0 (off)\n",command_line_autoreturn_to_pilot_after_periscope);  //GCsDriver  08-12-2007
 
 	fprintf(f,"\n[Joysticks and TrackIR]\n");	
 	fprintf(f,"eopann=%d            # joystick number for EO-camera panning\n",command_line_eo_pan_joystick_index);
@@ -797,6 +812,8 @@ void dump_ini_file(void)
 	fprintf(f,"eopanh=%d             # joystick DirectX axis for horizontal EO-camera panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1
 	fprintf(f,"eozoomn=%d          # joystick number for EO-camera zooming\n",command_line_eo_zoom_joystick_index);
 	fprintf(f,"eozoomax=%d         # joystick DirectX axis for EO-camera zooming\n",command_line_eo_zoom_joystick_axis+1);  //VJ 030531 added +1
+	fprintf(f,"field_of_viewn=%d    # joystick number for field of view (zoom) of main view\n",command_line_field_of_view_joystick_index);
+	fprintf(f,"field_of_viewax=%d   # joystick DirectX axis for field of view (zoom) of main view\n",command_line_field_of_view_joystick_axis+1);
 	fprintf(f,"cyclicn=%d           # Joystick number for cyclic\n",command_line_cyclic_joystick_index);
 	fprintf(f,"cyclich=%d            # Joystick DirectX axis for cyclic horizontal\n",command_line_cyclic_joystick_x_axis+1);  //VJ 030531 added +1
 	fprintf(f,"cyclicv=%d            # Joystick DirectX axis for cyclic vertical\n",command_line_cyclic_joystick_y_axis+1);   //VJ 030531 added +1
@@ -810,9 +827,8 @@ void dump_ini_file(void)
 	fprintf(f,"joylookst=%d         # joystick look step (1 = min, 100 = max) (def = 30)\n",command_line_joylook_step); //Jabberwock 031104
 	fprintf(f,"nonlinear-cyclic=%d   # use non-linear control for cyclic (less sensitive around center) (0 = off, 1 = on) (def = 1)\n", command_line_nonlinear_pedals);
 	fprintf(f,"nonlinear-pedals=%d   # use non-linear control for pedals (less sensitive around center) (0 = off, 1 = on) (def = 1)\n", command_line_nonlinear_cyclic);
-	fprintf(f,"nonlinear-collective-zone1=%.2f   # non-linear control value for throttle (n = % throttle position joystick to represents collective percentage at zone1 %% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)\n", command_line_collective_zone_1_limit);
+	fprintf(f,"nonlinear-collective-zone1=%.2f   # non-linear control value for throttle (n = % throttle position joystick to represents  60%% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)\n", command_line_collective_zone_1_limit);
 	fprintf(f,"nonlinear-collective-zone2=%.2f   # non-linear control value for throttle (n = % throttle position joystick to represents 100%% collective) (10% = 0.1) (0.0 = off (linear control), 1.2 = max) (def = 0.7)\n", command_line_collective_zone_2_limit);
-	fprintf(f,"nonlinear-collective-percentage-at-zone1=%.1f   #  collective percentage at zone1. Valid values are in range from 1.0 to 99.0, default is 60.0.\n", command_line_collective_percentage_at_zone1); //GCsDriver  08-12-2007
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input (0 = off/blue force/USA, 1 = on/red force/Russia) (def = 0)\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"msl=%d                # activates mouselook (and TrackIR when present) (0 = off, 1 = internal, 2 = external, 3 = both) (def = 0)\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed (when msl=1) (n > 0) (def = 15), POV speed (when msl=0) (n > 0, max = 20) (def = 13) \n",command_line_mouse_look_speed);

@@ -148,10 +148,11 @@ extern int
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
 	command_line_eo_zoom_joystick_index,					// loke 030319
 	command_line_eo_zoom_joystick_axis,						// loke 030319
+	command_line_field_of_view_joystick_index,	
+	command_line_field_of_view_joystick_axis,	
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322
 	command_line_manual_laser_radar,						// arneh 2006-11-06
-	command_line_laser_workaround,						// GCsDriver 08-12-2007
 	command_line_targeting_system_auto_page,				// arneh 2007-01-06
 	command_line_framerate,										// VJ 030324
 //Retro27NovDEAD	command_line_key_mapping,									// Retro 030322
@@ -171,7 +172,6 @@ extern int
 	command_line_russian_nvg_no_ir,						// GCsDriver 08-12-2007
 	command_line_high_res_mfd,									// loke 030420
 	command_line_high_res_hud,									// arneh 2006-07-18
-	command_line_hokum_ammo_count,									// GCsDriver  08-12-2007
 	command_line_unpadlock_on_handover,									// GCsDriver  08-12-2007
 	command_line_pilot_as_periscope_default,									// GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope,									// GCsDriver  08-12-2007

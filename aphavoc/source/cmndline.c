@@ -171,10 +171,11 @@ int
 	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
 	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
+	command_line_field_of_view_joystick_index               = -1,	
+	command_line_field_of_view_joystick_axis                = 4,
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
 	command_line_manual_laser_radar						= FALSE,	// arneh 2006-11-06
-	command_line_laser_workaround						= FALSE,	// GCsDriver 08-12-2007
 	command_line_targeting_system_auto_page				= TRUE,     // arneh 2007-01-06
 	command_line_framerate										= FALSE,	// VJ 030326
 //Retro27NovDEAD	command_line_key_mapping									= FALSE,	// Retro 030322
@@ -194,7 +195,6 @@ int
 	command_line_russian_nvg_no_ir							= 0,		// GCsDriver 08-12-2007
 	command_line_high_res_mfd									= TRUE,		// loke 030420
 	command_line_high_res_hud									= TRUE,     // arneh 20060808
-	command_line_hokum_ammo_count							= 0,     // GCsDriver  08-12-2007
 	command_line_unpadlock_on_handover							= 0,     // GCsDriver  08-12-2007
 	command_line_pilot_as_periscope_default							= 0,     // GCsDriver  08-12-2007
 	command_line_autoreturn_to_pilot_after_periscope							= 0,     // GCsDriver  08-12-2007
@@ -1806,15 +1806,6 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_manual_laser_radar);
 			}
 		}
-				////////////////////////////////////////
-		else if (s2 = strarg(s1, "laser_workaround"))	// GCsDriver 08-12-2007
-		////////////////////////////////////////
-		{
-			if (*s2 == ':')
-			{
-				sscanf (s2 + 1, "%d", &command_line_laser_workaround);
-			}
-		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "framerate"))) //VJ 030324 framerate
 		////////////////////////////////////////
@@ -1987,15 +1978,6 @@ void process_command_line (int argc, char *argv[])
 				sscanf (s2 + 1, "%d", &command_line_russian_nvg_no_ir);
 			}
 		}
-		////////////////////////////////////////
-		else if (s2 = strarg (s1, "hokumammocount"))		// GCsDriver 08-12-2007
-		////////////////////////////////////////
-		{
-			if (*s2 == ':')
-			{
-				sscanf (s2 + 1, "%d", &command_line_hokum_ammo_count);
-			}
-		}	
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "unpadlock_on_handover"))		// GCsDriver 08-12-2007
 		////////////////////////////////////////
