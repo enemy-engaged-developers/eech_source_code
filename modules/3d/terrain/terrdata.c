@@ -724,11 +724,9 @@ int load_3d_terrain ( const char *path )
 							//terrain_3d_tree_object = construct_3d_object_by_name ( "Y_DATE_PALM" );
 							//VJ 051030 for Maverick, change to whole tree else only truncs of palms are shown
 							terrain_3d_tree_object = construct_3d_object_by_name ( "FOREST_TREE_OBJECT" );
-// start render_tree_shadows-mod by GCsDriver 08-12-2007
-if ( !command_line_render_tree_shadows )
-{
-terrain_3d_tree_object->object_has_shadow = FALSE;
-}
+							// start render_tree_shadows-mod by GCsDriver 08-12-2007
+							if ( !command_line_render_tree_shadows )
+								terrain_3d_tree_object->object_has_shadow = FALSE;
 
 							break;
 						}
@@ -738,12 +736,10 @@ terrain_3d_tree_object->object_has_shadow = FALSE;
 
 							terrain_3d_tree_object = construct_3d_object_by_name ( "FOREST_TREE_OBJECT" );
 
-if ( !command_line_render_tree_shadows )
-{
-terrain_3d_tree_object->object_has_shadow = FALSE;
-}
+							if ( !command_line_render_tree_shadows )
+								terrain_3d_tree_object->object_has_shadow = FALSE;
 
-// end render_tree_shadows-mod by GCsDriver 08-12-2007
+							// end render_tree_shadows-mod by GCsDriver 08-12-2007
 							break;
 						}
 					}
