@@ -189,6 +189,21 @@ void copy_eo_zoom(eo_params_dynamic_move* from, eo_params_dynamic_move* to)
 	to->zoom = from->zoom;
 }
 
+static int is_using_eo_system(void)
+{
+	switch (target_acquisition_system)
+	{
+	case TARGET_ACQUISITION_SYSTEM_FLIR:
+	case TARGET_ACQUISITION_SYSTEM_DTV:
+	case TARGET_ACQUISITION_SYSTEM_LLLTV:
+	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
+	case TARGET_ACQUISITION_SYSTEM_DVO:
+		return TRUE;
+	default:
+		return FALSE;
+	}	
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1384,7 +1399,8 @@ void slave_common_eo_to_position (vec3d* target_position)
 
 	update_eo_visibility ();
 
-	if (target_in_fov && eo_on_target)
+	if (target_in_fov && 
+		(eo_on_target || !is_using_eo_system()))
 	{
 		if (!command_line_manual_laser_radar)
 			set_laser_is_active(TRUE);
