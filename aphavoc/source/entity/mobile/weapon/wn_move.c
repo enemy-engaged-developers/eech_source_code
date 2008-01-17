@@ -1772,7 +1772,7 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-float get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* aiming_pitch, float* time_of_flight, int simplified)
+int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* aiming_pitch, float* time_of_flight, int simplified)
 {
 	float
 		pitch_delta,
