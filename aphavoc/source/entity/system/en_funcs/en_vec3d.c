@@ -99,6 +99,11 @@ vec3d_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
 		},
 		{
+			"VEC3D_TYPE_EO_TRACKING_POINT",					// name
+			VEC3D_PACK_TYPE_POSITION,						// pack_type
+			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack
+		},
+		{
 			"VEC3D_TYPE_GUIDE_POSITION",					// name
 			VEC3D_PACK_TYPE_UNPACKED,						// pack_type
 			(DEBUG_MODULE_PACK_ALL || 0),					// debug_pack

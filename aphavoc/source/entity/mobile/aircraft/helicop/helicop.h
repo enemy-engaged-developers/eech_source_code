@@ -108,7 +108,8 @@ struct HELICOPTER
 		
 	vec3d
 		cover_position,
-		wait_position;
+		wait_position,
+		eo_tracking_point;
 };
 
 typedef struct HELICOPTER helicopter;

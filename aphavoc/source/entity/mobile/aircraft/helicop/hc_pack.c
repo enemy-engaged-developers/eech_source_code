@@ -166,6 +166,8 @@ static void pack_local_data (entity *en, pack_modes mode)
 
 			pack_vec3d (en, VEC3D_TYPE_COVER_POSITION, &raw->cover_position);
 
+			pack_vec3d (en, VEC3D_TYPE_EO_TRACKING_POINT, &raw->eo_tracking_point);
+
 			// wait_position
 
 			//
@@ -283,6 +285,8 @@ static void pack_local_data (entity *en, pack_modes mode)
 			// cover_position
 
 			pack_vec3d (en, VEC3D_TYPE_WAIT_POSITION, &raw->wait_position);
+
+			pack_vec3d (en, VEC3D_TYPE_EO_TRACKING_POINT, &raw->eo_tracking_point);
 
 			//
 			// pack local only special effects
@@ -421,6 +425,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// gunship_target_root
 
 			unpack_vec3d (en, VEC3D_TYPE_COVER_POSITION, &raw->cover_position);
+
+			unpack_vec3d (en, VEC3D_TYPE_EO_TRACKING_POINT, &raw->eo_tracking_point);
 
 			// wait_position
 
@@ -592,6 +598,8 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// cover_position
 
 			unpack_vec3d (en, VEC3D_TYPE_WAIT_POSITION, &raw->wait_position);
+
+			unpack_vec3d (en, VEC3D_TYPE_EO_TRACKING_POINT, &raw->eo_tracking_point);
 
 			//
 			// unpack local only special effects

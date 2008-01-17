@@ -110,6 +110,14 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			break;
 		}
 		////////////////////////////////////////
+		case VEC3D_TYPE_EO_TRACKING_POINT:
+		////////////////////////////////////////
+		{
+			raw->eo_tracking_point = *v;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -208,6 +216,14 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 			break;
 		}
 		////////////////////////////////////////
+		case VEC3D_TYPE_EO_TRACKING_POINT:
+		////////////////////////////////////////
+		{
+			*v = raw->eo_tracking_point;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -251,6 +267,14 @@ static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 			break;
 		}
 		////////////////////////////////////////
+		case VEC3D_TYPE_EO_TRACKING_POINT:
+		////////////////////////////////////////
+		{
+			v = &raw->eo_tracking_point;
+
+			break;
+		}
+		////////////////////////////////////////
 		default:
 		////////////////////////////////////////
 		{
@@ -281,7 +305,14 @@ void overload_helicopter_vec3d_functions (void)
 	fn_set_client_server_entity_vec3d	[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_WAIT_POSITION][COMMS_MODEL_SERVER]	= set_server_vec3d;
 	fn_set_client_server_entity_vec3d	[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_WAIT_POSITION][COMMS_MODEL_CLIENT]	= set_client_vec3d;
 	fn_get_local_entity_vec3d				[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_WAIT_POSITION]							 	= get_local_vec3d;
-	fn_get_local_entity_vec3d_ptr			[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_WAIT_POSITION]								= get_local_vec3d_ptr;
+	fn_get_local_entity_vec3d_ptr			[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_WAIT_POSITION]						= get_local_vec3d_ptr;
+
+	fn_set_local_entity_raw_vec3d			[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT]							= set_local_vec3d;
+	fn_set_local_entity_vec3d				[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT]							= set_local_vec3d;
+	fn_set_client_server_entity_vec3d	[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT][COMMS_MODEL_SERVER]	= set_server_vec3d;
+	fn_set_client_server_entity_vec3d	[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT][COMMS_MODEL_CLIENT]	= set_client_vec3d;
+	fn_get_local_entity_vec3d				[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT]						 	= get_local_vec3d;
+	fn_get_local_entity_vec3d_ptr			[ENTITY_TYPE_HELICOPTER][VEC3D_TYPE_EO_TRACKING_POINT]							= get_local_vec3d_ptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -184,6 +184,10 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		raw->player = ENTITY_PLAYER_AI;
 
+		raw->eo_tracking_point.x = 0.0;
+		raw->eo_tracking_point.y = -10000.0;  // NOT_TRACKING value in co_eo.c
+		raw->eo_tracking_point.z = 0.0;
+
 		////////////////////////////////////////
 		//
 		// OVERWRITE DEFAULT VALUES WITH GIVEN ATTRIBUTES
