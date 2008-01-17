@@ -189,7 +189,7 @@ void copy_eo_zoom(eo_params_dynamic_move* from, eo_params_dynamic_move* to)
 	to->zoom = from->zoom;
 }
 
-static int is_using_eo_system(void)
+int is_using_eo_system(int include_hms)
 {
 	switch (target_acquisition_system)
 	{
@@ -199,6 +199,10 @@ static int is_using_eo_system(void)
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 		return TRUE;
+	case TARGET_ACQUISITION_SYSTEM_HMS:
+	case TARGET_ACQUISITION_SYSTEM_HIDSS:
+	case TARGET_ACQUISITION_SYSTEM_IHADSS:
+		return include_hms;
 	default:
 		return FALSE;
 	}	
@@ -1402,7 +1406,7 @@ void slave_common_eo_to_position (vec3d* target_position)
 	update_eo_visibility ();
 
 	if (target_in_fov && 
-		(eo_on_target || !is_using_eo_system()))
+		(eo_on_target || !is_using_eo_system(FALSE)))
 	{
 		if (!command_line_manual_laser_radar)
 			set_laser_is_active(TRUE);
