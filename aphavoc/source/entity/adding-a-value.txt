@@ -4,7 +4,8 @@ To add a new value to an entity follow these steps (yes it's cumbersome!)
 * add packing info to entity/system/en_type.c
 * add a variable of correct type to the struct which needs it (e.g. in
 struct HELICOPTER in helicop.h if it's a value every helicopter should have)
-* add type to structtype_create
+* add type to get/set funcionts in structtype_create
+* add to overload_functions in structtype_create
 * add type to structtype_pack/unpack - important that pack and unpack have values in same order!
 * add type to structtype_attrs
 * add overload for attrs to set/get attr functions
