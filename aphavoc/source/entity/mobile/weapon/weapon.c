@@ -169,6 +169,47 @@ void load_local_entity_weapon_config (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static int get_viewpoint_from_weapon(weapon_config_types config_type, 
+	weapon_package_status *package_status, int package, 
+	object_3d_instance* inst3d, viewpoint *vp,
+	object_3d_sub_object_search_data* search_weapon_system_heading,
+	object_3d_sub_object_search_data* search_weapon_system_pitch)
+{
+	search_weapon_system_heading->search_depth = weapon_config_database[config_type][package].heading_depth;
+	search_weapon_system_heading->search_object = inst3d;
+	search_weapon_system_heading->sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
+
+	if (find_object_3d_sub_object (search_weapon_system_heading) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+	{
+		search_weapon_system_pitch->search_depth = weapon_config_database[config_type][package].pitch_depth;
+		search_weapon_system_pitch->sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
+
+		if (find_object_3d_sub_object_from_sub_object (search_weapon_system_heading, search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		{
+			//
+			// get viewpoint of unrotated heading and pitch devices
+			//
+
+			search_weapon_system_heading->result_sub_object->relative_heading = 0.0;
+			search_weapon_system_pitch->result_sub_object->relative_pitch = 0.0;
+
+			get_3d_sub_object_world_viewpoint (search_weapon_system_pitch->result_sub_object, vp);
+
+			// reset heading and pitch
+			search_weapon_system_heading->result_sub_object->relative_heading = package_status->weapon_system_heading;
+			search_weapon_system_pitch->result_sub_object->relative_pitch = -package_status->weapon_system_pitch;
+			
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon_sub_type)
 {
 	weapon_package_status
@@ -712,7 +753,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 	{
 		range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
 		if (range == -1.0)
-			range = 1000.0;  // use 200 meters if unable to triangulate range
+			range = 1000.0;  // use 1000 meters if unable to triangulate range
 		#ifdef DEBUG_MODULE
 		debug_log("triangulated range: %.0f (real range: %.0f)", range, get_2d_range (pitch_device_position, intercept_point));
 		#endif
@@ -762,7 +803,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 						{
 							range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
 							if (range == -1.0)
-								range = 1000.0;  // use 200 meters if unable to triangulate range
+								range = 1000.0;  // use 1000 meters if unable to triangulate range
 						}
 						else
 							range = get_2d_range (pitch_device_position, intercept_point);
@@ -999,13 +1040,9 @@ static int get_pitch_device_to_target_vector
 		m;
 
 	ASSERT (source);
-
 	ASSERT (target);
-
 	ASSERT (entity_sub_type_weapon_valid (weapon_sub_type));
-
 	ASSERT (pitch_device_position);
-
 	ASSERT (target_vector);
 
 	result = FALSE;
@@ -1028,6 +1065,7 @@ static int get_pitch_device_to_target_vector
 		case WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT:
 		////////////////////////////////////////
 		{
+			// arneh - this is the old aiming code, and unused with newer GWUT-files
 			if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
 			{
 				weapon_velocity = weapon_database[weapon_sub_type].cruise_velocity;
@@ -1168,8 +1206,7 @@ void update_entity_weapon_systems (entity *source)
 		vp;
 
 	vec3d
-		target_vector,
-		offset_vector;
+		target_vector;
 
 	int
 		package,
@@ -1411,80 +1448,49 @@ void update_entity_weapon_systems (entity *source)
 								{
 									if (target)
 									{
-										search_weapon_system_heading.search_depth = weapon_config_database[config_type][package].heading_depth;
-										search_weapon_system_heading.search_object = inst3d;
-										search_weapon_system_heading.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_HEADING;
-
-										if (find_object_3d_sub_object (&search_weapon_system_heading) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+										located_heading_and_pitch_devices = 
+											get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
+										
+										if (!located_heading_and_pitch_devices)
 										{
-											search_weapon_system_pitch.search_depth = weapon_config_database[config_type][package].pitch_depth;
-											search_weapon_system_pitch.sub_object_index = OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_PITCH;
-
-											if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-											{
-												located_heading_and_pitch_devices = TRUE;
-
-												//
-												// get viewpoint of unrotated heading and pitch devices
-												//
-
-												search_weapon_system_heading.result_sub_object->relative_heading = 0.0;
-
-												search_weapon_system_pitch.result_sub_object->relative_pitch = 0.0;
-
-												get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
-
-												search_weapon_system_heading.result_sub_object->relative_heading = package_status[package].weapon_system_heading;
-
-												search_weapon_system_pitch.result_sub_object->relative_pitch = -package_status[package].weapon_system_pitch;
-
-												//
-												// get pitch device to target vector
-												//
-												// (using the unrotated pitch device position is not pin-point accurate but is close enough)
-												//
-
-												if (get_pitch_device_to_target_vector (source, target, selected_weapon, &vp.position, &target_vector))
-												{
-													//
-													// get heading and pitch offsets
-													//
-
-													multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &target_vector);
-
-													required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
-
-													required_heading_offset = bound
-													(
-														required_heading_offset,
-														weapon_config_database[config_type][package].min_heading_limit,
-														weapon_config_database[config_type][package].max_heading_limit
-													);
-
-													flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
-
-													required_pitch_offset = atan2 (offset_vector.y, flat_range);
-
-													required_pitch_offset = bound
-													(
-														required_pitch_offset,
-														weapon_config_database[config_type][package].min_pitch_limit,
-														weapon_config_database[config_type][package].max_pitch_limit
-													);
-												}
-											}
-											else
-											{
-												debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate pitch device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
-
-												return;
-											}
-										}
-										else
-										{
-											debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate heading device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
-
+											debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
+											
 											return;
+										}
+
+										//
+										// get pitch device to target vector
+										//
+										// (using the unrotated pitch device position is not pin-point accurate but is close enough)
+										//
+
+										if (get_pitch_device_to_target_vector (source, target, selected_weapon, &vp.position, &target_vector))
+										{
+											vec3d offset_vector;
+											
+											//
+											// get heading and pitch offsets
+											//
+
+											multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &target_vector);
+
+											required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
+											required_heading_offset = bound
+											(
+												required_heading_offset,
+												weapon_config_database[config_type][package].min_heading_limit,
+												weapon_config_database[config_type][package].max_heading_limit
+											);
+
+											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
+
+											required_pitch_offset = atan2 (offset_vector.y, flat_range);
+											required_pitch_offset = bound
+											(
+												required_pitch_offset,
+												weapon_config_database[config_type][package].min_pitch_limit,
+												weapon_config_database[config_type][package].max_pitch_limit
+											);
 										}
 									}
 								}
@@ -1543,8 +1549,67 @@ void update_entity_weapon_systems (entity *source)
 										break;
 									}
 								}
-								
+							
+								// slave to EO system if it is active (and doesn't have a target)
+								if (is_using_eo_system(command_line_cannontrack != 2) && !target)
+								{
+									vec3d* tracking_point = get_eo_tracking_point();
+
+									ASSERT(source == get_gunship_entity());
+									
+									required_heading_offset = eo_azimuth;
+									required_pitch_offset = eo_elevation;
+
+									// if using point lock, then aim for that point
+									if (tracking_point)
+									{
+										float pitch, dummy;
+										float height_diff;
+
+										// if we don't already have it we need to get the viewpoint of the weapon
+										if (!located_heading_and_pitch_devices)
+										{
+											located_heading_and_pitch_devices = 
+												get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
+											
+											if (!located_heading_and_pitch_devices)
+												debug_fatal("Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
 										}
+
+										height_diff = vp.position.y - tracking_point->y;
+
+										// adjust weapon elevation for range
+										if (get_ballistic_pitch_deflection(selected_weapon, get_range_to_target(), height_diff, &pitch, &dummy, FALSE))
+										{
+											matrix3x3 m;
+											float dx, dz;
+											float heading;
+											vec3d offset_vector, tracking_vector;
+												
+											// get heading and pitch offsets
+
+											dx = tracking_point->x - vp.position.x;
+											dz = tracking_point->z - vp.position.z;
+							
+											heading = atan2 (dx, dz);
+											
+											// need to adjust for the gun's attitude, as the helicopter may not fly level all the time
+											get_3d_transformation_matrix (m, heading, pitch, 0.0);
+
+											tracking_vector.x = m[2][0];
+											tracking_vector.y = m[2][1];
+											tracking_vector.z = m[2][2];
+
+											multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &tracking_vector);
+
+											required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
+	
+											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
+											required_pitch_offset = atan2 (offset_vector.y, flat_range);
+										}
+									}
+								}	
+							}
 							else
 							{	
 								if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING) || get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH)))
