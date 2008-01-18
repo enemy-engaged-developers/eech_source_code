@@ -1561,7 +1561,7 @@ void update_entity_weapon_systems (entity *source)
 									required_pitch_offset = eo_elevation;
 
 									// if using point lock, then aim for that point
-									if (tracking_point)
+									if (tracking_point && weapon_database[selected_weapon].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
 									{
 										float pitch, dummy;
 										float height_diff;
