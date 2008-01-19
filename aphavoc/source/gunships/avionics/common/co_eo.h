@@ -107,7 +107,7 @@ typedef struct EO_PARAMS_DYNAMIC_MOVE eo_params_dynamic_move;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
-	eo_target_locked,
+//	eo_target_locked,
 	eo_on_target,
 	eo_low_light,
 	eo_ground_stabilised;
@@ -184,10 +184,13 @@ extern int eo_tracking_point_valid(vec3d* tracking_point);
 
 extern float get_range_to_target(void);
 
-//extern void keyboard_slew_eo_system(float slew_rate);
 extern void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate);
+extern void joystick_slew_eo_system(float slew_rate);
 
 extern int is_using_eo_system(int include_hms);
+extern int eo_is_locked(void);
+extern void toggle_eo_lock(void);
+extern void set_eo_lock(int locked);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

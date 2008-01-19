@@ -84,19 +84,21 @@
 
 #define MAX_GUN_SHAKE_DEFLECTION  rad(0.1)
 
+#define POINT_LOCK   0x01
+#define TARGET_LOCK  0x02
+
 #define NOT_TRACKING    -10000.0
 
 #define FINE_TRACKING_RATE 5.0
 #define MEDIUM_TRACKING_RATE 20.0
 #define COARSE_TRACKING_RATE 100.0
-
+#define JOYSTICK_TRACKING_RATE 40.0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-	eo_target_locked,
 	eo_on_target,
 	eo_low_light,
 	eo_ground_stabilised;
@@ -123,6 +125,13 @@ viewpoint
 int
 	draw_eo_boresight = FALSE,
 	draw_eo_terrain_los_markers = FALSE;
+
+static int
+//	eo_target_locked = FALSE,
+	lock_target = FALSE,
+	lock_terrain = FALSE;
+
+int eo_target_locked = FALSE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +171,7 @@ void initialise_common_eo (void)
 {
 	laser_active = FALSE;
 	
-	eo_target_locked = FALSE;
+	eo_target_locked = 0;
 
 	eo_on_target = FALSE;
 
@@ -174,6 +183,9 @@ void initialise_common_eo (void)
 	electrical_system_on = !command_line_dynamics_engine_startup;
 
 	eo_stop_tracking();
+	
+	lock_target = FALSE;
+	lock_terrain = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +200,10 @@ void copy_eo_zoom(eo_params_dynamic_move* from, eo_params_dynamic_move* to)
 {
 	to->zoom = from->zoom;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int is_using_eo_system(int include_hms)
 {
@@ -206,6 +222,39 @@ int is_using_eo_system(int include_hms)
 	default:
 		return FALSE;
 	}	
+}
+
+int eo_is_locked(void)
+{
+	return eo_target_locked != 0;
+}
+
+void toggle_eo_lock(void)
+{
+	if (eo_target_locked & TARGET_LOCK)
+	{
+		// if we have a target lock this disables all locks
+		lock_target = FALSE;
+		lock_terrain = FALSE;
+	}
+	else if (eo_target_locked & POINT_LOCK)
+	{
+		// if we have point lock then try locking a target, or unlock terrain
+		lock_target = TRUE;
+		lock_terrain = FALSE;
+	}
+	else
+	{
+		// if we have no lock try to get one of any type
+		lock_target = TRUE;
+		lock_terrain = TRUE;	
+	}
+}
+
+void set_eo_lock(int locked)
+{
+	lock_target = TRUE;
+	lock_terrain = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1093,18 +1142,11 @@ void update_common_eo (void)
 
 	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
-	if (eo_target_locked)
+	if (eo_target_locked & TARGET_LOCK)
 	{
-		if (!current_target && !eo_is_tracking_point())
-		{
-			vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
-			// try locking onto point on ground
-			if (get_eo_los_intercept_point(eo_tracking_point) >= eo_max_visual_range)
-				eo_target_locked = FALSE;
-		}
+		if (!current_target)
+			eo_target_locked = 0;
 	}
-	else
-		eo_stop_tracking();
 
 	get_eo_centred_viewpoint (&vp);
 
@@ -1114,7 +1156,7 @@ void update_common_eo (void)
 
 	if (eo_target_locked)
 	{
-		if (current_target)
+		if (eo_target_locked & TARGET_LOCK)
 		{
 			get_local_entity_target_point (current_target, &target_position);
 
@@ -1184,21 +1226,47 @@ void update_common_eo (void)
 	else
 		new_target = get_eo_boresight_target ();
 
-	if (eo_target_locked)
+	if (eo_target_locked & TARGET_LOCK)
 	{
-		if (new_target != current_target)  // FIXME
-		{
-			eo_target_locked = FALSE;
-		}
+		if (new_target != current_target)
+			eo_target_locked = 0;
 	}
 
+	// update target lock
 	if (new_target)
 	{
 		if (get_local_entity_parent (new_target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
-		{
 			insert_local_entity_into_parents_child_list (new_target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
+		
+		if (lock_target)
+		{
+			eo_target_locked = TARGET_LOCK;
+			lock_terrain = FALSE;
+		}
+		else
+			eo_target_locked &= ~TARGET_LOCK;
+	}
+
+	// update point lock
+	if (lock_terrain)
+	{
+		if (!eo_is_tracking_point())
+		{
+			// try locking onto point on ground
+			vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
+
+			if (get_eo_los_intercept_point(eo_tracking_point) < eo_max_visual_range)
+				eo_target_locked = POINT_LOCK;
+			else
+				eo_stop_tracking();
 		}
 	}
+	else
+		eo_stop_tracking();
+
+	// update the requested lock status
+	lock_target = (eo_target_locked & TARGET_LOCK) != 0;
+	lock_terrain = (eo_target_locked & POINT_LOCK) != 0;
 
 	set_gunship_target (new_target);
 
@@ -1253,9 +1321,6 @@ void activate_common_eo (void)
 
 void deactivate_common_eo (void)
 {
-	eo_target_locked = FALSE;
-
-	eo_stop_tracking();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1587,7 +1652,10 @@ void select_next_eo_target (void)
 
 	set_gunship_target (new_target);
 
-	eo_target_locked = new_target != NULL;
+	if (new_target)
+		eo_target_locked = TARGET_LOCK;
+	else
+		eo_target_locked = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1647,7 +1715,10 @@ void select_previous_eo_target (void)
 
 	set_gunship_target (new_target);
 
-	eo_target_locked = new_target != NULL;
+	if (new_target)
+		eo_target_locked = TARGET_LOCK;
+	else
+		eo_target_locked = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1687,10 +1758,8 @@ float convert_linear_view_value (eo_params_dynamic_move *eo)
 
 float make_panning_offset_from_axis (long state)
 {
-	int panning_deadzone_size = 100;
-
+	int panning_deadzone_size = 0;
 	long newstate;
-
 
 	if (state == 0 || (state > 0 && state < panning_deadzone_size) || (state < 0 && state > -panning_deadzone_size))
 	{
@@ -1765,7 +1834,10 @@ void select_next_designated_eo_target (void)
 
 	set_gunship_target (new_target);
 
-	eo_target_locked = new_target != NULL;
+	if (new_target)
+		eo_target_locked = TARGET_LOCK;
+	else
+		eo_target_locked = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1825,7 +1897,10 @@ void select_previous_designated_eo_target (void)
 
 	set_gunship_target (new_target);
 
-	eo_target_locked = new_target != NULL;
+	if (new_target)
+		eo_target_locked = TARGET_LOCK;
+	else
+		eo_target_locked = 0;
 }
 
 
@@ -1884,7 +1959,9 @@ void eo_stop_tracking(void)
 	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
 	eo_tracking_point->x = 0.0;
 	eo_tracking_point->y = NOT_TRACKING;
-	eo_tracking_point->z = 0.0;	
+	eo_tracking_point->z = 0.0;
+
+	eo_target_locked &= ~POINT_LOCK;
 }
 
 void eo_start_tracking(vec3d* tracking_point)
@@ -1895,6 +1972,35 @@ void eo_start_tracking(vec3d* tracking_point)
 int eo_tracking_point_valid(vec3d* tracking_point)
 {
 	return tracking_point && (tracking_point->y != NOT_TRACKING);
+}
+
+static void switch_to_point_lock(void)
+{
+	// get pointer to tracking point so we can set it
+	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
+	entity* target = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET);
+
+	lock_target = FALSE;
+
+	if (target && !get_local_entity_int_value(target, INT_TYPE_AIRBORNE_AIRCRAFT))
+	{
+		// get position of target
+		get_local_entity_vec3d(target, VEC3D_TYPE_POSITION, eo_tracking_point);
+		eo_target_locked = POINT_LOCK;
+		lock_terrain = TRUE;
+	}
+	// try locking onto point on ground
+	else if (get_eo_los_intercept_point(eo_tracking_point) < eo_max_visual_range)
+	{
+		eo_target_locked = POINT_LOCK;
+		lock_terrain = TRUE;
+	}
+	else  // unsuccessful, lose lock
+	{
+		eo_target_locked = 0;
+		eo_stop_tracking();
+	}
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1933,7 +2039,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 {
 	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
 	
-	if (eo_is_tracking_point())
+	if (eo_target_locked)
 	{
 		float
 			movement_rate = 0.0,
@@ -1944,7 +2050,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 		int
 			has_moved;
-		
+
 		// move tracking point perpendicular
 		if (continuous_target_acquisition_system_steer_left_fast_key)
 			movement_rate -= COARSE_TRACKING_RATE;
@@ -1964,12 +2070,19 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 		has_moved = movement_rate != 0.0;
 
-		movement = movement_rate * get_delta_time();
+		if (has_moved)
+		{
+			// if moving while in target lock then switch to point lock
+			if (eo_target_locked & TARGET_LOCK)
+				switch_to_point_lock();
 
-		eo_tracking_point->x += cos_heading * movement;
-		eo_tracking_point->z -= sin_heading * movement;
+			movement = movement_rate * get_delta_time();
+	
+			eo_tracking_point->x += cos_heading * movement;
+			eo_tracking_point->z -= sin_heading * movement;
+			movement_rate = 0.0;
+		}
 
-		movement_rate = 0.0;
 		// move closer farther
 		if (continuous_target_acquisition_system_steer_up_fast_key)
 			movement_rate += COARSE_TRACKING_RATE;
@@ -1987,10 +2100,17 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		else if (continuous_target_acquisition_system_steer_down_key)
 			movement_rate -= MEDIUM_TRACKING_RATE;
 
-		has_moved = has_moved || (movement_rate != 0.0);
+		if (!has_moved && movement_rate != 0.0)
+		{
+			// if moving while in target lock then switch to point lock
+			if (eo_target_locked & TARGET_LOCK)
+				switch_to_point_lock();
 
-		movement = movement_rate * 2* get_delta_time();  // multiply vertical rate by two since it appears much smaller from usual angles
-
+			has_moved = TRUE;
+		}
+		
+		movement = movement_rate * 4 * get_delta_time();  // multiply vertical rate by two since it appears much smaller from usual angles
+	
 		eo_tracking_point->x += sin_heading * movement;
 		eo_tracking_point->z += cos_heading * movement;
 
@@ -2071,6 +2191,64 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			eo_elevation -= medium_slew_rate;
 			eo_elevation = max (eo_elevation, eo_min_elevation);
+		}
+	}
+}
+
+void joystick_slew_eo_system(float slew_rate)
+{
+	if (command_line_eo_pan_joystick_index != -1)
+	{
+		float
+			panning_offset_horiz,
+			panning_offset_vert;
+
+		int
+			horizontal_value,
+			vertical_value;
+
+		vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
+
+		horizontal_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
+		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
+
+		vertical_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
+		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
+		
+		if (eo_target_locked)
+		{
+			if (panning_offset_horiz != 0.0 || panning_offset_vert != 0.0)
+			{
+				float
+					eo_heading = get_heading_from_attitude_matrix (eo_vp.attitude),
+					sin_heading = sin(eo_heading),
+					cos_heading = cos(eo_heading);
+
+				// if moving while in target lock then switch to point lock
+				if (eo_target_locked & TARGET_LOCK)
+					switch_to_point_lock();
+	
+				eo_tracking_point->x += cos_heading * panning_offset_horiz * JOYSTICK_TRACKING_RATE * get_delta_time();
+				eo_tracking_point->z -= sin_heading * panning_offset_horiz * FINE_TRACKING_RATE * get_delta_time();
+
+				eo_tracking_point->x += sin_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
+				eo_tracking_point->z += cos_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
+
+				// keep point on ground (unless point off map)
+				if (point_inside_map_area (eo_tracking_point))
+				{
+					helicopter *raw = get_local_entity_data(get_gunship_entity());
+					eo_tracking_point->y = get_3d_terrain_point_data(eo_tracking_point->x, eo_tracking_point->z, &raw->ac.terrain_info);
+				}
+			}			
+		}
+		else
+		{
+			eo_azimuth += panning_offset_horiz * slew_rate;
+			eo_azimuth = bound(eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+	
+			eo_elevation -= panning_offset_vert * slew_rate;
+			eo_elevation = bound(eo_elevation, eo_min_elevation, eo_max_elevation);
 		}
 	}
 }
