@@ -3783,7 +3783,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		width = get_mono_font_string_width ("LOCKED");
 		set_2d_mono_font_position (0.0, -0.6);
@@ -10562,7 +10562,7 @@ void draw_alnum_weapons(void)
 				{
 					// From AH-64A flight manual.  First letter is type (L for Laser, R for Radar), second is status (T for Tracking, R for Ready)
 					char type = (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) ? 'R' : 'L';
-					char status = ((type == 'L') && (weapon_lock_type == WEAPON_LOCK_VALID)) ? 'T' : 'R';
+					char status = ((type == 'L') && weapon_sub_type == selected_weapon && (weapon_lock_type == WEAPON_LOCK_VALID)) ? 'T' : 'R';
 
 					switch (number)
 					{
@@ -10632,7 +10632,7 @@ static const char* get_sight_status(void)
 		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV
 		|| target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
 	{
-		if (eo_target_locked)
+		if (eo_is_locked())
 			return "RECORDING";
 		else
 			return "BORESIGHT";
@@ -10666,9 +10666,9 @@ static const char* get_weapon_status(char* buffer, unsigned buffer_len)
 		{
 			float flight_time;
 
-			flight_time = get_apache_missile_flight_time();
+			flight_time = get_missile_flight_time();
 			if (flight_time <= 0.0)  // no missiles in flight
-				return "MSL LNCH";
+				return "MSL";
 
 			snprintf(buffer, buffer_len, "TOF=%d", (int)(flight_time + 0.5));
 			return buffer;
@@ -10690,11 +10690,10 @@ static const char* get_tracker_status(void)
 	{
 		if (laser_is_active())
 			return "LASE...TARGET";
-		if (eo_target_locked)
+		if (eo_is_tracking_point())
+			return "IAT OFFSET";
+		if (eo_is_locked())
 			return "IAT TRACKING";
-	
-		// TODO: add this when we implement locking onto random terrain
-		// return "IAT OFFSET";
 	}
 
 	return "TADS FORWARD";

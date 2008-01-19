@@ -1778,7 +1778,7 @@ static void display_weapon_information (void)
 				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_apache_missile_flight_time ();
+			flight_time = get_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2152,17 +2152,25 @@ static void draw_target_symbology (void)
 
 	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
+		vec3d* tracking_point;
+		
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 		target_visible = FALSE;
 
-		if (target)
+		// will use point lock if no target
+		tracking_point = get_eo_tracking_point();
+
+		if (target || tracking_point)
 		{
 			//
 			// draw target marker
 			//
 
-			get_local_entity_target_point (target, &target_position);
+			if (target)
+				get_local_entity_target_point (target, &target_position);
+			else
+				target_position = *tracking_point;
 
 			visibility = get_position_3d_screen_coordinates (&target_position, &i, &j);
 
