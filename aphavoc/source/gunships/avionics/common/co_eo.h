@@ -180,6 +180,7 @@ extern int eo_is_tracking_point(void);
 extern vec3d* get_eo_tracking_point(void);
 extern void eo_start_tracking(vec3d* tracking_point);
 extern void eo_stop_tracking(void);
+extern int eo_tracking_point_valid(vec3d* tracking_point);
 
 extern float get_range_to_target(void);
 
