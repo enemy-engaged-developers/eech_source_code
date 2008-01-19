@@ -200,9 +200,19 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 	if (!target)
 	{
-		weapon_lock_type = WEAPON_LOCK_NO_TARGET;
+		if (!guidance_type_can_use_point_lock(weapon_database[selected_weapon_type].guidance_type))
+		{
+			weapon_lock_type = WEAPON_LOCK_NO_TARGET;
+			return;
+		}
 
-		return;
+		target_position = get_local_entity_vec3d_ptr(source, VEC3D_TYPE_EO_TRACKING_POINT);
+		
+		if (!eo_tracking_point_valid(target_position))
+		{
+			weapon_lock_type = WEAPON_LOCK_NO_TARGET;
+			return;
+		}
 	}
 
 	////////////////////////////////////////
@@ -219,7 +229,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	{
 		if (weapon_database[selected_weapon_type].weapon_class & WEAPON_CLASS_AIR_TO_AIR)
 		{
-			if (!get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+			if (!target || !get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
 			{
 				weapon_lock_type = WEAPON_LOCK_INVALID_TARGET;
 
@@ -237,6 +247,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	//
 	// if guided weapon check target is inside the seeker limit
 	//
+
 
 	if (weapon_database[selected_weapon_type].guidance_type != WEAPON_GUIDANCE_TYPE_NONE)
 	{
@@ -338,7 +349,8 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	////////////////////////////////////////
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+	if (target)
+		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 	target_range = get_3d_range (source_position, target_position);
 
