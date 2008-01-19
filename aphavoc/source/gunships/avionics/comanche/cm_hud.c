@@ -1451,7 +1451,7 @@ static void display_weapon_information (void)
 				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_apache_missile_flight_time ();
+			flight_time = get_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{

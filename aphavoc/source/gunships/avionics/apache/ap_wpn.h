@@ -76,8 +76,6 @@ extern void initialise_apache_weapon_systems (void);
 
 extern void update_apache_weapon_systems (void);
 
-extern float get_apache_missile_flight_time (void);
-
 extern void toggle_apache_radar_jammer_manual (void);
 
 extern void set_apache_radar_jammer_manual (int state);

@@ -774,3 +774,94 @@ float get_weapon_drop(entity_sub_types wpn_type)
 	return ballistics_sight_calibrated_drop;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_missile_flight_time (void)
+{
+	entity_sub_types
+		weapon_sub_type;
+
+	entity
+		*en,
+		*weapon,
+		*target;
+
+	vec3d
+		*weapon_position,
+		*target_position;
+
+	float
+		flight_time,
+		weapon_velocity,
+		target_range;
+
+	flight_time = 0.0;
+
+	en = get_gunship_entity ();
+
+	//
+	// find first launched Hellfire with a target (first found on list)
+	//
+
+	weapon = get_local_entity_first_child (en, LIST_TYPE_LAUNCHED_WEAPON);
+	if (weapon)
+		weapon = get_local_entity_child_pred_circular(weapon, LIST_TYPE_LAUNCHED_WEAPON);
+
+	while (weapon)
+	{
+		int show_flight_time = FALSE;
+		weapon_sub_type = get_local_entity_int_value (weapon, INT_TYPE_ENTITY_SUB_TYPE);
+
+		switch (weapon_sub_type)
+		{
+		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
+		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		case ENTITY_SUB_TYPE_WEAPON_ATAKA:
+		case ENTITY_SUB_TYPE_WEAPON_VIKHR:
+		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+		case ENTITY_SUB_TYPE_WEAPON_AS10_KAREN:
+		case ENTITY_SUB_TYPE_WEAPON_AS14_KEDGE:
+			show_flight_time = TRUE;
+			break;
+		default:
+			show_flight_time = FALSE;
+			break;
+		}
+
+		if (show_flight_time)
+		{
+			target = get_local_entity_parent (weapon, LIST_TYPE_TARGET);
+
+			target_position = get_eo_tracking_point();
+			if (!target_position && target)
+				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+			if (target_position)
+			{
+				float cruise_velocity = weapon_database[weapon_sub_type].cruise_velocity * 0.75;
+				
+				weapon_position = get_local_entity_vec3d_ptr (weapon, VEC3D_TYPE_POSITION);
+				target_range = get_3d_range (weapon_position, target_position);
+
+				// if rocket still burning and accelerating, use cruise velocity
+				if (get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME) > 0.0)
+					weapon_velocity = cruise_velocity;
+				else
+					weapon_velocity = bound(get_local_entity_float_value (weapon, FLOAT_TYPE_VELOCITY), 0.0, cruise_velocity);
+
+				if (weapon_velocity > 0.0)
+				{
+					flight_time = target_range / weapon_velocity;
+
+					break;
+				}
+			}
+		}
+
+		weapon = get_local_entity_child_pred (weapon, LIST_TYPE_LAUNCHED_WEAPON);
+	}
+
+	return (flight_time);
+}
