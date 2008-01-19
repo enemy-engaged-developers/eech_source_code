@@ -228,7 +228,7 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 		*target;
 
 	int
-		target_position_valid;
+		target_position_valid = FALSE;
 
 	weapon_decoy_types
 		weapon_decoy_type;
@@ -241,7 +241,15 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 
 	target = raw->mob.target_link.parent;
 
-	if (target)
+	if (can_guide_on_ground_lock)
+	{
+		// track the locked ground point
+		get_local_entity_vec3d(raw->launched_weapon_link.parent, VEC3D_TYPE_EO_TRACKING_POINT, position);
+
+		target_position_valid = eo_tracking_point_valid(position);
+	}
+
+	if (!target_position_valid && target)
 	{
 		if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
 		{
@@ -274,20 +282,9 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 			}
 		}
 		else
-		{
 			get_local_entity_target_point (target, position);
-		}
-		
-
 
 		target_position_valid = TRUE;
-	}
-	else if (can_guide_on_ground_lock)
-	{
-		// track the locked ground point
-		get_local_entity_vec3d(raw->launched_weapon_link.parent, VEC3D_TYPE_EO_TRACKING_POINT, position);
-
-		target_position_valid = eo_tracking_point_valid(position);
 	}
 
 	return (target_position_valid);

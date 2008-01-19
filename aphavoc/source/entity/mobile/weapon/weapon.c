@@ -1586,7 +1586,7 @@ void update_entity_weapon_systems (entity *source)
 								}
 							
 								// slave to EO system if it is active (and doesn't have a target)
-								if (is_using_eo_system(command_line_cannontrack != 2) && !target)
+								if (is_using_eo_system(command_line_cannontrack != 2))
 								{
 									vec3d* tracking_point = get_eo_tracking_point();
 
@@ -2265,17 +2265,13 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 
 						if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 						{
+							vec3d* tracking_point = NULL;
 							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
 
-							if (target)
-							{
-								if (!get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector))
-									return;
-							}
-							else  // use get vector to EO tracking point, if any
-							{
-								vec3d* tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
+							tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
 
+							if (tracking_point)  // use get vector to EO tracking point, if any
+							{
 								ASSERT(get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);  // only player aircraft have tracking point
 
 								if (!eo_tracking_point_valid(tracking_point))
@@ -2284,6 +2280,12 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 								weapon_to_target_vector.x = tracking_point->x - vp.position.x;
 								weapon_to_target_vector.y = tracking_point->y - vp.position.y;
 								weapon_to_target_vector.z = tracking_point->z - vp.position.z;
+							}
+							else
+							{
+								ASSERT(target);
+								if (!get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector))
+									return;
 							}
 
 							normalise_3d_vector (&weapon_to_target_vector);
