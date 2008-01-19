@@ -285,8 +285,8 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
-	add_explosion_criteria (0, kill_code, 0, 99, SMALL_EARTH_META_EXPLOSION, table);
-	add_explosion_criteria (1, kill_code, 10, 999, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
+	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
 	add_explosion_criteria (2, kill_code, 1000, INT_MAX, LARGE_HE_META_EXPLOSION, table);
 
 	////////////////////////////////////////
