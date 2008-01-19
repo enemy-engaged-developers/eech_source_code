@@ -78,6 +78,29 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int guidance_type_can_use_point_lock(weapon_guidance_types type)
+{
+	switch (type)
+	{
+	case WEAPON_GUIDANCE_TYPE_NONE:
+	case WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED:					// fire and forget
+	case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR:					// illumination source
+	case WEAPON_GUIDANCE_TYPE_ACTIVE_LASER:							// fire and forget
+	case WEAPON_GUIDANCE_TYPE_ACTIVE_RADAR:							// fire and forget
+	default:
+		return FALSE;
+	case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER:					// illumination source
+	case WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER_BEAM_RIDING:   // illumination source
+	case WEAPON_GUIDANCE_TYPE_RADIO_COMMAND:							// control source
+	case WEAPON_GUIDANCE_TYPE_WIRE_GUIDED:   						// control source
+		return TRUE;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void load_local_entity_weapon_config (entity *en)
 {
 	weapon_package_status
@@ -265,6 +288,42 @@ int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types config_type, weapon_package_status* package_status, int* number)
+{
+	int package;
+	
+	*number = 0;
+	
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+		{
+			break;
+		}
+
+		ASSERT (package_status[package].number <= weapon_config_database[config_type][package].number);
+
+		if (weapon_config_database[config_type][package].sub_type == weapon_type)
+		{
+			if (!package_status[package].damaged)
+			{
+				if (package_status[package].number > *number)
+				{
+					*number = package_status[package].number;
+
+					return package;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_type, int burst_size, viewpoint *vp)
 {
 	weapon_package_status
@@ -275,7 +334,6 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 
 	int
 		found,
-		package,
 		found_package,
 		found_package_number;
 
@@ -326,30 +384,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 		// find undamaged package with most weapons remaining
 		//
 
-		found_package_number = 0;
-
-		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
-		{
-			if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-			{
-				break;
-			}
-
-			ASSERT (package_status[package].number <= weapon_config_database[config_type][package].number);
-
-			if (weapon_config_database[config_type][package].sub_type == weapon_sub_type)
-			{
-				if (!package_status[package].damaged)
-				{
-					if (package_status[package].number > found_package_number)
-					{
-						found_package = package;
-
-						found_package_number = package_status[package].number;
-					}
-				}
-			}
-		}
+		found_package = get_next_pylon_to_launch(weapon_sub_type, config_type, package_status, &found_package_number);
 
 		//
 		// detach weapon
@@ -1565,6 +1600,7 @@ void update_entity_weapon_systems (entity *source)
 									{
 										float pitch, dummy;
 										float height_diff;
+										float range;
 
 										// if we don't already have it we need to get the viewpoint of the weapon
 										if (!located_heading_and_pitch_devices)
@@ -1577,9 +1613,13 @@ void update_entity_weapon_systems (entity *source)
 										}
 
 										height_diff = vp.position.y - tracking_point->y;
+										range = get_range_to_target();
+										
+										if (range <= 0.0)
+											range = 1000.0;   // use 1000 meters if unable to determine range
 
 										// adjust weapon elevation for range
-										if (get_ballistic_pitch_deflection(selected_weapon, get_range_to_target(), height_diff, &pitch, &dummy, FALSE))
+										if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE))
 										{
 											matrix3x3 m;
 											float dx, dz;
@@ -2135,6 +2175,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 		*target;
 
 	ASSERT (launcher);
+	ASSERT(launcher->type != ENTITY_TYPE_WEAPON);
 
 	weapon_vector_ptr = get_local_entity_vec3d_ptr (launcher, VEC3D_TYPE_WEAPON_VECTOR);
 
@@ -2168,7 +2209,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 		{
 			target = get_local_entity_parent (launcher, LIST_TYPE_TARGET);
 
-			if (target)
+			if (target || get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
 				config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
@@ -2226,16 +2267,31 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 						{
 							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
 
-							if (get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector))
+							if (target)
 							{
-								normalise_3d_vector (&weapon_to_target_vector);
-
-								*weapon_vector_ptr = vp.zv;
-
-								*weapon_to_target_vector_ptr = weapon_to_target_vector;
-
-								set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, TRUE);
+								if (!get_pitch_device_to_target_vector (launcher, target, weapon_sub_type, &vp.position, &weapon_to_target_vector))
+									return;
 							}
+							else  // use get vector to EO tracking point, if any
+							{
+								vec3d* tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
+
+								ASSERT(get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI);  // only player aircraft have tracking point
+
+								if (!eo_tracking_point_valid(tracking_point))
+									return;
+
+								weapon_to_target_vector.x = tracking_point->x - vp.position.x;
+								weapon_to_target_vector.y = tracking_point->y - vp.position.y;
+								weapon_to_target_vector.z = tracking_point->z - vp.position.z;
+							}
+
+							normalise_3d_vector (&weapon_to_target_vector);
+
+							*weapon_vector_ptr = vp.zv;
+							*weapon_to_target_vector_ptr = weapon_to_target_vector;
+
+							set_local_entity_int_value (launcher, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID, TRUE);
 						}
 					}
 				}

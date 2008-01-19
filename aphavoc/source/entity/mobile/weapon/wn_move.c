@@ -219,7 +219,7 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_target_position (entity *en, vec3d *position)
+static int get_target_position (entity *en, vec3d *position, int can_guide_on_ground_lock)
 {
 	weapon
 		*raw;
@@ -282,9 +282,12 @@ static int get_target_position (entity *en, vec3d *position)
 
 		target_position_valid = TRUE;
 	}
-	else
+	else if (can_guide_on_ground_lock)
 	{
-		target_position_valid = FALSE;
+		// track the locked ground point
+		get_local_entity_vec3d(raw->launched_weapon_link.parent, VEC3D_TYPE_EO_TRACKING_POINT, position);
+
+		target_position_valid = eo_tracking_point_valid(position);
 	}
 
 	return (target_position_valid);
@@ -838,7 +841,9 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 
 			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
+				#ifdef DEBUG_MODULE
 				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
+				#endif
 				
 				// no target if no laser designation
 				if (laser_guided && !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
@@ -1026,7 +1031,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED:
 		////////////////////////////////////////
 		{
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, FALSE);
 
 			break;
 		}
@@ -1036,7 +1041,7 @@ void weapon_movement (entity *en)
 		{
 			check_guidance_source (raw, en, FALSE);
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, FALSE);
 
 			break;
 		}
@@ -1074,7 +1079,7 @@ void weapon_movement (entity *en)
 				}
 			}
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, FALSE);
 
 			break;
 		}
@@ -1106,15 +1111,9 @@ void weapon_movement (entity *en)
 								do_guidance_source_check = FALSE;
 
 								if (raw->weapon_lifetime < HELLFIRE_LOAL_CLIMB1_TIME)
-								{
 									if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
-									{
 										if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_LOS_TO_TARGET))
-										{
 											do_guidance_source_check = TRUE;
-										}
-									}
-								}
 							}
 						}
 					}
@@ -1128,7 +1127,13 @@ void weapon_movement (entity *en)
 				check_guidance_source (raw, en, TRUE);
 			}
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI 
+				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+			{
+				intercept_point_valid = FALSE;
+			}
+			else
+				intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
 
 			break;
 		}
@@ -1138,7 +1143,13 @@ void weapon_movement (entity *en)
 		{
 			check_guidance_source (raw, en, TRUE);
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI 
+				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
+			{
+				intercept_point_valid = FALSE;
+			}
+			else
+				intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
 
 			break;
 		}
@@ -1146,7 +1157,7 @@ void weapon_movement (entity *en)
 		case WEAPON_GUIDANCE_TYPE_ACTIVE_LASER:
 		////////////////////////////////////////
 		{
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, FALSE);
 
 			break;
 		}
@@ -1156,7 +1167,7 @@ void weapon_movement (entity *en)
 		{
 			check_guidance_source (raw, en, FALSE);
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
 
 			break;
 		}
@@ -1166,7 +1177,7 @@ void weapon_movement (entity *en)
 		{
 			check_guidance_source (raw, en, FALSE);
 
-			intercept_point_valid = get_target_position (en, &intercept_point);
+			intercept_point_valid = get_target_position (en, &intercept_point, TRUE);
 
 			break;
 		}
