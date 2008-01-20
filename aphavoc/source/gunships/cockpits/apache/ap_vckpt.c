@@ -571,10 +571,6 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 		directional_light_pitch,
 		directional_light_roll;
 
-	ambient_light_colour.red		 		= 0.7;
-	ambient_light_colour.green		  		= 0.7;
-	ambient_light_colour.blue		  		= 0.7;
-
 	directional_light_colour.red		= 0.3;
 	directional_light_colour.green	= 0.3;
 	directional_light_colour.blue		= 0.3;
@@ -582,6 +578,68 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 	directional_light_heading 			= rad (0.0);
 	directional_light_pitch 			= rad (0.0);
 	directional_light_roll 				= rad (0.0);
+
+	switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
+	{
+		////////////////////////////////////////
+		case DAY_SEGMENT_TYPE_DAWN:
+		////////////////////////////////////////
+		{
+			ambient_light_colour.red		 		= 0.70;
+			ambient_light_colour.green		  		= 0.70;
+			ambient_light_colour.blue		  		= 0.70;
+
+			directional_light_heading 				= rad (0.0);
+			directional_light_pitch 				= rad (-15.0);
+			directional_light_roll 					= rad (0.0);
+
+			break;
+		}
+		////////////////////////////////////////
+		case DAY_SEGMENT_TYPE_DAY:
+		////////////////////////////////////////
+		{
+			ambient_light_colour.red		 		= 0.85;
+			ambient_light_colour.green		  		= 0.85;
+			ambient_light_colour.blue		  		= 0.85;
+
+			directional_light_heading 				= rad (0.0);
+			directional_light_pitch 				= rad (-40.0);
+			directional_light_roll 					= rad (0.0);
+
+			directional_light_pitch 				= rad (0.0);
+
+			break;
+		}
+		////////////////////////////////////////
+		case DAY_SEGMENT_TYPE_DUSK:
+		////////////////////////////////////////
+		{
+			ambient_light_colour.red		 		= 0.65;
+			ambient_light_colour.green		  		= 0.50;
+			ambient_light_colour.blue		  		= 0.50;
+
+			directional_light_heading 				= rad (0.0);
+			directional_light_pitch 				= rad (-15.0);
+			directional_light_roll 					= rad (0.0);
+
+			break;
+		}
+		////////////////////////////////////////
+		case DAY_SEGMENT_TYPE_NIGHT:
+		////////////////////////////////////////
+		{
+			ambient_light_colour.red		 		= 0.45;
+			ambient_light_colour.green		  		= 0.45;
+			ambient_light_colour.blue		  		= 0.55;
+
+			directional_light_heading 				= rad (0.0);
+			directional_light_pitch 				= rad (-15.0);
+			directional_light_roll 					= rad (0.0);
+
+			break;
+		}
+	}
 
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
 
@@ -923,6 +981,8 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 	if (flags & (VIRTUAL_COCKPIT_COCKPIT))
 	{
+//		set_cockpit_lighting (vp.attitude);
+
 		set_cockpit_white_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
