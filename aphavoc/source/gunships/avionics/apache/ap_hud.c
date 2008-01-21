@@ -2215,7 +2215,7 @@ static void draw_target_symbology (void)
 			{
 				if (target_visible)
 				{
-					if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+					if (target && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
 					{
 						get_target_intercept_point (source, target, selected_weapon_type, &intercept_point);
 
