@@ -920,7 +920,7 @@ static void initialise_custom_scenes(const char* directory)
 	// internal occkpit
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT];
 	scene->number_of_sub_objects = 1;  // the entire cockpit
-	scene->total_number_of_sub_objects = 7;
+	scene->total_number_of_sub_objects = 8;  // main object, 2 invisible objects which just contain other objects, and 5 actual objects
 
 	scene->object_dissolve = 1.0;
 	scene->radius = 10.0;
@@ -940,7 +940,7 @@ static void initialise_custom_scenes(const char* directory)
 		{
 			initialise_sub_object(entry, next_free_custom_object++);
 
-			entry->number_of_sub_objects = 5;  // one for view + 4 for the throttles
+			entry->number_of_sub_objects = 6;  // one for view + one for co-pilot helmet + 4 for the throttles
 			entry->sub_objects = &scene->sub_objects[1];
 
 			// make an empty sub-object for views
@@ -974,6 +974,28 @@ static void initialise_custom_scenes(const char* directory)
 					custom_3d_models.arneh_ah64d_cockpit = TRUE;
 				}
 			}
+
+			if (!custom_3d_models.arneh_ah64d_cockpit)
+				return;
+
+			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-helmet.eeo", directory);
+			if (read_object(&objects_3d_data[next_free_custom_object++], filename))
+			{
+				entry = &main_entry->sub_objects[5];
+				entry->parent = main_entry;
+
+				// first an invisible object for the torso
+				initialise_sub_object(entry, 0);
+				entry->number_of_sub_objects = 1;
+				entry->sub_objects = &main_entry->sub_objects[6];
+
+				// then the helmet
+				entry = &main_entry->sub_objects[6];
+				initialise_sub_object(entry, next_free_custom_object-1);
+				entry->parent = &main_entry->sub_objects[5];
+			}
+			else
+				custom_3d_models.arneh_ah64d_cockpit = FALSE;
 		}
 	}
 
