@@ -247,7 +247,7 @@ void initialise_apache_virtual_cockpit (void)
 
 		// pnvs
 		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_position.x = -0.025;
-		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_position.z = 3.12;
+		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_position.z = 3.02;
 
 		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_heading = rad(-135);
 
@@ -267,6 +267,9 @@ void initialise_apache_virtual_cockpit (void)
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.x = -0.494;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.y = -0.974;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.z = 1.588;
+
+		// co-pilot's helmet
+		initialise_co_pilot_head_animations(&virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[5].sub_objects[0]);
 
 		// don't show clock or sideslip
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[1].visible_object = FALSE;  // sideslip
@@ -1066,6 +1069,9 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 				// with new cockpit we have to draw these in internal cockpit
 				if (custom_3d_models.arneh_ah64d_cockpit)
 				{
+					// co-pilot head
+					animate_co_pilot_head(&virtual_cockpit_inst3d->sub_objects[0].sub_objects[5].sub_objects[0]);
+
 					// compass
 					{
 						search.search_depth = 0;

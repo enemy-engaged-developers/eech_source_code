@@ -80,6 +80,7 @@ currentdir = $(projectdir)\source\gunships\cockpits\apache
 
 c_object_files		+=	$+ &
 							$(currentdir)\ap_ckpt.obj &
+							$(currentdir)\ap_cpg.obj &
 							$(currentdir)\ap_instr.obj &
 							$(currentdir)\ap_lamps.obj &
 							$(currentdir)\ap_vckpt.obj &
