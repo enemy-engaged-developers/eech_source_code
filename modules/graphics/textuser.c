@@ -3374,7 +3374,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 	char
 		filename[256];
 
-	sprintf (directory_search_path, "%s\\%s\\*.bmp", TEXTURE_OVERRIDE_DIRECTORY, mapname);
+	snprintf (directory_search_path, sizeof(directory_search_path), "%s\\%s\\*", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
 	directory_listing = get_first_directory_file ( directory_search_path );
 
@@ -3384,13 +3384,52 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 		while ( valid_file )
 		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_DIRECTORY )
 			{
+				snprintf(filename, sizeof(filename), "%s\\%s", mapname, get_directory_file_filename ( directory_listing ));
+
+				if (filename[strlen(mapname) + 1] == '.')
+				{
+					valid_file = get_next_directory_file ( directory_listing );
+					continue;
+				}
+
+				strupr(filename);
+
+				#if DEBUG_MODULE
+				debug_log("Entering directory %s", filename);
+				#endif
+				
+				initialize_texture_override_names(system_texture_override_names, filename);
+			}
+			else if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+			{
+				const char* extension;
+				int type = 1;
+				
 				strcpy(filename, get_directory_file_filename ( directory_listing ));
 				strupr(filename);
 
-				retrieved_index = match_system_texture_name ( filename );
+				extension = strrchr(filename, '.');
+				if (!extension)
+				{
+					debug_log("No extension for file: %s", filename);
+					valid_file = get_next_directory_file ( directory_listing );
+					continue;
+				}
+				
+				if (strcmp(extension, ".BMP") == 0)
+					type = 1;
+				else if (strcmp(extension, ".DDS") == 0)
+					type = 2;
+				else
+				{
+					debug_log("Texture file not BMP or DDS: %s", filename);
+					valid_file = get_next_directory_file ( directory_listing );
+					continue;
+				}
 
+				retrieved_index = match_system_texture_name ( filename );
 
 				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
@@ -3403,7 +3442,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
 							strupr(system_texture_override_names[index].path);
 							strcpy(system_texture_override_names[index].name, filename);
-							system_texture_override_names[index].type = 1;
+							system_texture_override_names[index].type = type;
 							#if DEBUG_MODULE
 							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
 							#endif							
@@ -3415,7 +3454,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = 1;
+						system_texture_override_names[index].type = type;
 						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
 						#endif							
@@ -3426,7 +3465,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = 1;
+						system_texture_override_names[index].type = type;
 						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
 						#endif							
@@ -3440,65 +3479,6 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		}
 	}
 
-//VJ 050515 do the same for dds files and continue index++
-	sprintf (directory_search_path, "%s\\%s\\*.dds", TEXTURE_OVERRIDE_DIRECTORY, mapname);
-
-	directory_listing = get_first_directory_file ( directory_search_path );
-
-	if ( directory_listing )
-	{
-		valid_file = TRUE;
-
-		while ( valid_file )
-		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
-			{
-				strcpy(filename, get_directory_file_filename ( directory_listing ));
-				strupr(filename);
-
-				retrieved_index = match_system_texture_name ( filename );
-
-				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
-
-					index = retrieved_index;
-
-//VJ 051011 add winter textures ==>
-					//VJ 051010 force winter textures
-					if ((get_global_season() == SESSION_SEASON_WINTER) && strstr(filename,DESERTIND_3))
-					{
-						   system_texture_override_names[index].camo = 1;
-							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
-							strupr(system_texture_override_names[index].path);
-							strcpy(system_texture_override_names[index].name, filename);
-							system_texture_override_names[index].type = 2;
-							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-					}
-					//VJ 051010 force desert textures
-					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))					
-					{
-					   system_texture_override_names[index].camo = 2;
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
-						strupr(system_texture_override_names[index].path);
-						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = 2;
-						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-					}	
-					//VJ 051010 use normal textures for the rest
-				   if (system_texture_override_names[index].camo == 0)
-				   {
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
-						strupr(system_texture_override_names[index].path);
-						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = 2;
-						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-				   }
-//VJ 051011 <== add winter textures 
-					count++;
-				}
-			}
-			valid_file = get_next_directory_file ( directory_listing );
-		}
-	}
 	return (count);
 }
 
@@ -4083,6 +4063,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 		if (!global_mipmapping)
 			mipmap = 1;
 
+		debug_log(full_override_texture_filename);
 		override_screen = create_texture_map (width, height, type, mipmap, system_texture_palettes[0], system_texture_colour_tables[0] );
 
 		for ( temp = 0; temp < mipmap; temp++ )  //was <= mipmap!
@@ -4205,6 +4186,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
 
 	//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
+	debug_log(full_override_texture_filename);
 	override_screen = create_texture_map (width, height, type,
         	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
 
