@@ -252,20 +252,20 @@ void initialise_apache_virtual_cockpit (void)
 		virtual_cockpit_nose_inst3d->sub_objects[0].sub_objects[0].relative_heading = rad(-135);
 
 		// throttles
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.x = -0.552;
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.y = -0.700;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.x = -0.542;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.y = -0.710;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[1].relative_position.z = 0.298;
 
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.x = -0.544;
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.y = -0.700;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.x = -0.524;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.y = -0.710;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[2].relative_position.z = 0.298;
 
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.x = -0.502;
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.y = -0.974;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.x = -0.492;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.y = -0.984;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[3].relative_position.z = 1.588;
 	
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.x = -0.494;
-		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.y = -0.974;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.x = -0.474;
+		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.y = -0.984;
 		virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[4].relative_position.z = 1.588;
 
 		// co-pilot's helmet
