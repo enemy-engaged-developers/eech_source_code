@@ -988,13 +988,11 @@ static void initialise_custom_scenes(const char* directory)
 				initialise_sub_object(entry, 0);
 				entry->number_of_sub_objects = 1;
 				entry->sub_objects = &main_entry->sub_objects[7];
-//				entry->default_visibility = TRUE;
 
 				// then the helmet
 				entry = &main_entry->sub_objects[7];
 				initialise_sub_object(entry, next_free_custom_object-1);
 				entry->parent = &main_entry->sub_objects[5];
-//				entry->default_visibility = FALSE;
 			}
 			else
 				custom_3d_models.arneh_ah64d_cockpit = FALSE;
@@ -1054,6 +1052,34 @@ static void initialise_custom_scenes(const char* directory)
 			}
 		}
 	}
+
+	// warning lights
+	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT];
+
+	scene->number_of_sub_objects = 1;
+	scene->total_number_of_sub_objects = 1;
+
+	scene->object_dissolve = 1.0;
+	scene->radius = 10.0;
+	scene->object_approximation_scale = 1.0;
+
+	scene->sub_objects = safe_malloc(sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
+	memset(scene->sub_objects, 0, sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
+
+	// the sub-objects:
+	{
+		object_3d_database_entry* entry = &scene->sub_objects[0];
+
+		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-fire-warning-light.eeo", directory);
+		if (read_object(&objects_3d_data[next_free_custom_object], filename))
+		{
+			initialise_sub_object(entry, next_free_custom_object++);
+			entry->default_visibility = FALSE;  // light off by default
+		}
+		else
+			custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
+	}
+
 }
 
 
