@@ -910,6 +910,10 @@ static void initialise_sub_object(object_3d_database_entry* entry, unsigned mode
 	entry->object_dissolve = 1.0;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void initialise_custom_scenes(const char* directory)
 {
 	char filename[1024];
@@ -1390,7 +1394,7 @@ void initialise_3d_objects ( const char *directory )
 
 	fread ( &total_number_of_objects, sizeof ( int ), 1, fp );
 
-	number_of_custom_objects = 2;  // apache cockpit and its nose
+	number_of_custom_objects = 200;
 	next_free_custom_object = total_number_of_objects;
 	total_objects = total_number_of_objects + number_of_custom_objects;
 
@@ -2000,6 +2004,8 @@ void initialise_3d_objects ( const char *directory )
 			object_3d_sprite_flare_texture = get_system_texture_ptr ( index );
 		}
 	}
+
+	ASSERT(next_free_custom_object <= total_number_of_objects + 1 + number_of_custom_objects);
 
 	current_number_of_3d_objects_constructed = 0;
 
