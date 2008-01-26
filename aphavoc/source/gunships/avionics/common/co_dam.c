@@ -838,7 +838,7 @@ void partially_repair_local_entity_avionics (entity *en)
 
 void load_gunship_avionics_damage (void)
 {
-	fire_extinguisher_used = FALSE;
+	fire_extinguisher_used = 0;
 
 	switch (get_global_gunship_type ())
 	{

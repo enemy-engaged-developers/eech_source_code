@@ -275,13 +275,14 @@ static void launch_flare_event (event *ev)
 
 static void fire_extinguisher_release_event (event *ev)
 {
-	if (!fire_extinguisher_used)
+	if (fire_extinguisher_used < 2)
 	{
-		fire_extinguisher_used = TRUE;
+		fire_extinguisher_used++;
 
 		set_dynamics_damage_repair_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE | DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE);
 
-		dynamics_damage_model (DYNAMICS_DAMAGE_FIRE_EXTINGUISHER, FALSE);
+		if (fire_extinguisher_used == 2)
+			dynamics_damage_model (DYNAMICS_DAMAGE_FIRE_EXTINGUISHER, FALSE);
 	}
 }
 
