@@ -73,7 +73,7 @@ static int set_new_static_direction(float cur_heading, float cur_pitch)
 	default:
 	case CPG_ANIM_STATE_REST:
 		requested_heading = 0.0;
-		requested_pitch = 0.0;
+		requested_pitch = 5.0;
 		break;
 	case CPG_ANIM_STATE_MFD_RIGHT:
 		multiplier = -1.0;
@@ -278,7 +278,7 @@ void initialise_co_pilot_head_animations(object_3d_sub_instance* helmet_inst)
 	current_movement_rate_pitch = 0.0;
 
 	requested_heading = 0.0;
-	requested_pitch = 0.0;
+	requested_pitch = 5.0;
 	requested_bend = 0.0;
 
 	// parent is entire torso.  Torso bend forward to look through ORT
