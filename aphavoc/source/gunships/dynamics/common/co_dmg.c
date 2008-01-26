@@ -437,7 +437,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					current_flight_dynamics->left_engine_rpm.damaged = TRUE;
 
-					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_LEFT_ENGINE_FAILURE);
+					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_RIGHT_ENGINE_FAILURE);  // speech has engine 1 and 2 switched
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
@@ -467,7 +467,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					current_flight_dynamics->right_engine_rpm.damaged = TRUE;
 
-					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_RIGHT_ENGINE_FAILURE);
+					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_LEFT_ENGINE_FAILURE);  // speech has engine 1 and 2 switched
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
@@ -494,7 +494,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE;
 
-					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_LEFT_ENGINE_FIRE);
+					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_RIGHT_ENGINE_FIRE);  // speech has engine 1 and 2 switched
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
@@ -513,7 +513,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE;
 
-					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_RIGHT_ENGINE_FIRE);
+					play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_LEFT_ENGINE_FIRE);  // speech has engine 1 and 2 switched
 
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
