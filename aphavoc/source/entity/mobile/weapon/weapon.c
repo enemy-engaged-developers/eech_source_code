@@ -2268,7 +2268,8 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 							vec3d* tracking_point = NULL;
 							get_3d_sub_object_world_viewpoint (search_weapon_system_pitch.result_sub_object, &vp);
 
-							tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
+							if (get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
+								tracking_point = get_local_entity_vec3d_ptr(launcher, VEC3D_TYPE_EO_TRACKING_POINT);
 
 							if (tracking_point)  // use get vector to EO tracking point, if any
 							{
