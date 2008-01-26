@@ -98,6 +98,16 @@ static object_3d_instance
 	*virtual_cockpit_lhs_mfd_inst3d,
 	*virtual_cockpit_rhs_mfd_inst3d,
 	*virtual_cockpit_display_view_mfd_inst3d,
+	*virtual_cockpit_pilot_fire_warning_light1_inst3d,
+	*virtual_cockpit_pilot_fire_warning_light2_inst3d,
+	*virtual_cockpit_cpg_fire_extinguisher_light1_inst3d,
+	*virtual_cockpit_cpg_fire_extinguisher_light2_inst3d,
+	*virtual_cockpit_pilot_fire_extinguisher_light1_inst3d,
+	*virtual_cockpit_pilot_fire_extinguisher_light2_inst3d,
+	*virtual_cockpit_cpg_fire_warning_light1_inst3d,
+	*virtual_cockpit_cpg_fire_warning_light2_inst3d,
+	*virtual_cockpit_pilot_apu_light_inst3d,
+	*virtual_cockpit_cpg_apu_light_inst3d,
 	*virtual_cockpit_nose_inst3d;
 
 
@@ -128,7 +138,20 @@ void initialise_apache_virtual_cockpit (void)
 	{
 		virtual_cockpit_level1_inst3d = construct_3d_object (OBJECT_3D_ARNEH_AH64D_COCKPIT);
 		virtual_cockpit_nose_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE);
-		
+
+		virtual_cockpit_pilot_fire_warning_light1_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_pilot_fire_warning_light2_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_cpg_fire_warning_light1_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_cpg_fire_warning_light2_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+
+		virtual_cockpit_pilot_apu_light_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+		virtual_cockpit_cpg_apu_light_inst3d = construct_3d_object(OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT);
+
 		virtual_cockpit_level2_inst3d = NULL;
 		virtual_cockpit_level3_inst3d = NULL;
 		virtual_cockpit_fillet_level1_inst3d = NULL;
@@ -146,6 +169,18 @@ void initialise_apache_virtual_cockpit (void)
 		virtual_cockpit_fillet_level3_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_LEVEL3_FILLET);
 
 		virtual_cockpit_nose_inst3d = NULL;
+		virtual_cockpit_pilot_fire_warning_light1_inst3d = NULL;
+		virtual_cockpit_pilot_fire_warning_light2_inst3d = NULL;
+		virtual_cockpit_cpg_fire_warning_light1_inst3d = NULL;
+		virtual_cockpit_cpg_fire_warning_light2_inst3d = NULL;
+
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d = NULL;
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d = NULL;
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d = NULL;
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d = NULL;
+
+		virtual_cockpit_pilot_apu_light_inst3d = NULL;
+		virtual_cockpit_cpg_apu_light_inst3d = NULL;
 	}
 
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_APACHE_VIRTUAL_COCKPIT_MAIN_ROTOR);
@@ -271,6 +306,73 @@ void initialise_apache_virtual_cockpit (void)
 		// co-pilot's helmet
 		initialise_co_pilot_head_animations(&virtual_cockpit_level1_inst3d->sub_objects[0].sub_objects[5].sub_objects[0]);
 
+		// fire warning lights
+		virtual_cockpit_pilot_fire_warning_light1_inst3d->sub_objects[0].relative_position.x = -0.2425;
+		virtual_cockpit_pilot_fire_warning_light1_inst3d->sub_objects[0].relative_position.y = -0.218;
+		virtual_cockpit_pilot_fire_warning_light1_inst3d->sub_objects[0].relative_position.z =  0.7685;
+		virtual_cockpit_pilot_fire_warning_light1_inst3d->sub_objects[0].relative_pitch = rad(8.0);
+
+		virtual_cockpit_pilot_fire_warning_light2_inst3d->sub_objects[0].relative_position.x = -0.1455;
+		virtual_cockpit_pilot_fire_warning_light2_inst3d->sub_objects[0].relative_position.y = -0.218;
+		virtual_cockpit_pilot_fire_warning_light2_inst3d->sub_objects[0].relative_position.z =  0.7675;
+		virtual_cockpit_pilot_fire_warning_light2_inst3d->sub_objects[0].relative_pitch = rad(8.0);
+
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_position.x = -0.3844;
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_position.y = -0.477;
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_position.z =  1.984;
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_heading = rad(-6.0);
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_pitch = rad(10.0);
+
+		virtual_cockpit_cpg_fire_warning_light2_inst3d->sub_objects[0].relative_position.x = -0.2755;
+		virtual_cockpit_cpg_fire_warning_light2_inst3d->sub_objects[0].relative_position.y = -0.479;
+		virtual_cockpit_cpg_fire_warning_light2_inst3d->sub_objects[0].relative_position.z =  1.995;
+		virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].relative_heading = rad(-6.0);
+		virtual_cockpit_cpg_fire_warning_light2_inst3d->sub_objects[0].relative_pitch = rad(10.0);
+
+		// Fire extinguisher ligths
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.x = -0.2350;
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.y = -0.2534;
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.z =  0.7634;
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d->sub_objects[0].relative_pitch = rad(8.0);
+		virtual_cockpit_pilot_fire_extinguisher_light1_inst3d->sub_objects[0].relative_scale.y = 0.65;
+
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.x = -0.1550;
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.y = -0.2544;
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.z =  0.7634;
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d->sub_objects[0].relative_pitch = rad(8.0);
+		virtual_cockpit_pilot_fire_extinguisher_light2_inst3d->sub_objects[0].relative_scale.y = 0.65;
+
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.x = -0.3770;
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.y = -0.5145;
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d ->sub_objects[0].relative_position.z =  1.9775;
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->sub_objects[0].relative_heading = rad(-6.0);
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->sub_objects[0].relative_pitch = rad(10.0);
+		virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->sub_objects[0].relative_scale.y = 0.65;
+
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.x = -0.2855;
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.y = -0.5160;
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d ->sub_objects[0].relative_position.z =  1.9870;
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->sub_objects[0].relative_heading = rad(-6.0);
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->sub_objects[0].relative_pitch = rad(10.0);
+		virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->sub_objects[0].relative_scale.y = 0.65;
+
+		// APU lights
+		virtual_cockpit_pilot_apu_light_inst3d ->sub_objects[0].relative_position.x = -0.5874;
+		virtual_cockpit_pilot_apu_light_inst3d ->sub_objects[0].relative_position.y = -0.6654;
+		virtual_cockpit_pilot_apu_light_inst3d ->sub_objects[0].relative_position.z =  0.2622;
+		virtual_cockpit_pilot_apu_light_inst3d->sub_objects[0].relative_pitch = rad(82.0);
+		virtual_cockpit_pilot_apu_light_inst3d->sub_objects[0].relative_scale.x = 0.65;
+		virtual_cockpit_pilot_apu_light_inst3d->sub_objects[0].relative_scale.y = 0.65;
+		virtual_cockpit_pilot_apu_light_inst3d->sub_objects[0].relative_scale.z = 0.65;
+
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_position.x = -0.5345;
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_position.y = -0.9459;
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_position.z =  1.5418;
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_pitch = rad(82.0);
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_scale.x = 0.65;
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_scale.y = 0.65;
+		virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].relative_scale.z = 0.65;
+
 		// don't show clock or sideslip
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[1].visible_object = FALSE;  // sideslip
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[3].visible_object = FALSE;
@@ -297,6 +399,12 @@ void deinitialise_apache_virtual_cockpit (void)
 	{
 		destruct_3d_object(virtual_cockpit_level1_inst3d);
 		destruct_3d_object(virtual_cockpit_nose_inst3d);
+		destruct_3d_object(virtual_cockpit_pilot_fire_warning_light1_inst3d);
+		destruct_3d_object(virtual_cockpit_pilot_fire_warning_light2_inst3d);
+		destruct_3d_object(virtual_cockpit_cpg_fire_warning_light1_inst3d);
+		destruct_3d_object(virtual_cockpit_cpg_fire_warning_light2_inst3d);
+		destruct_3d_object(virtual_cockpit_pilot_apu_light_inst3d);
+		destruct_3d_object(virtual_cockpit_cpg_apu_light_inst3d);
 	}
 	else
 	{
@@ -1149,9 +1257,60 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 						}
 		
 					}
-		
+
 					memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_instrument_needles_inst3d->vp.position, virtual_cockpit_instrument_needles_inst3d);
+
+					{
+						vec3d apu_scale;
+						apu_scale.x = 0.65;
+						apu_scale.y = 0.65;
+						apu_scale.z = 0.65;
+						// Fire warning lights
+						virtual_cockpit_pilot_fire_warning_light1_inst3d->sub_objects[0].visible_object = apache_lamps.engine_1_fire;
+						memcpy (&virtual_cockpit_pilot_fire_warning_light1_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_fire_warning_light1_inst3d->vp.position, virtual_cockpit_pilot_fire_warning_light1_inst3d);
+						
+						virtual_cockpit_pilot_fire_warning_light2_inst3d->sub_objects[0].visible_object = apache_lamps.engine_2_fire;
+						memcpy (&virtual_cockpit_pilot_fire_warning_light2_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_fire_warning_light2_inst3d->vp.position, virtual_cockpit_pilot_fire_warning_light2_inst3d);
+
+
+						virtual_cockpit_cpg_fire_warning_light1_inst3d->sub_objects[0].visible_object = apache_lamps.engine_1_fire;
+						memcpy (&virtual_cockpit_cpg_fire_warning_light1_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_cpg_fire_warning_light1_inst3d->vp.position, virtual_cockpit_cpg_fire_warning_light1_inst3d);
+						
+						virtual_cockpit_cpg_fire_warning_light2_inst3d->sub_objects[0].visible_object = apache_lamps.engine_2_fire;
+						memcpy (&virtual_cockpit_cpg_fire_warning_light2_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_cpg_fire_warning_light2_inst3d->vp.position, virtual_cockpit_cpg_fire_warning_light2_inst3d);
+
+						// fire extinguisher lights
+						virtual_cockpit_pilot_fire_extinguisher_light1_inst3d->sub_objects[0].visible_object = fire_extinguisher_used > 0;
+						memcpy (&virtual_cockpit_pilot_fire_extinguisher_light1_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_fire_extinguisher_light1_inst3d->vp.position, virtual_cockpit_pilot_fire_extinguisher_light1_inst3d);
+						
+						virtual_cockpit_pilot_fire_extinguisher_light2_inst3d->sub_objects[0].visible_object = fire_extinguisher_used > 1;
+						memcpy (&virtual_cockpit_pilot_fire_extinguisher_light2_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_fire_extinguisher_light2_inst3d->vp.position, virtual_cockpit_pilot_fire_extinguisher_light2_inst3d);
+
+						virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->sub_objects[0].visible_object = fire_extinguisher_used > 0;
+						memcpy (&virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_cpg_fire_extinguisher_light1_inst3d->vp.position, virtual_cockpit_cpg_fire_extinguisher_light1_inst3d);
+						
+						virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->sub_objects[0].visible_object = fire_extinguisher_used > 1;
+						memcpy (&virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_cpg_fire_extinguisher_light2_inst3d->vp.position, virtual_cockpit_cpg_fire_extinguisher_light2_inst3d);
+
+
+						// APU lights
+						virtual_cockpit_cpg_apu_light_inst3d->sub_objects[0].visible_object = current_flight_dynamics->apu_rpm.value > 20.0;
+						memcpy (&virtual_cockpit_cpg_apu_light_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_cpg_apu_light_inst3d->vp.position, virtual_cockpit_cpg_apu_light_inst3d);
+						
+						virtual_cockpit_pilot_apu_light_inst3d->sub_objects[0].visible_object = current_flight_dynamics->apu_rpm.value > 20.0;
+						memcpy (&virtual_cockpit_pilot_apu_light_inst3d->vp, &vp, sizeof (viewpoint));
+						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_apu_light_inst3d->vp.position, virtual_cockpit_pilot_apu_light_inst3d);
+					}
 				}
 			}
 
@@ -1167,8 +1326,6 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 				ui_display_text (buffer, 10, 60);
 				sprintf(buffer,"x=%.3f, y=%.3f, z=%.3f, pitch=%.3f, clip=%.3f",wide_cockpit_position[wide_cockpit_nr].x, wide_cockpit_position[wide_cockpit_nr].y, wide_cockpit_position[wide_cockpit_nr].z, wide_cockpit_position[wide_cockpit_nr].p, clipx);
 				ui_display_text (buffer, 10, 100);
-				
-              
            }
 
 		#if DEBUG_MODULE
