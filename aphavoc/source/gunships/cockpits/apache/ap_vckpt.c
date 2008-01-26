@@ -1851,9 +1851,9 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 		if (check_key(DIK_NUMPAD0))
 		{
-				wide_cockpit_position[wide_cockpit_nr].x = BASE_X_APACHE;
-				wide_cockpit_position[wide_cockpit_nr].y = BASE_Y_APACHE;
-				wide_cockpit_position[wide_cockpit_nr].z = BASE_Z_APACHE;
+				wide_cockpit_position[wide_cockpit_nr].x = 0.0;
+				wide_cockpit_position[wide_cockpit_nr].y = 0.0;
+				wide_cockpit_position[wide_cockpit_nr].z = 0.0;
 				wide_cockpit_position[wide_cockpit_nr].p = BASE_P_APACHE;
 		}
 	}
