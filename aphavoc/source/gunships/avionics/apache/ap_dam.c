@@ -131,7 +131,7 @@ void fully_repair_apache_damage (void)
 {
 	set_apache_upfront_display_text ("", "", NULL, NULL);
 
-	fire_extinguisher_used = FALSE;
+	fire_extinguisher_used = 0;
 
 	////////////////////////////////////////
 
@@ -262,7 +262,7 @@ void partially_repair_apache_damage (void)
 {
 	set_apache_upfront_display_text ("", "", NULL, NULL);
 
-	fire_extinguisher_used = FALSE;
+	fire_extinguisher_used = 0;
 
 	////////////////////////////////////////
 
