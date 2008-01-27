@@ -108,7 +108,8 @@ static void select_target_acquisition_system_air_radar_event (event *ev)
 	
 	if (!get_global_simple_avionics ())
 	{
-		select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
+		// has no air radar, left for later use on other helis
+		//select_default_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_AIR_RADAR);
 	}
 
 	break;
