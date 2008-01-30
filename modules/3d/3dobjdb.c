@@ -1176,12 +1176,15 @@ static int read_object(object_3d *obj, const char* filename)
 
 	int
 		i,
+		format_version,
 		number_of_points,
 		number_of_faces,
+		number_of_polygoned_faces,
 		number_of_surfaces,
 		number_of_texture_points,
-		format_version,
 		number_of_point_normals,
+		number_of_lighting_normals,
+		culling_normals_offset,
 		number_of_point_references,
 		number_of_surface_point_references,
 		number_of_surface_point_normals;
@@ -1193,8 +1196,11 @@ static int read_object(object_3d *obj, const char* filename)
 	fread ( &format_version, 4, 1, file );
 	fread ( &number_of_points, 4, 1, file );
 	fread ( &number_of_faces, 4, 1, file );
+	fread ( &number_of_polygoned_faces, 4, 1, file );
 	fread ( &number_of_surfaces, 4, 1, file );
 	fread ( &number_of_point_normals, 4, 1, file );
+	fread ( &number_of_lighting_normals, 4, 1, file );
+	fread ( &culling_normals_offset, 4, 1, file );
 	fread ( &number_of_point_references, 4, 1, file );
 	fread ( &number_of_texture_points, 4, 1, file );
 	fread ( &number_of_surface_point_references, 4, 1, file );
@@ -1203,14 +1209,17 @@ static int read_object(object_3d *obj, const char* filename)
 	if (format_version != 1)
 		debug_fatal("Incompatible object: %s (object version %d)", filename, format_version);
 
+	// assign these in separate step since they are all just two bytes, whie four in file format
 	obj->number_of_points = number_of_points;
 	obj->number_of_faces = number_of_faces;
-	obj->number_of_point_normals = number_of_point_normals;
-	obj->number_of_lighting_normals = number_of_point_normals;
 	obj->number_of_surfaces = number_of_surfaces;
+	obj->number_of_point_normals = number_of_point_normals;
+	obj->number_of_lighting_normals = number_of_lighting_normals;
+	obj->culling_normals_offset = culling_normals_offset;
 
 	fread ( &obj->bounding_box, 24, 1, file );
 	fread ( &obj->bounding_box2, 24, 1, file );
+	fread ( &obj->radius, 4, 1, file );
 
 	if ( obj->number_of_points )  // read all points
 	{
@@ -1219,17 +1228,17 @@ static int read_object(object_3d *obj, const char* filename)
 	}
 	else
 		obj->points = NULL;
-	if ( number_of_faces )  // number of points in each poly
+	if ( number_of_polygoned_faces )  // number of points in each poly
 	{
-		obj->faces = safe_malloc ( 1 * number_of_faces );
-		fread ( obj->faces, 1, number_of_faces, file );
+		obj->faces = safe_malloc ( 1 * number_of_polygoned_faces );
+		fread ( obj->faces, 1, number_of_polygoned_faces, file );
 	}
 	else
 		obj->faces = NULL;
-	if ( number_of_point_normals )
+	if ( obj->number_of_point_normals )
 	{
-		obj->point_normals = safe_malloc ( 2 * number_of_point_normals );
-		fread ( obj->point_normals, 2, number_of_point_normals, file );
+		obj->point_normals = safe_malloc ( 2 * obj->number_of_point_normals );
+		fread ( obj->point_normals, 2, obj->number_of_point_normals, file );
 	}
 	else
 		obj->point_normals = NULL;
@@ -1247,10 +1256,10 @@ static int read_object(object_3d *obj, const char* filename)
 	}
 	else
 		obj->surfaces = NULL;
-	if ( number_of_faces )   // read face normals
+	if ( number_of_polygoned_faces )   // read face normals
 	{
-		obj->object_face_normal_references = safe_malloc ( 2 * number_of_faces );
-		fread ( obj->object_face_normal_references, 2, number_of_faces, file );
+		obj->object_face_normal_references = safe_malloc ( 2 * number_of_polygoned_faces );
+		fread ( obj->object_face_normal_references, 2, number_of_polygoned_faces, file );
 	}
 	else
 		obj->object_face_normal_references = NULL;
@@ -1860,7 +1869,6 @@ void initialise_3d_objects ( const char *directory )
 
 	{
 		// reallocates surfaces memory
-		// this is necessary because obj3dvb uses the array index of each surface as an index into another array
 		
 		struct FACE_SURFACE_DESCRIPTION
 			*surfaces,
