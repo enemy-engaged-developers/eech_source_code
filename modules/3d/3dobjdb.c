@@ -1272,7 +1272,7 @@ static int read_object(object_3d *obj, const char* filename)
 	if ( number_of_surface_point_normals )
 	{
 		obj->surface_point_normals = safe_malloc ( 2 * number_of_surface_point_normals );
-		fread ( obj->surface_points, 2, number_of_surface_point_normals, file );
+		fread ( obj->surface_point_normals, 2, number_of_surface_point_normals, file );
 	}
 	else
 		obj->surface_point_normals = NULL;
