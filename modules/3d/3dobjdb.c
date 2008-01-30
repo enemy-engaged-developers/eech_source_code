@@ -1427,7 +1427,7 @@ void initialise_3d_objects ( const char *directory )
 	objects_3d_data[0].bounding_box2.zmax = 0;
 	objects_3d_data[0].radius = 0;
 
-	total_number_of_raw_3d_objects = total_number_of_objects;
+	total_number_of_raw_3d_objects = total_objects;
 
 	//
 	// Now a count of how many of each array type
@@ -1707,39 +1707,6 @@ void initialise_3d_objects ( const char *directory )
 			read_object(obj, filename);
 		}
 		_findclose ( handle );
-
-#if 0   // arneh - this code doesn't seem to be necessary
-		if (handle != -1 )
-		{
-			// reallocates surfaces memory
-			
-			struct FACE_SURFACE_DESCRIPTION
-				*surfaces,
-				*cursurface;
-			int
-				number_of_surfaces = 0;
-
-			for ( count = 1; count <= total_number_of_objects; count++ )
-				number_of_surfaces += objects_3d_data[count].number_of_surfaces;
-			surfaces = safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
-			cursurface = surfaces;
-			for ( count = 1; count <= total_number_of_objects; count++ )
-			{
-				obj = &objects_3d_data[count];
-
-				if ( !obj->number_of_surfaces )
-					continue;
-				memcpy ( cursurface, obj->surfaces, sizeof ( face_surface_description ) * obj->number_of_surfaces );
-				if ( obj->custom )
-					safe_free ( obj->surfaces );
-				obj->surfaces = cursurface;
-				cursurface += obj->number_of_surfaces;
-			}
-			safe_free ( object_database_surfaces );
-			object_database_surfaces = surfaces;
-			total_number_of_surfaces = number_of_surfaces;
-		}
-#endif
 	}
 	/* 26JUL06 Casm Import of 3D objects END */
 
@@ -1890,6 +1857,38 @@ void initialise_3d_objects ( const char *directory )
 
 	// arneh - this will initialize new custom scenes
 	initialise_custom_scenes(directory);
+
+	{
+		// reallocates surfaces memory
+		// this is necessary because obj3dvb uses the array index of each surface as an index into another array
+		
+		struct FACE_SURFACE_DESCRIPTION
+			*surfaces,
+			*cursurface;
+		int
+			number_of_surfaces = 0;
+
+		for ( count = 1; count <= total_objects; count++ )
+			number_of_surfaces += objects_3d_data[count].number_of_surfaces;
+		surfaces = safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
+		cursurface = surfaces;
+		for ( count = 1; count <= total_objects; count++ )
+		{
+			object_3d* obj;
+			obj = &objects_3d_data[count];
+
+			if ( !obj->number_of_surfaces )
+				continue;
+			memcpy ( cursurface, obj->surfaces, sizeof ( face_surface_description ) * obj->number_of_surfaces );
+			if ( obj->custom )
+				safe_free ( obj->surfaces );
+			obj->surfaces = cursurface;
+			cursurface += obj->number_of_surfaces;
+		}
+		safe_free ( object_database_surfaces );
+		object_database_surfaces = surfaces;
+		total_number_of_surfaces = number_of_surfaces;
+	}
 
 	//
 	// Read in the camera information
