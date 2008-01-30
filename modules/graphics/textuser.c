@@ -214,7 +214,7 @@ int
 screen
 	*system_textures[MAX_TEXTURES],
 	//VJ 050116 custom texture mod: backup textures to restore default
-   *backup_system_textures[MAX_TEXTURES];
+	*backup_system_textures[MAX_TEXTURES];
 	//this does not seem to be used
 	//*application_textures[MAX_TEXTURES];
 
@@ -261,12 +261,28 @@ unsigned char
 
 #define BITMAP_ID		(0x4D42)
 
+enum FILE_TYPE {
+	TYPE_INVALID,
+	TYPE_BMP,
+	TYPE_DDS,
+};
+
+typedef enum FILE_TYPE file_type;
+
+enum CAMO_TYPE {
+	CAMO_REGULAR,
+	CAMO_WINTER,
+	CAMO_DESERT,
+};
+
+typedef enum CAMO_TYPE camo_type;
+
 struct OVERRIDENAME {
 	char name[64]; //texture name
-	char path[256];  //full path+file name on disk
-	int type;   //1 = bmp; 2 = dds
+	char path[260];  //full path+file name on disk
+	file_type type;
 //VJ 051011 add winter textures
-	int camo;   //0 = regular; 1 = winter; 2 = desert
+	camo_type camo;
 };
 
 typedef struct OVERRIDENAME overridename;
@@ -283,7 +299,7 @@ static int
 //terrain_dynamic_water_info
 	//water_info[3]; // sea, river, reservoir
 
-//VJ 051225 moved all map info to one structure    
+//VJ 051225 moved all map info to one structure
 custom_map_info
 	current_map_info;
 
@@ -603,7 +619,7 @@ BOOL load_texturemap_data ( const char *path )
 	create_internal_texture_palettes ();
 
 	fread ( &number_of_system_textures, 4, 1, fp );
-	
+
 	debug_log ( "Reading in %d textures", number_of_system_textures );
 
 	if ( d3d_paletted_textures_supported )
@@ -2354,8 +2370,8 @@ int match_system_texture_name ( const char *name )
 		*ptr;
 
 	int
-		count, camo = 0;
-  
+		count, special_camo = 0;
+
 	ptr = real_name;
 	// convert to uppercase and strip filename extention
 	while ( ( *name != '\0' ) && ( *name != '.' ) )
@@ -2384,28 +2400,28 @@ int match_system_texture_name ( const char *name )
 		// treat as an exception
 		 return (385);
 	}
-	else
-   if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_1)))
-   {
+else
+	if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_1)))
+	{
 		//check for _DESERT
-       *p = '\0';
-       camo = 1;       
-   }
-   else
-   if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_2)))
-   {
+		*p = '\0';
+		special_camo = 1;
+	}
+	else
+	if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_2)))
+	{
 		//check for -D
-       *p = '\0';
-       camo = 1;
-   }
-   else
-//VJ 051011 add winter textures    
-   if (get_global_season() == SESSION_SEASON_WINTER && (p = strstr(real_name, DESERTIND_3)))
-   {
+		*p = '\0';
+		special_camo = 1;
+	}
+	else
+//VJ 051011 add winter textures
+	if (get_global_season() == SESSION_SEASON_WINTER && (p = strstr(real_name, DESERTIND_3)))
+	{
 		//check for -W
-       *p = '\0';
-       camo = 0;
-   }
+		*p = '\0';
+		special_camo = 0;
+	}
 
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
@@ -2414,14 +2430,14 @@ int match_system_texture_name ( const char *name )
 			system_textures_referenced[count] = TRUE;
 
 
-	  //arneh 070121 - reverted this fix as it caused completly white units in some campaigns
-      //VJ 061230 if the original name does not have _DESERT then do not increase camo
-      // not all textures have a desert version of course so assuming that messes up the texture numbers!
-      //OLD bug ;)
-//			if (camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
-//				 camo = 0;
+		//arneh 070121 - reverted this fix as it caused completly white units in some campaigns
+		//VJ 061230 if the original name does not have _DESERT then do not increase camo
+		// not all textures have a desert version of course so assuming that messes up the texture numbers!
+		//OLD bug ;)
+//			if (special_camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
+//				 special_camo = 0;
 
-			return ( count + camo );
+			return ( count + special_camo );
 		}
 	}
 
@@ -2683,7 +2699,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 	if ( ( d3d_total_video_texture_memory < 8192*1024 ) && ( ( width > 64 ) || ( height > 64 ) ) )
 	{
 
-		if ( channels ==  3 )
+		if ( channels == 3 )
 		{
 
 			psd_rgb
@@ -2704,16 +2720,16 @@ texture_graphic *create_texture_graphic ( const char *filename )
 				}
 			}
 		}
-		else if ( channels ==  4 )
+		else if ( channels == 4 )
 		{
 
 			psd_rgba
 				*dest,
 				*source;
 
-			source = ( psd_rgba * )  data;
+			source = ( psd_rgba * ) data;
 
-			dest = ( psd_rgba * )  data;
+			dest = ( psd_rgba * ) data;
 
 			for ( y = 0; y < height; y += 2 )
 			{
@@ -2776,7 +2792,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 			}
 		}
 
-		if ( d3d_square_only_textures  )
+		if ( d3d_square_only_textures )
 		{
 
 			if ( texture_width != texture_height )
@@ -3001,7 +3017,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
 
-					value =  ( red | green | blue );
+					value = ( red | green | blue );
 
 					pixels[pixel_x] = value;
 
@@ -3060,7 +3076,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 					green >>= active_screen_green_shift;
 					blue >>= active_screen_blue_shift;
 
-					value =  ( red | green | blue );
+					value = ( red | green | blue );
 
 					pixels[pixel_x] = value;
 
@@ -3132,7 +3148,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 					blue >>= active_screen_blue_shift;
 					alpha >>= active_screen_alpha_shift;
 
-					value =  ( red | green | blue | alpha );
+					value = ( red | green | blue | alpha );
 
 					pixels[pixel_x] = value;
 
@@ -3195,7 +3211,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 					blue >>= active_screen_blue_shift;
 					alpha >>= active_screen_alpha_shift;
 
-					value =  ( red | green | blue | alpha );
+					value = ( red | green | blue | alpha );
 
 					pixels[pixel_x] = value;
 
@@ -3289,11 +3305,11 @@ void clear_texture_override_names ( void )
 	int count;
 
 	for ( count = 0; count < MAX_TEXTURES; count++ ){
-   	system_texture_override_names[count].name[0] = '\0';
-   	system_texture_override_names[count].path[0] = '\0';
-   	system_texture_override_names[count].type = 0;
-   	system_texture_override_names[count].camo = 0;
-   }	
+		system_texture_override_names[count].name[0] = '\0';
+		system_texture_override_names[count].path[0] = '\0';
+		system_texture_override_names[count].type = TYPE_INVALID;
+		system_texture_override_names[count].camo = CAMO_REGULAR;
+	}
 }
 
 
@@ -3316,8 +3332,7 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 	{
 		if (count >= TEXTURE_INDEX_LAST &&
 			// need to provide all these textures ourselves
-			system_texture_override_names[count].type != 1 &&
-			system_texture_override_names[count].type != 2)
+			system_texture_override_names[count].type == TYPE_INVALID)
 		{
 			debug_fatal("Missing texture (%d): %s", count, get_system_texture_name(count));
 		}
@@ -3336,7 +3351,7 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
-			//VJ 050821 check if it worked		
+			//VJ 050821 check if it worked
 			if (override_screen) {
 				set_system_texture_screen (override_screen, count);
 
@@ -3370,9 +3385,9 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 		count = 0;
 
 	unsigned char
-		directory_search_path[256];
+		directory_search_path[260];
 	char
-		filename[256];
+		filename[260];
 
 	snprintf (directory_search_path, sizeof(directory_search_path), "%s\\%s\\*", TEXTURE_OVERRIDE_DIRECTORY, mapname);
 
@@ -3399,14 +3414,14 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 				#if DEBUG_MODULE
 				debug_log("Entering directory %s", filename);
 				#endif
-				
+
 				initialize_texture_override_names(system_texture_override_names, filename);
 			}
 			else if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
 				const char* extension;
-				int type = 1;
-				
+				file_type type = TYPE_INVALID;
+
 				strcpy(filename, get_directory_file_filename ( directory_listing ));
 				strupr(filename);
 
@@ -3417,11 +3432,11 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 					valid_file = get_next_directory_file ( directory_listing );
 					continue;
 				}
-				
+
 				if (strcmp(extension, ".BMP") == 0)
-					type = 1;
+					type = TYPE_BMP;
 				else if (strcmp(extension, ".DDS") == 0)
-					type = 2;
+					type = TYPE_DDS;
 				else
 				{
 					debug_log("Texture file not BMP or DDS: %s", filename);
@@ -3435,42 +3450,42 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 					index = retrieved_index;
 
 //VJ 051011 add winter textures ==>
-					//VJ 051010 force winter textures					
+					//VJ 051010 force winter textures
 					if ((get_global_season() == SESSION_SEASON_WINTER) && strstr(filename,DESERTIND_3))
 					{
-						   system_texture_override_names[index].camo = 1;
-							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+							system_texture_override_names[index].camo = CAMO_WINTER;
+							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
 							strupr(system_texture_override_names[index].path);
 							strcpy(system_texture_override_names[index].name, filename);
 							system_texture_override_names[index].type = type;
 							#if DEBUG_MODULE
 							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-							#endif							
+							#endif
 					}
 					//VJ 051010 force desert textures
-					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))					
+					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))
 					{
-					   system_texture_override_names[index].camo = 2;
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+						system_texture_override_names[index].camo = CAMO_DESERT;
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
 						system_texture_override_names[index].type = type;
 						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-						#endif							
-					}	
+						#endif
+					}
 					//VJ 051010 use normal textures for the rest
-				   if (system_texture_override_names[index].camo == 0)
-				   {
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);	
+					if (system_texture_override_names[index].camo == CAMO_REGULAR)
+					{
+						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
 						strupr(system_texture_override_names[index].path);
 						strcpy(system_texture_override_names[index].name, filename);
 						system_texture_override_names[index].type = type;
 						#if DEBUG_MODULE
 						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-						#endif							
-				   }
-//VJ 051011 <== add winter textures 
+						#endif
+					}
+//VJ 051011 <== add winter textures
 
 					count++;
 				}
@@ -3492,7 +3507,7 @@ void load_warzone_override_textures ()
 {
 	char directory_textdir_path[256];
 	int nrtextfound = 0;
-	
+
 	// VJ 051226 NOTE: map_info structure is called from aphavoc\source\ui_menu\sessparm\sparm_sc.c
 	// and main variables are already set (warzone name, number, countours etc.
 
@@ -3511,7 +3526,7 @@ void load_warzone_override_textures ()
 
 	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
-	//VJ 051229 changed the order of reading: first all the official dirs, last the user defined dirs. 
+	//VJ 051229 changed the order of reading: first all the official dirs, last the user defined dirs.
 	//Makes more sense, else people make textures but they are not shown
 
 	//look for the modded and mipmapped terrain textures
@@ -3521,10 +3536,10 @@ void load_warzone_override_textures ()
 	//VJ 050621 backup commandline var, set to 0 if no textures found
 	texture_colour_bak = command_line_texture_colour;
 
-	
+
 	if (command_line_texture_colour == 1)
 	{
-		
+
 		//VJ 051223 removed string list with warzone names:
 		//look directly for texture dir with name current_map_info.name" (= session title)
 		//That way warzones can be added automatically without adding strings to the code
@@ -3541,7 +3556,7 @@ void load_warzone_override_textures ()
 		initialize_terrain_texture_scales ( directory_textdir_path );
 	}
 
-	
+
 	//VJ 051228 last look for the user defined directories. Specified in a text file in the map dir
 	sprintf (directory_textdir_path, "%s\\texturedirs.txt",get_current_game_session()->data_path);
 
@@ -3576,7 +3591,7 @@ void load_warzone_override_textures ()
 					i--;
 				p[i+1]='\0';
 				while (p[0] == ' ')
-				  p++;
+					p++;
 				debug_log("=== Looking for additional textures in %s",p);
 
 				// get override texture names in array
@@ -3602,7 +3617,7 @@ void load_warzone_override_textures ()
 	//VJ 050820 dynamic water
 	if (global_dynamic_water)
 		load_texture_water();
-		
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3618,9 +3633,9 @@ void restore_default_textures ( void )
 	//VJ 050621 restore backup commandline
 	command_line_texture_colour = texture_colour_bak;
 
-   for (count = 0; count < MAX_TEXTURES; count++)
-   if (system_texture_override_names[count].type > 0)
-   {
+	for (count = 0; count < MAX_TEXTURES; count++)
+	if (system_texture_override_names[count].type > 0)
+	{
 
 #if DEBUG_MODULE
 		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
@@ -3639,26 +3654,26 @@ void restore_default_textures ( void )
 
 	}
 
-	//VJ 060120 release all texture loaded after the default system textures (water etc) 
+	//VJ 060120 release all texture loaded after the default system textures (water etc)
 	if (current_map_info.last_texture > number_of_system_textures)
 	{
-		     
+
 		for ( count = number_of_system_textures+1; count < current_map_info.last_texture; count++)
-		{		
-			
+		{
+
 	#if DEBUG_MODULE
 			debug_log("Additional texture release (%d-%d) ",count);
-	#endif	
-		
+	#endif
+
 			if (system_textures[count]->surface)
 				release_texture_surface ( &system_textures[count]->surface );
-	
+
 		}
-   }
-  
-   //VJ 051225 reset map data 
-   initialise_custom_map_info();
-   
+	}
+
+	//VJ 051225 reset map data
+	initialise_custom_map_info();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3703,7 +3718,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 					i--;
 				p[i+1]='\0';
 				while (p[0] == ' ')
-				  p++;
+					p++;
 				index = -1;
 
 				for ( c = 0; c < number_of_system_textures; c++ )
@@ -3721,7 +3736,7 @@ static void initialize_terrain_texture_scales ( const char *mapname )
 			p = strtok(NULL,"#");
 			if (p)
 			{
-				current_map_info.texture_override_scales[count][1] = atoi(p);				
+				current_map_info.texture_override_scales[count][1] = atoi(p);
 			}
 
 			fscanf(fin,"%[^\n]\n",buf);
@@ -3752,7 +3767,7 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 		debug_fatal ("%s is not 8, 24 or 32 bit! (it is : %d)", full_override_texture_filename, bmih.biBitCount);
 		return 0;
 	}
-   /* unlimited size
+	/* unlimited size
 	if (bmih.biHeight > MAX_TEXTURE_HEIGHT)
 	{
 		debug_log ("%s taller than the maximum allowed", full_override_texture_filename );
@@ -3797,7 +3812,7 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 
 			override_screen = load_dds_file_screen(full_override_texture_filename, 0);
 
-			//VJ 050821 check if it worked		
+			//VJ 050821 check if it worked
 			if (override_screen) {
 				// adjust alpha bit if user screen contains alpha
 				if (override_screen->contains_alpha)
@@ -3910,7 +3925,7 @@ void load_texture_water( void )
 		fscanf(fin,"%[^\n]\n",buf);
 
 		debug_log("dynamic water %s %s",
-		current_map_info.water_info[i].name_top, 
+		current_map_info.water_info[i].name_top,
 		current_map_info.water_info[i].name_bottom);
 	}
 
@@ -3941,7 +3956,7 @@ void load_texture_water( void )
 		system_texture_info[count].flags.mipmap_enabled = 1;
 		system_texture_info[count].flags.wrapped = 1;
 
-		system_textures[count]  = override_screen;
+		system_textures[count] = override_screen;
 		system_texture_info[count].texture_screen = override_screen;
 
 		// load dynamic texture series
@@ -3961,9 +3976,9 @@ void load_texture_water( void )
 				sprintf(system_texture_names[count],"%s%02d",current_map_info.water_info[i].name_bottom,rivernr);
 			else
 				sprintf(system_texture_names[count],"%s%03d",current_map_info.water_info[i].name_bottom,rivernr);
-		   
-		   //debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
-			
+
+			//debug_log("water %d %d %d %s",count, i, rivernr, system_texture_names[count]);
+
 			rivernr++;
 
 			if (current_map_info.water_info[i].type == 1){
@@ -3976,13 +3991,13 @@ void load_texture_water( void )
 			}
 
 			if (override_screen) {
-				system_textures[count]  = override_screen;
+				system_textures[count] = override_screen;
 				system_texture_info[count].texture_screen = override_screen;
 			}
 		}
 		placenr += current_map_info.water_info[i].number+1;
 	}
-	
+
 	//VJ 010620 add total number of textures
 	current_map_info.last_texture = placenr;
 
@@ -4037,7 +4052,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			 	debug_fatal("Compressed dds files not supported: %s",full_override_texture_filename);
 			}
 
-			if ( ddsh.ddpfPixelFormat.dwFlags & DDPF_FOURCC  )
+			if ( ddsh.ddpfPixelFormat.dwFlags & DDPF_FOURCC )
 			{
 			 	debug_fatal("Only RGB dds files supported: %s",full_override_texture_filename);
 			}
@@ -4073,7 +4088,7 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			//VJ 050426 create a new texture map with mipmap levels if needed
 			//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 
-		   buffer_size = width * height * nrbyte;
+			buffer_size = width * height * nrbyte;
 			buffer = safe_malloc (buffer_size);
 			bufferswap = safe_malloc (buffer_size);
 
@@ -4168,15 +4183,15 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 			//VJ 041217 if it is a 8bit texture read the palette, structure rgb_colour
 
 	if (bmih.biBitCount == 8){
-  		fread (&pal, sizeof (pal), 1, fp);
+		fread (&pal, sizeof (pal), 1, fp);
 	}
 
 	//check bitmap header for correct format
 	if (!check_bitmap_header ( bmih, full_override_texture_filename) )
 	{
 		safe_fclose (fp);
-   	return NULL;
-   }
+		return NULL;
+	}
 
 
 	//VJ 050426 create a new texture map with mipmap levels if needed
@@ -4188,14 +4203,14 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 	debug_log(full_override_texture_filename);
 	override_screen = create_texture_map (width, height, type,
-        	       	   mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
+							mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
 
 	if (bmih.biBitCount == 8)
-      buffer_size = width * height;
+		buffer_size = width * height;
 	else if (bmih.biBitCount == 24)
-	   buffer_size = width * height * 3;
+		buffer_size = width * height * 3;
 	else if (bmih.biBitCount == 32)
-	   buffer_size = width * height * 4;
+		buffer_size = width * height * 4;
 	// note color depth is assumed here
 
 	buffer = safe_malloc (buffer_size);
@@ -4206,8 +4221,8 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 
 	//VJ 050618 changed this part to proper texture handling instead of drawing pixels on a screen
 	//swap lines around, bitmaps are upside down in the game
-   if (bmih.biBitCount == 24)
-   {
+	if (bmih.biBitCount == 24)
+	{
 		for ( y = 0; y < height; y++ )
 		{
 			for ( x = 0; x < width; x++ )
@@ -4239,9 +4254,9 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	}
 
 	//only for NON PALETTE files
-   if (bmih.biBitCount == 24 || bmih.biBitCount == 32)
+	if (bmih.biBitCount == 24 || bmih.biBitCount == 32)
 		convert_no_alpha_24bit_texture_map_data ( bufferswap, width, height , override_screen, fp );
-   else if (bmih.biBitCount == 8)
+	else if (bmih.biBitCount == 8)
 		convert_no_alpha_texture_map_data ( buffer, width, height, override_screen , fp );
 
 	unlock_texture ( override_screen );
@@ -4264,28 +4279,28 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 void initialise_custom_map_info( void )
 {
 	int i;
-	
+
 	current_map_info.user_defined_contour_heights = 0;
 	for (i = 0; i < 9; i++)
 		current_map_info.contour_heights[i] = 0;
-		 
+
 	for (i = 0; i < 64; i ++)
 	{
 		current_map_info.texture_override_scales[i][0] = 0;
 		current_map_info.texture_override_scales[i][1] = 64; //safe value
 	}
-	
+
 	current_map_info.name[0] = '\0';
-	
+
 	current_map_info.mapnr = 0;
 
-//set the map season to default. There are 4 settings: default and desert, 
+//set the map season to default. There are 4 settings: default and desert,
 //and summer and winter for the maps that change seasonally
 //VJ 060319 further bug fixes
 	current_map_info.season = SESSION_SEASON_INVALID;
-	
+
 	current_map_info.dry_river = 0;
-	
+
 	current_map_info.last_texture = number_of_system_textures;
 
 	for (i = 0; i < 3; i++){
@@ -4300,7 +4315,7 @@ void initialise_custom_map_info( void )
 		current_map_info.water_info[i].name_top[0] = '\0';
 		current_map_info.water_info[i].name_bottom[0] = '\0';
 	}
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4323,10 +4338,10 @@ void read_map_info_data ( void )
 
 	const char
 		*map, *p;
-	
-	directory_file_list 
+
+	directory_file_list
 		*list;
-	
+
 	//VJ 060218 texture bug autosave fix, mapinfo was reinitialized each autosave
 	// moved to init_3d.c
 	//initialise_custom_map_info();
@@ -4334,68 +4349,68 @@ void read_map_info_data ( void )
 	// VJ 051223 head of the session list, title field contains warzone name "Taiwan" etc
 	//strcpy(current_map_info.name, get_session_list()->title);
 	//VJ 040206: doesn't work in MP because the title is: -multiplayer- !!!
-	
-	// the purpose of this bit of code is to detect the warzone name which is then used 
+
+	// the purpose of this bit of code is to detect the warzone name which is then used
 	// as directory name under /graphics/textures/terrain/[name] to read the textures from
 
 	//VJ 020206 Changed to using data_path, because that one is initialized in multiplayer
-	
-	// try and read an integer > 9 
+
+	// try and read an integer > 9
 	map = strchr(get_current_game_session()->data_path, '\0')-2;
 	current_map_info.mapnr = atoi(map);
 	// if result = 0 then read it as an integer < 9
 	if (current_map_info.mapnr == 0)	{
 		map++;
 		current_map_info.mapnr = atoi(map);
-	}	
+	}
 
 	debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: warzone number: %d",current_map_info.mapnr);
 
-	// now find the "short" name of the warzone by the campaign file. This is how it is done in the first place in uisession.c!	
+	// now find the "short" name of the warzone by the campaign file. This is how it is done in the first place in uisession.c!
 	//use the data_path to find the texture name by looking at the first file in the first campaign dir
 	//which is always taiwan.chc or yemen.chc etc
 	sprintf(filename,"%s\\camp01\\*.chc", get_current_game_session()->data_path);
 	list = get_first_directory_file(filename);
 	map = get_directory_file_filename (list);
-	
-	// look for the last occurence of '\\' or '/' 
+
+	// look for the last occurence of '\\' or '/'
 	if (strrchr(map,'\\')){
 		map = strrchr(map, '\\');
 	}
-	else	
+	else
 	if (strrchr(map,'/')){
 		map = strrchr(map, '/');
 	}
 	//copy the file name
 	strcpy(current_map_info.name, map);
-	
+
 	current_map_info.name[strlen(map)-4] = '\0';
-			
+
 	debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: warzone name: %s",current_map_info.name);
 
 	//we now know the name
 	// parse mapinfo.txt that should be added to new custom campaigns
 	sprintf(filename,"%s\\mapinfo.txt", get_current_game_session()->data_path);
-	
+
 	//VJ 050820 added file checking to prevent crash
 	if ( file_exist ( filename ) )
-	{		
-		
+	{
+
 		debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: reading mainfo.txt: %s",filename);
-		
+
 		fin = fopen(filename,"r");
-	
+
 		// read comments
 		fscanf(fin,"%[^\n]\n",buf);
 		while (buf[0] == '#')
 			fscanf(fin,"%[^\n]\n",buf);
-		
+
 		for (j = 0 ; j < 3; j++)
 		{
 			//VJ 051225 added more map info for custom map reading
 			//scan contours and camo
-			
-			// if a season is not determined by the interface, MP or savegame			
+
+			// if a season is not determined by the interface, MP or savegame
 			if (current_map_info.season == SESSION_SEASON_INVALID)
 			{
 				if (strstr(buf, "season"))
@@ -4404,13 +4419,13 @@ void read_map_info_data ( void )
 					p = strtok(NULL,"#");
 					if (p)
 						current_map_info.season = atoi(p);
-					if (current_map_info.season == 0)	
-						current_map_info.season = 1;	
+					if (current_map_info.season == 0)
+						current_map_info.season = 1;
 					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: season: %d",	current_map_info.season);
 					set_global_season( current_map_info.season );
-				}	
+				}
 			}
-	
+
 			//scan for 2D map contour info
 			if (strstr(buf, "contour"))
 			{
@@ -4419,19 +4434,19 @@ void read_map_info_data ( void )
 				{
 					p = strtok(NULL,",#");
 					if (p)
-				  		current_map_info.contour_heights[i] = atof(p);
+						current_map_info.contour_heights[i] = atof(p);
 					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: custom contour %f",current_map_info.contour_heights[i]);
-				}			
-				
+				}
+
 				// rude check if info makes sense
 				if (current_map_info.contour_heights[8] > 0)
 					current_map_info.user_defined_contour_heights = 1;
-			
-			   // set the contours again, this is also done in the terrtype.c 
+
+				// set the contours again, this is also done in the terrtype.c
 				if (current_map_info.user_defined_contour_heights)
-			  		set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
+					set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
 			}
-			
+
 			if (strstr(buf, "dry river"))
 			{
 				p = strtok(buf,"=");
@@ -4439,46 +4454,46 @@ void read_map_info_data ( void )
 				if (p)
 					current_map_info.dry_river = atoi(p);
 				debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: dry river: %d",	current_map_info.dry_river);
-			}	
-			
+			}
+
 			fscanf(fin,"%[^\n]\n",buf);
 		}
-		
+
 		fclose(fin);
 	}
-	
+
 	//if no mapinfo.tct and no season determined yet, initialize what we know
 	if(current_map_info.season == SESSION_SEASON_INVALID)
 	{
 		switch (current_map_info.mapnr) {
-			case 5: 
-			case 6: 
-			case 9: 
-			case 10: 
-			case 12: 
-			{				
+			case 5:
+			case 6:
+			case 9:
+			case 10:
+			case 12:
+			{
 				set_global_season( SESSION_SEASON_DESERT );
 				break;
-			}	
+			}
 			case 3: //georgia
 			{
 				set_global_season( SESSION_SEASON_SUMMER );
 				break;
 			}
-			case 7: 
-			case 8: 
+			case 7:
+			case 8:
 			{
 				set_global_season( SESSION_SEASON_WINTER );
 				break;
 			}
 			default:
 			{
-				set_global_season( SESSION_SEASON_DEFAULT );		
+				set_global_season( SESSION_SEASON_DEFAULT );
 			}
 		}
 		debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: default season: %d",	current_map_info.season);
 	}
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
