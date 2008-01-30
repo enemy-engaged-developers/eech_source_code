@@ -226,7 +226,7 @@ static void count_sub_object_statistics ( object_3d_database_entry *sub_object, 
 
 /** Gets the first nul terminated string from file and puts it in buf.
  *  Makes sure not to exceed the buf_len, and will NUL-terminate where if the string is truncated
- *  If uppercase is TRUE it will switch all characters in the string to uppercase (useful 
+ *  If uppercase is TRUE it will switch all characters in the string to uppercase (useful
  *  for case insensitive filenames)
  */
 static int get_nul_string(char* buf, unsigned buf_len, FILE* file, int uppercase)
@@ -275,14 +275,14 @@ static void debug_object(const char* filename, int objid)
 		fprintf(debug, "lighting normals: %d: \n", obj->number_of_lighting_normals);
 		fprintf(debug, "faces: %d: \n", obj->number_of_faces);
 		fprintf(debug, "surfaces: %d: \n", obj->number_of_surfaces);
-		fprintf(debug, "bounding box: x: %.2f %.2f;  y: %.2f, %.2f;  z: %.2f, %.2f\n", 
+		fprintf(debug, "bounding box: x: %.2f %.2f;  y: %.2f, %.2f;  z: %.2f, %.2f\n",
 			obj->bounding_box.xmin,
 			obj->bounding_box.xmax,
 			obj->bounding_box.ymin,
 			obj->bounding_box.ymax,
 			obj->bounding_box.zmin,
 			obj->bounding_box.zmax);
-		fprintf(debug, "bounding box2: x: %.2f %.2f;  y: %.2f, %.2f;  z: %.2f, %.2f\n", 
+		fprintf(debug, "bounding box2: x: %.2f %.2f;  y: %.2f, %.2f;  z: %.2f, %.2f\n",
 			obj->bounding_box2.xmin,
 			obj->bounding_box2.xmax,
 			obj->bounding_box2.ymin,
@@ -309,7 +309,7 @@ static void debug_object(const char* filename, int objid)
 			{
 				fprintf(debug, "%d ", points->point);
 /*					fprintf(debug, "%d (%d, %d, %d), ", points->point,
-//					fprintf(debug, "(%d, %d, %d), ", 
+//					fprintf(debug, "(%d, %d, %d), ",
 						obj->points[points->point].x,
 						obj->points[points->point].y,
 						obj->points[points->point].z
@@ -318,7 +318,7 @@ static void debug_object(const char* filename, int objid)
 				points++;
 			}
 //				fprintf(debug, ";  normal: %d - (%d, %d)\n", pref,
-			fprintf(debug, "(%d, %d)", 
+			fprintf(debug, "(%d, %d)",
 				obj->point_normals[pref].heading,
 				obj->point_normals[pref].pitch
 				);
@@ -329,7 +329,7 @@ static void debug_object(const char* filename, int objid)
 					);*/
 			fprintf(debug, "\n");
 		}
-		
+
 		{
 			int poly_index = 0;
 			points = obj->object_faces_point_plain_list;
@@ -342,10 +342,10 @@ static void debug_object(const char* filename, int objid)
 
 				fprintf(debug, "number of faces: %d\n  ", surf->number_of_faces);
 				fprintf(debug, "number of points: %d\n  ", npoints);
-				
+
 //					surf->surface_flags = 0;
 //					surf->polygons = 1;
-				
+
 				fprintf(debug, "pols: %d,  detail: %d,  smoothed: %d,  textured: %d  lumi tex: %d  additive: %d  trans: %d  lumi: %d  spec: %d\n,",
 					surf->polygons,
 					surf->detail,
@@ -357,7 +357,7 @@ static void debug_object(const char* filename, int objid)
 					surf->luminous,
 					surf->has_specularity
 					);
-				fprintf(debug, "flags: %08x, %8x, %d, %d, %d\n", 
+				fprintf(debug, "flags: %08x, %8x, %d, %d, %d\n",
 					surf->surface_flags,
 					surf->colour,
 					surf->texture_index,
@@ -367,19 +367,19 @@ static void debug_object(const char* filename, int objid)
 				for (count = 0; count < surf->number_of_faces; count++)
 				{
 					int nvertices = obj->faces[poly_index].number_of_points;
-					
+
 					while (nvertices--)
 					{
 						int
 							surface_point_index;
-					
+
 						surface_point_index = points->point;
 						fprintf(debug, "  idx: %d -> %d; ", surface_point_index, surface_points[surface_point_index]);
 						if (surf->textured)
 							fprintf(debug, "  u: %.2f, v: %.2f;  ", texture_points[surface_point_index].u, texture_points[surface_point_index].v);
 						fprintf(debug, "\n");
-						
-						points++;	
+
+						points++;
 					}
 
 					{
@@ -387,7 +387,7 @@ static void debug_object(const char* filename, int objid)
 //						int pref = obj->object_face_normal_references[surface_point_index].point;
 						fprintf(debug, "%d, normal: [%d,%d]", pref, obj->point_normals[pref].heading, obj->point_normals[pref].pitch);
 						fprintf(debug, "\n");
-					}						
+					}
 
 					poly_index++;
 				}
@@ -398,7 +398,7 @@ static void debug_object(const char* filename, int objid)
 				fprintf(debug, "\n");
 			}
 		}
-		
+
 		fclose(debug);
 	}
 }
@@ -607,7 +607,7 @@ static void read_scene(FILE* fp)
 
 	if (scene_index == OBJECT_3D_APACHE_VIRTUAL_COCKPIT_LEVEL1)
 	{
-		number_of_scene_sub_objects++;	
+		number_of_scene_sub_objects++;
 	}
 
 	//
@@ -891,7 +891,7 @@ static void read_scene(FILE* fp)
 
 	initialise_scene_visible_sub_objects ( scene_index );
 
-	initialise_scene_bounding_sub_objects ( scene_index );	
+	initialise_scene_bounding_sub_objects ( scene_index );
 }
 
 
@@ -920,7 +920,7 @@ static void initialise_custom_scenes(const char* directory)
 	object_3d_scene_database_entry* scene;
 
 	custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
-		
+
 	// internal occkpit
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT];
 	scene->number_of_sub_objects = 1;  // the entire cockpit
@@ -965,7 +965,7 @@ static void initialise_custom_scenes(const char* directory)
 				if (read_object(&objects_3d_data[right_throttle], filename))
 				{
 					int i;
-					
+
 					for (i= 0; i < 4; i++)
 					{
 						entry = &main_entry->sub_objects[i+1];
@@ -974,7 +974,7 @@ static void initialise_custom_scenes(const char* directory)
 						// left throttle in position 0 and 2, right in 1 and 3
 						initialise_sub_object(entry, (i % 2) ? right_throttle : left_throttle);
 					}
-	
+
 					custom_3d_models.arneh_ah64d_cockpit = TRUE;
 				}
 			}
@@ -1037,7 +1037,7 @@ static void initialise_custom_scenes(const char* directory)
 		object_3d_database_entry* entry = &scene->sub_objects[0];
 
 		custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
-		
+
 		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-nose.eeo", directory);
 		if (read_object(&objects_3d_data[next_free_custom_object], filename))
 		{
@@ -1048,7 +1048,7 @@ static void initialise_custom_scenes(const char* directory)
 			{
 				entry->number_of_sub_objects = 1;
 				entry->sub_objects = &scene->sub_objects[1];
-				
+
 				entry->sub_objects[0].parent = entry;
 				entry = &entry->sub_objects[0];
 				initialise_sub_object(entry, next_free_custom_object++);
@@ -1171,20 +1171,13 @@ void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out)
 
 static int read_object(object_3d *obj, const char* filename)
 {
-	FILE*
-		file;
+	FILE
+		*file;
 
 	int
-		i,
 		format_version,
-		number_of_points,
-		number_of_faces,
-		number_of_polygoned_faces,
-		number_of_surfaces,
 		number_of_texture_points,
-		number_of_point_normals,
-		number_of_lighting_normals,
-		culling_normals_offset,
+		number_of_polygoned_faces,
 		number_of_point_references,
 		number_of_surface_point_references,
 		number_of_surface_point_normals;
@@ -1193,29 +1186,26 @@ static int read_object(object_3d *obj, const char* filename)
 	if ( !file )
 		return FALSE;
 
+	debug_log ( "Replacing 3d object %s", filename );
+
 	fread ( &format_version, 4, 1, file );
-	fread ( &number_of_points, 4, 1, file );
-	fread ( &number_of_faces, 4, 1, file );
+
+	if (format_version != 1)
+	{
+		debug_log("Incompatible object: %s (object version %d)", filename, format_version);
+		return FALSE;
+	}
+
+	fread ( &obj->number_of_points, 4, 1, file );
+	fread ( &obj->number_of_faces, 4, 1, file );
 	fread ( &number_of_polygoned_faces, 4, 1, file );
-	fread ( &number_of_surfaces, 4, 1, file );
-	fread ( &number_of_point_normals, 4, 1, file );
-	fread ( &number_of_lighting_normals, 4, 1, file );
-	fread ( &culling_normals_offset, 4, 1, file );
+	fread ( &obj->number_of_surfaces, 4, 1, file );
+	fread ( &obj->number_of_point_normals, 4, 1, file );
+	fread ( &obj->number_of_lighting_normals, 4, 1, file );
 	fread ( &number_of_point_references, 4, 1, file );
 	fread ( &number_of_texture_points, 4, 1, file );
 	fread ( &number_of_surface_point_references, 4, 1, file );
 	fread ( &number_of_surface_point_normals, 4, 1, file );
-
-	if (format_version != 1)
-		debug_fatal("Incompatible object: %s (object version %d)", filename, format_version);
-
-	// assign these in separate step since they are all just two bytes, whie four in file format
-	obj->number_of_points = number_of_points;
-	obj->number_of_faces = number_of_faces;
-	obj->number_of_surfaces = number_of_surfaces;
-	obj->number_of_point_normals = number_of_point_normals;
-	obj->number_of_lighting_normals = number_of_lighting_normals;
-	obj->culling_normals_offset = culling_normals_offset;
 
 	fread ( &obj->bounding_box, 24, 1, file );
 	fread ( &obj->bounding_box2, 24, 1, file );
@@ -1277,7 +1267,6 @@ static int read_object(object_3d *obj, const char* filename)
 	}
 	else
 		obj->surface_points = NULL;
-
 	if ( number_of_surface_point_normals )
 	{
 		obj->surface_point_normals = safe_malloc ( 2 * number_of_surface_point_normals );
@@ -1289,18 +1278,27 @@ static int read_object(object_3d *obj, const char* filename)
 	obj->custom = 1;
 
 	// texture overrides
-	for (i = 0; i < obj->number_of_surfaces; i++)
 	{
-		char texture_name[256];
+		int
+			i;
+		char
+			texture_name[256];
 
-		if (!get_nul_string(texture_name, sizeof(texture_name), file, TRUE))
-			break;
+		for (i = 0; i < obj->number_of_surfaces; i++)
+		{
+			if (!get_nul_string(texture_name, sizeof(texture_name), file, TRUE))
+				break;
+			if (*texture_name)
+				obj->surfaces[i].texture_index = add_new_texture(texture_name);
 
-		if (*texture_name)
-			obj->surfaces[i].texture_index = add_new_texture(texture_name);
+			if (!get_nul_string(texture_name, sizeof(texture_name), file, TRUE))
+				break;
+			if (*texture_name)
+				obj->surfaces[i].luminosity_texture_index = add_new_texture(texture_name);
+		}
 	}
 
-	fclose(file);
+	fclose ( file );
 
 	return TRUE;
 }
@@ -1540,7 +1538,7 @@ void initialise_3d_objects ( const char *directory )
 
 			int
 				number_of_real_polygons;
-	
+
 			fread ( &number_of_points, sizeof ( int ), 1, fp );
 			fread ( &number_of_surfaces, sizeof ( int ), 1, fp );
 			fread ( &number_of_faces, sizeof ( int ), 1, fp );
@@ -1579,16 +1577,16 @@ void initialise_3d_objects ( const char *directory )
 
 			fread ( &objects_3d_data[count].bounding_box, sizeof ( object_3d_bounds ), 1, fp );
 			fread ( &objects_3d_data[count].bounding_box2, sizeof ( object_3d_bounds ), 1, fp );
-	
+
 			objects_3d_data[count].surfaces = current_surfaces;
-	
+
 			current_surfaces += objects_3d_data[count].number_of_surfaces;
 
 			number_of_real_polygons = 0;
 
 			for ( surface_count = 0; surface_count < objects_3d_data[count].number_of_surfaces; surface_count++ )
 			{
-	
+
 				fread ( &objects_3d_data[count].surfaces[surface_count].surface_flags, sizeof ( unsigned int ), 1, fp );
 				fread ( &objects_3d_data[count].surfaces[surface_count].texture_index, sizeof ( unsigned short int ), 1, fp );
 				fread ( &objects_3d_data[count].surfaces[surface_count].luminosity_texture_index, sizeof ( unsigned short int ), 1, fp );
@@ -1617,65 +1615,65 @@ void initialise_3d_objects ( const char *directory )
 					number_of_real_polygons += objects_3d_data[count].surfaces[surface_count].number_of_faces;
 				}
 			}
-	
+
 			if ( objects_3d_data[count].number_of_points )
 			{
 
 				//
 				// XYZ points are in separate memory mapped file - just set up the pointer
 				//
-	
+
 				objects_3d_data[count].points = current_points;
-	
+
 				current_points += objects_3d_data[count].number_of_points;
 			}
-	
+
 			if ( objects_3d_data[count].number_of_point_normals )
 			{
-	
+
 				//
 				// Read in the point normals
 				//
-	
+
 				objects_3d_data[count].point_normals = current_point_normals;
-	
+
 				current_point_normals += objects_3d_data[count].number_of_point_normals;
-	
+
 				fread ( objects_3d_data[count].point_normals, sizeof ( object_3d_heading_pitch_normal ), objects_3d_data[count].number_of_point_normals, fp );
 			}
-	
+
 			fread ( &point_reference_count, sizeof ( int ), 1, fp );
 			fread ( &face_normal_reference_count, sizeof ( int ), 1, fp );
-	
+
 			//
 			// Read in the data for the object
 			//
-	
+
 			if ( objects_3d_data[count].number_of_faces )
 			{
 
 				fread ( current_faces, sizeof ( struct OBJECT_3D_FACE ), number_of_real_polygons, fp );
-	
+
 				objects_3d_data[count].faces = current_faces;
-		
+
 				current_faces += number_of_real_polygons;
 			}
-	
+
 			if ( point_reference_count )
 			{
-	
+
 				fread ( current_faces_point_list, sizeof ( struct POINT_3D_SHORT_REFERENCE ), point_reference_count, fp );
-	
+
 				objects_3d_data[count].object_faces_point_plain_list = current_faces_point_list;
 
 				current_faces_point_list += point_reference_count;
 			}
-	
+
 			if ( face_normal_reference_count )
 			{
 
 				fread ( current_faces_face_normal_list, sizeof ( struct POINT_3D_PLAIN_REFERENCE ), face_normal_reference_count, fp );
-	
+
 				objects_3d_data[count].object_face_normal_references = current_faces_face_normal_list;
 
 				current_faces_face_normal_list += face_normal_reference_count;
@@ -1703,7 +1701,7 @@ void initialise_3d_objects ( const char *directory )
 				objid;
 
 			if ( !isxdigit ( fi.name[0] ) || !isxdigit ( fi.name[1] ) ||
-			     !isxdigit ( fi.name[2] ) || !isxdigit ( fi.name[3] ) )
+				 !isxdigit ( fi.name[2] ) || !isxdigit ( fi.name[3] ) )
 				continue;
 
 			objid = strtol ( fi.name, NULL, 16 );
@@ -1712,7 +1710,7 @@ void initialise_3d_objects ( const char *directory )
 
 			obj = &objects_3d_data[objid];
 			sprintf ( filename, "%s\\OBJECTS\\%s", directory, fi.name );
-			
+
 			read_object(obj, filename);
 		}
 		_findclose ( handle );
@@ -1768,7 +1766,7 @@ void initialise_3d_objects ( const char *directory )
 	fread ( &total_number_of_scene_sub_object_keyframes, sizeof ( int ), 1, fp );
 	fread ( &total_number_of_scene_sub_object_dissolve_keyframes, sizeof ( int ), 1, fp );
 
-	
+
 
 	//
 	// Allocate the memory
@@ -1937,11 +1935,11 @@ void initialise_3d_objects ( const char *directory )
 
 				fread ( &keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
 				fread ( &keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-		
+
 				fread ( &keyframes[keyframe_count].x, sizeof ( float ), 1, fp );
 				fread ( &keyframes[keyframe_count].y, sizeof ( float ), 1, fp );
 				fread ( &keyframes[keyframe_count].z, sizeof ( float ), 1, fp );
-		
+
 				fread ( &keyframes[keyframe_count].heading, sizeof ( float ), 1, fp );
 				fread ( &keyframes[keyframe_count].pitch, sizeof ( float ), 1, fp );
 				fread ( &keyframes[keyframe_count].roll, sizeof ( float ), 1, fp );
@@ -1982,7 +1980,7 @@ void initialise_3d_objects ( const char *directory )
 
 	if ( d3d_using_hardware_tnl )
 	{
-	
+
 		initialise_3d_objects_in_d3d ();
 	}
 
@@ -2072,10 +2070,10 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 
 		fread ( &sub_object->relative_heading_maximum, sizeof ( float ), 1, fp );
 		fread ( &sub_object->relative_heading_minimum, sizeof ( float ), 1, fp );
-	
+
 		fread ( &sub_object->relative_pitch_maximum, sizeof ( float ), 1, fp );
 		fread ( &sub_object->relative_pitch_minimum, sizeof ( float ), 1, fp );
-	
+
 		fread ( &sub_object->relative_roll_maximum, sizeof ( float ), 1, fp );
 		fread ( &sub_object->relative_roll_minimum, sizeof ( float ), 1, fp );
 	}
@@ -2726,7 +2724,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	//
 
 	object->object_dissolve_value = 255;
-	
+
 	return ( object );
 }
 
@@ -2741,7 +2739,7 @@ void dump_object(object_3d_instance* obj, FILE* output)
 	int i;
 	int index = obj->object_number;
 	object_3d_scene_database_entry* scene = &objects_3d_scene_database[index];
-	
+
 	fprintf(output, "index: %04X\n", index);
 	fprintf(output, "view position: %.3f %.3f %.3f\n", obj->view_position.x, obj->view_position.y, obj->view_position.z);
 	fprintf(output, "relative scale: %.3f %.3f %.3f\n", obj->relative_scale.x, obj->relative_scale.y, obj->relative_scale.z);
@@ -2794,14 +2792,14 @@ void dump_sub_object(object_3d_sub_instance* obj, FILE* output)
 //	fprintf(output, "sub object number: %X\n", obj->object_number);
 	fprintf(output, "relative position: %.3f %.3f %.3f\n", obj->relative_position.x, obj->relative_position.y, obj->relative_position.z);
 	fprintf(output, "heading: %.3f pitch: %.3f roll %.3f\n", deg(obj->relative_heading), obj->relative_pitch, obj->relative_roll);
-}		
+}
 */
 
 void dump_sub_object(object_3d_sub_instance* obj, FILE* output)
 {
 //	int index = obj->object_number;
 //	object_3d_scene_database_entry* scene = &objects_3d_scene_database[index];
-	
+
 //	fprintf(output, "index: %X\n", index);
 //	fprintf(output, "sub object number: %X\n", obj->object_number);
 	fprintf(output, "relative position: %.3f %.3f %.3f\n", obj->relative_position.x, obj->relative_position.y, obj->relative_position.z);
@@ -2826,7 +2824,7 @@ void dump_sub_object(object_3d_sub_instance* obj, FILE* output)
 
 void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_instance *sub_objects, struct OBJECT_3D_DATABASE_ENTRY *source_objects, int number_of_sub_objects )
 {
-    // number_of_sub_objects is the number of sub objects at this level, there might be more at lower levels */
+	// number_of_sub_objects is the number of sub objects at this level, there might be more at lower levels */
 	int
 		temp;
 
@@ -2839,11 +2837,11 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 			sub_objects[temp].relative_heading = source_objects[temp].keyframes[0].heading;
 			sub_objects[temp].relative_pitch = source_objects[temp].keyframes[0].pitch;
 			sub_objects[temp].relative_roll = source_objects[temp].keyframes[0].roll;
-	
+
 			sub_objects[temp].relative_position.x = source_objects[temp].keyframes[0].x;
 			sub_objects[temp].relative_position.y = source_objects[temp].keyframes[0].y;
 			sub_objects[temp].relative_position.z = source_objects[temp].keyframes[0].z;
-	
+
 			sub_objects[temp].relative_scale.x = source_objects[temp].keyframes[0].scale_x;
 			sub_objects[temp].relative_scale.y = source_objects[temp].keyframes[0].scale_y;
 			sub_objects[temp].relative_scale.z = source_objects[temp].keyframes[0].scale_z;
@@ -2853,16 +2851,16 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 			sub_objects[temp].relative_heading = 0.0;
 			sub_objects[temp].relative_pitch = 0.0;
 			sub_objects[temp].relative_roll = 0.0;
-	
+
 			sub_objects[temp].relative_position.x = 0.0;
 			sub_objects[temp].relative_position.y = 0.0;
 			sub_objects[temp].relative_position.z = 0.0;
-	
+
 			sub_objects[temp].relative_scale.x = 1.0;
 			sub_objects[temp].relative_scale.y = 1.0;
 			sub_objects[temp].relative_scale.z = 1.0;
 		}
-		
+
 		sub_objects[temp].visible_object = source_objects[temp].default_visibility;
 
 		sub_objects[temp].object_dissolve_value = 255;
@@ -3030,13 +3028,13 @@ int get_object_3d_collision_object_geometry_triangle ( object_3d_index_numbers i
 				surface++;
 
 				number_of_surface_points = obj->surfaces[surface].number_of_points;
-		
+
 				if ( number_of_surface_points == 0 )
 				{
-		
+
 					number_of_surface_points = 256;
 				}
-		
+
 				number_of_surface_faces = obj->surfaces[surface].number_of_faces;
 			}
 		}
@@ -3414,7 +3412,7 @@ object_3d_scene_camera *get_3d_object_camera ( object_3d_instance *object, objec
 
 			if ( depth == 0 )
 			{
-	
+
 				return ( &objects_3d_camera_database[ objects_3d_scene_database[scene_index].cameras[count].camera_index ] );
 			}
 			else
@@ -3545,7 +3543,7 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 		vp->position.x += obj->vp.x;
 		vp->position.y += obj->vp.y;
 		vp->position.z += obj->vp.z;
-	
+
 		heading = keyframe.heading;
 		pitch = keyframe.pitch;
 		roll = keyframe.roll;
@@ -3595,9 +3593,9 @@ int get_object_3d_camera_position ( object_3d_instance *obj, object_3d_camera_in
 		{
 
 			get_3d_transformation_matrix ( attitude, heading, -pitch, -roll );
-	
+
 			multiply_matrix3x3_matrix3x3 ( vp->attitude, attitude, new_object_attitude );	//obj->vp.attitude );
-	
+
 			return ( TRUE );
 		}
 	}
@@ -3649,7 +3647,7 @@ void report_all_3d_objects_statistics ( void )
 
 		for ( current_approximation = 0; current_approximation <= objects_3d_scene_database[count].number_of_approximations; current_approximation++ )
 		{
-	
+
 			current_triangles = 0;
 			current_points = 0;
 			current_objects = 0;
@@ -3664,14 +3662,14 @@ void report_all_3d_objects_statistics ( void )
 
 				object_index = objects_3d_scene_database[count].approximations[current_approximation - 1].object_number;
 			}
-	
+
 			current_objects++;
-	
+
 			if ( object_index > 0 )
 			{
-	
+
 				current_triangles += objects_3d_data[object_index].number_of_faces;
-	
+
 				current_points += objects_3d_data[object_index].number_of_points;
 			}
 			else if ( object_index < 0 )
@@ -3691,7 +3689,7 @@ void report_all_3d_objects_statistics ( void )
 
 					if ( objects_3d_scene_database[count].sub_objects[sub_object_index].default_visibility )
 					{
-	
+
 						count_sub_object_statistics ( &objects_3d_scene_database[count].sub_objects[sub_object_index],
 																	current_approximation + 1,
 																	&current_triangles,
@@ -3707,7 +3705,7 @@ void report_all_3d_objects_statistics ( void )
 
 			if ( current_approximation == 0 )
 			{
-	
+
 				debug_log ( "Distance: %f, %d triangles, %d points, %d objects",
 										distance,
 										scene_approximation_triangles[0],
@@ -3716,7 +3714,7 @@ void report_all_3d_objects_statistics ( void )
 			}
 			else
 			{
-	
+
 				debug_log ( "Distance: %f, %d triangles, %d points, %d objects",
 										objects_3d_scene_database[count].approximations[current_approximation-1].distance,
 										scene_approximation_triangles[current_approximation],
@@ -3764,7 +3762,7 @@ void count_sub_object_statistics ( object_3d_database_entry *sub_object, int app
 
 				if ( sub_object->sub_objects[sub_object_index].default_visibility )
 				{
-	
+
 					count_sub_object_statistics ( &sub_object->sub_objects[sub_object_index],
 																approximation,
 																triangles,
