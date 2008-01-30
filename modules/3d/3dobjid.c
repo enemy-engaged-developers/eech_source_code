@@ -145,50 +145,52 @@ void initialise_3d_objects_info ( const char *directory )
 
 	if ( object_3d_number_of_scene_names )
 	{
-		const char* unintialized_name = "UNNAMED_CUSTOM_OBJECT";
-	
+		const char
+			* const object_invalid_index = "OBJECT_INVALID_INDEX";
+		const char* uninitialized_name = "UNNAMED_CUSTOM_OBJECT";
+
 		fread ( &length, sizeof ( int ), 1, fp );
-	
-		length += strlen ( "OBJECT_INVALID_INDEX" ) + 1;
-		length += strlen(unintialized_name) + 1;
-	
+
+		length += strlen ( object_invalid_index ) + 1;
+		length += strlen ( uninitialized_name ) + 1;
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
-	
+
 		object_3d_information_database = safe_malloc ( OBJECT_3D_LAST * sizeof ( object_3d_information ) );
-		object_3d_enumeration_names = safe_malloc ( length * sizeof ( char * ) );
-	
+		object_3d_enumeration_names = safe_malloc ( OBJECT_3D_LAST * sizeof ( char * ) );
+
 		object_3d_enumeration_names[0] = ptr;
 		object_3d_information_database[0].name = ptr;
-	
-		sprintf ( ptr, "OBJECT_INVALID_INDEX" );
-		ptr += strlen ( "OBJECT_INVALID_INDEX" ) + 1;
-		
-		sprintf(ptr, unintialized_name);
-		unintialized_name = ptr;
-		ptr += strlen(unintialized_name);
-	
+
+		strcpy ( ptr, object_invalid_index );
+		ptr += strlen ( ptr ) + 1;
+
+		strcpy ( ptr, uninitialized_name );
+		uninitialized_name = ptr;
+		ptr += strlen ( ptr ) + 1;
+
 		for ( count = 1; count < object_3d_number_of_scene_names; count++ )
 		{
-	
+
 			fread ( &length, sizeof ( int ), 1, fp );
-	
+
 			object_3d_enumeration_names[count] = ptr;
-	
+
 			object_3d_information_database[count].name = ptr;
-	
+
 			fread ( ptr, length, 1, fp );
-	
+
 			fread ( &object_3d_information_database[count].maximum_distance, sizeof ( float ), 1, fp );
-	
+
 			ptr += length;
 		}
 		for (; count < OBJECT_3D_LAST; count++)
 		{
-			object_3d_enumeration_names[count] = unintialized_name;
-			object_3d_information_database[count].name = unintialized_name;
+			object_3d_enumeration_names[count] = uninitialized_name;
+			object_3d_information_database[count].name = uninitialized_name;
 			object_3d_information_database[count].maximum_distance = 1000.0;
 		}
-	
+
 		ptr = NULL;
 	}
 
@@ -202,11 +204,11 @@ void initialise_3d_objects_info ( const char *directory )
 	{
 
 		object_3d_sub_object_names = safe_malloc ( object_3d_number_of_sub_object_names * sizeof ( char * ) );
-	
+
 		fread ( &length, sizeof ( int ), 1, fp );
-	
+
 		length += strlen ( "INVALID_SUB_OBJECT_INDEX" ) + 1;
-	
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
 
 		object_3d_sub_object_names[0] = ptr;
@@ -214,19 +216,19 @@ void initialise_3d_objects_info ( const char *directory )
 		sprintf ( ptr, "INVALID_SUB_OBJECT_INDEX" );
 
 		ptr += strlen ( "INVALID_SUB_OBJECT_INDEX" ) + 1;
-	
+
 		for ( count = 1; count < object_3d_number_of_sub_object_names; count++ )
 		{
-	
+
 			fread ( &length, sizeof ( int ), 1, fp );
-	
+
 			object_3d_sub_object_names[count] = ptr;
 
 			fread ( ptr, length, 1, fp );
-	
+
 			ptr += length;
 		}
-	
+
 		ptr = NULL;
 	}
 
@@ -240,11 +242,11 @@ void initialise_3d_objects_info ( const char *directory )
 	{
 
 		object_3d_camera_names = safe_malloc ( object_3d_number_of_camera_names * sizeof ( char * ) );
-	
+
 		fread ( &length, sizeof ( int ), 1, fp );
-	
+
 		length += strlen ( "INVALID_CAMERA_INDEX" ) + 1;
-	
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
 
 		object_3d_camera_names[0] = ptr;
@@ -252,19 +254,19 @@ void initialise_3d_objects_info ( const char *directory )
 		sprintf ( ptr, "INVALID_CAMERA_INDEX" );
 
 		ptr += strlen ( "INVALID_CAMERA_INDEX" ) + 1;
-	
+
 		for ( count = 1; count < object_3d_number_of_camera_names; count++ )
 		{
-	
+
 			fread ( &length, sizeof ( int ), 1, fp );
-	
+
 			object_3d_camera_names[count] = ptr;
 
 			fread ( ptr, length, 1, fp );
-	
+
 			ptr += length;
 		}
-	
+
 		ptr = NULL;
 	}
 
@@ -276,25 +278,25 @@ void initialise_3d_objects_info ( const char *directory )
 
 	if ( object_3d_number_of_camoflage_set_names )
 	{
-	
+
 		object_3d_camoflage_set_names = safe_malloc ( object_3d_number_of_camoflage_set_names * sizeof ( char * ) );
-	
+
 		fread ( &length, sizeof ( int ), 1, fp );
-	
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < object_3d_number_of_camoflage_set_names; count++ )
 		{
-	
+
 			fread ( &length, sizeof ( int ), 1, fp );
-	
+
 			object_3d_camoflage_set_names[count] = ptr;
 
 			fread ( ptr, length, 1, fp );
-	
+
 			ptr += length;
 		}
-	
+
 		ptr = NULL;
 	}
 
@@ -312,12 +314,12 @@ void initialise_3d_objects_info ( const char *directory )
 		texture_animation_names = safe_malloc ( sizeof ( char * ) * number_of_texture_animations );
 
 		fread ( &length, sizeof ( int ), 1, fp );
-	
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < number_of_texture_animations; count++ )
 		{
-	
+
 			int
 				temp,
 				number_of_frames;
@@ -338,7 +340,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 			for ( temp = 0; temp < number_of_frames; temp++ )
 			{
-	
+
 				fread ( &texture_animations[count].texture_indices[temp], sizeof ( int ), 1, fp );
 			}
 		}
@@ -360,7 +362,7 @@ void initialise_3d_objects_info ( const char *directory )
 		displacement_animation_names = safe_malloc ( sizeof ( char * ) * number_of_displacement_animations );
 
 		fread ( &length, sizeof ( int ), 1, fp );
-	
+
 		ptr = safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < number_of_displacement_animations; count++ )
@@ -384,7 +386,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 			for ( temp = 0; temp < number_of_frames; temp++ )
 			{
-	
+
 				fread ( &displacement_animations[count].texture_indices[temp], sizeof ( int ), 1, fp );
 			}
 		}
