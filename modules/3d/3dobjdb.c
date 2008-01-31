@@ -1176,8 +1176,13 @@ static int read_object(object_3d *obj, const char* filename)
 
 	int
 		format_version,
+		number_of_points,
+		number_of_faces,
+		number_of_surfaces,
 		number_of_texture_points,
 		number_of_polygoned_faces,
+		number_of_point_normals,
+		number_of_lighting_normals,
 		number_of_point_references,
 		number_of_surface_point_references,
 		number_of_surface_point_normals;
@@ -1196,16 +1201,22 @@ static int read_object(object_3d *obj, const char* filename)
 		return FALSE;
 	}
 
-	fread ( &obj->number_of_points, 4, 1, file );
-	fread ( &obj->number_of_faces, 4, 1, file );
+	fread ( &number_of_points, 4, 1, file );
+	fread ( &number_of_faces, 4, 1, file );
 	fread ( &number_of_polygoned_faces, 4, 1, file );
-	fread ( &obj->number_of_surfaces, 4, 1, file );
-	fread ( &obj->number_of_point_normals, 4, 1, file );
-	fread ( &obj->number_of_lighting_normals, 4, 1, file );
+	fread ( &number_of_surfaces, 4, 1, file );
+	fread ( &number_of_point_normals, 4, 1, file );
+	fread ( &number_of_lighting_normals, 4, 1, file );
 	fread ( &number_of_point_references, 4, 1, file );
 	fread ( &number_of_texture_points, 4, 1, file );
 	fread ( &number_of_surface_point_references, 4, 1, file );
 	fread ( &number_of_surface_point_normals, 4, 1, file );
+
+	obj->number_of_points = number_of_points;
+	obj->number_of_faces = number_of_faces;
+	obj->number_of_surfaces = number_of_surfaces;
+	obj->number_of_point_normals = number_of_point_normals;
+	obj->number_of_lighting_normals = number_of_lighting_normals;
 
 	fread ( &obj->bounding_box, 24, 1, file );
 	fread ( &obj->bounding_box2, 24, 1, file );
