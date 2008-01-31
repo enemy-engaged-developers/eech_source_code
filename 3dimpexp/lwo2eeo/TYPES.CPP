@@ -199,5 +199,3 @@ struct RPoly
 
  RPoly(void) : index(0) {}
 };
-
-

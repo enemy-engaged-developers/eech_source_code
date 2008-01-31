@@ -178,13 +178,14 @@ void FindChunks(const LWOFile& lwofile)
      BBA.x = max(BBA.x, p.x);
      BBA.y = max(BBA.y, p.y);
      BBA.z = max(BBA.z, p.z);
-     scale.x = max(scale.x, fabsf(p.x));
-     scale.y = max(scale.y, fabsf(p.y));
-     scale.z = max(scale.z, fabsf(p.z));
+     scale.x = max(scale.x, static_cast<float>(fabs(p.x)));
+     scale.y = max(scale.y, static_cast<float>(fabs(p.y)));
+     scale.z = max(scale.z, static_cast<float>(fabs(p.z)));
      ps[index] = p;
      lp.rp[j] = index;
     }
   }
+ Radius = sqrt(scale.x * scale.x + scale.y * scale.y + scale.z * scale.z);
  for (unsigned i = 0; i < !ps; i++)
   {
    Rpoints[i].x = (short)(ps[i].x * 32767.0f / scale.x);
@@ -200,18 +201,18 @@ void FindChunks(const LWOFile& lwofile)
  friend struct RSurface;
 #include "surface.cpp"
 
- EET& eet;
  Array<LLayer> Layers;
  Array<LPoint> Point;
  LWO::Vector BBI, BBA;
  Array<RPoint> Rpoints;
  unsigned cur_poly;
  Array<RSurface> rs;
+ float Radius;
 
  public:
 
- Convert(EET& eet, const char* lwo)
-  : eet(eet), cur_poly(0)
+ Convert(const char* lwo)
+  : cur_poly(0)
  {
   BBI.x = 0.0;
   BBI.y = 0.0;
@@ -221,6 +222,8 @@ void FindChunks(const LWOFile& lwofile)
   BBA.z = 0.0;
 
   LWOFile lwofile(lwo);
+
+  lwofile.Print();
 
   FindChunks(lwofile);
 

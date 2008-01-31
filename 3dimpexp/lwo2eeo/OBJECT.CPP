@@ -12,8 +12,10 @@ class OBJECT_3D : private Convert
   number_of_texture_points = 0;
   number_of_polygoned_faces = 0;
   number_of_point_normals = 0;
+  number_of_lighting_normals = 0;
   number_of_point_references = 0;
   number_of_surface_point_references = 0;
+  number_of_surface_point_normals = 0;
   for (unsigned i = 0; i < !rs; i++)
    {
     if (!!rs[i].polys)
@@ -32,12 +34,13 @@ class OBJECT_3D : private Convert
     else
      number_of_point_references += 2 * !rs[i].polys;
     number_of_surface_point_references += !rs[i].points;
-    if (rs[i].tindex >= 0)
+    if (rs[i].texture[0] != '\0')
      number_of_texture_points += !rs[i].points;
-    if (rs[i].lindex >= 0)
+    if (rs[i].ltexture[0] != '\0')
      number_of_texture_points += !rs[i].points;
    }
   number_of_point_normals = !normals;
+  number_of_lighting_normals = number_of_point_normals;
 
   bounding_box.xmin = BBI.x;
   bounding_box.ymin = BBI.y;
@@ -46,6 +49,7 @@ class OBJECT_3D : private Convert
   bounding_box.ymax = BBA.y;
   bounding_box.zmax = BBA.z;
   bounding_box2 = bounding_box;
+  radius = Radius;
 
   points = new OBJECT_SHORT_3D_POINT[number_of_points];
   for (unsigned i = 0; i < number_of_points; i++)
@@ -95,6 +99,8 @@ class OBJECT_3D : private Convert
 
   surfaces = new FACE_SURFACE_DESCRIPTION[number_of_surfaces];
   memset(surfaces, 0, number_of_surfaces * sizeof(*surfaces));
+  textures = new SURFACE_TEXTURE[number_of_surfaces];
+  memset(textures, 0, number_of_surfaces * sizeof(*textures));
   {
    unsigned m = 0;
    for (unsigned i = 0; i < !rs; i++)
@@ -102,12 +108,15 @@ class OBJECT_3D : private Convert
      if (!!rs[i].polys)
       continue;
 
+	 SURFACE_TEXTURE* t = &textures[m];
      FACE_SURFACE_DESCRIPTION* su = &surfaces[m++];
      const RSurface* s = &rs[i];
 
+	 strcpy(t->texture, s->texture);
+	 strcpy(t->luminosity, s->ltexture);
      su->polygons = s->polygons;
-     su->textured = s->tindex >= 0;
-     su->has_luminosity_texture = s->lindex >= 0;
+     su->textured = t->texture[0] != '\0';
+     su->has_luminosity_texture = t->luminosity[0] != '\0';
      su->translucent = s->translucent;
      su->has_specularity = s->has_specularity;
      su->texture_filtered = s->texture_filtered;
@@ -119,8 +128,8 @@ class OBJECT_3D : private Convert
      su->luminosity_texture_wrapped_u = s->luminosity_texture_wrapped_u;
      su->luminosity_texture_wrapped_v = s->luminosity_texture_wrapped_v;
      su->number_of_points = (unsigned char)!s->points;
-     su->texture_index = s->tindex;
-     su->luminosity_texture_index = s->lindex;
+     su->texture_index = 0;
+     su->luminosity_texture_index = 0;
      su->number_of_faces = (unsigned short)!s->polys;
      su->reflectivity = s->reflectivity;
      su->specularity = s->specularity;
@@ -156,17 +165,17 @@ class OBJECT_3D : private Convert
     {
      if (!!rs[i].polys)
       continue;
-     if (rs[i].tindex < 0 && rs[i].lindex < 0)
+     if (rs[i].texture[0] == '\0' && rs[i].ltexture[0] == '\0')
       continue;
      for (unsigned j = 0; j < !rs[i].points; j++)
       {
-       if (rs[i].tindex >= 0)
+       if (rs[i].texture[0] != '\0')
         {
          surface_texture_points[m].u = rs[i].points[j].tp.u;
          surface_texture_points[m].v = rs[i].points[j].tp.v;
          m++;
         }
-       if (rs[i].lindex >= 0)
+       if (rs[i].ltexture[0] != '\0')
         {
          surface_texture_points[m].u = rs[i].points[j].lp.u;
          surface_texture_points[m].v = rs[i].points[j].lp.v;
@@ -198,6 +207,7 @@ class OBJECT_3D : private Convert
   delete [] surface_points;
   delete [] surface_texture_points;
   delete [] object_face_normal_references;
+  delete [] textures;
   delete [] surfaces;
   delete [] object_faces_point_plain_list;
   delete [] point_normals;
@@ -210,16 +220,22 @@ class OBJECT_3D : private Convert
   FILE* file = fopen(filename, "wb");
   if (!file)
    error("Failed to create %s", filename);
+
+  int format = 1;
+  fwrite(&format, 4, 1, file);
   fwrite(&number_of_points, 4, 1, file);
   fwrite(&number_of_faces, 4, 1, file);
-  fwrite(&number_of_surfaces, 4, 1, file);
   fwrite(&number_of_polygoned_faces, 4, 1, file);
+  fwrite(&number_of_surfaces, 4, 1, file);
   fwrite(&number_of_point_normals, 4, 1, file);
+  fwrite(&number_of_lighting_normals, 4, 1, file);
   fwrite(&number_of_point_references, 4, 1, file);
   fwrite(&number_of_texture_points, 4, 1, file);
   fwrite(&number_of_surface_point_references, 4, 1, file);
+  fwrite(&number_of_surface_point_normals, 4, 1, file);
   fwrite(&bounding_box, 24, 1, file);
   fwrite(&bounding_box2, 24, 1, file);
+  fwrite(&radius, 4, 1, file);
   fwrite(points, 6, number_of_points, file);
   fwrite(faces, 1, number_of_polygoned_faces, file);
   fwrite(point_normals, 2, number_of_point_normals, file);
@@ -228,10 +244,18 @@ class OBJECT_3D : private Convert
   fwrite(object_face_normal_references, 2, number_of_polygoned_faces, file);
   fwrite(surface_texture_points, 8, number_of_texture_points, file);
   fwrite(surface_points, 2, number_of_surface_point_references, file);
+  //fwrite(surface_point_normals, 2, number_of_surface_point_normals, file);
+  for (unsigned i = 0; i < number_of_surfaces; i++)
+  {
+   fwrite(textures[i].texture, 1, strlen(textures[i].texture) + 1, file);
+   fwrite(textures[i].luminosity, 1, strlen(textures[i].luminosity) + 1, file);
+  }
+
   fclose(file);
  }
 
- unsigned number_of_points, number_of_faces, number_of_surfaces;
+ unsigned number_of_points, number_of_faces, number_of_point_normals, number_of_surfaces, number_of_lighting_normals;
+ float radius;
  struct OBJECT_3D_BOUNDS { float xmin, xmax, ymin, ymax, zmin, zmax; } bounding_box, bounding_box2;
  struct OBJECT_SHORT_3D_POINT { short int x, y, z; } *points;
  struct OBJECT_3D_FACE { unsigned char number_of_points; } *faces;
@@ -261,6 +285,11 @@ class OBJECT_3D : private Convert
    unsigned int colour;
   };
  } *surfaces;
+ struct SURFACE_TEXTURE
+ {
+  char texture[256];
+  char luminosity[256];
+ } *textures;
  struct POINT_3D_PLAIN_REFERENCE { unsigned short int point; } *object_face_normal_references;
  struct OBJECT_3D_SHORT_TEXTURED_POINT { float u, v; } *surface_texture_points;
  struct POINT_3D_PLAIN_REFERENCE /*{ unsigned short int point; }*/ *surface_points;
@@ -268,18 +297,17 @@ class OBJECT_3D : private Convert
 
  unsigned number_of_texture_points;
  unsigned number_of_polygoned_faces;
- unsigned number_of_point_normals;
  unsigned number_of_point_references;
  unsigned number_of_surface_point_references;
+ unsigned number_of_surface_point_normals;
 
  public:
 
- OBJECT_3D(EET& eet, const char* lwo, const char* eeo)
-   : Convert(eet, lwo)
+ OBJECT_3D(const char* lwo, const char* eeo)
+   : Convert(lwo)
  {
   Create();
   Write(eeo);
   Clear();
  }
-
 };

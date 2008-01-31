@@ -9,8 +9,6 @@ struct RSurface
  char tvmap[1024];
  char lvmap[1024];
 
- int tindex;
- int lindex;
  Array<RPolyPoint> points;
 
  unsigned polygons:1, translucent:1, has_specularity:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1;
@@ -18,7 +16,7 @@ struct RSurface
  unsigned char blue, green, red, alpha;
 
  RSurface(void)
-  : Global(NULL), s(NULL), tindex(-1), lindex(-1),
+  : Global(NULL), s(NULL),
     polygons(0), translucent(0), has_specularity(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0),
     reflectivity(0), specularity(0),
     blue(0), green(0), red(0), alpha(0)
@@ -167,13 +165,13 @@ struct RSurface
          case TEXTURE:
           if (texture[0] != '\0')
            error("Duplicate texture for surface");
-          strcpy(texture, filename);
+          GetTextureName(texture, filename);
           break;
          case LUMINOSITY:
           if (ltexture[0] != '\0')
            error("Duplicate luminosity texture for surface");
-           strcpy(ltexture, filename);
-            break;
+          GetTextureName(ltexture, filename);
+          break;
          }
        }
        break;
@@ -315,17 +313,11 @@ struct RSurface
   if ((texture[0] != '\0') ^ (tvmap[0] != '\0'))
    error("Texture and vertex map must be both supplied, not just one of them");
   if (texture[0] != '\0')
-   {
-    tindex = Global->eet.GetIndex(texture);
-    UV(tvmap, &RPolyPoint::tp);
-   }
+   UV(tvmap, &RPolyPoint::tp);
   if ((ltexture[0] != '\0') ^ (lvmap[0] != '\0'))
    error("Luminosity texture and vertex map must be both supplied, not just one of them");
   if (ltexture[0] != '\0')
-   {
-    lindex = Global->eet.GetIndex(ltexture);
-    UV(lvmap, &RPolyPoint::lp);
-   }
+   UV(lvmap, &RPolyPoint::lp);
 
   /* Create points */
   for (unsigned i = 0; i < !polys; i++)
@@ -429,5 +421,19 @@ struct RSurface
       error("Not all texture points set for surface '%s'", &s->name);
    }
  }
-};
+ void GetTextureName(char* texture, const char* filename)
+ {
+  char* ptr;
 
+  ptr = strrchr(filename, '\\');
+  if (!ptr)
+   ptr = strchr(filename, ':');
+  if (ptr)
+   strcpy(texture, ptr + 1);
+  else
+   strcpy(texture, filename);
+  ptr = strchr(texture, '.');
+  if (ptr)
+   *ptr = '\0';
+ }
+};

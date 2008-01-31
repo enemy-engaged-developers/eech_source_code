@@ -6,7 +6,6 @@
 
 #include "lwofile.h"
 
-#include "eet.cpp"
 #include "types.cpp"
 #include "convert.cpp"
 #include "object.cpp"
@@ -16,7 +15,6 @@ int main(int argc, char* argv[])
  if (argc != 3)
   error("Usage: %s file_in.lwo file_out.eeo", argv[0]);
 
- EET eet;
- OBJECT_3D obj(eet, argv[1], argv[2]);
+ OBJECT_3D obj(argv[1], argv[2]);
  return 0;
 }
