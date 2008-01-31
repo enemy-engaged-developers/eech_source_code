@@ -79,6 +79,9 @@ static float
 static status_message_types
 	status_message_type;
 
+static int
+	in_tir_periscope = FALSE;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +97,6 @@ static status_message_types
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-extern int hokum_periscope_check ( int currentlyUsingPeriscope );	// Retro 6Feb2005
 
 void clear_status_message (void)
 {
@@ -735,7 +736,14 @@ void draw_view (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT:
 		////////////////////////////////////////
 		{
-			draw_virtual_cockpit_3d_view ();
+			if (command_line_TIR_6DOF && query_TIR_active() && TIR_looking_in_periscope())
+			{
+				in_tir_periscope = TRUE;
+				set_view_mode ( VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE);
+				draw_virtual_cockpit_3d_periscope_view ();
+			}
+			else
+				draw_virtual_cockpit_3d_view ();
 
 			break;
 		}
@@ -775,20 +783,14 @@ void draw_view (void)
 		case VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE:
 		////////////////////////////////////////
 		{
-			if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005 (the if block)
+			if (in_tir_periscope && command_line_TIR_6DOF && query_TIR_active() && !TIR_looking_in_periscope())
 			{
-				if ( hokum_periscope_check ( TRUE ) )
-					draw_virtual_cockpit_3d_periscope_view ();
-				else
-				{
-					set_view_mode ( VIEW_MODE_VIRTUAL_COCKPIT );
-					draw_virtual_cockpit_3d_view ();
-				}
+				set_view_mode ( VIEW_MODE_VIRTUAL_COCKPIT );
+				draw_virtual_cockpit_3d_view ();
+				in_tir_periscope = FALSE;
 			}
 			else	// original Razorworks call..
-			{
 				draw_virtual_cockpit_3d_periscope_view ();
-			}
 
 			break;
 		}

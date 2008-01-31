@@ -86,6 +86,7 @@ static object_3d_instance
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0  // code moved to co_vckpt so other helicopters can use it as well
 static int hokum_periscope_box_check ( void )	// Retro 6Feb2005 (whole block)
 {
 	if ( current_custom_cockpit_viewpoint.z < -0.150 )
@@ -115,6 +116,7 @@ int hokum_periscope_check ( int currentlyUsingPeriscope )	// Retro 6Feb2005 (who
 	// check if we are in the periscope box.. if yes, return TRUE
 	return hokum_periscope_box_check ();
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -893,25 +895,6 @@ void draw_hokum_virtual_cockpit (void)
 			destroy_light_3d_source (display_backlight);
 
 			destroy_light_3d_source (cockpit_light);
-		}
-	}
-
-	if ((command_line_TIR_6DOF == TRUE)&&(query_TIR_active() == TRUE))	// Retro 6Feb2005 (whole block)
-	{
-		//	if (!get_global_simple_avionics ())
-		{
-			// check if we are in virtual cockpit mode..
-//			if (( get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT) ||
-//				( get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE ))
-			{
-				if (get_crew_role () == CREW_ROLE_CO_PILOT)
-				{
-					if ( hokum_periscope_check ( get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE ) )
-					{
-						select_hokum_target_acquisition_system (TARGET_ACQUISITION_SYSTEM_PERISCOPE);
-					}
-				}
-			}
 		}
 	}
 

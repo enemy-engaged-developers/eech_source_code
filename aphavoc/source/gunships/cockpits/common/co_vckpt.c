@@ -87,6 +87,9 @@ float
 	pilot_head_pitch_datum,
 	co_pilot_head_pitch_datum;
 
+static vec3d
+	gunship_periscope_position[NUM_GUNSHIP_TYPES][2];
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +97,21 @@ float
 void initialise_common_virtual_cockpit (void)
 {
 	initialise_common_virtual_cockpit_wiper_and_rain_effect ();
+	
+	memset(gunship_periscope_position, 0, sizeof(gunship_periscope_position));
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].x = -0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].x =  0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].y = -0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].y =  0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].z = 0.275;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].z = 1.00;
+
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].x = -0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].x =  0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].y = -0.080;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].y = -0.020;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].z = 0.175;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].z = 1.00;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,6 +283,34 @@ void restore_virtual_cockpit_main_rotors (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int TIR_looking_in_periscope(void)
+{
+	gunship_types ship = get_global_gunship_type();
+
+	float x, y, z;
+
+	x = wide_cockpit_position[wide_cockpit_nr].x - current_custom_cockpit_viewpoint.x;
+	y = wide_cockpit_position[wide_cockpit_nr].y - current_custom_cockpit_viewpoint.y;
+	z = wide_cockpit_position[wide_cockpit_nr].z - current_custom_cockpit_viewpoint.z;
+
+	if (pilot_head_heading < rad(-10.0) || pilot_head_heading > rad(10.0)
+		|| pilot_head_pitch < rad(-30.0) || pilot_head_pitch > rad(10.0))
+	{
+		return FALSE;
+	}
+
+	if (gunship_periscope_position[ship][0].x < x &&
+		gunship_periscope_position[ship][1].x > x &&
+		gunship_periscope_position[ship][0].y < y &&
+		gunship_periscope_position[ship][1].y > y &&
+		gunship_periscope_position[ship][0].z < z &&
+		gunship_periscope_position[ship][1].z > z)
+	{
+		return TRUE;	
+	}
+
+	return FALSE;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
