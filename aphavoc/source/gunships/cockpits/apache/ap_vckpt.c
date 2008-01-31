@@ -208,6 +208,8 @@ void initialise_apache_virtual_cockpit (void)
 
 	initialise_common_virtual_cockpit_cameras ();
 
+	initialise_altitude_counter();
+
 //VJ 050208 cleaing up wideview
 	wide_cockpit_nr = WIDEVIEW_APACHE_PILOT;
 	set_global_wide_cockpit(TRUE);
@@ -271,13 +273,13 @@ void initialise_apache_virtual_cockpit (void)
 		// altitude
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_position.x = 0.460;
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_position.y = -0.5165;
-		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_position.z = 0.762;
+		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_position.z = 0.760;
 					
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_scale.x = 0.62;
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_scale.y = 0.62;
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_scale.z = 0.62;
 	
-		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_heading = rad(4.5);
+		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_heading = rad(4.0);
 		virtual_cockpit_instrument_needles_inst3d->sub_objects[2].relative_pitch = rad(9.5);
 
 		// pnvs
@@ -447,6 +449,8 @@ void deinitialise_apache_virtual_cockpit (void)
 	//
 
 	deinitialise_common_virtual_cockpit_cameras ();
+	
+	deinitialise_altitude_counter();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1061,6 +1065,9 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		draw_apache_upfront_display_on_texture ();
 	}
 
+	if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
+		draw_apache_altitude_counter();
+
 	if (flags & VIRTUAL_COCKPIT_PILOT_LHS_MFD_DISPLAY)
 	{
 		draw_apache_mfd_on_texture (MFD_LOCATION_PILOT_LHS);
@@ -1098,15 +1105,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-#if 0  // arneh - don't clip with the new cockpit
-//VJ 050108 wideview x coord used to clip apache cockpit
-		if (get_global_wide_cockpit ())
-		   clipx = wide_cockpit_position[wide_cockpit_nr].x;
-		else
-		   clipx = 0;
-#endif
-
-		set_3d_view_distances (main_3d_single_light_env, 10.0+clipx, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
