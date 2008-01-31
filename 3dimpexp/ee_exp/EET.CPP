@@ -30,7 +30,7 @@ EET::EET(char drive)
  if (!file)
   return;
  Texture texture;
- texture.index = 0;
+ texture.index = ~0u;
  while (fgets(texture.name, sizeof(texture.name), file) != NULL)
   {
    texture.name[strlen(texture.name) - 1] = '\0';
@@ -44,7 +44,7 @@ EET::EET(char drive)
 void EET::Clear(void)
 {
  for (unsigned i = 0; i < !textures; i++)
-  textures[i].index = 0;
+  textures[i].index = ~0u;
  index = 0;
 }
 
@@ -56,7 +56,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
 
  if (textindex < !textures)
   {
-   if (textures[textindex].index == 0)
+   if (textures[textindex].index == ~0u)
     {
      chunk = new LWO_Chunk("CLIP", 0, NULL);
      lwofile.AddSubChunk(chunk);
@@ -67,6 +67,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
      subchunk->AddBasicData(strlen(buf) + 1, buf);
      subchunk = new LWO_SubChunk("FLAG", 2, "\0\x80");
      chunk->AddSubChunk(subchunk);
+     textures[textindex].index = index++;
     }
 
    return textures[textindex].index;
