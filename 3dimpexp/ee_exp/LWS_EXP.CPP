@@ -169,36 +169,69 @@ void ExportObject(FILE* fp, int index, int sub_object_index)
  current++;
  if (index)
   if (sub_object_index)
-   fprintf(fp, "LoadObject %04X_%s.LWO\n", index, names.SubObjects[sub_object_index]);
+   fprintf(fp, "LoadObjectLayer 1 %08X %04X_%s.LWO\n", 0x10000000 + current, index, names.SubObjects[sub_object_index]);
   else
-   fprintf(fp, "LoadObject %04X.LWO\n", index);
+   fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
  else
   {
    if (sub_object_index)
-    fprintf(fp, "AddNullObject NullObject (%s)\n", names.SubObjects[sub_object_index]);
+    fprintf(fp, "AddNullObject %08X NullObject (%s)\n", 0x10000000 + current, names.SubObjects[sub_object_index]);
    else
-    fprintf(fp, "AddNullObject NullObject\n");
+    fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
   }
 }
-void ExportKeyFrames(FILE* fp, const char* type, int number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
+void ExportKeyFrames(FILE* fp, const char* type, int visibility, int color, int number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
 {
- fprintf(fp, "Show%s 7 3\n%sMotion (unnamed)\n9\n", type, type);
- fprintf(fp, "%i\n", number_of_keyframes);
- for (int i = 0; i < number_of_keyframes; i++)
+ fprintf(fp, "Show%s %i %i\n%sMotion\nNumChannels 9\n", type, visibility, color, type);
+ for (int c = 0; c < 9; c++)
   {
-   struct OBJECT_3D_SUB_OBJECT_KEYFRAME* f = &keyframes[i];
-   fprintf(fp, "%f %f %f %f %f %f %f %f %f\n%i %i %f %f %f\n",
-           f->x, f->y, f->z, deg(f->heading), deg(f->pitch), deg(f->roll),
-           f->scale_x, f->scale_y, f->scale_z, f->index, f->linear,
-           f->tension, f->continuity, f->bias);
+   fprintf(fp, "Channel %i\n{ Envelope\n  %i\n", c, number_of_keyframes);
+   for (int i = 0; i < number_of_keyframes; i++)
+    {
+     struct OBJECT_3D_SUB_OBJECT_KEYFRAME* f = &keyframes[i];
+     float value;
+     switch (c)
+      {
+       case 0:
+        value = f->x;
+        break;
+       case 1:
+        value = f->y;
+        break;
+       case 2:
+        value = f->z;
+        break;
+       case 3:
+        value = f->heading;
+        break;
+       case 4:
+        value = f->pitch;
+        break;
+       case 5:
+        value = f->roll;
+        break;
+       case 6:
+        value = f->scale_x;
+        break;
+       case 7:
+        value = f->scale_y;
+        break;
+       case 8:
+        value = f->scale_z;
+        break;
+      }
+     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n",
+             value, f->index, f->linear ? 3 : 0,
+             f->tension, f->continuity, f->bias);
+    }
+   fprintf(fp, "  Behaviors 1 2\n}\n");
   }
- fprintf(fp, "EndBehavior 2\n");
 }
 
 void ExportLimits(FILE* fp, const char* l, double min, double max)
 {
  if (fabs(min) > 1E-2 || fabs(max) > 1E-2)
-  fprintf(fp, "%sLimits %f %f\n", l, deg(min), deg(max));
+  fprintf(fp, "%sLimits %f %f\n", l, min, max);
 }
 
 int target_sub_object_index[OBJECT_3D_SUB_OBJECT_LAST];
@@ -334,8 +367,8 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
    fprintf(fp, "EndPlugin\n");
   }
 
- ExportKeyFrames(fp, "Object", subo->key.number_of_keyframes, subo->key.keyframes);
- fprintf(fp, "ParentObject %i\n", parent);
+ ExportKeyFrames(fp, "Object", 7, 3, subo->key.number_of_keyframes, subo->key.keyframes);
+ fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
  ExportLimits(fp, "H", subo->key.relative_heading_minimum, subo->key.relative_heading_maximum);
  ExportLimits(fp, "P", subo->key.relative_pitch_minimum, subo->key.relative_pitch_maximum);
  ExportLimits(fp, "B", subo->key.relative_roll_minimum, subo->key.relative_roll_maximum);
@@ -351,11 +384,11 @@ void sub_objects_export(FILE* fp, sub_object* subo, int parent)
 
 void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
 {
- current = 0;
- fprintf(fp, "LWSC\n1\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 30\n\n"); //FIXME
+ current = -1;
+ fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
 
  ExportObject(fp, scene->index, 0);
- ExportKeyFrames(fp, "Object", scene->number_of_keyframes, scene->keyframes);
+ ExportKeyFrames(fp, "Object", 7, 3, scene->number_of_keyframes, scene->keyframes);
  if (scene->number_of_approximations)
   {
    struct OBJECT_3D_APPROXIMATION_INFO* last = &scene->approximations[scene->number_of_approximations - 1];
@@ -389,13 +422,14 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
   G_scene = NULL;
  }
 
- fprintf(fp, "\nAmbientColor 255 255 255\nAmbIntensity 0.500000\n\n");
+ fprintf(fp, "\nAmbientColor 1 1 1\nAmbientIntensity 0.500000\n\n");
  for (int i = 0; i < scene->number_of_sprite_lights; i++)
   {
    struct OBJECT_3D_SPRITE_LIGHT* s = &scene->sprite_lights[i];
-   fprintf(fp, "AddLight\nShowLight 0 7\nLightMotion (unnamed)\n9\n1\n");
-   fprintf(fp, "%f %f %f 0 0 0 %f %f %f\n0 0 0 0 0\n", s->position.x, s->position.y, s->position.z, s->scale.x, s->scale.y, s->scale.z);
-   fprintf(fp, "EndBehavior 1\nLightColor %i %i %i\nLgtIntensity 1\nLightType 1\n\n", s->colour.r, s->colour.g, s->colour.b);
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, s->position.x, s->position.y, s->position.z, 0, 0, 0, s->scale.x, s->scale.y, s->scale.z };
+   fprintf(fp, "AddLight %08X\nLightName Light\n", 0x20000000 + i);
+   ExportKeyFrames(fp, "Light", 0, 7, 1, &keyframe);
+   fprintf(fp, "LightColor %f %f %f\nLightIntensity 1.0\nLightType 1\n\n", s->colour.r / 255.0, s->colour.g / 255.0, s->colour.b / 255.0);
   }
 
  for (int i = 0; i < scene->number_of_cameras; i++)
@@ -404,17 +438,17 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= scenes.total_number_of_cameras)
     error("Invalid camera index\n");
    struct OBJECT_3D_SCENE_CAMERA* c = &scenes.objects_3d_camera_database[s->camera_index];
-   fprintf(fp, "\nAddCamera\nCameraName %s\n", names.Cameras[s->camera_name_index]);
-   ExportKeyFrames(fp, "Camera", c->number_of_keyframes, c->keyframes);
+   fprintf(fp, "\nAddCamera %08X\nCameraName %s\n", 0x30000000 + i, names.Cameras[s->camera_name_index]);
+   ExportKeyFrames(fp, "Camera", 7, 3, c->number_of_keyframes, c->keyframes);
    int locked = (c->heading_locked ? 8 : 0) | (c->pitch_locked ? 16 : 0) | (c->roll_locked ? 32 : 0);
    if (locked)
     fprintf(fp, "LockedChannels %i\n", locked);
-   fprintf(fp, "ParentObject 1\n");
+   fprintf(fp, "ParentItem 0x10000000\n");
    if (c->target_sub_object_id)
     {
      int object = target_sub_object_index[c->target_sub_object_id];
      if (object)
-      fprintf(fp, "TargetObject %i\n", object);
+      fprintf(fp, "TargetItem %08X\n", 0x10000000 + object);
     }
   }
 }

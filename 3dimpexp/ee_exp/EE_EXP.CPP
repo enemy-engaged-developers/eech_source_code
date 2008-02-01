@@ -13,19 +13,19 @@
 #include "scenes.cpp"
 #include "lws_exp.cpp"
 
-int main(int argc, char* argv[])
+int main(void)
 {
+ char filename[1024];
+
  setbuf(stdout, NULL);
 
- EET eet(argc > 1 && isalpha(argv[1][0]) ? toupper(argv[1][0]) : 'D');
+ EET eet(*getcwd(filename, sizeof(filename)));
  const AllNames names;
  const Objects objects;
  const Scenes scenes(objects);
  LwsExport lwsexp(eet, names, objects, scenes);
 
  mkdir("_OBJECTS");
-
- char filename[1024];
 
  for (int i = 1; i < objects.GetNumberOfObjects(); i++)
   {
