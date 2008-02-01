@@ -827,8 +827,8 @@ void dump_ini_file(void)
 	fprintf(f,"joylookst=%d         # joystick look step (1 = min, 100 = max) (def = 30)\n",command_line_joylook_step); //Jabberwock 031104
 	fprintf(f,"nonlinear-cyclic=%d   # use non-linear control for cyclic (less sensitive around center) (0 = off, 1 = on) (def = 1)\n", command_line_nonlinear_pedals);
 	fprintf(f,"nonlinear-pedals=%d   # use non-linear control for pedals (less sensitive around center) (0 = off, 1 = on) (def = 1)\n", command_line_nonlinear_cyclic);
-	fprintf(f,"nonlinear-collective-zone1=%.2f   # non-linear control value for throttle (n = % throttle position joystick to represents  60%% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)\n", command_line_collective_zone_1_limit);
-	fprintf(f,"nonlinear-collective-zone2=%.2f   # non-linear control value for throttle (n = % throttle position joystick to represents 100%% collective) (10% = 0.1) (0.0 = off (linear control), 1.2 = max) (def = 0.7)\n", command_line_collective_zone_2_limit);
+	fprintf(f,"nonlinear-collective-zone1=%.2f   # non-linear control value for throttle (n = %% throttle position joystick to represents  60%% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)\n", command_line_collective_zone_1_limit);
+	fprintf(f,"nonlinear-collective-zone2=%.2f   # non-linear control value for throttle (n = %% throttle position joystick to represents 100%% collective) (10% = 0.1) (0.0 = off (linear control), 1.2 = max) (def = 0.7)\n", command_line_collective_zone_2_limit);
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input (0 = off/blue force/USA, 1 = on/red force/Russia) (def = 0)\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"msl=%d                # activates mouselook (and TrackIR when present) (0 = off, 1 = internal, 2 = external, 3 = both) (def = 0)\n",command_line_mouse_look);
 	fprintf(f,"msls=%d              # mouselook speed (when msl=1) (n > 0) (def = 15), POV speed (when msl=0) (n > 0, max = 20) (def = 13) \n",command_line_mouse_look_speed);
