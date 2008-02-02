@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_DYNAMIC_DAMAGES 17
+#define NUM_DYNAMIC_DAMAGES 18
 
 enum DYNAMICS_DAMAGE_TYPES
 {
@@ -86,6 +86,7 @@ enum DYNAMICS_DAMAGE_TYPES
 	DYNAMICS_DAMAGE_UNDERCARRIAGE				= (1 << 14),	// 16k
 	DYNAMICS_DAMAGE_APU							= (1 << 15),	// 32k
 	DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE			= (1 << 16),	// 64k
+	DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS			= (1 << 17),		// 128k
 	NUM_DYNAMICS_DAMAGE_TYPES					= (1 << NUM_DYNAMIC_DAMAGES)		//
 };
 

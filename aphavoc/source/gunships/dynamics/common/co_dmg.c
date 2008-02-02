@@ -227,6 +227,15 @@ dynamics_damage_type
 			0.2,
 			10.0 * ONE_SECOND,
 			FALSE,
+			FALSE,
+		},
+		{
+			"Secondary hydralics",
+			DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS,
+			0.05,
+			0.05,
+			10.0 * ONE_SECOND,
+			FALSE,
 			TRUE,
 		},
 	};
@@ -536,6 +545,12 @@ void dynamics_damage_model (unsigned int damage, int random)
 
 					current_flight_dynamics->input_data.cyclic_y.damaged = TRUE;
 
+					// only damage if secondary is also damaged
+					if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+						damage_hydraulics(TRUE);
+					else  // otherwise we'll lose some pressure, but it will still be flyable
+						damage_primary_hydralics_only();
+
 					if (sfrand1 () < 0.0)
 					{
 
@@ -550,6 +565,33 @@ void dynamics_damage_model (unsigned int damage, int random)
 					set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 
 					set_current_flight_dynamics_auto_pilot (FALSE);
+
+					break;
+				}
+				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
+				{
+
+					//#if DYNAMICS_DEBUG
+
+					debug_log ("DYNAMICS: SECONDARY HYDRAULICS damage");
+
+					//#endif
+
+					current_flight_dynamics->dynamics_damage |= DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS;
+
+					// only damage if primary is also damaged
+					if (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LOW_HYDRAULICS)
+					{
+						damage_hydraulics(TRUE);
+
+						set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
+						set_current_flight_dynamics_auto_pilot (FALSE);
+					}
+
+					if (sfrand1 () < 0.0)
+						play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_HYDRAULIC_PRESSURE_FAILURE);
+					else
+						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_CONTROL_SYSTEMS_DAMAGED);
 
 					break;
 				}
@@ -1123,9 +1165,9 @@ void update_dynamics_at_keysite (void)
 
 			current_flight_dynamics->damage_repair_time = max (current_flight_dynamics->damage_repair_time, 0.0);
 
-			#if DYNAMICS_DEBUG
+			#if DEBUG_MODULE
 
-			debug_log ("DYNAMICS: repairing %d, repair time %f seconds", current_flight_dynamics->damage_repair_time, current_flight_dynamics->damage_repair_time);
+			debug_log ("DYNAMICS: repairing %s, repair time %f seconds", dynamics_damage_database [damage_count].name, current_flight_dynamics->damage_repair_time);
 
 			#endif
 
@@ -1221,6 +1263,7 @@ void update_dynamics_damage (void)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
 				case DYNAMICS_DAMAGE_LOW_HYDRAULICS:
+				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
 				case DYNAMICS_DAMAGE_LOW_OIL_PRESSURE:
 				case DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE:
 				case DYNAMICS_DAMAGE_AVIONICS:
@@ -1568,8 +1611,18 @@ void repair_damage_model (unsigned int damage)
 
 					current_flight_dynamics->input_data.cyclic_y.damaged = FALSE;
 
+					damage_hydraulics(FALSE);
+
 					break;
 				}
+				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
+					#if DYNAMICS_DEBUG
+					debug_log ("DYNAMICS: SECONDARY HYDRAULICS repaired");
+					#endif
+
+					damage_hydraulics(FALSE);
+
+					break;
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
 
@@ -1896,6 +1949,19 @@ void damage_entity_to_flight_model (entity *en)
 					#if DYNAMICS_DEBUG
 
 					debug_log ("DYNAMICS: LOW HYDRAULICS damaged");
+
+					#endif
+
+					break;
+				}
+				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
+				{
+
+					damage_level += 0.05;
+
+					#if DYNAMICS_DEBUG
+
+					debug_log ("DYNAMICS: SECONDARY HYDRAULICS damaged");
 
 					#endif
 

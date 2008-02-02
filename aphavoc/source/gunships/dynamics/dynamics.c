@@ -704,6 +704,7 @@ void initialise_flight_dynamics_input_devices (void)
 	current_flight_dynamics->input_data.cyclic_joystick_device_index = command_line_cyclic_joystick_index;
 #endif	// Retro 18Jul2004 end
 
+	initialise_cyclic();
 	initialise_collective();
 }
 

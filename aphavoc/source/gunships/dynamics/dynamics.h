@@ -509,10 +509,10 @@ struct DYNAMICS_TYPE
 		damage_repair_time;
 		
 	short int
-		repairing_damage,
 		rotor_rotation_direction; // 1 = clockwise (russian), -1 anti-clockwise (usa)
 
 	unsigned int
+		repairing_damage,
 		dynamics_damage;
 	
 
