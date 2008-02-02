@@ -1004,6 +1004,13 @@ void notify_ka50_avionics_of_dynamics_fault (unsigned int damage)
 		set_ka50_ekran_display_text ("LOW HYDRA", "PRESSURE", NULL, NULL);
 	}
 
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		activate_ka50_master_caution_lamp ();
+
+		set_ka50_ekran_display_text ("SEC HYDR", "DAMAGED", NULL, NULL);
+	}
+
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
 		activate_ka50_master_caution_lamp ();

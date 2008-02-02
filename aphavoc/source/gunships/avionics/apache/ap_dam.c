@@ -1051,7 +1051,12 @@ void notify_apache_avionics_of_dynamics_fault (unsigned int damage)
 
 	if (damage & DYNAMICS_DAMAGE_LOW_HYDRAULICS)
 	{
-		set_apache_upfront_display_text ("HYDRAULICS", "PRESSURE LOW", NULL, NULL);
+		set_apache_upfront_display_text ("PRI HYDRAULICS", "PRESSURE LOW", NULL, NULL);
+	}
+
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		set_apache_upfront_display_text ("SEC HYDRAULICS", "DAMAGED", NULL, NULL);
 	}
 
 	if (damage & DYNAMICS_DAMAGE_STABILISER)

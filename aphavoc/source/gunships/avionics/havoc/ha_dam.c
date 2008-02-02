@@ -945,7 +945,14 @@ void notify_havoc_avionics_of_dynamics_fault (unsigned int damage)
 	{
 		activate_havoc_master_caution_lamp ();
 
-		set_havoc_ekran_display_text ("LOW HYDRA", "PRESSURE", NULL, NULL);
+		set_havoc_ekran_display_text ("LOW HYDR", "PRESSURE", NULL, NULL);
+	}
+
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		activate_havoc_master_caution_lamp ();
+
+		set_havoc_ekran_display_text ("SEC HYDR", "DAMAGED", NULL, NULL);
 	}
 
 	if (damage & DYNAMICS_DAMAGE_STABILISER)

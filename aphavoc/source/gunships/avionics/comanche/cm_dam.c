@@ -1350,6 +1350,13 @@ void notify_comanche_avionics_of_dynamics_fault (unsigned int damage)
 		set_comanche_text_display_text ("HYDRAULICS", "PRESSURE LOW");
 	}
 
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		activate_comanche_master_caution ();
+
+		set_comanche_text_display_text ("SEC HYDRAULICS", "DAMAGED");
+	}
+
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
 		activate_comanche_master_caution ();

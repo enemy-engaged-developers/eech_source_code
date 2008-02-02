@@ -8431,7 +8431,21 @@ static void draw_system_display_mfd (void)
 
 	y_adjust = print_system_message ("ENGINE 2", "DAMAGED", get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE), y_adjust);
 
-	y_adjust = print_system_message ("HYDRAULIC PRESSURE", "LOW", get_dynamics_damage_type (DYNAMICS_DAMAGE_LOW_HYDRAULICS), y_adjust);
+	{
+		char* failure_msg = "";
+		int
+			pri_dmg = get_dynamics_damage_type (DYNAMICS_DAMAGE_LOW_HYDRAULICS),
+			sec_dmg = get_dynamics_damage_type (DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS);
+
+		if (pri_dmg && sec_dmg)
+			failure_msg = "FAILURE";
+		else if (pri_dmg)
+			failure_msg = "PRI LOW";
+		else if (sec_dmg)
+			failure_msg = "SEC FAIL";
+
+		y_adjust = print_system_message ("HYDRAULICS", failure_msg, pri_dmg || sec_dmg, y_adjust);
+	}
 
 	if (get_dynamics_damage_type (DYNAMICS_DAMAGE_LOW_OIL_PRESSURE))
 	{
@@ -8471,7 +8485,7 @@ static void draw_system_display_mfd (void)
 static void draw_engine_display_mfd (void)
 {
 	char
-		buffer[80], buffer2[10];
+		buffer[80];
 
 	int
 		i;
@@ -8482,7 +8496,6 @@ static void draw_engine_display_mfd (void)
 		y2,
 		y3,
 		bar_value,
-		x_adjust,
 		digital_readout;
 
 
@@ -9172,7 +9185,40 @@ static void draw_engine_display_mfd (void)
 		draw_mono_sprite (small_engine_bar_marker, x1 - 4.0, y1 + 33.0, MFD_COLOUR1);
 		draw_mono_sprite (small_engine_bar_marker, x1 - 4.0, y1 + 11.0, MFD_COLOUR1);
 	}
+
+	// hydralic pressure
+
+	set_2d_mono_font_position (-0.25, -0.75);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_rel_position (2.0, -16.0);
+	}
+	else
+	{
+		set_mono_font_rel_position (0.0, -7.0);
+	}
+
+	print_mono_font_string ("HYDR PSI");
+
+	digital_readout = get_hydraulic_pressure() * (300.0 + ((int)(get_gunship_entity()) & 0xff) * 0.1);
+	convert_float_to_int (digital_readout, &i);
+	sprintf (buffer, "%03d0 psi", i);
+
+	set_2d_mono_font_position (-0.25, -0.7);
+
+	if (draw_large_mfd)
+	{
+		set_mono_font_rel_position (2.0, 8.0);
+	}
+	else
+	{
+		set_mono_font_rel_position (0.0, 3.0);
+	}
+
+	print_mono_font_string (buffer);
 	
+#if 0
 	////////////////////////////////////////
 	//
 	// Throttles
@@ -9221,6 +9267,8 @@ static void draw_engine_display_mfd (void)
 	x_adjust = get_mono_font_string_width (buffer) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (buffer);	
+
+#endif
 
 	////////////////////////////////////////
 

@@ -1031,6 +1031,13 @@ void notify_hind_avionics_of_dynamics_fault (unsigned int damage)
 		set_hind_ekran_display_text ("LOW HYDRA", "PRESSURE", NULL, NULL);
 	}
 
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		activate_hind_master_caution_lamp ();
+
+		set_hind_ekran_display_text ("SEC HYDR", "FAILURE", NULL, NULL);
+	}
+
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
 		activate_hind_master_caution_lamp ();

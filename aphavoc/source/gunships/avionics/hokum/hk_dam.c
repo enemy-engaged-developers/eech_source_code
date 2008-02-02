@@ -1151,6 +1151,13 @@ void notify_hokum_avionics_of_dynamics_fault (unsigned int damage)
 		set_hokum_text_display_text ("HYDRAULICS", "PRESSURE", "LOW");
 	}
 
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		activate_hokum_master_caution();
+
+		set_hokum_text_display_text ("SECONDARY", "HYDRAULICS", "FAILURE");
+	}
+
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
 		activate_hokum_master_caution ();

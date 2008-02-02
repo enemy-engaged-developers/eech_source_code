@@ -982,6 +982,11 @@ void notify_ah64a_avionics_of_dynamics_fault (unsigned int damage)
 		set_ah64a_upfront_display_text ("HYDRAULICS", "PRESSURE LOW", NULL, NULL);
 	}
 
+	if (damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS)
+	{
+		set_ah64a_upfront_display_text ("SEC HYDRAULICS", "DAMAGED", NULL, NULL);
+	}
+
 	if (damage & DYNAMICS_DAMAGE_STABILISER)
 	{
 		set_ah64a_upfront_display_text ("STABILISER", "FAILURE", NULL, NULL);
