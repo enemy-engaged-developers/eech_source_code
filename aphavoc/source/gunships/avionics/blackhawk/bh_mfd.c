@@ -3197,7 +3197,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		if (draw_large_mfd)
 		{
@@ -6964,6 +6964,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour)
 {
 	int x1, x2, y1, y2;
@@ -6985,6 +6986,7 @@ static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rg
 	draw_line(x1, y2, x2, y2, border_colour);
 	draw_line(x2, y1, x2, y2, border_colour);
 }
+#endif
 
 static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
 {
