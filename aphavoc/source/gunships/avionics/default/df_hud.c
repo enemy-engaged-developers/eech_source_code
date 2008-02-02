@@ -1779,7 +1779,7 @@ static void display_weapon_information (void)
 				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_default_missile_flight_time ();
+			flight_time = get_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2153,17 +2153,21 @@ static void draw_target_symbology (void)
 
 	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
+		vec3d* tracking_point = get_eo_tracking_point();
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 		target_visible = FALSE;
 
-		if (target)
+		if (target || tracking_point)
 		{
 			//
 			// draw target marker
 			//
 
-			get_local_entity_target_point (target, &target_position);
+			if (tracking_point)
+				target_position = *tracking_point;
+			else
+				get_local_entity_target_point (target, &target_position);
 
 			visibility = get_position_3d_screen_coordinates (&target_position, &i, &j);
 
@@ -2208,7 +2212,7 @@ static void draw_target_symbology (void)
 			{
 				if (target_visible)
 				{
-					if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+					if (target && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
 					{
 						get_target_intercept_point (source, target, selected_weapon_type, &intercept_point);
 
@@ -2333,10 +2337,6 @@ static void display_target_information (void)
 
 	entity
 		*target;
-
-	vec3d
-		*gunship_position,
-		*target_position;
 
 	rangefinding_system
 		rangefinder = get_range_finder();
@@ -2476,7 +2476,7 @@ static void display_target_information (void)
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
-	if (target && s)
+	if (target)
 	{
 		s = get_target_display_name (target, buffer, TRUE);
 		if (s)
@@ -2489,19 +2489,9 @@ static void display_target_information (void)
 	
 			print_mono_font_string (s);
 		}
-
-		if (rangefinder != RANGEFINDER_TRIANGULATION)
-		{
-			gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
-			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		
-			target_range = get_3d_range (gunship_position, target_position);
-		}
-		else
-			target_range = get_triangulated_range(target);
 	}
-	else
-		target_range = 0.0;
+
+	target_range = get_range_to_target();
 
 	switch (rangefinder)
 	{

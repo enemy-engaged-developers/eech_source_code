@@ -3327,28 +3327,12 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	const char* s;
 	char buffer[200];
 
-	float target_range;
+	float target_range = get_range_to_target();
 	int x_adjust, width;
 	
 	rangefinding_system rangefinder = get_range_finder();
 
 	entity_sub_types weapon_sub_type;
-
-	if (target)
-	{
-		if (rangefinder != RANGEFINDER_TRIANGULATION)
-		{
-			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-			vec3d* source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
-			
-			target_range = get_3d_range (source_position, target_position);
-		}
-		else
-			target_range = get_triangulated_range(target);
-	}
-	else
-		target_range = 0.0;
-
 
 	if (draw_large_mfd)
 		set_mono_font_type (MONO_FONT_TYPE_5X9);
@@ -3538,34 +3522,6 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 	print_mono_font_string (s);
 
 
-
-	/*
-
-	//
-	// target range
-	//
-
-	if (target)
-	{
-		if ((target_range < 1000.0) && (!default_damage.laser_designator))
-		{
-			sprintf (buffer, "%dm", (int) target_range);
-		}
-		else
-		{
-			sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-		}
-
-		width = get_mono_font_string_width (buffer);
-
-		set_2d_mono_font_position (0.8, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string (buffer);
-	}
-	*/
-
 	////////////////////////////////////////
 	//
 	// draw field of regard and view boxes
@@ -3747,7 +3703,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		width = get_mono_font_string_width ("LOCKED");
 		set_2d_mono_font_position (0.0, -0.6);
