@@ -3007,7 +3007,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	float
 		width,
-		target_range,
+		target_range = get_range_to_target(),
 		y_adjust,
 		i,
 		j,
@@ -3037,12 +3037,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-	if (target)
-	{
+	target_position = get_eo_tracking_point();
+	if (!target_position && target)
 		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
-	}
 
 	////////////////////////////////////////
 	//
@@ -3233,7 +3230,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// target range
 	//
 
-	if (target)
+	if (target_range > 0.0)
 	{
 		if ((target_range < 1000.0) && (!ah64a_damage.laser_designator))
 		{
@@ -3257,7 +3254,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		if (draw_large_mfd)
 		{

@@ -2135,7 +2135,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		width,
 		heading,
 		marker_position,
-		target_range,
+		target_range = get_range_to_target(),
 		y_adjust,
 		i,
 		j,
@@ -2166,24 +2166,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
 
-	if (target && has_range)
-	{
-		vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_3d_range (source_position, target_position);
-	}
-/*
-	if (target)
-	{
-		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
-			target_range = get_triangulated_range(target);
-		else
-		{
-			vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-			target_range = get_3d_range (source_position, target_position);
-		}
-	}
-*/
 	////////////////////////////////////////
 	//
 	// text
@@ -2359,7 +2341,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// target range
 	//
 
-	if (target)
+	if (target_range > 0.0)
 	{
 		if ((target_range < 1000.0) && (!ka50_damage.laser_range_finder))
 		{
@@ -2383,7 +2365,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		if (draw_large_mfd)
 		{
@@ -2401,8 +2383,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		print_mono_font_string ("LOCKED");
 	}
 // Jabberwock 031107 Designated targets
-	
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 	
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
@@ -2591,7 +2571,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR1);
 	}
 
-	if (target)
+	if (target_range > 0.0)
 	{
 		marker_position = (min (target_range, eo_max_visual_range) / eo_max_visual_range) * -0.5;
 

@@ -3459,7 +3459,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	float
 		width,
-		target_range,
+		target_range = get_range_to_target(),
 		y_adjust,
 		i,
 		j,
@@ -3482,7 +3482,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		visibility;
 
 	rangefinding_system
-		range_finder;
+		range_finder = get_range_finder();
 
 	ASSERT (eo);
 
@@ -3493,11 +3493,9 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 	if (target)
-	{
 		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-		target_range = get_target_range (target_position, &range_finder);
-	}
+	else
+		target_position = get_eo_tracking_point();
 
 	////////////////////////////////////////
 	//
@@ -3810,15 +3808,20 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	if (valid_3d)
 	{
-		if (target)
+		vec3d* tracking_point = get_eo_tracking_point();
+		
+		if (target || tracking_point)
 		{
 			if (!((!d3d_can_render_to_texture) && (!draw_large_mfd)))
 			{
+				if (target)
+					get_local_entity_target_point (target, &target_point);
+				else
+					target_point = *tracking_point;
+		
 				tmp = main_vp;
 
 				main_vp = eo_vp;
-
-				get_local_entity_target_point (target, &target_point);
 
 				visibility = get_position_3d_screen_coordinates (&target_point, &i, &j);
 
@@ -3833,31 +3836,34 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 					//
 					// target name
 					//
-				
-					s = get_target_display_name (target, buffer, FALSE);
-				
-					if (s)
+					
+					if (target)
 					{
-						y_adjust = -12.0;
-						x_adjust = -get_mono_font_string_width (s) / 2.0;
-
-						if (strcmp(s, "LOW LIGHT") == 0
-							|| strcmp(s, "CP/G ID...") == 0)
+						s = get_target_display_name (target, buffer, FALSE);
+					
+						if (s)
 						{
-							set_mono_font_colour (MFD_COLOUR_YELLOW);
+							y_adjust = -12.0;
+							x_adjust = -get_mono_font_string_width (s) / 2.0;
+	
+							if (strcmp(s, "LOW LIGHT") == 0
+								|| strcmp(s, "CP/G ID...") == 0)
+							{
+								set_mono_font_colour (MFD_COLOUR_YELLOW);
+							}
+							else if (get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SIDE) !=
+								get_local_entity_int_value(target, INT_TYPE_SIDE))
+							{
+								set_mono_font_colour (MFD_COLOUR_RED);
+							}
+							else
+								set_mono_font_colour (MFD_COLOUR1);
+	
+							set_2d_mono_font_position (x, y - 0.33);
+							set_mono_font_rel_position (x_adjust, y_adjust);
+					
+							print_mono_font_string (s);
 						}
-						else if (get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SIDE) !=
-							get_local_entity_int_value(target, INT_TYPE_SIDE))
-						{
-							set_mono_font_colour (MFD_COLOUR_RED);
-						}
-						else
-							set_mono_font_colour (MFD_COLOUR1);
-
-						set_2d_mono_font_position (x, y - 0.33);
-						set_mono_font_rel_position (x_adjust, y_adjust);
-				
-						print_mono_font_string (s);
 					}
 
 					set_mono_font_colour (MFD_COLOUR1);
@@ -3874,7 +3880,8 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 							range_char = 'A';
 						else
 						{
-							target_velocity = kilometres_per_hour(get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR));
+							if (target)
+								target_velocity = kilometres_per_hour(get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR));
 							range_char = (range_finder == RANGEFINDER_FCR) ? 'R' : 'L';
 						}
 
@@ -3896,7 +3903,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 					draw_2d_line (x + 0.30, y + 0.20, x + 0.30, y + 0.15, MFD_COLOUR1);
 					draw_2d_line (x + 0.30, y - 0.20, x + 0.30, y - 0.15, MFD_COLOUR1);
 
-					if (eo_target_locked)
+					if (eo_is_locked())
 					{
 						draw_2d_line (x - 0.35, y + 0.35, x - 0.6, y + 0.6, MFD_COLOUR1);	
 						draw_2d_line (x - 0.35, y - 0.35, x - 0.6, y - 0.6, MFD_COLOUR1);	

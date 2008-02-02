@@ -772,25 +772,11 @@ void toggle_ah64a_lock_target (void)
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			eo_target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_DTV:
-		////////////////////////////////////////
-		{
-			eo_target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_DVO:
 		////////////////////////////////////////
 		{
-			eo_target_locked ^= 1;
+			toggle_eo_lock();
 
 			break;
 		}
@@ -852,25 +838,11 @@ void set_ah64a_lock_target (int lock)
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			eo_target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_DTV:
-		////////////////////////////////////////
-		{
-			eo_target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_DVO:
 		////////////////////////////////////////
 		{
-			eo_target_locked = lock;
+			set_eo_lock(lock);
 
 			break;
 		}

@@ -107,7 +107,7 @@ typedef struct EO_PARAMS_DYNAMIC_MOVE eo_params_dynamic_move;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern int
-	eo_target_locked,
+//	eo_target_locked,
 	eo_on_target,
 	eo_low_light,
 	eo_ground_stabilised;

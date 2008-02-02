@@ -1784,7 +1784,7 @@ static void draw_target_marker_invalid_lock (float x, float y)
 static void draw_target_marker (void)
 {
 	int
-		airborne_target;
+		airborne_target = FALSE;
 
 	entity_sub_types
 		selected_weapon_type;
@@ -1812,13 +1812,18 @@ static void draw_target_marker (void)
 
 	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
+		vec3d* tracking_point = get_eo_tracking_point();
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-		if (target)
+		if (target || tracking_point)
 		{
-			airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
-
-			get_local_entity_target_point (target, &target_position);
+			if (tracking_point)
+				target_position = *tracking_point;
+			else
+			{
+				airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
+				get_local_entity_target_point (target, &target_position);
+			}
 
 			visibility = get_position_3d_screen_coordinates (&target_position, &i, &j);
 
@@ -1909,10 +1914,6 @@ static void draw_target_range_indicator (void)
 	char
 		*s;
 
-	entity
-		*source,
-		*target;
-
 	entity_sub_types
 		selected_weapon_type;
 
@@ -1921,15 +1922,11 @@ static void draw_target_range_indicator (void)
 		j,
 		y,
 		width,
-		target_range,
+		target_range = get_range_to_target(),
 		range_scale,
 		one_over_range_scale,
 		min_weapon_range,
 		max_weapon_range;
-
-	source = get_gunship_entity ();
-
-	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 	set_mono_font_type (MONO_FONT_TYPE_7X12);
 	// laser indicator
@@ -1953,7 +1950,7 @@ static void draw_target_range_indicator (void)
 	draw_2d_line (-0.8, -0.3, -0.85, -0.3, hud_colour);
 	draw_2d_line (-0.8, -0.5, -0.85, -0.5, hud_colour);
 
-	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
+	selected_weapon_type = get_local_entity_int_value (get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
 
 	range_scale = FAR_RANGE_SCALE;
 
@@ -2001,22 +1998,8 @@ static void draw_target_range_indicator (void)
 	// draw target range pointer
 	//
 
-	if (target)
+	if (target_range > 0.0)
 	{
-		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
-			target_range = get_triangulated_range(target);
-		else
-		{
-			vec3d
-				*source_position,
-				*target_position;
-			
-			source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-	
-			target_range = get_3d_range (source_position, target_position);
-		}
-
 		if (target_range < range_scale)
 		{
 			y = 1.0 - (target_range * one_over_range_scale);
@@ -2085,7 +2068,7 @@ static void display_weapon_information (void)
 
 		if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_ATAKA)
 		{
-			flight_time = get_hind_missile_flight_time ();
+			flight_time = get_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2357,7 +2340,7 @@ static void display_target_information (void)
 	// locked
 	//
 
-	if (target_locked)
+	if (eo_is_locked())
 	{
 		s = "LOCKED";
 
@@ -2391,8 +2374,6 @@ static void display_target_information (void)
 	//
 	// target name
 	//
-
-	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	if (target)
 	{

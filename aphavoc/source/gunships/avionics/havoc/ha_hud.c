@@ -2337,7 +2337,7 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 static void draw_target_marker (void)
 {
 	int
-		airborne_target;
+		airborne_target = FALSE;
 
 	entity_sub_types
 		selected_weapon_type;
@@ -2367,13 +2367,18 @@ static void draw_target_marker (void)
 
 	if (selected_weapon_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
+		vec3d* tracking_point = get_eo_tracking_point();
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
-		if (target)
+		if (target || tracking_point)
 		{
-			airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
-
-			get_local_entity_target_point (target, &target_position);
+			if (tracking_point)
+				target_position = *tracking_point;
+			else
+			{
+				airborne_target = get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT);
+				get_local_entity_target_point (target, &target_position);
+			}
 
 			visibility = get_position_3d_screen_coordinates (&target_position, &i, &j);
 
@@ -2457,7 +2462,7 @@ static void display_weapon_information (void)
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_ATAKA)
 		{
-			float flight_time = get_hokum_missile_flight_time ();
+			float flight_time = get_missile_flight_time ();
 
 			if (flight_time > 0.01)
 			{
@@ -2539,17 +2544,12 @@ static void display_target_information (void)
 	// Range
 	source = get_gunship_entity ();
 	ASSERT(source);
-	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-	if (target && range_finder != RANGEFINDER_TRIANGULATION)
+	if (range_finder != RANGEFINDER_TRIANGULATION)
 	{
-		vec3d *target_position, *source_position;
 		float min_weapon_range, max_weapon_range, target_range;
 		entity_sub_types selected_weapon_type;
 
-
-		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-		target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-		target_range = get_3d_range (source_position, target_position);
+		target_range = get_range_to_target();
 
 		if (draw_large_hud)
 			set_mono_font_type (MONO_FONT_TYPE_7X12);

@@ -806,25 +806,11 @@ void toggle_hokum_lock_target (void)
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			eo_target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			eo_target_locked ^= 1;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		////////////////////////////////////////
 		{
-			eo_target_locked ^= 1;
+			toggle_eo_lock();
 
 			break;
 		}
@@ -886,25 +872,11 @@ void set_hokum_lock_target (int lock)
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			eo_target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			eo_target_locked = lock;
-
-			break;
-		}
-		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
 		////////////////////////////////////////
 		{
-			eo_target_locked = lock;
+			set_eo_lock(lock);
 
 			break;
 		}

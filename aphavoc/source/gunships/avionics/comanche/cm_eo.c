@@ -451,6 +451,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 	}
 #endif
 
+/*
 	////////////////////////////////////////
 
 	if (continuous_target_acquisition_system_steer_left_fast_key)
@@ -577,6 +578,8 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 		eo_elevation = min (eo_elevation, eo_max_elevation);
 	}
+*/
+	keyboard_slew_eo_system(fine_slew_rate, medium_slew_rate, coarse_slew_rate);
 
 	////////////////////////////////////////
 
@@ -664,6 +667,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 	// loke 030315
 	// added code to allow the user to slew the eo device using joystick axes
 
+/*
 	if (command_line_eo_pan_joystick_index != -1)
 	{
 		float
@@ -705,6 +709,9 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 			eo_elevation = max (eo_elevation, eo_min_elevation);
 		}
 	}
+*/
+
+	joystick_slew_eo_system(coarse_slew_rate);
 
 	////////////////////////////////////////
 

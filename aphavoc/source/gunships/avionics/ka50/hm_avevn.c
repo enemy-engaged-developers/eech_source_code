@@ -690,8 +690,8 @@ static void activate_laser_event(event* ev)
 	{
 		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
 			lase_range_for_ballistics_sight();
-		else if (get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
-			set_laser_is_active(TRUE);
+		else
+			set_laser_is_active(eo_is_tracking_point() || get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET));
 	}
 	else
 		set_laser_is_active(FALSE);

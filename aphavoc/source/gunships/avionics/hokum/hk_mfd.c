@@ -273,6 +273,7 @@ static char
 //
 ////////////////////////////////////////
 
+#if 0
 static char large_heading_scale_datum[] =
 {
 	5,
@@ -311,6 +312,7 @@ static char large_command_heading_carat[] =
 	0,1,1,0,0,0,0,0,1,1,0,
 	1,1,0,0,0,0,0,0,0,1,1,
 };
+#endif
 
 static char small_command_heading_carat[] =
 {
@@ -3086,13 +3088,21 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
 
-	if (target && has_range)
+	if (has_range)
+		target_range = get_range_to_target();
+/*
+	if (has_range && eo_is_tracking_point())
+	{
+		vec3d* tracking_point = get_eo_tracking_point();
+		
+	}
+	else if (target && has_range)
 	{
 		vec3d* target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 		target_range = get_3d_range (source_position, target_position);
 	}
-
+*/
 	////////////////////////////////////////
 	//
 	// text
@@ -3336,7 +3346,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	// target range
 	//
 
-	if (target && has_range)
+	if (target_range > 0.0)
 	{
 		if ((target_range < 1000.0) && (!hokum_damage.laser_designator))
 		{
@@ -3369,7 +3379,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	// locked
 	//
 
-	if (eo_target_locked)
+	if (eo_is_locked())
 	{
 		if (draw_large_mfd)
 		{
@@ -3577,7 +3587,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		draw_2d_line (0.9, -0.500, 0.9 + 0.03, -0.500, MFD_COLOUR_GREEN);
 	}
 
-	if (target && has_range)
+	if (target_range > 0.0)
 	{
 		marker_position = (min (target_range, eo_max_visual_range) / eo_max_visual_range) * -0.5;
 
@@ -4398,42 +4408,31 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	// target range
 	//
 
-//	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_NAVIGATION)
 	{
-		if (source_target)
+		float
+			target_range = get_range_to_target();
+
+		if (target_range > 0.0)
 		{
-			rangefinding_system
-				range_finder;
-
-			vec3d
-				*target_position;
-
-			float
-				target_range;
-
-			target_position = get_local_entity_vec3d_ptr (source_target, VEC3D_TYPE_POSITION);
-
-			target_range = get_target_range(target_position, &range_finder);
-
 			sprintf (buffer, "%   4d M", (int) target_range);
-
+	
 			if (draw_large_mfd)
 			{
 				width += 2.0;
-
+	
 				y_adjust = 5.0;
 			}
 			else
 			{
 				width += 1.0;
-
+	
 				y_adjust = 2.0;
 			}
-
+	
 			set_2d_mono_font_position (0.5, -0.75);
-
+	
 			set_mono_font_rel_position (1.0, y_adjust);
-
+	
 			print_mono_font_string (buffer);
 		}
 	}
