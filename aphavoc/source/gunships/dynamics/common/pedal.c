@@ -216,7 +216,7 @@ void update_pedal_pressure_inputs (void)
 					current_flight_dynamics->input_data.pedal_pressure.value -= (5.0 * get_delta_time ()) * current_flight_dynamics->input_data.pedal_pressure.value;
 				}
 
-				current_flight_dynamics->input_data.pedal.value -= 1.0 * (current_flight_dynamics->input_data.pedal.value * get_delta_time ());
+				current_flight_dynamics->input_data.pedal.value -= 1.0 * ((current_flight_dynamics->input_data.pedal.value - current_flight_dynamics->input_data.pedal_trim.value ) * get_delta_time ());
 			}
 		
 			current_flight_dynamics->input_data.pedal_pressure.value = bound (current_flight_dynamics->input_data.pedal_pressure.value,
@@ -240,7 +240,7 @@ void update_pedal_pressure_inputs (void)
 				{
 		
 					//current_flight_dynamics->input_data.pedal.value *= 0.5;
-					current_flight_dynamics->input_data.pedal.value -= ((get_delta_time ()) / 2.0) * current_flight_dynamics->input_data.pedal.value;
+					current_flight_dynamics->input_data.pedal.value -= ((get_delta_time ()) / 2.0) * (current_flight_dynamics->input_data.pedal.value - current_flight_dynamics->input_data.pedal_trim.value);
 				}
 			}
 
