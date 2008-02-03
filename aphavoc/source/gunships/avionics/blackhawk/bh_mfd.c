@@ -3491,7 +3491,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
+	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE && !blackhawk_damage.navigation_computer)
 	{
 		//VJ 030423 TSD render mod
 		set_rgb_colour (MFD_COLOUR1,	0, 0,  96, 255);  //dark blue
@@ -3529,7 +3529,8 @@ static void draw_tactical_situation_display_mfd (void)
 	////////////////////////////////////////
 	
 //VJ 030423 TSD render mod, added mfd_env
-	draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
+	if (!blackhawk_damage.navigation_computer)
+		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
 
 
 	////////////////////////////////////////
@@ -3604,7 +3605,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !blackhawk_damage.navigation_computer)
 	{
 		entity
 			*wp1,
@@ -4188,7 +4189,7 @@ static void draw_tactical_situation_display_mfd (void)
 	// waypoint information
 	//
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !blackhawk_damage.navigation_computer)
 	{
 		entity
 			*wp;

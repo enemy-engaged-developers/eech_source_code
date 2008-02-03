@@ -3575,7 +3575,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
+	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE && !ah64a_damage.navigation_computer)
 	{
 		//VJ 030423 TSD render mod
 		set_rgb_colour (MFD_COLOUR1,	0, 0,  96, 255);  //dark blue
@@ -3613,7 +3613,8 @@ static void draw_tactical_situation_display_mfd (void)
 	////////////////////////////////////////
 	
 //VJ 030423 TSD render mod, added mfd_env
-	draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
+ 	if (ah64a_damage.navigation_computer)
+		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
 
 
 	////////////////////////////////////////
@@ -3688,7 +3689,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !ah64a_damage.navigation_computer)
 	{
 		entity
 			*wp1,
@@ -4272,7 +4273,7 @@ static void draw_tactical_situation_display_mfd (void)
 	// waypoint information
 	//
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET  && !ah64a_damage.navigation_computer)
 	{
 		entity
 			*wp;
@@ -7048,6 +7049,7 @@ static void draw_weapon_hardpoint_info (int heading_depth, entity_sub_types give
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour)
 {
 	int x1, x2, y1, y2;
@@ -7069,6 +7071,7 @@ static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rg
 	draw_line(x1, y2, x2, y2, border_colour);
 	draw_line(x2, y1, x2, y2, border_colour);
 }
+#endif
 
 static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour)
 {

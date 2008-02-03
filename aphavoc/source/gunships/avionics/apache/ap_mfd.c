@@ -4084,7 +4084,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_underlay == TSD_UNDERLAY_MAP)
+	if (tsd_underlay == TSD_UNDERLAY_MAP && !apache_damage.navigation_computer)
 	{
 		if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
 		{
@@ -4168,7 +4168,7 @@ static void draw_tactical_situation_display_mfd (void)
 	//
 	////////////////////////////////////////
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !apache_damage.navigation_computer)
 	{
 		entity
 			*wp1,
@@ -4750,7 +4750,7 @@ static void draw_tactical_situation_display_mfd (void)
 	// waypoint information
 	//
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !apache_damage.navigation_computer)
 	{
 		if (tsd_underlay == TSD_UNDERLAY_MAP)
 			display_waypoint_information (tsd_basic_colour);
@@ -10548,7 +10548,8 @@ static void draw_flight_display_mfd (void)
 
 	display_engine_torque ();
 
-	display_waypoint_information (MFD_COLOUR4);
+	if (!apache_damage.navigation_computer)
+		display_waypoint_information (MFD_COLOUR4);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

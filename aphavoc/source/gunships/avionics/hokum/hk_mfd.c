@@ -3865,7 +3865,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	//
 	////////////////////////////////////////
 
-	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
+	if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE && !hokum_damage.navigation_computer)
 	{
 		//VJ 030423 TSD render mod
 		set_rgb_colour (MFD_COLOUR1,   0, 0,  96, 255);  //dark blue
@@ -3922,7 +3922,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	////////////////////////////////////////
 	
 //VJ 030423 TSD render mod, added mfd_env
-	draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
+	if (!hokum_damage.navigation_computer)
+		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
@@ -3948,7 +3949,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	//
 	////////////////////////////////////////
 
-	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET && !hokum_damage.navigation_computer)
 	{
 		entity
 			*wp1,
@@ -4442,6 +4443,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 	//
 
 //	if (tsd_declutter_level != TSD_DECLUTTER_LEVEL_TARGET)
+	if (!hokum_damage.navigation_computer)
 	{
 		entity
 			*wp;
