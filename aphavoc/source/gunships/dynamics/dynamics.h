@@ -274,6 +274,7 @@ struct INPUT_VARIABLE_TYPE
 
 	dynamics_float_variable
 		pedal,
+		pedal_trim,
 		pedal_pressure;
 
 	pedal_pressure_types

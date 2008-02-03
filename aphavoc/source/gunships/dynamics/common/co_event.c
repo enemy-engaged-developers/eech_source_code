@@ -173,6 +173,8 @@ void set_flight_dynamics_events (void)
 				set_event (DIK_Z, MODIFIER_NONE, KEY_STATE_EITHER, pedal_left);
 				set_event (DIK_X, MODIFIER_NONE, KEY_STATE_EITHER, pedal_right);
 
+				set_event (DIK_Z, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_X, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
 				break;
 			}
 
@@ -182,11 +184,21 @@ void set_flight_dynamics_events (void)
 				set_event (MOUSE_MOVE_LEFT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, pedal_mouse_input);
 				set_event (MOUSE_MOVE_RIGHT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, pedal_mouse_input);
 
+				set_event (DIK_Z, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_X, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_Z, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_X, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
+
 				break;
 			}
 
 			case JOYSTICK_INPUT:
+			case RUDDER_INPUT:
 			{
+				set_event (DIK_Z, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_X, MODIFIER_NONE, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_Z, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
+				set_event (DIK_X, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, adjust_pedal_trim);
 
 				break;
 			}

@@ -327,34 +327,29 @@ void dynamics_damage_model (unsigned int damage, int random)
 					current_flight_dynamics->dynamics_damage = DYNAMICS_DAMAGE_NONE;
 
 					current_flight_dynamics->main_blade_pitch.damaged = FALSE;
-
 					current_flight_dynamics->main_rotor_roll_angle.damaged = FALSE;
 
 					current_flight_dynamics->main_rotor_pitch_angle.damaged = FALSE;
-
 					current_flight_dynamics->main_rotor_rpm.damaged = FALSE;
 
 					current_flight_dynamics->tail_blade_pitch.damaged = FALSE;
-
 					current_flight_dynamics->tail_rotor_rpm.damaged = FALSE;
 
 					current_flight_dynamics->left_engine_torque.damaged = FALSE;
-
 					current_flight_dynamics->left_engine_rpm.damaged = FALSE;
 
 					current_flight_dynamics->right_engine_torque.damaged = FALSE;
-
 					current_flight_dynamics->right_engine_rpm.damaged = FALSE;
 
 					current_flight_dynamics->cross_coupling_effect.damaged = FALSE;
 
 					current_flight_dynamics->input_data.cyclic_x.damaged = FALSE;
-
 					current_flight_dynamics->input_data.cyclic_y.damaged = FALSE;
 
 					current_flight_dynamics->input_data.cyclic_x_trim.damaged = FALSE;
-
 					current_flight_dynamics->input_data.cyclic_y_trim.damaged = FALSE;
+
+					current_flight_dynamics->input_data.pedal_trim.damaged = FALSE;
 
 					break;
 				}

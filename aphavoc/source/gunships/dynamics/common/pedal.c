@@ -307,6 +307,8 @@ void update_pedal_pressure_inputs (void)
 				current_flight_dynamics->input_data.pedal_input_pressure = PEDAL_PRESSURE_NONE;
 			}
 
+			current_flight_dynamics->input_data.pedal.delta += current_flight_dynamics->input_data.pedal_trim.value;
+
 			// vary lag depending if its demand or restore
 			if (fabs (current_flight_dynamics->input_data.pedal.value) < fabs (current_flight_dynamics->input_data.pedal.delta))
 			{
