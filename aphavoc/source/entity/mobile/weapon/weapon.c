@@ -920,7 +920,6 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 	float
 		range,
 		time_of_flight,
-		target_true_velocity,
 		target_move_distance;
 
 	vec3d
@@ -967,7 +966,14 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 
 	if (point_inside_map_area (intercept_point))
 	{
-		target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
+		float target_true_velocity = 0.0;
+		
+		if (target)
+			target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
+
+		#if DEBUG_MODULE
+		debug_log("Aiming at target moving at %.1f m/s", target_true_velocity);
+		#endif
 
 		if (target_true_velocity > 0.1)
 		{
@@ -1586,7 +1592,7 @@ void update_entity_weapon_systems (entity *source)
 								}
 							
 								// slave to EO system if it is active (and doesn't have a target)
-								if (is_using_eo_system(command_line_cannontrack != 2))
+								if (!target && is_using_eo_system(command_line_cannontrack != 2))
 								{
 									vec3d* tracking_point = get_eo_tracking_point();
 
@@ -1602,6 +1608,10 @@ void update_entity_weapon_systems (entity *source)
 										float height_diff;
 										float range;
 
+										#ifdef DEBUG_MODULE
+										debug_log("Aiming for point lock at %.0f, %.0f,  %.0f", tracking_point->x, tracking_point->y, tracking_point->z);
+										#endif
+
 										// if we don't already have it we need to get the viewpoint of the weapon
 										if (!located_heading_and_pitch_devices)
 										{
@@ -1614,7 +1624,7 @@ void update_entity_weapon_systems (entity *source)
 
 										height_diff = vp.position.y - tracking_point->y;
 										range = get_range_to_target();
-										
+
 										if (range <= 0.0)
 											range = 1000.0;   // use 1000 meters if unable to determine range
 
