@@ -798,7 +798,7 @@ static void damage_systems (apache_damage_flags damage)
 
 			play_client_server_warning_message (en, SPEECH_SYSTEM_PNVS_FAILURE);
 
-			night_vision_system_active = FALSE;
+			set_night_vision_system_active(FALSE);
 		}
 	}
 
