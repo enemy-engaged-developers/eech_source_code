@@ -931,6 +931,7 @@ void update_main_rotor_rpm_dynamics (void)
 
 	float
 		max_delta,
+		auto_min_delta,
 		blade_pitch,
 		rotor_rpm,
 		rpm_min,
@@ -941,6 +942,7 @@ void update_main_rotor_rpm_dynamics (void)
 
 	rpm_max = current_flight_dynamics->main_rotor_rpm.max;
 	max_delta = 100.0 / 20.0;
+	auto_min_delta = -100.0 / 6.0;
 
 	blade_pitch = ((current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min) /
 						(current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min));
@@ -972,6 +974,7 @@ void update_main_rotor_rpm_dynamics (void)
 		}
 
 		current_flight_dynamics->main_rotor_rpm.delta = rotor_rpm - current_flight_dynamics->main_rotor_rpm.value;
+		current_flight_dynamics->main_rotor_rpm.delta = bound (current_flight_dynamics->main_rotor_rpm.delta, -max_delta, max_delta);
 	}
 	else
 	{
@@ -982,9 +985,9 @@ void update_main_rotor_rpm_dynamics (void)
 			induced_drag, profile_drag,
 			autorotational_acceleration,
 			rpm_ratio, air_flow,
-			autorotation_factor = 1.6,
+			autorotation_factor = 1.8,
 			induced_drag_factor = 8.0,
-			profile_drag_factor = 2.0;
+			profile_drag_factor = 1.5;
 
 		// when not engaged to engine, rpm may exceed max
 		// (but rotor will fail before reaching the new limit)
@@ -1022,6 +1025,8 @@ void update_main_rotor_rpm_dynamics (void)
 				(autorotation_factor * autorotational_acceleration - 
 				 profile_drag_factor * profile_drag -
 				 induced_drag_factor * induced_drag);
+
+			current_flight_dynamics->main_rotor_rpm.delta = bound (current_flight_dynamics->main_rotor_rpm.delta, auto_min_delta, max_delta);
 		}
 		else
 		{
@@ -1031,8 +1036,6 @@ void update_main_rotor_rpm_dynamics (void)
 
 		//debug_log ("DYNAMICS: rotor rpm %f delta %f, velocity y %f, accelaration y %f", current_flight_dynamics->main_rotor_rpm.value, current_flight_dynamics->main_rotor_rpm.delta, current_flight_dynamics->velocity_y.value, current_flight_dynamics->velocity_y.delta);
 	}
-
-	current_flight_dynamics->main_rotor_rpm.delta = bound (current_flight_dynamics->main_rotor_rpm.delta, -max_delta, max_delta);
 
 	current_flight_dynamics->main_rotor_rpm.value += current_flight_dynamics->main_rotor_rpm.delta * get_model_delta_time ();
 
