@@ -52,7 +52,7 @@ int sub_object_suits(sub_object* subo, struct OBJECT_3D_DATABASE_ENTRY* sub, int
   return 0;
  CH_EQ(number_of_keyframes)
  CH_EQ(number_of_object_dissolve_keyframes)
- CH_EQ(default_visibility)
+ //CH_EQ(default_visibility)
  CH_EQ(collision_contribution)
  CH_EQ(object_dissolve)
  CH_EQ(relative_heading_minimum)
@@ -168,17 +168,12 @@ void ExportObject(FILE* fp, int index, int sub_object_index)
 {
  current++;
  if (index)
-  if (sub_object_index)
-   fprintf(fp, "LoadObjectLayer 1 %08X %04X_%s.LWO\n", 0x10000000 + current, index, names.SubObjects[sub_object_index]);
-  else
-   fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
+  fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
  else
-  {
-   if (sub_object_index)
-    fprintf(fp, "AddNullObject %08X NullObject (%s)\n", 0x10000000 + current, names.SubObjects[sub_object_index]);
-   else
-    fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
-  }
+  fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
+ if (sub_object_index)
+  fprintf(fp, "Plugin CustomObjHandler 1 LW_ItemShape\n4\n1\n1\n0\n0\n0\n0 0 0\n0 0 0\n0 0 0\n1\n0\n\"%s\"\nEndPlugin\n", names.SubObjects[sub_object_index]);
+
 }
 void ExportKeyFrames(FILE* fp, const char* type, int visibility, int color, int number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
 {
@@ -239,32 +234,6 @@ int target_sub_object_index[OBJECT_3D_SUB_OBJECT_LAST];
 void sub_object_export(FILE* fp, sub_object* subo, int parent)
 {
  fprintf(fp, "\n");
-
- if (subo->key.sub_object_index)
-  {
-   for (int i = 0; i < subo->number_of_lods; i++)
-    {
-     int index = subo->lods[i].index;
-     if (objs[index].surfaces)
-      {
-       bool found = false;
-       for (unsigned j = 0; j < !object_sub_object[index]; j++)
-        if (object_sub_object[index][j] == subo->key.sub_object_index)
-         {
-          found = true;
-          break;
-         }
-       if (found)
-        break;
-
-       char filename[1024];
-       LWO_File lwofile;
-       sprintf(filename, "_OBJECTS/%04X_%s.LWO", index, names.SubObjects[subo->key.sub_object_index]);
-       ExportLWO(eet, filename, objs[index]);
-       object_sub_object[index].Append(subo->key.sub_object_index);
-      }
-    }
-  }
 
  for (int i = 0; i < subo->number_of_lods - 1; i++)
   {
@@ -342,7 +311,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
        found = true;
        break;
       }
-   }
+    }
    if (found)
     {
      if (!target_sub_object_index[subo->key.sub_object_index])
@@ -384,6 +353,19 @@ void sub_objects_export(FILE* fp, sub_object* subo, int parent)
 
 void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
 {
+ if (scene->shadow_polygon_object_index > 0)
+  printf("\tShadow polygon object not supported\n");
+ if (scene->collision_object_index > 0)
+  printf("\tCollision object not supported\n");
+ if (scene->number_of_texture_animations)
+  printf("\tTexture animation not supported\n");
+ if (scene->number_of_displacement_amplitude_keyframes)
+  printf("\tDisplacement animation not supported\n");
+ if (scene->shadow_approximation_index > 0)
+  printf("\tShadow approximation not supported\n");
+ if (scene->number_of_scene_link_objects)
+  printf("\tScene link objects not supported\n");
+
  current = -1;
  fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
 
@@ -410,8 +392,21 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
      fprintf(fp, "EndPlugin\n");
     }
   }
- /*if (scene->object_dissolve > 1E-2)
-  fprintf(fp, "ObjDissolve %f\n", scene->object_dissolve);*/
+
+ if (scene->number_of_object_dissolve_keyframes)
+  {
+   fprintf(fp, "ObjectDissolve (envelope)\n{ Envelope\n  %i\n", scene->number_of_object_dissolve_keyframes);
+   for (int i = 0; i < scene->number_of_object_dissolve_keyframes; i++)
+    {
+     const struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME* f = &scene->object_dissolve_keyframes[i];
+     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n",
+             f->value, f->index, f->linear ? 3 : 0, f->tension, f->continuity, f->bias);
+    }
+   fprintf(fp, "  Behaviors 1 2\n}\n");
+  }
+ /*else
+  if (scene->object_dissolve > 1E-2)
+   fprintf(fp, "ObjectDissolve %f\n", scene->object_dissolve);*/
 
  memset(target_sub_object_index, 0, sizeof(target_sub_object_index));
  {
@@ -459,19 +454,16 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  const Objects& objs;
  const Scenes& scenes;
  typedef Array<int> ObjectSubobject;
- ObjectSubobject* object_sub_object;
 
  public:
 
  LwsExport(EET& eet, const AllNames& names, const Objects& objects, const Scenes& scenes)
   : eet(eet), names(names), objs(objects), scenes(scenes)
  {
-  object_sub_object = new ObjectSubobject[objs.GetNumberOfObjects()];
  }
 
  ~LwsExport(void)
  {
-  delete [] object_sub_object;
  }
 
  void ExportScene(const char* filename, const OBJECT_3D_SCENE_DATABASE_ENTRY& scene)

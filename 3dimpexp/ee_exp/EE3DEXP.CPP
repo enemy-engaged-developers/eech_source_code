@@ -119,15 +119,15 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
     number_of_surface_points = 256;
 
    if (current_surface->detail)
-    printf("Surface %u: detail not supported\n", i);
+    printf("\tSurface %u: detail not supported\n", i);
    if (current_surface->additive)
-    printf("Surface %u: additive not supported\n", i);
+    printf("\tSurface %u: additive not supported\n", i);
    if (current_surface->luminous)
-    printf("Surface %u: luminous not supported\n", i);
+    printf("\tSurface %u: luminous not supported\n", i);
    if (current_surface->texture_animation)
-    printf("Surface %u: texture_animation not supported\n", i);
+    printf("\tSurface %u: texture_animation not supported\n", i);
    if (current_surface->luminosity_texture_animation)
-    printf("Surface %u: luminosity_texture_animation not supported\n", i);
+    printf("\tSurface %u: luminosity_texture_animation not supported\n", i);
 
    value = 0.0;
    if (current_surface->textured)

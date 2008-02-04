@@ -17,7 +17,7 @@ int main(void)
 {
  char filename[1024];
 
- setbuf(stdout, NULL);
+ freopen("EEEXPLOG.TXT", "w", stdout);
 
  EET eet(*getcwd(filename, sizeof(filename)));
  const AllNames names;
