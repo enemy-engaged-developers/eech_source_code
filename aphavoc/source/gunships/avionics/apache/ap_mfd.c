@@ -1204,6 +1204,14 @@ void select_apache_mfd_mode (mfd_modes mfd_mode, mfd_locations location)
 
 	ASSERT (mfd_mode != MFD_MODE_LLLTV);
 
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT)
+	{
+		if (location == MFD_LOCATION_PILOT_LHS)
+			location = MFD_LOCATION_CPG_LHS;
+		else if (location == MFD_LOCATION_PILOT_RHS)
+			location = MFD_LOCATION_CPG_RHS;
+	}
+
 	ASSERT ((location == MFD_LOCATION_PILOT_LHS) || (location == MFD_LOCATION_PILOT_RHS)
 			|| (location == MFD_LOCATION_CPG_LHS) || (location == MFD_LOCATION_CPG_RHS)
 			|| (location == MFD_LOCATION_ORT));
