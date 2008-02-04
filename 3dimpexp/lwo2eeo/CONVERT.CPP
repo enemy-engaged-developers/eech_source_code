@@ -223,7 +223,7 @@ void FindChunks(const LWOFile& lwofile)
 
   LWOFile lwofile(lwo);
 
-  lwofile.Print();
+  //lwofile.Print();
 
   FindChunks(lwofile);
 
