@@ -911,7 +911,7 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 		{
 			head_object->relative_position.x = left_mfd_view ? -0.10 : 0.10;
 			head_object->relative_position.y = -0.28;
-			head_object->relative_position.z =  0.40 + debug_var_z * 0.01;
+			head_object->relative_position.z =  0.40;
 	
 			head_object->relative_heading = left_mfd_view ? rad(-4.0) : rad(4.0);
 			head_object->relative_pitch = rad(17.0);
