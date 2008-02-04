@@ -1212,6 +1212,7 @@ static int read_object(object_3d *obj, const char* filename)
 	fread ( &number_of_surface_point_references, 4, 1, file );
 	fread ( &number_of_surface_point_normals, 4, 1, file );
 
+	// assign these to obj in separate step since they are all just two bytes, while four in file format
 	obj->number_of_points = number_of_points;
 	obj->number_of_faces = number_of_faces;
 	obj->number_of_surfaces = number_of_surfaces;
