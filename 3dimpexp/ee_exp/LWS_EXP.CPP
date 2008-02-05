@@ -105,15 +105,15 @@ void sub_object_add(sub_object* subo, int number_of_sub_objects, struct OBJECT_3
   {
    int sub_object_index = 0;
    for (int j = 0; j < G_scene->number_of_sub_object_table_entries && !sub_object_index; j++)
-   {
-    struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* t = &G_scene->sub_object_indices_table[j];
-    for (int k = 0; k < t->number_of_sub_objects; k++)
-     if (t->sub_objects[k] == &sub[i])
-      {
-       sub_object_index = t->sub_object_index;
-       break;
-      }
-   }
+    {
+     struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY* t = &G_scene->sub_object_indices_table[j];
+     for (int k = 0; k < t->number_of_sub_objects; k++)
+      if (t->sub_objects[k] == &sub[i])
+       {
+        sub_object_index = t->sub_object_index;
+        break;
+       }
+    }
 
    sub_object* added = NULL;
    for (int j = 0; j < subo->number_of_sub_objects; j++)
@@ -346,6 +346,8 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
    ExportLimits(fp, "P", subo->key.relative_pitch_minimum, subo->key.relative_pitch_maximum);
    ExportLimits(fp, "B", subo->key.relative_roll_minimum, subo->key.relative_roll_maximum);
   }
+ if (subo->key.collision_contribution)
+  fprintf(fp, "Plugin CustomObjHandler 1 FX_Collision\nformat 2\n collision 0 0 2 3 0 0 0\n collision 0 1 0 0 0 0 0 0\n collision 0\nEndPlugin\n");
 
  sub_objects_export(fp, subo, current);
 }

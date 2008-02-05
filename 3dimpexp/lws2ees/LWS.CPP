@@ -151,6 +151,29 @@ struct Limits
  float min, max;
 };
 
+struct Collision
+{
+ Collision(void)
+  : collision(false)
+ {
+ }
+
+ void Print(void) const
+ {
+  if (!collision)
+   return;
+
+  printf("Plugin CustomObjHandler 1 FX_Collision\n");
+  printf("format 2\n");
+  printf(" collision 0 0 2 3 0 0 0\n");
+  printf(" collision 0 1 0 0 0 0 0 0\n");
+  printf(" collision 0\n");
+  printf("EndPlugin\n");
+ }
+
+ bool collision;
+};
+
 struct Object : GeneralObject
 {
  Object(void)
@@ -171,6 +194,7 @@ struct Object : GeneralObject
   h.Print("H");
   p.Print("P");
   b.Print("B");
+  collision.Print();
   if (dissolve.keys.size())
    {
     printf("ObjectDissolve (envelope)\n");
@@ -184,6 +208,7 @@ struct Object : GeneralObject
  std::string filename;
  std::string search;
  Limits h, p, b;
+ Collision collision;
 };
 
 struct Color
@@ -512,6 +537,14 @@ class LwsFile : public Lws
     if (LastObject)
      LastObject->search.assign(str + 1, strlen(str) - 2);
     gets();
+   }
+  else
+  if (!strcmp(str, "CustomObjHandler 1 FX_Collision"))
+   {
+    if (LastObject)
+     LastObject->collision.collision = true;
+    for (int i = 0; i < 5; i++)
+     gets();
    }
   else
    {

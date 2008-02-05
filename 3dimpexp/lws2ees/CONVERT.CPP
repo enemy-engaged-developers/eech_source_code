@@ -363,11 +363,7 @@ class Convert
  {
   fw(subobject.object->filename.c_str());
 
-#if 1
-  fw(0);
-#else
-  fw(contributes_to_collisions);
-#endif
+  fw(subobject.object->collision.collision);
   fw(subobject.lod_min + 1);
   fw(subobject.lod_max + 1);
 
