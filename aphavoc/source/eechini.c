@@ -743,10 +743,10 @@ void dump_ini_file(void)
 	fprintf(f,"\n[Views and Cameras]\n");
 	fprintf(f,"# minfov is linked to key 7, maxfov is linked to key 9, normal fov is linked to key 8, normal fov = 60\n");
 	fprintf(f,"minfov=%d		# general field of view minimum\n",command_line_min_fov);
-	fprintf(f,"maxfov0=%d		# general field of view maximum for Apache pits\n",command_line_max_fov0);
-	fprintf(f,"maxfov1=%d		# general field of view maximum for Havoc pits\n",command_line_max_fov1);
-	fprintf(f,"maxfov2=%d		# general field of view maximum for Comanche pits\n",command_line_max_fov2);
-	fprintf(f,"maxfov3=%d	# general field of view maximum for Hokum-B pits\n",command_line_max_fov3);	
+	fprintf(f,"maxfov0=%d		# general field of view maximum\n",command_line_max_fov0);
+//	fprintf(f,"maxfov1=%d		# general field of view maximum for Havoc pits\n",command_line_max_fov1);
+//	fprintf(f,"maxfov2=%d		# general field of view maximum for Comanche pits\n",command_line_max_fov2);
+//	fprintf(f,"maxfov3=%d	# general field of view maximum for Hokum-B pits\n",command_line_max_fov3);	
 
 	fprintf(f, "\ng-force_head_movement=%.1f			# amount of head movement caused by gravitational force (wideview only) (n = Gs, 1.0 = normal, 0.0 = off) (default = 0.0)\n", command_line_g_force_head_movment_modifier);
 	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].x,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].y,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].z,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].p);
@@ -759,7 +759,7 @@ void dump_ini_file(void)
 //	fprintf(f, "hind_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].p);	
 //	fprintf(f, "hind_copilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].p);	
 	//VJ 060212 hud info mod
-	fprintf(f, "hud_code=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d         #hud code for 4 gunships\n",
+	fprintf(f, "hud_code=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d		#hud code for 4 gunships\n",
 		hud_code[0][0],hud_code[0][1],hud_code[0][2],
 		hud_code[1][0],hud_code[1][1],hud_code[1][2],
 		hud_code[2][0],hud_code[2][1],hud_code[2][2],
