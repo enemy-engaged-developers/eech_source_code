@@ -314,7 +314,7 @@ class Convert
   fw(static_cast<int>(channel.keys.size()));
   for (Channel::Keys::const_iterator itor(channel.keys.begin()); itor != channel.keys.end(); ++itor)
    {
-    fw(static_cast<int>(itor->time / fps));
+    fw(static_cast<int>(itor->time * fps));
     fw(itor->spantime ? 1 : 0);
     fw(itor->value);
     fw(itor->p[0]);
@@ -328,7 +328,7 @@ class Convert
   fw(static_cast<int>(motion.channels[0].keys.size()));
   for (int i = 0; i < motion.channels[0].keys.size(); i++)
    {
-    fw(static_cast<int>(motion.channels[0].keys[i].time / fps));
+    fw(static_cast<int>(motion.channels[0].keys[i].time * fps));
     fw(motion.channels[0].keys[i].spantime ? 1 : 0);
     fw(motion.channels[0].keys[i].value);
     fw(motion.channels[1].keys[i].value);
