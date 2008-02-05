@@ -388,7 +388,7 @@ void process_ini_file(int argc, char *argv[])
 		j=0;
 		str_length = strlen(buf);
 		for (i = 0; i < str_length; i++){
-			if (buf[i] != ' '){
+			if (!isspace(buf[i])) {
 				buf1[j] = buf[i];
 				j++;
 			}
@@ -511,13 +511,13 @@ void process_ini_file(int argc, char *argv[])
 //VJ 030511 WUT is a separate part of the eech.ini
 		if (strcmp(p, "wut") == 0)
 		{
-			if (str_length > 0 && 128)
+			if (str_length > 0 && str_length < (sizeof(WUT_filename) - 1))
 				strcpy(WUT_filename, q);
 			else
 				strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 
 			debug_log("wutfile ini [%s]",WUT_filename);
-
+			
 			if (WUT_filename[0] != 0 && file_exist(WUT_filename))
 				command_line_wut = TRUE;
 			// wut filename checking is done elsewhere
@@ -782,7 +782,7 @@ void dump_ini_file(void)
 
 	fprintf(f,"\n[WUT]\n");
 	fprintf(f,"# for more information see http://www.eechcentral.com/wiki/index.php?title=WUT\n");
-	fprintf(f,"wut=%s		# Weapons and Unit Tweaking file (n = filename)\n",WUT_filename);
+	fprintf(f,"wut=%s           # Weapons and Unit Tweaking file (n = filename)\n",WUT_filename);
 
 	fprintf(f,"\n[Gameplay]\n");
 	fprintf(f,"chaff=%3.1f		# effectiveness of chaff  (0.0 - 1.0) (0.0 = ineffective, 1.0 = fully effective) (def = 1.0)\n",command_line_chaff_effectiveness);
