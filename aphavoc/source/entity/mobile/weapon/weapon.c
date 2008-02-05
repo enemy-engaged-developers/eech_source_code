@@ -290,7 +290,7 @@ int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon
 
 int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types config_type, weapon_package_status* package_status, int* number)
 {
-	int package;
+	int package, best_package = 0;
 	
 	*number = 0;
 	
@@ -311,13 +311,13 @@ int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types c
 				{
 					*number = package_status[package].number;
 
-					return package;
+					best_package = package;
 				}
 			}
 		}
 	}
 
-	return 0;
+	return best_package;
 }
 		
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
