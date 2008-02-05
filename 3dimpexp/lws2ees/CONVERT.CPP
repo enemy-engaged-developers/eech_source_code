@@ -58,6 +58,17 @@ class Convert
  };
  typedef std::vector<MainLod> Lods;
 
+ struct LightDesc
+ {
+  LightDesc(void)
+   : light(0)
+  {
+  }
+
+  const Light* light;
+ };
+ typedef std::vector<LightDesc> LightDescs;
+
  struct CameraDesc
  {
   CameraDesc(void)
@@ -174,7 +185,13 @@ class Convert
     cache[itor->index] = hierobj;
    }
 
-  lights = &lws.lights;
+  for (Lws::Lights::const_iterator itor(lws.lights.begin()); itor != lws.lights.end(); ++itor)
+   if (itor->type == 1)
+    {
+     LightDesc lightdesc;
+     lightdesc.light = &*itor;
+     lights.push_back(lightdesc);
+    }
 
   for (Lws::Cameras::const_iterator itor(lws.cameras.begin()); itor != lws.cameras.end(); ++itor)
    {
@@ -429,19 +446,20 @@ class Convert
    }
 #endif
 
-  fw(static_cast<int>(lights->size()));
-  for (Lws::Lights::const_iterator itor(lights->begin()); itor != lights->end(); ++itor)
+  fw(static_cast<int>(lights.size()));
+  for (LightDescs::const_iterator itor(lights.begin()); itor != lights.end(); ++itor)
    {
-    fw(itor->motion.channels[0].keys.begin()->value);
-    fw(itor->motion.channels[1].keys.begin()->value);
-    fw(itor->motion.channels[2].keys.begin()->value);
-    fw(itor->motion.channels[6].keys.begin()->value);
-    fw(itor->motion.channels[7].keys.begin()->value);
-    fw(itor->motion.channels[8].keys.begin()->value);
+    const Light* light = itor->light;
+    fw(light->motion.channels[0].keys.begin()->value);
+    fw(light->motion.channels[1].keys.begin()->value);
+    fw(light->motion.channels[2].keys.begin()->value);
+    fw(light->motion.channels[6].keys.begin()->value);
+    fw(light->motion.channels[7].keys.begin()->value);
+    fw(light->motion.channels[8].keys.begin()->value);
 
-    fw(static_cast<int>(itor->light.red * itor->intensity * 255));
-    fw(static_cast<int>(itor->light.green * itor->intensity * 255));
-    fw(static_cast<int>(itor->light.blue * itor->intensity * 255));
+    fw(static_cast<int>(light->light.red * light->intensity * 255));
+    fw(static_cast<int>(light->light.green * light->intensity * 255));
+    fw(static_cast<int>(light->light.blue * light->intensity * 255));
    }
 
   fw(total_subobjects);
@@ -504,7 +522,7 @@ class Convert
 
  HierObj* root;
  float fps;
- const Lws::Lights* lights;
+ LightDescs lights;
  CameraDescs cameras;
  Lods lods;
  SubObject main;
