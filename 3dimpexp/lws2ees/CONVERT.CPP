@@ -44,7 +44,6 @@ class Convert
   int lod_min, lod_max;
 
   const Object* object;
-  float relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum;
   SubObjects subobjects;
   int indices;
  };
@@ -230,25 +229,6 @@ class Convert
   subobject->object = hierobj->object;
   subobject->indices = 0;
 
-  if (hierobj->object && hierobj->object->motion.nchannels >= 6 &&
-      hierobj->object->motion.channels[3].keys.size() &&
-      hierobj->object->motion.channels[4].keys.size() &&
-      hierobj->object->motion.channels[5].keys.size())
-   {
-    set_minmax(hierobj->object->motion.channels[3].keys, &subobject->relative_heading_minimum, &subobject->relative_heading_maximum);
-    set_minmax(hierobj->object->motion.channels[4].keys, &subobject->relative_pitch_minimum, &subobject->relative_pitch_maximum);
-    set_minmax(hierobj->object->motion.channels[5].keys, &subobject->relative_roll_minimum, &subobject->relative_roll_maximum);
-   }
-  else
-   {
-    subobject->relative_heading_minimum = 0;
-    subobject->relative_heading_maximum = 0;
-    subobject->relative_pitch_minimum = 0;
-    subobject->relative_pitch_maximum = 0;
-    subobject->relative_roll_minimum = 0;
-    subobject->relative_roll_maximum = 0;
-   }
-
   for (HierObjs::const_iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
    {
     const HierObj* hierobj = *itor;
@@ -391,24 +371,18 @@ class Convert
   fw(subobject.lod_min + 1);
   fw(subobject.lod_max + 1);
 
-#if 1
-  fw(0);
-#else
-  fw(&flag, sizeof(int), 1, fp);
-
-  if(flag)
-  {
-
-    fw(&sub_object->relative_heading_maximum, sizeof(float), 1, fp);
-    fw(&sub_object->relative_heading_minimum, sizeof(float), 1, fp);
-
-    fw(&sub_object->relative_pitch_maximum, sizeof(float), 1, fp);
-    fw(&sub_object->relative_pitch_minimum, sizeof(float), 1, fp);
-
-    fw(&sub_object->relative_roll_maximum, sizeof(float), 1, fp);
-    fw(&sub_object->relative_roll_minimum, sizeof(float), 1, fp);
-  }
-#endif
+  if (subobject.object->h.set && subobject.object->p.set && subobject.object->b.set)
+   {
+    fw(1);
+    fw(subobject.object->h.max);
+    fw(subobject.object->h.min);
+    fw(subobject.object->p.max);
+    fw(subobject.object->p.min);
+    fw(subobject.object->b.max);
+    fw(subobject.object->b.min);
+   }
+  else
+   fw(0);
 
   save_animation(subobject.object->motion);
 

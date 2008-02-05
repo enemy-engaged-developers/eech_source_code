@@ -10,6 +10,7 @@ struct sub_object_key
  unsigned char default_visibility:1, collision_contribution:1;
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
  struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *object_dissolve_keyframes;
+ int flag;
  float object_dissolve, relative_heading_minimum, relative_heading_maximum, relative_pitch_minimum, relative_pitch_maximum, relative_roll_minimum, relative_roll_maximum;
 };
 
@@ -55,6 +56,7 @@ int sub_object_suits(sub_object* subo, struct OBJECT_3D_DATABASE_ENTRY* sub, int
  //CH_EQ(default_visibility)
  CH_EQ(collision_contribution)
  CH_EQ(object_dissolve)
+ CH_EQ(flag)
  CH_EQ(relative_heading_minimum)
  CH_EQ(relative_heading_maximum)
  CH_EQ(relative_pitch_minimum)
@@ -136,6 +138,7 @@ void sub_object_add(sub_object* subo, int number_of_sub_objects, struct OBJECT_3
     AS(keyframes)
     AS(object_dissolve_keyframes)
     AS(object_dissolve)
+    AS(flag)
     AS(relative_heading_minimum)
     AS(relative_heading_maximum)
     AS(relative_pitch_minimum)
@@ -225,8 +228,7 @@ void ExportKeyFrames(FILE* fp, const char* type, int visibility, int color, int 
 
 void ExportLimits(FILE* fp, const char* l, double min, double max)
 {
- if (fabs(min) > 1E-2 || fabs(max) > 1E-2)
-  fprintf(fp, "%sLimits %f %f\n", l, min, max);
+ fprintf(fp, "%sLimits %f %f\n", l, deg(min), deg(max));
 }
 
 int target_sub_object_index[OBJECT_3D_SUB_OBJECT_LAST];
@@ -338,9 +340,12 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
 
  ExportKeyFrames(fp, "Object", 7, 3, subo->key.number_of_keyframes, subo->key.keyframes);
  fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
- ExportLimits(fp, "H", subo->key.relative_heading_minimum, subo->key.relative_heading_maximum);
- ExportLimits(fp, "P", subo->key.relative_pitch_minimum, subo->key.relative_pitch_maximum);
- ExportLimits(fp, "B", subo->key.relative_roll_minimum, subo->key.relative_roll_maximum);
+ if (subo->key.flag)
+  {
+   ExportLimits(fp, "H", subo->key.relative_heading_minimum, subo->key.relative_heading_maximum);
+   ExportLimits(fp, "P", subo->key.relative_pitch_minimum, subo->key.relative_pitch_maximum);
+   ExportLimits(fp, "B", subo->key.relative_roll_minimum, subo->key.relative_roll_maximum);
+  }
 
  sub_objects_export(fp, subo, current);
 }
@@ -354,15 +359,15 @@ void sub_objects_export(FILE* fp, sub_object* subo, int parent)
 void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
 {
  if (scene->shadow_polygon_object_index > 0)
-  printf("\tShadow polygon object not supported\n");
+  printf("\tShadow polygon object %04X not supported\n", scene->shadow_polygon_object_index);
  if (scene->collision_object_index > 0)
-  printf("\tCollision object not supported\n");
+  printf("\tCollision object %04X not supported\n", scene->collision_object_index);
  if (scene->number_of_texture_animations)
   printf("\tTexture animation not supported\n");
  if (scene->number_of_displacement_amplitude_keyframes)
   printf("\tDisplacement animation not supported\n");
  if (scene->shadow_approximation_index > 0)
-  printf("\tShadow approximation not supported\n");
+  printf("\tShadow approximation %i not supported\n", scene->shadow_approximation_index);
  if (scene->number_of_scene_link_objects)
   printf("\tScene link objects not supported\n");
 

@@ -57,6 +57,7 @@ struct OBJECT_3D_DATABASE_ENTRY
  struct OBJECT_3D_SUB_OBJECT_INDEX *sub_object_indices;
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
  struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *object_dissolve_keyframes;
+ int flag;
  float
   object_dissolve,
   relative_heading_minimum,
@@ -244,7 +245,6 @@ int* object_sub_object;
 void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object)
 {
  int
-  flag,
   index,
   contributes_to_collisions,
   sub_object_approximation_in_level,
@@ -273,9 +273,9 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
  sub_object->sub_object_approximation_in_level = sub_object_approximation_in_level;
  sub_object->sub_object_approximation_out_level = sub_object_approximation_out_level;
 
- fread(&flag, sizeof(int), 1, fp);
+ fread(&sub_object->flag, sizeof(int), 1, fp);
 
- if (flag)
+ if (sub_object->flag)
  {
   fread(&sub_object->relative_heading_maximum, sizeof(float), 1, fp);
   fread(&sub_object->relative_heading_minimum, sizeof(float), 1, fp);

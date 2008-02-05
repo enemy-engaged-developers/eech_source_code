@@ -134,6 +134,23 @@ struct GeneralObject
  Channel dissolve;
 };
 
+struct Limits
+{
+ Limits(void)
+  : set(false), min(0), max(0)
+ {
+ }
+
+ void Print(const char* limit) const
+ {
+  if (set)
+   printf("%sLimits %f %f\n", limit, min, max);
+ }
+
+ bool set;
+ float min, max;
+};
+
 struct Object : GeneralObject
 {
  Object(void)
@@ -151,6 +168,9 @@ struct Object : GeneralObject
    else
     printf("AddNullObject %lX NullObject\n", index);
   GeneralObject::Print("Object");
+  h.Print("H");
+  p.Print("P");
+  b.Print("B");
   if (dissolve.keys.size())
    {
     printf("ObjectDissolve (envelope)\n");
@@ -163,6 +183,7 @@ struct Object : GeneralObject
  int layer;
  std::string filename;
  std::string search;
+ Limits h, p, b;
 };
 
 struct Color
@@ -607,6 +628,29 @@ class LwsFile : public Lws
   sscanf(str, "%lx", &LastCamera->target);
  }
 
+ void ProcessLimits(Limits Object::* limit)
+ {
+  if (!LastObject)
+   return;
+  sscanf(str, "%f %f", &(LastObject->*limit).min, &(LastObject->*limit).max);
+  (LastObject->*limit).set = true;
+ }
+
+ void ProcessHLimits(void)
+ {
+  ProcessLimits(&Object::h);
+ }
+
+ void ProcessPLimits(void)
+ {
+  ProcessLimits(&Object::p);
+ }
+
+ void ProcessBLimits(void)
+ {
+  ProcessLimits(&Object::b);
+ }
+
 
  FILE* fp;
  int line;
@@ -646,5 +690,8 @@ LwsFile::ProcessorAssignment LwsFile::Processors[] =
  { "CameraName", LwsFile::ProcessCameraName },
  { "LockedChannels", LwsFile::ProcessCameraLocked },
  { "TargetItem", LwsFile::ProcessCameraTarget },
+ { "HLimits", LwsFile::ProcessHLimits },
+ { "PLimits", LwsFile::ProcessPLimits },
+ { "BLimits", LwsFile::ProcessBLimits },
  { 0, 0 }
 };
