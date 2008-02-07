@@ -206,9 +206,9 @@ void update_weapon_lock_type (target_acquisition_systems system)
 			return;
 		}
 
-		target_position = get_local_entity_vec3d_ptr(source, VEC3D_TYPE_EO_TRACKING_POINT);
-		
-		if (!eo_tracking_point_valid(target_position))
+		target_position = get_eo_tracking_point();  // get_local_entity_vec3d_ptr(source, VEC3D_TYPE_EO_TRACKING_POINT);
+
+		if (!target_position)
 		{
 			weapon_lock_type = WEAPON_LOCK_NO_TARGET;
 			return;

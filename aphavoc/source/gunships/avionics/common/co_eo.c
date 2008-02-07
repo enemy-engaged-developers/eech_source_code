@@ -133,6 +133,9 @@ static int
 
 int eo_target_locked = FALSE;
 
+static vec3d
+	eo_tracking_point;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1166,7 +1169,7 @@ void update_common_eo (void)
 		}
 		else
 		{
-			get_local_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &target_vector);
+			target_vector = eo_tracking_point;
 			
 			target_vector.x -= vp.position.x;
 			target_vector.y -= vp.position.y;
@@ -1253,12 +1256,13 @@ void update_common_eo (void)
 		if (!eo_is_tracking_point())
 		{
 			// try locking onto point on ground
-			vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
-
-			if (get_eo_los_intercept_point(eo_tracking_point) < eo_max_visual_range)
+			if (get_eo_los_intercept_point(&eo_tracking_point) < eo_max_visual_range)
 				eo_target_locked = POINT_LOCK;
 			else
 				eo_stop_tracking();
+
+			// have to update server's tracking point so that missiles will aim in multiplayer
+			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 		}
 	}
 	else
@@ -1942,31 +1946,31 @@ void set_electrical_system_active(int active)
 
 int eo_is_tracking_point(void)
 {
-	return get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT)->y != NOT_TRACKING;
+	return eo_tracking_point.y != NOT_TRACKING;
 }
 
 vec3d* get_eo_tracking_point(void)
 {
-	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
-	if (eo_tracking_point->y == NOT_TRACKING)
+	if (eo_tracking_point.y == NOT_TRACKING)
 		return NULL;
 
-	return eo_tracking_point;
+	return &eo_tracking_point;
 }
 
 void eo_stop_tracking(void)
 {
-	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
-	eo_tracking_point->x = 0.0;
-	eo_tracking_point->y = NOT_TRACKING;
-	eo_tracking_point->z = 0.0;
+	eo_tracking_point.x = 0.0;
+	eo_tracking_point.y = NOT_TRACKING;
+	eo_tracking_point.z = 0.0;
+
+	set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 
 	eo_target_locked &= ~POINT_LOCK;
 }
 
 void eo_start_tracking(vec3d* tracking_point)
 {
-	set_local_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, tracking_point);
+	set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 }
 
 int eo_tracking_point_valid(vec3d* tracking_point)
@@ -1977,7 +1981,6 @@ int eo_tracking_point_valid(vec3d* tracking_point)
 static void switch_to_point_lock(void)
 {
 	// get pointer to tracking point so we can set it
-	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
 	entity* target = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET);
 
 	lock_target = FALSE;
@@ -1985,12 +1988,14 @@ static void switch_to_point_lock(void)
 	if (target && !get_local_entity_int_value(target, INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 		// get position of target
-		get_local_entity_vec3d(target, VEC3D_TYPE_POSITION, eo_tracking_point);
+		get_local_entity_vec3d(target, VEC3D_TYPE_POSITION, &eo_tracking_point);
+		set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
+
 		eo_target_locked = POINT_LOCK;
 		lock_terrain = TRUE;
 	}
 	// try locking onto point on ground
-	else if (get_eo_los_intercept_point(eo_tracking_point) < eo_max_visual_range)
+	else if (get_eo_los_intercept_point(&eo_tracking_point) < eo_max_visual_range)
 	{
 		eo_target_locked = POINT_LOCK;
 		lock_terrain = TRUE;
@@ -2037,7 +2042,7 @@ float get_range_to_target(void)
 
 void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate)
 {
-	vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
+	vec3d* eo_tracking_point = get_eo_tracking_point();
 	
 	if (eo_target_locked)
 	{
@@ -2119,6 +2124,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			helicopter *raw = get_local_entity_data(get_gunship_entity());
 			eo_tracking_point->y = get_3d_terrain_point_data(eo_tracking_point->x, eo_tracking_point->z, &raw->ac.terrain_info);
+
+			// have to update server's tracking point so that missiles will aim in multiplayer
+			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, eo_tracking_point);
 		}
 	}
 	else
@@ -2207,7 +2215,7 @@ void joystick_slew_eo_system(float slew_rate)
 			horizontal_value,
 			vertical_value;
 
-		vec3d* eo_tracking_point = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT);
+		vec3d* eo_tracking_point = get_eo_tracking_point();
 
 		horizontal_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
 		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
@@ -2239,6 +2247,9 @@ void joystick_slew_eo_system(float slew_rate)
 				{
 					helicopter *raw = get_local_entity_data(get_gunship_entity());
 					eo_tracking_point->y = get_3d_terrain_point_data(eo_tracking_point->x, eo_tracking_point->z, &raw->ac.terrain_info);
+
+					// have to update server's tracking point so that missiles will aim in multiplayer
+					set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, eo_tracking_point);
 				}
 			}			
 		}
