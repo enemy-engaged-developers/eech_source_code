@@ -10,7 +10,7 @@ class Convert
  public:
 
  Convert(const Lws& lws, const char* filename)
-  : root(0)
+  : root(0), collision(0), shadow(0)
  {
   convert(lws);
   save(filename);
@@ -81,6 +81,8 @@ class Convert
  };
  typedef std::vector<CameraDesc> CameraDescs;
 
+ typedef std::vector<const Object*> Links;
+
  void convert(const Lws& lws)
  {
   build_hierarchy(lws);
@@ -123,19 +125,45 @@ class Convert
 
   for (Lws::Objects::const_iterator itor(lws.objects.begin()); itor != lws.objects.end(); ++itor)
    {
+    if (itor->search == "SHADOW_OBJECT")
+     {
+      if (!itor->layer)
+       continue;
+      if (shadow)
+       error("Duplicate shadow objects found: %08lX and %08lX", shadow->index, itor->index);
+      shadow = &*itor;
+      continue;
+     }
+
+    if (itor->search == "COLLISION_OBJECT")
+     {
+      if (!itor->layer)
+       continue;
+      if (collision)
+       error("Duplicate collision objects found: %08lX and %08lX", collision->index, itor->index);
+      collision = &*itor;
+      continue;
+     }
+
+    if (!itor->layer && itor->filename == "LINK_OBJECT")
+     {
+      links.push_back(&*itor);
+      continue;
+     }
+
     {
      Cache::iterator found(cache.find(itor->index));
      if (found != cache.end())
-      error("Objects with duplicate index %lX are found", itor->index);
+      error("Objects with duplicate index %08lX are found", itor->index);
     }
 
     {
      if (itor->motion.nchannels != 9)
-      error("Invalid motion for object %lX", itor->index);
+      error("Invalid motion for object %08lX", itor->index);
      for (int i = 1; i < 9; i++)
       {
        if (itor->motion.channels[0].keys.size() != itor-> motion.channels[i].keys.size())
-        error("Invalid motion for object %lX", itor->index);
+        error("Invalid motion for object %08lX", itor->index);
        for (int j = 0; j < itor->motion.channels[0].keys.size(); j++)
         if (itor->motion.channels[0].keys[j].time != itor->motion.channels[i].keys[j].time ||
             itor->motion.channels[0].keys[j].spantime != itor->motion.channels[i].keys[j].spantime ||
@@ -147,7 +175,7 @@ class Convert
             itor->motion.channels[0].keys[j].p[3] != itor->motion.channels[i].keys[j].p[3] ||
             itor->motion.channels[0].keys[j].p[4] != itor->motion.channels[i].keys[j].p[4] ||
             itor->motion.channels[0].keys[j].p[5] != itor->motion.channels[i].keys[j].p[5])
-         error("Invalid motion for object %lX", itor->index);
+         error("Invalid motion for object %08lX", itor->index);
       }
     }
 
@@ -161,14 +189,14 @@ class Convert
      {
       Cache::iterator found(cache.find(itor->motion.parent));
       if (found == cache.end())
-       error("Failed to find object with index %lX as parent for object with index %lX", itor->motion.parent, itor->index);
+       error("Failed to find object with index %08lX as parent for object with index %08lX", itor->motion.parent, itor->index);
       found->second->hierobjs.push_back(hierobj);
      }
     else
      {
       if (root)
        {
-        error("Only one root object allowed, but two found: %lX and %lX", root->object->index, hierobj->object->index);
+        error("Only one root object allowed, but two found: %08lX and %08lX", root->object->index, hierobj->object->index);
 #if 0
         if (root->object)
          {
@@ -201,7 +229,7 @@ class Convert
      {
       Cache::iterator found(cache.find(itor->target));
       if (found == cache.end())
-       error("Failed to find object with index %lX as target for camera '%s'", itor->target, itor->name);
+       error("Failed to find object with index %08lX as target for camera '%s'", itor->target, itor->name);
       cameradesc.target = found->second->object;
      }
     cameras.push_back(cameradesc);
@@ -294,7 +322,7 @@ class Convert
 
  void print(const HierObj* hierobj, int depth)
  {
-  printf("% *s%lX (%s) '%s'", depth++, "", hierobj->object->index, hierobj->object->search.c_str(), hierobj->object->filename.c_str());
+  printf("% *s%08lX (%s) '%s'", depth++, "", hierobj->object->index, hierobj->object->search.c_str(), hierobj->object->filename.c_str());
   for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end(); ++lod)
    printf(" %f '%s'", lod->distance, lod->filename.c_str());
   printf("\n");
@@ -428,23 +456,17 @@ class Convert
     save_animation(itor->camera->motion);
    }
 
-#if 1
-  fw(0);
-#else
-  fw(number_of_scene_links);
-  objects_3d_scene_link_ptr = ...;
-  for (int tmp = 0; tmp < number_of_scene_links; tmp++)
+  fw(static_cast<int>(links.size()));
+  for (Links::const_iterator itor(links.begin()); itor != links.end(); ++itor)
    {
-    fwrite(&objects_3d_scene_link_ptr->scene_index, sizeof(int), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->x, sizeof(float), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->y, sizeof(float), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->z, sizeof(float), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->heading, sizeof(float), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->pitch, sizeof(float), 1, fp);
-    fwrite(&objects_3d_scene_link_ptr->roll, sizeof(float), 1, fp);
-    objects_3d_scene_link_ptr++;
+    fw((*itor)->search.c_str());
+    fw((*itor)->motion.channels[0].keys.front().value);
+    fw((*itor)->motion.channels[1].keys.front().value);
+    fw((*itor)->motion.channels[2].keys.front().value);
+    fw((*itor)->motion.channels[3].keys.front().value);
+    fw((*itor)->motion.channels[4].keys.front().value);
+    fw((*itor)->motion.channels[5].keys.front().value);
    }
-#endif
 
   fw(static_cast<int>(lights.size()));
   for (LightDescs::const_iterator itor(lights.begin()); itor != lights.end(); ++itor)
@@ -483,20 +505,29 @@ class Convert
 
 #if 1
   fw(0);
-  fw(0);
-  fw(1.0f);
-  fw(1.0f);
-  fw(1.0f);
-  fw(-1);
 #else
   fwrite(&shadow_approximation_index, sizeof(int), 1, fp);
-  fwrite(&shadow_polygon_object_index, sizeof(int), 1, fp);
-  fwrite(&shadow_polygon_object_scale.x, sizeof(float), 1, fp);
-  fwrite(&shadow_polygon_object_scale.y, sizeof(float), 1, fp);
-  fwrite(&shadow_polygon_object_scale.z, sizeof(float), 1, fp);
-
-  fwrite(&collision_object_index, sizeof(int), 1, fp);
 #endif
+
+  if (shadow)
+   {
+    fw(shadow->filename.c_str());
+    fw(shadow->motion.channels[7].keys.front().value);
+    fw(shadow->motion.channels[8].keys.front().value);
+    fw(shadow->motion.channels[9].keys.front().value);
+   }
+  else
+   {
+    fw("");
+    fw(1.0f);
+    fw(1.0f);
+    fw(1.0f);
+   }
+
+  if (collision)
+   fw(collision->filename.c_str());
+  else
+   fw("");
 
   save_animation(main.object->motion);
 
@@ -526,6 +557,9 @@ class Convert
  CameraDescs cameras;
  Lods lods;
  SubObject main;
+ const Object* collision;
+ const Object* shadow;
+ Links links;
  int total_indices, total_subobjects;
  FILE* fp;
 };

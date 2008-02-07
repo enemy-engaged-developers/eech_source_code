@@ -167,16 +167,22 @@ void sub_object_add(sub_object* subo, int number_of_sub_objects, struct OBJECT_3
 }
 
 int current;
-void ExportObject(FILE* fp, int index, int sub_object_index)
+void ExportObject(FILE* fp, int index, int sub_object_index, const char* special = NULL, const char* null_special = NULL)
 {
  current++;
  if (index)
   fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
  else
-  fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
- if (sub_object_index)
-  fprintf(fp, "Plugin CustomObjHandler 1 LW_ItemShape\n4\n1\n1\n0\n0\n0\n0 0 0\n0 0 0\n0 0 0\n1\n0\n\"%s\"\nEndPlugin\n", names.SubObjects[sub_object_index]);
-
+  {
+   if (null_special)
+    fprintf(fp, "AddNullObject %08X NullObject (%s)\n", 0x10000000 + current, null_special);
+   else
+    fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
+  }
+ if (!special && sub_object_index)
+  special = names.SubObjects[sub_object_index];
+ if (special)
+  fprintf(fp, "Plugin CustomObjHandler 1 LW_ItemShape\n4\n1\n1\n0\n0\n0\n0 0 0\n0 0 0\n0 0 0\n1\n0\n\"%s\"\nEndPlugin\n", special);
 }
 void ExportKeyFrames(FILE* fp, const char* type, int visibility, int color, int number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME* keyframes)
 {
@@ -360,21 +366,38 @@ void sub_objects_export(FILE* fp, sub_object* subo, int parent)
 
 void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
 {
- if (scene->shadow_polygon_object_index > 0)
-  printf("\tShadow polygon object %04X not supported\n", scene->shadow_polygon_object_index);
- if (scene->collision_object_index > 0)
-  printf("\tCollision object %04X not supported\n", scene->collision_object_index);
  if (scene->number_of_texture_animations)
   printf("\tTexture animation not supported\n");
  if (scene->number_of_displacement_amplitude_keyframes)
   printf("\tDisplacement animation not supported\n");
  if (scene->shadow_approximation_index > 0)
   printf("\tShadow approximation %i not supported\n", scene->shadow_approximation_index);
- if (scene->number_of_scene_link_objects)
-  printf("\tScene link objects not supported\n");
 
  current = -1;
  fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
+
+ if (scene->shadow_polygon_object_index > 0)
+  {
+   ExportObject(fp, scene->shadow_polygon_object_index, 0, "SHADOW_OBJECT");
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 2.5 * scene->radius, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z };
+   ExportKeyFrames(fp, "Object", 7, 3, 1, &keyframe);
+  }
+
+ if (scene->collision_object_index > 0)
+  {
+   ExportObject(fp, scene->collision_object_index, 0, "COLLISION_OBJECT");
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -2.5 * scene->radius, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0 };
+   ExportKeyFrames(fp, "Object", 7, 3, 1, &keyframe);
+  }
+
+ for (int i = 0; i < scene->number_of_scene_link_objects; i++)
+  {
+   const struct OBJECT_3D_SCENE_LINK_OBJECT* link = &scene->scene_link_objects[i];
+
+   ExportObject(fp, 0, 0, names.Objects[link->scene_index], "LINK_OBJECT");
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, link->x, link->y, link->z, link->heading, link->pitch, link->roll, 1.0, 1.0, 1.0 };
+   ExportKeyFrames(fp, "Object", 7, 3, 1, &keyframe);
+  }
 
  ExportObject(fp, scene->index, 0);
  ExportKeyFrames(fp, "Object", 7, 3, scene->number_of_keyframes, scene->keyframes);
@@ -415,12 +438,13 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
   if (scene->object_dissolve > 1E-2)
    fprintf(fp, "ObjectDissolve %f\n", scene->object_dissolve);*/
 
+ int root = current;
  memset(target_sub_object_index, 0, sizeof(target_sub_object_index));
  {
   G_scene = scene;
   sub_object sub;
   sub_object_add(&sub, scene->number_of_sub_objects, scene->sub_objects);
-  sub_objects_export(fp, &sub, current);
+  sub_objects_export(fp, &sub, root);
   G_scene = NULL;
  }
 
@@ -445,7 +469,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    int locked = (c->heading_locked ? 8 : 0) | (c->pitch_locked ? 16 : 0) | (c->roll_locked ? 32 : 0);
    if (locked)
     fprintf(fp, "LockedChannels %i\n", locked);
-   fprintf(fp, "ParentItem 0x10000000\n");
+   fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
    if (c->target_sub_object_id)
     {
      int object = target_sub_object_index[c->target_sub_object_id];

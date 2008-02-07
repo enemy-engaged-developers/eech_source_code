@@ -587,7 +587,11 @@ class LwsFile : public Lws
  {
   clearlast();
   Object object;
-  sscanf(str, "%lx NullObject", &object.index);
+  findkeyword();
+  sscanf(keyword.c_str(), "%lx", &object.index);
+  findkeyword();
+  if (str[0] && str[1])
+   object.filename.assign(str + 1, strlen(str) - 2);
   object.layer = 0;
   objects.push_back(object);
   LastObject = &objects.back();
