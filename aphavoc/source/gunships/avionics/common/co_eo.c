@@ -2042,8 +2042,6 @@ float get_range_to_target(void)
 
 void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float coarse_slew_rate)
 {
-	vec3d* eo_tracking_point = get_eo_tracking_point();
-	
 	if (eo_target_locked)
 	{
 		float
@@ -2083,8 +2081,8 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 			movement = movement_rate * get_delta_time();
 	
-			eo_tracking_point->x += cos_heading * movement;
-			eo_tracking_point->z -= sin_heading * movement;
+			eo_tracking_point.x += cos_heading * movement;
+			eo_tracking_point.z -= sin_heading * movement;
 			movement_rate = 0.0;
 		}
 
@@ -2116,17 +2114,17 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		
 		movement = movement_rate * 4 * get_delta_time();  // multiply vertical rate by two since it appears much smaller from usual angles
 	
-		eo_tracking_point->x += sin_heading * movement;
-		eo_tracking_point->z += cos_heading * movement;
+		eo_tracking_point.x += sin_heading * movement;
+		eo_tracking_point.z += cos_heading * movement;
 
 		// keep point on ground (unless point off map)
-		if (has_moved && point_inside_map_area (eo_tracking_point))
+		if (has_moved && point_inside_map_area (&eo_tracking_point))
 		{
 			helicopter *raw = get_local_entity_data(get_gunship_entity());
-			eo_tracking_point->y = get_3d_terrain_point_data(eo_tracking_point->x, eo_tracking_point->z, &raw->ac.terrain_info);
+			eo_tracking_point.y = get_3d_terrain_point_data(eo_tracking_point.x, eo_tracking_point.z, &raw->ac.terrain_info);
 
 			// have to update server's tracking point so that missiles will aim in multiplayer
-			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, eo_tracking_point);
+			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 		}
 	}
 	else
