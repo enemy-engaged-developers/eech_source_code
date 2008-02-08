@@ -289,6 +289,9 @@ int TIR_looking_in_periscope(void)
 
 	float x, y, z;
 
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) != CREW_ROLE_CO_PILOT)
+		return FALSE;
+
 	x = wide_cockpit_position[wide_cockpit_nr].x - current_custom_cockpit_viewpoint.x;
 	y = wide_cockpit_position[wide_cockpit_nr].y - current_custom_cockpit_viewpoint.y;
 	z = wide_cockpit_position[wide_cockpit_nr].z - current_custom_cockpit_viewpoint.z;
