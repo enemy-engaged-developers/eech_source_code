@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.9</title>
+<title>EECH Community Release Version 1.10</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.9.1</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.10</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -74,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by GCsDriver: January 27, 2008
+      italic;'>Last edited by arneh: February 8, 2008
       </p>
 
 
@@ -92,310 +92,116 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.9.1?</h2>
+      <h2>What's NEW in EECH 1.10?</h2>
       <p><em>(since version 1.9)</em></p>
+
+      <strong>Important: This version is incompatible with previous
+      versions of EECH.  Save games can not be loaded from previous
+      versions, it's incompatible in multiplayer, and any custom 3D
+      objects (like the Apache and Havoc floor fixes) from previous
+      versions won't work with this version.</strong>
       <dl>
-      <dt>Unordered changes
+      <dt>Avionics changes
+      <dd>
+         <ul>
+	   <li>Added capability to lock EO system on any point on
+      ground.  Use regular lock key.  Lock position can be moved after
+      lock is achieved.  Laser can be used to get range, and unguided,
+      optically and laser guided weapons (but not radar guided) can be
+      fired at ground lock.
+	   <li>Added ORT view for Apache (much like Hokum's perscope
+      view). Accessible by pressing PageDown when in co-pilot's
+      cockpit.
+           <li>Apache's DVO sensor has returned.  But it is only
+      viewable through the ORT, not on MFDs.  Use PageDown to first
+      select ORT, and again to change sensor to DVO.
+            <li>Locking a target in helmet sight mode won't also padlock
+      when using Track-IR.  You can still padlock with track-IR, but
+      you have to press the padlock key separately.
+	    <li>Weather condition dependant eo lock ranges and
+      slightly varying general lock ranges (LLTV,FLIR,Periscope). (GCsDriver)
+	    <li>Switchable COMM-Channels. See TAB menu. (GCsDriver)
+	    <li>Automatic unpadlock on target handover from helmet tracking via eech.ini.
+            <li>Implemented shaking of EO cameras when cannon is fired.
+	 </ul>
+
+      <dt>Flight model changes
+      <dd>
+         <ul>
+         <li>Implemented pedal trim.  Use normal trim key, and pedal
+      position will also be remembered as trim position.  For fine
+      trim you can use z and x (use shift + z/x if you are using
+      keyboard for pedal control).  Very useful for those flying with
+      cross coupling disabled.
+         <li>Rotor will lose RPM much faster when pulling collective
+      and not powered by engine (i.e. when flairing after an autorotation).
+         <li>All helicopters now have two hydraulics systems.  If only
+      primary is lost controls become more sluggish.  If only
+      secondary is lost no immediate effect.  If both are lost
+      controls will gradually lock up as pressure is lost (takes 1 to
+      15 minutes).  You are strongly adviced to land before this
+      happens ;-)
+        </ul>
+      <dt>Rendering changes
+      <dd>
+         <ul>
+	   <li>Removed restrictions on available screen resolutions.
+      EECH should now support any resolution your graphics card does.
+      (Retro)
+	   <li>Fixed so that aspect ratio is changed when screen
+      resolution is.  This should stop widescreen monitors having a
+      stretched image (In 3D.  The 2D menues will still be stretched).
+           <li>Added capability for "trinnlaus zoom" for main 3D view, i.e.
+      smoothly changing field of view to any angle (min and max field
+      of view set in eech.ini).  A
+      joystick axis (set in eech.ini), or ALT + F3/F4 keys can be used
+      to change zoom.
+	   <li>Objects can now be rendered up to fog border, avoiding
+      suddenly disappearing units.(GCsDriver)
+	   <li>Switchable tree shadows and optimised tree models for better performance.(GCsDriver)
+           <li>Russian NVG without FLIR effect via eech.ini.(GCsDriver)
+           <li>Added support for background image themes for UI(casm)
+         </ul>    
+
+      <dt>Non-standard helicopter changes (by GCsDriver)
       <dd>
           <ul>
-	    <li>Objects can now be rendered up to fog border, avoiding suddenly disappearing units.
-	    <li>Weather condition dependant eo lock ranges and slightly varying general lock ranges (LLTV,FLIR,Periscope).
-	    <li>Switchable tree shadows and optimised tree models for better performance.
-	    <li>Switchable COMM-Channels. See TAB menu.
-	    <li>Modder credit screen.
-
-	    <li>Nonlinear collective : percentage at zone1 can now be set via eech.ini, allowing better adaption to personal preferences.	
-	    <li>Automatic unpadlock on target handover from helmet tracking via eech.ini.
-
+	    <li>
 	    <li>Separate gear and door functions for hacked helis (Alt+C for doors).
 	    <li>Correct working weapon pages and chaff/flare outlet for hacked helis.
 	    <li>High-res MFDs and eo ground stabilisation for all helis.
 	    <li>AH-64A flight page added.
 	    <li>AH-64A and Blackhawk have 64D-style weapon pages.
-	    <li>Ka-52 periscope behaviour: can switch automatically back to pilot seat when switching from periscope to another targeting device. Also can stay in pilot seat when activating periscope.
 	    <li>Ka-50 with working gauges and Hokum style HUD.
-	    <li>Ka-50 and Mi-24 now also have aiming for ballistic weapons.
-
-	    <li>NVG brightness is now high per default.
-	    <li>Russian NVG without FLIR effect via eech.ini.
+	    <li>Ka-50 and Mi-24 now also have aiming for ballistic
+      weapons.
+          </ul>
+     <dt>Miscellaneous changes
+     <dd>
+         <ul>
+            <li>Added support for new Apache 3D cockpit
+	    <li>Nonlinear collective : percentage at zone1 can now be
+      set via eech.ini, allowing better adaption to personal
+      preferences. (GCsDriver)
+          </ul>
      </dl>
 
 
-      <h2>What's NEW in EECH 1.9?</h2>
-      <p><em>(since version 1.8.6)</em></p>
-      <dl>
-      <dt>Weapons modelling
-      <dd>
-          <ul>
-	     <li>Gun projectiles and unguided rockets are now affected
-	           by gravity, drag and dispersion.  As a result
-		   rounds take longer to reach their target and with
-		   less accuracy.
-	     <li>Vikhr missiles now follow a spiral flight path
-	     <li>Vikhr launch racks will depress up to 12 degrees to
-	     align with target direction.  This helps as the Vikhr now
-	     has very narrow launch restrictions for weapon launch.
-	     <li>Rockets and missiles will now only create smoke for
-	     as long as the rocket engine is burning.
-	     <li>Rockets adjusted to have shorter burn time and faster
-	     acceleration.
-	     <li>Muzzle velocity adjusted for many weapons to better
-	     match real world values.
-	     <li>New values for GWUT file for changing weapons drag,
-	     spiral path and seeker limits.  These are included in
-	     gwut190.csv, but note that the GWUT editor (version 1.3)
-	     is not yet capable of editing these values, and will delete them
-	     from any file which contains them.  So you will have to edit the
-	     file with a text editor until a new version of the GWUT editor
-	     comes out
-	  </ul>
-      <dt>Avionics changes
-      <dd>
-          <ul>
-		
-	    <li>High-res MFDs and eo ground stabilisation for all helis.
-	    <li>Corrected weapon pages for hacked helis.
-	    <li>Separated gear and door functions (Alt+C for doors).
-	    <li>AH-64A added flight page.
-	    <li>AH-64A and Blackhawk have 64D-style weapon pages.
-	    <li>Ka-52 periscope behaviour: can switch automatically back to pilot seat when switching from periscope to another targeting device. Also can stay in pilot seat when activating periscope.
-	    <li>Ka-52 HUD ammo counter can be switched on via eech.ini.
-	    <li>Ka-50 gauges working and HUD changed to Hokum style with adjusted gun box.
-	    <li>Mi-24 and Ka-50 now also have aiming for ballistic weapons.
-	    <li>New weapons aiming avionics for ballistic weapons. See
-	    <a
-	          href="http://www.eechcentral.com/wiki/index.php?title=Firing_guns_and_rockets">
-		  wiki article</a> for details.
-            <li>New flight MFD page, revised TADS page and added
-	    colour to many other MFD pages for Comanche.
-	    <li>New HUD for Comanche
-	    <li>New flight, TSD, radar and engine pages for Alligator.  Added
-	    colour to several other pages.
-            <li>DTV/LLLTV will now show a full-colour(for
-	    Comanche) or monochrome (for the others) TV view, not a IR-view.
-	    <li>DTV/LLLTV in Comanche and Ka-52 is now capable changing zoom
-	    level.
-	    <li>EO zoom level can now be changed even if EO is not
-	    active targeting system.  Use CTRL + keypad +/- for this.
-	    <li>EO camera can now be changed even if EO is not active
-	    targeting system.  Use Shift + END for this.
-          </ul>
-
-      <dt>Campaign map changes
-      <dd>      
-          <ul>
-	    <li>New relief shaded topographical campaign map
-	    <li>Hi-res campaign map and alternative map palette also
-	          available (campaign_map_mode and campaign_map_palette in
-		  eech.ini)
-            <li>Adjustable how often enemy units update.  By default
-	          the position of known enemy units are updated once every 2
-		  minutes.  Configurable by map_update_interval in eech.ini.
-            <li>Fixed bug where undiscovered enemy units would show up
-	          if you just zoomed the map enough.
-            <li>Campaign map in free flight mode now allows adding and
-	          moving waypoints.
-	  </ul>
-      <dt>External cameras
-      <dd>
-          <ul>
-            <li>New free camera mode.  Press F9 when
-	    already in chase or weapons camera view.  Use mouse to
-	    pan, arrow keys or mouse wheel to move camera.
-	    <li>New wobbly camera option (wobbly-camera in eech.ini)
-	    for chase and weapons camera.  Gives the impression of the camera
-	    being mounted in a chase plane/helicopter which is not always
-	    able to keep perfect view of object.
-	    <li>Chase camera allows a limited amount of movement from
-	    object being chased.  Use arrow keys for this.
-	  </ul>
-      <dt>Smoke fixes
-      <dd>
-          <ul>
-	    <li>You can now disable the persistent smoke
-	    (persistent_smoke=0 in eech.ini).  With it enabled smoke 
-	    will only be created for about 10 seconds, instead of minutes.
-	     <li>Rockets and missiles only generate smoke as long as
-	     the rocket engine is burning.
-	    <li>Slightly adjusted smoke colour.
-	    <li>Fixed a crash which would sometimes happen with smoke.
-	  </ul>
-      <dt>Other changes
-      <dd>
-         <ul>
-	    <li>Fixed a problem for multiplayer/saved games where
-	    data would get corrupted
-	    <li>Trim does no longer affect helicopter attitude in
-	    hover hold mode.
-	    <li>... and probably some more changes I've forgotten to
-	    mention, and numerous bugs I haven't discovered yet :)
-	 <ul>
-      </dl>
-
       <p align="right"><a href="#top">[top ^]</a></p>
+
     
 
       <h2><a name="installation"></a>Installation and addons</h2>
-      <hr>
-      <p><strong>NEW</strong>: Go to www.eechcentral.com and download
-      the installation tool: <A
-      href="http://www.planet.nl/~ek000114/gotcha/download/eechupdater1.3.exe">eechupdater1.3.exe</A></p>
-      <p>This will download and install all patches and addon packs
-      that you need. If new packs arrive this tool will detect them
-      and download them, keeping your database up to date. It is still
-      a good idea to read the following! </p>
-      <hr>
+      See the installation guide at <a href="http://www.eechcentral.com/wiki/index.php?title=Installation_guide">eechcentral</a>.
 
-      <h3 class="p">Basic Install </h3>
-      <p class="p">If you do not own EE - Apache Havoc you can skip the first two steps </p>
-      <ol>
-        <li><span lang=EN-GB>Install EE - Apache Havoc from CD and run once to unpack the graphics files. </span></li>
-        <li><span lang=EN-GB>Patch EEAH up to <a href="http://www.razorworks.com/enemyengaged/mainframe.html#Patches" target="_blank">patch 1.1E</a>, run once. </span></li>
-        <li>Install EE - Comanche Hokum from the CD. </li>
-        <li><strong>Do not forget this: </strong>Download and install <a href="http://www.razorworks.com/enemyengaged/chpatch/EECH_Patch.exe">patch 141C</a> from the Razorworks site: documentation is <a href="http://www.razorworks.com/enemyengaged/chpatch/index.html" target="_blank">here</a></li>
-      </ol>
-      <p>If there are new options the old <strong>eech.ini</strong> will still be read and the new options added when you leave the game. Start the game once and leave it to see which options are added. </p>
-      <p>IMPORTANT: when you have just installed eech by default the
-      <strong>avionics</strong> <strong>in the options menu </strong>
-      is set at <strong>&quot;novice&quot;. This means that you cannot
-      operate the targetting systems,</strong> it is done for you in
-      the game by the &quot;copilot&quot;. Set this option at
-      <strong>advanced</strong> when in the game for full operation.
-      When you delete the game.cfg and it is recreated by the game,
-      the option is reset at novice! </p>
+      <p align="right"><a href="#top">[top ^]</a></p>
 
-      <h3>Addons</h3>
-      <p>These addons should all be installed directly in your Razorworks directory. Normally the setup files recognize the correct directory and create and install all that is needed, you only have to click yes. The order below gives you the best result ;-). </p>
-      <p><strong>NOTE</strong>: to use modded textures you have to set the following options in <strong>eech.ini</strong>: <br>
-&quot;texture_colour=1&quot;, &quot;mipmapping=1&quot;, &quot;texture_filtering=1&quot; and &quot;dynamic_water=1&quot;. Also set the anisotropy setting of your graphics card to a higher quality setting. </p>
-      <p>The following texture packs can be installed in random order (note that these packs create a load of extra directories under /razorworks/cohokum/graphics/textures):</p>
-      <table border="0" cellpadding="2" cellspacing="2">
-        
-          <td colspan="3" bgcolor="eeeeee"><strong>Apache Havoc campaigns </strong></td>
-        </tr>
-        
-          <td width="220" ><p><a href="http://www.eechcentral.com/files/Map packs/eeahmapssetup1.1.exe">eeahmapssetup1.1.exe</a><a href="http://www.eechcentral.com/files/Map packs/eeahgeorgiapatch1.0.exe" target="_blank">eeahgeorgiapatch1.0.exe</a></p>
-            </td>
-          <td width="57" ><span class="style50">117 Mb </span></td>
-          <td >The original razorworks Apache Havoc maps and campaigns (Georgia, Cuba and Taiwan), if you don't own EE - Apache Havoc. With permission of Razorworks. A small patch corrects a mistake in the Georgia files. </td>
-        </tr>
-        <tr >
-          <td colspan="3" bgcolor="eeeeee"><strong>Fan made campaigns </strong></td>
-        </tr>
-        
-          <td height="54" ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/superpatch3.exe">superpatch3.exe</a></td>
-          <td height="54" ><span class="style50">14 Mb </span></td>
-          <td ><p>Custom campaigns: new version of Alaska and Aleut, older versions of Kuwait and Lybia campaigns and skirmishes. Trees packs for Alaska and Aleut. The Grand Canyon! </p></td>
-        </tr>
-        <tr  >
-          <td colspan="3" bgcolor="eeeeee"><strong>Camo, Cockpit and general textures for all maps </strong></td>
-        </tr>
-        
-          <td height="38" ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepack_gcc3.exe" target="_blank">texturepack_gcc3.exe</a></td>
-          <td height="38" ><span class="style50">26 Mb </span></td>
-          <td ><p>A compilation of all General, Cockpit and Camo textures by several authors, includes winter (-W) and desert (-D) textures. Includes also sky/cloud textures and Russian decals for each warzone. </p></td>
-        </tr>
-        
+      <h2><a name="trouble"></a>Trouble shooting </h2>
+      See the trouble shooting guide at <a href="http://www.eechcentral.com/wiki/index.php?title=Troubleshooting_FAQ">eechcentral</a>.
 
-        <tr  >
-          <td colspan="3" bgcolor="eeeeee"><strong>Terrain texture packs </strong></td>
-        </tr>
-        
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepack_dynamicwater.exe" target="_blank">texturepack_dynamicwater.exe</a> </td>
-          <td ><span class="style50">19 Mb </span></td>
-          <td >Dynamic water textures for rivers, reservoirs and sea by Gotcha </td>
-        </tr>
-
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackgeorgia2.exe">texturepackgeorgia2.exe</a><br></td>
-          <td ><span class="style50">26 Mb </span></td>
-          <td >Georgia textures by Gotcha</td>
-        </tr>  <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackgeorgia-W.exe">texturepackgeorgia-W.exe</a><br></td>
-            <td ><span class="style50">15 Mb </span></td>
-            <td >Georgia Winter textures by Maverick </td>
-        </tr>
-
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepacklebanon2.exe">texturepacklebanon2.exe</a></td>
-          <td ><span class="style50">20 Mb </span></td>
-          <td >Lebanon textures by Gotcha</td>
-        </tr>
-
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackyemen.exe">texturepackyemen.exe</a><br>          </td>
-          <td ><span class="style50">27 Mb </span></td>
-          <td >Yemen textures by Rocky</td>
-        </tr>
-         <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackthailand.exe" target="_blank">texturepackthailand.exe</a></td>
-          <td ><span class="style50">27 Mb </span></td>
-          <td >Thailand textures by Rocky </td>
-        </tr>
-
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepacktaiwan2.exe" target="_blank">texturepacktaiwan2.exe</a></td>
-          <td ><span class="style50">28 Mb </span></td>
-          <td >Taiwan textures by Gotcha </td>
-        </tr>
-
-          <td ><em>texturepackcuba.exe</em></td>
-          <td ><span class="style51"></span></td>
-          <td >Not done yet ! (but you can copy the thailand textures for instance to the cuba terrain texture directory) </td>
-        </tr>
-
-          <td ><FONT face="Verdana, Arial"><A 
-href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackalaska.exe" 
-target=_blank>texturepackalaska.exe</A></FONT></td>
-          <td ><span class="style50">20 Mb </span></td>
-          <td > Alaska summer and winter textures by Maverick </td>
-        </tr>
-
-          <td ><FONT face="Verdana, Arial"><A 
-href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackaleut.exe" 
-target=_blank>texturepackaleut.exe</A></FONT></td>
-          <td ><span class="style50">18 Mb </span></td>
-          <td > Aleut summer and winter tesxtures by Maverick</td>
-        </tr>
-
-          <td ><FONT face="Verdana, Arial"><A 
-href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackkuwait_etc.exe" 
-target=_blank>texturepackkuwait_etc.exe</A></FONT></td>
-          <td ><span class="style50">23 Mb </span></td>
-          <td > Textures for the Kuwait and Lybia campaigns </td>
-        </tr>
-        <tr >
-          <td colspan="3" bgcolor="eeeeee"><strong>Miscellaneaous</strong></td>
-        </tr>
-        
-          <td ><a href="http://www.eechcentral.com/files/Addon packs/Addons for versions 162W2T6 or later/texturepackmenuscreens.exe" target="_blank">texturepackmenuscreens.exe</a></td>
-          <td ><span class="style50">14 Mb </span></td>
-          <td >Opening screen and menu background replacements by Michael Langner</td>
-        </tr>
-      </table>
       <p align="right"><a href="#top">[top ^]</a></p>
 
 
-      <h2><a name="trouble"></a>Trouble shooting </h2>
-      <p>If your game doesn't run properly, there is not so much that can be done! </p>
-      <ul>
-        <li>If you have some weird behaviour, go to the directory razorworks\cohokum and delete the files <em><strong>game.cfg</strong></em> which contains all the settings of the in-game user interface, and <em><strong>eech.ini</strong></em> which contains additional and settings for mods, in the cohokum directory. These files are regenerated automatically. <strong>NOTE: </strong>when you delete <strong><em>game.cfg</em></strong> the avionics in the options screen is reset to &quot;novice&quot; and the targeting systems do not work, you have to set it to &quot;advanced&quot; to make it work again.<br>
-        </li>
-        <li>A fresh install has been known to help in many cases (but its a pain).<br>
-        </li>
-        <li>Set the screen refresh to &quot;always on&quot; for Radeon cards.<br>
-        </li>
-        <li>Try in the <em>options</em> screen to set the <em>Device</em> selection to either automatic or Primary Display Driver. This may sometimes help.<br>
-        </li>
-        <li>Graphics settings in eech.ini: try changing the <em>notnl </em>setting <br>
-        </li>
-        <li>Some people reported a problem with NVIDIA drivers 71.xx, no cure yet. <br>
-        </li>
-        <li>Very old saved games may not work because certain modded settings will not be in the game. This is rare however.<br>
-        </li>
-        <li>Framerates: these cannot be improved much because of the old rendering system. Framerate killers are FLIR especially above cities. Also in the eech.ini settings, the options &quot;highresMFD&quot;, &quot; high_lod_hack&quot; and &quot;cbar&quot; should be set to off or a low value. Set mfr to a high value (999). Note that the best way to test framerates is with the tool &quot;FRAPS&quot;. 
-  Of course on your graphics card AA settings may have a negative effect (but not always, this is not the bottleneck), and the &quot;texture preference&quot; can be set to &quot;high performance&quot; instead of &quot;high quality&quot;. <br>
-        </li>
-        <li>If you have windows XP and can't run apache havoc try running it in win 98 mode: right click on the executable and its a setting in properties -&gt; compatibility.<br>
-        </li>
-        <li>Please try to repeat the error and report about it on the <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30" target="_blank">SimHQ - EECH forum. </a>There is a file <em><strong>error.log</strong> </em>in your cohokum directory when the game crashes but it is a memory stack dump and pretty useless, no need to report that. </li>
-      </ul>      <p align="right"><span
-lang=EN-GB><a href="#top">[top ^]</a></span>
-      </p>
       <h2><span class="style37" lang=EN-GB><a name="gameinfo"></a>Game info </span></h2>
       <p>There are a number of ways to play this game:</p>
       <ol>
@@ -418,448 +224,20 @@ lang=EN-GB><a href="#top">[top ^]</a></span>
       <h3><a name=MP id=MP></a><span class="style37" lang=EN-GB>Multiplayer status </span></h3>
       <p>Seems to be fairly smooth these days, <span lang=EN-GB></span><span lang=EN-GB>but the test environment is limited, so there could still be bugs left. <span class="MsoNormal"><b>It's crucial that the host runs with cvc=1</b></span>. Its also a good idea to touch only the other variables if you know what you are doing. <strong>Downwash </strong>should be off, it can mess up the host after a while. </span></p>
       <h3><a name=wut></a><span class="style37" lang=EN-GB>What is a WUT file?</span></h3>
-      <p><span lang=EN-GB>Most people fly with a WUT file. A WUT-profile (Weapons and Units Tweaker file) is a text file that alters some critical parameters in the game to make it more &quot;realistic&quot; and harder. The text file name can be added to the file <a href="#eechini">eech.ini </a>and all parameters are read by cohokum.exe at startup. The most used WUT file is <strong>gwut151D.csv</strong> which basically increases speed and scan capabilities of aircraft and vehicles and power of various weapons (increasing gameplay difficulty). Furthermore there is <strong>gwut1613H.csv</strong> which adds enemy chopper aggressiveness (all enemy choppers behave as if they are on a strike mission), and <span><strong>gwut146X.csv </strong>which is needed when playing multiplayer and has the game's default values (identical to playing without a WUT file). </span></span>A last GWUT files has bee added: <strong>gwut162B.csv</strong> by KLiM, see <a href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=get_topic;f=30;t=004561" target="_blank">here</a> for a description. </p>
-      <p><span lang=EN-GB><span>You can edit these files with the GWUT editor, downloadable from </span></span><a
-href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a>. <span lang=EN-GB>If you intend to join a MP-game all three WUT files are needed. You are not aware of the host's profile until you're connecting and if the host is running with one of the WUT profiles your game will look for a similar one in your cohokum-folder. </span></p>
+      <p><span lang=EN-GB>Most people fly with a WUT file. A
+ WUT-profile (Weapons and Units Tweaker file) is a text file that
+ alters some critical parameters in the game to make it more
+ &quot;realistic&quot; and harder.
+ See the wiki on <a
+ href="http://www.eechcentral.com/wiki/index.php?title=WUT_files">eechcentral</a>
+ For more information about WUT-files.
+
       <p align="right"><span lang=EN-GB><a href="#top">[top ^]</a></span></p>
-      <h2><a name=eechini id="eechini"></a><span class="style37" lang=EN-GB>The eech.ini file and mod info </span></h2>
-      <p><strong><em>These are only the modded variables! In order of appearance in eech.ini: </em></strong></p>
-      <table border=0 cellpadding=4 cellspacing="4">
-        <tr valign="top" bgcolor="#eeeeee">
-          <td colspan=2 class="style36"><h4><span class="style41">[Communications]</span></h4></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><strong><span lang=EN-GB>Look for master server</span></strong></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" height="42" class="Normal">
-            <p class="style43"><span lang=EN-GB style=''>usemaster=0</span></p></td>
-          <td width="538" class="Normal">
-            <p><span lang=EN-GB style='color:black;'>When starting the game it reports to the master server and gets info from it (value = 1), when set to 0 the master server is ignored (default = 0)</span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Multiplayer master server </span></b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB> pss=[server name]</span></p>
-            <p class="style43"><span lang=EN-GB>sss=[server name]</span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Primary and secondary server setting. At </span><a
-  href="http://hoxdna.org/eech"><span lang=EN-GB>http://hoxdna.org/eech</span></a><span
-  lang=EN-GB> there is a master server for EECH, listing all running games along with total players and IP addresses. EECH versions newer than 1.6.0W1 report to the master server if you play a game with Networking set to TCP/IP in the options menu. To join a game, just copy&amp;paste an active IP from the server list into GSS (Ground Support System) or EECH itself. </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><span lang=EN-GB><span class="MsoNormal"><span lang=EN-GB style='color:black;'><strong><span lang=EN-GB >Server pause when client connects</span></strong></span></span></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">pauseserv=1</p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB style='color:black;'> When a host starts a game, he/she can hit &quot;pause&quot; and the game will resume when a client connects. When the (last) client leaves the game returns to &quot;pause&quot;-state and resumes again when a client connects (default=0, off).</span><span lang=EN-GB > </span></p></td>
-        </tr>
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan=2 class="style41"><h4>[Dynamics]</h4></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><strong><span lang=EN-GB >Advanced flight model</span></strong></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">advancedfm=0</p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB style='color:black;'>If enabled, this setting switches to a more complicated flight model. Pedal mixing will be disabled, which means that you will have to use the pedals to turn the chopper. This makes it possible to fly sideways to track and attack moving vehicles, for example.(default=0, off) .</span><span lang=EN-GB
-  style='color:red;'> </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><strong><span lang=EN-GB >Realistic engine dynamics</span></strong></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">enginerealism=1</p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB style='color:black;'>Causes the game to simulate the workload that the engines and the rotorhead are stressed with, and causes engine RPM to drop under prolonged extreme stress. Also, engine torque INCREASES with increased workload. This setting also makes the engines <i>sound</i> more lifelike. (default=1, on) .</span><span lang=EN-GB
-  style='color:red;'> </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">enginestartup=0</p></td>
-          <td class="Normal">
-            <p><style='color:black;'>If enabled will begin mission
-	    with engines off, and the pilot will have to start
-	    the engines as per engine start up procedures (default=0, off)</span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal"><p><strong>Debuging</strong></p></td>
-        </tr>
-	<tr>
-          <td width="214" class="Normal">
-            <p class="style43">debug_show_force_vectors=0</p></td>
-          <td class="Normal">
-            <p><style='color:black;'>Show force vectors acting on own
-	    helicopter. This is mostly for debuging the flight model
-	    (default=0, off)</p></td>
-	</tr>
 
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan=2 class="Normal">
-            <h4 class="style41">[WUT]</h4></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">wut=[filename]</p></td>
-          <td class="Normal">
-          <p><span lang=EN-GB style='color:black;'><a href="#wut">WUT</a> files are text files with Weapons and Units Tweaks to make the game harder. As of version 160W15 the new version &quot;GWUT&quot; files can be read as well as old style WUT files. For more information visit <a
-href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a>.</span></p></td>
-        </tr>
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan=2 class="Normal">
-            <h4 class="style41">[wideview]</h4></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><span lang=EN-GB><strong>Change your point of view to see more of the cockpit</strong></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>commanche_pilot=x,y,z,p<br>
-        commanche_co-pilot=x,y,z,p<br>
-        hokum_pilot=x,y,z,p<br>
-        hokum_co-pilot=x,y,z,p<br>
-        apache_pilot=x,y,z,p<br>
-        havoc_pilot=x,y,z,p </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>Retreating the pilots head causes the player to have a wider field of view without distortion. The values can be edited by pressing Ctrl-\ in the game and using the numpad keys to move the viewpoint: 4 and 6 move distance to dashboard; 2 and 8 move vertically; 1 and 3 move horizontally, 7 and 9 change the pitch (set free mouselook off). Ctrl-\ quits editing, when leaving the game the values are saved in the eech.ini file. </span></p>
-            <p><span lang=EN-GB>Note: for some keyboards with strange and disturbing langauage settings the keys are not \ and Ctrl-\ but something else. You just have to try for yourself on the right hand side of the keyboard. For more info: </span><a
-href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</span></a></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">g-force_head_movement</p></td>
-          <td class="Normal">
-            <p><style='color:black;'>Adjust amount head will move with
-	    g-forces in wideview.  Default = 1.0, off = 0.0 all other
-	    values adjust amount of movement (may be set to more than
-	    1.0 or even negative values to move head in opposite
-	    direction)</span></p></td> 
-        </tr>
- 	
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan="2" class="style41"><h4>Controllers &amp; Track-IR</h4></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Mouselook and TrackIR support</span></b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>msl=1<br>
-        msls=15 </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>You can now control you view using the mouse or by using TrackIR. The TrackIR support uses enhanced mode which means that you will not have to bother about centering you view all the time. A check will be made for a TrackIR upon startup, and if it is found it will be used to control the view. Otherwise the mouse is used. (default = 0, off). Pressing the left mouse button will recenter the view to forward. <br>
-        If mouselook is on, the msls setting controls the speed of the mouselook (6-20, default 15).</span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><span class=style341><strong>Mouse controlled FLIR</strong></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class=style43><span lang=EN-GB>msl=0<br>
-        msls=15 </span></p></td>
-          <td class="Normal">
-            <p class=style33><span lang=EN-GB>When mouselook is off (msl=0), you can use mouse for <strong>FLIR</strong> panning. Additionally, when you press <em>left </em>mouse button you <em>lock/unlock</em> target, with <em>right </em>button you can <em>select next target </em>and with mouse <em>wheel</em> you control <em>zoom </em>level. <br>
-        It is also possible to switch mouselook on/off with<strong> ctrl-delete </strong>key combination or with a middle mouse button. <br>
-        If mouselook is off, the msls setting controls the POV rotation speed (6-20, default 15).</span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Field of view</span></b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43"><span lang=EN-GB>minfov=20<br>
-        maxfov=80 </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>The user can specify different field-of-view values, which can be activated by the '7','8' and '9' keys. 7 switches min FOV, 8 switches to (fixed) standard FOV, 9 switched to wide FOV. Please note that higher FOVs currently mean lower LODs. </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Joystick controlled FLIR panning and zoom (Comanche and Hokum only) </span></b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="style43">
-            <p><span lang=FI>eopann=-1<br>
-        eopanv=6<br>
-        eopanh=8 </span></p>
-            <p><span lang=EN-GB>eozoomn=-1<br>
-        eozoomax=7 </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>You can now use joystick axis to pan the FLIR display. You specify the joystick number and which axis to use for this feature. <br>
-              </span><span lang=EN-GB>The old FLIR code only allowed three levels of zoom. This code has been updated to support any zoom levels. When using the keyboard, you still use the same keys to zoom, but you now have 5 levels instead. If you have an extra joystick axis available you can map one of them to the zoom and using for zooming. <br>
-              </span><span lang=EN-GB>DirectX numbers, general names, Saitek X36USB/X45 names:<br>
-        1 -&nbsp;X-axis -&nbsp;&nbsp;X-axis<br>
-        2 -&nbsp;Y-axis -&nbsp;&nbsp;Y-axis<br>
-        3 -&nbsp;Z-axis<br>
-        4 -&nbsp;rx-axis -&nbsp;&nbsp;Rotary 2<br>
-        5 -&nbsp;ry-axis <br>
-        6 -&nbsp;rz-axis &nbsp;-&nbsp;Rudder<br>
-        7 -&nbsp;slider 1 -&nbsp;Throttle<br>
-        8 -&nbsp;slider 2 -&nbsp;Rotary1 </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b><span lang=EN-GB>Mappable joystick axes </span></b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="style43">
-            <p><span lang=DE>cyclicn=-1<br>
-        cyclich=1<br>
-        cyclicv=2 </span></p>
-            <p><span lang=EN-GB>collectiven=-1<br>
-        collectiveax=3 </span></p>
-            <p><span lang=EN-GB>ruddern=-1<br>
-        rudderax=6 </span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>You can now choose exactly which joystick and which axis on that joystick that should be used for cyclic, collective and throttle. See &quot;FLIR panning&quot; for DX numbers.</span></p></td>
-        </tr>
-
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan="2" class="style41"><h4>Gameplay</h4></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">radarinf=1</p></td>
-          <td class="Normal">
-            <p>infantry no longer visible on radar, def = 1 (on)</p></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">grstab=1</p></td>
-          <td class="Normal">
-            <p>The Comanche now supports ground stabilisation for the
-	       FLIR. You toggle this feature in-flight using Ctrl-S.</p></td> 
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">manual_laser/radar=0</p></td>
-          <td class="Normal">
-            <p>Radar and laser activation/deactivation is manual, and
-	    not controlled by targeting mode, def = 0 (off)</p></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">faa=1</p></td>
-          <td class="Normal">
-            <p>Fly any aircraft: all helicopters available now for the
-        user. Fly your own insertions! The cockpit defaults to the
-        Apache when choosing anything else than CHAH (default = on)
-        .</p></td> 
-        </tr>
-
-
-
-        <tr valign="top" bgcolor="#EEEEEE">
-          <td colspan="2" class="style41"><h4>Graphics and textures</h4></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">dwash=1</p></td>
-          <td class="Normal">
-            <p>Rotor downwash (dust) effect. It makes you see clouds
-        of dust when the chopper gets close to the ground (default=1,
-        on) . May give a framerate hit when activated.</p></td> 
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">restricted_nvg_fov=1</p></td>
-          <td class="Normal">
-            <p>When enabled the night vision will show a dark frame,
-            severly restricting the field of view for a more realistic
-	    night vision effect.
-	    </p></td> 
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">dfr=0</p></td>
-          <td class="Normal">
-            <p>The framerate is displayed in the top
-        left corner and updates about once a second. The average of 30
-        readings is shown for stability. Values: 0 = off; 1 = on; 2
-        write the framerate to a file framerate.txt in the cohokum
-        directory. <strong>This is not a very good measure, you better
-        use the <a href="http://www.fraps.com">FRAPS</a>
-        tool</strong>.</p></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">highreshud=1</p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB>The resolution of the HUD will be
-        doubled. Currently only the Ka-52 and Mi-28 has a high
-        res mode for the HUD, for the other helicopters this setting
-        has no effect.</span></p></td>
-        </tr>
-
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">colourmfd=1</p></td>
-          <td class="Normal">
-            <p>MFDs will use colours for display when available.
-	    (But the TSD map will always be in colour).</p></td> 
-        </tr>
-
-         <tr valign="top">
-          <td colspan=2 class="Normal">
-            <p><b>Special TSD render</b></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" height="116" class="Normal">
-            <p class="style43">tsdrender=1<br>
-        tsdpalette=2<br>
-        tsdenemy=0<br>
-	tsddetail=0 </p></td>
-          <td class="Normal"><p>This mod adds a color and/or shaded
-        relief map background to the TSD of the Comanche, Hokum and
-        Apache (the Havoc is not included). Ctrl-D cycles through the
-        options. There are 3 palettes to choose from for the elevation
-        (Alt-D). The Apache has the same TSD
-        as the Comanche.The configuration is
-        automatically saved in the eech.ini file when you leave the
-        game. <br> 
-          Optional: the friendlies and enemies are shown in red and
-        blue colours (including detection circles of SAMs). If you
-        don't want this option set the eech.ini variable
-        &quot;tsdenemy&quot; to 0. There is
-        may be a framerate hit when showing the terrain.
-	If tsddetail is set to 1 the TSD map will always use high
-        detail level map, even if in 25KM range mode (might cause
-        lower frame rate).
-        For more info:<a 
-	 href="http://home.planet.nl/%7Ejette073/gotcha">Gotcha's site </a>.</p></td>
-        </tr>
-
-        <tr valign="top">
-          <td colspan=2 class="Normal"> <strong>Campaign commander</strong></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class=style43>camcom=0</p></td>
-          <td class="Normal">
-            <p class=style33>When the camcom setting is set to 1 (def
-        = 0), it is possible to designate targets on the main campaign
-        map. Just select the enemy target and press left mouse button:
-        a new task is created. New tasks work the same as other tasks:
-        they may not be executed right away, may expire etc. When you
-        press right mouse button over a task, it is immediately
-        terminated. If it was assigned to any group, the group is sent
-        home. Note that Campaign Commander greatly influences the
-        gameplay balance: with the right planning the campaigns are
-        much easier to win.</p></td> 
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal">
-            <p><strong><span lang=EN-GB style='color:black;'>Designated target list</span></strong><strong><span lang=EN-GB
-  style='color:red;'> </span></strong></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">destgt=0</p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB style='color:black;'>Actvate target list (default =0). Make a list of targets to attack: Alt-NumEnter to add/remove targets to the list. You can select a special MFD filter (added to the low, medium, high that already exist), where you can select the targets with the regular keys. There are also two keypresses: Alt-Num0 and Ctrl-Num0, which allow to select designated targets even outside the filter (default =0, off).</span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal">
-            <p><strong><span style='color:black'>Session filtering</span></strong></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class=style43><span style=''>filter=1</span></p></td>
-          <td class="Normal">
-            <p><span lang=EN-GB style='color:black;'>You can filter the campaign screen to sort the campaign names according to their warzones. (def = 1) </span></p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal">
-            <p><span class="style5"><strong>Pedal input </strong></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="Normal">
-            <p class="style43">reverse_pedal=0</p></td>
-          <td class="Normal">
-            <p> reversed pedal input</p></td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>High LOD </strong></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="style43"> high_lod_hack=0</td>
-          <td class="Normal"> EXPERIMENTAL! Enables highest level-of-detail models at far distances. Nice for higher FOVs, bad for FPS (esp. near cities). Default = 0 </td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>3D apache cockpit</strong></td>
-        </tr>
-        <tr valign="top">
-          <td width="214" class="style43"> 3d_cockpit=0</td>
-          <td class="Normal"> EXPERIMENTAL! Draws a 3D apache cockpit using an in game <span lang=EN-GB>apache model. Very ugly but fun. 
-      Default = 0; </span></td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal">
-            <p><span class="style5"><strong>TrackIR external view </strong></span></p></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> external_trackir=0<br>
-    external_trackir_dir=0</td>
-          <td class="Normal"> if TrackIR is active, let it control external view too (def=0). Invert the view direction of the external TIR (def=0)</td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Cannon tracking boresight</strong></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> cannontrack=1</td>
-          <td class="Normal"> Cannon is tracking the pilot's view. Three settings are available: 0 = tracking off, 1 = tracking only when no acquisition system is turned off (Ctrl-NumDel), 2 = tracking only when IHADSS/HIDSS/HMS system is active. </td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"><strong>           TrackIR vector support</strong></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> TIR_6DOF=0</td>
-          <td class="Normal"> Enables support for TrackIR vector</td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Texture support </strong></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> <p>texture_colour=0<br>
-            texture_filtering=0<br>
-            mipmapping=0<br>
-            dynamic_water=0
-          </p>          </td>
-          <td class="Normal"> Set these values to 1 to enjoy high res mipmapped alpha blended custom made texture packs. When linear filtering is set to 1 the game reacts to the anisotropy setting of your graphics card. Dynamic_water simulates flowing water but only with the correct texture packs. </td>
-        </tr>
-        <tr valign="top">
-          <td colspan="2" class="Normal"> <strong>Autosave</strong></td>
-        </tr>
-        <tr valign="top">
-          <td class="style43"> autosave=0 </td>
-          <td class="Normal">
-            <p>      autosave=n: Autosave every n minutes or 0 for no autosave. Quicksave is also possible using Ctrl-Z. </p>          </td>
-        </tr>
-      </table>
-      <p align="right"><a href="#top">[top ^]</a></p>
+<h2><a name=eechini id="eechini"></a><span class="style37" lang=EN-GB>The eech.ini file and mod info </span></h2>
+<a
+href="http://www.eechcentral.com/wiki/index.php?title=Eech.ini_options">See
+the EECH wiki for documentation of the eech.ini options</a>
 
 <!-- Keyboard commands -->
 
@@ -869,6 +247,20 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
       <h3>Flight controls</h3>
 
       <table border=0 cellpadding=4 cellspacing="4">
+        <tr>
+          <td width="190" class="style43">Arrow keys</td>
+          <td>
+	  Fine trim control.  (Have to use shift + arrowkeys if you use
+          keyboard as cyclic control)
+          </td>
+        </tr>
+        <tr>
+          <td width="190" class="style43">Z, X</td>
+          <td>
+	  Fine pedal trim.    (Have to use shift + Z/X if you use
+          keyboard for tail rotor control)
+          </td>
+        </tr>
         <tr>
           <td colspan=2 class="Normal"> <strong><span lang=EN-GB
         style='color:black;'>Rotor control</span></strong></td>
@@ -1075,6 +467,10 @@ href="http://home.planet.nl/%7Ejette073/gotcha"><span lang=EN-GB>Gotcha's site</
           <td width="190" class="style43">7,8,9</td>
           <td>Activates near, normal, wide field of view (FOV)</td>
         </tr>
+	<tr>
+          <td width="190" class="style43">ALT + F3/F4</td>
+	  <td>Increase/decrease field of view (zoom) smoothly.
+	</tr>	  
 
         <tr>
           <td colspan=2><strong>Mouse controlled view panning </strong></td>
@@ -1255,6 +651,107 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.9</h4>
+      <dl>
+      <dt>Weapons modelling
+      <dd>
+          <ul>
+	     <li>Gun projectiles and unguided rockets are now affected
+	           by gravity, drag and dispersion.  As a result
+		   rounds take longer to reach their target and with
+		   less accuracy.
+	     <li>Vikhr missiles now follow a spiral flight path
+	     <li>Vikhr launch racks will depress up to 12 degrees to
+	     align with target direction.  This helps as the Vikhr now
+	     has very narrow launch restrictions for weapon launch.
+	     <li>Rockets and missiles will now only create smoke for
+	     as long as the rocket engine is burning.
+	     <li>Rockets adjusted to have shorter burn time and faster
+	     acceleration.
+	     <li>Muzzle velocity adjusted for many weapons to better
+	     match real world values.
+	     <li>New values for GWUT file for changing weapons drag,
+	     spiral path and seeker limits.  These are included in
+	     gwut190.csv, but note that the GWUT editor (version 1.3)
+	     is not yet capable of editing these values, and will delete them
+	     from any file which contains them.  So you will have to edit the
+	     file with a text editor until a new version of the GWUT editor
+	     comes out
+	  </ul>
+      <dt>Avionics changes
+      <dd>
+          <ul>
+	    <li>New weapons aiming avionics for ballistic weapons. See
+	    <a
+	          href="http://www.eechcentral.com/wiki/index.php?title=Firing_guns_and_rockets">
+		  wiki article</a> for details.
+            <li>New flight MFD page, revised TADS page and added
+	    colour to many other MFD pages for Comanche.
+	    <li>New HUD for Comanche
+	    <li>New flight, TSD, radar and engine pages for Alligator.  Added
+	    colour to several other pages.
+            <li>DTV/LLLTV will now show a full-colour(for
+	    Comanche) or monochrome (for the others) TV view, not a IR-view.
+	    <li>DTV/LLLTV in Comanche and Ka-52 is now capable changing zoom
+	    level.
+	    <li>EO zoom level can now be changed even if EO is not
+	    active targeting system.  Use CTRL + keypad +/- for this.
+	    <li>EO camera can now be changed even if EO is not active
+	    targeting system.  Use Shift + END for this.
+          </ul>
+
+      <dt>Campaign map changes
+      <dd>      
+          <ul>
+	    <li>New relief shaded topographical campaign map
+	    <li>Hi-res campaign map and alternative map palette also
+	          available (campaign_map_mode and campaign_map_palette in
+		  eech.ini)
+            <li>Adjustable how often enemy units update.  By default
+	          the position of known enemy units are updated once every 2
+		  minutes.  Configurable by map_update_interval in eech.ini.
+            <li>Fixed bug where undiscovered enemy units would show up
+	          if you just zoomed the map enough.
+            <li>Campaign map in free flight mode now allows adding and
+	          moving waypoints.
+	  </ul>
+      <dt>External cameras
+      <dd>
+          <ul>
+            <li>New free camera mode.  Press F9 when
+	    already in chase or weapons camera view.  Use mouse to
+	    pan, arrow keys or mouse wheel to move camera.
+	    <li>New wobbly camera option (wobbly-camera in eech.ini)
+	    for chase and weapons camera.  Gives the impression of the camera
+	    being mounted in a chase plane/helicopter which is not always
+	    able to keep perfect view of object.
+	    <li>Chase camera allows a limited amount of movement from
+	    object being chased.  Use arrow keys for this.
+	  </ul>
+      <dt>Smoke fixes
+      <dd>
+          <ul>
+	    <li>You can now disable the persistent smoke
+	    (persistent_smoke=0 in eech.ini).  With it enabled smoke 
+	    will only be created for about 10 seconds, instead of minutes.
+	     <li>Rockets and missiles only generate smoke as long as
+	     the rocket engine is burning.
+	    <li>Slightly adjusted smoke colour.
+	    <li>Fixed a crash which would sometimes happen with smoke.
+	  </ul>
+      <dt>Other changes
+      <dd>
+         <ul>
+	    <li>Fixed a problem for multiplayer/saved games where
+	    data would get corrupted
+	    <li>Trim does no longer affect helicopter attitude in
+	    hover hold mode.
+	    <li>... and probably some more changes I've forgotten to
+	    mention, and numerous bugs I haven't discovered yet :)
+	 <ul>
+      </dl>
+
+
       <h4>Fixes/features in 1.8.6:</h4>
       <ul>
         <li>Fix for save games and multiplayer crashing in 1.8.5.
