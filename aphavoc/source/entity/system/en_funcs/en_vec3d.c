@@ -424,7 +424,7 @@ void pack_vec3d (entity *en, vec3d_types type, vec3d *v)
 				iy,
 				iz;
 
-			ASSERT (point_inside_map_volume (v));
+			ASSERT (point_inside_map_volume (v) || v->y == -10000);
 
 			pack_float_4_fractional_bits (v->x, &ix);
 
