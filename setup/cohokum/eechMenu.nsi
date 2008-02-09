@@ -10,14 +10,14 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.9"
+  !define VERSION "1.10.1"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
   OutFile "eechsetup${VERSION}.exe"
 
   ;Default installation folder
-  InstallDir "c:\razorworks\"
+  InstallDir "C:\Program Files\Razorworks\"
   
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\Razorworks\Comanche Hokum\" "INSTALLATION PATH"
