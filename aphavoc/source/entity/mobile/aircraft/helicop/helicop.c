@@ -245,15 +245,18 @@ void assign_entity_to_user (entity *en)
 
 		set_global_gunship_type (NUM_GUNSHIP_TYPES);
 
-		if (previous)
+		if (get_camera_entity())
 		{
-			set_external_view_entity (previous);
-
-			notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_END_OF_MISSION);
-		}
-		else
-		{
-			notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CINEMATIC);
+			if (previous)
+			{
+				set_external_view_entity (previous);
+	
+				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_END_OF_MISSION);
+			}
+			else
+			{
+				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_CINEMATIC);
+			}
 		}
 	}
 
