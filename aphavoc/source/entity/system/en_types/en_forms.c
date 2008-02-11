@@ -763,6 +763,10 @@ void initialise_formation_component_database (void)
 		
 								type = get_next_file_enum (file_ptr, entity_sub_type_vehicle_names, NUM_ENTITY_SUB_TYPE_VEHICLES);
 
+								#if DEBUG_MODULE
+								debug_log ("	adding component %d %s", loop, entity_sub_type_vehicle_names [type]);
+								#endif
+
 								break;
 							}
 
@@ -773,17 +777,15 @@ void initialise_formation_component_database (void)
 		
 								type = get_next_file_enum (file_ptr, entity_sub_type_aircraft_names, NUM_ENTITY_SUB_TYPE_AIRCRAFT);
 
+								#if DEBUG_MODULE
+								debug_log ("	adding component %d %s", loop, entity_sub_type_aircraft_names [type]);
+								#endif
+
 								break;
 							}
 						}
 	
 						new_formation_component->components [loop] = type;
-	
-						#if DEBUG_MODULE
-
-						debug_log ("	adding component %d %s", loop, entity_sub_type_vehicle_names [new_formation_component->components [loop]]);
-
-						#endif
 	
 						loop ++;
 					}
