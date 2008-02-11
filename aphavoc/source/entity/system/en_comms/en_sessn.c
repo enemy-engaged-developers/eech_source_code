@@ -606,7 +606,7 @@ int unpack_session (char *buffer, int buffer_size, pack_modes mode)
 
 	type = unpack_entity_type ();
 
-	while (type != ENTITY_TYPE_UNKNOWN)
+	while (type != ENTITY_TYPE_UNKNOWN && type < NUM_ENTITY_TYPES)
 	{
 
 		/////////////////////////////////////////////
