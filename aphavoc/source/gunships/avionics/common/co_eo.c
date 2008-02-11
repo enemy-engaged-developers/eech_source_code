@@ -2213,8 +2213,6 @@ void joystick_slew_eo_system(float slew_rate)
 			horizontal_value,
 			vertical_value;
 
-		vec3d* eo_tracking_point = get_eo_tracking_point();
-
 		horizontal_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_horizontal_joystick_axis);
 		panning_offset_horiz = make_panning_offset_from_axis (horizontal_value);
 
@@ -2234,20 +2232,20 @@ void joystick_slew_eo_system(float slew_rate)
 				if (eo_target_locked & TARGET_LOCK)
 					switch_to_point_lock();
 	
-				eo_tracking_point->x += cos_heading * panning_offset_horiz * JOYSTICK_TRACKING_RATE * get_delta_time();
-				eo_tracking_point->z -= sin_heading * panning_offset_horiz * FINE_TRACKING_RATE * get_delta_time();
+				eo_tracking_point.x += cos_heading * panning_offset_horiz * JOYSTICK_TRACKING_RATE * get_delta_time();
+				eo_tracking_point.z -= sin_heading * panning_offset_horiz * FINE_TRACKING_RATE * get_delta_time();
 
-				eo_tracking_point->x += sin_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
-				eo_tracking_point->z += cos_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
+				eo_tracking_point.x += sin_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
+				eo_tracking_point.z += cos_heading * panning_offset_vert * 4 * JOYSTICK_TRACKING_RATE * get_delta_time();
 
 				// keep point on ground (unless point off map)
-				if (point_inside_map_area (eo_tracking_point))
+				if (point_inside_map_area (&eo_tracking_point))
 				{
 					helicopter *raw = get_local_entity_data(get_gunship_entity());
-					eo_tracking_point->y = get_3d_terrain_point_data(eo_tracking_point->x, eo_tracking_point->z, &raw->ac.terrain_info);
+					eo_tracking_point.y = get_3d_terrain_point_data(eo_tracking_point.x, eo_tracking_point.z, &raw->ac.terrain_info);
 
 					// have to update server's tracking point so that missiles will aim in multiplayer
-					set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, eo_tracking_point);
+					set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 				}
 			}			
 		}
