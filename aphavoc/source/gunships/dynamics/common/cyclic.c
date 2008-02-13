@@ -640,13 +640,11 @@ void update_cyclic_pressure_inputs (void)
 	// Damaged Stabaliser
 	//
 
-	if ((current_flight_dynamics->input_data.cyclic_x_trim.damaged) || (current_flight_dynamics->input_data.cyclic_y_trim.damaged))
-	{
-
+	if (current_flight_dynamics->input_data.cyclic_x_trim.damaged)
 		current_flight_dynamics->input_data.cyclic_x_trim.value += (MODEL_FRAME_RATE * get_model_delta_time ()) * (0.5 * sfrand1 () * current_flight_dynamics->input_data.cyclic_x_trim.value);
-
+	
+	if (current_flight_dynamics->input_data.cyclic_y_trim.damaged)
 		current_flight_dynamics->input_data.cyclic_y_trim.value += (MODEL_FRAME_RATE * get_model_delta_time ()) * (0.5 * sfrand1 () * current_flight_dynamics->input_data.cyclic_y_trim.value);
-	}
 
 	// limit cyclic position
 
