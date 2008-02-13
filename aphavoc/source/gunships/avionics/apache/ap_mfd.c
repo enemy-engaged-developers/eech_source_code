@@ -2957,6 +2957,7 @@ static display_3d_noise_levels
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define ONE_OVER_SQRT2 0.707106
 
 static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 {
@@ -2967,36 +2968,36 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 		case EO_FOV_ZOOM:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 1.6;
+				fov = 1.6 * ONE_OVER_SQRT2;
 			else  // DTV
-				fov = 0.45;
+				fov = 0.45 * ONE_OVER_SQRT2;
 
 			break;
 		}
 		case EO_FOV_NARROW:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 3.1;
+				fov = 3.1 * ONE_OVER_SQRT2;
 			else  // DTV
-				fov = 0.9;
+				fov = 0.9 * ONE_OVER_SQRT2;
 
 			break;
 		}
 		case EO_FOV_MEDIUM:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 10.1;
+				fov = 10.1 * ONE_OVER_SQRT2;
 			else  // DTV or DVO
-				fov = 4.0;
+				fov = 4.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
 		case EO_FOV_WIDE:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 50.0;
+				fov = 50.0 * ONE_OVER_SQRT2;
 			else  // DVO
-				fov = 18.0;
+				fov = 18.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
