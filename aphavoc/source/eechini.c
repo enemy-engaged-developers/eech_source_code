@@ -573,6 +573,8 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "grstab") == 0) 		command_line_ground_stabilisation_available = d1;
 		if (strcmp(p, "manual_laser/radar") == 0) 		command_line_manual_laser_radar = d1;
 		if (strcmp(p, "targeting_system_auto_page") == 0) 		command_line_targeting_system_auto_page = d1;
+		if (strcmp(p, "TSD_mouse_control") == 0)             command_line_mouse_tsd_target_select = d1;
+
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
 ////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;
@@ -805,6 +807,7 @@ void dump_ini_file(void)
 	fprintf(f,"cannontrack=%d                   # cannon tracking boresight (0 = no tracking, 1 = track if no acquire, 2 = always track IHADSS/HIDSS/HMS) (def = 1) \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 	fprintf(f,"unpadlock_on_handover=%d		# unpadlock on handover from HMS to TADS = 0 (off)\n",command_line_unpadlock_on_handover);  //GCsDriver  08-12-2007
 	fprintf(f,"pilot_as_periscope_default=%d	# stay in pilot seat when switching to periscope = 0 (off)\n",command_line_pilot_as_periscope_default);  //GCsDriver  08-12-2007
+	fprintf(f,"TSD_mouse_control=%d             # allows mouse control of TSD (Apache only) for selecting targets and creating PFZs\n", command_line_mouse_tsd_target_select);
 
 	fprintf(f,"\n[Joysticks and TrackIR]\n");	
 	fprintf(f,"eopann=%d		# joystick number for EO-camera panning\n",command_line_eo_pan_joystick_index);
