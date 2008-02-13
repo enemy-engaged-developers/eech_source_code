@@ -1437,9 +1437,6 @@ void update_local_helicopter_rotor_sounds (entity *en)
 //		main_rotor_roll,
 		acc_force;
 
-	vec3d
-		acc_direction;
-
 	entity
 		*spec;
 
@@ -1478,13 +1475,9 @@ void update_local_helicopter_rotor_sounds (entity *en)
 	//Slapping sound depends on how harsh the direction changes are: Do a tight turn and the rotor blades will slap
 	if (get_current_flight_dynamics ())
 	{
-		acc_direction.x += current_flight_dynamics->model_acceleration_vector.x;
-		acc_direction.y += current_flight_dynamics->model_acceleration_vector.y;
-		acc_direction.z += current_flight_dynamics->model_acceleration_vector.z;
-		acc_force = (get_3d_vector_magnitude (&acc_direction) / 20.0); //force vector can get as high as 30.0, but 20.0 should suffice for the maximum slap sound
+		acc_force = (get_3d_vector_magnitude (&current_flight_dynamics->model_acceleration_vector) / 15.0); //force vector can get as high as 30.0, but 15.0 should suffice for the maximum slap sound
 		slap_amp = (acc_force) * looping_amp;
 		slap_amp = bound (slap_amp, 0.0, 1.0);
-//		debug_log ( "SLAP FORCE %f", acc_force );
 	}
 	else
 	{
