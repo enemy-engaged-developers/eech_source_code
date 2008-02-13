@@ -155,7 +155,7 @@ void set_pilot_entity (entity *en)
 		}
 		//-- Werewolf
 	}
-	else
+	else if (pilot_entity)
 	{
 		debug_log ("PILOT: Setting pilot_entity to NULL");
 

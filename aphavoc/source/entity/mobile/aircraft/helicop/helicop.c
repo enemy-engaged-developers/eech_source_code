@@ -165,7 +165,9 @@ void assign_entity_to_user (entity *en)
 	comms_data_flow_types
 		store_data_flow;
 
-	ASSERT (get_pilot_entity ());
+//	ASSERT (get_pilot_entity ());
+	if (!get_pilot_entity ())
+		return;
 
 	old_group = NULL;
 
