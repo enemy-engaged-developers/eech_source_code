@@ -679,16 +679,22 @@ static void mouse_left_button_event (event* ev)
 {
 	switch (target_acquisition_system)
 	{
+
 	case TARGET_ACQUISITION_SYSTEM_FLIR:
 	case TARGET_ACQUISITION_SYSTEM_DTV:
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 	case TARGET_ACQUISITION_SYSTEM_LLLTV:
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-		if (ev->state == BUTTON_STATE_DOWN)
-			mouse_lock_target_event(ev);
-		break;
+		if (get_global_gunship_type() != GUNSHIP_TYPE_APACHE || !command_line_mouse_tsd_target_select)
+		{
+			if (ev->state == BUTTON_STATE_DOWN)
+				mouse_lock_target_event(ev);
+			break;
+		}
+		// fall through
 	default:
 		store_point_left_event(ev);
+		break;
 	}
 }
 

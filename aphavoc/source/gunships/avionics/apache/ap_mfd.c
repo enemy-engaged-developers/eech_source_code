@@ -1934,6 +1934,7 @@ static void draw_radar_arc (float arc_size, float radius, rgb_colour colour)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VJ 030423 TSD render mod, added display_on_tsd
+
 static void draw_radar_target_symbol (entity *target, vec3d *source_position, float scale, int selected_target, int display_on_tsd, int display_on_ase)
 {
 	target_symbol_types
@@ -4017,6 +4018,86 @@ static void draw_2d_dvo_mfd (int valid_3d, int scaled_3d)
 //
 
 #define RADIUS	(ROOT2 - 0.05)
+
+void apache_select_clicked_target()
+{
+	entity
+		*target,
+		*best_target = NULL;
+	
+	matrix3x3
+		rotation_matrix;
+
+	vec3d
+		position,
+		relative_position;
+
+	int
+		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
+
+	float
+		selection_range_limit_sqr,
+		tsd_ase_range,
+		scale;
+	
+
+	if (fabs(pointer_position_x - clicked_position_x) > 0.05
+		|| fabs(pointer_position_y - clicked_position_y) > 0.05)
+	{
+		return;
+	}
+
+	tsd_ase_range = is_pilot ? pilot_tsd_ase_range : cpg_tsd_ase_range;
+	scale = RADIUS / tsd_ase_range;
+	selection_range_limit_sqr = (tsd_ase_range * 0.05);
+	selection_range_limit_sqr *= selection_range_limit_sqr;
+
+	get_3d_transformation_matrix(rotation_matrix, current_flight_dynamics->heading.value, 0.0, 0.0);
+
+	relative_position = get_relative_vec_from_tsd_coordinate(clicked_position_x, clicked_position_y, scale);
+	relative_position_to_world_coordinate(&relative_position, &position, rotation_matrix);
+
+	// find target which best corresponds with clicked position
+	target = get_local_entity_first_child (get_gunship_entity(), LIST_TYPE_GUNSHIP_TARGET);
+	while (target)
+	{
+		if (!get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER))
+		{
+			vec3d*
+				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			
+			float range_sqr = get_sqr_2d_range(&position, target_position);
+
+			if (range_sqr < selection_range_limit_sqr)
+			{
+				best_target = target;
+				selection_range_limit_sqr = range_sqr;
+			}
+		}
+
+		target = get_local_entity_child_succ (target, LIST_TYPE_GUNSHIP_TARGET);
+	}
+
+	if (best_target)
+	{
+		if (is_using_eo_system(FALSE))
+			set_eo_slave_target(best_target);
+		else
+		{
+			set_gunship_target(best_target);
+			set_apache_lock_target(1);
+		}
+	}
+	// didn't find any target under pointer, but if using EO do a point lock on position
+	else if (is_using_eo_system(FALSE) && point_inside_map_area(&position))
+	{
+		helicopter *raw = get_local_entity_data(get_gunship_entity());
+
+		position.y = get_3d_terrain_point_data(position.x, position.z, &raw->ac.terrain_info);
+
+		eo_start_tracking(&position);
+	}
+}
 
 static void draw_tactical_situation_display_mfd (void)
 {

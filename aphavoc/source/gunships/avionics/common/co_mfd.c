@@ -66,6 +66,8 @@
 
 #include "project.h"
 
+#define CLICK_TOLERANCE  0.025
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,11 +204,19 @@ static void store_point(int button_down, int left_button)
 	}
 	else
 	{
-		if (get_global_gunship_type () == GUNSHIP_TYPE_APACHE
-			&& (left_button_held && left_button)
-			|| (right_button_held && !left_button))
+		if (get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
 		{
-			create_apache_pfz(!left_button);
+			if (left_button_held && left_button
+				&& fabs(clicked_position_x - pointer_position_x) < CLICK_TOLERANCE
+				&& fabs(clicked_position_y - pointer_position_y) < CLICK_TOLERANCE)
+			{
+				apache_select_clicked_target();
+			}
+			else if ((left_button_held && left_button)
+					 || (right_button_held && !left_button))
+			{
+				create_apache_pfz(!left_button);
+			}
 		}
 
 		left_button_held = right_button_held = FALSE;

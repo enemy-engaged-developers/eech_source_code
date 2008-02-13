@@ -136,6 +136,9 @@ int eo_target_locked = FALSE;
 static vec3d
 	eo_tracking_point;
 
+entity*
+	slave_target = NULL;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,6 +192,8 @@ void initialise_common_eo (void)
 	
 	lock_target = FALSE;
 	lock_terrain = FALSE;
+
+	slave_target = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,6 +239,8 @@ int eo_is_locked(void)
 
 void toggle_eo_lock(void)
 {
+	slave_target = NULL;
+
 	if (eo_target_locked & TARGET_LOCK)
 	{
 		// if we have a target lock this disables all locks
@@ -256,8 +263,10 @@ void toggle_eo_lock(void)
 
 void set_eo_lock(int locked)
 {
-	lock_target = TRUE;
-	lock_terrain = TRUE;
+	lock_target = locked;
+	lock_terrain = locked;
+
+	slave_target = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1145,7 +1154,23 @@ void update_common_eo (void)
 
 	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
-	if (eo_target_locked & TARGET_LOCK)
+	if (slave_target)
+	{
+		if (get_local_entity_int_value (slave_target, INT_TYPE_TARGET_TYPE) == TARGET_TYPE_INVALID)
+			slave_target = NULL;
+	
+		else
+		{
+			slave_common_eo_to_current_target();
+			
+			if (get_eo_boresight_target() != slave_target)
+				return;   // not done slewing to target yet
+
+			slave_target = NULL;
+			lock_target = TRUE;
+		}
+	}
+	else if (eo_target_locked & TARGET_LOCK)
 	{
 		if (!current_target)
 			eo_target_locked = 0;
@@ -1210,7 +1235,6 @@ void update_common_eo (void)
 			eo_target_locked = FALSE;
 		}
 	}
-
 
 	eo_vp.position = vp.position;
 
@@ -1403,7 +1427,12 @@ static void slew_eo(float elevation, float azimuth)
 void slave_common_eo_to_current_target (void)
 {
 	vec3d position;
-	entity* current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+	entity* current_target;
+	
+	if (slave_target)
+		current_target = slave_target;
+	else
+		current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	if (current_target)
 	{
@@ -1654,12 +1683,7 @@ void select_next_eo_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
-
-	if (new_target)
-		eo_target_locked = TARGET_LOCK;
-	else
-		eo_target_locked = 0;
+	set_eo_slave_target(new_target);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1717,12 +1741,7 @@ void select_previous_eo_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
-
-	if (new_target)
-		eo_target_locked = TARGET_LOCK;
-	else
-		eo_target_locked = 0;
+	set_eo_slave_target(new_target);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1836,12 +1855,7 @@ void select_next_designated_eo_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
-
-	if (new_target)
-		eo_target_locked = TARGET_LOCK;
-	else
-		eo_target_locked = 0;
+	set_eo_slave_target(new_target);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1899,12 +1913,7 @@ void select_previous_designated_eo_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
-
-	if (new_target)
-		eo_target_locked = TARGET_LOCK;
-	else
-		eo_target_locked = 0;
+	set_eo_slave_target(new_target);
 }
 
 
@@ -1970,6 +1979,10 @@ void eo_stop_tracking(void)
 
 void eo_start_tracking(vec3d* tracking_point)
 {
+	eo_target_locked = POINT_LOCK;
+	lock_terrain = TRUE;
+
+	eo_tracking_point = *tracking_point;
 	set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 }
 
@@ -2125,6 +2138,8 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 			// have to update server's tracking point so that missiles will aim in multiplayer
 			set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
+
+			slave_target = NULL;
 		}
 	}
 	else
@@ -2133,16 +2148,19 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			eo_azimuth -= coarse_slew_rate;
 			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_left_fine_key)
 		{
 			eo_azimuth -= fine_slew_rate;
 			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_left_key)
 		{
 			eo_azimuth -= medium_slew_rate;
 			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
+			slave_target = NULL;
 		}
 	
 		////////////////////////////////////////
@@ -2151,16 +2169,19 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			eo_azimuth += coarse_slew_rate;
 			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_right_fine_key)
 		{
 			eo_azimuth += fine_slew_rate;
 			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_right_key)
 		{
 			eo_azimuth += medium_slew_rate;
 			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
+			slave_target = NULL;
 		}
 	
 		////////////////////////////////////////
@@ -2169,16 +2190,19 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			eo_elevation += coarse_slew_rate;
 			eo_elevation = min (eo_elevation, eo_max_elevation);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_up_fine_key)
 		{
 			eo_elevation += fine_slew_rate;
 			eo_elevation = min (eo_elevation, eo_max_elevation);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_up_key)
 		{
 			eo_elevation += medium_slew_rate;
 			eo_elevation = min (eo_elevation, eo_max_elevation);
+			slave_target = NULL;
 		}
 	
 		////////////////////////////////////////
@@ -2187,16 +2211,19 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		{
 			eo_elevation -= coarse_slew_rate;
 			eo_elevation = max (eo_elevation, eo_min_elevation);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_down_fine_key)
 		{
 			eo_elevation -= fine_slew_rate;
 			eo_elevation = max (eo_elevation, eo_min_elevation);
+			slave_target = NULL;
 		}
 		else if (continuous_target_acquisition_system_steer_down_key)
 		{
 			eo_elevation -= medium_slew_rate;
 			eo_elevation = max (eo_elevation, eo_min_elevation);
+			slave_target = NULL;
 		}
 	}
 }
@@ -2219,9 +2246,11 @@ void joystick_slew_eo_system(float slew_rate)
 		vertical_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
 		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
 		
-		if (eo_target_locked)
+		if (panning_offset_horiz != 0.0 || panning_offset_vert != 0.0)
 		{
-			if (panning_offset_horiz != 0.0 || panning_offset_vert != 0.0)
+			slave_target = NULL;
+			
+			if (eo_target_locked)
 			{
 				float
 					eo_heading = get_heading_from_attitude_matrix (eo_vp.attitude),
@@ -2247,15 +2276,15 @@ void joystick_slew_eo_system(float slew_rate)
 					// have to update server's tracking point so that missiles will aim in multiplayer
 					set_client_server_entity_vec3d(get_gunship_entity(), VEC3D_TYPE_EO_TRACKING_POINT, &eo_tracking_point);
 				}
-			}			
-		}
-		else
-		{
-			eo_azimuth += panning_offset_horiz * slew_rate;
-			eo_azimuth = bound(eo_azimuth, eo_min_azimuth, eo_max_azimuth);
-	
-			eo_elevation -= panning_offset_vert * slew_rate;
-			eo_elevation = bound(eo_elevation, eo_min_elevation, eo_max_elevation);
+			}
+			else
+			{
+				eo_azimuth += panning_offset_horiz * slew_rate;
+				eo_azimuth = bound(eo_azimuth, eo_min_azimuth, eo_max_azimuth);
+		
+				eo_elevation -= panning_offset_vert * slew_rate;
+				eo_elevation = bound(eo_elevation, eo_min_elevation, eo_max_elevation);
+			}
 		}
 	}
 }
@@ -2306,3 +2335,10 @@ void update_eo_max_visual_range(void)
 }
 // end full_eo_range by GCsDriver  08-12-2007
 
+void set_eo_slave_target(entity* target)
+{
+	slave_target = target;
+
+	set_gunship_target(NULL);
+	eo_target_locked = 0;
+}
