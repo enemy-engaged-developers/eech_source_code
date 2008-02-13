@@ -1326,10 +1326,8 @@ void update_dynamics_damage (void)
 					if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 					{
 
-						current_flight_dynamics->centre_of_gravity.x += current_flight_dynamics->roll.value * get_model_delta_time ();
 						current_flight_dynamics->centre_of_gravity.z -= current_flight_dynamics->pitch.value * get_model_delta_time ();
 
-						current_flight_dynamics->centre_of_gravity.x = bound (current_flight_dynamics->centre_of_gravity.x, -0.1, 0.1);
 						current_flight_dynamics->centre_of_gravity.z = bound (current_flight_dynamics->centre_of_gravity.z, -0.1, 0.1);
 
 						#if DEBUG_MODULE
