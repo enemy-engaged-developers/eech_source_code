@@ -262,7 +262,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, criteria))
 		{
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
-				&& get_2d_range(en, target) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
+				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
 			{
 				debug_log("AC_WPN: Switching to LOAL mode to fire at target without LOS ((Aircraft %s (%d), Target %s (%d))",
 									get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en),
