@@ -153,6 +153,9 @@ void notify_session_parameters (void)
 	//VJ 051227 reading map inof data for automatic custom map 
 	// function declared in textuser.c
 	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_session_parameters: read_map_info_data"); 
+
+	initialise_custom_map_info();
+	
 	read_map_info_data();
 
 	//
