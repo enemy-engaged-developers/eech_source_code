@@ -82,16 +82,19 @@ ui_object
 	*co_pilot_ecm_area,
 	*avionics_area,
 	*difficulty_area,
+	*cpg_report_targets_area,
 	*co_pilot_target_option_button,
 	*co_pilot_ecm_option_button,
 	*avionics_option_button,
-	*difficulty_option_button;
+	*difficulty_option_button,
+	*cpg_report_targets_button;
 
 static const char
 	*option_boolean_text[2],
 	*option_cpg_text[3],
 	*option_avionics_text[2],
-	*option_difficulty_text[3];
+	*option_difficulty_text[3],
+	*option_cpg_report_targets_text[2];
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +107,8 @@ void notify_co_pilot_ecm_option_button (ui_object *obj, void *arg);
 void notify_avionics_option_button (ui_object *obj, void *arg);
 
 void notify_difficulty_option_button (ui_object *obj, void *arg);
+
+void notify_cpg_report_targets_option_button (ui_object *obj, void *arg);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +140,8 @@ void notify_show_realism_page (void)
 	debug_filtered_log ("diff: %d text: %s", get_global_difficulty_level (), option_difficulty_text [get_global_difficulty_level () - 1]);
 	#endif
 
+	set_ui_object_text (cpg_report_targets_button, option_cpg_report_targets_text[global_co_pilot_scans_for_targets]);
+
 	display_options_page (OPTIONS_PAGE_REALISM);
 	#if DEBUG_MODULE
 		debug_filtered_log("Inside show_realism_page");
@@ -160,9 +167,9 @@ void define_options_screen_realism_page_objects (void)
 		*page;
 
 	ui_object
-		*title_change_array [4],
-		*check_array [4],
-		*change_array [4];
+		*title_change_array [5],
+		*check_array [5],
+		*change_array [5];
 
 	/////////////////////////////////////////////////////////////////
 	// Initialise Button Strings
@@ -180,6 +187,9 @@ void define_options_screen_realism_page_objects (void)
 	option_difficulty_text [0] = get_trans ("Hard");
 	option_difficulty_text [1] = get_trans ("Medium");
 	option_difficulty_text [2] = get_trans ("Easy");
+
+	option_cpg_report_targets_text[0] = get_trans ("Off");
+	option_cpg_report_targets_text[1] = get_trans ("On");
 
 	/////////////////////////////////////////////////////////////////
 	// realism Area
@@ -388,6 +398,52 @@ void define_options_screen_realism_page_objects (void)
 
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
+	//cpg report targets area
+
+	i++;
+	x1 = 0.0; 
+	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+
+    cpg_report_targets_area = create_ui_object
+								(
+									UI_TYPE_AREA,
+									UI_ATTR_PARENT (page),
+									UI_ATTR_VIRTUAL_POSITION (x1, y1),
+									UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+									UI_ATTR_CLEAR (TRUE),
+									UI_ATTR_END
+								);
+
+	x1 = OPTION_TITLE_OFFSET_X;
+	y1 = 0.0; 
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (cpg_report_targets_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Co-Pilot report targets")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+
 
 	/////////////////////////////////////////////////////////////////
 	// buttons
@@ -551,6 +607,44 @@ void define_options_screen_realism_page_objects (void)
 
 	preprocess_translation_object_size (change_array [i], difficulty_option_button, option_difficulty_text, 3, RESIZE_OPTION_CYCLE_BUTTON);
 
+	// cpg report target setting
+	
+	i++;
+		
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (cpg_report_targets_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_MEDIUM_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_medium),
+		UI_ATTR_END
+	);
+
+    cpg_report_targets_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (cpg_report_targets_area),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_FONT_COLOUR (254, 124, 47, 255),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_cpg_report_targets_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], cpg_report_targets_area, option_cpg_report_targets_text, 4, RESIZE_OPTION_CYCLE_BUTTON);
+
 	recursively_set_object_time (page, OPTIONS_BUTTON_AREA_FADE_TIME, OPTIONS_BUTTON_AREA_OFFSET_TIME);
 }
 
@@ -635,6 +729,21 @@ void notify_difficulty_option_button ( ui_object *obj, void *arg )
 	set_global_difficulty_level (selection);
 
 	set_ui_object_text (obj, option_difficulty_text [selection - 1]);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_cpg_report_targets_option_button ( ui_object *obj, void *arg )
+{
+	global_co_pilot_scans_for_targets = !global_co_pilot_scans_for_targets;
+
+	set_ui_object_text (obj, option_cpg_report_targets_text [global_co_pilot_scans_for_targets]);
 
 	// don't leave text selected
 
