@@ -423,7 +423,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 		if (current_weapon_count > 0)
 		{
-			int loal_mode = get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
+			int loal_mode = weapon_database[weapon_sub_type].hellfire_flight_profile && get_local_entity_int_value (launcher, INT_TYPE_LOCK_ON_AFTER_LAUNCH);
 			
 			if (get_comms_data_flow () == COMMS_DATA_FLOW_RX)
 			{
