@@ -374,7 +374,7 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int check_bearing_within_cw_sweep_segment (float bearing, float cw_sweep_start_direction, float cw_sweep_end_direction)
+int check_bearing_within_cw_sweep_segment (float bearing, float cw_sweep_start_direction, float cw_sweep_end_direction)
 {
 	int
 		result;
@@ -2000,7 +2000,7 @@ int get_gunship_target_valid_for_air_radar (entity *target)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_air_radar_los_clear (entity *target, vec3d *source_position, vec3d *target_position)
+int get_los_clear (entity *target, vec3d *source_position, vec3d *target_position)
 {
 	ASSERT (target);
 
@@ -2010,6 +2010,9 @@ static int get_air_radar_los_clear (entity *target, vec3d *source_position, vec3
 
 	if (get_terrain_los_clear (source_position, target_position))
 	{
+		if (!target)
+			return TRUE;
+
 		if (get_object_los_clear (target, source_position, target_position))
 		{
 			return (TRUE);
@@ -2739,7 +2742,7 @@ void update_common_air_radar (void)
 
 								if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
 								{
-									if (get_air_radar_los_clear (target, source_position, target_position))
+									if (get_los_clear (target, source_position, target_position))
 									{
 										if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
 										{
@@ -2789,7 +2792,7 @@ void update_common_air_radar (void)
 
 									if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
 									{
-										if (get_air_radar_los_clear (target, source_position, target_position))
+										if (get_los_clear (target, source_position, target_position))
 										{
 											insert_local_entity_into_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
 										}

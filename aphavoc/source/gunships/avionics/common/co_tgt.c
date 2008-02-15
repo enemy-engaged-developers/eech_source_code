@@ -272,11 +272,15 @@ static void update_gunship_target_list (void)
 		*target_position;
 
 	source = get_gunship_entity ();
-
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
+	if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_AIR_RADAR &&
+		target_acquisition_system != TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	{
+		cpg_scan_for_eo_targets();
+	}
 
+	target = get_local_entity_first_child (source, LIST_TYPE_GUNSHIP_TARGET);
 	current_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 	while (target)
@@ -1172,3 +1176,106 @@ float get_target_range(vec3d* target_position, rangefinding_system* rf_system)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void cpg_report_target(entity* target)
+{
+	switch (get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE))
+	{
+		////////////////////////////////////////
+		case THREAT_TYPE_INVALID:
+		case THREAT_TYPE_RF_MISSILE:
+		case THREAT_TYPE_IR_MISSILE:
+		case THREAT_TYPE_LASER_MISSILE:
+		////////////////////////////////////////
+		{
+			break;
+		}
+		////////////////////////////////////////
+		case THREAT_TYPE_AIRBORNE_RADAR:
+		////////////////////////////////////////
+		{
+				if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_HELICOPTER))
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_CHOPPERS,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+				else if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_FIXED_WING))
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_FAST_MOVERS,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+
+			break;
+		}
+		////////////////////////////////////////
+		case THREAT_TYPE_SAM:
+		////////////////////////////////////////
+		{
+				if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_SHIP_VEHICLE))
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_WARSHIPS,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+				else
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_SAM,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+
+			break;
+		}
+		////////////////////////////////////////
+		case THREAT_TYPE_AAA:
+		////////////////////////////////////////
+		{
+				if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_SHIP_VEHICLE))
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_WARSHIPS,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+				else
+				{
+					play_client_server_cpg_contact_message
+					(
+						get_gunship_entity (),
+						SPEECH_CPG_TRIPLE_A,
+						get_speech_heading_type (get_gunship_entity (), target),
+						get_speech_distance_type (get_gunship_entity (), target)
+					);
+				}
+
+			break;
+		}
+		////////////////////////////////////////
+		case THREAT_TYPE_EARLY_WARNING_RADAR:
+		////////////////////////////////////////
+		{
+			break;
+		}
+	}
+}

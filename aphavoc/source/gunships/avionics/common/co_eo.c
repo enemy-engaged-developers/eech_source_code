@@ -94,6 +94,8 @@
 #define COARSE_TRACKING_RATE 100.0
 #define JOYSTICK_TRACKING_RATE 40.0
 
+#define CO_PILOT_SWEEP_SPEED  rad(90.0)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,8 +138,13 @@ int eo_target_locked = FALSE;
 static vec3d
 	eo_tracking_point;
 
-entity*
-	slave_target = NULL;
+static float
+	co_pilot_sweep_heading,
+	time_until_next_co_pilot_sweep;
+
+entity
+	*next_cpg_target_report,
+	*slave_target = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +176,9 @@ static int
 	laser_active = FALSE,
 	electrical_system_on = TRUE;
 
+static void co_pilot_scan_for_eo_targets(void);
+static void slew_eo(float elevation, float azimuth);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,6 +204,9 @@ void initialise_common_eo (void)
 	lock_terrain = FALSE;
 
 	slave_target = NULL;
+
+	co_pilot_sweep_heading = -rad(90.0);
+	time_until_next_co_pilot_sweep = 2.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1152,6 +1165,9 @@ void update_common_eo (void)
 	matrix3x3
 		m;
 
+	if (get_time_acceleration() == TIME_ACCELERATION_PAUSE)
+		return;
+
 	current_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 	if (slave_target)
@@ -1184,6 +1200,9 @@ void update_common_eo (void)
 
 	if (eo_target_locked)
 	{
+		float req_azimuth, req_elevation, delta_eo_azimuth, delta_eo_elevation, frame_delta_eo_azimuth, frame_delta_eo_elevation;
+		float frame_slew_rate = rad(60) * get_delta_time();
+		
 		if (eo_target_locked & TARGET_LOCK)
 		{
 			get_local_entity_target_point (current_target, &target_position);
@@ -1203,11 +1222,17 @@ void update_common_eo (void)
 
 		multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &target_vector);
 
-		eo_azimuth = atan2 (offset_vector.x, offset_vector.z);
-
 		flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
+		req_elevation = atan2(offset_vector.y, flat_range);
+		req_azimuth = atan2(offset_vector.x, offset_vector.z);
 
-		eo_elevation = atan2 (offset_vector.y, flat_range);
+		delta_eo_azimuth = req_azimuth - eo_azimuth;
+		frame_delta_eo_azimuth = bound (delta_eo_azimuth, -frame_slew_rate, frame_slew_rate);
+		eo_azimuth += frame_delta_eo_azimuth;
+	
+		delta_eo_elevation = req_elevation - eo_elevation;
+		frame_delta_eo_elevation = bound (delta_eo_elevation, -frame_slew_rate, frame_slew_rate);
+		eo_elevation += frame_delta_eo_elevation;
 
 		if (eo_azimuth < eo_min_azimuth)
 		{
@@ -1372,7 +1397,7 @@ static void slew_eo(float elevation, float azimuth)
 		 frame_delta_eo_elevation;
 
 	
-	float frame_slew_rate = rad (45.0) * get_delta_time ();
+	float frame_slew_rate = rad (60.0) * get_delta_time ();
 
 	viewpoint
 		vp;
@@ -2228,6 +2253,10 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void joystick_slew_eo_system(float slew_rate)
 {
 	if (command_line_eo_pan_joystick_index != -1)
@@ -2335,6 +2364,11 @@ void update_eo_max_visual_range(void)
 }
 // end full_eo_range by GCsDriver  08-12-2007
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void set_eo_slave_target(entity* target)
 {
 	slave_target = target;
@@ -2342,3 +2376,334 @@ void set_eo_slave_target(entity* target)
 	set_gunship_target(NULL);
 	eo_target_locked = 0;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static float evaluate_target(entity* target, float sqr_range)
+{
+	if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
+	{
+		float
+			rank = 0.0;
+
+		entity_sub_types sub_type = get_local_entity_int_value (target, INT_TYPE_ENTITY_SUB_TYPE);
+
+		switch (get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE))
+		{
+			case TARGET_TYPE_INVALID:
+				return 0.0;
+
+			case TARGET_TYPE_GROUND:
+			{
+				switch (target->type)
+				{
+				case ENTITY_TYPE_ANTI_AIRCRAFT:
+				case ENTITY_TYPE_ROUTED_VEHICLE:
+				case ENTITY_TYPE_SHIP_VEHICLE:
+					rank = vehicle_database[sub_type].potential_surface_to_air_threat;
+					break;
+				default:
+					return 0.0;
+				}
+
+				break;
+			}
+			case TARGET_TYPE_AIR:
+			////////////////////////////////////////
+			{
+				if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT) && get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE) > 5.0)
+					rank = aircraft_database[sub_type].potential_air_to_air_threat;
+				else
+					return 0.0;
+
+				break;
+			}
+			////////////////////////////////////////
+			default:
+			////////////////////////////////////////
+			{
+				debug_fatal ("Invalid target type = %d", get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE));
+
+				return 0.0;
+
+				break;
+			}
+		}
+
+		rank *= (5000 * 5000);
+		rank /= sqr_range;
+
+		rank *= frand1();
+		
+		return rank;
+	}
+
+	return 0.0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void co_pilot_perform_eo_scan(void)
+{
+	static float
+		best_target_rank = 0.0;
+
+	static entity*
+		best_target = NULL;
+	
+	int
+		sweep_done = FALSE,
+		x_sec,
+		z_sec,
+		x_sec_min,
+		z_sec_min,
+		x_sec_max,
+		z_sec_max;
+
+	float
+		scan_range = 5000.0,
+		cw_sweep_start_offset,
+		cw_sweep_end_offset,
+		cw_sweep_start_direction,
+		cw_sweep_end_direction,
+		heading,
+		bearing,
+		dx,
+		dz,
+		x_min,
+		z_min,
+		x_max,
+		z_max,
+		sqr_scan_range;
+
+	entity
+		*source,
+		*target,
+		*sector;
+
+	vec3d
+		*source_position,
+		*target_position,
+		cw_sweep_start_position,
+		cw_sweep_end_position;
+
+	////////////////////////////////////////
+	//
+	// get source data
+	//
+	////////////////////////////////////////
+
+	source = get_gunship_entity ();
+	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
+
+	{
+		entity_sides source_side = get_local_entity_int_value(source, INT_TYPE_SIDE);
+		
+		heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
+		cw_sweep_start_offset = co_pilot_sweep_heading;
+		co_pilot_sweep_heading += CO_PILOT_SWEEP_SPEED * get_delta_time();
+
+		if (co_pilot_sweep_heading >= rad(90.0))  // this is last segment of sweep
+		{
+			sweep_done = TRUE;
+			cw_sweep_end_offset = rad(90.0);
+			co_pilot_sweep_heading = rad(-90.0);
+		}
+		else
+			cw_sweep_end_offset = co_pilot_sweep_heading;
+
+		cw_sweep_start_direction = heading + cw_sweep_start_offset;
+
+		if (cw_sweep_start_direction > rad (180.0))
+			cw_sweep_start_direction -= rad (360.0);
+		else if (cw_sweep_start_direction < rad (-180.0))
+			cw_sweep_start_direction += rad (360.0);
+
+		cw_sweep_end_direction = heading + cw_sweep_end_offset;
+
+		if (cw_sweep_end_direction > rad (180.0))
+			cw_sweep_end_direction -= rad (360.0);
+		else if (cw_sweep_end_direction < rad (-180.0))
+			cw_sweep_end_direction += rad (360.0);
+
+		////////////////////////////////////////
+		//
+		// get sector scan area
+		//
+		////////////////////////////////////////
+
+		cw_sweep_start_position.x = source_position->x + (sin (cw_sweep_start_direction) * scan_range);
+		cw_sweep_start_position.y = source_position->y;
+		cw_sweep_start_position.z = source_position->z + (cos (cw_sweep_start_direction) * scan_range);
+
+		cw_sweep_end_position.x = source_position->x + (sin (cw_sweep_end_direction) * scan_range);
+		cw_sweep_end_position.y = source_position->y;
+		cw_sweep_end_position.z = source_position->z + (cos (cw_sweep_end_direction) * scan_range);
+
+		//
+		// sector scan min
+		//
+
+		x_min = min (min (cw_sweep_start_position.x, cw_sweep_end_position.x), source_position->x);
+		z_min = min (min (cw_sweep_start_position.z, cw_sweep_end_position.z), source_position->z);
+
+		get_x_sector (x_sec_min, x_min);
+		get_z_sector (z_sec_min, z_min);
+
+		x_sec_min = max (x_sec_min, MIN_MAP_X_SECTOR);
+		z_sec_min = max (z_sec_min, MIN_MAP_Z_SECTOR);
+
+		//
+		// sector scan max
+		//
+
+		x_max = max (max (cw_sweep_start_position.x, cw_sweep_end_position.x), source_position->x);
+		z_max = max (max (cw_sweep_start_position.z, cw_sweep_end_position.z), source_position->z);
+
+		get_x_sector (x_sec_max, x_max);
+		get_z_sector (z_sec_max, z_max);
+
+		x_sec_max = min (x_sec_max, MAX_MAP_X_SECTOR);
+		z_sec_max = min (z_sec_max, MAX_MAP_Z_SECTOR);
+
+		////////////////////////////////////////
+		//
+		// sector scan
+		//
+		////////////////////////////////////////
+
+		// reduce scan range in bad visibility
+		if (get_simple_session_weather_at_point (source_position) == WEATHERMODE_HEAVY_RAIN)
+			scan_range -= 1500.0;
+		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_NIGHT)
+			scan_range -= 1500.0;
+
+		sqr_scan_range = scan_range * scan_range;
+
+		for (z_sec = z_sec_min; z_sec <= z_sec_max; z_sec++)
+		{
+			for (x_sec = x_sec_min; x_sec <= x_sec_max; x_sec++)
+			{
+				sector = get_local_raw_sector_entity (x_sec, z_sec);
+
+				target = get_local_entity_first_child (sector, LIST_TYPE_SECTOR);
+
+				while (target)
+				{
+					if (get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID)
+					{
+						if (!get_local_entity_parent (target, LIST_TYPE_GUNSHIP_TARGET))
+						{
+							////////////////////////////////////////
+							//
+							// target not on target list
+							//
+							////////////////////////////////////////
+
+							if (source_side != get_local_entity_int_value (target, INT_TYPE_SIDE))
+							{
+								float sqr_target_range;
+								
+								target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+								sqr_target_range = get_sqr_3d_range (source_position, target_position);
+
+								if (sqr_target_range <= sqr_scan_range)
+								{
+									dx = target_position->x - source_position->x;
+									dz = target_position->z - source_position->z;
+
+									bearing = atan2 (dx, dz);
+
+									if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
+									{
+										float rank = evaluate_target(target, sqr_target_range);
+
+										if (rank > best_target_rank && get_los_clear (target, source_position, target_position))
+										{
+											best_target_rank = rank;
+											best_target = target;
+										}
+									}
+								}
+							}
+						}
+					}
+
+					target = get_local_entity_child_succ (target, LIST_TYPE_SECTOR);
+				}
+			}
+		}
+
+		////////////////////////////////////////
+		//
+		// update target
+		//
+		////////////////////////////////////////
+
+		if (sweep_done)
+		{
+			next_cpg_target_report = best_target;
+			
+			if (best_target)  // if we found a target, wait the proper detection time before reporting it
+			{
+				float range;
+
+				target_position = get_local_entity_vec3d_ptr (best_target, VEC3D_TYPE_POSITION);
+				range = get_2d_range(source_position, target_position);
+
+				time_until_next_co_pilot_sweep = 5.0 + frand1() * 0.005 * range;
+			}
+
+			best_target = NULL;			
+			best_target_rank = 0.0;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void cpg_scan_for_eo_targets(void)
+{
+	if (!global_co_pilot_scans_for_targets)
+		return;
+	
+	// wait until timeout
+	if (time_until_next_co_pilot_sweep > 0.0)
+		time_until_next_co_pilot_sweep -= get_delta_time();
+	else
+	{
+		// enough time has passed to detect this target
+		if (next_cpg_target_report)
+		{
+			entity*
+				source = get_gunship_entity();
+
+			vec3d 
+				*source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION),
+				*target_position = get_local_entity_vec3d_ptr (next_cpg_target_report, VEC3D_TYPE_POSITION);
+
+			// report target, and add to target list
+			if (get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID && get_los_clear(next_cpg_target_report, source_position, target_position))
+			{
+				insert_local_entity_into_parents_child_list (next_cpg_target_report, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
+				cpg_report_target(next_cpg_target_report);
+			}
+			
+			next_cpg_target_report = NULL;
+		}
+
+		// find more targets to report
+		co_pilot_perform_eo_scan();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
