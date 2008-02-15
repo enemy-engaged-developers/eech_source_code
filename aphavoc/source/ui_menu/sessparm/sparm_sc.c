@@ -154,6 +154,7 @@ void notify_session_parameters (void)
 	// function declared in textuser.c
 	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_session_parameters: read_map_info_data"); 
 
+	//VJ 080215 add initialize to avoid being stuck on season first selected campaign
 	initialise_custom_map_info();
 	
 	read_map_info_data();
