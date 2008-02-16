@@ -652,3 +652,95 @@ const char *entity_sub_type_weapon_names [] =
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef DEBUG
+const char* get_sub_type_name(entity* en)
+{
+	entity_sub_types sub_type;
+
+	if (!en)
+		return "NULL";
+
+	sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+ 
+	switch (en->type)
+	{
+	case ENTITY_TYPE_UNKNOWN:
+		return "Unknown";
+	case ENTITY_TYPE_BRIDGE:
+		return entity_sub_type_bridge_names[sub_type];
+	case ENTITY_TYPE_CAMERA:
+		return "Camera";
+	case ENTITY_TYPE_CARGO:
+		return entity_sub_type_cargo_names[sub_type];
+	case ENTITY_TYPE_CITY:
+		return "City";
+	case ENTITY_TYPE_CITY_BUILDING:
+		return "City building";
+	case ENTITY_TYPE_CRATER:
+		return "Crater";
+	case ENTITY_TYPE_DIVISION:
+		return entity_sub_type_division_names[sub_type];
+	case ENTITY_TYPE_EXPLOSION:
+		return "Explosion";
+	case ENTITY_TYPE_FIXED_WING:
+	case ENTITY_TYPE_HELICOPTER:
+		return entity_sub_type_aircraft_names[sub_type];
+	case ENTITY_TYPE_FORCE:
+		return "Force";
+	case ENTITY_TYPE_GROUP:
+		return entity_sub_type_group_names[sub_type];
+	case ENTITY_TYPE_GUIDE:
+		return entity_sub_type_guide_names[sub_type];
+	case ENTITY_TYPE_KEYSITE:
+		return entity_sub_type_keysite_names[sub_type];
+	case ENTITY_TYPE_LANDING:
+		return entity_sub_type_landing_names[sub_type];
+	case ENTITY_TYPE_OBJECT:
+		return "Object";
+	case ENTITY_TYPE_PARTICLE:
+		return "Particle";
+	case ENTITY_TYPE_PERSON:
+		return "Person";
+	case ENTITY_TYPE_PILOT:
+		return entity_sub_type_pilot_names[sub_type];
+	case ENTITY_TYPE_PYLON:
+		return "Pylon";
+	case ENTITY_TYPE_REGEN:
+		return entity_sub_type_regen_names[sub_type];
+	case ENTITY_TYPE_ANTI_AIRCRAFT:
+	case ENTITY_TYPE_ROUTED_VEHICLE:
+		return entity_sub_type_vehicle_names[sub_type];
+	case ENTITY_TYPE_SCENIC:
+		return "Scenic";
+	case ENTITY_TYPE_SECTOR:
+		return "Sector";
+	case ENTITY_TYPE_SEGMENT:
+		return "Segment";
+	case ENTITY_TYPE_SESSION:
+		return "Session";
+	case ENTITY_TYPE_SHIP_VEHICLE:
+		return entity_sub_type_vehicle_names[sub_type];
+	case ENTITY_TYPE_SITE:
+		return entity_sub_type_site_names[sub_type];
+	case ENTITY_TYPE_SITE_UPDATABLE:
+		return "Updatedable";
+	case ENTITY_TYPE_SMOKE_LIST:
+		return "Smoke list";
+	case ENTITY_TYPE_SOUND_EFFECT:
+		return "Sound effect";
+	case ENTITY_TYPE_SPRITE:
+		return "Sprite";
+	case ENTITY_TYPE_TASK:
+		return entity_sub_type_task_names[sub_type];
+	case ENTITY_TYPE_UPDATE:
+		return "Update";
+	case ENTITY_TYPE_WAYPOINT:
+		return entity_sub_type_waypoint_names[sub_type];
+	case ENTITY_TYPE_WEAPON:
+		return entity_sub_type_weapon_names[sub_type];
+	}
+
+	return "Unknown";
+}
+#endif // DEBUG
