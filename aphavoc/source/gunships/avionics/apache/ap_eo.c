@@ -574,16 +574,32 @@ void toggle_apache_eo_system(void)
 	case TARGET_ACQUISITION_SYSTEM_FLIR:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_DTV;
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR)
+		if (is_using_eo_system(FALSE))
 			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_DTV;
 
 		break;
 	case TARGET_ACQUISITION_SYSTEM_DTV:
+		if (get_view_mode() == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE)
+		{
+			eo_sensor = TARGET_ACQUISITION_SYSTEM_DVO;
+	
+			if (is_using_eo_system(FALSE))
+				target_acquisition_system = TARGET_ACQUISITION_SYSTEM_DVO;
+		}
+		else
+		{
+			eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
+	
+			if (is_using_eo_system(FALSE))
+				target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
+		}
+		break;
+	case TARGET_ACQUISITION_SYSTEM_DVO:
 		eo_sensor = TARGET_ACQUISITION_SYSTEM_FLIR;
 
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DTV)
+		if (is_using_eo_system(FALSE))
 			target_acquisition_system = TARGET_ACQUISITION_SYSTEM_FLIR;
-
+		
 		break;
 	}
 }
