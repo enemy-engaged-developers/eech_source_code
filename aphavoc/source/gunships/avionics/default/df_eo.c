@@ -418,7 +418,7 @@ void update_default_eo (eo_params *eo)
 	// loke 030315
 	// added code to allow the user to slew the eo device using joystick axes
 
-	joystick_slew_eo_system(coarse_slew_rate);
+	joystick_slew_eo_system(medium_slew_rate);
 
 	////////////////////////////////////////
 

@@ -427,7 +427,7 @@ void update_ka50_eo (eo_params *eo)
 		mouse_wheel_up--;
 	}
 
-	joystick_slew_eo_system(coarse_slew_rate);
+	joystick_slew_eo_system(medium_slew_rate);
 
 	////////////////////////////////////////
 

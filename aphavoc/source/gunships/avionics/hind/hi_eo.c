@@ -393,7 +393,7 @@ void update_hind_eo (eo_params *eo)
 
 	// Jabberwock 030930 ends
 
-	joystick_slew_eo_system(coarse_slew_rate);
+	joystick_slew_eo_system(medium_slew_rate);
 
 	////////////////////////////////////////
 	// loke 030322

@@ -393,7 +393,7 @@ void update_havoc_eo (eo_params *eo)
 
 	////////////////////////////////////////
 
-	joystick_slew_eo_system(coarse_slew_rate);
+	joystick_slew_eo_system(medium_slew_rate);
 
 	////////////////////////////////////////
 
