@@ -146,6 +146,8 @@ static void destroy_local (entity *en)
 		// just set raw value (otherwise it will destroy itself again)
 		//
 		
+		debug_log("pilot entity destroyed");
+			
 		pilot_entity = NULL;
 	}
 
