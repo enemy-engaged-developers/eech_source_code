@@ -3375,7 +3375,6 @@ void load_texture_override_bmp ( overridename system_texture_override_names[MAX_
 // NOTE: if a name already exists from previous calls to this function they are overwritten
 int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname )
 {
-
 	directory_file_list
 		*directory_listing;
 
@@ -3395,27 +3394,33 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 	if ( directory_listing )
 	{
+		int is_terrain_directory = strnicmp(mapname, "terrain", 7) == 0;
 		valid_file = TRUE;
 
 		while ( valid_file )
 		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_DIRECTORY )
+			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_DIRECTORY)
 			{
-				snprintf(filename, sizeof(filename), "%s\\%s", mapname, get_directory_file_filename ( directory_listing ));
-
-				if (filename[strlen(mapname) + 1] == '.')
-				{
-					valid_file = get_next_directory_file ( directory_listing );
-					continue;
-				}
-
-				strupr(filename);
-
-				#if DEBUG_MODULE
-				debug_log("Entering directory %s", filename);
-				#endif
-
-				initialize_texture_override_names(system_texture_override_names, filename);
+			 	if (!is_terrain_directory)
+			 	{
+					const char *this_entry = get_directory_file_filename ( directory_listing );
+	
+					if (*this_entry == '.')
+					{
+						valid_file = get_next_directory_file ( directory_listing );
+						continue;
+					}
+					
+					snprintf(filename, sizeof(filename), "%s\\%s", mapname, this_entry);
+	
+					strupr(filename);
+	
+					#if DEBUG_MODULE
+					debug_log("Entering directory %s", filename);
+					#endif
+	
+					initialize_texture_override_names(system_texture_override_names, filename);
+			 	}
 			}
 			else if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
