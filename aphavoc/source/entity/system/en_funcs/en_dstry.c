@@ -274,6 +274,9 @@ void destroy_local_entities (void)
 
 	en = get_local_entity_list ();
 
+	if (get_gunship_entity())
+		set_gunship_entity(NULL);
+
 	while (en)
    {
 
@@ -379,7 +382,7 @@ void destroy_local_entities (void)
 		}
 		#endif
 
-      destroy_local_entity_family (en);
+		destroy_local_entity_family(en);
 
 		en = get_local_entity_list ();
    }
