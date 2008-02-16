@@ -11089,7 +11089,10 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 	}
 	else
 	{
-		if (ort_mode != MFD_MODE_DAMAGED && ort_mode != MFD_MODE_OFF)
+		int use_3d_texture = ort_mode != MFD_MODE_DAMAGED && ort_mode != MFD_MODE_OFF && !current_apache_eo_sensor_damaged();
+		ASSERT(location == MFD_LOCATION_ORT);
+
+		if (use_3d_texture)
 		{
 			ort_mode = get_mfd_mode_for_eo_sensor();
 			mfd_texture_screen = eo_3d_texture_screen;
@@ -11100,7 +11103,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 		
 		set_system_texture_screen (mfd_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT);
 
-		if (ort_mode != MFD_MODE_DAMAGED && ort_mode != MFD_MODE_OFF)
+		if (use_3d_texture)
 			if (cpg_lhs_mfd_mode == ort_mode || cpg_rhs_mfd_mode == ort_mode)
 			{
 				// use same texture as MFD if it also shows TADS
@@ -11111,7 +11114,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 	if (is_pilot
 		&& pilot_tsd_underlay == TSD_UNDERLAY_TADS
 		&& (d3d_can_render_to_texture)
-		&& !apache_damage.flir
+		&& !current_apache_eo_sensor_damaged()
 		&& (lhs_mfd_mode == MFD_MODE_TSD
 			|| rhs_mfd_mode == MFD_MODE_TSD))
 		tsd_tads_underlay_active = TRUE;
@@ -11325,7 +11328,13 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 				if (lock_screen (mfd_texture_screen))
 				{
-					set_block (0, 0, mfd_texture_size - 1, mfd_texture_size - 1, clear_mfd_colour);
+					int width;
+					if (location == MFD_LOCATION_ORT)
+						width = mfd_texture_size * 2 - 1;
+					else
+						width = mfd_texture_size - 1;
+					
+					set_block (0, 0, width, mfd_texture_size - 1, clear_mfd_colour);
 
 					draw_layout_grid ();
 
