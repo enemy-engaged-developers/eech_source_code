@@ -106,6 +106,8 @@ void set_gunship_entity (entity *en)
 {
 	stop_messaging_system (NULL);
 
+	debug_log("Setting gunship to %s", get_sub_type_name(en));
+
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
 		assign_entity_to_user (en);
@@ -165,9 +167,9 @@ void assign_entity_to_user (entity *en)
 	comms_data_flow_types
 		store_data_flow;
 
-//	ASSERT (get_pilot_entity ());
-	if (!get_pilot_entity ())
-		return;
+	debug_log("Assigning gunship to user: %s", get_sub_type_name(en));
+
+	ASSERT (get_pilot_entity () || (en == NULL && get_gunship_entity() == NULL));
 
 	old_group = NULL;
 
@@ -370,9 +372,11 @@ void assign_entity_to_user (entity *en)
 	// assign pilot
 	//
 
-	set_client_server_entity_parent (get_pilot_entity (), LIST_TYPE_AIRCREW, en);
-
-	set_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE, CREW_ROLE_PILOT);
+	if (en)
+	{
+		set_client_server_entity_parent (get_pilot_entity (), LIST_TYPE_AIRCREW, en);
+		set_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE, CREW_ROLE_PILOT);
+	}
 
 	//
 	// Tidy up old group (must be done after gunship_entity and aircrew link set)
@@ -557,9 +561,6 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 				
 				if (task)
 				{
-					// Should be TRUE through "get_local_entity_suitable_for_player"
-					ASSERT (get_local_entity_int_value (task, INT_TYPE_TASK_COMPLETED) == TASK_INCOMPLETE);
-
 					//
 					// Update Campaign Screen to reflect new gunship/mission
 					//
