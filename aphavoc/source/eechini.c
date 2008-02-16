@@ -807,6 +807,7 @@ void dump_ini_file(void)
 	fprintf(f,"cannontrack=%d                   # cannon tracking boresight (0 = no tracking, 1 = track if no acquire, 2 = always track IHADSS/HIDSS/HMS) (def = 1) \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 	fprintf(f,"unpadlock_on_handover=%d		# unpadlock on handover from HMS to TADS = 0 (off)\n",command_line_unpadlock_on_handover);  //GCsDriver  08-12-2007
 	fprintf(f,"pilot_as_periscope_default=%d	# stay in pilot seat when switching to periscope = 0 (off)\n",command_line_pilot_as_periscope_default);  //GCsDriver  08-12-2007
+	fprintf(f,"autoreturn_to_pilot_after_periscope=%d         # switch to pilot seat when deactivating periscope = 0 (off)\n",command_line_autoreturn_to_pilot_after_periscope);  //GCsDriver  08-12-2007
 	fprintf(f,"TSD_mouse_control=%d             # allows mouse control of TSD (Apache only) for selecting targets and creating PFZs\n", command_line_mouse_tsd_target_select);
 	fprintf(f,"co_pilot_reports_targets=%d	    # Co-pilot will report targets he finds, and add them to TSD\n", global_co_pilot_scans_for_targets);
 
@@ -833,6 +834,7 @@ void dump_ini_file(void)
 	fprintf(f,"nonlinear-pedals=%d	# use non-linear control for pedals (less sensitive around center) (0 = off, 1 = on) (def = 1)\n", command_line_nonlinear_cyclic);
 	fprintf(f,"nonlinear-collective-zone1=%.2f		# non-linear control value for throttle (n = %% throttle position joystick to represents  60%% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)\n", command_line_collective_zone_1_limit);
 	fprintf(f,"nonlinear-collective-zone2=%.2f		# non-linear control value for throttle (n = %% throttle position joystick to represents 100%% collective) (10% = 0.1) (0.0 = off (linear control), 1.2 = max) (def = 0.7)\n", command_line_collective_zone_2_limit);
+	fprintf(f,"nonlinear-collective-percentage-at-zone1=%.1f   #  collective percentage at zone1. Valid values are in range from 1.0 to 99.0, default is 60.0.\n", command_line_collective_percentage_at_zone1); //GCsDriver  08-12-2007
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input (0 = off/blue force/USA, 1 = on/red force/Russia) (def = 0)\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"msl=%d			# activates mouselook (and TrackIR when present) (0 = off, 1 = internal, 2 = external, 3 = both) (def = 0)\n",command_line_mouse_look);
 	fprintf(f,"msls=%d			# mouselook speed (when msl=1) (n > 0) (def = 15), POV speed (when msl=0) (n > 0, max = 20) (def = 13) \n",command_line_mouse_look_speed);
