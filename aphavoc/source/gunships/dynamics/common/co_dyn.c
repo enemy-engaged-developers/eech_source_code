@@ -139,8 +139,6 @@ void clear_trim_control (event *ev)
 	current_flight_dynamics->input_data.cyclic_x_trim.value = 0.0;
 	current_flight_dynamics->input_data.cyclic_y_trim.value = centre_trim;
 	current_flight_dynamics->input_data.pedal_trim.value = centre_pedal_trim;
-
-	debug_log ("CO_DYN: clearing trim");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
