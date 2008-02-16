@@ -2689,8 +2689,10 @@ void cpg_scan_for_eo_targets(void)
 				*source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION),
 				*target_position = get_local_entity_vec3d_ptr (next_cpg_target_report, VEC3D_TYPE_POSITION);
 
-			// report target, and add to target list
-			if (get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID && get_los_clear(next_cpg_target_report, source_position, target_position))
+			// report target, and add to target list.  Have to retest conditions, since they may have changed since we selected it
+			if (get_local_entity_int_value (next_cpg_target_report, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID
+				&& !get_local_entity_parent (next_cpg_target_report, LIST_TYPE_GUNSHIP_TARGET)
+				&& get_los_clear(next_cpg_target_report, source_position, target_position))
 			{
 				insert_local_entity_into_parents_child_list (next_cpg_target_report, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
 				cpg_report_target(next_cpg_target_report);
