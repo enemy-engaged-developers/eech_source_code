@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.10</title>
+<title>EECH Community Release Version 1.10.2</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.10</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.10.2</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -74,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: February 8, 2008
+      italic;'>Last edited by arneh: February 16, 2008
       </p>
 
 
@@ -91,100 +91,26 @@ h4 {
         <li><a href="#history">Version history</a></li>
       </ul>
 
-
-      <h2>What's NEW in EECH 1.10?</h2>
-      <p><em>(since version 1.9)</em></p>
-
-      <strong>Important: This version is incompatible with previous
-      versions of EECH.  Save games can not be loaded from previous
-      versions, it's incompatible in multiplayer, and any custom 3D
-      objects (like the Apache and Havoc floor fixes) from previous
-      versions won't work with this version.</strong>
-      <dl>
-      <dt>Avionics changes
-      <dd>
-         <ul>
-	   <li>Added capability to lock EO system on any point on
-      ground.  Use regular lock key.  Lock position can be moved after
-      lock is achieved.  Laser can be used to get range, and unguided,
-      optically and laser guided weapons (but not radar guided) can be
-      fired at ground lock.
-	   <li>Added ORT view for Apache (much like Hokum's perscope
-      view). Accessible by pressing PageDown when in co-pilot's
-      cockpit.
-           <li>Apache's DVO sensor has returned.  But it is only
-      viewable through the ORT, not on MFDs.  Use PageDown to first
-      select ORT, and again to change sensor to DVO.
-            <li>Locking a target in helmet sight mode won't also padlock
-      when using Track-IR.  You can still padlock with track-IR, but
-      you have to press the padlock key separately.
-	    <li>Weather condition dependant eo lock ranges and
-      slightly varying general lock ranges (LLTV,FLIR,Periscope). (GCsDriver)
-	    <li>Switchable COMM-Channels. See TAB menu. (GCsDriver)
-	    <li>Automatic unpadlock on target handover from helmet tracking via eech.ini.
-            <li>Implemented shaking of EO cameras when cannon is fired.
-	 </ul>
-
-      <dt>Flight model changes
-      <dd>
-         <ul>
-         <li>Implemented pedal trim.  Use normal trim key, and pedal
-      position will also be remembered as trim position.  For fine
-      trim you can use z and x (use shift + z/x if you are using
-      keyboard for pedal control).  Very useful for those flying with
-      cross coupling disabled.
-         <li>Rotor will lose RPM much faster when pulling collective
-      and not powered by engine (i.e. when flairing after an autorotation).
-         <li>All helicopters now have two hydraulics systems.  If only
-      primary is lost controls become more sluggish.  If only
-      secondary is lost no immediate effect.  If both are lost
-      controls will gradually lock up as pressure is lost (takes 1 to
-      15 minutes).  You are strongly adviced to land before this
-      happens ;-)
-        </ul>
-      <dt>Rendering changes
-      <dd>
-         <ul>
-	   <li>Removed restrictions on available screen resolutions.
-      EECH should now support any resolution your graphics card does.
-      (Retro)
-	   <li>Fixed so that aspect ratio is changed when screen
-      resolution is.  This should stop widescreen monitors having a
-      stretched image (In 3D.  The 2D menues will still be stretched).
-           <li>Added capability for "trinnlaus zoom" for main 3D view, i.e.
-      smoothly changing field of view to any angle (min and max field
-      of view set in eech.ini).  A
-      joystick axis (set in eech.ini), or ALT + F3/F4 keys can be used
-      to change zoom.
-	   <li>Objects can now be rendered up to fog border, avoiding
-      suddenly disappearing units.(GCsDriver)
-	   <li>Switchable tree shadows and optimised tree models for better performance.(GCsDriver)
-           <li>Russian NVG without FLIR effect via eech.ini.(GCsDriver)
-           <li>Added support for background image themes for UI(casm)
-         </ul>    
-
-      <dt>Non-standard helicopter changes (by GCsDriver)
-      <dd>
-          <ul>
-	    <li>
-	    <li>Separate gear and door functions for hacked helis (Alt+C for doors).
-	    <li>Correct working weapon pages and chaff/flare outlet for hacked helis.
-	    <li>High-res MFDs and eo ground stabilisation for all helis.
-	    <li>AH-64A flight page added.
-	    <li>AH-64A and Blackhawk have 64D-style weapon pages.
-	    <li>Ka-50 with working gauges and Hokum style HUD.
-	    <li>Ka-50 and Mi-24 now also have aiming for ballistic
-      weapons.
-          </ul>
-     <dt>Miscellaneous changes
-     <dd>
-         <ul>
-            <li>Added support for new Apache 3D cockpit
-	    <li>Nonlinear collective : percentage at zone1 can now be
-      set via eech.ini, allowing better adaption to personal
-      preferences. (GCsDriver)
-          </ul>
-     </dl>
+      <h2>What's NEW in EECH 1.10.2?</h2>
+      <p><em>(since version 1.10.1)</em></p>
+      <ul>
+        <li>Added option for co-pilot to search for and report any
+	targets he finds.  Option found in realism menu.
+        <li>Added ability to lock target or ground point (if no target
+      under pointer) by clicking on TSD.  Apache Longbow only.
+        <li>Fixed next/previous target commands for EO.
+        <li>Fixed crash when using joystick axis for EO control and
+      moving while target is locked
+        <li>Fixed crash when exiting campaign with masterserver
+      enabled
+        <li>Fixed problem where unguided rockets would fire in LOAL mode
+	<li>Fixed problem with Ka-52's EO camera pointing in the wrong
+      direction
+        <li>Fixed problem where wrong camouflage would be used
+      (gotcha)
+        <li>EECH won't load texture from all sub directories of
+      texture/terrain, just the ones for the current map
+      </ul>
 
 
       <p align="right"><a href="#top">[top ^]</a></p>
@@ -651,6 +577,101 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.10.1</h4>
+         <ul>
+           <li>Fixed crash when locking target with EO
+           <li>Fixed so leaning forward in pilot's cockpit doesn't
+	   enter ORT view.  Only co-pilot has ORT.
+         </ul>
+
+      <h4>Fixes/features in 1.10</h4>
+      <dl>
+      <dt>Avionics changes
+      <dd>
+         <ul>
+	   <li>Added capability to lock EO system on any point on
+      ground.  Use regular lock key.  Lock position can be moved after
+      lock is achieved.  Laser can be used to get range, and unguided,
+      optically and laser guided weapons (but not radar guided) can be
+      fired at ground lock.
+	   <li>Added ORT view for Apache (much like Hokum's perscope
+      view). Accessible by pressing PageDown when in co-pilot's
+      cockpit.
+           <li>Apache's DVO sensor has returned.  But it is only
+      viewable through the ORT, not on MFDs.  Use PageDown to first
+      select ORT, and again to change sensor to DVO.
+            <li>Locking a target in helmet sight mode won't also padlock
+      when using Track-IR.  You can still padlock with track-IR, but
+      you have to press the padlock key separately.
+	    <li>Weather condition dependant eo lock ranges and
+      slightly varying general lock ranges (LLTV,FLIR,Periscope). (GCsDriver)
+	    <li>Switchable COMM-Channels. See TAB menu. (GCsDriver)
+	    <li>Automatic unpadlock on target handover from helmet tracking via eech.ini.
+            <li>Implemented shaking of EO cameras when cannon is fired.
+	 </ul>
+
+      <dt>Flight model changes
+      <dd>
+         <ul>
+         <li>Implemented pedal trim.  Use normal trim key, and pedal
+      position will also be remembered as trim position.  For fine
+      trim you can use z and x (use shift + z/x if you are using
+      keyboard for pedal control).  Very useful for those flying with
+      cross coupling disabled.
+         <li>Rotor will lose RPM much faster when pulling collective
+      and not powered by engine (i.e. when flairing after an autorotation).
+         <li>All helicopters now have two hydraulics systems.  If only
+      primary is lost controls become more sluggish.  If only
+      secondary is lost no immediate effect.  If both are lost
+      controls will gradually lock up as pressure is lost (takes 1 to
+      15 minutes).  You are strongly adviced to land before this
+      happens ;-)
+        </ul>
+      <dt>Rendering changes
+      <dd>
+         <ul>
+	   <li>Removed restrictions on available screen resolutions.
+      EECH should now support any resolution your graphics card does.
+      (Retro)
+	   <li>Fixed so that aspect ratio is changed when screen
+      resolution is.  This should stop widescreen monitors having a
+      stretched image (In 3D.  The 2D menues will still be stretched).
+           <li>Added capability for "trinnlaus zoom" for main 3D view, i.e.
+      smoothly changing field of view to any angle (min and max field
+      of view set in eech.ini).  A
+      joystick axis (set in eech.ini), or ALT + F3/F4 keys can be used
+      to change zoom.
+	   <li>Objects can now be rendered up to fog border, avoiding
+      suddenly disappearing units.(GCsDriver)
+	   <li>Switchable tree shadows and optimised tree models for better performance.(GCsDriver)
+           <li>Russian NVG without FLIR effect via eech.ini.(GCsDriver)
+           <li>Added support for background image themes for UI(casm)
+         </ul>    
+
+      <dt>Non-standard helicopter changes (by GCsDriver)
+      <dd>
+          <ul>
+	    <li>
+	    <li>Separate gear and door functions for hacked helis (Alt+C for doors).
+	    <li>Correct working weapon pages and chaff/flare outlet for hacked helis.
+	    <li>High-res MFDs and eo ground stabilisation for all helis.
+	    <li>AH-64A flight page added.
+	    <li>AH-64A and Blackhawk have 64D-style weapon pages.
+	    <li>Ka-50 with working gauges and Hokum style HUD.
+	    <li>Ka-50 and Mi-24 now also have aiming for ballistic
+      weapons.
+          </ul>
+     <dt>Miscellaneous changes
+     <dd>
+         <ul>
+            <li>Added support for new Apache 3D cockpit
+	    <li>Nonlinear collective : percentage at zone1 can now be
+      set via eech.ini, allowing better adaption to personal
+      preferences. (GCsDriver)
+          </ul>
+     </dl>
+
+
       <h4>Fixes/features in 1.9</h4>
       <dl>
       <dt>Weapons modelling
