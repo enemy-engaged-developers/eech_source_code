@@ -1102,22 +1102,12 @@ void initialise_apache_mfd (void)
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
 
-	if(command_line_export_mfd)
-	{
-		lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
-		rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
-		cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SCREEN);
-		cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SCREEN);
-		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
-	}
-	else
-	{
-		lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-		rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-		cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-		cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
-		ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
-	}
+	lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	cpg_lhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	cpg_rhs_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD, TEXTURE_TYPE_SINGLEALPHA);
+	ort_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_AVCKPT_DISPLAY_ORT, TEXTURE_TYPE_SCREEN);
+
 	lhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, LHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	rhs_overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, RHS_OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 	alnum_display_screen = create_system_texture_screen(ALNUM_DISPLAY_WIDTH, ALNUM_DISPLAY_HEIGHT, TEXTURE_INDEX_AVCKPT_ALNUM_DISPLAY, TEXTURE_TYPE_NOALPHA);
@@ -11051,8 +11041,7 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 	screen
 		*mfd_texture_screen,
-		*left_export,
-		*right_export;
+		*export_screen;
 
 	int
 		is_pilot = (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT);
@@ -11502,15 +11491,24 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 	set_active_screen (video_screen);
 	if(command_line_export_mfd)
 	{
-		if(location == MFD_LOCATION_LHS)
+		switch(location)
 		{
-			left_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
-			copy_export_mfd(left_export,NULL);
-		}
-		else
-		{
-			right_export=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
-			copy_export_mfd(NULL,right_export);
+		case MFD_LOCATION_PILOT_LHS:
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_LHS_MFD);
+			copy_export_mfd(export_screen,NULL);
+			break;
+		case MFD_LOCATION_PILOT_RHS:
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
+			copy_export_mfd(NULL,export_screen);
+			break;
+		case MFD_LOCATION_CPG_LHS:
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_LHS_MFD);
+			copy_export_mfd(export_screen,NULL);
+			break;
+		case MFD_LOCATION_CPG_RHS:
+			export_screen=create_screen_for_system_texture (TEXTURE_INDEX_AVCKPT_DISPLAY_CPG_RHS_MFD);
+			copy_export_mfd(NULL,export_screen);
+			break;
 		}
 	}
 }
