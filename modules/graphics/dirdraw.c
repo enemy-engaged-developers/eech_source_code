@@ -67,7 +67,7 @@
 #include "graphics.h"
 #include "cmndline.h"
 #include "global.h"
-//#include "external\pixel.h"
+#include "external\pixel.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -934,30 +934,9 @@ BOOL ddraw_flip_surface_export ( void )
 			dst.right=command_line_export_mfd_left_pos[2];
 			dst.bottom=command_line_export_mfd_left_pos[3];
 	}
-	switch(get_global_gunship_type())
-	{
-		case GUNSHIP_TYPE_HAVOC:
-		case GUNSHIP_TYPE_COMANCHE:
-		case GUNSHIP_TYPE_HOKUM:
-		case GUNSHIP_TYPE_APACHE:
-// start high-res mfds for all helis by GCsDriver 08-12-2007
-		case GUNSHIP_TYPE_AH64A:
-		case GUNSHIP_TYPE_BLACKHAWK:
-		case GUNSHIP_TYPE_KA50:
-		case GUNSHIP_TYPE_HIND:
-		default:
-			size=256;
-			break;
-/*
-		case GUNSHIP_TYPE_BLACKHAWK:
-		case GUNSHIP_TYPE_HIND:
-		case GUNSHIP_TYPE_KA50:
-		case GUNSHIP_TYPE_AH64A:
-			size=128;
-			break;
-*/
-// end high-res mfds for all helis by GCsDriver 08-12-2007
-	}
+// high-res mfds for all helis
+	size=256;
+	
 	src.left=0;
 	src.top=0;
 	src.right=size;
@@ -969,9 +948,13 @@ BOOL ddraw_flip_surface_export ( void )
        //	ddrval	= IDirectDrawSurface7_Flip ( ddraw2.lpFrontBuffer, NULL, DDFLIP_WAIT );
 	ddrval = IDirectDrawSurface7_Blt ( ddraw_export.lpFrontBuffer, &dst, ddraw_export.lpBackBuffer, &src, 0, NULL);
 
-	if(get_global_gunship_type()==GUNSHIP_TYPE_HAVOC)
-		return TRUE;
-
+	switch(get_global_gunship_type())
+	{
+		case GUNSHIP_TYPE_HAVOC:
+		case GUNSHIP_TYPE_KA50:
+		case GUNSHIP_TYPE_HIND:
+			return TRUE;
+	}
 	dst.left=command_line_export_mfd_right_pos[0];
 	dst.top=command_line_export_mfd_right_pos[1];
 	dst.right=command_line_export_mfd_right_pos[2];
@@ -2504,7 +2487,7 @@ int ddraw_internal_set_display_mode ( void *data )
 
 	ret = IDirectDraw7_SetDisplayMode ( ddraw.ddraw, ptr[0], ptr[1], ptr[2], 0, 0 );
 	if(ddraw_export.ddraw)
-		ret = IDirectDraw7_SetDisplayMode ( ddraw_export.ddraw, command_line_export_mfd_screen_width, command_line_export_mfd_screen_height, 16 , 0, 0 );
+		ret = IDirectDraw7_SetDisplayMode ( ddraw_export.ddraw, command_line_export_mfd_screen_width, command_line_export_mfd_screen_height, 16, 0, 0 );
 
 	return ( ret );
 }
@@ -3352,16 +3335,17 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 
 		int
 			width,height, w, h;
-/*		int 
+		unsigned int 
 		src_surface_red_mask,
 		src_surface_green_mask,
 		src_surface_blue_mask,
+		dst_surface_red_mask,
+		dst_surface_green_mask,
+		dst_surface_blue_mask;
+		int
 		src_surface_red_shift,
 		src_surface_green_shift,
 		src_surface_blue_shift,
-		dst_surface_red_mask,
-		dst_surface_green_mask,
-		dst_surface_blue_mask,
 		dst_surface_red_shift,
 		dst_surface_green_shift,
 		dst_surface_blue_shift;
@@ -3370,25 +3354,34 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 		green,
 		blue;
 
-		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwRBitMask, &src_surface_red_mask, &src_surface_red_shift);
-		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwGBitMask, &src_surface_green_mask, &src_surface_green_shift);
-		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwBBitMask, &src_surface_blue_mask, &src_surface_blue_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwRBitMask, (int*)&src_surface_red_mask, &src_surface_red_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwGBitMask, (int*)&src_surface_green_mask, &src_surface_green_shift);
+		set_surface_shift_and_mask(src_ddsd.ddpfPixelFormat.dwBBitMask, (int*)&src_surface_blue_mask, &src_surface_blue_shift);
 
-		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwRBitMask, &dst_surface_red_mask, &dst_surface_red_shift);
-		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwGBitMask, &dst_surface_green_mask, &dst_surface_green_shift);
-		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwBBitMask, &dst_surface_blue_mask, &dst_surface_blue_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwRBitMask, (int*)&dst_surface_red_mask, &dst_surface_red_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwGBitMask, (int*)&dst_surface_green_mask, &dst_surface_green_shift);
+		set_surface_shift_and_mask(dest_ddsd.ddpfPixelFormat.dwBBitMask, (int*)&dst_surface_blue_mask, &dst_surface_blue_shift);
 			
 		dst_surface_red_mask&=src_surface_red_mask;
 		dst_surface_green_mask&=src_surface_green_mask;
 		dst_surface_blue_mask&=src_surface_blue_mask;
-//		dst_surface_red_mask|=(dst_surface_red_mask>>16);
-//		dst_surface_green_mask|=(dst_surface_green_mask>>16);
-//		dst_surface_blue_mask|=(dst_surface_blue_mask>>16);
-//		dst_surface_red_mask>>=src_surface_red_shift;
-//		dst_surface_green_mask>>=src_surface_green_shift;
-//		dst_surface_blue_mask>>=src_surface_blue_shift;
-*/
-		w=src_rect.right-src_rect.left;
+		if(src_ddsd.ddpfPixelFormat.dwRGBBitCount==16) 
+		{
+			dst_surface_red_mask|=(dst_surface_red_mask>>16);
+			dst_surface_green_mask|=(dst_surface_green_mask>>16);
+			dst_surface_blue_mask|=(dst_surface_blue_mask>>16);
+			src_surface_red_shift-=16; 
+			src_surface_green_shift-=16;
+			src_surface_blue_shift-=16;
+			dst_surface_red_shift-=16; 
+			dst_surface_green_shift-=16;
+			dst_surface_blue_shift-=16;
+			w=(src_rect.right-src_rect.left)/2; 
+		} 
+		else
+		{
+			w=src_rect.right-src_rect.left;
+		}
 		h=src_rect.bottom-src_rect.top;
 
 		source_screen = src_ddsd.lpSurface;
@@ -3396,23 +3389,17 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 				
 		for ( height=0; height < h; height++ )
 		{
-			double
+			unsigned int
 			*source,
 			*dest;
+			unsigned short int *dest_short;
 
-			source = ( double * ) source_screen;
-			dest = ( double * ) dest_screen;
+			source = ( unsigned int* ) source_screen;
+			dest = ( unsigned int* ) dest_screen;
+			dest_short = (unsigned short int*) dest_screen;
 				
-	/*		unsigned short int
-			*source,
-			*dest;
-
-			source = ( unsigned short int* ) source_screen;
-			dest = ( unsigned short int* ) dest_screen;
-	*/			
-			for ( width = w; width > 0; width -= 16 )
+			for(width=w;width>0;width--)
 			{
-/*
 				red=*source<<src_surface_red_shift;
 				green=*source<<src_surface_green_shift;
 				blue=*source<<src_surface_blue_shift;
@@ -3423,19 +3410,18 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 				green>>=dst_surface_green_shift;
 				blue>>=dst_surface_blue_shift;
 				
-				*dest=(red|green|blue);
-				dest++;
+				if(src_ddsd.ddpfPixelFormat.dwRGBBitCount==16)
+				{
+					*dest=(red|green|blue);
+					dest++;
+				}
+				else
+				{
+					*dest_short=(red|green|blue);
+					dest_short++;
+				}
 				source++;
-*/
-				dest[0] = source[0];
-				dest[1] = source[1];
-				dest[2] = source[2];
-				dest[3] = source[3];
-				dest += 4;
-				source += 4;
-
 			}
-		
 			dest_screen += dest_ddsd.lPitch;
 			source_screen += src_ddsd.lPitch;
 		}

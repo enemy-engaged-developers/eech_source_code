@@ -184,14 +184,7 @@ void initialise_hind_mfd (void)
 	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
 
-	if(command_line_export_mfd)
-	{
-		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SCREEN);
-	}
-	else
-	{
-		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
-	}
+	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
 
 	overlaid_mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, OVERLAID_MFD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
 
@@ -204,7 +197,7 @@ void initialise_hind_mfd (void)
 
 	if(command_line_export_mfd)
 	{
-		clear_mfd_colour=MFD_COLOUR6;
+		set_rgb_colour (clear_mfd_colour, 80, 62, 8, 0);
 	}
 	else
 	{
