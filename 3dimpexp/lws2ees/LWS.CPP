@@ -87,7 +87,7 @@ struct LOD
  void Print(void) const
  {
   printf("%f\n", distance);
-  printf("%s\n", filename.c_str());
+  printf("\"%s\"\n", filename.c_str());
  }
 };
 
@@ -317,6 +317,7 @@ class LwsFile : public Lws
  public:
 
  LwsFile(const char* filename)
+  : objectnumber(0)
  {
   clearlast();
 
@@ -380,9 +381,9 @@ class LwsFile : public Lws
    error("Failed to open file %s", filename);
 
   if (!gets() || strcmp(str, "LWSC"))
-   error("Provided file is not Lightwave Scene version 4");
-  if (!gets() || strcmp(str, "4"))
-   error("Provided file is not Lightwave Scene version 4");
+   error("Provided file is not Lightwave Scene");
+  if (!gets() || strcmp(str, "4") && strcmp(str, "3"))
+   error("Provided file is not Lightwave Scene version 3 or 4");
 
   while (gets())
    {
@@ -504,6 +505,8 @@ class LwsFile : public Lws
   if (!LastGeneralObject)
    error("Line %i: Parent without previous object/light/camera", line);
   sscanf(str, "%lX", &LastGeneralObject->motion.parent);
+  if (LastGeneralObject->motion.parent < 0x10000000)
+   LastGeneralObject->motion.parent += 0xFFFFFFF;
  }
 
  void ProcessPlugin(void)
@@ -570,14 +573,24 @@ class LwsFile : public Lws
 
  void ProcessLoad(void)
  {
+  objectnumber++;
+
   clearlast();
   Object object;
 
   findkeyword();
   sscanf(keyword.c_str(), "%i", &object.layer);
   findkeyword();
-  sscanf(keyword.c_str(), "%lx", &object.index);
-  object.filename = str;
+  if (*str)
+   {
+    sscanf(keyword.c_str(), "%lx", &object.index);
+    object.filename = str;
+   }
+  else
+   {
+    object.index = 0xFFFFFFF + objectnumber;
+    object.filename = keyword;
+   }
 
   objects.push_back(object);
   LastObject = &objects.back();
@@ -585,11 +598,18 @@ class LwsFile : public Lws
 
  void ProcessNull(void)
  {
+  objectnumber++;
+
   clearlast();
   Object object;
   findkeyword();
-  sscanf(keyword.c_str(), "%lx", &object.index);
-  findkeyword();
+  if (strcmp(keyword.c_str(), "NullObject"))
+   {
+    sscanf(keyword.c_str(), "%lx", &object.index);
+    findkeyword();
+   }
+  else
+   object.index = 0xFFFFFFF + objectnumber;
   if (str[0] && str[1])
    object.filename.assign(str + 1, strlen(str) - 2);
   object.layer = 0;
@@ -699,6 +719,7 @@ class LwsFile : public Lws
  Object* LastObject;
  Light* LastLight;
  Camera* LastCamera;
+ int objectnumber;
 };
 
 LwsFile::ProcessorAssignment LwsFile::Processors[] =
