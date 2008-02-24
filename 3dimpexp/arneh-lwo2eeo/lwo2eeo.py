@@ -207,6 +207,7 @@ class Surface:
         self.surface_points = {}
         self.texture_name = None
 
+        self.next_unsmooth_point_index = 1
 
     def rgb_colour(self):
         r = bound(int(round(self.colour[0] * 255)), 0, 255)
@@ -267,24 +268,42 @@ class Surface:
         return struct.pack('<HBB', flag16, flag8, npoints)
 
     def get_surface_point_indices(self, coords):
-#        res = range(self.num_surface_points, self.num_surface_points+len(coords))
-#        self.num_surface_points += len(coords)
-#        return res
+        r"""Returns the index into the surface's point list for each point for the
+        provided coordinates (should be both vertex and texture coordinates for each
+        point in the polygon"""
         res = []
         for index in coords:
-            # if we already have this point then return the index of it, otherwise insert a new one
+            # non-smooth surfaces cannot share point indices (because colour is
+            # calculated on a point basis, so polygons with differen normals will get
+            # the same colour), so add a unique value to each key for each non-smooth
+            # polygon
+            if self.smooth:
+                unique_var = 0
+            else:
+                unique_var = self.next_unsmooth_point_index
+                self.next_unsmooth_point_index += 1
+
+            # we use the actual coordinate as key for this hash, and the value is the
+            # index.  This way we can easily find coordinates wich are repeated and
+            # return the same value
+            index = (index[0],index[1],unique_var)
+
+            # if we already have this point then return the index of it, otherwise
+            # insert a new one
             if index not in self.surface_points:
                 self.surface_points[index] = len(self.surface_points)
-                
+               
             res.append(self.surface_points[index])
         return res
 
     def get_surface_points(self):
+        '''Returns all vertice coordinates for all polygons in this surface.  Sorted by point index'''
         items = [(v,k) for (k,v) in self.surface_points.items()]
         items.sort()
         return [i[1][0] for i in items]
 
     def get_texture_points(self):
+        '''Returns all texture coordinates for all polygons in this surface.  Sorted by point index'''
         items = [(v,k) for (k,v) in self.surface_points.items()]
         items.sort()
         return [i[1][1] for i in items]
