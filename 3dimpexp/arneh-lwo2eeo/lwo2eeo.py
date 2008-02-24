@@ -925,7 +925,7 @@ class Model:
                 else:
                     uv = [(0,0)] * len(indices)
                 
-                if surf.uv_map:
+                if surf.lumi_uv_map:
                     lumi_uv = [surf.lumi_uv_map.get_map(poly, pref) for pref in indices]
                 else:
                     lumi_uv = [(0,0)] * len(indices)
