@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.3.1'
+VERSION = '1.4'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -201,11 +201,13 @@ class Surface:
         self.texture_index = 0
         self.texture_wrap = (1,1)
         self.uv_map = None
+        self.lumi_uv_map = None
         self.luminosity_texture_index = 0
 
         self.smoothing_angle = 0
         self.surface_points = {}
         self.texture_name = None
+        self.luminosity_texture_name = None
 
         self.next_unsmooth_point_index = 1
 
@@ -221,8 +223,14 @@ class Surface:
             idx,name = textures.get_texture_index(self.image)
             if not idx:
                 idx = 1
-                self.texture_name = name
-            self.texture_index = idx
+                if model.current_channel == 'LUMI':
+                    self.luminosity_texture_name = name
+                else:
+                    self.texture_name = name
+            if model.current_channel == 'LUMI':
+                self.luminosity_texture_index = idx
+            else:
+                self.texture_index = idx
 
     def pack_colour(self):
         colour = list(self.rgb_colour())
@@ -438,6 +446,8 @@ class Model:
         num = 0
         for surf in self.surfaces:
             if surf.uv_map:
+                num += len(surf.surface_points)
+            if surf.lumi_uv_map:
                 num += len(surf.surface_points)
         return num
 
@@ -698,11 +708,16 @@ class Model:
                 self.parse_projection(string, start)
             elif tag == 'VMAP':
                 uv_map = self.parse_uv_name(string, start, blok_length)
-                surf.uv_map = self.vertex_maps[uv_map]
+                if self.current_channel == 'LUMI':
+                    surf.lumi_uv_map = self.vertex_maps[uv_map]
+                else:
+                    surf.uv_map = self.vertex_maps[uv_map]
             elif tag == 'IMAG':
-                surf.set_image(self.parse_imag(string, start, length))
+                if self.current_channel != 'LUMI':
+                    surf.set_image(self.parse_imag(string, start, length))
             elif tag == 'WRAP':
-                surf.texture_wrap = self.parse_wrap(string, start)
+                if self.current_channel != 'LUMI':
+                    surf.texture_wrap = self.parse_wrap(string, start)
 
             start += blok_length
 
@@ -715,7 +730,6 @@ class Model:
         end = start + blok_length
 
         ordinal = self.parse_nul_string(string, start, blok_length)[0]
-        return 6 + blok_length ## TODO: do something more useful!
 
         start += len(ordinal) + 1
         while start < end:
@@ -723,9 +737,10 @@ class Model:
             start += 6
 
             if tag == 'CHAN':
-                print string[start:start+4]
-            if tag == 'OPAC':
-                print struct.unpack('>Hf', string[start:start+6])
+                self.current_channel = string[start:start+4]
+            elif tag == 'OPAC':
+#                print struct.unpack('>Hf', string[start:start+6])
+                pass
 
             start += chunk_length
 
@@ -739,7 +754,6 @@ class Model:
         while start < end:
             tag, chunk_length = self.parse_tag(string, start, True)
             start += 6
-
             start += chunk_length
 
         return 6 + blok_length
@@ -878,9 +892,13 @@ class Model:
     
         self.bounding_box = min(xx), max(xx), min(yy), max(yy), min(zz), max(zz)
 
-        x_scale = 0x7fff / max(map(abs, self.bounding_box[0:2]))
-        y_scale = 0x7fff / max(map(abs, self.bounding_box[2:4]))
-        z_scale = 0x7fff / max(map(abs, self.bounding_box[4:]))
+        xmax = max(map(abs, self.bounding_box[0:2])) or 1
+        ymax = max(map(abs, self.bounding_box[2:4])) or 1
+        zmax = max(map(abs, self.bounding_box[4:])) or 1
+
+        x_scale = 0x7fff / xmax
+        y_scale = 0x7fff / ymax
+        z_scale = 0x7fff / zmax
 
         self.short_points = [[0,0,0] for n in range(len(self.points))]
         for i in range(len(self.points)):
@@ -906,8 +924,14 @@ class Model:
                     uv = [surf.uv_map.get_map(poly, pref) for pref in indices]
                 else:
                     uv = [(0,0)] * len(indices)
+                
+                if surf.uv_map:
+                    lumi_uv = [surf.lumi_uv_map.get_map(poly, pref) for pref in indices]
+                else:
+                    lumi_uv = [(0,0)] * len(indices)
+
                 poly.surf = surf
-                poly.surface_indices = surf.get_surface_point_indices(zip(indices, uv))
+                poly.surface_indices = surf.get_surface_point_indices(zip(indices, uv, lumi_uv))
                 poly.calculate_normal()
 
         for surf in self.surfaces:
@@ -1026,11 +1050,12 @@ class Model:
             if not surf.image:
                 continue
 
-            uv = surf.uv_map
-            if uv:
-                for map in surf.get_texture_points():
-                    eeo.write(struct.pack('<ff', *map))
-
+#            uv = surf.uv_map
+            for uv in (surf.uv_map, surf.lumi_uv_map):
+                if uv:
+                    for map in surf.get_texture_points():
+                        eeo.write(struct.pack('<ff', *map))
+                    
     def write_surface_normals(self, eeo):
         # need a normal for each point: only if smooth surface
         i = 0
