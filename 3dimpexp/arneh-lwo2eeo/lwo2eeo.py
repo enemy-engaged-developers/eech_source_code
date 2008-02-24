@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.3'
+VERSION = '1.3.1'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
