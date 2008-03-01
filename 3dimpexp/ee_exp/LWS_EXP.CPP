@@ -171,13 +171,25 @@ void ExportObject(FILE* fp, int index, int sub_object_index, const char* special
 {
  current++;
  if (index)
+#ifdef SCENE_3
+  fprintf(fp, "LoadObjectLayer 1 %04X.LWO\n", index);
+#else
   fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
+#endif
  else
   {
    if (null_special)
+#ifdef SCENE_3
+    fprintf(fp, "AddNullObject NullObject (%s)\n", null_special);
+#else
     fprintf(fp, "AddNullObject %08X NullObject (%s)\n", 0x10000000 + current, null_special);
+#endif
    else
+#ifdef SCENE_3
+    fprintf(fp, "AddNullObject NullObject\n");
+#else
     fprintf(fp, "AddNullObject %08X NullObject\n", 0x10000000 + current);
+#endif
   }
  if (!special && sub_object_index)
   special = names.SubObjects[sub_object_index];
@@ -345,7 +357,11 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
   }
 
  ExportKeyFrames(fp, "Object", 7, 3, subo->key.number_of_keyframes, subo->key.keyframes);
+#ifdef SCENE_3
+ fprintf(fp, "ParentItem %i\n", parent);
+#else
  fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
+#endif
  if (subo->key.flag)
   {
    ExportLimits(fp, "H", subo->key.relative_heading_minimum, subo->key.relative_heading_maximum);
@@ -373,8 +389,17 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  if (scene->shadow_approximation_index > 0)
   printf("\tShadow approximation %i not supported\n", scene->shadow_approximation_index);
 
+#ifdef SCENE_3
+ current = 0;
+#else
  current = -1;
+#endif
+
+#ifdef SCENE_3
+ fprintf(fp, "LWSC\n3\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
+#else
  fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
+#endif
 
  if (scene->shadow_polygon_object_index > 0)
   {
@@ -453,7 +478,11 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
   {
    struct OBJECT_3D_SPRITE_LIGHT* s = &scene->sprite_lights[i];
    struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, s->position.x, s->position.y, s->position.z, 0, 0, 0, s->scale.x, s->scale.y, s->scale.z };
+#ifdef SCENE_3
+   fprintf(fp, "AddLight\nLightName Light\n");
+#else
    fprintf(fp, "AddLight %08X\nLightName Light\n", 0x20000000 + i);
+#endif
    ExportKeyFrames(fp, "Light", 0, 7, 1, &keyframe);
    fprintf(fp, "LightColor %f %f %f\nLightIntensity 1.0\nLightType 1\n\n", s->colour.r / 255.0, s->colour.g / 255.0, s->colour.b / 255.0);
   }
@@ -464,17 +493,29 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= scenes.total_number_of_cameras)
     error("Invalid camera index\n");
    struct OBJECT_3D_SCENE_CAMERA* c = &scenes.objects_3d_camera_database[s->camera_index];
+#ifdef SCENE_3
+   fprintf(fp, "\nAddCamera\nCameraName %s\n", names.Cameras[s->camera_name_index]);
+#else
    fprintf(fp, "\nAddCamera %08X\nCameraName %s\n", 0x30000000 + i, names.Cameras[s->camera_name_index]);
+#endif
    ExportKeyFrames(fp, "Camera", 7, 3, c->number_of_keyframes, c->keyframes);
    int locked = (c->heading_locked ? 8 : 0) | (c->pitch_locked ? 16 : 0) | (c->roll_locked ? 32 : 0);
    if (locked)
     fprintf(fp, "LockedChannels %i\n", locked);
+#ifdef SCENE_3
+   fprintf(fp, "ParentItem %i\n", root);
+#else
    fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
+#endif
    if (c->target_sub_object_id)
     {
      int object = target_sub_object_index[c->target_sub_object_id];
      if (object)
+#ifdef SCENE_3
+      fprintf(fp, "TargetItem %i\n", object);
+#else
       fprintf(fp, "TargetItem %08X\n", 0x10000000 + object);
+#endif
     }
   }
 }
