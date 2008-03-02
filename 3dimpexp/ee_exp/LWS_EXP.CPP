@@ -357,11 +357,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
   }
 
  ExportKeyFrames(fp, "Object", 7, 3, subo->key.number_of_keyframes, subo->key.keyframes);
-#ifdef SCENE_3
  fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
-#else
- fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
-#endif
  if (subo->key.flag)
   {
    ExportLimits(fp, "H", subo->key.relative_heading_minimum, subo->key.relative_heading_maximum);
@@ -498,20 +494,12 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    int locked = (c->heading_locked ? 8 : 0) | (c->pitch_locked ? 16 : 0) | (c->roll_locked ? 32 : 0);
    if (locked)
     fprintf(fp, "LockedChannels %i\n", locked);
-#ifdef SCENE_3
    fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
-#else
-   fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
-#endif
    if (c->target_sub_object_id)
     {
      int object = target_sub_object_index[c->target_sub_object_id];
      if (object)
-#ifdef SCENE_3
-      fprintf(fp, "TargetItem %i\n", object);
-#else
       fprintf(fp, "TargetItem %08X\n", 0x10000000 + object);
-#endif
     }
   }
 }
