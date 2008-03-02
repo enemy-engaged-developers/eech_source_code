@@ -389,11 +389,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  if (scene->shadow_approximation_index > 0)
   printf("\tShadow approximation %i not supported\n", scene->shadow_approximation_index);
 
-#ifdef SCENE_3
- current = 0;
-#else
  current = -1;
-#endif
 
 #ifdef SCENE_3
  fprintf(fp, "LWSC\n3\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
