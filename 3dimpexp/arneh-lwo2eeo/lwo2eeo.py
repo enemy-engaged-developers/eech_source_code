@@ -1015,13 +1015,18 @@ class Model:
                     poly.surface_points.append(index)
 
     def write_header(self, eeo):
+        if FORMAT_VERSION == 1:
+            nlighting_normals = self.num_point_normals
+        else:
+            nlighting_normals = self.num_lighting_normals()
+        
         for num in [FORMAT_VERSION,
                     len(self.points),
                     len(self.polygons),   # faces
                     len(self.polygons),   # polygoned faces. all faces are polygoned
                     len(self.surface_users),   # surfaces
                     self.num_point_normals,  # point normals
-                    self.num_point_normals,  # number of lighting normals is the same as point normals for now
+                    nlighting_normals,  # number of lighting normals is the same as point normals for now
                     self.num_point_refs,  # point references
                     self.num_texture_points(),  # texture points
                     self.num_surface_point_refs(),   # surface point references
@@ -1062,7 +1067,7 @@ class Model:
                 except struct.error:
                     'Error, a surface contains too many points'
 
-    def num_point_normals(self):
+    def num_lighting_normals(self):
         num = 0
         for poly in self.eeo_polygons:
             if not poly.surf.smoothing_angle:
@@ -1070,9 +1075,15 @@ class Model:
         return num
 
     def write_polygon_normals(self, eeo):
+        pad = 0
         for poly in self.eeo_polygons:
-#            if not poly.surf.smoothing_angle: 
-            eeo.write(struct.pack('<H', poly.normal_index))
+            if not poly.surf.smoothing_angle:
+                eeo.write(struct.pack('<H', poly.normal_index))
+            else:
+                pad += 1
+        if FORMAT_VERSION == 1:
+            for i in range(pad):
+                eeo.write(struct.pack('<H', 0))
 
     def write_point_normals(self, eeo):
         normals = [(index,val) for (val,index) in self.point_normals.items()]
@@ -1106,7 +1117,6 @@ class Model:
             if not surf.image:
                 continue
 
-#            uv = surf.uv_map
             for uv in (surf.uv_map, surf.lumi_uv_map):
                 if uv:
                     for map in surf.get_texture_points():
