@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.4'
+VERSION = '1.4.1'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -14,6 +14,12 @@ flat_shade = False   # if True then no gauraud shading will be applied
 def length(v):
     'v is a tuple representing a 3d vector'
     return (v[0]**2 + v[1]**2 + v[2]**2) ** 0.5
+
+def distance(v1, v2):
+    return abs(length((v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2])))
+
+def add(v1, v2):
+    return (v2[0] + v1[0], v2[1] + v1[1], v2[2] + v1[2])
 
 def normalize(v):
     'Normalizes vector v to unit vector'
@@ -31,6 +37,19 @@ def dot_prod(u, v):
     'Computes the dot product of two vectors'
     return reduce(operator.add, [x * y for x,y in zip(u,v)])
 
+class LinearVertices(Exception):
+    pass
+
+def get_normal(v1, v2, v3):
+    w1 = (v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2])
+    w2 = (v2[0] - v3[0], v2[1] - v3[1], v2[2] - v3[2])
+    normal = cross_prod(w1, w2)
+    if normal != (0.0, 0.0, 0.0):
+        return normalize(normal)
+    else:
+        raise LinearVertices
+
+
 def calculate_normal(vertices):
     'Uses the first two points and the next point not on the same line'
     'to calculate polygon normal'
@@ -41,13 +60,42 @@ def calculate_normal(vertices):
         warnings.warn('polygon with less than 3 points')
         return (0.0, 1.0, 0.0)   # dummy value
 
-    [v1,v2] = points_list[:2]
-    for v3 in points_list[2:]:  # use first v3 not on the same line
-        w1 = (v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2])
-        w2 = (v2[0] - v3[0], v2[1] - v3[1], v2[2] - v3[2])
-        normal = cross_prod(w1, w2)
-        if normal != (0.0, 0.0, 0.0):
-            return normalize(normal)
+    if len(points_list) == 3:
+        try:
+            return get_normal(*points_list)
+        except LinearPolygons:
+            pass
+    else:
+        # find two vertices with furthest distance between them, then
+        # average all normals from those to all other points (except
+        # for points in line with the first two)
+        v1 = points_list[0]
+        lengths = [(distance(v1, v2),v2) for v2 in points_list[1:]]
+        v2 = max(lengths)[1]
+
+        sum = (0.0, 0.0, 0.0)
+        v3_is_last = False
+        for v3 in points_list[1:]:
+            # don't use v2 twice
+            if v3 == v2:
+                v3_is_last = True
+                continue
+
+            # have to make sure vertices are in the same order as point list
+            if v3_is_last:
+                vertices = [v1, v2, v3]
+            else:
+                vertices = [v1, v3, v2]
+
+            try:
+                normal = get_normal(*vertices)
+            except LinearVertices:
+                continue
+
+            sum = add(sum, normal)
+
+        if sum != (0.0, 0.0, 0.0):
+            return normalize(sum)
 
     warnings.warn('polygon with all points in a line. Points: %s %s' % 
                   ([v.index + 1 for v in vertices], 
@@ -1014,8 +1062,16 @@ class Model:
                 except struct.error:
                     'Error, a surface contains too many points'
 
+    def num_point_normals(self):
+        num = 0
+        for poly in self.eeo_polygons:
+            if not poly.surf.smoothing_angle:
+                num += 1
+        return num
+
     def write_polygon_normals(self, eeo):
         for poly in self.eeo_polygons:
+#            if not poly.surf.smoothing_angle: 
             eeo.write(struct.pack('<H', poly.normal_index))
 
     def write_point_normals(self, eeo):
