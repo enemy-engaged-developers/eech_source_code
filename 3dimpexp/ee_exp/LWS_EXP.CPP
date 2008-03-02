@@ -358,7 +358,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
 
  ExportKeyFrames(fp, "Object", 7, 3, subo->key.number_of_keyframes, subo->key.keyframes);
 #ifdef SCENE_3
- fprintf(fp, "ParentItem %i\n", parent);
+ fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
 #else
  fprintf(fp, "ParentItem %08X\n", 0x10000000 + parent);
 #endif
@@ -503,7 +503,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    if (locked)
     fprintf(fp, "LockedChannels %i\n", locked);
 #ifdef SCENE_3
-   fprintf(fp, "ParentItem %i\n", root);
+   fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
 #else
    fprintf(fp, "ParentItem %08X\n", 0x10000000 + root);
 #endif
