@@ -1,6 +1,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <list>
 #include <algorithm>
 
 
@@ -117,9 +118,11 @@ class Convert
  {
   typedef std::map<long, HierObj*> Cache;
   typedef std::set<float> Distances;
+  typedef std::list<HierObj*> Deferred;
 
   Cache cache;
   Distances distances;
+  Deferred deferred;
 
   fps = lws.fps;
 
@@ -189,7 +192,10 @@ class Convert
      {
       Cache::iterator found(cache.find(itor->motion.parent));
       if (found == cache.end())
-       error("Failed to find object with index %08lX as parent for object with index %08lX", itor->motion.parent, itor->index);
+       {
+        deferred.push_back(hierobj);
+        continue;
+       }
       found->second->hierobjs.push_back(hierobj);
      }
     else
@@ -211,6 +217,33 @@ class Convert
        root = hierobj;
      }
     cache[itor->index] = hierobj;
+   }
+
+  while (deferred.size())
+   {
+    bool modified = false;
+    for (Deferred::iterator itor(deferred.begin()); itor != deferred.end(); )
+     {
+      HierObj* hierobj = *itor;
+      {
+       Cache::iterator found(cache.find(hierobj->object->index));
+       if (found != cache.end())
+        error("Objects with duplicate index %08lX are found", hierobj->object->index);
+      }
+      Cache::iterator found(cache.find(hierobj->object->motion.parent));
+      if (found != cache.end())
+       {
+        found->second->hierobjs.push_back(hierobj);
+        cache[hierobj->object->index] = hierobj;
+        itor = deferred.erase(itor);
+        modified = true;
+       }
+      else
+       ++itor;
+     }
+    if (!modified)
+     error("Either cyclic dependency within hierarchy or inexisting parent for object(s) "
+           "(at least %08lX)", deferred.front()->object->index);
    }
 
   for (Lws::Lights::const_iterator itor(lws.lights.begin()); itor != lws.lights.end(); ++itor)
