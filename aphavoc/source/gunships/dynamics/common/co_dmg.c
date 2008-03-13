@@ -66,6 +66,15 @@
 
 #include "project.h"
 
+#include "../ah64a/ah_dyn.h"
+#include "../apache/ap_dyn.h"
+#include "../blackhawk/bh_dyn.h"
+#include "../comanche/cm_dyn.h"
+#include "../havoc/ha_dyn.h"
+#include "../hokum/ho_dyn.h"
+#include "../hind/hi_dyn.h"
+#include "../ka50/hm_dyn.h"
+
 #define DEBUG_MODULE 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
