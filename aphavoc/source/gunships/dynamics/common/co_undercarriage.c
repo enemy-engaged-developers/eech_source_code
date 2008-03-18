@@ -6,6 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define MAX_GEAR_POINTS 8
+#define SUSPENSION_NAME_MAX_LENGTH 32
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +14,7 @@
 
 typedef struct {
 	int
-		retracted,
+		retractable,
 		can_turn,
 		has_brakes;
 	
@@ -28,7 +29,7 @@ typedef struct {
 		damping,        // resistance to change in compression
 		bump_stiffness;
 
-	const char* name;
+	char name[SUSPENSION_NAME_MAX_LENGTH];
 } landing_gear_point;
 
 typedef struct {
@@ -36,7 +37,7 @@ typedef struct {
 		num_gear_points;
 
 	landing_gear_point
-		gear_points[MAX_GEAR_POINTS];
+		*gear_points;
 } landing_gear_system;
 
 
@@ -44,56 +45,76 @@ typedef struct {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//static landing_gear_system
-//	landing_gear[NUM_GUNSHIP_TYPES];
+static landing_gear_system
+	landing_gears[NUM_GUNSHIP_TYPES+1];
 
 static landing_gear_system
-	landing_gear;
+	*current_landing_gear;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void initialise_landing_gear(landing_gear_system* gear)
+static void initialise_landing_gear(landing_gear_system* gear, const char* filename)
 {
-	unsigned i;
-
 	gear->num_gear_points = 0;
+	gear->gear_points = NULL;
 	
-	for (i=0; i < MAX_GEAR_POINTS; i++)
+	if (filename)
 	{
-		memset(&gear->gear_points[i], 0, sizeof(landing_gear_point));
-		gear->gear_points[i].suspension_stiffness = 2.0;
-		gear->gear_points[i].damper_stiffness = 5.0;
-		gear->gear_points[i].max_suspension_compression = 0.3;
-		gear->gear_points[i].bump_stiffness = 6.0;
+		char filepath[256];
+		FILE* file;
+
+		snprintf(filepath, ARRAY_LENGTH(filepath), "..\\common\\data\\dyn\\%s", filename);
+
+		file = safe_fopen(filepath, "r");
+		if (file)
+		{
+			fscanf(file, "suspension_points = %d\n", &gear->num_gear_points);
+			
+			if (gear->num_gear_points > 0 && gear->num_gear_points <= 16)
+			{
+				unsigned i;
+				
+				gear->gear_points = safe_malloc(sizeof(landing_gear_point) * gear->num_gear_points);
+				memset(gear->gear_points, 0, gear->num_gear_points * sizeof(landing_gear_point));
+
+				for (i = 0; i < gear->num_gear_points; i++)
+				{
+					landing_gear_point* point = &gear->gear_points[i];
+					unsigned len;
+					unsigned nread = 0;
+					
+					if (fgets(&point->name, SUSPENSION_NAME_MAX_LENGTH, file) == EOF)
+						break;
+
+					len = strlen(point->name);
+					ASSERT(len < SUSPENSION_NAME_MAX_LENGTH-1);
+					if (point->name[len-1] == '\n')
+						point->name[len-1] = '\0';
+					
+					nread += fscanf(file, "retractable = %d\n", &point->retractable);
+					nread += fscanf(file, "has_brakes = %d\n", &point->has_brakes);
+					nread += fscanf(file, "can_turn = %d\n", &point->can_turn);
+
+					nread += fscanf(file, "position = %f, %f, %f\n", &point->position.x, &point->position.y, &point->position.z);
+
+					nread += fscanf(file, "max_spring_compression = %f\n", &point->max_suspension_compression);
+					nread += fscanf(file, "spring_stiffness = %f\n", &point->suspension_stiffness);
+					nread += fscanf(file, "damper_stiffness = %f\n", &point->damper_stiffness);
+					nread += fscanf(file, "bump_stiffness = %f\n", &point->bump_stiffness);
+
+					if (nread != 10)
+						debug_fatal("error in suspension point %d, value %d", i, nread);
+				}
+
+				if (i != gear->num_gear_points)
+					debug_fatal("suspension file claims there should be %d points, but only %d found", gear->num_gear_points, i-1);
+			}
+			
+			safe_fclose(file);
+		}
 	}
-
-	gear->num_gear_points = 4;
-	gear->gear_points[0].position.x = 1.65;
-	gear->gear_points[0].position.y = -4.1;
-	gear->gear_points[0].position.z = -1.35;
-	gear->gear_points[0].name = "right main wheel";
-
-	gear->gear_points[1].position.x = -1.65;
-	gear->gear_points[1].position.y = -4.1;
-	gear->gear_points[1].position.z = -1.35;
-	gear->gear_points[1].name = "left main wheel";
-
-	gear->gear_points[2].position.x = 0.0;
-	gear->gear_points[2].position.y = -4.4;
-	gear->gear_points[2].position.z = 3.0;
-	gear->gear_points[2].suspension_stiffness = 1.5;
-	gear->gear_points[2].damper_stiffness = 4.0;
-	gear->gear_points[2].bump_stiffness = 4.0;
-	gear->gear_points[2].name = "nose wheel";
-
-	gear->gear_points[3].position.x = 0.0;
-	gear->gear_points[3].position.y = -2.5;
-	gear->gear_points[3].position.z = -10.0;
-	gear->gear_points[3].suspension_stiffness = 4.0;
-	gear->gear_points[3].max_suspension_compression = 0.3;
-	gear->gear_points[3].name = "tail bumper";
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,12 +128,10 @@ static void update_suspension(void)
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(&attitude, &attitude);
-	
-	landing_gear.gear_points[2].bump_stiffness = 1.5 + debug_var_z;
-	
-	for (i = 0; i < landing_gear.num_gear_points; i++)
+		
+	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
-		landing_gear_point* point = &landing_gear.gear_points[i];
+		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d world_position, gear_position;
 		float
 			spring_compression,
@@ -175,9 +194,9 @@ static void apply_suspension_forces(void)
 
 	multiply_transpose_matrix3x3_vec3d (&direction, attitude, &direction);
 	
-	for (i = 0; i < landing_gear.num_gear_points; i++)
+	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
-		landing_gear_point* point = &landing_gear.gear_points[i];
+		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
 		float force;
 		
@@ -203,9 +222,40 @@ static void apply_suspension_forces(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void initialise_undercarriage_database(void)
+{
+	const char* filenames[NUM_GUNSHIP_TYPES+1];
+	unsigned gunship;
+
+	memset(filenames, 0, sizeof(filenames));
+
+	filenames[GUNSHIP_TYPE_HIND] = "mi-24-suspension.txt";
+	
+	for (gunship=0; gunship < ARRAY_LENGTH(filenames); gunship++)
+		initialise_landing_gear(&landing_gears[gunship], filenames[gunship]);
+}
+
+void deinitialise_undercarriage_database(void)
+{
+	unsigned i;
+	
+	for (i=0; i < ARRAY_LENGTH(landing_gears); i++)
+	{
+		if (landing_gears[i].gear_points)
+			safe_free(landing_gears[i].gear_points);
+
+		landing_gears[i].num_gear_points = 0;
+		landing_gears[i].gear_points = NULL;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_undercarriage_dynamics(void)
 {
-	initialise_landing_gear(&landing_gear);
+	current_landing_gear = &landing_gears[get_global_gunship_type()];
 }
 
 void deinitialise_undercarriage_dynamics(void)
@@ -231,23 +281,26 @@ void update_undercarriage_dynamics(void)
 
 void animate_hind_suspension(object_3d_instance* inst3d)
 {
-	float front_compression = min(landing_gear.gear_points[2].suspension_compression, landing_gear.gear_points[2].max_suspension_compression);
+	if (landing_gears[GUNSHIP_TYPE_HIND].num_gear_points >= 3)
+	{
+		float front_compression = min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].max_suspension_compression);
+		
+		object_3d_sub_instance
+			*left_wheel = &inst3d->sub_objects[2].sub_objects[0].sub_objects[0],
+			*right_wheel = &inst3d->sub_objects[3].sub_objects[0].sub_objects[0],
+			*nose_wheel = &inst3d->sub_objects[15].sub_objects[1].sub_objects[0],
+			*nose_strut = &inst3d->sub_objects[15].sub_objects[0];
 	
-	object_3d_sub_instance
-		*left_wheel = &inst3d->sub_objects[2].sub_objects[0].sub_objects[0],
-		*right_wheel = &inst3d->sub_objects[3].sub_objects[0].sub_objects[0],
-		*nose_wheel = &inst3d->sub_objects[15].sub_objects[1].sub_objects[0],
-		*nose_strut = &inst3d->sub_objects[15].sub_objects[0];
-
-	left_wheel->relative_pitch = rad(-15) + min(landing_gear.gear_points[1].suspension_compression, landing_gear.gear_points[1].max_suspension_compression) * rad(70);
-	right_wheel->relative_pitch = rad(-15) + min(landing_gear.gear_points[0].suspension_compression, landing_gear.gear_points[0].max_suspension_compression) * rad(70);
-
-	nose_strut->relative_position.z = -0.20 + front_compression * 0.85;
-
-	nose_wheel->relative_position.y = sin(rad(60)) * (-0.20 + front_compression * 0.8);
-	nose_wheel->relative_position.z = cos(rad(60)) * (-0.20 + front_compression * 0.8);
-
-	nose_wheel->relative_pitch = rad(-15) + front_compression * rad(70);
+		left_wheel->relative_pitch = rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].max_suspension_compression) * rad(70);
+		right_wheel->relative_pitch = rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].max_suspension_compression) * rad(70);
+	
+		nose_strut->relative_position.z = -0.20 + front_compression * 0.85;
+	
+		nose_wheel->relative_position.y = sin(rad(60)) * (-0.20 + front_compression * 0.8);
+		nose_wheel->relative_position.z = cos(rad(60)) * (-0.20 + front_compression * 0.8);
+	
+		nose_wheel->relative_pitch = rad(-15) + front_compression * rad(70);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
