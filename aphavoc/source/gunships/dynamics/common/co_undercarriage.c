@@ -55,6 +55,18 @@ static landing_gear_system
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// returns a value between 1.0 (fully extended) and 0.0 (fully retracted)
+static float get_undercarriage_state()
+{
+	float uc_state = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_UNDERCARRIAGE_STATE);
+	if (uc_state >= 3.0)  // 3.0 -> 4.0 = retracting
+		uc_state = 4.0 - uc_state;
+	else if (uc_state > 1.0)  // extending
+		uc_state -= 1.0;
+
+	return uc_state;
+}
+
 static void initialise_landing_gear(landing_gear_system* gear, const char* filename)
 {
 	gear->num_gear_points = 0;
@@ -278,13 +290,7 @@ void update_undercarriage_dynamics(void)
 	float uc_state;
 	ASSERT(get_gunship_entity());
 
-	uc_state = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_UNDERCARRIAGE_STATE);
-	if (uc_state >= 3.0)  // 3.0 -> 4.0 = retracting
-		current_flight_dynamics->undercarriage_state.value = 4.0 - uc_state;
-	else if (uc_state > 1.0)  // extending
-		current_flight_dynamics->undercarriage_state.value = uc_state - 1.0;
-	else
-		current_flight_dynamics->undercarriage_state.value = uc_state;
+	current_flight_dynamics->undercarriage_state.value = get_undercarriage_state();
 	
 	update_suspension();
 	apply_suspension_forces();
@@ -304,13 +310,9 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 			*nose_wheel = &inst3d->sub_objects[15].sub_objects[1].sub_objects[0],
 			*nose_strut = &inst3d->sub_objects[15].sub_objects[0];
 		
-		float front_compression = min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].max_suspension_compression);
-
-		float uc_state = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_UNDERCARRIAGE_STATE);
-		if (uc_state >= 3.0)  // 3.0 -> 4.0 = retracting
-			uc_state = 4.0 - uc_state;
-		else if (uc_state > 1.0)  // extending
-			uc_state -= 1.0;
+		float
+			uc_state = get_undercarriage_state(),
+			front_compression = min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].max_suspension_compression);
 
 		left_wheel->relative_pitch = (rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].max_suspension_compression) * rad(70)) * uc_state;
 		right_wheel->relative_pitch = (rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].max_suspension_compression) * rad(70)) * uc_state;
