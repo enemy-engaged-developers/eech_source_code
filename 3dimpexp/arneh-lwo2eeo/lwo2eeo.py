@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.4.1'
+VERSION = '1.4.2'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -51,8 +51,8 @@ def get_normal(v1, v2, v3):
 
 
 def calculate_normal(vertices):
-    'Uses the first two points and the next point not on the same line'
-    'to calculate polygon normal'
+    'Finds the polygons normal by trying to be somewhat clever in selecting'
+    'three points from the polygon to calculate a normal from'
 
     points_list = [v.coordinate for v in vertices]
 
@@ -139,19 +139,15 @@ def normal2heading_pitch(normal):
 
     return heading,pitch
 
-def rad2index(rad, pitch):
+def rad2index(rad, is_pitch):
     'EECH uses an index of from 0 (for -PI) to 255 (for PI) for heading values'
     'and 0 (for -PI/2) to 255 (for PI/2) for pitch values'
-    if pitch:
+    if is_pitch:
         scale = 256 / (math.pi)
     else:
         scale = 256 / (2 * math.pi)
 
-    index = rad * scale + 128.0
-    if index < 0:
-        index = 0
-    elif index > 255:
-        index = 255
+    index = bound(rad * scale + 128.0, 0, 255)
 
     return int(round(index))
 
@@ -181,6 +177,7 @@ class Warning:
 
     def warn(self, *msg):
         msg = ' '.join(msg)
+        # only write each warning once
         if msg in self.printed_warnings:
             return
 
@@ -197,11 +194,15 @@ class TextureList:
     
     def read_texture_enums(self):
         index = 0
-        for texture in file('TEXTURES.TXT'):
-            self.textures[texture.strip()] = index
-            index += 1
+        try:
+            for texture in file('TEXTURES.TXT'):
+                self.textures[texture.strip()] = index
+                index += 1
+        except IOError,e:
+            warnings.warn('Unable to read texture names file: ' + str(e))
 
     def get_texture_index(self, texture_name):
+        "Index for internal texture names.  For new textures we return 0 and the name"
         start = texture_name.rfind('/')
         end = texture_name.rfind('.')
         texture_name = texture_name[start+1:end]
@@ -234,6 +235,7 @@ FLAGS = Constants(
     )
 
 class Surface:
+    "Represents a surface in EECH"
     def __init__(self, name):
         self.name = name
         self.polygons = []
@@ -243,23 +245,24 @@ class Surface:
         self.specularity = 0.0
         self.luminosity = 0.0
         self.translucency = 0.0
-        self.smooth = 0
+        self.smooth = 0   # If it's a smooth (round) surface which should have gauraud shading applied
 
-        self.image = None
+        self.image = None        # texture used for surface
         self.texture_index = 0
         self.texture_wrap = (1,1)
-        self.uv_map = None
-        self.lumi_uv_map = None
+        self.uv_map = None       # mapping used for texture.
+        self.lumi_uv_map = None  # UV map used for luminosity texture
         self.luminosity_texture_index = 0
 
-        self.smoothing_angle = 0
+        self.smoothing_angle = 0  # cutoff-angle for smooting.  If the angle between two polygons is more than this angle it will be a sharp edge, otherwise smooth
         self.surface_points = {}
-        self.texture_name = None
-        self.luminosity_texture_name = None
+        self.texture_name = None  # filename (minus extension) of texture
+        self.luminosity_texture_name = None  # filename (minus extension) of luminosity texture
 
         self.next_unsmooth_point_index = 1
 
     def rgb_colour(self):
+        "Converts from 0.0->1.0 to 0->255 based colours"
         r = bound(int(round(self.colour[0] * 255)), 0, 255)
         g = bound(int(round(self.colour[1] * 255)), 0, 255)
         b = bound(int(round(self.colour[2] * 255)), 0, 255)
@@ -281,17 +284,20 @@ class Surface:
                 self.texture_index = idx
 
     def pack_colour(self):
+        "Returns colour in EEO-file format"
         colour = list(self.rgb_colour())
         colour.reverse()    # EEO wants it in bgr format
         colour.append(255)  # include alpha
         return struct.pack('<4B', *colour)
 
     def pack_refl_and_spec(self):
+        "Returns reflection and specularity in EEO-file format"
         r = bound(int(round(self.reflectivity * 255)), 0, 255)
         s = bound(int(round(self.specularity * 255)), 0, 255)
         return struct.pack('<2B', r,s)
 
     def pack_flags(self):
+        "Returns a bit representation of the surface flags packed in EEO's format"
         flag16 = 0
         flag8 = 0
         
@@ -433,6 +439,7 @@ class Polygon:
         return 'Poly: ' + str(map(str, self.vertices))
 
 class Vertex:
+    "Represents a vertex (point) used in polygons"
     def __init__(self, index, coord):
         self.index = index
         self.coordinate = coord
@@ -449,6 +456,7 @@ class Vertex:
 
 
 class Object:
+    "Represents a complete object"
     def __init__(self):
         self.vertices = []
     
@@ -1026,7 +1034,7 @@ class Model:
                     len(self.polygons),   # polygoned faces. all faces are polygoned
                     len(self.surface_users),   # surfaces
                     self.num_point_normals,  # point normals
-                    nlighting_normals,  # number of lighting normals is the same as point normals for now
+                    nlighting_normals,    # number of lighting normals
                     self.num_point_refs,  # point references
                     self.num_texture_points(),  # texture points
                     self.num_surface_point_refs(),   # surface point references
@@ -1141,7 +1149,11 @@ class Model:
                 textures[surf.texture_name] = None
                 eeo.write(surf.texture_name)
             eeo.write('\0')
-            eeo.write('\0')  # luminosity texture, not used yet
+
+            if surf.luminosity_texture_name:
+                textures[surf.luminosity_texture_name] = None
+                eeo.write(surf.luminostiy_texture_name)
+            eeo.write('\0')
 
         if textures:
             textures = textures.keys()
