@@ -19,6 +19,8 @@ typedef struct {
 		has_brakes;
 	
 	vec3d
+		velocity,
+		world_position,
 		position;   // relative to CoG with suspension fully extended
 
 	float
@@ -129,17 +131,41 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 	}
 }
 
+void update_gear_world_position(landing_gear_point* point, matrix3x3 attitude)
+{
+	vec3d
+		gear_position;
+	
+	point->world_position.x = current_flight_dynamics->position.x;
+	point->world_position.y = current_flight_dynamics->position.y;
+	point->world_position.z = current_flight_dynamics->position.z;
+	
+	gear_position = point->position;		
+	
+	multiply_transpose_matrix3x3_vec3d(&gear_position, attitude, &gear_position);
+	
+	point->world_position.x += gear_position.x;
+	point->world_position.y += gear_position.y;
+	point->world_position.z += gear_position.z;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static void update_suspension(void)
 {
-	matrix3x3 attitude;
+	matrix3x3 
+		attitude,
+		inv_attitude;
+
 	unsigned i;
 
+	float
+		inv_delta_time = 1.0 / get_model_delta_time();
+	
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-	get_inverse_matrix(&attitude, &attitude);
+	get_inverse_matrix(&inv_attitude, &attitude);
 		
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
@@ -147,27 +173,27 @@ static void update_suspension(void)
 		
 		if (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0)
 		{
-			vec3d world_position, gear_position;
+			vec3d
+				old_world_position;
+
 			float
 				spring_compression,
 				terrain_elevation,
 				compression_change;
 	
-			world_position.x = current_flight_dynamics->position.x;
-			world_position.y = current_flight_dynamics->position.y;
-			world_position.z = current_flight_dynamics->position.z;
+			old_world_position = point->world_position;
+			update_gear_world_position(point, inv_attitude);
+
+			point->velocity.x = (point->world_position.x - old_world_position.x) * inv_delta_time;
+			point->velocity.y = (point->world_position.y - old_world_position.y) * inv_delta_time;
+			point->velocity.z = (point->world_position.z - old_world_position.z) * inv_delta_time;
+
+			multiply_transpose_matrix3x3_vec3d(&point->velocity, attitude, &point->velocity);
 			
-			gear_position = point->position;		
+			debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
 			
-			multiply_transpose_matrix3x3_vec3d(&gear_position, attitude, &gear_position);
-			
-			world_position.x += gear_position.x;
-			world_position.y += gear_position.y;
-			world_position.z += gear_position.z;
-			
-			terrain_elevation = get_3d_terrain_elevation(world_position.x, world_position.z);
-			
-			spring_compression = (terrain_elevation - world_position.y);
+			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
+			spring_compression = (terrain_elevation - point->world_position.y);
 			
 			if (spring_compression > 0.0)
 			{
@@ -182,11 +208,6 @@ static void update_suspension(void)
 				}
 				
 				point->suspension_compression = spring_compression;
-	
-				// TODO: hack, make proper brakes
-				current_flight_dynamics->world_motion_vector.x = 0.0;
-				if (i < 2)
-					current_flight_dynamics->world_motion_vector.z = 0.0;
 			}
 			else
 			{
@@ -199,39 +220,72 @@ static void update_suspension(void)
 static void apply_suspension_forces(void)
 {
 	matrix3x3 attitude;
-	vec3d direction;
+	vec3d
+		up_direction,
+		direction;
 	unsigned i;
 	
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 
-	direction.x = 0.0;
-	direction.y = 1.0;
-	direction.z = 0.0;
+	up_direction.x = 0.0;
+	up_direction.y = 1.0;
+	up_direction.z = 0.0;
 
-	multiply_transpose_matrix3x3_vec3d (&direction, attitude, &direction);
+	multiply_transpose_matrix3x3_vec3d (&up_direction, attitude, &up_direction);
 	
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
-		float force;
+		float wheel_load;
 		float uc_state = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_UNDERCARRIAGE_STATE);
 
 		if (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0)
 			if (point->suspension_compression > 0.0)
 			{
 				position.x = point->position.x;
-				position.y = point->position.y - point->suspension_compression;
+				position.y = point->position.y - point->suspension_compression + 3.0;
 				position.z = point->position.z;
 	
 				if (point->suspension_compression >= point->max_suspension_compression)
-					force = G * point->suspension_compression * point->bump_stiffness;
+					wheel_load = G * point->suspension_compression * point->bump_stiffness;
 				else
-					force = G * point->suspension_compression * point->suspension_stiffness;
+					wheel_load = G * point->suspension_compression * point->suspension_stiffness;
 	
-				force += point->damping;
+				wheel_load += point->damping;
 	
-				add_dynamic_force (point->name, force, 0.0, &position, &direction, FALSE);
+				add_dynamic_force (point->name, wheel_load, 0.0, &position, &up_direction, TRUE);
+				
+				// wheel sideways resistance
+				if (!point->can_turn)
+				{
+					float max_force = wheel_load * 1.0;  // depends on load on wheel
+					float force = max_force * bound(fabs(point->velocity.x * 1.0), 0.0, 1.0);
+
+					direction.x = (point->velocity.x > 0.0) ? -1.0 : 1.0;
+					direction.y = 0.0;
+					direction.z = 0.0;
+
+					add_dynamic_force ("sideways wheel resistance", force, 0.0, &position, &direction, FALSE);
+				}
+				
+				// wheel longitudinal resistance/brakes
+				{
+					float max_force, force;
+					
+					if (point->has_brakes && current_flight_dynamics->wheel_brake)
+						max_force = wheel_load * 1.0;  // depends on load on wheel
+					else
+						max_force = wheel_load * 0.025;  // general rolling resistance
+
+					force = max_force * bound(fabs(point->velocity.z * 1.0), 0.0, 1.0);
+
+					direction.x = 0.0;
+					direction.y = 0.0;
+					direction.z = (point->velocity.z > 0.0) ? -1.0 : 1.0;
+
+					add_dynamic_force ("brakes", force, 0.0, &position, &direction, TRUE);
+				}
 			}
 	}
 }
@@ -273,7 +327,18 @@ void deinitialise_undercarriage_database(void)
 
 void initialise_undercarriage_dynamics(void)
 {
+	matrix3x3 attitude;
+	unsigned i;
+
 	current_landing_gear = &landing_gears[get_global_gunship_type()];
+
+	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
+	get_inverse_matrix(&attitude, &attitude);
+		
+	for (i = 0; i < current_landing_gear->num_gear_points; i++)
+	{
+		update_gear_world_position(&current_landing_gear->gear_points[i], attitude);
+	}
 }
 
 void deinitialise_undercarriage_dynamics(void)
