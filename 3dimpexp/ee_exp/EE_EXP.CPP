@@ -27,7 +27,7 @@ int main(void)
 
  mkdir("_OBJECTS");
 
- for (int i = 1; i < objects.GetNumberOfObjects(); i++)
+ for (int i = 1; i <= objects.GetNumberOfObjects(); i++)
   {
    const OBJECT_3D& obj = objects.GetObject(i);
    if (obj.surfaces)
@@ -37,7 +37,7 @@ int main(void)
     }
   }
 
- for (int i = 1; i < scenes.GetNumberOfScenes(); i++)
+ for (int i = 1; i <= scenes.GetNumberOfScenes(); i++)
  {
   sprintf(filename, "_OBJECTS/%04X_%s.LWS", i, names.Objects[i]);
   lwsexp.ExportScene(filename, scenes.GetScene(i));
