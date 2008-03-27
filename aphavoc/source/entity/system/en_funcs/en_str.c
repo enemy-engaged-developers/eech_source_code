@@ -222,7 +222,7 @@ static const char *default_get_entity_string (entity *en, string_types type)
 
 void initialise_entity_string_default_functions (void)
 {
-	char
+	int
 		i,
 		j;
 

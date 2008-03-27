@@ -1458,7 +1458,7 @@ float ui_display_text (const char *text, float x, float y)
 				// work out what char
 				//
 		
-				character = &current_font->characters[*text_ptr];
+				character = &current_font->characters[(int)*text_ptr];
 		
 				if ( !character->valid )
 				{
@@ -1707,7 +1707,7 @@ int get_kerning_offset ( const char *ptr )
 	font_character
 		*character;
 
-	character = &current_font->characters[ptr[0]];
+	character = &current_font->characters[(int)ptr[0]];
 
 	if ( character->kerning_pairs )
 	{
@@ -1772,7 +1772,7 @@ float ui_get_string_length (const char *string)
 	while (*current_char)
 	{
 
-		character = &current_font->characters[*current_char];
+		character = &current_font->characters[(int)*current_char];
 
 		if (!character->valid)
 		{

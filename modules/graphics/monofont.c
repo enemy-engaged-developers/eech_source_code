@@ -359,7 +359,8 @@ void print_mono_font_char (const char c)
 	const char
 		*sprite_ptr;
 
-	ASSERT (c >= 0 && c < NUM_CHARACTERS);
+	//ASSERT (c >= 0 && c < NUM_CHARACTERS);
+	ASSERT (c > 0 && c < NUM_CHARACTERS);
 
 	sprite_ptr = mono_font_cells + (c * mono_font_size);
 

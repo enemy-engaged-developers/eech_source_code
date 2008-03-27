@@ -2341,10 +2341,6 @@ static void display_target_information (void)
 	entity
 		*target;
 
-	vec3d
-		*gunship_position,
-		*target_position;
-
 	rangefinding_system
 		rangefinder = get_range_finder();
 

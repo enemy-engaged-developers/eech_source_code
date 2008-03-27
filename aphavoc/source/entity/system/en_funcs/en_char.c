@@ -159,7 +159,7 @@ static char default_get_entity_char_value (entity *en, char_types type)
 
 void initialise_entity_char_value_default_functions (void)
 {
-	char
+	int
 		i,
 		j;
 

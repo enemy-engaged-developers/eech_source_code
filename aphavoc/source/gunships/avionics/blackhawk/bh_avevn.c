@@ -906,6 +906,7 @@ static void toggle_navigation_lights_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 // Retro 18Jul2004 - FIXME (this thing does NOT have toggleable gear - but it works.. hmm)
 static void toggle_gear_event (event *ev)
 {
@@ -936,6 +937,7 @@ static void toggle_gear_event (event *ev)
 	}
 }
 // Retro 18Jul2004 end
+#endif
 
 // separated gear and door events by GCsDriver  08-12-2007
 static void toggle_door_event (event *ev)
