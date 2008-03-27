@@ -97,45 +97,6 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 struct OBJECT_3D_SCENE_CAMERA
 	*objects_3d_camera_database;
 
-struct OBJECT_3D_SCENE_LINK_OBJECT
-	*objects_3d_scene_link_array,
-	*objects_3d_scene_link_ptr;
-
-struct OBJECT_3D_SPRITE_LIGHT
-	*objects_3d_scene_sprite_light_array,
-	*objects_3d_scene_sprite_light_ptr;
-
-struct OBJECT_3D_SUB_OBJECT_KEYFRAME
-	*objects_3d_camera_keyframes;
-
-struct OBJECT_3D_SCENE_CAMERA_INFO
-	*objects_3d_camera_info_array,
-	*objects_3d_camera_info_array_ptr;
-
-struct OBJECT_3D_DATABASE_ENTRY
-	*objects_3d_scene_sub_objects_array,
-	*objects_3d_scene_sub_objects_array_ptr;
-
-struct OBJECT_3D_SUB_OBJECT_INDEX
-	*objects_3d_scene_sub_object_indices_array,
-	*objects_3d_scene_sub_object_indices_array_ptr;
-
-struct OBJECT_3D_APPROXIMATION_INFO
-	*objects_3d_scene_approximations_array,
-	*objects_3d_scene_approximations_array_ptr;
-
-int
-	*objects_3d_scene_texture_animations_array,
-	*objects_3d_scene_texture_animations_array_ptr;
-
-struct OBJECT_3D_SUB_OBJECT_KEYFRAME
-	*objects_3d_scene_sub_object_keyframes_array,
-	*objects_3d_scene_sub_object_keyframes_array_ptr;
-
-struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME
-	*objects_3d_scene_sub_object_dissolve_keyframes_array,
-	*objects_3d_scene_sub_object_dissolve_keyframes_array_ptr;
-
 int
 	object_3d_scenes_creation_count[OBJECT_3D_LAST];
 
@@ -143,7 +104,13 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// XXX: These numbers must be large enough
 static int
+	custom_number_of_objects = 1000,
+	custom_number_of_cameras = 200;
+
+static int
+	total_number_of_objects,
 	total_number_of_cameras,
 	total_number_of_scene_link_objects,
 	total_number_of_sprite_light_objects,
@@ -156,9 +123,11 @@ static int
 	total_number_of_scene_sub_object_keyframes,
 	total_number_of_scene_sub_object_dissolve_keyframes;
 
-static unsigned
-	next_free_custom_object,
-	total_objects;
+static int
+	sceneid = 0;
+
+static char
+	prefix[260];
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,25 +198,25 @@ static void count_sub_object_statistics ( object_3d_database_entry *sub_object, 
  *  If uppercase is TRUE it will switch all characters in the string to uppercase (useful
  *  for case insensitive filenames)
  */
-static int get_nul_string(char* buf, unsigned buf_len, FILE* file, int uppercase)
+static int get_nul_string ( char* buf, unsigned buf_len, FILE* file, int uppercase )
 {
 	int chr;
 	unsigned dest = 0;
 
-	while (chr = fgetc(file))
+	while ( chr = fgetc ( file ) )
 	{
-		if (chr == EOF)
+		if ( chr == EOF )
 			return FALSE;
 
-		if (uppercase)
-			chr = toupper(chr);
+		if ( uppercase )
+			chr = toupper ( chr );
 
 		buf[dest] = chr;
 		dest++;
 
-		if (dest >= buf_len)
+		if ( dest >= buf_len )
 		{
-			buf[buf_len-1] = '\0';
+			buf[buf_len - 1] = '\0';
 			return TRUE;
 		}
 	}
@@ -408,11 +377,346 @@ static void debug_object(const char* filename, int objid)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void read_scene(FILE* fp)
+static void read_keyframes ( FILE *fp, int *number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_KEYFRAME **keyframes, int read_number )
+{
+	int
+		keyframe_count;
+
+	if ( read_number )
+		fread ( number_of_keyframes, sizeof ( int ), 1, fp );
+
+	ASSERT ( *number_of_keyframes );
+
+	*keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) * *number_of_keyframes );
+
+	for ( keyframe_count = 0; keyframe_count < *number_of_keyframes; keyframe_count++ )
+	{
+		fread ( &(*keyframes)[keyframe_count].index, sizeof ( int ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].linear, sizeof ( int ), 1, fp );
+
+		fread ( &(*keyframes)[keyframe_count].x, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].y, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].z, sizeof ( float ), 1, fp );
+
+		fread ( &(*keyframes)[keyframe_count].heading, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].pitch, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].roll, sizeof ( float ), 1, fp );
+
+		fread ( &(*keyframes)[keyframe_count].scale_x, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].scale_y, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].scale_z, sizeof ( float ), 1, fp );
+
+		fread ( &(*keyframes)[keyframe_count].tension, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].continuity, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].bias, sizeof ( float ), 1, fp );
+	}
+}
+
+static void read_value_keyframes ( FILE *fp, int *number_of_keyframes, struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME **keyframes )
+{
+	int
+		keyframe_count;
+
+	fread ( number_of_keyframes, sizeof ( int ), 1, fp );
+
+	if ( !*number_of_keyframes )
+	{
+		*keyframes = NULL;
+		return;
+	}
+
+	*keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME ) * *number_of_keyframes );
+
+	for ( keyframe_count = 0; keyframe_count < *number_of_keyframes; keyframe_count++ )
+	{
+		fread ( &(*keyframes)[keyframe_count].index, sizeof ( int ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].linear, sizeof ( int ), 1, fp );
+
+		fread ( &(*keyframes)[keyframe_count].value, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].tension, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].continuity, sizeof ( float ), 1, fp );
+		fread ( &(*keyframes)[keyframe_count].bias, sizeof ( float ), 1, fp );
+	}
+}
+
+static void read_indices ( FILE *fp, int *number_of_sub_object_indices, object_3d_sub_object_index **sub_object_indices )
+{
+	int
+		index_count;
+
+	fread ( number_of_sub_object_indices, sizeof ( int ), 1, fp );
+
+	if ( !*number_of_sub_object_indices )
+	{
+		*sub_object_indices = NULL;
+		return;
+	}
+
+	*sub_object_indices = current_scene_sub_object_index_array;
+	current_scene_sub_object_index_array += *number_of_sub_object_indices;
+
+	for ( index_count = 0; index_count < *number_of_sub_object_indices; index_count++ )
+	{
+		int
+			sub_object_index,
+			object_index;
+
+		if ( sceneid )
+			sub_object_index = get_subobject ( fp );
+		else
+			fread ( &sub_object_index, sizeof ( int ), 1, fp );
+		fread ( &object_index, sizeof ( int ), 1, fp );
+		(*sub_object_indices)[index_count].sub_object_index = sub_object_index;
+		(*sub_object_indices)[index_count].object_index = object_index;
+
+		if ( index_count != 0 )
+			ASSERT ( (*sub_object_indices)[index_count-1].object_index <
+					(*sub_object_indices)[index_count].object_index );
+	}
+}
+
+static void read_subobjects ( FILE *fp, int *number_of_sub_objects, struct OBJECT_3D_DATABASE_ENTRY **sub_objects, struct OBJECT_3D_DATABASE_ENTRY *parent )
+{
+	int
+		sub_object_count;
+
+	fread ( number_of_sub_objects, sizeof ( int ), 1, fp );
+	if ( !*number_of_sub_objects )
+	{
+		*sub_objects = NULL;
+		return;
+	}
+
+	*sub_objects = current_scene_sub_object_array;
+	current_scene_sub_object_array += *number_of_sub_objects;
+
+	for ( sub_object_count = 0; sub_object_count < *number_of_sub_objects; sub_object_count++ )
+		initialise_3d_sub_object ( fp, parent, &(*sub_objects)[sub_object_count] );
+}
+
+static void read_camera ( FILE *fp, struct OBJECT_3D_SCENE_CAMERA *camera )
+{
+	if ( sceneid )
+		camera->target_sub_object_id = get_subobject ( fp );
+	else
+	{
+		fread ( &camera->number_of_keyframes, sizeof ( int ), 1, fp );
+		fread ( &camera->target_sub_object_id, sizeof ( int ), 1, fp );
+	}
+
+	fread ( &camera->heading_locked, sizeof ( int ), 1, fp );
+	fread ( &camera->pitch_locked, sizeof ( int ), 1, fp );
+	fread ( &camera->roll_locked, sizeof ( int ), 1, fp );
+
+	read_keyframes ( fp, &camera->number_of_keyframes, &camera->keyframes, sceneid );
+}
+
+static int get_scene ( const char *filename )
+{
+	char
+		name[1024];
+	int
+		i;
+
+#define OBJECT_3D_DECLARATION(x)
+#define OBJECT_3D_INDEX(x) #x,
+#define OBJECT_3D_INDEX_(x)
+#define OBJECT_3D_INDEX__(x) NULL
+#define OBJECT_3D_SUBINDEX(x)
+#define OBJECT_3D_SUBINDEX_(x)
+#define OBJECT_3D_SUBINDEX__(x)
+#define OBJECT_3D_CAMERA(x)
+#define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_CAMERA__(x)
+	static const char
+		*scenes[] =
+		{
+#include "3dmodels.h"
+		};
+
+	strcpy ( name, filename );
+	name[strlen ( name ) - 4] = '\0';
+	strupr ( name );
+
+	for ( i = 1; scenes[i]; i++ )
+		if ( !strcmp ( name, scenes[i] + 10 ) )
+			return i;
+
+	return 0;
+}
+
+static int get_next_object_id ( void )
+{
+	if ( !custom_number_of_objects )
+	{
+		debug_fatal ( "Too many custom objects" );
+		return 0;
+	}
+
+	custom_number_of_objects--;
+	return total_number_of_objects++;
+}
+
+static int get_object ( FILE *fp )
+{
+	char
+		*ptr,
+		filename[260];
+	int
+		objid = 0;
+
+	if ( !get_nul_string ( filename, sizeof ( filename ), fp, TRUE ) )
+		return 0;
+
+	ptr = strrchr ( filename, '/' );
+	if ( !ptr )
+		ptr = strrchr ( filename, '\\' );
+	if ( !ptr )
+		ptr = strrchr ( filename, ':' );
+	if ( !ptr )
+		ptr = filename;
+	strupr ( ptr );
+
+	if ( sscanf ( ptr, "%X.LWO", &objid ) == 1 && objid > 0 && objid < total_number_of_raw_3d_objects )
+		return objid;
+
+	objid = get_next_object_id();
+	if ( !objid )
+		return 0;
+
+	{
+		char
+			*ext,
+			filename[1024];
+
+		ext = strrchr ( ptr, '.' );
+		if ( !ext )
+			*ext = '\0';
+
+		{
+			struct object_history
+			{
+				char filename[260];
+				int object_id;
+			};
+
+			static int
+				last_scene_id,
+				current;
+			static struct object_history
+				history[1000];
+
+			int
+				i;
+
+			if ( sceneid != last_scene_id )
+			{
+				current = 0;
+				last_scene_id = sceneid;
+			}
+
+			for (i = 0; i < current; i++)
+				if ( !strcmp ( history[i].filename, ptr ) )
+					return history[i].object_id;
+			if ( current < sizeof ( history ) / sizeof ( *history ) )
+			{
+				strcpy ( history[current].filename, ptr );
+				history[current].object_id = total_number_of_objects;
+				current++;
+			}
+		}
+
+		sprintf ( filename, "%s%s.EEO", prefix, ptr );
+		read_object ( &objects_3d_data[objid], filename );
+	}
+
+	return objid;
+}
+
+static int get_subobject ( FILE *fp )
+{
+	char
+		name[1024];
+	int
+		i;
+
+#define OBJECT_3D_DECLARATION(x)
+#define OBJECT_3D_INDEX(x)
+#define OBJECT_3D_INDEX_(x)
+#define OBJECT_3D_INDEX__(x)
+#define OBJECT_3D_SUBINDEX(x) #x ,
+#define OBJECT_3D_SUBINDEX_(x)
+#define OBJECT_3D_SUBINDEX__(x) NULL
+#define OBJECT_3D_CAMERA(x)
+#define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_CAMERA__(x)
+	static const char
+		*sub_objects[] =
+		{
+#include "3dmodels.h"
+		};
+
+	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) )
+		return 0;
+
+	for ( i = 1; sub_objects[i]; i++ )
+		if ( !strcmp ( name, sub_objects[i] + 21 ) )
+			return i;
+
+	return 0;
+}
+
+static int get_camera ( FILE *fp )
+{
+	char
+		name[1024];
+	int
+		i;
+
+#define OBJECT_3D_DECLARATION(x)
+#define OBJECT_3D_INDEX(x)
+#define OBJECT_3D_INDEX_(x)
+#define OBJECT_3D_INDEX__(x)
+#define OBJECT_3D_SUBINDEX(x)
+#define OBJECT_3D_SUBINDEX_(x)
+#define OBJECT_3D_SUBINDEX__(x)
+#define OBJECT_3D_CAMERA(x) #x ,
+#define OBJECT_3D_CAMERA_(x)
+#define OBJECT_3D_CAMERA__(x) NULL
+	static const char
+		*cameras[] =
+		{
+#include "3dmodels.h"
+		};
+
+	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) )
+		return 0;
+
+	for ( i = 1; cameras[i]; i++ )
+		if ( !strcmp ( name, cameras[i] + 17 ) )
+			return i;
+
+	return 0;
+}
+
+static int read_new_camera ( FILE *fp )
+{
+	ASSERT ( custom_number_of_cameras );
+
+	if ( !custom_number_of_cameras )
+		return 0;
+
+	custom_number_of_cameras--;
+
+	read_camera ( fp, &objects_3d_camera_database[total_number_of_cameras] );
+
+	return total_number_of_cameras++;
+}
+
+static void read_scene ( FILE *fp )
 {
 	int
 		tmp,
-		keyframe_count,
 		scene_index,
 		number_of_texture_animations,
 		approximation,
@@ -426,29 +730,28 @@ static void read_scene(FILE* fp)
 
 	number_of_scene_lights = 0;
 
-	for ( tmp = 0; tmp < 16; tmp++ )
-	{
-
-		int
-			temp;
-
-		fread ( &temp, sizeof ( int ), 1, fp );
-
-		if ( temp != -1 )
+	if ( !sceneid )
+		for ( tmp = 0; tmp < 16; tmp++ )
 		{
-
-			debug_fatal ( "3d objects scene definitions file is corrupted" );
+			int
+				temp;
+			fread ( &temp, sizeof ( int ), 1, fp );
+			if ( temp != -1 )
+				debug_fatal ( "3d objects scene definitions file is corrupted" );
 		}
-	}
 
-	fread ( &scene_index, sizeof ( int ), 1, fp );
+	if ( sceneid )
+		scene_index = sceneid;
+	else
+		fread ( &scene_index, sizeof ( int ), 1, fp );
 
 	if ( ( scene_index <= OBJECT_3D_INVALID_OBJECT_INDEX ) || ( scene_index >= OBJECT_3D_LAST ) )
 	{
 		debug_fatal ( "Scene index is out of range: %d ( %d to %d allowed )", scene_index, OBJECT_3D_INVALID_OBJECT_INDEX, OBJECT_3D_LAST );
 	}
 
-	fread ( &objects_3d_scene_database[scene_index].self_shadows, sizeof ( int ), 1, fp );
+	if ( !sceneid )
+		fread ( &objects_3d_scene_database[scene_index].self_shadows, sizeof ( int ), 1, fp );
 
 	//
 	// Set the approximation scale to 1.0
@@ -460,7 +763,10 @@ static void read_scene(FILE* fp)
 	// Read in the number of lights
 	//
 
-	fread ( &number_of_scene_lights, sizeof ( int ), 1, fp );
+	if ( !sceneid )
+		fread ( &number_of_scene_lights, sizeof ( int ), 1, fp );
+	else
+		number_of_scene_lights = 0;
 
 	for ( tmp = 0; tmp < number_of_scene_lights; tmp++ )
 	{
@@ -505,18 +811,24 @@ static void read_scene(FILE* fp)
 		int
 			camera_count;
 
-		objects_3d_scene_database[scene_index].cameras = objects_3d_camera_info_array_ptr;
-
-		objects_3d_camera_info_array_ptr += number_of_scene_cameras;
+		objects_3d_scene_database[scene_index].cameras = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA_INFO ) * number_of_scene_cameras );
 
 		ASSERT ( objects_3d_scene_database[scene_index].cameras );
 
 		for ( camera_count = 0; camera_count < number_of_scene_cameras; camera_count++ )
 		{
 
-			fread ( &objects_3d_scene_database[scene_index].cameras[camera_count].camera_name_index, sizeof ( int ), 1, fp );
+			if ( sceneid )
+			{
+				objects_3d_scene_database[scene_index].cameras[camera_count].camera_name_index = get_camera ( fp );
+				objects_3d_scene_database[scene_index].cameras[camera_count].camera_index = read_new_camera ( fp );
+			}
+			else
+			{
+				fread ( &objects_3d_scene_database[scene_index].cameras[camera_count].camera_name_index, sizeof ( int ), 1, fp );
 
-			fread ( &objects_3d_scene_database[scene_index].cameras[camera_count].camera_index, sizeof ( int ), 1, fp );
+				fread ( &objects_3d_scene_database[scene_index].cameras[camera_count].camera_index, sizeof ( int ), 1, fp );
+			}
 		}
 	}
 	else
@@ -533,27 +845,37 @@ static void read_scene(FILE* fp)
 
 	objects_3d_scene_database[scene_index].number_of_scene_link_objects = number_of_scene_links;
 
-	objects_3d_scene_database[scene_index].scene_link_objects = NULL;
-
 	if ( number_of_scene_links )
 	{
+		struct OBJECT_3D_SCENE_LINK_OBJECT
+			*objects_3d_scene_link_ptr;
 
+		objects_3d_scene_link_ptr = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_LINK_OBJECT ) * number_of_scene_links );
 		objects_3d_scene_database[scene_index].scene_link_objects = objects_3d_scene_link_ptr;
+		for ( tmp = 0; tmp < number_of_scene_links; tmp++ )
+		{
+			if ( sceneid )
+			{
+				char
+					name[1024];
+
+				get_nul_string ( name, sizeof ( name ), fp, TRUE );
+				objects_3d_scene_link_ptr->scene_index = get_scene ( name );
+			}
+			else
+				fread ( &objects_3d_scene_link_ptr->scene_index, sizeof ( int ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->x, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->y, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->z, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->heading, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->pitch, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_link_ptr->roll, sizeof ( float ), 1, fp );
+
+			objects_3d_scene_link_ptr++;
+		}
 	}
-
-	for ( tmp = 0; tmp < number_of_scene_links; tmp++ )
-	{
-
-		fread ( &objects_3d_scene_link_ptr->scene_index, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->x, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->y, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->z, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->heading, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->pitch, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_link_ptr->roll, sizeof ( float ), 1, fp );
-
-		objects_3d_scene_link_ptr++;
-	}
+	else
+		objects_3d_scene_database[scene_index].scene_link_objects = NULL;
 
 	//
 	// Read in the sprite lights
@@ -567,34 +889,36 @@ static void read_scene(FILE* fp)
 
 	if ( number_of_sprite_lights )
 	{
+		struct OBJECT_3D_SPRITE_LIGHT
+			*objects_3d_scene_sprite_light_ptr;
 
+		objects_3d_scene_sprite_light_ptr = safe_malloc ( sizeof ( struct OBJECT_3D_SPRITE_LIGHT ) * number_of_sprite_lights );
 		objects_3d_scene_database[scene_index].sprite_lights = objects_3d_scene_sprite_light_ptr;
-	}
 
-	for ( tmp = 0; tmp < number_of_sprite_lights; tmp++ )
-	{
+		for ( tmp = 0; tmp < number_of_sprite_lights; tmp++ )
+		{
+			int
+				red,
+				green,
+				blue;
 
-		int
-			red,
-			green,
-			blue;
+			fread ( &objects_3d_scene_sprite_light_ptr->position.x, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_sprite_light_ptr->position.y, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_sprite_light_ptr->position.z, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_sprite_light_ptr->scale.x, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_sprite_light_ptr->scale.y, sizeof ( float ), 1, fp );
+			fread ( &objects_3d_scene_sprite_light_ptr->scale.z, sizeof ( float ), 1, fp );
 
-		fread ( &objects_3d_scene_sprite_light_ptr->position.x, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_sprite_light_ptr->position.y, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_sprite_light_ptr->position.z, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_sprite_light_ptr->scale.x, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_sprite_light_ptr->scale.y, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_sprite_light_ptr->scale.z, sizeof ( float ), 1, fp );
+			fread ( &red, sizeof ( int ), 1, fp );
+			fread ( &green, sizeof ( int ), 1, fp );
+			fread ( &blue, sizeof ( int ), 1, fp );
 
-		fread ( &red, sizeof ( int ), 1, fp );
-		fread ( &green, sizeof ( int ), 1, fp );
-		fread ( &blue, sizeof ( int ), 1, fp );
+			objects_3d_scene_sprite_light_ptr->colour.red = red;
+			objects_3d_scene_sprite_light_ptr->colour.green = green;
+			objects_3d_scene_sprite_light_ptr->colour.blue = blue;
 
-		objects_3d_scene_sprite_light_ptr->colour.red = red;
-		objects_3d_scene_sprite_light_ptr->colour.green = green;
-		objects_3d_scene_sprite_light_ptr->colour.blue = blue;
-
-		objects_3d_scene_sprite_light_ptr++;
+			objects_3d_scene_sprite_light_ptr++;
+		}
 	}
 
 	//
@@ -605,33 +929,21 @@ static void read_scene(FILE* fp)
 
 	fread ( &number_of_scene_named_sub_objects, sizeof ( int ), 1, fp );
 
+	// FIXME: This is a dirty hack and should be fixed ASAP
 	if (scene_index == OBJECT_3D_APACHE_VIRTUAL_COCKPIT_LEVEL1)
 	{
 		number_of_scene_sub_objects++;
 	}
-
-	//
-	// Allocate the memory for all sub objects
-	//
-
-	current_scene_sub_object_array = NULL;
-
-	current_scene_sub_object_index_array = NULL;
+	// End of hack
 
 	if ( number_of_scene_named_sub_objects )
-	{
-		current_scene_sub_object_index_array = safe_malloc(sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * number_of_scene_named_sub_objects);
-//		current_scene_sub_object_index_array = objects_3d_scene_sub_object_indices_array_ptr;
-//		objects_3d_scene_sub_object_indices_array_ptr += number_of_scene_named_sub_objects;
-	}
-
+		current_scene_sub_object_index_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * number_of_scene_named_sub_objects );
+	else
+		current_scene_sub_object_index_array = NULL;
 	if ( number_of_scene_sub_objects )
-	{
-		current_scene_sub_object_array = safe_malloc(sizeof(object_3d_database_entry) * number_of_scene_sub_objects);
-//		current_scene_sub_object_array = objects_3d_scene_sub_objects_array_ptr;
-//		objects_3d_scene_sub_objects_array_ptr += number_of_scene_sub_objects;
-	}
-
+		current_scene_sub_object_array = safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY ) * number_of_scene_sub_objects );
+	else
+		current_scene_sub_object_array = NULL;
 
 	objects_3d_scene_database[scene_index].total_number_of_sub_objects = number_of_scene_sub_objects;
 	objects_3d_scene_database[scene_index].total_number_of_sub_object_indices = number_of_scene_named_sub_objects;
@@ -639,30 +951,28 @@ static void read_scene(FILE* fp)
 	objects_3d_scene_database[scene_index].scene_sub_object_indices_array = current_scene_sub_object_index_array;
 	objects_3d_scene_database[scene_index].scene_sub_object_array = current_scene_sub_object_array;
 
-
 	fread ( &number_of_texture_animations, sizeof ( int ), 1, fp );
+
+	ASSERT ( !sceneid || !number_of_texture_animations );
 
 	objects_3d_scene_database[scene_index].number_of_texture_animations = number_of_texture_animations;
 
 	if ( number_of_texture_animations )
 	{
+		objects_3d_scene_database[scene_index].texture_animations = safe_malloc ( sizeof ( int ) * number_of_texture_animations );
 
-		objects_3d_scene_database[scene_index].texture_animations = objects_3d_scene_texture_animations_array_ptr;
-
-		objects_3d_scene_texture_animations_array_ptr += number_of_texture_animations;
-
-		ASSERT ( objects_3d_scene_database[scene_index].texture_animations );
-
-		for ( tmp =0; tmp < number_of_texture_animations; tmp++ )
-		{
-
+		for ( tmp = 0; tmp < number_of_texture_animations; tmp++ )
 			fread ( &objects_3d_scene_database[scene_index].texture_animations[tmp], sizeof ( int ), 1, fp );
-		}
 	}
+	else
+		objects_3d_scene_database[scene_index].texture_animations = NULL;
 
 	fread ( &number_of_approximations, sizeof ( int ), 1, fp );
 
-	fread ( &objects_3d_scene_database[scene_index].index, sizeof ( int ), 1, fp );
+	if ( sceneid )
+		objects_3d_scene_database[scene_index].index = get_object ( fp );
+	else
+		fread ( &objects_3d_scene_database[scene_index].index, sizeof ( int ), 1, fp );
 
 	ASSERT ( objects_3d_scene_database[scene_index].index >= 0 );
 	ASSERT ( objects_3d_scene_database[scene_index].index <= total_number_of_raw_3d_objects );
@@ -671,17 +981,7 @@ static void read_scene(FILE* fp)
 
 	if ( number_of_approximations )
 	{
-
-		ASSERT ( ( objects_3d_scene_approximations_array_ptr - objects_3d_scene_approximations_array ) < total_number_of_scene_approximations );
-
-		objects_3d_scene_database[scene_index].approximations = objects_3d_scene_approximations_array_ptr;
-
-		objects_3d_scene_approximations_array_ptr += number_of_approximations;
-
-		ASSERT ( ( objects_3d_scene_approximations_array_ptr - objects_3d_scene_approximations_array ) <= total_number_of_scene_approximations );
-
-		ASSERT ( objects_3d_scene_database[scene_index].approximations );
-
+		objects_3d_scene_database[scene_index].approximations = safe_malloc ( sizeof ( struct OBJECT_3D_APPROXIMATION_INFO ) * objects_3d_scene_database[scene_index].number_of_approximations );
 		//
 		// Read any approximation information in
 		//
@@ -689,7 +989,10 @@ static void read_scene(FILE* fp)
 		for ( approximation = 0; approximation < number_of_approximations; approximation++ )
 		{
 
-			fread ( &objects_3d_scene_database[scene_index].approximations[approximation].object_number, sizeof ( int ), 1, fp );
+			if ( sceneid )
+				objects_3d_scene_database[scene_index].approximations[approximation].object_number = get_object ( fp );
+			else
+				fread ( &objects_3d_scene_database[scene_index].approximations[approximation].object_number, sizeof ( int ), 1, fp );
 
 			fread ( &objects_3d_scene_database[scene_index].approximations[approximation].distance, sizeof ( float ), 1, fp );
 
@@ -707,11 +1010,16 @@ static void read_scene(FILE* fp)
 
 	fread ( &objects_3d_scene_database[scene_index].shadow_approximation_index, sizeof ( int ), 1, fp );
 
+	ASSERT ( !sceneid || !objects_3d_scene_database[scene_index].shadow_approximation_index);
+
 	//
 	// Read in the shadow polygon object index
 	//
 
-	fread ( &objects_3d_scene_database[scene_index].shadow_polygon_object_index, sizeof ( int ), 1, fp );
+	if ( sceneid )
+		objects_3d_scene_database[scene_index].shadow_polygon_object_index = get_object ( fp );
+	else
+		fread ( &objects_3d_scene_database[scene_index].shadow_polygon_object_index, sizeof ( int ), 1, fp );
 	fread ( &objects_3d_scene_database[scene_index].shadow_polygon_object_scale.x, sizeof ( float ), 1, fp );
 	fread ( &objects_3d_scene_database[scene_index].shadow_polygon_object_scale.y, sizeof ( float ), 1, fp );
 	fread ( &objects_3d_scene_database[scene_index].shadow_polygon_object_scale.z, sizeof ( float ), 1, fp );
@@ -720,40 +1028,20 @@ static void read_scene(FILE* fp)
 	// Read in the collision object index
 	//
 
-	fread ( &objects_3d_scene_database[scene_index].collision_object_index, sizeof ( int ), 1, fp );
+	if ( sceneid )
+	{
+		objects_3d_scene_database[scene_index].collision_object_index = get_object ( fp );
+		if ( !objects_3d_scene_database[scene_index].collision_object_index )
+			objects_3d_scene_database[scene_index].collision_object_index = -1;
+	}
+	else
+		fread ( &objects_3d_scene_database[scene_index].collision_object_index, sizeof ( int ), 1, fp );
 
 	//
 	// Next, read in the keyframes for the main object in the scene.
 	//
 
-	fread ( &objects_3d_scene_database[scene_index].number_of_keyframes, sizeof ( int ), 1, fp );
-
-	objects_3d_scene_database[scene_index].keyframes = objects_3d_scene_sub_object_keyframes_array_ptr;
-
-	objects_3d_scene_sub_object_keyframes_array_ptr += objects_3d_scene_database[scene_index].number_of_keyframes;
-
-	for ( keyframe_count = 0; keyframe_count < objects_3d_scene_database[scene_index].number_of_keyframes; keyframe_count++ )
-	{
-
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].x, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].y, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].z, sizeof ( float ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].heading, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].pitch, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].roll, sizeof ( float ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].scale_x, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].scale_y, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].scale_z, sizeof ( int ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].tension, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].continuity, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].keyframes[keyframe_count].bias, sizeof ( int ), 1, fp );
-	}
+	read_keyframes ( fp, &objects_3d_scene_database[scene_index].number_of_keyframes, &objects_3d_scene_database[scene_index].keyframes, TRUE );
 
 	//
 	// Next the object dissolve for the main object & any keyframes associate with it
@@ -761,131 +1049,30 @@ static void read_scene(FILE* fp)
 
 	fread ( &objects_3d_scene_database[scene_index].object_dissolve, sizeof ( float ), 1, fp );
 
-	fread ( &objects_3d_scene_database[scene_index].number_of_object_dissolve_keyframes, sizeof ( int ), 1, fp );
-
-	objects_3d_scene_database[scene_index].object_dissolve_keyframes = objects_3d_scene_sub_object_dissolve_keyframes_array_ptr;
-
-	objects_3d_scene_sub_object_dissolve_keyframes_array_ptr += objects_3d_scene_database[scene_index].number_of_object_dissolve_keyframes;
-
-	for ( keyframe_count = 0; keyframe_count < objects_3d_scene_database[scene_index].number_of_object_dissolve_keyframes; keyframe_count++ )
-	{
-
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].value, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].tension, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].continuity, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].object_dissolve_keyframes[keyframe_count].bias, sizeof ( int ), 1, fp );
-	}
+	read_value_keyframes ( fp, &objects_3d_scene_database[scene_index].number_of_object_dissolve_keyframes, &objects_3d_scene_database[scene_index].object_dissolve_keyframes );
 
 	//
 	// Next read in the object displacement sequence number
 	//
 
-	fread ( &objects_3d_scene_database[scene_index].displacement_sequence_index, sizeof ( int ), 1, fp );
+	if ( !sceneid )
+		fread ( &objects_3d_scene_database[scene_index].displacement_sequence_index, sizeof ( int ), 1, fp );
 
-	fread ( &objects_3d_scene_database[scene_index].number_of_displacement_amplitude_keyframes, sizeof ( int ), 1, fp );
-
-	objects_3d_scene_database[scene_index].displacement_amplitude_keyframes = objects_3d_scene_sub_object_dissolve_keyframes_array_ptr;
-
-	objects_3d_scene_sub_object_dissolve_keyframes_array_ptr += objects_3d_scene_database[scene_index].number_of_displacement_amplitude_keyframes;
-
-	for ( keyframe_count = 0; keyframe_count < objects_3d_scene_database[scene_index].number_of_displacement_amplitude_keyframes; keyframe_count++ )
-	{
-
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].value, sizeof ( float ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].tension, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].continuity, sizeof ( int ), 1, fp );
-		fread ( &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes[keyframe_count].bias, sizeof ( int ), 1, fp );
-	}
+	read_value_keyframes ( fp, &objects_3d_scene_database[scene_index].number_of_displacement_amplitude_keyframes, &objects_3d_scene_database[scene_index].displacement_amplitude_keyframes );
 
 
 	//
 	// Read in any sub object indices
 	//
 
-	{
-
-		int
-			number_of_sub_object_indices;
-
-		fread ( &number_of_sub_object_indices, sizeof ( int ), 1, fp );
-
-		objects_3d_scene_database[scene_index].number_of_sub_object_indices = number_of_sub_object_indices;
-
-		if ( number_of_sub_object_indices )
-		{
-
-			int
-				index_count,
-				sub_object_index,
-				object_index;
-
-			//
-			// Allocate the array
-			//
-
-			objects_3d_scene_database[scene_index].sub_object_indices = current_scene_sub_object_index_array;
-
-			current_scene_sub_object_index_array += number_of_sub_object_indices;
-
-			ASSERT ( objects_3d_scene_database[scene_index].sub_object_indices );
-
-			for ( index_count = 0; index_count < objects_3d_scene_database[scene_index].number_of_sub_object_indices; index_count++ )
-			{
-
-				fread ( &sub_object_index, sizeof ( int ), 1, fp );
-
-				fread ( &object_index, sizeof ( int ), 1, fp );
-
-				objects_3d_scene_database[scene_index].sub_object_indices[index_count].sub_object_index = sub_object_index;
-
-				objects_3d_scene_database[scene_index].sub_object_indices[index_count].object_index = object_index;
-
-				if ( index_count != 0 )
-				{
-
-					ASSERT ( objects_3d_scene_database[scene_index].sub_object_indices[index_count-1].object_index <
-								objects_3d_scene_database[scene_index].sub_object_indices[index_count].object_index );
-				}
-			}
-		}
-	}
+	read_indices ( fp, &objects_3d_scene_database[scene_index].number_of_sub_object_indices, &objects_3d_scene_database[scene_index].sub_object_indices );
 
 	//
 	// Read in any immediate sub objects
 	//
 
-	fread ( &objects_3d_scene_database[scene_index].number_of_sub_objects, sizeof ( int ), 1, fp );
+	read_subobjects ( fp, &objects_3d_scene_database[scene_index].number_of_sub_objects, &objects_3d_scene_database[scene_index].sub_objects, NULL );
 
-	if ( objects_3d_scene_database[scene_index].number_of_sub_objects )
-	{
-
-		int
-			sub_object_total,
-			sub_object_count;
-
-		struct OBJECT_3D_DATABASE_ENTRY
-			*sub_objects;
-
-		sub_object_total = objects_3d_scene_database[scene_index].number_of_sub_objects;
-
-		sub_objects = current_scene_sub_object_array;
-
-		current_scene_sub_object_array += sub_object_total;
-
-		ASSERT ( sub_objects );
-
-		objects_3d_scene_database[scene_index].sub_objects = sub_objects;
-
-		for ( sub_object_count = 0; sub_object_count < sub_object_total; sub_object_count++ )
-			initialise_3d_sub_object ( fp, NULL, &sub_objects[sub_object_count] );
-
-	}
 
 	initialise_scene_quick_sub_object_search ( scene_index );
 
@@ -893,7 +1080,6 @@ static void read_scene(FILE* fp)
 
 	initialise_scene_bounding_sub_objects ( scene_index );
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -908,14 +1094,36 @@ static void initialise_sub_object(object_3d_database_entry* entry, unsigned mode
 	entry->sub_object_approximation_out_level = 1;
 
 	entry->object_dissolve = 1.0;
+
+	entry->number_of_keyframes = 1;
+	entry->keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) );
+
+	entry->keyframes->x = 0.0;
+	entry->keyframes->y = 0.0;
+	entry->keyframes->z = 0.0;
+	entry->keyframes->heading = 0.0;
+	entry->keyframes->pitch = 0.0;
+	entry->keyframes->roll = 0.0;
+	entry->keyframes->scale_x = 1.0;
+	entry->keyframes->scale_y = 1.0;
+	entry->keyframes->scale_z = 1.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void set_scene_default ( struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene )
+{
+	scene->number_of_sub_objects = 0;
+	scene->total_number_of_sub_objects = 0;
+	scene->number_of_keyframes = 0;
+}
+
 static void initialise_custom_scenes(const char* directory)
 {
+	int
+		objid;
 	char filename[1024];
 	object_3d_scene_database_entry* scene;
 
@@ -923,6 +1131,7 @@ static void initialise_custom_scenes(const char* directory)
 
 	// internal occkpit
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT];
+	set_scene_default ( scene );
 	scene->number_of_sub_objects = 1;  // the entire cockpit
 	scene->total_number_of_sub_objects = 9;  // main object, 2 invisible objects which just contain other objects, and 6 actual objects
 
@@ -940,9 +1149,10 @@ static void initialise_custom_scenes(const char* directory)
 		object_3d_database_entry* main_entry = entry;
 
 		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-cockpit.eeo", directory);
-		if (read_object(&objects_3d_data[next_free_custom_object], filename))
+		objid = get_next_object_id();
+		if (read_object(&objects_3d_data[objid], filename))
 		{
-			initialise_sub_object(entry, next_free_custom_object++);
+			initialise_sub_object(entry, objid);
 
 			entry->number_of_sub_objects = 7;  // one for view + one for co-pilot helmet + 4 for the throttles + one for radio switches
 			entry->sub_objects = &scene->sub_objects[1];
@@ -955,11 +1165,12 @@ static void initialise_custom_scenes(const char* directory)
 
 			// make sub-objects for the throttles
 			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-left.eeo", directory);
-			if (read_object(&objects_3d_data[next_free_custom_object], filename))
+			objid = get_next_object_id();
+			if (read_object(&objects_3d_data[objid], filename))
 			{
 				int
-					left_throttle = next_free_custom_object++,
-					right_throttle = next_free_custom_object++;
+					left_throttle = objid,
+					right_throttle = get_next_object_id();
 
 				snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-right.eeo", directory);
 				if (read_object(&objects_3d_data[right_throttle], filename))
@@ -983,7 +1194,8 @@ static void initialise_custom_scenes(const char* directory)
 				return;
 
 			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-helmet.eeo", directory);
-			if (read_object(&objects_3d_data[next_free_custom_object++], filename))
+			objid = get_next_object_id();
+			if (read_object(&objects_3d_data[objid], filename))
 			{
 				entry = &main_entry->sub_objects[5];
 				entry->parent = main_entry;
@@ -995,19 +1207,20 @@ static void initialise_custom_scenes(const char* directory)
 
 				// then the helmet
 				entry = &main_entry->sub_objects[7];
-				initialise_sub_object(entry, next_free_custom_object-1);
+				initialise_sub_object(entry, objid);
 				entry->parent = &main_entry->sub_objects[5];
 			}
 			else
 				custom_3d_models.arneh_ah64d_cockpit = FALSE;
 
 			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-radio-switches.eeo", directory);
-			if (read_object(&objects_3d_data[next_free_custom_object++], filename))
+			objid = get_next_object_id();
+			if (read_object(&objects_3d_data[objid], filename))
 			{
 				// the radio switches
 				entry = &main_entry->sub_objects[6];
 				entry->parent = main_entry;
-				initialise_sub_object(entry, next_free_custom_object-1);
+				initialise_sub_object(entry, objid);
 				entry->default_visibility = TRUE;
 			}
 			else
@@ -1020,6 +1233,7 @@ static void initialise_custom_scenes(const char* directory)
 
 	// external part of cockpit
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE];
+	set_scene_default ( scene );
 
 	scene->number_of_sub_objects = 1;
 	scene->total_number_of_sub_objects = 2;
@@ -1039,19 +1253,21 @@ static void initialise_custom_scenes(const char* directory)
 		custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
 
 		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-nose.eeo", directory);
-		if (read_object(&objects_3d_data[next_free_custom_object], filename))
+		objid = get_next_object_id();
+		if (read_object(&objects_3d_data[objid], filename))
 		{
-			initialise_sub_object(entry, next_free_custom_object++);
+			initialise_sub_object(entry, objid);
 
 			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-pnvs.eeo", directory);
-			if (read_object(&objects_3d_data[next_free_custom_object], filename))
+			objid = get_next_object_id();
+			if (read_object(&objects_3d_data[objid], filename))
 			{
 				entry->number_of_sub_objects = 1;
 				entry->sub_objects = &scene->sub_objects[1];
 
 				entry->sub_objects[0].parent = entry;
 				entry = &entry->sub_objects[0];
-				initialise_sub_object(entry, next_free_custom_object++);
+				initialise_sub_object(entry, objid);
 				custom_3d_models.arneh_ah64d_cockpit = TRUE;
 			}
 		}
@@ -1059,6 +1275,7 @@ static void initialise_custom_scenes(const char* directory)
 
 	// warning lights
 	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT];
+	set_scene_default ( scene );
 
 	scene->number_of_sub_objects = 1;
 	scene->total_number_of_sub_objects = 1;
@@ -1075,9 +1292,10 @@ static void initialise_custom_scenes(const char* directory)
 		object_3d_database_entry* entry = &scene->sub_objects[0];
 
 		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-fire-warning-light.eeo", directory);
-		if (read_object(&objects_3d_data[next_free_custom_object], filename))
+		objid = get_next_object_id();
+		if (read_object(&objects_3d_data[objid], filename))
 		{
-			initialise_sub_object(entry, next_free_custom_object++);
+			initialise_sub_object(entry, objid);
 			entry->default_visibility = FALSE;  // light off by default
 		}
 		else
@@ -1168,8 +1386,23 @@ void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void read_custom_scene ( const char* filename )
+{
+	FILE
+		*fp;
+	int
+		version;
 
-static int read_object(object_3d *obj, const char* filename)
+	fp = safe_fopen ( filename, "rb" );
+	fread ( &version, sizeof ( int ), 1, fp );
+	if ( version != -1 )
+		return;
+	read_scene ( fp );
+	safe_fclose ( fp );
+}
+
+
+static int read_object ( object_3d *obj, const char* filename )
 {
 	FILE
 		*file;
@@ -1195,9 +1428,9 @@ static int read_object(object_3d *obj, const char* filename)
 
 	fread ( &format_version, 4, 1, file );
 
-	if (format_version != 1)
+	if ( format_version != 1 )
 	{
-		debug_log("Incompatible object: %s (object version %d)", filename, format_version);
+		debug_log ( "Incompatible object: %s (object version %d)", filename, format_version );
 		return FALSE;
 	}
 
@@ -1212,7 +1445,6 @@ static int read_object(object_3d *obj, const char* filename)
 	fread ( &number_of_surface_point_references, 4, 1, file );
 	fread ( &number_of_surface_point_normals, 4, 1, file );
 
-	// assign these to obj in separate step since they are all just two bytes, while four in file format
 	obj->number_of_points = number_of_points;
 	obj->number_of_faces = number_of_faces;
 	obj->number_of_surfaces = number_of_surfaces;
@@ -1296,17 +1528,17 @@ static int read_object(object_3d *obj, const char* filename)
 		char
 			texture_name[256];
 
-		for (i = 0; i < obj->number_of_surfaces; i++)
+		for ( i = 0; i < obj->number_of_surfaces; i++ )
 		{
-			if (!get_nul_string(texture_name, sizeof(texture_name), file, TRUE))
+			if ( !get_nul_string ( texture_name, sizeof ( texture_name ), file, TRUE ) )
 				break;
-			if (*texture_name)
-				obj->surfaces[i].texture_index = add_new_texture(texture_name);
+			if ( *texture_name )
+				obj->surfaces[i].texture_index = add_new_texture ( texture_name );
 
-			if (!get_nul_string(texture_name, sizeof(texture_name), file, TRUE))
+			if ( !get_nul_string ( texture_name, sizeof ( texture_name ), file, TRUE ) )
 				break;
-			if (*texture_name)
-				obj->surfaces[i].luminosity_texture_index = add_new_texture(texture_name);
+			if ( *texture_name )
+				obj->surfaces[i].luminosity_texture_index = add_new_texture ( texture_name );
 		}
 	}
 
@@ -1323,8 +1555,6 @@ void initialise_3d_objects ( const char *directory )
 {
 
 	int
-		total_number_of_objects,
-		number_of_custom_objects,
 		total_number_of_scenes,
 		total_number_of_surfaces,
 		total_number_of_points,
@@ -1413,16 +1643,14 @@ void initialise_3d_objects ( const char *directory )
 
 	fread ( &total_number_of_objects, sizeof ( int ), 1, fp );
 
-	number_of_custom_objects = 200;
-	next_free_custom_object = total_number_of_objects;
-	total_objects = total_number_of_objects + number_of_custom_objects;
-
 #if REPORT_OBJECT_STATS
 	debug_log ( "THERE ARE %d 3D OBJECT SHAPES", total_number_of_objects );
 #endif
 
-	objects_3d_data = safe_malloc ( ( total_number_of_objects + 1 + number_of_custom_objects) * sizeof ( struct OBJECT_3D ) );
-	memset ( objects_3d_data, 0, ( total_number_of_objects + 1 + number_of_custom_objects) * sizeof ( struct OBJECT_3D ) );
+	total_number_of_raw_3d_objects = total_number_of_objects + custom_number_of_objects;
+
+	objects_3d_data = safe_malloc ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
+	memset ( objects_3d_data, 0, ( total_number_of_raw_3d_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
 
 	//
 	// Now the first object ( index 0 ) is a NULL object - and has no 3d points, or anything at all
@@ -1445,8 +1673,6 @@ void initialise_3d_objects ( const char *directory )
 	objects_3d_data[0].bounding_box2.zmin = 0;
 	objects_3d_data[0].bounding_box2.zmax = 0;
 	objects_3d_data[0].radius = 0;
-
-	total_number_of_raw_3d_objects = total_objects;
 
 	//
 	// Now a count of how many of each array type
@@ -1703,14 +1929,15 @@ void initialise_3d_objects ( const char *directory )
 			handle;
 		struct _finddata_t
 			fi;
-		struct OBJECT_3D
-			*obj;
 
 		sprintf ( filename, "%s\\OBJECTS\\????.EEO", directory );
 		for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
 		{
 			int
 				objid;
+
+			if ( fi.attrib & _A_SUBDIR )
+				continue;
 
 			if ( !isxdigit ( fi.name[0] ) || !isxdigit ( fi.name[1] ) ||
 				 !isxdigit ( fi.name[2] ) || !isxdigit ( fi.name[3] ) )
@@ -1720,10 +1947,8 @@ void initialise_3d_objects ( const char *directory )
 			if ( objid <= 0 || objid > total_number_of_objects )
 				continue;
 
-			obj = &objects_3d_data[objid];
 			sprintf ( filename, "%s\\OBJECTS\\%s", directory, fi.name );
-
-			read_object(obj, filename);
+			read_object ( &objects_3d_data[objid], filename );
 		}
 		_findclose ( handle );
 	}
@@ -1779,121 +2004,94 @@ void initialise_3d_objects ( const char *directory )
 	fread ( &total_number_of_scene_sub_object_dissolve_keyframes, sizeof ( int ), 1, fp );
 
 
-
-	//
-	// Allocate the memory
-	//
-
-	objects_3d_camera_info_array = NULL;
-	objects_3d_scene_link_array = NULL;
-	objects_3d_scene_sprite_light_array = NULL;
-	objects_3d_scene_sub_objects_array = NULL;
-	objects_3d_scene_sub_object_indices_array = NULL;
-	objects_3d_scene_approximations_array = NULL;
-	objects_3d_scene_texture_animations_array = NULL;
-	objects_3d_scene_sub_object_keyframes_array = NULL;
-	objects_3d_scene_sub_object_dissolve_keyframes_array = NULL;
-
-	objects_3d_camera_info_array_ptr = NULL;
-	objects_3d_scene_link_ptr = NULL;
-	objects_3d_scene_sprite_light_ptr = NULL;
-	objects_3d_scene_sub_objects_array_ptr = NULL;
-	objects_3d_scene_sub_object_indices_array_ptr = NULL;
-	objects_3d_scene_approximations_array_ptr = NULL;
-	objects_3d_scene_texture_animations_array_ptr = NULL;
-	objects_3d_scene_sub_object_keyframes_array_ptr = NULL;
-	objects_3d_scene_sub_object_dissolve_keyframes_array_ptr = NULL;
-
-	if ( total_number_of_scene_camera_indices )
-	{
-
-		objects_3d_camera_info_array = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA_INFO ) * total_number_of_scene_camera_indices );
-	}
-
-	if ( total_number_of_scene_link_objects )
-	{
-
-		objects_3d_scene_link_array = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_LINK_OBJECT ) * total_number_of_scene_link_objects );
-	}
-
-	if ( total_number_of_sprite_light_objects )
-	{
-
-		objects_3d_scene_sprite_light_array = safe_malloc ( sizeof ( struct OBJECT_3D_SPRITE_LIGHT ) * total_number_of_sprite_light_objects );
-	}
-
-#if 0  // arneh - these are alloced separetly for each scene to make it easier to add new scenes
-	if ( total_number_of_scene_sub_objects )
-	{
-		objects_3d_scene_sub_objects_array = safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY ) * total_number_of_scene_sub_objects );
-	}
-
-	if ( total_number_of_scene_sub_object_indices )
-	{
-		objects_3d_scene_sub_object_indices_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * total_number_of_scene_sub_object_indices );
-	}
-#endif
-
-	if ( total_number_of_scene_texture_animations )
-	{
-
-		objects_3d_scene_texture_animations_array = safe_malloc ( sizeof ( int ) * total_number_of_scene_texture_animations );
-	}
-
-	if ( total_number_of_scene_approximations )
-	{
-
-		objects_3d_scene_approximations_array = safe_malloc ( sizeof ( struct OBJECT_3D_APPROXIMATION_INFO ) * total_number_of_scene_approximations );
-	}
-
-	if ( total_number_of_scene_sub_object_keyframes )
-	{
-
-		objects_3d_scene_sub_object_keyframes_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) * total_number_of_scene_sub_object_keyframes );
-	}
-
-	if ( total_number_of_scene_sub_object_dissolve_keyframes )
-	{
-
-		objects_3d_scene_sub_object_dissolve_keyframes_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME ) * total_number_of_scene_sub_object_dissolve_keyframes );
-	}
-
-	objects_3d_camera_info_array_ptr = objects_3d_camera_info_array;
-	objects_3d_scene_link_ptr = objects_3d_scene_link_array;
-	objects_3d_scene_sprite_light_ptr = objects_3d_scene_sprite_light_array;
-	objects_3d_scene_sub_objects_array_ptr = NULL; //objects_3d_scene_sub_objects_array;
-	objects_3d_scene_sub_object_indices_array_ptr = objects_3d_scene_sub_object_indices_array;
-	objects_3d_scene_texture_animations_array_ptr = objects_3d_scene_texture_animations_array;
-	objects_3d_scene_approximations_array_ptr = objects_3d_scene_approximations_array;
-	objects_3d_scene_sub_object_keyframes_array_ptr = objects_3d_scene_sub_object_keyframes_array;
-	objects_3d_scene_sub_object_dissolve_keyframes_array_ptr = objects_3d_scene_sub_object_dissolve_keyframes_array;
-
 	// read in all the default scenes
 	for ( count = 0; count < total_number_of_scenes; count++ )
+		read_scene ( fp );
+
+	//
+	// Read in the camera information
+	//
+
+	fread ( &total_number_of_cameras, sizeof ( int ), 1, fp );
+
+	fread ( &total_number_of_camera_keyframes, sizeof ( int ), 1, fp );
+
+	if ( total_number_of_cameras )
 	{
-		read_scene(fp);
+		objects_3d_camera_database = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA ) * ( total_number_of_cameras + custom_number_of_cameras ) );
+
+		for ( count = 0; count < total_number_of_cameras; count++ )
+			read_camera ( fp, &objects_3d_camera_database[count] );
 	}
+
+	fclose ( fp );
 
 	// arneh - this will initialize new custom scenes
 	initialise_custom_scenes(directory);
 
+	/* 06FEB08 Casm Import of 3D scenes BEGIN */
+	{
+		int
+			rc;
+		long
+			handle;
+		struct _finddata_t
+			di;
+
+		sprintf ( filename, "%s\\OBJECTS\\*.*", directory );
+		for ( rc = handle = _findfirst ( filename, &di ); rc != -1; rc = _findnext ( handle, &di ) )
+		{
+			int
+				rc;
+			long
+				handle;
+			struct _finddata_t
+				fi;
+
+			if ( !( di.attrib & _A_SUBDIR ) )
+				continue;
+
+			if ( !strcmp ( di.name, "." ) || !strcmp ( di.name, ".." ) )
+				continue;
+
+			sprintf ( filename, "%s\\OBJECTS\\%s\\*.EES", directory, di.name );
+			for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
+			{
+				if ( fi.attrib & _A_SUBDIR )
+					continue;
+
+				sceneid = get_scene ( fi.name );
+				if ( !sceneid )
+					continue;
+
+				sprintf ( prefix, "%s\\OBJECTS\\%s", directory, di.name );
+				sprintf ( filename, "%s%s", prefix, fi.name );
+
+				read_custom_scene ( filename );
+			}
+			_findclose ( handle );
+		}
+
+		_findclose ( handle );
+	}
+	/* 06FEB08 Casm Import of 3D scenes END */
+
 	{
 		// reallocates surfaces memory
-		
+
 		struct FACE_SURFACE_DESCRIPTION
 			*surfaces,
 			*cursurface;
 		int
 			number_of_surfaces = 0;
 
-		for ( count = 1; count <= total_objects; count++ )
+		for ( count = 1; count <= total_number_of_objects; count++ )
 			number_of_surfaces += objects_3d_data[count].number_of_surfaces;
 		surfaces = safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
 		cursurface = surfaces;
-		for ( count = 1; count <= total_objects; count++ )
+		for ( count = 1; count <= total_number_of_objects; count++ )
 		{
-			object_3d* obj;
-			obj = &objects_3d_data[count];
+			object_3d *obj = &objects_3d_data[count];
 
 			if ( !obj->number_of_surfaces )
 				continue;
@@ -1907,84 +2105,6 @@ void initialise_3d_objects ( const char *directory )
 		object_database_surfaces = surfaces;
 		total_number_of_surfaces = number_of_surfaces;
 	}
-
-	//
-	// Read in the camera information
-	//
-
-	fread ( &total_number_of_cameras, sizeof ( int ), 1, fp );
-
-	fread ( &total_number_of_camera_keyframes, sizeof ( int ), 1, fp );
-
-	if ( total_number_of_cameras )
-	{
-
-		object_3d_sub_object_keyframe
-			*keyframes;
-
-		objects_3d_camera_database = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA ) * total_number_of_cameras );
-
-		objects_3d_camera_keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) * total_number_of_camera_keyframes );
-
-		keyframes = objects_3d_camera_keyframes;
-
-		for ( count = 0; count < total_number_of_cameras; count++ )
-		{
-
-			int
-				keyframe_count;
-
-			fread ( &objects_3d_camera_database[count].number_of_keyframes, sizeof ( int ), 1, fp );
-			fread ( &objects_3d_camera_database[count].target_sub_object_id, sizeof ( int ), 1, fp );
-			fread ( &objects_3d_camera_database[count].heading_locked, sizeof ( int ), 1, fp );
-			fread ( &objects_3d_camera_database[count].pitch_locked, sizeof ( int ), 1, fp );
-			fread ( &objects_3d_camera_database[count].roll_locked, sizeof ( int ), 1, fp );
-
-			objects_3d_camera_database[count].keyframes = keyframes;
-
-			for ( keyframe_count = 0; keyframe_count < objects_3d_camera_database[count].number_of_keyframes; keyframe_count++ )
-			{
-
-				fread ( &keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-				fread ( &keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-
-				fread ( &keyframes[keyframe_count].x, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].y, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].z, sizeof ( float ), 1, fp );
-
-				fread ( &keyframes[keyframe_count].heading, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].pitch, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].roll, sizeof ( float ), 1, fp );
-
-				fread ( &keyframes[keyframe_count].scale_x, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].scale_y, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].scale_z, sizeof ( float ), 1, fp );
-
-				fread ( &keyframes[keyframe_count].tension, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].continuity, sizeof ( float ), 1, fp );
-				fread ( &keyframes[keyframe_count].bias, sizeof ( float ), 1, fp );
-			}
-
-			keyframes += objects_3d_camera_database[count].number_of_keyframes;
-		}
-	}
-
-	{
-
-		int
-			total_keyframes;
-
-		total_keyframes = objects_3d_scene_sub_object_keyframes_array_ptr - objects_3d_scene_sub_object_keyframes_array;
-
-		if ( total_keyframes != total_number_of_scene_sub_object_keyframes )
-		{
-
-			debug_fatal ( "Read in %d keyframes, but allocated %d keyframes", total_keyframes, total_number_of_scene_sub_object_keyframes );
-		}
-
-	}
-
-	fclose ( fp );
 
 	//
 	// Initialise the d3d version of the objects now
@@ -2022,8 +2142,6 @@ void initialise_3d_objects ( const char *directory )
 		}
 	}
 
-	ASSERT(next_free_custom_object <= total_number_of_objects + 1 + number_of_custom_objects);
-
 	current_number_of_3d_objects_constructed = 0;
 
 	current_amount_of_3d_objects_memory = 0;
@@ -2047,16 +2165,14 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 		index,
 		contributes_to_collisions,
 		sub_object_approximation_in_level,
-		sub_object_approximation_out_level,
-		number_of_keyframes,
-		keyframe_count,
-		number_of_object_dissolve_keyframes,
-		number_of_sub_object_indices,
-		number_of_sub_objects;
+		sub_object_approximation_out_level;
 
 	sub_object->parent = parent;
 
-	fread ( &index, sizeof ( int ), 1, fp );
+	if ( sceneid )
+		index = get_object ( fp );
+	else
+		fread ( &index, sizeof ( int ), 1, fp );
 
 	if ( index < 0 )
 	{
@@ -2067,6 +2183,7 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 //	ASSERT ( index < total_number_of_raw_3d_objects );
 
 	fread ( &contributes_to_collisions, sizeof ( int ), 1, fp );
+	ASSERT ( !sceneid || !contributes_to_collisions );
 	fread ( &sub_object_approximation_in_level, sizeof ( int ), 1, fp );
 	fread ( &sub_object_approximation_out_level, sizeof ( int ), 1, fp );
 
@@ -2076,6 +2193,7 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 	sub_object->sub_object_approximation_out_level = sub_object_approximation_out_level;
 
 	fread ( &flag, sizeof ( int ), 1, fp );
+	ASSERT ( !sceneid || !flag );
 
 	if ( flag )
 	{
@@ -2090,123 +2208,45 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 		fread ( &sub_object->relative_roll_minimum, sizeof ( float ), 1, fp );
 	}
 
-	fread ( &number_of_keyframes, sizeof ( int ), 1, fp );
-	ASSERT ( number_of_keyframes );
-	sub_object->number_of_keyframes = number_of_keyframes;
-
-	sub_object->keyframes = objects_3d_scene_sub_object_keyframes_array_ptr;
-	objects_3d_scene_sub_object_keyframes_array_ptr += number_of_keyframes;
-	ASSERT ( sub_object->keyframes );
-
-	for ( keyframe_count = 0; keyframe_count < number_of_keyframes; keyframe_count++ )
 	{
+		int
+			number_of_keyframes;
 
-		fread ( &sub_object->keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].x, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].y, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].z, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].heading, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].pitch, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].roll, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].scale_x, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].scale_y, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].scale_z, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].tension, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].continuity, sizeof ( float ), 1, fp );
-		fread ( &sub_object->keyframes[keyframe_count].bias, sizeof ( float ), 1, fp );
+		read_keyframes ( fp, &number_of_keyframes, &sub_object->keyframes, TRUE );
+		sub_object->number_of_keyframes = number_of_keyframes;
 	}
 
 	//
 	// Next the object dissolve for the sub object & any keyframes associate with it
 	//
 
-	fread ( &sub_object->object_dissolve, sizeof ( float ), 1, fp );
-	fread ( &number_of_object_dissolve_keyframes, sizeof ( int ), 1, fp );
-
-	sub_object->number_of_object_dissolve_keyframes = number_of_object_dissolve_keyframes;
-	sub_object->object_dissolve_keyframes = objects_3d_scene_sub_object_dissolve_keyframes_array_ptr;
-	objects_3d_scene_sub_object_dissolve_keyframes_array_ptr += sub_object->number_of_object_dissolve_keyframes;
-
-	for ( keyframe_count = 0; keyframe_count < sub_object->number_of_object_dissolve_keyframes; keyframe_count++ )
 	{
+		int
+			number_of_object_dissolve_keyframes;
 
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].index, sizeof ( int ), 1, fp );
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].linear, sizeof ( int ), 1, fp );
-
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].value, sizeof ( float ), 1, fp );
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].tension, sizeof ( int ), 1, fp );
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].continuity, sizeof ( int ), 1, fp );
-		fread ( &sub_object->object_dissolve_keyframes[keyframe_count].bias, sizeof ( int ), 1, fp );
+		fread ( &sub_object->object_dissolve, sizeof ( float ), 1, fp );
+		read_value_keyframes ( fp, &number_of_object_dissolve_keyframes, &sub_object->object_dissolve_keyframes );
+		sub_object->number_of_object_dissolve_keyframes = number_of_object_dissolve_keyframes;
 	}
 
 	//
 	// Now the sub objects
 	//
 
-	fread ( &number_of_sub_object_indices, sizeof ( int ), 1, fp );
-	sub_object->number_of_sub_object_indices = number_of_sub_object_indices;
-
-	if ( number_of_sub_object_indices )
 	{
-
 		int
-			index_count;
+			number_of_sub_object_indices;
 
-		//
-		// Alloocate the array
-		//
-
-		sub_object->sub_object_indices = current_scene_sub_object_index_array;
-
-		current_scene_sub_object_index_array += sub_object->number_of_sub_object_indices;
-
-		ASSERT ( sub_object->sub_object_indices );
-
-		for ( index_count = 0; index_count < sub_object->number_of_sub_object_indices; index_count++ )
-		{
-
-			int
-				sub_object_index,
-				object_index;
-
-			fread ( &sub_object_index, sizeof ( int ), 1, fp );
-
-			fread ( &object_index, sizeof ( int ), 1, fp );
-
-			sub_object->sub_object_indices[index_count].sub_object_index = sub_object_index;
-
-			sub_object->sub_object_indices[index_count].object_index = object_index;
-		}
+		read_indices ( fp, &number_of_sub_object_indices, &sub_object->sub_object_indices );
+		sub_object->number_of_sub_object_indices = number_of_sub_object_indices;
 	}
 
-	fread ( &number_of_sub_objects, sizeof ( int ), 1, fp );
-	sub_object->number_of_sub_objects = number_of_sub_objects;
-
-	if ( number_of_sub_objects )
 	{
-
-		struct OBJECT_3D_DATABASE_ENTRY
-			*sub_objects;
-
 		int
-			sub_object_count,
-			sub_object_total;
+			number_of_sub_objects;
 
-
-		sub_object_total = sub_object->number_of_sub_objects;
-
-		sub_objects = current_scene_sub_object_array;
-
-		current_scene_sub_object_array += sub_object_total;
-
-		sub_object->sub_objects = sub_objects;
-
-		for ( sub_object_count = 0; sub_object_count < sub_object_total; sub_object_count++ )
-		{
-
-			initialise_3d_sub_object ( fp, sub_object, &sub_objects[sub_object_count] );
-		}
+		read_subobjects ( fp, &number_of_sub_objects, &sub_object->sub_objects, sub_object );
+		sub_object->number_of_sub_objects = number_of_sub_objects;
 	}
 }
 
@@ -2216,7 +2256,8 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 
 void deinitialise_3d_objects ( void )
 {
-	int i;
+	int
+		i;
 
 	//
 	// Deinitialise the d3d versions first
@@ -2224,73 +2265,28 @@ void deinitialise_3d_objects ( void )
 
 	deinitialise_3d_objects_in_d3d ();
 
-	//
-	// Go through all the scenes, deallocating the keyframes, and sub objects
-	//
-
-	if ( objects_3d_camera_info_array )
+	for ( i = 0; i < total_number_of_objects; i++ )
 	{
-
-		safe_free ( objects_3d_camera_info_array );
-
-		objects_3d_camera_info_array = NULL;
-	}
-
-	if ( objects_3d_scene_link_array )
-	{
-
-		safe_free ( objects_3d_scene_link_array );
-
-		objects_3d_scene_link_array = NULL;
-	}
-
-	if ( objects_3d_scene_sub_objects_array )
-	{
-
-		safe_free ( objects_3d_scene_sub_objects_array );
-
-		objects_3d_scene_sub_objects_array = NULL;
-	}
-
-	if ( objects_3d_scene_sub_object_indices_array )
-	{
-
-		safe_free ( objects_3d_scene_sub_object_indices_array );
-
-		objects_3d_scene_sub_object_indices_array = NULL;
-	}
-
-	if ( objects_3d_scene_texture_animations_array )
-	{
-
-		safe_free ( objects_3d_scene_texture_animations_array );
-
-		objects_3d_scene_texture_animations_array = NULL;
-	}
-
-	if ( objects_3d_scene_approximations_array )
-	{
-
-		safe_free ( objects_3d_scene_approximations_array );
-
-		objects_3d_scene_approximations_array = NULL;
-	}
-
-	if ( objects_3d_scene_sub_object_keyframes_array )
-	{
-
-		safe_free ( objects_3d_scene_sub_object_keyframes_array );
-
-		objects_3d_scene_sub_object_keyframes_array = NULL;
-	}
-
-	// free the dynamically allocet sub_objects for each scene
-	for (i=0; i < total_objects; i++)
-	{
-		if (objects_3d_scene_database[i].sub_objects)
-			safe_free(objects_3d_scene_database[i].scene_sub_object_array);
-		if (objects_3d_scene_database[i].scene_sub_object_indices_array)
-			safe_free(objects_3d_scene_database[i].scene_sub_object_indices_array);
+		if ( objects_3d_scene_database[i].texture_animations )
+			safe_free ( objects_3d_scene_database[i].texture_animations );
+		if ( objects_3d_scene_database[i].approximations )
+			safe_free ( objects_3d_scene_database[i].approximations );
+		if ( objects_3d_scene_database[i].cameras )
+			safe_free ( objects_3d_scene_database[i].cameras );
+		if ( objects_3d_scene_database[i].scene_link_objects )
+			safe_free ( objects_3d_scene_database[i].scene_link_objects );
+		if ( objects_3d_scene_database[i].sprite_lights )
+			safe_free ( objects_3d_scene_database[i].sprite_lights );
+		if ( objects_3d_scene_database[i].keyframes )
+			safe_free ( objects_3d_scene_database[i].keyframes );
+		if ( objects_3d_scene_database[i].object_dissolve_keyframes )
+			safe_free ( objects_3d_scene_database[i].object_dissolve_keyframes );
+		if ( objects_3d_scene_database[i].displacement_amplitude_keyframes )
+			safe_free ( objects_3d_scene_database[i].displacement_amplitude_keyframes );
+		if ( objects_3d_scene_database[i].scene_sub_object_indices_array )
+			safe_free ( objects_3d_scene_database[i].scene_sub_object_indices_array );
+		if ( objects_3d_scene_database[i].sub_objects )
+			safe_free ( objects_3d_scene_database[i].scene_sub_object_array );
 	}
 
 	//
@@ -2300,6 +2296,12 @@ void deinitialise_3d_objects ( void )
 	safe_free ( objects_3d_scene_database );
 
 	objects_3d_scene_database = NULL;
+
+	for ( i = 0; i < total_number_of_cameras; i++ )
+	{
+		if ( objects_3d_camera_database[i].keyframes )
+			safe_free ( objects_3d_camera_database[i].keyframes );
+	}
 
 	//
 	// Free up the cameras
@@ -2311,14 +2313,6 @@ void deinitialise_3d_objects ( void )
 		safe_free ( objects_3d_camera_database );
 
 		objects_3d_camera_database = NULL;
-	}
-
-	if ( objects_3d_camera_keyframes )
-	{
-
-		safe_free ( objects_3d_camera_keyframes );
-
-		objects_3d_camera_keyframes = NULL;
 	}
 
 	//
@@ -2842,36 +2836,20 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 
 	for ( temp = 0; temp < number_of_sub_objects; temp ++ )
 	{
+
 //		sub_objects[temp].object_number = source_objects[temp].index;
 
-		if (source_objects[temp].number_of_keyframes)
-		{
-			sub_objects[temp].relative_heading = source_objects[temp].keyframes[0].heading;
-			sub_objects[temp].relative_pitch = source_objects[temp].keyframes[0].pitch;
-			sub_objects[temp].relative_roll = source_objects[temp].keyframes[0].roll;
+		sub_objects[temp].relative_heading = source_objects[temp].keyframes[0].heading;
+		sub_objects[temp].relative_pitch = source_objects[temp].keyframes[0].pitch;
+		sub_objects[temp].relative_roll = source_objects[temp].keyframes[0].roll;
 
-			sub_objects[temp].relative_position.x = source_objects[temp].keyframes[0].x;
-			sub_objects[temp].relative_position.y = source_objects[temp].keyframes[0].y;
-			sub_objects[temp].relative_position.z = source_objects[temp].keyframes[0].z;
+		sub_objects[temp].relative_position.x = source_objects[temp].keyframes[0].x;
+		sub_objects[temp].relative_position.y = source_objects[temp].keyframes[0].y;
+		sub_objects[temp].relative_position.z = source_objects[temp].keyframes[0].z;
 
-			sub_objects[temp].relative_scale.x = source_objects[temp].keyframes[0].scale_x;
-			sub_objects[temp].relative_scale.y = source_objects[temp].keyframes[0].scale_y;
-			sub_objects[temp].relative_scale.z = source_objects[temp].keyframes[0].scale_z;
-		}
-		else
-		{
-			sub_objects[temp].relative_heading = 0.0;
-			sub_objects[temp].relative_pitch = 0.0;
-			sub_objects[temp].relative_roll = 0.0;
-
-			sub_objects[temp].relative_position.x = 0.0;
-			sub_objects[temp].relative_position.y = 0.0;
-			sub_objects[temp].relative_position.z = 0.0;
-
-			sub_objects[temp].relative_scale.x = 1.0;
-			sub_objects[temp].relative_scale.y = 1.0;
-			sub_objects[temp].relative_scale.z = 1.0;
-		}
+		sub_objects[temp].relative_scale.x = source_objects[temp].keyframes[0].scale_x;
+		sub_objects[temp].relative_scale.y = source_objects[temp].keyframes[0].scale_y;
+		sub_objects[temp].relative_scale.z = source_objects[temp].keyframes[0].scale_z;
 
 		sub_objects[temp].visible_object = source_objects[temp].default_visibility;
 
@@ -2882,6 +2860,7 @@ void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d_sub_in
 		// create all sub objects of this sub object
 		if ( source_objects[temp].number_of_sub_objects )
 		{
+
 			sub_objects[temp].sub_objects = object_3d_sub_instance_construction_array;
 
 			object_3d_sub_instance_construction_array += source_objects[temp].number_of_sub_objects;
@@ -3744,8 +3723,8 @@ void report_all_3d_objects_statistics ( void )
 void count_sub_object_statistics ( object_3d_database_entry *sub_object, int approximation, int *triangles, int *points, int *objects )
 {
 
-	if (	( sub_object->sub_object_approximation_in_level <= approximation ) &&
-			( sub_object->sub_object_approximation_out_level >= approximation ) )
+	if ( ( sub_object->sub_object_approximation_in_level <= approximation ) &&
+		 ( sub_object->sub_object_approximation_out_level >= approximation ) )
 	{
 
 		int
@@ -3812,4 +3791,3 @@ void report_objects_not_destructed ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
