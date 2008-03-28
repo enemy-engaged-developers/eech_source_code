@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#include "../common/common.h"
+
 
 template <typename T>
 void PrintAll(T begin, T end)
@@ -689,7 +691,10 @@ class LwsFile : public Lws
  {
   if (!LastObject)
    return;
-  sscanf(str, "%f %f", &(LastObject->*limit).min, &(LastObject->*limit).max);
+  float min, max;
+  sscanf(str, "%f %f", &min, &max);
+  (LastObject->*limit).min = rad(min);
+  (LastObject->*limit).max = rad(max);
   (LastObject->*limit).set = true;
  }
 

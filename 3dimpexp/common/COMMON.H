@@ -20,6 +20,11 @@ double deg(double rad)
  return rad * 180.0 / M_PI;
 }
 
+double rad(double deg)
+{
+ return deg * M_PI / 180.0;
+}
+
 #ifndef __WATCOMC__
 #define truncate trunc
 #else
