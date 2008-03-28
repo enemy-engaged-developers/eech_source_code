@@ -111,14 +111,12 @@ struct RSurface
         {
          case TEXTURE:
           if (tvmap[0] != '\0')
-           error("Duplicate vertex mapping name for surface '%s' '%s'",
-                 tvmap, &uv->txuv_map_name);
+           error("Surface '%s': Duplicate vertex mapping name for surface '%s' '%s'", &s->name, tvmap, &uv->txuv_map_name);
           strcpy(tvmap, uv->txuv_map_name);
           break;
          case LUMINOSITY:
           if (lvmap[0] != '\0')
-           error("Duplicate luminosity vertex mapping name for surface '%s' '%s'",
-                 lvmap, &uv->txuv_map_name);
+           error("Surface '%s': Duplicate luminosity vertex mapping name for surface '%s' '%s'", &s->name, lvmap, &uv->txuv_map_name);
           strcpy(lvmap, uv->txuv_map_name);
           break;
         }
@@ -142,7 +140,18 @@ struct RSurface
          }
 
        if (!image)
-        error("Surface requires absent image");
+        {
+         switch (type)
+          {
+           case TEXTURE:
+            warning("Surface '%s': Texture is set but texture file is not", &s->name);
+            break;
+           case LUMINOSITY:
+            warning("Surface '%s': Luminosity texture is set but texture file is not", &s->name);
+            break;
+          }
+         break;
+        }
 
        char filename[1024] = "";
 
@@ -152,24 +161,35 @@ struct RSurface
           {
            const StillImage* si = static_cast<const StillImage*>(image->attributes[m]);
            if (*filename)
-            error("Filename for image supplied more then once");
+            error("Surface '%s': Filename for image supplied more then once '%s' and '%s'", &s->name, filename, &si->name);
            strcpy(filename, si->name);
           }
         }
 
        if (!*filename)
-        error("Filename for image is not supplied");
+        {
+         switch (type)
+          {
+           case TEXTURE:
+            warning("Surface '%s': Filename for texture image is not supplied", &s->name);
+            break;
+           case LUMINOSITY:
+            warning("Surface '%s': Filename for texture image is not supplied", &s->name);
+            break;
+          }
+         break;
+        }
 
        switch (type)
         {
          case TEXTURE:
           if (texture[0] != '\0')
-           error("Duplicate texture for surface");
+           error("Surface '%s': Duplicate texture for surface", &s->name);
           GetTextureName(texture, filename);
           break;
          case LUMINOSITY:
           if (ltexture[0] != '\0')
-           error("Duplicate luminosity texture for surface");
+           error("Surface '%s': Duplicate luminosity texture for surface", &s->name);
           GetTextureName(ltexture, filename);
           break;
          }
@@ -262,16 +282,16 @@ struct RSurface
           unsigned npoints = pl->list[m].numvertflags & 0x3FF;
 
           if (npoints < 2)
-           error("Invalid polygon %u", npoints);
+           error("Surface '%s': Invalid polygon %u (< 2 points)", &s->name, npoints);
 
           if (npoints >= 256)
-           error("Too large polygon %u", npoints);
+           error("Surface '%s': Too large polygon %u point (> 256 points)", &s->name, npoints);
 
           if (!!polys)
            polygons = npoints > 2;
           else
            if (polygons != (npoints > 2))
-            error("Mix of polygons and nonpolygons");
+            error("Surface '%s': Mix of polygons and nonpolygons", &s->name);
 
           RPoly* ro = &polys.Append();
 
@@ -281,7 +301,7 @@ struct RSurface
            {
             unsigned o = pl->list[m].vert[n];
             if (o >= !Global->Point[i].p->points)
-             error("Invalid point index %u %u", o, !Global->Point[i].p->points);
+             error("Surface '%s': Invalid point index %u %u", &s->name, o, !Global->Point[i].p->points);
             ro->points[n].p = Global->Rpoints[Global->Point[i].rp[o]];
             ro->points[n].p.index = o;
            }
@@ -310,12 +330,36 @@ struct RSurface
   for (unsigned i = 0; i < !s->attributes; i++)
    ParseAttribute(lwofile, s->attributes[i]);
 
-  if ((texture[0] != '\0') ^ (tvmap[0] != '\0'))
-   error("Texture and vertex map must be both supplied, not just one of them");
+  if (texture[0] == '\0')
+   {
+    if (tvmap[0] != '\0')
+     {
+      warning("Surface '%s': UV mapping is supplied but texture is not", &s->name);
+      tvmap[0] = '\0';
+     }
+   }
+  else
+   if (tvmap[0] == '\0')
+    {
+     warning("Surface '%s': Texture is supplied but UV mapping is not");
+     texture[0] = '\0';
+    }
   if (texture[0] != '\0')
    UV(tvmap, &RPolyPoint::tp);
-  if ((ltexture[0] != '\0') ^ (lvmap[0] != '\0'))
-   error("Luminosity texture and vertex map must be both supplied, not just one of them");
+  if (ltexture[0] == '\0')
+   {
+    if (lvmap[0] != '\0')
+     {
+      warning("Surface '%s': UV mapping is supplied but luminosity texture is not", &s->name);
+      lvmap[0] = '\0';
+     }
+   }
+  else
+   if (lvmap[0] == '\0')
+    {
+     warning("Surface '%s': Luminosity texture is supplied but UV mapping is not");
+     ltexture[0] = '\0';
+    }
   if (ltexture[0] != '\0')
    UV(lvmap, &RPolyPoint::lp);
 
@@ -324,7 +368,7 @@ struct RSurface
    for (unsigned j = 0; j < !polys[i].points; j++)
     AddPoint(points, polys[i].points[j]);
   if (!points > 256)
-   error("Too many different points for surface");
+   error("Surface '%s': More than 256 different points", &s->name);
  }
  void UV(const char* vmap, RTPoint RPolyPoint::* tp)
  {
@@ -345,7 +389,7 @@ struct RSurface
          if (strcmp(Global->Point[j].vm[l]->name, vmap) == 0)
           {
            if (vm)
-            error("Duplicate vertex mapping '%s'", vmap);
+            error("Surface '%s': Duplicate vertex mapping '%s'", &s->name, vmap);
            vm = Global->Point[j].vm[k];
           }
 
@@ -353,7 +397,7 @@ struct RSurface
          if (strcmp(Global->Point[j].pl[k].dvm[l]->name, vmap) == 0)
           {
            if (dvm)
-            error("Duplicate discontinuous vertex mapping '%s'", vmap);
+            error("Surface '%s': Duplicate discontinuous vertex mapping '%s'", &s->name, vmap);
            dvm = Global->Point[j].pl[k].dvm[l];
           }
 
@@ -364,10 +408,10 @@ struct RSurface
            if (lp.pt->ptags[j].poly == polys[i].index)
             {
              if (pttp)
-              error("Duplicate PTAG TXUV entry");
+              error("Surface '%s': Duplicate PTAG TXUV entry", &s->name);
              pttp = &lp.pt->ptags[j];
              if (pttp->tag >= !lp.t->tags)
-              error("Invalid tag index");
+              error("Surface '%s': Invalid tag index", &s->name);
              t = lp.t;
             }
          }
@@ -388,7 +432,7 @@ struct RSurface
           while (*ptr == ' ')
            ptr++;
           if (*ptr == '\0')
-           error("Invalid locked vertex map");
+           error("Surface '%s': Invalid locked vertex map", &s->name);
           value[k] = atof(ptr);
           while (*ptr != ' ' && *ptr != '\0')
            ptr++;
@@ -414,11 +458,16 @@ struct RSurface
            (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
        }
       else
-       error("No vertex maping found '%s'", vmap);
+       {
+        warning("Surface '%s': No vertex mapping '%s' found", &s->name, vmap);
+        float zero[2] = { 0, 0 };
+        for (unsigned k = 0; k < !polys[i].points; k++)
+         (polys[i].points[k].*tp).Set(zero);
+       }
 
     for (unsigned j = 0; j < !polys[i].points; j++)
      if (!((polys[i].points[j].*tp).set))
-      error("Not all texture points set for surface '%s'", &s->name);
+      error("Surface '%s': Not all texture points set", &s->name);
    }
  }
  void GetTextureName(char* texture, const char* filename)

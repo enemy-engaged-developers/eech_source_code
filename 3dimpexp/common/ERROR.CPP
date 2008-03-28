@@ -1,9 +1,21 @@
 #include <stdarg.h>
 
+void warning(const char* msg, ...)
+{
+ va_list va;
+
+ printf("Warning: ");
+ va_start(va, msg);
+ vprintf(msg, va);
+ va_end(va);
+ putchar('\n');
+}
+
 void error(const char* msg, ...)
 {
  va_list va;
 
+ printf("Error: ");
  va_start(va, msg);
  vprintf(msg, va);
  va_end(va);
