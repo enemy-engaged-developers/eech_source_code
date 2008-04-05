@@ -565,7 +565,7 @@ static int get_object ( FILE *fp )
 	int
 		objid = 0;
 
-	if ( !get_nul_string ( filename, sizeof ( filename ), fp, TRUE ) )
+	if ( !get_nul_string ( filename, sizeof ( filename ), fp, TRUE ) || !*filename )
 		return 0;
 
 	ptr = strrchr ( filename, '/' );
@@ -590,7 +590,7 @@ static int get_object ( FILE *fp )
 			filename[1024];
 
 		ext = strrchr ( ptr, '.' );
-		if ( !ext )
+		if ( ext )
 			*ext = '\0';
 
 		{
@@ -656,7 +656,7 @@ static int get_subobject ( FILE *fp )
 #include "3dmodels.h"
 		};
 
-	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) )
+	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
 		return 0;
 
 	for ( i = 1; sub_objects[i]; i++ )
@@ -689,7 +689,7 @@ static int get_camera ( FILE *fp )
 #include "3dmodels.h"
 		};
 
-	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) )
+	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
 		return 0;
 
 	for ( i = 1; cameras[i]; i++ )
@@ -2065,7 +2065,7 @@ void initialise_3d_objects ( const char *directory )
 					continue;
 
 				sprintf ( prefix, "%s\\OBJECTS\\%s", directory, di.name );
-				sprintf ( filename, "%s%s", prefix, fi.name );
+				sprintf ( filename, "%s\\%s", prefix, fi.name );
 
 				read_custom_scene ( filename );
 			}
