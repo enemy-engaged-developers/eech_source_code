@@ -9,4 +9,6 @@ void deinitialise_undercarriage_dynamics(void);
 
 void update_undercarriage_dynamics(void);
 
+void reset_undercarriage_world_position(void);
+
 #endif /*CO_UNDERCARRIAGE_H_*/

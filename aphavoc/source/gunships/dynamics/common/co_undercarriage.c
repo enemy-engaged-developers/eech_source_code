@@ -14,6 +14,7 @@
 
 typedef struct {
 	int
+		damaged,
 		retractable,
 		can_turn,
 		has_brakes;
@@ -24,7 +25,10 @@ typedef struct {
 		position;   // relative to CoG with suspension fully extended
 
 	float
+		turn_angle,
 		suspension_compression,  // how much the suspension is compressed, meters
+		resistance_force,
+		brake_force,
 		max_suspension_compression,
 		suspension_stiffness,    // kN per meter of suspension movement
 		damper_stiffness,
@@ -131,7 +135,7 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 	}
 }
 
-void update_gear_world_position(landing_gear_point* point, matrix3x3 attitude)
+static void update_gear_world_position(landing_gear_point* point, matrix3x3 attitude)
 {
 	vec3d
 		gear_position;
@@ -164,14 +168,26 @@ static void update_suspension(void)
 	float
 		inv_delta_time = 1.0 / get_model_delta_time();
 	
+	static float max_damp = 0.0;
+
+	/*
+	current_landing_gear->gear_points[2].damaged = debug_var_x > 0.0; 
+	current_landing_gear->gear_points[0].damaged = debug_var_y > 0.0;
+	current_landing_gear->gear_points[1].damaged = debug_var_y > 0.0;
+	*/
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(&inv_attitude, &attitude);
-		
+
+	/*
+	debug_log("fixed_collision_count: %d", fixed_collision_count);
+	debug_log("h pos: %.2f, %.2f, %.2f", current_flight_dynamics->position.x, current_flight_dynamics->position.y, current_flight_dynamics->position.z);
+*/
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		
-		if (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0)
+		if (!point->damaged 
+			&& (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0))
 		{
 			vec3d
 				old_world_position;
@@ -180,9 +196,11 @@ static void update_suspension(void)
 				spring_compression,
 				terrain_elevation,
 				compression_change;
-	
+
 			old_world_position = point->world_position;
-			update_gear_world_position(point, inv_attitude);
+
+			if (!fixed_collision_count && !moving_collision_count)
+				update_gear_world_position(point, inv_attitude);
 
 			point->velocity.x = (point->world_position.x - old_world_position.x) * inv_delta_time;
 			point->velocity.y = (point->world_position.y - old_world_position.y) * inv_delta_time;
@@ -190,28 +208,81 @@ static void update_suspension(void)
 
 			multiply_transpose_matrix3x3_vec3d(&point->velocity, attitude, &point->velocity);
 			
-			debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
-			
+			//debug_log("pos: %.2f, %.2f, %.2f", point->world_position.x, point->world_position.y, point->world_position.z);
+
 			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
 			spring_compression = (terrain_elevation - point->world_position.y);
 			
-			if (spring_compression > 0.0)
+//			if (spring_compression > 0.0)
+//				debug_log("compression: %.3f (old: %.3f)", spring_compression, point->suspension_compression);
+			
+			if (spring_compression > 0.55)
+			{
+				point->damaged = TRUE;
+				//point->suspension_compression = 0.0;
+			}
+			else if (spring_compression > 0.0)
 			{
 				compression_change = spring_compression - point->suspension_compression;
-				point->damping = compression_change * MODEL_FRAME_RATE * point->damper_stiffness;
-	
-				if (spring_compression >= point->max_suspension_compression)
+
+				if ((fixed_collision_count || moving_collision_count) && compression_change > 0.0)
 				{
-					// increase damper stiffness on the bump to get this descent stopped quickly
-					if (compression_change > 0.0)  // bump
-						point->damping *= 2.0;
+					debug_log("disabeling damper due to collision");
+					point->damping = 0.0;
+				}
+				else
+				{
+					point->damping = min(compression_change * inv_delta_time * point->damper_stiffness, 25.0);
+					debug_log("change: %.3f, step: %.3f, damper: %.3f, result: %.3f", compression_change, inv_delta_time, point->damper_stiffness, compression_change * inv_delta_time * point->damper_stiffness);
+	
+					max_damp = max(point->damping, max_damp);
+						debug_log("damping: %.2f, max: %.2f", point->damping, max_damp);
+	
+					if (spring_compression >= point->max_suspension_compression)
+					{
+						// increase damper stiffness on the bump to get this descent stopped quickly
+						if (compression_change > 0.0)  // bump
+							point->damping *= 2.0;
+					}
 				}
 				
 				point->suspension_compression = spring_compression;
+				debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
+
+				if (point->can_turn && fabs(point->velocity.x) > 0.1)
+				{
+					float
+						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0)) * 0.5,
+						angle_diff,
+						new_angle;
+
+
+					if (fabs(point->velocity.z) > 0.05)
+						new_angle = atan(point->velocity.x / fabs(point->velocity.z));
+					else if (point->velocity.x > 0.0)
+						new_angle = 90.0;
+					else
+						new_angle = -90.0;
+
+					debug_log("turn angle = %.1f", deg(new_angle));
+					
+					angle_diff = new_angle - point->turn_angle;
+					point->turn_angle += bound(angle_diff, -max_turn_rate, max_turn_rate);
+				}
 			}
 			else
 			{
 				point->suspension_compression = 0.0;
+
+				if (point->can_turn)
+				{
+					float
+						turn_rate = get_model_delta_time() * rad(180.0), 
+						angle_diff = 0.0 - point->turn_angle;
+					
+					// straighten wheel
+					point->turn_angle += bound(angle_diff, -turn_rate, turn_rate);
+				}
 			}
 		}
 	}
@@ -238,10 +309,9 @@ static void apply_suspension_forces(void)
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
 		vec3d position;
 		float wheel_load;
-		float uc_state = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_UNDERCARRIAGE_STATE);
 
 		if (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0)
-			if (point->suspension_compression > 0.0)
+			if (!point->damaged && point->suspension_compression > 0.0)
 			{
 				position.x = point->position.x;
 				position.y = point->position.y - point->suspension_compression + 3.0;
@@ -259,32 +329,49 @@ static void apply_suspension_forces(void)
 				// wheel sideways resistance
 				if (!point->can_turn)
 				{
-					float max_force = wheel_load * 1.0;  // depends on load on wheel
-					float force = max_force * bound(fabs(point->velocity.x * 1.0), 0.0, 1.0);
+					float
+						max_force, 
+						force,
+						force_diff = 0.0,
+						max_force_change = get_model_delta_time() * 10.0;
 
-					direction.x = (point->velocity.x > 0.0) ? -1.0 : 1.0;
+					max_force = min(wheel_load * 2.5, G);  // depends on load on wheel
+
+					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
+					force_diff = (max_force * force) - point->resistance_force;
+
+					point->resistance_force += bound(force_diff, -max_force_change, max_force_change);
+					
+					direction.x = (point->resistance_force > 0.0) ? -1.0 : 1.0;
 					direction.y = 0.0;
 					direction.z = 0.0;
 
-					add_dynamic_force ("sideways wheel resistance", force, 0.0, &position, &direction, FALSE);
+					add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
 				}
-				
+
 				// wheel longitudinal resistance/brakes
 				{
-					float max_force, force;
-					
+					float
+						max_force, 
+						force,
+						force_diff = 0.0,
+						max_force_change = get_model_delta_time() * 10.0;
+
 					if (point->has_brakes && current_flight_dynamics->wheel_brake)
-						max_force = wheel_load * 1.0;  // depends on load on wheel
+						max_force = min(wheel_load * 2.0, G);  // depends on load on wheel
 					else
-						max_force = wheel_load * 0.025;  // general rolling resistance
+						max_force = min(wheel_load * 0.025, G);  // general rolling resistance
 
-					force = max_force * bound(fabs(point->velocity.z * 1.0), 0.0, 1.0);
+					force = bound(point->velocity.z * 1.0, -1.0, 1.0);
+					force_diff = (max_force * force) - point->brake_force;
 
+					point->brake_force += bound(force_diff, -max_force_change, max_force_change);
+					
 					direction.x = 0.0;
 					direction.y = 0.0;
-					direction.z = (point->velocity.z > 0.0) ? -1.0 : 1.0;
+					direction.z = (point->brake_force > 0.0) ? -1.0 : 1.0;
 
-					add_dynamic_force ("brakes", force, 0.0, &position, &direction, TRUE);
+					add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, TRUE);
 				}
 			}
 	}
@@ -334,9 +421,20 @@ void initialise_undercarriage_dynamics(void)
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(&attitude, &attitude);
-		
+
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
+		current_landing_gear->gear_points[i].damaged = FALSE;
+		current_landing_gear->gear_points[i].resistance_force = 0.0;
+		current_landing_gear->gear_points[i].brake_force = 0.0;
+		current_landing_gear->gear_points[i].damping = 0.0;
+		current_landing_gear->gear_points[i].suspension_compression = 0.0;
+		current_landing_gear->gear_points[i].turn_angle = 0.0;
+
+		current_landing_gear->gear_points[i].velocity.x = 0.0;
+		current_landing_gear->gear_points[i].velocity.y = 0.0;
+		current_landing_gear->gear_points[i].velocity.z = 0.0;
+
 		update_gear_world_position(&current_landing_gear->gear_points[i], attitude);
 	}
 }
@@ -346,13 +444,28 @@ void deinitialise_undercarriage_dynamics(void)
 	
 }
 
+void reset_undercarriage_world_position(void)
+{
+	matrix3x3 attitude;
+	unsigned i;
+
+	debug_log("resetting gear position");
+	
+	current_landing_gear = &landing_gears[get_global_gunship_type()];
+
+	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
+	get_inverse_matrix(&attitude, &attitude);
+
+	for (i = 0; i < current_landing_gear->num_gear_points; i++)
+		update_gear_world_position(&current_landing_gear->gear_points[i], attitude);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void update_undercarriage_dynamics(void)
 {
-	float uc_state;
 	ASSERT(get_gunship_entity());
 
 	current_flight_dynamics->undercarriage_state.value = get_undercarriage_state();
@@ -377,17 +490,22 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 		
 		float
 			uc_state = get_undercarriage_state(),
+			turn_angle = landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].turn_angle,
 			front_compression = min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].max_suspension_compression);
 
-		left_wheel->relative_pitch = (rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].max_suspension_compression) * rad(70)) * uc_state;
-		right_wheel->relative_pitch = (rad(-15) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].max_suspension_compression) * rad(70)) * uc_state;
+		left_wheel->relative_pitch = (rad(-13.0) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].max_suspension_compression) * rad(70)) * uc_state;
+		right_wheel->relative_pitch = (rad(-13.0) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].max_suspension_compression) * rad(70)) * uc_state;
 
-		nose_strut->relative_position.z = (-0.20 + front_compression * 0.85) * uc_state;
-	
-		nose_wheel->relative_position.y = sin(rad(60)) * (-0.20 + front_compression * 0.8) * uc_state;
-		nose_wheel->relative_position.z = cos(rad(60)) * (-0.20 + front_compression * 0.8) * uc_state;
+		nose_strut->relative_position.z = (-0.15 + front_compression * 0.85) * uc_state;
+
+		nose_wheel->relative_position.y = sin(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
+		nose_wheel->relative_position.z = cos(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
 	
 		nose_wheel->relative_pitch = (rad(-15) + front_compression * rad(70)) * uc_state;
+		
+		nose_wheel->relative_heading = debug_var_x * rad(10);
+		nose_wheel->relative_roll = debug_var_y * rad(10);
+		nose_wheel->relative_heading = turn_angle;
 	}
 }
 
