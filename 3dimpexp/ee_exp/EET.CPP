@@ -19,6 +19,7 @@ class EET
  EET(char drive = 'D');
  void Clear(void);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex);
+ unsigned Append(const char* name);
 };
 
 EET::EET(char drive)
@@ -63,7 +64,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
      chunk->AddData(4, &index);
      subchunk = new LWO_SubChunk("STIL", 0, NULL);
      chunk->AddSubChunk(subchunk);
-     sprintf(buf, "%c%s%s.bmp", textures_drive, TEXTURES_ROOT, textures[textindex].name);
+     sprintf(buf, "%c%s%s.tga", textures_drive, TEXTURES_ROOT, textures[textindex].name);
      subchunk->AddBasicData(strlen(buf) + 1, buf);
      subchunk = new LWO_SubChunk("FLAG", 2, "\0\x80");
      chunk->AddSubChunk(subchunk);
@@ -73,4 +74,13 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
    return textures[textindex].index;
   }
  return 0;
+}
+
+unsigned EET::Append(const char* name)
+{
+ Texture texture;
+ texture.index = ~0u;
+ strcpy(texture.name, name);
+ textures.Append(texture);
+ return !textures - 1;
 }

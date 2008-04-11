@@ -10,6 +10,7 @@
 
 #include "../common/common.h"
 #include "names.cpp"
+#include "textures.cpp"
 #include "scenes.cpp"
 #include "lws_exp.cpp"
 
@@ -24,6 +25,10 @@ int main(void)
  const Objects objects;
  const Scenes scenes(objects);
  LwsExport lwsexp(eet, names, objects, scenes);
+
+ mkdir("\\TEXTURES");
+ TexturesExporter textures;
+ textures.export_textures();
 
  mkdir("_OBJECTS");
 
