@@ -43,6 +43,13 @@ class TexturesExporter
      unsigned char tmp = cur[0];
      cur[0] = cur[2];
      cur[2] = tmp;
+     if (bpp == 4)
+      {
+       if (type == TEXTURE_TYPE_SINGLEALPHA)
+        cur[3] = cur[3] ? 255 : 0;
+       else
+        cur[3] = 255 - cur[3];
+      }
      cur += bpp;
     }
   }
