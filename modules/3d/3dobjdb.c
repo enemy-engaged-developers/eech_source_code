@@ -595,7 +595,7 @@ static int get_object ( FILE *fp )
 
 	if ( isxdigit ( ptr[0] ) && isxdigit ( ptr[1] ) &&
 		isxdigit ( ptr[2] ) && isxdigit ( ptr[3] ) &&
-		strcasecmp(ptr + 4, ".LWO") &&
+		strcasecmp(ptr + 4, ".LWO") == 0 &&
 		sscanf ( ptr, "%X.LWO", &objid ) == 1 &&
 		objid > 0 && objid < total_number_of_raw_3d_objects )
 		return objid;
@@ -2181,7 +2181,6 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 //	ASSERT ( index < total_number_of_raw_3d_objects );
 
 	fread ( &contributes_to_collisions, sizeof ( int ), 1, fp );
-	ASSERT ( !sceneid || !contributes_to_collisions );
 	fread ( &sub_object_approximation_in_level, sizeof ( int ), 1, fp );
 	fread ( &sub_object_approximation_out_level, sizeof ( int ), 1, fp );
 
