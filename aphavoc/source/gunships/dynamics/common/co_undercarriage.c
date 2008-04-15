@@ -258,7 +258,14 @@ static void update_suspension(void)
 
 
 					if (fabs(point->velocity.z) > 0.05)
+					{
 						new_angle = atan(point->velocity.x / fabs(point->velocity.z));
+						if (point->velocity.z < 0.0)
+							if (new_angle > 0.0)
+								new_angle = rad(180.0) - new_angle;
+							else
+								new_angle = rad(-180.0) - new_angle;
+					}
 					else if (point->velocity.x > 0.0)
 						new_angle = 90.0;
 					else
@@ -267,8 +274,17 @@ static void update_suspension(void)
 					debug_log("turn angle = %.1f", deg(new_angle));
 					
 					angle_diff = new_angle - point->turn_angle;
+					if (angle_diff > rad(180.0))
+						angle_diff -= rad(360.0);
+					else if (angle_diff < rad(-180.0))
+						angle_diff += rad(360);
+					
 					point->turn_angle += bound(angle_diff, -max_turn_rate, max_turn_rate);
-				}
+					if (point->turn_angle > rad(180.0))
+						point->turn_angle -= rad(360.0);
+					else if (point->turn_angle < rad(-180.0))
+						point->turn_angle += rad(360);
+ 				}
 			}
 			else
 			{
@@ -503,9 +519,11 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 	
 		nose_wheel->relative_pitch = (rad(-15) + front_compression * rad(70)) * uc_state;
 		
-		nose_wheel->relative_heading = debug_var_x * rad(10);
-		nose_wheel->relative_roll = debug_var_y * rad(10);
 		nose_wheel->relative_heading = turn_angle;
+		nose_wheel->relative_roll = sin(nose_wheel->relative_heading) * rad(40);
+		nose_wheel->relative_pitch += rad(-30) + cos(nose_wheel->relative_heading) * rad(30);
+		
+		nose_wheel->relative_position.z += cos(nose_wheel->relative_heading) * 0.05 - 0.05;
 	}
 }
 
