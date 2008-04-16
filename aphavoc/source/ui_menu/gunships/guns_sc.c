@@ -147,6 +147,7 @@ void initialise_gunships_screen (void)
 			case GUNSHIP_TYPE_AH64A:
 			{
 				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
+				set_free_flight_gunship_type ( command_line_game_initialisation_phase_gunship_type );
 
 				break;
 			}
@@ -157,6 +158,7 @@ void initialise_gunships_screen (void)
 			case GUNSHIP_TYPE_KA50:
 			{
 				gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
+				set_free_flight_gunship_type ( command_line_game_initialisation_phase_gunship_type );
 
 				break;
 			}
