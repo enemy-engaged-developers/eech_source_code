@@ -129,6 +129,9 @@ static int
 static char
 	prefix[260];
 
+static int
+	fail;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -520,14 +523,11 @@ static int get_scene ( const char *filename )
 
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x) #x,
-#define OBJECT_3D_INDEX_(x)
-#define OBJECT_3D_INDEX__(x) NULL
+#define OBJECT_3D_INDEX_(x) NULL
 #define OBJECT_3D_SUBINDEX(x)
 #define OBJECT_3D_SUBINDEX_(x)
-#define OBJECT_3D_SUBINDEX__(x)
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
-#define OBJECT_3D_CAMERA__(x)
 	static const char
 		*scenes[] =
 		{
@@ -626,7 +626,8 @@ static int get_object ( FILE *fp )
 	}
 
 	sprintf ( new_filename, "%s\\%s.EEO", prefix, ptr );
-	read_object ( &objects_3d_data[objid], new_filename );
+	if ( !read_object ( &objects_3d_data[objid], new_filename ) )
+		fail = 1;
 
 	return objid;
 }
@@ -641,13 +642,10 @@ static int get_subobject ( FILE *fp )
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x)
 #define OBJECT_3D_INDEX_(x)
-#define OBJECT_3D_INDEX__(x)
 #define OBJECT_3D_SUBINDEX(x) #x ,
-#define OBJECT_3D_SUBINDEX_(x)
-#define OBJECT_3D_SUBINDEX__(x) NULL
+#define OBJECT_3D_SUBINDEX_(x) NULL
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
-#define OBJECT_3D_CAMERA__(x)
 	static const char
 		*sub_objects[] =
 		{
@@ -674,13 +672,10 @@ static int get_camera ( FILE *fp )
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x)
 #define OBJECT_3D_INDEX_(x)
-#define OBJECT_3D_INDEX__(x)
 #define OBJECT_3D_SUBINDEX(x)
 #define OBJECT_3D_SUBINDEX_(x)
-#define OBJECT_3D_SUBINDEX__(x)
 #define OBJECT_3D_CAMERA(x) #x ,
-#define OBJECT_3D_CAMERA_(x)
-#define OBJECT_3D_CAMERA__(x) NULL
+#define OBJECT_3D_CAMERA_(x) NULL
 	static const char
 		*cameras[] =
 		{
@@ -725,6 +720,8 @@ static void read_scene ( FILE *fp )
 		number_of_scene_links,
 		number_of_sprite_lights,
 		number_of_scene_named_sub_objects;
+
+	fail = 0;
 
 	number_of_scene_lights = 0;
 
@@ -927,13 +924,6 @@ static void read_scene ( FILE *fp )
 
 	fread ( &number_of_scene_named_sub_objects, sizeof ( int ), 1, fp );
 
-	// FIXME: This is a dirty hack and should be fixed ASAP
-	if (scene_index == OBJECT_3D_APACHE_VIRTUAL_COCKPIT_LEVEL1)
-	{
-		number_of_scene_sub_objects++;
-	}
-	// End of hack
-
 	if ( number_of_scene_named_sub_objects )
 		current_scene_sub_object_index_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * number_of_scene_named_sub_objects );
 	else
@@ -1077,236 +1067,30 @@ static void read_scene ( FILE *fp )
 	initialise_scene_visible_sub_objects ( scene_index );
 
 	initialise_scene_bounding_sub_objects ( scene_index );
+
+
+	objects_3d_scene_database[scene_index].succeded = !fail;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void initialise_sub_object(object_3d_database_entry* entry, unsigned model_index)
+static void initialise_custom_scenes(void)
 {
-	entry->index = model_index;
-	entry->default_visibility = TRUE;
-
-	entry->sub_object_approximation_in_level = 1;
-	entry->sub_object_approximation_out_level = 1;
-
-	entry->object_dissolve = 1.0;
-
-	entry->number_of_keyframes = 1;
-	entry->keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) );
-
-	entry->keyframes->x = 0.0;
-	entry->keyframes->y = 0.0;
-	entry->keyframes->z = 0.0;
-	entry->keyframes->heading = 0.0;
-	entry->keyframes->pitch = 0.0;
-	entry->keyframes->roll = 0.0;
-	entry->keyframes->scale_x = 1.0;
-	entry->keyframes->scale_y = 1.0;
-	entry->keyframes->scale_z = 1.0;
+    custom_3d_models.arneh_ah64d_cockpit =
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES].succeded &&
+		TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void set_scene_default ( struct OBJECT_3D_SCENE_DATABASE_ENTRY *scene )
-{
-	scene->number_of_sub_objects = 0;
-	scene->total_number_of_sub_objects = 0;
-	scene->number_of_keyframes = 0;
-}
-
-static void initialise_custom_scenes(const char* directory)
-{
-	int
-		objid;
-	char filename[1024];
-	object_3d_scene_database_entry* scene;
-
-	custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
-
-	// internal occkpit
-	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT];
-	set_scene_default ( scene );
-	scene->number_of_sub_objects = 1;  // the entire cockpit
-	scene->total_number_of_sub_objects = 9;  // main object, 2 invisible objects which just contain other objects, and 6 actual objects
-
-	scene->object_dissolve = 1.0;
-	scene->radius = 10.0;
-	scene->object_approximation_scale = 1.0;
-
-	scene->sub_objects = safe_malloc(sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-
-	memset(scene->sub_objects, 0, sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-
-	// the sub-objects:
-	{
-		object_3d_database_entry* entry = &scene->sub_objects[0];
-		object_3d_database_entry* main_entry = entry;
-
-		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-cockpit.eeo", directory);
-		objid = get_next_object_id();
-		if (read_object(&objects_3d_data[objid], filename))
-		{
-			initialise_sub_object(entry, objid);
-
-			entry->number_of_sub_objects = 7;  // one for view + one for co-pilot helmet + 4 for the throttles + one for radio switches
-			entry->sub_objects = &scene->sub_objects[1];
-
-			// make an empty sub-object for views
-			entry = &main_entry->sub_objects[0];
-			entry->parent = main_entry;
-
-			initialise_sub_object(entry, 0);
-
-			// make sub-objects for the throttles
-			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-left.eeo", directory);
-			objid = get_next_object_id();
-			if (read_object(&objects_3d_data[objid], filename))
-			{
-				int
-					left_throttle = objid,
-					right_throttle = get_next_object_id();
-
-				snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-throttle-right.eeo", directory);
-				if (read_object(&objects_3d_data[right_throttle], filename))
-				{
-					int i;
-
-					for (i= 0; i < 4; i++)
-					{
-						entry = &main_entry->sub_objects[i+1];
-						entry->parent = main_entry;
-
-						// left throttle in position 0 and 2, right in 1 and 3
-						initialise_sub_object(entry, (i % 2) ? right_throttle : left_throttle);
-					}
-
-					custom_3d_models.arneh_ah64d_cockpit = TRUE;
-				}
-			}
-
-			if (!custom_3d_models.arneh_ah64d_cockpit)
-				return;
-
-			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-helmet.eeo", directory);
-			objid = get_next_object_id();
-			if (read_object(&objects_3d_data[objid], filename))
-			{
-				entry = &main_entry->sub_objects[5];
-				entry->parent = main_entry;
-
-				// first an invisible object for the torso
-				initialise_sub_object(entry, 0);
-				entry->number_of_sub_objects = 1;
-				entry->sub_objects = &main_entry->sub_objects[7];
-
-				// then the helmet
-				entry = &main_entry->sub_objects[7];
-				initialise_sub_object(entry, objid);
-				entry->parent = &main_entry->sub_objects[5];
-			}
-			else
-				custom_3d_models.arneh_ah64d_cockpit = FALSE;
-
-			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-radio-switches.eeo", directory);
-			objid = get_next_object_id();
-			if (read_object(&objects_3d_data[objid], filename))
-			{
-				// the radio switches
-				entry = &main_entry->sub_objects[6];
-				entry->parent = main_entry;
-				initialise_sub_object(entry, objid);
-				entry->default_visibility = TRUE;
-			}
-			else
-				custom_3d_models.arneh_ah64d_cockpit = FALSE;
-		}
-	}
-
-	if (!custom_3d_models.arneh_ah64d_cockpit)
-		return;
-
-	// external part of cockpit
-	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE];
-	set_scene_default ( scene );
-
-	scene->number_of_sub_objects = 1;
-	scene->total_number_of_sub_objects = 2;
-
-	scene->object_dissolve = 1.0;
-	scene->radius = 10.0;
-	scene->object_approximation_scale = 1.0;
-
-	scene->sub_objects = safe_malloc(sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-
-	memset(scene->sub_objects, 0, sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-
-	// the sub-objects:
-	{
-		object_3d_database_entry* entry = &scene->sub_objects[0];
-
-		custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
-
-		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-nose.eeo", directory);
-		objid = get_next_object_id();
-		if (read_object(&objects_3d_data[objid], filename))
-		{
-			initialise_sub_object(entry, objid);
-
-			snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-pnvs.eeo", directory);
-			objid = get_next_object_id();
-			if (read_object(&objects_3d_data[objid], filename))
-			{
-				entry->number_of_sub_objects = 1;
-				entry->sub_objects = &scene->sub_objects[1];
-
-				entry->sub_objects[0].parent = entry;
-				entry = &entry->sub_objects[0];
-				initialise_sub_object(entry, objid);
-				custom_3d_models.arneh_ah64d_cockpit = TRUE;
-			}
-		}
-	}
-
-	// warning lights
-	scene = &objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT];
-	set_scene_default ( scene );
-
-	scene->number_of_sub_objects = 1;
-	scene->total_number_of_sub_objects = 1;
-
-	scene->object_dissolve = 1.0;
-	scene->radius = 10.0;
-	scene->object_approximation_scale = 1.0;
-
-	scene->sub_objects = safe_malloc(sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-	memset(scene->sub_objects, 0, sizeof(object_3d_database_entry) * scene->total_number_of_sub_objects);
-
-	// the sub-objects:
-	{
-		object_3d_database_entry* entry = &scene->sub_objects[0];
-
-		snprintf(filename, sizeof(filename) - 1, "%s\\objects\\ah-64d-cockpit\\ah-64d-fire-warning-light.eeo", directory);
-		objid = get_next_object_id();
-		if (read_object(&objects_3d_data[objid], filename))
-		{
-			initialise_sub_object(entry, objid);
-			entry->default_visibility = FALSE;  // light off by default
-		}
-		else
-			custom_3d_models.arneh_ah64d_cockpit = FALSE;  // don't set it to true unless we find all subobjects
-	}
-
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 #define DEBUG_DB_INT(var)  fprintf(out, "%s" #var ": %d\n", indent, db_entry->var)
 #define DEBUG_DB_HEX(var)  fprintf(out, "%s" #var ": %08X\n", indent, db_entry->var)
@@ -2024,9 +1808,6 @@ void initialise_3d_objects ( const char *directory )
 
 	fclose ( fp );
 
-	// arneh - this will initialize new custom scenes
-	initialise_custom_scenes(directory);
-
 	/* 06FEB08 Casm Import of 3D scenes BEGIN */
 	{
 		int
@@ -2073,6 +1854,8 @@ void initialise_3d_objects ( const char *directory )
 		_findclose ( handle );
 	}
 	/* 06FEB08 Casm Import of 3D scenes END */
+
+	initialise_custom_scenes();
 
 	{
 		// reallocates surfaces memory

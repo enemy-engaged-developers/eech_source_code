@@ -309,6 +309,9 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 	 * sub objects follow the object itself directly */
 	struct OBJECT_3D_DATABASE_ENTRY
 		*sub_objects;
+
+	int
+		succeded;
 };
 
 typedef struct OBJECT_3D_SCENE_DATABASE_ENTRY object_3d_scene_database_entry;

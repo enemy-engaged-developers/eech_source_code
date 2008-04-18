@@ -39,7 +39,7 @@ static float
 	requested_bend,
 	requested_heading,
 	requested_pitch;
-	
+
 static head_looking_states
 	looking_state;
 
@@ -91,7 +91,7 @@ static int set_new_static_direction(float cur_heading, float cur_pitch)
 		break;
 	case CPG_ANIM_STATE_LOOK_UP:
 		requested_heading = (-rad(20.0) + (rad(40.0)) * frand1());
-		requested_pitch = -rad(40.0) + (rad(50.0)) * frand1();		
+		requested_pitch = -rad(40.0) + (rad(50.0)) * frand1();
 		break;
 	}
 
@@ -125,7 +125,7 @@ static int set_new_follow_eo_state(float cur_heading, float cur_pitch)
 	current_movement_rate_pitch = current_movement_rate_pitch;
 
 	requested_bend = MIN_BEND;
-	
+
 	return TRUE;
 }
 
@@ -167,9 +167,9 @@ static int set_new_ort_position(void)
 
 static void switch_head_aiming_state(object_3d_sub_instance* helmet_inst)
 {
-	int	
+	int
 		valid_state = FALSE;
-	
+
 	float
 		cur_heading = helmet_inst->relative_heading,
 		cur_pitch = helmet_inst->relative_pitch,
@@ -205,7 +205,7 @@ static void switch_head_aiming_state(object_3d_sub_instance* helmet_inst)
 			break;
 		}
 	};
-	
+
 	time_until_state_change = get_reset_co_pilot_anim_delay() * state_multiplier;
 
 	#if DEBUG_MODULE
@@ -217,15 +217,34 @@ static void switch_head_aiming_state(object_3d_sub_instance* helmet_inst)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void animate_co_pilot_head(object_3d_sub_instance* helmet_inst)
+void animate_co_pilot_head(object_3d_instance* cockpit_inst3d)
 {
 	float
 		diff = 0.0,
 		dt = get_delta_time(),
 		delta;
+	object_3d_sub_instance
+		*torso_inst,
+		*helmet_inst;
+	object_3d_sub_object_search_data
+		search;
+
+	search.search_depth = 0;
+	search.search_object = cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WSO_CHEST;
+	if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+		return;
+	torso_inst = search.result_sub_object;
+
+	search.search_depth = 0;
+	search.search_object = cockpit_inst3d;
+	search.sub_object_index = OBJECT_3D_SUB_OBJECT_WSO_HEAD;
+	if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+		return;
+	helmet_inst = search.result_sub_object;
 
 	// don't display co-pilot's helmet when you are co-pilot. it's just in the way
-	helmet_inst->visible_object = get_crew_role() == CREW_ROLE_PILOT;
+	torso_inst->visible_object = helmet_inst->visible_object = get_crew_role() == CREW_ROLE_PILOT;
 
 	if (get_time_acceleration() == 0)
 		return;
@@ -252,14 +271,14 @@ void animate_co_pilot_head(object_3d_sub_instance* helmet_inst)
 	helmet_inst->relative_pitch = bound(helmet_inst->relative_pitch + delta, MIN_PITCH, MAX_PITCH);
 
 	// update torso bending
-	diff = requested_bend - helmet_inst->parent->relative_pitch;
+	diff = requested_bend - torso_inst->relative_pitch;
 	if (diff < 0.0)
 		delta = -MAX_BENDING_RATE * dt;
 	else if (diff > 0.0)
 		delta = MAX_BENDING_RATE * dt;
 	else
 		delta = 0.0;
-	helmet_inst->parent->relative_pitch = bound(helmet_inst->parent->relative_pitch + delta, 0.0, MAX_BEND);
+	torso_inst->relative_pitch = bound(torso_inst->relative_pitch + delta, 0.0, MAX_BEND);
 
 	time_until_state_change -= get_delta_time();
 }
@@ -268,7 +287,7 @@ void animate_co_pilot_head(object_3d_sub_instance* helmet_inst)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void initialise_co_pilot_head_animations(object_3d_sub_instance* helmet_inst)
+void initialise_co_pilot_head_animations(void)
 {
 	looking_state = CPG_ANIM_STATE_REST;
 
@@ -280,13 +299,4 @@ void initialise_co_pilot_head_animations(object_3d_sub_instance* helmet_inst)
 	requested_heading = 0.0;
 	requested_pitch = 5.0;
 	requested_bend = 0.0;
-
-	// parent is entire torso.  Torso bend forward to look through ORT
-	helmet_inst->parent->relative_pitch = MIN_BEND;
-	helmet_inst->parent->relative_position.x = 0.0;
-	helmet_inst->parent->relative_position.y = -0.80;
-	helmet_inst->parent->relative_position.z = 1.38;
-
-	// helmet is above pivot point of torse
-	helmet_inst->relative_position.y = 0.55;
 }
