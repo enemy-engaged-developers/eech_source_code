@@ -215,6 +215,7 @@ void update_common_attitude_dynamics (void)
 		attitude;
 
 	float
+		rotor_radius = current_flight_dynamics->main_rotor_diameter.value * 0.5,
 		angle,
 		rotor_edge_value,
 		motion_vector_magnitude,
@@ -400,7 +401,7 @@ void update_common_attitude_dynamics (void)
 
 		position.x = 0.0;
 		position.y = 0.0;
-		position.z = 7.299;
+		position.z = rotor_radius;
 	
 		add_dynamic_force ("Front rotor force", command_line_dynamics_main_rotor_lift * front_rotor_force, 0.0, &position, &rotor_direction, FALSE);
 	}
@@ -419,7 +420,7 @@ void update_common_attitude_dynamics (void)
 
 		position.x = 0.0;
 		position.y = 0.0;
-		position.z = -7.299;
+		position.z = -rotor_radius;
 	
 		add_dynamic_force ("Back rotor force", command_line_dynamics_main_rotor_lift * back_rotor_force, 0.0, &position, &rotor_direction, FALSE);
 	}
@@ -436,7 +437,7 @@ void update_common_attitude_dynamics (void)
 
 		left_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
 
-		position.x = 7.299;
+		position.x = rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 	
@@ -455,7 +456,7 @@ void update_common_attitude_dynamics (void)
 
 		right_rotor_force *= main_rotor_rpm_value / current_flight_dynamics->main_rotor_rpm.max;
 
-		position.x = -7.299;
+		position.x = -rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 	
@@ -682,7 +683,7 @@ void update_common_attitude_dynamics (void)
 
 				left_rotor_force *= command_line_dynamics_retreating_blade_stall_effect;
 			
-				position.x = 7.299;
+				position.x = rotor_radius;
 				position.y = 0.0;
 				position.z = 0.0;
 			
@@ -719,7 +720,7 @@ void update_common_attitude_dynamics (void)
 
 				right_rotor_force *= command_line_dynamics_retreating_blade_stall_effect;
 			
-				position.x = -7.299;
+				position.x = -rotor_radius;
 				position.y = 0.0;
 				position.z = 0.0;
 			
@@ -769,7 +770,7 @@ void update_common_attitude_dynamics (void)
 			}
 		}
 	
-		position.x = -7.299;
+		position.x = -rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 	
@@ -894,7 +895,7 @@ void update_common_attitude_dynamics (void)
 	
 		position.x = 0.0;
 		position.y = 0.0;
-		position.z = 7.299;
+		position.z = rotor_radius;
 	
 		direction.x = 0.0;
 		direction.y = -1.0;
@@ -910,7 +911,7 @@ void update_common_attitude_dynamics (void)
 		reaction_force = roll_inertia_value *
 							(current_flight_dynamics->roll.delta + current_flight_dynamics->main_rotor_roll_angle.delta);
 	
-		position.x = 7.299;
+		position.x = rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 	
@@ -1001,10 +1002,6 @@ void update_common_attitude_dynamics (void)
 			position.y = 0.0;
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
-			//Werewolf 3 Jan 04
-			if (command_line_dynamics_advanced_flight_model == TRUE)
-				this_reaction_force *= 0.6;
-
 			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
 		}
 	}
@@ -1029,15 +1026,11 @@ void update_common_attitude_dynamics (void)
 	
 		position.x = 0.0;
 		position.y = 0.0;
-		position.z = 7.299;
+		position.z = rotor_radius;
 	
 		direction.x = 0.0;
 		direction.y = -1.0;
 		direction.z = 0.0;
-
-		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
-			reaction_force *= 0.6;
 
 		add_dynamic_force ("Realign force (X axis)", reaction_force, 0.0, &position, &direction, FALSE);
 	}
@@ -1066,7 +1059,7 @@ void update_common_attitude_dynamics (void)
 
 		position.x = 0.0;
 		position.y = 0.0;
-		position.z = 7.299;
+		position.z = rotor_radius;
 	
 		direction.x = 0.0;
 		direction.y = 0.0;
@@ -1091,7 +1084,7 @@ void update_common_attitude_dynamics (void)
 			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0);
 		}
 
-		position.x = 7.299;
+		position.x = rotor_radius;
 		position.y = 0.0;
 		position.z = 0.0;
 	
@@ -1232,7 +1225,7 @@ void update_common_attitude_dynamics (void)
 
 			position.x = 0.0;
 			position.y = 0.0;
-			position.z = 7.299;
+			position.z = rotor_radius;
 		
 			multiply_matrix3x3_vec3d (&world_position, current_flight_dynamics->attitude, &position);
 	
@@ -1289,7 +1282,7 @@ void update_common_attitude_dynamics (void)
 	
 			position.x = 0.0;
 			position.y = 0.0;
-			position.z = -7.299;
+			position.z = -rotor_radius;
 		
 			multiply_matrix3x3_vec3d (&world_position, current_flight_dynamics->attitude, &position);
 	
@@ -1343,7 +1336,7 @@ void update_common_attitude_dynamics (void)
 			float
 				tuning_value = 0.1;
 	
-			position.x = 7.299;
+			position.x = rotor_radius;
 			position.y = 0.0;
 			position.z = 0.0;
 	
@@ -1399,7 +1392,7 @@ void update_common_attitude_dynamics (void)
 			float
 				tuning_value = 0.1;
 	
-			position.x = -7.299;
+			position.x = -rotor_radius;
 			position.y = 0.0;
 			position.z = 0.0;
 		
@@ -1519,7 +1512,7 @@ void update_common_attitude_dynamics (void)
 	}
 	////////////////////////////////////////////
 	
-	if (0 && fixed_collision_count)
+	if (fixed_collision_count)
 	{
 		
 		float
