@@ -1973,7 +1973,6 @@ void initialise_3d_sub_object ( FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *paren
 	sub_object->sub_object_approximation_out_level = sub_object_approximation_out_level;
 
 	fread ( &flag, sizeof ( int ), 1, fp );
-	ASSERT ( !sceneid || !flag );
 
 	if ( flag )
 	{
