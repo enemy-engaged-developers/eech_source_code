@@ -12,6 +12,7 @@
 #include "names.cpp"
 #include "textures.cpp"
 #include "scenes.cpp"
+#include "trans.cpp"
 #include "lws_exp.cpp"
 
 int main(void)
@@ -24,7 +25,8 @@ int main(void)
  const AllNames names;
  const Objects objects;
  const Scenes scenes(objects);
- LwsExport lwsexp(eet, names, objects, scenes);
+ SimpleTranslator translator;
+ LwsExport lwsexp(names, scenes.GetCameras(), translator);
 
  mkdir("\\TEXTURES");
  TexturesExporter textures;

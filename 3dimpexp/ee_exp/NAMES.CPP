@@ -9,12 +9,16 @@ class Names
  Array<Name> names;
 
  public:
- Names(const char* filename)
+ Names(const char* filename = "")
  {
   Name name;
   FILE* file = fopen(filename, "r");
   if (!file)
-   return;
+   {
+    Name name = { "INVALID NAME" };
+    names.Append(name);
+    return;
+   }
   while (fgets(name.name, sizeof(name.name), file) && *name.name)
    {
     name.name[strlen(name.name) - 1] = '\0';
@@ -30,6 +34,17 @@ class Names
   if (index >= !names)
    return "NO NAME";
   return names[index].name;
+ }
+ unsigned operator += (const char* name)
+ {
+  for (unsigned i = 0; i < !names; i++)
+   if (!strcmp(names[i].name, name))
+    return i;
+
+  Name new_name;
+  strcpy(new_name.name, name);
+  names.Append(new_name);
+  return !names - 1;
  }
 };
 

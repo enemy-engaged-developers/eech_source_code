@@ -7,7 +7,7 @@ struct sub_object_key
 {
  unsigned short int sub_object_index;
  unsigned char number_of_keyframes, number_of_object_dissolve_keyframes;
- unsigned char default_visibility:1, collision_contribution:1;
+ unsigned char collision_contribution:1;
  struct OBJECT_3D_SUB_OBJECT_KEYFRAME *keyframes;
  struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME *object_dissolve_keyframes;
  int flag;
@@ -53,7 +53,6 @@ int sub_object_suits(sub_object* subo, struct OBJECT_3D_DATABASE_ENTRY* sub, int
   return 0;
  CH_EQ(number_of_keyframes)
  CH_EQ(number_of_object_dissolve_keyframes)
- //CH_EQ(default_visibility)
  CH_EQ(collision_contribution)
  CH_EQ(object_dissolve)
  CH_EQ(flag)
@@ -133,7 +132,6 @@ void sub_object_add(sub_object* subo, int number_of_sub_objects, struct OBJECT_3
     added->key.sub_object_index = sub_object_index;
     AS(number_of_keyframes)
     AS(number_of_object_dissolve_keyframes)
-    AS(default_visibility)
     AS(collision_contribution)
     AS(keyframes)
     AS(object_dissolve_keyframes)
@@ -172,9 +170,9 @@ void ExportObject(FILE* fp, int index, int sub_object_index, const char* special
  current++;
  if (index)
 #ifdef SCENE_3
-  fprintf(fp, "LoadObjectLayer 1 %04X.LWO\n", index);
+  fprintf(fp, "LoadObjectLayer 1 %s.LWO\n", translator(index));
 #else
-  fprintf(fp, "LoadObjectLayer 1 %08X %04X.LWO\n", 0x10000000 + current, index);
+  fprintf(fp, "LoadObjectLayer 1 %08X %s.LWO\n", 0x10000000 + current, translator(index));
 #endif
  else
   {
@@ -323,9 +321,9 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
    for (int i = 0; i < G_scene->number_of_cameras; i++)
     {
      struct OBJECT_3D_SCENE_CAMERA_INFO* s = &G_scene->cameras[i];
-     if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= scenes.total_number_of_cameras)
+     if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= cameras.GetNumberOfCameras())
       error("Invalid camera index\n");
-     struct OBJECT_3D_SCENE_CAMERA* c = &scenes.objects_3d_camera_database[s->camera_index];
+     const struct OBJECT_3D_SCENE_CAMERA* c = &cameras.GetCamera(s->camera_index);
      if (c->target_sub_object_id == subo->key.sub_object_index)
       {
        found = true;
@@ -348,7 +346,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
     {
      fprintf(fp, "%f\n", G_scene->approximations[subo->lods[i].sub_object_approximation_in_level - 2].distance);
      if (subo->lods[i].index)
-      fprintf(fp, "\"%04X.LWO\"\n", subo->lods[i].index);
+      fprintf(fp, "\"%s.LWO\"\n", translator(subo->lods[i].index));
      else
       fprintf(fp, "NullObject\n");
     }
@@ -396,14 +394,14 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  if (scene->shadow_polygon_object_index > 0)
   {
    ExportObject(fp, scene->shadow_polygon_object_index, 0, "SHADOW_OBJECT");
-   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 2.5 * scene->radius, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z };
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, 50, 0, 0, 0, 0, 0, scene->shadow_polygon_object_scale.x, scene->shadow_polygon_object_scale.y, scene->shadow_polygon_object_scale.z };
    ExportKeyFrames(fp, "Object", 7, 3, 1, &keyframe);
   }
 
  if (scene->collision_object_index > 0)
   {
    ExportObject(fp, scene->collision_object_index, 0, "COLLISION_OBJECT");
-   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -2.5 * scene->radius, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0 };
+   struct OBJECT_3D_SUB_OBJECT_KEYFRAME keyframe = { 0, 0, -50, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0 };
    ExportKeyFrames(fp, "Object", 7, 3, 1, &keyframe);
   }
 
@@ -432,7 +430,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
       {
        fprintf(fp, "%f\n", ap->distance);
        if (ap->object_number)
-        fprintf(fp, "\"%04X.LWO\"\n", ap->object_number);
+        fprintf(fp, "\"%s.LWO\"\n", translator(ap->object_number));
        else
         fprintf(fp, "NullObject\n");
       }
@@ -451,9 +449,6 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
     }
    fprintf(fp, "  Behaviors 1 2\n}\n");
   }
- /*else
-  if (scene->object_dissolve > 1E-2)
-   fprintf(fp, "ObjectDissolve %f\n", scene->object_dissolve);*/
 
  int root = current;
  memset(target_sub_object_index, 0, sizeof(target_sub_object_index));
@@ -482,9 +477,9 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  for (int i = 0; i < scene->number_of_cameras; i++)
   {
    struct OBJECT_3D_SCENE_CAMERA_INFO* s = &scene->cameras[i];
-   if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= scenes.total_number_of_cameras)
+   if (s->camera_name_index < 0 || (unsigned)s->camera_name_index >= !names.Cameras || s->camera_index >= cameras.GetNumberOfCameras())
     error("Invalid camera index\n");
-   struct OBJECT_3D_SCENE_CAMERA* c = &scenes.objects_3d_camera_database[s->camera_index];
+   const struct OBJECT_3D_SCENE_CAMERA* c = &cameras.GetCamera(s->camera_index);
 #ifdef SCENE_3
    fprintf(fp, "\nAddCamera\nCameraName %s\n", names.Cameras[s->camera_name_index]);
 #else
@@ -505,16 +500,15 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
 }
 
 
- EET& eet;
  const AllNames& names;
- const Objects& objs;
- const Scenes& scenes;
+ const Cameras& cameras;
  typedef Array<int> ObjectSubobject;
+ Translator& translator;
 
  public:
 
- LwsExport(EET& eet, const AllNames& names, const Objects& objects, const Scenes& scenes)
-  : eet(eet), names(names), objs(objects), scenes(scenes)
+ LwsExport(const AllNames& names, const Cameras& cameras, Translator& translator)
+  : names(names), cameras(cameras), translator(translator)
  {
  }
 

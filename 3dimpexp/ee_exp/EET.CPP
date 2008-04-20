@@ -13,17 +13,18 @@ class EET
  Array<Texture> textures;
  unsigned long index;
  char textures_drive;
+ const char* extention;
 
  public:
 
- EET(char drive = 'D');
+ EET(char drive = 'D', const char* ext = "tga");
  void Clear(void);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex);
  unsigned Append(const char* name);
 };
 
-EET::EET(char drive)
- : index(0), textures_drive(drive)
+EET::EET(char drive, const char* ext)
+ : index(0), textures_drive(drive), extention(ext)
 {
  FILE* file;
 
@@ -64,7 +65,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
      chunk->AddData(4, &index);
      subchunk = new LWO_SubChunk("STIL", 0, NULL);
      chunk->AddSubChunk(subchunk);
-     sprintf(buf, "%c%s%s.tga", textures_drive, TEXTURES_ROOT, textures[textindex].name);
+     sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[textindex].name, extention);
      subchunk->AddBasicData(strlen(buf) + 1, buf);
      subchunk = new LWO_SubChunk("FLAG", 2, "\0\x80");
      chunk->AddSubChunk(subchunk);

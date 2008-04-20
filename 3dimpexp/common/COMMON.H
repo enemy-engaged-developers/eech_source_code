@@ -46,4 +46,23 @@ T max(T a, T b)
  return a > b ? a : b;
 }
 
+bool get_nul_string(char* buf, int buf_len, FILE* file)
+{
+ if (buf_len <= 0)
+  return false;
+ buf_len--;
+ while (int ch = fgetc(file))
+  {
+   if (ch == EOF)
+    return false;
+
+   *buf++ = toupper(ch);
+   buf_len--;
+   if (!buf_len)
+    break;
+  }
+ *buf = '\0';
+ return true;
+}
+
 #endif
