@@ -620,7 +620,7 @@ void LoadScene(FILE* fp, OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
   fseek(fp, sizeof(int), SEEK_CUR);
 
   fread(&tmp, sizeof(int), 1, fp);
-  fseek(fp, 35 * tmp, SEEK_CUR);
+  fseek(fp, 36 * tmp, SEEK_CUR);
 
   //
   // Read in the number of camera
