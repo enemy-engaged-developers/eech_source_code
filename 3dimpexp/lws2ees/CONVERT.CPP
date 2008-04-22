@@ -545,9 +545,9 @@ class Convert
   if (shadow)
    {
     fw(shadow->filename.c_str());
+    fw(shadow->motion.channels[6].keys.front().value);
     fw(shadow->motion.channels[7].keys.front().value);
     fw(shadow->motion.channels[8].keys.front().value);
-    fw(shadow->motion.channels[9].keys.front().value);
    }
   else
    {
