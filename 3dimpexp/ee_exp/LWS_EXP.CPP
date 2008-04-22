@@ -167,6 +167,7 @@ void sub_object_add(sub_object* subo, int number_of_sub_objects, struct OBJECT_3
 int current;
 void ExportObject(FILE* fp, int index, int sub_object_index, const char* special = NULL, const char* null_special = NULL)
 {
+ fprintf(fp, "\n");
  current++;
  if (index)
 #ifdef SCENE_3
@@ -251,8 +252,6 @@ int target_sub_object_index[OBJECT_3D_SUB_OBJECT_LAST];
 
 void sub_object_export(FILE* fp, sub_object* subo, int parent)
 {
- fprintf(fp, "\n");
-
  for (int i = 0; i < subo->number_of_lods - 1; i++)
   {
    int k = i;
@@ -386,9 +385,9 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  current = -1;
 
 #ifdef SCENE_3
- fprintf(fp, "LWSC\n3\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
+ fprintf(fp, "LWSC\n3\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
 #else
- fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n\n"); //FIXME
+ fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
 #endif
 
  if (scene->shadow_polygon_object_index > 0)
