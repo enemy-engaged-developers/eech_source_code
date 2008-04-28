@@ -487,7 +487,8 @@ void process_ini_file(int argc, char *argv[])
 			if (str_length > 0 && str_length < 128)
 				strcpy(command_line_game_initialisation_phase_path, q);
 //DYN
-		if (strcmp(p, "advancedfm")==0) command_line_dynamics_advanced_flight_model = d1; //Werewolf 3 Jan 04
+		if (strcmp(p, "advancedfm")==0) command_line_dynamics_flight_model = d1; //Werewolf 3 Jan 04
+		if (strcmp(p, "flight_model")==0) command_line_dynamics_flight_model = d1;
 		if (strcmp(p, "enginerealism")==0) command_line_dynamics_advanced_engine_model = d1; //Werewolf 5 Feb 06
 		if (strcmp(p, "enginestartup")==0) 	command_line_dynamics_engine_startup = d1; // arneh - july 2006
 		if (strcmp(p, "drbs")==0) 	command_line_dynamics_retreating_blade_stall_effect = v1;
@@ -769,7 +770,7 @@ void dump_ini_file(void)
 	fprintf(f,"wobbly-camera=%d					# Make external cameras move wobbly and smoother (0 = off, 1 = on) (def = 1)\n", command_line_wobbly_camera);
 
 	fprintf(f,"\n[Dynamics]\n");
-	fprintf(f,"advancedfm=%d		# different flight model Makes sideways flight easier, but not realistic (0 = off, 1 = on) (def = 0)\n",command_line_dynamics_advanced_flight_model);
+	fprintf(f,"flight_model=%d		# 0 is default flight model, 1 is werewolf's flight model, 2 is arneh's model with suspension (def = 2)\n",command_line_dynamics_flight_model);
 	fprintf(f,"enginerealism=%d		# realistic engine workload simulation model (0 = off, 1 = on) (def = 1)\n",command_line_dynamics_advanced_engine_model);
 	fprintf(f,"enginestartup=%d		# manual engine start up, off by default (0 = off, 1 = on) (def = 0)\n", command_line_dynamics_engine_startup);
 	fprintf(f,"drbs=%3.1f		# retreating blade stall, floating point scaling factor for RBS effect (default = 1.0)\n",command_line_dynamics_retreating_blade_stall_effect);

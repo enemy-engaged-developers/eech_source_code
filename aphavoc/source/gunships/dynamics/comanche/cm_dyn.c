@@ -66,6 +66,8 @@
 
 #include "project.h"
 
+#include "ai/parser/parsgen.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2128,7 +2130,7 @@ void update_attitude_dynamics (void)
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
 			//Werewolf 3 Jan 04
-			if (command_line_dynamics_advanced_flight_model == TRUE)
+			if (command_line_dynamics_flight_model == 1)
 				this_reaction_force *= 0.1;
 
 			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
@@ -2162,7 +2164,7 @@ void update_attitude_dynamics (void)
 		direction.z = 0.0;
 		
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.1;
 
 		add_dynamic_force ("Realign force (X axis)", reaction_force, 0.0, &position, &direction, FALSE);
@@ -2225,7 +2227,7 @@ void update_attitude_dynamics (void)
 		direction.z = -1.0 * sign;
 	
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.4;
 
 		add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
@@ -2256,7 +2258,7 @@ void update_attitude_dynamics (void)
 		direction.z = 0.0;
 	
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.8;
 
 		add_dynamic_force ("Lateral motion drag", reaction_force, 0.0, &position, &direction, FALSE);
