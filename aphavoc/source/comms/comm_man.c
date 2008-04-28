@@ -67,6 +67,8 @@
 #define INTERNAL_MODULES 1
 
 #include "project.h"
+#include "../ai/parser/parsgen.h"
+
 //-- Werewolf
 #include <winsock.h>
 //-- Werewolf
