@@ -96,6 +96,8 @@ void initialise_entity_databases (void)
 
 	initialise_fixed_3d_object_database ();
 
+	initialise_undercarriage_database();
+	
 // Xhit: added for downwash effect (030328)
 	//VJ 030508 if downwash 
 	if (command_line_downwash)
@@ -125,6 +127,8 @@ void deinitialise_entity_databases (void)
 	deinitialise_speech_index_table ();
 
 	report_non_entries_in_fixed_3d_object_database ();
+
+	deinitialise_undercarriage_database();
 
 // Xhit: added for downwash effect (030328)
 	//VJ 030508 if downwash 
