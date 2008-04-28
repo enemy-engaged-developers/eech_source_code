@@ -1553,8 +1553,6 @@ void update_common_attitude_dynamics (void)
 		#endif
 	}
 	
-	update_undercarriage_dynamics();
-	
 	// arneh - add vibration if rotor damaged
 	if (!model_landed && current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
 		create_rotor_vibration(1.2);
