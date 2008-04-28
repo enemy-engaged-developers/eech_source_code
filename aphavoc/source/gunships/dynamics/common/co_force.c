@@ -181,7 +181,7 @@ void deinitialise_dynamic_forces (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void add_dynamic_force (char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
+void add_dynamic_force (const char *name, float force, float duration, vec3d *position, vec3d *direction, int debug)
 {
 
 	int
@@ -1600,6 +1600,8 @@ void update_collision_dynamics (void)
 	}
 	else
 	{
+		if (command_line_dynamics_flight_model == 2)
+			reset_undercarriage_world_position();
 
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{

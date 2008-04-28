@@ -205,6 +205,8 @@ void initialise_flight_dynamics (entity *en)
 	//
 	//
 
+	initialise_common_dynamics();
+	
 	switch (get_global_dynamics_model ())
 	{
 
@@ -335,6 +337,8 @@ void initialise_flight_dynamics (entity *en)
 
 	initialise_flight_dynamics_input_devices ();
 
+	initialise_undercarriage_dynamics();
+	
 	add_update_function (update_flight_path, 10.0, 0.0);
 
 #if DEBUG_DYNAMICS
@@ -517,6 +521,8 @@ void initialise_flight_dynamics_collision_points (void)
 	{
 		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
 	}
+	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
+		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
 	else
 		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 
@@ -738,6 +744,7 @@ void deinitialise_flight_dynamics (void)
 
 	if (current_flight_dynamics)
 	{
+		deinitialise_undercarriage_dynamics();
 		
 		deinitialise_dynamic_forces ();
 
@@ -1232,16 +1239,21 @@ void update_gunship_dynamics (void)
 ////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
-
 			while (current_flight_dynamics->model_iterations --)
 			{
 
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hind_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (command_line_dynamics_flight_model == 2)
+					if (fixed_collision_count || moving_collision_count)
+						update_collision_dynamics ();
 			}
 
-			update_collision_dynamics ();
+			if (command_line_dynamics_flight_model != 2 || (!fixed_collision_count && !moving_collision_count))
+				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
 

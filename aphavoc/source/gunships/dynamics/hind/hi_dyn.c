@@ -66,6 +66,9 @@
 
 #include "project.h"
 
+#include "../common/co_undercarriage.h"
+#include "ai/parser/parsgen.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +88,9 @@ static float
 	back_g_e_force = 0.0,
 	front_g_e_force = 0.0,
 	this_reaction_force = 0.0;
+
+static vec3d
+	centre_of_gravity;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,7 +328,8 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->input_data.collective.max = 120;
 
 	current_flight_dynamics->input_data.cyclic_x_trim.value = 0.0;
-	current_flight_dynamics->input_data.cyclic_y_trim.value = 6.0;
+	current_flight_dynamics->input_data.cyclic_y_trim.value = 0.0;
+//	current_flight_dynamics->input_data.cyclic_y_trim.value = 6.0;
 
 	current_flight_dynamics->input_data.cyclic_x.min = -100.0;
 	current_flight_dynamics->input_data.cyclic_x.max = 100.0;
@@ -404,7 +411,7 @@ void set_dynamics_defaults (entity *en)
 
 	// main rotor characteristics
 
-	current_flight_dynamics->main_rotor_diameter.value = 14.63;
+	current_flight_dynamics->main_rotor_diameter.value = 17.3;
 	current_flight_dynamics->main_rotor_area.value = PI * pow ((current_flight_dynamics->main_rotor_diameter.value / 2.0), 2);
 
 	current_flight_dynamics->main_rotor_induced_air.value = 0.0;
@@ -444,7 +451,7 @@ void set_dynamics_defaults (entity *en)
 
 	// tail rotor characteristics
 
-	current_flight_dynamics->tail_rotor_diameter.value = 2.79;
+	current_flight_dynamics->tail_rotor_diameter.value = 3.9;
 
 	current_flight_dynamics->tail_rotor_rpm.value = 0.0;
 	current_flight_dynamics->tail_rotor_rpm.min = 0.0;
@@ -546,9 +553,19 @@ void set_dynamics_defaults (entity *en)
 	// apache at 	0.0, -0.2, -0.012
 
 	current_flight_dynamics->centre_of_gravity.x = 0.00;
-	current_flight_dynamics->centre_of_gravity.y = -0.2; 
-	current_flight_dynamics->centre_of_gravity.z = -0.022;
+	if (command_line_dynamics_flight_model == 2)
+	{
+		current_flight_dynamics->centre_of_gravity.y = -0.05; 
+		current_flight_dynamics->centre_of_gravity.z = -0.017;
+	}
+	else
+	{
+		current_flight_dynamics->centre_of_gravity.y = -0.2;
+		current_flight_dynamics->centre_of_gravity.z = -0.035;
+	}
 
+	current_flight_dynamics->centre_of_gravity = centre_of_gravity;
+	
 	// landing
 	// havoc at 	1.0, 3.0, 7.0, 10.0
 	// apache at 	0.75, 2.5, 6.0, 9.0
@@ -650,8 +667,14 @@ void update_hind_advanced_dynamics (void)
 
 	update_acceleration_dynamics ();
 
-	update_attitude_dynamics ();
-
+	if (command_line_dynamics_flight_model == 2)
+	{
+		update_common_attitude_dynamics();
+		update_undercarriage_dynamics();
+	}
+	else
+		update_attitude_dynamics ();
+	
 	resolve_dynamic_forces ();
 
 	update_dynamics_external_values ();
@@ -2164,7 +2187,7 @@ void update_attitude_dynamics (void)
 			position.z = -current_flight_dynamics->tail_boom_length.value;
 
 			//Werewolf 3 Jan 04
-			if (command_line_dynamics_advanced_flight_model == TRUE)
+			if (command_line_dynamics_flight_model == 1)
 				this_reaction_force *= 0.6;
 
 			add_dynamic_force ("Realign force (Y axis)", this_reaction_force, 0.0, &position, &direction, FALSE);
@@ -2198,7 +2221,7 @@ void update_attitude_dynamics (void)
 		direction.z = 0.0;
 
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.6;
 
 		add_dynamic_force ("Realign force (X axis)", reaction_force, 0.0, &position, &direction, FALSE);
@@ -2261,7 +2284,7 @@ void update_attitude_dynamics (void)
 		direction.z = -1.0 * sign;
 	
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.9;
 
 		add_dynamic_force ("Forward motion drag", reaction_force, 0.0, &position, &direction, FALSE);
@@ -2292,7 +2315,7 @@ void update_attitude_dynamics (void)
 		direction.z = 0.0;
 	
 		//Werewolf 3 Jan 04
-		if (command_line_dynamics_advanced_flight_model == TRUE)
+		if (command_line_dynamics_flight_model == 1)
 			reaction_force *= 0.9;
 
 		add_dynamic_force ("Lateral motion drag", reaction_force, 0.0, &position, &direction, FALSE);
@@ -2948,9 +2971,8 @@ void update_acceleration_dynamics (void)
 
 	// debug - for ships, VSI = 0 when landed.
 
-	if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+	if (command_line_dynamics_flight_model != 2 && !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
-
 		current_flight_dynamics->world_velocity_y.value = max (current_flight_dynamics->world_velocity_y.value, 0.0);
 		current_flight_dynamics->velocity_y.value = max (current_flight_dynamics->velocity_y.value, 0.0);
 		current_flight_dynamics->model_motion_vector.y = max (current_flight_dynamics->model_motion_vector.y, 0.0);
@@ -3013,10 +3035,7 @@ void update_acceleration_dynamics (void)
 
 void hind_restore_damage_values (void)
 {
-
-	current_flight_dynamics->centre_of_gravity.x = 0.00;
-	current_flight_dynamics->centre_of_gravity.y = -0.2; 
-	current_flight_dynamics->centre_of_gravity.z = -0.022;
+	current_flight_dynamics->centre_of_gravity = centre_of_gravity;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -170,7 +170,7 @@ extern void deinitialise_dynamic_forces (void);
 
 extern void update_collision_dynamics (void);
 
-extern void add_dynamic_force (char *name, float force, float duration, vec3d *position, vec3d *direction, int flag);
+extern void add_dynamic_force (const char *name, float force, float duration, vec3d *position, vec3d *direction, int flag);
 
 extern void update_dynamic_forces (void);
 
