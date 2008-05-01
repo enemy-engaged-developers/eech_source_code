@@ -1086,11 +1086,6 @@ static void initialise_custom_scenes(void)
 		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS].succeeded &&
 		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES].succeeded &&
 		TRUE;
-   
-    {
-    	FILE* f = fopen("pnvs2.txt", "w");
-    	debug_database_scene(&objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE], f);
-    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
