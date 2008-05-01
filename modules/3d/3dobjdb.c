@@ -1069,7 +1069,7 @@ static void read_scene ( FILE *fp )
 	initialise_scene_bounding_sub_objects ( scene_index );
 
 
-	objects_3d_scene_database[scene_index].succeded = !fail;
+	objects_3d_scene_database[scene_index].succeeded = !fail;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1079,13 +1079,18 @@ static void read_scene ( FILE *fp )
 static void initialise_custom_scenes(void)
 {
     custom_3d_models.arneh_ah64d_cockpit =
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT].succeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE].succeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT].succeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI].succeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS].succeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES].succeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT].succeeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE].succeeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT].succeeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI].succeeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS].succeeded &&
+		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES].succeeded &&
 		TRUE;
+   
+    {
+    	FILE* f = fopen("pnvs2.txt", "w");
+    	debug_database_scene(&objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE], f);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -311,7 +311,7 @@ struct OBJECT_3D_SCENE_DATABASE_ENTRY
 		*sub_objects;
 
 	int
-		succeded;
+		succeeded;
 };
 
 typedef struct OBJECT_3D_SCENE_DATABASE_ENTRY object_3d_scene_database_entry;
