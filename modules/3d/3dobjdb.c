@@ -1076,6 +1076,18 @@ static void read_scene ( FILE *fp )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// returns TRUE if all scenes between the parameters (including start and end index) have loaded successfully
+static int all_scenes_loaded_successfully(unsigned from_index, unsigned to_index)
+{
+	unsigned sceneno;
+
+	for (sceneno = from_index; sceneno <= to_index; sceneno++)
+		if (!objects_3d_scene_database[sceneno].succeeded)
+			return FALSE;
+
+	return TRUE;
+}
+
 static void initialise_custom_scenes(const char* directory)
 {
 	/* 06FEB08 Casm Import of 3D scenes BEGIN */
@@ -1128,16 +1140,8 @@ static void initialise_custom_scenes(const char* directory)
 	/* 06FEB08 Casm Import of 3D scenes END */
 
 	/** check which custom scenes have loaded correctly **/ 
-	
-	custom_3d_models.arneh_ah64d_cockpit = TRUE;
-	for (sceneno = OBJECT_3D_ARNEH_AH64D_COCKPIT; sceneno <= OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES; sceneno++)
-		if (!objects_3d_scene_database[sceneno].succeeded)
-			custom_3d_models.arneh_ah64d_cockpit = FALSE;
-    
-    custom_3d_models.arneh_mi24v_cockpit = TRUE;
-	for (sceneno = OBJECT_3D_MI24V_PILOT_COCKPIT; sceneno <= OBJECT_3D_MI24V_PILOT_COCKPIT; sceneno++)
-		if (!objects_3d_scene_database[sceneno].succeeded)
-			custom_3d_models.arneh_mi24v_cockpit = FALSE;
+	custom_3d_models.arneh_ah64d_cockpit = all_scenes_loaded_successfully(OBJECT_3D_ARNEH_AH64D_COCKPIT, OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
+	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_PILOT_COCKPIT);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
