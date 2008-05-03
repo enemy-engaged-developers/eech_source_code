@@ -1092,7 +1092,6 @@ static void initialise_custom_scenes(const char* directory)
 {
 	/* 06FEB08 Casm Import of 3D scenes BEGIN */
 	int
-		sceneno = 0,
 		rc = 0;
 	long
 		handle;
