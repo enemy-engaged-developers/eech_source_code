@@ -1076,16 +1076,68 @@ static void read_scene ( FILE *fp )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void initialise_custom_scenes(void)
+static void initialise_custom_scenes(const char* directory)
 {
-    custom_3d_models.arneh_ah64d_cockpit =
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_COCKPIT].succeeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_NOSE].succeeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_VCKPT_FIRE_WARNING_LIGHT].succeeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_ADI].succeeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_COMPASS].succeeded &&
-		objects_3d_scene_database[OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES].succeeded &&
-		TRUE;
+	/* 06FEB08 Casm Import of 3D scenes BEGIN */
+	int
+		sceneno = 0,
+		rc = 0;
+	long
+		handle;
+	struct _finddata_t
+		di;
+
+	char
+		filename[512];
+
+	snprintf ( filename, ARRAY_LENGTH(filename), "%s\\OBJECTS\\*.*", directory );
+	for ( rc = handle = _findfirst ( filename, &di ); rc != -1; rc = _findnext ( handle, &di ) )
+	{
+		int
+			rc;
+		long
+			handle;
+		struct _finddata_t
+			fi;
+
+		if ( !( di.attrib & _A_SUBDIR ) )
+			continue;
+
+		if ( !strcmp ( di.name, "." ) || !strcmp ( di.name, ".." ) )
+			continue;
+
+		snprintf ( filename, ARRAY_LENGTH(filename), "%s\\OBJECTS\\%s\\*.EES", directory, di.name );
+		for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
+		{
+			if ( fi.attrib & _A_SUBDIR )
+				continue;
+
+			sceneid = get_scene ( fi.name );
+			if ( !sceneid )
+				continue;
+
+			snprintf ( prefix, ARRAY_LENGTH(prefix), "%s\\OBJECTS\\%s", directory, di.name );
+			snprintf ( filename, ARRAY_LENGTH(filename), "%s\\%s", prefix, fi.name );
+
+			read_custom_scene ( filename );
+		}
+		_findclose ( handle );
+	}
+
+	_findclose ( handle );
+	/* 06FEB08 Casm Import of 3D scenes END */
+
+	/** check which custom scenes have loaded correctly **/ 
+	
+	custom_3d_models.arneh_ah64d_cockpit = TRUE;
+	for (sceneno = OBJECT_3D_ARNEH_AH64D_COCKPIT; sceneno <= OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES; sceneno++)
+		if (!objects_3d_scene_database[sceneno].succeeded)
+			custom_3d_models.arneh_ah64d_cockpit = FALSE;
+    
+    custom_3d_models.arneh_mi24v_cockpit = TRUE;
+	for (sceneno = OBJECT_3D_MI24V_PILOT_COCKPIT; sceneno <= OBJECT_3D_MI24V_PILOT_COCKPIT; sceneno++)
+		if (!objects_3d_scene_database[sceneno].succeeded)
+			custom_3d_models.arneh_mi24v_cockpit = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1808,54 +1860,7 @@ void initialise_3d_objects ( const char *directory )
 
 	fclose ( fp );
 
-	/* 06FEB08 Casm Import of 3D scenes BEGIN */
-	{
-		int
-			rc;
-		long
-			handle;
-		struct _finddata_t
-			di;
-
-		sprintf ( filename, "%s\\OBJECTS\\*.*", directory );
-		for ( rc = handle = _findfirst ( filename, &di ); rc != -1; rc = _findnext ( handle, &di ) )
-		{
-			int
-				rc;
-			long
-				handle;
-			struct _finddata_t
-				fi;
-
-			if ( !( di.attrib & _A_SUBDIR ) )
-				continue;
-
-			if ( !strcmp ( di.name, "." ) || !strcmp ( di.name, ".." ) )
-				continue;
-
-			sprintf ( filename, "%s\\OBJECTS\\%s\\*.EES", directory, di.name );
-			for ( rc = handle = _findfirst ( filename, &fi ); rc != -1; rc = _findnext ( handle, &fi ) )
-			{
-				if ( fi.attrib & _A_SUBDIR )
-					continue;
-
-				sceneid = get_scene ( fi.name );
-				if ( !sceneid )
-					continue;
-
-				sprintf ( prefix, "%s\\OBJECTS\\%s", directory, di.name );
-				sprintf ( filename, "%s\\%s", prefix, fi.name );
-
-				read_custom_scene ( filename );
-			}
-			_findclose ( handle );
-		}
-
-		_findclose ( handle );
-	}
-	/* 06FEB08 Casm Import of 3D scenes END */
-
-	initialise_custom_scenes();
+	initialise_custom_scenes(directory);
 
 	{
 		// reallocates surfaces memory
