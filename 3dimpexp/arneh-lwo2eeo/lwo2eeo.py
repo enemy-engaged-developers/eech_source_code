@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.4.2'
+VERSION = '1.5.0'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -35,7 +35,7 @@ def cross_prod(u, v):
 
 def dot_prod(u, v):
     'Computes the dot product of two vectors'
-    return reduce(operator.add, [x * y for x,y in zip(u,v)])
+    return reduce(operator.add, [(x * y) for (x,y) in zip(u,v)])
 
 class LinearVertices(Exception):
     pass
@@ -244,7 +244,8 @@ class Surface:
         self.reflectivity = 0.0
         self.specularity = 0.0
         self.luminosity = 0.0
-        self.translucency = 0.0
+        self.transparency = 0.0
+        self.translucency = 0.0   # translucency let's light through, without being transparent.  Like paper.
         self.smooth = 0   # If it's a smooth (round) surface which should have gauraud shading applied
 
         self.image = None        # texture used for surface
@@ -287,7 +288,10 @@ class Surface:
         "Returns colour in EEO-file format"
         colour = list(self.rgb_colour())
         colour.reverse()    # EEO wants it in bgr format
-        colour.append(255)  # include alpha
+
+        # add transparency as alpha
+        alpha = bound(int((1.0 - self.transparency) * 255), 0, 255)
+        colour.append(alpha)
         return struct.pack('<4B', *colour)
 
     def pack_refl_and_spec(self):
@@ -304,11 +308,10 @@ class Surface:
         flag16 |= FLAGS.POLYGONS   # only supports polygones for now...
         if self.luminosity > 0.01:
             flag16 |= FLAGS.LUMINOUS
-        if self.translucency > 0.01:
+        if self.translucency > 0.01 or self.transparency > 0.0:
             flag16 |= FLAGS.TRANSLUCENT
         if self.texture_index:
             flag16 |= FLAGS.TEXTURED
-
             # enable mipmapping and filtering for all textures for now, as I'm not sure
             # how to get that information from the LWO file...
             flag16 |= FLAGS.TEXTURE_MIPMAPPED
