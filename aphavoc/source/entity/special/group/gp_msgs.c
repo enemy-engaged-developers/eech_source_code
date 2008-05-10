@@ -80,6 +80,7 @@
 
 #include "ai/taskgen/taskgen.h"
 #include "ai/ai_misc/ai_route.h"
+#include "ai/highlevl/highlevl.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1143,11 +1144,12 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 	if (get_local_entity_int_value (task, INT_TYPE_VISIBLE_TASK))
 	{
 		send_text_message (receiver, task, MESSAGE_TEXT_SYSTEM_TASK_COMPLETED, NULL);
-
+#if 0
 		ai_log ("(TASK) %s mission %s by %s",
 					get_local_entity_string (task, STRING_TYPE_SHORT_DISPLAY_NAME),
 					task_debrief_result_names [get_local_entity_int_value (task, INT_TYPE_TASK_COMPLETED)],
 					get_local_entity_string (receiver, STRING_TYPE_FULL_NAME));
+#endif
 	}
 
 	//
