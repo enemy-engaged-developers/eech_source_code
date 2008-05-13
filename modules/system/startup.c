@@ -1392,13 +1392,15 @@ LONG WINAPI application_exception_handler ( LPEXCEPTION_POINTERS lpExceptionData
 
 		memory = ( DWORD * ) context_record->Esp;
 
-		for ( count = 0; count < 16; count++ )
+		for ( count = 0; count < 256; count++ )
 		{
 
 			if ( !IsBadReadPtr ( memory, 4 ) )
 			{
-
-				fprintf ( fp, "%08x\n", *memory );
+				if (*memory > 0x00400000 && *memory < 0x0100000)  // likely return address, useful for recreating call stack
+					fprintf ( fp, "%08x *\n", *memory );
+				else
+					fprintf ( fp, "%08x\n", *memory );
 			}
 			else
 			{
