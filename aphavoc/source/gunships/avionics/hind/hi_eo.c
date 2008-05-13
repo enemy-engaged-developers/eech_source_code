@@ -150,8 +150,6 @@ void get_hind_eo_centred_viewpoint (viewpoint *vp)
 		//
 
 		memcpy (&vp->position, &inst3d->vp.position, sizeof (vec3d));
-
-		debug_log ("OBJECT_3D_SUB_OBJECT_OPTICS missing from hind");
 	}
 
 	memcpy (&vp->attitude, &inst3d->vp.attitude, sizeof (matrix3x3));
