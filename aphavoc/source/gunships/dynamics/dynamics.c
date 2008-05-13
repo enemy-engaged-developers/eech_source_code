@@ -3539,7 +3539,6 @@ void update_engine_temperature_dynamics (int engine_number)
 	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
 	{
 		int probability = 5.0 * (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
-		debug_log("fire probability: %f", get_model_delta_time() * (float)probability);
 		if ((rand16() % (int)probability) == 0)
 			dynamics_damage_model (engine_fire, FALSE);
 	}
