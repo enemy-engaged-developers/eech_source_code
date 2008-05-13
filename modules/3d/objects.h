@@ -502,12 +502,14 @@ struct OBJECT_3D
 	struct POINT_3D_PLAIN_REFERENCE
 		*object_face_normal_references;
 
+	/* all texture UV coordinates */
 	struct OBJECT_3D_SHORT_TEXTURED_POINT
 		*surface_texture_points;
 
 	struct POINT_3D_PLAIN_REFERENCE
 		*surface_points;
 
+	/* point normals, used for smooth surfaces for calculating rounding */
 	struct POINT_3D_PLAIN_REFERENCE
 		*surface_point_normals;
 
