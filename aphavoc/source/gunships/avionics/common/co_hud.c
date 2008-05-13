@@ -161,9 +161,11 @@ void initialise_common_hud (void)
    set_rgb_colour (hud_colour_table[HUD_COL_BLUE1],       68,   109,  140, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_BLUE2],       15,    26,   72, 255);
    set_rgb_colour (hud_colour_table[HUD_COL_BLUE3],       49,    66,  109, 255);
-	
-	hud_colour = hud_colour_table[get_global_hud_colour ()];
-	
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		hud_colour = get_hind_hud_colour();
+	else
+		hud_colour = hud_colour_table[get_global_hud_colour ()];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,17 +190,19 @@ void update_common_hud (void)
 
 void set_next_hud_colour (void)
 {
-	hud_colours
-		col;
-		
-	col = get_global_hud_colour ();
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		hud_colour = get_next_hind_hud_colour();
+	else
+	{
+		hud_colours
+			col;
 
-	col = (++col <= NUM_HUD_COLOURS - 1) ? col : 0;
+		col = get_global_hud_colour ();
+		col = (++col <= NUM_HUD_COLOURS - 1) ? col : 0;
 
-	set_global_hud_colour (col);
-
-	hud_colour = hud_colour_table[col];	
-	
+		set_global_hud_colour (col);
+		hud_colour = hud_colour_table[col];	
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,16 +211,19 @@ void set_next_hud_colour (void)
 
 void set_prev_hud_colour (void)
 {
-	hud_colours
-		col;
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		hud_colour = get_prev_hind_hud_colour();
+	else
+	{
+		hud_colours
+			col;
 
-	col = get_global_hud_colour ();
+		col = get_global_hud_colour ();
+		col = (--col >= 0) ? col : NUM_HUD_COLOURS - 1;
 
-	col = (--col >= 0) ? col : NUM_HUD_COLOURS - 1;
-
-	set_global_hud_colour (col);
-
-	hud_colour = hud_colour_table[col];
+		set_global_hud_colour (col);
+		hud_colour = hud_colour_table[col];
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
