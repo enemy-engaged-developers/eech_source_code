@@ -729,7 +729,7 @@ void lase_range_for_ballistics_sight(void)
 	angle_of_drop = 0.0;
 
 	if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-		get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_drop, &time_of_flight, FALSE);
+		get_ballistic_pitch_deflection(wpn_type, range, current_flight_dynamics->pitch.value, &angle_of_drop, &time_of_flight, FALSE, TRUE);
 
 	ballistics_sight_calibrated_drop = angle_of_drop;
 }
@@ -759,7 +759,7 @@ float get_weapon_drop(entity_sub_types wpn_type)
 		if (weapon_database[wpn_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
 		{
 			angle_of_projection = 0.0;
-			get_ballistic_pitch_deflection(wpn_type, range, 0.0, &angle_of_projection, &time_of_flight, FALSE);
+			get_ballistic_pitch_deflection(wpn_type, range, source_position->y - target_position.y, &angle_of_projection, &time_of_flight, FALSE, FALSE);
 		}
 		else
 		{

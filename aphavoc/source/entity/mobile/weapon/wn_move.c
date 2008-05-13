@@ -1780,18 +1780,17 @@ void delete_ballistics_tables(void)
  * As we probably don't have the value for the exact range/pitch requested it
  * will make a weighted average of the closeset values we have.
  */
-int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_difference, float* aiming_pitch, float* time_of_flight, int simplified)
+int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float height_diff_or_pitch, float* aiming_pitch, float* time_of_flight, int simplified, int fixed_pitch)
 {
 	float
 		pitch_delta,
 		range_error,
 		range_delta,
 		drop_compensation = 0.0,
-		tof,
-		straight_pitch = -atan(height_difference / range);
+		straight_pitch = fixed_pitch ? height_diff_or_pitch : -atan(height_diff_or_pitch / range);
 	
 	int
-		iterations = (simplified ? 3 : 5),
+		iterations,
 		i,
 		pitch_index,
 		range_index;
@@ -1799,6 +1798,13 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	ASSERT(time_of_flight);
 	ASSERT(aiming_pitch);
 
+	if (fixed_pitch)
+		iterations = 1;
+	else if (simplified)
+		iterations = 3;
+	else
+		iterations = 5;
+	
 	if (!ballistics_table[wpn_type][0])
 	{
 		ASSERT(FALSE);
@@ -1806,14 +1812,21 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	}
 
 	ASSERT(range >= 0.0);
+	
+	if (range <= 0.1)
+	{
+		*aiming_pitch = straight_pitch;
+		*time_of_flight = 0.0;
+		return TRUE;
+	}
 
 	range = bound(range, 0.01, weapon_database[wpn_type].max_range);
 	range_index = (int)(range / RANGE_STEP);
 	range_error = range - (range_index * RANGE_STEP);
 	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]
 
-	#ifdef DEBUG_MODULE
-	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_difference);
+	#if DEBUG_MODULE
+	debug_log("range: %.0f (%.0f) closeness: %.02f, height_difference: %.0f", range, range_index*RANGE_STEP, range_delta, height_diff_or_pitch);
 	#endif
 
 	// refine drop_compensation - do it several times because as we adjust
@@ -1830,7 +1843,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		if (drop_compensation > rad(45.0))
 			return FALSE;
 
-		tof = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
+		*time_of_flight = ballistics_table[wpn_type][pitch_index][range_index].flight_time;
 	}
 
 	// average between next pitch and range:
@@ -1844,7 +1857,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 
 		// first average the next ranges
 		compensation_grid[0][0].drop_angle = drop_compensation;
-		compensation_grid[0][0].flight_time = tof;
+		compensation_grid[0][0].flight_time = *time_of_flight;
 
 		compensation_grid[0][1].drop_angle = ballistics_table[wpn_type][pitch_index][range_index+1].drop_angle;
 		compensation_grid[0][1].flight_time = ballistics_table[wpn_type][pitch_index][range_index+1].flight_time;
@@ -1866,7 +1879,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
 		*time_of_flight = (range_delta * pitch_compensation[0].flight_time) + ((1 - range_delta) * pitch_compensation[1].flight_time);
 
-		#ifdef DEBUG_MODULE
+		#if DEBUG_MODULE
 		debug_log("average over drop: (%.3f, %.3f, %.3f, %.3f) result: %.3f",
 			deg(compensation_grid[0][0].drop_angle), deg(compensation_grid[0][1].drop_angle),
 			deg(compensation_grid[1][0].drop_angle), deg(compensation_grid[1][1].drop_angle),

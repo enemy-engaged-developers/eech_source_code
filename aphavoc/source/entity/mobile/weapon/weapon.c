@@ -995,7 +995,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			while (number_of_iterations--)
 			{
 				int simplified = (number_of_iterations > 1);   // only calculate with highest accuracy the last time
-				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, simplified))
+				if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, simplified, FALSE))
 					return FALSE;
 				*intercept_point = new_intercept_point;
 
@@ -1035,7 +1035,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 			//
 
 			result = TRUE;
-			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, FALSE))
+			if (!get_ballistic_pitch_deflection(wpn_type, range, pitch_device_position->y - intercept_point->y, angle_of_projection, &time_of_flight, FALSE, FALSE))
 				return FALSE;
 		}
 	}
@@ -1629,7 +1629,7 @@ void update_entity_weapon_systems (entity *source)
 											range = 1000.0;   // use 1000 meters if unable to determine range
 
 										// adjust weapon elevation for range
-										if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE))
+										if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE))
 										{
 											matrix3x3 m;
 											float dx, dz;
