@@ -133,6 +133,9 @@ static unsigned
 static object_3d_short_textured_point*
 	hud_texture_uv_coordinates = NULL;
 
+rgb_colour
+	backup_sight_colour;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,49 +246,41 @@ static void draw_backup_sight(void)
 		nar_tick = 0.035,
 		wide_tick = 0.075;
 	
-	rgb_colour
-		col;
+	set_2d_pixel(0.0, 0.0, backup_sight_colour);
+	draw_2d_circle(0.0, 0.0, 0.15, backup_sight_colour);
+	draw_2d_circle(0.0, 0.0, 0.4, backup_sight_colour);
 	
-	col.red = 255;
-	col.green = 50;
-	col.blue = 0;
-	col.alpha = 255;
-	
-	set_2d_pixel(0.0, 0.0, col);
-	draw_2d_circle(0.0, 0.0, 0.15, col);
-	draw_2d_circle(0.0, 0.0, 0.4, col);
-	
-	draw_2d_line(0.0, 0.6, 0.0, 0.1, col);
-	draw_2d_line(0.0, -0.1, 0.0, -1.0, col);
-	draw_2d_line(0.8, 0.0, 0.1, 0.0, col);
-	draw_2d_line(-0.8, 0.0, -0.1, 0.0, col);
+	draw_2d_line(0.0, 0.6, 0.0, 0.1, backup_sight_colour);
+	draw_2d_line(0.0, -0.1, 0.0, -1.0, backup_sight_colour);
+	draw_2d_line(0.8, 0.0, 0.1, 0.0, backup_sight_colour);
+	draw_2d_line(-0.8, 0.0, -0.1, 0.0, backup_sight_colour);
 	
 	// horizontal tick marks
-	draw_2d_line(-wide_tick, 0.2, wide_tick, 0.2, col);
-	draw_2d_line(-wide_tick, -0.2, wide_tick, -0.2, col);
-	draw_2d_line(-wide_tick, -0.6, wide_tick, -0.6, col);
-	draw_2d_line(-wide_tick, -0.8, wide_tick, -0.8, col);
+	draw_2d_line(-wide_tick, 0.2, wide_tick, 0.2, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.2, wide_tick, -0.2, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.6, wide_tick, -0.6, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.8, wide_tick, -0.8, backup_sight_colour);
 
-	draw_2d_line(-nar_tick, 0.5, nar_tick, 0.5, col);
-	draw_2d_line(-nar_tick, 0.3, nar_tick, 0.3, col);
-	draw_2d_line(-nar_tick, -0.3, nar_tick, -0.3, col);
-	draw_2d_line(-nar_tick, -0.5, nar_tick, -0.5, col);
-	draw_2d_line(-nar_tick, -0.7, nar_tick, -0.7, col);
-	draw_2d_line(-nar_tick, -0.9, nar_tick, -0.9, col);
+	draw_2d_line(-nar_tick, 0.5, nar_tick, 0.5, backup_sight_colour);
+	draw_2d_line(-nar_tick, 0.3, nar_tick, 0.3, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.3, nar_tick, -0.3, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.5, nar_tick, -0.5, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.7, nar_tick, -0.7, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.9, nar_tick, -0.9, backup_sight_colour);
 	
 	// vertical tick marks
-	draw_2d_line(-0.6, wide_tick, -0.6, -wide_tick, col);
-	draw_2d_line(-0.2, wide_tick, -0.2, -wide_tick, col);
-	draw_2d_line( 0.2, wide_tick,  0.2, -wide_tick, col);
-	draw_2d_line( 0.6, wide_tick,  0.6, -wide_tick, col);
+	draw_2d_line(-0.6, wide_tick, -0.6, -wide_tick, backup_sight_colour);
+	draw_2d_line(-0.2, wide_tick, -0.2, -wide_tick, backup_sight_colour);
+	draw_2d_line( 0.2, wide_tick,  0.2, -wide_tick, backup_sight_colour);
+	draw_2d_line( 0.6, wide_tick,  0.6, -wide_tick, backup_sight_colour);
 
-	draw_2d_line(-0.7, nar_tick, -0.7, -nar_tick, col);
-	draw_2d_line(-0.5, nar_tick, -0.5, -nar_tick, col);
-	draw_2d_line(-0.3, nar_tick, -0.3, -nar_tick, col);
+	draw_2d_line(-0.7, nar_tick, -0.7, -nar_tick, backup_sight_colour);
+	draw_2d_line(-0.5, nar_tick, -0.5, -nar_tick, backup_sight_colour);
+	draw_2d_line(-0.3, nar_tick, -0.3, -nar_tick, backup_sight_colour);
 
-	draw_2d_line( 0.7, nar_tick,  0.7, -nar_tick, col);
-	draw_2d_line( 0.5, nar_tick,  0.5, -nar_tick, col);
-	draw_2d_line( 0.3, nar_tick,  0.3, -nar_tick, col);
+	draw_2d_line( 0.7, nar_tick,  0.7, -nar_tick, backup_sight_colour);
+	draw_2d_line( 0.5, nar_tick,  0.5, -nar_tick, backup_sight_colour);
+	draw_2d_line( 0.3, nar_tick,  0.3, -nar_tick, backup_sight_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -486,7 +481,14 @@ void draw_hind_hud_on_texture (void)
 		rgb_colour
 			clear_hud_colour;
 
-		set_rgb_colour (clear_hud_colour, hud_colour.r, hud_colour.g, hud_colour.b, 0);
+		if (backup_sight_active)
+		{
+			set_rgb_colour (clear_hud_colour, backup_sight_colour.r, backup_sight_colour.g, backup_sight_colour.b, 0);
+		}
+		else
+		{
+			set_rgb_colour (clear_hud_colour, hud_colour.r, hud_colour.g, hud_colour.b, 0);
+		}
 
 		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 
@@ -639,6 +641,43 @@ static int angles_to_hud_coordinates(float azimuth, float elevation, float* x, f
 	return TRUE;
 }
 
+static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* out_range)
+{
+#define MAX_RANGE 4000.0
+	static float
+		aim_range = 0.0,
+		angle_of_drop = 0.0;
+
+	float
+		time_of_flight,
+		triangulated_range,
+		range_diff,
+		height = current_flight_dynamics->radar_altitude.value,
+		pitch = current_flight_dynamics->pitch.value;
+
+	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
+	{
+		if (pitch > (angle_of_drop + rad(0.05)) || height < 2.0)
+			triangulated_range = MAX_RANGE;
+		else
+			triangulated_range = bound(height / tan(-pitch + angle_of_drop), 0.0, MAX_RANGE);
+		
+		range_diff = triangulated_range - aim_range;
+		// move the aiming range in gradual steps, so as not to come into a oscilating 
+		// state where it continousely overcorrects in alternating directions
+		aim_range += 0.25 * range_diff;
+
+		if (get_ballistic_pitch_deflection(weapon_sub_type, aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
+			angle_of_drop -= pitch;
+		else
+			angle_of_drop = 0.0;
+	}
+
+	
+	*out_range = aim_range;
+	return angle_of_drop;
+}
+
 static void display_weapon_information (void)
 {
 	entity_sub_types
@@ -665,19 +704,13 @@ static void display_weapon_information (void)
 			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND))
 		{
 			float
-				time_of_flight,
-				range = 1500.0,
-				pitch = current_flight_dynamics->pitch.value,
+				range,
 				x,y;
 				angle_of_drop = 0.0;
 				drop_hud_distance;
 				roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-			if (get_ballistic_pitch_deflection(weapon_sub_type, range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
-				angle_of_drop -= pitch;
-			else
-				angle_of_drop = 0.0;
-
+			angle_of_drop = get_ballistic_weapon_drop(weapon_sub_type, &range);
 			drop_hud_distance = atan(angle_of_drop) * hud_position_z / (0.5 * hud_height);
 			
 			y = cos(roll) * -drop_hud_distance;
@@ -760,6 +793,8 @@ static void initialise_hud_colours(void)
 	set_rgb_colour(hind_hud_colours[1],   128, 255, 48, 255);
 	set_rgb_colour(hind_hud_colours[2],    48,  64, 16, 255);
 	set_rgb_colour(hind_hud_colours[3],   255, 220, 64, 255);
+
+	set_rgb_colour(backup_sight_colour,  255, 50, 0, 255);
 
 	current_hud_colour = 0;
 	hud_colour = hind_hud_colours[current_hud_colour];
