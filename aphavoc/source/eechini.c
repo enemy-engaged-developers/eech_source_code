@@ -735,7 +735,7 @@ void dump_ini_file(void)
 	fprintf(f,"tsdpalette=%d		# TSD palette options (0 - 2) (def = 0)\n",command_line_tsd_palette);
 	fprintf(f,"tsdenemy=%d		# TSD showing red force blue force colours (0 = off, 1 = on) (def = 1)\n",command_line_tsd_enemy_colours);
 	fprintf(f,"tsddetail=%d		# TSD in high detail (0 = off, 1 = on) (def = 0)\n",global_tsd_detail); // VJ 061215 detailed TSD
-	fprintf(f,"texture_colour=%d	# Use texture colours directly. [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",command_line_texture_colour);	//VJ 050303 texture colour mod
+	fprintf(f,"texture_colour=%d	# Use texture colours and noisemaps directly. [WARNING!] Use only with correct texture packs. (0 = off, 1 = on, 2 = also use noisemap for higher resolution) (def = 0)\n",command_line_texture_colour);	//VJ 050303 texture colour mod
 	fprintf(f,"texture_filtering=%d	# [EXPERIMENTAL!] texture blending (reacts to anisotropic filter setting) (0 = off, 1 = on) (def = 0)\n",global_anisotropic);	//VJ 050530 AF filtering on/off
 	fprintf(f,"mipmapping=%d		# mipmapped textures (dds files). [WARNING!] Use only with correct texture packs. (0 = off, 1 = on) (def = 0)\n",global_mipmapping);	//VJ 050530 mipmapping
 	fprintf(f,"dynamic_water=%d		# dynamic water textures (0 = off, 1 = on) (def = 0)\n",global_dynamic_water);	//VJ 050817 dynamic water textures

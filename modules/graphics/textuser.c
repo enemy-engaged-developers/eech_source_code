@@ -330,16 +330,14 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 // void restore_default_textures( void );
 
 //VJ 050814 cleaned up differences between dds and bmp download
-int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
-void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES]);
-void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
-void clear_texture_override_names ( void );
-screen *load_dds_file_screen (const char *full_override_texture_filename, int step);
-screen *load_bmp_file_screen (const char *full_override_texture_filename);
-//VJ 050814 dynamic water
-//VJ 051226 changed function parameter to void
-void load_texture_water( void );
+static int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
+static int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
+static void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES]);
+static void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
+static void clear_texture_override_names ( void );
+static screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
+static screen *load_bmp_file_screen (const char *full_override_texture_filename);
+static void load_texture_water( void );
 static void initialize_terrain_texture_scales ( const char *mapname );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3542,7 +3540,7 @@ void load_warzone_override_textures ()
 	texture_colour_bak = command_line_texture_colour;
 
 
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 	{
 
 		//VJ 051223 removed string list with warzone names:
@@ -3815,7 +3813,7 @@ void load_texture_override_dds ( overridename system_texture_override_names[MAX_
 
 			//debug_log ("++OVERRIDES++ found dds file %s",full_override_texture_filename);
 
-			override_screen = load_dds_file_screen(full_override_texture_filename, 0);
+			override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
 
 			//VJ 050821 check if it worked
 			if (override_screen) {
@@ -3953,7 +3951,7 @@ void load_texture_water( void )
 
 		debug_log("water %d %d %s",placenr, i, filename);
 
-		override_screen = load_dds_file_screen(filename, 0);
+		override_screen = load_dds_file_screen(filename, 0, 1.0);
 
 		count = placenr;
 		system_texture_info[count].flags.contains_alpha = 1;
@@ -3992,7 +3990,7 @@ void load_texture_water( void )
 			}
 			if (current_map_info.water_info[i].type == 2){
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
-				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha);
+				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
 			}
 
 			if (override_screen) {
@@ -4013,7 +4011,7 @@ void load_texture_water( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //VJ 050814 load a mipmapped and alpha dds file and link to a screen
-screen *load_dds_file_screen (const char *full_override_texture_filename, int step)
+screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment)
 {
 		int
 			temp;
@@ -4104,9 +4102,9 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			{
 				for ( x = 0; x < width; x++ )
 				{
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = buffer[y*width*nrbyte + x*nrbyte + 2];
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = buffer[y*width*nrbyte + x*nrbyte + 1];
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = buffer[y*width*nrbyte + x*nrbyte + 0];
+					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 2] * gamma_adjustment), 255);
+					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 1] * gamma_adjustment), 255);
+					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 0] * gamma_adjustment), 255);
 				//add alpha layer if necessary
 				if (nrbyte == 4){
 					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 3] = min(255, max(0, buffer[y*width*nrbyte + x*nrbyte + 3]+step));
@@ -4523,10 +4521,6 @@ int add_new_texture(char* texture_name)
 		system_texture_names[number_of_system_textures][letter] = toupper(system_texture_names[number_of_system_textures][letter]);
 
 	add_texture_to_name_hash(number_of_system_textures);
-
-//	debug_log(texture_name);
-
-	debug_log("tex: %s: %d", texture_name, number_of_system_textures);
 
 	number_of_system_textures++;
 	return number_of_system_textures-1;

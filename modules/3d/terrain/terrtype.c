@@ -113,9 +113,9 @@ static void set_terrain_rendering_routines ( terrain_types type, terrain_polygon
 																void ( *render_word_unclipped ) ( int ),
 																void ( *render_byte_unclipped ) ( int ) );
 
-void set_terrain_type_textures ( terrain_types type, int texture, int texture2,
+void set_terrain_type_textures ( terrain_types type, int texture, int texture2, float noise_adjustment,
 											float xz_texture_scale, float y_texture_scale,
-											float xz_texture_scale2, float y_texture_scale2,
+											float xz_texture_scale2, float y_texture_scale2, 
 											int red, int green, int blue, surface_types surface_type );
 
 void set_terrain_textures ( terrain_types type,  int texture, int texture2 );
@@ -675,7 +675,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze	
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 	{
 
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_FLOOR, POLYGON_TYPE_FAN,
@@ -707,7 +707,6 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 		set_terrain_rendering_routines ( TERRAIN_TYPE_FOREST_TOP, POLYGON_TYPE_FAN,
 													draw_clipped_fan_word_face, draw_clipped_fan_byte_face,
 													draw_unclipped_fan_word_face, draw_unclipped_fan_byte_face );
-
 //very little difference between these		
 
 	   set_terrain_rendering_routines ( TERRAIN_TYPE_BUILT_UP_AREA1, POLYGON_TYPE_FAN,
@@ -767,7 +766,7 @@ void initialise_3d_terrain_rendering_routines ( int dual_pass )
 	}
 
 	//VJ 050321 texture colour mod
-	if (command_line_texture_colour == 0)
+	if (command_line_texture_colour)
 	switch ( current_terrain_version.map_number )
 	{
 
@@ -869,7 +868,6 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 
 		case 6:	// YEMEN
 		{
-
 			initialise_3d_yemen_terrain_types ();
 
 			break;
@@ -918,7 +916,7 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 		default:
 		{
 			
-			if (command_line_texture_colour == 0)
+			if (!command_line_texture_colour)
 				initialise_3d_georgia_terrain_types ();
 			else
 				initialise_3d_custom_map_terrain_types ();
@@ -930,7 +928,7 @@ void initialise_3d_terrain_map_specific_texture_indices ( void )
 	initialise_3d_terrain_types ();
 
 	//VJ 050314	texture colour mod
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_3d_custom_terrain_types();		
 	
 }
@@ -946,6 +944,7 @@ void initialise_3d_custom_terrain_types( void )
 {
 	int count = 0;
 	float sl, sld, sldd;
+	const float default_noise_detail = 32.0;
 	
 	for (count = 0; count < 64; count++)
 	if (current_map_info.texture_override_scales[count][0] > 0)
@@ -956,82 +955,82 @@ void initialise_3d_custom_terrain_types( void )
 		sldd = sl;	
 
 		//VJ 051001 sld equals sl but may not in future alpha blended display
-		if (index == terrain_texture_beach_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_beach );
-		if (index == terrain_texture_land_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, sld, sld, sldd, sldd,  255, 255, 255, terrain_surface_land);
-   	if (index == terrain_texture_altered_land1_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND1, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land1 );
-   	if (index == terrain_texture_altered_land2_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND2, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land2 );
-   	if (index == terrain_texture_altered_land3_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND3, terrain_texture_altered_land3_detail, terrain_texture_altered_land3_colour_pass, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land3 );
+		if (index == terrain_texture_beach_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_beach );
+		if (index == terrain_texture_land_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, default_noise_detail, sld, sld, sldd, sldd,  255, 255, 255, terrain_surface_land);
+   	if (index == terrain_texture_altered_land1_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND1, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, default_noise_detail, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land1 );
+   	if (index == terrain_texture_altered_land2_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND2, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, default_noise_detail, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land2 );
+   	if (index == terrain_texture_altered_land3_detail ) set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND3, terrain_texture_altered_land3_detail, terrain_texture_altered_land3_colour_pass, default_noise_detail, sld, sld, sldd, sldd, 255, 255, 255, terrain_surface_altered_land3 );
 
 
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
+		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255,terrain_surface_forest );
 		
-		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_forest);
    	
-   	if (index == terrain_texture_field1_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field1 );
-   	if (index == terrain_texture_field2_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD2, terrain_texture_field2_detail, terrain_texture_field2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field2 );
-   	if (index == terrain_texture_field3_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD3, terrain_texture_field3_detail, terrain_texture_field3_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field3 );
-   	if (index == terrain_texture_field4_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD4, terrain_texture_field4_detail, terrain_texture_field4_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field4 );
-   	if (index == terrain_texture_field5_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD5, terrain_texture_field5_detail, terrain_texture_field5_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field5 );
-   	if (index == terrain_texture_field6_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD6, terrain_texture_field6_detail, terrain_texture_field6_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field6 );
-   	if (index == terrain_texture_field7_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD7, terrain_texture_field7_detail, terrain_texture_field7_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field7 );
-   	if (index == terrain_texture_field8_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD8, terrain_texture_field8_detail, terrain_texture_field8_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field8 );
-   	if (index == terrain_texture_field9_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD9, terrain_texture_field9_detail, terrain_texture_field9_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field9 );
-   	if (index == terrain_texture_field10_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD10, terrain_texture_field10_detail, terrain_texture_field10_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field10 );
-   	if (index == terrain_texture_field11_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD11, terrain_texture_field11_detail, terrain_texture_field11_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field11 );
+   	if (index == terrain_texture_field1_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field1 );
+   	if (index == terrain_texture_field2_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD2, terrain_texture_field2_detail, terrain_texture_field2_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field2 );
+   	if (index == terrain_texture_field3_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD3, terrain_texture_field3_detail, terrain_texture_field3_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field3 );
+   	if (index == terrain_texture_field4_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD4, terrain_texture_field4_detail, terrain_texture_field4_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field4 );
+   	if (index == terrain_texture_field5_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD5, terrain_texture_field5_detail, terrain_texture_field5_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field5 );
+   	if (index == terrain_texture_field6_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD6, terrain_texture_field6_detail, terrain_texture_field6_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field6 );
+   	if (index == terrain_texture_field7_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD7, terrain_texture_field7_detail, terrain_texture_field7_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field7 );
+   	if (index == terrain_texture_field8_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD8, terrain_texture_field8_detail, terrain_texture_field8_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field8 );
+   	if (index == terrain_texture_field9_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD9, terrain_texture_field9_detail, terrain_texture_field9_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field9 );
+   	if (index == terrain_texture_field10_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD10, terrain_texture_field10_detail, terrain_texture_field10_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field10 );
+   	if (index == terrain_texture_field11_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_FIELD11, terrain_texture_field11_detail, terrain_texture_field11_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_field11 );
    	   	
-		if (index == terrain_texture_sea_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_sea );		
-		if (index == terrain_texture_river_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_river );		
-   	if (index == terrain_texture_reservoir_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_reservoir );
+		if (index == terrain_texture_sea_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_sea );		
+		if (index == terrain_texture_river_detail    ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_river );		
+   	if (index == terrain_texture_reservoir_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_reservoir );
 
 
-   	if (index == terrain_texture_road_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, sld, sld, sl, sl,  255, 255, 255, terrain_surface_road );
-   	if (index == terrain_texture_track_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_track );
-   	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
-   	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
+   	if (index == terrain_texture_road_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8.0, sld, sld, sl, sl,  255, 255, 255, terrain_surface_road );
+   	if (index == terrain_texture_track_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_track );
+   	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 8.0, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
+   	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
 
 		if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 		{
-			if (index == terrain_texture_builtup_area1_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1_infrared );
-			if (index == terrain_texture_builtup_area2_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2_infrared );
-			if (index == terrain_texture_builtup_area3_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_infrared_detail, terrain_texture_builtup_area3_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area3_infrared );
-			if (index == terrain_texture_builtup_area4_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4_infrared );
+			if (index == terrain_texture_builtup_area1_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1_infrared );
+			if (index == terrain_texture_builtup_area2_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2_infrared );
+			if (index == terrain_texture_builtup_area3_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_infrared_detail, terrain_texture_builtup_area3_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area3_infrared );
+			if (index == terrain_texture_builtup_area4_infrared_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4_infrared );
 		}
 		else
 		{
-			if (index == terrain_texture_builtup_area1_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1 );
-			if (index == terrain_texture_builtup_area2_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2 );
-			if (index == terrain_texture_builtup_area3_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_detail, terrain_texture_builtup_area3_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area3 );
-			if (index == terrain_texture_builtup_area4_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_detail, terrain_texture_builtup_area4_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4 );
+			if (index == terrain_texture_builtup_area1_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area1 );
+			if (index == terrain_texture_builtup_area2_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area2 );
+			if (index == terrain_texture_builtup_area3_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_detail, terrain_texture_builtup_area3_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area3 );
+			if (index == terrain_texture_builtup_area4_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_detail, terrain_texture_builtup_area4_colour_pass, default_noise_detail, sld, sld, sl, sl, 255, 255, 255, terrain_surface_builtup_area4 );
 		}
 
-   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_TOP, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
-   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_X, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
-   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_Z, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
-   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_TOP, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
-   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_X, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
-   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_Z, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
-   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
-   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_X, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
-   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_Z, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
-   	if (index == terrain_texture_rail_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL_BANK, terrain_texture_rail_bank_detail, terrain_texture_rail_bank_colour_pass, sld, sld, sl, sl, 255, 255, 255, terrain_surface_rail_bank );
+   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_TOP, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
+   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_X, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
+   	if (index == terrain_texture_hedge_detail      ) set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_Z, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_hedge );
+   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_TOP, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
+   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_X, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
+   	if (index == terrain_texture_wall_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_Z, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_wall );
+   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
+   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_X, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
+   	if (index == terrain_texture_trench_detail     ) set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_Z, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_trench );
+   	if (index == terrain_texture_rail_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL_BANK, terrain_texture_rail_bank_detail, terrain_texture_rail_bank_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_rail_bank );
 
 		//VJ 051001 textures that have a different vertical scale
 		sld = sl;   	
    	sldd = sld/2;  //river bank doisplays ok if vertical scale 0.5 of horizontal scale
    						//do not change because then all texture packs look strange
-   	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );   	
+   	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );   	
 
 		//VJ 051223 fixed forest side textures and scaling: index was wrong
 		sld = sl/2.4;				
 		// forest sides need separate scaling
 		sldd = sld/4;
 		//scale top-side forest texture between top and side
-		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass,    		sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass,    sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
-		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_top_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_top_detail, terrain_texture_forest_top_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_middle_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_middle_detail, terrain_texture_forest_middle_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
+		if (index == terrain_texture_forest_bottom_detail ) set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_bottom_detail, terrain_texture_forest_bottom_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_forest);
 			
 		//VJ 051001 dynamic water textures
 		if (global_dynamic_water)
@@ -1049,8 +1048,8 @@ void initialise_3d_custom_terrain_types( void )
 			sld = current_map_info.water_info[1].scale_top;
 			set_terrain_type_textures ( TERRAIN_TYPE_SEA, 
 					current_map_info.water_info[1].placenr, 
-					current_map_info.water_info[1].placenr+1+change_sea_texture, 
-					sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
+					current_map_info.water_info[1].placenr+1+change_sea_texture,
+					1.0, sld, sld, sl, sl, 255,255,255, terrain_surface_sea );		
 
 				
 			//desert campaigns can be dry, no flowing water on land, user should apply appropriate textures
@@ -1066,8 +1065,8 @@ void initialise_3d_custom_terrain_types( void )
 				sld = current_map_info.water_info[0].scale_top;
 				set_terrain_type_textures ( TERRAIN_TYPE_RIVER, 
 						current_map_info.water_info[0].placenr, 
-						current_map_info.water_info[0].placenr+1+change_river_texture, 
-						sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
+						current_map_info.water_info[0].placenr+1+change_river_texture,
+						1.0, sld, sld, sl, sl, 255,255,255, terrain_surface_river );		
 
 				//reservoir textures
 				if (delay_count % current_map_info.water_info[2].delay == 0) 	
@@ -1080,7 +1079,7 @@ void initialise_3d_custom_terrain_types( void )
 				set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, 
 						current_map_info.water_info[2].placenr, 
 						current_map_info.water_info[2].placenr+1+change_reservoir_texture, 
-						sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
+						1.0, sld, sld, sl, sl, 255,255,255, terrain_surface_reservoir );
 			}
 		}				
 	}
@@ -1092,105 +1091,110 @@ void initialise_3d_custom_terrain_types( void )
 
 void initialise_3d_terrain_types ( void )
 {
+	const float default_noise_detail = 32.0;
+	
+	set_3d_terrain_dual_pass_rendering(command_line_texture_colour == 2);
+	
 	// Xhit: the last argument in follwing calls sets the type of surface for the terrain. (030328)
 
-	set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, 256, 256, 2048, 2048, 4, 103, 115, terrain_surface_sea );
-   set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, 256, 256, 2048, 2048, 199, 172, 120, terrain_surface_beach );
-   set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, 256, 256, 2048, 2048, 61, 135, 75, terrain_surface_land);
+	set_terrain_type_textures ( TERRAIN_TYPE_SEA, terrain_texture_sea_detail, terrain_texture_sea_colour_pass, 1.0, 256, 256, 2048, 2048, 4, 103, 115, terrain_surface_sea );
+   set_terrain_type_textures ( TERRAIN_TYPE_BEACH, terrain_texture_beach_detail, terrain_texture_beach_colour_pass, 8.0, 256, 256, 2048, 2048, 199, 172, 120, terrain_surface_beach );
+   set_terrain_type_textures ( TERRAIN_TYPE_LAND, terrain_texture_land_detail, terrain_texture_land_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 61, 135, 75, terrain_surface_land);
 
 	//
 	// Forest textures
 	//
 
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_detail, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
-	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, 512, 512, 1024, 1024, 190, 170, 15, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_FLOOR, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_X, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_MID_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_SIDE_TOP_Z, terrain_texture_forest_detail, 8.0, 0, 512, 512, 0, 0, 80, 60, 30, terrain_surface_forest );
+	set_terrain_type_textures ( TERRAIN_TYPE_FOREST_TOP, terrain_texture_forest_detail, terrain_texture_forest_colour_pass, 8.0, 512, 512, 1024, 1024, 190, 170, 15, terrain_surface_forest );
 
 	//
 	// Builtup areas
 	//
 
-   set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_road );
-   set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_track );
+   set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8.0, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_road );
+   set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8.0, 8, 8, 1024, 1024, 255, 255, 255, terrain_surface_track );
 
 	if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 	{
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1_infrared );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2_infrared );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_infrared_detail, terrain_texture_builtup_area3_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area3_infrared );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area4_infrared );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_infrared_detail, terrain_texture_builtup_area1_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1_infrared );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_infrared_detail, terrain_texture_builtup_area2_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2_infrared );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_infrared_detail, terrain_texture_builtup_area3_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area3_infrared );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_infrared_detail, terrain_texture_builtup_area4_infrared_colour_pass, 1.0, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area4_infrared );
 	}
 	else
 	{
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1 );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2 );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_detail, terrain_texture_builtup_area3_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area3 );
-		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_detail, terrain_texture_builtup_area4_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area4 );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA1, terrain_texture_builtup_area1_detail, terrain_texture_builtup_area1_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area1 );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA2, terrain_texture_builtup_area2_detail, terrain_texture_builtup_area2_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area2 );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA3, terrain_texture_builtup_area3_detail, terrain_texture_builtup_area3_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area3 );
+		set_terrain_type_textures ( TERRAIN_TYPE_BUILT_UP_AREA4, terrain_texture_builtup_area4_detail, terrain_texture_builtup_area4_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_builtup_area4 );
 	}
 
-   set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, 256, 256, 2048, 2048, 4, 103, 115, terrain_surface_river);
-   set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, 1024, 1024, 2048, 2048, 4, 103, 115, terrain_surface_reservoir );
-   set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 256, 256, 0, 0, 38, 38, 38, terrain_surface_rail );
-   set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 256, 256, 2048, 2048, 61, 135, 75, terrain_surface_road_bank );
-   set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, 256, 256, 2048, 2048, 141, 122, 84, terrain_surface_river_bank );
-   set_terrain_type_textures ( TERRAIN_TYPE_RAIL_BANK, terrain_texture_rail_bank_detail, terrain_texture_rail_bank_colour_pass, 256, 256, 2048, 2048, 141, 122, 84, terrain_surface_rail_bank );
+   set_terrain_type_textures ( TERRAIN_TYPE_RIVER, terrain_texture_river_detail, terrain_texture_river_colour_pass, 1.0, 256, 256, 2048, 2048, 4, 103, 115, terrain_surface_river);
+   set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, 1.0, 1024, 1024, 2048, 2048, 4, 103, 115, terrain_surface_reservoir );
+   set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 8.0, 256, 256, 0, 0, 38, 38, 38, terrain_surface_rail );
+   set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 8.0, 256, 256, 2048, 2048, 61, 135, 75, terrain_surface_road_bank );
+   set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, 8.0, 256, 256, 2048, 2048, 141, 122, 84, terrain_surface_river_bank );
+   set_terrain_type_textures ( TERRAIN_TYPE_RAIL_BANK, terrain_texture_rail_bank_detail, terrain_texture_rail_bank_colour_pass, 8.0, 256, 256, 2048, 2048, 141, 122, 84, terrain_surface_rail_bank );
 
 	//
 	// Field types
 	//
 
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, 256, 256, 1024, 1024, 255, 255, 80, terrain_surface_field1 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD2, terrain_texture_field2_detail, terrain_texture_field2_colour_pass, 256, 256, 1024, 1024, 100, 70, 40, terrain_surface_field2 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD3, terrain_texture_field3_detail, terrain_texture_field3_colour_pass, 256, 256, 1024, 1024, 140, 70, 50, terrain_surface_field3 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD4, terrain_texture_field4_detail, terrain_texture_field4_colour_pass, 256, 256, 1024, 1024, 190, 170, 15, terrain_surface_field4 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD5, terrain_texture_field5_detail, terrain_texture_field5_colour_pass, 256, 256, 1024, 1024, 170, 140, 0, terrain_surface_field5 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD6, terrain_texture_field6_detail, terrain_texture_field6_colour_pass, 256, 256, 1024, 1024, 81, 165, 85, terrain_surface_field6 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD7, terrain_texture_field7_detail, terrain_texture_field7_colour_pass, 256, 256, 1024, 1024, 41, 115, 50, terrain_surface_field7 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD8, terrain_texture_field8_detail, terrain_texture_field8_colour_pass, 256, 256, 1024, 1024, 255, 255, 80, terrain_surface_field8 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD9, terrain_texture_field9_detail, terrain_texture_field9_colour_pass, 256, 256, 1024, 1024, 100, 70, 40, terrain_surface_field9 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD10, terrain_texture_field10_detail, terrain_texture_field10_colour_pass, 256, 256, 1024, 1024, 140, 70, 50, terrain_surface_field10 );
-   set_terrain_type_textures ( TERRAIN_TYPE_FIELD11, terrain_texture_field11_detail, terrain_texture_field11_colour_pass, 256, 256, 1024, 1024, 190, 170, 15, terrain_surface_field11 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD1, terrain_texture_field1_detail, terrain_texture_field1_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 255, 255, 80, terrain_surface_field1 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD2, terrain_texture_field2_detail, terrain_texture_field2_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 100, 70, 40, terrain_surface_field2 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD3, terrain_texture_field3_detail, terrain_texture_field3_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 140, 70, 50, terrain_surface_field3 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD4, terrain_texture_field4_detail, terrain_texture_field4_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 190, 170, 15, terrain_surface_field4 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD5, terrain_texture_field5_detail, terrain_texture_field5_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 170, 140, 0, terrain_surface_field5 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD6, terrain_texture_field6_detail, terrain_texture_field6_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 81, 165, 85, terrain_surface_field6 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD7, terrain_texture_field7_detail, terrain_texture_field7_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 41, 115, 50, terrain_surface_field7 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD8, terrain_texture_field8_detail, terrain_texture_field8_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 255, 255, 80, terrain_surface_field8 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD9, terrain_texture_field9_detail, terrain_texture_field9_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 100, 70, 40, terrain_surface_field9 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD10, terrain_texture_field10_detail, terrain_texture_field10_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 140, 70, 50, terrain_surface_field10 );
+   set_terrain_type_textures ( TERRAIN_TYPE_FIELD11, terrain_texture_field11_detail, terrain_texture_field11_colour_pass, default_noise_detail, 256, 256, 1024, 1024, 190, 170, 15, terrain_surface_field11 );
 
 	//
 	// Varied Land Types (e.g. snow, rock etc.)
 	//
 
-	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND1, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, 256, 256, 2048, 2048, 170, 140, 0, terrain_surface_altered_land1 );
-	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND2, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, 128, 128, 2048, 2048, 81, 165, 85, terrain_surface_altered_land2 );
-	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND3, terrain_texture_altered_land3_detail, terrain_texture_altered_land3_colour_pass, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_altered_land3 );
+	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND1, terrain_texture_altered_land1_detail, terrain_texture_altered_land1_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 170, 140, 0, terrain_surface_altered_land1 );
+	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND2, terrain_texture_altered_land2_detail, terrain_texture_altered_land2_colour_pass, default_noise_detail, 128, 128, 2048, 2048, 81, 165, 85, terrain_surface_altered_land2 );
+	set_terrain_type_textures ( TERRAIN_TYPE_ALTERED_LAND3, terrain_texture_altered_land3_detail, terrain_texture_altered_land3_colour_pass, default_noise_detail, 256, 256, 2048, 2048, 255, 255, 255, terrain_surface_altered_land3 );
 
 
 	//
 	// Hedges / Walls
 	//
 
-   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_TOP, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
-   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_X, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
-   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_Z, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
+   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_TOP, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
+   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_X, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
+   set_terrain_type_textures ( TERRAIN_TYPE_HEDGE_SIDE_Z, terrain_texture_hedge_detail, terrain_texture_hedge_colour_pass, 8.0, 40, 40, 0, 0, 190, 170, 15, terrain_surface_hedge );
 
-	set_terrain_type_textures ( TERRAIN_TYPE_WALL_TOP, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
-	set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_X, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
-	set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_Z, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
+	set_terrain_type_textures ( TERRAIN_TYPE_WALL_TOP, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
+	set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_X, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
+	set_terrain_type_textures ( TERRAIN_TYPE_WALL_SIDE_Z, terrain_texture_wall_detail, terrain_texture_wall_colour_pass, 8.0, 5, 5, 0, 0, 255, 255, 255, terrain_surface_wall );
 
-   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
-   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_X, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
-   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_Z, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
+   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
+   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_X, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
+   set_terrain_type_textures ( TERRAIN_TYPE_TRENCH_SIDE_Z, terrain_texture_trench_detail, terrain_texture_trench_colour_pass, 8.0, 256, 256, 0, 0, 190, 170, 15, terrain_surface_trench );
 
 	//
 	// All the types that are used in the terrain generation tool
 	//
 
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_BEACH_MID,			0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_FRINGE,				0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_POWER_LINE,		0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_TELEPHONE_LINE,	0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_BEACH_MID,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_FRINGE,				0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_POWER_LINE,		0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_TELEPHONE_LINE,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1300,7 +1304,7 @@ void initialise_3d_thailand_terrain_types ( void )
 	terrain_texture_trench_colour_pass						= 0;
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -1466,7 +1470,7 @@ void initialise_3d_cuba_terrain_types ( void )
 	terrain_texture_trench_colour_pass						= 0;
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -1633,7 +1637,7 @@ void initialise_3d_georgia_terrain_types ( void )
 	terrain_texture_trench_colour_pass						= 0;
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 	
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -1797,7 +1801,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -1961,7 +1965,7 @@ void initialise_3d_yemen_terrain_types ( void )
 	terrain_texture_trench_colour_pass						= 0;
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -2127,7 +2131,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 	terrain_texture_trench_colour_pass						= 0;
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -2210,24 +2214,26 @@ void set_terrain_rendering_routines ( terrain_types type, terrain_polygon_type p
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// texture is detail, texture2 is colour pass
-void set_terrain_type_textures ( terrain_types type, int texture, int texture2,
+// texture is detail, texture2 is colour pass (texture_colour == 0) or noisemap (texture_colour == 2).  Unused for texture_colour == 1
+void set_terrain_type_textures ( terrain_types type, int texture, int texture2, float noise_adjustment,
 											float xz_texture_size, float y_texture_size,
-											float xz_texture_size2, float y_texture_size2,
+											float xz_texture_size2, float y_texture_size2, 
 											int red, int green, int blue, surface_types surface_type )
 {
+	float
+		noisemap_scale_adjustment = (command_line_texture_colour == 2) ? noise_adjustment : 1.0;
 
 	if ( xz_texture_size == 0.0 )		xz_texture_size = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( y_texture_size == 0.0 )		y_texture_size = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( xz_texture_size2 == 0.0 )	xz_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
 	if ( y_texture_size2 == 0.0 )		y_texture_size2 = TERRAIN_DEFAULT_TEXTURE_SIZE;
-
+	
 	terrain_type_information[type].texture = system_textures[texture];
 	terrain_type_information[type].xz_texture_scale = ( TERRAIN_3D_XZ_SCALE / xz_texture_size );
 	terrain_type_information[type].y_texture_scale =  1.0 / y_texture_size;
 
 	terrain_type_information[type].texture2 = system_textures[texture2];
-	terrain_type_information[type].xz_texture_scale2 = ( TERRAIN_3D_XZ_SCALE / xz_texture_size2 );
+	terrain_type_information[type].xz_texture_scale2 = ( noisemap_scale_adjustment * TERRAIN_3D_XZ_SCALE / (xz_texture_size2));
 	terrain_type_information[type].y_texture_scale2 = 1.0 / y_texture_size2;
 
 	terrain_type_information[type].red = red;
@@ -2378,9 +2384,211 @@ int get_terrain_surface_type ( terrain_types type )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static struct {
+	int index;
+	float gamma_correction;
+} textures_with_noisemap[64];
+
+float texture_gamma_correction(int texture_index)
+{
+	unsigned i;
+
+	for (i=0; i < ARRAY_LENGTH(textures_with_noisemap) && textures_with_noisemap[i].index; i++)
+	{
+		if (textures_with_noisemap[i].index == texture_index)
+			return textures_with_noisemap[i].gamma_correction;
+	}
+
+	return 1.0;
+}
+
+static void initialse_noisemaps(void)
+{
+	unsigned i = 0;
+	int 
+		grass_noisemap,
+		rock_noisemap = add_new_texture("NOISEMAP_FIELD"),
+		tree_noisemap = add_new_texture("NOISEMAP_TREE_CANOPY"),
+		field_noise,
+		noisemap;
+
+	float gamma = 1.25, gamma2 = 1.4;
+
+	switch (get_global_season())
+	{
+	case SESSION_SEASON_SUMMER:
+	case SESSION_SEASON_INVALID:
+	case SESSION_SEASON_DEFAULT:
+	default:
+		grass_noisemap = add_new_texture("NOISEMAP_GRASS");
+		field_noise = grass_noisemap; 
+		noisemap = add_new_texture("NOISEMAP");
+		break;
+	case SESSION_SEASON_DESERT:
+		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SAND");
+		break;
+	case SESSION_SEASON_WINTER:
+		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SNOW");
+		break;
+	}
+
+	terrain_texture_sea_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SEA_1" );
+	terrain_texture_sea_colour_pass	= add_new_texture("NOISEMAP_WATER");
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_beach_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_BEACH" );
+	terrain_texture_beach_colour_pass = add_new_texture("NOISEMAP_BEACH");
+	textures_with_noisemap[i++].gamma_correction = gamma;
+	
+	terrain_texture_land_detail	= textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_DETAIL_4" );
+	terrain_texture_land_colour_pass = grass_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+	
+	terrain_texture_altered_land1_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SCRUB" );
+	terrain_texture_altered_land1_colour_pass = grass_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_altered_land2_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_BARE_ROCK2" );
+	terrain_texture_altered_land2_colour_pass = rock_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_altered_land3_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SNOW" );
+	terrain_texture_altered_land3_colour_pass = grass_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	
+	terrain_texture_forest_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_TREE_CANOPY_1" );
+	terrain_texture_forest_colour_pass = tree_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_forest_top_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_TREE_CANOPY_LEBANON" );
+	terrain_texture_forest_top_colour_pass = tree_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+	
+	terrain_texture_forest_middle_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SWAMP2" );
+	terrain_texture_forest_middle_colour_pass = tree_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_forest_bottom_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SWAMP1" );
+	terrain_texture_forest_bottom_colour_pass = tree_noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+
+	terrain_texture_builtup_area1_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_GRG_CITY4" );
+	terrain_texture_builtup_area1_colour_pass				= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+
+	terrain_texture_builtup_area2_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_GRG_CITY3" );
+	terrain_texture_builtup_area2_colour_pass				= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+
+	terrain_texture_builtup_area3_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_GRG_CITY2" );
+	terrain_texture_builtup_area3_colour_pass				= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+
+	terrain_texture_builtup_area4_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_GRG_CITY1" );
+	terrain_texture_builtup_area4_colour_pass				= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+
+	terrain_texture_builtup_area1_infrared_detail = get_system_texture_index ( "TERRAIN_BW_CITY4" );
+	terrain_texture_builtup_area2_infrared_detail = get_system_texture_index ( "TERRAIN_BW_CITY3" );
+	terrain_texture_builtup_area3_infrared_detail = get_system_texture_index ( "TERRAIN_BW_CITY2" );
+	terrain_texture_builtup_area4_infrared_detail = get_system_texture_index ( "TERRAIN_BW_CITY1" );
+	// IR view doesn't use second pass anyway
+	terrain_texture_builtup_area1_infrared_colour_pass	= terrain_texture_builtup_area1_infrared_detail;
+	terrain_texture_builtup_area2_infrared_colour_pass	= terrain_texture_builtup_area2_infrared_detail;
+	terrain_texture_builtup_area3_infrared_colour_pass	= terrain_texture_builtup_area3_infrared_detail;
+	terrain_texture_builtup_area4_infrared_colour_pass	= terrain_texture_builtup_area4_infrared_detail;
+
+	
+	terrain_texture_road_detail	= textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_DETAIL_ROAD" );
+	terrain_texture_road_colour_pass							= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+	
+	terrain_texture_road_bank_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_DETAIL_LEBANON" );
+	terrain_texture_road_bank_colour_pass					= noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma2;
+	
+	terrain_texture_river_detail  = textures_with_noisemap[i].index	= get_system_texture_index ( "TERRAIN_RIVER" );
+	terrain_texture_river_colour_pass						=noisemap;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_river_bank_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_HIGHLAND" );
+	terrain_texture_river_bank_colour_pass					= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_track_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_THAI_TRACK" );
+	terrain_texture_track_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+	
+	terrain_texture_field1_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+	terrain_texture_field1_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field2_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+	terrain_texture_field2_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field3_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+	terrain_texture_field3_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field4_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_CORNFIELD" );
+	terrain_texture_field4_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field5_detail =  textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_WHEATFIELD" );
+	terrain_texture_field5_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field6_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_LIGHTGREENFIELD" );
+	terrain_texture_field6_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field7_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_DARKGREENFIELD" );
+	terrain_texture_field7_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field8_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_MUSTARDFIELD" );
+	terrain_texture_field8_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field9_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_PLOUGHED1FIELD" );
+	terrain_texture_field9_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field10_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_PLOUGHED2FIELD" );
+	terrain_texture_field10_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_field11_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_CORNFIELD" );
+	terrain_texture_field11_colour_pass						= field_noise;
+	textures_with_noisemap[i++].gamma_correction = gamma;
+
+	terrain_texture_reservoir_detail						= get_system_texture_index ( "TERRAIN_THAILAND_RIVER" );
+	terrain_texture_trench_detail							= get_system_texture_index ( "CH_TERRAIN_DRY_MUD1");
+	
+	terrain_texture_hedge_detail							= get_system_texture_index ( "TERRAIN_WALL_LEBANON" );
+	terrain_texture_wall_detail							= get_system_texture_index ( "TERRAIN_WALL" );
+
+	terrain_texture_hedge_colour_pass						= noisemap;
+	terrain_texture_wall_colour_pass							= noisemap;
+	
+	terrain_texture_reservoir_colour_pass					=noisemap;
+	terrain_texture_trench_colour_pass						=noisemap;
+
+	if (i >= ARRAY_LENGTH(textures_with_noisemap))
+		debug_fatal("noisemap array out of bounds!");
+}
+
 static void initialise_all_custom_terrain_types ( void )
 {
+	memset(textures_with_noisemap, 0, sizeof(textures_with_noisemap));
 
+	if (command_line_texture_colour == 2)
+		initialse_noisemaps();
+	else
+	{
 	 	terrain_texture_sea_detail								= get_system_texture_index ( "TERRAIN_SEA_1" );
 		terrain_texture_beach_detail							= get_system_texture_index ( "TERRAIN_BEACH" );
 		terrain_texture_land_detail							= get_system_texture_index ( "TERRAIN_DETAIL_4" );
@@ -2426,7 +2634,7 @@ static void initialise_all_custom_terrain_types ( void )
 		terrain_texture_hedge_detail							= get_system_texture_index ( "TERRAIN_WALL_LEBANON" );
 		terrain_texture_wall_detail							= get_system_texture_index ( "TERRAIN_WALL" );
 		terrain_texture_trench_detail							= get_system_texture_index ( "TERRAIN_RIVER" );
-			
+
 		terrain_texture_sea_colour_pass						= terrain_texture_sea_detail;
 		terrain_texture_beach_colour_pass					= terrain_texture_beach_detail;
 		terrain_texture_land_colour_pass						= terrain_texture_land_detail;
@@ -2473,8 +2681,8 @@ static void initialise_all_custom_terrain_types ( void )
 		terrain_texture_hedge_colour_pass						= terrain_texture_hedge_detail;
 		terrain_texture_wall_colour_pass							= terrain_texture_wall_detail;
 		terrain_texture_trench_colour_pass						= terrain_texture_trench_detail;
-		
-		
+	}
+
 	//terrain_texture_beach_colour_pass						= get_system_texture_index ( "COLOUR_PASS" );
 	//terrain_texture_road_colour_pass						= get_system_texture_index ( "COLOUR_PASS" );
 	//terrain_texture_track_colour_pass						= get_system_texture_index ( "COLOUR_PASS" );
@@ -2538,7 +2746,7 @@ void initialise_3d_alaska_terrain_types ( void )
 	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -2626,7 +2834,7 @@ void initialise_3d_aleut_terrain_types ( void )
 	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -2715,7 +2923,7 @@ void initialise_3d_kuwait_terrain_types ( void )
 	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	// Xhit: the surface types for the various terrain types are set according to the surroundings. (030328)
@@ -2809,7 +3017,7 @@ void initialise_3d_grand_terrain_types ( void )
 	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 		//set surface types for rotor dust
@@ -2891,7 +3099,7 @@ void initialise_3d_mars_terrain_types ( void )
 	terrain_texture_altered_land3_colour_pass				= get_system_texture_index ( "COLOUR_PASS_SNOW" );
 
 	//VJ 050303 texture colour mod: use texture colour directly instead of brownish haze
-	if (command_line_texture_colour == 1)
+	if (command_line_texture_colour)
 		initialise_all_custom_terrain_types ();
 
 	//set surface types for rotor dust

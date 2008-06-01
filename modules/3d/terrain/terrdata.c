@@ -153,6 +153,9 @@ void initialise_3d_terrain_colour_conversion_table ( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+terrain_3d_colour
+	white_col[4048];
+
 int load_3d_terrain ( const char *path )
 {
 
@@ -178,6 +181,8 @@ int load_3d_terrain ( const char *path )
 
 	terrain_3d_sector
 		*terrain_sector_ptr;
+
+	memset(white_col, 255, sizeof(white_col)); 
 
 	ASSERT ( !terrain_initialised );
 
@@ -489,14 +494,23 @@ int load_3d_terrain ( const char *path )
 			//
 			// Get the offsets into the colours file
 			//
-
 			offset = get_list_item ( terrain_3d_local_data, int );
-
+			
 			terrain_sectors[z][x].colour_indices = ( terrain_3d_colour_index * ) ( terrain_3d_colour_data + offset );
 
 			offset = get_list_item ( terrain_3d_local_data, int );
-
+			
 			terrain_sectors[z][x].point_colours = ( terrain_3d_colour * ) ( terrain_3d_colour_data + offset );
+			if (command_line_texture_colour)
+			{
+				// the colour is mixed with the textures' colours.  
+				// This will however darken the texture substantially, so disable it
+				// when texture colour is enabled by setting it to white
+				
+				ASSERT(terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col));
+				if (terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col))
+					terrain_sectors[z][x].point_colours = white_col;
+			}
 
 			//
 			// Set the approximation to off
