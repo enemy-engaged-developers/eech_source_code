@@ -97,14 +97,14 @@ def calculate_normal(vertices):
         if sum != (0.0, 0.0, 0.0):
             return normalize(sum)
 
-    warnings.warn('polygon with all points in a line. Points: %s %s' % 
-                  ([v.index + 1 for v in vertices], 
-                  [('(%.2f, %.2f, %.2f)' % tuple(point)) for point in points_list]))
+    warnings.warn('polygon with all points in a line. Points: \n%s' % 
+                  ', \n'.join([('(%.2f, %.2f, %.2f)' % tuple(point)) for point in points_list]))
     return (0.0, 1.0, 0.0)   # dummy value
 
 def angle_between(u, v):
     'calculates the angle between two unit vectors'
-    return math.acos(dot_prod(u, v))
+    dp = max(-1.0, min(dot_prod(u,v), 1.0))  # keep between -1.0 and 1.0 to account for rounding errors
+    return math.acos(dp)
 
 def deg(x):
     return 180 * x / math.pi
