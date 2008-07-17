@@ -192,6 +192,8 @@ struct Object : GeneralObject
     printf("AddNullObject %lX NullObject (%s)\n", index, filename.c_str());
    else
     printf("AddNullObject %lX NullObject\n", index);
+  if (!search.empty())
+   printf("// LABEL=%s\n", search.c_str());
   GeneralObject::Print("Object");
   h.Print("H");
   p.Print("P");
@@ -202,6 +204,24 @@ struct Object : GeneralObject
     printf("ObjectDissolve (envelope)\n");
     dissolve.Print();
     printf("\n");
+   }
+  if (!search.empty())
+   {
+    printf("Plugin CustomObjHandler 1 LW_ItemShape\n");
+    printf("4\n");
+    printf("1\n");
+    printf("1\n");
+    printf("0\n");
+    printf("0\n");
+    printf("0\n");
+    printf("0 0 0\n");
+    printf("0 0 0\n");
+    printf("0 0 0\n");
+    printf("1\n");
+    printf("0\n");
+    printf("\"%s\"\n", search.c_str());
+    printf("EndPlugin\n");
+
    }
  }
 
@@ -605,7 +625,20 @@ class LwsFile : public Lws
   clearlast();
   Object object;
   findkeyword();
-  if (strcmp(keyword.c_str(), "NullObject"))
+
+  bool index = false;
+  if (keyword.length() == 8)
+   {
+    index = true;
+    for (int i = 0; i < 8; i++)
+     if (!isxdigit(keyword[i]))
+      {
+       index = false;
+       break;
+      }
+   }
+
+  if (index)
    {
     sscanf(keyword.c_str(), "%lx", &object.index);
     findkeyword();
