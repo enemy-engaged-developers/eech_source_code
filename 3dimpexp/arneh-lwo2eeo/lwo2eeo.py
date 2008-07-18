@@ -1128,14 +1128,16 @@ class Model:
             if not surf.image:
                 continue
 
+            if not surf.uv_map and not surf.lumi_uv_map:
+                sys.exit(('\nError: Surfaces with textures must have a UV-map describing'
+                         " the texture\nmapping.  The surface '%s' does have a texture "
+                         "('%s'), \nbut no UV-map.") % (surf.name, surf.texture_name))
+                
+
             for uv in (surf.uv_map, surf.lumi_uv_map):
                 if uv:
                     for map in surf.get_texture_points():
                         eeo.write(struct.pack('<ff', *map))
-            else:
-                sys.exit(('\nError: Surfaces with textures must have a UV-map describing'
-                         " the texture\nmapping.  The surface '%s' does have a texture "
-                         "('%s'), \nbut no UV-map.") % (surf.name, surf.texture_name))
                     
     def write_surface_normals(self, eeo):
         # need a normal for each point: only if smooth surface
