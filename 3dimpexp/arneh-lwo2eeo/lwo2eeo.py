@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -1132,6 +1132,10 @@ class Model:
                 if uv:
                     for map in surf.get_texture_points():
                         eeo.write(struct.pack('<ff', *map))
+            else:
+                sys.exit(('\nError: Surfaces with textures must have a UV-map describing'
+                         " the texture\nmapping.  The surface '%s' does have a texture "
+                         "('%s'), \nbut no UV-map.") % (surf.name, surf.texture_name))
                     
     def write_surface_normals(self, eeo):
         # need a normal for each point: only if smooth surface
