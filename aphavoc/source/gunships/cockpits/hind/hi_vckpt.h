@@ -72,18 +72,25 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern void initialise_hind_virtual_cockpit (void);
+extern void initialise_hind_3d_cockpit (void);
 
 extern void deinitialise_hind_virtual_cockpit (void);
+extern void deinitialise_hind_3d_cockpit (void);
 
 extern void update_hind_virtual_cockpit (void);
+extern void update_hind_3d_cockpit (void);
 
 extern void draw_hind_internal_virtual_cockpit (unsigned int flags);
+extern void draw_hind_internal_3d_cockpit (unsigned int flags);
 
 extern void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic);
+extern void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle_graphic);
 
 extern void damage_hind_virtual_cockpit_main_rotors (int seed);
+extern void damage_hind_3d_cockpit_main_rotors (int seed);
 
 extern void restore_hind_virtual_cockpit_main_rotors (void);
+extern void restore_hind_3d_cockpit_main_rotors (void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
