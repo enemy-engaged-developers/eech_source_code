@@ -188,6 +188,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 	// We should already have the total number, so check here
 	//
 
+	// If this asserts make sure you have recompiled this file with the latest 3dmodels.h file
 	ASSERT ( total_sub_object_indices == objects_3d_scene_database[scene_index].total_number_of_sub_object_indices );
 
 	if ( number_of_unique_indices )
@@ -1141,3 +1142,19 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id)
+{
+	object_3d_sub_object_index_numbers
+		index;
+	object_3d_sub_object_search_data
+		search;
+
+	search.search_depth = 0;
+	search.search_object = parent_object;
+	search.sub_object_index = sub_obj_id;
+
+	if (find_object_3d_sub_object(&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+		debug_fatal ("Failed to locate sub object: %d", sub_obj_id);
+
+	return search.result_sub_object;
+}
