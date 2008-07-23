@@ -1138,9 +1138,9 @@ static void initialise_custom_scenes(const char* directory)
 	_findclose ( handle );
 	/* 06FEB08 Casm Import of 3D scenes END */
 
-	/** check which custom scenes have loaded correctly **/ 
+	/** check which custom scenes have loaded correctly **/
 	custom_3d_models.arneh_ah64d_cockpit = all_scenes_loaded_successfully(OBJECT_3D_ARNEH_AH64D_COCKPIT, OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
-	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_HUD_DISPLAY);
+	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_CANOPY);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
