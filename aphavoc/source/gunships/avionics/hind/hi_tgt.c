@@ -199,8 +199,6 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 
 			set_gunship_target (NULL);
 
-			select_hind_mfd_mode (MFD_MODE_OFF);
-
 			#if 0
 
 			hud_mode = HUD_MODE_NAVIGATION;
@@ -235,8 +233,6 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_hind_mfd_mode (MFD_MODE_FLIR);
-
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -254,8 +250,6 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 
 				activate_common_eo ();
 
-				select_hind_mfd_mode (MFD_MODE_LLLTV);
-
 				hud_mode = HUD_MODE_WEAPON;
 			}
 
@@ -272,8 +266,6 @@ void select_hind_target_acquisition_system (target_acquisition_systems system)
 				target_acquisition_system = system;
 
 				activate_common_hms ();
-
-				select_hind_mfd_mode (MFD_MODE_OFF);
 
 				hud_mode = HUD_MODE_WEAPON;
 			}
