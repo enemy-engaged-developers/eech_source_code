@@ -159,7 +159,7 @@ static float get_rotate_left_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT2);
+			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT1);
 
 			break;
 		}
@@ -258,7 +258,7 @@ static float get_rotate_right_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT2);
+			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT1);
 
 			break;
 		}
@@ -453,7 +453,7 @@ static float get_rotate_down_limit (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			limit = rad (-MAX_LOOK_ANGLE_DOWN2);
+			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
 
 			break;
 		}
@@ -1748,27 +1748,35 @@ void draw_virtual_cockpit_3d_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				draw_hind_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_ADI |
-					VIRTUAL_COCKPIT_HSI |
-					VIRTUAL_COCKPIT_COMPASS |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
+				if (custom_3d_models.arneh_mi24v_cockpit)
+				{
+					draw_hind_external_3d_cockpit(0, NULL);
+					draw_hind_internal_3d_cockpit(0);
+				}
+				else
+				{
+					draw_hind_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_ADI |
+						VIRTUAL_COCKPIT_HSI |
+						VIRTUAL_COCKPIT_COMPASS |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
 
-				draw_hind_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_HUD_GLASS |
-					VIRTUAL_COCKPIT_HUD_DISPLAY |
-					VIRTUAL_COCKPIT_CRT_DISPLAY |
-					VIRTUAL_COCKPIT_EKRAN_DISPLAY |
-					VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
-				);
+					draw_hind_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_HUD_GLASS |
+						VIRTUAL_COCKPIT_HUD_DISPLAY |
+						VIRTUAL_COCKPIT_CRT_DISPLAY |
+						VIRTUAL_COCKPIT_EKRAN_DISPLAY |
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
+					);
+				}
 			}
 			else
 			{
@@ -2266,20 +2274,28 @@ void draw_virtual_cockpit_3d_hud_view (void)
 			{
 				set_pilots_full_screen_params (FALSE);
 
-				draw_hind_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_STOWED_WIPER |
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
+				if (custom_3d_models.arneh_mi24v_cockpit)
+				{
+					draw_hind_external_3d_cockpit(0, NULL);
+					draw_hind_internal_3d_cockpit(0);
+				}
+				else
+				{
+					draw_hind_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_STOWED_WIPER |
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
 
-				draw_hind_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_COCKPIT |
-					VIRTUAL_COCKPIT_HUD_GLASS
-				);
+					draw_hind_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_COCKPIT |
+						VIRTUAL_COCKPIT_HUD_GLASS
+					);
+				}
 			}
 			else
 			{
@@ -2512,12 +2528,15 @@ void draw_virtual_cockpit_3d_display_view (void)
 		{
 			set_pilots_full_screen_params (FALSE);
 
-			draw_hind_internal_virtual_cockpit
-			(
-				VIRTUAL_COCKPIT_COCKPIT |
-				VIRTUAL_COCKPIT_CRT_DISPLAY |
-				VIRTUAL_COCKPIT_EKRAN_DISPLAY
-			);
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				draw_hind_internal_3d_cockpit(0);
+			else
+				draw_hind_internal_virtual_cockpit
+				(
+					VIRTUAL_COCKPIT_COCKPIT |
+					VIRTUAL_COCKPIT_CRT_DISPLAY |
+					VIRTUAL_COCKPIT_EKRAN_DISPLAY
+				);
 
 			break;
 		}
