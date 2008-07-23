@@ -2133,3 +2133,66 @@ void get_hind_virtual_cockpit_hsi_needle_values (float *direction_finder, float 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float get_mi24_airspeed_needle_value(void)
+{
+	float airspeed = bound(kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value), 0.0, 450.0);
+	float roll = -4.0;
+
+	if (airspeed < 50.0)
+		roll = rad(-4.0) + airspeed / 50 * rad(20.0);  
+	else if (airspeed < 100.0)
+		roll = rad(16.0) + (airspeed - 50) / 50 * rad(37.5);
+	else if (airspeed < 250.0)
+		roll = rad(53.5) + (airspeed - 100) / 150 * rad(126.5);
+	else
+		roll = rad(180.0) + (airspeed - 250) / 200 * rad(164.0);
+	return -roll;
+}
+
+float get_mi24_vertical_velocity_needle_value(void)
+{
+	float vvi = bound(current_flight_dynamics->world_velocity_y.value, -30.0, 30.0);
+	int negative = vvi < 0.0;
+	float roll = 0.0;
+	
+	vvi = fabs(vvi);
+
+	if (vvi < 5.0)
+		roll = vvi / 5.0 * rad(42.0);
+	else if (vvi < 10.0)
+		roll = rad(42.0) + (vvi - 5.0) / 5.0 * rad(38.5);
+	else if (vvi < 20.0)
+		roll = rad(80.5) + (vvi - 10.0) / 10.0 * rad(60.0);
+	else
+		roll = rad(140.5) + (vvi - 20.0) / 10.0 * rad(39.5);
+
+	if (negative)
+		return rad(90) + roll;
+	else
+		return rad(90) - roll;
+}
+
+float get_mi24_pitch_ladder_dispacement()
+{
+	float pitch = current_flight_dynamics->pitch.value;
+
+	return deg(-pitch) * 0.001;
+}
+
+void get_mi24_hover_indicator_speed(float* longitudinal, float* sideways)
+{
+#define HOVER_SPEED_SCALING  0.000725  // 0.725 mm per kph
+	*longitudinal = bound(kilometres_per_hour(current_flight_dynamics->indicated_airspeed.value), -30.0, 55.0);
+	*sideways = bound(kilometres_per_hour(-current_flight_dynamics->velocity_x.value), -30.0, 30.0);
+
+	*longitudinal *= HOVER_SPEED_SCALING;
+	*sideways *= HOVER_SPEED_SCALING;
+}
+
+float get_mi24_hover_indicator_vvi_needle_value()
+{
+	float vvi = bound(current_flight_dynamics->world_velocity_y.value, -10.0, 10.0);
+
+	return (3.0 - vvi) * rad(3.85);  
+}
