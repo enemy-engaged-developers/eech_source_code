@@ -38,9 +38,6 @@ void draw_hind_3d_cockpit_wiper (viewpoint *vp)
 
 	wiper_arm_object->relative_roll = rad(-44.0) + wiper_position * (rad (88.0) / MAX_WIPER_POSITION);
 	wiper_rod_object->relative_roll = rad(-43.5) + wiper_position * (rad (87.0) / MAX_WIPER_POSITION);
-	//wiper_rod_object->relative_roll = wiper_arm_object->relative_roll + debug_var_x * rad(0.25);
-
-	debug_log("debug_var_x: %.0f", debug_var_x);
 	
 	//
 	// rotate wiper blade
