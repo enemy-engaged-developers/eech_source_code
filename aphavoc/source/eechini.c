@@ -839,7 +839,7 @@ void dump_ini_file(void)
 	fprintf(f,"reverse_pedal=%d		# reversed pedal input (0 = off/blue force/USA, 1 = on/red force/Russia) (def = 0)\n",command_line_reverse_pedal);	// Retro 17Jul2004
 	fprintf(f,"msl=%d			# activates mouselook (and TrackIR when present) (0 = off, 1 = internal, 2 = external, 3 = both) (def = 0)\n",command_line_mouse_look);
 	fprintf(f,"msls=%d			# mouselook speed (when msl=1) (n > 0) (def = 15), POV speed (when msl=0) (n > 0, max = 20) (def = 13) \n",command_line_mouse_look_speed);
-	fprintf(f,"TIR_6DOF=%d		# 6 DoF support for TrackIR (Hokum and Comanche only) (0 = off, 1 = on) (def = 0)\n",command_line_TIR_6DOF); // Retro 6Feb2005
+	fprintf(f,"TIR_6DOF=%d		# 6 DoF support for TrackIR (0 = off, 1 = on) (def = 0)\n",command_line_TIR_6DOF); // Retro 6Feb2005
 	fprintf(f,"external_trackir=%d	# (only when msl=1) external cameras controlled by TrackIR (0 = off, 1 = on) (def = 0)\n",command_line_external_trackir); // Retro 31Oct2004
 	fprintf(f,"external_trackir_dir=%d	# (only when external_trackir=1) invert external cameras view direction (0 = off, 1 = on) (def = 0)\n",command_line_external_trackir_direction); // Retro 31Jan2005
 	
