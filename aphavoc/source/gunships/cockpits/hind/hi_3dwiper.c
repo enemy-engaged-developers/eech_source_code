@@ -1,5 +1,7 @@
 #include "project.h"
 
+#include "3d/3dsubobj.h"
+
 static object_3d_instance
 	*wiper_inst3d;
 
