@@ -65,6 +65,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+#include "3d/3dsubobj.h"
+
+#include "hi_3dwiper.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,9 +81,12 @@
 
 static object_3d_instance
 	*virtual_pilot_cockpit_inst3d,
-
+	*virtual_cockpit_canopy_inst3d,
+	
 	*virtual_cockpit_hud_glass_inst3d,
 	*virtual_cockpit_hud_display_inst3d,
+	*virtual_cockpit_map_display_inst3d,
+	*virtual_cockpit_pilot_instruments_inst3d,
 	*virtual_cockpit_main_rotor_inst3d,
 	*virtual_cockpit_adi_inst3d,
 	*virtual_cockpit_hsi_inst3d,
@@ -88,6 +94,17 @@ static object_3d_instance
 	*virtual_cockpit_compass_inst3d;
 
 static object_3d_sub_instance
+	*fan_object,
+	*spinning_fan_object,
+	*compass_object,
+	*airspeed_needle,
+	*vvi_needle,
+	*bank_indicator,
+	*hover_indicator_speed,
+	*hover_indicator_sideways,
+	*hover_indicator_vvi,
+	*pitch_ladder_pitch,
+	*pitch_ladder_roll,
 	*pilot_head_object;
 
 // crew position in first dimension, min/max limit in second
@@ -97,23 +114,6 @@ static vec3d head_limits[2][2];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id)
-{
-	object_3d_sub_object_index_numbers
-		index;
-	object_3d_sub_object_search_data
-		search;
-
-	search.search_depth = 0;
-	search.search_object = parent_object;
-	search.sub_object_index = sub_obj_id;
-
-	if (find_object_3d_sub_object(&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		debug_fatal ("Failed to locate sub object: %d", sub_obj_id);
-
-	return search.result_sub_object;
-}
-
 void initialise_hind_3d_cockpit (void)
 {
 	//
@@ -121,13 +121,18 @@ void initialise_hind_3d_cockpit (void)
 	//
 
 	virtual_pilot_cockpit_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_COCKPIT);
+	virtual_cockpit_canopy_inst3d = construct_3d_object (OBJECT_3D_MI24V_CANOPY);
+	
+	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_HUD_DISPLAY);
+	virtual_cockpit_map_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_MAP_DISPLAY);
+
+	virtual_cockpit_pilot_instruments_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_INSTRUMENTS);
 
 	pilot_head_pitch_datum = 0.0;
 
 	co_pilot_head_pitch_datum = 0.0;
 
 	virtual_cockpit_hud_glass_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_HUD_GLASS_LEVEL1);
-	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_HUD_DISPLAY);
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_MAIN_ROTOR);
 	virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_ADI);
 
@@ -139,7 +144,7 @@ void initialise_hind_3d_cockpit (void)
 	// wipers and rain
 	//
 
-	initialise_hind_virtual_cockpit_wiper_and_rain_effect ();
+	initialise_hind_3d_cockpit_wiper ();
 
 	//
 	// virtual cockpit cameras
@@ -148,7 +153,21 @@ void initialise_hind_3d_cockpit (void)
 	initialise_common_virtual_cockpit_cameras ();
 
 	pilot_head_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_PILOT_HEAD);
+	compass_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_COMPASS_HEADING_NULL);
+	fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_FAN);
+	spinning_fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_SPINNING_FAN);
+	airspeed_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_AIRSPEED_NEEDLE);
+	vvi_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_VERTICAL_VELOCITY_NEEDLE);
+	bank_indicator = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BANK_INDICATOR);
 
+	hover_indicator_speed = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_LONGITUDINAL);
+	hover_indicator_sideways = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_SIDWAYS);
+	hover_indicator_vvi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_VVI);
+	
+	pitch_ladder_pitch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI);
+	pitch_ladder_roll = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI_PITCH_NULL);
+
+	//ASSERT(FALSE);
 #ifdef DEBUG  // don't limit in debug (for all practical purposes
 	// pilot limits
 	head_limits[0][0].x = -10;
@@ -183,10 +202,7 @@ void initialise_hind_3d_cockpit (void)
 	head_limits[1][1].z =  0.3;
 #endif
 	
-//VJ 050208 cleaing up wideview
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
-//VJ wideview mod, date: 20-mar-03
-//start up in normal view because when you switch to wideview the parameters are read	
 	set_global_wide_cockpit(TRUE);	
 }
 
@@ -201,10 +217,13 @@ void deinitialise_hind_3d_cockpit (void)
 	//
 
 	destruct_3d_object (virtual_pilot_cockpit_inst3d);
+	destruct_3d_object (virtual_cockpit_canopy_inst3d);
 
 	destruct_3d_object (virtual_cockpit_hud_glass_inst3d);
 	destruct_3d_object (virtual_cockpit_hud_display_inst3d);
+	destruct_3d_object (virtual_cockpit_map_display_inst3d);
 	destruct_3d_object (virtual_cockpit_main_rotor_inst3d);
+	destruct_3d_object (virtual_cockpit_pilot_instruments_inst3d);
 	destruct_3d_object (virtual_cockpit_adi_inst3d);
 	destruct_3d_object (virtual_cockpit_hsi_inst3d);
 	destruct_3d_object (virtual_cockpit_ekran_display_inst3d);
@@ -216,7 +235,7 @@ void deinitialise_hind_3d_cockpit (void)
 	// wipers and rain
 	//
 
-	deinitialise_hind_virtual_cockpit_wiper_and_rain_effect ();
+	deinitialise_hind_3d_cockpit_wiper();
 
 	//
 	// virtual cockpit cameras
@@ -225,18 +244,64 @@ void deinitialise_hind_3d_cockpit (void)
 	deinitialise_common_virtual_cockpit_cameras ();
 }
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_hind_3d_cockpit (void)
+#define FAN_ROTATION_SPEED   (PI2 * 4.0)
+#define FAN_BLUR_TRESHOLD    (PI2 * 2.0)
+
+static void animate_fan(void)
 {
+	static float fan_speed = 0.0;
+
+	ASSERT(fan_object);
+
+	if (debug_var_x > 0.0 && fan_speed < FAN_ROTATION_SPEED)
+	{
+		fan_speed += FAN_ROTATION_SPEED * get_delta_time();
+		if (fan_speed > FAN_ROTATION_SPEED)
+			fan_speed = FAN_ROTATION_SPEED;
+	}
+	else if (debug_var_x <= 0.0 && fan_speed > 0.0)
+	{
+		fan_speed -= FAN_ROTATION_SPEED * 0.4 * get_delta_time();
+		if (fan_speed < 0.0)
+			fan_speed = 0.0;
+	}
+
+	fan_object->relative_roll -= fan_speed * get_delta_time();
+	while (fan_object->relative_roll < 0.0)
+		fan_object->relative_roll += PI2;
+	spinning_fan_object->relative_roll = fan_object->relative_roll;
+	
+	if (fan_speed > FAN_BLUR_TRESHOLD)
+	{
+		fan_object->visible_object = FALSE;
+		spinning_fan_object->visible_object = TRUE;
+	}
+	else
+	{
+		fan_object->visible_object = TRUE;
+		spinning_fan_object->visible_object = FALSE;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void update_hind_3d_cockpit (void)
+{
+	animate_fan();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#if 0
 static void set_cockpit_white_lighting (matrix3x3 attitude)
 {
 	matrix3x3
@@ -324,7 +389,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			break;
 		}
 	}
-
+	
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
 
 	get_3d_transformation_matrix (directional_light_rotation, directional_light_heading, directional_light_pitch, directional_light_roll);
@@ -337,161 +402,24 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 
 	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
 }
+#endif
 
 static void set_cockpit_lighting (matrix3x3 attitude)
 {
-	matrix3x3
-		directional_light_rotation,
-		result;
-
-	vec3d
-		directional_light_direction;
-
 	light_colour
 		ambient_light_colour,
 		directional_light_colour;
-
-	float
-		directional_light_heading,
-		directional_light_pitch,
-		directional_light_roll;
-
-/*
-	switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
-	{
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAWN:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.574;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DAY:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 1.0;
-			directional_light_colour.blue			= 1.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-30.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_DUSK:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.574;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-		////////////////////////////////////////
-		case DAY_SEGMENT_TYPE_NIGHT:
-		////////////////////////////////////////
-		{
-			ambient_light_colour.red		 		= 0.0;
-			ambient_light_colour.green		  		= 0.0;
-			ambient_light_colour.blue		  		= 0.0;
-
-			directional_light_colour.red			= 1.0;
-			directional_light_colour.green		= 0.703;
-			directional_light_colour.blue			= 0.0;
-
-			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
-			directional_light_roll 					= rad (0.0);
-
-			break;
-		}
-	}
-
-	#if DEMO_VERSION
-
-	ambient_light_colour.red		 		= 0.0;
-	ambient_light_colour.green		  		= 0.0;
-	ambient_light_colour.blue		  		= 0.0;
-
-	directional_light_colour.red			= 1.0;
-	directional_light_colour.green		= 1.0;
-	directional_light_colour.blue			= 1.0;
-
-	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-30.0);
-	directional_light_roll 					= rad (0.0);
-
-	#endif
-*/
-
-/*	ambient_light_colour.red = 0.6;
-	ambient_light_colour.green = 0.6;
-	ambient_light_colour.blue = 0.6;
-*/
-//	debug_log("%.2f, %.2f, %.2f", ambient_3d_light.colour.red, ambient_3d_light.colour.green, ambient_3d_light.colour.blue);
 
 	ambient_light_colour.red = 0.35 + ambient_3d_light.colour.red;
 	ambient_light_colour.green = 0.35 + ambient_3d_light.colour.green;
 	ambient_light_colour.blue = 0.35 + ambient_3d_light.colour.blue;
 
-/*
-	ambient_light_colour.red = -0.4 + ambient_3d_light.colour.red;
-	ambient_light_colour.green = -0.4 + ambient_3d_light.colour.green;
-	ambient_light_colour.blue = -0.4 + ambient_3d_light.colour.blue;
-*/
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
 
-/*
-	directional_light_heading 				= rad (debug_var_x * 10.0);
-	directional_light_pitch 				= rad (debug_var_y * 10.0);
-	directional_light_roll 					= 0.0;
-
-//	debug_log("heading %.2f, pitch %.2f", deg(directional_light_heading), deg(directional_light_pitch));
-
-	get_3d_transformation_matrix (directional_light_rotation, directional_light_heading, directional_light_pitch, directional_light_roll);
-	multiply_matrix3x3_matrix3x3 (result, directional_light_rotation, attitude);
-
-	directional_light_direction.x = -result[2][0];
-	directional_light_direction.y = -result[2][1];
-	directional_light_direction.z = -result[2][2];
-/*
-	directional_light_direction = current_3d_sun->light_direction;
-
-	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &directional_light_direction, FALSE);
-*/
-
-//	set_3d_main_light_source (main_3d_single_light_env, &current_3d_sun->colour, &directional_light_direction, FALSE);
 	directional_light_colour.red = bound(current_3d_sun->colour.red * 1.2, 0.0, 1.0);
 	directional_light_colour.green = bound(current_3d_sun->colour.green * 1.2, 0.0, 1.0);
 	directional_light_colour.blue = bound(current_3d_sun->colour.blue * 1.2, 0.0, 1.0);
 
-//	set_3d_main_light_source (main_3d_single_light_env, &current_3d_sun->colour, &current_3d_sun->light_direction, FALSE);
 	set_3d_main_light_source (main_3d_single_light_env, &directional_light_colour, &current_3d_sun->light_direction, FALSE);
 }
 
@@ -602,82 +530,14 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 	*crew_viewpoint = virtual_cockpit_inst3d->vp;
 }
 
-
-static void get_display_viewpoint (view_modes mode, viewpoint *display_viewpoint)
-{
-	object_3d_sub_object_index_numbers
-		index;
-
-	object_3d_sub_object_search_data
-		search;
-
-	viewpoint
-		vp;
-
-	ASSERT (display_viewpoint);
-
-	if (mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV)
-	{
-		index = OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_CRT_CAMERA;
-	}
-	else if (mode == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
-	{
-		index = OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_HUD_CAMERA;
-	}
-	else
-	{
-		debug_fatal ("Invalid view mode = %d", mode);
-	}
-
-	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
-
-	search.search_depth = 0;
-	search.search_object = virtual_cockpit_inst3d;
-	search.sub_object_index = index;
-
-	if (find_object_3d_sub_object (&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-	{
-		debug_fatal ("Failed to locate display viewpoint in virtual cockpit");
-	}
-
-	virtual_cockpit_inst3d->vp.x = 0.0;
-	virtual_cockpit_inst3d->vp.y = 0.0;
-	virtual_cockpit_inst3d->vp.z = 0.0;
-
-	get_local_entity_attitude_matrix (get_gunship_entity (), virtual_cockpit_inst3d->vp.attitude);
-
-	get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
-
-	get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &main_vp.position);
-
-	main_vp.x += vp.x;
-	main_vp.y += vp.y;
-	main_vp.z += vp.z;
-
-	memcpy (main_vp.attitude, vp.attitude, sizeof (matrix3x3));
-
-	vp.x = -vp.x;
-	vp.y = -vp.y;
-	vp.z = -vp.z;
-
-	multiply_transpose_matrix3x3_vec3d (&virtual_cockpit_inst3d->vp.position, vp.attitude, &vp.position);
-
-	memcpy (display_viewpoint, &virtual_cockpit_inst3d->vp, sizeof (viewpoint));
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void draw_hind_internal_3d_cockpit (unsigned int flags)
 {
-	static float debug = 0.0;
-	
 	viewpoint
 		vp;
-
-	object_3d_sub_object_search_data
-		search;
 
 	object_3d_instance
 		*virtual_cockpit_inst3d;
@@ -702,15 +562,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-	if (flags & VIRTUAL_COCKPIT_HUD_DISPLAY)
-	{
-		draw_hind_hud_on_texture ();
-	}
-
-	if (flags & VIRTUAL_COCKPIT_EKRAN_DISPLAY)
-	{
-		draw_hind_ekran_display_on_texture ();
-	}
+	draw_hind_hud_on_texture ();
 
 	if (flags & VIRTUAL_COCKPIT_CRT_DISPLAY)
 	{
@@ -730,9 +582,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	//
 	////////////////////////////////////////
 
-//	if (flags & (VIRTUAL_COCKPIT_COCKPIT | VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES))
 	{
-//		set_cockpit_white_lighting (vp.attitude);
 		set_cockpit_lighting (vp.attitude);
 
 		set_3d_active_environment (main_3d_single_light_env);
@@ -743,78 +593,41 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 		clear_zbuffer_screen ();
 
-		debug_var_y = debug != debug_var_z;
-//		debug_log("z: %.1f, y: %.1f", debug_var_z, debug_var_y);
-		if (debug_var_y != 0.0)
-			debug = debug_var_z;
-
-/*		set_3d_active_environment (main_3d_env);
-
-//VJ 050108 wideview x coord used to clip apache cockpit
-		set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
-
-		realise_3d_clip_extents (main_3d_env);
-
-		recalculate_3d_environment_settings (main_3d_env);
-
-		clear_zbuffer_screen ();
-*/
 		if (begin_3d_scene ())
 		{
 			//
-			// virtual cockpit
+			// map first, otherwise transparency doesn't work properly
 			//
+			memcpy (&virtual_cockpit_map_display_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_map_display_inst3d->vp.position, virtual_cockpit_map_display_inst3d);
+			
+			// cockpit
+			virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
+			memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
 
-			if (flags & VIRTUAL_COCKPIT_COCKPIT)
-			{
-				/*
-				switch (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE))
-				{
-					////////////////////////////////////////
-					case DAY_SEGMENT_TYPE_DAWN:
-					////////////////////////////////////////
-					{
-						virtual_cockpit_inst3d = virtual_cockpit_level2_inst3d;
-
-						break;
-					}
-					////////////////////////////////////////
-					case DAY_SEGMENT_TYPE_DAY:
-					////////////////////////////////////////
-					{
-						virtual_cockpit_inst3d = virtual_cockpit_level1_inst3d;
-
-						break;
-					}
-					////////////////////////////////////////
-					case DAY_SEGMENT_TYPE_DUSK:
-					////////////////////////////////////////
-					{
-						virtual_cockpit_inst3d = virtual_cockpit_level2_inst3d;
-
-						break;
-					}
-					////////////////////////////////////////
-					case DAY_SEGMENT_TYPE_NIGHT:
-					////////////////////////////////////////
-					{
-						virtual_cockpit_inst3d = virtual_cockpit_level3_inst3d;
-
-						break;
-					}
-				}
-				*/
-
-				virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
-
-				memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
-
-				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
-			}
+			memcpy (&virtual_cockpit_hud_display_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hud_display_inst3d->vp.position, virtual_cockpit_hud_display_inst3d);
 
 			//
 			// instrument needles
 			//
+			
+			compass_object->relative_heading = -current_flight_dynamics->heading.value;
+
+			airspeed_needle->relative_roll = get_mi24_airspeed_needle_value();
+			vvi_needle->relative_roll = get_mi24_vertical_velocity_needle_value();
+
+			get_mi24_hover_indicator_speed(&hover_indicator_speed->relative_position.x, &hover_indicator_sideways->relative_position.y);
+			hover_indicator_vvi->relative_roll = get_mi24_hover_indicator_vvi_needle_value();
+
+			bank_indicator->relative_roll = current_flight_dynamics->roll.value;
+			pitch_ladder_roll->relative_roll = current_flight_dynamics->roll.value;
+			pitch_ladder_pitch->relative_position.y = get_mi24_pitch_ladder_dispacement();
+
+			memcpy (&virtual_cockpit_pilot_instruments_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_instruments_inst3d->vp.position, virtual_cockpit_pilot_instruments_inst3d);
+
 #if 0
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
 			{
@@ -1172,8 +985,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	#endif
 
 	realise_3d_clip_extents (main_3d_env);
-	
-	debug_var_y  = 0.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1184,9 +995,6 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 {
 	viewpoint
 		vp;
-
-	object_3d_sub_object_search_data
-		search;
 
 	float
 		theta;
@@ -1209,7 +1017,6 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 	//
 	////////////////////////////////////////
 
-//	if (flags & (VIRTUAL_COCKPIT_MAIN_ROTOR | VIRTUAL_COCKPIT_STOWED_WIPER | VIRTUAL_COCKPIT_MOVING_WIPER))
 	{
 		set_3d_active_environment (main_3d_env);
 
@@ -1223,10 +1030,10 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 
 		if (begin_3d_scene ())
 		{
+
 			//
 			// main rotor
 			//
-
 //			if (flags & VIRTUAL_COCKPIT_MAIN_ROTOR)
 			{
 				if (!(get_helicopter_main_rotors_blurred (get_gunship_entity ()) && (!get_global_blurred_main_rotors_visible_from_cockpit ())))
@@ -1255,26 +1062,13 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 					}
 				}
 			}
-#if 0
+
 			//
 			// wiper
 			//
 
-			if (wiper_mode == WIPER_MODE_STOWED)
-			{
-				if (flags & VIRTUAL_COCKPIT_STOWED_WIPER)
-				{
-					draw_hind_virtual_cockpit_wiper (&vp, flags & VIRTUAL_COCKPIT_LARGE_HUD);
-				}
-			}
-			else
-			{
-				if (flags & VIRTUAL_COCKPIT_MOVING_WIPER)
-				{
-					draw_hind_virtual_cockpit_wiper (&vp, flags & VIRTUAL_COCKPIT_LARGE_HUD);
-				}
-			}
-#endif
+			draw_hind_3d_cockpit_wiper (&vp);
+
 			draw_3d_scene ();
 
 			end_3d_scene ();
@@ -1492,38 +1286,33 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 			}
 		}
 	}
-
+#endif
 	////////////////////////////////////////
 	//
 	// rain effect
 	//
 	////////////////////////////////////////
 
-	if (flags & VIRTUAL_COCKPIT_RAIN_EFFECT)
+	if (rain_mode != RAIN_MODE_DRY)
 	{
-		if (rain_mode != RAIN_MODE_DRY)
+		set_3d_active_environment (main_3d_env);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		realise_3d_clip_extents (main_3d_env);
+
+		recalculate_3d_environment_settings (main_3d_env);
+
+		clear_zbuffer_screen ();
+
+		if (begin_3d_scene ())
 		{
-			set_3d_active_environment (main_3d_env);
+			memcpy (&virtual_cockpit_canopy_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_canopy_inst3d->vp.position, virtual_cockpit_canopy_inst3d);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
-
-			realise_3d_clip_extents (main_3d_env);
-
-			recalculate_3d_environment_settings (main_3d_env);
-
-			clear_zbuffer_screen ();
-
-			if (begin_3d_scene ())
-			{
-				draw_hind_virtual_cockpit_rain_effect (&vp, flags & VIRTUAL_COCKPIT_LARGE_HUD);
-
-				draw_3d_scene ();
-
-				end_3d_scene ();
-			}
+			draw_3d_scene ();
+			end_3d_scene ();
 		}
 	}
-#endif
+
 	//VJ wideview mod, date: 18-mar-03	
 	////////////////////////////////////////
 	//
