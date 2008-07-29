@@ -296,7 +296,7 @@ struct RSurface
           RPoly* ro = &polys.Append();
 
           ro->pl = Global->Point[i].pl[j].pl;
-          ro->index = Global->cur_poly++;
+          ro->index = m;
           for (unsigned n = 0; n < npoints; n++)
            {
             unsigned o = pl->list[m].vert[n];

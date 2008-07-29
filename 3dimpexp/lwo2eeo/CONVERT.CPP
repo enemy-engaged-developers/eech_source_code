@@ -205,14 +205,12 @@ void FindChunks(const LWOFile& lwofile)
  Array<LPoint> Point;
  LWO::Vector BBI, BBA;
  Array<RPoint> Rpoints;
- unsigned cur_poly;
  Array<RSurface> rs;
  float Radius;
 
  public:
 
  Convert(const char* lwo)
-  : cur_poly(0)
  {
   BBI.x = 0.0;
   BBI.y = 0.0;
