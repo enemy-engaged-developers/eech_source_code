@@ -341,7 +341,7 @@ struct RSurface
   else
    if (tvmap[0] == '\0')
     {
-     warning("Surface '%s': Texture is supplied but UV mapping is not");
+     warning("Surface '%s': Texture is supplied but UV mapping is not", &s->name);
      texture[0] = '\0';
     }
   if (texture[0] != '\0')
@@ -357,7 +357,7 @@ struct RSurface
   else
    if (lvmap[0] == '\0')
     {
-     warning("Surface '%s': Luminosity texture is supplied but UV mapping is not");
+     warning("Surface '%s': Luminosity texture is supplied but UV mapping is not", &s->name);
      ltexture[0] = '\0';
     }
   if (ltexture[0] != '\0')
