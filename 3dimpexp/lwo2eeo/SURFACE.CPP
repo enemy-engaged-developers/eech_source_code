@@ -231,9 +231,9 @@ struct RSurface
      }
      break;
 
-    case SurfaceAttribute::TRANSLUCENCY:
+    case SurfaceAttribute::TRANSPARENCY:
      {
-      const Translucency* t = static_cast<const Translucency*>(attr);
+      const Transparency* t = static_cast<const Transparency*>(attr);
 
       translucent = 1;
       alpha = (unsigned char)((1.0f - t->intensity) * 255.0f);
