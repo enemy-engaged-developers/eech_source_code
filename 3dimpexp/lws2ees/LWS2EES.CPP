@@ -9,6 +9,8 @@
 
 int main(int argc, char* argv[])
 {
+ puts("Enemy Engaged LWS to EES converter build " __DATE__);
+
  if (argc != 3)
   error("Usage: %s file_in.lws file_out.ees", argv[0]);
 

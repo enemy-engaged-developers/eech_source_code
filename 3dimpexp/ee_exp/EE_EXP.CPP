@@ -17,6 +17,8 @@
 
 int main(void)
 {
+ puts("Enemy Engaged 3D Exporter build " __DATE__);
+
  char filename[1024];
 
  freopen("EEEXPLOG.TXT", "w", stdout);

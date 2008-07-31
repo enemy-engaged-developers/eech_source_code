@@ -107,6 +107,8 @@ class Object : public OBJECT_3D
 
 int main(int argc, char* argv[])
 {
+ puts("Enemy Engaged EEO to LWO converter build " __DATE__);
+
  if (argc < 3)
   {
    printf("Usage: eeo2lwo file_name.eeo file_name.lwo [textures extention]");

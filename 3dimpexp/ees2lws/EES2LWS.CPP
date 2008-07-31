@@ -38,6 +38,8 @@ class Scene : public OBJECT_3D_SCENE_DATABASE_ENTRY
 
 int main(int argc, char* argv[])
 {
+ puts("Enemy Engaged EES to LWS converter build " __DATE__);
+
  if (argc < 3)
   {
    printf("Usage: ees2lws file_name.ees file_name.lws");

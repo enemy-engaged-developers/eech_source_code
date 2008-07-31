@@ -12,6 +12,8 @@
 
 int main(int argc, char* argv[])
 {
+ puts("Enemy Engaged LWO to EEO converter build " __DATE__);
+
  if (argc != 3)
   error("Usage: %s file_in.lwo file_out.eeo", argv[0]);
 
