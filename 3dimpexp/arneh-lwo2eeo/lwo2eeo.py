@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.5.1'
+VERSION = '1.5.2'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -339,7 +339,7 @@ class Surface:
         res = []
         for index in coords:
             # non-smooth surfaces cannot share point indices (because colour is
-            # calculated on a point basis, so polygons with differen normals will get
+            # calculated on a point basis, so polygons with different normals will get
             # the same colour), so add a unique value to each key for each non-smooth
             # polygon
             if self.smooth:
@@ -386,8 +386,12 @@ class VertexMap:
         else:
             point_map = self.point_map
 
-        point_map[point] = map
-
+        # Not sure why it happens, but sometimes the same point will have
+        # multiple UVs.  And from experience all but the first one are wrong,
+        # so only add UV if we don't already have it.
+        if point not in point_map:
+            point_map[point] = map
+        
     def get_map(self, poly_idx, point):
         if (poly_idx is not None) and (poly_idx in self.polygon_override):
             poly_map = self.polygon_override[poly_idx]
@@ -983,7 +987,7 @@ class Model:
                     uv = [surf.uv_map.get_map(poly, pref) for pref in indices]
                 else:
                     uv = [(0,0)] * len(indices)
-                
+
                 if surf.lumi_uv_map:
                     lumi_uv = [surf.lumi_uv_map.get_map(poly, pref) for pref in indices]
                 else:
