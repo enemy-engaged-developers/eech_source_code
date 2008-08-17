@@ -394,9 +394,9 @@ void draw_hind_hud_on_texture (void)
 		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
 		float head_offset_x = 0.0, head_offset_y = 0.0, head_offset_z = 0.0;
 
-		head_offset_x = getViewpointOffsetX(head_offset_x);
-		head_offset_y = getViewpointOffsetY(head_offset_y);
-		head_offset_z = getViewpointOffsetY(head_offset_z);
+		head_offset_x = -getViewpointOffsetX(head_offset_x);
+		head_offset_y = -getViewpointOffsetY(head_offset_y);
+		head_offset_z = -getViewpointOffsetY(head_offset_z);
 		
 		if (get_global_wide_cockpit())
 		{
