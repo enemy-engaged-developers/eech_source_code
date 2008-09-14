@@ -68,6 +68,8 @@
 
 #include "project.h"
 #include "../ai/parser/parsgen.h"
+#include "ai/ai_misc/ai_misc.h"
+#include "ai/faction/popread.h"
 
 //-- Werewolf
 #include <winsock.h>
