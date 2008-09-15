@@ -627,7 +627,10 @@ static int get_object ( FILE *fp )
 
 	sprintf ( new_filename, "%s\\%s.EEO", prefix, ptr );
 	if ( !read_object ( &objects_3d_data[objid], new_filename ) )
+	{
+		debug_log("failed to load object: %s", new_filename);
 		fail = 1;
+	}
 
 	return objid;
 }
@@ -1083,7 +1086,11 @@ static int all_scenes_loaded_successfully(unsigned from_index, unsigned to_index
 
 	for (sceneno = from_index; sceneno <= to_index; sceneno++)
 		if (!objects_3d_scene_database[sceneno].succeeded)
+		{
+			debug_log("failed: %d", sceneno);
+			ASSERT(FALSE);
 			return FALSE;
+		}
 
 	return TRUE;
 }
@@ -1140,7 +1147,7 @@ static void initialise_custom_scenes(const char* directory)
 
 	/** check which custom scenes have loaded correctly **/
 	custom_3d_models.arneh_ah64d_cockpit = all_scenes_loaded_successfully(OBJECT_3D_ARNEH_AH64D_COCKPIT, OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
-	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_CANOPY);
+	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_PILOT_WARNING_LAMPS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
