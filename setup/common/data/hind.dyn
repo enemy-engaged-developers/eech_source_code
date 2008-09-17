@@ -83,4 +83,4 @@ radar_altitude value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.00
 g_force value = 1.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_rpm value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
 combined_engine_torque value = 0.000000, min = 0.000000, max = 0.000000, modifier = 1.000000
-fuel_weight value = 1136.359985, min = 0.000000, max = 1136.359985, modifier = 1.000000
+fuel_weight value = 1416.359985, min = 0.000000, max = 1416.359985, modifier = 1.000000
