@@ -109,9 +109,24 @@ extern void draw_havoc_virtual_cockpit_instruments_on_texture (void);
 
 extern float get_mi24_airspeed_needle_value(void);
 extern float get_mi24_vertical_velocity_needle_value(void);
-extern float get_mi24_pitch_ladder_dispacement();
+extern float get_mi24_pitch_ladder_dispacement(void);
 extern void get_mi24_hover_indicator_speed(float* longitudinal, float* sideways);
-extern float get_mi24_hover_indicator_vvi_needle_value();
+extern float get_mi24_hover_indicator_vvi_needle_value(void);
+extern float get_mi24_radar_altimeter_needle_value(void);
+extern void get_mi24_barometric_altimeter_needle_values(float* shrt, float* lng);
+extern float get_mi24_rpm_needle_value(float rpm);
+extern void get_mi24_epr_needle_values(float* limits, float* left, float* right);
+extern void get_mi24_temperature_needle_values(float temp, float* big_needle, float* small_needle);
+extern float get_mi24_compass_waypoint_needle_value(void);
+extern float get_mi24_compass_waypoint_needle_heading_value(void);
+extern void get_mi24_clock_hand_values(float* hour_hand, float* minute_hand, float* second_hand);
+extern void get_mi24_hydraulic_pressure_values(float* gear, float* primary, float* secondary);
+
+extern float get_mi24_apu_rpm_needle_value(void);
+extern void get_mi24_engine_select_switch_value(float* current_val);
+extern float get_mi24_rocket_salvo_switch_value(void);
+extern float get_mi24_sidewind_needle_value(void);
+extern float get_mi24_fuel_quantity_needle_value(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

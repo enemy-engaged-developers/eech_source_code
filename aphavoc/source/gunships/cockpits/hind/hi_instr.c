@@ -88,6 +88,8 @@ struct SCALE_DATA
 
 typedef struct SCALE_DATA scale_data;
 
+#define SWITCH_MOVEMENT_RATE   rad(300.0)   // 30 deg in 0.1 sec
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2111,6 +2113,7 @@ void get_hind_virtual_cockpit_adi_angles (matrix3x3 attitude, float *heading, fl
 void get_hind_virtual_cockpit_hsi_needle_values (float *direction_finder, float *flight_path, float *drift)
 {
 	float
+		max_movement = rad(270) * get_delta_time(),
 		direction_finder_needle_value,
 		flight_path_needle_value,
 		drift_needle_value;
@@ -2123,11 +2126,11 @@ void get_hind_virtual_cockpit_hsi_needle_values (float *direction_finder, float 
 
 	get_hsi_needle_values (&direction_finder_needle_value, &flight_path_needle_value, &drift_needle_value);
 
-	*direction_finder = direction_finder_needle_value * -1.0;
+	*direction_finder += bound(-direction_finder_needle_value - *direction_finder, -max_movement, max_movement);
 
-	*flight_path = flight_path_needle_value * -1.0;
+	*flight_path += bound(-direction_finder_needle_value - *flight_path, -max_movement, max_movement);
 
-	*drift = drift_needle_value * -1.0;
+	*drift = -drift_needle_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2173,7 +2176,7 @@ float get_mi24_vertical_velocity_needle_value(void)
 		return rad(90) - roll;
 }
 
-float get_mi24_pitch_ladder_dispacement()
+float get_mi24_pitch_ladder_dispacement(void)
 {
 	float pitch = current_flight_dynamics->pitch.value;
 
@@ -2190,9 +2193,179 @@ void get_mi24_hover_indicator_speed(float* longitudinal, float* sideways)
 	*sideways *= HOVER_SPEED_SCALING;
 }
 
-float get_mi24_hover_indicator_vvi_needle_value()
+float get_mi24_hover_indicator_vvi_needle_value(void)
 {
 	float vvi = bound(current_flight_dynamics->world_velocity_y.value, -10.0, 10.0);
 
 	return (3.0 - vvi) * rad(3.85);  
+}
+
+float get_mi24_radar_altimeter_needle_value(void)
+{
+	float alt = bound(current_flight_dynamics->radar_altitude.value, 0.0, 700.0);
+	float roll = 0.0;
+
+	if (alt < 20.0)
+		roll = alt / 20.0 * rad(29.0);
+	else if (alt < 60.0)
+		roll = rad(29.0) + (alt - 20.0) / 40.0 * rad(64.0);
+	else if (alt < 100.0)
+		roll = rad(93.0) + (alt - 60.0) / 40.0 * rad(62.0);
+	else if (alt < 500.0)
+		roll = rad(155.0) + (alt - 100.0) / 400.0 * rad(105.0);
+	else
+		roll = rad(260.0) + (alt - 500.0) / 200.0 * rad(49.0);
+		
+	return -roll;
+}
+
+void get_mi24_barometric_altimeter_needle_values(float* shrt, float* lng)
+{
+	float alt = current_flight_dynamics->barometric_altitude.value;
+
+	*shrt = -(alt / 10000.0) * 2 * PI;
+	*lng = -(alt / 1000.0) * 2 * PI;
+}
+
+float get_mi24_apu_rpm_needle_value(void)
+{
+	float val = rad(113);
+
+	return val + rad(-1.85) * current_flight_dynamics->apu_rpm.value;
+}
+
+void get_mi24_engine_select_switch_value(float* current_val)
+{
+	float val = rad(5.0);
+	float max_step = SWITCH_MOVEMENT_RATE * get_delta_time();
+
+	if (current_flight_dynamics->left_engine_starter_active)
+		val = rad(50.0);
+	else if (current_flight_dynamics->right_engine_starter_active)
+		val = -rad(40.0);
+
+	*current_val += bound(val - *current_val, -max_step, max_step);
+}
+
+float get_mi24_rpm_needle_value(float rpm)
+{
+	float ret = rad(-46.0);
+
+	return ret + rpm * rad(-3.13);
+}
+
+void get_mi24_temperature_needle_values(float temp, float* big_needle, float* small_needle)
+{
+	temp = bound(temp, 0.0, 1200.0);
+
+	*big_needle = rad(131) - rad(0.2183) * temp;
+	*small_needle = rad(180) - 0.02 * PI * temp;
+}
+
+float get_mi24_compass_waypoint_needle_value(void)
+{
+	return 0.0;
+}
+
+float get_mi24_compass_waypoint_needle_heading_value(void)
+{
+	return 0.0;
+}
+
+void get_mi24_epr_needle_values(float* limits, float* left, float* right)
+{
+	float ambient_pressure = get_air_density(current_flight_dynamics->barometric_altitude.value);
+	float engine_power_ratio;  
+	
+	*limits = rad(15) * max(ambient_pressure - 0.5, 0.0) * 2;
+
+	engine_power_ratio = (current_flight_dynamics->left_engine_n1_rpm.value - current_flight_dynamics->engine_idle_rpm - 8.0)
+		* current_flight_dynamics->left_engine_rpm.value / 1900;
+	*left = bound(engine_power_ratio * rad(19) * max(ambient_pressure - 0.5, 0.0) * 2, 0.0, rad(25));;
+
+	engine_power_ratio = (current_flight_dynamics->right_engine_n1_rpm.value - current_flight_dynamics->engine_idle_rpm - 8.0)
+		* current_flight_dynamics->right_engine_rpm.value / 1900;
+	*right = bound(engine_power_ratio * rad(19) * max(ambient_pressure - 0.5, 0.0) * 2, 0.0, rad(25));;
+}
+
+float get_mi24_rocket_salvo_switch_value(void)
+{
+	float angle = rad(-22.0);
+
+	if (rocket_salvo_size == 2)
+		angle += rad(90.0);
+	else if (rocket_salvo_size != 4)
+		angle += rad(45.0);
+
+	return angle;
+}
+
+float get_mi24_sidewind_needle_value(void)
+{
+	float angle = 0.0;
+
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND))
+	{
+		vec3d position, wind, relative_wind;
+
+		position.x = current_flight_dynamics->position.x;
+		position.y = current_flight_dynamics->position.y;
+		position.z = current_flight_dynamics->position.z;
+
+		get_session_wind_velocity_at_point(&position, &wind);
+		multiply_matrix3x3_vec3d(&relative_wind, current_flight_dynamics->attitude, &wind);
+
+		angle = bound(relative_wind.x * rad(-9.7), rad(-130.0), rad(130.0));
+	}
+
+	return angle;
+}
+
+float get_mi24_fuel_quantity_needle_value(void)
+{
+	float angle = rad(149.0);
+
+	angle += rad(-0.1196) * current_flight_dynamics->fuel_weight.value * 1.39;  // gauge uses liters, 1.39 liters per kilo
+	
+	return angle;
+}
+
+void get_mi24_clock_hand_values(float* hour_hand, float* minute_hand, float* second_hand)
+{
+	float
+		time_of_day,
+		hour_hand_value,
+		minute_hand_value,
+		second_hand_value;
+	
+	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+	get_analogue_clock_values (time_of_day, &hour_hand_value, &minute_hand_value, &second_hand_value);
+
+	*hour_hand = hour_hand_value * rad(-30.0);
+	*minute_hand = minute_hand_value * rad(-6.0);
+	*second_hand = floor(second_hand_value) * rad(-6.0);
+}
+
+void get_mi24_hydraulic_pressure_values(float* gear, float* primary, float* secondary)
+{
+	float
+		max_movement = rad(180) * get_delta_time(),
+		gear_psi = rad(52.0),
+		primary_psi = rad(52.0),
+		secondary_psi = rad(52.0);
+	
+	if (electrical_system_active())
+	{
+		if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_UNDERCARRIAGE))
+			gear_psi -= rad(115.0); 
+
+		if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS))
+			secondary_psi -= rad(115.0);
+
+		primary_psi -= get_hydraulic_pressure() * rad(115.0);
+	}
+	
+	*gear += bound(gear_psi - *gear, -max_movement, max_movement);
+	*primary += bound(primary_psi - *primary, -max_movement, max_movement);
+	*secondary += bound(secondary_psi - *secondary, -max_movement, max_movement);
 }
