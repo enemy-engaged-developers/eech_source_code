@@ -68,6 +68,7 @@
 #include "3d/3dsubobj.h"
 
 #include "hi_3dwiper.h"
+#include "../../dynamics/common/co_undercarriage.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +80,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define SHUTOFF_MOVEMENT_RATE rad(120.0)
+#define ROTOR_BRAKE_MOVEMENT_RATE rad(120.0)
+#define COLLECTIVE_THROTTLE_MOVEMENT_RATE rad(120.0)
+#define GEAR_LEVER_MOVEMENT_RATE rad(270.0)
+#define ELECTRICAL_GAUGE_MOVEMENT_RATE rad(480.0)
+
 static object_3d_instance
 	*virtual_pilot_cockpit_inst3d,
 	*virtual_cockpit_canopy_inst3d,
@@ -87,6 +94,8 @@ static object_3d_instance
 	*virtual_cockpit_hud_display_inst3d,
 	*virtual_cockpit_map_display_inst3d,
 	*virtual_cockpit_pilot_instruments_inst3d,
+	*virtual_cockpit_pilot_secondary_instruments_inst3d,
+	*virtual_cockpit_warning_lamps_inst3d,
 	*virtual_cockpit_main_rotor_inst3d,
 	*virtual_cockpit_adi_inst3d,
 	*virtual_cockpit_hsi_inst3d,
@@ -94,21 +103,120 @@ static object_3d_instance
 	*virtual_cockpit_compass_inst3d;
 
 static object_3d_sub_instance
+	*high_detail,
 	*fan_object,
 	*spinning_fan_object,
 	*compass_object,
 	*airspeed_needle,
 	*vvi_needle,
+	*radar_altimeter,
+	*barometric_altimeter_short,
+	*barometric_altimeter_long,
 	*bank_indicator,
 	*hover_indicator_speed,
 	*hover_indicator_sideways,
 	*hover_indicator_vvi,
 	*pitch_ladder_pitch,
 	*pitch_ladder_roll,
-	*pilot_head_object;
+	*horizon_ball,
+	*pilot_head_object,
+	*shutoff_valve_left,
+	*shutoff_valve_right,
+	*rotor_brake,
+	*rotor_rpm,
+	*left_n1_rpm,
+	*right_n1_rpm,
+	*left_temperature,
+	*left_temperature_small,
+	*right_temperature,
+	*right_temperature_small,
+	*radio_compass,
+	*compass_waypoint_needle,
+	*compass_waypoint_heading_needle,
+	*epr_limits,
+	*left_epr_needle,
+	*right_epr_needle,
+	*blade_pitch_needle,
+	*g_force,
+	*sidewind,
+	*fuel_quantity,
+	*primary_hydraulic_psi,
+	*secondary_hydraulic_psi,
+	*gear_hydraulic_psi,
+	*clock_hour_hand,
+	*clock_minute_hand,
+	*clock_second_hand,
+
+	*gear_lever,
+	*collective,
+	*collective_throttle,
+	*pedal_link,
+	*left_pedal,
+	*right_pedal,
+
+	*apu_rpm_needle,
+	*apu_start_switch,
+	*apu_stop_switch,
+	*apu_ready_light,
+	*apu_rpm_light,
+	*apu_bleedair_lights,
+	*engine_start_switch,
+	*engine_select_switch,
+	*engine_start_light,
+
+	*left_battery_ammeter,
+	*right_battery_ammeter,
+	*apu_ammeter,
+	*voltmeter,
+	*left_generator_ammeter,
+	*right_generator_ammeter,
+	
+	*left_wheel_down_light,
+	*right_wheel_down_light,
+	*nose_wheel_down_light,
+	*wheels_up_light,
+	*gear_operational_light,
+	*gear_fail_light,
+	*cockpit_open_light,
+	*cockpit_sealed_light,
+	*park_brake_light,
+	*auto_hover_light,
+	*auto_pilot_light,
+	*auto_pilot_off_light,
+	*auto_altitude_light,
+	*auto_altitude_off_light,
+	*external_light_lamps,
+	*left_outer_pylon_light,
+	*left_inner_pylon_light,
+	*right_inner_pylon_light,
+	*right_outer_pylon_light,
+	
+	*fire_light,
+	*left_engine_fire_light,
+	*right_engine_fire_light,
+	*left_engine_fail_light,
+	*right_engine_fail_light,
+	*over_stress_light,
+	*low_fuel_lights,
+	*gyre_fail_lights,
+	
+	*fuel_switches,
+	*external_light_switches,
+	*radio_navigation_switches,
+	*weapon_select_switch,
+	*master_arm_switches,
+	*rocket_salvo_switch
+	;
+
+cockpit_switch
+    switch_animations[3];
 
 // crew position in first dimension, min/max limit in second
 static vec3d head_limits[2][2];
+
+static int cockpit_fan_enabled = FALSE;
+
+//static void animate_shutoff_valve(object3d_sub_instance* inst, int closed);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +224,7 @@ static vec3d head_limits[2][2];
 
 void initialise_hind_3d_cockpit (void)
 {
+	int switch_no = 0;
 	//
 	// 3D instances
 	//
@@ -127,7 +236,9 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_map_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_MAP_DISPLAY);
 
 	virtual_cockpit_pilot_instruments_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_INSTRUMENTS);
-
+	virtual_cockpit_pilot_secondary_instruments_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_SECONDARY_INSTRUMENTS);
+	virtual_cockpit_warning_lamps_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_WARNING_LAMPS);
+	
 	pilot_head_pitch_datum = 0.0;
 
 	co_pilot_head_pitch_datum = 0.0;
@@ -153,11 +264,15 @@ void initialise_hind_3d_cockpit (void)
 	initialise_common_virtual_cockpit_cameras ();
 
 	pilot_head_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_PILOT_HEAD);
+	high_detail = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
 	compass_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_COMPASS_HEADING_NULL);
 	fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_FAN);
 	spinning_fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_SPINNING_FAN);
 	airspeed_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_AIRSPEED_NEEDLE);
 	vvi_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_VERTICAL_VELOCITY_NEEDLE);
+	radar_altimeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RADAR_ALTIMETER);
+	barometric_altimeter_short = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BAROMETRIC_ALTIMETER_SHORT);
+	barometric_altimeter_long = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BAROMETRIC_ALTIMETER_LONG);
 	bank_indicator = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BANK_INDICATOR);
 
 	hover_indicator_speed = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_LONGITUDINAL);
@@ -166,7 +281,113 @@ void initialise_hind_3d_cockpit (void)
 	
 	pitch_ladder_pitch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI);
 	pitch_ladder_roll = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI_PITCH_NULL);
+	horizon_ball = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_ADI);
+	
+	shutoff_valve_left = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SHUTOFFVALVE_LEFT);
+	shutoff_valve_right = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SHUTOFFVALVE_RIGHT);
+	rotor_brake = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROTOR_BRAKE);
+	
+	rotor_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROTOR_RPM_NEEDLE);
+	left_n1_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_N1_RPM_NEEDLE);
+	right_n1_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_N1_RPM_NEEDLE);
 
+	left_temperature = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_TEMPERATURE_NEEDLE);
+	left_temperature_small = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_TEMPERATURE_SMALL_NEEDLE);
+	right_temperature = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_TEMPERATURE_NEEDLE);
+	right_temperature_small = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_TEMPERATURE_SMALL_NEEDLE);
+
+	radio_compass = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_ROSE);
+	compass_waypoint_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_WAYPOINT_NEEDLE);
+	compass_waypoint_heading_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_WAYPOINT_HEADING_NEEDLE);
+
+	epr_limits = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EPR_LIMITS);
+	left_epr_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_EPR_NEEDLE);
+	right_epr_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_EPR_NEEDLE);
+	
+	blade_pitch_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BLADE_PITCH_NEEDLE);
+	g_force = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_G_FORCE_NEEDLE);
+	sidewind = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SIDEWIND_NEEDLE);
+	fuel_quantity = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_QUANTITY_NEEDLE);
+	primary_hydraulic_psi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_PRIMARY_HYDRAULIC_NEEDLE);
+	secondary_hydraulic_psi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SECONDARY_HYDRAULIC_NEEDLE);
+	gear_hydraulic_psi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_HYDRAULIC_NEEDLE);
+
+
+	clock_hour_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_HOUR_HAND);
+	clock_minute_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_MINUTE_HAND);
+	clock_second_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_SECOND_HAND);
+	
+	gear_lever = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_LEVER);
+	collective = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COLLECTIVE);
+	collective_throttle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COLLECTIVE_THROTTLE);
+
+	pedal_link = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_PEDAL_LINK);
+	left_pedal = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_PEDAL);
+	right_pedal = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_PEDAL);
+
+	left_battery_ammeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_BATTERY_AMMETER_NEEDLE);
+	right_battery_ammeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_BATTERY_AMMETER_NEEDLE);
+	apu_ammeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_APU_AMMETER_NEEDLE);
+	voltmeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_VOLTMETER_NEEDLE);
+	left_generator_ammeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_GENERATOR_AMMETER_NEEDLE);
+	right_generator_ammeter = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_GENERATOR_AMMETER_NEEDLE);
+
+	apu_rpm_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_APU_RPM_NEEDLE);
+	engine_select_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ENGINE_SELECT_SWITCH);
+	engine_start_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ENGINE_START_SWITCH);
+	apu_start_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_APU_START_SWITCH);
+	apu_stop_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_APU_STOP_SWITCH);
+
+	initialise_switch(&switch_animations[switch_no], &engine_start_switch->relative_position.x, -0.0065, 0.3, 0.25);
+	engine_start_switch_animation_object = &switch_animations[switch_no];
+	initialise_switch(&switch_animations[++switch_no], &apu_start_switch->relative_position.x, -0.0065, 0.3, 0.0);
+	apu_start_switch_animation_object = &switch_animations[switch_no];
+	initialise_switch(&switch_animations[++switch_no], &apu_stop_switch->relative_position.x, -0.0065, 0.3, 0.0);
+	apu_stop_switch_animation_object = &switch_animations[switch_no];
+
+	apu_ready_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_READY_LIGHT);
+	apu_rpm_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_RPM_LIGHT);
+	apu_bleedair_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_BLEEDAIR_LIGHT);
+	engine_start_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ENGINE_START_LIGHT);
+	
+	left_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_WHEEL_DOWN_LIGHT);
+	right_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_WHEEL_DOWN_LIGHT);
+	nose_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_NOSE_WHEEL_DOWN_LIGHT); 
+	wheels_up_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_WHEELS_UP_LIGHT);
+	gear_operational_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_OPERATIONAL_LIGHT);
+	gear_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_FAIL_LIGHT);
+	cockpit_open_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_OPEN_LIGHT);
+	cockpit_sealed_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_SEALED_LIGHT);
+	park_brake_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_PARK_BRAKE_LIGHT);
+	auto_hover_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_HOVER_LIGHT);
+	auto_pilot_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_PILOT_LIGHT);
+	auto_pilot_off_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_PILOT_OFF_LIGHT);
+	auto_altitude_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ALTITUDE_HOLD_LIGHT); 
+	auto_altitude_off_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ALTITUDE_HOLD_OFF_LIGHT);
+	external_light_lamps = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_LAMPS);
+	left_outer_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_OUTER_PYLON_LIGHT);
+	left_inner_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_INNER_PYLON_LIGHT);
+	right_inner_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_INNER_PYLON_LIGHT);
+	right_outer_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_OUTER_PYLON_LIGHT);
+	
+	fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_FIRE_LIGHT); 
+	left_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FIRE_LIGHT);
+	right_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FIRE_LIGHT); 
+	left_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FAIL_LIGHT); 
+	right_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FAIL_LIGHT); 
+	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT); 
+	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS); 
+	gyre_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS); 
+	
+	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
+	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
+	radio_navigation_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RADIO_NAVIGATION_SWITCHES);
+	weapon_select_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SELECT_SWITCH);
+	rocket_salvo_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROCKET_SALVO_SWITCH);
+	master_arm_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_MASTER_ARM_SWITCHES);
+//	rocket_side_switch = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROCKET_SIDE_SWITCH);
+
+	ASSERT(switch_no == ARRAY_LENGTH(switch_animations) - 1);
 	//ASSERT(FALSE);
 #ifdef DEBUG  // don't limit in debug (for all practical purposes
 	// pilot limits
@@ -224,6 +445,8 @@ void deinitialise_hind_3d_cockpit (void)
 	destruct_3d_object (virtual_cockpit_map_display_inst3d);
 	destruct_3d_object (virtual_cockpit_main_rotor_inst3d);
 	destruct_3d_object (virtual_cockpit_pilot_instruments_inst3d);
+	destruct_3d_object (virtual_cockpit_pilot_secondary_instruments_inst3d);
+	destruct_3d_object (virtual_cockpit_warning_lamps_inst3d);
 	destruct_3d_object (virtual_cockpit_adi_inst3d);
 	destruct_3d_object (virtual_cockpit_hsi_inst3d);
 	destruct_3d_object (virtual_cockpit_ekran_display_inst3d);
@@ -249,6 +472,11 @@ void deinitialise_hind_3d_cockpit (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void toggle_mi24_cockpit_fan(void)
+{
+	cockpit_fan_enabled = !cockpit_fan_enabled;
+}
+
 #define FAN_ROTATION_SPEED   (PI2 * 4.0)
 #define FAN_BLUR_TRESHOLD    (PI2 * 2.0)
 
@@ -258,19 +486,19 @@ static void animate_fan(void)
 
 	ASSERT(fan_object);
 
-	if (debug_var_x > 0.0 && fan_speed < FAN_ROTATION_SPEED)
+	if (fan_speed < FAN_ROTATION_SPEED && cockpit_fan_enabled && electrical_system_active())
 	{
 		fan_speed += FAN_ROTATION_SPEED * get_delta_time();
 		if (fan_speed > FAN_ROTATION_SPEED)
 			fan_speed = FAN_ROTATION_SPEED;
 	}
-	else if (debug_var_x <= 0.0 && fan_speed > 0.0)
+	else if (fan_speed > 0.0 && (!cockpit_fan_enabled || !electrical_system_active()))
 	{
 		fan_speed -= FAN_ROTATION_SPEED * 0.4 * get_delta_time();
 		if (fan_speed < 0.0)
 			fan_speed = 0.0;
 	}
-
+	
 	fan_object->relative_roll -= fan_speed * get_delta_time();
 	while (fan_object->relative_roll < 0.0)
 		fan_object->relative_roll += PI2;
@@ -292,9 +520,96 @@ static void animate_fan(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void animate_rotor_brake(int enabled)
+{
+	float
+		max_movement = ROTOR_BRAKE_MOVEMENT_RATE * get_delta_time(),
+		brake_angle = 0.0;
+
+	if (enabled)
+		brake_angle = rad(-35.0);
+	
+	rotor_brake->relative_pitch += bound(brake_angle - rotor_brake->relative_pitch, -max_movement, max_movement);
+}
+
+static void animate_electrical_instruments(void)
+{
+	float
+		max_movement = ELECTRICAL_GAUGE_MOVEMENT_RATE * get_delta_time(),
+		angle = rad(98.0);
+
+	if (electrical_system_active())
+		angle = rad(-60.0);
+
+	left_battery_ammeter->relative_roll += bound(angle - left_battery_ammeter->relative_roll, -max_movement, max_movement);
+	right_battery_ammeter->relative_roll = left_battery_ammeter->relative_roll; 
+	apu_ammeter->relative_roll = left_battery_ammeter->relative_roll;
+	voltmeter->relative_roll = left_battery_ammeter->relative_roll;
+	left_generator_ammeter->relative_roll = left_battery_ammeter->relative_roll;
+	right_generator_ammeter->relative_roll = left_battery_ammeter->relative_roll;
+}
+
+static void animate_collective_throttle(void)
+{
+	float
+		max_movement = COLLECTIVE_THROTTLE_MOVEMENT_RATE * get_delta_time(),
+		throttle_position = (current_flight_dynamics->main_rotor_governor_rpm - current_flight_dynamics->main_rotor_idle_rpm)
+				/ (current_flight_dynamics->main_rotor_max_rpm - current_flight_dynamics->main_rotor_idle_rpm),
+		angle = rad(-65.0) * throttle_position;
+
+	collective_throttle->relative_roll += bound(angle - collective_throttle->relative_roll, -max_movement, max_movement);
+}
+
+static void animate_gear_lever(void)
+{
+	float
+		max_movement = GEAR_LEVER_MOVEMENT_RATE * get_delta_time(),
+		angle = 0.0;
+
+	int uc_state = get_local_entity_undercarriage_state(get_gunship_entity());
+	
+	if (uc_state == AIRCRAFT_UNDERCARRIAGE_UP || uc_state == AIRCRAFT_UNDERCARRIAGE_RAISING)
+		angle = rad(75.0);
+	
+	gear_lever->relative_roll += bound(angle - gear_lever->relative_roll, -max_movement, max_movement);
+}
+
+static float animate_weapon_switch(entity_sub_types selected_weapon)
+{
+	float
+		max_movement = rad(360.0) * get_delta_time(),
+		angle = 0.0;
+
+	switch (selected_weapon)
+	{
+	case ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND:
+		angle = rad(-82.0);
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_S5:
+	case ENTITY_SUB_TYPE_WEAPON_S8:
+	case ENTITY_SUB_TYPE_WEAPON_S13:
+		angle = rad(-105.0);
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_ATAKA:
+	case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
+	default:
+		angle = rad(54.0);
+		break;
+	}
+
+	weapon_select_switch->relative_roll += bound(angle - weapon_select_switch->relative_roll, -max_movement, max_movement);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void update_hind_3d_cockpit (void)
 {
 	animate_fan();
+	animate_collective_throttle();
+	animate_gear_lever();
+	animate_electrical_instruments();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,9 +725,9 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 		ambient_light_colour,
 		directional_light_colour;
 
-	ambient_light_colour.red = 0.35 + ambient_3d_light.colour.red;
-	ambient_light_colour.green = 0.35 + ambient_3d_light.colour.green;
-	ambient_light_colour.blue = 0.35 + ambient_3d_light.colour.blue;
+	ambient_light_colour.red = 0.3 + ambient_3d_light.colour.red;
+	ambient_light_colour.green = 0.3 + ambient_3d_light.colour.green;
+	ambient_light_colour.blue = 0.3 + ambient_3d_light.colour.blue;
 
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
 
@@ -595,6 +910,9 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 		if (begin_3d_scene ())
 		{
+			float dummy;  // TODO: remove
+			entity_sub_types selected_weapon = get_local_entity_int_value (get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
+			
 			//
 			// map first, otherwise transparency doesn't work properly
 			//
@@ -602,6 +920,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_map_display_inst3d->vp.position, virtual_cockpit_map_display_inst3d);
 			
 			// cockpit
+			high_detail->visible_object = get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW;
 			virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
 			memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_inst3d->vp.position, virtual_cockpit_inst3d);
@@ -620,13 +939,161 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 			get_mi24_hover_indicator_speed(&hover_indicator_speed->relative_position.x, &hover_indicator_sideways->relative_position.y);
 			hover_indicator_vvi->relative_roll = get_mi24_hover_indicator_vvi_needle_value();
-
+			radar_altimeter->relative_roll = get_mi24_radar_altimeter_needle_value();
+			get_mi24_barometric_altimeter_needle_values(&barometric_altimeter_short->relative_roll, &barometric_altimeter_long->relative_roll);
+			
 			bank_indicator->relative_roll = current_flight_dynamics->roll.value;
 			pitch_ladder_roll->relative_roll = current_flight_dynamics->roll.value;
 			pitch_ladder_pitch->relative_position.y = get_mi24_pitch_ladder_dispacement();
+			horizon_ball->relative_pitch = -current_flight_dynamics->roll.value;
+			horizon_ball->relative_roll = -current_flight_dynamics->pitch.value;
 
+			animate_shutoff_valve(shutoff_valve_left, current_flight_dynamics->right_engine_n1_rpm.max < 60.0);
+			animate_shutoff_valve(shutoff_valve_right, current_flight_dynamics->left_engine_n1_rpm.max < 60.0);
+			animate_rotor_brake(current_flight_dynamics->rotor_brake);
+
+			apu_rpm_needle->relative_roll = get_mi24_apu_rpm_needle_value();
+			get_mi24_engine_select_switch_value(&engine_select_switch->relative_pitch);
+
+			rotor_rpm->relative_roll = get_mi24_rpm_needle_value(current_flight_dynamics->main_rotor_rpm.value);
+			left_n1_rpm->relative_roll = get_mi24_rpm_needle_value(current_flight_dynamics->left_engine_n1_rpm.value);
+			right_n1_rpm->relative_roll = get_mi24_rpm_needle_value(current_flight_dynamics->right_engine_n1_rpm.value);
+
+			get_mi24_temperature_needle_values(current_flight_dynamics->left_engine_temp.value, &left_temperature->relative_roll, &left_temperature_small->relative_roll);
+			get_mi24_temperature_needle_values(current_flight_dynamics->right_engine_temp.value, &right_temperature->relative_roll, &right_temperature_small->relative_roll);
+			
+			get_mi24_epr_needle_values(&epr_limits->relative_pitch, &left_epr_needle->relative_pitch, &right_epr_needle->relative_pitch);
+			
+			radio_compass->relative_roll = current_flight_dynamics->heading.value;
+			get_hind_virtual_cockpit_hsi_needle_values(&compass_waypoint_needle->relative_roll, &compass_waypoint_heading_needle->relative_roll, &dummy);
+
+			sidewind->relative_roll = get_mi24_sidewind_needle_value();
+			fuel_quantity->relative_roll = get_mi24_fuel_quantity_needle_value();
+			
+			blade_pitch_needle->relative_roll = rad(98) - rad(185.0) *
+				current_flight_dynamics->input_data.collective.value / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
+
+			g_force->relative_roll = bound(rad(-59.5) * current_flight_dynamics->g_force.value, rad(-210.0), rad(90.0));
+			get_mi24_clock_hand_values(&clock_hour_hand->relative_roll, &clock_minute_hand->relative_roll, &clock_second_hand->relative_roll);
+
+			get_mi24_hydraulic_pressure_values(&gear_hydraulic_psi->relative_roll, &primary_hydraulic_psi->relative_roll, &secondary_hydraulic_psi->relative_roll);
+			
+			collective->relative_pitch = rad(-25.0) - rad(20) * current_flight_dynamics->input_data.collective.value * 0.01;
+			pedal_link->relative_heading = rad(-15.0) * current_flight_dynamics->input_data.pedal.value * 0.01;
+			left_pedal->relative_heading = right_pedal->relative_heading = -pedal_link->relative_heading;
+
+			animate_weapon_switch(selected_weapon);
+			rocket_salvo_switch->relative_pitch = get_mi24_rocket_salvo_switch_value();
+			
+			{
+				int i;
+				for (i=0; i < ARRAY_LENGTH(switch_animations); i++)
+					animate_switch(&switch_animations[i]);
+			}
+			
 			memcpy (&virtual_cockpit_pilot_instruments_inst3d->vp, &vp, sizeof (viewpoint));
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_instruments_inst3d->vp.position, virtual_cockpit_pilot_instruments_inst3d);
+
+			// warning lamps
+			if (electrical_system_active())
+			{
+				int hover_hold_mode = current_flight_dynamics->auto_hover;
+				
+				apu_ready_light->visible_object = !current_flight_dynamics->apu_rpm.damaged;
+				apu_rpm_light->visible_object = current_flight_dynamics->apu_rpm.value > 90.0;
+				apu_bleedair_lights->visible_object = current_flight_dynamics->apu_rpm.value > 60.0;
+				engine_start_light->visible_object = (current_flight_dynamics->left_engine_starter_active || current_flight_dynamics->right_engine_starter_active);
+
+				cockpit_sealed_light->visible_object = get_local_entity_loading_door_state(get_gunship_entity ()) == 0;
+				cockpit_open_light->visible_object = !cockpit_sealed_light->visible_object; 
+				park_brake_light->visible_object = !!current_flight_dynamics->wheel_brake;
+
+				gear_operational_light->visible_object = !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_UNDERCARRIAGE);
+				gear_fail_light->visible_object = !gear_operational_light->visible_object;
+				
+				if (get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
+				{
+					wheels_up_light->visible_object = FALSE;
+					if (gear_operational_light->visible_object)
+					{
+						left_wheel_down_light->visible_object = left_main_wheel_locked_down();
+						right_wheel_down_light->visible_object = right_main_wheel_locked_down();
+						nose_wheel_down_light->visible_object = nose_wheel_locked_down();
+					}
+				}
+				else
+				{
+					wheels_up_light->visible_object = get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_UP;
+					left_wheel_down_light->visible_object = FALSE;
+					right_wheel_down_light->visible_object = FALSE;
+					nose_wheel_down_light->visible_object = FALSE;
+				}
+
+				auto_hover_light->visible_object = hover_hold_mode == HOVER_HOLD_NORMAL || hover_hold_mode == HOVER_HOLD_STABLE;
+				auto_pilot_light->visible_object = get_current_flight_dynamics_auto_pilot();
+				auto_pilot_off_light->visible_object = !auto_hover_light->visible_object && !auto_pilot_light->visible_object;
+				auto_altitude_light->visible_object = hover_hold_mode == HOVER_HOLD_STABLE || hover_hold_mode == HOVER_HOLD_ALTITUDE_LOCK;
+				auto_altitude_off_light->visible_object = !auto_altitude_light->visible_object;
+				
+				external_light_lamps->visible_object = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_LIGHTS_ON);
+
+				left_engine_fire_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE) != 0;
+				right_engine_fire_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE) != 0;
+				fire_light->visible_object = left_engine_fire_light->visible_object || right_engine_fire_light->visible_object;
+				left_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE) != 0;
+				right_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0;
+				over_stress_light->visible_object = current_flight_dynamics->g_force.value > 1.8;
+				low_fuel_lights->visible_object = current_flight_dynamics->fuel_weight.value < current_flight_dynamics->fuel_weight.max * 0.25;
+				gyre_fail_lights->visible_object = hind_damage.navigation_computer; 
+				
+				// weapon pylon lights
+				{
+					int pylon;
+
+					for (pylon = HAVOC_LHS_INNER_PYLON; pylon <= HAVOC_RHS_OUTER_PYLON; pylon++)
+					{
+						entity_sub_types weapon_sub_type;
+						int number, damaged;
+						int pylon_index = 0;
+						
+						if (get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
+							pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
+							&weapon_sub_type, &number, &damaged))
+						{
+							switch (pylon)
+							{
+							case HAVOC_LHS_OUTER_PYLON:
+								left_outer_pylon_light->visible_object = (!damaged && weapon_sub_type == selected_weapon);
+								break;
+							case HAVOC_LHS_INNER_PYLON:
+								left_inner_pylon_light->visible_object = (!damaged && weapon_sub_type == selected_weapon);
+								break;
+							case HAVOC_RHS_INNER_PYLON:
+								right_inner_pylon_light->visible_object = (!damaged && weapon_sub_type == selected_weapon);
+								break;
+							case HAVOC_RHS_OUTER_PYLON:
+								right_outer_pylon_light->visible_object = (!damaged && weapon_sub_type == selected_weapon);
+								break;
+							}
+						}
+					}
+				}
+				
+				memcpy (&virtual_cockpit_warning_lamps_inst3d->vp, &vp, sizeof (viewpoint));
+				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_warning_lamps_inst3d->vp.position, virtual_cockpit_warning_lamps_inst3d);
+			}
+
+			// secondary instruments
+			if (get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW)
+			{
+				fuel_switches->relative_roll = electrical_system_active() ? rad(90.0) : 0.0;
+				radio_navigation_switches->relative_roll = fuel_switches->relative_roll; 
+				external_light_switches->relative_roll = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_LIGHTS_ON) ? rad(90.0) : 0.0;
+				master_arm_switches->relative_pitch = (get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON) ? 0.0 : rad(90.0);
+				
+				memcpy (&virtual_cockpit_pilot_secondary_instruments_inst3d->vp, &vp, sizeof (viewpoint));
+				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_secondary_instruments_inst3d->vp.position, virtual_cockpit_pilot_secondary_instruments_inst3d);
+			}
 
 #if 0
 			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
@@ -1446,3 +1913,16 @@ void restore_hind_3d_cockpit_main_rotors (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void animate_shutoff_valve(object_3d_sub_instance* inst, int closed)
+{
+	float
+		max_movement = SHUTOFF_MOVEMENT_RATE * get_delta_time(),
+		valve_angle = 0.0;
+
+	// left throttle
+	if (!closed)  // idle at -45 deg
+		valve_angle = rad(45.0);
+	
+	inst->relative_pitch += bound(valve_angle - inst->relative_pitch, -max_movement, max_movement);
+}
