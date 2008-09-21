@@ -385,7 +385,6 @@ void initialise_hind_3d_cockpit (void)
 	weapon_select_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SELECT_SWITCH);
 	rocket_salvo_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROCKET_SALVO_SWITCH);
 	master_arm_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_MASTER_ARM_SWITCHES);
-//	rocket_side_switch = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROCKET_SIDE_SWITCH);
 
 	ASSERT(switch_no == ARRAY_LENGTH(switch_animations) - 1);
 	//ASSERT(FALSE);
@@ -574,7 +573,7 @@ static void animate_gear_lever(void)
 	gear_lever->relative_roll += bound(angle - gear_lever->relative_roll, -max_movement, max_movement);
 }
 
-static float animate_weapon_switch(entity_sub_types selected_weapon)
+static void animate_weapon_switch(entity_sub_types selected_weapon)
 {
 	float
 		max_movement = rad(360.0) * get_delta_time(),
@@ -1054,7 +1053,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 					{
 						entity_sub_types weapon_sub_type;
 						int number, damaged;
-						int pylon_index = 0;
 						
 						if (get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
 							pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
@@ -1824,12 +1822,12 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
       }                                                      
 		if (check_key(DIK_NUMPAD0))                            
 		{                                       
-			wide_cockpit_position[wide_cockpit_nr].x = BASE_X_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].y = BASE_Y_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].z = BASE_Z_HAVOC;
-			wide_cockpit_position[wide_cockpit_nr].p = BASE_P_HAVOC;
+			wide_cockpit_position[wide_cockpit_nr].x = 0.0;
+			wide_cockpit_position[wide_cockpit_nr].y = 0.0;
+			wide_cockpit_position[wide_cockpit_nr].z = 0.0;
+			wide_cockpit_position[wide_cockpit_nr].p = -5.0;
       }                                                      
-   }            	                                           
+   }      
 
 
 
