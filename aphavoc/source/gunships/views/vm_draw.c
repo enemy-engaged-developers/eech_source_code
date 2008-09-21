@@ -299,6 +299,9 @@ static void display_time_acceleration (void)
 
 	s = NULL;
 
+	if (command_line_disable_message_text)
+		return;
+
 	if (get_time_acceleration () == 0)
 	{
 		s = get_trans ("Paused");
