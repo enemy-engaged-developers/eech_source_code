@@ -160,7 +160,6 @@ void initialise_view_events (void)
 
 //VJ 030511 TSD render mod, linked to eech.ini
 	tsd_render_mode = command_line_tsd_render_mode+1;
-	tsd_render_palette = command_line_tsd_palette;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1057,11 +1056,7 @@ static void TSD_render_event (event *ev)
 //VJ 030429 TSD render mod
 static void TSD_render_palette_event (event *ev)
 {
-	tsd_render_palette++;
-	if (tsd_render_palette == 4)
-	   tsd_render_palette = 0; 
-// update commandline option	
-	command_line_tsd_palette = tsd_render_palette;
+	cycle_tsd_map_palette();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2337,6 +2332,12 @@ void set_gunship_view_mode_events (void)
 	if (get_apache_havoc_gunship ())
 	{
 		set_event (DIK_F2, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_draw_overlaid_instruments_event);
+
+		if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		{
+			set_event (DIK_F3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, decrease_cockpit_detail_event);
+			set_event (DIK_F4, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, increase_cockpit_detail_event);
+		}
 	}
 	else
 	{
@@ -2345,7 +2346,6 @@ void set_gunship_view_mode_events (void)
 		set_event (DIK_F2, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, hud_view_event);
 
 		set_event (DIK_F3, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, decrease_cockpit_detail_event);
-
 		set_event (DIK_F4, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, increase_cockpit_detail_event);
 	}
 
