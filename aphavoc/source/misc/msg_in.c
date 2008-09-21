@@ -2360,6 +2360,9 @@ void display_in_flight_incoming_messages (void)
 	message_log_type
 		*log;
 
+	if (command_line_disable_message_text)
+		return;
+	
 	//
 	// Don't display message if status message active
 	//

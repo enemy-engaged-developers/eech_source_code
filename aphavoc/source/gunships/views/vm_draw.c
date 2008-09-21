@@ -165,6 +165,9 @@ static void display_status_message (void)
 		x,
 		y;
 
+	if (command_line_disable_message_text)
+		return;
+	
 	if (status_message_timer > 0.0)
 	{
 		set_ui_font_type (UI_FONT_ARIAL_16);
@@ -240,6 +243,9 @@ static void display_eject_message (void)
 		x,
 		y;
 
+	if (command_line_disable_message_text)
+		return;
+	
 	display_message = FALSE;
 
 	if (get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE) == CAMERA_MODE_EJECT)

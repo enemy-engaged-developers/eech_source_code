@@ -211,6 +211,7 @@ extern int
 	global_PNVS_level, 									 // VJ 050704 light setting for PNVS
 	global_dynamic_water,  								//VJ 050817 dynamic water textures
 	global_tsd_detail,                   //VJ 061213 toggle TSD colour grid detail level
+	command_line_disable_message_text,					// arneh, - disables the output of text messages (at top of screen)
 //VJ 051227 no longer needed, mapinfo structure	global_season,											//VJ 051011 add winter textures
 //VJ 060120 OBSOLETE	global_zbuffer,										//VJ 051011 zbuffer correction
 	command_line_autosave,								//Casm 17JUN05 Autosave option

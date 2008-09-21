@@ -608,6 +608,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "tsdpalette") == 0)	command_line_tsd_palette = d1; // VJ 030511
 		if (strcmp(p, "tsdenemy") == 0)		command_line_tsd_enemy_colours = d1; // VJ 030511
 		if (strcmp(p, "tsddetail") == 0)		global_tsd_detail = d1; // VJ 061215 detailed TSD
+		if (strcmp(p, "disable_text_messages") == 0) command_line_disable_message_text = d1;
 		if (strcmp(p, "reverse_pedal") == 0)command_line_reverse_pedal = d1;	// Retro 17Jul2004
 		if (strcmp(p, "external_trackir") == 0) command_line_external_trackir = d1;	// Retro 31Oct2004
 		if (strcmp(p, "external_trackir_dir") == 0) command_line_external_trackir_direction = d1;	// Retro 31Jan2005
@@ -854,6 +855,7 @@ void dump_ini_file(void)
 	fprintf(f,"hdwrbuf=%d		# hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)\n",command_line_sound_hdwrbuf); //VJ 050904 added "for sound"
 	fprintf(f,"mta=%d			# maximum time acceleration (n = time multiplier) (default = 4)\n",command_line_max_time_acceleration);
 	fprintf(f,"nomcm=%d			# no mission complete music (0 = off, 1 = on) (def = 0)\n",command_line_no_mission_complete_music);
+	fprintf(f,"disable_text_messages=%d		# Disables the text messages displayed at top of screen (messages can still be heard) (def = 0)\n", command_line_disable_message_text); // VJ 061215 detailed TSD
 
 	fprintf(f,"\nMEMEXPORT=%d				# export cockpit information to a shared memory area (0 = off, 1 = on) (def = 0)\n", command_line_shared_mem_export);
 	fprintf(f,"export_mfd=%d				# enables MFD export on multimon systems (0 = off, 1 = on) (def = 0)\n",command_line_export_mfd);
