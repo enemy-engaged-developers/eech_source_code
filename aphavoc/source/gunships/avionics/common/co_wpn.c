@@ -105,7 +105,10 @@ void initialise_common_weapon_systems (void)
 
 	fire_single_weapon = 0;
 
-	rocket_salvo_size = 1;
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		rocket_salvo_size = 2;
+	else
+		rocket_salvo_size = 1;
 
 	rocket_salvo_count = 0;
 
@@ -425,7 +428,10 @@ void increase_rocket_salvo_size (void)
 		case 4:
 		////////////////////////////////////////
 		{
-			rocket_salvo_size = 8;
+			if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+				rocket_salvo_size = 10;
+			else
+				rocket_salvo_size = 8;
 
 			break;
 		}
@@ -434,6 +440,14 @@ void increase_rocket_salvo_size (void)
 		////////////////////////////////////////
 		{
 			rocket_salvo_size = 16;
+
+			break;
+		}
+		////////////////////////////////////////
+		case 10:
+		////////////////////////////////////////
+		{
+			rocket_salvo_size = 2;
 
 			break;
 		}
