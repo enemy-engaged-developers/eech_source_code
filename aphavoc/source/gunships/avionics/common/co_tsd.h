@@ -64,11 +64,23 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 //VJ 030418 TSD render mod
 
-extern void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading);
+extern void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int paper_map);
 
-extern void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int draw_large_mfd);
+extern void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int draw_large_mfd, int force_contours);
 
 extern void Initialise_TSD_render_terrain(void);
+
+extern void set_tsd_map_contour_colour(rgb_colour col);
+
+extern void set_tsd_map_river_colour(rgb_colour col);
+
+extern void set_tsd_map_road_colour(rgb_colour col);
+
+extern void draw_tsd_map_grid(vec3d* centre_position, float scale, rgb_colour colour);
+
+extern void draw_tsd_map_towns(vec3d* centre_position, float scale);
+
+extern void set_tsd_map_palette_number();
+extern void cycle_tsd_map_palette();

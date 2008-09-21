@@ -67,6 +67,8 @@
 
 #include "project.h"
 
+#include "ai/ai_misc/ai_dbase.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,21 +77,25 @@
 #define COLOUR_SCALE(a)    min(COLOUR_BASE,(int)(COLOUR_BASE*a/elevation_factor)+1)
 #define GET_TERRAIN_COLOUR(a, c, f) if (terrain_elev > 0)\
 			   								{\
-			   									a = terrain_colour[tsd_render_palette][c];\
+			   									a = map_palette[c];\
 													a.r *= f; a.g *= f; a.b *= f;\
 												}\
 			   								else\
-			   									a = terrain_colour[tsd_render_palette][0]
+			   									a = map_palette[0]
 
 static rgb_colour
+		paper_colour[COLOUR_BASE+1],
 		terrain_colour[4][COLOUR_BASE+1];
 
 static int
 	draw_large_mfd;
 
 static int
+	tsd_render_palette,
 	contour_spacing,
 	contour_samples;
+
+static rgb_colour* map_palette;
 
 //VJ 030424 TSD render mod default to on
 #define OPTIMISE_CONTOURS	1
@@ -109,68 +115,12 @@ static int
 #define TSD_ASE_RANGE_5000		((float) 5000.0)
 #define TSD_ASE_RANGE_10000	((float) 10000.0)
 #define TSD_ASE_RANGE_25000	((float) 25000.0)
+#define HIND_MOVING_MAP_RANGE_50000	((float) 50000.0)
 
 static rgb_colour
-		dummy_colours[11];
-
-#define MFD_COLOUR1 		  		(dummy_colours[0])
-#define MFD_COLOUR2 		  		(dummy_colours[1])
-#define MFD_COLOUR3 		  		(dummy_colours[2])
-#define MFD_COLOUR4	  	  		(dummy_colours[3])
-#define MFD_COLOUR5				(dummy_colours[4])
-#define MFD_COLOUR6				(dummy_colours[5])
-#define MFD_CONTOUR_COLOUR		(dummy_colours[6])
-#define MFD_RIVER_COLOUR		(dummy_colours[7])
-#define MFD_ROAD_COLOUR			(dummy_colours[8])
-#define MFD_BACKGROUND_COLOUR	(dummy_colours[9])
-#define clear_mfd_colour		(dummy_colours[10])
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-void set_tsd_colours(void)
-{
-		set_rgb_colour (MFD_COLOUR1,   0, 0,  96, 255);  //dark blue
-	   set_rgb_colour (MFD_COLOUR2,	32, 32,  164, 255); //light blue
-		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
-		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
-		set_rgb_colour (MFD_COLOUR5,   0, 128,   192, 255);
-		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
-
-		set_rgb_colour (MFD_CONTOUR_COLOUR,      48, 48,  48, 255);
-		set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
-
-		if (tsd_render_palette == 1)
-		{
-			set_rgb_colour (MFD_ROAD_COLOUR,        96,96,96, 255);
-		}
-		else
-		{
-			set_rgb_colour (MFD_ROAD_COLOUR,        255,255,132, 255);
-		}
-		set_rgb_colour (clear_mfd_colour,        255,255,255,255);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void reset_tsd_colours(void)
-{
-	set_rgb_colour (MFD_COLOUR1,              0, 255,   0, 255);
-	set_rgb_colour (MFD_COLOUR2,              0, 200,   0, 255);
-	set_rgb_colour (MFD_COLOUR3,              0, 176,   0, 255);
-	set_rgb_colour (MFD_COLOUR4,              0, 151,   0, 255);
-	set_rgb_colour (MFD_COLOUR5,              0, 128,   0, 255);
-	set_rgb_colour (MFD_COLOUR6,             40,  68,  56, 255);
-
-	set_rgb_colour (MFD_CONTOUR_COLOUR,     255, 100,   0, 255);
-	set_rgb_colour (MFD_RIVER_COLOUR,        50,  75, 225, 255);
-	set_rgb_colour (MFD_ROAD_COLOUR,        255, 200,   0, 255);
-	set_rgb_colour (clear_mfd_colour,        255,255,255,0);
-}
+	map_river_colour,
+	map_road_colour,
+	map_contour_colour;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +130,10 @@ void Initialise_TSD_render_terrain(void)
 {
 	draw_large_mfd = TRUE;
 
-	set_tsd_colours();
+	tsd_render_palette = command_line_tsd_palette;
+	set_rgb_colour(map_river_colour, 0, 0,  96, 255);
+	set_rgb_colour(map_road_colour, 32, 32,  20, 255);
+	set_rgb_colour(map_contour_colour, 80, 64,  20, 255);
 //water
 
 //colours as atlas: green yellow red white, strong
@@ -555,8 +508,86 @@ set_rgb_colour(terrain_colour[3][61],245,245,245,255);
 set_rgb_colour(terrain_colour[3][62],248,248,248,255);
 set_rgb_colour(terrain_colour[3][63],251,251,251,255);
 set_rgb_colour(terrain_colour[3][64],255,255,255,255);
+
+		// Made with hue: 0.32 - 0.02, value: 0.85 - 0.80, saturation: 0.10 - 0.15
+set_rgb_colour(paper_colour[ 0],150,200,240,255);
+set_rgb_colour(paper_colour[ 1],196,216,195,255);
+set_rgb_colour(paper_colour[ 2],197,216,194,255);
+set_rgb_colour(paper_colour[ 3],197,215,193,255);
+set_rgb_colour(paper_colour[ 4],198,215,192,255);
+set_rgb_colour(paper_colour[ 5],199,215,192,255);
+set_rgb_colour(paper_colour[ 6],199,214,191,255);
+set_rgb_colour(paper_colour[ 7],200,214,190,255);
+set_rgb_colour(paper_colour[ 8],201,213,190,255);
+set_rgb_colour(paper_colour[ 9],202,213,189,255);
+set_rgb_colour(paper_colour[10],203,213,188,255);
+set_rgb_colour(paper_colour[11],203,212,188,255);
+set_rgb_colour(paper_colour[12],204,212,187,255);
+set_rgb_colour(paper_colour[13],205,211,186,255);
+set_rgb_colour(paper_colour[14],206,211,186,255);
+set_rgb_colour(paper_colour[15],207,211,185,255);
+set_rgb_colour(paper_colour[16],208,210,184,255);
+set_rgb_colour(paper_colour[17],209,210,184,255);
+set_rgb_colour(paper_colour[18],209,209,183,255);
+set_rgb_colour(paper_colour[19],209,207,182,255);
+set_rgb_colour(paper_colour[20],209,205,182,255);
+set_rgb_colour(paper_colour[21],208,203,181,255);
+set_rgb_colour(paper_colour[22],208,201,180,255);
+set_rgb_colour(paper_colour[23],207,199,180,255);
+set_rgb_colour(paper_colour[24],207,197,179,255);
+set_rgb_colour(paper_colour[25],207,194,178,255);
+set_rgb_colour(paper_colour[26],206,192,178,255);
+set_rgb_colour(paper_colour[27],206,190,177,255);
+set_rgb_colour(paper_colour[28],205,188,176,255);
+set_rgb_colour(paper_colour[29],205,186,176,255);
+set_rgb_colour(paper_colour[30],205,183,175,255);
+set_rgb_colour(paper_colour[31],204,181,174,255);
+set_rgb_colour(paper_colour[32],204,179,174,255);
+set_rgb_colour(paper_colour[33],203,177,173,255);
+set_rgb_colour(paper_colour[34],205,180,176,255);
+set_rgb_colour(paper_colour[35],207,183,180,255);
+set_rgb_colour(paper_colour[36],208,186,183,255);
+set_rgb_colour(paper_colour[37],210,189,186,255);
+set_rgb_colour(paper_colour[38],212,192,190,255);
+set_rgb_colour(paper_colour[39],213,196,193,255);
+set_rgb_colour(paper_colour[40],215,199,197,255);
+set_rgb_colour(paper_colour[41],217,202,200,255);
+set_rgb_colour(paper_colour[42],218,206,204,255);
+set_rgb_colour(paper_colour[43],220,209,208,255);
+set_rgb_colour(paper_colour[44],222,212,211,255);
+set_rgb_colour(paper_colour[45],223,216,215,255);
+set_rgb_colour(paper_colour[46],225,219,219,255);
+set_rgb_colour(paper_colour[47],227,223,222,255);
+set_rgb_colour(paper_colour[48],228,226,226,255);
+set_rgb_colour(paper_colour[49],230,230,230,255);
+set_rgb_colour(paper_colour[50],231,231,231,255);
+set_rgb_colour(paper_colour[51],233,233,233,255);
+set_rgb_colour(paper_colour[52],235,235,235,255);
+set_rgb_colour(paper_colour[53],236,236,236,255);
+set_rgb_colour(paper_colour[54],238,238,238,255);
+set_rgb_colour(paper_colour[55],240,240,240,255);
+set_rgb_colour(paper_colour[56],241,241,241,255);
+set_rgb_colour(paper_colour[57],243,243,243,255);
+set_rgb_colour(paper_colour[58],245,245,245,255);
+set_rgb_colour(paper_colour[59],246,246,246,255);
+set_rgb_colour(paper_colour[60],248,248,248,255);
+set_rgb_colour(paper_colour[61],250,250,250,255);
+set_rgb_colour(paper_colour[62],251,251,251,255);
+set_rgb_colour(paper_colour[63],253,253,253,255);
+set_rgb_colour(paper_colour[64],254,254,254,255);
+
 }                                
-                                 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void get_map_coords_from_world(vec3d* source_pos, float scale, vec3d* world_pos, float* screen_x, float* screen_y)
+{
+	*screen_x = (world_pos->x - source_pos->x) * scale;
+	*screen_y = (world_pos->z - source_pos->z) * scale;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -712,7 +743,7 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
                                  
 				y = contour_samples; 
                                  
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
+				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
 			}                       
                                  
 			y--;                    
@@ -757,7 +788,7 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
                                  
 				y = contour_samples; 
                                  
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
+				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
                                  
 			}                       
                                  
@@ -808,7 +839,7 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
                                  
 				y = contour_samples; 
                                  
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
+				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
                                  
 			}                       
                                  
@@ -847,7 +878,7 @@ static void draw_contour_lines (vec3d *p1, vec3d *p2, vec3d *p3)
                                  
 				y = contour_samples; 
                                  
-				draw_2d_line (x1, z1, x2, z2, MFD_CONTOUR_COLOUR);
+				draw_2d_line (x1, z1, x2, z2, map_contour_colour);
 			}                       
                                  
 			y--;                    
@@ -1130,7 +1161,7 @@ float get_aspect(float z1, float z2, float z3, float z4)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                  
-void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading)
+void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int paper_map)
 {                                
 	int                           
 		x_index,                   
@@ -1178,10 +1209,14 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 //VJ 051006 simplified code, lower detail but better framerate
 	unsigned int doaspect = (tsd_render_mode == TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE ||
   							tsd_render_mode == TSD_RENDER_SHADED_RELIEF_MODE);
-                                 
+
+	if (paper_map)
+		map_palette = paper_colour;
+	else
+		map_palette = &terrain_colour[tsd_render_palette];
                                  
 	ASSERT (position);            
-                                 
+
                                  
 	//                            
 	// rotate map                 
@@ -1420,7 +1455,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 			old_aspectrow = NULL;   
 		}                          
 	}                             
-                                 
+	
 	set_2d_window_rotation (mfd_env, 0.0);
 }                                
                                  
@@ -1428,7 +1463,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                  
-void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int draw_large_mfd)
+void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, float scale, vec3d *position, float heading, int draw_large_mfd, int force_contours)
 {                                
 	int                           
 		x_index,                   
@@ -1478,12 +1513,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 	num_contour_lines = 0;        
                                  
 	#endif                        
-                                 
-	if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
-	  reset_tsd_colours();        
-	else                          
-	  set_tsd_colours();          
-                                 
+
 	//                            
 	// rotate map                 
 	//                            
@@ -1633,17 +1663,27 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 			path_detail_level = 4;  
 		}                          
                                  
-		contour_spacing = 250;     
+		contour_spacing = 250;
+		contour_spacing = 100;     
 	}                             
-                                 
+	else if (range == HIND_MOVING_MAP_RANGE_50000)
+	{
+		contour_granularity = 1;
+		                                 
+		contour_samples = 5;
+		                                 
+		path_detail_level = 0;
+		
+		contour_spacing = 75;
+	}
 	////////////////////////////////////////
 	else                          
 	///////////////////////////////////////
 	{                             
 		debug_fatal ("Unknown TSD/ASE range %.2f", range);
-	}                             
+	}
 	//VJ 030423 TSD render mod    
-	if (tsd_render_mode != TSD_RENDER_RELIEF_MODE && tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE)
+	if (force_contours || (tsd_render_mode != TSD_RENDER_RELIEF_MODE && tsd_render_mode != TSD_RENDER_SHADED_RELIEF_MODE))
 	{                             
                                  
 		contour_spacing /= contour_samples;
@@ -1783,7 +1823,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 		contour_map_number_of_river_paths,
 		contour_map_river_paths,   
 		contour_map_river_nodes,   
-		MFD_RIVER_COLOUR,          
+		map_river_colour,          
 		path_detail_level,         
 		x_min,                     
 		z_min,                     
@@ -1807,7 +1847,7 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 		contour_map_number_of_road_paths,
 		contour_map_road_paths,    
 		contour_map_road_nodes,    
-		MFD_ROAD_COLOUR,           
+		map_road_colour,           
 		path_detail_level,         
 		x_min,                     
 		z_min,                     
@@ -1832,3 +1872,165 @@ void draw_tsd_contour_map (env_2d *mfd_env, float y_translate, float range, floa
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void set_tsd_map_contour_colour(rgb_colour col)
+{
+	map_contour_colour = col;
+}
+
+void set_tsd_map_river_colour(rgb_colour col)
+{
+	map_river_colour = col;
+}
+
+void set_tsd_map_road_colour(rgb_colour col)
+{
+	map_road_colour = col;
+}
+
+
+void draw_tsd_map_grid (vec3d* centre_position, float scale, rgb_colour colour)
+{
+	float
+		x1, x2, y1, y2,
+		range = 1.0 / scale,
+		wxmin,
+		wzmin,
+		wxmax = 0,
+		wzmax = 0,
+		width,
+		one_over_sector_side_length;
+
+	int
+		grid_spacing = 0,
+		inew_wxmin,
+		inew_wzmin,
+		inew_wxmax,
+		inew_wzmax,
+		grid_loop,
+		grid_loopy;
+
+	one_over_sector_side_length = 1.0 / SECTOR_SIDE_LENGTH;
+
+	// 1.5 is a little more than sqrt(2), so that it is long enough even when rotated 45 degrees
+	wxmin = max((centre_position->x - range * 1.5), MIN_MAP_X);
+	wxmax = min((centre_position->x + range * 1.5), MAX_MAP_X);
+
+	wzmin = max((centre_position->z - range * 1.5), MIN_MAP_Z);
+	wzmax = min((centre_position->z + range * 1.5), MAX_MAP_Z);
+
+	inew_wxmin = (((int) (wxmin * one_over_sector_side_length)) - 1.0) * SECTOR_SIDE_LENGTH;
+	inew_wxmax = (((int) (wxmax * one_over_sector_side_length)) + 1.0) * SECTOR_SIDE_LENGTH;
+
+	// Z max and min around wrong way !
+	inew_wzmin = (((int) (wzmin * one_over_sector_side_length)) - 1.0) * SECTOR_SIDE_LENGTH;
+	inew_wzmax = (((int) (wzmax * one_over_sector_side_length)) + 1.0) * SECTOR_SIDE_LENGTH;
+
+	inew_wxmin = bound (inew_wxmin, 0, MAX_MAP_X);
+	inew_wxmax = bound (inew_wxmax, 0, MAX_MAP_X);
+	inew_wzmin = bound (inew_wzmin, 0, MAX_MAP_Z);
+	inew_wzmax = bound (inew_wzmax, 0, MAX_MAP_Z);
+
+	width = fabs (wxmax - wxmin);
+
+	grid_spacing = 4096;  // the normal grid spacing is 4096 meters
+	
+	// along the X
+	y1 = (wzmin - centre_position->z) * scale;
+	y2 = (wzmax - centre_position->z) * scale;
+	
+	for (grid_loop = inew_wxmin; grid_loop <= inew_wxmax; grid_loop += grid_spacing)
+	{
+		if ((grid_loop >= wxmin) && (grid_loop <= wxmax))
+		{
+			x1 = (grid_loop - centre_position->x) * scale;
+			draw_2d_line(x1, y1, x1, y2, colour);
+		}
+	}
+
+	// down the Z
+	x1 = (wxmin - centre_position->x) * scale;
+	x2 = (wxmax - centre_position->x) * scale;
+
+	for (grid_loop = inew_wzmin; grid_loop <= inew_wzmax; grid_loop += grid_spacing)
+	{
+		if ((grid_loop >= wzmin) && (grid_loop <= wzmax))
+		{
+			y1 = (grid_loop - centre_position->z) * scale;
+			draw_2d_line(x1, y1, x2, y1, colour);
+		}
+	}
+
+	set_mono_font_colour (colour);
+	set_mono_font_type (MONO_FONT_TYPE_6X10);
+
+	// map sector labels
+	for (grid_loop = inew_wxmin; grid_loop <= inew_wxmax; grid_loop += grid_spacing)
+		for (grid_loopy = inew_wzmin; grid_loopy <= inew_wzmax; grid_loopy += grid_spacing)
+		{
+			int 
+				grid_no_x = grid_loop / grid_spacing,
+				grid_no_y = grid_loopy / grid_spacing;
+			char grid[16];
+
+			x1 = (grid_loop - centre_position->x) * scale;
+			x2 = (grid_loop - centre_position->x + 0.5 * grid_spacing) * scale;
+			y1 = (grid_loopy - centre_position->z) * scale;
+			y2 = (grid_loopy - centre_position->z + 0.5 * grid_spacing) * scale;
+
+			if ((grid_no_y & 3) == 0)  // modula 4, every fourth row has labels
+			{
+				sprintf(grid, "%02d", grid_loop / grid_spacing);
+				set_2d_mono_font_position(x2, y1);
+				set_mono_font_rel_position (-6.0, -8.0);
+				print_mono_font_string(grid);
+			}
+
+			if ((grid_no_x & 3) == 0)  // mod 4
+			{
+				sprintf(grid, "%02d", grid_loopy / grid_spacing);
+				set_2d_mono_font_position(x1, y2);
+				set_mono_font_rel_position (2.0, -5.0);
+				print_mono_font_string(grid);
+			}
+		}
+}
+
+void draw_tsd_map_towns(vec3d* centre_position, float scale)
+{
+	vec3d
+		pos;
+
+	population_name_database_type
+		*item;
+
+	item = population_name_database;
+	
+	while (item)
+	{
+//		if (item->type == POPULATION_TYPE_TOWN)
+		{
+			float x, y;
+
+			pos.x = item->x;
+			pos.y = 0.0;
+			pos.z = item->z;
+			
+			get_map_coords_from_world(centre_position, scale, &pos, &x, &y);
+			
+			set_2d_mono_font_position(x, y);
+			print_mono_font_string(item->name);
+		}
+
+		item = item->next;
+	}
+}
+
+
+void cycle_tsd_map_palette()
+{
+	tsd_render_palette++;
+	if (tsd_render_palette == ARRAY_LENGTH(terrain_colour))
+	   tsd_render_palette = 0;
+	command_line_tsd_palette = tsd_render_palette;
+}

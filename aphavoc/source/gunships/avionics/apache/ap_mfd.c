@@ -4169,11 +4169,11 @@ static void draw_tactical_situation_display_mfd (void)
 		if (tsd_render_mode != TSD_RENDER_CONTOUR_MODE)
 		{
 			tsd_basic_colour = MFD_COLOUR_DARK_BLUE;
-			draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
+			draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, FALSE);
 		}
 
 //VJ 030423 TSD render mod, added mfd_env
-		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
+		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd, FALSE);
 	}
 
 	////////////////////////////////////////

@@ -5382,27 +5382,13 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 		set_rgb_colour (MFD_COLOUR3, 220, 48,   0, 255); //bright red
 		set_rgb_colour (MFD_COLOUR4, 148, 32,   0, 255);//dark red
 
-		if (tsd_render_palette == 0)
-		{
-			set_rgb_colour (MFD_COLOUR5,   32, 56,   20, 255);
-		}	
-		else
-			if (tsd_render_palette == 1)
-			{
-				set_rgb_colour (MFD_COLOUR5,   0, 132,   156, 255);
-			}	
-			else
-			{
-				set_rgb_colour (MFD_COLOUR5,   64, 132,   0, 255);
-			}	
-
 		set_rgb_colour (MFD_COLOUR6,  255, 255,  0, 255);
 		//VJ 030511 colours 7 and 8 are grays when enemy colour option is off in eech.ini
 		//VJ 030530 colour tweaks: black and dark gray are best
 		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
 		set_rgb_colour (MFD_COLOUR8,    0,0,0, 255);
 
-	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading);
+	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, FALSE);
 	}
 
 	////////////////////////////////////////
@@ -5413,7 +5399,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 
 //VJ 030423 TSD render mod, added mfd_env
 	if (!comanche_damage.navigation_computer)
-		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd);
+		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd, FALSE);
 
 	////////////////////////////////////////
 	//
