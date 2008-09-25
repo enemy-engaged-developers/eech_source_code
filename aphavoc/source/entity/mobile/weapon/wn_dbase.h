@@ -145,7 +145,8 @@ struct WEAPON_DATA
 		reload_time,						// seconds
 		max_launch_angle_error,			// radians
 		max_seeker_limit,				// cos of angle (usually cos(max_launch_angle_error))
-		drag_factor;                    // projectile drag, used for calculating deceleration
+		drag_factor,                    // projectile drag, used for calculating deceleration
+		inverse_rate_of_fire;           // 1.0 / rate_of_fire
 };
 
 typedef struct WEAPON_DATA weapon_data;
