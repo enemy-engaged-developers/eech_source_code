@@ -562,6 +562,8 @@ void update_default_weapon_systems (void)
 			}
 		}
 	}
+	else
+		((helicopter*)get_local_entity_data(en))->ac.weapon_salvo_timer = 0.0;
 
 	fire_single_weapon = 0;
 }

@@ -421,7 +421,7 @@ void update_apache_weapon_systems (void)
 
 	target = get_local_entity_parent (en, LIST_TYPE_TARGET);
 
-	if (fire_continuous_weapon || fire_single_weapon)
+	if ((fire_continuous_weapon || fire_single_weapon) && get_local_entity_weapon_count (en, weapon_sub_type) > 0)
 	{
 		if (weapon_database[weapon_sub_type].rate_of_fire == FIRE_SINGLE_WEAPON)
 		{
@@ -455,13 +455,14 @@ void update_apache_weapon_systems (void)
 		}
 		else
 		{
-			gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
+			gun_is_firing = TRUE;
 
 			apply_weapon_recoil_effect (en, weapon_sub_type);
-
 			launch_client_server_weapon (en, weapon_sub_type);
 		}
 	}
+	else
+		((helicopter*)get_local_entity_data(en))->ac.weapon_salvo_timer = 0.0;
 
 	fire_single_weapon = 0;
 }

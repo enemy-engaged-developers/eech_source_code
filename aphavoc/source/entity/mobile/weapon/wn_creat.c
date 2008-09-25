@@ -436,11 +436,78 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 			if (weapon_database[weapon_sub_type].rate_of_fire != FIRE_SINGLE_WEAPON)
 			{
-				burst_size = (int) (weapon_database[weapon_sub_type].rate_of_fire * get_delta_time () * ONE_OVER_ONE_MINUTE);
-
-				if (burst_size == 0)
-				{
+				if (debug_var_x > 0)
 					burst_size = 1;
+				else
+				{
+					float time_per_shot = weapon_database[weapon_sub_type].inverse_rate_of_fire * ONE_MINUTE;
+					unsigned int* last_shot = NULL;
+
+					switch (launcher->type)
+					{
+					case ENTITY_TYPE_HELICOPTER:
+						last_shot = &((helicopter*)get_local_entity_data(launcher))->ac.weapon_salvo_timer;
+						break;
+						
+					case ENTITY_TYPE_FIXED_WING:
+						last_shot = &((fixed_wing*)get_local_entity_data(launcher))->ac.weapon_salvo_timer;
+						break;
+					
+					case ENTITY_TYPE_ANTI_AIRCRAFT:
+						last_shot = &((anti_aircraft*)get_local_entity_data(launcher))->vh.weapon_salvo_timer;
+						break;
+					
+					case ENTITY_TYPE_PERSON:
+						last_shot = &((person*)get_local_entity_data(launcher))->vh.weapon_salvo_timer;
+						break;
+					
+					case ENTITY_TYPE_ROUTED_VEHICLE:
+						last_shot = &((routed_vehicle*)get_local_entity_data(launcher))->vh.weapon_salvo_timer;
+						break;
+					
+					case ENTITY_TYPE_SHIP_VEHICLE:
+						last_shot = &((ship_vehicle*)get_local_entity_data(launcher))->vh.weapon_salvo_timer;
+						break;
+					}
+
+					if (last_shot)
+					{
+						unsigned int current_time = get_system_time();
+						float elapsed_time = 1;
+
+						if (*last_shot > 0)
+						{
+							if (current_time < *last_shot)
+								return;
+							elapsed_time = (current_time - *last_shot) * 0.001;
+						}
+						else
+							elapsed_time = get_delta_time();
+
+						debug_log("%s firing %s (rof: %.0f):", get_sub_type_name(launcher), weapon_database[weapon_sub_type].full_name, weapon_database[weapon_sub_type].rate_of_fire);
+						debug_log("time_per_shot: %.2f time: %u, last: %u, elapsed: %.2f", time_per_shot, current_time, *last_shot, elapsed_time);
+
+						burst_size = (int)(weapon_database[weapon_sub_type].rate_of_fire * ONE_OVER_ONE_MINUTE * elapsed_time);
+						if (burst_size < 1)
+						{
+							if (*last_shot == 0)  // first shot in salvo always get fired
+								burst_size = 1;
+							else
+								return;
+						}
+
+						debug_log("burst: %d", burst_size);
+
+						if (*last_shot)
+							*last_shot += (int)(burst_size * time_per_shot * 1000.0);
+						else
+							*last_shot = current_time;
+					}
+					else
+					{
+						ASSERT(FALSE);
+						burst_size = 1;
+					}
 				}
 			}
 			else

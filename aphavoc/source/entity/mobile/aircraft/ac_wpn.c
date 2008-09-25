@@ -219,6 +219,8 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 		}
 	}
 
+	debug_log("%s: %d", get_sub_type_name(en), get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON));
+	
 	//
 	// find target
 	//
@@ -375,6 +377,8 @@ void update_aircraft_weapon_fire (entity *en)
 			return;
 		}
 	}
+	else
+		raw->weapon_salvo_timer = 0.0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

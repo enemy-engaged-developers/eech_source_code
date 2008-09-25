@@ -448,6 +448,8 @@ void update_comanche_weapon_systems (void)
 			launch_client_server_weapon (en, weapon_sub_type);
 		}
 	}
+	else
+		((helicopter*)get_local_entity_data(en))->ac.weapon_salvo_timer = 0.0;
 
 	fire_single_weapon = 0;
 }

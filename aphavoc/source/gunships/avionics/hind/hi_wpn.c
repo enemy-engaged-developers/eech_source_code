@@ -186,6 +186,7 @@ void update_hind_weapon_systems (void)
 	////////////////////////////////////////
 
 	inhibit_launch = FALSE;
+	gun_is_firing = FALSE;
 
 	switch (weapon_sub_type)
 	{
@@ -371,6 +372,21 @@ void update_hind_weapon_systems (void)
 				launch_client_server_weapon (en, weapon_sub_type);
 			}
 		}
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND)
+		{
+			helicopter* raw = get_local_entity_data(en);
+			unsigned number_of_pods = get_number_of_pods_firing(en, weapon_sub_type);
+			unsigned pre_fire_timer = raw->ac.weapon_salvo_timer;
+
+			gun_is_firing = get_local_entity_weapon_count (en, weapon_sub_type) > 0;
+
+			while (number_of_pods--)
+			{
+				raw->ac.weapon_salvo_timer = pre_fire_timer;  // should only set once per frame, not once per gun, so revert before each gun */
+				apply_weapon_recoil_effect (en, weapon_sub_type);
+				launch_client_server_weapon (en, weapon_sub_type);
+			}
+		}
 		else
 		{
 			apply_weapon_recoil_effect (en, weapon_sub_type);
@@ -378,6 +394,8 @@ void update_hind_weapon_systems (void)
 			launch_client_server_weapon (en, weapon_sub_type);
 		}
 	}
+	else
+		((helicopter*)get_local_entity_data(en))->ac.weapon_salvo_timer = 0.0;
 
 	fire_single_weapon = 0;
 }

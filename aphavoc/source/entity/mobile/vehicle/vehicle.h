@@ -126,6 +126,9 @@ struct VEHICLE
 		group_member_number					:NUM_GROUP_MEMBER_NUMBER_BITS,
 		id_number_significant_digits		:NUM_ID_NUMBER_SIGNIFICANT_DIGIT_BITS;
 
+	unsigned int
+		weapon_salvo_timer;
+
 	int
 		damage_level,
 		id_number;

@@ -129,6 +129,9 @@ struct AIRCRAFT
 		id_number_significant_digits		:NUM_ID_NUMBER_SIGNIFICANT_DIGIT_BITS,
 		ejected									:NUM_EJECTED_BITS;
 
+	unsigned int
+		weapon_salvo_timer;
+
 	int
 		damage_level,
 		id_number;
