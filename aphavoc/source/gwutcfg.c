@@ -1219,13 +1219,14 @@ void ReadGWutInfo(const char *fname)
 		p = strtok(NULL,",");
 		//skip full name
 		aircraft_database[i].force                                         = ( entity_forces ) IntValue(p);
-		aircraft_database[i].default_weapon_config_type                    = IntValue(p);
-		aircraft_database[i].min_weapon_config_type                        = IntValue(p);
-		aircraft_database[i].max_weapon_config_type                        = IntValue(p);
-		aircraft_database[i].air_to_air_weapon_config_type                 = IntValue(p);
-		aircraft_database[i].air_to_surface_weapon_config_type             = IntValue(p);
-		aircraft_database[i].scout_weapon_config_type                      = IntValue(p);
-		aircraft_database[i].default_weapon_type                           = IntValue(p);
+		/*  Don't read weapons configs, the numbers have changed, so will be wrong in GWUT file! */
+		/*aircraft_database[i].default_weapon_config_type                    = */IntValue(p);
+		/*aircraft_database[i].min_weapon_config_type                        = */ IntValue(p);
+		/*aircraft_database[i].max_weapon_config_type                        = */  IntValue(p);
+		/*aircraft_database[i].air_to_air_weapon_config_type                 = */IntValue(p);
+		/*aircraft_database[i].air_to_surface_weapon_config_type             = */IntValue(p);
+		/*aircraft_database[i].scout_weapon_config_type                      = */IntValue(p);
+		/*aircraft_database[i].default_weapon_type                           = */IntValue(p);
 		aircraft_database[i].target_symbol_type                            = ( target_symbol_types ) IntValue(p);
 		aircraft_database[i].target_priority_type                          = ( target_priority_types ) IntValue(p);
 		aircraft_database[i].force_info_catagory                           = ( force_info_catagories ) IntValue(p);
@@ -1278,7 +1279,6 @@ void ReadGWutInfo(const char *fname)
 		TESTDUMP(buf);
 	}
 
-
 	// READ [VEHICLES]
 
 	if (READ_HEADER)
@@ -1298,10 +1298,11 @@ void ReadGWutInfo(const char *fname)
 		//skip full name
 
 		vehicle_database[i].force                               = ( entity_forces ) IntValue(p);
-		vehicle_database[i].default_weapon_config_type          = IntValue(p);
-		vehicle_database[i].min_weapon_config_type              = IntValue(p);
-		vehicle_database[i].max_weapon_config_type              = IntValue(p);
-		vehicle_database[i].default_weapon_type                 = IntValue(p);
+		/*  Don't read weapons configs, the numbers have changed, so will be wrong in GWUT file! */
+		/*vehicle_database[i].default_weapon_config_type          = */IntValue(p);
+		/*vehicle_database[i].min_weapon_config_type              = */IntValue(p);
+		/*vehicle_database[i].max_weapon_config_type              = */IntValue(p);
+		/*vehicle_database[i].default_weapon_type                 = */IntValue(p);
 		vehicle_database[i].target_type                         = ( target_types ) IntValue(p);
 		vehicle_database[i].target_symbol_type                  = ( target_symbol_types ) IntValue(p);
 		vehicle_database[i].target_priority_type                = ( target_priority_types ) IntValue(p);
@@ -1407,6 +1408,7 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].inhibit_time              = FloatValue(p);
 		weapon_database[i].burst_duration            = FloatValue(p);
 		weapon_database[i].rate_of_fire              = FloatValue(p);
+		weapon_database[i].inverse_rate_of_fire		 = (weapon_database[i].rate_of_fire > 0.0) ? (1.0 / weapon_database[i].rate_of_fire) : 0.01;
 		weapon_database[i].reload_time               = FloatValue(p);
 		weapon_database[i].max_launch_angle_error    = rad(FloatValue(p));
 		weapon_database[i].max_seeker_limit			 = cos(weapon_database[i].max_launch_angle_error + 0.25);
@@ -1707,6 +1709,9 @@ void ReadGWutInfo(const char *fname)
 
 	while (!(strcmp(buf,"[RADAR]")==0) && !(strcmp(buf,"[End of GWUT file]")==0))
 	{
+/* Don't read weapons configs, they are not in sync with the implementation, and
+ * were very little flexible in any case */
+#if 0
 		int minwn, maxwn;
 		int w[48], a[48];
 		int anr = -1;
@@ -1800,7 +1805,7 @@ void ReadGWutInfo(const char *fname)
 					}
 				}
 		}
-
+#endif
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);
 	}
