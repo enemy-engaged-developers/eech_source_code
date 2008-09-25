@@ -319,7 +319,7 @@ int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types c
 
 	return best_package;
 }
-		
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,7 +389,6 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 		//
 		// detach weapon
 		//
-
 		if (found_package_number > 0)
 		{
 			inst3d = get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
@@ -789,7 +788,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 		range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
 		if (range == -1.0)
 			range = 1000.0;  // use 1000 meters if unable to triangulate range
-		#ifdef DEBUG_MODULE
+		#if DEBUG_MODULE
 		debug_log("triangulated range: %.0f (real range: %.0f)", range, get_2d_range (pitch_device_position, intercept_point));
 		#endif
 	}
@@ -900,6 +899,31 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+unsigned get_number_of_pods_firing(entity* launcher, entity_sub_types weapon_type)
+{
+	weapon_package_status *package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	weapon_config_types config_type = get_local_entity_int_value(launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+	int package, number = 0;
+	
+	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
+	{
+		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+			break;
+
+		ASSERT(package_status[package].number <= weapon_config_database[config_type][package].number);
+
+		if (weapon_config_database[config_type][package].sub_type == weapon_type)
+			if (!package_status[package].damaged && package_status[package].number > 0)
+				number++;
+	}
+
+	return number;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 (
 	vec3d *pitch_device_position,
@@ -950,7 +974,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		range = get_triangulated_by_position_range(pitch_device_position, intercept_point);
 		if (range == -1.0)
 			range = 1000.0;  // use 1000 meters if unable to triangulate range
-		#ifdef DEBUG_MODULE
+		#if DEBUG_MODULE
 		debug_log("triangulated range: %.0f (real range: %.0f)", range, get_2d_range (pitch_device_position, intercept_point));
 		#endif
 	}
@@ -1017,14 +1041,14 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 					new_intercept_point.z = current_target_position.z + (target_motion_vector.z * target_move_distance);
 
 					#ifdef DEBUG_MODULE
-					debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+//					debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
 					#endif
 					if (!point_inside_map_area (&new_intercept_point))
 						break;
 				}
 			}
 			#ifdef DEBUG_MODULE
-			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
+//			debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
 			#endif
 		}
 		else
@@ -1705,14 +1729,14 @@ void update_entity_weapon_systems (entity *source)
 
 								if (find_object_3d_sub_object_from_sub_object (&search_weapon_system_heading, &search_weapon_system_pitch) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 								{
-									debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate pitch device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
+//									debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate pitch device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
 
 									return;
 								}
 							}
 							else
 							{
-								debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate heading device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
+//								debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate heading device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
 
 								return;
 							}
