@@ -358,6 +358,9 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 		temp_damage += (temp_damage * 0.1 * sfrand1 ());
 
+		// adjust for burst size
+		temp_damage *= get_local_entity_int_value(weapon, INT_TYPE_WEAPON_BURST_SIZE);
+		
 		//
 		// subtract from entities damage level
 		//
