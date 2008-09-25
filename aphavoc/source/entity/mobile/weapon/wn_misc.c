@@ -580,7 +580,7 @@ weapon_config_types get_hind_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_MI24D_HIND_1; config_type <= WEAPON_CONFIG_TYPE_MI24D_HIND_18; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_MI24D_HIND_1; config_type < WEAPON_CONFIG_TYPE_CH46E_SEA_KNIGHT_1; config_type++)
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -1019,7 +1019,7 @@ void get_hind_weapons_from_weapon_config
 		(weapon_config_type == WEAPON_CONFIG_TYPE_UNARMED) ||
 		(
 			(weapon_config_type >= WEAPON_CONFIG_TYPE_MI24D_HIND_1) &&
-			(weapon_config_type <= WEAPON_CONFIG_TYPE_MI24D_HIND_18)
+			(weapon_config_type < WEAPON_CONFIG_TYPE_CH46E_SEA_KNIGHT_1)
 		)
 	);
 
