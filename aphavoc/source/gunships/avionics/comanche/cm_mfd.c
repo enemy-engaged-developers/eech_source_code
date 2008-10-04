@@ -9522,6 +9522,17 @@ static void draw_system_display_side_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void draw_engine_bar(float f_x1, float f_y1, float f_x2, float f_y2, float fvalue)
+{
+	int x1, x2, y1, y2;
+	
+	draw_2d_box(f_x1, f_y1, f_x2, f_y2, FALSE, MFD_COLOUR1);
+
+	get_2d_int_screen_coordinates (f_x1, f_y2 + (fvalue * (f_y1 - f_y2)), &x1, &y1);
+	get_2d_int_screen_coordinates (f_x2, f_y2, &x2, &y2);
+	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+}
+
 static void draw_engine_display_mfd (void)
 {
 	char
@@ -9535,6 +9546,7 @@ static void draw_engine_display_mfd (void)
 		ivalue;
 
 	float
+		bottom_edge,
 		x_adjust,
 		fvalue;
 
@@ -9679,6 +9691,12 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
+
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
 	x_adjust = get_mono_font_string_width ("NR") * -0.5;
@@ -9705,14 +9723,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9727,6 +9738,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float)	(0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9754,14 +9771,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9776,6 +9786,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9803,14 +9819,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9825,6 +9834,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9852,14 +9867,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9874,6 +9882,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9901,14 +9915,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9923,6 +9930,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9950,14 +9963,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9972,6 +9978,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -9999,14 +10011,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10021,6 +10026,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10048,14 +10059,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 999.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10070,6 +10074,12 @@ static void draw_engine_display_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10097,14 +10107,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 999.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10129,6 +10132,8 @@ static void draw_engine_display_side_mfd (void)
 		ivalue;
 
 	float
+		centre_x,
+		bottom_edge,
 		x_adjust,
 		fvalue;
 
@@ -10209,11 +10214,18 @@ static void draw_engine_display_side_mfd (void)
 	// Nr
 	//
 
-	#define X_ORG	((float) (0.0 - 0.4))
-	#define Y_ORG	((float) (0.5))
-	#define WIDTH	((float) (0.045))
-	#define HEIGHT	((float) (1.0))
+	#define X_ORG	((float) (0.0f - 0.4f))
+	#define Y_ORG	((float) (0.5f))
+	#define WIDTH	((float) (0.045f))
+	#define HEIGHT	((float) (1.0f))
 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	centre_x = X_ORG;
+	bottom_edge = (Y_ORG - HEIGHT);
+	
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
 	x_adjust = get_mono_font_string_width ("NR") * -0.5;
@@ -10240,14 +10252,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10262,6 +10267,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10289,14 +10300,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10311,6 +10315,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10338,14 +10348,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10360,6 +10363,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10387,14 +10396,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10409,6 +10411,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10436,14 +10444,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 120.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10458,6 +10459,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (0.8333))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10485,14 +10492,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 999.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10507,6 +10507,12 @@ static void draw_engine_display_side_mfd (void)
 	#define Y_ORG	((float) (0.5))
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (0.8333))
+
+	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// as a constant as a function parameter will use a double (even though
+	// definition is available and says const float), which causes later parameters
+	// to be wrong
+	bottom_edge = (Y_ORG - HEIGHT);
 
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
@@ -10534,14 +10540,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG + (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), Y_ORG, MFD_COLOUR1);
-	draw_2d_line (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT, X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, MFD_COLOUR1);
-
-	get_2d_int_screen_coordinates (X_ORG - (WIDTH * 0.5), Y_ORG - HEIGHT + (fvalue * (HEIGHT / 999.0)), &x1, &y1);
-	get_2d_int_screen_coordinates (X_ORG + (WIDTH * 0.5), Y_ORG - HEIGHT, &x2, &y2);
-	set_block (x1, y1, x2, y2, MFD_COLOUR1);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
 
 	#undef X_ORG
 	#undef Y_ORG
