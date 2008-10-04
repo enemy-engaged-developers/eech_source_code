@@ -92,6 +92,10 @@ static mfd_modes
 #define MFD_TEXTURE_SIZE			(1024)
 #define MFD_VIEWPORT_SIZE           (1024)
 
+// for the old cockpit:
+#define MFD_HAVOC_TEXTURE_SIZE			(256)
+#define MFD_HAVOC_VIEWPORT_SIZE           (256)
+
 #define MAP_DISPLAY_WIDTH  0.5
 #define MAP_DISPLAY_HEIGHT 0.35
 
@@ -107,9 +111,9 @@ static float
 	mfd_viewport_x_max,
 	mfd_viewport_y_max;
 
-static const float
-	map_range = 50000.0,
-	map_scale = 1.0 / (50000.0 * ROOT2);
+static float
+	map_range,
+	map_scale;
 
 static int
 	mfd_texture_size,
@@ -211,8 +215,20 @@ void initialise_hind_mfd (void)
 
 	map_up_to_date = FALSE;
 
-	mfd_viewport_size = MFD_VIEWPORT_SIZE;
-	mfd_texture_size = MFD_TEXTURE_SIZE;
+	if (custom_3d_models.arneh_mi24v_cockpit)
+	{
+		mfd_viewport_size = MFD_VIEWPORT_SIZE;
+		mfd_texture_size = MFD_TEXTURE_SIZE;
+		map_range = 50000.0,
+		map_scale = 1.0 / (50000.0 * ROOT2);
+	}
+	else
+	{
+		mfd_viewport_size = MFD_HAVOC_VIEWPORT_SIZE;
+		mfd_texture_size = MFD_HAVOC_TEXTURE_SIZE;
+		map_range = 25000.0,
+		map_scale = 1.0 / (25000.0 * ROOT2);
+	}
 	
 	mfd_viewport_texture_x_org = mfd_texture_size / 2;
 	mfd_viewport_texture_y_org = mfd_texture_size / 2;
@@ -222,8 +238,10 @@ void initialise_hind_mfd (void)
 	mfd_viewport_x_max = mfd_viewport_x_org + (mfd_viewport_size * 0.5) - 0.001;
 	mfd_viewport_y_max = mfd_viewport_y_org + (mfd_viewport_size * 0.5) - 0.001;
 
-	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HIND_MAP_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
-//	mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HIND_MAP_DISPLAY, TEXTURE_TYPE_MULTIPLEALPHA);
+	if (custom_3d_models.arneh_mi24v_cockpit)
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HIND_MAP_DISPLAY, TEXTURE_TYPE_SINGLEALPHA);
+	else
+		mfd_texture_screen = create_system_texture_screen (mfd_texture_size, mfd_texture_size, TEXTURE_INDEX_HVCKPT_DISPLAY_CRT, TEXTURE_TYPE_SINGLEALPHA);
 
 	initialize_colours();
 
@@ -508,10 +526,10 @@ static void draw_map_display(void)
 	////////////////////////////////////////
 
 	// last pixel must be transparent because it's repeated when texture doesn't fill entire polygon
-	draw_line(0, 0, 0, MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
-	draw_line(0, 0, MFD_VIEWPORT_SIZE - 1, 0, clear_mfd_colour);
-	draw_line(0, MFD_VIEWPORT_SIZE - 1, MFD_VIEWPORT_SIZE - 1, MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
-	draw_line(MFD_VIEWPORT_SIZE - 1, 0, MFD_VIEWPORT_SIZE - 1, MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
+	draw_line(0, 0, 0, mfd_viewport_size - 1, clear_mfd_colour);
+	draw_line(0, 0, mfd_viewport_size - 1, 0, clear_mfd_colour);
+	draw_line(0, mfd_viewport_size - 1, mfd_viewport_size - 1, mfd_viewport_size - 1, clear_mfd_colour);
+	draw_line(mfd_viewport_size - 1, 0, mfd_viewport_size - 1, mfd_viewport_size - 1, clear_mfd_colour);
 	
 	map_up_to_date = TRUE;
 }
@@ -552,7 +570,6 @@ void draw_hind_mfd_on_texture (void)
 	// viewport
 	//
 
-	mfd_viewport_size = MFD_VIEWPORT_SIZE;
 
 	ASSERT (mfd_viewport_size <= mfd_texture_size);
 
@@ -579,7 +596,7 @@ void draw_hind_mfd_on_texture (void)
 	
 		if (lock_screen (mfd_texture_screen))
 		{
-			set_block (0, 0, MFD_VIEWPORT_SIZE - 1, MFD_VIEWPORT_SIZE - 1, clear_mfd_colour);
+			set_block (0, 0, mfd_viewport_size - 1, mfd_viewport_size - 1, clear_mfd_colour);
 	
 			draw_layout_grid ();
 	
