@@ -83,6 +83,8 @@ c_object_files		+=	$+ &
 							$(currentdir)\hi_instr.obj &
 							$(currentdir)\hi_lamps.obj &
 							$(currentdir)\hi_vckpt.obj &
+							$(currentdir)\hi_3dvckpt.obj &
+							$(currentdir)\hi_3dwiper.obj &
 							$(currentdir)\hi_wiper.obj &
 							$-
 

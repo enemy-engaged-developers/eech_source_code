@@ -80,7 +80,7 @@ void initialise_hind_cockpits (void)
 {
 	initialise_hind_lamps ();
 
-	initialise_hind_instrument_colours ();
+	initialise_havoc_instrument_colours ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ void draw_hind_cockpit (cockpit_panels panel)
 
 	#endif
 
-	set_hind_instrument_colours ();
+	set_havoc_instrument_colours ();
 
 	////////////////////////////////////////
 	//
@@ -180,18 +180,23 @@ void draw_hind_cockpit (cockpit_panels panel)
 		{
 			if (get_global_draw_cockpit_graphics ())
 			{
-				draw_hind_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR,
-					NULL
-				);
-
-				if (lock_screen (active_screen))
+				if (custom_3d_models.arneh_mi24v_cockpit)
+					draw_hind_external_3d_cockpit(0, NULL);
+				else
 				{
-					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_U40_L90_RLE), ix_640_480, iy_640_480);
-
-					unlock_screen (active_screen);
+					draw_hind_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR,
+						NULL
+					);
+	
+					if (lock_screen (active_screen))
+					{
+						blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_U40_L90_RLE), ix_640_480, iy_640_480);
+	
+						unlock_screen (active_screen);
+					}
 				}
 			}
 			else
@@ -448,27 +453,35 @@ void draw_hind_cockpit (cockpit_panels panel)
 		{
 			if (get_global_draw_cockpit_graphics ())
 			{
-				draw_hind_external_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_MOVING_WIPER |
-					VIRTUAL_COCKPIT_RAIN_EFFECT |
-					VIRTUAL_COCKPIT_MAIN_ROTOR |
-					VIRTUAL_COCKPIT_COMPASS,
-					NULL
-				);
-
-				if (lock_screen (active_screen))
+				if (custom_3d_models.arneh_mi24v_cockpit)
 				{
-					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_U20_L30_RLE), ix_640_480, iy_640_480);
-
-					unlock_screen (active_screen);
+					draw_hind_external_3d_cockpit(0, NULL);
+					draw_hind_internal_3d_cockpit(0);
 				}
+				else
+				{
+					draw_hind_external_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_MOVING_WIPER |
+						VIRTUAL_COCKPIT_RAIN_EFFECT |
+						VIRTUAL_COCKPIT_MAIN_ROTOR |
+						VIRTUAL_COCKPIT_COMPASS,
+						NULL
+					);
+	
+					if (lock_screen (active_screen))
+					{
+						blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_U20_L30_RLE), ix_640_480, iy_640_480);
+	
+						unlock_screen (active_screen);
+					}
 
-				draw_hind_internal_virtual_cockpit
-				(
-					VIRTUAL_COCKPIT_HUD_GLASS |
-					VIRTUAL_COCKPIT_HUD_DISPLAY
-				);
+					draw_hind_internal_virtual_cockpit
+					(
+						VIRTUAL_COCKPIT_HUD_GLASS |
+						VIRTUAL_COCKPIT_HUD_DISPLAY
+					);
+				}
 			}
 			else
 			{
@@ -689,9 +702,9 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_LVL_L30_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_g_meter (panel);
+					draw_havoc_g_meter (panel);
 
-					draw_hind_radar_altimeter (panel);
+					draw_havoc_radar_altimeter (panel);
 
 					draw_hind_weapons_management_panel_lamps (panel);
 
@@ -734,11 +747,11 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_LVL_AHD_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_g_meter (panel);
+					draw_havoc_g_meter (panel);
 
-					draw_hind_radar_altimeter (panel);
+					draw_havoc_radar_altimeter (panel);
 
-					draw_hind_weapons_management_panel_lamps (panel);
+					draw_havoc_weapons_management_panel_lamps (panel);
 
 					draw_hind_threat_warning_display (panel);
 
@@ -909,7 +922,7 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_D20_L60_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_barometric_altimeter (panel);
+					draw_havoc_barometric_altimeter (panel);
 
 					draw_hind_weapons_management_panel_lamps (panel);
 
@@ -946,19 +959,19 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_D20_L30_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_barometric_altimeter (panel);
+					draw_havoc_barometric_altimeter (panel);
 
-					draw_hind_airspeed_indicator (panel);
+					draw_havoc_airspeed_indicator (panel);
 
-					draw_hind_main_rotor_rpm_indicator (panel);
+					draw_havoc_main_rotor_rpm_indicator (panel);
 
-					draw_hind_g_meter (panel);
+					draw_havoc_g_meter (panel);
 
-					draw_hind_vertical_speed_indicator (panel);
+					draw_havoc_vertical_speed_indicator (panel);
 
-					draw_hind_clock (panel);
+					draw_havoc_clock (panel);
 
-					draw_hind_radar_altimeter (panel);
+					draw_havoc_radar_altimeter (panel);
 
 					draw_hind_weapons_management_panel_lamps (panel);
 
@@ -1005,47 +1018,47 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_D20_AHD_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_barometric_altimeter (panel);
+					draw_havoc_barometric_altimeter (panel);
 
-					draw_hind_airspeed_indicator (panel);
+					draw_havoc_airspeed_indicator (panel);
 
-					draw_hind_main_rotor_rpm_indicator (panel);
+					draw_havoc_main_rotor_rpm_indicator (panel);
 
-					draw_hind_g_meter (panel);
+					draw_havoc_g_meter (panel);
 
-					draw_hind_engine_torque_indicator (panel);
+					draw_havoc_engine_torque_indicator (panel);
 
-					draw_hind_engine_temperature_indicator (panel);
+					draw_havoc_engine_temperature_indicator (panel);
 
-					draw_hind_engine_rpm_indicator (panel);
+					draw_havoc_engine_rpm_indicator (panel);
 
-					draw_hind_engine_temperature_and_rpm_indicator_ticks (panel);
+					draw_havoc_engine_temperature_and_rpm_indicator_ticks (panel);
 
-					draw_hind_vertical_speed_indicator (panel);
+					draw_havoc_vertical_speed_indicator (panel);
 
-					draw_hind_clock (panel);
+					draw_havoc_clock (panel);
 
-					draw_hind_radar_altimeter (panel);
+					draw_havoc_radar_altimeter (panel);
 
-					draw_hind_fuel_gauge (panel);
+					draw_havoc_fuel_gauge (panel);
 
-					draw_hind_fixed_cockpit_hsi_waypoint_distance_digits (panel);
+					draw_havoc_fixed_cockpit_hsi_waypoint_distance_digits (panel);
 
-					draw_hind_fixed_cockpit_hsi_waypoint_identifier (panel);
+					draw_havoc_fixed_cockpit_hsi_waypoint_identifier (panel);
 
-					draw_hind_weapons_management_panel_lamps (panel);
+					draw_havoc_weapons_management_panel_lamps (panel);
 
-					draw_hind_status_panel_lamps (panel);
+					draw_havoc_status_panel_lamps (panel);
 
-					draw_hind_threat_warning_display (panel);
+					draw_havoc_threat_warning_display (panel);
 
-					draw_hind_master_caution_lamp (panel);
+					draw_havoc_master_caution_lamp (panel);
 
-					draw_hind_warning_panel_lamps (panel);
+					draw_havoc_warning_panel_lamps (panel);
 
-					draw_hind_radio_lamp (panel);
+					draw_havoc_radio_lamp (panel);
 
-					draw_hind_oil_gauges (panel);
+					draw_havoc_oil_gauges (panel);
 
 					unlock_screen (active_screen);
 				}
@@ -1096,15 +1109,15 @@ void draw_hind_cockpit (cockpit_panels panel)
 				{
 					blit_rle_graphic (get_graphics_file_data (base_cockpit_graphics_file + GRAPHICS_COCKPITS_HAVOC_D20_R30_RLE), ix_640_480, iy_640_480);
 
-					draw_hind_engine_torque_indicator (panel);
+					draw_havoc_engine_torque_indicator (panel);
 
-					draw_hind_engine_temperature_indicator (panel);
+					draw_havoc_engine_temperature_indicator (panel);
 
-					draw_hind_engine_rpm_indicator (panel);
+					draw_havoc_engine_rpm_indicator (panel);
 
-					draw_hind_engine_temperature_and_rpm_indicator_ticks (panel);
+					draw_havoc_engine_temperature_and_rpm_indicator_ticks (panel);
 
-					draw_hind_fuel_gauge (panel);
+					draw_havoc_fuel_gauge (panel);
 
 					draw_hind_status_panel_lamps (panel);
 
@@ -1114,7 +1127,7 @@ void draw_hind_cockpit (cockpit_panels panel)
 
 					draw_hind_radio_lamp (panel);
 
-					draw_hind_oil_gauges (panel);
+					draw_havoc_oil_gauges (panel);
 
 					unlock_screen (active_screen);
 				}
@@ -1157,7 +1170,7 @@ void draw_hind_cockpit (cockpit_panels panel)
 
 					draw_hind_radio_lamp (panel);
 
-					draw_hind_oil_gauges (panel);
+					draw_havoc_oil_gauges (panel);
 
 					unlock_screen (active_screen);
 				}

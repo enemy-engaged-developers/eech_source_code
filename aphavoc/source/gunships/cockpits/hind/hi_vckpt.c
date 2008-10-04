@@ -1171,7 +1171,7 @@ void draw_hind_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 						pitch,
 						roll;
 
-					get_hind_virtual_cockpit_adi_angles (vp.attitude, &heading, &pitch, &roll);
+					get_havoc_virtual_cockpit_adi_angles (vp.attitude, &heading, &pitch, &roll);
 
 					search.result_sub_object->relative_heading = -heading;
 
