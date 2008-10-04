@@ -290,9 +290,9 @@ static void set_special1_view_mode (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV)
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
 			{
-				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV);
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD);
 			}
 			else
 			{
@@ -458,9 +458,9 @@ static void set_special2_view_mode (void)
 		case GUNSHIP_TYPE_HIND:
 		////////////////////////////////////////
 		{
-			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
+			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV)
 			{
-				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD);
+				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV);
 			}
 			else
 			{

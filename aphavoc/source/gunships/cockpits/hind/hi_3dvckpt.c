@@ -120,6 +120,8 @@ static object_3d_sub_instance
 	*pitch_ladder_roll,
 	*horizon_ball,
 	*pilot_head_object,
+	*hud_view_object,
+	*map_view_object,
 	*shutoff_valve_left,
 	*shutoff_valve_right,
 	*rotor_brake,
@@ -267,6 +269,9 @@ void initialise_hind_3d_cockpit (void)
 	initialise_common_virtual_cockpit_cameras ();
 
 	pilot_head_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_PILOT_HEAD);
+	hud_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FL);
+	map_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FR);
+	
 	high_detail = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
 	compass_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_COMPASS_HEADING_NULL);
 	fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_FAN);
@@ -747,6 +752,13 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void get_hind_3d_cockpit_hud_view_position(float* x, float* y, float* z)
+{
+	*x = hud_view_object->relative_position.x;
+	*y = hud_view_object->relative_position.y;
+	*z = hud_view_object->relative_position.z;
+}
+
 static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 {
 	int is_copilot = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_CO_PILOT;
@@ -761,28 +773,21 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	// TODO: add co-pilot
 	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
-	head_object = pilot_head_object;
 	
-#if 0
 	switch (get_view_mode())
 		{
-		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
-			index = is_copilot
-				? OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_LHS_2
-				: OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_LHS_1;
+		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
+			head_object = map_view_object;
 			break;
 
-		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
-			index = is_copilot
-				? OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_RHS_2
-				: OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_RHS_1;
+		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
+			head_object = hud_view_object;
 			break;
 
 		default:
-			index = OBJECT_3D_SUB_OBJECT_PILOT_VIEWPOINT;
+			head_object = pilot_head_object;
 			break;
 		}
-#endif
 
 	virtual_cockpit_inst3d->vp.x = 0.0;
 	virtual_cockpit_inst3d->vp.y = 0.0;
@@ -790,8 +795,11 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	switch (get_view_mode())
 	{
-	case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_LHS_MFD:
-	case VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD:
+	case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
+		head_object->relative_pitch = rad(10.0);
+		break;
+	case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
+		head_object->relative_pitch = rad(-5.0);
 		break;
 
 	default:

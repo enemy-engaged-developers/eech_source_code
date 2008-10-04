@@ -394,15 +394,23 @@ void draw_hind_hud_on_texture (void)
 		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
 		float head_offset_x = 0.0, head_offset_y = 0.0, head_offset_z = 0.0;
 
-		head_offset_x = -getViewpointOffsetX(head_offset_x);
-		head_offset_y = -getViewpointOffsetY(head_offset_y);
-		head_offset_z = -getViewpointOffsetY(head_offset_z);
-		
-		if (get_global_wide_cockpit())
+		if (get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
 		{
-			head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
-			head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].y;
-			head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].z;
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				get_hind_3d_cockpit_hud_view_position(&head_offset_x, &head_offset_y, &head_offset_z);
+		}
+		else
+		{
+			head_offset_x = -getViewpointOffsetX(head_offset_x);
+			head_offset_y = -getViewpointOffsetY(head_offset_y);
+			head_offset_z = -getViewpointOffsetY(head_offset_z);
+			
+			if (get_global_wide_cockpit())
+			{
+				head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
+				head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].y;
+				head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].z;
+			}
 		}
 
 		{

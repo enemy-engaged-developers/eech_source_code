@@ -92,6 +92,8 @@ extern void damage_hind_3d_cockpit_main_rotors (int seed);
 extern void restore_hind_virtual_cockpit_main_rotors (void);
 extern void restore_hind_3d_cockpit_main_rotors (void);
 
+extern void get_hind_3d_cockpit_hud_view_position(float* x, float* y, float* z);
+
 extern void toggle_mi24_cockpit_fan(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
