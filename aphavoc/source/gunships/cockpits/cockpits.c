@@ -100,6 +100,8 @@ void initialise_cockpits (void)
 
 	gunship_type = get_global_gunship_type ();
 
+	pre_initialise_common_virtual_cockpit();
+	
 	switch (gunship_type)
 	{
 		////////////////////////////////////////
@@ -216,7 +218,10 @@ void initialise_cockpits (void)
 			// order is critical
 			//
 
-			initialise_hind_virtual_cockpit ();
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				initialise_hind_3d_cockpit ();
+			else
+				initialise_hind_virtual_cockpit ();
 
 			initialise_common_virtual_cockpit ();
 
@@ -385,7 +390,10 @@ void deinitialise_cockpits (void)
 			deinitialise_common_cockpits ();
 			deinitialise_common_virtual_cockpit ();
 			deinitialise_hind_cockpits ();
-			deinitialise_hind_virtual_cockpit ();
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				deinitialise_hind_3d_cockpit ();
+			else
+				deinitialise_hind_virtual_cockpit ();
 
 			break;
 		}
@@ -539,8 +547,11 @@ void update_cockpits (void)
 
 			update_hind_cockpits ();
 
-			update_hind_virtual_cockpit ();
-
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				update_hind_3d_cockpit ();
+			else
+				update_hind_virtual_cockpit ();
+			
 			break;
 		}
 		////Moje 030612 End

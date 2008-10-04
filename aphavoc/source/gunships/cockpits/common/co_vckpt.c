@@ -87,12 +87,24 @@ float
 	pilot_head_pitch_datum,
 	co_pilot_head_pitch_datum;
 
+cockpit_switch
+	*engine_start_switch_animation_object,
+	*apu_start_switch_animation_object,
+	*apu_stop_switch_animation_object;
+
 static vec3d
 	gunship_periscope_position[NUM_GUNSHIP_TYPES][2];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void pre_initialise_common_virtual_cockpit (void)
+{
+	engine_start_switch_animation_object = NULL;
+	apu_start_switch_animation_object = NULL;
+	apu_stop_switch_animation_object = NULL;
+}
 
 void initialise_common_virtual_cockpit (void)
 {
@@ -178,7 +190,10 @@ void damage_virtual_cockpit_main_rotors (int seed)
 		////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
-			damage_hind_virtual_cockpit_main_rotors (seed);
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				damage_hind_3d_cockpit_main_rotors (seed);
+			else
+				damage_hind_virtual_cockpit_main_rotors (seed);
 
 			break;
 		}
@@ -251,7 +266,10 @@ void restore_virtual_cockpit_main_rotors (void)
 		////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
-			restore_hind_virtual_cockpit_main_rotors ();
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				restore_hind_3d_cockpit_main_rotors ();
+			else
+				restore_hind_virtual_cockpit_main_rotors ();
 
 			break;
 		}
@@ -538,4 +556,42 @@ void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 
 		end_3d_scene ();
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void initialise_switch(cockpit_switch* swch, float* position, float depress_length, float depress_time, float delay)
+{
+	swch->position = position;
+	swch->initial_position = *position;
+	swch->depress_length = depress_length * 2.0 / depress_time;
+	swch->depress_time = depress_time;
+	swch->delay = delay;
+	swch->timer = 0.0;
+}
+
+void press_switch(cockpit_switch* swch)
+{
+	if (swch->timer <= 0.0)
+		swch->timer = swch->depress_time + swch->delay; 
+}
+
+void animate_switch(cockpit_switch* swch)
+{
+	if (swch->timer <= 0.0)
+		return;
+
+	if (swch->timer < swch->depress_time)  // otherwise delay
+	{
+		float half_time = swch->depress_time / 2.0;
+
+		if (swch->timer > half_time)  // pressing in
+			*(swch->position) = swch->initial_position + (swch->depress_length * (swch->depress_time - swch->timer));
+		else // rebounding out
+			*(swch->position) = swch->initial_position + (swch->depress_length * swch->timer);
+	}
+
+	swch->timer -= get_delta_time();
 }
