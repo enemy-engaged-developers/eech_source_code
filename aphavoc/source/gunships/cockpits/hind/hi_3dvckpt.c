@@ -247,6 +247,9 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_MAIN_ROTOR);
 	virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_ADI);
 
+	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.z = -2.9; 
+	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.y = 1.6; 
+
 	virtual_cockpit_hsi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_HSI_LEVEL1);
 	virtual_cockpit_ekran_display_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_DISPLAYS_EKRAN);
 	virtual_cockpit_compass_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_COMPASS_LEVEL1);
@@ -587,12 +590,15 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 	case ENTITY_SUB_TYPE_WEAPON_S5:
 	case ENTITY_SUB_TYPE_WEAPON_S8:
 	case ENTITY_SUB_TYPE_WEAPON_S13:
-		angle = rad(-105.0);
+		angle = rad(-110.0);
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
+		angle = rad(-170.0);
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_ATAKA:
 	case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
 	default:
-		angle = rad(54.0);
+		angle = rad(58.0);
 		break;
 	}
 
@@ -898,13 +904,9 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 	{
 		set_cockpit_lighting (vp.attitude);
-
 		set_3d_active_environment (main_3d_single_light_env);
-
 		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
-
 		realise_3d_clip_extents (main_3d_single_light_env);
-
 		clear_zbuffer_screen ();
 
 		if (begin_3d_scene ())
@@ -941,11 +943,20 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			radar_altimeter->relative_roll = get_mi24_radar_altimeter_needle_value();
 			get_mi24_barometric_altimeter_needle_values(&barometric_altimeter_short->relative_roll, &barometric_altimeter_long->relative_roll);
 			
-			bank_indicator->relative_roll = current_flight_dynamics->roll.value;
-			pitch_ladder_roll->relative_roll = current_flight_dynamics->roll.value;
-			pitch_ladder_pitch->relative_position.y = get_mi24_pitch_ladder_dispacement();
-			horizon_ball->relative_pitch = -current_flight_dynamics->roll.value;
-			horizon_ball->relative_roll = -current_flight_dynamics->pitch.value;
+			if (electrical_system_active())
+			{
+				bank_indicator->relative_roll = current_flight_dynamics->roll.value;
+				pitch_ladder_roll->relative_roll = current_flight_dynamics->roll.value;
+				pitch_ladder_pitch->relative_position.y = get_mi24_pitch_ladder_dispacement();
+				horizon_ball->relative_pitch = -current_flight_dynamics->roll.value;
+				horizon_ball->relative_roll = -current_flight_dynamics->pitch.value;
+
+				if (!hind_damage.navigation_computer)
+				{
+					radio_compass->relative_roll = current_flight_dynamics->heading.value;
+					get_hind_virtual_cockpit_hsi_needle_values(&compass_waypoint_needle->relative_roll, &compass_waypoint_heading_needle->relative_roll, &dummy);
+				}
+			}
 
 			animate_shutoff_valve(shutoff_valve_left, current_flight_dynamics->right_engine_n1_rpm.max < 60.0);
 			animate_shutoff_valve(shutoff_valve_right, current_flight_dynamics->left_engine_n1_rpm.max < 60.0);
@@ -963,15 +974,13 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			
 			get_mi24_epr_needle_values(&epr_limits->relative_pitch, &left_epr_needle->relative_pitch, &right_epr_needle->relative_pitch);
 			
-			radio_compass->relative_roll = current_flight_dynamics->heading.value;
-			get_hind_virtual_cockpit_hsi_needle_values(&compass_waypoint_needle->relative_roll, &compass_waypoint_heading_needle->relative_roll, &dummy);
-
 			sidewind->relative_roll = get_mi24_sidewind_needle_value();
 			fuel_quantity->relative_roll = get_mi24_fuel_quantity_needle_value();
 			
 			blade_pitch_needle->relative_roll = rad(98) - rad(185.0) *
-				current_flight_dynamics->input_data.collective.value / (current_flight_dynamics->input_data.collective.max - current_flight_dynamics->input_data.collective.min);
-
+				(current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min)
+					/ (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min);
+			
 			g_force->relative_roll = bound(rad(-59.5) * current_flight_dynamics->g_force.value, rad(-210.0), rad(90.0));
 			get_mi24_clock_hand_values(&clock_hour_hand->relative_roll, &clock_minute_hand->relative_roll, &clock_second_hand->relative_roll);
 
@@ -1092,82 +1101,6 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				memcpy (&virtual_cockpit_pilot_secondary_instruments_inst3d->vp, &vp, sizeof (viewpoint));
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_secondary_instruments_inst3d->vp.position, virtual_cockpit_pilot_secondary_instruments_inst3d);
 			}
-
-#if 0
-			if (flags & VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES)
-			{
-				//
-				// HSI
-				//
-
-				{
-					float
-						direction_finder,
-						flight_path,
-						drift;
-
-					get_hind_virtual_cockpit_hsi_needle_values (&direction_finder, &flight_path, &drift);
-
-					//
-					// flight path
-					//
-
-					search.search_depth = 0;
-					search.search_object = virtual_cockpit_hsi_flight_path_inst3d;
-					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_HSI_ARROW_DOUBLE;
-
-					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search.result_sub_object->relative_roll = flight_path;
-					}
-
-					memcpy (&virtual_cockpit_hsi_flight_path_inst3d->vp, &vp, sizeof (viewpoint));
-
-					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_flight_path_inst3d->vp.position, virtual_cockpit_hsi_flight_path_inst3d);
-
-					//
-					// direction finder
-					//
-
-					search.search_depth = 0;
-					search.search_object = virtual_cockpit_hsi_direction_finder_inst3d;
-					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_HSI_ARROW_LONG;
-
-					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search.result_sub_object->relative_roll = direction_finder;
-					}
-
-					memcpy (&virtual_cockpit_hsi_direction_finder_inst3d->vp, &vp, sizeof (viewpoint));
-
-					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_direction_finder_inst3d->vp.position, virtual_cockpit_hsi_direction_finder_inst3d);
-
-					//
-					// drift
-					//
-
-					search.search_depth = 0;
-					search.search_object = virtual_cockpit_hsi_drift_inst3d;
-					search.sub_object_index = OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_HSI_ARROW_SHORT;
-
-					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-					{
-						search.result_sub_object->relative_roll = drift;
-					}
-
-					memcpy (&virtual_cockpit_hsi_drift_inst3d->vp, &vp, sizeof (viewpoint));
-
-					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hsi_drift_inst3d->vp.position, virtual_cockpit_hsi_drift_inst3d);
-
-//VJ wideview mod, date: 18-mar-03	
-// re-insert compass here (internal is draw after external
-					if (get_global_wide_cockpit ())
-					{					
-					    insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_compass_inst3d->vp.position, virtual_cockpit_compass_inst3d);
-					}
-				}
-			}
-#endif
 
 			draw_3d_scene ();
 
@@ -1495,7 +1428,6 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 
 		if (begin_3d_scene ())
 		{
-
 			//
 			// main rotor
 			//
