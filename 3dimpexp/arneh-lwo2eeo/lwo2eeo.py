@@ -2,7 +2,7 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.5.2'
+VERSION = '1.5.3'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
@@ -38,7 +38,13 @@ def dot_prod(u, v):
     return reduce(operator.add, [(x * y) for (x,y) in zip(u,v)])
 
 class LinearVertices(Exception):
-    pass
+    def __init__(self, *args):
+        self.args = args
+    
+    def __str__(self):
+        res = "Error: can't take normal of polygon with all points in a line:\n" +\
+              '\n'.join(['(%0f, %0f, %0f)' % v for v in self.args])
+        return res
 
 def get_normal(v1, v2, v3):
     w1 = (v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2])
@@ -47,7 +53,7 @@ def get_normal(v1, v2, v3):
     if normal != (0.0, 0.0, 0.0):
         return normalize(normal)
     else:
-        raise LinearVertices
+        raise LinearVertices(v1, v2, v3)
 
 
 def calculate_normal(vertices):
@@ -61,10 +67,7 @@ def calculate_normal(vertices):
         return (0.0, 1.0, 0.0)   # dummy value
 
     if len(points_list) == 3:
-        try:
-            return get_normal(*points_list)
-        except LinearPolygons:
-            pass
+        return get_normal(*points_list)
     else:
         # find two vertices with furthest distance between them, then
         # average all normals from those to all other points (except
@@ -97,9 +100,7 @@ def calculate_normal(vertices):
         if sum != (0.0, 0.0, 0.0):
             return normalize(sum)
 
-    warnings.warn('polygon with all points in a line. Points: \n%s' % 
-                  ', \n'.join([('(%.2f, %.2f, %.2f)' % tuple(point)) for point in points_list]))
-    return (0.0, 1.0, 0.0)   # dummy value
+    raise LinearVertices(*points_list)
 
 def angle_between(u, v):
     'calculates the angle between two unit vectors'
@@ -981,22 +982,25 @@ class Model:
         # the polygon belongs to
         for surf, surf_pols in self.surface_users.items():
             surf = self.surface_lookup[surf]
-            for poly in [self.polygons[i] for i in surf_pols]:
-                indices = poly.vertex_indices()
-                if surf.uv_map:
-                    uv = [surf.uv_map.get_map(poly, pref) for pref in indices]
-                else:
-                    uv = [(0,0)] * len(indices)
+            try:
+                for poly in [self.polygons[i] for i in surf_pols]:
+                    indices = poly.vertex_indices()
+                    if surf.uv_map:
+                        uv = [surf.uv_map.get_map(poly, pref) for pref in indices]
+                    else:
+                        uv = [(0,0)] * len(indices)
 
-                if surf.lumi_uv_map:
-                    lumi_uv = [surf.lumi_uv_map.get_map(poly, pref) for pref in indices]
-                else:
-                    lumi_uv = [(0,0)] * len(indices)
+                    if surf.lumi_uv_map:
+                        lumi_uv = [surf.lumi_uv_map.get_map(poly, pref) for pref in indices]
+                    else:
+                        lumi_uv = [(0,0)] * len(indices)
 
-                poly.surf = surf
-                poly.surface_indices = surf.get_surface_point_indices(zip(indices, uv, lumi_uv))
-                poly.calculate_normal()
-
+                    poly.surf = surf
+                    poly.surface_indices = surf.get_surface_point_indices(zip(indices, uv, lumi_uv))
+                    poly.calculate_normal()
+            except LinearVertices, e:
+                sys.exit('Surface ' + surf.name + ' ' + str(e))
+                
         for surf in self.surfaces:
             self.eeo_polygons.extend(surf.polygons)
 
