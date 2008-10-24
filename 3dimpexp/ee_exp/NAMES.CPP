@@ -9,22 +9,6 @@ class Names
  Array<Name> names;
 
  public:
- Names(const char* filename = "")
- {
-  Name name;
-  FILE* file = fopen(filename, "r");
-  if (!file)
-   {
-    Name name = { "INVALID NAME" };
-    names.Append(name);
-    return;
-   }
-  while (fgets(name.name, sizeof(name.name), file) && *name.name)
-   {
-    name.name[strlen(name.name) - 1] = '\0';
-    names.Append(name);
-   }
- }
  unsigned operator !(void) const
  {
   return !names;
@@ -41,6 +25,10 @@ class Names
    if (!strcmp(names[i].name, name))
     return i;
 
+  return *this <<= name;
+ }
+ unsigned operator <<= (const char* name)
+ {
   Name new_name;
   strcpy(new_name.name, name);
   names.Append(new_name);
@@ -55,7 +43,54 @@ struct AllNames
  Names Cameras;
 
  AllNames(void)
-  : Objects("OBJECTS.TXT"), SubObjects("SOBJECTS.TXT"), Cameras("CAMERAS.TXT")
  {
+  Objects <<= "OBJECT_INVALID_INDEX";
+  SubObjects <<= "INVALID_SUB_OBJECT_INDEX";
+  Cameras <<= "INVALID_CAMERA_INDEX";
+
+  FILE* file = fopen("bininfo.bin", "rb");
+  if (!file)
+   return;
+
+  int total, length;
+  char name[1024];
+
+  fread(&total, sizeof(int), 1, file);
+
+  if (total)
+   {
+    fseek(file, sizeof(int), SEEK_CUR);
+    for (int count = 1; count < total; count++)
+     {
+      fread (&length, sizeof(int), 1, file);
+      fread (name, length, 1, file);
+      Objects <<= name;
+      fseek(file, sizeof(float), SEEK_CUR);
+     }
+   }
+
+  fread (&total, sizeof(int), 1, file);
+  if (total)
+   {
+    fseek(file, sizeof(int), SEEK_CUR);
+    for (int count = 1; count < total; count++)
+     {
+      fread (&length, sizeof(int), 1, file);
+      fread (name, length, 1, file);
+      SubObjects <<= name;
+     }
+   }
+
+  fread (&total, sizeof(int), 1, file);
+  if (total)
+   {
+    fseek(file, sizeof(int), SEEK_CUR);
+    for (int count = 1; count < total; count++)
+     {
+      fread (&length, sizeof(int), 1, file);
+      fread (name, length, 1, file);
+      Cameras <<= name;
+     }
+   }
  }
 };

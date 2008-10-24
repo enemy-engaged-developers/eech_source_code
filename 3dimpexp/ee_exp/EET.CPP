@@ -26,21 +26,6 @@ class EET
 EET::EET(char drive, const char* ext)
  : index(0), textures_drive(drive), extention(ext)
 {
- FILE* file;
-
- file = fopen("TEXTURES.TXT", "r");
- if (!file)
-  return;
- Texture texture;
- texture.index = ~0u;
- while (fgets(texture.name, sizeof(texture.name), file) != NULL)
-  {
-   texture.name[strlen(texture.name) - 1] = '\0';
-   if (!*texture.name)
-    break;
-   textures.Append(texture);
-  }
- fclose(file);
 }
 
 void EET::Clear(void)

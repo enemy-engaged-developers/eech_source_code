@@ -32,7 +32,7 @@ int main(void)
 
  mkdir("\\TEXTURES");
  TexturesExporter textures;
- textures.export_textures();
+ textures.export_textures(eet);
 
  mkdir("_OBJECTS");
 

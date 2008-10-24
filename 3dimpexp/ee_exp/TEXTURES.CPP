@@ -90,7 +90,7 @@ class TexturesExporter
  {
   delete [] texture_image_data;
  }
- void export_textures(void)
+ void export_textures(EET& eet)
  {
   int number_of_textures;
   FILE *fp;
@@ -100,11 +100,11 @@ class TexturesExporter
   printf("Exporting textures\n");
   {
    int tmp;
-   fread(&tmp, 4, 1, fp);
+   fread(&tmp, sizeof(int), 1, fp);
    fseek(fp, 1024 * tmp, SEEK_CUR);
   }
 
-  fread(&number_of_textures, 4, 1, fp);
+  fread(&number_of_textures, sizeof(int), 1, fp);
   for (int count = 0; count < number_of_textures; count++)
    {
     int length, number_of_mipmaps;
@@ -124,10 +124,14 @@ class TexturesExporter
       continue;
      }
 
+    if (flags.camoflage_texture)
+	 strcat(name, "-D");
+	eet.Append(name);
+
     fread(&type, sizeof(int), 1, fp);
-    fread(&number_of_mipmaps, 4, 1, fp);
-    fread(&width, 4, 1, fp);
-    fread(&height, 4, 1, fp);
+    fread(&number_of_mipmaps, sizeof(int), 1, fp);
+    fread(&width, sizeof(int), 1, fp);
+    fread(&height, sizeof(int), 1, fp);
 
     printf(" ML:%i%s %ix%i", number_of_mipmaps, type == TEXTURE_TYPE_NOALPHA || type == TEXTURE_TYPE_NOALPHA_NOPALETTE ? "" : " ALPHA", width, height);
     print_flags(flags);
@@ -151,9 +155,9 @@ class TexturesExporter
        }
 
       if (temp)
-       sprintf(filename, "\\TEXTURES\\%s%s_%i.TGA", name, flags.camoflage_texture ? "-D" : "", temp);
+       sprintf(filename, "\\TEXTURES\\%s_%i.TGA", name, temp);
       else
-       sprintf(filename, "\\TEXTURES\\%s%s.TGA", name, flags.camoflage_texture ? "-D" : "");
+       sprintf(filename, "\\TEXTURES\\%s.TGA", name);
       save_tga();
 
       width >>= 1;
