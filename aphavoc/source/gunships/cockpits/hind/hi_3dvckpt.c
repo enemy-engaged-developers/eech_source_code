@@ -232,6 +232,7 @@ void initialise_hind_3d_cockpit (void)
 	//
 
 	virtual_pilot_cockpit_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_COCKPIT);
+	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
 	virtual_cockpit_canopy_inst3d = construct_3d_object (OBJECT_3D_MI24V_CANOPY);
 	
 	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_HUD_DISPLAY);
