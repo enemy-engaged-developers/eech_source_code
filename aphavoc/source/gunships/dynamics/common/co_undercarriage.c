@@ -533,18 +533,30 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 
 int nose_wheel_locked_down(void)
 {
-	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
-		&& !landing_gears[get_global_gunship_type()].gear_points[2].damaged;
+	landing_gear_point* point = &current_landing_gear->gear_points[2];
+
+	if (command_line_dynamics_flight_model < 2)
+		return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+
+	return (!point->damaged && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0));
 }
 
 int left_main_wheel_locked_down(void)
 {
-	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
-		&& !landing_gears[get_global_gunship_type()].gear_points[1].damaged;
+	landing_gear_point* point = &current_landing_gear->gear_points[1];
+
+	if (command_line_dynamics_flight_model < 2)
+		return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+
+	return (!point->damaged && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0));
 }
 
 int right_main_wheel_locked_down(void)
 {
-	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
-		&& !landing_gears[get_global_gunship_type()].gear_points[0].damaged;
+	landing_gear_point* point = &current_landing_gear->gear_points[0];
+
+	if (command_line_dynamics_flight_model < 2)
+		return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+
+	return (!point->damaged && (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0));
 }
