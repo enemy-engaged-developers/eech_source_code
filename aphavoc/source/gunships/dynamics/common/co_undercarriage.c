@@ -480,6 +480,25 @@ void reset_undercarriage_world_position(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int weight_on_wheels(void)
+{
+	int i;
+
+	if (command_line_dynamics_flight_model < 2)
+		return FALSE;
+
+	for (i = 0; i < current_landing_gear->num_gear_points; i++)
+	{
+		if (!current_landing_gear->gear_points[i].damaged && current_landing_gear->gear_points[i].suspension_compression > 0.0)
+		{
+			return TRUE;
+			break;
+		}
+	}
+
+	return FALSE;
+}
+
 void update_undercarriage_dynamics(void)
 {
 	ASSERT(get_gunship_entity());

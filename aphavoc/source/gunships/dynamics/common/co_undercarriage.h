@@ -15,4 +15,6 @@ int nose_wheel_locked_down(void);
 int left_main_wheel_locked_down(void);
 int right_main_wheel_locked_down(void);
 
+int weight_on_wheels(void);
+
 #endif /*CO_UNDERCARRIAGE_H_*/
