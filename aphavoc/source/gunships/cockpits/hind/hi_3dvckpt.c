@@ -151,6 +151,7 @@ static object_3d_sub_instance
 	*clock_hour_hand,
 	*clock_minute_hand,
 	*clock_second_hand,
+	*waypoint_indicator,
 
 	*gear_lever,
 	*collective,
@@ -168,6 +169,10 @@ static object_3d_sub_instance
 	*engine_start_switch,
 	*engine_select_switch,
 	*engine_start_light,
+
+	*weapon_ready_light,
+	*weapon_not_ready_light,
+	*weapon_min_range_light,
 
 	*left_battery_ammeter,
 	*right_battery_ammeter,
@@ -203,7 +208,7 @@ static object_3d_sub_instance
 	*right_engine_fail_light,
 	*over_stress_light,
 	*low_fuel_lights,
-	*gyre_fail_lights,
+	*gyro_fail_lights,
 
 	*fuel_switches,
 	*external_light_switches,
@@ -320,6 +325,7 @@ void initialise_hind_3d_cockpit (void)
 	radio_compass = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_ROSE);
 	compass_waypoint_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_WAYPOINT_NEEDLE);
 	compass_waypoint_heading_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COMPASS_WAYPOINT_HEADING_NEEDLE);
+	waypoint_indicator = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_WAYPOINT_INDICATOR);
 
 	epr_limits = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EPR_LIMITS);
 	left_epr_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_EPR_NEEDLE);
@@ -391,6 +397,10 @@ void initialise_hind_3d_cockpit (void)
 	right_inner_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_INNER_PYLON_LIGHT);
 	right_outer_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_OUTER_PYLON_LIGHT);
 
+	weapon_ready_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_READY_LIGHT);
+	weapon_not_ready_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_NOT_READY_LIGHT);
+	weapon_min_range_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_MIN_RANGE_LIGHT);
+
 	fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_FIRE_LIGHT);
 	left_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FIRE_LIGHT);
 	right_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FIRE_LIGHT);
@@ -398,7 +408,7 @@ void initialise_hind_3d_cockpit (void)
 	right_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FAIL_LIGHT);
 	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT);
 	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS);
-	gyre_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
+	gyro_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
 
 	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
 	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
@@ -629,7 +639,7 @@ void toggle_mi24_cockpit_doors(void)
 {
 	open_door = !open_door;
 
-	if (open_door && door_handle_timer <= 0.0)
+	if (open_door && door_handle_timer <= 0.0 && door_state == 1.0)
 		door_handle_timer = 0.6;
 }
 
@@ -1020,6 +1030,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				{
 					radio_compass->relative_roll = current_flight_dynamics->heading.value;
 					get_hind_virtual_cockpit_hsi_needle_values(&compass_waypoint_needle->relative_roll, &compass_waypoint_heading_needle->relative_roll, &dummy);
+					update_mi24_waypoint_indicator(&waypoint_indicator->relative_pitch);
 				}
 			}
 
@@ -1077,7 +1088,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				apu_bleedair_lights->visible_object = current_flight_dynamics->apu_rpm.value > 60.0;
 				engine_start_light->visible_object = (current_flight_dynamics->left_engine_starter_active || current_flight_dynamics->right_engine_starter_active);
 
-				cockpit_sealed_light->visible_object = get_local_entity_loading_door_state(get_gunship_entity ()) == 0;
+				cockpit_sealed_light->visible_object = get_local_entity_loading_door_state(get_gunship_entity ()) == 0 && door_state == 1.0;
 				cockpit_open_light->visible_object = !cockpit_sealed_light->visible_object;
 				park_brake_light->visible_object = !!current_flight_dynamics->wheel_brake;
 
@@ -1117,7 +1128,9 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				right_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0;
 				over_stress_light->visible_object = current_flight_dynamics->g_force.value > 1.8;
 				low_fuel_lights->visible_object = current_flight_dynamics->fuel_weight.value < current_flight_dynamics->fuel_weight.max * 0.25;
-				gyre_fail_lights->visible_object = hind_damage.navigation_computer;
+				gyro_fail_lights->visible_object = hind_damage.navigation_computer;
+
+				update_mi24_weapon_status_lights(weapon_ready_light, weapon_not_ready_light, weapon_min_range_light);
 
 				// weapon pylon lights
 				{

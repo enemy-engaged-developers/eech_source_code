@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -393,7 +393,7 @@ float get_mi24_airspeed_needle_value(void)
 	float roll = -4.0;
 
 	if (airspeed < 50.0)
-		roll = rad(-4.0) + airspeed / 50 * rad(20.0);  
+		roll = rad(-4.0) + airspeed / 50 * rad(20.0);
 	else if (airspeed < 100.0)
 		roll = rad(16.0) + (airspeed - 50) / 50 * rad(37.5);
 	else if (airspeed < 250.0)
@@ -408,7 +408,7 @@ float get_mi24_vertical_velocity_needle_value(void)
 	float vvi = bound(current_flight_dynamics->world_velocity_y.value, -30.0, 30.0);
 	int negative = vvi < 0.0;
 	float roll = 0.0;
-	
+
 	vvi = fabs(vvi);
 
 	if (vvi < 5.0)
@@ -447,7 +447,7 @@ float get_mi24_hover_indicator_vvi_needle_value(void)
 {
 	float vvi = bound(current_flight_dynamics->world_velocity_y.value, -10.0, 10.0);
 
-	return (3.0 - vvi) * rad(3.85);  
+	return (3.0 - vvi) * rad(3.85);
 }
 
 float get_mi24_radar_altimeter_needle_value(void)
@@ -457,7 +457,7 @@ float get_mi24_radar_altimeter_needle_value(void)
 
 	if (!electrical_system_active())
 		alt = 0.0;
-	
+
 	if (alt < 20.0)
 		roll = alt / 20.0 * rad(29.0);
 	else if (alt < 60.0)
@@ -468,7 +468,7 @@ float get_mi24_radar_altimeter_needle_value(void)
 		roll = rad(155.0) + (alt - 100.0) / 400.0 * rad(105.0);
 	else
 		roll = rad(260.0) + (alt - 500.0) / 200.0 * rad(49.0);
-		
+
 	return -roll;
 }
 
@@ -528,8 +528,8 @@ float get_mi24_compass_waypoint_needle_heading_value(void)
 void get_mi24_epr_needle_values(float* limits, float* left, float* right)
 {
 	float ambient_pressure = get_air_density(current_flight_dynamics->barometric_altitude.value);
-	float engine_power_ratio;  
-	
+	float engine_power_ratio;
+
 	*limits = rad(15) * max(ambient_pressure - 0.5, 0.0) * 2;
 
 	engine_power_ratio = (current_flight_dynamics->left_engine_n1_rpm.value - current_flight_dynamics->engine_idle_rpm - 8.0)
@@ -579,7 +579,7 @@ float get_mi24_fuel_quantity_needle_value(void)
 	float angle = rad(149.0);
 
 	angle += rad(-0.1196) * current_flight_dynamics->fuel_weight.value * 1.39;  // gauge uses liters, 1.39 liters per kilo
-	
+
 	return angle;
 }
 
@@ -590,7 +590,7 @@ void get_mi24_clock_hand_values(float* hour_hand, float* minute_hand, float* sec
 		hour_hand_value,
 		minute_hand_value,
 		second_hand_value;
-	
+
 	time_of_day = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 	get_analogue_clock_values (time_of_day, &hour_hand_value, &minute_hand_value, &second_hand_value);
 
@@ -606,19 +606,75 @@ void get_mi24_hydraulic_pressure_values(float* gear, float* primary, float* seco
 		gear_psi = rad(52.0),
 		primary_psi = rad(52.0),
 		secondary_psi = rad(52.0);
-	
+
 	if (electrical_system_active())
 	{
 		if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_UNDERCARRIAGE))
-			gear_psi -= rad(115.0); 
+			gear_psi -= rad(115.0);
 
 		if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS))
 			secondary_psi -= rad(115.0);
 
 		primary_psi -= get_hydraulic_pressure() * rad(115.0);
 	}
-	
+
 	*gear += bound(gear_psi - *gear, -max_movement, max_movement);
 	*primary += bound(primary_psi - *primary, -max_movement, max_movement);
 	*secondary += bound(secondary_psi - *secondary, -max_movement, max_movement);
+}
+
+void update_mi24_waypoint_indicator(float* indicator)
+{
+	entity* wp = get_local_entity_current_waypoint (get_gunship_entity ());
+
+	if (wp)
+	{
+		float pitch = rad(-75.0);
+		char wpnt = get_local_entity_char_value(wp, CHAR_TYPE_TAG) + (int)debug_var_x;
+		float max_movement = rad(120) * get_delta_time();
+
+		pitch += (wpnt - 'A') * rad(-360.0 / 26.0);
+
+		*indicator += bound(pitch - *indicator, -max_movement, max_movement);
+	}
+}
+
+void update_mi24_weapon_status_lights(object_3d_sub_instance* ready, object_3d_sub_instance* not_ready, object_3d_sub_instance* min_range)
+{
+	entity_sub_types
+		weapon_sub_type;
+
+	weapon_sub_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
+
+	if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+	{
+		ready->visible_object = FALSE;
+		not_ready->visible_object = FALSE;
+		min_range->visible_object = FALSE;
+		return;
+	}
+
+	switch (weapon_lock_type)
+	{
+		case WEAPON_LOCK_NO_WEAPON:
+			ASSERT(FALSE);
+		case WEAPON_LOCK_NO_ACQUIRE:
+		case WEAPON_LOCK_NO_TARGET:
+		case WEAPON_LOCK_INVALID_TARGET:
+		case WEAPON_LOCK_NO_LOS:
+		case WEAPON_LOCK_SEEKER_LIMIT:
+		case WEAPON_LOCK_NO_BORESIGHT:
+			// don't need valid target to fire unguided weapons
+			ready->visible_object = weapon_database[weapon_sub_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE;
+			not_ready->visible_object = !ready->visible_object;
+			break;
+		case WEAPON_LOCK_MIN_RANGE:
+		case WEAPON_LOCK_MAX_RANGE:
+		case WEAPON_LOCK_VALID:
+			ready->visible_object = TRUE;
+			not_ready->visible_object = FALSE;
+			break;
+	}
+
+	min_range->visible_object = get_hud_aiming_range() < weapon_database[weapon_sub_type].min_range;
 }

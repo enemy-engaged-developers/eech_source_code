@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -245,16 +245,16 @@ static void draw_backup_sight(void)
 	const float
 		nar_tick = 0.035,
 		wide_tick = 0.075;
-	
+
 	set_2d_pixel(0.0, 0.0, backup_sight_colour);
 	draw_2d_circle(0.0, 0.0, 0.15, backup_sight_colour);
 	draw_2d_circle(0.0, 0.0, 0.4, backup_sight_colour);
-	
+
 	draw_2d_line(0.0, 0.6, 0.0, 0.1, backup_sight_colour);
 	draw_2d_line(0.0, -0.1, 0.0, -1.0, backup_sight_colour);
 	draw_2d_line(0.8, 0.0, 0.1, 0.0, backup_sight_colour);
 	draw_2d_line(-0.8, 0.0, -0.1, 0.0, backup_sight_colour);
-	
+
 	// horizontal tick marks
 	draw_2d_line(-wide_tick, 0.2, wide_tick, 0.2, backup_sight_colour);
 	draw_2d_line(-wide_tick, -0.2, wide_tick, -0.2, backup_sight_colour);
@@ -267,7 +267,7 @@ static void draw_backup_sight(void)
 	draw_2d_line(-nar_tick, -0.5, nar_tick, -0.5, backup_sight_colour);
 	draw_2d_line(-nar_tick, -0.7, nar_tick, -0.7, backup_sight_colour);
 	draw_2d_line(-nar_tick, -0.9, nar_tick, -0.9, backup_sight_colour);
-	
+
 	// vertical tick marks
 	draw_2d_line(-0.6, wide_tick, -0.6, -wide_tick, backup_sight_colour);
 	draw_2d_line(-0.2, wide_tick, -0.2, -wide_tick, backup_sight_colour);
@@ -308,26 +308,26 @@ void initialise_hind_hud (void)
 	initialise_hud_colours();
 	initialise_hms_gun_pipper ();
 	backup_sight_active = FALSE;
-	
+
 	if (objects_3d_scene_database[OBJECT_3D_MI24V_HUD_DISPLAY].index)
 	{
 		unsigned i, mem_size;
-		
+
 		hud_display_model = &objects_3d_data[objects_3d_scene_database[OBJECT_3D_MI24V_HUD_DISPLAY].index];
 
 		hud_position_y = (hud_display_model->bounding_box.ymin + hud_display_model->bounding_box.ymax) * 0.5;
 		hud_position_z = (hud_display_model->bounding_box.zmin + hud_display_model->bounding_box.zmax) * 0.5;
 		hud_width = (hud_display_model->bounding_box.xmax - hud_display_model->bounding_box.xmin);
 		hud_height = (hud_display_model->bounding_box.ymax - hud_display_model->bounding_box.ymin);
-				
+
 		num_texture_coordinates = 0;
 		if (hud_display_model->surfaces[0].texture_index)
 		{
 			for (i=0; i < hud_display_model->surfaces[0].number_of_faces; i++)
 				num_texture_coordinates += hud_display_model->faces[i].number_of_points;
-			
+
 			mem_size = 6 * sizeof(object_3d_short_textured_point);
-	
+
 			hud_texture_uv_coordinates = safe_malloc(mem_size);
 			memcpy(hud_texture_uv_coordinates, hud_display_model->surface_texture_points, mem_size);
 		}
@@ -347,7 +347,7 @@ void deinitialise_hind_hud (void)
 	destroy_2d_environment (hud_env);
 
 	destroy_screen (hud_texture_screen);
-	
+
 	safe_free(hud_texture_uv_coordinates);
 	hud_texture_uv_coordinates = NULL;
 }
@@ -404,7 +404,7 @@ void draw_hind_hud_on_texture (void)
 			head_offset_x = -getViewpointOffsetX(head_offset_x);
 			head_offset_y = -getViewpointOffsetY(head_offset_y);
 			head_offset_z = -getViewpointOffsetY(head_offset_z);
-			
+
 			if (get_global_wide_cockpit())
 			{
 				head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
@@ -429,23 +429,23 @@ void draw_hind_hud_on_texture (void)
 
 				hud_distance = hud_position_z - head_offset_z;
 				scale = hud_position_z / hud_distance;
-				
+
 				u *= scale;
 				v *= scale;
 
 				u += 0.5;
 				v += 0.5;
-				
+
 				// then displace hud to keep it directly in front of pilot's position
 				u -= (scale) * head_offset_x / hud_width;
 				v += (scale) * (head_offset_y - hud_position_y) / hud_height;
-				
+
 				hud_display_model->surface_texture_points[i].u = u;
 				hud_display_model->surface_texture_points[i].v = v;
 			}
 		}
 	}
-	
+
 	//
 	// viewport
 	//
@@ -500,16 +500,16 @@ void draw_hind_hud_on_texture (void)
 
 		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 
-		
+
 		if (electrical_system_active())
 			if (backup_sight_active)
 				draw_backup_sight();
 			else if (!hind_damage.head_up_display)
 			{
 				set_mono_font_colour (hud_colour);
-	
+
 				draw_layout_grid ();
-	
+
 				if (hud_mode == HUD_MODE_WEAPON)
 					draw_weapon_mode_hud (TRUE);
 			}
@@ -519,7 +519,7 @@ void draw_hind_hud_on_texture (void)
 		draw_line(0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, 0, clear_hud_colour);
 		draw_line(0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
 		draw_line(HUD_VIEWPORT_SMALL_SIZE - 1, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-	
+
 		flush_screen_texture_graphics (hud_texture_screen);
 
 		unlock_screen (hud_texture_screen);
@@ -603,7 +603,7 @@ static void draw_aim_marker(float x, float y, float range, float min_range)
 			i,
 			min_range_i,
 			end_i;
-		
+
 		for (i=0; i<NUM_GUN_PIPPER_POINTS; i++)
 			set_2d_pixel(x + gun_pipper_points[i][0], y + gun_pipper_points[i][1], hud_colour);
 
@@ -618,7 +618,7 @@ static void draw_aim_marker(float x, float y, float range, float min_range)
 				draw_2d_mono_sprite (big_hud_dot, x + gun_pipper_points2[i][0], y + gun_pipper_points2[i][1], hud_colour);
 		}
 	}
-	
+
 	// draw range tick marks
 	draw_2d_line(x, y + GUN_PIPPER_SIZE, x, y + tick_end, hud_colour);
 	draw_2d_line(x + GUN_PIPPER_SIZE * 0.5, y + GUN_PIPPER_SIZE * SIN60, x + tick_end * 0.5, y + tick_end * SIN60, hud_colour);
@@ -649,11 +649,18 @@ static int angles_to_hud_coordinates(float azimuth, float elevation, float* x, f
 	return TRUE;
 }
 
-static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* out_range)
+static float
+	hud_aim_range = 0.0;
+
+float get_hud_aiming_range(void)
+{
+	return hud_aim_range;
+}
+
+static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type)
 {
 #define MAX_RANGE 4000.0
 	static float
-		aim_range = 0.0,
 		angle_of_drop = 0.0;
 
 	float
@@ -669,20 +676,20 @@ static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type, float* 
 			triangulated_range = MAX_RANGE;
 		else
 			triangulated_range = bound(height / tan(-pitch + angle_of_drop), 0.0, MAX_RANGE);
-		
-		range_diff = triangulated_range - aim_range;
-		// move the aiming range in gradual steps, so as not to come into a oscilating 
-		// state where it continousely overcorrects in alternating directions
-		aim_range += 0.25 * range_diff;
 
-		if (get_ballistic_pitch_deflection(weapon_sub_type, aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
+		range_diff = triangulated_range - hud_aim_range;
+		// move the aiming range in gradual steps, so as not to come into a oscilating
+		// state where it continousely overcorrects in alternating directions
+		hud_aim_range += 0.25 * range_diff;
+
+		if (get_ballistic_pitch_deflection(weapon_sub_type, hud_aim_range, pitch, &angle_of_drop, &time_of_flight, FALSE, TRUE))
 			angle_of_drop -= pitch;
 		else
 			angle_of_drop = 0.0;
 	}
 
-	
-	*out_range = aim_range;
+
+	hud_aim_range;
 	return angle_of_drop;
 }
 
@@ -690,13 +697,13 @@ static void display_weapon_information (void)
 {
 	entity_sub_types
 		weapon_sub_type;
-			
+
 	float
 		x,
 		y,
 		angle_of_drop,
 		drop_hud_distance,
-		roll;	
+		roll;
 
 	weapon_sub_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SELECTED_WEAPON);
 
@@ -712,25 +719,24 @@ static void display_weapon_information (void)
 			|| (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND))
 		{
 			float
-				range,
 				x,y;
 				angle_of_drop = 0.0;
 				drop_hud_distance;
 				roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-			angle_of_drop = get_ballistic_weapon_drop(weapon_sub_type, &range);
+			angle_of_drop = get_ballistic_weapon_drop(weapon_sub_type);
 			drop_hud_distance = atan(angle_of_drop) * hud_position_z / (0.5 * hud_height);
-			
+
 			y = cos(roll) * -drop_hud_distance;
 			x = sin(roll) * drop_hud_distance;
 
-			draw_aim_marker(x, y, range, weapon_database[weapon_sub_type].min_range);
-			
+			draw_aim_marker(x, y, hud_aim_range, weapon_database[weapon_sub_type].min_range);
+
 			// draw target marker around target if having cpg assist
 			if (get_global_cpg_assist_type() != CPG_ASSIST_TYPE_NONE)
 			{
 				float az, el;
-				
+
 				get_eo_azimuth_and_elevation(&az, &el);
 				if (angles_to_hud_coordinates(az, el, &x, &y, TRUE))
 					draw_2d_circle(x, y, 0.15, hud_colour);
@@ -739,17 +745,19 @@ static void display_weapon_information (void)
 		else
 		{
 			entity* target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-			
+
 			if (target)
 			{
 				float
 					elevation,
 					azimuth;
-				
+
 				get_eo_azimuth_and_elevation(&azimuth, &elevation);
 
+				hud_aim_range = get_triangulated_range(target);
+
 				if (angles_to_hud_coordinates(azimuth, elevation, &x, &y, TRUE))
-					draw_aim_marker(x, y, get_triangulated_range(target), weapon_database[weapon_sub_type].min_range);
+					draw_aim_marker(x, y, hud_aim_range, weapon_database[weapon_sub_type].min_range);
 			}
 		}
 	}
