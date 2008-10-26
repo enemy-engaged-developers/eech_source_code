@@ -219,7 +219,13 @@ cockpit_switch
 // crew position in first dimension, min/max limit in second
 static vec3d head_limits[2][2];
 
-static int cockpit_fan_enabled = FALSE;
+static int
+	cockpit_fan_enabled = FALSE,
+	open_door = TRUE;
+
+static float
+	door_handle_timer = 0.0,
+	door_state = 0.0;
 
 //static void animate_shutoff_valve(object3d_sub_instance* inst, int closed);
 
@@ -437,6 +443,7 @@ void initialise_hind_3d_cockpit (void)
 	head_limits[1][1].z =  0.3;
 #endif
 
+	open_door = !get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) && command_line_dynamics_engine_startup;
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
 	set_global_wide_cockpit(TRUE);
 }
@@ -618,6 +625,43 @@ static void animate_weapon_switch(entity_sub_types selected_weapon)
 	weapon_select_switch->relative_roll += bound(angle - weapon_select_switch->relative_roll, -max_movement, max_movement);
 }
 
+void toggle_mi24_cockpit_doors(void)
+{
+	open_door = !open_door;
+
+	if (open_door && door_handle_timer <= 0.0)
+		door_handle_timer = 0.6;
+}
+
+static void animate_doors(void)
+{
+	const float door_movement_rate = 0.7 * get_delta_time();
+	float new_state = door_state;
+
+	if (open_door && door_handle_timer < 0.4)
+		new_state += max(-door_state, -door_movement_rate);
+	else
+		new_state += min(1.0 - door_state, door_movement_rate);
+
+
+	if (new_state != door_state)
+	{
+		door_state = new_state;
+		animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+		animate_keyframed_sub_object_type(virtual_cockpit_canopy_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+	}
+
+	if (door_handle_timer > 0.0)
+	{
+		if (door_handle_timer > 0.4)  // pushing down
+			door_handle->relative_pitch = (0.6 - door_handle_timer) * rad(-150.0);
+		else if (door_handle_timer < 0.2)
+			door_handle->relative_pitch = door_handle_timer * rad(-150.0);
+
+		door_handle_timer -= get_delta_time();
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,6 +672,7 @@ void update_hind_3d_cockpit (void)
 	animate_collective_throttle();
 	animate_gear_lever();
 	animate_electrical_instruments();
+	animate_doors();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
