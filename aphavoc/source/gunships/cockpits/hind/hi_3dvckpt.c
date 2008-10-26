@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -89,7 +89,8 @@
 static object_3d_instance
 	*virtual_pilot_cockpit_inst3d,
 	*virtual_cockpit_canopy_inst3d,
-	
+	*virtual_cockpit_pilot_door_inst3d,
+
 	*virtual_cockpit_hud_glass_inst3d,
 	*virtual_cockpit_hud_display_inst3d,
 	*virtual_cockpit_map_display_inst3d,
@@ -104,6 +105,8 @@ static object_3d_instance
 
 static object_3d_sub_instance
 	*high_detail,
+	*door_high_detail,
+	*door_handle,
 	*fan_object,
 	*spinning_fan_object,
 	*compass_object,
@@ -172,7 +175,7 @@ static object_3d_sub_instance
 	*voltmeter,
 	*left_generator_ammeter,
 	*right_generator_ammeter,
-	
+
 	*left_wheel_down_light,
 	*right_wheel_down_light,
 	*nose_wheel_down_light,
@@ -192,7 +195,7 @@ static object_3d_sub_instance
 	*left_inner_pylon_light,
 	*right_inner_pylon_light,
 	*right_outer_pylon_light,
-	
+
 	*fire_light,
 	*left_engine_fire_light,
 	*right_engine_fire_light,
@@ -201,7 +204,7 @@ static object_3d_sub_instance
 	*over_stress_light,
 	*low_fuel_lights,
 	*gyre_fail_lights,
-	
+
 	*fuel_switches,
 	*external_light_switches,
 	*radio_navigation_switches,
@@ -234,14 +237,15 @@ void initialise_hind_3d_cockpit (void)
 	virtual_pilot_cockpit_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_COCKPIT);
 	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
 	virtual_cockpit_canopy_inst3d = construct_3d_object (OBJECT_3D_MI24V_CANOPY);
-	
+	virtual_cockpit_pilot_door_inst3d = construct_3d_object(OBJECT_3D_MI24V_PILOT_DOOR);
+
 	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_HUD_DISPLAY);
 	virtual_cockpit_map_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_MAP_DISPLAY);
 
 	virtual_cockpit_pilot_instruments_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_INSTRUMENTS);
 	virtual_cockpit_pilot_secondary_instruments_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_SECONDARY_INSTRUMENTS);
 	virtual_cockpit_warning_lamps_inst3d = construct_3d_object (OBJECT_3D_MI24V_PILOT_WARNING_LAMPS);
-	
+
 	pilot_head_pitch_datum = 0.0;
 
 	co_pilot_head_pitch_datum = 0.0;
@@ -250,8 +254,8 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_main_rotor_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_MAIN_ROTOR);
 	virtual_cockpit_adi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_ADI);
 
-	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.z = -2.9; 
-	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.y = 1.6; 
+	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.z = -2.9;
+	virtual_cockpit_main_rotor_inst3d->sub_objects[0].relative_position.y = 1.6;
 
 	virtual_cockpit_hsi_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_INSTRUMENTS_HSI_LEVEL1);
 	virtual_cockpit_ekran_display_inst3d = construct_3d_object (OBJECT_3D_HAVOC_VIRTUAL_COCKPIT_DISPLAYS_EKRAN);
@@ -272,8 +276,10 @@ void initialise_hind_3d_cockpit (void)
 	pilot_head_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_PILOT_HEAD);
 	hud_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FL);
 	map_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FR);
-	
+
 	high_detail = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
+	door_high_detail = find_sub_object(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
+	door_handle = find_sub_object(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_DOOR_HANDLE);
 	compass_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_COMPASS_HEADING_NULL);
 	fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_FAN);
 	spinning_fan_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_SPINNING_FAN);
@@ -287,15 +293,15 @@ void initialise_hind_3d_cockpit (void)
 	hover_indicator_speed = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_LONGITUDINAL);
 	hover_indicator_sideways = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_SIDWAYS);
 	hover_indicator_vvi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HOVER_INDICATOR_VVI);
-	
+
 	pitch_ladder_pitch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI);
 	pitch_ladder_roll = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_ADI_PITCH_NULL);
 	horizon_ball = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_VIRTUAL_COCKPIT_ADI);
-	
+
 	shutoff_valve_left = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SHUTOFFVALVE_LEFT);
 	shutoff_valve_right = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SHUTOFFVALVE_RIGHT);
 	rotor_brake = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROTOR_BRAKE);
-	
+
 	rotor_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROTOR_RPM_NEEDLE);
 	left_n1_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_N1_RPM_NEEDLE);
 	right_n1_rpm = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_N1_RPM_NEEDLE);
@@ -312,7 +318,7 @@ void initialise_hind_3d_cockpit (void)
 	epr_limits = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EPR_LIMITS);
 	left_epr_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_EPR_NEEDLE);
 	right_epr_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_EPR_NEEDLE);
-	
+
 	blade_pitch_needle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_BLADE_PITCH_NEEDLE);
 	g_force = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_G_FORCE_NEEDLE);
 	sidewind = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SIDEWIND_NEEDLE);
@@ -325,7 +331,7 @@ void initialise_hind_3d_cockpit (void)
 	clock_hour_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_HOUR_HAND);
 	clock_minute_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_MINUTE_HAND);
 	clock_second_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_SECOND_HAND);
-	
+
 	gear_lever = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_LEVER);
 	collective = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COLLECTIVE);
 	collective_throttle = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_COLLECTIVE_THROTTLE);
@@ -358,10 +364,10 @@ void initialise_hind_3d_cockpit (void)
 	apu_rpm_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_RPM_LIGHT);
 	apu_bleedair_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_BLEEDAIR_LIGHT);
 	engine_start_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ENGINE_START_LIGHT);
-	
+
 	left_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_WHEEL_DOWN_LIGHT);
 	right_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_WHEEL_DOWN_LIGHT);
-	nose_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_NOSE_WHEEL_DOWN_LIGHT); 
+	nose_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_NOSE_WHEEL_DOWN_LIGHT);
 	wheels_up_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_WHEELS_UP_LIGHT);
 	gear_operational_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_OPERATIONAL_LIGHT);
 	gear_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_FAIL_LIGHT);
@@ -371,23 +377,23 @@ void initialise_hind_3d_cockpit (void)
 	auto_hover_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_HOVER_LIGHT);
 	auto_pilot_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_PILOT_LIGHT);
 	auto_pilot_off_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_AUTO_PILOT_OFF_LIGHT);
-	auto_altitude_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ALTITUDE_HOLD_LIGHT); 
+	auto_altitude_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ALTITUDE_HOLD_LIGHT);
 	auto_altitude_off_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ALTITUDE_HOLD_OFF_LIGHT);
 	external_light_lamps = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_LAMPS);
 	left_outer_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_OUTER_PYLON_LIGHT);
 	left_inner_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_INNER_PYLON_LIGHT);
 	right_inner_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_INNER_PYLON_LIGHT);
 	right_outer_pylon_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_OUTER_PYLON_LIGHT);
-	
-	fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_FIRE_LIGHT); 
+
+	fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_FIRE_LIGHT);
 	left_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FIRE_LIGHT);
-	right_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FIRE_LIGHT); 
-	left_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FAIL_LIGHT); 
-	right_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FAIL_LIGHT); 
-	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT); 
-	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS); 
-	gyre_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS); 
-	
+	right_engine_fire_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FIRE_LIGHT);
+	left_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_FAIL_LIGHT);
+	right_engine_fail_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_FAIL_LIGHT);
+	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT);
+	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS);
+	gyre_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
+
 	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
 	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
 	radio_navigation_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RADIO_NAVIGATION_SWITCHES);
@@ -430,9 +436,9 @@ void initialise_hind_3d_cockpit (void)
 	head_limits[1][0].z = -0.05;
 	head_limits[1][1].z =  0.3;
 #endif
-	
+
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
-	set_global_wide_cockpit(TRUE);	
+	set_global_wide_cockpit(TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -447,6 +453,7 @@ void deinitialise_hind_3d_cockpit (void)
 
 	destruct_3d_object (virtual_pilot_cockpit_inst3d);
 	destruct_3d_object (virtual_cockpit_canopy_inst3d);
+	destruct_3d_object (virtual_cockpit_pilot_door_inst3d);
 
 	destruct_3d_object (virtual_cockpit_hud_glass_inst3d);
 	destruct_3d_object (virtual_cockpit_hud_display_inst3d);
@@ -506,12 +513,12 @@ static void animate_fan(void)
 		if (fan_speed < 0.0)
 			fan_speed = 0.0;
 	}
-	
+
 	fan_object->relative_roll -= fan_speed * get_delta_time();
 	while (fan_object->relative_roll < 0.0)
 		fan_object->relative_roll += PI2;
 	spinning_fan_object->relative_roll = fan_object->relative_roll;
-	
+
 	if (fan_speed > FAN_BLUR_TRESHOLD)
 	{
 		fan_object->visible_object = FALSE;
@@ -536,7 +543,7 @@ static void animate_rotor_brake(int enabled)
 
 	if (enabled)
 		brake_angle = rad(-35.0);
-	
+
 	rotor_brake->relative_pitch += bound(brake_angle - rotor_brake->relative_pitch, -max_movement, max_movement);
 }
 
@@ -550,7 +557,7 @@ static void animate_electrical_instruments(void)
 		angle = rad(-60.0);
 
 	left_battery_ammeter->relative_roll += bound(angle - left_battery_ammeter->relative_roll, -max_movement, max_movement);
-	right_battery_ammeter->relative_roll = left_battery_ammeter->relative_roll; 
+	right_battery_ammeter->relative_roll = left_battery_ammeter->relative_roll;
 	apu_ammeter->relative_roll = left_battery_ammeter->relative_roll;
 	voltmeter->relative_roll = left_battery_ammeter->relative_roll;
 	left_generator_ammeter->relative_roll = left_battery_ammeter->relative_roll;
@@ -575,10 +582,10 @@ static void animate_gear_lever(void)
 		angle = 0.0;
 
 	int uc_state = get_local_entity_undercarriage_state(get_gunship_entity());
-	
+
 	if (uc_state == AIRCRAFT_UNDERCARRIAGE_UP || uc_state == AIRCRAFT_UNDERCARRIAGE_RAISING)
 		angle = rad(75.0);
-	
+
 	gear_lever->relative_roll += bound(angle - gear_lever->relative_roll, -max_movement, max_movement);
 }
 
@@ -715,7 +722,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			break;
 		}
 	}
-	
+
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
 
 	get_3d_transformation_matrix (directional_light_rotation, directional_light_heading, directional_light_pitch, directional_light_roll);
@@ -769,12 +776,12 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 
 	object_3d_sub_instance*
 		head_object;
-	
+
 	ASSERT (crew_viewpoint);
 
 	// TODO: add co-pilot
 	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
-	
+
 	switch (get_view_mode())
 		{
 		case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_TV:
@@ -871,11 +878,11 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	object_3d_instance
 		*virtual_cockpit_inst3d;
 
-//VJ wideview mod, date: 18-mar-03	
+//VJ wideview mod, date: 18-mar-03
     char buffer[128];
 
 	flags = (unsigned)-1;
-	
+
 
 	////////////////////////////////////////
 	//
@@ -884,7 +891,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 	////////////////////////////////////////
 
 	get_crew_viewpoint(&vp);
-	
+
 	////////////////////////////////////////
 	//
 	// render displays onto textures (before draw 3D scenes)
@@ -922,13 +929,13 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 		{
 			float dummy;  // TODO: remove
 			entity_sub_types selected_weapon = get_local_entity_int_value (get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
-			
+
 			//
 			// map first, otherwise transparency doesn't work properly
 			//
 			memcpy (&virtual_cockpit_map_display_inst3d->vp, &vp, sizeof (viewpoint));
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_map_display_inst3d->vp.position, virtual_cockpit_map_display_inst3d);
-			
+
 			// cockpit
 			high_detail->visible_object = get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW;
 			virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
@@ -938,10 +945,14 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			memcpy (&virtual_cockpit_hud_display_inst3d->vp, &vp, sizeof (viewpoint));
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_hud_display_inst3d->vp.position, virtual_cockpit_hud_display_inst3d);
 
+			door_high_detail->visible_object = get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW;
+			memcpy (&virtual_cockpit_pilot_door_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_door_inst3d->vp.position, virtual_cockpit_pilot_door_inst3d);
+
 			//
 			// instrument needles
 			//
-			
+
 			compass_object->relative_heading = -current_flight_dynamics->heading.value;
 
 			airspeed_needle->relative_roll = get_mi24_airspeed_needle_value();
@@ -951,7 +962,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			hover_indicator_vvi->relative_roll = get_mi24_hover_indicator_vvi_needle_value();
 			radar_altimeter->relative_roll = get_mi24_radar_altimeter_needle_value();
 			get_mi24_barometric_altimeter_needle_values(&barometric_altimeter_short->relative_roll, &barometric_altimeter_long->relative_roll);
-			
+
 			if (electrical_system_active())
 			{
 				bank_indicator->relative_roll = current_flight_dynamics->roll.value;
@@ -980,34 +991,34 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 
 			get_mi24_temperature_needle_values(current_flight_dynamics->left_engine_temp.value, &left_temperature->relative_roll, &left_temperature_small->relative_roll);
 			get_mi24_temperature_needle_values(current_flight_dynamics->right_engine_temp.value, &right_temperature->relative_roll, &right_temperature_small->relative_roll);
-			
+
 			get_mi24_epr_needle_values(&epr_limits->relative_pitch, &left_epr_needle->relative_pitch, &right_epr_needle->relative_pitch);
-			
+
 			sidewind->relative_roll = get_mi24_sidewind_needle_value();
 			fuel_quantity->relative_roll = get_mi24_fuel_quantity_needle_value();
-			
+
 			blade_pitch_needle->relative_roll = rad(98) - rad(185.0) *
 				(current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min)
 					/ (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min);
-			
+
 			g_force->relative_roll = bound(rad(-59.5) * current_flight_dynamics->g_force.value, rad(-210.0), rad(90.0));
 			get_mi24_clock_hand_values(&clock_hour_hand->relative_roll, &clock_minute_hand->relative_roll, &clock_second_hand->relative_roll);
 
 			get_mi24_hydraulic_pressure_values(&gear_hydraulic_psi->relative_roll, &primary_hydraulic_psi->relative_roll, &secondary_hydraulic_psi->relative_roll);
-			
+
 			collective->relative_pitch = rad(-25.0) - rad(20) * current_flight_dynamics->input_data.collective.value * 0.01;
 			pedal_link->relative_heading = rad(-15.0) * current_flight_dynamics->input_data.pedal.value * 0.01;
 			left_pedal->relative_heading = right_pedal->relative_heading = -pedal_link->relative_heading;
 
 			animate_weapon_switch(selected_weapon);
 			rocket_salvo_switch->relative_pitch = get_mi24_rocket_salvo_switch_value();
-			
+
 			{
 				int i;
 				for (i=0; i < ARRAY_LENGTH(switch_animations); i++)
 					animate_switch(&switch_animations[i]);
 			}
-			
+
 			memcpy (&virtual_cockpit_pilot_instruments_inst3d->vp, &vp, sizeof (viewpoint));
 			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_instruments_inst3d->vp.position, virtual_cockpit_pilot_instruments_inst3d);
 
@@ -1015,19 +1026,19 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			if (electrical_system_active())
 			{
 				int hover_hold_mode = current_flight_dynamics->auto_hover;
-				
+
 				apu_ready_light->visible_object = !current_flight_dynamics->apu_rpm.damaged;
 				apu_rpm_light->visible_object = current_flight_dynamics->apu_rpm.value > 90.0;
 				apu_bleedair_lights->visible_object = current_flight_dynamics->apu_rpm.value > 60.0;
 				engine_start_light->visible_object = (current_flight_dynamics->left_engine_starter_active || current_flight_dynamics->right_engine_starter_active);
 
 				cockpit_sealed_light->visible_object = get_local_entity_loading_door_state(get_gunship_entity ()) == 0;
-				cockpit_open_light->visible_object = !cockpit_sealed_light->visible_object; 
+				cockpit_open_light->visible_object = !cockpit_sealed_light->visible_object;
 				park_brake_light->visible_object = !!current_flight_dynamics->wheel_brake;
 
 				gear_operational_light->visible_object = !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_UNDERCARRIAGE);
 				gear_fail_light->visible_object = !gear_operational_light->visible_object;
-				
+
 				if (get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
 				{
 					wheels_up_light->visible_object = FALSE;
@@ -1051,7 +1062,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				auto_pilot_off_light->visible_object = !auto_hover_light->visible_object && !auto_pilot_light->visible_object;
 				auto_altitude_light->visible_object = hover_hold_mode == HOVER_HOLD_STABLE || hover_hold_mode == HOVER_HOLD_ALTITUDE_LOCK;
 				auto_altitude_off_light->visible_object = !auto_altitude_light->visible_object;
-				
+
 				external_light_lamps->visible_object = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_LIGHTS_ON);
 
 				left_engine_fire_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE) != 0;
@@ -1061,8 +1072,8 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				right_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0;
 				over_stress_light->visible_object = current_flight_dynamics->g_force.value > 1.8;
 				low_fuel_lights->visible_object = current_flight_dynamics->fuel_weight.value < current_flight_dynamics->fuel_weight.max * 0.25;
-				gyre_fail_lights->visible_object = hind_damage.navigation_computer; 
-				
+				gyre_fail_lights->visible_object = hind_damage.navigation_computer;
+
 				// weapon pylon lights
 				{
 					int pylon;
@@ -1071,7 +1082,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 					{
 						entity_sub_types weapon_sub_type;
 						int number, damaged;
-						
+
 						if (get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
 							pylon, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
 							&weapon_sub_type, &number, &damaged))
@@ -1094,7 +1105,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 						}
 					}
 				}
-				
+
 				memcpy (&virtual_cockpit_warning_lamps_inst3d->vp, &vp, sizeof (viewpoint));
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_warning_lamps_inst3d->vp.position, virtual_cockpit_warning_lamps_inst3d);
 			}
@@ -1103,17 +1114,17 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			if (get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW)
 			{
 				fuel_switches->relative_roll = electrical_system_active() ? rad(90.0) : 0.0;
-				radio_navigation_switches->relative_roll = fuel_switches->relative_roll; 
+				radio_navigation_switches->relative_roll = fuel_switches->relative_roll;
 				external_light_switches->relative_roll = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_LIGHTS_ON) ? rad(90.0) : 0.0;
 				master_arm_switches->relative_pitch = (get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON) ? 0.0 : rad(90.0);
-				
+
 				memcpy (&virtual_cockpit_pilot_secondary_instruments_inst3d->vp, &vp, sizeof (viewpoint));
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_pilot_secondary_instruments_inst3d->vp.position, virtual_cockpit_pilot_secondary_instruments_inst3d);
 			}
 
 			draw_3d_scene ();
 
-//VJ wideview mod, date: 18-mar-03	
+//VJ wideview mod, date: 18-mar-03
          if (edit_wide_cockpit)
        	{
 				sprintf(buffer,"HIND wide cockpit mod edit (set freelook off):");
@@ -1409,7 +1420,7 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 	object_3d_instance
 		*inst3d;
 
-	
+
 	////////////////////////////////////////
 	//
 	// virtual cockpit viewpoint is placed at the main object origin
@@ -1528,13 +1539,13 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 					search.result_sub_object->relative_roll = -roll;
 				}
 
-//VJ wideview mod, date: 18-mar-03	
+//VJ wideview mod, date: 18-mar-03
 				if (get_global_wide_cockpit ())
 				{
 				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
 				    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
-				}    
-				
+				}
+
 				memcpy (&virtual_cockpit_adi_inst3d->vp, &vp, sizeof (viewpoint));
 
 				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_adi_inst3d->vp.position, virtual_cockpit_adi_inst3d);
@@ -1719,15 +1730,15 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 		}
 	}
 
-	//VJ wideview mod, date: 18-mar-03	
+	//VJ wideview mod, date: 18-mar-03
 	////////////////////////////////////////
 	//
 	// wide cockpit position edit
 	//
 	////////////////////////////////////////
-	
-	if (edit_wide_cockpit)                                     
-	{                                                          
+
+	if (edit_wide_cockpit)
+	{
 		//VJ 50208 added pilot head pitch
 		if (check_key(DIK_NUMPAD7))
 		{
@@ -1737,38 +1748,38 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 		{
             wide_cockpit_position[wide_cockpit_nr].p -= 0.5;
       }
-		if (check_key(DIK_NUMPAD6))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD4))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD8))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD2))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD1))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD3))                            
-		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
-      }                                                      
-		if (check_key(DIK_NUMPAD0))                            
-		{                                       
+		if (check_key(DIK_NUMPAD6))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+      }
+		if (check_key(DIK_NUMPAD4))
+		{
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD8))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+      }
+		if (check_key(DIK_NUMPAD2))
+		{
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD1))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+      }
+		if (check_key(DIK_NUMPAD3))
+		{
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+      }
+		if (check_key(DIK_NUMPAD0))
+		{
 			wide_cockpit_position[wide_cockpit_nr].x = 0.0;
 			wide_cockpit_position[wide_cockpit_nr].y = 0.0;
 			wide_cockpit_position[wide_cockpit_nr].z = 0.0;
 			wide_cockpit_position[wide_cockpit_nr].p = -5.0;
-      }                                                      
-   }      
+      }
+   }
 
 
 
@@ -1862,6 +1873,6 @@ void animate_shutoff_valve(object_3d_sub_instance* inst, int closed)
 	// left throttle
 	if (!closed)  // idle at -45 deg
 		valve_angle = rad(45.0);
-	
+
 	inst->relative_pitch += bound(valve_angle - inst->relative_pitch, -max_movement, max_movement);
 }
