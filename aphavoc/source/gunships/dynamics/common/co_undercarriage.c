@@ -533,15 +533,18 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 
 int nose_wheel_locked_down(void)
 {
-	return landing_gears[get_global_gunship_type()].gear_points[2].suspension_compression > 0.0;
+	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
+		&& !landing_gears[get_global_gunship_type()].gear_points[2].damaged;
 }
 
 int left_main_wheel_locked_down(void)
 {
-	return landing_gears[get_global_gunship_type()].gear_points[1].suspension_compression > 0.0;
+	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
+		&& !landing_gears[get_global_gunship_type()].gear_points[1].damaged;
 }
 
 int right_main_wheel_locked_down(void)
 {
-	return landing_gears[get_global_gunship_type()].gear_points[0].suspension_compression > 0.0;
+	return get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN
+		&& !landing_gears[get_global_gunship_type()].gear_points[0].damaged;
 }
