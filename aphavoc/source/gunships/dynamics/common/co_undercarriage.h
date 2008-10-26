@@ -11,4 +11,8 @@ void update_undercarriage_dynamics(void);
 
 void reset_undercarriage_world_position(void);
 
+int nose_wheel_locked_down(void);
+int left_main_wheel_locked_down(void);
+int right_main_wheel_locked_down(void);
+
 #endif /*CO_UNDERCARRIAGE_H_*/
