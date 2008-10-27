@@ -514,13 +514,6 @@ static void read_camera ( FILE *fp, struct OBJECT_3D_SCENE_CAMERA *camera )
 	read_keyframes ( fp, &camera->number_of_keyframes, &camera->keyframes, sceneid );
 }
 
-static int get_scene ( const char *filename )
-{
-	char
-		name[1024];
-	int
-		i;
-
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x) #x,
 #define OBJECT_3D_INDEX_(x) NULL
@@ -528,18 +521,30 @@ static int get_scene ( const char *filename )
 #define OBJECT_3D_SUBINDEX_(x)
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
-	static const char
-		*scenes[] =
-		{
+const char* object_3d_scene_names[] = {
 #include "3dmodels.h"
-		};
+};
+#undef OBJECT_3D_DECLARATION
+#undef OBJECT_3D_INDEX
+#undef OBJECT_3D_INDEX_
+#undef OBJECT_3D_SUBINDEX
+#undef OBJECT_3D_SUBINDEX_
+#undef OBJECT_3D_CAMERA
+#undef OBJECT_3D_CAMERA_
+
+static int get_scene ( const char *filename )
+{
+	char
+		name[1024];
+	int
+		i;
 
 	strcpy ( name, filename );
 	name[strlen ( name ) - 4] = '\0';
 	strupr ( name );
 
-	for ( i = 1; scenes[i]; i++ )
-		if ( !strcmp ( name, scenes[i] + 10 ) )
+	for ( i = 1; object_3d_scene_names[i]; i++ )
+		if ( !strcmp ( name, object_3d_scene_names[i] + 10 ) )
 			return i;
 
 	return 0;
@@ -1087,7 +1092,7 @@ static int all_scenes_loaded_successfully(unsigned from_index, unsigned to_index
 	for (sceneno = from_index; sceneno <= to_index; sceneno++)
 		if (!objects_3d_scene_database[sceneno].succeeded)
 		{
-			debug_log("failed: %d", sceneno);
+			debug_log("failed: %s", object_3d_scene_names[sceneno]);
 			ASSERT(FALSE);
 			return FALSE;
 		}
