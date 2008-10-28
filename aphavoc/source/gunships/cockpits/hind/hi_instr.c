@@ -678,3 +678,37 @@ void update_mi24_weapon_status_lights(object_3d_sub_instance* ready, object_3d_s
 
 	min_range->visible_object = get_hud_aiming_range() < weapon_database[weapon_sub_type].min_range;
 }
+
+void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_pressure, float* right_pressure)
+{
+	float
+		max_temp_movement = rad(5) * get_delta_time(),
+		max_pressure_movement = rad(60) * get_delta_time(),
+		temp,
+		lpres,
+		rpres;
+
+	temp = bound(current_flight_dynamics->left_engine_temp.value * 0.001, 0.0, 1.0);
+	*left_temp += bound((rad(100) - rad(70) * temp) - *left_temp, -max_temp_movement, max_temp_movement);
+
+	temp = bound(current_flight_dynamics->right_engine_temp.value * 0.001, 0.0, 1.0);
+	*right_temp += bound((rad(100) - rad(70) * temp) - *right_temp, -max_temp_movement, max_temp_movement);
+
+	if (electrical_system_active())
+	{
+		if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE) != 0)
+			lpres = 0.0;
+		else
+			lpres = 1.0;
+
+		if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0)
+			rpres = 0.0;
+		else
+			rpres = 1.0;
+	}
+	else
+		lpres = rpres = 0.0;
+
+	*left_pressure += bound((rad(-150) + rad(100) * lpres) - *left_pressure, -max_pressure_movement*0.9, max_pressure_movement);
+	*right_pressure += bound((rad(-150) + rad(100) * rpres) - *right_pressure, -max_pressure_movement, max_pressure_movement*0.9);
+}

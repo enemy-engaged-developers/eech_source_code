@@ -153,6 +153,11 @@ static object_3d_sub_instance
 	*clock_second_hand,
 	*waypoint_indicator,
 
+	*left_engine_oil_pressure,
+	*left_engine_oil_temperature,
+	*right_engine_oil_pressure,
+	*right_engine_oil_temperature,
+
 	*gear_lever,
 	*collective,
 	*collective_throttle,
@@ -209,6 +214,8 @@ static object_3d_sub_instance
 	*over_stress_light,
 	*low_fuel_lights,
 	*gyro_fail_lights,
+	*left_engine_over_temperature_light,
+	*right_engine_over_temperature_light,
 
 	*fuel_switches,
 	*external_light_switches,
@@ -339,6 +346,10 @@ void initialise_hind_3d_cockpit (void)
 	secondary_hydraulic_psi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_SECONDARY_HYDRAULIC_NEEDLE);
 	gear_hydraulic_psi = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_GEAR_HYDRAULIC_NEEDLE);
 
+	left_engine_oil_pressure = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OIL_PRESSURE);
+	left_engine_oil_temperature = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OIL_TEMPERATURE);
+	right_engine_oil_pressure = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OIL_PRESSURE);
+	right_engine_oil_temperature = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OIL_TEMPERATURE);
 
 	clock_hour_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_HOUR_HAND);
 	clock_minute_hand = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_CLOCK_MINUTE_HAND);
@@ -409,6 +420,8 @@ void initialise_hind_3d_cockpit (void)
 	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT);
 	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS);
 	gyro_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
+//	left_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OVER_TEMPERATURE_LIGHT);
+//	right_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OVER_TEMPERATURE_LIGHT);
 
 	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
 	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
@@ -1049,6 +1062,8 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			get_mi24_temperature_needle_values(current_flight_dynamics->right_engine_temp.value, &right_temperature->relative_roll, &right_temperature_small->relative_roll);
 
 			get_mi24_epr_needle_values(&epr_limits->relative_pitch, &left_epr_needle->relative_pitch, &right_epr_needle->relative_pitch);
+
+			update_mi24_engine_gauges(&left_engine_oil_temperature->relative_roll, &right_engine_oil_temperature->relative_roll, &left_engine_oil_pressure->relative_roll, &right_engine_oil_pressure->relative_roll);
 
 			sidewind->relative_roll = get_mi24_sidewind_needle_value();
 			fuel_quantity->relative_roll = get_mi24_fuel_quantity_needle_value();
