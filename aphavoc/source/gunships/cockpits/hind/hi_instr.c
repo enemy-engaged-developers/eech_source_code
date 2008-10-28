@@ -698,11 +698,15 @@ void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_
 	{
 		if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE) != 0)
 			lpres = 0.0;
+		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LOW_OIL_PRESSURE) != 0)
+			lpres = 0.5;
 		else
 			lpres = 1.0;
 
 		if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0)
 			rpres = 0.0;
+		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LOW_OIL_PRESSURE) != 0)
+			rpres = 0.5;
 		else
 			rpres = 1.0;
 	}
