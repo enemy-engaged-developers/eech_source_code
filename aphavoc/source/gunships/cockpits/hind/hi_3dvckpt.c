@@ -420,8 +420,8 @@ void initialise_hind_3d_cockpit (void)
 	over_stress_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_OVER_STRESS_LIGHT);
 	low_fuel_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LOW_FUEL_LIGHTS);
 	gyro_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
-//	left_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OVER_TEMPERATURE_LIGHT);
-//	right_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OVER_TEMPERATURE_LIGHT);
+	left_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OVER_TEMPERATURE_LIGHT);
+	right_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OVER_TEMPERATURE_LIGHT);
 
 	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
 	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
@@ -1144,6 +1144,8 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				over_stress_light->visible_object = current_flight_dynamics->g_force.value > 1.8;
 				low_fuel_lights->visible_object = current_flight_dynamics->fuel_weight.value < current_flight_dynamics->fuel_weight.max * 0.25;
 				gyro_fail_lights->visible_object = hind_damage.navigation_computer;
+				left_engine_over_temperature_light->visible_object = (current_flight_dynamics->left_engine_temp.value > 800.0);
+				right_engine_over_temperature_light->visible_object = (current_flight_dynamics->right_engine_temp.value > 800.0);
 
 				update_mi24_weapon_status_lights(weapon_ready_light, weapon_not_ready_light, weapon_min_range_light);
 
