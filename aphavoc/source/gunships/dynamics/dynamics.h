@@ -509,7 +509,8 @@ struct DYNAMICS_TYPE
 		main_rotor_governor_rpm,
 		main_rotor_idle_rpm,
 		main_rotor_max_rpm,
-		engine_idle_rpm;
+		engine_idle_rpm,
+		engine_start_timer;
 };
 
 typedef struct DYNAMICS_TYPE dynamics_type;

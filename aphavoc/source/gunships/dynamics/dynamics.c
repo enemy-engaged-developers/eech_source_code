@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -106,7 +106,7 @@ float
 const char
 	*dynamics_options_type_names [] =
 	{
-		
+
 		"CROSS_COUPLING",
 		"DAMAGE",
 		"DRAW_FLIGHT_PATH",
@@ -130,7 +130,7 @@ const char
 const char
 	*flight_path_action_names [] =
 	{
-	
+
 		"ACTION_USER_NAVIGATING",
 		"ACTION_AUTOPILOT_NAVIGATING",
 		"ACTION_LAUNCH_WEAPON",
@@ -198,7 +198,7 @@ void initialise_flight_dynamics (entity *en)
 	{
 
       set_global_dynamics_model (DEFAULT_DYNAMICS_MODEL);
-	
+
 	}
 
 	//
@@ -206,7 +206,7 @@ void initialise_flight_dynamics (entity *en)
 	//
 
 	initialise_common_dynamics();
-	
+
 	switch (get_global_dynamics_model ())
 	{
 
@@ -338,7 +338,7 @@ void initialise_flight_dynamics (entity *en)
 	initialise_flight_dynamics_input_devices ();
 
 	initialise_undercarriage_dynamics();
-	
+
 	add_update_function (update_flight_path, 10.0, 0.0);
 
 #if DEBUG_DYNAMICS
@@ -369,7 +369,7 @@ void initialise_flight_dynamics (entity *en)
 
 
 	debug_watch ("apu_rpm   						= %f", MT_FLOAT, &current_flight_dynamics->apu_rpm.value);
-	debug_watch ("apu_rpm max 						= %f", MT_FLOAT, &current_flight_dynamics->apu_rpm.max);	
+	debug_watch ("apu_rpm max 						= %f", MT_FLOAT, &current_flight_dynamics->apu_rpm.max);
 
 	debug_watch ("left N1 rpm   					= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.value);
 	debug_watch ("left min N1 rpm   				= %f", MT_FLOAT, &current_flight_dynamics->left_engine_n1_rpm.min);
@@ -397,7 +397,7 @@ void initialise_flight_dynamics (entity *en)
 	debug_watch ("main_rotor_pitch  				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_pitch_angle.value);
 	debug_watch ("main_rotor_thrust 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_thrust.value);
 	debug_watch ("main_rotor_rpm    				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rpm.value);
-	debug_watch ("main_rotor_rpm_delta 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rpm.delta);	
+	debug_watch ("main_rotor_rpm_delta 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rpm.delta);
 	debug_watch ("main_rotor_rps    				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_rps.value);
 	debug_watch ("main_rotor_angle  				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_angular_position.value);
 	debug_watch ("main_rotor_inc	 				= %f", MT_FLOAT, &current_flight_dynamics->main_rotor_angular_increment.value);
@@ -510,9 +510,9 @@ void initialise_flight_dynamics_collision_points (void)
                 raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND ||
 		raw->ac.object_3d_shape == OBJECT_3D_AH_64A ||
                 raw->ac.object_3d_shape == OBJECT_3D_KA_50)
-////Moje 030713 next line 
+////Moje 030713 next line
 */
-	
+
 	if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW ||
 		raw->ac.object_3d_shape == OBJECT_3D_MI28N_HAVOC ||
 		raw->ac.object_3d_shape == OBJECT_3D_RAH66 ||
@@ -542,165 +542,165 @@ void initialise_flight_dynamics_collision_points (void)
 
 		if (!dynamics_collision_point_info [collision_type].moving)
 		{
-		
+
 			//
 			// Fixed
 			//
-		
+
 			sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
-		
+
 			depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
-		
+
 			if (depth > 0)
 			{
-		
+
 				fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
-		
+
 				last_frame_fixed_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_fixed_collision_points + depth));
-	
+
 				if (current_flight_dynamics->fixed_collision_points)
 				{
-	
+
 					memcpy (fixed_collision_points, current_flight_dynamics->fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
-	
+
 					memcpy (last_frame_fixed_collision_points, current_flight_dynamics->last_frame_fixed_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_fixed_collision_points);
-	
+
 					free_mem (current_flight_dynamics->fixed_collision_points);
-	
+
 					free_mem (current_flight_dynamics->last_frame_fixed_collision_points);
 				}
-	
+
 				current_flight_dynamics->fixed_collision_points = fixed_collision_points;
 
 				current_flight_dynamics->last_frame_fixed_collision_points = last_frame_fixed_collision_points;
-	
+
 				current_flight_dynamics->valid_last_frame_fixed_collision_points = FALSE;
-		
+
 				current_flight_dynamics->number_of_fixed_collision_points += depth;
-		
+
 				while (depth >= 0)
 				{
-		
+
 					search.search_depth = depth;
 					search.search_object = temp_inst3d;
 					search.sub_object_index = sub_object_type;
-		
+
 					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
-		
+
 						viewpoint
 							vp;
-		
+
 						get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
-		
+
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.x = vp.position.x;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y = vp.position.y;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.z = vp.position.z;
-		
+
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type = collision_type;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].violated = FALSE;
-		
+
 						#if DEBUG_DYNAMICS >= 2
-		
+
 						debug_log ("DYNAMICS: Found fixed collision point %s (%d) at %f, %f, %f",
 										dynamics_collision_point_info [current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type].name,
 										current_flight_dynamics->number_of_fixed_collision_points - depth - 1,
 										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.x,
 										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y,
 										current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.z);
-		
+
 						#endif
 					}
-		
+
 					depth --;
 				}
 			}
 			else
 			{
-		
+
 				debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
 			}
 		}
 		else
 		{
-		
+
 			//
 			// Moving
 			//
-		
+
 			sub_object_type = dynamics_collision_point_info [collision_type].sub_object_type;
-		
+
 			depth = count_sub_object_type_depth (temp_inst3d, sub_object_type);
-		
+
 			if (depth > 0)
 			{
-		
+
 				moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
-		
+
 				last_frame_moving_collision_points = (dynamics_collision_type *) malloc_heap_mem (sizeof (dynamics_collision_type) * (current_flight_dynamics->number_of_moving_collision_points + depth));
-	
+
 				if (current_flight_dynamics->moving_collision_points)
 				{
-	
+
 					memcpy (moving_collision_points, current_flight_dynamics->moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
-	
+
 					memcpy (last_frame_moving_collision_points, current_flight_dynamics->last_frame_moving_collision_points, sizeof (dynamics_collision_type) * current_flight_dynamics->number_of_moving_collision_points);
-	
+
 					free_mem (current_flight_dynamics->moving_collision_points);
-	
+
 					free_mem (current_flight_dynamics->last_frame_moving_collision_points);
 				}
-	
+
 				current_flight_dynamics->moving_collision_points = moving_collision_points;
 
 				current_flight_dynamics->last_frame_moving_collision_points = last_frame_moving_collision_points;
-		
+
 				current_flight_dynamics->valid_last_frame_moving_collision_points = FALSE;
-		
+
 				current_flight_dynamics->number_of_moving_collision_points += depth;
-		
+
 				while (depth >= 0)
 				{
-		
+
 					search.search_depth = depth;
 					search.search_object = temp_inst3d;
 					search.sub_object_index = sub_object_type;
-		
+
 					if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 					{
-		
+
 						viewpoint
 							vp;
-		
+
 						get_3d_sub_object_world_viewpoint (search.result_sub_object, &vp);
-		
+
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.x = vp.position.x;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.y = vp.position.y;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.z = vp.position.z;
-		
+
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type = collision_type;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].violated = FALSE;
-		
+
 						#if DEBUG_DYNAMICS >= 2
-		
+
 						debug_log ("DYNAMICS: Found moving collision point %s (%d) at %f, %f, %f",
 										dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type].name,
 										current_flight_dynamics->number_of_moving_collision_points - depth - 1,
 										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.x,
 										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.y,
 										current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.z);
-		
+
 						#endif
 					}
-		
+
 					depth --;
 				}
 			}
 			else
 			{
-		
+
 				debug_log ("DYNAMICS: WARNING: object %s with no %s collision points", entity_sub_type_aircraft_names [get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ENTITY_SUB_TYPE)], dynamics_collision_point_info [collision_type].name);
 			}
 		}
@@ -745,7 +745,7 @@ void deinitialise_flight_dynamics (void)
 	if (current_flight_dynamics)
 	{
 		deinitialise_undercarriage_dynamics();
-		
+
 		deinitialise_dynamic_forces ();
 
 		// free fixed collision points
@@ -772,7 +772,7 @@ void deinitialise_flight_dynamics (void)
 			free_mem (current_flight_dynamics->last_frame_moving_collision_points);
 
 			current_flight_dynamics->valid_last_frame_moving_collision_points = FALSE;
-			
+
 			current_flight_dynamics->moving_collision_points = NULL;
 		}
 
@@ -843,6 +843,15 @@ void set_dynamics_entity_values (entity *en)
 
 	set_current_flight_dynamics_wheel_brake (TRUE);
 
+	current_flight_dynamics->engine_idle_rpm = 60.0;
+	current_flight_dynamics->main_rotor_governor_rpm = 100.0;
+	current_flight_dynamics->main_rotor_idle_rpm = 70.0;
+	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		current_flight_dynamics->main_rotor_max_rpm = 97.5;
+	else
+		current_flight_dynamics->main_rotor_max_rpm = 100.0;
+	current_flight_dynamics->engine_start_timer = 0.0;
+
 	if ((!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT)) ||
 		(get_local_entity_float_value (en, FLOAT_TYPE_RADAR_ALTITUDE) < 1.0) || // altitude (not carrier)
 		(get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) == 0.0)) // engine off
@@ -868,7 +877,7 @@ void set_dynamics_entity_values (entity *en)
 		current_flight_dynamics->left_engine_torque.max = 120.0;
 		current_flight_dynamics->right_engine_torque.max = 120.0;
 		current_flight_dynamics->combined_engine_torque.value = 0.0;
-		
+
 		current_flight_dynamics->apu_rpm.value = 0.0;
 		if (command_line_dynamics_engine_startup)
 		{
@@ -876,6 +885,9 @@ void set_dynamics_entity_values (entity *en)
 			current_flight_dynamics->right_engine_n1_rpm.value = 0.0;
 			current_flight_dynamics->left_engine_n1_rpm.max = 0.0;
 			current_flight_dynamics->right_engine_n1_rpm.max = 0.0;
+
+			if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+				current_flight_dynamics->main_rotor_governor_rpm = 70.0;
 		}
 		else  // start with engines running
 		{
@@ -931,7 +943,7 @@ void set_dynamics_entity_values (entity *en)
 
 		if (get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) != 0.0)
 		{
-			
+
 			current_flight_dynamics->input_data.collective.value = max (50.0, get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM));
 		}
 	}
@@ -1012,15 +1024,15 @@ void set_dynamics_entity_values (entity *en)
 			Md,
 			Pmax,
 			Tl;
-	
+
 		Mrpm = current_flight_dynamics->main_rotor_rpm.value;
-	
+
 		Md = current_flight_dynamics->main_rotor_diameter.value;
-	
+
 		Pmax = current_flight_dynamics->tail_blade_pitch.max;
-	
+
 		Tl = current_flight_dynamics->tail_boom_length.value;
-	
+
 		current_flight_dynamics->cross_coupling_effect.value = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
 	}
 }
@@ -1040,20 +1052,20 @@ void update_flight_dynamics (void)
 	/*
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
-	
-		if (get_game_type () == GAME_TYPE_CAMPAIGN) 
+
+		if (get_game_type () == GAME_TYPE_CAMPAIGN)
 		{
-	
+
 			entity
 				*task;
-	
+
 			task = get_local_entity_primary_task (get_gunship_entity ());
-	
+
 			if (!task)
 			{
 				task = get_local_entity_current_task (get_gunship_entity ());
 			}
-	
+
 			ASSERT (task);
 		}
 	}
@@ -1118,7 +1130,7 @@ void update_flight_dynamics (void)
 		update_dynamics_damage ();
 
 		current_flight_dynamics->velocity_z.value = bound (current_flight_dynamics->velocity_z.value, knots (-100), knots (200));
-		
+
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 			current_flight_dynamics->g_force.value = 1.0 + current_flight_dynamics->model_acceleration_vector.y / G;
 		else
@@ -1141,7 +1153,7 @@ void update_gunship_dynamics (void)
 	current_flight_dynamics->model_iterations = (int) (get_delta_time () * MODEL_FRAME_RATE + 1.0);
 
 	set_model_delta_time (get_delta_time () / current_flight_dynamics->model_iterations);
-	
+
 	switch (get_global_gunship_type ())
 	{
 
@@ -1215,7 +1227,7 @@ void update_gunship_dynamics (void)
 
 			break;
 		}
-////Moje 030518 Start 
+////Moje 030518 Start
 
 		case GUNSHIP_TYPE_BLACKHAWK:
 		{
@@ -1260,7 +1272,7 @@ void update_gunship_dynamics (void)
 			break;
 		}
 ////Moje 030612 End
-////Moje 030816 Start 
+////Moje 030816 Start
 
 		case GUNSHIP_TYPE_AH64A:
 		{
@@ -1425,15 +1437,15 @@ void update_dynamics_external_values (void)
 
 	if (get_gunship_entity ())
 	{
-	
+
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_PITCH, current_flight_dynamics->main_rotor_pitch_angle.value);
-	
+
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_ROLL, current_flight_dynamics->main_rotor_roll_angle.value);
-	
+
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_RPM, current_flight_dynamics->main_rotor_rpm.value);
-	
+
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_MAIN_ROTOR_BLADE_CONING_ANGLE, current_flight_dynamics->main_rotor_coning_angle.value);
-	
+
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_TAIL_ROTOR_RPM, current_flight_dynamics->tail_rotor_rpm.value);
 
 		current_flight_dynamics->model_motion_vector.x = bound (current_flight_dynamics->model_motion_vector.x, -100, 300);
@@ -1441,27 +1453,27 @@ void update_dynamics_external_values (void)
 		current_flight_dynamics->model_motion_vector.z = bound (current_flight_dynamics->model_motion_vector.z, -100, 300);
 
 		set_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_VELOCITY, current_flight_dynamics->model_motion_vector.z);
-	
+
 		set_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_MOTION_VECTOR, &current_flight_dynamics->world_motion_vector);
-	
+
 		//
 		// position and attitude
 		//
 
 		raw = get_local_entity_data (get_gunship_entity ());
-	
+
 		bound_double_position_to_adjusted_map_volume (&current_flight_dynamics->position);
 
 		pos.x = current_flight_dynamics->position.x;
 		pos.y = current_flight_dynamics->position.y;
 		pos.z = current_flight_dynamics->position.z;
-	
+
 		set_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pos);
-	
+
 		normalise_any_3d_vector ((vec3d *) &current_flight_dynamics->attitude [0]);
 		normalise_any_3d_vector ((vec3d *) &current_flight_dynamics->attitude [1]);
 		normalise_any_3d_vector ((vec3d *) &current_flight_dynamics->attitude [2]);
-	
+
 		set_local_entity_attitude_matrix (get_gunship_entity (), current_flight_dynamics->attitude);
 
 		if (get_terrain_type_class (get_3d_terrain_point_data_type (&raw->ac.terrain_info)) == TERRAIN_CLASS_LAND)
@@ -1902,26 +1914,26 @@ void set_current_flight_dynamics_rotor_brake (int flag)
 
 							if ((landing_en) && (!check_landing_route_lock_clear (landing_en, get_gunship_entity ())))
 							{
-			
+
 								notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, landing_en, get_gunship_entity (), TASK_TERMINATED_WAYPOINT_ROUTE_COMPLETE);
 							}
 						}
 					}
 				}
-	
+
 				//
 				// landed at MAIN-BASE go to weapon screen, do debrief and exit
 				//
-	
+
 //				start_game_exit (GAME_EXIT_DEBRIEF, FALSE);
 			}
 			else if (get_keysite_currently_landed_at ())
 			{
-	
+
 				//
 				// landed at BASE go to weapon screen
 				//
-		
+
 				//notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_WEAPON_LOADING);
 			}
 		}
@@ -1989,7 +2001,7 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 
 			play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_OFF);
 		}
-	
+
 		set_current_flight_dynamics_auto_hover (HOVER_HOLD_NONE);
 	}
 	else
@@ -2000,7 +2012,7 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 
 			if (ev->modifier == MODIFIER_LEFT_SHIFT)
 			{
-	
+
 				set_current_flight_dynamics_auto_hover (HOVER_HOLD_STABLE);
 			}
 			else
@@ -2102,7 +2114,7 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 
 		if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{
-			
+
 			set_current_flight_dynamics_rotor_brake (TRUE);
 
 			current_flight_dynamics->input_data.collective.value = 0.0;
@@ -2117,21 +2129,21 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 
 				if ((!flag) && (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT)))
 				{
-	
+
 					play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_AUTOPILOT_OFF);
 				}
 			}
 			else if (current_flight_dynamics->radar_altitude.value < MIN_AUTOPILOT_HEIGHT)
 			{
-	
+
 				if (sfrand1 () < 0.0)
 				{
-	
+
 					play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_AUTOPILOT_TOO_LOW1);
 				}
 				else
 				{
-	
+
 					play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_AUTOPILOT_TOO_LOW2);
 				}
 			}
@@ -2310,7 +2322,7 @@ void set_current_flight_dynamics_auto_pilot (int flag)
 /*
 		if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		{
-			
+
 			set_current_flight_dynamics_rotor_brake (TRUE);
 
 			current_flight_dynamics->input_data.collective.value = 0.0;
@@ -2389,7 +2401,7 @@ void flight_dynamics_toggle_altitude_lock (event *ev)
 		current_flight_dynamics->altitude.max = current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min;
 
 		debug_log ("DYNAMICS: altitude_lock on at %f ft", current_flight_dynamics->altitude.max);
-	
+
 		set_current_flight_dynamics_auto_hover (HOVER_HOLD_ALTITUDE_LOCK);
 
 		play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_ALTITUDE_HOLD_ON);
@@ -2403,7 +2415,7 @@ void flight_dynamics_toggle_altitude_lock (event *ev)
 		current_flight_dynamics->altitude.max = current_flight_dynamics->altitude.value - current_flight_dynamics->altitude.min;
 
 		debug_log ("DYNAMICS: altitude_lock on at %f ft", current_flight_dynamics->altitude.max);
-	
+
 		set_current_flight_dynamics_auto_hover (HOVER_HOLD_ALTITUDE_LOCK);
 	}
 	else
@@ -2528,7 +2540,7 @@ void dynamics_land (void)
 
 		return;
 	}
-	
+
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 
@@ -2540,7 +2552,7 @@ void dynamics_land (void)
 	//
 	// find out if landed near keysite
 	//
-	
+
 	model_position.x = current_flight_dynamics->position.x;
 	model_position.y = current_flight_dynamics->position.y;
 	model_position.z = current_flight_dynamics->position.z;
@@ -2555,10 +2567,10 @@ void dynamics_land (void)
 
 		vec3d
 			*keysite_pos;
-	
+
 		struct OBJECT_3D_BOUNDS
 			*bounding_box;
-	
+
 		xmin = 0.0;
 		xmax = 0.0;
 		zmin = 0.0;
@@ -2569,48 +2581,48 @@ void dynamics_land (void)
 
 			case ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE:
 			{
-	
+
 				float
 					heading = 0.0;
-	
+
 				entity
 					*ship;
-	
+
 				ship = get_local_entity_parent (keysite, LIST_TYPE_MOVEMENT_DEPENDENT);
-	
+
 				ASSERT (ship);
 				ASSERT (get_local_entity_type (ship) == ENTITY_TYPE_SHIP_VEHICLE);
-	
+
 				heading = get_local_entity_float_value (ship, FLOAT_TYPE_HEADING);
-	
+
 				//
 				// rotate model position into 'keysite space'
 				//
-	
+
 				keysite_pos = get_local_entity_vec3d_ptr (ship, VEC3D_TYPE_POSITION);
-		
+
 				model_position.x = current_flight_dynamics->position.x - keysite_pos->x;
 				model_position.y = current_flight_dynamics->position.y - keysite_pos->y;
 				model_position.z = current_flight_dynamics->position.z - keysite_pos->z;
-	
+
 				model_position.x = model_position.x * cos (-heading) + model_position.z * sin (-heading);
 				model_position.z = model_position.z * cos (-heading) - model_position.x * sin (-heading);
-	
+
 				inst3d = get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (inst3d->object_number);
 
 				break;
 			}
 			case ENTITY_SUB_TYPE_KEYSITE_FARP:
 			{
-		
+
 				keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-		
+
 				model_position.x = current_flight_dynamics->position.x - keysite_pos->x;
 				model_position.y = current_flight_dynamics->position.y - keysite_pos->y;
 				model_position.z = current_flight_dynamics->position.z - keysite_pos->z;
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				xmin = -400.0;
@@ -2622,13 +2634,13 @@ void dynamics_land (void)
 			}
 			default:
 			{
-		
+
 				keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-		
+
 				model_position.x = current_flight_dynamics->position.x - keysite_pos->x;
 				model_position.y = current_flight_dynamics->position.y - keysite_pos->y;
 				model_position.z = current_flight_dynamics->position.z - keysite_pos->z;
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the airbase is at least 400 m radius
@@ -2640,7 +2652,7 @@ void dynamics_land (void)
 				break;
 			}
 		}
-	
+
 		if (((model_position.x > bounding_box->xmin + xmin) && (model_position.x < bounding_box->xmax + xmax)) &&
 			((model_position.z > bounding_box->zmin + zmin) && (model_position.z < bounding_box->zmax + zmax)))
 		{
@@ -2658,7 +2670,7 @@ void dynamics_land (void)
 
 		//if (!get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		//{
-			
+
 			//set_current_flight_dynamics_rotor_brake (TRUE);
 
 			//current_flight_dynamics->input_data.collective.value = 0.0;
@@ -2672,28 +2684,28 @@ void dynamics_land (void)
 
 			if (landed_wp)
 			{
-	
+
 				task = get_local_entity_parent (landed_wp, LIST_TYPE_WAYPOINT);
-	
+
 				if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_LANDING)
 				{
-		
+
 					while (get_local_entity_child_succ (landed_wp, LIST_TYPE_WAYPOINT))
 					{
-		
+
 						landed_wp = get_local_entity_child_succ (landed_wp, LIST_TYPE_WAYPOINT);
 					}
-		
+
 					ASSERT (get_local_entity_int_value (landed_wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_LANDED);
-		
+
 					notify_local_entity (ENTITY_MESSAGE_WAYPOINT_LANDED_REACHED, get_gunship_entity (), landed_wp);
-	
+
 					return;
 				}
 			}
 			else
 			{
-	
+
 				//exit_flight_loop_event (NULL);
 			}
 			*/
@@ -2739,7 +2751,7 @@ void update_vector_flight_model (void)
 
    heading = 0.0;
 
-   pitch = 0.0; 
+   pitch = 0.0;
 
    roll = 0.0;
 
@@ -2909,7 +2921,7 @@ float set_flight_dynamics_mass (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				
+
 void update_current_flight_dynamics_fuel_weight (void)
 {
 
@@ -2925,7 +2937,7 @@ void update_current_flight_dynamics_fuel_weight (void)
 	{
 		float fuel_delta = current_flight_dynamics->fuel_weight.delta * get_delta_time ();
 		// arneh - adjust for engine RPM.  Adjusted to 1 at 85% N1 RPM on both engines
-		fuel_delta *= (current_flight_dynamics->left_engine_n1_rpm.value + 
+		fuel_delta *= (current_flight_dynamics->left_engine_n1_rpm.value +
 					   current_flight_dynamics->right_engine_n1_rpm.value) / 170.0;
 
 		current_flight_dynamics->fuel_weight.value -= fuel_delta;
@@ -2945,9 +2957,9 @@ void update_current_flight_dynamics_fuel_weight (void)
 
 			if (time <= 0.0)
 			{
-	
+
 				play_client_server_warning_message (get_gunship_entity (), SPEECH_SYSTEM_FUEL_LOW);
-	
+
 				time = DYNAMICS_LOW_FUEL_SPEECH_TIME;
 			}
 		}
@@ -2957,7 +2969,7 @@ void update_current_flight_dynamics_fuel_weight (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				
+
 void update_current_flight_dynamics_flight_time (void)
 {
 
@@ -3048,18 +3060,18 @@ void update_flight_path (void)
 
 	if (current_flight_dynamics)
 	{
-	
+
 		if (get_current_flight_dynamics_auto_pilot ())
 		{
-	
+
 			action = FLIGHT_PATH_ACTION_AUTOPILOT_NAVIGATING;
 		}
 		else
 		{
-	
+
 			action = FLIGHT_PATH_ACTION_USER_NAVIGATING;
 		}
-	
+
 		add_flight_path_action (current_flight_dynamics->position.x, current_flight_dynamics->position.z, action);
 	}
 }
@@ -3084,7 +3096,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 								DYNAMICS_DAMAGE_UNDERCARRIAGE |
 								DYNAMICS_DAMAGE_LOW_OIL_PRESSURE |
 								DYNAMICS_DAMAGE_AVIONICS);
-							
+
 	flag = TRUE;
 
 	//
@@ -3142,24 +3154,24 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 				}
 				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0))
 				{
-	
+
 					if (!speech)
 					{
-		
+
 						if (sfrand1 () < 0.0)
 						{
-		
+
 							play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_TOO_FAST1);
 						}
 						else
 						{
-			
+
 							play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_HOVER_HOLD_TOO_FAST2);
 						}
 					}
-	
+
 					speech = TRUE;
-		
+
 					flag = FALSE;
 				}
 			}
@@ -3179,7 +3191,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 					joystick_x_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL);
 					joystick_y_pos = get_joystick_axis (current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH);
 				}
-				else 
+				else
 				{
 					joystick_x_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_x_axis);
 					joystick_y_pos = get_joystick_axis (command_line_cyclic_joystick_index, command_line_cyclic_joystick_y_axis);
@@ -3225,7 +3237,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 				if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT))
 				{
-	
+
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_AUTO_PILOT, FALSE);
 				}
 
@@ -3255,15 +3267,15 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 				if (!speech)
 				{
-		
+
 					if (sfrand1 () < 0.0)
 					{
-		
+
 						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_AUTOPILOT_TOO_LOW1);
 					}
 					else
 					{
-		
+
 						play_client_server_cpg_message (get_gunship_entity (), 0.5, 1.0, SPEECH_CATEGORY_CPG_SYSTEMS, 1.0, SPEECH_CPG_AUTOPILOT_TOO_LOW2);
 					}
 				}
@@ -3333,15 +3345,34 @@ void flight_dynamics_start_engine (int engine_number)
 {
 	dynamics_float_variable* engine_rpm;
 
+	// can only start one engine at a time, and not when rotor brake is active
+	if (current_flight_dynamics->rotor_brake || current_flight_dynamics->left_engine_starter_active || current_flight_dynamics->right_engine_starter_active)
+		return;
+
 	ASSERT (engine_number >= 1 && engine_number <= 2);
-	debug_log("Starting engine %d", engine_number);
 
 	if (engine_number == 1)
+	{
 		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
+		current_flight_dynamics->left_engine_starter_active = TRUE;
+	}
 	else if (engine_number == 2)
+	{
 		engine_rpm = &current_flight_dynamics->right_engine_n1_rpm;
+		current_flight_dynamics->right_engine_starter_active = TRUE;
+	}
 	else
 		return;
+
+	switch (get_global_gunship_type())
+	{
+	case GUNSHIP_TYPE_HIND:
+	case GUNSHIP_TYPE_HAVOC:
+	case GUNSHIP_TYPE_HOKUM:
+	case GUNSHIP_TYPE_KA50:
+		current_flight_dynamics->engine_start_timer = 4.5;
+		break;
+	}
 
 	engine_rpm->max = max(engine_rpm->max, 20.0);
 }
@@ -3357,8 +3388,8 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	dynamics_float_variable *engine_rpm, *engine_temp;
 
 	ASSERT (engine_number == 1 || engine_number == 2);
-	debug_log("Throttling engine %d %d RPM", engine_number, rpm_delta);	
-	
+	debug_log("Throttling engine %d %d RPM", engine_number, rpm_delta);
+
 	if (engine_number == 1)
 	{
 		engine_rpm = &current_flight_dynamics->left_engine_n1_rpm;
@@ -3375,7 +3406,7 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	if (engine_rpm->damaged)
 	{
 		engine_rpm->max = 0.0;
-		return;	
+		return;
 	}
 
 	// double throttle down with RPM under 62% shuts down engine
@@ -3415,7 +3446,7 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 		else
 			double_count[engine_number-1] = 0;
 
-		return;	
+		return;
 	}
 	else
 		double_count[engine_number-1] = 0;
@@ -3464,7 +3495,7 @@ void update_engine_temperature_dynamics (int engine_number)
 {
 	unsigned int engine_fire;
 	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque, *engine_temp;
-	
+
 	ASSERT(engine_number == 1 || engine_number == 2);
 
 	if (engine_number == 1)
@@ -3497,7 +3528,7 @@ void update_engine_temperature_dynamics (int engine_number)
 		engine_temp->min = 35.0;
 		if (current_flight_dynamics->dynamics_damage & engine_fire)
 			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -30.0, 200.0);
-		else	
+		else
 			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -10.0, 200.0);
 	}
 	else if (n1_rpm->max == 20.0)  // no ignition, under APU power
@@ -3508,7 +3539,7 @@ void update_engine_temperature_dynamics (int engine_number)
 	else  // ignition
 	{
 		float rpm_factor;
-		
+
 		engine_temp->value = max(engine_temp->value, 100.0);
 
 		rpm_factor = 500.0 + (n1_rpm->value * n1_rpm->value * 0.032);
@@ -3535,7 +3566,7 @@ void update_engine_temperature_dynamics (int engine_number)
 	else
 		engine_temp->value = bound(engine_temp->value, 0.0, 800.0);
 
-	// if temp above 820 degrees, randomly damage engine. probability depending on temperature	
+	// if temp above 820 degrees, randomly damage engine. probability depending on temperature
 	if (engine_temp->value > 820.0 && current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
 	{
 		int probability = 5.0 * (int)(bound(1020.0 - engine_temp->value, 1.0, 200.0) / get_model_delta_time());
@@ -3548,6 +3579,23 @@ void update_engine_temperature_dynamics (int engine_number)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void animate_engine_start_rpm(float* rpm)
+{
+	if (current_flight_dynamics->engine_start_timer > 3.0)
+	{
+		current_flight_dynamics->engine_start_timer -= get_model_delta_time();
+
+		if (current_flight_dynamics->engine_start_timer <= 3.0)
+			*rpm += 4.0;
+
+		return;
+	}
+
+	*rpm -= sin(-current_flight_dynamics->engine_start_timer * PI * 6) * current_flight_dynamics->engine_start_timer * 1.5;
+	current_flight_dynamics->engine_start_timer -= get_model_delta_time();
+	*rpm += sin(-current_flight_dynamics->engine_start_timer * PI * 6) * current_flight_dynamics->engine_start_timer * 1.5;
+}
+
 void update_engine_rpm_dynamics (int engine_number)
 {
 	/* arneh - july 2006
@@ -3556,7 +3604,7 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * engine, and hence how much power it makes.  N2 (or NP, or in the code
 	 * simply refered to as engine_rpm) is the power turbine which converts
 	 * the combustion energy into shaft rotation.
-	 * 
+	 *
 	 * The N2 tubine is directly connected to the rotor (through a gearbox which
 	 * reduces the real RPM from somewhere around 20,000 RPM to rotor RPM
 	 * of around 300 RPM.  Left to itself the rotor and N2 RPM will drop under load
@@ -3566,10 +3614,10 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * when N1 speed has changed it might take a little longer before the extra
 	 * energy reaches the N2 turbine and is converted into shaft power.  Hence
 	 * it might not be able to keep N2 speed at exactly 100% at all times, especally
-	 * initially after sudden changes of rotor drag (i.e. by changing rotor pitch 
+	 * initially after sudden changes of rotor drag (i.e. by changing rotor pitch
 	 * suddenly (fast pulling collective), or by sudden heavy rotor load (increase
 	 * in g-force by hard manouvering).
-	 * 
+	 *
 	 * The values are used as follow:
 	 * *engine_rpm.value : actual RPM
 	 * *engine_n1_rpm.max : max allowed rpm of N1 engine.  Is directly controlled
@@ -3578,11 +3626,12 @@ void update_engine_rpm_dynamics (int engine_number)
 	 * *rpm_delta : change of RPM in percent per second.  Controled by engine control system
 	 * apu_rpm.max : APU RPM commanded by pilot (100% when APU on, 0% when off)
 	 */
-	
-	
+
+
 	float collect;
 	dynamics_float_variable *n1_rpm, *n2_rpm, *engine_torque;
 	short engine_damage;
+	int starter_active;
 
 	ASSERT(engine_number == 1 || engine_number == 2);
 
@@ -3595,6 +3644,7 @@ void update_engine_rpm_dynamics (int engine_number)
 		n2_rpm = &current_flight_dynamics->left_engine_rpm;
 		engine_damage = current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE;
 		engine_torque = &current_flight_dynamics->left_engine_torque;
+		starter_active = current_flight_dynamics->left_engine_starter_active;
 	}
 	else if (engine_number == 2)
 	{
@@ -3602,6 +3652,7 @@ void update_engine_rpm_dynamics (int engine_number)
 		n2_rpm = &current_flight_dynamics->right_engine_rpm;
 		engine_damage = current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE;
 		engine_torque = &current_flight_dynamics->right_engine_torque;
+		starter_active = current_flight_dynamics->right_engine_starter_active;
 	}
 	else
 		return;
@@ -3611,26 +3662,29 @@ void update_engine_rpm_dynamics (int engine_number)
 	{
 		float torque_ratio, surplus_energy;
 
-		float n1_power_ratio = (n1_rpm->value - 65.0) / (100.0 - 65.0);  // might be negative
+		float n1_power_ratio = (n1_rpm->value - current_flight_dynamics->engine_idle_rpm + 5.0) / (100.0 - current_flight_dynamics->engine_idle_rpm + 5.0);  // might be negative
 
 		torque_ratio = engine_torque->value / engine_torque->max;
 		surplus_energy = n1_power_ratio - torque_ratio;
-		
+
 		if (n1_rpm->value > n2_rpm->value)
 			surplus_energy += (n1_rpm->value - n2_rpm->value) * 0.15;
-		
+
 		n2_rpm->delta = surplus_energy * 20.0;
 		n2_rpm->value = bound(n2_rpm->value + n2_rpm->delta * get_model_delta_time (), 0.0, 110.0);
 	}
 
-	if (n1_rpm->value > 55.0)
+	if (n1_rpm->value > current_flight_dynamics->engine_idle_rpm - 5.0)
 	{
 		float n2_delta, n1_delta;
-		
-		// shut down APU if both engines are running
-		if (current_flight_dynamics->left_engine_n1_rpm.value > 59.0
-			&& current_flight_dynamics->right_engine_n1_rpm.value > 59.0)
-			current_flight_dynamics->apu_rpm.max = 0.0;
+
+		if (current_flight_dynamics->apu_rpm.max > 0.0)
+		{
+			// shut down engine starter if engine is running on own power
+			if (n1_rpm->value > current_flight_dynamics->engine_idle_rpm - 1.0)
+				starter_active = FALSE;
+		}
+		current_flight_dynamics->engine_start_timer = 0.0;
 
 		// figure out how much power we need
 		n2_delta = n2_rpm->max - n2_rpm->value;  // this is how much we're trying to adjust N2 RPM
@@ -3639,7 +3693,7 @@ void update_engine_rpm_dynamics (int engine_number)
 			n1_delta = 3 * n2_delta;
 		else
 			n1_delta = n2_delta;
-			
+
 		if (current_flight_dynamics->dynamics_options.dynamics_options_over_torque)
 			n1_rpm->min = bound(n1_rpm->value + n1_delta, 60.0, 110.0);
 		else
@@ -3651,29 +3705,33 @@ void update_engine_rpm_dynamics (int engine_number)
 	else // in the realm of the APU
 	{
 		float delta = 0.0;
-		
+
 		if (current_flight_dynamics->apu_rpm.max == 0.0)  // engine not capable of keeping RPM without APU under 55% RPM
+		{
 			n1_rpm->max = 0.0;
+			current_flight_dynamics->left_engine_starter_active = FALSE;
+			current_flight_dynamics->right_engine_starter_active = FALSE;
+			current_flight_dynamics->engine_start_timer = 0.0;
+		}
 
 		delta = n1_rpm->max - n1_rpm->value;
-		if (delta < 0.0)
+		if (delta < 0.0 || current_flight_dynamics->engine_start_timer > 3.0)
 			n1_rpm->delta = bound(delta, -3.0, 0.0);
 		else
 		{
 			float apu_contribution = 2.0 * current_flight_dynamics->apu_rpm.value * 0.01;
 
-			if (n1_rpm->max < 60.0)  // only APU
+			if (n1_rpm->max < current_flight_dynamics->engine_idle_rpm)  // only APU
 				n1_rpm->delta = min(apu_contribution, delta);
 			else  // engine itself is helping
-				n1_rpm->delta = min(delta, 2.0 + apu_contribution);
+				n1_rpm->delta = min(delta, 1.0 + apu_contribution);
 		}
 	}
-
 
 	//
 	// damaged or out of fuel
 	//
-	
+
 	if (n2_rpm->damaged)
 	{
 		n1_rpm->max = 0.0;
@@ -3685,8 +3743,17 @@ void update_engine_rpm_dynamics (int engine_number)
 			n1_rpm->delta = -10.0;
 
 		n1_rpm->value += n1_rpm->delta * get_model_delta_time ();
+
+		if (starter_active && current_flight_dynamics->engine_start_timer > 0.0)
+			animate_engine_start_rpm(&n1_rpm->value);
+
 		n1_rpm->value = bound(n1_rpm->value, 0.0, 110.0);
 	}
+
+	if (engine_number == 1)
+		current_flight_dynamics->left_engine_starter_active = starter_active;
+	else
+		current_flight_dynamics->right_engine_starter_active = starter_active;
 }
 
 // arneh, july 2006 - create vibration effect on rotor
@@ -3696,21 +3763,21 @@ void create_rotor_vibration(float force)
 	static int step = 0;
 
 	float interval = 0.125;
-	
+
 	vec3d position,	direction;
-	
+
 	if (!get_gunship_entity () || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 		return;
-	
+
 	force = bound (force, -2.5, 2.5);
 
-	// to create vibration we rotate a force around the rotor disk, moving it 
+	// to create vibration we rotate a force around the rotor disk, moving it
 	// a quarter rotation every step
 	if (step == 0 || step == 2)
 		position.x = current_flight_dynamics->main_rotor_diameter.value * 0.5;
 	else
 		position.x = -current_flight_dynamics->main_rotor_diameter.value * 0.5;
-		
+
 	if (step < 2)
 		position.z = current_flight_dynamics->main_rotor_diameter.value * 0.5;
 	else
