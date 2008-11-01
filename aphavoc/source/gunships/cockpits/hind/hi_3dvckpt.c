@@ -170,6 +170,7 @@ static object_3d_sub_instance
 	*apu_stop_switch,
 	*apu_ready_light,
 	*apu_rpm_light,
+	*apu_oil_psi_light,
 	*apu_bleedair_lights,
 	*engine_start_switch,
 	*engine_select_switch,
@@ -387,6 +388,7 @@ void initialise_hind_3d_cockpit (void)
 	apu_rpm_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_RPM_LIGHT);
 	apu_bleedair_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_BLEEDAIR_LIGHT);
 	engine_start_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_ENGINE_START_LIGHT);
+	apu_oil_psi_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_APU_OIL_PSI_LIGHT);
 
 	left_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_WHEEL_DOWN_LIGHT);
 	right_wheel_down_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_WHEEL_DOWN_LIGHT);
@@ -1098,8 +1100,9 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			{
 				int hover_hold_mode = current_flight_dynamics->auto_hover;
 
-				apu_ready_light->visible_object = !current_flight_dynamics->apu_rpm.damaged;
-				apu_rpm_light->visible_object = current_flight_dynamics->apu_rpm.value > 90.0;
+				apu_oil_psi_light->visible_object = current_flight_dynamics->apu_rpm.value > 5.0;
+				apu_ready_light->visible_object = current_flight_dynamics->apu_rpm.value > 90.0;
+				apu_rpm_light->visible_object = current_flight_dynamics->apu_rpm.damaged;
 				apu_bleedair_lights->visible_object = current_flight_dynamics->apu_rpm.value > 60.0;
 				engine_start_light->visible_object = (current_flight_dynamics->left_engine_starter_active || current_flight_dynamics->right_engine_starter_active);
 
