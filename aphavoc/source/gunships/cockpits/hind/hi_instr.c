@@ -630,7 +630,7 @@ void update_mi24_waypoint_indicator(float* indicator)
 	if (wp)
 	{
 		float pitch = rad(-75.0);
-		char wpnt = get_local_entity_char_value(wp, CHAR_TYPE_TAG) + (int)debug_var_x;
+		char wpnt = get_local_entity_char_value(wp, CHAR_TYPE_TAG);
 		float max_movement = rad(120) * get_delta_time();
 
 		pitch += (wpnt - 'A') * rad(-360.0 / 26.0);
