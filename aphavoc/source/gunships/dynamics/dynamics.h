@@ -601,6 +601,8 @@ extern void create_rotor_vibration(float force);
 extern void flight_dynamics_start_engine_ev (event* ev);
 extern void flight_dynamics_throttle_engine_ev (event* ev);
 extern void flight_dynamics_start_apu_ev (event* ev);
+extern void flight_dynamics_decrease_governor_rpm(event* ev);
+extern void flight_dynamics_increase_governor_rpm(event* ev);
 
 #ifdef DEBUG
 extern void debug_dynamics_event1(event* ev);

@@ -3340,6 +3340,22 @@ void flight_dynamics_throttle_engine_ev (event* ev)
 	flight_dynamics_throttle_engine(engine, rpm_delta);
 }
 
+void flight_dynamics_increase_governor_rpm(event* ev)
+{
+	if (current_flight_dynamics->main_rotor_governor_rpm < 90.0)
+		current_flight_dynamics->main_rotor_governor_rpm += 10.0;
+	else
+		current_flight_dynamics->main_rotor_governor_rpm = min(97.5, current_flight_dynamics->main_rotor_governor_rpm + 2.5);
+}
+
+void flight_dynamics_decrease_governor_rpm(event* ev)
+{
+	if (current_flight_dynamics->main_rotor_governor_rpm <= 90.0)
+		current_flight_dynamics->main_rotor_governor_rpm = max(70.0, current_flight_dynamics->main_rotor_governor_rpm - 10.0);
+	else
+		current_flight_dynamics->main_rotor_governor_rpm -= 2.5;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3373,7 +3389,8 @@ void flight_dynamics_start_engine (int engine_number)
 	case GUNSHIP_TYPE_HAVOC:
 	case GUNSHIP_TYPE_HOKUM:
 	case GUNSHIP_TYPE_KA50:
-		current_flight_dynamics->engine_start_timer = 4.5;
+		if (engine_rpm->value < 5.0)
+			current_flight_dynamics->engine_start_timer = 4.5;
 		break;
 	}
 
@@ -3413,7 +3430,9 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	}
 
 	// double throttle down with RPM under 62% shuts down engine
-	if (engine_rpm->value < (current_flight_dynamics->engine_idle_rpm + 2.0) && engine_rpm->max <= current_flight_dynamics->engine_idle_rpm && rpm_delta < 0.0)
+	if (((engine_rpm->value < (current_flight_dynamics->engine_idle_rpm + 2.0) && engine_rpm->max <= current_flight_dynamics->engine_idle_rpm)
+		 || get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		&& rpm_delta < 0.0)
 	{
 		if (double_count[engine_number-1] < 0)
 		{
@@ -3437,7 +3456,11 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 			if (current_flight_dynamics->apu_rpm.value > 80.0 && engine_rpm->value > 12.0)
 			{
 				debug_log("Engine %d ignition", engine_number);
-				engine_rpm->max = current_flight_dynamics->engine_idle_rpm;
+				if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+					engine_rpm->max = 100.0;
+				else
+					engine_rpm->max = current_flight_dynamics->engine_idle_rpm;
+
 				engine_temp->min += 1500.0;
 				play_helicopter_winding_rotor_sounds(get_gunship_entity(), 1, engine_number);
 			}
@@ -3470,7 +3493,12 @@ void flight_dynamics_start_apu (void)
 	debug_log("Starting APU");
 
 	if (current_flight_dynamics->apu_rpm.max > 0.0)
+	{
 		current_flight_dynamics->apu_rpm.max = 0.0;
+		current_flight_dynamics->left_engine_starter_active = FALSE;
+		current_flight_dynamics->right_engine_starter_active = FALSE;
+		current_flight_dynamics->engine_start_timer = 0.0;
+	}
 	else
 		current_flight_dynamics->apu_rpm.max = 100.0;
 }
@@ -3560,7 +3588,6 @@ void update_engine_temperature_dynamics (int engine_number)
 		if (current_flight_dynamics->dynamics_damage & engine_fire)
 			engine_temp->delta += 20.0;
 	}
-
 
 	engine_temp->value += engine_temp->delta * get_model_delta_time();
 
@@ -3666,12 +3693,16 @@ void update_engine_rpm_dynamics (int engine_number)
 		float torque_ratio, surplus_energy;
 
 		float n1_power_ratio = (n1_rpm->value - current_flight_dynamics->engine_idle_rpm + 5.0) / (100.0 - current_flight_dynamics->engine_idle_rpm + 5.0);  // might be negative
+		float n1_surplus;
 
 		torque_ratio = (0.8 * engine_torque->value / engine_torque->max) + 0.2;
 		surplus_energy = n1_power_ratio - torque_ratio;
 
-		if (n1_rpm->value > n2_rpm->value)
-			surplus_energy += ((max(n1_rpm->value - 25.0, 0.0) * 1.33) - n2_rpm->value) * 0.5;
+		n1_surplus = ((max(n1_rpm->value - 25.0, 0.0) * 1.33) - n2_rpm->value);
+
+//		if (n1_rpm->value > n2_rpm->value)
+		if (n1_surplus > 0.0)
+			surplus_energy += n1_surplus * 0.5;
 
 		n2_rpm->delta = surplus_energy * 30.0;
 		n2_rpm->value = bound(n2_rpm->value + n2_rpm->delta * get_model_delta_time (), 0.0, 110.0);
@@ -3687,10 +3718,9 @@ void update_engine_rpm_dynamics (int engine_number)
 			if (n1_rpm->value > current_flight_dynamics->engine_idle_rpm - 1.0)
 				starter_active = FALSE;
 		}
-		current_flight_dynamics->engine_start_timer = 0.0;
 
 		// figure out how much power we need
-		n2_delta = n2_rpm->max - n2_rpm->value;  // this is how much we're trying to adjust N2 RPM
+		n2_delta = current_flight_dynamics->main_rotor_governor_rpm - n2_rpm->value;  // this is how much we're trying to adjust N2 RPM
 		n2_delta -= 2 * n2_rpm->delta;   // try predicting were N2 RPM is heading
 		if (n2_rpm->value > n2_rpm->max) // be more aggresive about not going over 100% N2 RPM
 			n1_delta = 3 * n2_delta;
@@ -3703,7 +3733,7 @@ void update_engine_rpm_dynamics (int engine_number)
 			n1_rpm->min = bound(n1_rpm->value + n1_delta, current_flight_dynamics->engine_idle_rpm, 100.0);
 
 		n1_rpm->delta = min(n1_rpm->max, n1_rpm->min) - n1_rpm->value;
-		n1_rpm->delta = bound (n1_rpm->delta, -10.0, 10.0);
+		n1_rpm->delta = bound (n1_rpm->delta, -8.0, 8.0);
 	}
 	else // in the realm of the APU
 	{

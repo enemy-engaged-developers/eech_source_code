@@ -261,6 +261,12 @@ void set_flight_dynamics_events (void)
 		set_event (DIK_PERIOD, MODIFIER_LEFT_SHIFT,   KEY_STATE_DOWN, flight_dynamics_throttle_engine_ev);
 		set_event (DIK_SLASH,  MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, flight_dynamics_start_apu_ev);
 
+		if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+		{
+			set_event (DIK_COMMA,  MODIFIER_LEFT_ALT,   KEY_STATE_DOWN, flight_dynamics_decrease_governor_rpm);
+			set_event (DIK_PERIOD,  MODIFIER_LEFT_ALT,   KEY_STATE_DOWN, flight_dynamics_increase_governor_rpm);
+		}
+
 		#ifdef DEBUG
 
 		set_event (DIK_1, MODIFIER_RIGHT_SHIFT, KEY_STATE_DOWN, debug_dynamics_damage_model);
