@@ -640,12 +640,6 @@ static int get_object ( FILE *fp )
 	return objid;
 }
 
-static int get_subobject ( FILE *fp )
-{
-	char
-		name[1024];
-	int
-		i;
 
 #define OBJECT_3D_DECLARATION(x)
 #define OBJECT_3D_INDEX(x)
@@ -654,17 +648,30 @@ static int get_subobject ( FILE *fp )
 #define OBJECT_3D_SUBINDEX_(x) NULL
 #define OBJECT_3D_CAMERA(x)
 #define OBJECT_3D_CAMERA_(x)
-	static const char
-		*sub_objects[] =
-		{
-#include "3dmodels.h"
-		};
+const char* object_3d_subobject_names[] = {
+	#include "3dmodels.h"
+};
+#undef OBJECT_3D_DECLARATION
+#undef OBJECT_3D_INDEX
+#undef OBJECT_3D_INDEX_
+#undef OBJECT_3D_SUBINDEX
+#undef OBJECT_3D_SUBINDEX_
+#undef OBJECT_3D_CAMERA
+#undef OBJECT_3D_CAMERA_
+
+static int get_subobject ( FILE *fp )
+{
+	char
+		name[1024];
+	int
+		i;
+
 
 	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
 		return 0;
 
-	for ( i = 1; sub_objects[i]; i++ )
-		if ( !strcmp ( name, sub_objects[i] + 21 ) )
+	for ( i = 1; object_3d_subobject_names[i]; i++ )
+		if ( !strcmp ( name, object_3d_subobject_names[i] + 21 ) )
 			return i;
 
 	return 0;

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -193,20 +193,20 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 
 	if ( number_of_unique_indices )
 	{
-	
+
 		object_3d_database_entry
 			**sub_object_table_entries,
 			**sub_object_entry_ptr;
 
 		int
 			table_index;
-	
+
 		number_of_sub_object_table_entries = number_of_unique_indices;
 
 		//
 		// Allocate memory for the table
 		//
-	
+
 		current_sub_object_table = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY ) * number_of_unique_indices );
 
 		ASSERT ( current_sub_object_table );
@@ -218,7 +218,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 		objects_3d_scene_database[scene_index].sub_object_indices_table = current_sub_object_table;
 
 		objects_3d_scene_database[scene_index].number_of_sub_object_table_entries = number_of_unique_indices;
-	
+
 		//
 		// Allocate memory for the entries in the table
 		//
@@ -263,7 +263,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 
 			object_3d_database_entry
 				*sub_object;
-		
+
 			index = objects_3d_scene_database[scene_index].scene_sub_object_indices_array[count].sub_object_index;
 
 			offset = objects_3d_scene_database[scene_index].scene_sub_object_indices_array[count].object_index;
@@ -279,7 +279,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 
 		for ( count = 0; count < objects_3d_scene_database[scene_index].number_of_sub_objects; count++ )
 		{
-	
+
 			populate_table_with_named_sub_objects ( &objects_3d_scene_database[scene_index].sub_objects[count] );
 		}
 	}
@@ -413,7 +413,7 @@ void initialise_scene_bounding_sub_objects ( int scene_index )
 	//
 
 	{
-	
+
 		double
 			dxmin,
 			dxmax,
@@ -422,18 +422,18 @@ void initialise_scene_bounding_sub_objects ( int scene_index )
 			dzmin,
 			dzmax,
 			radius;
-	
+
 		dxmax = ( (double) scene_bounds.xmax * (double) scene_bounds.xmax );
 		dxmin = ( (double) scene_bounds.xmin * (double) scene_bounds.xmin );
-	
+
 		dymax = ( (double) scene_bounds.ymax * (double) scene_bounds.ymax );
 		dymin = ( (double) scene_bounds.ymin * (double) scene_bounds.ymin );
-	
+
 		dzmax = ( (double) scene_bounds.zmax * (double) scene_bounds.zmax );
 		dzmin = ( (double) scene_bounds.zmin * (double) scene_bounds.zmin );
-	
+
 		radius = 0;
-	
+
 		radius = max ( radius, ( dxmax + dymax + dzmax ) );
 		radius = max ( radius, ( dxmax + dymax + dzmin ) );
 		radius = max ( radius, ( dxmax + dymin + dzmax ) );
@@ -442,9 +442,9 @@ void initialise_scene_bounding_sub_objects ( int scene_index )
 		radius = max ( radius, ( dxmin + dymax + dzmin ) );
 		radius = max ( radius, ( dxmin + dymin + dzmax ) );
 		radius = max ( radius, ( dxmin + dymin + dzmin ) );
-	
+
 		radius = sqrt ( radius );
-	
+
 		objects_3d_scene_database[scene_index].radius = radius;
 	}
 }
@@ -562,22 +562,22 @@ void recurse_initialise_sub_scene_bounding_box ( object_3d_database_entry *sub_o
 			( ( rotated_bounds2.ymax - rotated_bounds2.ymin ) != 0 ) ||
 			( ( rotated_bounds2.zmax - rotated_bounds2.zmin ) != 0 ) )
 	{
-	
+
 		rotated_bounds2.xmin += scene_position.x;
 		rotated_bounds2.ymin += scene_position.y;
 		rotated_bounds2.zmin += scene_position.z;
-	
+
 		rotated_bounds2.xmax += scene_position.x;
 		rotated_bounds2.ymax += scene_position.y;
 		rotated_bounds2.zmax += scene_position.z;
 
 		if ( contributes_to_collision )
 		{
-	
+
 			scene_bounds2.xmin = min ( scene_bounds2.xmin, rotated_bounds2.xmin );
 			scene_bounds2.ymin = min ( scene_bounds2.ymin, rotated_bounds2.ymin );
 			scene_bounds2.zmin = min ( scene_bounds2.zmin, rotated_bounds2.zmin );
-		
+
 			scene_bounds2.xmax = max ( scene_bounds2.xmax, rotated_bounds2.xmax );
 			scene_bounds2.ymax = max ( scene_bounds2.ymax, rotated_bounds2.ymax );
 			scene_bounds2.zmax = max ( scene_bounds2.zmax, rotated_bounds2.zmax );
@@ -632,7 +632,7 @@ void rotate_sub_scene_boundaries ( object_3d_bounds *results, object_3d_bounds *
 	}
 	else
 	{
-	
+
 		cube_points[0].x = source->xmin; cube_points[0].y = source->ymin; cube_points[0].z = source->zmin;
 		cube_points[1].x = source->xmin; cube_points[1].y = source->ymin; cube_points[1].z = source->zmax;
 		cube_points[2].x = source->xmin; cube_points[2].y = source->ymax; cube_points[2].z = source->zmin;
@@ -641,38 +641,38 @@ void rotate_sub_scene_boundaries ( object_3d_bounds *results, object_3d_bounds *
 		cube_points[5].x = source->xmax; cube_points[5].y = source->ymin; cube_points[5].z = source->zmax;
 		cube_points[6].x = source->xmax; cube_points[6].y = source->ymax; cube_points[6].z = source->zmin;
 		cube_points[7].x = source->xmax; cube_points[7].y = source->ymax; cube_points[7].z = source->zmax;
-	
+
 		for ( count = 0; count < 8; count++ )
 		{
-	
+
 			float
 				x,
 				y,
 				z;
-	
+
 			x = cube_points[count].x * scene_rotation[0][0] + cube_points[count].y * scene_rotation[1][0] + cube_points[count].z * scene_rotation[2][0];
 			y = cube_points[count].x * scene_rotation[0][1] + cube_points[count].y * scene_rotation[1][1] + cube_points[count].z * scene_rotation[2][1];
 			z = cube_points[count].x * scene_rotation[0][2] + cube_points[count].y * scene_rotation[1][2] + cube_points[count].z * scene_rotation[2][2];
-	
+
 			cube_points[count].x = x;
 			cube_points[count].y = y;
 			cube_points[count].z = z;
 		}
-	
+
 		results->xmin = cube_points[0].x;
 		results->xmax = cube_points[0].x;
 		results->ymin = cube_points[0].y;
 		results->ymax = cube_points[0].y;
 		results->zmin = cube_points[0].z;
 		results->zmax = cube_points[0].z;
-	
+
 		for ( count = 1; count < 8; count++ )
 		{
-	
+
 			results->xmin = min ( results->xmin, cube_points[count].x );
 			results->ymin = min ( results->ymin, cube_points[count].y );
 			results->zmin = min ( results->zmin, cube_points[count].z );
-	
+
 			results->xmax = max ( results->xmax, cube_points[count].x );
 			results->ymax = max ( results->ymax, cube_points[count].y );
 			results->zmax = max ( results->zmax, cube_points[count].z );
@@ -724,7 +724,7 @@ void populate_table_with_named_sub_objects ( object_3d_database_entry *object )
 
 		object_3d_database_entry
 			*sub_object;
-	
+
 		index = object->sub_object_indices[count].sub_object_index;
 
 		offset = object->sub_object_indices[count].object_index;
@@ -1149,12 +1149,17 @@ object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsig
 	object_3d_sub_object_search_data
 		search;
 
+	const char* name = (sub_obj_id < OBJECT_3D_SUB_OBJECT_LAST) ? object_3d_subobject_names[sub_obj_id] : NULL;
+
 	search.search_depth = 0;
 	search.search_object = parent_object;
 	search.sub_object_index = sub_obj_id;
 
 	if (find_object_3d_sub_object(&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
-		debug_fatal ("Failed to locate sub object: %d", sub_obj_id);
+		if (name)
+			debug_fatal ("Failed to locate sub object: %s", name);
+		else
+			debug_fatal ("Failed to locate sub object: %d (illegal id)", sub_obj_id);
 
 	return search.result_sub_object;
 }
