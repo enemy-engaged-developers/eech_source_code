@@ -3408,7 +3408,6 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 	dynamics_float_variable *engine_rpm, *engine_temp;
 
 	ASSERT (engine_number == 1 || engine_number == 2);
-	debug_log("Throttling engine %d %d RPM", engine_number, rpm_delta);
 
 	if (engine_number == 1)
 	{
@@ -3455,13 +3454,12 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 		{
 			if (current_flight_dynamics->apu_rpm.value > 80.0 && engine_rpm->value > 12.0)
 			{
-				debug_log("Engine %d ignition", engine_number);
 				if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
 					engine_rpm->max = 100.0;
 				else
 					engine_rpm->max = current_flight_dynamics->engine_idle_rpm;
 
-				engine_temp->min += 1500.0;
+				engine_temp->min += 250.0;
 				play_helicopter_winding_rotor_sounds(get_gunship_entity(), 1, engine_number);
 			}
 
@@ -3490,8 +3488,6 @@ void flight_dynamics_throttle_engine (int engine_number, int rpm_delta)
 
 void flight_dynamics_start_apu (void)
 {
-	debug_log("Starting APU");
-
 	if (current_flight_dynamics->apu_rpm.max > 0.0)
 	{
 		current_flight_dynamics->apu_rpm.max = 0.0;
@@ -3571,14 +3567,14 @@ void update_engine_temperature_dynamics (int engine_number)
 	{
 		float rpm_factor;
 
-		engine_temp->value = max(engine_temp->value, 100.0);
+//		engine_temp->value = max(engine_temp->value, 500.0);
 
-		rpm_factor = 100.0 + (n1_rpm->value * n1_rpm->value * 0.032);
+		rpm_factor = 400.0 + (n1_rpm->value * n1_rpm->value * 0.035);
 		if (n1_rpm->value > n2_rpm->value)  // should only happen during startup, or demanding really much from engine
-			rpm_factor += (n1_rpm->value - n2_rpm->value) * 5.0;
+			rpm_factor += (n1_rpm->value - n2_rpm->value) * 1.0;
 
 		if (engine_torque->value > 100.0)   // increase temp more when overtorqueing
-			rpm_factor += (engine_torque->value - 100.0) * 7.5;
+			rpm_factor += (engine_torque->value - 100.0) * 3.0;
 
 		engine_temp->min = (1.0 - (0.5 * get_model_delta_time())) * engine_temp->min + 0.5 * get_model_delta_time() * rpm_factor;
 
