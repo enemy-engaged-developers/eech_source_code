@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -80,7 +80,7 @@
 
 // #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
 
-//VJ 050208 gives the possibility to look behind you (since you can't turn your body) 
+//VJ 050208 gives the possibility to look behind you (since you can't turn your body)
 #define MAX_LOOK_ANGLE_LEFT_RIGHT1  135.0   //Comanche and Hokum
 #define MAX_LOOK_ANGLE_LEFT_RIGHT2  100.0   //the rest
 #define MAX_LOOK_ANGLE_UP1  75.0	//comanche, hokum   //was 45
@@ -95,7 +95,7 @@
 
 static padlock_modes
 	padlock_mode;
-padlock_modes	
+padlock_modes
 	inset_mode;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ static float get_rotate_right_limit (void)
 		{
 			if (command_line_3d_cockpit)
 				limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT1);
-			else	
+			else
 				limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT2);
 
 			break;
@@ -500,11 +500,11 @@ void initialise_virtual_cockpit_view (void)
 	pilot_head_vp.position.x = MID_MAP_X;
 	pilot_head_vp.position.y = MID_MAP_Y;
 	pilot_head_vp.position.z = MID_MAP_Z;
-	
+
 	current_custom_cockpit_viewpoint.x = 0.0;
-	current_custom_cockpit_viewpoint.y = 0.0; 
+	current_custom_cockpit_viewpoint.y = 0.0;
 	current_custom_cockpit_viewpoint.z = 0.0;
-	
+
 
 	get_identity_matrix3x3 (pilot_head_vp.attitude);
 
@@ -601,11 +601,11 @@ void deinitialise_virtual_cockpit_view (void)
 
 void update_virtual_cockpit_view (void)
 {
-	float 
+	float
 		ROTATE_RATE;
-	
+
 	ROTATE_RATE = (float) command_line_mouse_look_speed / 6.0; // Jabberwock 031016 - variable POV speed
-	
+
 	// lfriembichler 030317 start
 	// enabled panning by mouse/trackir
 	// trackir only works with mousepanning enabled AND the naturalpoint window
@@ -613,28 +613,28 @@ void update_virtual_cockpit_view (void)
 
 	if ((command_line_mouse_look == MOUSELOOK_OFF)||	// ..if keyboard/POV panning.. (by me, stuff inside is (C) RW)
 		(command_line_mouse_look == MOUSELOOK_EXTERNAL))
-	{	
+	{
 		if (command_line_joylook_joystick_index != -1) // Jabberwock 030311 Joystick look
 		{
-			float 
+			float
 				stp,
 				pos;
-				
+
 			stp = (float) command_line_joylook_step / 1000.0;
-			
+
 			pos = (float) get_joystick_axis (command_line_joylook_joystick_index, command_line_joylookh_joystick_axis);
-					
+
 			pos = ((get_rotate_right_limit ()) * pos) / 10000.0;
-			
+
 			if (((pilot_head_heading - (pos)) > stp) || ((pilot_head_heading - (pos) < -stp)))
 			{
 				pilot_head_heading = (pos);
 			}
 
 			pos = (float) get_joystick_axis (command_line_joylook_joystick_index, command_line_joylookv_joystick_axis);
-					
+
 			pos = (get_rotate_up_limit ()) * pos / 10000.0;
-			
+
 			if (((pilot_head_pitch - (pos)) > stp) || ((pilot_head_pitch - (pos)) < -stp))
 			{
 				pilot_head_pitch = (pos);
@@ -686,7 +686,7 @@ void update_virtual_cockpit_view (void)
 				dp = get_mouse_move_delta_y() * -45 / 8000.0;
 
 				previous_mouse_update_flag = get_mouse_update_flag();
-				
+
 				pilot_head_heading += rad(dh);
 				pilot_head_pitch += rad(dp);
 			}
@@ -711,20 +711,20 @@ void update_virtual_cockpit_view (void)
 	} // end Retro 030317
 
 
-//VJ wideview mod, date: 27-mar-03	
+//VJ wideview mod, date: 27-mar-03
 //VJ 050131 wideview mod, better
 /*
 	if (get_global_wide_cockpit () &&
 		 !command_line_3d_cockpit &&
 		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
 		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
-		) 
-	{		
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
-	       
-   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+		)
+	{
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
+
+   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
-	}	
+	}
 	*/
 }
 
@@ -935,7 +935,7 @@ void get_pilot_head_viewpoint (void)
 			case GUNSHIP_TYPE_COMANCHE:
 			////////////////////////////////////////
 			{
-//VJ#	this does the proper viepoint?			
+//VJ#	this does the proper viepoint?
 				get_comanche_crew_viewpoint ();
 
 				break;
@@ -1434,7 +1434,7 @@ void draw_virtual_cockpit_3d_view (void)
 	ASSERT (get_gunship_entity ());
 
 	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
-	
+
 	switch (get_global_gunship_type ())
 	{
 		////////////////////////////////////////
@@ -1477,7 +1477,7 @@ void draw_virtual_cockpit_3d_view (void)
 #if 0  // the old experimental 3D cockpit by gotcha - not used anymore
 				if (command_line_3d_cockpit)
 				{
-					
+
 					draw_apache_external_virtual_cockpit_3d
 					(
 						VIRTUAL_COCKPIT_STOWED_WIPER |
@@ -1487,14 +1487,14 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_RAIN_EFFECT |
 						VIRTUAL_COCKPIT_MAIN_ROTOR//,NULL
 					);
-      
+
 					draw_apache_internal_virtual_cockpit_3d
 					(
 						VIRTUAL_COCKPIT_COCKPIT |
 						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
 						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
 						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
-						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES 
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
 					);
 				}
 				else
@@ -1689,7 +1689,7 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
 						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
 					);
-					
+
 				}
 				else
 				{
@@ -1704,7 +1704,7 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_MAIN_ROTOR,
 						NULL
 					);
-	
+
 					draw_blackhawk_internal_virtual_cockpit
 					(
 						VIRTUAL_COCKPIT_COCKPIT |
@@ -1923,7 +1923,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 				if (command_line_3d_cockpit)
 				{
-					
+
 					draw_default_external_virtual_cockpit_3d
 					(
 						VIRTUAL_COCKPIT_STOWED_WIPER |
@@ -1933,14 +1933,14 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_RAIN_EFFECT |
 						VIRTUAL_COCKPIT_MAIN_ROTOR//,NULL
 					);
-      
+
 					draw_default_internal_virtual_cockpit_3d
 					(
 						VIRTUAL_COCKPIT_COCKPIT |
 						VIRTUAL_COCKPIT_LHS_MFD_DISPLAY |
 						VIRTUAL_COCKPIT_RHS_MFD_DISPLAY |
 						VIRTUAL_COCKPIT_UPFRONT_DISPLAY |
-						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES 
+						VIRTUAL_COCKPIT_INSTRUMENT_NEEDLES
 					);
 				}
 				else
@@ -1955,7 +1955,7 @@ void draw_virtual_cockpit_3d_view (void)
 						VIRTUAL_COCKPIT_MAIN_ROTOR,
 						NULL
 					);
-            	
+
 					draw_default_internal_virtual_cockpit
 					(
 						VIRTUAL_COCKPIT_COCKPIT |
@@ -1990,7 +1990,7 @@ void draw_virtual_cockpit_3d_view (void)
 
 
 	}
-	
+
 	if (command_line_restricted_nvg_fov && night_vision_system_active && get_global_draw_cockpit_graphics ())
 		draw_night_vision_mask();
 
@@ -2005,7 +2005,7 @@ void draw_virtual_cockpit_3d_view (void)
 			vp;
 
 		source = get_external_view_entity ();
-		
+
 		target = get_inset ();
 
 		ASSERT (source);
@@ -2031,7 +2031,7 @@ void draw_virtual_cockpit_3d_view (void)
 	}
 	// Jabberwock 031016 ends
 
-	
+
 	//
 	// restore virtual cockpit 3D instance
 	//
@@ -2375,20 +2375,16 @@ void draw_virtual_cockpit_3d_hud_view (void)
 void draw_virtual_cockpit_3d_periscope_view (void)
 {
 	int
-		x_min,
-		x_max,
-		x_excess;
+		x_excess = ((full_screen_x_max - full_screen_x_min) - (full_screen_y_max - full_screen_y_min)) / 2,
+		x_min = full_screen_x_min + x_excess,
+		x_max = full_screen_x_max - x_excess;
 
-	
+
 	ASSERT (get_gunship_entity ());
 
 	switch (get_global_gunship_type())
 	{
 	case  GUNSHIP_TYPE_APACHE:
-		x_excess = ((full_screen_x_max - full_screen_x_min) - (full_screen_y_max - full_screen_y_min)) / 2;
-		x_min = full_screen_x_min + x_excess;
-		x_max = full_screen_x_max - x_excess;
-	
 		draw_apache_virtual_cockpit_ort_view(x_min, x_max - x_excess);
 		draw_virtual_cockpit_periscope_mask (x_min, x_max, TRUE);
 		draw_apache_virtual_cockpit_ort_symbology();
@@ -2397,6 +2393,11 @@ void draw_virtual_cockpit_3d_periscope_view (void)
 		draw_hokum_virtual_cockpit_periscope_view ();
 		draw_virtual_cockpit_periscope_mask (full_screen_x_min, full_screen_x_max, FALSE);
 		draw_hokum_virtual_cockpit_periscope_symbology ();
+		break;
+	case GUNSHIP_TYPE_HIND:
+		draw_hind_virtual_cockpit_ort_view(x_min, x_max - x_excess);
+		draw_virtual_cockpit_periscope_mask (x_min, x_max, TRUE);
+		draw_hind_virtual_cockpit_ort_symbology();
 		break;
 	default:
 		ASSERT(FALSE);
@@ -2790,7 +2791,7 @@ void switch_seat_position (void)
 		default:
 			break;
 		}
-	
+
 		// start periscope check by GCsDriver  08-12-2007
 	  	// as copilot is no longer periscopes default position it can already be active
 		if(command_line_pilot_as_periscope_default){
@@ -4041,19 +4042,19 @@ entity *get_inset (void)
 	source = get_external_view_entity ();
 
 	target = NULL;
-	
+
 	if (source)
 	{
 		switch (inset_mode)
 		{
 			case PADLOCK_MODE_NONE:
 			{
-				target = get_local_entity_parent (source, LIST_TYPE_TARGET); 
+				target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 				// Jabberwock 031027 not working :( target = get_gunship_entity();
 				break;
 			}
 			case PADLOCK_MODE_WINGMAN:
-			{	
+			{
 				if (source == get_gunship_entity())
 				{
 					target = get_next_wingman ();
@@ -4069,7 +4070,7 @@ entity *get_inset (void)
 				break;
 			}
 			case PADLOCK_MODE_GROUND_THREAT:
-			{	
+			{
 				if (source == get_gunship_entity())
 				{
 					target = get_next_ground_threat ();
@@ -4128,7 +4129,7 @@ entity *get_players_padlock (void)
 			////////////////////////////////////////
 			{
 				debug_fatal ("Invalid padlock mode = PADLOCK_MODE_NONE");
-				
+
 				break;
 			}
 			////////////////////////////////////////
@@ -4274,17 +4275,17 @@ void update_virtual_cockpit_padlock_view (void)
 		}
 	}
 /*
-//VJ wideview mod, date: 27-mar-03	
+//VJ wideview mod, date: 27-mar-03
 //VJ 050131 wideview mod, better
 	if (get_global_wide_cockpit () &&
 		 !command_line_3d_cockpit &&
 		 get_global_gunship_type () != GUNSHIP_TYPE_COMANCHE &&
 		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
-		) 
-	{		
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;		
-	       
-   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);		
+		)
+	{
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
+
+   		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
 	}
 	*/
