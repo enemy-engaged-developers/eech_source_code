@@ -745,16 +745,30 @@ static void display_weapon_information (void)
 		else
 		{
 			entity* target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
+			vec3d* tracking_point;
 
-			if (target)
+			// will use point lock if no target
+			tracking_point = get_eo_tracking_point();
+			if (target || tracking_point)
 			{
+				vec3d
+					target_position,
+					*source_position;
+
 				float
 					elevation,
 					azimuth;
 
+				if (target)
+					get_local_entity_target_point (target, &target_position);
+				else
+					target_position = *tracking_point;
+
+				source_position = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_POSITION);
+
 				get_eo_azimuth_and_elevation(&azimuth, &elevation);
 
-				hud_aim_range = get_triangulated_range(target);
+				hud_aim_range = get_triangulated_by_position_range(source_position, &target_position);
 
 				if (angles_to_hud_coordinates(azimuth, elevation, &x, &y, TRUE))
 					draw_aim_marker(x, y, hud_aim_range, weapon_database[weapon_sub_type].min_range);
@@ -779,7 +793,7 @@ static void display_target_information (void)
 
 	set_mono_font_type (MONO_FONT_TYPE_8X14);
 	s = get_target_display_name (target, buffer, FALSE);
-	if (s)
+	if (s && strcmp(s, "NO TARGET") != 0)
 	{
 		float width = get_mono_font_string_width (s);
 		set_2d_mono_font_position (0.0, -0.75);
