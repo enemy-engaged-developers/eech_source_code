@@ -1023,11 +1023,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
 	target = get_local_entity_parent (source, LIST_TYPE_TARGET);
-
-	has_range = get_range_finder() != RANGEFINDER_TRIANGULATION;
-
-	if (has_range)
-		target_range = get_range_to_target();
+	target_range = get_range_to_target();
 
 	////////////////////////////////////////
 	//
@@ -1194,14 +1190,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	if (target_range > 0.0)
 	{
-		if ((target_range < 1000.0) && (!hokum_damage.laser_designator))
-		{
-			sprintf (buffer, "%dm", (int) target_range);
-		}
-		else
-		{
-			sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
-		}
+		sprintf (buffer, "%.1fKm", target_range * (1.0 / 1000.0));
 
 		width = get_mono_font_string_width (buffer);
 
@@ -1366,16 +1355,11 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 				if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 				{
-//					if (scaled_3d)
-					{
-						i -= i_translate_3d;
-						j -= j_translate_3d;
+					i -= i_translate_3d;
+					j -= j_translate_3d;
 
-						i *= i_scale_3d;
-						j *= j_scale_3d;
-					}
-
-//					transform_mfd_screen_co_ords_to_mfd_texture_co_ords (&i, &j);
+					i *= i_scale_3d;
+					j *= j_scale_3d;
 
 					get_2d_world_position (i, j, &x, &y);
 
@@ -1500,14 +1484,6 @@ void draw_hind_virtual_cockpit_ort_symbology(void)
 	set_rgb_colour(background_colour, 255, 255, 255, 0);
 
 	set_system_texture_screen (eo_texture_screen, TEXTURE_INDEX_AVCKPT_DISPLAY_RHS_MFD);
-
-	debug_log("size: %.0f, x min: %d, y min: %d, x max: %d, y max: %d",
-			mfd_viewport_size,
-			mfd_screen_x_min,
-			mfd_screen_y_min,
-			mfd_screen_x_max,
-			mfd_screen_y_max
-	);
 
 	draw_symbology_to_texture(
 		eo_texture_screen,
