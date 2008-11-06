@@ -894,8 +894,8 @@ void set_dynamics_entity_values (entity *en)
 		}
 		else  // start with engines running
 		{
-			current_flight_dynamics->left_engine_n1_rpm.value = 60.0;
-			current_flight_dynamics->right_engine_n1_rpm.value = 60.0;
+			current_flight_dynamics->left_engine_n1_rpm.value = current_flight_dynamics->engine_idle_rpm;
+			current_flight_dynamics->right_engine_n1_rpm.value = current_flight_dynamics->engine_idle_rpm;
 			current_flight_dynamics->left_engine_n1_rpm.max = 110.0;
 			current_flight_dynamics->right_engine_n1_rpm.max = 110.0;
 		}
