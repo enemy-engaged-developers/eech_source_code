@@ -524,11 +524,6 @@ void resolve_dynamic_forces (void)
 		}
    }
 
-	debug_log("moment  x: %.2f, y: %.2f, z: %.2f",
-			moment_x,
-				moment_y,
-				moment_z);
-
    ///////////////////////////////////////////////////////////////
 	// Auto hover calculations
    ///////////////////////////////////////////////////////////////
