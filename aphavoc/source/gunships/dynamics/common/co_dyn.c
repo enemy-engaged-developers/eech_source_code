@@ -126,7 +126,7 @@ void clear_trim_control (event *ev)
 		centre_trim = 5.0;
 		break;
 	case GUNSHIP_TYPE_HIND:
-		centre_trim = 6.0;
+		centre_trim = 0.0;
 		if (!get_current_dynamics_options(DYNAMICS_OPTIONS_CROSS_COUPLING))
 			centre_pedal_trim = 41.0;
 		break;
@@ -1047,7 +1047,7 @@ void update_common_attitude_dynamics (void)
 			sign,
 			drag;
 
-		drag = 0.00034 + (0.034 * command_line_dynamics_main_rotor_drag * max (current_flight_dynamics->pitch.value, 0.0));
+		drag = 0.0005;
 
 		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
 
@@ -1107,20 +1107,7 @@ void update_common_attitude_dynamics (void)
 			Fmax;
 
 		// ball park figures
-		if (world_motion_vector.y < 0.0)
-		{
-
-			// y = mx + c, drag 0.4 at 0m/s ->0.0001 at -30m/s
-
-			drag = 0.4 - (((0.4 - 0.0001) / 30.0) * -world_motion_vector.y);
-
-			drag = bound (drag, 0.0001, 0.4);
-		}
-		else
-		{
-
-			drag = 0.4;
-		}
+		drag = 0.4;
 
 		Fmax = 0.0;
 		// arneh 20060813 - reduce drag in sideway flight - compensated by reduced lift.
@@ -1146,7 +1133,7 @@ void update_common_attitude_dynamics (void)
 		// Only add resistane lift
 		//
 
-		if (reaction_force > 0.0)
+//		if (reaction_force > 0.0)
 		{
 
 			position.x = 0.0;
