@@ -874,39 +874,21 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 
 	switch (eo->field_of_view)
 	{
-		case EO_FOV_ZOOM:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 1.6 * ONE_OVER_SQRT2;
-			else  // DTV
-				fov = 0.45 * ONE_OVER_SQRT2;
-
-			break;
-		}
-		case EO_FOV_NARROW:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 3.1 * ONE_OVER_SQRT2;
-			else  // DTV
-				fov = 0.9 * ONE_OVER_SQRT2;
-
-			break;
-		}
 		case EO_FOV_MEDIUM:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 10.1 * ONE_OVER_SQRT2;
-			else  // DTV or DVO
 				fov = 4.0 * ONE_OVER_SQRT2;
+			else  // DTV or DVO
+				fov = 3.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
 		case EO_FOV_WIDE:
 		{
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 50.0 * ONE_OVER_SQRT2;
+				fov = 15.0 * ONE_OVER_SQRT2;
 			else  // DVO
-				fov = 18.0 * ONE_OVER_SQRT2;
+				fov = 12.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
@@ -1133,13 +1115,9 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	switch (eo->field_of_view)
 	{
 		case EO_FOV_NARROW:
-		{
-			s = "NARROW";
-			break;
-		}
 		case EO_FOV_MEDIUM:
 		{
-			s = "MEDIUM";
+			s = "NARROW";
 			break;
 		}
 		case EO_FOV_WIDE:
@@ -1286,7 +1264,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	// elevation
 	//
 
-	draw_2d_line (-0.9, 0.4, -0.9, -0.3, MFD_EO_TEXT_COLOUR);
+	draw_2d_line (-0.9, 0.1, -0.9, -0.3, MFD_EO_TEXT_COLOUR);
 
 	if (eo_elevation < 0.0)
 	{
@@ -1294,10 +1272,10 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	}
 	else
 	{
-		marker_position = (eo_elevation / eo_max_elevation) * 0.4;
+		marker_position = (eo_elevation / eo_max_elevation) * 0.1;
 	}
 
-	draw_2d_line (-0.9 - 0.02, 0.4, -0.9 + 0.02, 0.4, MFD_EO_TEXT_COLOUR);
+	draw_2d_line (-0.9 - 0.02, 0.1, -0.9 + 0.02, 0.1, MFD_EO_TEXT_COLOUR);
 	draw_2d_line (-0.9 - 0.02, -0.3, -0.9 + 0.02, -0.3, MFD_EO_TEXT_COLOUR);
 	draw_2d_line (-0.9 - 0.01, 0.0, -0.9 + 0.01, 0.0, MFD_EO_TEXT_COLOUR);
 	draw_2d_mono_sprite (large_elevation_marker, -0.9, marker_position, MFD_EO_TEXT_COLOUR);
