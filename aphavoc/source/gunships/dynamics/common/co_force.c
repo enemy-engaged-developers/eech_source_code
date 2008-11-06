@@ -524,6 +524,11 @@ void resolve_dynamic_forces (void)
 		}
    }
 
+	debug_log("moment  x: %.2f, y: %.2f, z: %.2f",
+			moment_x,
+				moment_y,
+				moment_z);
+
    ///////////////////////////////////////////////////////////////
 	// Auto hover calculations
    ///////////////////////////////////////////////////////////////
@@ -557,6 +562,15 @@ void resolve_dynamic_forces (void)
 				//
 				// wash velocity out to zero
 				//
+
+
+				// level out helicopter
+				if (command_line_dynamics_flight_model >= 2)
+				{
+					// level out pitch/yaw
+					current_flight_dynamics->input_data.cyclic_x.value = bound(-current_flight_dynamics->roll.value / rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_x.min, current_flight_dynamics->input_data.cyclic_x.max);
+					current_flight_dynamics->input_data.cyclic_y.value = bound((current_flight_dynamics->pitch.value - rad(5.0))/ rad(10.0) * 100.0, current_flight_dynamics->input_data.cyclic_y.min, current_flight_dynamics->input_data.cyclic_y.max);
+				}
 
 				current_flight_dynamics->model_acceleration_vector.x = -(10.0 * get_model_delta_time ()) * current_flight_dynamics->model_motion_vector.x;
 				current_flight_dynamics->model_acceleration_vector.y = resultant_vertically;
