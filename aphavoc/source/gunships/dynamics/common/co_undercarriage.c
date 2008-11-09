@@ -227,16 +227,16 @@ static void update_suspension(void)
 
 				if ((fixed_collision_count || moving_collision_count) && compression_change > 0.0)
 				{
-					debug_log("disabeling damper due to collision");
+//					debug_log("disabeling damper due to collision");
 					point->damping = 0.0;
 				}
 				else
 				{
 					point->damping = min(compression_change * inv_delta_time * point->damper_stiffness, 25.0);
-					debug_log("change: %.3f, step: %.3f, damper: %.3f, result: %.3f", compression_change, inv_delta_time, point->damper_stiffness, compression_change * inv_delta_time * point->damper_stiffness);
+//					debug_log("change: %.3f, step: %.3f, damper: %.3f, result: %.3f", compression_change, inv_delta_time, point->damper_stiffness, compression_change * inv_delta_time * point->damper_stiffness);
 
 					max_damp = max(point->damping, max_damp);
-						debug_log("damping: %.2f, max: %.2f", point->damping, max_damp);
+//						debug_log("damping: %.2f, max: %.2f", point->damping, max_damp);
 
 					if (spring_compression >= point->max_suspension_compression)
 					{
@@ -247,7 +247,7 @@ static void update_suspension(void)
 				}
 
 				point->suspension_compression = spring_compression;
-				debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
+//				debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
 
 				if (point->can_turn && fabs(point->velocity.x) > 0.1)
 				{
@@ -271,7 +271,7 @@ static void update_suspension(void)
 					else
 						new_angle = -90.0;
 
-					debug_log("turn angle = %.1f", deg(new_angle));
+//					debug_log("turn angle = %.1f", deg(new_angle));
 
 					angle_diff = new_angle - point->turn_angle;
 					if (angle_diff > rad(180.0))
@@ -351,7 +351,8 @@ static void apply_suspension_forces(void)
 						force_diff = 0.0,
 						max_force_change = get_model_delta_time() * 10.0;
 
-					max_force = min(wheel_load * 2.5, G);  // depends on load on wheel
+//					max_force = min(wheel_load * 2.5, G);  // depends on load on wheel
+					max_force = min(wheel_load * 2.5, 2*G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->resistance_force;
@@ -374,7 +375,7 @@ static void apply_suspension_forces(void)
 						max_force_change = get_model_delta_time() * 10.0;
 
 					if (point->has_brakes && current_flight_dynamics->wheel_brake)
-						max_force = min(wheel_load * 2.0, G);  // depends on load on wheel
+						max_force = min(wheel_load * 2.0, 1.5 * G);  // depends on load on wheel
 					else
 						max_force = min(wheel_load * 0.025, G);  // general rolling resistance
 
@@ -465,7 +466,7 @@ void reset_undercarriage_world_position(void)
 	matrix3x3 attitude;
 	unsigned i;
 
-	debug_log("resetting gear position");
+//	debug_log("resetting gear position");
 
 	current_landing_gear = &landing_gears[get_global_gunship_type()];
 
