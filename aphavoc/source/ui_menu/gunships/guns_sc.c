@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -131,7 +131,7 @@ void initialise_gunships_screen (void)
 		y1,
 		x2,
 		y2;
-	
+
 	ui_object
 		*option_bdrop;
 
@@ -393,7 +393,7 @@ void initialise_gunships_screen (void)
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-			
+
 	set_text_option_backdrop_object (option_bdrop, gunship_screen_next_button);
 
 	/////////////////////////////////////////////////////////////////
@@ -431,7 +431,7 @@ void initialise_gunships_screen (void)
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-			
+
 	set_text_option_backdrop_object (option_bdrop, gunship_screen_back_button);
 
 	x1 = 0.370;
@@ -481,7 +481,7 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 		if (get_game_type () == GAME_TYPE_FREE_FLIGHT)
 		{
 			if (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL || get_free_flight_gunship_type() == NUM_GUNSHIP_TYPES)
-				
+
 				if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
 				{
 					set_free_flight_gunship_type(GUNSHIP_TYPE_APACHE);
@@ -502,38 +502,38 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 			if ((gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL) || (gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE))
 			{
 				set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
-	
+
 				set_ui_object_text (side_selected_area, get_trans (""));
-	
+
 				set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-	
+
 				gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 			}
 			else
 			{
 				set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
-	
+
 				set_ui_object_text (side_selected_area, get_trans (""));
-	
+
 				set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-	
+
 				gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			}
 		}
-	
+
 		set_ui_object_drawable (gunship_screen_back_button, TRUE);
 
 		//set_ui_object_drawable (gunship_screen_next_button, TRUE);
 		//set_ui_object_text (gunship_screen_next_button, get_trans("SELECT"));
 		set_display_gunship_buttons (TRUE, "SELECT");
-	
+
 		process_game_initialisation_phases ();
 
 		blit_front_buffer_to_render_buffer ();
 
 		if ( gunships_screen_graphic )
 		{
-	
+
 			destroy_texture_graphic ( gunships_screen_graphic );
 
 			gunships_screen_graphic = NULL;
@@ -542,9 +542,9 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 		free_all_hardware_textures ();
 
 		gunships_screen_graphic = create_texture_graphic ( "graphics\\ui\\cohokum\\gunship.psd" );
-	
+
 		set_ui_object_texture_graphic ( gunships_screen, gunships_screen_graphic );
-	
+
 		reset_time_values ( gunships_screen );
 
 		gunship_just_entered_screen = TRUE;
@@ -554,7 +554,7 @@ void notify_gunships_screen (ui_object *obj, void *arg)
 
 		if ( gunships_screen_graphic )
 		{
-	
+
 			destroy_texture_graphic ( gunships_screen_graphic );
 
 			gunships_screen_graphic = NULL;
@@ -617,17 +617,15 @@ void gunships_button_function (ui_object *obj, void *arg)
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
 		case GUNSHIP_TYPE_HOKUM:
-#ifdef DEBUG
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HIND);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
-#endif
 		case GUNSHIP_TYPE_HIND:
 			set_free_flight_gunship_type(GUNSHIP_TYPE_HAVOC);
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 			break;
 		}
-		
+
 		set_ui_object_text(gunship_screen_gunship_type_button, get_gunship_name());
 		set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_LEFT_CENTRE);
 	}
@@ -635,21 +633,21 @@ void gunships_button_function (ui_object *obj, void *arg)
 		if ((gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE) || (gunships_screen_side_selected == ENTITY_SIDE_NEUTRAL))
 		{
 			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Red Force"));
-	
+
 			set_ui_object_text (side_selected_area, get_trans (""));
-	
+
 			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-	
+
 			gunships_screen_side_selected = ENTITY_SIDE_RED_FORCE;
 		}
 		else
 		{
 			set_ui_object_text (gunship_screen_gunship_type_button, get_trans ("Blue Force"));
-	
+
 			set_ui_object_text (side_selected_area, get_trans (""));
-	
+
 			set_ui_object_text_justify (side_selected_area, TEXT_JUSTIFY_CENTRE);
-	
+
 			gunships_screen_side_selected = ENTITY_SIDE_BLUE_FORCE;
 		}
 
@@ -717,7 +715,7 @@ void set_gunship_waiting_for_connection ( int flag )
 
 		set_ui_object_drawable ( gunship_screen_waiting_area, TRUE );
 		set_ui_object_drawable ( gunship_screen_waiting_area_text, TRUE );
-	
+
 		if (current_game_session->type == SESSION_LIST_TYPE_JOIN)
 		{
 
@@ -732,10 +730,10 @@ void set_gunship_waiting_for_connection ( int flag )
 
 		if (current_game_session->type == SESSION_LIST_TYPE_JOIN)
 		{
-	
+
 			// set flag for helo rotation
 			stop_gunship_model_rotating = FALSE;
-			
+
 			set_display_gunship_buttons (TRUE, "SELECT");
 		}
 	}
@@ -884,23 +882,23 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 			obj_y2,
 			obj_size_x,
 			obj_size_y;
-	
+
 		obj_x1 = get_ui_object_x (obj);
 		obj_y1 = get_ui_object_y (obj);
 		obj_size_x = get_ui_object_x_size (obj);
 		obj_size_y = get_ui_object_y_size (obj);
-	
+
 		obj_x2 = obj_x1 + obj_size_x;
 		obj_y2 = obj_y1 + obj_size_y;
-	
+
 //		set_3d_viewport ( main_3d_env, obj_x1, obj_y1, obj_x2, obj_y2 );
-	
+
 //		set_3d_origin ( main_3d_env, obj_x1 + (obj_size_x / 2.0), obj_y1 + (obj_size_y / 2.0) );
 
 //		set_3d_viewcone ( main_3d_env, obj_size_x, obj_size_y, rad ( 59.99 ), rad ( 46.82 ) );
 
 		set_3d_viewport ( main_3d_env, 0, 0, ( float ) application_video_width - 0.001, ( float ) application_video_height - 0.001 );
-	
+
 		set_3d_origin ( main_3d_env, application_video_width /2, application_video_height/2 );
 
 		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99 ), rad (59.99) / full_screen_aspect_ratio );
@@ -925,7 +923,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	{
 		pitch = rad(4);
 		heading = rad(235);
-		
+
 		switch (get_free_flight_gunship_type())
 		{
 		case GUNSHIP_TYPE_AH64A:
@@ -961,9 +959,9 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	else
 		if ( gunships_screen_side_selected == ENTITY_SIDE_BLUE_FORCE )
 		{
-	
+
 			apache = construct_temporary_3d_object ( OBJECT_3D_RAH66_UI, FALSE );
-	
+
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__000, 4 );
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__001, 2 );
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_USA_COPTER_DIGIT__002, 9 );
@@ -972,9 +970,9 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		}
 		else
 		{
-	
+
 			apache = construct_temporary_3d_object ( OBJECT_3D_KA_52_UI, FALSE );
-	
+
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__000, 1 );
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__001, 5 );
 			set_texture_animation_frame_on_object ( apache, TEXTURE_ANIMATION_INDEX_CIS_COPTER_DIGIT__002, 2 );
@@ -990,7 +988,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	{
 		apache->vp.y = 2.2;
 	}
-	
+
 	apache->vp.z = 18;//12
 
 	get_3d_transformation_matrix ( visual_3d_vp->attitude, 0, rad ( 0 ) , my_heading );
@@ -1007,7 +1005,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		}
 		else
 		{
-	
+
 			heading += ( 0.75 * get_delta_time () );
 		}
 	}
@@ -1015,11 +1013,11 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	insert_object_into_3d_scene ( OBJECT_3D_DRAW_TYPE_OBJECT, apache );
 
 	set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
-			
+
 	draw_3d_scene ();
 
 	set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, FALSE, FALSE );
-			
+
 	//
 	// DO NOT DESTRUCT THE TEMPORARY INSTANCE - IT WILL CAUSE A PAGE FAULT
 	//
@@ -1031,7 +1029,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 void set_display_gunship_buttons (int flag, char *text)
 {
-	
+
 	set_ui_object_drawable (gunship_screen_next_button, flag);
 	set_ui_object_drawable (side_selected_area, flag);
 	set_ui_object_drawable (gunship_screen_gunship_type_button, flag);
@@ -1067,6 +1065,6 @@ char* get_gunship_name(void)
 		case GUNSHIP_TYPE_HAVOC:
 			return "Mi-28N \"Havoc B\"";
 	}
-	
+
 	return "Invalid gunship";
 }
