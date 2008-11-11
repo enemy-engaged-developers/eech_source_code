@@ -733,7 +733,7 @@ static void display_weapon_information (void)
 			draw_aim_marker(x, y, hud_aim_range, weapon_database[weapon_sub_type].min_range);
 
 			// draw target marker around target if having cpg assist
-			if (get_global_cpg_assist_type() != CPG_ASSIST_TYPE_NONE)
+			if (get_global_cpg_assist_type() != CPG_ASSIST_TYPE_NONE && eo_is_locked())
 			{
 				float az, el;
 
