@@ -1099,6 +1099,13 @@ void update_common_attitude_dynamics (void)
 	////////////////////////////////////////////
 	// Resistance to vertical movement
 	////////////////////////////////////////////
+
+	// if we're in contact with something then the helicopter may not move afterall
+	// and what we thought were downward movement isn't actually, and when we then
+	// apply "drag" we're actually creating a force which moves the helicopter in the
+	// opposite direction.  So disable the drag if we're in contact with something else
+	// (most commonly the ground)
+	if (!fixed_collision_count && !moving_collision_count)
 	{
 
 		float
@@ -1501,7 +1508,10 @@ void update_common_attitude_dynamics (void)
 	}
 	////////////////////////////////////////////
 
-	if (fixed_collision_count)
+	// If colliding with something, then the collision will move the helicopter. Combined with gravity
+	// and no drag this can make the helicopter fall down hillsides very rapidly.  So add some "friction"
+	// so it won't move as fast.
+	if (fixed_collision_count || moving_collision_count)
 	{
 
 		float
@@ -1517,17 +1527,17 @@ void update_common_attitude_dynamics (void)
 		direction.y += current_flight_dynamics->model_acceleration_vector.y * get_model_delta_time ();
 		direction.z += current_flight_dynamics->model_acceleration_vector.z * get_model_delta_time ();
 
-		force = get_3d_vector_magnitude (&direction);// / get_model_delta_time ();
+		force = 3.0 * get_3d_vector_magnitude(&direction);// / get_model_delta_time ();
 
 		invert_3d_vector (&direction);
 
 		normalise_any_3d_vector (&direction);
 
-		position.x = 0.0; //direction.x * 5.0;
-		position.y = 0.0; //direction.y * 5.0;
-		position.z = 0.0; //direction.z * 5.0;
+		position.x = 0.0;
+		position.y = 0.0;
+		position.z = 0.0;
 
-		add_dynamic_force ("Ground Friction force", force, 0.0, &position, &direction, FALSE);
+		add_dynamic_force ("Ground Friction force", force, 0.0, &position, &direction, TRUE);
 
 		#if DEBUG_MODULE
 
