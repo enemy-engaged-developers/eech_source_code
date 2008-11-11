@@ -674,6 +674,7 @@ static void animate_doors(void)
 		door_state = new_state;
 		animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		animate_keyframed_sub_object_type(virtual_cockpit_canopy_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+		canopy_door_state = 1.0 - door_state;
 	}
 
 	if (door_handle_timer > 0.0)
