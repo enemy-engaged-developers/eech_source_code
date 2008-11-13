@@ -152,6 +152,7 @@ static object_3d_sub_instance
 	*clock_minute_hand,
 	*clock_second_hand,
 	*waypoint_indicator,
+	*map_background,
 
 	*left_engine_oil_pressure,
 	*left_engine_oil_temperature,
@@ -295,6 +296,7 @@ void initialise_hind_3d_cockpit (void)
 	pilot_head_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_PILOT_HEAD);
 	hud_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FL);
 	map_view_object = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_FR);
+	map_background = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_HAVOC_COCKPIT_CRT_CAMERA);
 
 	high_detail = find_sub_object(virtual_pilot_cockpit_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
 	door_high_detail = find_sub_object(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_HIGH_DETAIL);
@@ -1004,8 +1006,14 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			//
 			// map first, otherwise transparency doesn't work properly
 			//
-			memcpy (&virtual_cockpit_map_display_inst3d->vp, &vp, sizeof (viewpoint));
-			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_map_display_inst3d->vp.position, virtual_cockpit_map_display_inst3d);
+
+			map_background->visible_object = !mi24_map_active();
+
+			if (mi24_map_active())
+			{
+				memcpy (&virtual_cockpit_map_display_inst3d->vp, &vp, sizeof (viewpoint));
+				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_map_display_inst3d->vp.position, virtual_cockpit_map_display_inst3d);
+			}
 
 			// cockpit
 			high_detail->visible_object = get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW;
