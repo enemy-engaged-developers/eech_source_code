@@ -1100,7 +1100,7 @@ static int all_scenes_loaded_successfully(unsigned from_index, unsigned to_index
 		if (!objects_3d_scene_database[sceneno].succeeded)
 		{
 			debug_log("failed: %s", object_3d_scene_names[sceneno]);
-			ASSERT(FALSE);
+//			ASSERT(FALSE);
 			return FALSE;
 		}
 
