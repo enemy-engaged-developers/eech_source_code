@@ -579,6 +579,9 @@ static void draw_layout_grid (void)
 
 static int scroll_map_to_uv(float u, float v)
 {
+	if (!map_display_model)
+		return FALSE;
+
 	upper_left_texture_uv->u = u - 0.5 * MAP_DISPLAY_WIDTH;
 	upper_left_texture_uv->v = v - 0.5 * MAP_DISPLAY_HEIGHT;
 	upper_right_texture_uv->u = u + 0.5 * MAP_DISPLAY_WIDTH;

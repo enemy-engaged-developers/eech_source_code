@@ -348,7 +348,8 @@ void deinitialise_hind_hud (void)
 
 	destroy_screen (hud_texture_screen);
 
-	safe_free(hud_texture_uv_coordinates);
+	if (hud_texture_uv_coordinates)
+		safe_free(hud_texture_uv_coordinates);
 	hud_texture_uv_coordinates = NULL;
 }
 
