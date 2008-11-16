@@ -438,7 +438,7 @@ static void light_signal_strength_lamps(float range, float max_range)
 {
 	float range_ratio;
 	int segment;
-	
+
 	ASSERT(max_range > 0.0);
 	if (max_range > 0.0)
 	{
@@ -779,60 +779,6 @@ static void update_threat_warning_display (void)
 
 			threat = get_local_entity_child_succ (threat, LIST_TYPE_TARGET);
 		}
-/*
-		if (closest_missile)
-		{
-			closest_missile_flash_timer -= get_delta_time ();
-
-			if (closest_missile_flash_timer <= 0.0)
-			{
-				closest_missile_flash_timer = CLOSEST_MISSILE_FLASH_RATE;
-
-				closest_missile_flash_state ^= 1;
-			}
-
-			//
-			// make lamps flash (overriding previous setting)
-			//
-
-			light_close_range_threat_bearing_lamp (closest_missile_theta, closest_missile_flash_state);
-
-			switch (closest_missile_threat_type)
-			{
-				case THREAT_TYPE_RF_MISSILE:
-				{
-					hind_lamps.threat_warning_radar_type_1 = closest_missile_flash_state;
-
-					break;
-				}
-				case THREAT_TYPE_IR_MISSILE:
-				{
-					hind_lamps.threat_warning_radar_type_2 = closest_missile_flash_state;
-
-					break;
-				}
-				case THREAT_TYPE_LASER_MISSILE:
-				{
-					hind_lamps.threat_warning_radar_type_6 = closest_missile_flash_state;
-
-					break;
-				}
-			}
-
-			light_missile_approaching_lamps (closest_missile_time_to_impact);
-
-			hind_lamps.threat_warning_missile_lh_lock = 1;
-			hind_lamps.threat_warning_missile_rh_lock = 1;
-
-			if (closest_missile_altitude < source_position->z)
-			{
-				hind_lamps.threat_warning_missile_below = 1;
-			}
-			else
-			{
-				hind_lamps.threat_warning_missile_above = 1;
-			}
-		}*/
 	}
 }
 
