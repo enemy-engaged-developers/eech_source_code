@@ -240,7 +240,7 @@ void add_dynamic_force (const char *name, float force, float duration, vec3d *po
 
 			current_flight_dynamics->dynamic_forces [index].name = NULL;
 
-			//#if DEBUG_MODULE
+			#if DEBUG_MODULE
 
 			//if ((get_current_dynamics_options (DYNAMICS_OPTIONS_DRAW_FLIGHT_PATH)) && (debug))
 			if (debug)
@@ -266,7 +266,7 @@ void add_dynamic_force (const char *name, float force, float duration, vec3d *po
 															direction->x * force * 500,
 															direction->z * force * 500);
 */
-			//#endif
+			#endif
 
 			break;
 		}

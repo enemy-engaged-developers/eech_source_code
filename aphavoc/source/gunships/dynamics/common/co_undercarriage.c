@@ -363,7 +363,7 @@ static void apply_suspension_forces(void)
 					direction.y = 0.0;
 					direction.z = 0.0;
 
-					add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, TRUE);
+					add_dynamic_force ("sideways wheel resistance", fabs(point->resistance_force), 0.0, &position, &direction, FALSE);
 				}
 
 				// wheel longitudinal resistance/brakes
@@ -388,7 +388,7 @@ static void apply_suspension_forces(void)
 					direction.y = 0.0;
 					direction.z = (point->brake_force > 0.0) ? -1.0 : 1.0;
 
-					add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, TRUE);
+					add_dynamic_force ("brakes", fabs(point->brake_force), 0.0, &position, &direction, FALSE);
 				}
 			}
 	}
