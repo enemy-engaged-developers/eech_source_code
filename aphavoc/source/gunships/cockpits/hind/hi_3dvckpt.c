@@ -219,6 +219,39 @@ static object_3d_sub_instance
 	*left_engine_over_temperature_light,
 	*right_engine_over_temperature_light,
 
+	*rwr_above_light,
+	*rwr_airborne_light,
+	*rwr_below_light,
+	*rwr_left10_light,
+	*rwr_left30_light,
+	*rwr_left50_light,
+	*rwr_left90_light,
+	*rwr_left_rear_light,
+	*rwr_long_range_light,
+	*rwr_medium_range_light,
+	*rwr_missile_launch_light,
+	*rwr_right10_light,
+	*rwr_right30_light,
+	*rwr_right50_light,
+	*rwr_right90_light,
+	*rwr_right_rear_light,
+	*rwr_short_range_light,
+	*rwr_signal_strength1,
+	*rwr_signal_strength10,
+	*rwr_signal_strength11,
+	*rwr_signal_strength12,
+	*rwr_signal_strength13,
+	*rwr_signal_strength14,
+	*rwr_signal_strength15,
+	*rwr_signal_strength2,
+	*rwr_signal_strength3,
+	*rwr_signal_strength4,
+	*rwr_signal_strength5,
+	*rwr_signal_strength6,
+	*rwr_signal_strength7,
+	*rwr_signal_strength8,
+	*rwr_signal_strength9,
+
 	*fuel_switches,
 	*external_light_switches,
 	*radio_navigation_switches,
@@ -426,6 +459,39 @@ void initialise_hind_3d_cockpit (void)
 	gyro_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
 	left_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OVER_TEMPERATURE_LIGHT);
 	right_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OVER_TEMPERATURE_LIGHT);
+
+	rwr_above_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_ABOVE_LIGHT);
+	rwr_airborne_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_AIRBORNE_LIGHT);
+	rwr_below_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_BELOW_LIGHT);
+	rwr_left10_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT10_LIGHT);
+	rwr_left30_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT30_LIGHT);
+	rwr_left50_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT50_LIGHT);
+	rwr_left90_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT90_LIGHT);
+	rwr_left_rear_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LEFT_REAR_LIGHT);
+	rwr_long_range_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_LONG_RANGE_LIGHT);
+	rwr_medium_range_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_MEDIUM_RANGE_LIGHT);
+	rwr_missile_launch_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_MISSILE_LAUNCH_LIGHT);
+	rwr_right10_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT10_LIGHT);
+	rwr_right30_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT30_LIGHT);
+	rwr_right50_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT50_LIGHT);
+	rwr_right90_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT90_LIGHT);
+	rwr_right_rear_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_RIGHT_REAR_LIGHT);
+	rwr_short_range_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SHORT_RANGE_LIGHT);
+	rwr_signal_strength1 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH1_LIGHT);
+	rwr_signal_strength10 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH10_LIGHT);
+	rwr_signal_strength11 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH11_LIGHT);
+	rwr_signal_strength12 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH12_LIGHT);
+	rwr_signal_strength13 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH13_LIGHT);
+	rwr_signal_strength14 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH14_LIGHT);
+	rwr_signal_strength15 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH15_LIGHT);
+	rwr_signal_strength2 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH2_LIGHT);
+	rwr_signal_strength3 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH3_LIGHT);
+	rwr_signal_strength4 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH4_LIGHT);
+	rwr_signal_strength5 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH5_LIGHT);
+	rwr_signal_strength6 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH6_LIGHT);
+	rwr_signal_strength7 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH7_LIGHT);
+	rwr_signal_strength8 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH8_LIGHT);
+	rwr_signal_strength9 = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_SIGNAL_STRENGTH9_LIGHT);
 
 	fuel_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_FUEL_SWITCHES);
 	external_light_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_EXTERNAL_LIGHT_SWITCHES);
@@ -690,6 +756,44 @@ static void animate_doors(void)
 	}
 }
 
+static void update_threat_warning_lights(void)
+{
+	rwr_above_light->visible_object = hind_lamps.threat_warning_missile_above;
+	rwr_below_light->visible_object = hind_lamps.threat_warning_missile_below;
+	rwr_missile_launch_light->visible_object = hind_lamps.threat_warning_missile_lh_lock;
+
+	rwr_left10_light->visible_object = hind_lamps.threat_warning_bearing_lh_10;
+	rwr_left30_light->visible_object = hind_lamps.threat_warning_bearing_lh_30;
+	rwr_left50_light->visible_object = hind_lamps.threat_warning_bearing_lh_50;
+	rwr_left90_light->visible_object = hind_lamps.threat_warning_bearing_lh_90;
+	rwr_left_rear_light->visible_object = hind_lamps.threat_warning_bearing_lh_rear;
+	rwr_right10_light->visible_object = hind_lamps.threat_warning_bearing_rh_10;
+	rwr_right30_light->visible_object = hind_lamps.threat_warning_bearing_rh_30;
+	rwr_right50_light->visible_object = hind_lamps.threat_warning_bearing_rh_50;
+	rwr_right90_light->visible_object = hind_lamps.threat_warning_bearing_rh_90;
+	rwr_right_rear_light->visible_object = hind_lamps.threat_warning_bearing_rh_rear;
+
+	rwr_airborne_light->visible_object = hind_lamps.threat_warning_radar_type_1;
+	rwr_long_range_light->visible_object = hind_lamps.threat_warning_radar_type_2;
+	rwr_medium_range_light->visible_object = hind_lamps.threat_warning_radar_type_3;
+	rwr_short_range_light->visible_object = hind_lamps.threat_warning_radar_type_4;
+
+	rwr_signal_strength1->visible_object = hind_lamps.threat_warning_close_range_1;
+	rwr_signal_strength2->visible_object = hind_lamps.threat_warning_close_range_2;
+	rwr_signal_strength3->visible_object = hind_lamps.threat_warning_close_range_3;
+	rwr_signal_strength4->visible_object = hind_lamps.threat_warning_close_range_4;
+	rwr_signal_strength5->visible_object = hind_lamps.threat_warning_close_range_5;
+	rwr_signal_strength6->visible_object = hind_lamps.threat_warning_close_range_6;
+	rwr_signal_strength7->visible_object = hind_lamps.threat_warning_close_range_7;
+	rwr_signal_strength8->visible_object = hind_lamps.threat_warning_close_range_8;
+	rwr_signal_strength9->visible_object = hind_lamps.threat_warning_close_range_9;
+	rwr_signal_strength10->visible_object = hind_lamps.threat_warning_close_range_10;
+	rwr_signal_strength11->visible_object = hind_lamps.threat_warning_close_range_11;
+	rwr_signal_strength12->visible_object = hind_lamps.threat_warning_close_range_12;
+	rwr_signal_strength13->visible_object = hind_lamps.threat_warning_close_range_13;
+	rwr_signal_strength14->visible_object = hind_lamps.threat_warning_close_range_14;
+	rwr_signal_strength15->visible_object = hind_lamps.threat_warning_close_range_15;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1160,6 +1264,7 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				right_engine_over_temperature_light->visible_object = (current_flight_dynamics->right_engine_temp.value > 800.0);
 
 				update_mi24_weapon_status_lights(weapon_ready_light, weapon_not_ready_light, weapon_min_range_light);
+				update_threat_warning_lights();
 
 				// weapon pylon lights
 				{

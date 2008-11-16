@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -717,22 +717,22 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 
 			hind_lamps.threat_warning_bearing_lh_rear_close_range = 0;
 			hind_lamps.threat_warning_bearing_lh_90_close_range = 0;
-			hind_lamps.threat_warning_bearing_lh_67_close_range = 0;
-			hind_lamps.threat_warning_bearing_lh_45_close_range = 0;
-			hind_lamps.threat_warning_bearing_lh_22_close_range = 0;
-			hind_lamps.threat_warning_bearing_rh_22_close_range = 0;
-			hind_lamps.threat_warning_bearing_rh_45_close_range = 0;
-			hind_lamps.threat_warning_bearing_rh_67_close_range = 0;
+			hind_lamps.threat_warning_bearing_lh_50_close_range = 0;
+			hind_lamps.threat_warning_bearing_lh_30_close_range = 0;
+			hind_lamps.threat_warning_bearing_lh_10_close_range = 0;
+			hind_lamps.threat_warning_bearing_rh_10_close_range = 0;
+			hind_lamps.threat_warning_bearing_rh_30_close_range = 0;
+			hind_lamps.threat_warning_bearing_rh_50_close_range = 0;
 			hind_lamps.threat_warning_bearing_rh_90_close_range = 0;
 			hind_lamps.threat_warning_bearing_rh_rear_close_range = 0;
 			hind_lamps.threat_warning_bearing_lh_rear = 0;
 			hind_lamps.threat_warning_bearing_lh_90 = 0;
-			hind_lamps.threat_warning_bearing_lh_67 = 0;
-			hind_lamps.threat_warning_bearing_lh_45 = 0;
-			hind_lamps.threat_warning_bearing_lh_22 = 0;
-			hind_lamps.threat_warning_bearing_rh_22 = 0;
-			hind_lamps.threat_warning_bearing_rh_45 = 0;
-			hind_lamps.threat_warning_bearing_rh_67 = 0;
+			hind_lamps.threat_warning_bearing_lh_50 = 0;
+			hind_lamps.threat_warning_bearing_lh_30 = 0;
+			hind_lamps.threat_warning_bearing_lh_10 = 0;
+			hind_lamps.threat_warning_bearing_rh_10 = 0;
+			hind_lamps.threat_warning_bearing_rh_30 = 0;
+			hind_lamps.threat_warning_bearing_rh_50 = 0;
 			hind_lamps.threat_warning_bearing_rh_90 = 0;
 			hind_lamps.threat_warning_bearing_rh_rear = 0;
 
@@ -748,27 +748,27 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			}
 			else if (timer < (ONE_SECOND * 3.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_67_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_50_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 4.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_45_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_30_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 5.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_22_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_10_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 6.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_22_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_10_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 7.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_45_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_30_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 8.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_67_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_50_close_range = 1;
 			}
 			else if (timer < (ONE_SECOND * 9.0))
 			{
@@ -788,27 +788,27 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			}
 			else if (timer < (ONE_SECOND * 13.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_67 = 1;
+				hind_lamps.threat_warning_bearing_lh_50 = 1;
 			}
 			else if (timer < (ONE_SECOND * 14.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_45 = 1;
+				hind_lamps.threat_warning_bearing_lh_30 = 1;
 			}
 			else if (timer < (ONE_SECOND * 15.0))
 			{
-				hind_lamps.threat_warning_bearing_lh_22 = 1;
+				hind_lamps.threat_warning_bearing_lh_10 = 1;
 			}
 			else if (timer < (ONE_SECOND * 16.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_22 = 1;
+				hind_lamps.threat_warning_bearing_rh_10 = 1;
 			}
 			else if (timer < (ONE_SECOND * 17.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_45 = 1;
+				hind_lamps.threat_warning_bearing_rh_30 = 1;
 			}
 			else if (timer < (ONE_SECOND * 18.0))
 			{
-				hind_lamps.threat_warning_bearing_rh_67 = 1;
+				hind_lamps.threat_warning_bearing_rh_50 = 1;
 			}
 			else if (timer < (ONE_SECOND * 19.0))
 			{
@@ -822,22 +822,22 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			{
 				hind_lamps.threat_warning_bearing_lh_rear_close_range = 1;
 				hind_lamps.threat_warning_bearing_lh_90_close_range = 1;
-				hind_lamps.threat_warning_bearing_lh_67_close_range = 1;
-				hind_lamps.threat_warning_bearing_lh_45_close_range = 1;
-				hind_lamps.threat_warning_bearing_lh_22_close_range = 1;
-				hind_lamps.threat_warning_bearing_rh_22_close_range = 1;
-				hind_lamps.threat_warning_bearing_rh_45_close_range = 1;
-				hind_lamps.threat_warning_bearing_rh_67_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_50_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_30_close_range = 1;
+				hind_lamps.threat_warning_bearing_lh_10_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_10_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_30_close_range = 1;
+				hind_lamps.threat_warning_bearing_rh_50_close_range = 1;
 				hind_lamps.threat_warning_bearing_rh_90_close_range = 1;
 				hind_lamps.threat_warning_bearing_rh_rear_close_range = 1;
 				hind_lamps.threat_warning_bearing_lh_rear = 1;
 				hind_lamps.threat_warning_bearing_lh_90 = 1;
-				hind_lamps.threat_warning_bearing_lh_67 = 1;
-				hind_lamps.threat_warning_bearing_lh_45 = 1;
-				hind_lamps.threat_warning_bearing_lh_22 = 1;
-				hind_lamps.threat_warning_bearing_rh_22 = 1;
-				hind_lamps.threat_warning_bearing_rh_45 = 1;
-				hind_lamps.threat_warning_bearing_rh_67 = 1;
+				hind_lamps.threat_warning_bearing_lh_50 = 1;
+				hind_lamps.threat_warning_bearing_lh_30 = 1;
+				hind_lamps.threat_warning_bearing_lh_10 = 1;
+				hind_lamps.threat_warning_bearing_rh_10 = 1;
+				hind_lamps.threat_warning_bearing_rh_30 = 1;
+				hind_lamps.threat_warning_bearing_rh_50 = 1;
 				hind_lamps.threat_warning_bearing_rh_90 = 1;
 				hind_lamps.threat_warning_bearing_rh_rear = 1;
 			}
@@ -1035,20 +1035,20 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			draw_lamp (hind_lamps.threat_warning_close_range_14						, X_ORG +  38, Y_ORG +  38, 422, 219,   6,   5, 176);	// (31% alpha)
 			draw_lamp (hind_lamps.threat_warning_close_range_15						, X_ORG +  33, Y_ORG +  43, 417, 224,   6,   4, 173);	// (32% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90_close_range		, X_ORG +   7, Y_ORG +  23, 391, 204,   4,   5, 171);	// (33% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67_close_range		, X_ORG +  10, Y_ORG +  16, 394, 197,   4,   4, 168);	// (34% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45_close_range		, X_ORG +  14, Y_ORG +  11, 398, 192,   4,   4, 166);	// (35% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22_close_range		, X_ORG +  21, Y_ORG +   8, 405, 189,   4,   4, 163);	// (36% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22_close_range		, X_ORG +  28, Y_ORG +   8, 412, 189,   4,   4, 161);	// (37% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45_close_range		, X_ORG +  35, Y_ORG +  11, 419, 192,   4,   4, 158);	// (38% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67_close_range		, X_ORG +  41, Y_ORG +  16, 425, 197,   4,   4, 156);	// (39% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50_close_range		, X_ORG +  10, Y_ORG +  16, 394, 197,   4,   4, 168);	// (34% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30_close_range		, X_ORG +  14, Y_ORG +  11, 398, 192,   4,   4, 166);	// (35% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10_close_range		, X_ORG +  21, Y_ORG +   8, 405, 189,   4,   4, 163);	// (36% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10_close_range		, X_ORG +  28, Y_ORG +   8, 412, 189,   4,   4, 161);	// (37% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30_close_range		, X_ORG +  35, Y_ORG +  11, 419, 192,   4,   4, 158);	// (38% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50_close_range		, X_ORG +  41, Y_ORG +  16, 425, 197,   4,   4, 156);	// (39% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90_close_range		, X_ORG +  45, Y_ORG +  23, 429, 204,   4,   5, 153);	// (40% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90						, X_ORG +   1, Y_ORG +  21, 385, 202,   7,   7, 150);	// (41% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67						, X_ORG +   4, Y_ORG +  12, 388, 193,   7,   7, 148);	// (42% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +  10, Y_ORG +   5, 394, 186,   6,   7, 145);	// (43% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  18, Y_ORG +   2, 402, 183,   7,   6, 143);	// (44% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22						, X_ORG +  27, Y_ORG +   2, 411, 183,   7,   6, 140);	// (45% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45						, X_ORG +  36, Y_ORG +   5, 420, 186,   7,   7, 138);	// (46% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67						, X_ORG +  43, Y_ORG +  12, 427, 193,   7,   7, 135);	// (47% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50						, X_ORG +   4, Y_ORG +  12, 388, 193,   7,   7, 148);	// (42% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30						, X_ORG +  10, Y_ORG +   5, 394, 186,   6,   7, 145);	// (43% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10						, X_ORG +  18, Y_ORG +   2, 402, 183,   7,   6, 143);	// (44% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10						, X_ORG +  27, Y_ORG +   2, 411, 183,   7,   6, 140);	// (45% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30						, X_ORG +  36, Y_ORG +   5, 420, 186,   7,   7, 138);	// (46% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50						, X_ORG +  43, Y_ORG +  12, 427, 193,   7,   7, 135);	// (47% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90						, X_ORG +  48, Y_ORG +  21, 432, 202,   7,   7, 133);	// (48% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_below						, X_ORG +  23, Y_ORG +  27, 407, 208,  11,   5, 130);	// (49% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_above						, X_ORG +  23, Y_ORG +  22, 407, 203,  10,   5, 127);	// (50% alpha)
@@ -1093,20 +1093,20 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			draw_lamp (hind_lamps.threat_warning_close_range_14						, X_ORG +  38, Y_ORG +  35, 364, 216,   6,   6, 176);	// (31% alpha)
 			draw_lamp (hind_lamps.threat_warning_close_range_15						, X_ORG +  33, Y_ORG +  40, 359, 221,   6,   4, 173);	// (32% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90_close_range		, X_ORG +   8, Y_ORG +  25, 334, 206,   4,   4, 171);	// (33% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67_close_range		, X_ORG +  10, Y_ORG +  18, 336, 199,   4,   4, 168);	// (34% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45_close_range		, X_ORG +  15, Y_ORG +  12, 341, 193,   4,   4, 166);	// (35% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22_close_range		, X_ORG +  21, Y_ORG +   8, 347, 189,   4,   4, 163);	// (36% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22_close_range		, X_ORG +  28, Y_ORG +   7, 354, 188,   4,   4, 161);	// (37% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45_close_range		, X_ORG +  35, Y_ORG +   9, 361, 190,   4,   4, 158);	// (38% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67_close_range		, X_ORG +  41, Y_ORG +  13, 367, 194,   3,   4, 156);	// (39% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50_close_range		, X_ORG +  10, Y_ORG +  18, 336, 199,   4,   4, 168);	// (34% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30_close_range		, X_ORG +  15, Y_ORG +  12, 341, 193,   4,   4, 166);	// (35% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10_close_range		, X_ORG +  21, Y_ORG +   8, 347, 189,   4,   4, 163);	// (36% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10_close_range		, X_ORG +  28, Y_ORG +   7, 354, 188,   4,   4, 161);	// (37% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30_close_range		, X_ORG +  35, Y_ORG +   9, 361, 190,   4,   4, 158);	// (38% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50_close_range		, X_ORG +  41, Y_ORG +  13, 367, 194,   3,   4, 156);	// (39% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90_close_range		, X_ORG +  44, Y_ORG +  20, 370, 201,   4,   4, 153);	// (40% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90						, X_ORG +   2, Y_ORG +  23, 328, 204,   6,   7, 150);	// (41% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67						, X_ORG +   4, Y_ORG +  14, 330, 195,   7,   7, 148);	// (42% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +  10, Y_ORG +   7, 336, 188,   7,   6, 145);	// (43% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  18, Y_ORG +   2, 344, 183,   7,   6, 143);	// (44% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22						, X_ORG +  27, Y_ORG +   1, 353, 182,   7,   6, 140);	// (45% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45						, X_ORG +  36, Y_ORG +   3, 362, 184,   6,   7, 138);	// (46% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67						, X_ORG +  43, Y_ORG +   9, 369, 190,   6,   6, 135);	// (47% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50						, X_ORG +   4, Y_ORG +  14, 330, 195,   7,   7, 148);	// (42% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30						, X_ORG +  10, Y_ORG +   7, 336, 188,   7,   6, 145);	// (43% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10						, X_ORG +  18, Y_ORG +   2, 344, 183,   7,   6, 143);	// (44% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10						, X_ORG +  27, Y_ORG +   1, 353, 182,   7,   6, 140);	// (45% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30						, X_ORG +  36, Y_ORG +   3, 362, 184,   6,   7, 138);	// (46% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50						, X_ORG +  43, Y_ORG +   9, 369, 190,   6,   6, 135);	// (47% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90						, X_ORG +  47, Y_ORG +  17, 373, 198,   6,   6, 133);	// (48% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_below						, X_ORG +  23, Y_ORG +  25, 349, 206,  11,   7, 130);	// (49% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_above						, X_ORG +  23, Y_ORG +  21, 349, 202,  10,   6, 127);	// (50% alpha)
@@ -1151,20 +1151,20 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			draw_lamp (hind_lamps.threat_warning_close_range_14						, X_ORG +  37, Y_ORG +  36, 306, 217,   5,   4, 176);	// (31% alpha)
 			draw_lamp (hind_lamps.threat_warning_close_range_15						, X_ORG +  31, Y_ORG +  39, 300, 220,   6,   4, 173);	// (32% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90_close_range		, X_ORG +   9, Y_ORG +  22, 278, 203,   4,   4, 171);	// (33% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67_close_range		, X_ORG +  12, Y_ORG +  15, 281, 196,   4,   4, 168);	// (34% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45_close_range		, X_ORG +  16, Y_ORG +  10, 285, 191,   4,   4, 166);	// (35% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22_close_range		, X_ORG +  23, Y_ORG +   7, 292, 188,   4,   4, 163);	// (36% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22_close_range		, X_ORG +  30, Y_ORG +   7, 299, 188,   4,   4, 161);	// (37% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45_close_range		, X_ORG +  36, Y_ORG +  10, 305, 191,   4,   4, 158);	// (38% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67_close_range		, X_ORG +  41, Y_ORG +  15, 310, 196,   4,   4, 156);	// (39% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50_close_range		, X_ORG +  12, Y_ORG +  15, 281, 196,   4,   4, 168);	// (34% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30_close_range		, X_ORG +  16, Y_ORG +  10, 285, 191,   4,   4, 166);	// (35% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10_close_range		, X_ORG +  23, Y_ORG +   7, 292, 188,   4,   4, 163);	// (36% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10_close_range		, X_ORG +  30, Y_ORG +   7, 299, 188,   4,   4, 161);	// (37% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30_close_range		, X_ORG +  36, Y_ORG +  10, 305, 191,   4,   4, 158);	// (38% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50_close_range		, X_ORG +  41, Y_ORG +  15, 310, 196,   4,   4, 156);	// (39% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90_close_range		, X_ORG +  44, Y_ORG +  22, 313, 203,   4,   4, 153);	// (40% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90						, X_ORG +   3, Y_ORG +  19, 272, 200,   6,   7, 150);	// (41% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67						, X_ORG +   6, Y_ORG +  11, 275, 192,   7,   7, 148);	// (42% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +  12, Y_ORG +   5, 281, 186,   7,   6, 145);	// (43% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  21, Y_ORG +   2, 290, 183,   6,   6, 143);	// (44% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22						, X_ORG +  30, Y_ORG +   2, 299, 183,   6,   6, 140);	// (45% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45						, X_ORG +  38, Y_ORG +   5, 307, 186,   6,   6, 138);	// (46% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67						, X_ORG +  44, Y_ORG +  11, 313, 192,   7,   7, 135);	// (47% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50						, X_ORG +   6, Y_ORG +  11, 275, 192,   7,   7, 148);	// (42% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30						, X_ORG +  12, Y_ORG +   5, 281, 186,   7,   6, 145);	// (43% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10						, X_ORG +  21, Y_ORG +   2, 290, 183,   6,   6, 143);	// (44% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10						, X_ORG +  30, Y_ORG +   2, 299, 183,   6,   6, 140);	// (45% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30						, X_ORG +  38, Y_ORG +   5, 307, 186,   6,   6, 138);	// (46% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50						, X_ORG +  44, Y_ORG +  11, 313, 192,   7,   7, 135);	// (47% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90						, X_ORG +  48, Y_ORG +  20, 317, 201,   6,   6, 133);	// (48% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_below						, X_ORG +  23, Y_ORG +  25, 292, 206,  11,   5, 130);	// (49% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_above						, X_ORG +  23, Y_ORG +  21, 292, 202,  11,   4, 127);	// (50% alpha)
@@ -1209,20 +1209,20 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			draw_lamp (hind_lamps.threat_warning_close_range_14						, X_ORG +  37, Y_ORG +  34, 249, 215,   5,   5, 176);	// (31% alpha)
 			draw_lamp (hind_lamps.threat_warning_close_range_15						, X_ORG +  33, Y_ORG +  39, 245, 220,   5,   3, 173);	// (32% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90_close_range		, X_ORG +   8, Y_ORG +  25, 220, 206,   4,   4, 171);	// (33% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67_close_range		, X_ORG +   9, Y_ORG +  18, 221, 199,   4,   4, 168);	// (34% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45_close_range		, X_ORG +  13, Y_ORG +  12, 225, 193,   4,   4, 166);	// (35% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22_close_range		, X_ORG +  19, Y_ORG +   9, 231, 190,   4,   4, 163);	// (36% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22_close_range		, X_ORG +  26, Y_ORG +   8, 238, 189,   4,   4, 161);	// (37% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45_close_range		, X_ORG +  33, Y_ORG +  10, 245, 191,   3,   3, 158);	// (38% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67_close_range		, X_ORG +  38, Y_ORG +  14, 250, 195,   4,   4, 156);	// (39% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50_close_range		, X_ORG +   9, Y_ORG +  18, 221, 199,   4,   4, 168);	// (34% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30_close_range		, X_ORG +  13, Y_ORG +  12, 225, 193,   4,   4, 166);	// (35% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10_close_range		, X_ORG +  19, Y_ORG +   9, 231, 190,   4,   4, 163);	// (36% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10_close_range		, X_ORG +  26, Y_ORG +   8, 238, 189,   4,   4, 161);	// (37% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30_close_range		, X_ORG +  33, Y_ORG +  10, 245, 191,   3,   3, 158);	// (38% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50_close_range		, X_ORG +  38, Y_ORG +  14, 250, 195,   4,   4, 156);	// (39% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90_close_range		, X_ORG +  42, Y_ORG +  20, 254, 201,   4,   4, 153);	// (40% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_lh_90						, X_ORG +   2, Y_ORG +  23, 214, 204,   6,   7, 150);	// (41% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_67						, X_ORG +   3, Y_ORG +  14, 215, 195,   7,   7, 148);	// (42% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +   8, Y_ORG +   7, 220, 188,   7,   7, 145);	// (43% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  16, Y_ORG +   3, 228, 184,   6,   6, 143);	// (44% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_22						, X_ORG +  25, Y_ORG +   2, 237, 183,   6,   6, 140);	// (45% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_45						, X_ORG +  33, Y_ORG +   4, 245, 185,   7,   7, 138);	// (46% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_rh_67						, X_ORG +  40, Y_ORG +  10, 252, 191,   6,   6, 135);	// (47% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_50						, X_ORG +   3, Y_ORG +  14, 215, 195,   7,   7, 148);	// (42% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_30						, X_ORG +   8, Y_ORG +   7, 220, 188,   7,   7, 145);	// (43% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_lh_10						, X_ORG +  16, Y_ORG +   3, 228, 184,   6,   6, 143);	// (44% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_10						, X_ORG +  25, Y_ORG +   2, 237, 183,   6,   6, 140);	// (45% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_30						, X_ORG +  33, Y_ORG +   4, 245, 185,   7,   7, 138);	// (46% alpha)
+			draw_lamp (hind_lamps.threat_warning_bearing_rh_50						, X_ORG +  40, Y_ORG +  10, 252, 191,   6,   6, 135);	// (47% alpha)
 			draw_lamp (hind_lamps.threat_warning_bearing_rh_90						, X_ORG +  45, Y_ORG +  17, 257, 198,   6,   6, 133);	// (48% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_below						, X_ORG +  23, Y_ORG +  25, 235, 206,   9,   6, 130);	// (49% alpha)
 			draw_lamp (hind_lamps.threat_warning_missile_above						, X_ORG +  23, Y_ORG +  21, 235, 202,   9,   6, 127);	// (50% alpha)
@@ -1243,8 +1243,8 @@ void draw_hind_threat_warning_display (cockpit_panels panel)
 			#define X_ORG (605)
 			#define Y_ORG (465)
 
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +   3, Y_ORG +  10, 180, 234,  12,   5, 145);	// (43% alpha)
-			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  18, Y_ORG +   3, 195, 227,  14,  12, 143);	// (44% alpha)
+//			draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, X_ORG +   3, Y_ORG +  10, 180, 234,  12,   5, 145);	// (43% alpha)
+//			draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, X_ORG +  18, Y_ORG +   3, 195, 227,  14,  12, 143);	// (44% alpha)
 
 			#undef X_ORG
 			#undef Y_ORG
@@ -1993,22 +1993,22 @@ void draw_overlaid_hind_threat_warning_display (int x_org, int y_org)
 
 				hind_lamps.threat_warning_bearing_lh_rear_close_range = 0;
 				hind_lamps.threat_warning_bearing_lh_90_close_range = 0;
-				hind_lamps.threat_warning_bearing_lh_67_close_range = 0;
-				hind_lamps.threat_warning_bearing_lh_45_close_range = 0;
-				hind_lamps.threat_warning_bearing_lh_22_close_range = 0;
-				hind_lamps.threat_warning_bearing_rh_22_close_range = 0;
-				hind_lamps.threat_warning_bearing_rh_45_close_range = 0;
-				hind_lamps.threat_warning_bearing_rh_67_close_range = 0;
+				hind_lamps.threat_warning_bearing_lh_50_close_range = 0;
+				hind_lamps.threat_warning_bearing_lh_30_close_range = 0;
+				hind_lamps.threat_warning_bearing_lh_10_close_range = 0;
+				hind_lamps.threat_warning_bearing_rh_10_close_range = 0;
+				hind_lamps.threat_warning_bearing_rh_30_close_range = 0;
+				hind_lamps.threat_warning_bearing_rh_50_close_range = 0;
 				hind_lamps.threat_warning_bearing_rh_90_close_range = 0;
 				hind_lamps.threat_warning_bearing_rh_rear_close_range = 0;
 				hind_lamps.threat_warning_bearing_lh_rear = 0;
 				hind_lamps.threat_warning_bearing_lh_90 = 0;
-				hind_lamps.threat_warning_bearing_lh_67 = 0;
-				hind_lamps.threat_warning_bearing_lh_45 = 0;
-				hind_lamps.threat_warning_bearing_lh_22 = 0;
-				hind_lamps.threat_warning_bearing_rh_22 = 0;
-				hind_lamps.threat_warning_bearing_rh_45 = 0;
-				hind_lamps.threat_warning_bearing_rh_67 = 0;
+				hind_lamps.threat_warning_bearing_lh_50 = 0;
+				hind_lamps.threat_warning_bearing_lh_30 = 0;
+				hind_lamps.threat_warning_bearing_lh_10 = 0;
+				hind_lamps.threat_warning_bearing_rh_10 = 0;
+				hind_lamps.threat_warning_bearing_rh_30 = 0;
+				hind_lamps.threat_warning_bearing_rh_50 = 0;
 				hind_lamps.threat_warning_bearing_rh_90 = 0;
 				hind_lamps.threat_warning_bearing_rh_rear = 0;
 
@@ -2024,27 +2024,27 @@ void draw_overlaid_hind_threat_warning_display (int x_org, int y_org)
 				}
 				else if (timer < (ONE_SECOND * 3.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_67_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_50_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 4.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_45_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_30_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 5.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_22_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_10_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 6.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_22_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_10_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 7.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_45_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_30_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 8.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_67_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_50_close_range = 1;
 				}
 				else if (timer < (ONE_SECOND * 9.0))
 				{
@@ -2064,27 +2064,27 @@ void draw_overlaid_hind_threat_warning_display (int x_org, int y_org)
 				}
 				else if (timer < (ONE_SECOND * 13.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_67 = 1;
+					hind_lamps.threat_warning_bearing_lh_50 = 1;
 				}
 				else if (timer < (ONE_SECOND * 14.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_45 = 1;
+					hind_lamps.threat_warning_bearing_lh_30 = 1;
 				}
 				else if (timer < (ONE_SECOND * 15.0))
 				{
-					hind_lamps.threat_warning_bearing_lh_22 = 1;
+					hind_lamps.threat_warning_bearing_lh_10 = 1;
 				}
 				else if (timer < (ONE_SECOND * 16.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_22 = 1;
+					hind_lamps.threat_warning_bearing_rh_10 = 1;
 				}
 				else if (timer < (ONE_SECOND * 17.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_45 = 1;
+					hind_lamps.threat_warning_bearing_rh_30 = 1;
 				}
 				else if (timer < (ONE_SECOND * 18.0))
 				{
-					hind_lamps.threat_warning_bearing_rh_67 = 1;
+					hind_lamps.threat_warning_bearing_rh_50 = 1;
 				}
 				else if (timer < (ONE_SECOND * 19.0))
 				{
@@ -2098,22 +2098,22 @@ void draw_overlaid_hind_threat_warning_display (int x_org, int y_org)
 				{
 					hind_lamps.threat_warning_bearing_lh_rear_close_range = 1;
 					hind_lamps.threat_warning_bearing_lh_90_close_range = 1;
-					hind_lamps.threat_warning_bearing_lh_67_close_range = 1;
-					hind_lamps.threat_warning_bearing_lh_45_close_range = 1;
-					hind_lamps.threat_warning_bearing_lh_22_close_range = 1;
-					hind_lamps.threat_warning_bearing_rh_22_close_range = 1;
-					hind_lamps.threat_warning_bearing_rh_45_close_range = 1;
-					hind_lamps.threat_warning_bearing_rh_67_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_50_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_30_close_range = 1;
+					hind_lamps.threat_warning_bearing_lh_10_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_10_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_30_close_range = 1;
+					hind_lamps.threat_warning_bearing_rh_50_close_range = 1;
 					hind_lamps.threat_warning_bearing_rh_90_close_range = 1;
 					hind_lamps.threat_warning_bearing_rh_rear_close_range = 1;
 					hind_lamps.threat_warning_bearing_lh_rear = 1;
 					hind_lamps.threat_warning_bearing_lh_90 = 1;
-					hind_lamps.threat_warning_bearing_lh_67 = 1;
-					hind_lamps.threat_warning_bearing_lh_45 = 1;
-					hind_lamps.threat_warning_bearing_lh_22 = 1;
-					hind_lamps.threat_warning_bearing_rh_22 = 1;
-					hind_lamps.threat_warning_bearing_rh_45 = 1;
-					hind_lamps.threat_warning_bearing_rh_67 = 1;
+					hind_lamps.threat_warning_bearing_lh_50 = 1;
+					hind_lamps.threat_warning_bearing_lh_30 = 1;
+					hind_lamps.threat_warning_bearing_lh_10 = 1;
+					hind_lamps.threat_warning_bearing_rh_10 = 1;
+					hind_lamps.threat_warning_bearing_rh_30 = 1;
+					hind_lamps.threat_warning_bearing_rh_50 = 1;
 					hind_lamps.threat_warning_bearing_rh_90 = 1;
 					hind_lamps.threat_warning_bearing_rh_rear = 1;
 				}
@@ -2305,20 +2305,20 @@ void draw_overlaid_hind_threat_warning_display (int x_org, int y_org)
 		draw_lamp (hind_lamps.threat_warning_close_range_14						, x_org +  37, y_org +  36, 306, 217,   5,   4, 176);	// (31% alpha)
 		draw_lamp (hind_lamps.threat_warning_close_range_15						, x_org +  31, y_org +  39, 300, 220,   6,   4, 173);	// (32% alpha)
 		draw_lamp (hind_lamps.threat_warning_bearing_lh_90_close_range		, x_org +   9, y_org +  22, 278, 203,   4,   4, 171);	// (33% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_67_close_range		, x_org +  12, y_org +  15, 281, 196,   4,   4, 168);	// (34% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_45_close_range		, x_org +  16, y_org +  10, 285, 191,   4,   4, 166);	// (35% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_22_close_range		, x_org +  23, y_org +   7, 292, 188,   4,   4, 163);	// (36% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_22_close_range		, x_org +  30, y_org +   7, 299, 188,   4,   4, 161);	// (37% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_45_close_range		, x_org +  36, y_org +  10, 305, 191,   4,   4, 158);	// (38% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_67_close_range		, x_org +  41, y_org +  15, 310, 196,   4,   4, 156);	// (39% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_50_close_range		, x_org +  12, y_org +  15, 281, 196,   4,   4, 168);	// (34% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_30_close_range		, x_org +  16, y_org +  10, 285, 191,   4,   4, 166);	// (35% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_10_close_range		, x_org +  23, y_org +   7, 292, 188,   4,   4, 163);	// (36% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_10_close_range		, x_org +  30, y_org +   7, 299, 188,   4,   4, 161);	// (37% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_30_close_range		, x_org +  36, y_org +  10, 305, 191,   4,   4, 158);	// (38% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_50_close_range		, x_org +  41, y_org +  15, 310, 196,   4,   4, 156);	// (39% alpha)
 		draw_lamp (hind_lamps.threat_warning_bearing_rh_90_close_range		, x_org +  44, y_org +  22, 313, 203,   4,   4, 153);	// (40% alpha)
 		draw_lamp (hind_lamps.threat_warning_bearing_lh_90						, x_org +   3, y_org +  19, 272, 200,   6,   7, 150);	// (41% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_67						, x_org +   6, y_org +  11, 275, 192,   7,   7, 148);	// (42% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_45						, x_org +  12, y_org +   5, 281, 186,   7,   6, 145);	// (43% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_lh_22						, x_org +  21, y_org +   2, 290, 183,   6,   6, 143);	// (44% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_22						, x_org +  30, y_org +   2, 299, 183,   6,   6, 140);	// (45% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_45						, x_org +  38, y_org +   5, 307, 186,   6,   6, 138);	// (46% alpha)
-		draw_lamp (hind_lamps.threat_warning_bearing_rh_67						, x_org +  44, y_org +  11, 313, 192,   7,   7, 135);	// (47% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_50						, x_org +   6, y_org +  11, 275, 192,   7,   7, 148);	// (42% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_30						, x_org +  12, y_org +   5, 281, 186,   7,   6, 145);	// (43% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_lh_10						, x_org +  21, y_org +   2, 290, 183,   6,   6, 143);	// (44% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_10						, x_org +  30, y_org +   2, 299, 183,   6,   6, 140);	// (45% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_30						, x_org +  38, y_org +   5, 307, 186,   6,   6, 138);	// (46% alpha)
+		draw_lamp (hind_lamps.threat_warning_bearing_rh_50						, x_org +  44, y_org +  11, 313, 192,   7,   7, 135);	// (47% alpha)
 		draw_lamp (hind_lamps.threat_warning_bearing_rh_90						, x_org +  48, y_org +  20, 317, 201,   6,   6, 133);	// (48% alpha)
 		draw_lamp (hind_lamps.threat_warning_missile_below						, x_org +  23, y_org +  25, 292, 206,  11,   5, 130);	// (49% alpha)
 		draw_lamp (hind_lamps.threat_warning_missile_above						, x_org +  23, y_org +  21, 292, 202,  11,   4, 127);	// (50% alpha)

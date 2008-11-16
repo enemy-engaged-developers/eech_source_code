@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -264,20 +264,20 @@ static void clear_threat_warning_display_lamps (void)
 	hind_lamps.threat_warning_close_range_14						= 0;
 	hind_lamps.threat_warning_close_range_15						= 0;
 	hind_lamps.threat_warning_bearing_lh_90_close_range		= 0;
-	hind_lamps.threat_warning_bearing_lh_67_close_range		= 0;
-	hind_lamps.threat_warning_bearing_lh_45_close_range		= 0;
-	hind_lamps.threat_warning_bearing_lh_22_close_range		= 0;
-	hind_lamps.threat_warning_bearing_rh_22_close_range		= 0;
-	hind_lamps.threat_warning_bearing_rh_45_close_range		= 0;
-	hind_lamps.threat_warning_bearing_rh_67_close_range		= 0;
+	hind_lamps.threat_warning_bearing_lh_50_close_range		= 0;
+	hind_lamps.threat_warning_bearing_lh_30_close_range		= 0;
+	hind_lamps.threat_warning_bearing_lh_10_close_range		= 0;
+	hind_lamps.threat_warning_bearing_rh_10_close_range		= 0;
+	hind_lamps.threat_warning_bearing_rh_30_close_range		= 0;
+	hind_lamps.threat_warning_bearing_rh_50_close_range		= 0;
 	hind_lamps.threat_warning_bearing_rh_90_close_range		= 0;
 	hind_lamps.threat_warning_bearing_lh_90						= 0;
-	hind_lamps.threat_warning_bearing_lh_67						= 0;
-	hind_lamps.threat_warning_bearing_lh_45						= 0;
-	hind_lamps.threat_warning_bearing_lh_22						= 0;
-	hind_lamps.threat_warning_bearing_rh_22						= 0;
-	hind_lamps.threat_warning_bearing_rh_45						= 0;
-	hind_lamps.threat_warning_bearing_rh_67						= 0;
+	hind_lamps.threat_warning_bearing_lh_50						= 0;
+	hind_lamps.threat_warning_bearing_lh_30						= 0;
+	hind_lamps.threat_warning_bearing_lh_10						= 0;
+	hind_lamps.threat_warning_bearing_rh_10						= 0;
+	hind_lamps.threat_warning_bearing_rh_30						= 0;
+	hind_lamps.threat_warning_bearing_rh_50						= 0;
 	hind_lamps.threat_warning_bearing_rh_90						= 0;
 	hind_lamps.threat_warning_missile_below						= 0;
 	hind_lamps.threat_warning_missile_above						= 0;
@@ -295,19 +295,19 @@ static void light_threat_bearing_lamp (float theta)
 {
 	if (theta >= 0.0)
 	{
-		if (theta <= rad (22.75 + 11.25))
+		if (theta <= rad (10.0 + 10.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_22 = 1;
+			hind_lamps.threat_warning_bearing_rh_10 = 1;
 		}
-		else if (theta <= rad (45.0 + 11.25))
+		else if (theta <= rad (30.0 + 10.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_45 = 1;
+			hind_lamps.threat_warning_bearing_rh_30 = 1;
 		}
-		else if (theta <= rad (67.5 + 11.25))
+		else if (theta <= rad (50.0 + 20.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_67 = 1;
+			hind_lamps.threat_warning_bearing_rh_50 = 1;
 		}
-		else if (theta <= rad (90.0 + 11.25))
+		else if (theta <= rad (90.0 + 30.0))
 		{
 			hind_lamps.threat_warning_bearing_rh_90 = 1;
 		}
@@ -318,19 +318,19 @@ static void light_threat_bearing_lamp (float theta)
 	}
 	else
 	{
-		if (theta >= rad (-22.75 + -11.25))
+		if (theta >= rad (-10.0 + -10.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_22 = 1;
+			hind_lamps.threat_warning_bearing_lh_10 = 1;
 		}
-		else if (theta >= rad (-45.0 + -11.25))
+		else if (theta >= rad (-30.0 + -10.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_45 = 1;
+			hind_lamps.threat_warning_bearing_lh_30 = 1;
 		}
-		else if (theta >= rad (-67.5 + -11.25))
+		else if (theta >= rad (-50.0 + -20.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_67 = 1;
+			hind_lamps.threat_warning_bearing_lh_50 = 1;
 		}
-		else if (theta >= rad (-90.0 + -11.25))
+		else if (theta >= rad (-90.0 + -30.0))
 		{
 			hind_lamps.threat_warning_bearing_lh_90 = 1;
 		}
@@ -345,23 +345,24 @@ static void light_threat_bearing_lamp (float theta)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static void light_close_range_threat_bearing_lamp (float theta, int state)
 {
 	if (theta >= 0.0)
 	{
-		if (theta <= rad (22.75 + 11.25))
+		if (theta <= rad (10.0 + 10.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_22_close_range = state;
+			hind_lamps.threat_warning_bearing_rh_10_close_range = state;
 		}
-		else if (theta <= rad (45.0 + 11.25))
+		else if (theta <= rad (30.0 + 10.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_45_close_range = state;
+			hind_lamps.threat_warning_bearing_rh_30_close_range = state;
 		}
-		else if (theta <= rad (67.5 + 11.25))
+		else if (theta <= rad (50.0 + 20.0))
 		{
-			hind_lamps.threat_warning_bearing_rh_67_close_range = state;
+			hind_lamps.threat_warning_bearing_rh_50_close_range = state;
 		}
-		else if (theta <= rad (90.0 + 11.25))
+		else if (theta <= rad (90.0 + 30.0))
 		{
 			hind_lamps.threat_warning_bearing_rh_90_close_range = state;
 		}
@@ -372,19 +373,19 @@ static void light_close_range_threat_bearing_lamp (float theta, int state)
 	}
 	else
 	{
-		if (theta >= rad (-22.75 + -11.25))
+		if (theta >= rad (-10.0 + -10.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_22_close_range = state;
+			hind_lamps.threat_warning_bearing_lh_10_close_range = state;
 		}
-		else if (theta >= rad (-45.0 + -11.25))
+		else if (theta >= rad (-30.0 + -10.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_45_close_range = state;
+			hind_lamps.threat_warning_bearing_lh_30_close_range = state;
 		}
-		else if (theta >= rad (-67.5 + -11.25))
+		else if (theta >= rad (-50.0 + -20.0))
 		{
-			hind_lamps.threat_warning_bearing_lh_67_close_range = state;
+			hind_lamps.threat_warning_bearing_lh_50_close_range = state;
 		}
-		else if (theta >= rad (-90.0 + -11.25))
+		else if (theta >= rad (-90.0 + -30.0))
 		{
 			hind_lamps.threat_warning_bearing_lh_90_close_range = state;
 		}
@@ -394,11 +395,12 @@ static void light_close_range_threat_bearing_lamp (float theta, int state)
 		}
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 static void light_missile_approaching_lamps (float time_to_impact)
 {
 	int
@@ -430,6 +432,41 @@ static void light_missile_approaching_lamps (float time_to_impact)
 		}
 	}
 }
+#endif
+
+static void light_signal_strength_lamps(float range, float max_range)
+{
+	float range_ratio;
+	int segment;
+	
+	ASSERT(max_range > 0.0);
+	if (max_range > 0.0)
+	{
+		range_ratio = 0.99 - bound(range/(max_range * 1.5), 0.0, 0.99);
+		segment = (int)(range_ratio * 15);
+	}
+	else
+		segment = 14;
+
+	switch (segment)
+	{
+		case 14: hind_lamps.threat_warning_close_range_15 = 1;
+		case 13: hind_lamps.threat_warning_close_range_14 = 1;
+		case 12: hind_lamps.threat_warning_close_range_13 = 1;
+		case 11: hind_lamps.threat_warning_close_range_12 = 1;
+		case 10: hind_lamps.threat_warning_close_range_11 = 1;
+		case  9: hind_lamps.threat_warning_close_range_10 = 1;
+		case  8: hind_lamps.threat_warning_close_range_9 = 1;
+		case  7: hind_lamps.threat_warning_close_range_8 = 1;
+		case  6: hind_lamps.threat_warning_close_range_7 = 1;
+		case  5: hind_lamps.threat_warning_close_range_6 = 1;
+		case  4: hind_lamps.threat_warning_close_range_5 = 1;
+		case  3: hind_lamps.threat_warning_close_range_4 = 1;
+		case  2: hind_lamps.threat_warning_close_range_3 = 1;
+		case  1: hind_lamps.threat_warning_close_range_2 = 1;
+		case  0: hind_lamps.threat_warning_close_range_1 = 1;
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,10 +476,10 @@ static void update_threat_warning_display (void)
 {
 	entity
 		*source,
-		*threat,
-		*closest_missile;
+		*threat;
 
 	int
+		above = FALSE,
 		overshot,
 		threat_active;
 
@@ -455,16 +492,12 @@ static void update_threat_warning_display (void)
 		threat_range,
 		threat_velocity,
 		time_to_impact,
-		closest_missile_time_to_impact,
-		closest_missile_theta,
-		closest_missile_altitude,
 		source_heading,
 		length,
 		cos_error;
 
 	threat_types
-		threat_type,
-		closest_missile_threat_type;
+		threat_type;
 
 	vec3d
 		*source_position,
@@ -476,7 +509,7 @@ static void update_threat_warning_display (void)
 
 	clear_threat_warning_display_lamps ();
 
-	if (hind_damage.threat_warning_display)
+	if (hind_damage.threat_warning_display || hind_damage.radar_warning_system)
 	{
 		return;
 	}
@@ -485,10 +518,6 @@ static void update_threat_warning_display (void)
 
 	if (threat)
 	{
-		closest_missile = NULL;
-
-		closest_missile_time_to_impact = 1000000.0;
-
 		source = get_gunship_entity ();
 
 		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
@@ -497,12 +526,40 @@ static void update_threat_warning_display (void)
 
 		while (threat)
 		{
+			entity_sub_types sub_type = get_local_entity_int_value(threat, INT_TYPE_ENTITY_SUB_TYPE);
+			float max_range = 10.0;
+
 			threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 			//
 			// check threat is active
 			//
 
+			if (get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_VEHICLE))
+			{
+				max_range = vehicle_database[sub_type].air_scan_range;
+				threat_active = get_local_entity_int_value (threat, INT_TYPE_RADAR_ON);
+			}
+			else if (get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_AIRCRAFT))
+			{
+				max_range = aircraft_database[sub_type].air_scan_range;
+				threat_active = get_local_entity_int_value (threat, INT_TYPE_RADAR_ON);
+			}
+			else if (get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_WEAPON))
+			{
+				weapon_guidance_types guidance = weapon_database[sub_type].guidance_type;
+
+				threat_active = guidance == WEAPON_GUIDANCE_TYPE_ACTIVE_RADAR;
+				if (guidance == WEAPON_GUIDANCE_TYPE_ACTIVE_RADAR || guidance == WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR)
+				{
+					hind_lamps.threat_warning_missile_lh_lock = 1;
+					hind_lamps.threat_warning_missile_rh_lock = 1;
+				}
+
+				max_range = weapon_database[sub_type].max_range;
+			}
+
+#if 0
 			switch (threat_type)
 			{
 				////////////////////////////////////////
@@ -517,6 +574,8 @@ static void update_threat_warning_display (void)
 				case THREAT_TYPE_RF_MISSILE:
 				////////////////////////////////////////
 				{
+					ASSERT(get_local_entity_int_value (threat, INT_TYPE_IDENTIFY_WEAPON));
+
 					if (!hind_damage.radar_warning_system)
 					{
 						threat_active = TRUE;
@@ -532,7 +591,7 @@ static void update_threat_warning_display (void)
 				case THREAT_TYPE_IR_MISSILE:
 				////////////////////////////////////////
 				{
-					threat_active = TRUE;
+					threat_active = FALSE;
 
 					break;
 				}
@@ -540,7 +599,7 @@ static void update_threat_warning_display (void)
 				case THREAT_TYPE_LASER_MISSILE:
 				////////////////////////////////////////
 				{
-					threat_active = TRUE;
+					threat_active = FALSE;
 
 					break;
 				}
@@ -613,79 +672,10 @@ static void update_threat_warning_display (void)
 					break;
 				}
 			}
+#endif
 
 			if (threat_active)
 			{
-				//
-				// light threat type lamp
-				//
-
-				switch (threat_type)
-				{
-					////////////////////////////////////////
-					case THREAT_TYPE_RF_MISSILE:
-					////////////////////////////////////////
-					{
-						hind_lamps.threat_warning_radar_type_1 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_IR_MISSILE:
-					////////////////////////////////////////
-					{
-						hind_lamps.threat_warning_radar_type_2 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_LASER_MISSILE:
-					////////////////////////////////////////
-					{
-						//
-						// this used to be the EWR lamp
-						//
-
-						hind_lamps.threat_warning_radar_type_6 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_AIRBORNE_RADAR:
-					////////////////////////////////////////
-					{
-						hind_lamps.threat_warning_radar_type_3 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_SAM:
-					////////////////////////////////////////
-					{
-						hind_lamps.threat_warning_radar_type_4 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_AAA:
-					////////////////////////////////////////
-					{
-						hind_lamps.threat_warning_radar_type_5 = 1;
-
-						break;
-					}
-					////////////////////////////////////////
-					case THREAT_TYPE_EARLY_WARNING_RADAR:
-					////////////////////////////////////////
-					{
-						//
-						// this lamp is now used for laser missiles
-						//
-
-						break;
-					}
-				}
-
 				//
 				// get threat direction wrt aircraft datum
 				//
@@ -693,10 +683,12 @@ static void update_threat_warning_display (void)
 				threat_position = get_local_entity_vec3d_ptr (threat, VEC3D_TYPE_POSITION);
 
 				dx = threat_position->x - source_position->x;
+				dy = threat_position->y - source_position->y;
 				dz = threat_position->z - source_position->z;
 
+				threat_range = sqrt ((dx * dx) + (dy * dy) + (dz * dz));
+				above = dy > 0.0;
 				threat_bearing = atan2 (dx, dz);
-
 				theta = threat_bearing - source_heading;
 
 				if (theta > rad (180.0))
@@ -714,10 +706,6 @@ static void update_threat_warning_display (void)
 
 				if ((threat_type == THREAT_TYPE_RF_MISSILE) || (threat_type == THREAT_TYPE_IR_MISSILE) || (threat_type == THREAT_TYPE_LASER_MISSILE))
 				{
-					dy = threat_position->y - source_position->y;
-
-					threat_range = sqrt ((dx * dx) + (dy * dy) + (dz * dz));
-
 					threat_velocity = get_local_entity_float_value (threat, FLOAT_TYPE_VELOCITY);
 
 					time_to_impact = threat_range / max (threat_velocity, 1.0);
@@ -754,32 +742,44 @@ static void update_threat_warning_display (void)
 					if (!overshot)
 					{
 						light_threat_bearing_lamp (theta);
+						light_signal_strength_lamps(threat_range, max_range);
 
-						light_close_range_threat_bearing_lamp (theta, 1);
+						hind_lamps.threat_warning_radar_type_1 = 1;
 
-						if (time_to_impact < closest_missile_time_to_impact)
-						{
-							closest_missile = threat;
-
-							closest_missile_threat_type = threat_type;
-
-							closest_missile_time_to_impact = time_to_impact;
-
-							closest_missile_theta = theta;
-
-							closest_missile_altitude = threat_position->z;
-						}
+						if (above)
+							hind_lamps.threat_warning_missile_above = 1;
+						else
+							hind_lamps.threat_warning_missile_below = 1;
 					}
 				}
 				else
 				{
 					light_threat_bearing_lamp (theta);
+					light_signal_strength_lamps(threat_range, max_range);
+
+					if (above)
+						hind_lamps.threat_warning_missile_above = 1;
+					else
+						hind_lamps.threat_warning_missile_below = 1;
+
+					if (threat_type == THREAT_TYPE_AIRBORNE_RADAR)
+						hind_lamps.threat_warning_radar_type_1 = 1;
+					else
+					{
+						if (max_range <= 4000.0)  // short range
+							hind_lamps.threat_warning_radar_type_4 = 1;
+						else if (max_range <= 10000.0)   // medium range
+							hind_lamps.threat_warning_radar_type_3 = 1;
+						else  // long range
+							hind_lamps.threat_warning_radar_type_2 = 1;
+					}
+
 				}
 			}
 
 			threat = get_local_entity_child_succ (threat, LIST_TYPE_TARGET);
 		}
-
+/*
 		if (closest_missile)
 		{
 			closest_missile_flash_timer -= get_delta_time ();
@@ -832,7 +832,7 @@ static void update_threat_warning_display (void)
 			{
 				hind_lamps.threat_warning_missile_above = 1;
 			}
-		}
+		}*/
 	}
 }
 
