@@ -73,7 +73,7 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
-#define DEFAULT_GWUT_FILE "gwut190.csv"
+#define DEFAULT_GWUT_FILE "gwut1110.csv"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,12 +84,12 @@ static void wide_cockpit_initialize(void)
 {
 	//VJ 050205 new wideview init settings
 		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105; 
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].z = 0.180;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].p = 0;
 
 		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105; 
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z = 0.180;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p = 0;
 
@@ -136,17 +136,17 @@ static void wide_cockpit_initialize(void)
 //VJ 050207 cleaning up the wideview code
 void read_wideview_parameters (char *q, int i)
 {
-	char *p = strtok(q,",");         
-	if (p) 
+	char *p = strtok(q,",");
+	if (p)
 		wide_cockpit_position[i].x = atof(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		wide_cockpit_position[i].y = atof(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		wide_cockpit_position[i].z = atof(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		wide_cockpit_position[i].p = atof(p);
 }
 
@@ -158,20 +158,20 @@ void read_hud_parameters (char *q)
 {
 	int i;
 	char *p = strtok(q,",");
-	
+
 	for (i = 0; i < 4; i++)
 	{
-		if (p) 
-			hud_code[i][0] = atoi(p);				
-		p = strtok(NULL,",");	    
-		if (p) 
-			hud_code[i][1] = atoi(p);				
-		p = strtok(NULL,",");	    
-		if (p) 
-			hud_code[i][2] = atoi(p);				
-		p = strtok(NULL,",");	    
-				 
-	}	
+		if (p)
+			hud_code[i][0] = atoi(p);
+		p = strtok(NULL,",");
+		if (p)
+			hud_code[i][1] = atoi(p);
+		p = strtok(NULL,",");
+		if (p)
+			hud_code[i][2] = atoi(p);
+		p = strtok(NULL,",");
+
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,17 +180,17 @@ void read_hud_parameters (char *q)
 
 void read_export_mfd_pos(char *q, int *pos)
 {
-	char *p = strtok(q,",");         
-	if (p) 
+	char *p = strtok(q,",");
+	if (p)
 		pos[0]= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		pos[1]= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		pos[2]= atoi(p);
-	p = strtok(NULL,",");	     
-	if (p) 
+	p = strtok(NULL,",");
+	if (p)
 		pos[3]= atoi(p);
 }
 
@@ -295,16 +295,16 @@ static void initialize_radar_ranges(void)
 		radar_range_hind[1] = 2000;
 		radar_range_hind[2] = 4000;
 		radar_range_hind[3] = 6000;
-		
+
 		// GCsDriver  08-12-2007
 		radar_range_default[0] = 500;
 		radar_range_default[1] = 1000;
 		radar_range_default[2] = 2000;
 		radar_range_default[3] = 4000;
 		radar_range_default[4] = 8000;
-		
+
 		//VJ 060212 hud info mod
-		memset(	hud_code, 0, 8*3*sizeof(int));		
+		memset(	hud_code, 0, 8*3*sizeof(int));
 		hud_code[0][2] = 10;
 		hud_code[1][2] = 10;
 		hud_code[2][2] = 10;
@@ -312,7 +312,7 @@ static void initialize_radar_ranges(void)
 		hud_code[4][2] = 10;
 		hud_code[5][2] = 10;
 		hud_code[6][2] = 10;
-		hud_code[7][2] = 10;		
+		hud_code[7][2] = 10;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +334,7 @@ void process_ini_file(int argc, char *argv[])
 //VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
 	 wide_cockpit_initialize();
 
-//VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work 
+//VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work
 //VJ 050125 changed back: this should always be done
     initialize_radar_ranges();
 
@@ -357,7 +357,7 @@ void process_ini_file(int argc, char *argv[])
 			return;
 		 }
 	 }
-	 
+
 //VJ 030409, changed to generate eech.ini when it doesn't exist
 	 if (command_line_dump_ini && !file_exist(fname))
 	 {
@@ -374,13 +374,13 @@ void process_ini_file(int argc, char *argv[])
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
     buf1 = ( char * ) malloc(255);
-    
+
 	 // main loop to parse eech.ini file
 	 while (!strstr(buf,"end of file") && !feof(f))
 	 {
 		int i = 0, j = 0;
 		fscanf(f,"%[^\n]\n",buf);
-      
+
 		if (!strchr(buf,'='))
 		  continue;
 
@@ -395,8 +395,8 @@ void process_ini_file(int argc, char *argv[])
 		}
 		buf1[j] = '\0';
 
-//VJ 041002 bug fix: if variable is empty so # follows = the # is overwritten by NULL 
-//after the first call to strtok, this causes an error because q then contains the comment 
+//VJ 041002 bug fix: if variable is empty so # follows = the # is overwritten by NULL
+//after the first call to strtok, this causes an error because q then contains the comment
 //without spaces. fix: empty q when that is the case.
 		r = strchr(buf1, '=');
 		r++;
@@ -406,7 +406,7 @@ void process_ini_file(int argc, char *argv[])
 		}else{
   			p = strtok(buf1,"=");
 			q = strtok(NULL,"#");
-		}   
+		}
 
 		sscanf(q,"%f",&v1);
 		sscanf(q,"%d",&d1);
@@ -478,7 +478,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "cist")==0) 	command_line_comms_initial_sleep_time = d1;
 		if (strcmp(p, "servlog")==0) // Jabberwock 031119 Server log
 			if (str_length > 0 && str_length < 128)
-				strcpy(command_line_server_log_filename, q); 
+				strcpy(command_line_server_log_filename, q);
 		if (strcmp(p, "pauseserv")==0) 	command_line_pause_server = d1; // Jabberwock 040220 Pause server
 		if (strcmp(p, "dedicated")==0) 	command_line_comms_dedicated_server = d1;
 		if (strcmp(p, "game_type")==0) 	command_line_game_initialisation_phase_game_type = d1;
@@ -518,7 +518,7 @@ void process_ini_file(int argc, char *argv[])
 				strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 
 			debug_log("wutfile ini [%s]",WUT_filename);
-			
+
 			if (WUT_filename[0] != 0 && file_exist(WUT_filename))
 				command_line_wut = TRUE;
 			// wut filename checking is done elsewhere
@@ -579,7 +579,7 @@ void process_ini_file(int argc, char *argv[])
 
 		if (strcmp(p, "dfr") == 0) 			command_line_framerate = d1;
 ////Retro27NovDEAD		if (strcmp(p, "keymap") == 0) 		command_line_key_mapping = d1;
-		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1; 
+		if (strcmp(p, "dwash") == 0)			command_line_downwash = d1;
 		if (strcmp(p, "cyclicn") == 0)		command_line_cyclic_joystick_index = d1;
 		if (strcmp(p, "cyclich") == 0)		command_line_cyclic_joystick_x_axis = d1 - 1;
 		if (strcmp(p, "cyclicv") == 0)		command_line_cyclic_joystick_y_axis = d1 - 1;
@@ -617,7 +617,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "MEMEXPORT") == 0) command_line_shared_mem_export = d1;	// Retro 14Aug2006
 		if (strcmp(p, "texture_colour") == 0) command_line_texture_colour = d1;	// VJ 050303 texture colour mod
 		if (strcmp(p, "texture_filtering") == 0)  global_anisotropic = d1;	//VJ 050530 AF filtering on/off
-		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping		
+		if (strcmp(p, "mipmapping") == 0) global_mipmapping = d1;	//VJ 050530 mipmapping
 		if (strcmp(p, "night_light") == 0) global_night_light_level = v1;	//VJ 060920 night light levels
 
 		if (strcmp(p, "dynamic_water") == 0) global_dynamic_water = d1;	//VJ 050817 dynamic water textures
@@ -642,13 +642,13 @@ void process_ini_file(int argc, char *argv[])
 					aircraft_database[k].player_controllable = FALSE;
 			}
 		}
-		if (strcmp(p, "export_mfd") == 0) command_line_export_mfd= d1;	// mue 070223 
-		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223 
-		if (strcmp(p, "export_mfd_screen_width") == 0) command_line_export_mfd_screen_width= d1;	// mue 070223 
-		if (strcmp(p, "export_mfd_screen_height") == 0) command_line_export_mfd_screen_height= d1;	// mue 070223 
-		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_left_pos);	// mue 070223 
-		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_right_pos);		// mue 070223 
-		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223 
+		if (strcmp(p, "export_mfd") == 0) command_line_export_mfd= d1;	// mue 070223
+		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223
+		if (strcmp(p, "export_mfd_screen_width") == 0) command_line_export_mfd_screen_width= d1;	// mue 070223
+		if (strcmp(p, "export_mfd_screen_height") == 0) command_line_export_mfd_screen_height= d1;	// mue 070223
+		if (strcmp(p, "export_mfd_left_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_left_pos);	// mue 070223
+		if (strcmp(p, "export_mfd_right_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_right_pos);		// mue 070223
+		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223
 		if (strcmp(p, "themes") == 0) if (str_length < 128) set_themes(q); // Casm 21DEC07
 
 	}// while (!strstr(buf,"end of file"))
@@ -659,8 +659,8 @@ void process_ini_file(int argc, char *argv[])
 		global_dynamic_water = 0;
 
 //VJ 040816 forgot these
-   if (buf1) free(buf1);  
-   if (buf) free(buf);  
+   if (buf1) free(buf1);
+   if (buf) free(buf);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -750,7 +750,7 @@ void dump_ini_file(void)
 	fprintf(f,"maxfov0=%d		# general field of view maximum\n",command_line_max_fov0);
 //	fprintf(f,"maxfov1=%d		# general field of view maximum for Havoc pits\n",command_line_max_fov1);
 //	fprintf(f,"maxfov2=%d		# general field of view maximum for Comanche pits\n",command_line_max_fov2);
-//	fprintf(f,"maxfov3=%d	# general field of view maximum for Hokum-B pits\n",command_line_max_fov3);	
+//	fprintf(f,"maxfov3=%d	# general field of view maximum for Hokum-B pits\n",command_line_max_fov3);
 
 	fprintf(f, "\ng-force_head_movement=%.1f			# amount of head movement caused by gravitational force (wideview only) (n = Gs, 1.0 = normal, 0.0 = off) (default = 0.0)\n", command_line_g_force_head_movment_modifier);
 	fprintf(f, "comanche_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].x,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].y,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].z,wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT  ].p);
@@ -759,9 +759,9 @@ void dump_ini_file(void)
 	fprintf(f, "hokum_co-pilot=%.3f,%.3f,%.3f,%.3f		# wideview co-pilot position\n",wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].x,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].y,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].z,wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT   ].p);
 	fprintf(f, "apache_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_PILOT    ].p);
 	fprintf(f, "apache_copilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].x,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].y,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].z,wide_cockpit_position[WIDEVIEW_APACHE_COPILOT    ].p);
-	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].p);	
-	fprintf(f, "hind_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].p);	
-	fprintf(f, "hind_copilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].p);	
+	fprintf(f, "havoc_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HAVOC_PILOT     ].p);
+	fprintf(f, "hind_pilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_PILOT     ].p);
+	fprintf(f, "hind_copilot=%.3f,%.3f,%.3f,%.3f		# wideview pilot position\n",wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].x,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].y,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].z,wide_cockpit_position[WIDEVIEW_HIND_COPILOT     ].p);
 	//VJ 060212 hud info mod
 	fprintf(f, "hud_code=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d		#hud code for 4 gunships\n",
 		hud_code[0][0],hud_code[0][1],hud_code[0][2],
@@ -813,7 +813,7 @@ void dump_ini_file(void)
 	fprintf(f,"TSD_mouse_control=%d             # allows mouse control of TSD (Apache only) for selecting targets and creating PFZs\n", command_line_mouse_tsd_target_select);
 	fprintf(f,"co_pilot_reports_targets=%d	    # Co-pilot will report targets he finds, and add them to TSD\n", global_co_pilot_scans_for_targets);
 
-	fprintf(f,"\n[Joysticks and TrackIR]\n");	
+	fprintf(f,"\n[Joysticks and TrackIR]\n");
 	fprintf(f,"eopann=%d		# joystick number for EO-camera panning\n",command_line_eo_pan_joystick_index);
 	fprintf(f,"eopanv=%d		# joystick DirectX axis for vertical EO-camera panning\n",command_line_eo_pan_vertical_joystick_axis+1);   //VJ 030531 added +1
 	fprintf(f,"eopanh=%d		# joystick DirectX axis for horizontal EO-camera panning\n",command_line_eo_pan_horizontal_joystick_axis+1); //VJ 030531 added +1
@@ -843,7 +843,7 @@ void dump_ini_file(void)
 	fprintf(f,"TIR_6DOF=%d		# 6 DoF support for TrackIR (0 = off, 1 = on) (def = 0)\n",command_line_TIR_6DOF); // Retro 6Feb2005
 	fprintf(f,"external_trackir=%d	# (only when msl=1) external cameras controlled by TrackIR (0 = off, 1 = on) (def = 0)\n",command_line_external_trackir); // Retro 31Oct2004
 	fprintf(f,"external_trackir_dir=%d	# (only when external_trackir=1) invert external cameras view direction (0 = off, 1 = on) (def = 0)\n",command_line_external_trackir_direction); // Retro 31Jan2005
-	
+
 	fprintf(f,"\n[Miscellaneous]\n");
 	fprintf(f,"filter=%d		# session filtering (0 = off, 1 = on) (def = 1)\n",command_line_session_filter); // Jabberwock 031210
 	fprintf(f,"autosave=%d		# autosave (n = minutes, 0 = off) (def = 0)\n", command_line_autosave / 60); //Casm 17JUN05 Autosave option
