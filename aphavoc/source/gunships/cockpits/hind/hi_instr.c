@@ -557,7 +557,7 @@ float get_mi24_sidewind_needle_value(void)
 {
 	float angle = 0.0;
 
-	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND))
+	if (get_current_dynamics_options(DYNAMICS_OPTIONS_WIND) && get_local_entity_int_value (get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 		vec3d position, wind, relative_wind;
 
