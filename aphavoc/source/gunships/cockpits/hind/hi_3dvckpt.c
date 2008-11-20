@@ -90,6 +90,7 @@ static object_3d_instance
 	*virtual_pilot_cockpit_inst3d,
 	*virtual_cockpit_canopy_inst3d,
 	*virtual_cockpit_pilot_door_inst3d,
+	*virtual_cockpit_external_inst3d,
 
 	*virtual_cockpit_hud_glass_inst3d,
 	*virtual_cockpit_hud_display_inst3d,
@@ -257,7 +258,10 @@ static object_3d_sub_instance
 	*radio_navigation_switches,
 	*weapon_select_switch,
 	*master_arm_switches,
-	*rocket_salvo_switch
+	*rocket_salvo_switch,
+
+	*horizontal_air_data_vanes,
+	*vertical_air_data_vanes
 	;
 
 cockpit_switch
@@ -291,6 +295,7 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_inst3d = virtual_pilot_cockpit_inst3d;
 	virtual_cockpit_canopy_inst3d = construct_3d_object (OBJECT_3D_MI24V_CANOPY);
 	virtual_cockpit_pilot_door_inst3d = construct_3d_object(OBJECT_3D_MI24V_PILOT_DOOR);
+	virtual_cockpit_external_inst3d = construct_3d_object(OBJECT_3D_MI24V_EXTERNAL_COCKPIT);
 
 	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_HUD_DISPLAY);
 	virtual_cockpit_map_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_MAP_DISPLAY);
@@ -500,6 +505,9 @@ void initialise_hind_3d_cockpit (void)
 	rocket_salvo_switch = find_sub_object(virtual_cockpit_pilot_instruments_inst3d, OBJECT_3D_SUB_OBJECT_ROCKET_SALVO_SWITCH);
 	master_arm_switches = find_sub_object(virtual_cockpit_pilot_secondary_instruments_inst3d, OBJECT_3D_SUB_OBJECT_MASTER_ARM_SWITCHES);
 
+	vertical_air_data_vanes = find_sub_object(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_AIR_DATA_VANES_VERTICAL);
+	horizontal_air_data_vanes = find_sub_object(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_AIR_DATA_VANES_HORIZONTAL);
+
 	ASSERT(switch_no == ARRAY_LENGTH(switch_animations) - 1);
 	//ASSERT(FALSE);
 #ifdef DEBUG  // don't limit in debug (for all practical purposes
@@ -554,6 +562,7 @@ void deinitialise_hind_3d_cockpit (void)
 	destruct_3d_object (virtual_pilot_cockpit_inst3d);
 	destruct_3d_object (virtual_cockpit_canopy_inst3d);
 	destruct_3d_object (virtual_cockpit_pilot_door_inst3d);
+	destruct_3d_object (virtual_cockpit_external_inst3d);
 
 	destruct_3d_object (virtual_cockpit_hud_glass_inst3d);
 	destruct_3d_object (virtual_cockpit_hud_display_inst3d);
@@ -741,6 +750,7 @@ static void animate_doors(void)
 	{
 		door_state = new_state;
 		animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+		animate_keyframed_sub_object_type(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		animate_keyframed_sub_object_type(virtual_cockpit_canopy_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		canopy_door_state = 1.0 - door_state;
 	}
@@ -794,6 +804,94 @@ static void update_threat_warning_lights(void)
 	rwr_signal_strength14->visible_object = hind_lamps.threat_warning_close_range_14;
 	rwr_signal_strength15->visible_object = hind_lamps.threat_warning_close_range_15;
 }
+
+// the vanes orient themselves to point into the slipstream, like a flag
+static void animate_air_data_vanes()
+{
+	const float vanes_moment_arm = 6.68;   // air vanes are this distance ahead of centre of gravity
+	vec3d velocity = current_flight_dynamics->model_motion_vector;
+	float vertical_slipstream_angle, horizontal_slipstream_angle, max_movement, offset;
+
+	if (get_time_acceleration() == TIME_ACCELERATION_PAUSE)
+		return;
+
+	if (get_current_dynamics_options (DYNAMICS_OPTIONS_WIND))
+	{
+		vec3d position, wind, model_wind;
+
+		position.x = current_flight_dynamics->position.x;
+		position.y = current_flight_dynamics->position.y;
+		position.z = current_flight_dynamics->position.z;
+
+		get_session_wind_velocity_at_point (&position, &wind);
+
+		multiply_matrix3x3_vec3d (&model_wind, current_flight_dynamics->attitude, &wind);
+
+		velocity.x -= model_wind.x;
+		velocity.y -= model_wind.y;
+		velocity.z -= model_wind.z;
+	};
+
+	// add velocity due to rotation into account
+	velocity.x -= current_flight_dynamics->angular_heading_velocity.value * vanes_moment_arm;
+	velocity.y += current_flight_dynamics->angular_pitch_velocity.value * vanes_moment_arm;
+
+	// find angles of slipstream
+	if (velocity.z != 0.0)
+	{
+		if (velocity.z > 0.0)
+		{
+			vertical_slipstream_angle = atan(velocity.y / fabs(velocity.z));
+			horizontal_slipstream_angle = atan(velocity.x / fabs(velocity.z));
+		}
+		else
+		{
+			vertical_slipstream_angle = rad(180) - atan(velocity.y / fabs(velocity.z));
+			horizontal_slipstream_angle = rad(180) - atan(velocity.x / fabs(velocity.z));
+
+			if (vertical_slipstream_angle > rad(180))
+				vertical_slipstream_angle -= rad(360);
+			if (horizontal_slipstream_angle > rad(180))
+				horizontal_slipstream_angle -= rad(360);
+		}
+	}
+	else
+	{
+		vertical_slipstream_angle = (velocity.y >= 0.0) ? rad(90) : rad(-90);
+		horizontal_slipstream_angle = (velocity.x >= 0.0) ? rad(90) : rad(-90);
+	}
+
+	// horizontal_air_data_vanes refers to the vanes which lie horizontally.
+	// the actually measure vertical velocity, and vice versa for vertical vanes.
+	// hence what seems to be somewhat reversed when refering to the vanes objects
+	offset = vertical_slipstream_angle - horizontal_air_data_vanes->relative_heading;
+	if (offset > rad(180))
+		offset -= rad(360);
+	else if (offset < rad(-180))
+		offset += rad(360);
+
+	// make them move faster, the more slipstream there is, and the further they are from their correct angle
+	max_movement = (velocity.y * velocity.y + velocity.z * velocity.z) / (rad(360))* get_delta_time() * fabs(offset) / rad(90);
+	horizontal_air_data_vanes->relative_heading += bound(offset, -max_movement, max_movement);
+	if (horizontal_air_data_vanes->relative_heading > rad(180.0))
+		horizontal_air_data_vanes->relative_heading -= rad(360.0);
+	else if (horizontal_air_data_vanes->relative_heading < rad(-180.0))
+		horizontal_air_data_vanes->relative_heading += rad(360.0);
+
+	offset = horizontal_slipstream_angle - vertical_air_data_vanes->relative_heading;
+	if (offset > rad(180))
+		offset -= rad(360);
+	else if (offset < rad(-180))
+		offset += rad(360);
+
+	max_movement = (velocity.x * velocity.x + velocity.z * velocity.z) / (rad(360))* get_delta_time() * fabs(offset) / rad(90);
+	vertical_air_data_vanes->relative_heading += bound(offset, -max_movement, max_movement);
+	if (vertical_air_data_vanes->relative_heading > rad(180.0))
+		vertical_air_data_vanes->relative_heading -= rad(360.0);
+	else if (vertical_air_data_vanes->relative_heading < rad(-180.0))
+		vertical_air_data_vanes->relative_heading += rad(360.0);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1670,6 +1768,13 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 						insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_main_rotor_inst3d->vp.position, virtual_cockpit_main_rotor_inst3d);
 					}
 				}
+			}
+
+			if (get_global_cockpit_detail_level () != COCKPIT_DETAIL_LEVEL_LOW)
+			{
+				animate_air_data_vanes();
+				memcpy (&virtual_cockpit_external_inst3d->vp, &vp, sizeof (viewpoint));
+				insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_external_inst3d->vp.position, virtual_cockpit_external_inst3d);
 			}
 
 			//

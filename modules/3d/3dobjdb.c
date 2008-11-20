@@ -1159,7 +1159,7 @@ static void initialise_custom_scenes(const char* directory)
 
 	/** check which custom scenes have loaded correctly **/
 	custom_3d_models.arneh_ah64d_cockpit = all_scenes_loaded_successfully(OBJECT_3D_ARNEH_AH64D_COCKPIT, OBJECT_3D_ARNEH_AH64D_INSTRUMENTS_NEEDLES);
-	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_PILOT_DOOR);
+	custom_3d_models.arneh_mi24v_cockpit = all_scenes_loaded_successfully(OBJECT_3D_MI24V_PILOT_COCKPIT, OBJECT_3D_MI24V_EXTERNAL_COCKPIT);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
