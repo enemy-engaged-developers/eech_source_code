@@ -836,6 +836,10 @@ static void animate_air_data_vanes()
 	velocity.x -= current_flight_dynamics->angular_heading_velocity.value * vanes_moment_arm;
 	velocity.y += current_flight_dynamics->angular_pitch_velocity.value * vanes_moment_arm;
 
+	// Add 1 m/s vertical wind to simulate gravity, i.e. that the fins will hang down
+	// in calm conditions
+	velocity.y += 1.0;
+
 	// find angles of slipstream
 	if (velocity.z != 0.0)
 	{
@@ -865,31 +869,14 @@ static void animate_air_data_vanes()
 	// the actually measure vertical velocity, and vice versa for vertical vanes.
 	// hence what seems to be somewhat reversed when refering to the vanes objects
 	offset = vertical_slipstream_angle - horizontal_air_data_vanes->relative_heading;
-	if (offset > rad(180))
-		offset -= rad(360);
-	else if (offset < rad(-180))
-		offset += rad(360);
 
 	// make them move faster, the more slipstream there is, and the further they are from their correct angle
 	max_movement = (velocity.y * velocity.y + velocity.z * velocity.z) / (rad(360))* get_delta_time() * fabs(offset) / rad(90);
-	horizontal_air_data_vanes->relative_heading += bound(offset, -max_movement, max_movement);
-	if (horizontal_air_data_vanes->relative_heading > rad(180.0))
-		horizontal_air_data_vanes->relative_heading -= rad(360.0);
-	else if (horizontal_air_data_vanes->relative_heading < rad(-180.0))
-		horizontal_air_data_vanes->relative_heading += rad(360.0);
+	horizontal_air_data_vanes->relative_heading = bound(horizontal_air_data_vanes->relative_heading + bound(offset, -max_movement, max_movement), rad(-90), rad(90));
 
 	offset = horizontal_slipstream_angle - vertical_air_data_vanes->relative_heading;
-	if (offset > rad(180))
-		offset -= rad(360);
-	else if (offset < rad(-180))
-		offset += rad(360);
-
 	max_movement = (velocity.x * velocity.x + velocity.z * velocity.z) / (rad(360))* get_delta_time() * fabs(offset) / rad(90);
-	vertical_air_data_vanes->relative_heading += bound(offset, -max_movement, max_movement);
-	if (vertical_air_data_vanes->relative_heading > rad(180.0))
-		vertical_air_data_vanes->relative_heading -= rad(360.0);
-	else if (vertical_air_data_vanes->relative_heading < rad(-180.0))
-		vertical_air_data_vanes->relative_heading += rad(360.0);
+	vertical_air_data_vanes->relative_heading = bound(vertical_air_data_vanes->relative_heading + bound(offset, -max_movement, max_movement), rad(-90), rad(90));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
