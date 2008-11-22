@@ -58,13 +58,13 @@
 // 	as expressly permitted by  this Agreement.
 //
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+
+extern entity *current_flight_dynamics_landed_at_keysite;  // declared in dynamics.c
 
 static float
 	right_g_e_force = 0.0,
@@ -1550,6 +1550,28 @@ void update_common_attitude_dynamics (void)
 		create_vectored_debug_3d_object (&position, &direction, OBJECT_3D_ARROW_FORCES, 0, 5 * force);
 
 		#endif
+	}
+
+	if (current_flight_dynamics_landed_at_keysite
+		&& get_local_entity_int_value(current_flight_dynamics_landed_at_keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE)
+	{
+		// cludge to make carrier landings possible.  New suspension doesn't work there,
+		// but at least don't let the helicopter roll off the deck
+		if (current_flight_dynamics->wheel_brake)
+		{
+			if (current_flight_dynamics->world_motion_vector.x > 0)
+				current_flight_dynamics->world_motion_vector.x -= min(20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+			else
+				current_flight_dynamics->world_motion_vector.x -= max(-20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+
+			if (current_flight_dynamics->world_motion_vector.z > 0)
+				current_flight_dynamics->world_motion_vector.z -= min(5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+			else
+				current_flight_dynamics->world_motion_vector.z -= max(-5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+
+			if (current_flight_dynamics->world_motion_vector.y < 0.0)
+				current_flight_dynamics->world_motion_vector.y = 0.0;
+		}
 	}
 
 	// arneh - add vibration if rotor damaged
