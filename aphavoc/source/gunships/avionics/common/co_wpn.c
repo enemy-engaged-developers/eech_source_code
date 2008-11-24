@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -494,7 +494,10 @@ void decrease_rocket_salvo_size (void)
 		case 2:
 		////////////////////////////////////////
 		{
-			rocket_salvo_size = 1;
+			if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+				rocket_salvo_size = 10;
+			else
+				rocket_salvo_size = 1;
 
 			break;
 		}
@@ -508,6 +511,14 @@ void decrease_rocket_salvo_size (void)
 		}
 		////////////////////////////////////////
 		case 8:
+		////////////////////////////////////////
+		{
+			rocket_salvo_size = 4;
+
+			break;
+		}
+		////////////////////////////////////////
+		case 10:
 		////////////////////////////////////////
 		{
 			rocket_salvo_size = 4;
@@ -759,7 +770,7 @@ float get_weapon_drop(entity_sub_types wpn_type)
 		float angle_of_projection;
 		float time_of_flight;
 		source_position = get_local_entity_vec3d_ptr (get_gunship_entity(), VEC3D_TYPE_POSITION);
-		
+
 		get_local_entity_target_point (target, &target_position);
 		if (get_range_finder() == RANGEFINDER_TRIANGULATION)
 		{
@@ -855,7 +866,7 @@ float get_missile_flight_time (void)
 			if (target_position)
 			{
 				float cruise_velocity = weapon_database[weapon_sub_type].cruise_velocity * 0.75;
-				
+
 				weapon_position = get_local_entity_vec3d_ptr (weapon, VEC3D_TYPE_POSITION);
 				target_range = get_3d_range (weapon_position, target_position);
 
