@@ -221,6 +221,10 @@ static object_3d_sub_instance
 	*gyro_fail_lights,
 	*left_engine_over_temperature_light,
 	*right_engine_over_temperature_light,
+	*left_engine_extinguisher1_light,
+	*left_engine_extinguisher2_light,
+	*right_engine_extinguisher1_light,
+	*right_engine_extinguisher2_light,
 
 	*rwr_above_light,
 	*rwr_airborne_light,
@@ -468,6 +472,10 @@ void initialise_hind_3d_cockpit (void)
 	gyro_fail_lights = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_GYRO_FAIL_LIGHTS);
 	left_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_OVER_TEMPERATURE_LIGHT);
 	right_engine_over_temperature_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_OVER_TEMPERATURE_LIGHT);
+	left_engine_extinguisher1_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_EXTINGUISHER1);
+	left_engine_extinguisher2_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_LEFT_ENGINE_EXTINGUISHER2);
+	right_engine_extinguisher1_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_EXTINGUISHER1);
+	right_engine_extinguisher2_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RIGHT_ENGINE_EXTINGUISHER2);
 
 	rwr_above_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_ABOVE_LIGHT);
 	rwr_airborne_light = find_sub_object(virtual_cockpit_warning_lamps_inst3d, OBJECT_3D_SUB_OBJECT_RWR_AIRBORNE_LIGHT);
@@ -1361,6 +1369,8 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				gyro_fail_lights->visible_object = hind_damage.navigation_computer;
 				left_engine_over_temperature_light->visible_object = (current_flight_dynamics->left_engine_temp.value > 800.0);
 				right_engine_over_temperature_light->visible_object = (current_flight_dynamics->right_engine_temp.value > 800.0);
+				left_engine_extinguisher1_light->visible_object = right_engine_extinguisher1_light->visible_object = fire_extinguisher_used > 0;
+				left_engine_extinguisher2_light->visible_object = right_engine_extinguisher2_light->visible_object = fire_extinguisher_used > 1;
 
 				update_mi24_weapon_status_lights(weapon_ready_light, weapon_not_ready_light, weapon_min_range_light);
 				update_threat_warning_lights();
