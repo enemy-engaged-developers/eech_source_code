@@ -454,6 +454,7 @@ static float get_rotate_down_limit (void)
 		////////////////////////////////////////
 		{
 			limit = rad (-MAX_LOOK_ANGLE_DOWN1);
+			limit = rad(-90);
 
 			break;
 		}
