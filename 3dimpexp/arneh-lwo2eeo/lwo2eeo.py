@@ -2,10 +2,11 @@
 
 import sys, struct, math, operator
 
-VERSION = '1.5.3'
+VERSION = '1.6.0'
 FORMAT_VERSION = 1
 
 flat_shade = False   # if True then no gauraud shading will be applied
+reverse_normals = False   # if True then normal directions are reversed.  Can be useful for transparent surfaces where the lighting should be from the backside
 
 # ==============================
 # SOME VECTOR FUNCTIONS
@@ -55,6 +56,8 @@ def get_normal(v1, v2, v3):
     else:
         raise LinearVertices(v1, v2, v3)
 
+def reverse(normal):
+    return tuple([-x for x in normal])
 
 def calculate_normal(vertices):
     'Finds the polygons normal by trying to be somewhat clever in selecting'
@@ -98,7 +101,10 @@ def calculate_normal(vertices):
             sum = add(sum, normal)
 
         if sum != (0.0, 0.0, 0.0):
-            return normalize(sum)
+            if reverse_normals:
+                return reverse(normalize(sum))
+            else:
+                return normalize(sum)
 
     raise LinearVertices(*points_list)
 
@@ -1189,7 +1195,10 @@ textures.read_texture_enums()
 args = sys.argv[1:]
 if '-f' in args:
     flat_shade = True
-    args.pop(0)
+    args.remove('-f')
+if '-r' in args:
+    reverse_normals = True
+    args.remove('-r')
 
 infile = args.pop(0)
 if not args:
