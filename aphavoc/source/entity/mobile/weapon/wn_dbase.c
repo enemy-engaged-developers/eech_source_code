@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -133,7 +133,7 @@ weapon_data
 	weapon_database[NUM_ENTITY_SUB_TYPE_WEAPONS] =
 	{
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_NO_WEAPON
 		//
 		////////////////////////////////////////
@@ -204,7 +204,7 @@ weapon_data
 		////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND
 		//
 		////////////////////////////////////////
@@ -270,7 +270,7 @@ weapon_data
             1.0 / 1000.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M61A1_20MM_ROUND
 		//
 		////////////////////////////////////////
@@ -338,7 +338,7 @@ weapon_data
             1.0 / 1000.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND
 		//
 		////////////////////////////////////////
@@ -404,7 +404,7 @@ weapon_data
             1.0 / 750.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_GAU12U_25MM_ROUND
 		//
 		////////////////////////////////////////
@@ -470,7 +470,7 @@ weapon_data
             1.0 / 1650.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M242_25MM_ROUND
 		//
 		////////////////////////////////////////
@@ -536,7 +536,7 @@ weapon_data
             1.0 / 1000.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_GAU8A_30MM_ROUND
 		//
 		////////////////////////////////////////
@@ -602,7 +602,7 @@ weapon_data
             1.0 / 2100.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND
 		//
 		////////////////////////////////////////
@@ -668,7 +668,7 @@ weapon_data
             1.0 / 625.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND
 		//
 		////////////////////////////////////////
@@ -737,7 +737,7 @@ weapon_data
             1.0 / 100.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M256_120MM_ROUND
 		//
 		////////////////////////////////////////
@@ -806,7 +806,7 @@ weapon_data
             1.0 / 100.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M284_155MM_ROUND
 		//
 		////////////////////////////////////////
@@ -871,7 +871,7 @@ weapon_data
             1.0 / 100.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET
 		//
 		////////////////////////////////////////
@@ -940,7 +940,7 @@ weapon_data
             1.0 / 100.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND
 		//
 		////////////////////////////////////////
@@ -1006,7 +1006,7 @@ weapon_data
             1.0 / 1000.0,                                                          // inverse_rate_of_fire
 		},
 		////////////////////////////////////////
-		//	 
+		//
 		// ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND
 		//
 		////////////////////////////////////////
@@ -1027,9 +1027,9 @@ weapon_data
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MACHINE_GUN,						// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_NONE,										// continuous_sound_effect
-			-1,																	// weapon_selected_cpg_speech
-			-1,																	// weapon_low_cpg_speech
-			-1,																	// weapon_out_cpg_speech
+			SPEECH_CPG_SWITCHING_TO_CHAINGUN,							// weapon_selected_cpg_speech
+			SPEECH_CPG_CANNON_LOW,											// weapon_low_cpg_speech
+			SPEECH_CPG_CANNON_OUT,											// weapon_out_cpg_speech
 			-1,																	// weapon_launched_cpg_speech
 			WEAPON_LAUNCH_WINGMAN_SPEECH_CANNON,						// weapon_launched_wingman_speech
 			0,																		// report_weapon_low_count
@@ -2351,9 +2351,9 @@ weapon_data
 			SOUND_SAMPLE_INDEX_EXTERIOR_ROCKET_LAUNCH,				// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_EXTERIOR_ROCKET_LAUNCH,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
-			-1,																	// weapon_selected_cpg_speech
-			-1,																	// weapon_low_cpg_speech
-			-1,																	// weapon_out_cpg_speech
+			SPEECH_CPG_SWITCHING_TO_ROCKETS,								// weapon_selected_cpg_speech
+			SPEECH_CPG_ROCKETS_LOW,											// weapon_low_cpg_speech
+			SPEECH_CPG_ROCKETS_OUT,											// weapon_out_cpg_speech
 			-1,																	// weapon_launched_cpg_speech
 			WEAPON_LAUNCH_WINGMAN_SPEECH_ROCKET,						// weapon_launched_wingman_speech
 			0,																		// report_weapon_low_count
@@ -3535,11 +3535,11 @@ weapon_data
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
 			SOUND_SAMPLE_INDEX_HEAVY_MISSILE_FLIGHT,					// continuous_sound_effect
-			-1,								// weapon_selected_cpg_speech
-			-1,									// weapon_low_cpg_speech
-			-1,								// weapon_out_cpg_speech
-			-1,								// weapon_launched_cpg_speech
-			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,				// weapon_launched_wingman_speech
+			SPEECH_CPG_SWITCHING_TO_ROCKETS,								// weapon_selected_cpg_speech
+			SPEECH_CPG_ROCKETS_LOW,											// weapon_low_cpg_speech
+			SPEECH_CPG_ROCKETS_OUT,											// weapon_out_cpg_speech
+			-1,																	// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_ROCKET,						// weapon_launched_wingman_speech
 			0,								// report_weapon_low_count
 			FALSE,								// gun_shake
 			744,								// soft_damage_capability
@@ -5306,7 +5306,7 @@ void validate_weapon_database (void)
 		}
 
 		debug_assert (weapon_database[sub_type].max_launch_angle_error >= 0.0);
-		
+
 		debug_assert (weapon_database[sub_type].max_seeker_limit >= 0.0 && weapon_database[sub_type].max_seeker_limit <= 1.0);
 	}
 }
