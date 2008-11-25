@@ -91,6 +91,8 @@ static object_3d_instance
 	*virtual_cockpit_canopy_inst3d,
 	*virtual_cockpit_pilot_door_inst3d,
 	*virtual_cockpit_external_inst3d,
+	*virtual_cockpit_canopy_reflection_inst3d,
+	*virtual_cockpit_canopy_details_inst3d,
 
 	*virtual_cockpit_hud_glass_inst3d,
 	*virtual_cockpit_hud_display_inst3d,
@@ -296,6 +298,8 @@ void initialise_hind_3d_cockpit (void)
 	virtual_cockpit_canopy_inst3d = construct_3d_object (OBJECT_3D_MI24V_CANOPY);
 	virtual_cockpit_pilot_door_inst3d = construct_3d_object(OBJECT_3D_MI24V_PILOT_DOOR);
 	virtual_cockpit_external_inst3d = construct_3d_object(OBJECT_3D_MI24V_EXTERNAL_COCKPIT);
+	virtual_cockpit_canopy_reflection_inst3d = construct_3d_object(OBJECT_3D_MI24V_CANOPY_GLASS);
+	virtual_cockpit_canopy_details_inst3d = construct_3d_object(OBJECT_3D_MI24V_CANOPY_GLASS_DETAILS);
 
 	virtual_cockpit_hud_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_HUD_DISPLAY);
 	virtual_cockpit_map_display_inst3d = construct_3d_object (OBJECT_3D_MI24V_MAP_DISPLAY);
@@ -545,6 +549,8 @@ void initialise_hind_3d_cockpit (void)
 #endif
 
 	open_door = !get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) && command_line_dynamics_engine_startup;
+	door_state = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) ? 1.0 : 0.0;
+
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
 	set_global_wide_cockpit(TRUE);
 }
@@ -563,6 +569,8 @@ void deinitialise_hind_3d_cockpit (void)
 	destruct_3d_object (virtual_cockpit_canopy_inst3d);
 	destruct_3d_object (virtual_cockpit_pilot_door_inst3d);
 	destruct_3d_object (virtual_cockpit_external_inst3d);
+	destruct_3d_object (virtual_cockpit_canopy_reflection_inst3d);
+	destruct_3d_object (virtual_cockpit_canopy_details_inst3d);
 
 	destruct_3d_object (virtual_cockpit_hud_glass_inst3d);
 	destruct_3d_object (virtual_cockpit_hud_display_inst3d);
@@ -752,6 +760,8 @@ static void animate_doors(void)
 		animate_keyframed_sub_object_type(virtual_cockpit_pilot_door_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		animate_keyframed_sub_object_type(virtual_cockpit_external_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		animate_keyframed_sub_object_type(virtual_cockpit_canopy_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+		animate_keyframed_sub_object_type(virtual_cockpit_canopy_reflection_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
+		animate_keyframed_sub_object_type(virtual_cockpit_canopy_details_inst3d, OBJECT_3D_SUB_OBJECT_CANOPY_DOORS, door_state);
 		canopy_door_state = 1.0 - door_state;
 	}
 
@@ -2014,6 +2024,42 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 		}
 	}
 
+	if (get_global_cockpit_detail_level () == COCKPIT_DETAIL_LEVEL_HIGH)
+	{
+		set_3d_active_environment (main_3d_env);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		realise_3d_clip_extents (main_3d_env);
+
+		recalculate_3d_environment_settings (main_3d_env);
+
+		clear_zbuffer_screen ();
+
+		if (begin_3d_scene ())
+		{
+			memcpy (&virtual_cockpit_canopy_reflection_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_canopy_reflection_inst3d->vp.position, virtual_cockpit_canopy_reflection_inst3d);
+
+			draw_3d_scene ();
+			end_3d_scene ();
+		}
+
+		set_3d_active_environment (main_3d_env);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		realise_3d_clip_extents (main_3d_env);
+
+		recalculate_3d_environment_settings (main_3d_env);
+
+		clear_zbuffer_screen ();
+
+		if (begin_3d_scene ())
+		{
+			memcpy (&virtual_cockpit_canopy_details_inst3d->vp, &vp, sizeof (viewpoint));
+			insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_canopy_details_inst3d->vp.position, virtual_cockpit_canopy_details_inst3d);
+
+			draw_3d_scene ();
+			end_3d_scene ();
+		}
+	}
 	//VJ wideview mod, date: 18-mar-03
 	////////////////////////////////////////
 	//
