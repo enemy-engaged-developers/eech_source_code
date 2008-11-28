@@ -755,7 +755,7 @@ static void draw_map_display(void)
 				wp1_rel_position.x = (wp1_rel_position.x - source_position->x) * scale;
 				wp1_rel_position.z = (wp1_rel_position.z - source_position->z) * scale;
 
-				draw_2d_circle(wp1_rel_position.x, wp1_rel_position.z, 0.008 + debug_var_x * 0.01, waypoint_colour);
+				draw_2d_circle(wp1_rel_position.x, wp1_rel_position.z, 0.008, waypoint_colour);
 
 				set_2d_mono_font_position (wp1_rel_position.x, wp1_rel_position.z);
 				set_mono_font_rel_position (-4.0, 8.0);
