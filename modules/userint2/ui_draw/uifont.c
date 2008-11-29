@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -72,7 +72,7 @@
 // For the russian version (Remake and generate correct fonts if changed)
 //
 //if these are set to 1 then in combination with the language setting in the registry
-//the font is set to cyrillic. If set to 1 and language in the registry is set to english the user 
+//the font is set to cyrillic. If set to 1 and language in the registry is set to english the user
 //may or may not get a "create font returned null [120]" error, depending on his list of fonts I guess
 //050311 Lines above added by VJ
 ////050311 Next line modded by Moje. A space was added before 0
@@ -354,7 +354,7 @@ void initialise_ui_font (void)
 	res_factor_y = ((float) current_font_resolution_height) / 480.0;
 
 	arial_factor_x = res_factor_x / arial_factor_x;
-	
+
 	arial_factor_y = res_factor_y / arial_factor_y;
 
 	impact_factor_y = res_factor_y / impact_factor_y;
@@ -624,14 +624,14 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		}
 
 		aliased_character = safe_malloc ( 128 * 128 );
-	
+
 		old_active_screen = get_active_screen ();
-	
+
 		rect.top = 0;
 		rect.left = 0;
 		rect.right = 128;
 		rect.bottom = 128;
-	
+
 		my_font = CreateFontW ( 	height, 							// Height
 											width,							// Width ( 0 = don't care )
 											0,									// Escapement
@@ -646,7 +646,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 											DEFAULT_QUALITY,				// ANTIALIASED_QUALITY,	//DEFAULT_QUALITY,		// quality
 											VARIABLE_PITCH | FF_SCRIPT,
 											buf );	//type_name );
-	
+
 
 		if ( !my_font )
 		{
@@ -659,7 +659,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		//
 
 		debug_log ( "Creating font %s ( %d )", type_name, height );
-	
+
 		hdc = GetDC ( application_window );
 
 		SelectObject ( hdc, my_font );
@@ -685,9 +685,9 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			KERNINGPAIR
 				*pairs;
-		
+
 			pairs = safe_malloc ( number_of_kerning_pairs * sizeof ( KERNINGPAIR ) );
-		
+
 			GetKerningPairs ( hdc, number_of_kerning_pairs, pairs );
 
 			fwrite ( pairs, sizeof ( KERNINGPAIR ), number_of_kerning_pairs, fonts_data_file );
@@ -700,28 +700,28 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
 		{
-	
+
 			int
 				finished,
 				character_width,
 				character_height;
-	
+
 			TEXTMETRIC
 				metric;
-	
+
 			unsigned char
 				*ptr;
-	
+
 			int
 				x_adjust,
 				y_adjust,
 				size;
-	
+
 			ABC
 				widths;
-	
+
 			memset ( aliased_character, 0, 128*128 );
-	
+
 			if ( font_character_table[character_count] != ' ' )
 			{
 
@@ -742,42 +742,42 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				}
 
 				hdc = GetDC ( application_window );
-		
+
 				SelectObject ( hdc, my_font );
-		
+
 				GetTextMetrics ( hdc, &metric );
-		
+
 				if ( !GetCharABCWidthsW ( hdc, actual_character, actual_character, &widths ) )
 				{
 
 					debug_log ( "Failed to get widths" );
 				}
-		
+
 				mat2.eM11.fract = 0; mat2.eM11.value = 1; mat2.eM12.fract = 0; mat2.eM12.value = 0;
 				mat2.eM21.fract = 0; mat2.eM21.value = 0; mat2.eM22.fract = 0; mat2.eM22.value = 1;
-		
+
 				memset ( &metrics, 0, sizeof ( metrics ) );
-		
+
 				size = 128 * 128;
-		
+
 				glyph_character = safe_malloc ( size );
-		
+
 				GetGlyphOutlineW ( hdc, actual_character, GGO_GRAY8_BITMAP, &metrics, size, glyph_character, &mat2 );
-		
+
 				ReleaseDC ( application_window, hdc );
-		
+
 				character_width = metrics.gmBlackBoxX;
 				character_height = metrics.gmBlackBoxY;
-		
+
 				if ( character_width & 3 )
 				{
-		
+
 					character_width &= 0xfffffffc;
 					character_width += 4;
 				}
-		
+
 				ptr = glyph_character;
-		
+
 				y_adjust = metric.tmAscent - metrics.gmptGlyphOrigin.y;
 
 				if ( y_adjust < 0 )
@@ -785,68 +785,68 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 					y_adjust = 0;
 				}
-	
+
 				finished = FALSE;
-	
+
 				for ( x_adjust = 0; !finished; x_adjust++ )
 				{
-	
+
 					for ( y = 0; y < character_height; y++ )
 					{
-	
+
 						if ( glyph_character[ (y*character_width)+x_adjust ] != 0 )
 						{
-	
+
 							finished = TRUE;
-	
+
 							break;
 						}
 					}
-	
+
 					if ( x_adjust >= character_width )
 					{
-	
+
 						x_adjust = 1;
-	
+
 						finished = TRUE;
-	
+
 						break;
 					}
 				}
-	
+
 				x_adjust -= 1;
-	
+
 				x_adjust = -x_adjust;	//metrics.gmptGlyphOrigin.x;
 
 				for ( y = 0; y < character_height; y++ )
 				{
-		
+
 					for ( x = 0; x < character_width; x++ )
 					{
-		
+
 						float
 							fval;
-		
+
 						int
 							ival;
-		
+
 						fval = *ptr++;
-		
+
 						fval *= 255.0 / 65.0;
-		
+
 						convert_float_to_int ( fval, &ival );
-		
+
 						aliased_character[((y+y_adjust)*128)+(x+x_adjust)] = ival;
 					}
 				}
-		
+
 				//
 				// Re-assess character width, as we want the proper width, not dword aligned width! :)
 				//
-		
+
 //				character_width = metrics.gmBlackBoxX + x_adjust + UI_FONT_WINDOWS_TEXTURE_WIDTH_GAP;
 				character_width = metrics.gmBlackBoxX;
-	
+
 				character_height += y_adjust + UI_FONT_WINDOWS_TEXTURE_HEIGHT_GAP;
 
 				fwrite ( &character_width, sizeof ( int ), 1, fonts_data_file );
@@ -870,10 +870,10 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				font_character_maximum_width = max ( font_character_maximum_width, character_width );
 				font_character_maximum_height = max ( font_character_maximum_height, character_height );
-		
+
 				for ( y = 0; y < character_height; y++ )
 				{
-		
+
 					for ( x = 0; x < character_width; x++ )
 					{
 
@@ -883,17 +883,17 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			}
 			else
 			{
-	
+
 				//
 				// Special case the space character
 				//
-	
+
 				hdc = GetDC ( application_window );
-		
+
 				SelectObject ( hdc, my_font );
-		
+
 				GetTextMetrics ( hdc, &metric );
-		
+
 				if ( !GetCharABCWidths ( hdc, font_character_table[character_count], font_character_table[character_count], &widths ) )
 				{
 
@@ -902,26 +902,26 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				mat2.eM11.fract = 0;
 				mat2.eM11.value = 1;
-		
+
 				mat2.eM12.fract = 0;
 				mat2.eM12.value = 0;
-		
+
 				mat2.eM21.fract = 0;
 				mat2.eM21.value = 0;
-		
+
 				mat2.eM22.fract = 0;
 				mat2.eM22.value = 1;
-		
+
 				memset ( &metrics, 0, sizeof ( metrics ) );
-		
+
 				size = 128 * 128;
-		
+
 				glyph_character = safe_malloc ( size );
-		
+
 				GetGlyphOutlineW ( hdc, 'o', GGO_METRICS, &metrics, size, glyph_character, &mat2 );
-	
+
 				ReleaseDC ( application_window, hdc );
-		
+
 				character_width = metrics.gmBlackBoxX;
 				character_height = metrics.gmBlackBoxY;
 
@@ -954,7 +954,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		//
 		// Put a 2 pixel surround for each character
 		//
-	
+
 //		font_character_maximum_width += UI_FONT_WINDOWS_TEXTURE_WIDTH_GAP;
 //		font_character_maximum_height += UI_FONT_WINDOWS_TEXTURE_HEIGHT_GAP;
 
@@ -999,18 +999,18 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		fp = safe_fopen ( UI_FONT_DATA_FILE, "rb" );
 
 		old_active_screen = get_active_screen ();
-	
+
 		//
 		// Detect font maximum extents
 		//
 
 		new_font->font_width = font_headers[font_offset].font_character_maximum_width;
 		new_font->font_height = font_headers[font_offset].font_character_maximum_height;
-	
+
 		//
 		// Get Kerning information
 		//
-	
+
 		new_font->number_of_kerning_pairs = font_headers[font_offset].number_of_kerning_pairs;
 
 		new_font->kerning_pairs = NULL;
@@ -1022,52 +1022,52 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			fseek ( fp, font_headers[font_offset].kerning_data_offset, SEEK_SET );
 
-			fread ( new_font->kerning_pairs, sizeof ( KERNINGPAIR ), new_font->number_of_kerning_pairs, fp );
+			safe_fread ( new_font->kerning_pairs, sizeof ( KERNINGPAIR ), new_font->number_of_kerning_pairs, fp );
 		}
-	
+
 		//
 		// Start off at 16x16 texture, working upwards
 		//
-	
+
 		texture_width = 16;
 		texture_height = 16;
 		finished = FALSE;
-	
+
 		while ( !finished )
 		{
-	
+
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
-	
+
 			if ( ( characters_wide * characters_high ) >= sizeof ( font_character_table ) )
 			{
-	
+
 				finished = TRUE;
 			}
 			else
 			{
-	
+
 				if ( texture_width > texture_height )
 				{
-	
+
 					texture_height *= 2;
 				}
 				else
 				{
-	
+
 					texture_width *= 2;
 				}
 			}
 		}
-	
+
 		//
 		// Check maximum texture sizes
 		//
-	
+
 		finished = FALSE;
 		number_of_screens = 1;
 		font_screens = NULL;
-	
+
 		if ( ( texture_width > d3d_maximum_texture_width ) || ( texture_height > d3d_maximum_texture_height ) )
 		{
 
@@ -1077,54 +1077,54 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			//
 			// Recalculate the number of screens
 			//
-	
+
 			characters_wide = texture_width / new_font->font_width;
 			characters_high = texture_height / new_font->font_height;
 			number_of_screens = ( sizeof ( font_character_table ) / ( characters_wide * characters_high ) ) + 1;
 		}
-	
+
 		new_font->screens = safe_malloc ( sizeof ( screen * ) * number_of_screens );
-	
+
 		memset ( new_font->screens, 0, sizeof ( screen * ) * number_of_screens );
-	
+
 		colour.r = 255;
 		colour.g = 255;
 		colour.b = 255;
 		colour.a = 0;
-	
+
 		for ( count = 0; count < number_of_screens; count++ )
 		{
-	
+
 			new_font->screens[count] = create_user_texture_screen ( texture_width, texture_height, TEXTURE_TYPE_MULTIPLEALPHA, 0 );
-	
+
 			set_active_screen ( new_font->screens[count] );
-	
+
 			set_block ( 0, 0, texture_width - 1, texture_height - 1, colour );
 		}
-	
+
 		character_x = 0;
 		character_y = 0;
 		screen_index = 0;
-	
+
 		fseek ( fp, font_headers[font_offset].graphic_data_offset, SEEK_SET );
 
 		for ( character_count = 0; character_count < sizeof ( font_character_table ); character_count++ )
 		{
-	
+
 			int
 				character_width,
 				character_height;
-	
+
 			float
 				u,
 				v;
-	
-			fread ( &character_width, sizeof ( int ), 1, fp );
-			fread ( &character_height, sizeof ( int ), 1, fp );
 
-			fread ( &new_font->characters[ font_character_table[character_count] ].abcA, sizeof ( int ), 1, fp );
-			fread ( &new_font->characters[ font_character_table[character_count] ].abcB, sizeof ( int ), 1, fp );
-			fread ( &new_font->characters[ font_character_table[character_count] ].abcC, sizeof ( int ), 1, fp );
+			safe_fread ( &character_width, sizeof ( int ), 1, fp );
+			safe_fread ( &character_height, sizeof ( int ), 1, fp );
+
+			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcA, sizeof ( int ), 1, fp );
+			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcB, sizeof ( int ), 1, fp );
+			safe_fread ( &new_font->characters[ font_character_table[character_count] ].abcC, sizeof ( int ), 1, fp );
 
 			//
 			// Put a pointer to the kerning pairs for this character
@@ -1177,43 +1177,43 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			if ( font_character_table[character_count] != ' ' )
 			{
-		
+
 				//
 				// Figure out the coordinates in the texture to put the character
 				//
-		
+
 				set_active_screen ( new_font->screens[screen_index] );
-		
+
 				lock_screen ( active_screen );
-		
+
 				for ( y = 0; y < character_height; y++ )
 				{
-		
+
 					for ( x = 0; x < character_width; x++ )
 					{
-		
+
 						colour.r = 255;
 						colour.g = 255;
 						colour.b = 255;
 						fread ( &colour.a, 1, 1, fp );
-		
+
 						set_pixel ( character_x + x, character_y + y, colour );
 					}
 				}
-	
+
 				unlock_screen ( active_screen );
 			}
-	
+
 			//
 			// Now put the information into the character itself
 			//
-	
+
 			u = ( float ) character_x / ( float ) texture_width;
 			v = ( float ) character_y / ( float ) texture_height;
-	
+
 			u -= ( 1.0 / ( texture_width * 2 ) );
 			v -= ( 1.0 / ( texture_width * 2 ) );
-	
+
 			new_font->characters[ font_character_table[character_count] ].width = character_width;
 			new_font->characters[ font_character_table[character_count] ].height = character_height;
 			new_font->characters[ font_character_table[character_count] ].screen_index = screen_index;
@@ -1223,36 +1223,36 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 			if ( d3d_using_permedia2_chipset )
 			{
-	
+
 				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 0.0 ) / ( float ) texture_width );
 				new_font->characters[ font_character_table[character_count] ].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
 			}
 			else
 			{
-	
+
 				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 1.0 ) / ( float ) texture_width );
 				new_font->characters[ font_character_table[character_count] ].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
 			}
 
 			character_x += new_font->font_width;
-	
+
 			if ( ( character_x + new_font->font_width ) > texture_width )
 			{
-	
+
 				character_x = 0;
-	
+
 				character_y += new_font->font_height;
-	
+
 				if ( ( character_y + new_font->font_height ) > texture_height )
 				{
-	
+
 					character_y = 0;
-	
+
 					screen_index++;
 				}
 			}
 		}
-	
+
 		set_active_screen ( old_active_screen );
 
 		safe_mclose ( font_headers );
@@ -1279,19 +1279,19 @@ void deinitialise_ui_font (void)
 
 			int
 				screen_index;
-	
+
 			//
 			// Free up the screens etc
 			//
-	
+
 			for ( screen_index = 0; screen_index < ui_fonts[count].number_of_screens; screen_index++ )
 			{
-	
+
 				destroy_screen ( ui_fonts[count].screens[screen_index] );
 			}
-	
+
 			safe_free ( ui_fonts[count].screens );
-	
+
 			ui_fonts[count].screens = NULL;
 		}
 	}
@@ -1308,65 +1308,65 @@ float ui_display_text (const char *text, float x, float y)
 
 	if ( d3d_in_3d_scene )
 	{
-	
+
 		float
 			ox,
 			oy;
-	
+
 		int
 			ix,
 			iy,
 			loop_string;
-	
+
 		font_character
 			*character;
-	
+
 		float
 			char_end_x,
 			char_end_y,
 			char_start_x,
 			char_start_y,
 			original_x_position;
-	
+
 		const char
 			*text_ptr;
-	
+
 		viewport
 			old_active_viewport,
 			new_viewport;
-	
+
 		int_viewport
 			old_active_int_viewport;
-	
+
 		real_colour
 			colour,
 			shadow_colour,
 			specular;
-	
+
 		screen
 			*texture;
-	
+
 		//
 		// Always have to render text to the video screen
 		//
-	
+
 		ASSERT ( active_screen == video_screen );
 
 	//	if ( begin_3d_scene () )
 		{
-		
+
 			if (!text)
 			{
-		
+
 				return 0;
 			}
-	
+
 			//
 			// setup stuff
 			//
 
 			x += ui_x_origin;
-		
+
 			y += ui_y_origin;
 
 			convert_float_to_int ( x, &ix );
@@ -1376,9 +1376,9 @@ float ui_display_text (const char *text, float x, float y)
 			y = iy;
 
 			original_x_position = x;
-		
+
 			text_ptr = text;
-	
+
 			colour.red = current_font_colour.r;
 			colour.green = current_font_colour.g;
 			colour.blue = current_font_colour.b;
@@ -1388,78 +1388,78 @@ float ui_display_text (const char *text, float x, float y)
 			shadow_colour.green = 0;
 			shadow_colour.blue = 0;
 			shadow_colour.alpha = current_font_colour.a / 2;
-	
+
 			specular.red = 0;
 			specular.green = 0;
 			specular.blue = 0;
 			specular.alpha = 255;
-		
+
 			//
 			// Save old viewport values
 			//
-		
+
 			old_active_viewport = active_viewport;
-		
+
 			old_active_int_viewport = active_int_viewport;
-		
+
 			//
 			// Calculate new viewport settings
 			//
-		
+
 			ox = ui_x_origin;
-		
+
 			oy = ui_y_origin;
-		
+
 			ui_set_origin (0, 0);
-		
+
 			ui_get_clip_area ( &new_viewport.x_min, &new_viewport.y_min, &new_viewport.x_max, &new_viewport.y_max );
-		
+
 			set_viewport ( new_viewport.x_min, new_viewport.y_min, new_viewport.x_max, new_viewport.y_max );
 
 			ui_set_origin (ox, oy);
-		
+
 			//
 			// Set renderstates
 			//
-			
+
 			texture = get_screen_texture ( current_font->screens[0] );
-	
+
 			set_d3d_gouraud_shaded_textured_renderstate ( texture );
 
 			set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, FALSE, FALSE );
-	
+
 			set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 			set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
 
 			set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, D3DCMP_ALWAYS );
-	
+
 			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP );
 			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP );
-	
+
 			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MAGFILTER, D3DTFG_POINT );
 			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MINFILTER, D3DTFN_POINT );
 			set_d3d_texture_stage_state_immediate ( 0, D3DTSS_MIPFILTER, D3DTFP_NONE );
-			
+
 			//
 			// loop the whole string
 			//
 
 			for (loop_string = strlen (text); loop_string > 0; loop_string --)
 			{
-		
+
 				vertex
 					quad[4];
-		
+
 				int
 					outcode,
 					outcode2;
-		
+
 				//
 				// work out what char
 				//
-		
+
 				character = &current_font->characters[(int)*text_ptr];
-		
+
 				if ( !character->valid )
 				{
 
@@ -1467,35 +1467,35 @@ float ui_display_text (const char *text, float x, float y)
 	/*
 					if (*text_ptr == 10)
 					{
-		
+
 						y += ui_get_font_height ();
-		
+
 						x = original_x_position;
 					}
-		
+
 					text_ptr ++;
-		
+
 					continue;
 					*/
 				}
-		
+
 				//
 				// starting position for char in viewport coords
 				//
-		
+
 				char_start_x = x + character->abcA;
-			
+
 				char_start_y = y;
-			
+
 				//
 				// calculate end of char in viewport coords
 				//
-		
+
 				char_end_x = char_start_x + character->width+1;	//current_font->letter_data [index].width;
 //				char_end_x = char_start_x + character->width;	//current_font->letter_data [index].width;
-		
+
 				char_end_y = char_start_y + character->height;	//current_font->font_height;
-		
+
 				quad[0].u = character->u1;
 				quad[0].v = character->v1;
 				quad[0].q = 0.1;
@@ -1518,65 +1518,65 @@ float ui_display_text (const char *text, float x, float y)
 
 				if ( current_font->font_dropshadow )
 				{
-	
+
 					quad[0].i = char_start_x + 1;
 					quad[0].j = char_start_y + 1;
 					quad[0].next_vertex = &quad[1];
-			
+
 					quad[1].i = char_end_x + 1;
 					quad[1].j = char_start_y + 1;
 					quad[1].next_vertex = &quad[2];
-			
+
 					quad[2].i = char_end_x + 1;
 					quad[2].j = char_end_y + 1;
 					quad[2].next_vertex = &quad[3];
-			
+
 					quad[3].i = char_start_x + 1;
 					quad[3].j = char_end_y + 1;
 					quad[3].next_vertex = NULL;
-			
+
 					quad[0].outcode = generate_outcode ( quad[0].i, quad[0].j );
 					quad[1].outcode = generate_outcode ( quad[1].i, quad[1].j );
 					quad[2].outcode = generate_outcode ( quad[2].i, quad[2].j );
 					quad[3].outcode = generate_outcode ( quad[3].i, quad[3].j );
-		
+
 					//
 					// Draw the character
 					//
-			
+
 					outcode = quad[0].outcode;
 					outcode2 = quad[0].outcode;
-			
+
 					outcode |= quad[1].outcode;
 					outcode2 &= quad[1].outcode;
-			
+
 					outcode |= quad[2].outcode;
 					outcode2 &= quad[2].outcode;
-			
+
 					outcode |= quad[3].outcode;
 					outcode2 &= quad[3].outcode;
-			
+
 					if ( outcode2 == 0 )
 					{
-			
+
 						vertex
 							*poly;
-			
+
 						clip_3d_coord = 0;
-			
+
 						poly = quad;
-			
+
 						if ( outcode )
 						{
-			
+
 							poly = clip_3d_polygon ( poly, outcode );
 						}
-			
+
 						if ( poly )
 						{
-			
+
 							set_d3d_gouraud_shaded_textured_renderstate ( get_screen_texture ( current_font->screens[character->screen_index] ) );
-					
+
 							draw_wbuffered_flat_shaded_textured_polygon ( poly, shadow_colour, specular );	//, colour, specular );
 						}
 					}
@@ -1588,61 +1588,61 @@ float ui_display_text (const char *text, float x, float y)
 				quad[0].i = char_start_x;
 				quad[0].j = char_start_y;
 				quad[0].next_vertex = &quad[1];
-		
+
 				quad[1].i = char_end_x;
 				quad[1].j = char_start_y;
 				quad[1].next_vertex = &quad[2];
-		
+
 				quad[2].i = char_end_x;
 				quad[2].j = char_end_y;
 				quad[2].next_vertex = &quad[3];
-		
+
 				quad[3].i = char_start_x;
 				quad[3].j = char_end_y;
 				quad[3].next_vertex = NULL;
-		
+
 				quad[0].outcode = generate_outcode ( quad[0].i, quad[0].j );
 				quad[1].outcode = generate_outcode ( quad[1].i, quad[1].j );
 				quad[2].outcode = generate_outcode ( quad[2].i, quad[2].j );
 				quad[3].outcode = generate_outcode ( quad[3].i, quad[3].j );
-	
+
 				//
 				// Draw the character
 				//
-		
+
 				outcode = quad[0].outcode;
 				outcode2 = quad[0].outcode;
-		
+
 				outcode |= quad[1].outcode;
 				outcode2 &= quad[1].outcode;
-		
+
 				outcode |= quad[2].outcode;
 				outcode2 &= quad[2].outcode;
-		
+
 				outcode |= quad[3].outcode;
 				outcode2 &= quad[3].outcode;
-		
+
 				if ( outcode2 == 0 )
 				{
-		
+
 					vertex
 						*poly;
-		
+
 					clip_3d_coord = 0;
-		
+
 					poly = quad;
-		
+
 					if ( outcode )
 					{
-		
+
 						poly = clip_3d_polygon ( poly, outcode );
 					}
-		
+
 					if ( poly )
 					{
-		
+
 						set_d3d_gouraud_shaded_textured_renderstate ( get_screen_texture ( current_font->screens[character->screen_index] ) );
-				
+
 						draw_wbuffered_flat_shaded_textured_polygon ( poly, colour, specular );	//, colour, specular );
 					}
 				}
@@ -1651,39 +1651,39 @@ float ui_display_text (const char *text, float x, float y)
 				//
 				// Go onto the next character
 				//
-		
+
 				x += character->abcA + character->abcB + character->abcC;	//character->width;	//float_font_width;
-	
+
 				x += get_kerning_offset ( text_ptr );
-		
+
 				text_ptr ++;
 			}
-		
+
 			//
 			// Reset some renderstates
 			//
 
 			flush_triangle_primitives ();
-		
+
 			//
 			// Restore the old viewport settings
 			//
-		
+
 			active_viewport = old_active_viewport;
-		
+
 			active_int_viewport = old_active_int_viewport;
-	
+
 	//		end_3d_scene ();
-		
+
 			//
 			// return the length in pixels of the text written to screen
 			//
-		
+
 			return (x - original_x_position);
 		}
 	//	else
 		{
-	
+
 	//		return ( 0 );
 		}
 	}
@@ -1716,7 +1716,7 @@ int get_kerning_offset ( const char *ptr )
 
 		while ( TRUE )
 		{
-	
+
 			if ( character->kerning_pairs[count].wFirst != ptr[0] )
 			{
 
@@ -1789,7 +1789,7 @@ float ui_get_string_length (const char *string)
 		length += character->abcA + character->abcB + character->abcC;
 
 		length += get_kerning_offset ( current_char );
-		
+
 		current_char ++;
 	}
 
@@ -1937,19 +1937,19 @@ void ui_set_object_font (ui_object *obj)
 			col = get_ui_object_highlighted_font_colour (obj);
 
 			set_ui_font_type (get_ui_object_highlighted_font_type (obj));
-	
+
 			set_ui_font_colour (get_ui_object_highlighted_font_colour (obj));
 		}
 		else
 		{
-	
+
 			set_ui_font_type (get_ui_object_font_type (obj));
-	
+
 			set_ui_font_colour (get_ui_object_font_colour (obj));
 		}
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
