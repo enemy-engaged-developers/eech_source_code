@@ -320,19 +320,23 @@ void initialise_hind_hud (void)
 		hud_width = (hud_display_model->bounding_box.xmax - hud_display_model->bounding_box.xmin);
 		hud_height = (hud_display_model->bounding_box.ymax - hud_display_model->bounding_box.ymin);
 
-		num_texture_coordinates = 0;
-		if (hud_display_model->surfaces[0].texture_index)
+		// make a copy of original texture coordinates
+		if (!hud_texture_uv_coordinates)
 		{
-			for (i=0; i < hud_display_model->surfaces[0].number_of_faces; i++)
-				num_texture_coordinates += hud_display_model->faces[i].number_of_points;
+			num_texture_coordinates = 0;
+			if (hud_display_model->surfaces[0].texture_index)
+			{
+				for (i=0; i < hud_display_model->surfaces[0].number_of_faces; i++)
+					num_texture_coordinates += hud_display_model->faces[i].number_of_points;
 
-			mem_size = 6 * sizeof(object_3d_short_textured_point);
+				mem_size = 6 * sizeof(object_3d_short_textured_point);
 
-			hud_texture_uv_coordinates = safe_malloc(mem_size);
-			memcpy(hud_texture_uv_coordinates, hud_display_model->surface_texture_points, mem_size);
+				hud_texture_uv_coordinates = safe_malloc(mem_size);
+				memcpy(hud_texture_uv_coordinates, hud_display_model->surface_texture_points, mem_size);
+			}
+			else
+				debug_fatal("Untextured HUD display");
 		}
-		else
-			debug_fatal("Untextured HUD display");
 	}
 	else
 		hud_display_model = NULL;
@@ -349,8 +353,14 @@ void deinitialise_hind_hud (void)
 	destroy_screen (hud_texture_screen);
 
 	if (hud_texture_uv_coordinates)
+	{
+		// copy back original coordinates
+		size_t mem_size = 6 * sizeof(object_3d_short_textured_point);
+		memcpy(hud_display_model->surface_texture_points, hud_texture_uv_coordinates, mem_size);
+
 		safe_free(hud_texture_uv_coordinates);
-	hud_texture_uv_coordinates = NULL;
+		hud_texture_uv_coordinates = NULL;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
