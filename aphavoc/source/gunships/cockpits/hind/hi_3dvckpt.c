@@ -1088,7 +1088,7 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 		head_object->relative_pitch = rad(10.0);
 		break;
 	case VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD:
-		head_object->relative_pitch = rad(-5.0);
+		head_object->relative_pitch = 0.0;
 		break;
 
 	default:
