@@ -558,6 +558,7 @@ void initialise_hind_3d_cockpit (void)
 
 	open_door = !get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) && command_line_dynamics_engine_startup;
 	door_state = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT) ? 1.0 : 0.0;
+	cockpit_fan_enabled = !command_line_dynamics_engine_startup && get_global_season() != SESSION_SEASON_WINTER;
 
 	wide_cockpit_nr = WIDEVIEW_HIND_PILOT;
 	set_global_wide_cockpit(TRUE);
