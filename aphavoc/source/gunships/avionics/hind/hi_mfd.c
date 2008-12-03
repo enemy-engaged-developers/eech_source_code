@@ -462,14 +462,14 @@ void initialise_hind_mfd (void)
 	{
 		mfd_viewport_size = MFD_VIEWPORT_SIZE;
 		mfd_texture_size = MFD_TEXTURE_SIZE;
-		map_range = 50000.0,
+		map_range = 50000.0;
 		map_scale = 1.0 / (50000.0 * ROOT2);
 	}
 	else
 	{
 		mfd_viewport_size = MFD_HAVOC_VIEWPORT_SIZE;
 		mfd_texture_size = MFD_HAVOC_TEXTURE_SIZE;
-		map_range = 25000.0,
+		map_range = 25000.0;
 		map_scale = 1.0 / (25000.0 * ROOT2);
 	}
 
@@ -823,9 +823,21 @@ void draw_hind_mfd_on_texture (void)
 	// viewport
 	//
 
+	if (custom_3d_models.arneh_mi24v_cockpit)
+	{
+		mfd_viewport_size = MFD_VIEWPORT_SIZE;
+		mfd_texture_size = MFD_TEXTURE_SIZE;
+	}
+	else
+	{
+		mfd_viewport_size = MFD_HAVOC_VIEWPORT_SIZE;
+		mfd_texture_size = MFD_HAVOC_TEXTURE_SIZE;
+	}
+
+	mfd_viewport_texture_x_org = mfd_texture_size / 2;
+	mfd_viewport_texture_y_org = mfd_texture_size / 2;
 
 	ASSERT (mfd_viewport_size <= mfd_texture_size);
-
 
 	mfd_viewport_x_org = mfd_viewport_texture_x_org;
 	mfd_viewport_y_org = mfd_viewport_texture_y_org;
