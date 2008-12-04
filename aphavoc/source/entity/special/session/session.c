@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -133,7 +133,7 @@ float calculate_session_time_of_day (entity *en, int *day)
 	ASSERT (en);
 
 	elapsed_time = get_local_entity_float_value (en, FLOAT_TYPE_ELAPSED_TIME);
-	
+
 	start_time = get_local_entity_float_value (en, FLOAT_TYPE_START_TIME);
 
 	time_of_day = start_time + elapsed_time;
@@ -146,7 +146,7 @@ float calculate_session_time_of_day (entity *en, int *day)
 
 		count ++;
 	}
-	
+
 	time_of_day = max (time_of_day, 0.0);
 
 	if (day)
@@ -254,7 +254,7 @@ float get_session_random_start_time_of_day (void)
 
 	float
 		start_time;
-		
+
 	initialise_random_number_generator ();
 
 	index = rand16 () % NUM_RANDOM_SESSION_START_TIMES;
@@ -290,9 +290,9 @@ static struct SESSION_PRESET_TIME_OF_DAY_TABLE
 } session_preset_time_of_day_table [] =
 	{
 		SESSION_TIME_DAWN,			(05.0 * ONE_HOUR) + (45 * ONE_MINUTE),
-		SESSION_TIME_MIDDAY,			(11.0 * ONE_HOUR) + (50 * ONE_MINUTE),	
+		SESSION_TIME_MIDDAY,			(11.0 * ONE_HOUR) + (50 * ONE_MINUTE),
 		SESSION_TIME_AFTERNOON,		(15.0 * ONE_HOUR) + (20 * ONE_MINUTE),
-		SESSION_TIME_DUSK,			(19.0 * ONE_HOUR) + (30 * ONE_MINUTE),
+		SESSION_TIME_DUSK,			(18.0 * ONE_HOUR) + (00 * ONE_MINUTE),
 		SESSION_TIME_MIDNIGHT,		(23.0 * ONE_HOUR) + (45 * ONE_MINUTE),
 		-1
 	};
@@ -355,10 +355,10 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 			//
 			// weather is fine all across the map
 			//
-	
+
 			cwm = WEATHERMODE_DRY;
 			twm = WEATHERMODE_DRY;
-	
+
 			ts = 1.0;
 		}
 		else
@@ -366,18 +366,18 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 			//
 			// there is some bad weather somewhere on the map
 			//
-	
+
 			range = get_approx_2d_range (pos, &raw->weather_position);
-	
+
 			if (range >= raw->weather_radius)
 			{
 				//
 				// camera is in the dry zone
 				//
-				
+
 				cwm = WEATHERMODE_DRY;
 				twm = WEATHERMODE_DRY;
-	
+
 				ts = 0.0;
 			}
 			else if (range >= (raw->weather_radius * 0.666))
@@ -385,14 +385,14 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				//
 				// camera is in the dry / light rain zone
 				//
-				
+
 				cwm = WEATHERMODE_DRY;
-				//VJ 051014 link winter/summer to snow/rain 
+				//VJ 051014 link winter/summer to snow/rain
 				if (get_global_season() == SESSION_SEASON_WINTER)
 					twm = WEATHERMODE_SNOW;
 				else
 					twm = WEATHERMODE_LIGHT_RAIN;
-		
+
 				ts = (raw->weather_radius - range) / (raw->weather_radius * 0.333);
 			}
 			else if (range >= (raw->weather_radius * 0.333))
@@ -400,8 +400,8 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				//
 				// camera is in the light rain / heavy rain zone
 				//
-				
-				//VJ 051014 link winter/summer to snow/rain 
+
+				//VJ 051014 link winter/summer to snow/rain
 				if (get_global_season() == SESSION_SEASON_WINTER)
 				{
 					cwm = WEATHERMODE_SNOW;
@@ -412,16 +412,16 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 					cwm = WEATHERMODE_LIGHT_RAIN;
 					twm = WEATHERMODE_HEAVY_RAIN;
 				}
-	
+
 				ts = ((raw->weather_radius * 0.666) - range) / (raw->weather_radius * 0.333);
 			}
-			else	
+			else
 			{
 				//
 				// camera is in the heavy rain zone
 				//
-				
-				//VJ 051014 link winter/summer to snow/rain 
+
+				//VJ 051014 link winter/summer to snow/rain
 				if (get_global_season() == SESSION_SEASON_WINTER)
 				{
 					cwm = WEATHERMODE_SNOW;
@@ -434,7 +434,7 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 				}
 				ts = 0.0;
 			}
-	
+
 			ts = bound (ts, 0.0, 1.0);
 		}
 	}
@@ -443,7 +443,7 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 		//
 		// global weather model
 		//
-			
+
 		cwm = raw->weather_mode;
 		twm = raw->target_weather_mode;
 
@@ -494,7 +494,7 @@ weathermodes get_simple_session_weather_at_point (vec3d *pos)
 		return twm;
 	}
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -541,7 +541,7 @@ void set_session_random_weather_mode (entity *en)
 	//
 	// Rain
 	//
-	
+
 	raw->weather_radius = MIN_WEATHER_RADIUS + ((MAX_WEATHER_RADIUS - MIN_WEATHER_RADIUS) * frand1 ());
 
 	raw->weather_increasing = (rand16 () & 1);
@@ -559,7 +559,7 @@ void set_session_random_weather_mode (entity *en)
 	//
 	// Wind
 	//
-	
+
 	raw->wind_effect_radius = MIN_WIND_RADIUS + ((MAX_WIND_RADIUS - MIN_WIND_RADIUS) * frand1 ());
 
 	raw->wind_increasing = (rand16 () & 1);
@@ -616,7 +616,7 @@ float get_session_wind_velocity_at_point (vec3d *pos, vec3d *wind_velocity)
 			//
 			// camera is in the calm zone
 			//
-			
+
 			wind_speed = raw->wind_minimum_speed;
 		}
 		else
@@ -788,7 +788,7 @@ void attach_session_sound_effects (entity *en)
 	);
 
 	//
-	// Maverick's Ambiente sound mod 
+	// Maverick's Ambiente sound mod
 	//
 
 	sound_effect_index = SOUND_SAMPLE_INDEX_AMB1;
@@ -809,7 +809,7 @@ void attach_session_sound_effects (entity *en)
 		1,													// sample count
 		&sound_effect_index							        // sample index list
 	);
-	
+
     sound_effect_index = SOUND_SAMPLE_INDEX_AMB2;
 
 	create_local_sound_effect_entity
@@ -828,7 +828,7 @@ void attach_session_sound_effects (entity *en)
 		1,													// sample count
 		&sound_effect_index							        // sample index list
 	);
-	
+
     sound_effect_index = SOUND_SAMPLE_INDEX_AMB3;
 
 	create_local_sound_effect_entity
@@ -847,7 +847,7 @@ void attach_session_sound_effects (entity *en)
 		1,													// sample count
 		&sound_effect_index							        // sample index list
     );
-	
+
     sound_effect_index = SOUND_SAMPLE_INDEX_AMB4;
 
 	create_local_sound_effect_entity
@@ -895,7 +895,7 @@ float get_wind_gusting_modulation_value (float wind_gusting_value)
 
 	high = ceil (val);
 
-	d = val - low;	
+	d = val - low;
 
 	convert_float_to_int (low, &low_index);
 	convert_float_to_int (high, &high_index);
