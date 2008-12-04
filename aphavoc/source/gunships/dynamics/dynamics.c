@@ -1152,6 +1152,9 @@ void update_gunship_dynamics (void)
 		*raw;
 
 	raw = get_local_entity_data (get_gunship_entity ());
+	ASSERT(raw);
+	if (!raw)
+		return;
 
 	current_flight_dynamics->model_iterations = (int) (get_delta_time () * MODEL_FRAME_RATE + 1.0);
 
@@ -1262,9 +1265,15 @@ void update_gunship_dynamics (void)
 				update_hind_advanced_dynamics ();
 
 				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (command_line_dynamics_flight_model == 2)
+				if (command_line_dynamics_flight_model == 2 && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
 					if (fixed_collision_count || moving_collision_count)
+					{
 						update_collision_dynamics ();
+						ASSERT(current_flight_dynamics);  // just want to know if this can happen
+						// may get killed, so abort further calculations if so
+						if (!current_flight_dynamics || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+							break;
+					}
 			}
 
 			if (command_line_dynamics_flight_model != 2 || (!fixed_collision_count && !moving_collision_count))
