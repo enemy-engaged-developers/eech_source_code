@@ -192,8 +192,8 @@ void load_local_entity_weapon_config (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_viewpoint_from_weapon(weapon_config_types config_type, 
-	weapon_package_status *package_status, int package, 
+static int get_viewpoint_from_weapon(weapon_config_types config_type,
+	weapon_package_status *package_status, int package,
 	object_3d_instance* inst3d, viewpoint *vp,
 	object_3d_sub_object_search_data* search_weapon_system_heading,
 	object_3d_sub_object_search_data* search_weapon_system_pitch)
@@ -221,7 +221,7 @@ static int get_viewpoint_from_weapon(weapon_config_types config_type,
 			// reset heading and pitch
 			search_weapon_system_heading->result_sub_object->relative_heading = package_status->weapon_system_heading;
 			search_weapon_system_pitch->result_sub_object->relative_pitch = -package_status->weapon_system_pitch;
-			
+
 			return TRUE;
 		}
 	}
@@ -291,9 +291,9 @@ int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon
 int get_next_pylon_to_launch(entity_sub_types weapon_type, weapon_config_types config_type, weapon_package_status* package_status, int* number)
 {
 	int package, best_package = 0;
-	
+
 	*number = 0;
-	
+
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 	{
 		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
@@ -841,7 +841,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 						}
 						else
 							range = get_2d_range (pitch_device_position, intercept_point);
-						
+
 						if (airborne_target)
 							// no use calulating ballistic trajectory to point on ground at target's distance
 							time_of_flight = range / weapon_velocity;
@@ -904,7 +904,7 @@ unsigned get_number_of_pods_firing(entity* launcher, entity_sub_types weapon_typ
 	weapon_package_status *package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 	weapon_config_types config_type = get_local_entity_int_value(launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 	int package, number = 0;
-	
+
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 	{
 		if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
@@ -991,7 +991,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 	if (point_inside_map_area (intercept_point))
 	{
 		float target_true_velocity = 0.0;
-		
+
 		if (target)
 			target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
 
@@ -1513,13 +1513,13 @@ void update_entity_weapon_systems (entity *source)
 								{
 									if (target)
 									{
-										located_heading_and_pitch_devices = 
+										located_heading_and_pitch_devices =
 											get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
-										
+
 										if (!located_heading_and_pitch_devices)
 										{
 											debug_colour_log (DEBUG_COLOUR_AMBER, "Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
-											
+
 											return;
 										}
 
@@ -1532,7 +1532,7 @@ void update_entity_weapon_systems (entity *source)
 										if (get_pitch_device_to_target_vector (source, target, selected_weapon, &vp.position, &target_vector))
 										{
 											vec3d offset_vector;
-											
+
 											//
 											// get heading and pitch offsets
 											//
@@ -1575,53 +1575,63 @@ void update_entity_weapon_systems (entity *source)
 						}
 
 						// 050320 Jabberwock - Cannon tracking - major restructuring for MP
-						
+
 						if (get_local_entity_int_value (source, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 						{
 							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
 							{
-								switch (command_line_cannontrack)
+								int use_eo_sight_for_direction = is_using_eo_system(command_line_cannontrack != 2);
+
+								// Mi-24's nose gun which doesn't have as good aiming devices as other helicopters
+								if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND)
 								{
-									case 1:
+									target = NULL;
+									// in EO view fire along EO line of sight
+									use_eo_sight_for_direction = target_acquisition_system != TARGET_ACQUISITION_SYSTEM_HMS && view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE;
+
+									  // in HMS mode gun follows head, simulates co-pilot aiming
+									if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
 									{
-										if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
-										{
-											required_heading_offset = -pilot_head_heading;
-
-											required_pitch_offset = pilot_head_pitch;
-											
-											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
-																				
-											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
-
-										}
-										break;
+										required_heading_offset = -pilot_head_heading;
+										required_pitch_offset = pilot_head_pitch;
 									}
-
-									case 2:
+									else  // fire straight ahead, where the pilot has a sight
 									{
-										if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
-										{
-											required_heading_offset = -pilot_head_heading;
-
-											required_pitch_offset = pilot_head_pitch;
-											
-											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
-																				
-											set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
-
-										}
-										break;
+										required_heading_offset = 0.0;
+										required_pitch_offset = 0.0;
 									}
 								}
-							
+								else
+									switch (command_line_cannontrack)
+									{
+										case 1:
+										{
+											if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+											{
+												required_heading_offset = -pilot_head_heading;
+												required_pitch_offset = pilot_head_pitch;
+											}
+											break;
+										}
+
+										case 2:
+										{
+											if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
+											{
+												required_heading_offset = -pilot_head_heading;
+												required_pitch_offset = pilot_head_pitch;
+											}
+											break;
+										}
+									}
+
 								// slave to EO system if it is active (and doesn't have a target)
-								if (!target && is_using_eo_system(command_line_cannontrack != 2))
+								if (!target && use_eo_sight_for_direction)
 								{
 									vec3d* tracking_point = get_eo_tracking_point();
 
 									ASSERT(source == get_gunship_entity());
-									
+
 									required_heading_offset = eo_azimuth;
 									required_pitch_offset = eo_elevation;
 
@@ -1639,9 +1649,9 @@ void update_entity_weapon_systems (entity *source)
 										// if we don't already have it we need to get the viewpoint of the weapon
 										if (!located_heading_and_pitch_devices)
 										{
-											located_heading_and_pitch_devices = 
+											located_heading_and_pitch_devices =
 												get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
-											
+
 											if (!located_heading_and_pitch_devices)
 												debug_fatal("Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
 										}
@@ -1659,14 +1669,14 @@ void update_entity_weapon_systems (entity *source)
 											float dx, dz;
 											float heading;
 											vec3d offset_vector, tracking_vector;
-												
+
 											// get heading and pitch offsets
 
 											dx = tracking_point->x - vp.position.x;
 											dz = tracking_point->z - vp.position.z;
-							
+
 											heading = atan2 (dx, dz);
-											
+
 											// need to adjust for the gun's attitude, as the helicopter may not fly level all the time
 											get_3d_transformation_matrix (m, heading, pitch, 0.0);
 
@@ -1677,15 +1687,18 @@ void update_entity_weapon_systems (entity *source)
 											multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &tracking_vector);
 
 											required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
-	
+
 											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
 											required_pitch_offset = atan2 (offset_vector.y, flat_range);
 										}
 									}
-								}	
+								}
+
+								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
+								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
 							}
 							else
-							{	
+							{
 								if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING) || get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH)))
 								{
 									required_heading_offset = get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING);
