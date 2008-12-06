@@ -238,8 +238,8 @@ void set_flight_dynamics_events (void)
 
 		// model keys
 
-		set_event (DIK_T, MODIFIER_NONE, KEY_STATE_DOWN, set_trim_control);
-		set_event (DIK_T, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, clear_trim_control);
+		set_event (DIK_T, MODIFIER_LEFT_SHIFT, KEY_STATE_EITHER, clear_trim_control);
+		set_event (DIK_T, MODIFIER_NONE, KEY_STATE_EITHER, set_trim_control);
 		set_event (DIK_R, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_rotor_brake);
 		set_event (DIK_B, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_wheel_brake);
 		set_event (DIK_H, MODIFIER_NONE, KEY_STATE_DOWN, flight_dynamics_toggle_auto_hover);
