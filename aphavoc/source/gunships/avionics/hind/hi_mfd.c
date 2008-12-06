@@ -1129,13 +1129,30 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	print_mono_font_string (buffer);
 
+	// airspeed
+
+	sprintf(buffer, "%+03.0f", current_flight_dynamics->indicated_airspeed.value);
+	set_2d_mono_font_position (-1.0, 1.0);
+	set_mono_font_rel_position(1.0, 18.0);
+	print_mono_font_string(buffer);
+
+	// altitude
+
+	if (current_flight_dynamics->radar_altitude.value < 300.0)
+	{
+		sprintf(buffer, "R%03.0f", current_flight_dynamics->radar_altitude.value);
+		set_2d_mono_font_position (1.0, 1.0);
+		set_mono_font_rel_position(-get_mono_font_string_width(buffer) - 2.0, 18.0);
+		print_mono_font_string(buffer);
+	}
+
 	//
 	// low light
 	//
 
 	if (eo_low_light)
 	{
-		y_adjust = 18.0;
+		y_adjust = 32.0;
 
 		set_2d_mono_font_position (-1.0, 1.0);
 
@@ -1347,6 +1364,24 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	{
 		marker_position = (min (target_range, eo_max_visual_range) / eo_max_visual_range) * -0.5;
 		draw_2d_mono_sprite (large_range_marker, 0.9, marker_position, MFD_EO_TEXT_COLOUR);
+	}
+
+	// horizon
+	{
+		float roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
+		float pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
+		float pitch_adjustment = -pitch / rad(90) * 0.5;
+
+		draw_2d_half_thick_line(-0.35, 0.0, -0.3, 0.0, MFD_EO_TEXT_COLOUR);
+		draw_2d_half_thick_line( 0.35, 0.0,  0.3, 0.0, MFD_EO_TEXT_COLOUR);
+
+		// draw datum
+		set_2d_instance_rotation (mfd_env, roll);
+
+		draw_2d_half_thick_line(-0.75, pitch_adjustment, -0.4, pitch_adjustment, MFD_EO_TEXT_COLOUR);
+		draw_2d_half_thick_line( 0.75, pitch_adjustment,  0.4, pitch_adjustment, MFD_EO_TEXT_COLOUR);
+
+		reset_2d_instance (mfd_env);
 	}
 
 	//
