@@ -521,7 +521,7 @@ void initialise_flight_dynamics_collision_points (void)
 	{
 		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
 	}
-	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
+	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND && command_line_dynamics_flight_model >= 2)
 		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
 	else
 		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
