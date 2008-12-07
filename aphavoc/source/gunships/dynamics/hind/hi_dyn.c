@@ -502,7 +502,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->velocity_z.max = knots_to_metres_per_second (197);
 
 	current_flight_dynamics->power_avaliable.min = 0.0;
-	current_flight_dynamics->power_avaliable.max = 2530.0;
+	current_flight_dynamics->power_avaliable.max = 2230.0;
 
 	current_flight_dynamics->lift.min = -10.0;
 	current_flight_dynamics->lift.max = 20.0;
