@@ -1048,7 +1048,7 @@ weapon_data
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.0,																	// weight
+			0.133,																	// weight
 			0.0,		  															// min_range
 			1500.0,																// max_range
 			800.0,																// effective_range
@@ -1180,7 +1180,7 @@ weapon_data
 			WEAPON_CLASS_AIR_TO_AIR +										// weapon_class
 			WEAPON_CLASS_AIR_TO_SURFACE,
 
-			0.2,																	// weight
+			0.9,																	// weight.  actually each round is .325 kg, but empty pod weighs 145 kg by itself
 			0.0,		  															// min_range
 			2000.0,																// max_range
 			500.0,																// effective_range
@@ -2371,7 +2371,7 @@ weapon_data
             FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,									// weapon_class
 
-			0.0,																	// weight
+			8.25,																	// weight
 			100.0,																// min_range
 			3000.0,																// max_range
 			600.0,																// effective_range
@@ -2436,7 +2436,7 @@ weapon_data
             FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,				// weapon_class
 
-			11.3,																	// weight
+			16.6,																	// weight
 			100.0,																// min_range
 			4000.0,																// max_range
 			600.0,																// effective_range
@@ -3555,12 +3555,12 @@ weapon_data
             FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_SURFACE,					// weapon_class
 
-			0.0,								// weight
-			500.0,								// min_range
-			7000.0,								// max_range
+			31.4,								// weight
+			400.0,								// min_range
+			5000.0,								// max_range
 			3000.0,								// effective_range
-			500.0,		 						// min_range_loal
-			7000.0,		  						// max_range_loal
+			400.0,		 						// min_range_loal
+			5000.0,		  						// max_range_loal
 			0.0,							// max_range_error_ratio
 			50.0,								// muzzle_velocity
 			0.0,							// muzzle_velocity_max_error
