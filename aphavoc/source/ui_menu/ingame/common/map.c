@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -266,7 +266,7 @@ const layer_control_button_type
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"MISN",
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"AIR",
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"GRND",
-		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"SEA",	
+		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"SEA",
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"DEF",
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"THRT",
 		UI_TYPE_TOGGLE,		map_layer_control_toggle_function,	"TRACK",
@@ -296,7 +296,7 @@ static vec3d* get_last_known_position(entity* en)
 
 		int day = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY);
 		float current_time = current_time = (day * 24 *3600) + get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
-		
+
 		float last_update = get_local_entity_float_value (en, FLOAT_TYPE_LAST_SEEN_TIME);
 		float time_since_last_update = current_time - last_update;
 
@@ -373,7 +373,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	enemy_side = get_enemy_side (this_side);
@@ -389,12 +389,12 @@ void draw_2d_map (ui_object *obj, void *arg)
 
 	track_entity = NULL;
 
-	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_TRACK_PLAYER)) 
+	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_TRACK_PLAYER))
 	{
 		//
 		// Track subject of map object.....
 		//
-		
+
 		en = map_dimensions->subject_entity;
 
 		if (en)
@@ -402,7 +402,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 			//
 			// ...Unless it's not meant to be tracked
 			//
-			
+
 			if (!get_local_entity_int_value (en, INT_TYPE_TRACK_ENTITY_ON_MAP))
 			{
 				en = NULL;
@@ -430,7 +430,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 			ASSERT (pos);
-		
+
 			map_dimensions->x = pos->x;
 			map_dimensions->z = pos->z;
 		}
@@ -441,7 +441,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 	//
 
 	bound_map_extents (obj, &width, &height);
-	
+
 	x = map_dimensions->x;
 	z = map_dimensions->z;
 
@@ -449,7 +449,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 	// draw map
 	//
 
-	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_SECTOR_SIDES)) 
+	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_SECTOR_SIDES))
 	{
 		set_2d_terrain_contour_colour (FALSE);
 	}
@@ -457,12 +457,12 @@ void draw_2d_map (ui_object *obj, void *arg)
 	{
 		set_2d_terrain_contour_colour (TRUE);
 	}
-	
+
 	set_2d_terrain_map_dimensions (
               x - width/2, z + height/2,
               x + width/2, z - height/2,
               x1, y1, (x1 + x_size) - 0.01, (y1 + y_size) - 0.01 );
- 
+
 	terrain_2d_map_contour_lines_drawn = TRUE;
 
 	draw_2d_shaded_terrain_contour_map ();
@@ -511,7 +511,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 	{
 		map_draw_track_entity (obj, track_entity);
 	}
-	
+
 	map_draw_subject_entity (obj);
 
 	map_draw_waypoint_routes (obj, this_side);
@@ -539,7 +539,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 
 		map_draw_highlighted_insert_waypoint_icon (obj, &(map_dimensions->mouse_over_object.pos));
 	}
-	
+
 	set_last_drawn_map_object (obj);
 
 	if (track_entity)
@@ -566,7 +566,7 @@ void map_draw_waypoint_routes (ui_object *obj, entity_sides side)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	//
 	// Draw waypoint routes dependent of subject of the map
 	//
@@ -578,30 +578,30 @@ void map_draw_waypoint_routes (ui_object *obj, entity_sides side)
 		//
 		// If a TASK - draw waypoint route for that task only
 		//
-	
+
 		if (get_local_entity_type (en) == ENTITY_TYPE_TASK)
 		{
 			draw_task_waypoint_routes (obj, en);
-	
+
 			return;
 		}
-	
+
 		//
 		// If a MOBILE - draw waypoint route for that group only
 		//
-	
+
 		if (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_MOBILE))
 		{
 			draw_group_waypoint_routes (obj, get_local_entity_parent (en, LIST_TYPE_MEMBER));
-	
+
 			return;
 		}
 	}
-	
+
 	//
 	// Default - Draw Player Waypoint Route
 	//
-	
+
 	if (get_gunship_entity ())
 	{
 		draw_group_waypoint_routes (obj, get_local_entity_parent (get_gunship_entity (), LIST_TYPE_MEMBER));
@@ -667,9 +667,9 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 		//
 		// Draw Connecting Lines .........
 		//
-		
+
 		wp2 = get_local_entity_child_succ (wp1, LIST_TYPE_WAYPOINT);
-	
+
 		while (wp2)
 		{
 			get_local_entity_vec3d (wp1, VEC3D_TYPE_POSITION, &wpos1);
@@ -695,11 +695,11 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 		//
 		// Draw Icons ..............
 		//
-		
+
 		wp1 = get_local_entity_first_child (en, LIST_TYPE_WAYPOINT);
 
 		wp2 = get_local_entity_child_succ (wp1, LIST_TYPE_WAYPOINT);
-	
+
 		while (wp2)
 		{
 			get_local_entity_vec3d (wp1, VEC3D_TYPE_POSITION, &wpos1);
@@ -724,13 +724,13 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 			//
 			// Draw WP1 Letter
 			//
-			
+
 			sprintf (tag, "%c", get_local_entity_char_value (wp1, CHAR_TYPE_TAG));
 
 			font_width = ui_get_string_length (tag);
 
 			ui_display_text (tag, spos1.x - (font_width * 0.5), spos1.z - (font_height * 0.5));
-	
+
 			//
 			// Add Insert Waypoint Icon
 			//
@@ -802,7 +802,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 							case FLIGHT_PATH_ACTION_USER_NAVIGATING:
 							{
-			
+
 								draw_line (spos1.x, spos1.z, spos2.x, spos2.z, sys_col_red);
 
 								break;
@@ -810,7 +810,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 							case FLIGHT_PATH_ACTION_AUTOPILOT_NAVIGATING:
 							{
-			
+
 								draw_line (spos1.x, spos1.z, spos2.x, spos2.z, sys_col_green);
 
 								break;
@@ -905,14 +905,14 @@ void draw_group_waypoint_routes (ui_object *obj, entity *en)
 {
 	entity
 		*task;
-		
+
 	if (en)
 	{
-	
+
 		ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GROUP);
-	
+
 		task = get_local_group_primary_task (en);
-	
+
 		if (task)
 		{
 			draw_task_waypoint_routes (obj, task);
@@ -1009,7 +1009,7 @@ void load_map_textures (void)
 				map_icons [side][icon] = NULL;
 			}
 		}
-	
+
 		load_map_icon (MAP_ICON_CAMPAIGN_OBJECTIVE,	ENTITY_SIDE_NEUTRAL, "graphics\\ui\\cohokum\\icons\\campobj.psd");
 		load_map_icon (MAP_ICON_EVENT, 					ENTITY_SIDE_NEUTRAL, "graphics\\ui\\cohokum\\icons\\hotspot.psd");
 		load_map_icon (MAP_ICON_EXPLOSION, 				ENTITY_SIDE_NEUTRAL, "graphics\\ui\\cohokum\\icons\\expl.psd");
@@ -1078,7 +1078,7 @@ void load_map_textures (void)
 				key_icons [layer][loop] = NULL;
 			}
 		}
-	
+
 		for (layer = 0; layer < NUM_MAP_LAYER_CONTROLS; layer ++)
 		{
 			load_key_icons (layer);
@@ -1171,7 +1171,7 @@ void update_layer_control_objects (int layer)
 {
 	ui_object
 		*obj;
-		
+
 	map_dimension_type
 		*data;
 
@@ -1180,9 +1180,9 @@ void update_layer_control_objects (int layer)
 	while (data)
 	{
 		obj = data->layer_control_objects [layer];
-	
+
 		ASSERT (obj);
-	
+
 		if (global_layer_controls & (1 << layer))
 		{
 			set_toggle_button_on (obj);
@@ -1191,8 +1191,8 @@ void update_layer_control_objects (int layer)
 		{
 			set_toggle_button_off (obj);
 		}
-	
-		data = data->next;		
+
+		data = data->next;
 	}
 }
 
@@ -1208,6 +1208,22 @@ void initialise_layer_control_objects (void)
 	for (loop = 0; loop < NUM_MAP_LAYER_CONTROLS; loop ++)
 	{
 		update_layer_control_objects (loop);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void player_map_updated(entity* changed_task)
+{
+	if (get_gunship_entity() && get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+	{
+		entity* group = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_MEMBER);
+		entity* player_task = group ? get_local_group_primary_task(group) : NULL;
+
+		if (player_task && changed_task == player_task)
+			hind_map_waypoints_changed();
 	}
 }
 
@@ -1240,7 +1256,7 @@ static int check_visible_entity (ui_object *obj, entity *en)
 	//
 	// For developement purposes, if map fog option off - show everything...
 	//
-	
+
 	if (!(global_layer_controls & (1 << MAP_LAYER_CONTROL_FOG_OF_WAR)))
 	{
 		return TRUE;
@@ -1291,34 +1307,34 @@ void map_centralise_function (ui_object *obj, void *arg)
 
 	map_dimension_type
 		*map_dimensions;
-		
+
 	entity
 		*en,
 		*group;
-	
+
 	int
 		side;
 
 	if (((int) arg) == BUTTON_STATE_DOWN)
 	{
 		ASSERT (obj);
-	
+
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 		ASSERT (map_dimensions);
-		
+
 		// Jabberwock 031007 Campaign Commander - cancel mission
-		
-		
+
+
 		map_dimensions->selected_entity = NULL;
 
 		side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-	
+
 		en = get_map_mouse_over_entity (map_dimensions);
-		
+
 		if ((en) && (get_local_entity_type (en) == ENTITY_TYPE_TASK) && (session_camcom) && (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER))
 		{
-			if (get_local_entity_int_value (en, INT_TYPE_SIDE) == side) 
+			if (get_local_entity_int_value (en, INT_TYPE_SIDE) == side)
 			{
 				if (get_local_task_list_type (en) == LIST_TYPE_UNASSIGNED_TASK)
 				{
@@ -1327,7 +1343,7 @@ void map_centralise_function (ui_object *obj, void *arg)
 				else
 				{
 					group = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
-					
+
 					notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, en, en, TASK_TERMINATED_STOP_TIME_REACHED);
 				}
 			}
@@ -1339,7 +1355,7 @@ void map_centralise_function (ui_object *obj, void *arg)
 			// Disable Tracking
 			//
 
-		//	force_map_layer_control_object (MAP_LAYER_CONTROL_TRACK_PLAYER, FALSE); 
+		//	force_map_layer_control_object (MAP_LAYER_CONTROL_TRACK_PLAYER, FALSE);
 
 			//
 			// work out click position in world coords
@@ -1370,7 +1386,7 @@ void map_zoom_in_function (ui_object *obj, void *arg)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	map_dimensions->size /= 2.0;
 
 	map_dimensions->size = bound (map_dimensions->size, 100.0, max (MAX_MAP_X, MAX_MAP_Z));
@@ -1409,7 +1425,7 @@ void map_wheel_centralise (ui_object *obj)
 		*map_dimensions;
 
 		ASSERT (obj);
-	
+
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 		ASSERT (map_dimensions);
@@ -1418,24 +1434,24 @@ void map_wheel_centralise (ui_object *obj)
 		pos.z = get_mouse_y ();
 
 		map_get_world_coords_from_screen (obj, &pos, &pos);
-	
+
 		map_dimensions->x = pos.x;
 		map_dimensions->z = pos.z;
-		
+
 		bound_map_extents (obj, NULL, NULL);
-		
+
 }
 
 
 void map_wheel_zoom_in_event (event *ev)
 {
-	
+
 	map_dimension_type
 		*map_dimensions;
 
 	ui_object
 			*obj;
-			
+
 	float
 		x,
 		y,
@@ -1445,19 +1461,19 @@ void map_wheel_zoom_in_event (event *ev)
 		wz_min,
 		wx_max,
 		wz_max;
-		
+
 	vec3d
 		pos1;
 
 	obj = last_drawn_map_object;
-	
+
 
 	if (obj)
 	{
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 		ASSERT (map_dimensions);
-	
+
 		map_dimensions->size /= 2.0;
 
 		map_dimensions->size = bound (map_dimensions->size, 100.0, max (MAX_MAP_X, MAX_MAP_Z));
@@ -1466,13 +1482,13 @@ void map_wheel_zoom_in_event (event *ev)
 		pos1.z = get_mouse_y ();
 
 		x = get_ui_object_x (obj);
-				
+
 		y = get_ui_object_y (obj);
 
 		map_wheel_centralise (obj);
-		
+
 		get_2d_terrain_map_world_dimensions (&wx_min, &wz_min, &wx_max, &wz_max);
-		
+
 		width = get_ui_object_x_size (obj)/2;
 		height = get_ui_object_y_size (obj)/2;
 
@@ -1516,6 +1532,73 @@ void map_add_waypoint (entity *wp1, vec3d *pos)
 		ENTITY_ATTR_VEC3D (VEC3D_TYPE_POSITION, pos->x, pos->y, pos->z),
 		ENTITY_ATTR_END
 	);
+
+	player_map_updated(task);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void map_delete_waypoint_event ()
+{
+	entity
+		*en,
+		*task;
+
+	entity_sub_types
+		sub_type;
+
+	en = get_ui_mouse_over_entity ();
+
+	if (en)
+	{
+		if (get_local_entity_type (en) == ENTITY_TYPE_WAYPOINT)
+		{
+			if ((get_local_entity_child_succ (en, LIST_TYPE_WAYPOINT)) && (get_local_entity_child_pred (en, LIST_TYPE_WAYPOINT)))
+			{
+				sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
+
+				if (waypoint_database [sub_type].planner_moveable)
+				{
+					//
+					// Delete waypoint
+					//
+
+					if (!get_local_entity_first_child (en, LIST_TYPE_CURRENT_WAYPOINT))
+					{
+						task = get_local_entity_parent (en, LIST_TYPE_WAYPOINT);
+
+						player_map_updated(task);
+
+						ASSERT (task);
+
+						ASSERT (get_local_entity_int_value (task, INT_TYPE_PRIMARY_TASK));
+
+						//
+						// "Fast-track" unlinking of waypoint, Required to stop client "double-deleting"
+						//
+
+						unlink_local_entity_children (en, LIST_TYPE_CURRENT_WAYPOINT);
+
+						delete_local_entity_from_parents_child_list (en, LIST_TYPE_TASK_DEPENDENT);
+
+						delete_local_entity_from_parents_child_list (en, LIST_TYPE_WAYPOINT);
+
+						//
+						// Destroy Entity
+						//
+
+						destroy_client_server_entity (en);
+
+						update_client_server_entity_waypoint_list_tags (task);
+
+						set_ui_mouse_over_entity (NULL);
+					}
+				}
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1593,7 +1676,7 @@ static void draw_full_screen_toggle_function (ui_object *obj, void *arg)
 	ASSERT (map_dimensions->map_area);
 
 	ASSERT (map_dimensions->full_screen_parent);
-	
+
 	set_ui_object_drawable (obj, TRUE);
 
 	set_ui_object_highlightable (obj, TRUE);
@@ -1635,15 +1718,15 @@ void toggle_full_screen_function (ui_object *obj, void *arg)
 		ASSERT (*(map_dimensions->full_screen_parent));
 
 		info_area = get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
-	
+
 		if (map_dimensions->full_screen)
 		{
 			//
 			// Minimize map
 			//
-	
+
 			set_ui_object_drawable (*(map_dimensions->full_screen_parent), FALSE);
-	
+
 			set_ui_object_parent (map_dimensions->map_area, map_dimensions->parent);
 
 			if (info_area)
@@ -1658,11 +1741,11 @@ void toggle_full_screen_function (ui_object *obj, void *arg)
 			//
 			// Maximize map
 			//
-	
+
 			set_ui_object_drawable (*(map_dimensions->full_screen_parent), TRUE);
-	
+
 			set_ui_object_parent (map_dimensions->map_area, *(map_dimensions->full_screen_parent));
-	
+
 			if (info_area)
 			{
 				set_ui_object_drawable (info_area, TRUE);
@@ -1733,19 +1816,19 @@ static void minimize_full_screen_function (map_dimension_type *map_dimensions)
 	if (map_dimensions->full_screen_parent)
 	{
 		ASSERT (*(map_dimensions->full_screen_parent));
-	
+
 		if (parent == *(map_dimensions->full_screen_parent))
 		{
 			//
 			// Minimize map
 			//
-	
+
 			info_area = get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
-	
+
 			set_ui_object_drawable (*(map_dimensions->full_screen_parent), FALSE);
-	
+
 			set_ui_object_parent (map_dimensions->map_area, map_dimensions->parent);
-	
+
 			if (info_area)
 			{
 				set_ui_object_drawable (info_area, FALSE);
@@ -1786,8 +1869,8 @@ void minimize_all_map_objects (void)
 	while (data)
 	{
 		minimize_full_screen_function (data);
-	
-		data = data->next;		
+
+		data = data->next;
 	}
 }
 
@@ -1811,42 +1894,42 @@ void map_goto_function (ui_object *obj)
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
-	
+
 		ASSERT (map_dimensions);
-	
+
 		if (get_gunship_entity ())
 		{
 			if ((map_dimensions->enable_goto) || (session_planner_goto_button))
 			{
 				pos.x = get_mouse_x ();
 				pos.z = get_mouse_y ();
-		
+
 				map_get_world_coords_from_screen (obj, &pos, &pos);
-		
+
 				bound_position_to_adjusted_map_volume (&pos);
-		
+
 				altitude = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_RADAR_ALTITUDE);
-		
+
 				altitude = min (altitude, 100.0);
-		
+
 				pos.y = get_3d_terrain_elevation (pos.x, pos.z) + altitude;
-		
+
 				set_client_server_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pos);
-			
+
 				current_flight_dynamics->position.x = pos.x;
 				current_flight_dynamics->position.y = pos.y;
 				current_flight_dynamics->position.z = pos.z;
-			
+
 				current_flight_dynamics->model_motion_vector.x = 0.0;
 				current_flight_dynamics->model_motion_vector.y = 0.0;
 				current_flight_dynamics->model_motion_vector.z = 0.0;
-			
+
 				current_flight_dynamics->world_motion_vector.x = 0.0;
 				current_flight_dynamics->world_motion_vector.y = 0.0;
 				current_flight_dynamics->world_motion_vector.z = 0.0;
-		
+
 				set_current_flight_dynamics_valid_collision_points (FALSE);
-	
+
 				map_dimensions->enable_goto = FALSE;
 			}
 		}
@@ -1933,34 +2016,34 @@ void map_pop_move_waypoint_events (event *ev)
 				*last_waypoint_position;
 
 			last_wp = get_local_entity_child_pred (map_dimensions->selected_entity, LIST_TYPE_WAYPOINT);
-	
+
 			if (last_wp)
 			{
-	
+
 				last_waypoint_position = get_local_entity_vec3d_ptr (last_wp, VEC3D_TYPE_POSITION);
-	
+
 				range = get_2d_range (pos, last_waypoint_position);
-	
+
 				task = get_local_entity_parent (map_dimensions->selected_entity, LIST_TYPE_WAYPOINT);
-	
+
 				ASSERT (task);
-	
+
 				guide = get_local_entity_first_child (task, LIST_TYPE_GUIDE);
-	
+
 				if (guide)
 				{
 
 					group = get_local_entity_parent (guide, LIST_TYPE_GUIDE_STACK);
-		
+
 					member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
-		
+
 					if (member)
 					{
-			
+
 						flight_time = range / get_local_entity_float_value (member, FLOAT_TYPE_CRUISE_VELOCITY);
-			
+
 						set_client_server_entity_float_value (map_dimensions->selected_entity, FLOAT_TYPE_FLIGHT_TIME, flight_time);
-	
+
 						debug_log ("CA_MAP: setting flight time for waypoint %s to %f", get_local_entity_string (map_dimensions->selected_entity, STRING_TYPE_FULL_NAME), flight_time);
 					}
 				}
@@ -2021,6 +2104,8 @@ void map_move_waypoint_position (event *ev)
 		pos.y = max (pos.y, get_3d_terrain_elevation (pos.x, pos.z));
 
 		set_local_entity_vec3d (map_dimensions->selected_entity, VEC3D_TYPE_POSITION, &pos);
+
+		player_map_updated(get_local_entity_parent(map_dimensions->selected_entity, LIST_TYPE_WAYPOINT));
 	}
 }
 
@@ -2055,13 +2140,13 @@ void map_get_screen_coords_from_world (ui_object *obj, vec3d *wpos, vec3d *spos)
 
 	x_size = get_ui_object_x_size (obj);
 	y_size = get_ui_object_y_size (obj);
-	
+
 	get_2d_terrain_map_world_dimensions (&wx_min, &wz_min, &wx_max, &wz_max);
 
 	width = (wx_max - wx_min);
 
 	height = (wz_min - wz_max);
-	
+
 	spos->x -= wx_min;
 	spos->x /= width;
 	spos->x *= x_size;
@@ -2105,13 +2190,13 @@ void map_get_world_coords_from_screen (ui_object *obj, vec3d *spos, vec3d *wpos)
 
 	x_size = get_ui_object_x_size (obj);
 	y_size = get_ui_object_y_size (obj);
-	
+
 	get_2d_terrain_map_world_dimensions (&wx_min, &wz_min, &wx_max, &wz_max);
 
 	width = (wx_max - wx_min);
 
 	height = (wz_min - wz_max);
-	
+
 	wpos->x -= x1;
 	wpos->x /= x_size;
 	wpos->x *= width;
@@ -2194,7 +2279,7 @@ void force_map_layer_control_object (map_layer_control_types index, int state)
 	{
 		global_layer_controls &= ~(1 << index);
 	}
-	
+
 	update_layer_control_objects (index);
 
 	set_global_map_layer_options (global_layer_controls);
@@ -2289,7 +2374,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 				threat_circle_filled_colour.r = 20;
 				threat_circle_filled_colour.g = 20;
 				threat_circle_filled_colour.b = 200;
-	
+
 				threat_circle_outline_colour = ui_colour_dark_blue;
 			}
 			else
@@ -2297,7 +2382,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 				threat_circle_filled_colour.r = 200;
 				threat_circle_filled_colour.g = 20;
 				threat_circle_filled_colour.b = 20;
-	
+
 				threat_circle_outline_colour = ui_colour_dark_red;
 			}
 
@@ -2311,7 +2396,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 			{
 				threat_circle_outline_colour.a = 128;
 			}
-			
+
 			draw_outline_circle (spos1.x, spos1.z, screen_radius, circle_side_count, threat_circle_outline_colour);
 		}
 	}
@@ -2347,11 +2432,11 @@ void map_draw_threat_circles (ui_object *obj, entity_sides side)
 		circle_side_count;
 
 	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_THREAT_CIRCLES))
-	{				
+	{
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
-	
+
 		ASSERT (map_dimensions);
-		
+
 		force = get_local_force_entity (side);
 
 		if (map_dimensions->size >= MIN_THREAT_CIRCLE_MAP_RADIUS)
@@ -2372,40 +2457,40 @@ void map_draw_threat_circles (ui_object *obj, entity_sides side)
 		}
 
 		ASSERT ((circle_side_count >= MIN_THREAT_CIRCLE_SIDES) && (circle_side_count <= MAX_THREAT_CIRCLE_SIDES));
-		
+
 		//
 		// SEA GROUPS
 		//
-	
+
 		group = get_local_entity_first_child (force, LIST_TYPE_SEA_REGISTRY);
-		
+
 		while (group)
 		{
 			group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 			if (get_local_entity_int_value (group, INT_TYPE_AIR_ATTACK_STRENGTH) > 0)
 			{
 				map_draw_threat_circle (obj, group, circle_side_count);
 			}
-		
+
 			group = get_local_entity_child_succ (group, LIST_TYPE_SEA_REGISTRY);
 		}
-	
+
 		//
 		// LAND GROUPS
 		//
-	
+
 		group = get_local_entity_first_child (force, LIST_TYPE_GROUND_REGISTRY);
-		
+
 		while (group)
 		{
 			group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 			if (get_local_entity_int_value (group, INT_TYPE_AIR_ATTACK_STRENGTH) > 0)
 			{
 				map_draw_threat_circle (obj, group, circle_side_count);
 			}
-	
+
 			group = get_local_entity_child_succ (group, LIST_TYPE_GROUND_REGISTRY);
 		}
 	}
@@ -2448,9 +2533,9 @@ static void map_draw_group (ui_object *obj, entity *en)
 	ASSERT (en);
 
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
-	
+
 	ASSERT (map_dimensions);
-		
+
 	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
 	is_friendly = side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
@@ -2485,14 +2570,14 @@ static void map_draw_group (ui_object *obj, entity *en)
 			if (check_visible_entity (obj, member))
 			{
 				icon = get_local_entity_int_value (member, INT_TYPE_MAP_ICON);
-		
+
 				if (icon != MAP_ICON_NONE)
 				{
 					pos = get_local_entity_vec3d_ptr (member, VEC3D_TYPE_POSITION);
-				
+
 					map_draw_entity_icon (obj, member, pos, icon, side, 1.0);
 				}
-			}			
+			}
 
 			member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 		}
@@ -2502,11 +2587,11 @@ static void map_draw_group (ui_object *obj, entity *en)
 		//
 		// draw group icon
 		//
-		
+
 		if (check_visible_entity (obj, en))
 		{
 			icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
-		
+
 			if (icon != MAP_ICON_NONE)
 			{
 				group_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
@@ -2531,14 +2616,14 @@ static void map_draw_group (ui_object *obj, entity *en)
 				}*/
 //				else
 //					pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-				
+
 				map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
-			
+
 				if (get_current_list_mode () == COMMON_LIST_MODE_GROUP && is_friendly)
 					if (group_database [group_type].default_entity_type == ENTITY_TYPE_HELICOPTER)
 					{
 						name = get_local_entity_string (en, STRING_TYPE_GROUP_CALLSIGN);
-					
+
 						map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
 					}
 			}
@@ -2566,7 +2651,7 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	force = get_local_force_entity (side);
 
 	if (get_ui_object_drawable (campaign_page [CAMPAIGN_PAGE_GROUP]))
@@ -2583,16 +2668,16 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 	//
 
 	group = get_local_entity_first_child (force, LIST_TYPE_SEA_REGISTRY);
-	
+
 	while (group)
 	{
 		group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if ((group == current_page_group) || (global_layer_controls & (1 << group_database [group_type].map_layer_type)))
-		{				
+		{
 			map_draw_group (obj, group);
 		}
-	
+
 		group = get_local_entity_child_succ (group, LIST_TYPE_SEA_REGISTRY);
 	}
 
@@ -2601,13 +2686,13 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 	//
 
 	group = get_local_entity_first_child (force, LIST_TYPE_GROUND_REGISTRY);
-	
+
 	while (group)
 	{
 		group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if ((group == current_page_group) || (global_layer_controls & (1 << group_database [group_type].map_layer_type)))
-		{				
+		{
 			map_draw_group (obj, group);
 		}
 
@@ -2619,7 +2704,7 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 	//
 
 	group = get_local_entity_first_child (force, LIST_TYPE_AIR_REGISTRY);
-	
+
 	while (group)
 	{
 		group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
@@ -2631,7 +2716,7 @@ void map_draw_groups (ui_object *obj, entity_sides side)
 				map_draw_group (obj, group);
 			}
 		}
-	
+
 		group = get_local_entity_child_succ (group, LIST_TYPE_AIR_REGISTRY);
 	}
 }
@@ -2692,7 +2777,7 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	pilot_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	pilot_force = get_local_force_entity (pilot_side);
@@ -2700,17 +2785,17 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 	if (check_visible_entity (obj, en))
 	{
 		sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
-			
+
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
-	
+
 		//
 		// Draw Icon
 		//
-									
+
 		icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
-	
+
 		ASSERT (icon != MAP_ICON_NONE);
-	
+
 		map_draw_entity_icon (obj, en, pos, icon, side, 1.0);
 
 		if (get_local_entity_parent (en, LIST_TYPE_CAMPAIGN_OBJECTIVE) == pilot_force)
@@ -2718,14 +2803,14 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 			//
 			// Highlight as campaign objective
 			//
-										
+
 			map_draw_entity_icon (obj, en, pos, MAP_ICON_CAMPAIGN_OBJECTIVE, ENTITY_SIDE_NEUTRAL, 1.0);
 		}
 
 		//
 		// Draw Overlay Icon
 		//
-						
+
 		if (overlay_icon != MAP_ICON_NONE)
 		{
 			map_draw_entity_icon (obj, NULL, pos, overlay_icon, ENTITY_SIDE_NEUTRAL, 1.0);
@@ -2741,7 +2826,7 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 				//
 
 				name = get_local_entity_string (en, STRING_TYPE_KEYSITE_NAME);
-		
+
 				map_draw_string (obj, pos, name, UI_FONT_ARIAL_16, &col, FALSE);
 
 				break;
@@ -2778,7 +2863,7 @@ void map_draw_keysites (ui_object *obj, entity_sides side)
 		ASSERT (force);
 
 		keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
-		
+
 		while (keysite)
 		{
 			if ((get_local_entity_int_value (keysite, INT_TYPE_IN_USE)) && (get_local_entity_int_value (keysite, INT_TYPE_ALIVE)))
@@ -2790,7 +2875,7 @@ void map_draw_keysites (ui_object *obj, entity_sides side)
 					map_draw_keysite (obj, keysite, MAP_ICON_NONE);
 				}
 			}
-	
+
 			keysite = get_local_entity_child_succ (keysite, LIST_TYPE_KEYSITE_FORCE);
 		}
 	}
@@ -2819,9 +2904,9 @@ void map_draw_towns (ui_object *obj)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	item = population_name_database;
-	
+
 	while (item)
 	{
 		if (item->type == POPULATION_TYPE_TOWN)
@@ -2869,15 +2954,15 @@ void map_draw_pilots (ui_object *obj, entity_sides side)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	force = get_local_force_entity (side);
 
 	pilot = get_local_entity_first_child (force, LIST_TYPE_PILOT);
-	
+
 	while (pilot)
 	{
 		gunship = get_local_entity_parent (pilot, LIST_TYPE_AIRCREW);
-		
+
 		if (gunship)
 		{
 			if (get_local_entity_int_value (gunship, INT_TYPE_ALIVE))
@@ -2885,16 +2970,16 @@ void map_draw_pilots (ui_object *obj, entity_sides side)
 				if (check_visible_entity (obj, gunship))
 				{
 					pos = get_local_entity_vec3d_ptr (gunship, VEC3D_TYPE_POSITION);
-			
+
 					name = get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME);
-				
+
 					map_draw_entity_icon (obj, gunship, pos, MAP_ICON_PLAYER, side, 1.0);
-	
+
 					if (pilot == get_pilot_entity ())
 					{
 						map_draw_entity_icon (obj, gunship, pos, MAP_ICON_PLAYER_OVERLAY, ENTITY_SIDE_NEUTRAL, 1.0);
 					}
-	
+
 					map_draw_string (obj, pos, name, UI_FONT_ARIAL_10, &ui_ingame_selected_text_colour, FALSE);
 				}
 			}
@@ -2931,15 +3016,15 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	icon = MAP_ICON_MISSION;
 
 	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_MISSIONS))
-	{ 
+	{
 		force = get_local_force_entity (side);
-	
+
 		keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
-		
+
 		while (keysite)
 		{
 			if (get_local_entity_int_value (keysite, INT_TYPE_IN_USE))
@@ -2947,7 +3032,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 				//
 				// UNASSIGNED
 				//
-				
+
 				mission = get_local_entity_first_child (keysite, LIST_TYPE_UNASSIGNED_TASK);
 
 				while (mission)
@@ -2955,32 +3040,32 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 					if (get_local_entity_int_value (mission, INT_TYPE_VISIBLE_TASK))
 					{
 						objective = get_local_entity_parent (mission, LIST_TYPE_TASK_DEPENDENT);
-	
+
 						if (objective)
 						{
 							pos = get_last_known_position(objective);
-	
+
 							if (pos)
 							{
 								map_draw_entity_icon (obj, mission, pos, icon, side, 1.0);
-		
+
 								if (get_current_list_mode () == COMMON_LIST_MODE_MISSION)
 								{
 									sprintf (name, "%s #%d", get_trans (get_local_entity_string (mission, STRING_TYPE_SHORT_DISPLAY_NAME)), get_local_entity_int_value (mission, INT_TYPE_TASK_ID));
-						
+
 									map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_white, FALSE);
 								}
 							}
 						}
 					}
-					
+
 					mission = get_local_entity_child_succ (mission, LIST_TYPE_UNASSIGNED_TASK);
 				}
 
 				//
 				// ASSIGNED
 				//
-				
+
 				mission = get_local_entity_first_child (keysite, LIST_TYPE_ASSIGNED_TASK);
 
 				while (mission)
@@ -2988,19 +3073,19 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 					if (get_local_entity_int_value (mission, INT_TYPE_VISIBLE_TASK))
 					{
 						objective = get_local_entity_parent (mission, LIST_TYPE_TASK_DEPENDENT);
-	
+
 						if (objective)
 						{
 							pos = get_last_known_position(objective);
-	
+
 							ASSERT (pos);
-	
+
 							map_draw_entity_icon (obj, mission, pos, icon, side, 1.0);
-	
+
 							if (get_current_list_mode () == COMMON_LIST_MODE_MISSION)
 							{
 								sprintf (name, "%s #%d", get_trans (get_local_entity_string (mission, STRING_TYPE_SHORT_DISPLAY_NAME)), get_local_entity_int_value (mission, INT_TYPE_TASK_ID));
-					
+
 								map_draw_string (obj, pos, name, UI_FONT_ARIAL_14, &ui_colour_orange, FALSE);
 							}
 						}
@@ -3009,7 +3094,7 @@ void map_draw_missions (ui_object *obj, entity_sides side)
 					mission = get_local_entity_child_succ (mission, LIST_TYPE_ASSIGNED_TASK);
 				}
 			}
-	
+
 			keysite = get_local_entity_child_succ (keysite, LIST_TYPE_KEYSITE_FORCE);
 		}
 	}
@@ -3031,7 +3116,7 @@ void map_draw_symbol (ui_object *obj, vec3d *pos, unsigned char tag, font_types 
 	ASSERT (pos);
 
 	map_get_screen_coords_from_world (obj, pos, &screen_pos);
-		
+
 	set_ui_font_type (font);
 
 	set_ui_font_colour (*col);
@@ -3060,7 +3145,7 @@ void map_draw_string (ui_object *obj, vec3d *pos, const char *string, font_types
 	ASSERT (pos);
 
 	map_get_screen_coords_from_world (obj, pos, &screen_pos);
-		
+
 	set_ui_font_type (font);
 
 	set_ui_font_colour (*col);
@@ -3068,9 +3153,9 @@ void map_draw_string (ui_object *obj, vec3d *pos, const char *string, font_types
 	if (centered)
 	{
 		font_height = ui_get_font_height ();
-	
+
 		font_width = ui_get_string_length (string);
-	
+
 		ui_display_text (string, screen_pos.x - (font_width * 0.5), screen_pos.z - (font_height * 0.5));
 	}
 	else
@@ -3124,13 +3209,13 @@ static void map_draw_icon (ui_object *obj, vec3d *pos, int icon, int side, float
 	get_2d_terrain_map_screen_dimensions (&sxmin, &symin, &sxmax, &symax);
 
 	map_get_screen_coords_from_world (obj, pos, &screen_pos);
-		
+
 	//
 	// Always have to render to the video screen
 	//
-		
+
 	ASSERT ( active_screen == video_screen );
-	
+
 	icon_graphic = map_icons [side][icon];
 
 	ASSERT (icon_graphic);
@@ -3151,7 +3236,7 @@ static void map_draw_icon (ui_object *obj, vec3d *pos, int icon, int side, float
 	colour.green = 255;
 	colour.blue = 255;
 	colour.alpha = 255;
-	
+
 	ui_draw_texture_graphic (x1, y1, x2, y2, icon_graphic, colour);
 
 	if (distance)
@@ -3160,12 +3245,12 @@ static void map_draw_icon (ui_object *obj, vec3d *pos, int icon, int side, float
 		{
 			mx = get_mouse_x ();
 			my = get_mouse_y ();
-			
+
 			if ((mx > x1) && (mx < x2) && (my > y1) && (my < y2))
 			{
 				dx = mx - screen_pos.x;
 				dy = my - screen_pos.z;
-			
+
 				(*distance) = ((dx * dx) + (dy * dy));
 			}
 		}
@@ -3183,7 +3268,7 @@ void map_draw_entity_icon (ui_object *obj, entity *en, vec3d *pos, int icon, int
 
 	float
 		distance;
-	
+
 	ASSERT (obj);
 
 	ASSERT (pos);
@@ -3207,7 +3292,7 @@ void map_draw_entity_icon (ui_object *obj, entity *en, vec3d *pos, int icon, int
 				map_dimensions->mouse_over_object.type = MOUSE_OVER_OBJECT_ENTITY;
 
 				map_dimensions->mouse_over_object.en = en;
-		
+
 				map_dimensions->mouse_over_object.distance = distance;
 			}
 		}
@@ -3241,7 +3326,7 @@ void map_draw_insert_waypoint_icon (ui_object *obj, entity *wp, vec3d *pos, int 
 	ASSERT (map_dimensions);
 
 	icon = MAP_ICON_WAYPOINT_INSERT;
-	
+
 	scale = ICON_RESOLUTION_SCALE;
 
 	map_draw_icon (obj, pos, icon, side, scale, &distance);
@@ -3261,7 +3346,7 @@ void map_draw_insert_waypoint_icon (ui_object *obj, entity *wp, vec3d *pos, int 
 			map_dimensions->mouse_over_object.pos.x = pos->x;
 			map_dimensions->mouse_over_object.pos.y = pos->y;
 			map_dimensions->mouse_over_object.pos.z = pos->z;
-	
+
 			map_dimensions->mouse_over_object.distance = distance;
 		}
 	}
@@ -3333,13 +3418,13 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 		{
 			mission = get_local_entity_primary_task (en);
 		}
-	
+
 		if (mission)
 		{
 			if (get_local_entity_int_value (mission, INT_TYPE_TASK_STATE) != TASK_STATE_COMPLETED)
 			{
 				objective = get_local_entity_parent (mission, LIST_TYPE_TASK_DEPENDENT);
-	
+
 				if (objective)
 				{
 					mission_pos = get_last_known_position (objective);
@@ -3349,22 +3434,22 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 						//
 						// Draw connecting line
 						//
-				
+
 						map_get_screen_coords_from_world (obj, en_pos, &pos1);
 						map_get_screen_coords_from_world (obj, mission_pos, &pos2);
-				
+
 						draw_line (pos1.x, pos1.z, pos2.x, pos2.z, *col);
-				
+
 						//
 						// Draw Mission Icon
 						//
-				
+
 						icon = get_local_entity_int_value (mission, INT_TYPE_MAP_ICON);
-				
+
 						ASSERT (icon != MAP_ICON_NONE);
-				
+
 						map_draw_entity_icon (obj, mission, mission_pos, icon, side, 1.0);
-					
+
 						map_draw_entity_icon (obj, NULL, mission_pos, overlay_icon, ENTITY_SIDE_NEUTRAL, 1.0);
 					}
 				}
@@ -3393,7 +3478,7 @@ static void map_draw_highlighted_group (ui_object *obj, entity *en, int overlay_
 	ASSERT (icon != MAP_ICON_NONE);
 
 	map_draw_entity_icon (obj, en, en_pos, icon, side, 1.0);
-	
+
 	map_draw_entity_icon (obj, NULL, en_pos, overlay_icon, ENTITY_SIDE_NEUTRAL, scale);
 }
 
@@ -3449,25 +3534,25 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 	if (side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE))
 	{
 		group = NULL;
-	
+
 		group_pos = NULL;
-	
+
 		base = NULL;
-	
+
 		base_pos = NULL;
-	
+
 		// get group position
 		guide = get_local_entity_first_child (en, LIST_TYPE_GUIDE);
-	
+
 		if (guide)
 		{
 			group = get_local_entity_parent (guide, LIST_TYPE_GUIDE_STACK);
-	
+
 			ASSERT (group);
-	
+
 			group_pos = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
 		}
-	
+
 		// get base position
 		if (get_local_entity_int_value (en, INT_TYPE_ASSESS_LANDING))
 		{
@@ -3479,39 +3564,39 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 			{
 				base = get_local_entity_ptr_value (en, PTR_TYPE_RETURN_KEYSITE);
 			}
-	
+
 			if (base)
 			{
 				base_pos = get_local_entity_vec3d_ptr (base, VEC3D_TYPE_POSITION);
-	
+
 				ASSERT (base_pos);
 			}
 		}
-	
+
 		//
 		// Draw connecting lines
 		//
-	
+
 		map_get_screen_coords_from_world (obj, mission_pos, &pos1);
-	
+
 		if (group)
 		{
 			ASSERT (group_pos);
-			
+
 			map_get_screen_coords_from_world (obj, group_pos, &pos2);
-	
+
 			draw_line (pos1.x, pos1.z, pos2.x, pos2.z, *col);
 
 			//
 			// Draw Group Icon
 			//
-	
+
 			icon = get_local_entity_int_value (group, INT_TYPE_MAP_ICON);
-	
+
 			ASSERT (icon != MAP_ICON_NONE);
-	
+
 			map_draw_entity_icon (obj, group, group_pos, icon, side, 1.0);
-		
+
 			map_draw_entity_icon (obj, NULL, group_pos, overlay_icon, ENTITY_SIDE_NEUTRAL, 1.0);
 		}
 		else if (base)
@@ -3519,17 +3604,17 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 			ASSERT (base_pos);
 
 			map_get_screen_coords_from_world (obj, base_pos, &pos2);
-	
+
 			draw_line (pos1.x, pos1.z, pos2.x, pos2.z, *col);
-	
+
 			//
 			// Draw Base Icon
 			//
-	
+
 			map_draw_keysite (obj, base, overlay_icon);
 		}
 	}
-	
+
 	//
 	// Draw Mission Icon
 	//
@@ -3539,7 +3624,7 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 	ASSERT (icon != MAP_ICON_NONE);
 
 	map_draw_entity_icon (obj, en, mission_pos, icon, side, 1.0);
-	
+
 	map_draw_entity_icon (obj, NULL, mission_pos, overlay_icon, ENTITY_SIDE_NEUTRAL, scale);
 }
 
@@ -3591,7 +3676,7 @@ static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overl
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	//
 	// Draw selected waypoint
 	//
@@ -3599,7 +3684,7 @@ static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overl
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 	ASSERT (pos);
-	
+
 	icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
 
 	ASSERT (icon != MAP_ICON_NONE);
@@ -3619,7 +3704,7 @@ static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overl
 		//
 		// Selected Icons
 		//
-		
+
 		switch (icon)
 		{
 			case MAP_ICON_WAYPOINT_NAV:
@@ -3641,7 +3726,7 @@ static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overl
 		//
 		// Highlighted Icons
 		//
-		
+
 		switch (icon)
 		{
 			case MAP_ICON_WAYPOINT_NAV:
@@ -3722,7 +3807,7 @@ void map_draw_mouse_over_entity (ui_object *obj, entity *en)
 
 	ASSERT (obj);
 
-	#if ANIMATE_MOUSE_OVER_ICON	
+	#if ANIMATE_MOUSE_OVER_ICON
 	{
 		float
 			x,
@@ -3778,7 +3863,7 @@ void map_draw_subject_entity (ui_object *obj)
 	{
 		//
 		// Draw base icon
-		// 
+		//
 
 		en = get_local_entity_safe_ptr (get_ui_object_item_number (campaign_page [CAMPAIGN_PAGE_BASE]));
 
@@ -3811,7 +3896,7 @@ void bound_map_extents (ui_object *obj, float *w, float *h)
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	x_size = get_ui_object_x_size (obj);
 
 	y_size = get_ui_object_y_size (obj);
@@ -3819,7 +3904,7 @@ void bound_map_extents (ui_object *obj, float *w, float *h)
 	//
 	// Correct Aspect Ratio + Bound Size
 	//
-	
+
 	if (x_size < y_size)
 	{
 		height = map_dimensions->size;
@@ -3885,7 +3970,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 	real_colour
 		colour,
 		specular;
-	
+
 	float
 		x_size,
 		y_size,
@@ -3909,7 +3994,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 	map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 	ASSERT (map_dimensions);
-	
+
 	if (
 			(global_layer_controls & (1 << MAP_LAYER_CONTROL_SECTOR_SIDES)) ||
 			(global_layer_controls & (1 << MAP_LAYER_CONTROL_FOG_OF_WAR))
@@ -3925,7 +4010,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 
 			x1 = get_ui_object_x (obj);
 			y1 = get_ui_object_y (obj);
-		
+
 			convert_float_to_int (x1, &ix);
 			convert_float_to_int (y1, &iy);
 
@@ -3950,19 +4035,19 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 			//
 			// Always have to render to the video screen
 			//
-		
+
 			ASSERT ( active_screen == video_screen );
-	
+
 			colour.red = 255;
 			colour.green = 255;
 			colour.blue = 255;
 			colour.alpha = 255;
-	
+
 			specular.red = 0;
 			specular.green = 0;
 			specular.blue = 0;
 			specular.alpha = 255;
-		
+
 			set_d3d_flat_shaded_textured_renderstate (map_overlay);
 			set_d3d_transparency_on ();
 			set_d3d_zbuffer_comparison ( FALSE );
@@ -3970,11 +4055,11 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 			set_d3d_texture_mag_filtering (TRUE);
 			set_d3d_texture_min_filtering (TRUE);
 			set_d3d_texture_mip_filtering (FALSE);
-			
+
 			{
 				vertex
 					quad[4];
-		
+
 				//
 				// Set up quad vertices
 				//
@@ -3986,7 +4071,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[0].q = 0.1;
 				quad[0].z = 100;
 				quad[0].next_vertex = &quad[1];
-		
+
 				quad[1].i = x2;
 				quad[1].j = y1;
 				quad[1].u = u2;
@@ -3994,7 +4079,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[1].q = 0.1;
 				quad[1].z = 100;
 				quad[1].next_vertex = &quad[2];
-		
+
 				quad[2].i = x2;
 				quad[2].j = y2;
 				quad[2].u = u2;
@@ -4002,7 +4087,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[2].q = 0.1;
 				quad[2].z = 100;
 				quad[2].next_vertex = &quad[3];
-		
+
 				quad[3].i = x1;
 				quad[3].j = y2;
 				quad[3].u = u1;
@@ -4010,10 +4095,10 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[3].q = 0.1;
 				quad[3].z = 100;
 				quad[3].next_vertex = NULL;
-		
+
 				draw_wbuffered_flat_shaded_textured_polygon ( quad, colour, specular );
 			}
-		
+
 			flush_triangle_primitives ();
 		}
 	}
@@ -4048,7 +4133,7 @@ static void create_fog_of_war_texture_overlay (void)
 	ASSERT (get_pilot_entity());
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-	
+
 	max_fog = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_FOG_OF_WAR_MAXIMUM_VALUE);
 
 	col.r = 0;
@@ -4107,7 +4192,7 @@ static void create_fog_of_war_texture_overlay (void)
 	ASSERT (map_overlay);
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-	
+
 	col.a = 255;
 
 	for (z = -1; z < NUM_MAP_Z_SECTORS; z++)
@@ -4159,12 +4244,12 @@ static void create_sector_side_texture_overlay (void)
 		col;
 
 	const map_side_band_type
-		*band_data; 
+		*band_data;
 
 	ASSERT (map_overlay);
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-	
+
 	for (z = -1; z < NUM_MAP_Z_SECTORS; z++)
 	{
 		sz = max (z, 0);
@@ -4239,7 +4324,7 @@ static void create_supply_level_texture_overlay (void)
 	ASSERT (map_overlay);
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-	
+
 	if (supply_heat_map == NULL)
 	{
 		build_supply_heat_map ();
@@ -4291,7 +4376,7 @@ void create_2d_terrain_texture_overlays (void)
 	lock_screen (map_overlay);
 
 	set_active_screen (map_overlay);
-	
+
 	if (global_layer_controls & (1 << MAP_LAYER_CONTROL_SECTOR_SIDES))
 	{
 		//
@@ -4421,7 +4506,7 @@ void update_map_events (void)
 void update_map_animations (void)
 {
 	animation_timer += get_delta_time ();
-	
+
 	animation_timer = frac (animation_timer);
 }
 
@@ -4521,7 +4606,7 @@ void map_draw_grid (ui_object *obj)
 	{
 
 		one_over_sector_side_length = 1.0 / SECTOR_SIDE_LENGTH;
-	
+
 		get_2d_terrain_map_world_dimensions (&wxmin, &wzmin, &wxmax, &wzmax);
 
 		inew_wxmin = (((int) (wxmin * one_over_sector_side_length)) - 1.0) * SECTOR_SIDE_LENGTH;
@@ -4607,11 +4692,11 @@ void map_draw_grid (ui_object *obj)
 
 				map_get_screen_coords_from_world (obj, &pos1, &pos1);
 
-				map_get_screen_coords_from_world (obj, &pos2, &pos2); 
+				map_get_screen_coords_from_world (obj, &pos2, &pos2);
 
 				if ((grid_loop % SECTOR_SIDE_LENGTH) == 0)
 				{
-	
+
 					// sector boundary
 
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_white);
@@ -4624,7 +4709,7 @@ void map_draw_grid (ui_object *obj)
 				{
 
 					// sub_sector division
-			
+
 					draw_line (pos1.x, pos1.z, pos2.x, pos2.z, sys_col_slate_grey);
 				}
 			}
@@ -4650,11 +4735,11 @@ void map_draw_grid (ui_object *obj)
 		pos1.z = wzmax;
 
 		map_get_screen_coords_from_world (obj, &pos1, &pos1);
-		
+
 // GCsDriver  08-12-2007
 //		set_ui_font_colour (sys_col_slate_grey);
 		set_ui_font_colour (ui_colour_white);
-		
+
 		ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
 	}
 }
@@ -4691,7 +4776,7 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 	if (flash_timer < 0.6)
 	{
 		get_2d_terrain_map_world_dimensions (&wxmin, &wzmin, &wxmax, &wzmax);
-	
+
 		sprintf (text, "");
 
 		if (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_AIRCRAFT))
@@ -4700,7 +4785,7 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 
 			if (pilot)
 			{
-				sprintf (text, "%s: %s", get_trans ("Tracking"), get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME)); 
+				sprintf (text, "%s: %s", get_trans ("Tracking"), get_local_entity_string (pilot, STRING_TYPE_PILOTS_NAME));
 			}
 			else
 			{
@@ -4709,7 +4794,7 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 				if (group)
 				{
 					sprintf (text, "%s: %s 1-%d",
-								get_trans ("Tracking"), 
+								get_trans ("Tracking"),
 								get_local_entity_string (group, STRING_TYPE_GROUP_CALLSIGN),
 								get_local_entity_int_value (en, INT_TYPE_GROUP_MEMBER_ID));
 				}
@@ -4717,23 +4802,23 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 		}
 		else
 		{
-			name = get_local_entity_string (en, STRING_TYPE_FULL_NAME); 
+			name = get_local_entity_string (en, STRING_TYPE_FULL_NAME);
 
 			if (name)
 			{
-				sprintf (text, "%s: %s", get_trans ("Tracking"), name); 
+				sprintf (text, "%s: %s", get_trans ("Tracking"), name);
 			}
 		}
-		
+
 		pos.x = wxmin;
 		pos.z = wzmax;
-	
+
 		map_get_screen_coords_from_world (obj, &pos, &pos);
-		
+
 		set_ui_font_type (UI_FONT_ARIAL_14);
 
 		set_ui_font_colour (ui_ingame_selected_text_colour);
-		
+
 		ui_display_text (text, pos.x + 5, pos.z - ui_get_font_height ());
 	}
 
@@ -4781,7 +4866,7 @@ void shift_current_map_up_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.2;
-	
+
 		map_dimensions->z += d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4812,7 +4897,7 @@ void shift_current_map_down_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.2;
-	
+
 		map_dimensions->z -= d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4843,7 +4928,7 @@ void shift_current_map_left_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.2;
-	
+
 		map_dimensions->x -= d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4874,7 +4959,7 @@ void shift_current_map_right_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.2;
-	
+
 		map_dimensions->x += d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4903,7 +4988,7 @@ void fine_current_map_up_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.01;
-	
+
 		map_dimensions->z += d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4930,7 +5015,7 @@ void fine_current_map_down_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.01;
-	
+
 		map_dimensions->z -= d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4957,7 +5042,7 @@ void fine_current_map_left_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.01;
-	
+
 		map_dimensions->x -= d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -4984,7 +5069,7 @@ void fine_current_map_right_event (event *ev)
 		ASSERT (map_dimensions);
 
 		d = map_dimensions->size * 0.01;
-	
+
 		map_dimensions->x += d;
 
 		bound_map_extents (obj, NULL, NULL);
@@ -5007,7 +5092,7 @@ void zoom_in_current_map_event (event *ev)
 	{
 		map_zoom_in_function (obj, NULL);
 	}
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5025,7 +5110,7 @@ void zoom_out_current_map_event (event *ev)
 	{
 		map_zoom_out_function (obj, NULL);
 	}
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5058,7 +5143,7 @@ void centre_current_map_on_player (event *ev)
 
 		if (en)
 		{
-			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);	
+			pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 			map_dimensions->x = pos->x;
 			map_dimensions->z = pos->z;
@@ -5115,13 +5200,13 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 				UI_ATTR_CLEAR (TRUE),
 				UI_ATTR_END
 			);
-	
+
 	data->map_area = map_area;
 
 	/////////////////////////////////////////////////////////////////
 	// Map Window
 	{
-			
+
 		x1 = 0.0;
 		y1 = 0.0;
 		x2 = 0.915;
@@ -5178,7 +5263,7 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 
 			y1 = 0.0;
 			y2 = y1 + y_inc;
-			
+
 			create_ui_object
 			(
 				UI_TYPE_BUTTON,
@@ -5195,11 +5280,11 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 		else
 		{
 			/////////////////////////////////////////////////////////////////
-			// Goto 
+			// Goto
 
 			y1 = 0.0;
 			y2 = y1 + y_inc;
-			
+
 			create_ui_object
 			(
 				UI_TYPE_TOGGLE,
@@ -5222,7 +5307,7 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 
 		y1 += y_inc;
 		y2 = y1 + y_inc;
-		
+
 		create_ui_object
 			(
 				UI_TYPE_BUTTON,
@@ -5237,10 +5322,10 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 				UI_ATTR_SELECTED_TEXTURE_GRAPHIC (zoom_in_icons [2]),
 				UI_ATTR_END
 			);
-		
+
 		y1 += y_inc;
 		y2 = y1 + y_inc;
-		
+
 		create_ui_object
 			(
 				UI_TYPE_BUTTON,
@@ -5261,12 +5346,12 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 		{
 			int
 				loop;
-	
+
 			for (loop = 0; loop < NUM_MAP_LAYER_CONTROLS; loop ++)
 			{
 				y1 += y_inc;
 				y2 = y1 + y_inc;
-		
+
 				data->layer_control_objects [loop] = create_ui_object
 				(
 					UI_TYPE_TOGGLE,
@@ -5305,7 +5390,7 @@ void switch_to_satellite_event (event *ev)
 {
 	map_dimension_type
 		*map_dimensions;
-			
+
 	entity
 		*key,
 		*en,
@@ -5313,39 +5398,39 @@ void switch_to_satellite_event (event *ev)
 
 	ui_object
 			*obj;
-				
+
 	obj = last_drawn_map_object;
 
-	if (obj)	
+	if (obj)
 	{
 		map_dimensions = (map_dimension_type *)get_ui_object_user_ptr (obj);
 
 		map_dimensions->selected_entity = NULL;
-	
+
 		en = get_map_mouse_over_entity (map_dimensions);
-		
+
 		key = NULL;
-		
+
 		if (en)
 		{
-			switch (get_local_entity_type (en))	
+			switch (get_local_entity_type (en))
 			{
 				case ENTITY_TYPE_KEYSITE:
 				case ENTITY_TYPE_WAYPOINT:
 				{
 					key = en;
-					
+
 					break;
 				}
 				case ENTITY_TYPE_TASK:
 				{
 					objective = get_local_entity_parent (en, LIST_TYPE_TASK_DEPENDENT);
-				
+
 					if (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE)
 					{
 						key = objective;
 					}
-					
+
 					break;
 				}
 			}
@@ -5353,11 +5438,11 @@ void switch_to_satellite_event (event *ev)
 		if (key)
 		{
 			ASSERT (get_local_entity_int_value (key, INT_TYPE_VIEWABLE));
-				
+
 			notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_SATELLITE);
-			
+
 			set_external_view_entity (key);
-			
+
 			toggle_in_flight_game_modes (NULL);
 		}
 	}

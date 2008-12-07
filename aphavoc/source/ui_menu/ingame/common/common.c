@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -208,7 +208,7 @@ void set_ingame_ui_object_mouse_over_properties (ui_object *obj)
 		*col;
 
 	ASSERT (obj);
-	
+
 	set_ui_object_highlightable (obj, TRUE);
 
 	col = &ui_ingame_live_text_colour;
@@ -228,7 +228,7 @@ void set_ingame_ui_object_mouse_over_properties (ui_object *obj)
 void set_ui_mouse_over_entity_function (ui_object *obj)
 {
 	ASSERT (obj);
-	
+
 	set_ui_object_highlighted_function (obj, entity_mouse_over_function);
 
 	set_ui_object_highlighted_notify_on (obj, NOTIFY_TYPE_CONTINUAL);
@@ -281,7 +281,7 @@ int get_mission_player_suitability_status (entity *mission)
 	if ((task_database [mission_type].primary_task) && (task_database [mission_type].visible_task))
 	{
 		state = get_local_entity_int_value (mission, INT_TYPE_TASK_STATE);
-	
+
 		switch (state)
 		{
 			case TASK_STATE_UNASSIGNED:
@@ -289,21 +289,21 @@ int get_mission_player_suitability_status (entity *mission)
 				//
 				// Take each group at the base, and test if it matches the mission type
 				//
-	
+
 				base = get_local_entity_parent (mission, LIST_TYPE_UNASSIGNED_TASK);
-	
+
 				ASSERT (base);
-	
+
 				ASSERT (get_local_entity_type (base) == ENTITY_TYPE_KEYSITE);
-	
+
 				group = get_local_entity_first_child (base, LIST_TYPE_KEYSITE_GROUP);
-	
+
 				while (group)
 				{
 					if (get_local_entity_int_value (group, INT_TYPE_GROUP_MODE) == GROUP_MODE_IDLE)
 					{
 						group_type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
-	
+
 						if (get_group_suitable_for_player (group, get_pilot_entity ()))
 						{
 							if (get_group_to_task_suitability (group_type, mission_type) > 0.0)
@@ -312,43 +312,43 @@ int get_mission_player_suitability_status (entity *mission)
 							}
 						}
 					}
-	
+
 					group = get_local_entity_child_succ (group, LIST_TYPE_KEYSITE_GROUP);
 				}
-	
+
 				break;
 			}
-	
+
 			case TASK_STATE_ASSIGNED:
 			{
 				//
 				// Mission already assigned - see if group is suitable for player
 				//
-				
+
 				guide = get_local_entity_first_child (mission, LIST_TYPE_GUIDE);
-			
+
 				ASSERT (guide);
-	
+
 				group = get_local_entity_parent (guide, LIST_TYPE_GUIDE_STACK);
-	
+
 				ASSERT (group);
-	
+
 				if (get_group_suitable_for_player (group, get_pilot_entity ()))
 				{
 					return TRUE;
 				}
-	
+
 				break;
 			}
-	
+
 			case TASK_STATE_COMPLETED:
 			{
-	
+
 				break;
 			}
 		}
 	}
-	
+
 	return FALSE;
 }
 
@@ -376,7 +376,7 @@ int get_group_player_suitability_status (entity *group)
 	//
 	// Check if group contains controllable entities
 	//
-	
+
 	if (!get_group_suitable_for_player (group, get_pilot_entity ()))
 	{
 		return FALSE;
@@ -415,7 +415,7 @@ int get_group_player_suitability_status (entity *group)
 	mission = get_local_entity_first_child (base, LIST_TYPE_UNASSIGNED_TASK);
 
 	while (mission)
-	{	
+	{
 		mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if (get_group_to_task_suitability (group_type, mission_type) > 0.0)
@@ -458,7 +458,7 @@ int get_base_player_suitability_status (entity *base)
 	mission = get_local_entity_first_child (base, LIST_TYPE_ASSIGNED_TASK);
 
 	while (mission)
-	{	
+	{
 		mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if ((task_database [mission_type].primary_task) && (task_database [mission_type].visible_task))
@@ -491,7 +491,7 @@ int get_base_player_suitability_status (entity *base)
 	mission = get_local_entity_first_child (base, LIST_TYPE_UNASSIGNED_TASK);
 
 	while (mission)
-	{	
+	{
 		mission_type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 
 		if ((task_database [mission_type].primary_task) && (task_database [mission_type].visible_task))
@@ -664,61 +664,7 @@ void ingame_quit_function (event *ev)
 
 static void delete_waypoint_event (event *ev)
 {
-	entity
-		*en,
-		*task;
-
-	entity_sub_types
-		sub_type;
-
-	en = get_ui_mouse_over_entity ();
-
-	if (en)
-	{
-		if (get_local_entity_type (en) == ENTITY_TYPE_WAYPOINT)
-		{
-			if ((get_local_entity_child_succ (en, LIST_TYPE_WAYPOINT)) && (get_local_entity_child_pred (en, LIST_TYPE_WAYPOINT)))
-			{
-				sub_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
-
-				if (waypoint_database [sub_type].planner_moveable)
-				{
-					//
-					// Delete waypoint
-					//
-
-					if (!get_local_entity_first_child (en, LIST_TYPE_CURRENT_WAYPOINT))
-					{
-						task = get_local_entity_parent (en, LIST_TYPE_WAYPOINT);
-
-						ASSERT (task);
-
-						ASSERT (get_local_entity_int_value (task, INT_TYPE_PRIMARY_TASK));
-
-						//
-						// "Fast-track" unlinking of waypoint, Required to stop client "double-deleting"
-						//
-						
-						unlink_local_entity_children (en, LIST_TYPE_CURRENT_WAYPOINT);
-					
-						delete_local_entity_from_parents_child_list (en, LIST_TYPE_TASK_DEPENDENT);
-					
-						delete_local_entity_from_parents_child_list (en, LIST_TYPE_WAYPOINT);
-
-						//
-						// Destroy Entity
-						//
-						
-						destroy_client_server_entity (en);
-
-						update_client_server_entity_waypoint_list_tags (task);
-
-						set_ui_mouse_over_entity (NULL);
-					}
-				}
-			}
-		}
-	}
+	map_delete_waypoint_event();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -730,7 +676,7 @@ static void adjust_3d_preview_heading_left_event (event *ev)
 	rotate_base_page_3d_scene_heading (10.0);
 	rotate_group_page_3d_scene_heading (10.0);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -740,7 +686,7 @@ static void adjust_3d_preview_heading_right_event (event *ev)
 	rotate_base_page_3d_scene_heading (-10.0);
 	rotate_group_page_3d_scene_heading (-10.0);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -750,7 +696,7 @@ static void adjust_3d_preview_pitch_up_event (event *ev)
 	rotate_base_page_3d_scene_pitch (5.0);
 	rotate_group_page_3d_scene_pitch (5.0);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -760,7 +706,7 @@ static void adjust_3d_preview_pitch_down_event (event *ev)
 	rotate_base_page_3d_scene_pitch (-5.0);
 	rotate_group_page_3d_scene_pitch (-5.0);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -770,7 +716,7 @@ static void adjust_3d_preview_zoom_in_event (event *ev)
 	zoom_base_page_3d_scene (1);
 	zoom_group_page_3d_scene (1);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -780,7 +726,7 @@ static void adjust_3d_preview_zoom_out_event (event *ev)
 	zoom_base_page_3d_scene (-1);
 	zoom_group_page_3d_scene (-1);
 }
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -828,10 +774,10 @@ void ingame_screen_set_events (void)
 	//
 	// Map keyboard shortcuts
 	//
-	
+
 	set_event (DIK_SPACE, MODIFIER_NONE, KEY_STATE_DOWN, switch_to_satellite_event); // Jabberwock 031009 Satellite view
 
-	
+
 	set_event (DIK_UP, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_up_event);
 	set_event (DIK_DOWN, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_down_event);
 	set_event (DIK_LEFT, MODIFIER_NONE, KEY_STATE_DOWN, shift_current_map_left_event);
@@ -847,7 +793,7 @@ void ingame_screen_set_events (void)
 
    set_event (DIK_ADD, MODIFIER_NONE, KEY_STATE_DOWN, zoom_in_current_map_event);
    set_event (DIK_SUBTRACT, MODIFIER_NONE, KEY_STATE_DOWN, zoom_out_current_map_event);
-   
+
    set_event (MOUSE_WHEEL_UP, MODIFIER_NONE, BUTTON_STATE_EITHER, map_wheel_zoom_in_event); // Jabberwock 031002 - wheel map zoom
    set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, zoom_out_current_map_event);
 
@@ -886,8 +832,8 @@ void ingame_screen_set_events (void)
 	set_event (MOUSE_MOVE_RIGHT, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_heading_right_event);
 	set_event (MOUSE_MOVE_UP, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_up_event);
 	set_event (MOUSE_MOVE_DOWN, MODIFIER_LEFT_CONTROL, BUTTON_STATE_EITHER, adjust_3d_preview_pitch_down_event);
-	
-	
+
+
 	set_event (MOUSE_MOVE_LEFT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_right_event); // Jabberwock 031020 Fine mouse panning
 	set_event (MOUSE_MOVE_RIGHT, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_left_event);
 	set_event (MOUSE_MOVE_UP, MODIFIER_MOUSE_RIGHT_BUTTON, BUTTON_STATE_EITHER, fine_current_map_down_event);
@@ -918,24 +864,24 @@ void set_common_slider_graphics (ui_object *parent)
 	ui_object
 		*temp,
 		*slider;
-		
+
 	slider = get_ui_object_vslider (parent);
 
 	ASSERT (slider);
 
-	ASSERT (common_slider_graphic); 
+	ASSERT (common_slider_graphic);
 
-	ASSERT (common_slider_bar_graphic); 
+	ASSERT (common_slider_bar_graphic);
 	ASSERT (common_slider_bar_highlighted_graphic);
-	ASSERT (common_slider_bar_selected_graphic); 
+	ASSERT (common_slider_bar_selected_graphic);
 
-	ASSERT (common_slider_up_graphic); 
-	ASSERT (common_slider_up_highlighted_graphic); 
-	ASSERT (common_slider_up_selected_graphic); 
+	ASSERT (common_slider_up_graphic);
+	ASSERT (common_slider_up_highlighted_graphic);
+	ASSERT (common_slider_up_selected_graphic);
 
 	ASSERT (common_slider_down_graphic);
-	ASSERT (common_slider_down_highlighted_graphic); 
-	ASSERT (common_slider_down_selected_graphic); 
+	ASSERT (common_slider_down_highlighted_graphic);
+	ASSERT (common_slider_down_selected_graphic);
 
 	set_ui_object_texture_graphic (slider, common_slider_graphic);
 
