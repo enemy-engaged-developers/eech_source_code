@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -76,7 +76,7 @@
 
 #define HELICOPTER_VELOCITY_RAMP_DISTANCE								(500.0 * METRE)
 
-#define HELICOPTER_MAX_PITCH 												(rad (30.0))
+#define HELICOPTER_MAX_PITCH 												(rad (20.0))
 
 #define HELICOPTER_MAX_ROLL 												(rad (30.0))
 
@@ -190,7 +190,7 @@ void helicopter_movement (entity *en)
 	raw = get_local_entity_data (en);
 
 	//
-	// abort if the mobile has no current guide 
+	// abort if the mobile has no current guide
 	//
 
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
@@ -277,9 +277,9 @@ void helicopter_movement (entity *en)
 	//
 	//
 
-	world_acceleration_vector.x = wp_vec.x - raw->ac.mob.motion_vector.x;
-	world_acceleration_vector.y = wp_vec.y - raw->ac.mob.motion_vector.y;
-	world_acceleration_vector.z = wp_vec.z - raw->ac.mob.motion_vector.z;
+	world_acceleration_vector.x = (wp_vec.x - raw->ac.mob.motion_vector.x) * 0.3;
+	world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.3;
+	world_acceleration_vector.z = (wp_vec.z - raw->ac.mob.motion_vector.z) * 0.3;
 
 	//
 	// Don't allow movement before rotors have spun up.
@@ -313,11 +313,11 @@ void helicopter_movement (entity *en)
 			if (get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE) == OPERATIONAL_STATE_LANDED)
 			{
 				group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
-	
+
 				ASSERT (group);
-	
+
 				member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
-	
+
 				while (member)
 				{
 					if (get_local_entity_int_value (member, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
@@ -327,10 +327,10 @@ void helicopter_movement (entity *en)
 							return;
 						}
 					}
-	
+
 					member = get_local_entity_child_succ (member, LIST_TYPE_MEMBER);
 				}
-	
+
 				set_client_server_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE, OPERATIONAL_STATE_TAKEOFF);
 			}
 		}
@@ -341,10 +341,10 @@ void helicopter_movement (entity *en)
 		return;
 	}
 
-	//	
+	//
 	// calculate the motion vector, in world coords
 	//
-	
+
 	raw->ac.mob.motion_vector.x += world_acceleration_vector.x * get_entity_movement_delta_time ();
 	raw->ac.mob.motion_vector.y = wp_vec.y;
 	raw->ac.mob.motion_vector.z += world_acceleration_vector.z * get_entity_movement_delta_time ();
@@ -385,8 +385,8 @@ void helicopter_movement (entity *en)
 	desired_pitch = helicopter_movement_get_desired_pitch (en, &model_motion_vector, &model_acceleration_vector, NULL);
 	desired_roll = helicopter_movement_get_desired_roll (en, model_motion_vector.x, model_acceleration_vector.x, NULL);
 
-	new_pitch = current_pitch + (desired_pitch - current_pitch) * get_entity_movement_delta_time ();
-	new_roll = current_roll + (desired_roll - current_roll) * get_entity_movement_delta_time ();
+	new_pitch = current_pitch + (desired_pitch - current_pitch) * 0.5 * get_entity_movement_delta_time ();
+	new_roll = current_roll + (desired_roll - current_roll) * 0.5 * get_entity_movement_delta_time ();
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, new_roll);
 
@@ -1491,9 +1491,9 @@ float helicopter_movement_structure_avoidance (entity *en)
 	if (get_local_entity_int_value (en, INT_TYPE_TASK_LEADER))
 	{
 		guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
-	
+
 		ASSERT (guide);
-	
+
 		if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_RADIUS))
 		{
 			if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_ALTITUDE))
@@ -1505,7 +1505,7 @@ float helicopter_movement_structure_avoidance (entity *en)
 			}
 		}
 	}
-	
+
 	get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &pos);
 
 	attitude = get_local_entity_attitude_matrix_ptr (en);
@@ -1903,12 +1903,12 @@ void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 		{
 			rgb_colour
 				los_colour;
-	
+
 			los_colour.r = 255.0;
 			los_colour.g = 0.0;
 			los_colour.b = 0.0;
 			los_colour.a = 255.0;
-	
+
 			// vertical line to wp
 			create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
 		}
