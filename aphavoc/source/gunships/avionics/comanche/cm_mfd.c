@@ -954,7 +954,7 @@ static void draw_airspeed_scale (void)
 
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
 
-	// draw box around	
+	// draw box around
 	draw_2d_line (x1, y_centre + scale_height_ratio, x7, y_centre + scale_height_ratio, MFD_COLOUR1);
 	draw_2d_line (x1, y_centre - scale_height_ratio, x7, y_centre - scale_height_ratio, MFD_COLOUR1);
 	draw_2d_line (x7, y_centre + scale_height_ratio, x7, y_centre - scale_height_ratio, MFD_COLOUR1);
@@ -971,7 +971,7 @@ static void draw_airspeed_scale (void)
 		float scale_step_5 = knots(airspeed * 0.2);
 		int int_scale_step_5 = (int) scale_step_5;
 		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
-	
+
 		int tick_type = (int_scale_step_5 % 2) == 0;
 		float y = -(5.0 + mod_scale_step_5) * tick_y_spacing;
 		int loop;
@@ -995,11 +995,11 @@ static void draw_airspeed_scale (void)
 
 					sprintf(buffer, "%d", int_scale_step_5 * 5);
 					x_adjust = get_mono_font_string_width(buffer) / 2;
-		
+
 					set_2d_mono_font_position (x4, y);
 					set_mono_font_rel_position (-x_adjust, y_adjust);
-					print_mono_font_string(buffer); 
-				}					
+					print_mono_font_string(buffer);
+				}
 				else
 					draw_2d_line (x3, y, x5, y, MFD_COLOUR1);
 			}
@@ -1051,13 +1051,13 @@ static void draw_airspeed_scale (void)
 
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 		y_adjust = -4.0;
-		
+
 		sprintf(buffer, "%3d", (int)knots(airspeed));
 		x_adjust = -get_mono_font_string_width(buffer);
-		
+
 		set_2d_mono_font_position (x7, y_centre);
 		set_mono_font_rel_position (x_adjust, y_adjust);
-		print_mono_font_string(buffer); 
+		print_mono_font_string(buffer);
 	}
 }
 
@@ -1210,7 +1210,7 @@ static void draw_barometric_altitude_scale (void)
 		float scale_step_5 = barometric_altitude * 0.2;
 		int int_scale_step_5 = (int) scale_step_5;
 		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
-	
+
 		int tick_type = (int_scale_step_5 % 2) == 0;
 		float y = -(5.0 + mod_scale_step_5) * scale_step;
 		int loop;
@@ -1238,8 +1238,8 @@ static void draw_barometric_altitude_scale (void)
 
 					set_2d_mono_font_position (x3, y);
 					set_mono_font_rel_position (-x_adjust, y_adjust);
-					print_mono_font_string(buffer); 
-				}					
+					print_mono_font_string(buffer);
+				}
 				else
 					draw_2d_line (x3 - 0.02, y, x3 + 0.02, y, MFD_COLOUR1);
 			}
@@ -1549,7 +1549,7 @@ static void display_navigation_info(void)
 		bottom = -0.98,
 		top = -0.78,
 		mid_y = -0.88;
-	
+
 	entity
 		*wp;
 
@@ -1581,11 +1581,11 @@ static void display_navigation_info(void)
 	{
 		vec3d
 			waypoint_position;
-	
+
 		float
 			x_adjust,
 			waypoint_range;
-		
+
 		get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
 
 		//
@@ -1935,8 +1935,8 @@ static void display_radar_target_details (entity *target, float target_range, ra
 
 		print_mono_font_string ("LOCKED");
 	}
-	
-	
+
+
 // Jabberwock 031107 Designated targets
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
@@ -1958,7 +1958,7 @@ static void display_radar_target_details (entity *target, float target_range, ra
 
 		set_mono_font_rel_position (-width -1.0, y_adjust);
 
-		print_mono_font_string ("MARKED");		
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 
@@ -2378,7 +2378,7 @@ static void draw_ground_radar_mfd (void)
 
 			break;
 		}
-		// Jabberwock 031107 ends	
+		// Jabberwock 031107 ends
 	}
 
 	//
@@ -3682,9 +3682,9 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 
 // Jabberwock 031107 Designated targets
-	
+
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	
+
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
 		if (draw_large_mfd)
@@ -3697,12 +3697,12 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		}
 
 		width = get_mono_font_string_width ("MARKED");
-		
+
 		set_2d_mono_font_position (1.0, -1.0);
 
 		set_mono_font_rel_position (-width-1.0, y_adjust);
-		
-		print_mono_font_string ("MARKED");		
+
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 
@@ -3740,7 +3740,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	draw_heading_scale (get_heading_from_attitude_matrix (eo_vp.attitude), FALSE);
 
 	// draw speed and altitude
-	
+
 	{
 		float
 			speed = knots(current_flight_dynamics->velocity_z.value),
@@ -3809,7 +3809,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	if (valid_3d)
 	{
 		vec3d* tracking_point = get_eo_tracking_point();
-		
+
 		if (target || tracking_point)
 		{
 			if (!((!d3d_can_render_to_texture) && (!draw_large_mfd)))
@@ -3818,7 +3818,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 					get_local_entity_target_point (target, &target_point);
 				else
 					target_point = *tracking_point;
-		
+
 				tmp = main_vp;
 
 				main_vp = eo_vp;
@@ -3836,16 +3836,16 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 					//
 					// target name
 					//
-					
+
 					if (target)
 					{
 						s = get_target_display_name (target, buffer, FALSE);
-					
+
 						if (s)
 						{
 							y_adjust = -12.0;
 							x_adjust = -get_mono_font_string_width (s) / 2.0;
-	
+
 							if (strcmp(s, "LOW LIGHT") == 0
 								|| strcmp(s, "CP/G ID...") == 0)
 							{
@@ -3858,10 +3858,10 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 							}
 							else
 								set_mono_font_colour (MFD_COLOUR1);
-	
+
 							set_2d_mono_font_position (x, y - 0.33);
 							set_mono_font_rel_position (x_adjust, y_adjust);
-					
+
 							print_mono_font_string (s);
 						}
 					}
@@ -3872,7 +3872,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 					{
 						char
 							range_char = 'R';
-						
+
 						float
 							target_velocity = 0.0;
 
@@ -3890,10 +3890,10 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 						width = get_mono_font_string_width (buffer) / 2;
 						set_2d_mono_font_position (0.0, 0.75);
 						set_mono_font_rel_position (-width, 0.0);
-				
+
 						print_mono_font_string (buffer);
 					}
-					
+
 					draw_2d_line (x - 0.30, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
 					draw_2d_line (x + 0.30, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
 					draw_2d_line (x - 0.30, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
@@ -3905,10 +3905,10 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 					if (eo_is_locked())
 					{
-						draw_2d_line (x - 0.35, y + 0.35, x - 0.6, y + 0.6, MFD_COLOUR1);	
-						draw_2d_line (x - 0.35, y - 0.35, x - 0.6, y - 0.6, MFD_COLOUR1);	
-						draw_2d_line (x + 0.35, y + 0.35, x + 0.6, y + 0.6, MFD_COLOUR1);	
-						draw_2d_line (x + 0.35, y - 0.35, x + 0.6, y - 0.6, MFD_COLOUR1);	
+						draw_2d_line (x - 0.35, y + 0.35, x - 0.6, y + 0.6, MFD_COLOUR1);
+						draw_2d_line (x - 0.35, y - 0.35, x - 0.6, y - 0.6, MFD_COLOUR1);
+						draw_2d_line (x + 0.35, y + 0.35, x + 0.6, y + 0.6, MFD_COLOUR1);
+						draw_2d_line (x + 0.35, y - 0.35, x + 0.6, y - 0.6, MFD_COLOUR1);
 					}
 				}
 
@@ -5657,12 +5657,12 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 //VJ 030423 TSD render mod, enemy of comanche so red
 //VJ 030511 TSD render mod, enemy optional in eech.ini
 //VJ 030530 TSD render mod, corrected colour vor original view MFD_COLOUR2
-							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE) 
+							if (tsd_render_mode == TSD_RENDER_CONTOUR_MODE)
 								draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR2);
-							else	
+							else
 								if (command_line_tsd_enemy_colours)
 									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR4);
-								else				
+								else
 									draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR8);
 						}
 					}
@@ -5785,7 +5785,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 
 		draw_2d_mono_sprite (small_tsd_ase_aircraft_datum, x_origin, y_origin, MFD_COLOUR1);
 	}
-	
+
 	// ATARIBABY added heading tape to TSD NAV display
 	if (tsd_declutter_level == TSD_DECLUTTER_LEVEL_NAVIGATION || tsd_declutter_level == TSD_DECLUTTER_LEVEL_ALL)
 	{
@@ -9525,7 +9525,7 @@ static void draw_system_display_side_mfd (void)
 static void draw_engine_bar(float f_x1, float f_y1, float f_x2, float f_y2, float fvalue)
 {
 	int x1, x2, y1, y2;
-	
+
 	draw_2d_box(f_x1, f_y1, f_x2, f_y2, FALSE, MFD_COLOUR1);
 
 	get_2d_int_screen_coordinates (f_x1, f_y2 + (fvalue * (f_y1 - f_y2)), &x1, &y1);
@@ -9610,15 +9610,15 @@ static void draw_engine_display_mfd (void)
 	print_mono_font_string (s);
 
 	////////////////////////////////////////
-	
+
 	set_2d_mono_font_position (0.0, -0.6);
-	
+
 	x_adjust = get_mono_font_string_width ("THROTTLE") * -0.5;
-	
+
 	set_mono_font_rel_position (x_adjust, 0.0);
 
 	print_mono_font_string ("THROTTLE");
-	
+
 //	set_2d_mono_font_position (0.0, -0.7);
 
 	fvalue = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
@@ -9636,9 +9636,9 @@ static void draw_engine_display_mfd (void)
 	/*
 	x_adjust = get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
-	print_mono_font_string (s);	
+	print_mono_font_string (s);
 	*/
-	
+
 	set_2d_mono_font_position (0.0, -0.7);
 
 	fvalue = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
@@ -9655,7 +9655,7 @@ static void draw_engine_display_mfd (void)
 
 	x_adjust = get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
-	print_mono_font_string (s);	
+	print_mono_font_string (s);
 
 	////////////////////////////////////////
 
@@ -9666,7 +9666,7 @@ static void draw_engine_display_mfd (void)
 
 	sprintf(s, "SPU %03d%%", ivalue);
 
-	print_mono_font_string (s);		
+	print_mono_font_string (s);
 
 	////////////////////////////////////////
 
@@ -9691,7 +9691,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says float), which causes later parameters
 	// to be wrong
@@ -9723,7 +9723,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9739,7 +9739,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float)	(0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -9771,7 +9771,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9787,7 +9787,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -9819,7 +9819,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9835,7 +9835,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -9867,7 +9867,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9883,7 +9883,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -9915,7 +9915,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9931,7 +9931,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -9963,7 +9963,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -9979,7 +9979,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10011,7 +10011,7 @@ static void draw_engine_display_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10027,7 +10027,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10075,7 +10075,7 @@ static void draw_engine_display_mfd (void)
 	#define WIDTH	((float) (0.06))
 	#define HEIGHT	((float) (0.8333))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10219,13 +10219,13 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045f))
 	#define HEIGHT	((float) (1.0f))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
 	centre_x = X_ORG;
 	bottom_edge = (Y_ORG - HEIGHT);
-	
+
 	set_2d_mono_font_position (X_ORG, Y_ORG + 0.2);
 
 	x_adjust = get_mono_font_string_width ("NR") * -0.5;
@@ -10252,7 +10252,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10268,7 +10268,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10300,7 +10300,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10316,7 +10316,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10348,7 +10348,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10364,7 +10364,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10396,7 +10396,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10412,7 +10412,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (1.0))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10444,7 +10444,7 @@ static void draw_engine_display_side_mfd (void)
 
 	////////////////////////////////////////
 
-	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 1000.0);
+	draw_engine_bar(X_ORG - (WIDTH * 0.5), Y_ORG, X_ORG + (WIDTH * 0.5), bottom_edge, fvalue / 120.0);
 
 	#undef X_ORG
 	#undef Y_ORG
@@ -10460,7 +10460,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (0.8333))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10508,7 +10508,7 @@ static void draw_engine_display_side_mfd (void)
 	#define WIDTH	((float) (0.045))
 	#define HEIGHT	((float) (0.8333))
 
-	// seems to be a compiler bug, have to use a float variable for this value, sending it 
+	// seems to be a compiler bug, have to use a float variable for this value, sending it
 	// as a constant as a function parameter will use a double (even though
 	// definition is available and says const float), which causes later parameters
 	// to be wrong
@@ -10677,7 +10677,7 @@ static void draw_pitch_ladder (void)
 		sky_colour.green = 120;
 		sky_colour.blue = 200;
 		sky_colour.alpha = 225;
-	
+
 		ground_colour.red = 220;
 		ground_colour.green = 180;
 		ground_colour.blue = 100;
@@ -10686,7 +10686,7 @@ static void draw_pitch_ladder (void)
 	else
 	{
 		sky_colour = MFD_COLOUR2;
-		ground_colour = MFD_COLOUR5;	
+		ground_colour = MFD_COLOUR5;
 	}
 
 	if (draw_large_mfd)
@@ -10756,14 +10756,14 @@ static void draw_pitch_ladder (void)
 		mod_pitch = fmod (pitch, rad (10.0));
 		tan_mod_pitch = -tan (mod_pitch);
 		int_pitch = (int) (pitch * (1.0 / rad (10.0)));
-	
+
 		//
 		// get x and y scale factors
 		//
 
 		x_scale = -sin (roll) * 1.5 * pitch_bar_scale;
 		y_scale = cos (roll) * 1.5 * pitch_bar_scale;
-	
+
 		x_horizon = tan_mod_pitch * x_scale;
 		y_horizon = tan_mod_pitch * y_scale;
 
@@ -10825,7 +10825,7 @@ static void draw_pitch_ladder (void)
 				left_colour = &sky_colour;
 				right_colour = &ground_colour;
 			}
-			
+
 			draw_2d_filled_triangle(x_horizon_abs, 1.0, 1.0, 1.0, 1.0, -1.0, *right_colour);
 			draw_2d_filled_triangle(1.0, -1.0, x_horizon_abs, -1.0, x_horizon_abs, 1.0, *right_colour);
 
@@ -10838,20 +10838,20 @@ static void draw_pitch_ladder (void)
 		// draw pitch ladder
 		//
 		////////////////////////////////////////
-	
+
 		step_direction = -1;
-	
+
 		int_pitch = limit_pitch (int_pitch + 3, &step_direction);
-	
+
 		x = x_horizon + x_10_deg_step * 3.0;
 		y = y_horizon + y_10_deg_step * 3.0;
-	
+
 		set_2d_instance_rotation (mfd_env, roll);
-	
+
 		for (loop = 0; loop < 7; loop++)
 		{
 			set_2d_instance_position (mfd_env, x, y);
-	
+
 			switch (int_pitch)
 			{
 				////////////////////////////////////////
@@ -10870,15 +10870,15 @@ static void draw_pitch_ladder (void)
 
 					sprintf (s, "%d0", int_pitch);
 					x_adjust = get_mono_font_string_width (s) * -0.5;
-	
+
 					set_2d_mono_font_position (+PITCH_BAR_X4, +PITCH_BAR_Y4);
 					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
 					print_mono_font_string (s);
-	
+
 					set_2d_mono_font_position (-PITCH_BAR_X4, +PITCH_BAR_Y4);
 					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
 					print_mono_font_string (s);
-	
+
 					break;
 				}
 				////////////////////////////////////////
@@ -10887,7 +10887,7 @@ static void draw_pitch_ladder (void)
 				{
 					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR1);
 					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR1);
-	
+
 					break;
 				}
 				////////////////////////////////////////
@@ -10896,19 +10896,19 @@ static void draw_pitch_ladder (void)
 				{
 					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR1);
 					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR1);
-	
+
 					draw_2d_line (+PITCH_BAR_X3, +PITCH_BAR_Y3, +PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR1);
 					draw_2d_line (-PITCH_BAR_X3, +PITCH_BAR_Y3, -PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR1);
-	
+
 					draw_2d_line (+PITCH_BAR_X5, +PITCH_BAR_Y5, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR1);
 					draw_2d_line (-PITCH_BAR_X5, +PITCH_BAR_Y5, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR1);
-	
+
 					break;
 				}
 			}
-	
+
 			int_pitch = limit_pitch (int_pitch + step_direction, &step_direction);
-	
+
 			x -= x_10_deg_step;
 			y -= y_10_deg_step;
 		}
@@ -10958,10 +10958,10 @@ static void draw_pitch_ladder (void)
 
 			sprintf(buffer, "%d", i);
 			x_adjust = get_mono_font_string_width(buffer) + 1;
-		
+
 			set_2d_mono_font_position (x_tick, current_y);
 			set_mono_font_rel_position (-x_adjust, y_adjust);
-			print_mono_font_string(buffer); 
+			print_mono_font_string(buffer);
 		}
 
 		for (i = 0; i < 7; i++)
@@ -10978,7 +10978,7 @@ static void draw_pitch_ladder (void)
 
 		set_2d_mono_font_position (x_tick, y_centre);
 		set_mono_font_rel_position (-x_adjust, y_adjust);
-		print_mono_font_string(buffer); 
+		print_mono_font_string(buffer);
 
 		current_y -= y_fine_step;
 		for (i = -1; i >= -3; i--)
@@ -10987,10 +10987,10 @@ static void draw_pitch_ladder (void)
 
 			sprintf(buffer, "%d", i);
 			x_adjust = get_mono_font_string_width(buffer) + 1;
-		
+
 			set_2d_mono_font_position (x_tick, current_y);
 			set_mono_font_rel_position (-x_adjust, y_adjust);
-			print_mono_font_string(buffer); 
+			print_mono_font_string(buffer);
 			current_y -= y_coarse_step;
 		}
 
@@ -11020,35 +11020,35 @@ static void draw_pitch_ladder (void)
 	if (draw_main_display)
 	{
 		set_2d_instance_position (mfd_env, PITCH_DATUM_X, PITCH_DATUM_Y - size);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (0.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (10.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.025, MFD_COLOUR1);
 		set_2d_instance_rotation (mfd_env, rad (-10.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.025, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (20.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.025, MFD_COLOUR1);
 		set_2d_instance_rotation (mfd_env, rad (-20.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.025, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (30.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
 		set_2d_instance_rotation (mfd_env, rad (-30.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (45.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
 		set_2d_instance_rotation (mfd_env, rad (-45.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, rad (60.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
 		set_2d_instance_rotation (mfd_env, rad (-60.0));
 		draw_2d_line (0.0, -size, 0.0, -size - 0.05, MFD_COLOUR1);
-	
+
 		set_2d_instance_rotation (mfd_env, bound (roll, rad(-60.0), rad(60.0)));
 		draw_2d_filled_triangle(0.0, -size, -0.035, -size + 0.075, 0.035, -size + 0.075, MFD_COLOUR4);
 	}
@@ -12483,7 +12483,7 @@ static void initalize_horizon_mask(int width, char** mask)
 			if (i < 2 || i >= semi_begin + semi_radius)
 			{
 				row[j] = 1;
-				continue;	
+				continue;
 			}
 
 			if (i < semi_begin)
@@ -12608,10 +12608,10 @@ void initialise_comanche_mfd (void)
 		set_rgb_colour (MFD_COLOUR_DARK_BLUE,	   0,   0,  96,  255);
 		set_rgb_colour (MFD_COLOUR_YELLOW,       230, 230,  40,  255);
 		set_rgb_colour (MFD_COLOUR_DARK_YELLOW,  165, 165,  30,  255);
-		set_rgb_colour (MFD_COLOUR_RED,          255,  40,  40,  255);	
+		set_rgb_colour (MFD_COLOUR_RED,          255,  40,  40,  255);
 		set_rgb_colour (MFD_COLOUR_DARK_RED,	 148,   8,   8,  255);
-		set_rgb_colour (MFD_COLOUR_CYAN,          60, 255, 230,  255);	
-		set_rgb_colour (MFD_COLOUR_WHITE,        200, 200, 240,  255);	
+		set_rgb_colour (MFD_COLOUR_CYAN,          60, 255, 230,  255);
+		set_rgb_colour (MFD_COLOUR_WHITE,        200, 200, 240,  255);
 	}
 	else
 	{
@@ -12624,7 +12624,7 @@ void initialise_comanche_mfd (void)
 		set_rgb_colour (MFD_COLOUR_CYAN,           0, 255,   0, 255);
 		set_rgb_colour (MFD_COLOUR_WHITE,          0, 255,   0, 255);
 	}
-	
+
 	set_rgb_colour (TEXT_COLOUR1,           254, 204,   1, 255);
 	set_rgb_colour (TEXT_BACKGROUND_COLOUR,  66,  35,  11, 255);
 
@@ -12815,7 +12815,7 @@ void deinitialise_comanche_mfd (void)
 void draw_comanche_mfd (void)
 {
 	screen *export_left, *export_right;
-	
+
 	////////////////////////////////////////
 	//
 	// SELECT LARGE OR SMALL MFD TEXTURES
@@ -12898,13 +12898,13 @@ void draw_comanche_mfd (void)
 
 	if (get_crew_role () == CREW_ROLE_PILOT)
 	{
-		export_left=pilot_lhs_main_mfd_texture_screen; 
-		export_right=pilot_rhs_main_mfd_texture_screen; 
+		export_left=pilot_lhs_main_mfd_texture_screen;
+		export_right=pilot_rhs_main_mfd_texture_screen;
 	}
 	else
 	{
-		export_left=co_pilot_lhs_main_mfd_texture_screen; 
-		export_right=co_pilot_rhs_main_mfd_texture_screen; 
+		export_left=co_pilot_lhs_main_mfd_texture_screen;
+		export_right=co_pilot_rhs_main_mfd_texture_screen;
 	}
 
 	set_system_texture_screen (pilot_lhs_main_mfd_texture_screen, TEXTURE_INDEX_COMANCHE_MFD2);
@@ -14838,7 +14838,7 @@ static comanche_side_mfd_modes get_next_side_mfd_mode (comanche_side_mfd_modes m
 
 	ASSERT (comanche_side_mfd_mode_valid (mfd_mode));
 	ASSERT (comanche_side_mfd_location_valid (mfd_location));
-	
+
 	next_mfd_mode = mfd_mode++;
 		next_mfd_mode++;
 
@@ -15595,14 +15595,14 @@ void select_comanche_ground_radar_main_mfd (void)
 		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_GROUND_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
-	
+
 			return;
 		}
 
 		if (pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_AIR_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_GROUND_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
-	
+
 			return;
 		}
 
@@ -15765,14 +15765,14 @@ void select_comanche_air_radar_main_mfd (void)
 		if (pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_LHS);
-	
+
 			return;
 		}
 
 		if (pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_PILOT_RHS);
-	
+
 			return;
 		}
 
@@ -15853,17 +15853,17 @@ void select_comanche_air_radar_main_mfd (void)
 		if (co_pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
-	
+
 			return;
 		}
 
 		if (co_pilot_rhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_RHS);
-	
+
 			return;
 		}
-	
+
 		if (co_pilot_lhs_main_mfd_mode == COMANCHE_MAIN_MFD_MODE_GROUND_RADAR)
 		{
 			select_comanche_main_mfd_mode (COMANCHE_MAIN_MFD_MODE_AIR_RADAR, COMANCHE_MAIN_MFD_LOCATION_CO_PILOT_LHS);
