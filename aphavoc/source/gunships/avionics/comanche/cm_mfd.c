@@ -9539,10 +9539,6 @@ static void draw_engine_display_mfd (void)
 		s[80], s2[10];
 
 	int
-		x1,
-		y1,
-		x2,
-		y2,
 		ivalue;
 
 	float
@@ -10125,10 +10121,6 @@ static void draw_engine_display_side_mfd (void)
 		s[80];
 
 	int
-		x1,
-		y1,
-		x2,
-		y2,
 		ivalue;
 
 	float
