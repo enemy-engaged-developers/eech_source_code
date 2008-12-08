@@ -1169,8 +1169,8 @@ void update_object_collision_dynamics (void)
 									current_flight_dynamics->moving_collision_points [loop].world_point.y,
 									current_flight_dynamics->moving_collision_points [loop].world_point.z,
 									current_flight_dynamics->last_frame_moving_collision_points [loop].world_point.x,
-									current_flight_dynamics->moving_frame_fixed_collision_points [loop].world_point.y,
-									current_flight_dynamics->moving_frame_fixed_collision_points [loop].world_point.z,
+									current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point.y,
+									current_flight_dynamics->last_frame_fixed_collision_points [loop].world_point.z,
 									current_flight_dynamics->moving_collision_points [loop].collision_point.x,
 									current_flight_dynamics->moving_collision_points [loop].collision_point.y,
 									current_flight_dynamics->moving_collision_points [loop].collision_point.z,
@@ -1496,7 +1496,7 @@ void assess_landing(void)
 
 	fatal = FALSE;
 
-	landing_assessment = current_flight_dynamics->world_motion_vector.y - fabs (current_flight_dynamics->model_motion_vector.z / 10.0);
+	landing_assessment = current_flight_dynamics->world_motion_vector.y;
 
 	// landed with undercarriage up
 	if (current_flight_dynamics->undercarriage_state.value != 1.0)
@@ -1515,8 +1515,13 @@ void assess_landing(void)
 
 		debug_log ("CO_FORCE: landed with undercarriage up");
 
+		// be less forgiving about landing at speed with gear up
+		landing_assessment -= fabs (current_flight_dynamics->model_motion_vector.z / 3.0);
+
 		//#endif
 	}
+	else
+		landing_assessment -= fabs (current_flight_dynamics->model_motion_vector.z / 10.0);
 	//
 
 	debug_log ("CO_FORCE: landing force %f", landing_assessment);
