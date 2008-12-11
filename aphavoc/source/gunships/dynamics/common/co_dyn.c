@@ -64,6 +64,8 @@
 
 #include "project.h"
 
+#include "co_undercarriage.h"
+
 extern entity *current_flight_dynamics_landed_at_keysite;  // declared in dynamics.c
 
 int
@@ -155,7 +157,10 @@ void clear_trim_control (event *ev)
 
 		current_flight_dynamics->input_data.cyclic_x_trim.value = 0.0;
 		current_flight_dynamics->input_data.cyclic_y_trim.value = centre_trim;
-		current_flight_dynamics->input_data.pedal_trim.value = centre_pedal_trim;
+		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+			current_flight_dynamics->input_data.pedal_trim.value = 0.0;
+		else
+			current_flight_dynamics->input_data.pedal_trim.value = centre_pedal_trim;
 	}
 }
 
@@ -483,7 +488,7 @@ void update_common_attitude_dynamics (void)
 		tail_angular_force *= heading_inertia_value;
 
 		position.x = 0.0;
-		position.y = -0.08022;
+		position.y = 0.0; // -0.08022;
 		position.z = -current_flight_dynamics->tail_boom_length.value;
 
 		direction.x = -current_flight_dynamics->rotor_rotation_direction;
@@ -867,26 +872,26 @@ void update_common_attitude_dynamics (void)
 
 			position.x = 0.0;
 			position.y = 0.0; // -0.08022;
-			position.z = -current_flight_dynamics->tail_boom_length.value * 0.5;
+			position.z = -current_flight_dynamics->tail_boom_length.value;
 
 			direction.x = current_flight_dynamics->rotor_rotation_direction;
 			direction.y = 0.0;
 			direction.z = 0.0;
 
-			main_angular_force = (9) + main_angular_force;
+			//main_angular_force = (9) + main_angular_force;
 
 			if (model_landed)
 			{
 
 				position.y = 0.0;
 
-				if ((current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_LEFT) &&
+/*				if ((current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_LEFT) &&
 					(current_flight_dynamics->input_data.pedal_input_pressure != PEDAL_PRESSURE_RIGHT))
 				{
 
 					main_angular_force = 0.0;
 				}
-				else
+				else */
 				{
 
 					main_angular_force *= min (fabs (current_flight_dynamics->velocity_z.value) / 15.0, 1.0);
@@ -1585,7 +1590,24 @@ void update_common_attitude_dynamics (void)
 				current_flight_dynamics->world_motion_vector.y = 0.0;
 		}
 	}
+/*	else if (current_flight_dynamics->wheel_brake && weight_on_wheels())  // cludge to stop helicopter completetly
+	{
+		float load = get_load_on_wheels();
+		debug_log("load: %.2f, x: %.3f, y: %.3f", load, current_flight_dynamics->world_motion_vector.x, current_flight_dynamics->world_motion_vector.z);
 
+		if (fabs(current_flight_dynamics->world_motion_vector.x) < 0.2)
+			if (current_flight_dynamics->world_motion_vector.x > 0)
+				current_flight_dynamics->world_motion_vector.x -= min(2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
+			else
+				current_flight_dynamics->world_motion_vector.x -= max(-2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
+
+		if (fabs(current_flight_dynamics->world_motion_vector.z) < 0.2)
+			if (current_flight_dynamics->world_motion_vector.z > 0)
+				current_flight_dynamics->world_motion_vector.z -= min(1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
+			else
+				current_flight_dynamics->world_motion_vector.z -= max(-1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
+	}
+*/
 	// arneh - add vibration if rotor damaged
 	if (!model_landed && current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE)
 		create_rotor_vibration(1.2);

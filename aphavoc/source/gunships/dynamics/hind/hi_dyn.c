@@ -415,7 +415,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->main_rotor_area.value = PI * pow ((current_flight_dynamics->main_rotor_diameter.value / 2.0), 2);
 
 	current_flight_dynamics->main_rotor_induced_air.value = 0.0;
-	current_flight_dynamics->main_rotor_induced_air.min = 0.0;
+	current_flight_dynamics->main_rotor_induced_air.min = 5.0;
 	current_flight_dynamics->main_rotor_induced_air.max = 26.0;
 
 	current_flight_dynamics->main_rotor_induced_vortex_air_flow.min = knots_to_metres_per_second (10.0); // actually used for the max velocity for vortex ring to occur
@@ -619,7 +619,7 @@ void set_dynamics_defaults (entity *en)
 
 		Tl = current_flight_dynamics->tail_boom_length.value;
 
-		current_flight_dynamics->cross_coupling_effect.value = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
+		current_flight_dynamics->cross_coupling_effect.value = (((10 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
 	}
 
 	right_g_e_force = 0.0;
@@ -722,7 +722,7 @@ void update_hind_advanced_dynamics (void)
 		{
 			float rotor_rpm_diff = current_flight_dynamics->main_rotor_rpm.value - current_flight_dynamics->left_engine_rpm.value;
 
-			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
+			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_max_rpm;
 			rpm *= 0.5 + left_power_ratio;
 			if (rotor_rpm_diff > 0.0)
 				rpm *= 1.0 - bound(rotor_rpm_diff * 0.75, 0.0, 1.0);
@@ -748,7 +748,7 @@ void update_hind_advanced_dynamics (void)
 		{
 			float rotor_rpm_diff = current_flight_dynamics->main_rotor_rpm.value - current_flight_dynamics->right_engine_rpm.value;
 
-			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_rpm.max;
+			rpm = current_flight_dynamics->main_rotor_rpm.value / current_flight_dynamics->main_rotor_max_rpm;
 			rpm *= 0.5 + (1.0 - left_power_ratio);
 			if (rotor_rpm_diff > 0.0)
 				rpm *= 1.0 - bound(rotor_rpm_diff * 0.75, 0.0, 1.0);
@@ -1008,9 +1008,9 @@ void update_main_rotor_rpm_dynamics (void)
 			induced_drag, profile_drag,
 			autorotational_acceleration,
 			rpm_ratio, air_flow,
-			autorotation_factor = 1.8,
+			autorotation_factor = 1.5,
 			induced_drag_factor = 8.0,
-			profile_drag_factor = 1.5;
+			profile_drag_factor = 3.5;
 
 		// when not engaged to engine, rpm may exceed max
 		// (but rotor will fail before reaching the new limit)
@@ -1044,7 +1044,7 @@ void update_main_rotor_rpm_dynamics (void)
 			// calulate change in rotor RPM.  The factors for autorotational_acceleration,
 			// profile_drag and induced_drag have been arrived at by experimentation.
 			// Feel free to change the factors if you feel they are wrong.
-			current_flight_dynamics->main_rotor_rpm.delta = max_delta *
+			current_flight_dynamics->main_rotor_rpm.delta = 2.0 *
 				(autorotation_factor * autorotational_acceleration -
 				 profile_drag_factor * profile_drag -
 				 induced_drag_factor * induced_drag);
@@ -1263,10 +1263,9 @@ void update_tail_rotor_thrust_dynamics (void)
 		(get_current_dynamics_options (DYNAMICS_OPTIONS_CROSS_COUPLING)))
 		desired = 0.0;
 	else
-		desired = (((200 * PI * Mrpm * Md * Pmax) / (1649 * Tl))) / (Pmax);
+		desired = (((10 * PI * Mrpm * Md * Pmax) / (1649.0 * Tl))) / (Pmax);
 
 	current_flight_dynamics->cross_coupling_effect.value += (desired - current_flight_dynamics->cross_coupling_effect.value) * get_model_delta_time ();
-
 	blade_pitch_induced_thrust_percentage = (((100.0 - current_flight_dynamics->cross_coupling_effect.value) /
 															current_flight_dynamics->tail_blade_pitch.max) *
 															current_flight_dynamics->tail_blade_pitch.value +
@@ -1281,7 +1280,9 @@ void update_tail_rotor_thrust_dynamics (void)
 																					(blade_pitch_induced_thrust_percentage / 2.0);
 	}
 
-	//debug_log ("tail induced %f, cross %f, tail pitch value %f", current_flight_dynamics->tail_rotor_induced_air.value, current_flight_dynamics->cross_coupling_effect.value, current_flight_dynamics->tail_blade_pitch.value);
+	current_flight_dynamics->tail_rotor_induced_air.value += debug_var_x;
+
+	// debug_log ("tail induced %.2f, cross %.2f, tail pitch value %.2f, blade pitch: %.2f", current_flight_dynamics->tail_rotor_induced_air.value, current_flight_dynamics->cross_coupling_effect.value, current_flight_dynamics->tail_blade_pitch.value, blade_pitch_induced_thrust_percentage);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

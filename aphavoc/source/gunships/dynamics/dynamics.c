@@ -523,6 +523,8 @@ void initialise_flight_dynamics_collision_points (void)
 	}
 	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND && command_line_dynamics_flight_model >= 2)
 		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
+	else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
+		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
 	else
 		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 
@@ -851,6 +853,7 @@ void set_dynamics_entity_values (entity *en)
 
 	if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
 	{
+		current_flight_dynamics->main_rotor_governor_rpm = 97.5;
 		current_flight_dynamics->main_rotor_max_rpm = 97.5;
 		current_flight_dynamics->engine_idle_rpm = 72.0;
 	}
@@ -1257,6 +1260,8 @@ void update_gunship_dynamics (void)
 ////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
+			int check_collisions_each_frame = command_line_dynamics_flight_model == 2 && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+
 			while (current_flight_dynamics->model_iterations --)
 			{
 
@@ -1265,18 +1270,16 @@ void update_gunship_dynamics (void)
 				update_hind_advanced_dynamics ();
 
 				// if we're in a collision this will move helicopter, so need to do it for each model iteration
-				if (command_line_dynamics_flight_model == 2 && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN)
-					if (fixed_collision_count || moving_collision_count)
-					{
-						update_collision_dynamics ();
-						ASSERT(current_flight_dynamics);  // just want to know if this can happen
-						// may get killed, so abort further calculations if so
-						if (!current_flight_dynamics || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
-							break;
-					}
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			if (command_line_dynamics_flight_model != 2 || (!fixed_collision_count && !moving_collision_count))
+			if (!check_collisions_each_frame)
 				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
