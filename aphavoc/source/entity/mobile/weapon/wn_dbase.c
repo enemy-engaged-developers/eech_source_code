@@ -1011,11 +1011,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"9-A-624 12.7mm Round",				  							// full_name
-			"Gun",																	// hud_name
-			"Gun",																	// mfd_name
-			"12.7mm Round",																	// weapon_loading_list_name
-			"12.7mm Round",																	// weapon_loading_name_text
+			"Yak-B",				  							// full_name
+			"YAK-B",																	// hud_name
+			"YAK-B",																	// mfd_name
+			"Yak-B",																	// weapon_loading_list_name
+			"Yak-B 12.7mm Gatling Gun",													// weapon_loading_name_text
 
 			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
@@ -1143,11 +1143,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"GSh-23L 23mm Round",			  								// full_name
-			"GSh-23L",															// hud_name
-			"CANNON",		 													// mfd_name
-			"GSh-23L", 															// weapon_loading_list_name
-			"GSh-23L 23mm Cannon Pod",										// weapon_loading_name_text
+			"UPK-23",						  								// full_name
+			"UPK-23",															// hud_name
+			"UPK-23",		 													// mfd_name
+			"UPK-23", 															// weapon_loading_list_name
+			"UPK-23-250 23mm Cannon Pod",										// weapon_loading_name_text
 
 			OBJECT_3D_CANNON_SHELL_ORANGE,								// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
@@ -2732,11 +2732,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Igla-V",			  				  								// full_name
+			"9K38 Igla-V",			  				  								// full_name
 			"Igla-V",		 													// hud_name
 			"IGLA-V",  															// mfd_name
 			"Igla",											  					// weapon_loading_list_name
-			"Igla-V",										  					// weapon_loading_name_text
+			"9K38 Igla-V",										  					// weapon_loading_name_text
 
 			OBJECT_3D_IGLA_MISSILE,	 										// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED, 					// guidance_type
@@ -2797,14 +2797,79 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AA-8A Aphid",						  								// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"R-60",						  								// full_name
+			"R-60",																	// hud_name
+			"R-60",																	// mfd_name
+			"R-60",																	// weapon_loading_list_name
+			"R-60",																	// weapon_loading_name_text
 
 			OBJECT_3D_APHID_MISSILE,	  									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED,	  				// guidance_type
+			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
+			WEAPON_DECOY_TYPE_NONE,											// decoy_type
+			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
+			THREAT_TYPE_IR_MISSILE,											// threat_type
+			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
+			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
+			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
+			SPEECH_CPG_SELECTING_IGLA,										// weapon_selected_cpg_speech
+			SPEECH_CPG_IGLAS_LOW,											// weapon_low_cpg_speech
+			SPEECH_CPG_IGLAS_OUT,											// weapon_out_cpg_speech
+			SPEECH_CPG_FIRING_IGLA,											// weapon_launched_cpg_speech
+			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,						// weapon_launched_wingman_speech
+			0,																		// report_weapon_low_count
+			FALSE,																// gun_shake
+			1132,																	// soft_damage_capability
+			40,																	// hard_damage_capability
+			META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL,				// smoke_trail_type
+			TRUE,																	// acquire_parent_forward_velocity
+			FALSE,	  															// ignore_gravity
+			FALSE,																// survive_ground_impact
+			TRUE,	 																// in_flight_collision_check
+			TRUE,				 													// viewable_weapon
+			FALSE,																// boresight_weapon
+			FALSE,																// hellfire_flight_profile
+            FALSE,                                                                   // spiral_flight_path
+			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
+
+			43.5,																	// weight
+			500.0,																// min_range
+			8000.0,																// max_range
+			5000.0,																// effective_range
+			500.0,		 														// min_range_loal
+			10000.0,																// max_range_loal
+			0.0,																	// max_range_error_ratio
+			50.0,																	// muzzle_velocity
+			0.0,																	// muzzle_velocity_max_error
+			1000.0,																// cruise_velocity
+			15.0 * G,															// g_max
+			6.456,																// burn_time
+			6.611,																// cruise_time
+			0.0,																	// cruise_time_max_error
+			1.0,																	// inhibit_time
+			0.0,																	// burst_duration
+			FIRE_SINGLE_WEAPON,												// rate_of_fire
+			0.0,																	// reload_time
+			rad (30.0),															// max_launch_angle_error
+			0.0,																	// max_seeker_limit
+            0.0,                                                                   // drag_factor
+            1.0 / 100.0,                                                          // inverse_rate_of_fire
+		},
+		////////////////////////////////////////
+		//
+		// ENTITY_SUB_TYPE_WEAPON_AA8B_APHID
+		//
+		////////////////////////////////////////
+		{
+			"R-60M",						  								// full_name
+			"R-60M",																	// hud_name
+			"R-60M",																	// mfd_name
+			"R-60M",																	// weapon_loading_list_name
+			"R-60M",																	// weapon_loading_name_text
+
+			OBJECT_3D_APHID_MISSILE,	  									// default_3d_shape
+			WEAPON_GUIDANCE_TYPE_PASSIVE_INFRA_RED,					// guidance_type
 			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
 			WEAPON_DECOY_TYPE_NONE,											// decoy_type
 			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
@@ -2833,72 +2898,7 @@ weapon_data
             FALSE,                                                                   // spiral_flight_path
 			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
 
-			0.0,																	// weight
-			500.0,																// min_range
-			10000.0,																// max_range
-			5000.0,																// effective_range
-			500.0,		 														// min_range_loal
-			10000.0,																// max_range_loal
-			0.0,																	// max_range_error_ratio
-			50.0,																	// muzzle_velocity
-			0.0,																	// muzzle_velocity_max_error
-			1000.0,																// cruise_velocity
-			15.0 * G,															// g_max
-			6.456,																// burn_time
-			6.611,																// cruise_time
-			0.0,																	// cruise_time_max_error
-			1.0,																	// inhibit_time
-			0.0,																	// burst_duration
-			FIRE_SINGLE_WEAPON,												// rate_of_fire
-			0.0,																	// reload_time
-			rad (30.0),															// max_launch_angle_error
-			0.0,																	// max_seeker_limit
-            0.0,                                                                   // drag_factor
-            1.0 / 100.0,                                                          // inverse_rate_of_fire
-		},
-		////////////////////////////////////////
-		//
-		// ENTITY_SUB_TYPE_WEAPON_AA8B_APHID
-		//
-		////////////////////////////////////////
-		{
-			"AA-8B Aphid",						  								// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
-
-			OBJECT_3D_APHID_MISSILE,	  									// default_3d_shape
-			WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_RADAR,					// guidance_type
-			WEAPON_AIMING_TYPE_CALC_INTERCEPT_POINT,					// aiming_type
-			WEAPON_DECOY_TYPE_NONE,											// decoy_type
-			WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE,							// warhead_type
-			THREAT_TYPE_RF_MISSILE,											// threat_type
-			ENTITY_SUB_TYPE_EFFECT_SOUND_MISC,							// launch_sound_effect_sub_type
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// interior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_EXTERIOR_MISSILE_LAUNCH,				// exterior_launch_sound_effect
-			SOUND_SAMPLE_INDEX_LIGHT_MISSILE_FLIGHT,					// continuous_sound_effect
-			-1,																	// weapon_selected_cpg_speech
-			-1,																	// weapon_low_cpg_speech
-			-1,																	// weapon_out_cpg_speech
-			-1,																	// weapon_launched_cpg_speech
-			WEAPON_LAUNCH_WINGMAN_SPEECH_MISSILE,						// weapon_launched_wingman_speech
-			0,																		// report_weapon_low_count
-			FALSE,																// gun_shake
-			1132,																	// soft_damage_capability
-			40,																	// hard_damage_capability
-			META_SMOKE_LIST_TYPE_GENERIC_ROCKET_TRAIL,				// smoke_trail_type
-			TRUE,																	// acquire_parent_forward_velocity
-			FALSE,	  															// ignore_gravity
-			FALSE,																// survive_ground_impact
-			TRUE,	 																// in_flight_collision_check
-			TRUE,				 													// viewable_weapon
-			FALSE,																// boresight_weapon
-			FALSE,																// hellfire_flight_profile
-            FALSE,                                                                   // spiral_flight_path
-			WEAPON_CLASS_AIR_TO_AIR,										// weapon_class
-
-			0.0,																	// weight
+			43.5,																	// weight
 			500.0,																// min_range
 			15000.0,																// max_range
 			5000.0,																// effective_range
@@ -3389,11 +3389,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Ataka",				 				 								// full_name
-			"Ataka",	  															// hud_name
-			"?",																	// mfd_name
+			"9M120 Ataka",				 				 								// full_name
+			"ATAKA",	  															// hud_name
+			"ATAKA",																	// mfd_name
 			"Ataka",													 			// weapon_loading_list_name
-			"Ataka",													 			// weapon_loading_name_text
+			"9M120 Ataka",													 			// weapon_loading_name_text
 
 			OBJECT_3D_ATAKA_MISSILE,	  									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_RADIO_COMMAND,							// guidance_type
@@ -3454,11 +3454,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Vikhr",				 				 								// full_name
-			"Vikhr",				  												// hud_name
+			"9K121 Vikhr",				 				 								// full_name
+			"VIKHR",				  												// hud_name
 			"VIKHR",																// mfd_name
 			"Vikhr",				  												// weapon_loading_list_name
-			"Vikhr",				  												// weapon_loading_name_text
+			"9K121 Vikhr",				  												// weapon_loading_name_text
 
 			OBJECT_3D_VIKHR_MISSILE,	  									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER,					// guidance_type
@@ -3519,11 +3519,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AT-6 Spiral",				 				 						// full_name
-			"AT-6 Spiral",																	// hud_name
-			"AT-6 Spiral",																	// mfd_name
-			"AT-6 Spiral",																	// weapon_loading_list_name
-			"AT-6 Spiral",																	// weapon_loading_name_text
+			"9K114 Shturm",				 				 						// full_name
+			"SHTURM",																	// hud_name
+			"SHTURM",																	// mfd_name
+			"Shturm",																	// weapon_loading_list_name
+			"9K114 Shturm",																	// weapon_loading_name_text
 
 			OBJECT_3D_AT6_MISSILE,	  										// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_RADIO_COMMAND,							// guidance_type
