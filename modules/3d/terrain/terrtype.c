@@ -2402,7 +2402,7 @@ float texture_gamma_correction(int texture_index)
 	return 1.0;
 }
 
-static void initialse_noisemaps(void)
+void initialise_noisemaps(void)
 {
 	unsigned i = 0;
 	int
@@ -2586,7 +2586,7 @@ static void initialise_all_custom_terrain_types ( void )
 	memset(textures_with_noisemap, 0, sizeof(textures_with_noisemap));
 
 	if (command_line_texture_colour == 2)
-		initialse_noisemaps();
+		initialise_noisemaps();
 	else
 	{
 	 	terrain_texture_sea_detail								= get_system_texture_index ( "TERRAIN_SEA_1" );
