@@ -689,7 +689,7 @@ void update_common_attitude_dynamics (void)
 			if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR))
 			{
 
-				left_rotor_force = 0.25 * ((edge_rotor_split * main_rotor_induced_air_value) -
+				left_rotor_force = 0.1 * ((edge_rotor_split * main_rotor_induced_air_value) -
 							((edge_rotor_split * main_rotor_induced_air_value * main_rotor_roll_angle_value) /
 							(current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min)));
 
@@ -726,7 +726,7 @@ void update_common_attitude_dynamics (void)
 			if (!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR))
 			{
 
-				right_rotor_force = 0.25 * ((edge_rotor_split * main_rotor_induced_air_value) +
+				right_rotor_force = 0.1 * ((edge_rotor_split * main_rotor_induced_air_value) +
 							((edge_rotor_split * main_rotor_induced_air_value * main_rotor_roll_angle_value) /
 							(current_flight_dynamics->main_rotor_roll_angle.max - current_flight_dynamics->main_rotor_roll_angle.min)));
 
