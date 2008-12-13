@@ -1275,8 +1275,6 @@ void update_tail_rotor_thrust_dynamics (void)
 																					(blade_pitch_induced_thrust_percentage / 2.0);
 	}
 
-	current_flight_dynamics->tail_rotor_induced_air.value += debug_var_x;
-
 	// debug_log ("tail induced %.2f, cross %.2f, tail pitch value %.2f, blade pitch: %.2f", current_flight_dynamics->tail_rotor_induced_air.value, current_flight_dynamics->cross_coupling_effect.value, current_flight_dynamics->tail_blade_pitch.value, blade_pitch_induced_thrust_percentage);
 }
 
