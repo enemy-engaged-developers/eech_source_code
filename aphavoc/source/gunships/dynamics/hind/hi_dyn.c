@@ -809,11 +809,10 @@ void update_main_rotor_dynamics (void)
 	current_flight_dynamics->main_blade_y_pitch.value = (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min) *
 						(current_flight_dynamics->input_data.cyclic_y.value / 100.0) + current_flight_dynamics->main_blade_pitch.min;
 
+	coll = current_flight_dynamics->input_data.collective.value / 120.0;
 	coll *= coll;
 
-	average_blade_input = coll;
-
-	average_blade_input = bound (average_blade_input, 0.0, 1.0);
+	average_blade_input = bound (coll, 0.0, 1.0);
 
 	blade_pitch = (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min) *
 						average_blade_input + current_flight_dynamics->main_blade_pitch.min;
