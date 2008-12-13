@@ -528,9 +528,7 @@ void initialise_flight_dynamics_collision_points (void)
 	else
 		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 
-	temp_inst3d->vp.attitude [0][0] = 1.0;
-	temp_inst3d->vp.attitude [1][1] = 1.0;
-	temp_inst3d->vp.attitude [2][2] = 1.0;
+	get_identity_matrix3x3(temp_inst3d->vp.attitude);
 
 	temp_inst3d->vp.position.x = 0.0;
 	temp_inst3d->vp.position.y = 0.0;
