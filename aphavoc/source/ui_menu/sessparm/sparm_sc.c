@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -92,7 +92,7 @@ enum
 
 ui_object
 	*session_parameters_area,
-//VJ 051011 add season summer/winter/desert button	
+//VJ 051011 add season summer/winter/desert button
 	*season_area,
 	*season_button,
 	*time_of_day_area,
@@ -118,7 +118,7 @@ static const char
 	*suppress_ai_fire_text[2],
 	*time_of_day_text[6],
 	*weather_text[4],
-//VJ 051011 add season default/summer/winter/desert button	
+//VJ 051011 add season default/summer/winter/desert button
 	*season_text[4];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,13 +150,13 @@ void notify_session_parameters (void)
 
 	notify_clear_all_session_parameters ();
 
-	//VJ 051227 reading map inof data for automatic custom map 
+	//VJ 051227 reading map inof data for automatic custom map
 	// function declared in textuser.c
-	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_session_parameters: read_map_info_data"); 
+	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_session_parameters: read_map_info_data");
 
 	//VJ 080215 add initialize to avoid being stuck on season first selected campaign
 	initialise_custom_map_info();
-	
+
 	read_map_info_data();
 
 	//
@@ -188,7 +188,7 @@ void notify_session_parameters (void)
 
 		case GAME_TYPE_FREE_FLIGHT:
 		{
-//VJ 051011 add season summer/winter/desert button		
+//VJ 051011 add season summer/winter/desert button
 			y = 0.333;
 			set_ui_object_virtual_y (season_area, y);
 			set_ui_object_text (season_button, season_text [get_global_season () - 1]);
@@ -236,7 +236,7 @@ void notify_session_parameters (void)
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
-	//VJ 051011 add season summer/winter/desert button	
+	//VJ 051011 add season summer/winter/desert button
 			y = 0.533;
 			set_ui_object_virtual_y (season_area, y);
 			set_ui_object_text (season_button, season_text [get_global_season () - 1]);
@@ -267,7 +267,7 @@ void notify_session_parameters (void)
 		set_ui_object_font_colour_end (realism_inf_fuel_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 127);
 
 		set_ui_object_notify_on (realism_inf_fuel_button, NOTIFY_TYPE_NONE);
-	
+
 
 		set_ui_object_font_colour_end (realism_inf_weapons_title, ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 127);
 
@@ -276,7 +276,7 @@ void notify_session_parameters (void)
 		set_ui_object_font_colour_end (realism_inf_weapons_button, ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 127);
 
 		set_ui_object_notify_on (realism_inf_weapons_button, NOTIFY_TYPE_NONE);
-	
+
 	#endif
 
 }
@@ -310,7 +310,7 @@ void define_session_parameter_objects (void)
 		*title_box_obj,
 		*title_text_obj,
 		*button_box_obj;
-		
+
 	float
 		x1,
 		y1,
@@ -366,7 +366,7 @@ void define_session_parameter_objects (void)
 //VJ 051011 add season summer/winter/desert button	==>
 	/////////////////////////////////////////////////////////////////
 	//Season
-	
+
 	x1 = 0.506;
 	y1 = 0.5333;
 
@@ -406,7 +406,7 @@ void define_session_parameter_objects (void)
 	);
 
 	// Season Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -442,7 +442,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//Time of Day
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    time_of_day_area = create_ui_object
@@ -481,7 +481,7 @@ void define_session_parameter_objects (void)
 	);
 
 	// Time Of Day Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -519,7 +519,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Weather
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    weather_area = create_ui_object
@@ -559,7 +559,7 @@ void define_session_parameter_objects (void)
 
 
 	// Weather Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -595,7 +595,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Realism Suppress AI Fire
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    realism_suppress_ai_fire_area = create_ui_object
@@ -635,7 +635,7 @@ void define_session_parameter_objects (void)
 
 
 	// Suppress AI Fire Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -671,7 +671,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Realism Infinite Weapons
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    realism_inf_weapons_area = create_ui_object
@@ -712,7 +712,7 @@ void define_session_parameter_objects (void)
 
 
 	// Infinite Weapons Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -748,7 +748,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Realism Infinite Fuel
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    realism_inf_fuel_area = create_ui_object
@@ -788,7 +788,7 @@ void define_session_parameter_objects (void)
 
 
 	// Infinite Fuel Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -824,7 +824,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Realism Collisions
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    realism_collisions_area = create_ui_object
@@ -864,7 +864,7 @@ void define_session_parameter_objects (void)
 
 
 	// Collisions Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -900,7 +900,7 @@ void define_session_parameter_objects (void)
 
 	/////////////////////////////////////////////////////////////////
 	//	Realism Weapons Damage
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
    realism_weapons_damage_area = create_ui_object
@@ -940,7 +940,7 @@ void define_session_parameter_objects (void)
 
 
 	// Weapons Damage Button
-	
+
 	button_box_obj = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -983,27 +983,30 @@ void define_session_parameter_objects (void)
 //VJ 051011 add season summer/winter/desert button	==>
 void notify_season_function ( ui_object *obj, void *arg )
 {
-	
+
 	int
 		tod;
 
 	tod = get_global_season ();
-	
+
 	tod++;
 	// skip deserts. they cannot be changed
-	if (tod == SESSION_SEASON_DESERT)	
+	if (tod == SESSION_SEASON_DESERT)
 		tod = SESSION_SEASON_SUMMER;
-	if (tod == SESSION_SEASON_DEFAULT)	
+	if (tod == SESSION_SEASON_DEFAULT)
 		tod = SESSION_SEASON_SUMMER;
-	
+
 	set_global_season (tod);
 
+	// this is totally the wrong place to call this, but it fixes bug with non-default seasons not working with noisemaps
+	initialise_noisemaps();
+
 	set_ui_object_text (obj, season_text [get_global_season () - 1]);
-	
+
 	set_toggle_button_off (obj);
 
 //VJ 060319 further bug fixes
-	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_season_function"); 
+	debug_log("###CUSTOM TEXTURE STARTUP: sparm_sc: notify_season_function");
 }
 //VJ 051011 <==add season summer/winter/desert button
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1014,7 +1017,7 @@ void notify_time_of_day_function ( ui_object *obj, void *arg )
 {
 	int
 		tod;
-		
+
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
@@ -1023,7 +1026,7 @@ void notify_time_of_day_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-	
+
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
@@ -1050,7 +1053,7 @@ void notify_time_of_day_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-	
+
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
@@ -1075,7 +1078,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 {
 	int
 		weather;
-		
+
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
@@ -1084,7 +1087,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-	
+
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
@@ -1095,7 +1098,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 	}
 
 	weather++;
-	
+
 	if (weather > SESSION_WEATHER_POOR)
 	{
 		weather = SESSION_WEATHER_RANDOM;
@@ -1111,7 +1114,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 
 			break;
 		}
-	
+
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
@@ -1138,7 +1141,7 @@ void notify_realism_inf_weapons_function ( ui_object *obj, void *arg )
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
-		{	
+		{
 			set_global_session_free_flight_realism_infinite_weapons (!get_global_session_free_flight_realism_infinite_weapons ());
 
 			set_ui_object_text (obj, boolean_text [get_global_session_free_flight_realism_infinite_weapons ()]);
@@ -1148,7 +1151,7 @@ void notify_realism_inf_weapons_function ( ui_object *obj, void *arg )
 
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
-		{	
+		{
 			set_global_session_campaign_realism_infinite_weapons (!get_global_session_campaign_realism_infinite_weapons ());
 
 			set_ui_object_text (obj, boolean_text [get_global_session_campaign_realism_infinite_weapons ()]);
@@ -1173,7 +1176,7 @@ void notify_realism_inf_fuel_function ( ui_object *obj, void *arg )
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
-		{	
+		{
 			set_global_session_free_flight_realism_infinite_fuel (!get_global_session_free_flight_realism_infinite_fuel ());
 
 			set_ui_object_text (obj, boolean_text [get_global_session_free_flight_realism_infinite_fuel ()]);
@@ -1183,7 +1186,7 @@ void notify_realism_inf_fuel_function ( ui_object *obj, void *arg )
 
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
-		{	
+		{
 			set_global_session_campaign_realism_infinite_fuel (!get_global_session_campaign_realism_infinite_fuel ());
 
 			set_ui_object_text (obj, boolean_text [get_global_session_campaign_realism_infinite_fuel ()]);
@@ -1208,7 +1211,7 @@ void notify_realism_collisions_function ( ui_object *obj, void *arg )
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
-		{	
+		{
 			set_global_session_free_flight_realism_invulnerable_from_collisions (!get_global_session_free_flight_realism_invulnerable_from_collisions ());
 
 			set_ui_object_text (obj, boolean_text [!get_global_session_free_flight_realism_invulnerable_from_collisions ()]);
@@ -1218,7 +1221,7 @@ void notify_realism_collisions_function ( ui_object *obj, void *arg )
 
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
-		{	
+		{
 			set_global_session_campaign_realism_invulnerable_from_collisions (!get_global_session_campaign_realism_invulnerable_from_collisions ());
 
 			set_ui_object_text (obj, boolean_text [!get_global_session_campaign_realism_invulnerable_from_collisions ()]);
@@ -1243,7 +1246,7 @@ void notify_realism_weapons_damage_function ( ui_object *obj, void *arg )
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
-		{	
+		{
 			set_global_session_free_flight_realism_invulnerable_from_weapons (!get_global_session_free_flight_realism_invulnerable_from_weapons ());
 
 			set_ui_object_text (obj, boolean_text [!get_global_session_free_flight_realism_invulnerable_from_weapons ()]);
@@ -1253,7 +1256,7 @@ void notify_realism_weapons_damage_function ( ui_object *obj, void *arg )
 
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
-		{	
+		{
 			set_global_session_campaign_realism_invulnerable_from_weapons (!get_global_session_campaign_realism_invulnerable_from_weapons ());
 
 			set_ui_object_text (obj, boolean_text [!get_global_session_campaign_realism_invulnerable_from_weapons ()]);
@@ -1278,7 +1281,7 @@ void notify_realism_suppress_ai_fire_function ( ui_object *obj, void *arg )
 	switch ( get_game_type () )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
-		{	
+		{
 			set_global_session_free_flight_realism_suppress_ai_fire (!get_global_session_free_flight_realism_suppress_ai_fire ());
 
 			set_ui_object_text (obj, suppress_ai_fire_text [!get_global_session_free_flight_realism_suppress_ai_fire ()]);
@@ -1288,7 +1291,7 @@ void notify_realism_suppress_ai_fire_function ( ui_object *obj, void *arg )
 
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
-		{	
+		{
 			set_global_session_campaign_realism_suppress_ai_fire (!get_global_session_campaign_realism_suppress_ai_fire ());
 
 			set_ui_object_text (obj, suppress_ai_fire_text [!get_global_session_campaign_realism_suppress_ai_fire ()]);
@@ -1409,7 +1412,7 @@ static void session_parameters_bounded_input_function ( ui_object *obj, void *ar
 
 	int
 		val;
-		
+
 	obj;
 	arg;
 
@@ -1429,7 +1432,7 @@ static void session_parameters_bounded_input_function ( ui_object *obj, void *ar
 		val = bound ( val, minimum, maximum );
 
 		itoa ( val, buffer, 10 );
-		
+
 		set_ui_object_text ( obj, buffer );
 	}
 
@@ -1445,7 +1448,7 @@ void session_parameters_time_limit_input_function ( ui_object *obj, void *arg )
 	//
 	// max time limit 60 minutes
 	//
-	
+
 	session_parameters_bounded_input_function ( obj, arg, 0, 60 );
 }
 
@@ -1494,10 +1497,10 @@ static void process_session_setup_weather_options (session_weather_settings weat
 				// (If local_weather_model is set to FALSE, it means the weather for this warzone has been specified in the
 				//		campaign file, and should not be changed)
 				//
-		
+
 				set_session_random_weather_mode (get_session_entity ());
 			}
-			
+
 			break;
 		}
 		case SESSION_WEATHER_GOOD:
@@ -1514,12 +1517,12 @@ static void process_session_setup_weather_options (session_weather_settings weat
 		}
 		case SESSION_WEATHER_POOR:
 		{
-			//VJ 051014 link winter/summer to snow/rain 
+			//VJ 051014 link winter/summer to snow/rain
 			if (get_global_season() == SESSION_SEASON_WINTER)
 				set_session_fixed_weather_mode (get_session_entity (), WEATHERMODE_SNOW);
 			else
 				set_session_fixed_weather_mode (get_session_entity (), WEATHERMODE_HEAVY_RAIN);
-			
+
 			break;
 		}
 		default:
@@ -1593,13 +1596,13 @@ void process_host_session_setup_options (void)
 //VJ 051011 add season summer/winter/desert button
 	//session_season_settings
 		//season_setting;
-		
+
 	ASSERT (get_session_entity ());
 
 	weather_setting = SESSION_WEATHER_RANDOM;
 
 	time_of_day = SESSION_TIME_RANDOM;
-	
+
 //VJ 060304 changed to default season
 	//season_setting = SESSION_SEASON_DEFAULT;
 
@@ -1676,7 +1679,7 @@ void process_restore_session_setup_options (void)
 	weather_setting = SESSION_WEATHER_RANDOM;
 
 	time_of_day = SESSION_TIME_RANDOM;
-	
+
 	switch (get_game_type ())
 	{
 
@@ -1726,7 +1729,7 @@ void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_o
 	float
 		old_size,
 		new_size;
-	
+
 	// process button objects
 
 	old_size = get_ui_object_virtual_x_size (button_box_obj);
@@ -1735,7 +1738,7 @@ void process_sessparm_objects (ui_object *title_box_obj, ui_object *title_text_o
 
 	new_size = get_ui_object_virtual_x_size (button_box_obj);
 
-	set_ui_object_virtual_x_size (button_obj, 1.0); 
+	set_ui_object_virtual_x_size (button_obj, 1.0);
 
 	set_ui_object_virtual_y_size (button_obj, 1.0);
 
@@ -1756,26 +1759,26 @@ void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *titl
 	float
 		old_size,
 		new_size;
-	
+
 	// process button objects
 
 	if (get_global_current_language () != LANGUAGE_ENGLISH)
 	{
 		old_size = get_ui_object_virtual_x_size (button_box_obj);
-	
+
 		preprocess_translation_object_size (button_box_obj, button_obj, button_text, num_strings, RESIZE_SESSPARM_CYCLE_BUTTON);
-	
+
 		new_size = get_ui_object_virtual_x_size (button_box_obj);
-	
+
 		set_ui_object_x_end (button_box_obj, (1.0 - new_size));
-	
-		set_ui_object_virtual_x_size (button_obj, 1.0); 
-	
+
+		set_ui_object_virtual_x_size (button_obj, 1.0);
+
 		set_ui_object_virtual_y_size (button_obj, 1.0);
-	
-	
+
+
 		// process title objects
-	
+
 		set_ui_object_virtual_x_size (title_box_obj, (1.0 - new_size - SETUP_BOX_GAP_WIDTH));
 
 		// not definite yet...
