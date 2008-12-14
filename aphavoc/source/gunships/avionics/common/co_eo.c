@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -118,7 +118,7 @@ float
 	eo_min_elevation,
 	eo_max_elevation,
 	eo_max_visual_range,
-	fog_start, 
+	fog_start,
 	fog_end;
 
 viewpoint
@@ -186,20 +186,20 @@ static void slew_eo(float elevation, float azimuth);
 void initialise_common_eo (void)
 {
 	laser_active = FALSE;
-	
+
 	eo_target_locked = 0;
 
 	eo_on_target = FALSE;
 
 	eo_low_light = FALSE;
-	
+
 	eo_requested_elevation = 0.0;
 	eo_requested_azimuth = 0.0;
-	
-	electrical_system_on = !command_line_dynamics_engine_startup;
+
+	electrical_system_on = !command_line_dynamics_engine_startup || get_local_entity_int_value(get_gunship_entity(), INT_TYPE_AIRBORNE_AIRCRAFT);
 
 	eo_stop_tracking();
-	
+
 	lock_target = FALSE;
 	lock_terrain = FALSE;
 
@@ -242,7 +242,7 @@ int is_using_eo_system(int include_hms)
 		return include_hms;
 	default:
 		return FALSE;
-	}	
+	}
 }
 
 int eo_is_locked(void)
@@ -270,7 +270,7 @@ void toggle_eo_lock(void)
 	{
 		// if we have no lock try to get one of any type
 		lock_target = TRUE;
-		lock_terrain = TRUE;	
+		lock_terrain = TRUE;
 	}
 }
 
@@ -613,11 +613,11 @@ static float get_eo_boresight_terrain_los_clear_range (vec3d* position)
 			while (los_clear_range < max_range)
 			{
 				los_clear_range += SMALL_TERRAIN_LOS_STEP;
-		
+
 				position->x += step.x;
 				position->y += step.y;
 				position->z += step.z;
-		
+
 				if (draw_eo_terrain_los_markers && (get_view_mode () == VIEW_MODE_EXTERNAL))
 				{
 					create_rotated_debug_3d_object
@@ -631,11 +631,11 @@ static float get_eo_boresight_terrain_los_clear_range (vec3d* position)
 						TERRAIN_LOS_MARKER_SCALE
 					);
 				}
-		
+
 				if (point_below_ground (position))
 					return (los_clear_range);
 			}
-			
+
 			return max_range;
 		}
 	}
@@ -1003,7 +1003,7 @@ static entity *get_eo_target (vec3d *los_start, vec3d *los_end, vec3d *los_unit_
 		if (first_pass)
 		{
 			vec3d intercept_point;
-			
+
 			terrain_los_range = get_eo_boresight_terrain_los_clear_range (&intercept_point);
 
 			tree_los_range = get_eo_boresight_tree_los_clear_range (los_start, los_end, &intercept_point);
@@ -1174,11 +1174,11 @@ void update_common_eo (void)
 	{
 		if (get_local_entity_int_value (slave_target, INT_TYPE_TARGET_TYPE) == TARGET_TYPE_INVALID)
 			slave_target = NULL;
-	
+
 		else
 		{
 			slave_common_eo_to_current_target();
-			
+
 			if (get_eo_boresight_target() != slave_target)
 				return;   // not done slewing to target yet
 
@@ -1202,7 +1202,7 @@ void update_common_eo (void)
 	{
 		float req_azimuth, req_elevation, delta_eo_azimuth, delta_eo_elevation, frame_delta_eo_azimuth, frame_delta_eo_elevation;
 		float frame_slew_rate = rad(60) * get_delta_time();
-		
+
 		if (eo_target_locked & TARGET_LOCK)
 		{
 			get_local_entity_target_point (current_target, &target_position);
@@ -1214,7 +1214,7 @@ void update_common_eo (void)
 		else
 		{
 			target_vector = eo_tracking_point;
-			
+
 			target_vector.x -= vp.position.x;
 			target_vector.y -= vp.position.y;
 			target_vector.z -= vp.position.z;
@@ -1229,7 +1229,7 @@ void update_common_eo (void)
 		delta_eo_azimuth = req_azimuth - eo_azimuth;
 		frame_delta_eo_azimuth = bound (delta_eo_azimuth, -frame_slew_rate, frame_slew_rate);
 		eo_azimuth += frame_delta_eo_azimuth;
-	
+
 		delta_eo_elevation = req_elevation - eo_elevation;
 		frame_delta_eo_elevation = bound (delta_eo_elevation, -frame_slew_rate, frame_slew_rate);
 		eo_elevation += frame_delta_eo_elevation;
@@ -1289,7 +1289,7 @@ void update_common_eo (void)
 	{
 		if (get_local_entity_parent (new_target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
 			insert_local_entity_into_parents_child_list (new_target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
-		
+
 		if (lock_target)
 		{
 			eo_target_locked = TARGET_LOCK;
@@ -1383,7 +1383,7 @@ void deactivate_common_eo (void)
 void slew_eo_to_direction(float elevation, float azimuth)
 {
 	eo_requested_azimuth = azimuth;
-	eo_requested_elevation = elevation;	
+	eo_requested_elevation = elevation;
 }
 
 static void slew_eo(float elevation, float azimuth)
@@ -1396,7 +1396,7 @@ static void slew_eo(float elevation, float azimuth)
 		 delta_eo_elevation,
 		 frame_delta_eo_elevation;
 
-	
+
 	float frame_slew_rate = rad (60.0) * get_delta_time ();
 
 	viewpoint
@@ -1453,7 +1453,7 @@ void slave_common_eo_to_current_target (void)
 {
 	vec3d position;
 	entity* current_target;
-	
+
 	if (slave_target)
 		current_target = slave_target;
 	else
@@ -1529,7 +1529,7 @@ void slave_common_eo_to_position (vec3d* target_position)
 
 	update_eo_visibility ();
 
-	if (target_in_fov && 
+	if (target_in_fov &&
 		(eo_on_target || !is_using_eo_system(FALSE)))
 	{
 		if (!command_line_manual_laser_radar)
@@ -1950,7 +1950,7 @@ void select_previous_designated_eo_target (void)
 
 int laser_is_active(void)
 {
-	return laser_active;	
+	return laser_active;
 }
 
 void set_laser_is_active(int is_active)
@@ -2043,7 +2043,7 @@ static void switch_to_point_lock(void)
 		eo_target_locked = 0;
 		eo_stop_tracking();
 	}
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2099,9 +2099,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			movement_rate -= FINE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_left_key)
 			movement_rate -= MEDIUM_TRACKING_RATE;
-	
+
 		////////////////////////////////////////
-	
+
 		if (continuous_target_acquisition_system_steer_right_fast_key)
 			movement_rate += COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_right_fine_key)
@@ -2118,7 +2118,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 				switch_to_point_lock();
 
 			movement = movement_rate * get_delta_time();
-	
+
 			eo_tracking_point.x += cos_heading * movement;
 			eo_tracking_point.z -= sin_heading * movement;
 			movement_rate = 0.0;
@@ -2131,9 +2131,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			movement_rate += FINE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_up_key)
 			movement_rate += MEDIUM_TRACKING_RATE;
-	
+
 		////////////////////////////////////////
-	
+
 		if (continuous_target_acquisition_system_steer_down_fast_key)
 			movement_rate -= COARSE_TRACKING_RATE;
 		else if (continuous_target_acquisition_system_steer_down_fine_key)
@@ -2149,9 +2149,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 
 			has_moved = TRUE;
 		}
-		
+
 		movement = movement_rate * 4 * get_delta_time();  // multiply vertical rate by two since it appears much smaller from usual angles
-	
+
 		eo_tracking_point.x += sin_heading * movement;
 		eo_tracking_point.z += cos_heading * movement;
 
@@ -2187,9 +2187,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			eo_azimuth = max (eo_azimuth, eo_min_azimuth);
 			slave_target = NULL;
 		}
-	
+
 		////////////////////////////////////////
-	
+
 		if (continuous_target_acquisition_system_steer_right_fast_key)
 		{
 			eo_azimuth += coarse_slew_rate;
@@ -2208,9 +2208,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			eo_azimuth = min (eo_azimuth, eo_max_azimuth);
 			slave_target = NULL;
 		}
-	
+
 		////////////////////////////////////////
-	
+
 		if (continuous_target_acquisition_system_steer_up_fast_key)
 		{
 			eo_elevation += coarse_slew_rate;
@@ -2229,9 +2229,9 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 			eo_elevation = min (eo_elevation, eo_max_elevation);
 			slave_target = NULL;
 		}
-	
+
 		////////////////////////////////////////
-	
+
 		if (continuous_target_acquisition_system_steer_down_fast_key)
 		{
 			eo_elevation -= coarse_slew_rate;
@@ -2274,11 +2274,11 @@ void joystick_slew_eo_system(float slew_rate)
 
 		vertical_value = get_joystick_axis (command_line_eo_pan_joystick_index, command_line_eo_pan_vertical_joystick_axis);
 		panning_offset_vert = make_panning_offset_from_axis (vertical_value);
-		
+
 		if (panning_offset_horiz != 0.0 || panning_offset_vert != 0.0)
 		{
 			slave_target = NULL;
-			
+
 			if (eo_target_locked)
 			{
 				float
@@ -2289,7 +2289,7 @@ void joystick_slew_eo_system(float slew_rate)
 				// if moving while in target lock then switch to point lock
 				if (eo_target_locked & TARGET_LOCK)
 					switch_to_point_lock();
-	
+
 				eo_tracking_point.x += cos_heading * panning_offset_horiz * JOYSTICK_TRACKING_RATE * get_delta_time();
 				eo_tracking_point.z -= sin_heading * panning_offset_horiz * FINE_TRACKING_RATE * get_delta_time();
 
@@ -2310,7 +2310,7 @@ void joystick_slew_eo_system(float slew_rate)
 			{
 				eo_azimuth += panning_offset_horiz * slew_rate;
 				eo_azimuth = bound(eo_azimuth, eo_min_azimuth, eo_max_azimuth);
-		
+
 				eo_elevation -= panning_offset_vert * slew_rate;
 				eo_elevation = bound(eo_elevation, eo_min_elevation, eo_max_elevation);
 			}
@@ -2331,7 +2331,7 @@ void update_eo_max_visual_range(void)
 	get_3d_fog_distances (main_3d_env, &fog_start, &fog_end);
 
 	//eo_max_visual_range = fog_end;
-	
+
 	switch (eo_sensor)
 	{
 		case TARGET_ACQUISITION_SYSTEM_DTV:
@@ -2437,7 +2437,7 @@ static float evaluate_target(entity* target, float sqr_range)
 		rank /= sqr_range;
 
 		rank *= frand1();
-		
+
 		return rank;
 	}
 
@@ -2455,7 +2455,7 @@ static void co_pilot_perform_eo_scan(void)
 
 	static entity*
 		best_target = NULL;
-	
+
 	int
 		sweep_done = FALSE,
 		x_sec,
@@ -2503,7 +2503,7 @@ static void co_pilot_perform_eo_scan(void)
 
 	{
 		entity_sides source_side = get_local_entity_int_value(source, INT_TYPE_SIDE);
-		
+
 		heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 		cw_sweep_start_offset = co_pilot_sweep_heading;
 		co_pilot_sweep_heading += CO_PILOT_SWEEP_SPEED * get_delta_time();
@@ -2608,7 +2608,7 @@ static void co_pilot_perform_eo_scan(void)
 							if (source_side != get_local_entity_int_value (target, INT_TYPE_SIDE))
 							{
 								float sqr_target_range;
-								
+
 								target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 								sqr_target_range = get_sqr_3d_range (source_position, target_position);
 
@@ -2648,7 +2648,7 @@ static void co_pilot_perform_eo_scan(void)
 		if (sweep_done)
 		{
 			next_cpg_target_report = best_target;
-			
+
 			if (best_target)  // if we found a target, wait the proper detection time before reporting it
 			{
 				float range;
@@ -2659,7 +2659,7 @@ static void co_pilot_perform_eo_scan(void)
 				time_until_next_co_pilot_sweep = 5.0 + frand1() * 0.005 * range;
 			}
 
-			best_target = NULL;			
+			best_target = NULL;
 			best_target_rank = 0.0;
 		}
 	}
@@ -2673,7 +2673,7 @@ void cpg_scan_for_eo_targets(void)
 {
 	if (!global_co_pilot_scans_for_targets)
 		return;
-	
+
 	// wait until timeout
 	if (time_until_next_co_pilot_sweep > 0.0)
 		time_until_next_co_pilot_sweep -= get_delta_time();
@@ -2685,7 +2685,7 @@ void cpg_scan_for_eo_targets(void)
 			entity*
 				source = get_gunship_entity();
 
-			vec3d 
+			vec3d
 				*source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION),
 				*target_position = get_local_entity_vec3d_ptr (next_cpg_target_report, VEC3D_TYPE_POSITION);
 
@@ -2697,7 +2697,7 @@ void cpg_scan_for_eo_targets(void)
 				insert_local_entity_into_parents_child_list (next_cpg_target_report, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
 				cpg_report_target(next_cpg_target_report);
 			}
-			
+
 			next_cpg_target_report = NULL;
 		}
 
