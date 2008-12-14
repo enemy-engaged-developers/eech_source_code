@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.10.2</title>
+<title>EECH Community Release Version 1.11.0</title>
 <style>
 <!--
 a {
@@ -74,7 +74,7 @@ h4 {
       </p> 
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: February 16, 2008
+      italic;'>Last edited by arneh: December 13, 2008
       </p>
 
 
@@ -91,26 +91,81 @@ h4 {
         <li><a href="#history">Version history</a></li>
       </ul>
 
-      <h2>What's NEW in EECH 1.10.2?</h2>
-      <p><em>(since version 1.10.1)</em></p>
-      <ul>
-        <li>Added option for co-pilot to search for and report any
-	targets he finds.  Option found in realism menu.
-        <li>Added ability to lock target or ground point (if no target
-      under pointer) by clicking on TSD.  Apache Longbow only.
-        <li>Fixed next/previous target commands for EO.
-        <li>Fixed crash when using joystick axis for EO control and
-      moving while target is locked
-        <li>Fixed crash when exiting campaign with masterserver
-      enabled
-        <li>Fixed problem where unguided rockets would fire in LOAL mode
-	<li>Fixed problem with Ka-52's EO camera pointing in the wrong
-      direction
-        <li>Fixed problem where wrong camouflage would be used
-      (gotcha)
-        <li>EECH won't load texture from all sub directories of
-      texture/terrain, just the ones for the current map
-      </ul>
+      
+
+      <h2>What's NEW in EECH 1.11.0?</h2>
+      <p><em>(since version 1.10.2)</em></p>
+      Note that some of the changes require use of the new
+      gwut1110.wut file.  Change your eech.ini file to use it.
+      <dl>
+        <dt>Cockpit/avionics changes
+	<dd>
+	  <ul>
+	    <li>Added support for new Mi-24V 3D cockpit
+	    <li>Added new in-cockpit 'paper map' for Mi-24
+	    <li>Made new HUD sight and backup sight for Mi-24 (use O
+	    to switch between main and backup sight)
+	    <li>Added EO view for Mi-24, to simulate co-pilot using
+	    the sight.  Enable with PgDn key.
+	    <li>Fixed bug in Comanche's engine MFD page (bars were too
+	    short)
+            <li>Fixed bug in Ka-52's EO display when used with mouse.
+	    The movement rates were not adjusted for zoom
+	    <li>Added easter egg to Mi-24 cockpit
+	  </ul>
+        <dt>Flight model changes
+	<dd>
+	  <ul>
+	    <li>Adjusted flight model for Mi-24.  It gives feeling of
+	    more weight and inertia.  Enable by 
+	    setting flight_model=2 in eech.ini
+	    <li>Added suspension modelling for Mi-24.  Enable by
+	    setting flight_model=2 in eech.ini
+	    <li>Adjusted start-up procedure for Mi-24 - timing,
+	        throttle response etc.
+	    <li>Rotor brake must be off for engine to start
+	    <li>Only one engine can be started at a time
+	    <li>Enabled adjustment of governor RPM for Mi-24V between
+	        70% and 97%.  Use ALT + , and . to adjust.
+            <li>Adjusted power, weights, and fuel quantities to more real values
+	    <li>Adjustment to trim function.  It will now keep current
+	    cyclic/pedal values while trim button is held.  This can
+	    be used to move cyclic/pedals to centre with button held to
+	    avoid sudden control input when centre position is moved.
+	  </ul>
+	<dt>Weapon changes
+	<dd>
+	  <ul>
+	    <li>Changed weapons to use the rate of fire specified in
+	    used gwut file
+	    <li>Added weight to Hind-specific weapons (YakB nose gun,
+	    Shturm missiles, S-5 rockets).  They previously had no weight.
+	    <li>Added capability for Mi-24 to carry UPK-23 gun pods
+	    (on two inner most pylons), and Sthurm missiles also on
+	    outer wing pylons in addition to wingtips
+	    <li>Mi-24 now has just three rocket salvo settings.  Short (2
+	    rockets), medium (4 rockets) and large (10 rockets)
+	    <li>Fixed bug where only one gun sound would be used even if
+	    several kind of guns were carried
+	    <li>Added Mi-24's weapons to pilot log statistics
+	  </ul>
+	<dt>Other changes
+	<dd>      
+	  <ul>
+	    <li>Added support for noisemaps for terrain.  Increases
+	    terrain texture detail.  Enable with texture_colour=2 in
+	    eech.ini.  Requires noisemap files to be installed
+	    <li>EECH now supports custon scenes (created with
+	    Firebird's tool) in addition to custom 3D objects
+            <li>Enabled Mi-24V for free flight missions
+	    <li>mfdexport with color conversion, works now with 32 bit
+	    colordepth too(by mue)
+	    <li>Adjustment to AI flight model for a slightly more real look
+	    <li>Added option for disabling text messages (radio
+	    message, pause/time acceleration, camera type etc.).
+	    disable_text_messages=1 in eech.ini to enable
+	  </ul>
+      </dl>
 
 
       <p align="right"><a href="#top">[top ^]</a></p>
@@ -577,6 +632,26 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.10.2</h4>
+      <ul>
+        <li>Added option for co-pilot to search for and report any
+	targets he finds.  Option found in realism menu.
+        <li>Added ability to lock target or ground point (if no target
+      under pointer) by clicking on TSD.  Apache Longbow only.
+        <li>Fixed next/previous target commands for EO.
+        <li>Fixed crash when using joystick axis for EO control and
+      moving while target is locked
+        <li>Fixed crash when exiting campaign with masterserver
+      enabled
+        <li>Fixed problem where unguided rockets would fire in LOAL mode
+	<li>Fixed problem with Ka-52's EO camera pointing in the wrong
+      direction
+        <li>Fixed problem where wrong camouflage would be used
+      (gotcha)
+        <li>EECH won't load texture from all sub directories of
+      texture/terrain, just the ones for the current map
+      </ul>
+
       <h4>Fixes/features in 1.10.1</h4>
          <ul>
            <li>Fixed crash when locking target with EO
