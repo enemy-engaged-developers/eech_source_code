@@ -915,7 +915,7 @@ void draw_overlaid_hind_mfd (float x_org, float y_org, float size)
 static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 {
 	// TODO: change fov numbers
-	float fov = 10.0;
+	float fov = 9.0;
 
 	switch (eo->field_of_view)
 	{
@@ -924,7 +924,7 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
 				fov = 4.0 * ONE_OVER_SQRT2;
 			else  // DTV or DVO
-				fov = 3.0 * ONE_OVER_SQRT2;
+				fov = 2.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
@@ -933,7 +933,7 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
 				fov = 15.0 * ONE_OVER_SQRT2;
 			else  // DVO
-				fov = 12.0 * ONE_OVER_SQRT2;
+				fov = 9.0 * ONE_OVER_SQRT2;
 
 			break;
 		}
