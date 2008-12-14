@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -520,7 +520,7 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 
 	vec3d
 		aircraft_direction;
-	
+
 	if (draw_hud_on_lens)
 		return;
 
@@ -561,7 +561,7 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 
 		get_2d_float_screen_x_coordinate (0.0, &u);
 		get_2d_float_screen_y_coordinate (0.0, &v);
-	
+
 		set_2d_window (hud_env, PITCH_LADDER_WINDOW_X_MIN, PITCH_LADDER_WINDOW_Y_MIN, PITCH_LADDER_WINDOW_X_MAX, PITCH_LADDER_WINDOW_Y_MAX);
 		vp_x_min = u + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_X_MIN);
 		vp_x_max = u + (hud_viewport_size * 0.5 * PITCH_LADDER_WINDOW_X_MAX) - 0.001;
@@ -579,10 +579,10 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 		{
 			if (angle == 0)
 				continue;
-			
+
 			get_3d_unit_vector_from_heading_and_pitch(&aircraft_direction, heading, rad(angle));
 			visibility = get_coordinate_of_relative_position(&aircraft_direction, &i, &j);
-		
+
 			if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 			{
 				float x, y;
@@ -612,7 +612,7 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 						set_2d_mono_font_position (+pitch_readout_x, 0.0);
 						set_hud_mono_font_rel_position (x_adjust, PITCH_CHAR_Y_ADJUST);
 						print_hud_mono_font_string (s);
-	
+
 						set_2d_mono_font_position (-pitch_readout_x, 0.0);
 						set_hud_mono_font_rel_position (x_adjust, PITCH_CHAR_Y_ADJUST);
 						print_hud_mono_font_string (s);
@@ -640,7 +640,7 @@ static void draw_hud_aircraft_datum (int draw_pitch_ladder)
 				}
 			}
 		}
-		
+
 		reset_2d_instance (hud_env);
 		set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 		set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
@@ -775,7 +775,7 @@ static void draw_steerpoint_tadpole(void)
 	if (!comanche_damage.navigation_computer)
 	{
 		float heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING);
-	
+
 		entity
 			*wp;
 
@@ -871,11 +871,11 @@ static short clip_2d_line(float* x1, float* y1, float* x2, float* y2, float xmin
 	{
 		if (*x1 < xmin || *x1 > xmax) // line outside clip box
 			return FALSE;
-		
+
 		*x1 = *x2;
 		*y1 = bound(*y1, ymin, ymax);
 		*y2 = bound(*y2, ymin, ymax);
-		
+
 		return *y1 != *y2;
 	}
 
@@ -895,7 +895,7 @@ static short clip_2d_line(float* x1, float* y1, float* x2, float* y2, float xmin
 	if (*x2 < xmin)
 	{
 		*y2 += (xmin - *x2) * ratio;
-		*x2 = xmin;	
+		*x2 = xmin;
 	}
 	else if (*x2 > xmax)
 	{
@@ -938,7 +938,7 @@ static short clip_2d_line(float* x1, float* y1, float* x2, float* y2, float xmin
 
 	ASSERT(*x1 >= xmin && *x1 <= xmax && *x2 >= xmin && *x2 <= xmax &&
 		   *y1 >= ymin && *y1 <= ymax && *y2 >= ymin && *y2 <= ymax);
-	
+
 	return *x1 != *x2 && *y1 != *y2;
 }
 
@@ -974,7 +974,7 @@ static void draw_flight_path_marker (void)
 	sin_roll = sin(roll);
 
 	ASSERT (main_3d_env);
-	
+
 	// figure out on which screen pixel the flight path marker should be drawn
 	focal_length = tan (main_3d_env->width_view_angle * 0.5);               // view angle (20, 60, 80 deg etc.)
 	pixels_per_rad = (main_3d_env->clip_xmax - main_3d_env->clip_xmin) * 0.5;  // resolution
@@ -1001,19 +1001,19 @@ static void draw_flight_path_marker (void)
 	horizon_pt_y = -(fpm_y_offset + cos_roll * flight_vector_y);
 	horizon_hud_x = hud_pixel_ratio * pixels_per_rad * tan(horizon_pt_x);
 	horizon_hud_y = hud_pixel_ratio * pixels_per_rad * tan(horizon_pt_y);
-	
+
 	horizon_angle = cos(pilot_head_heading) * roll + sin(pilot_head_heading) * -pitch;
 	horizon_deg = fmod(fabs(deg(horizon_angle)), 180);
 
 	if (horizon_deg < 89)  // my primitive horizon drawing algoritm assumes less than 90 degrees bank angle
 	{
 		line_climb_ratio = tan(horizon_angle);
-	
+
 		left_hud_x = horizon_hud_x - 1.5;
 		left_hud_y = horizon_hud_y + 1.5 * -line_climb_ratio;
 		right_hud_x = horizon_hud_x + 1.5;
 		right_hud_y = horizon_hud_y + 1.5 * line_climb_ratio;
-	
+
 		if (clip_2d_line(&left_hud_x, &left_hud_y, &right_hud_x, &right_hud_y, -0.75, -0.75, 0.8, 0.8))
 		{
 			float step = 0.05;
@@ -1047,7 +1047,7 @@ static void draw_flight_path_marker (void)
 				float x2, y2;
 				x2 = x + xstep;
 				y2 = y + ystep;
-	
+
 				if (x >= left_hud_x)
 					draw_2d_line(x, y, x2, y2, hud_colour);
 
@@ -1312,7 +1312,7 @@ static void display_waypoint_information (void)
 	if (wp)
 	{
 		float x_adjust;
-		
+
 		set_mono_font_type (MONO_FONT_TYPE_6X10);
 
 		gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
@@ -1456,7 +1456,7 @@ static void display_weapon_information (void)
 			if (flight_time > 0.01)
 			{
 				flight_time = bound (flight_time, 0.0, 99.9);
-				
+
 				sprintf (s, "TOF:%.0f", flight_time);
 
 				set_2d_mono_font_position (0.5, -0.5);
@@ -1481,6 +1481,13 @@ static void display_weapon_information (void)
 			set_mono_font_rel_position (1.0, 0.0);
 
 			print_mono_font_string (s);
+		}
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND)
+		{
+			draw_2d_line (-0.10, +0.00, -0.05, +0.00, hud_colour);
+			draw_2d_line (+0.10, +0.00, +0.05, +0.00, hud_colour);
+			draw_2d_line (+0.00, -0.10, +0.00, -0.05, hud_colour);
+			draw_2d_line (+0.00, +0.10, +0.00, +0.05, hud_colour);
 		}
 	}
 }
@@ -2021,9 +2028,9 @@ static void display_target_information (void)
 	set_mono_font_type (MONO_FONT_TYPE_6X7);
 
 // Jabberwock 031107 Designated targets
-	
+
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	
+
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
 		s = "MARKED";
@@ -2156,13 +2163,13 @@ static void display_target_information (void)
 			width = get_mono_font_string_width (s);
 			set_2d_mono_font_position (0.0, -0.9);
 			set_mono_font_rel_position (-width * 0.5, 8.0);
-	
+
 			print_mono_font_string (s);
 		}
 	}
 
 	target_range = get_range_to_target();
-	
+
 	switch (target_acquisition_system)
 	{
 	case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
@@ -2216,7 +2223,7 @@ static void draw_velocity_vector()
 #define VV_CUTOFF_VELOCITY 10.0
 	const float y_centre = -0.5;
 	float scale, x, z;
-	
+
 	z = current_flight_dynamics->velocity_z.value;
 	x = current_flight_dynamics->velocity_x.value;
 
@@ -2332,7 +2339,7 @@ void initialise_comanche_hud (void)
 	clear_lens_hud_colour.g = 99;
 	clear_lens_hud_colour.b = 65;
 	clear_lens_hud_colour.a = 255;
-	
+
 	dc = 0;
 	df = 1.0;
 	_dx = 0;
@@ -2493,7 +2500,7 @@ char buffer[255];
 	////////////////////////////////////////
 
 	set_2d_active_environment (hud_env);
- 
+
 	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
 
 	draw_hud_on_lens = FALSE;
@@ -2501,9 +2508,9 @@ char buffer[255];
 //VJ 050126 hud mod start
 
 	hud_viewport_size = HUD_VIEWPORT_SIZE * min(1.0,global_hud_size2); //VJ 060212 clean up hud mod
-   
+
 	hud_viewport_x_org = hud_viewport_size * 0.5;
-   
+
 	hud_viewport_y_org = hud_viewport_size * 0.5;
 
 	hud_viewport_x_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
@@ -2511,7 +2518,7 @@ char buffer[255];
 	hud_viewport_y_min = (HUD_VIEWPORT_SIZE - hud_viewport_size)*0.5;
 
 	hud_viewport_x_max = HUD_VIEWPORT_SIZE - hud_viewport_x_min-0.001;
-   
+
 	hud_viewport_y_max = HUD_VIEWPORT_SIZE - hud_viewport_y_min-0.001;
 
 //VJ 050126 hud mod end
@@ -2522,8 +2529,8 @@ char buffer[255];
 	// get screen co-ords (scaled to keep HUD size constant)
 	//
 
-//VJ 050213 hud scaling mod: for size > 1.0 graphics resampling is used 
-// for size < 1.0 (get_global_unscaled_displays = TRUE) the hud is redrawn 
+//VJ 050213 hud scaling mod: for size > 1.0 graphics resampling is used
+// for size < 1.0 (get_global_unscaled_displays = TRUE) the hud is redrawn
 //at a smaller scale but the fonts etc are kept at a readable size
 	if (get_global_unscaled_displays ())
 	{
@@ -2539,7 +2546,7 @@ char buffer[255];
 	else
 	{
 		//VJ 050210, 060913 scaling factor for hud > 1.0
-		float scale = 4.35 - 2.5*global_hud_size2;			 
+		float scale = 4.35 - 2.5*global_hud_size2;
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (scale*640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (scale*480.0 * 2.0)) * full_screen_height);
 
@@ -2549,24 +2556,24 @@ char buffer[255];
 		hud_screen_x_scale = scale*640.0 / full_screen_width;
 		hud_screen_y_scale = scale*480.0 / full_screen_height;
 	}
-	
-//VJ 050126 hud mod start 
-	//VJ 050204 bug fix do not touch the scale	
+
+//VJ 050126 hud mod start
+	//VJ 050204 bug fix do not touch the scale
 	//hud_screen_x_scale = global_hud_size2;
 	//hud_screen_y_scale = global_hud_size2;
-	hsd.hud_viewport_x_min = hud_viewport_x_min; 
-	hsd.hud_viewport_y_min = hud_viewport_y_min; 
-	hsd.hud_viewport_x_max = hud_viewport_x_max; 
-	hsd.hud_viewport_y_max = hud_viewport_y_max; 
-	hsd.hud_screen_x_min = hud_screen_x_min;   
-	hsd.hud_screen_y_min = hud_screen_y_min;   
-	hsd.hud_screen_x_max = hud_screen_x_max;   
-	hsd.hud_screen_y_max = hud_screen_y_max;   
+	hsd.hud_viewport_x_min = hud_viewport_x_min;
+	hsd.hud_viewport_y_min = hud_viewport_y_min;
+	hsd.hud_viewport_x_max = hud_viewport_x_max;
+	hsd.hud_viewport_y_max = hud_viewport_y_max;
+	hsd.hud_screen_x_min = hud_screen_x_min;
+	hsd.hud_screen_y_min = hud_screen_y_min;
+	hsd.hud_screen_x_max = hud_screen_x_max;
+	hsd.hud_screen_y_max = hud_screen_y_max;
 	hsd.hud_texture_screen = hud_texture_screen;
-	
+
    draw_hud_background (&hsd, alpha );
 //VJ 050126 hud mod end
-  
+
 	////////////////////////////////////////
 	//
 	// draw HUD on texture
@@ -2582,7 +2589,7 @@ char buffer[255];
 		set_rgb_colour (hud_colour, 255, 255, 255, 255);
 
 		set_mono_font_colour (hud_colour);
-      
+
 		//clear max block because between two clear size can have changed
 		set_block (0, 0, HUD_VIEWPORT_SIZE - 1, HUD_VIEWPORT_SIZE - 1, clear_hud_colour);
 
@@ -2659,7 +2666,7 @@ char buffer[255];
 		colour.green			= hud_colour_table[get_global_hud_colour ()].g;
 		colour.blue	 			= hud_colour_table[get_global_hud_colour ()].b;
 		colour.alpha  			= alpha;
-		
+
 		specular.red 			= 0;
 		specular.green	 		= 0;
 		specular.blue 			= 0;
