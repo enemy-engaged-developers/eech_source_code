@@ -941,7 +941,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		draw_apache_mfd_on_texture (MFD_LOCATION_CPG_RHS);
 	}
 
-	if (flags & VIRTUAL_COCKPIT_ORT_DISPLAY)
+	if (flags & VIRTUAL_COCKPIT_ORT_DISPLAY && d3d_can_render_to_texture)
 		draw_apache_mfd_on_texture (MFD_LOCATION_ORT);
 
 	////////////////////////////////////////
