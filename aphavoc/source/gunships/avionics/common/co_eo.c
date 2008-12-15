@@ -1325,6 +1325,9 @@ void update_common_eo (void)
 
 	target_locked = eo_target_locked;
 
+	if (!command_line_manual_laser_radar)
+		set_laser_is_active(target_locked != 0 || new_target);
+
 	//
 	// flag eo on target for "CP/G IDENTIFYING..." message
 	//
