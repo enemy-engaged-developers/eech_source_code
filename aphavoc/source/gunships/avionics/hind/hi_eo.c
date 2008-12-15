@@ -330,6 +330,40 @@ void update_hind_eo (eo_params *eo)
 
 	keyboard_slew_eo_system(fine_slew_rate, medium_slew_rate, coarse_slew_rate);
 
+	while (single_target_acquisition_system_select_next_target_key)
+	{
+		select_next_eo_target ();
+
+		single_target_acquisition_system_select_next_target_key--;
+	}
+
+	////////////////////////////////////////
+
+	while (single_target_acquisition_system_select_previous_target_key)
+	{
+		select_previous_eo_target ();
+
+		single_target_acquisition_system_select_previous_target_key--;
+	}
+
+// Jabberwock 031107 Designated targets
+
+	while (single_target_acquisition_system_select_next_designated_key)
+	{
+		select_next_designated_eo_target ();
+
+		single_target_acquisition_system_select_next_designated_key--;
+	}
+
+	////////////////////////////////////////
+
+	while (single_target_acquisition_system_select_previous_designated_key)
+	{
+		select_previous_designated_eo_target ();
+
+		single_target_acquisition_system_select_previous_designated_key--;
+	}
+
 	// Jabberwock 030930 - Mouse FLIR control functions
 
 	if (mouse_move_left)
