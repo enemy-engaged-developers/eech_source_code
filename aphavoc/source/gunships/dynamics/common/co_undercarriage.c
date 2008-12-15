@@ -19,9 +19,11 @@ typedef struct {
 		can_turn,
 		has_brakes;
 
+	double_vec3d
+		world_position;
+
 	vec3d
 		velocity,
-		world_position,
 		position;   // relative to CoG with suspension fully extended
 
 	float
@@ -170,18 +172,9 @@ static void update_suspension(void)
 
 	static float max_damp = 0.0;
 
-	/*
-	current_landing_gear->gear_points[2].damaged = debug_var_x > 0.0;
-	current_landing_gear->gear_points[0].damaged = debug_var_y > 0.0;
-	current_landing_gear->gear_points[1].damaged = debug_var_y > 0.0;
-	*/
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
 	get_inverse_matrix(&inv_attitude, &attitude);
 
-	/*
-	debug_log("fixed_collision_count: %d", fixed_collision_count);
-	debug_log("h pos: %.2f, %.2f, %.2f", current_flight_dynamics->position.x, current_flight_dynamics->position.y, current_flight_dynamics->position.z);
-*/
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
 		landing_gear_point* point = &current_landing_gear->gear_points[i];
@@ -189,7 +182,7 @@ static void update_suspension(void)
 		if (!point->damaged
 			&& (!point->retractable || current_flight_dynamics->undercarriage_state.value == 1.0))
 		{
-			vec3d
+			double_vec3d
 				old_world_position;
 
 			float
@@ -208,13 +201,8 @@ static void update_suspension(void)
 
 			multiply_transpose_matrix3x3_vec3d(&point->velocity, attitude, &point->velocity);
 
-			//debug_log("pos: %.2f, %.2f, %.2f", point->world_position.x, point->world_position.y, point->world_position.z);
-
 			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
 			spring_compression = (terrain_elevation - point->world_position.y);
-
-//			if (spring_compression > 0.0)
-//				debug_log("compression: %.3f (old: %.3f)", spring_compression, point->suspension_compression);
 
 			if (spring_compression > 0.55)
 			{
@@ -227,16 +215,13 @@ static void update_suspension(void)
 
 				if ((fixed_collision_count || moving_collision_count) && compression_change > 0.0)
 				{
-//					debug_log("disabeling damper due to collision");
 					point->damping = 0.0;
 				}
 				else
 				{
 					point->damping = min(compression_change * inv_delta_time * point->damper_stiffness, 25.0);
-//					debug_log("change: %.3f, step: %.3f, damper: %.3f, result: %.3f", compression_change, inv_delta_time, point->damper_stiffness, compression_change * inv_delta_time * point->damper_stiffness);
 
 					max_damp = max(point->damping, max_damp);
-//						debug_log("damping: %.2f, max: %.2f", point->damping, max_damp);
 
 					if (spring_compression >= point->max_suspension_compression)
 					{
@@ -247,7 +232,6 @@ static void update_suspension(void)
 				}
 
 				point->suspension_compression = spring_compression;
-//				debug_log("vel: %.2f, %.2f, %.2f", point->velocity.x, point->velocity.y, point->velocity.z);
 
 				if (point->can_turn && fabs(point->velocity.x) > 0.1)
 				{
@@ -270,8 +254,6 @@ static void update_suspension(void)
 						new_angle = 90.0;
 					else
 						new_angle = -90.0;
-
-//					debug_log("turn angle = %.1f", deg(new_angle));
 
 					angle_diff = new_angle - point->turn_angle;
 					if (angle_diff > rad(180.0))
@@ -351,7 +333,6 @@ static void apply_suspension_forces(void)
 						force_diff = 0.0,
 						max_force_change = get_model_delta_time() * 10.0;
 
-//					max_force = min(wheel_load * 2.5, G);  // depends on load on wheel
 					max_force = min(wheel_load * 2.5, 2*G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
@@ -379,7 +360,7 @@ static void apply_suspension_forces(void)
 					else
 						max_force = min(wheel_load * 0.025, G);  // general rolling resistance
 
-					force = bound(point->velocity.z * 1.0, -1.0, 1.0);
+					force = bound(point->velocity.z * 10.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->brake_force;
 
 					point->brake_force += bound(force_diff, -max_force_change, max_force_change);
