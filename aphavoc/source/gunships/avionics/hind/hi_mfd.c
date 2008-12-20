@@ -535,6 +535,28 @@ void initialise_hind_mfd (void)
 
 void deinitialise_hind_mfd (void)
 {
+	// reset texture coordinates
+	if (upper_left_texture_uv)
+	{
+		upper_left_texture_uv->u = 0.0;
+		upper_left_texture_uv->v = 0.0;
+	}
+	if (upper_right_texture_uv)
+	{
+		upper_right_texture_uv->u = 1.0;
+		upper_right_texture_uv->v = 0.0;
+	}
+	if (lower_left_texture_uv)
+	{
+		lower_left_texture_uv->u = 0.0;
+		lower_left_texture_uv->v = 1.0;
+	}
+	if (lower_right_texture_uv)
+	{
+		lower_right_texture_uv->u = 1.0;
+		lower_right_texture_uv->v = 1.0;
+	}
+
 	destroy_2d_environment (mfd_env);
 
 	destroy_screen (mfd_texture_screen);
