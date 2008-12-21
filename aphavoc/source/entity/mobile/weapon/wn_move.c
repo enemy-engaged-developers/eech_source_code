@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -125,7 +125,7 @@ typedef struct
 
 static ballistics_data*
 	ballistics_table[LAST_WEAPON+1][TOTAL_PITCH_INDICES + 2];
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,7 +350,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 		horizontal_range_point.y = weapon_position->y;
 		range = get_2d_range (weapon_position, &horizontal_range_point);
-		
+
 		dive_ratio = (intercept_point->y - weapon_position->y) / range;
 
 		if (raw->loal_mode)
@@ -370,10 +370,10 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						}
 						break;
 					}
-		
+
 					raw->missile_phase = MISSILE_PHASE2;
 					// fall through
-				
+
 				case MISSILE_PHASE2:
 					if (range < 800.0)
 					{
@@ -385,13 +385,13 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						// seconds phase climb at 4%
 						float new_aim_y = weapon_position->y + range * 0.04;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
-		
+
 						break;
 					}
-		
+
 					raw->missile_phase = MISSILE_PHASE3;
 					// fall through
-		
+
 				case MISSILE_PHASE3:
 					if (range < 500.0)
 					{
@@ -403,10 +403,10 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						// third phase dive at 20%
 						float new_aim_y = weapon_position->y + range * -0.2;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
-		
+
 						break;
 					}
-		
+
 					// final phase goes straigt for target (in approximate 60% dive)
 					raw->missile_phase = MISSILE_FINAL_PHASE;
 					break;
@@ -430,10 +430,10 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						// intial phase climb at 7%
 						float new_aim_y = weapon_position->y + range * 0.07;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
-						
+
 						break;
 					}
-					
+
 					raw->missile_phase = MISSILE_PHASE2;
 				case MISSILE_PHASE2:
 					if (raw->weapon_lifetime < HELLFIRE_MINIMUM_CLIMB_TIME && range < 750.0)
@@ -447,12 +447,12 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						// second phase dive at 3%
 						float new_aim_y = weapon_position->y + range * -0.03;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
-						
+
 						break;
 					}
-					
+
 					raw->missile_phase = MISSILE_FINAL_PHASE;
-					
+
 					break;
 				default:
 					ASSERT(FALSE);
@@ -499,11 +499,11 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	{
 		if (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time < -1.0)  // weapon armed after 1 second
 		{
-			debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)), 
+			debug_log("%s self destructed due to turn demand too high (%0.1f degrees). limit: %.2f", weapon_database[raw->mob.sub_type].full_name, deg(acos(cos_turn_demand)),
 				deg(acos(weapon_database[raw->mob.sub_type].max_seeker_limit)));
-			
+
 			raw->kill_code = WEAPON_KILL_CODE_OVERSHOT_TARGET;
-	
+
 			return;
 		}
 //		else
@@ -554,7 +554,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 		frame_turn_rate = inhibit_damp_factor * bound (turn_demand, -max_frame_turn_rate, max_frame_turn_rate);
 	}
-	else 
+	else
 	{
 		// arneh - limit turn rate in first phases of hellfire trajectory to get a smoother arc
 		if (weapon_database[raw->mob.sub_type].hellfire_flight_profile && raw->missile_phase != MISSILE_FINAL_PHASE)
@@ -612,7 +612,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 	if (raw->weapon_lifetime < 0.0 && raw->mob.velocity < 20.0)  // self destruct if speed drops too low (after motor has burned out)
 	{
 		debug_log("%s self destructed due to speed dropping too low (%0.1f m/s)", weapon_database[raw->mob.sub_type].full_name, raw->mob.velocity);
-		
+
 		raw->kill_code = WEAPON_KILL_CODE_SELF_DESTRUCT;
 
 		return;
@@ -672,13 +672,13 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		raw->mob.velocity += acceleration * delta_time;
 		raw->mob.velocity = bound (raw->mob.velocity, 0.0, weapon_database[raw->mob.sub_type].cruise_velocity);
 	}
-	else if (weapon_database[raw->mob.sub_type].drag_factor > 0.0 && 
+	else if (weapon_database[raw->mob.sub_type].drag_factor > 0.0 &&
 		weapon_database[raw->mob.sub_type].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
 	{
 		// arneh - simulate drag as decelleration
 		float
 			 // adjust velocity in steps to avoid difference because of different delta times (i.e. different behaviour drag depending on frame rate)
-			adjusted_velocity = (int)(raw->mob.velocity * 0.1) * 10; 
+			adjusted_velocity = (int)(raw->mob.velocity * 0.1) * 10;
 
 		acceleration = -0.001 * weapon_database[raw->mob.sub_type].drag_factor * adjusted_velocity * adjusted_velocity;
 
@@ -687,7 +687,7 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		raw->mob.velocity += acceleration * delta_time;
 		raw->mob.velocity = max (raw->mob.velocity, 0.0);
 	}
-		
+
 
 	if (weapon_database[raw->mob.sub_type].ignore_gravity)
 	{
@@ -721,6 +721,10 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		//
 		////////////////////////////////////////
 
+		// Workaround for buggy floating point calculations in open watcom 1.7
+		// Assign to variable instead of using expression directly in calculation
+		float gravity_fall = (0.5 * G * delta_time * delta_time);
+
 		//
 		// motion vector
 		//
@@ -734,8 +738,10 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		//
 
 		new_position->x += raw->mob.motion_vector.x * delta_time;
-		new_position->y += raw->mob.motion_vector.y * delta_time - (0.5 * G * delta_time * delta_time);
+		new_position->y += raw->mob.motion_vector.y * delta_time - gravity_fall;
 		new_position->z += raw->mob.motion_vector.z * delta_time;
+
+		ASSERT(new_position->y >= -1000000000000.0);  // mostly just tests for -nan and -inf which happens with buggy floating point calculations
 
 		//
 		// apply gravity (after moving weapon)
@@ -841,11 +847,11 @@ static void check_guidance_source (weapon *raw, entity *en, int laser_guided)
 				#ifdef DEBUG_MODULE
 				debug_log("Finding parent's target (parent: %p, parent type %s", raw->launched_weapon_link.parent, entity_type_names[raw->launched_weapon_link.parent->type]);
 				#endif
-				
+
 				// no target if no laser designation
 				if (laser_guided && !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
 				{
-					new_target = NULL;	
+					new_target = NULL;
 				}
 				else
 					new_target = get_local_entity_parent (raw->launched_weapon_link.parent, LIST_TYPE_TARGET);
@@ -1124,7 +1130,7 @@ void weapon_movement (entity *en)
 				check_guidance_source (raw, en, TRUE);
 			}
 
-			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI 
+			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
 				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
 			{
 				intercept_point_valid = FALSE;
@@ -1140,7 +1146,7 @@ void weapon_movement (entity *en)
 		{
 			check_guidance_source (raw, en, TRUE);
 
-			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI 
+			if (get_local_entity_int_value (raw->launched_weapon_link.parent, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI
 				&& !get_local_entity_int_value(raw->launched_weapon_link.parent, INT_TYPE_LASER_ON))
 			{
 				intercept_point_valid = FALSE;
@@ -1338,6 +1344,8 @@ void weapon_movement (entity *en)
 	{
 		bound_position_to_map_volume (&new_position);
 
+		ASSERT(point_inside_map_volume(&new_position));
+
 		set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &new_position);
 
 		if (raw->kill_code == WEAPON_KILL_CODE_OK)
@@ -1365,6 +1373,8 @@ void weapon_movement (entity *en)
 
 		return;
 	}
+
+	ASSERT(point_inside_map_volume(&new_position));
 
 	//
 	// set weapon position (set again if new_position changes)
@@ -1535,7 +1545,7 @@ static int get_floor_pitch_index(float pitch, float* closeness)
 		*closeness = 1.0 - ((deg_pitch - (int_pitch * PITCH_STEP)) / PITCH_STEP);
 
 		return int_pitch + (10 / PITCH_STEP) + NUM_NEGATIVE_PITCH_VALUES;
-	}	
+	}
 	else if (deg_pitch < (10.0 + PITCH_STEP))
 	{
 		int_pitch = (int)(floor(deg_pitch));
@@ -1563,7 +1573,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 {
 	float
 		dummy;
-	
+
 	int
 		i,
 		pitch_index = 0,
@@ -1616,14 +1626,14 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 		data[pitch_index] = safe_malloc(sizeof(ballistics_data) * num_range_values);
 
-		// initialize weapon for new firing	
+		// initialize weapon for new firing
 		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].burn_time;
 		wpn->mob.velocity = weapon_database[wpn->mob.sub_type].muzzle_velocity;
-	
+
 		wpn->mob.position.x = 0.0;
 		wpn->mob.position.y = 0.0;
 		wpn->mob.position.z = 0.0;
-	
+
 		get_identity_matrix3x3(&wpn->mob.attitude);
 		get_3d_transformation_matrix(wpn->mob.attitude, 0.0, pitch, 0.0);
 
@@ -1641,7 +1651,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		while (wpn->mob.position.z < max_range)
 		{
 			float drop;
-	
+
 			time += delta_time;
 			wpn->weapon_lifetime -= delta_time;
 			move_unguided_weapon(wpn, &wpn->mob.position, delta_time, FALSE);
@@ -1656,7 +1666,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 				if (wpn->mob.velocity < 20.0)
 					break;
 			}
-	
+
 			if (wpn->mob.position.z > ((range_mark * RANGE_STEP) - 1.0)) // this is a range we want to sample
 			{
 				int
@@ -1683,7 +1693,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 				if (output && wpn->mob.position.z > (last_write_range + WRITE_STEP - 1) && pitch_index == zero_pitch)
 				{
 					last_write_range += WRITE_STEP;
-					fprintf(output, "%5d m  %6.1f m/s %5.1f s %6.1f m (%.1f degrees)\n", 
+					fprintf(output, "%5d m  %6.1f m/s %5.1f s %6.1f m (%.1f degrees)\n",
 						last_write_range, wpn->mob.velocity, time, -wpn->mob.position.y, deg(drop_angle));
 				}
 
@@ -1695,7 +1705,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		// if there's any spots left just copy the last to those (it will be wrong, but better than arbitrary values)
 		for (; range_mark < num_range_values; range_mark++)
 		{
-			data[pitch_index][range_mark] = data[pitch_index][range_mark-1];	
+			data[pitch_index][range_mark] = data[pitch_index][range_mark-1];
 		}
 
 		// we have smaller steps around 0 pitch to get a little better accuracy there
@@ -1711,7 +1721,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 /** precalculates ballistics tables for all weapons with ballistic aiming.
  *  for certain range and angle intervals
- * 
+ *
  *  The tables are calculated by simulating a firing and measuring drop at
  *  at various distances
  */
@@ -1740,11 +1750,11 @@ void generate_ballistics_tables(void)
 			{
 				fprintf(write_file, "\n%s   max_range: %.0f m, muzzle velocity: %.0f m/s, drag: %.2f\n",
 					weapon_database[wpn_type].full_name,
-					weapon_database[wpn_type].max_range, 
-					weapon_database[wpn_type].muzzle_velocity, 
+					weapon_database[wpn_type].max_range,
+					weapon_database[wpn_type].muzzle_velocity,
 					weapon_database[wpn_type].drag_factor);
 			}
-		
+
 			wpn.mob.sub_type = wpn_type;
 			calculate_projectory(&wpn, write_file);
 		}
@@ -1788,7 +1798,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		range_delta,
 		drop_compensation = 0.0,
 		straight_pitch = fixed_pitch ? height_diff_or_pitch : -atan(height_diff_or_pitch / range);
-	
+
 	int
 		iterations,
 		i,
@@ -1804,7 +1814,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		iterations = 3;
 	else
 		iterations = 5;
-	
+
 	if (!ballistics_table[wpn_type][0])
 	{
 		ASSERT(FALSE);
@@ -1812,7 +1822,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	}
 
 	ASSERT(range >= 0.0);
-	
+
 	if (range <= 0.1)
 	{
 		*aiming_pitch = straight_pitch;
@@ -1872,8 +1882,8 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 		pitch_compensation[0].drop_angle = (pitch_delta * compensation_grid[0][0].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][0].drop_angle);
 		pitch_compensation[0].flight_time = (pitch_delta * compensation_grid[0][0].flight_time) + ((1 - pitch_delta) * compensation_grid[1][0].flight_time);
 
-		pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);		
-		pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);		
+		pitch_compensation[1].drop_angle = (pitch_delta * compensation_grid[0][1].drop_angle) + ((1 - pitch_delta) * compensation_grid[1][1].drop_angle);
+		pitch_compensation[1].flight_time = (pitch_delta * compensation_grid[0][1].flight_time) + ((1 - pitch_delta) * compensation_grid[1][1].flight_time);
 
 		// and finally get a total
 		drop_compensation = (range_delta * pitch_compensation[0].drop_angle) + ((1 - range_delta) * pitch_compensation[1].drop_angle);
