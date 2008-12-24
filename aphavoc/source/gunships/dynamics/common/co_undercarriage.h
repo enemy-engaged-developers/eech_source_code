@@ -17,4 +17,6 @@ int right_main_wheel_locked_down(void);
 
 int weight_on_wheels(void);
 
+void animate_hind_suspension(object_3d_instance* inst3d);
+
 #endif /*CO_UNDERCARRIAGE_H_*/

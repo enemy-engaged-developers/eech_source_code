@@ -1037,8 +1037,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		buffer[200];
 
 	int
-		heading_readout,
-		has_range;
+		heading_readout;
 
 	float
 		width,
