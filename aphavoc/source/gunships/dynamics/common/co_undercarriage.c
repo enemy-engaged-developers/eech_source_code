@@ -333,7 +333,7 @@ static void apply_suspension_forces(void)
 						force_diff = 0.0,
 						max_force_change = get_model_delta_time() * 10.0;
 
-					max_force = min(wheel_load * 2.5, 2*G);  // depends on load on wheel
+					max_force = min(wheel_load * 2.5, 1*G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->resistance_force;
@@ -353,14 +353,14 @@ static void apply_suspension_forces(void)
 						max_force,
 						force,
 						force_diff = 0.0,
-						max_force_change = get_model_delta_time() * 10.0;
+						max_force_change = get_model_delta_time() * 20.0;
 
 					if (point->has_brakes && current_flight_dynamics->wheel_brake)
-						max_force = min(wheel_load * 2.0, 1.5 * G);  // depends on load on wheel
+						max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
 					else
 						max_force = min(wheel_load * 0.025, G);  // general rolling resistance
 
-					force = bound(point->velocity.z * 10.0, -1.0, 1.0);
+					force = bound(point->velocity.z * 2.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->brake_force;
 
 					point->brake_force += bound(force_diff, -max_force_change, max_force_change);
@@ -386,6 +386,13 @@ void initialise_undercarriage_database(void)
 
 	memset(filenames, 0, sizeof(filenames));
 
+	filenames[GUNSHIP_TYPE_APACHE] = "ah-64-suspension.txt";
+	filenames[GUNSHIP_TYPE_AH64A] = "ah-64-suspension.txt";
+	filenames[GUNSHIP_TYPE_COMANCHE] = "rah-66-suspension.txt";
+	filenames[GUNSHIP_TYPE_BLACKHAWK] = "uh-60-suspension.txt";
+	filenames[GUNSHIP_TYPE_HAVOC] = "mi-28-suspension.txt";
+	filenames[GUNSHIP_TYPE_HOKUM] = "ka-52-suspension.txt";
+	filenames[GUNSHIP_TYPE_KA50] = "ka-52-suspension.txt";
 	filenames[GUNSHIP_TYPE_HIND] = "mi-24-suspension.txt";
 
 	for (gunship=0; gunship < ARRAY_LENGTH(filenames); gunship++)
@@ -456,6 +463,11 @@ void reset_undercarriage_world_position(void)
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 		update_gear_world_position(&current_landing_gear->gear_points[i], attitude);
+}
+
+int helicopter_has_undercarriage_modelling(void)
+{
+	return command_line_dynamics_flight_model >= 2 && current_landing_gear->num_gear_points > 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

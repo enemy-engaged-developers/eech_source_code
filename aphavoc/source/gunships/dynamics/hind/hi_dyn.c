@@ -552,16 +552,16 @@ void set_dynamics_defaults (entity *en)
 	// havoc at 	0.0, -0.2, -0.022
 	// apache at 	0.0, -0.2, -0.012
 
-	current_flight_dynamics->centre_of_gravity.x = 0.00;
+	centre_of_gravity.x = 0.00;
 	if (command_line_dynamics_flight_model == 2)
 	{
-		current_flight_dynamics->centre_of_gravity.y = -0.05;
-		current_flight_dynamics->centre_of_gravity.z = -0.017;
+		centre_of_gravity.y = -0.05;
+		centre_of_gravity.z = -0.005;
 	}
 	else
 	{
-		current_flight_dynamics->centre_of_gravity.y = -0.2;
-		current_flight_dynamics->centre_of_gravity.z = -0.035;
+		centre_of_gravity.y = -0.2;
+		centre_of_gravity.z = -0.035;
 	}
 
 	current_flight_dynamics->centre_of_gravity = centre_of_gravity;
@@ -637,6 +637,8 @@ void update_hind_advanced_dynamics (void)
 {
 	float
 		rpm, workload=0.0, total_rpm, left_power_ratio;
+
+	current_flight_dynamics->centre_of_gravity = centre_of_gravity;
 
 	update_power_dynamics ();
 
@@ -2965,7 +2967,7 @@ void update_acceleration_dynamics (void)
 
 	// debug - for ships, VSI = 0 when landed.
 
-	if (command_line_dynamics_flight_model != 2 && !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
+	if (command_line_dynamics_flight_model < 2 && !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 		current_flight_dynamics->world_velocity_y.value = max (current_flight_dynamics->world_velocity_y.value, 0.0);
 		current_flight_dynamics->velocity_y.value = max (current_flight_dynamics->velocity_y.value, 0.0);

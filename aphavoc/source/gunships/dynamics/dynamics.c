@@ -331,13 +331,13 @@ void initialise_flight_dynamics (entity *en)
 
 	push_event_overlay (set_flight_dynamics_events, "flight_dynamics");
 
+	initialise_undercarriage_dynamics();
+
 	initialise_dynamic_forces ();
 
 	initialise_flight_dynamics_collision_points ();
 
 	initialise_flight_dynamics_input_devices ();
-
-	initialise_undercarriage_dynamics();
 
 	add_update_function (update_flight_path, 10.0, 0.0);
 
@@ -522,9 +522,12 @@ void initialise_flight_dynamics_collision_points (void)
 		temp_inst3d = construct_3d_object (raw->ac.object_3d_shape);
 	}
 	else if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND && command_line_dynamics_flight_model >= 2)
-		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
+//		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
+		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 	else if (raw->ac.object_3d_shape == OBJECT_3D_KA_50)
 		temp_inst3d = construct_3d_object (OBJECT_3D_KA_52);
+	else if (raw->ac.object_3d_shape == OBJECT_3D_UH60_BLACKHAWK && command_line_dynamics_flight_model >= 2)
+		temp_inst3d = construct_3d_object (OBJECT_3D_RAH66);
 	else
 		temp_inst3d = construct_3d_object (OBJECT_3D_AH64D_APACHE_LONGBOW);
 
@@ -600,6 +603,10 @@ void initialise_flight_dynamics_collision_points (void)
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type = collision_type;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].violated = FALSE;
+
+						// for flight_model >= 2 we have separate modelling for the suspension, so don't let the collision points of the, old fixed wheels get in the way.  Raise them by 0.5 m
+						if (helicopter_has_undercarriage_modelling() && collision_type == DYNAMICS_COLLISION_POINT_WHEEL)
+							current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y += 0.5;
 
 						#if DEBUG_DYNAMICS >= 2
 
@@ -683,7 +690,10 @@ void initialise_flight_dynamics_collision_points (void)
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].violated = FALSE;
 
-						#if DEBUG_DYNAMICS >= 2
+						if (helicopter_has_undercarriage_modelling() && collision_type == DYNAMICS_COLLISION_POINT_WHEEL)
+							current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y += 0.5;
+
+						#if 1 || DEBUG_DYNAMICS >= 2
 
 						debug_log ("DYNAMICS: Found moving collision point %s (%d) at %f, %f, %f",
 										dynamics_collision_point_info [current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type].name,
@@ -705,6 +715,8 @@ void initialise_flight_dynamics_collision_points (void)
 			}
 		}
 	}
+
+//	ASSERT(FALSE);
 
 	destruct_3d_object (temp_inst3d);
 }
@@ -1152,6 +1164,8 @@ void update_gunship_dynamics (void)
 	helicopter
 		*raw;
 
+	int check_collisions_each_frame = helicopter_has_undercarriage_modelling();
+
 	raw = get_local_entity_data (get_gunship_entity ());
 	ASSERT(raw);
 	if (!raw)
@@ -1168,16 +1182,25 @@ void update_gunship_dynamics (void)
 		default:
 		case GUNSHIP_TYPE_APACHE:
 		{
-
 			while (current_flight_dynamics->model_iterations --)
 			{
 
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_apache_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			update_collision_dynamics ();
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
 
@@ -1185,6 +1208,7 @@ void update_gunship_dynamics (void)
 		}
 		case GUNSHIP_TYPE_HAVOC:
 		{
+			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
 			while (current_flight_dynamics->model_iterations --)
 			{
@@ -1192,16 +1216,25 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_havoc_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			update_collision_dynamics ();
-
-			update_dynamics_external_values ();
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
 
 			break;
 		}
 		case GUNSHIP_TYPE_COMANCHE:
 		{
+			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
 			while (current_flight_dynamics->model_iterations --)
 			{
@@ -1209,9 +1242,19 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_comanche_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			update_collision_dynamics ();
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
 
@@ -1219,6 +1262,7 @@ void update_gunship_dynamics (void)
 		}
 		case GUNSHIP_TYPE_HOKUM:
 		{
+			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
 			while (current_flight_dynamics->model_iterations --)
 			{
@@ -1226,9 +1270,19 @@ void update_gunship_dynamics (void)
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_hokum_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			update_collision_dynamics ();
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
 
@@ -1258,7 +1312,7 @@ void update_gunship_dynamics (void)
 ////Moje 030612 Start
 		case GUNSHIP_TYPE_HIND:
 		{
-			int check_collisions_each_frame = command_line_dynamics_flight_model == 2 && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
+			check_collisions_each_frame = check_collisions_each_frame && get_local_entity_undercarriage_state(get_gunship_entity()) == AIRCRAFT_UNDERCARRIAGE_DOWN;
 
 			while (current_flight_dynamics->model_iterations --)
 			{
@@ -1289,16 +1343,25 @@ void update_gunship_dynamics (void)
 
 		case GUNSHIP_TYPE_AH64A:
 		{
-
 			while (current_flight_dynamics->model_iterations --)
 			{
 
 				get_3d_terrain_point_data (current_flight_dynamics->position.x, current_flight_dynamics->position.z, &raw->ac.terrain_info);
 
 				update_ah64a_advanced_dynamics ();
+
+				// if we're in a collision this will move helicopter, so need to do it for each model iteration
+				if (check_collisions_each_frame)
+				{
+					update_collision_dynamics ();
+					// may get killed, so abort further calculations if so
+					if (!current_flight_dynamics || !get_gunship_entity() || !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_ALIVE))
+						break;
+				}
 			}
 
-			update_collision_dynamics ();
+			if (!check_collisions_each_frame)
+				update_collision_dynamics ();
 
 			update_dynamics_external_values ();
 

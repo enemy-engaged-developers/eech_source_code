@@ -66,8 +66,6 @@
 
 #include "co_undercarriage.h"
 
-extern entity *current_flight_dynamics_landed_at_keysite;  // declared in dynamics.c
-
 int
 	trim_button_held = FALSE;
 
@@ -1165,10 +1163,10 @@ void update_common_attitude_dynamics (void)
 			position.z = 0.0;
 
 			direction.x = 0.0;
-			direction.y = -1.0;
+			direction.y = (reaction_force > 0.0) ? -1.0 : 1.0;
 			direction.z = 0.0;
 
-			add_dynamic_force ("Vertical motion drag", reaction_force, 0.0, &position, &direction, FALSE);
+			add_dynamic_force ("Vertical motion drag", fabs(reaction_force), 0.0, &position, &direction, FALSE);
 		}
 	}
 

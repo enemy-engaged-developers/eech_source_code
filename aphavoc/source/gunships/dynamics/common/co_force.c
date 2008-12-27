@@ -1754,7 +1754,7 @@ void update_collision_dynamics (void)
 	}
 	else
 	{
-		if (command_line_dynamics_flight_model == 2)
+		if (command_line_dynamics_flight_model >= 2)
 			reset_undercarriage_world_position();
 
 		if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
@@ -2142,45 +2142,45 @@ void dynamics_setup_fixed_collision_points (void)
 		current_flight_dynamics->fixed_collision_points [loop].world_point.y += current_flight_dynamics->position.y;
 		current_flight_dynamics->fixed_collision_points [loop].world_point.z += current_flight_dynamics->position.z;
 
-		// temp for undercarriage... lower collision points
-		switch (get_global_gunship_type ())
-		{
-
-			case GUNSHIP_TYPE_COMANCHE:
+		if (!helicopter_has_undercarriage_modelling())
+			// temp for undercarriage... lower collision points
+			switch (get_global_gunship_type ())
 			{
 
-				current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.48 * get_current_flight_dynamics_undercarriage_state ();
+				case GUNSHIP_TYPE_COMANCHE:
+				{
 
-				break;
+					current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.48 * get_current_flight_dynamics_undercarriage_state ();
+
+					break;
+				}
+				case GUNSHIP_TYPE_HOKUM:
+				{
+
+					current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.69 * get_current_flight_dynamics_undercarriage_state ();
+
+					break;
+				}
+				case GUNSHIP_TYPE_APACHE:
+				{
+
+					//current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.48 * get_current_flight_dynamics_undercarriage_state ();
+
+					break;
+				}
+				case GUNSHIP_TYPE_HAVOC:
+				{
+
+					//current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.20 * get_current_flight_dynamics_undercarriage_state ();
+
+					break;
+				}
+				default:
+				{
+
+					break;
+				}
 			}
-			case GUNSHIP_TYPE_HOKUM:
-			{
-
-				current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.69 * get_current_flight_dynamics_undercarriage_state ();
-
-				break;
-			}
-			case GUNSHIP_TYPE_APACHE:
-			{
-
-				//current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.48 * get_current_flight_dynamics_undercarriage_state ();
-
-				break;
-			}
-			case GUNSHIP_TYPE_HAVOC:
-			{
-
-				//current_flight_dynamics->fixed_collision_points [loop].world_point.y -= 0.20 * get_current_flight_dynamics_undercarriage_state ();
-
-				break;
-			}
-			default:
-			{
-
-				break;
-			}
-		}
-		//
 
 		bound_position_to_map_area (&current_flight_dynamics->fixed_collision_points [loop].world_point);
 
