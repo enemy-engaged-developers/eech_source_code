@@ -10,7 +10,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.10.2"
+  !define VERSION "1.11.0"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -41,7 +41,7 @@
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
 	   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\${VERSION}readme.html"
+  		!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\cohokum\readme.html"
   !insertmacro MUI_PAGE_FINISH
 
 	ShowInstDetails show  
@@ -61,15 +61,6 @@ Section "Create a backup?" SecBackup
 	
 CopyFiles /FILESONLY ${TBACKUP1}\cohokum.exe           ${TBACKUP1}\backup
 
-CopyFiles /FILESONLY ${DATADIR}\ah64a.dyn         ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\apache.dyn        ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\blckhwk.dyn       ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\comanche.dyn      ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\havoc.dyn         ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\hind.dyn          ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\hokum.dyn         ${TBACKUP1}\backup
-CopyFiles /FILESONLY ${DATADIR}\ka50.dyn          ${TBACKUP1}\backup
-	
 SectionEnd
 
 Section "UI screens" SectionUIScreens
@@ -90,23 +81,23 @@ Section "cohokum.exe" SectionExe
   SetOutPath "$INSTDIR\cohokum"
   
   File "..\..\aphavoc\cohokum.exe"
-  File ${VERSION}-readme.html
+  File readme.html
   File motd.txt
   File TrackIR.dll	
-  File gwut190.csv
+  File gwut1110.csv
   File eech_keyguide_2.pdf
 
-  SetOutPath "$INSTDIR\common\data\"
+  SetOutPath "$INSTDIR\common\data"
   File ..\common\data\FORMS.DAT
-  File ..\common\data\ah64a.dyn
-  File ..\common\data\apache.dyn
-  File ..\common\data\blckhwk.dyn
-  File ..\common\data\comanche.dyn
-  File ..\common\data\havoc.dyn
-  File ..\common\data\hind.dyn
-  File ..\common\data\hokum.dyn
-  File ..\common\data\ka50.dyn
-  
+
+  SetOutPath "$INSTDIR\common\data\dyn"
+  File ..\common\data\dyn\ah-64-suspension.txt
+  File ..\common\data\dyn\mi-24-suspension.txt
+  File ..\common\data\dyn\mi-28-suspension.txt
+  File ..\common\data\dyn\rah-66-suspension.txt
+  File ..\common\data\dyn\uh-60-suspension.txt
+  File ..\common\data\dyn\ka-52-suspension.txt
+
   SetOutPath "$INSTDIR\common\data\language"
   File ..\common\data\language\tlate6.dat
 

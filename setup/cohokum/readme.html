@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.10.2</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.11</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -111,6 +111,10 @@ h4 {
 	    short)
             <li>Fixed bug in Ka-52's EO display when used with mouse.
 	    The movement rates were not adjusted for zoom
+	    <li>Fixed bug where next/prev target command didn't work
+	    in Mi-24 and Mi-28
+	    <li>Fixed bug where laser would not activate itself in
+	    automatic radar/laser mode
 	    <li>Added easter egg to Mi-24 cockpit
 	  </ul>
         <dt>Flight model changes
@@ -119,8 +123,9 @@ h4 {
 	    <li>Adjusted flight model for Mi-24.  It gives feeling of
 	    more weight and inertia.  Enable by 
 	    setting flight_model=2 in eech.ini
-	    <li>Added suspension modelling for Mi-24.  Enable by
-	    setting flight_model=2 in eech.ini
+	    <li>Added suspension modelling.  Only animated in external
+	    view for Mi-24, but physics modelling is included for all
+	    main helicopters.  Enable by setting flight_model=2 in eech.ini
 	    <li>Adjusted start-up procedure for Mi-24 - timing,
 	        throttle response etc.
 	    <li>Rotor brake must be off for engine to start
