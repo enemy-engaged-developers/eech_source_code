@@ -1136,9 +1136,9 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
     x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     
-    head_object->relative_position.x = -x_head_g_movement;
+    head_object->relative_position.x -= x_head_g_movement;
 		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-			head_object->relative_position.y = -y_head_g_movement;
+			head_object->relative_position.y -= y_head_g_movement;
     
 		// keep head inside reasonable limimts
 		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
