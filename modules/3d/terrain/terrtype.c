@@ -2414,6 +2414,7 @@ void initialise_noisemaps(void)
 
 	float gamma = 1.25, gamma2 = 1.4;
 
+#if 0
 	switch (get_global_season())
 	{
 	case SESSION_SEASON_SUMMER:
@@ -2430,6 +2431,18 @@ void initialise_noisemaps(void)
 	case SESSION_SEASON_WINTER:
 		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SNOW");
 		break;
+	}
+#endif
+
+	if (get_global_season() == SESSION_SEASON_DESERT)
+		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SAND");
+	else if (get_global_season() == SESSION_SEASON_WINTER)
+		grass_noisemap = field_noise = noisemap = add_new_texture("NOISEMAP_SNOW");
+	else
+	{
+		grass_noisemap = add_new_texture("NOISEMAP_GRASS");
+		field_noise = grass_noisemap;
+		noisemap = add_new_texture("NOISEMAP");
 	}
 
 	terrain_texture_sea_detail = textures_with_noisemap[i].index = get_system_texture_index ( "TERRAIN_SEA_1" );
