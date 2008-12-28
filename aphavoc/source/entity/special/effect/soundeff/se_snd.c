@@ -334,36 +334,27 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	{
 		switch (raw->eff.sub_type)
 		{
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
-			if (parent == get_gunship_entity ())
-				v *= 1.5;
-			// fall through
+		//ataribaby 28/12/2008 lets guns rocks
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN: 
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_GUN_PODS:
+		  canopy_state_amp = 0.4 + bound(canopy_door_state, 0.0, 0.6);
+			break;
+    //ataribaby 28/12/2008 all external sound sources gets influenced by external_sounds_volume setting			
+    case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_RAIN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_WIND:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_RAIN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_WIND:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_JUNGLE:
-        case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
-			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
-			break;
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
-			canopy_state_amp = 0.8 + bound(canopy_door_state, 0.0, 0.2);
+    case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
+		  canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+		  canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
 			break;
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_INCOMING_MISSILE_WARNING:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_LOCK_ON_TONE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_MCA:
-		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC_SPEECH:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_LOCKED:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_RADAR_TRACKED:
@@ -373,8 +364,59 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		default:
 			canopy_state_amp = 1.0;
 			break;
-			}
-		v *= canopy_state_amp;
+	 }
+	 
+	 //ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
+	 if (parent == get_gunship_entity ())
+	 {
+      switch (raw->eff.sub_type)
+		  {
+	    case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
+  			v *= 1.5;
+  			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
+  			break;
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
+  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+			break;
+      default:
+        break;
+		  }
+   }
+   else
+   {
+      switch (raw->eff.sub_type)
+		  {
+		  case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
+  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+		    canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+  			break;
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
+  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
+  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+			break;
+		  default:
+        break;
+		  }
+   }
+	 
+	 v *= canopy_state_amp;
 	}
 
 	//

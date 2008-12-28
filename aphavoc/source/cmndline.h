@@ -256,7 +256,8 @@ extern float
 	command_line_smoke_effectiveness,
 	command_line_g_force_head_movment_modifier,
 	global_night_light_level, //VJ 060920 night light levels (0-1)
-	global_hud_size2;// VJ 050126 hud mod: size 	
+	global_hud_size2, // VJ 050126 hud mod: size 	
+	command_line_external_sounds_volume; //ataribaby 28/12/2008 volume for external sounds when in cockpit
 
 extern char
 	command_line_themes[], //Casm 21DEC07
