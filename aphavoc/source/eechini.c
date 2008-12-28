@@ -641,9 +641,9 @@ void process_ini_file(int argc, char *argv[])
 				for (k=4; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
 					aircraft_database[k].player_controllable = FALSE;
 			}
-			
+
 			//ataribaby 28/12/2008 make Hind flyable as default
-			aircraft_database[5].player_controllable = TRUE;
+			aircraft_database[GUNSHIP_TYPE_HIND].player_controllable = TRUE;
 		}
 		if (strcmp(p, "export_mfd") == 0) command_line_export_mfd= d1;	// mue 070223
 		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223
@@ -654,9 +654,9 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223
 		if (strcmp(p, "themes") == 0) if (str_length < 128) set_themes(q); // Casm 21DEC07
 
-    //ataribaby 28/12/2008 volume for external sounds when in cockpit  
+    //ataribaby 28/12/2008 volume for external sounds when in cockpit
     if (strcmp(p, "external_sounds_volume")==0) command_line_external_sounds_volume = v1;
-    
+
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
 
@@ -874,11 +874,11 @@ void dump_ini_file(void)
 			command_line_export_mfd_right_pos[1],command_line_export_mfd_right_pos[2],command_line_export_mfd_right_pos[3]);
 	fprintf(f,"export_mfd_single_pos=%d,%d,%d,%d	# single MFD position (Havoc, Hind and Black Shark only) (def = 0,0,256,256)\n",command_line_export_mfd_single_pos[0],
 			command_line_export_mfd_single_pos[1],command_line_export_mfd_single_pos[2],command_line_export_mfd_single_pos[3]);
-  
+
   fprintf(f,"\n[Sounds]\n");
   //ataribaby 28/12/2008 volume for external sounds when in cockpit
   fprintf(f, "external_sounds_volume=%.1f			# volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)\n", command_line_external_sounds_volume);
-  
+
 //Retro27NovDEAD	fprintf(f,"keymap=%d				# key mapping (0 = off, 1 = on) (def = 0)\n",command_line_key_mapping);
 
 	fprintf(f,"[end of file]\n");
