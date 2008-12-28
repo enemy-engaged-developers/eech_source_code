@@ -76,11 +76,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//ataribaby 27/12/2008
+float move_by_rate(float oldval, float newval, float rate);
+
 static object_3d_instance
 	*virtual_cockpit_inst3d_detail_level_high_inst3d,
 	*virtual_cockpit_inst3d_detail_level_medium_inst3d,
 	*virtual_cockpit_inst3d_detail_level_low_inst3d,
 	*virtual_cockpit_inst3d_detail_level_glass_inst3d;
+	
+//ataribaby 27/12/2008 for new head g-force movement	
+static float	
+	x_head_g_movement = 0.0,
+  y_head_g_movement = 0.0,
+  random_vibration_x = 0.0,
+  random_vibration_y = 0.0;    	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -750,10 +760,13 @@ void draw_hokum_virtual_cockpit (void)
 			virtual_cockpit_inst3d->vp.y += wide_cockpit_position[wide_cockpit_nr].y;
 			virtual_cockpit_inst3d->vp.z += wide_cockpit_position[wide_cockpit_nr].z;	
 
+      //ataribaby 27/12/2008
+      /* 
 			virtual_cockpit_inst3d->vp.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
 			if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
 				virtual_cockpit_inst3d->vp.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
-
+      */
+      
 		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_PILOT)
 	   		pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT)
@@ -761,7 +774,23 @@ void draw_hokum_virtual_cockpit (void)
 
 		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);    	
 		}
-
+		
+		//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
+		if (get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_LHS_DISPLAY &&
+  	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_PILOT_RHS_DISPLAY &&
+  	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
+  	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
+		{
+      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+      random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
+      x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
+      y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
+      
+      virtual_cockpit_inst3d->vp.x -= x_head_g_movement;
+  		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+  			virtual_cockpit_inst3d->vp.y -= y_head_g_movement;
+    }
+    
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)
 		{
 			////////////////////////////////////////
