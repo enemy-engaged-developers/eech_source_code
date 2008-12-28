@@ -641,6 +641,9 @@ void process_ini_file(int argc, char *argv[])
 				for (k=4; k < NUM_ENTITY_SUB_TYPE_AIRCRAFT; k++)
 					aircraft_database[k].player_controllable = FALSE;
 			}
+			
+			//ataribaby 28/12/2008 make Hind flyable as default
+			aircraft_database[5].player_controllable = TRUE;
 		}
 		if (strcmp(p, "export_mfd") == 0) command_line_export_mfd= d1;	// mue 070223
 		if (strcmp(p, "export_mfd_adapter") == 0) command_line_export_mfd_adapter= d1;	// mue 070223
