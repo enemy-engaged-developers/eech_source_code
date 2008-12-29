@@ -108,6 +108,9 @@ static sound_channel_info_type
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//ataribaby 29/12/2008 for muted UI sounds
+int ui_sounds_muted;
+
 static void play_local_sound (entity *en, viewpoint *vp, float range)
 {
 	entity
@@ -418,6 +421,8 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	 
 	 v *= canopy_state_amp;
 	}
+  
+  if (ui_sounds_muted == 1) v = 0.0; //ataribaby 29/12/2008 for muted UI sounds
 
 	//
 	// adjust volume with channel sound settings

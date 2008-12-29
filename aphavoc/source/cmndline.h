@@ -228,10 +228,9 @@ extern int
 	command_line_export_mfd_screen_height,
 	command_line_export_mfd_right_pos[4],
 	command_line_export_mfd_left_pos[4],
-	command_line_export_mfd_single_pos[4];
-
+	command_line_export_mfd_single_pos[4],
+  command_line_ui_sounds_muted; //ataribaby 29/12/2008 for muted UI sounds 
  
-
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
 	command_line_dynamics_rudder_value,

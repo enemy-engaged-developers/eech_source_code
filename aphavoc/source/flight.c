@@ -589,8 +589,8 @@ void toggle_in_flight_game_modes (event *ev)
 	}
 	else
 	{
+    if (command_line_ui_sounds_muted) ui_sounds_muted = 0; //ataribaby 29/12/2008 for muted UI sounds	  
 		pages_clear = 0;
-
 		set_in_flight_game_mode (IN_FLIGHT_GAME_MODE_SIMULATOR);
 	}
 }
