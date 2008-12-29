@@ -115,6 +115,8 @@ void initialise_main_free_flight_screen (void)
 
 static void notify_free_flight_screen_entered (ui_object *obj, void *arg)
 {
+  if (command_line_ui_sounds_muted) ui_sounds_muted = 1; //ataribaby 29/12/2008 for muted UI sounds
+  
 	set_mouse_graphic_on ();
 }
 
@@ -171,6 +173,8 @@ static void notify_free_flight_cancel_quit_campaign_button (ui_object *obj, void
 
 static void free_flight_accept_quit_campaign (event *ev)
 {
+  if (command_line_ui_sounds_muted) ui_sounds_muted = 0; //ataribaby 29/12/2008 for muted UI sounds 
+  
 	free_flight_cancel_quit_campaign (ev);
 
 	player_quit_session (NULL);
