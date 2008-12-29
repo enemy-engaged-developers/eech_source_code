@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -67,7 +67,7 @@
 #include "project.h"
 
 #include <errno.h>
- 
+
 #include "parsgen.h"
 
 #include "../ai_misc/ai_dbase.h"
@@ -82,14 +82,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define DEBUG_MODULE	0
-  
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
 	debug_mode = FALSE;
-  
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,14 +161,14 @@ void parser_debug_fatal (char *msg, ...);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
 void initialise_parser (void)
 {
 
 	campaign_trigger_head = NULL;
 
 	campaign_event_head = NULL;
-	
+
 	campaign_while_loop_head = NULL;
 }
 
@@ -251,7 +251,7 @@ int parser_campaign_file (const char *filename, int *offset)
 	ASSERT (get_valid_current_game_session ());
 
 	current_session = get_current_game_session ();
-	
+
 	start_base_count = 0;
 
 	if (!file_ptr)
@@ -279,7 +279,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 		switch (tag)
 		{
-	
+
 			case FILE_TAG_START:
 			{
 
@@ -367,15 +367,15 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (!if_file_tag_operator (value1, operator_name, value2))
 				{
-	
+
 					destroy_while_loop_head ();
 
 					while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 					{
-	
+
 						if (tag == FILE_TAG_END_WHILE)
 						{
-	
+
 							break;
 						}
 					}
@@ -408,7 +408,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				*offset = ftell (file_ptr);
-				
+
 				value1 = parser_campaign_file (filename, offset);
 
 				fseek (file_ptr, *offset, SEEK_SET);
@@ -449,14 +449,14 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (!return_value)
 				{
-	
+
 					// skip script to ENDIF
 					while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 					{
-	
+
 						if ((tag == FILE_TAG_ENDIF) || (tag == FILE_TAG_ELSE))
 						{
-	
+
 							break;
 						}
 					}
@@ -672,7 +672,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 						break;
 					}
-					
+
 					case CAMPAIGN_TRIGGER_TIME_DURATION:
 					{
 
@@ -706,7 +706,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 						break;
 					}
-					
+
 					case CAMPAIGN_TRIGGER_VARIABLE_CONDITION:
 					{
 
@@ -735,7 +735,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 						break;
 					}
-					
+
 					case CAMPAIGN_TRIGGER_RANDOM:
 					{
 
@@ -932,7 +932,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (flag)
 				{
-	
+
 					debug_log ("PARSGEN: Marking Campaign as requiring Apache Havoc to be installed");
 				}
 
@@ -953,7 +953,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (medal)
 				{
-	
+
 					debug_log ("PARSGEN: Campaign medal = %s", medal_type_names [medal]);
 				}
 
@@ -979,22 +979,22 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				char
 					temp_filename [256];
-			
+
 				if (get_gunship_entity ())
 				{
-			
+
 					get_local_entity_vec3d (get_gunship_entity (), VEC3D_TYPE_POSITION, &pos);
 				}
 				else
 				{
-			
+
 					pos.x = MID_MAP_X;
 					pos.z = MID_MAP_Z;
 				}
-			
+
 //				planner_set_map_zoom (1);
 //				planner_set_current_viewpoint (&pos);
-			
+
 				//
 				// side data filename
 				//
@@ -1004,7 +1004,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				ASSERT (result == FILE_TAG_FILENAME);
 
 				memset (&temp_filename, 0, sizeof (temp_filename));
-			
+
 				get_next_file_string (file_ptr, temp_filename, sizeof (temp_filename));
 
 				if (side_data_filename)
@@ -1023,23 +1023,23 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_FILENAME)
 				{
-	
+
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-	
+
 					ASSERT (result == FILE_TAG_FILENAME);
-	
+
 					memset (&temp_filename, 0, sizeof (temp_filename));
-				
+
 					get_next_file_string (file_ptr, temp_filename, sizeof (temp_filename));
-	
+
 					if (population_placement_filename)
 					{
-	
+
 						free_mem (population_placement_filename);
 					}
-	
+
 					population_placement_filename = (char *) malloc_heap_mem (strlen (temp_filename) + 1);
-	
+
 					sprintf (population_placement_filename, "%s", temp_filename);
 				}
 
@@ -1110,23 +1110,23 @@ int parser_campaign_file (const char *filename, int *offset)
 				/*
 				if (check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_FILENAME)
 				{
-	
+
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-	
+
 					ASSERT (result == FILE_TAG_FILENAME);
-	
+
 					memset (&temp_filename, 0, sizeof (temp_filename));
-				
+
 					get_next_file_string (file_ptr, temp_filename, sizeof (temp_filename));
-	
+
 					if (campaign_population_filename)
 					{
-	
+
 						free_mem (campaign_population_filename);
 					}
-	
+
 					campaign_population_filename = (char *) malloc_heap_mem (strlen (temp_filename) + 1);
-	
+
 					sprintf (campaign_population_filename, "%s", temp_filename);
 				}
 				*/
@@ -1155,7 +1155,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				{
 					entity
 						*en;
-									
+
 					en = create_local_entity
 					(
 						ENTITY_TYPE_SESSION,
@@ -1181,29 +1181,29 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				while (get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_FACTION)
 				{
-	
+
 					int
 						faction_side,
 						colour;
-	
+
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-	
+
 					ASSERT (result == FILE_TAG_SIDE);
-	
+
 					faction_side = get_next_file_enum (file_ptr, entity_side_names, NUM_ENTITY_SIDES);
-	
+
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-	
+
 					ASSERT (result == FILE_TAG_COLOUR);
-	
+
 					colour = get_next_file_enum (file_ptr, sys_colour_names, NUM_SYS_COLOURS);
-	
+
 					create_faction (faction_side, colour);
-	
+
 					#if DEBUG_MODULE
-	
+
 					debug_log ("PARSER: loading campaign populate: faction id %d, colour %d", faction_side, colour);
-	
+
 					#endif
 				}
 
@@ -1232,7 +1232,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				if (population_placement_filename)
 				{
-	
+
 					read_population_placement_file (population_placement_filename);
 				}
 
@@ -1264,7 +1264,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				rain_effect = get_next_file_int (file_ptr);
 				//if (get_global_season() == SESSION_SEASON_WINTER)
 					//rain_effect = 1;
-	
+
 				if (!rain_effect)
 				{
 
@@ -1503,13 +1503,13 @@ int parser_campaign_file (const char *filename, int *offset)
 				while (check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_TYPE)
 				{
 				 	result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-					 
+
 				   ASSERT (result == FILE_TAG_TYPE);
 
 					sub_type = get_next_file_enum (file_ptr, entity_sub_type_division_names, NUM_ENTITY_SUB_TYPE_DIVISIONS);
 
 				   result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-					
+
 				   ASSERT (result == FILE_TAG_LIST);
 
 					count = 0;
@@ -1526,7 +1526,7 @@ int parser_campaign_file (const char *filename, int *offset)
 													entity_side_short_names [side],
 													entity_sub_type_division_names [sub_type]);
 						}
-					
+
 						number_list [count] = value;
 
 						count ++;
@@ -1577,7 +1577,7 @@ int parser_campaign_file (const char *filename, int *offset)
 							{
 
 								set_parser_keysite (keysite);
-				
+
 								switch (counter & 0x03)
 								{
 									case 0:
@@ -1796,11 +1796,11 @@ int parser_campaign_file (const char *filename, int *offset)
 					get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
-	
+
 					ASSERT (result == FILE_TAG_FORMATION_COMPONENT);
-		
+
 					formation_components = get_next_file_enum (file_ptr, formation_component_names, NUM_FORMATION_COMPONENT_TYPES);
-	
+
 					group = create_faction_members (get_parser_keysite (), group_type, formation_components, count, get_local_entity_int_value (get_parser_keysite (), INT_TYPE_SIDE), get_local_entity_vec3d_ptr (get_parser_keysite (), VEC3D_TYPE_POSITION), TRUE, TRUE);
 
 					ASSERT (group);
@@ -1813,16 +1813,16 @@ int parser_campaign_file (const char *filename, int *offset)
 				{
 
 					group = create_landed_faction_members (get_parser_keysite (), member_type, group_type, count);
-	
+
 					if (group)
 					{
 
 						member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
-	
+
 						#if DEBUG_MODULE
-	
+
 						debug_log ("PARSER: campaign load: create members, keysite %d, group type %d, entity type %d, member type %d, count %d", get_parser_keysite (), group_type, member_type, count);
-	
+
 						#endif
 					}
 				}
@@ -1911,15 +1911,15 @@ int parser_campaign_file (const char *filename, int *offset)
 				}
 
 				group = create_landed_faction_group (get_parser_keysite (), group_type, formation_component_type);
-	
+
 				#if DEBUG_MODULE
-	
+
 				debug_log ("PARSER: campaign load: create group, keysite %d, formation component type %s, entity type %d, member type %d, count %d",
 				get_parser_keysite (),
 				formation_component_names [formation_component_type],
 				member_type,
 				count);
-	
+
 				#endif
 
 				break;
@@ -2021,7 +2021,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						{
 
 							wp_count ++;
-	
+
 							wp_types [wp_count] = get_next_file_enum (file_ptr, entity_sub_type_waypoint_names, NUM_ENTITY_SUB_TYPE_WAYPOINTS);
 
 							break;
@@ -2031,11 +2031,11 @@ int parser_campaign_file (const char *filename, int *offset)
 						{
 
 							ASSERT (wp_count >= 0);
-									
+
 							wp_nodes [wp_count].x = get_next_file_float (file_ptr);
 							wp_nodes [wp_count].y = get_next_file_float (file_ptr);
 							wp_nodes [wp_count].z = get_next_file_float (file_ptr);
-			
+
 							break;
 						}
 /*
@@ -2114,16 +2114,16 @@ int parser_campaign_file (const char *filename, int *offset)
 						ENTITY_ATTR_PTR_VALUE (PTR_TYPE_POSITION_ENTITY, NULL),
 						ENTITY_ATTR_END
 					);
-				
+
 			  		count ++;
 				}
 
 				//
 				// Assign task
 				//
-		
+
 				push_task_onto_group_task_stack (group_en, new_task, TASK_ASSIGN_ALL_MEMBERS);
-		
+
 				assign_task_to_group_members (group_en, new_task, TASK_ASSIGN_ALL_MEMBERS);
 
 				break;
@@ -2146,15 +2146,16 @@ int parser_campaign_file (const char *filename, int *offset)
 				break;
 			}
 
-	//VJ 051202 add season file tag for winter/summer camo		
+	//VJ 051202 add season file tag for winter/summer camo
 			case FILE_TAG_SEASON:
 			{
 				int
 					season = 0;
-				
+
 				season = get_next_file_int (file_ptr);
 				//VJ 051227 use set and get global season here
 				set_global_season( season );
+				initialise_noisemaps();
 
 				#if DEBUG_MODULE
 
@@ -2162,7 +2163,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				#endif
 
-				
+
 				break;
 			}
 
@@ -2374,27 +2375,27 @@ int update_script_triggers (campaign_trigger trigger)
 
 		if (this_campaign_trigger->trigger_type == trigger)
 		{
-	
+
 			if (trigger_triggered (this_campaign_trigger))
 			{
-	
+
 				if (this_campaign_trigger->event_name)
 				{
-		
+
 					event = get_campaign_event (this_campaign_trigger->event_name);
-		
+
 					if (event)
 					{
 
 						if (!event->triggered)
 						{
-	
+
 							//parser_debug_log ("EXECUTING EVENT %s", this_campaign_trigger->event_name);
-	
+
 							offset = event->file_offset;
 
 							event->triggered = FALSE;
-			
+
 							return_value = parser_campaign_file (event->filename, &offset);
 						}
 					}
@@ -2433,12 +2434,12 @@ void generate_key_bound_triggers (void)
 
 		if (this_campaign_trigger->trigger_type == CAMPAIGN_TRIGGER_KEY_PRESS)
 		{
-	
+
 			if (this_campaign_trigger->event_name)
 			{
-	
+
 				event = get_campaign_event (this_campaign_trigger->event_name);
-	
+
 				if (event)
 				{
 
@@ -2488,22 +2489,22 @@ void key_bound_trigger_function (event *ev)
 
 				if (this_campaign_trigger->value3 == ev->state)
 				{
-		
+
 					event = get_campaign_event (this_campaign_trigger->event_name);
-		
+
 					if (event)
 					{
 
 						if (!event->triggered)
 						{
-		
+
 							parser_debug_log ("calling EVENT %s to key %d, modifier %d, state %d", this_campaign_trigger->event_name, this_campaign_trigger->value1, this_campaign_trigger->value2, this_campaign_trigger->value3);
 							debug_log ("calling EVENT %s to key %d, modifier %d, state %d", this_campaign_trigger->event_name, this_campaign_trigger->value1, this_campaign_trigger->value2, this_campaign_trigger->value3);
-	
+
 							offset = event->file_offset;
 
 							event->triggered = FALSE;
-				
+
 							return_value = parser_campaign_file (event->filename, &offset);
 						}
 					}
@@ -3005,7 +3006,7 @@ void debug_parser_message (int tag, FILE *file_ptr)
 
 					break;
 				}
-				
+
 				case CAMPAIGN_TRIGGER_TIME_DURATION:
 				{
 
@@ -3034,7 +3035,7 @@ void debug_parser_message (int tag, FILE *file_ptr)
 
 					break;
 				}
-				
+
 				case CAMPAIGN_TRIGGER_VARIABLE_CONDITION:
 				{
 
@@ -3062,7 +3063,7 @@ void debug_parser_message (int tag, FILE *file_ptr)
 
 					break;
 				}
-				
+
 				case CAMPAIGN_TRIGGER_RANDOM:
 				{
 

@@ -165,6 +165,7 @@ void notify_session_parameters (void)
 
 	//VJ 051227 set season info with map_info structure
 	set_global_season( current_map_info.season );
+	initialise_noisemaps();
 
 	if (current_map_info.season != SESSION_SEASON_SUMMER && current_map_info.season != SESSION_SEASON_WINTER)
 	{
