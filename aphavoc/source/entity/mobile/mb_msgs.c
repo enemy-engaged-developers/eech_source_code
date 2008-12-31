@@ -2325,8 +2325,10 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 	//
 	
 	open_client_server_entity_loading_doors (receiver);
-
-	lower_client_server_entity_undercarriage (receiver);
+  
+  //ataribaby 31/12/2008 fix for player heli
+  if (receiver != get_gunship_entity ())
+	 lower_client_server_entity_undercarriage (receiver);
 
 	//
 	// Create a troop group for leader only
@@ -2463,8 +2465,10 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 			if (leader)
 			{
 				close_client_server_entity_loading_doors (leader);
-
-				raise_client_server_entity_undercarriage (leader);
+        
+        //ataribaby 31/12/2008 fix for player heli
+        if (leader != get_gunship_entity ())
+				  raise_client_server_entity_undercarriage (leader);
 			}
 		}
 	}
