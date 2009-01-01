@@ -498,8 +498,9 @@ void update_cyclic_pressure_inputs (void)
 				}
 
 				current_flight_dynamics->input_data.cyclic_x.value = input;
-
-				if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE)
+        
+        //ataribaby 1/1/2009 allow trim with ALT HOLD
+				if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
 					current_flight_dynamics->input_data.cyclic_x.value += current_flight_dynamics->input_data.cyclic_x_trim.value;
 
 				// y
@@ -535,8 +536,9 @@ void update_cyclic_pressure_inputs (void)
 				}
 
 				current_flight_dynamics->input_data.cyclic_y.value = input;
-
-				if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE)
+        
+        //ataribaby 1/1/2009 allow trim with ALT HOLD 
+				if (current_flight_dynamics->auto_hover == HOVER_HOLD_NONE || current_flight_dynamics->auto_hover == HOVER_HOLD_ALTITUDE_LOCK)
 					current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
 
 				/*

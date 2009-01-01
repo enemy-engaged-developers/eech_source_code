@@ -1282,7 +1282,7 @@ static int play_client_server_personal_message
 {
 	int
 		result;
-
+  
 	ASSERT (en);
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
@@ -1505,8 +1505,8 @@ int play_client_server_wingman_message
 )
 {
 	ASSERT (en);
-
-	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
+  
+  if (get_local_entity_int_value (en, INT_TYPE_ALIVE)) 
 	{
 		return play_client_server_radio_message
 					(

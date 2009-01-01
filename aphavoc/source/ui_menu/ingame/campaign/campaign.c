@@ -173,7 +173,7 @@ void update_campaign_screen (void)
 
 static void notify_campaign_screen_entered (ui_object *obj, void *arg)
 {
-  if (command_line_ui_sounds_muted) ui_sounds_muted = 1; //ataribaby 29/12/2008 for muted UI sounds
+  if (command_line_ui_sounds_muted) ui_sounds_muted = TRUE; //ataribaby 29/12/2008 for muted UI sounds
      
 	if (get_ui_object_drawable (obj))
 	{
@@ -472,7 +472,7 @@ static void notify_campaign_cancel_quit_campaign_button (ui_object *obj, void *a
 
 static void campaign_accept_quit_campaign (event *ev)
 {
-  if (command_line_ui_sounds_muted) ui_sounds_muted = 0; //ataribaby 29/12/2008 for muted UI sounds 
+  if (command_line_ui_sounds_muted) ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds 
   
 	campaign_cancel_quit_campaign (ev);
 
