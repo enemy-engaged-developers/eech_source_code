@@ -803,14 +803,17 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 		}
 		
 		//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
-    random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
-    random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
+		if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
+    {
+      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+      random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
+    }
     x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     
     head_object->relative_position.x -= x_head_g_movement;
-		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-			head_object->relative_position.y -= y_head_g_movement;
+		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+		head_object->relative_position.y -= y_head_g_movement;
 
 		// keep head inside reasonable limimts
 		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
@@ -912,8 +915,8 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 			vp_position.z += current_custom_cockpit_viewpoint.z;
 
 			vp_position.x += bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier;
-			if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-				vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
+			//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+			vp_position.y += bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier;
 
 			get_local_entity_attitude_matrix (get_gunship_entity (), vp.attitude);
 			get_3d_transformation_matrix(head_rotation, pilot_head_heading, -pilot_head_pitch, 0.0);

@@ -781,14 +781,17 @@ void draw_hokum_virtual_cockpit (void)
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_LHS_DISPLAY &&
   	     get_view_mode () != VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY)
 		{
-      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
-      random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
+		  if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
+      {
+        random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+        random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
+      }
       x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
       y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
       
       virtual_cockpit_inst3d->vp.x -= x_head_g_movement;
-  		if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
-  			virtual_cockpit_inst3d->vp.y -= y_head_g_movement;
+  		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
+  	  virtual_cockpit_inst3d->vp.y -= y_head_g_movement;
     }
     
 		if (get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE) == DAY_SEGMENT_TYPE_DAY)

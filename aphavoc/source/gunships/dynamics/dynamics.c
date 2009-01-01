@@ -1,4 +1,3 @@
-//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
@@ -3300,14 +3299,17 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 				flag = FALSE;
 			}
-
+      
+      //ataribaby 1/1/2009 enable ALT HOLD for Apache and Havoc
+      /*
 			if ((current_flight_dynamics->sub_type == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW) ||
 				(current_flight_dynamics->sub_type == ENTITY_SUB_TYPE_AIRCRAFT_MI28N_HAVOC_B))
 			{
 
 				flag = FALSE;
 			}
-
+      */
+      
 			if (flag)
 			{
 
