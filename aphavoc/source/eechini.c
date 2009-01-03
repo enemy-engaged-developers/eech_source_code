@@ -626,6 +626,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "unpadlock_on_handover") == 0)	command_line_unpadlock_on_handover = d1; // GCsDriver  08-12-2007
 		if (strcmp(p, "pilot_as_periscope_default") == 0)	command_line_pilot_as_periscope_default = d1; // GCsDriver  08-12-2007
 		if (strcmp(p, "autoreturn_to_pilot_after_periscope") == 0)	command_line_autoreturn_to_pilot_after_periscope = d1; // GCsDriver  08-12-2007
+    if (strcmp(p, "use_hind_cpg_for_cannon")==0) command_line_use_hind_cpg_for_cannon = d1; //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode
 
 		if (strcmp(p, "faa") == 0)
 		{
@@ -818,6 +819,7 @@ void dump_ini_file(void)
 	fprintf(f,"unpadlock_on_handover=%d		# unpadlock on handover from HMS to TADS = 0 (off)\n",command_line_unpadlock_on_handover);  //GCsDriver  08-12-2007
 	fprintf(f,"pilot_as_periscope_default=%d	# stay in pilot seat when switching to periscope = 0 (off)\n",command_line_pilot_as_periscope_default);  //GCsDriver  08-12-2007
 	fprintf(f,"autoreturn_to_pilot_after_periscope=%d         # switch to pilot seat when deactivating periscope = 0 (off)\n",command_line_autoreturn_to_pilot_after_periscope);  //GCsDriver  08-12-2007
+	fprintf(f,"use_hind_cpg_for_cannon=%d         # use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode = 0 (off)\n",command_line_use_hind_cpg_for_cannon);  //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode
 	fprintf(f,"TSD_mouse_control=%d             # allows mouse control of TSD (Apache only) for selecting targets and creating PFZs\n", command_line_mouse_tsd_target_select);
 	fprintf(f,"co_pilot_reports_targets=%d	    # Co-pilot will report targets he finds, and add them to TSD\n", global_co_pilot_scans_for_targets);
 

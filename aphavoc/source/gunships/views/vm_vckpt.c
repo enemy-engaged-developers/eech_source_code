@@ -81,7 +81,7 @@
 // #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
 
 //VJ 050208 gives the possibility to look behind you (since you can't turn your body)
-#define MAX_LOOK_ANGLE_LEFT_RIGHT1  135.0   //Comanche and Hokum
+#define MAX_LOOK_ANGLE_LEFT_RIGHT1  90.0   //Comanche and Hokum
 #define MAX_LOOK_ANGLE_LEFT_RIGHT2  100.0   //the rest
 #define MAX_LOOK_ANGLE_UP1  75.0	//comanche, hokum   //was 45
 #define MAX_LOOK_ANGLE_UP2  75.0 //rest              //was 40
