@@ -550,14 +550,16 @@ void resolve_dynamic_forces (void)
         {
           if (current_flight_dynamics->velocity_y.value < 0.0)
   				{
-  				  if (current_flight_dynamics->world_acceleration_vector.y < 2.0)
+  				  //ataribaby 4/1/2009 limit torque around 100%
+  				  if (current_flight_dynamics->world_acceleration_vector.y < 2.0 && current_flight_dynamics->combined_engine_torque.value <= 100.0)
               current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;
             else              
               current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
   				}
   				else if (current_flight_dynamics->velocity_y.value > 0.0)
   				{
-  				  if (current_flight_dynamics->world_acceleration_vector.y > -2.0)
+  				  //ataribaby 4/1/2009 limit torque around 100%
+  				  if (current_flight_dynamics->world_acceleration_vector.y > -2.0 || current_flight_dynamics->combined_engine_torque.value > 100.0)
               current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
             else
               current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;              
@@ -565,7 +567,7 @@ void resolve_dynamic_forces (void)
         }
         else
         {
-  				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0))
+  				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0) && current_flight_dynamics->combined_engine_torque.value <= 100.0)
   				{
   					current_flight_dynamics->input_data.collective.value += i * get_delta_time();
   				}
@@ -629,20 +631,21 @@ void resolve_dynamic_forces (void)
 
 				// subtract altitude lock
 				delta_altitude -= current_flight_dynamics->altitude.max;
-
-				if (delta_altitude < 0.0)
+        
+        //ataribaby 4/1/2009 limit torque around 100%
+				if (delta_altitude < 0.0 && current_flight_dynamics->combined_engine_torque.value <= 100.0)
 				{
 
 					i = min (i, -delta_altitude);
 
-					current_flight_dynamics->input_data.collective.value += i * get_delta_time ();
+					current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
 				}
 				else if (delta_altitude > 0.0)
 				{
 
 					i = min (i, delta_altitude);
 
-					current_flight_dynamics->input_data.collective.value -= i * get_delta_time ();
+					current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0; //ataribaby 4/1/2009 speedup altitude level hold
 				}
 
 	  			// intentional follow through...
