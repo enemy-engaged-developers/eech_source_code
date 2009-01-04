@@ -390,6 +390,8 @@ static void update_cpg_identify_target (void)
 						cpg_identify_target_delay = 0.0;
 
 						set_local_entity_int_value (target, INT_TYPE_CPG_IDENTIFIED, TRUE);
+						
+            cpg_report_identified_target(target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
 					}
 				}
 			}

@@ -1712,6 +1712,12 @@ void select_next_eo_target (void)
 	}
 
 	set_eo_slave_target(new_target);
+	
+  if(new_target)
+  {
+    cpg_report_next_prev_target(new_target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
+  }
+	 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1770,6 +1776,11 @@ void select_previous_eo_target (void)
 	}
 
 	set_eo_slave_target(new_target);
+	
+  if(new_target)
+  {
+    cpg_report_next_prev_target(new_target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2717,4 +2728,117 @@ extern void get_eo_azimuth_and_elevation(float* az, float* el)
 {
 	*az = eo_azimuth;
 	*el = eo_elevation;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//ataribaby 4/1/2009 added CPG next/prev target lock and ID
+void cpg_report_identified_target(entity* target)
+{
+  if (get_gunship_entity() && target)
+  {
+    int allied;
+    
+    allied = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SIDE) == get_local_entity_int_value (target, INT_TYPE_SIDE);
+    
+    if (get_local_entity_int_value(target, INT_TYPE_CPG_IDENTIFIED))
+    {
+      if(allied)
+    	{
+    	  play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_FRIENDLY);
+    	  /*
+    		play_client_server_cpg_contact_message
+    		(
+    			get_gunship_entity (),
+    			SPEECH_CPG_FRIENDLY,
+    			get_speech_heading_type (get_gunship_entity (), target),
+    			get_speech_distance_type (get_gunship_entity (), target)
+    		);
+    		*/
+    	}
+    	else if(!allied)
+    	{
+    	  play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_ENEMY);
+    	  /*
+    		play_client_server_cpg_contact_message
+    		(
+    			get_gunship_entity (),
+    			SPEECH_CPG_ENEMY,
+    			get_speech_heading_type (get_gunship_entity (), target),
+    			get_speech_distance_type (get_gunship_entity (), target)
+    		);
+    		*/
+    	}
+  	}
+  }
+}
+
+//ataribaby 4/1/2009 added CPG next/prev target lock and ID
+void cpg_report_next_prev_target(entity* target)
+{
+  if (get_gunship_entity() && target)
+  {
+    int allied;
+    
+    allied = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SIDE) == get_local_entity_int_value (target, INT_TYPE_SIDE);
+    
+    /*	
+  	SPEECH_CPG_ENEMY,
+  	SPEECH_CPG_FRIENDLY,
+  	SPEECH_CPG_CHOPPERS,
+  	SPEECH_CPG_FAST_MOVERS,
+  	SPEECH_CPG_CARGO_BIRD,
+  	SPEECH_CPG_HEAVY_METAL,
+  	SPEECH_CPG_TANKS,
+  	SPEECH_CPG_ARMOUR,
+  	SPEECH_CPG_ARTILLERY,
+  	SPEECH_CPG_TRUCKS,
+  	SPEECH_CPG_SAM,
+  	SPEECH_CPG_TRIPLE_A,
+  	SPEECH_CPG_WARSHIPS,
+  	SPEECH_CPG_INFANTRY,
+    */
+    
+    if (!get_local_entity_int_value(target, INT_TYPE_CPG_IDENTIFIED))
+    {
+      play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_SPOT_ON);
+      /*
+      play_client_server_cpg_contact_message
+  		(
+  			get_gunship_entity (),
+  			SPEECH_CPG_SPOT_ON,
+  			get_speech_heading_type (get_gunship_entity (), target),
+  			get_speech_distance_type (get_gunship_entity (), target)
+  		);
+  		*/
+    }
+    else if(allied)
+  	{
+  	  play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_FRIENDLY);
+  	  /*
+  		play_client_server_cpg_contact_message
+  		(
+  			get_gunship_entity (),
+  			SPEECH_CPG_FRIENDLY,
+  			get_speech_heading_type (get_gunship_entity (), target),
+  			get_speech_distance_type (get_gunship_entity (), target)
+  		);
+  		*/
+  	}
+  	else if(!allied)
+  	{
+  	  play_client_server_cpg_message(get_gunship_entity (), 1.0, 30.0, SPEECH_CATEGORY_CPG_SYSTEMS, -1.0, SPEECH_CPG_ENEMY);
+  	  /*
+  		play_client_server_cpg_contact_message
+  		(
+  			get_gunship_entity (),
+  			SPEECH_CPG_ENEMY,
+  			get_speech_heading_type (get_gunship_entity (), target),
+  			get_speech_distance_type (get_gunship_entity (), target)
+  		);
+  		*/
+  	}
+  }  	
 }
