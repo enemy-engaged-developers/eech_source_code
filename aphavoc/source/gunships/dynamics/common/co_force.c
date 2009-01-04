@@ -540,22 +540,40 @@ void resolve_dynamic_forces (void)
 
 				float
 					i = 4.0;
-
+        
 				//
 				// adjust collective accordingly
 				//
-
-				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0))
-				{
-
-					current_flight_dynamics->input_data.collective.value += i * get_delta_time ();
-				}
-				else if ((current_flight_dynamics->velocity_y.value > 0.0) && (resultant_vertically > -1.0))
-				{
-
-					current_flight_dynamics->input_data.collective.value -= i * get_delta_time ();
-				}
-
+        
+        //ataribaby 4/1/2009 speedup Hover Hold altitude level
+        if(abs(current_flight_dynamics->velocity_y.value) > 2.0)
+        {
+          if (current_flight_dynamics->velocity_y.value < 0.0)
+  				{
+  				  if (current_flight_dynamics->world_acceleration_vector.y < 2.0)
+              current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;
+            else              
+              current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
+  				}
+  				else if (current_flight_dynamics->velocity_y.value > 0.0)
+  				{
+  				  if (current_flight_dynamics->world_acceleration_vector.y > -2.0)
+              current_flight_dynamics->input_data.collective.value -= i * get_delta_time() * 5.0;
+            else
+              current_flight_dynamics->input_data.collective.value += i * get_delta_time() * 5.0;              
+  				}
+        }
+        else
+        {
+  				if ((current_flight_dynamics->velocity_y.value < 0.0) && (resultant_vertically < 1.0))
+  				{
+  					current_flight_dynamics->input_data.collective.value += i * get_delta_time();
+  				}
+  				else if ((current_flight_dynamics->velocity_y.value > 0.0) && (resultant_vertically > -1.0))
+  				{
+  					current_flight_dynamics->input_data.collective.value -= i * get_delta_time();
+  				}
+        }
 				//
 				// wash velocity out to zero
 				//
