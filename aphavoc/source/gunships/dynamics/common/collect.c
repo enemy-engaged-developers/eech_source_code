@@ -272,12 +272,6 @@ void update_collective_pressure_inputs (void)
 					current_flight_dynamics->input_data.collective.value = (float) 60.0 + input;
 				}
 			}
-			//ataribaby 1/1/2009 limit ALT HOLD collective to not go over 100% to prevent engine fire
-			else
-			{
-			   if(current_flight_dynamics->input_data.collective.value > 95.0)
-			     current_flight_dynamics->input_data.collective.value=95.0;
-      }
 			break;
 		}
 	}
