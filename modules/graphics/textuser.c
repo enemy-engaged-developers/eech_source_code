@@ -501,34 +501,45 @@ void release_system_textures ( void )
 
 int get_system_texture_index ( const char *name )
 {
-
 	int
 		hash,
 		hash_index;
 
 	texture_name_hash_entry
 		*entry;
+	char
+		real_name[256];
+	int
+		offset;
+	int
+		camo;
 
-	hash = get_hash(name);
+	camo = 0;
+	offset = strlen ( name ) - sizeof ( DESERTIND_2 ) + 1;
+	if ( offset > 0 && !strcmp ( name + offset, DESERTIND_2 ) )
+	{
+		strncpy ( real_name, name, offset );
+		real_name[offset] = 0;
+		name = real_name;
+		camo = 1;
+	}
+
+	hash = get_hash ( name );
 	hash_index = hash & 0xff;
 
 	entry = system_texture_name_hash_table[hash_index];
 
 	while ( entry )
 	{
+		ASSERT ( entry->hash == hash );
 
-		if ( entry->hash == hash )
+		if ( stricmp ( system_texture_names[entry->texture_index], name ) == 0 &&
+			camo == system_texture_info[entry->texture_index].flags.camoflage_texture )
 		{
-
-			if ( stricmp ( system_texture_names[entry->texture_index], name ) == 0 )
-			{
-
-				return ( entry->texture_index );
-			}
+			return ( entry->texture_index );
 		}
 		else
 		{
-
 			entry = entry->succ;
 		}
 	}
@@ -629,7 +640,6 @@ BOOL load_texturemap_data ( const char *path )
 			int
 				temp,
 				length,
-				letter,
 				number_of_mipmaps;
 
 			unsigned int
@@ -655,10 +665,9 @@ BOOL load_texturemap_data ( const char *path )
 
 			fread ( system_texture_names[count], length, 1, fp );
 
-			for ( letter = 0; letter < 128; letter++ )
-				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
+			strupr ( system_texture_names[count] );
 
-			add_texture_to_name_hash(count);
+			add_texture_to_name_hash ( count );
 
 			if ( flags.reserved_texture )
 			{
@@ -882,9 +891,6 @@ BOOL load_texturemap_data ( const char *path )
 			int
 				temp,
 				length,
-				letter,
-				hash,
-				hash_index,
 				number_of_mipmaps;
 
 			unsigned int
@@ -910,28 +916,10 @@ BOOL load_texturemap_data ( const char *path )
 
 			fread ( system_texture_names[count], length, 1, fp );
 
-			for ( letter = 0; letter < 128; letter++ )
-			{
+			strupr ( system_texture_names[count] );
 
-				system_texture_names[count][letter] = toupper ( system_texture_names[count][letter] );
-			}
+			add_texture_to_name_hash ( count );
 
-			hash = strlen ( system_texture_names[count] );
-
-			for ( letter = 0; letter < strlen ( system_texture_names[count] ); letter++ )
-			{
-
-				hash += system_texture_names[count][letter];
-
-				hash <<= 1;
-			}
-
-			hash_index = hash & 0xff;
-
-			system_texture_name_hashes[count].hash = hash;
-			system_texture_name_hashes[count].texture_index = count;
-			system_texture_name_hashes[count].succ = system_texture_name_hash_table[hash_index];
-			system_texture_name_hash_table[hash_index] = &system_texture_name_hashes[count];
 			if ( flags.reserved_texture )
 			{
 
@@ -4506,7 +4494,6 @@ void read_map_info_data ( void )
 int add_new_texture(char* texture_name)
 {
 	int texture_index = get_system_texture_index(texture_name);
-	unsigned letter;
 
 	if (texture_index != -1)
 		return texture_index;
@@ -4517,13 +4504,11 @@ int add_new_texture(char* texture_name)
 	strncpy(system_texture_names[number_of_system_textures], texture_name, 127);
 	system_texture_names[number_of_system_textures][127] = '\0';
 
-	for ( letter = 0; letter < 128; letter++ )
-		system_texture_names[number_of_system_textures][letter] = toupper(system_texture_names[number_of_system_textures][letter]);
+	strupr ( system_texture_names[number_of_system_textures] );
 
 	add_texture_to_name_hash(number_of_system_textures);
 
-	number_of_system_textures++;
-	return number_of_system_textures-1;
+	return number_of_system_textures++;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4532,12 +4517,13 @@ int add_new_texture(char* texture_name)
 
 unsigned get_hash(const char* name)
 {
+	unsigned length = strlen(name);
 	unsigned letter;
-	unsigned hash = strlen(name);
+	unsigned hash = length;
 
-	for ( letter = 0; letter < strlen(name); letter++ )
+	for ( letter = 0; letter < length; letter++ )
 	{
-		hash += name[letter];
+		hash += toupper ( name[letter] );
 		hash <<= 1;
 	}
 
