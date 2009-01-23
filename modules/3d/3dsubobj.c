@@ -1144,8 +1144,6 @@ object_3d_sub_instance *get_sub_object_from_sub_scene ( int scene_index, object_
 
 object_3d_sub_instance* find_sub_object(object_3d_instance* parent_object, unsigned sub_obj_id)
 {
-	object_3d_sub_object_index_numbers
-		index;
 	object_3d_sub_object_search_data
 		search;
 
