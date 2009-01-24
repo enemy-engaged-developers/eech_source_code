@@ -61,7 +61,7 @@ LWO_Chunk::LWO_Chunk(const char* _tag, unsigned long _ndata, const void* _data)
  if (ndata)
   {
    data = new char[ndata];
-   memcpy(data, _data, ndata);
+   memcpy(data, _data, _ndata);
    if (_ndata & 1)
     data[_ndata] = '\0';
   }

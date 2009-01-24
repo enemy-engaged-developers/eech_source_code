@@ -116,17 +116,17 @@ class TexturesExporter
     memset(name, 0, sizeof(name));
     fread(name, length, 1, fp);
     strupr(name);
-
     printf("%i %s", count, name);
+
+    if (flags.camoflage_texture)
+	 strcat(name, "-D");
+	eet.Append(name);
+
     if (flags.reserved_texture)
      {
       print_flags(flags);
       continue;
      }
-
-    if (flags.camoflage_texture)
-	 strcat(name, "-D");
-	eet.Append(name);
 
     fread(&type, sizeof(int), 1, fp);
     fread(&number_of_mipmaps, sizeof(int), 1, fp);

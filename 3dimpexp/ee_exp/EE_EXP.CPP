@@ -24,7 +24,7 @@ int main(void)
  freopen("EEEXPLOG.TXT", "w", stdout);
 
  EET eet(*getcwd(filename, sizeof(filename)));
- const AllNames names;
+ const AllNames names(eet);
  const Objects objects;
  const Scenes scenes(objects);
  SimpleTranslator translator;

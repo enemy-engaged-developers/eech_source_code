@@ -571,6 +571,12 @@ struct Surface : public Chunk
       case TAG ( 'B', 'L', 'O', 'K' ) :
        attributes[!attributes] = new Block ( tag, lwo );
        break;
+      case TAG ( 'C', 'M', 'N', 'T' ) :
+       attributes[!attributes] = new Comment ( tag, lwo );
+       break;
+      case TAG ( 'V', 'E', 'R', 'S' ) :
+       attributes[!attributes] = new CompatibilityVersion ( tag, lwo );
+       break;
       default :
        attributes[!attributes] = new SurfaceUnknown ( tag, lwo );
        break;

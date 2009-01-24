@@ -115,14 +115,17 @@ class OBJECT_3D : private Convert
 	 strcpy(t->texture, s->texture);
 	 strcpy(t->luminosity, s->ltexture);
      su->polygons = s->polygons;
+	 su->detail = s->detail;
      su->textured = t->texture[0] != '\0';
      su->has_luminosity_texture = t->luminosity[0] != '\0';
      su->translucent = s->translucent;
      su->has_specularity = s->has_specularity;
+     su->texture_animation = s->texture_animation != 0;
      su->texture_filtered = s->texture_filtered;
      su->texture_mipmapped = s->texture_mipmapped;
      su->texture_wrapped_u = s->texture_wrapped_u;
      su->texture_wrapped_v = s->texture_wrapped_v;
+     su->luminosity_texture_animation = s->luminosity_texture_animation != 0;
      su->luminosity_texture_filtered = s->luminosity_texture_filtered;
      su->luminosity_texture_mipmapped = s->luminosity_texture_mipmapped;
      su->luminosity_texture_wrapped_u = s->luminosity_texture_wrapped_u;

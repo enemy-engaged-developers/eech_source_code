@@ -42,15 +42,13 @@ struct AllNames
  Names SubObjects;
  Names Cameras;
 
- AllNames(void)
+ AllNames(EET& eet)
  {
   Objects <<= "OBJECT_INVALID_INDEX";
   SubObjects <<= "INVALID_SUB_OBJECT_INDEX";
   Cameras <<= "INVALID_CAMERA_INDEX";
 
-  FILE* file = fopen("bininfo.bin", "rb");
-  if (!file)
-   return;
+  FILE* file = safe_fopen("bininfo.bin", "rb");
 
   int total, length;
   char name[1024];
@@ -92,5 +90,22 @@ struct AllNames
       Cameras <<= name;
      }
    }
+
+  // Skip camo names
+  {
+   int n;
+   fread(&n, sizeof(int), 1, file);
+   int l;
+   fread(&l, sizeof(int), 1, file);
+   while (n-- > 0)
+    {
+     fread(&l, sizeof(int), 1, file);
+     fseek(file, l, SEEK_CUR);
+    }
+  }
+
+  eet.LoadAnimations(file);
+
+  fclose(file);
  }
 };

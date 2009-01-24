@@ -34,7 +34,9 @@ struct SurfaceAttribute : public BasicChunk
   RENDEROUTLINES,
   ALPHAMODE,
   VERTEXCOLORMAP,
-  BLOCK
+  BLOCK,
+  COMMENT,
+  COMPATIBILITYVERSION
  };
 
  SurfaceAttributeType surfaceattributetype;
@@ -748,5 +750,34 @@ struct Block : public SurfaceAttribute
  }
 };
 
+struct Comment : public SurfaceAttribute
+{
+ FString comment;
+
+ Comment ( LWO::Tag typetag, LWO & lwo )
+  : SurfaceAttribute ( typetag, COMMENT )
+ {
+  comment = lwo.Read_String ();
+ }
+ void Print ( void )
+ {
+  printf ( " Subchunk %s comment '%s'\n", &comment );
+ }
+};
+
+struct CompatibilityVersion : public SurfaceAttribute
+{
+ unsigned long version;
+
+ CompatibilityVersion ( LWO::Tag typetag, LWO & lwo )
+  : SurfaceAttribute ( typetag, COMPATIBILITYVERSION )
+ {
+  version = lwo.Read_U4 ();
+ }
+ void Print ( void )
+ {
+  printf ( " Subchunk %s version %lu\n", &tag, version );
+ }
+};
 
 #endif

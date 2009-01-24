@@ -77,7 +77,7 @@ class Objects
   OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT * current_object_surface_point_texture_references;
   FILE* fp;
 
-  fp = fopen("3dobjs.bin", "rb");
+  fp = safe_fopen("3dobjs.bin", "rb");
   object_database_points = (OBJECT_3D::OBJECT_SHORT_3D_POINT*)loadfile("3dobjs.pts");
   object_database_surface_point_list = (OBJECT_3D::POINT_3D_PLAIN_REFERENCE*)loadfile("3dobjs.sp");
   object_database_surface_point_texture_list = (OBJECT_3D::OBJECT_3D_SHORT_TEXTURED_POINT*)loadfile("3dobjs.spt");

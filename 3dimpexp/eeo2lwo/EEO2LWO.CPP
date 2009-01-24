@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 
 #include "../ee_exp/ee3dexp.cpp"
+#include "../ee_exp/names.cpp"
 
 class Object : public OBJECT_3D
 {
@@ -118,6 +119,7 @@ int main(int argc, char* argv[])
  char filename[1024];
 
  EET eet(*getcwd(filename, sizeof(filename)), argc > 3 ? argv[3] : "tga");
+ AllNames names(eet);
  const Object object(argv[1], eet);
  ExportLWO(eet, argv[2], object);
 

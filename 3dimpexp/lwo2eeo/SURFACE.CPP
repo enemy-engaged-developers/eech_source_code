@@ -11,13 +11,13 @@ struct RSurface
 
  Array<RPolyPoint> points;
 
- unsigned polygons:1, translucent:1, has_specularity:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1;
+ unsigned polygons:1, detail:1, translucent:1, has_specularity:1, texture_animation:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_animation, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1;
  unsigned char reflectivity, specularity;
  unsigned char blue, green, red, alpha;
 
  RSurface(void)
   : Global(NULL), s(NULL),
-    polygons(0), translucent(0), has_specularity(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0),
+    polygons(0), translucent(0), has_specularity(0), texture_animation(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_animation(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0),
     reflectivity(0), specularity(0),
     blue(0), green(0), red(0), alpha(0)
  {
@@ -242,6 +242,18 @@ struct RSurface
 
     case SurfaceAttribute::BLOCK:
      ParseBlock(lwofile, static_cast<const Block*>(attr));
+     break;
+
+    case SurfaceAttribute::COMMENT:
+     {
+      const Comment* c = static_cast<const Comment*>(attr);
+
+	  if (strstr(&c->comment, "detail="))
+	   detail = 1;
+
+      texture_animation = ProcessAnimation(&c->comment, "texture_animation=", texture);
+      luminosity_texture_animation = ProcessAnimation(&c->comment, "luminosity_animation=", ltexture);
+     }
      break;
 
     default:
@@ -484,5 +496,20 @@ struct RSurface
   ptr = strchr(texture, '.');
   if (ptr)
    *ptr = '\0';
+ }
+ unsigned ProcessAnimation(const char* comment, const char* tag, char* name)
+ {
+  const char* p = strstr(comment, tag);
+  if (!p)
+   return 0;
+  p += strlen(tag);
+  const char* g = p;
+  for (; *g && !isspace(*g); g++);
+  if (p == g)
+   return 0;
+  int length = g - p;
+  memcpy(name, p, length);
+  name[length] = '\0';
+  return 1;
  }
 };

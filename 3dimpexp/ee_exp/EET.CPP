@@ -7,10 +7,18 @@ class EET
 
  struct Texture
  {
-  unsigned long index;
   char name[64];
+  unsigned long index;
  };
+ struct Animation
+ {
+  char name[64];
+  Array<unsigned> animation;
+  unsigned long index;
+ };
+
  Array<Texture> textures;
+ Array<Animation> animations;
  unsigned long index;
  char textures_drive;
  const char* extention;
@@ -18,9 +26,11 @@ class EET
  public:
 
  EET(char drive = 'D', const char* ext = "tga");
- void Clear(void);
- unsigned long GetIndex(LWO_File& lwofile, unsigned textindex);
+ void LoadAnimations(FILE* file);
  unsigned Append(const char* name);
+ void Clear(void);
+ unsigned long GetIndex(LWO_File& lwofile, unsigned textindex, bool animation);
+ const char* GetAnimation(unsigned textindex);
 };
 
 EET::EET(char drive, const char* ext)
@@ -28,38 +38,97 @@ EET::EET(char drive, const char* ext)
 {
 }
 
+void EET::LoadAnimations(FILE* file)
+{
+ int number_of_texture_animations;
+ fread(&number_of_texture_animations, sizeof(int), 1, file);
+ if (number_of_texture_animations)
+  {
+   animations[number_of_texture_animations - 1];
+   int length;
+   fread(&length, sizeof(int), 1, file);
+   for (int count = 0; count < number_of_texture_animations; count++)
+    {
+	 Animation animation;
+	 animation.index = ~0u;
+     fread(&length, sizeof(int), 1, file);
+	 fread(animation.name, length, 1, file);
+     fread(&length, sizeof(int), 1, file);
+     animations[count].index = ~0u;
+     for (int temp = 0; temp < length; temp++)
+      {
+	   unsigned texture;
+       fread(&texture, sizeof(int), 1, file);
+	   animation.animation.Append(texture);
+      }
+     animations[count] = animation;
+    }
+  }
+}
+
 void EET::Clear(void)
 {
  for (unsigned i = 0; i < !textures; i++)
   textures[i].index = ~0u;
+ for (unsigned i = 0; i < !animations; i++)
+  animations[i].index = ~0u;
  index = 0;
 }
 
-unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex)
+unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animation)
 {
  LWO_Chunk* chunk;
  LWO_SubChunk* subchunk;
  char buf[1024];
 
- if (textindex < !textures)
+ if (animation)
   {
-   if (textures[textindex].index == ~0u)
+   if (textindex < !animations)
     {
-     chunk = new LWO_Chunk("CLIP", 0, NULL);
-     lwofile.AddSubChunk(chunk);
-     chunk->AddData(4, &index);
-     subchunk = new LWO_SubChunk("STIL", 0, NULL);
-     chunk->AddSubChunk(subchunk);
-     sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[textindex].name, extention);
-     subchunk->AddBasicData(strlen(buf) + 1, buf);
-     subchunk = new LWO_SubChunk("FLAG", 2, "\0\x80");
-     chunk->AddSubChunk(subchunk);
-     textures[textindex].index = index++;
-    }
+     Animation& animation = animations[textindex];
+     if (animation.index == ~0u)
+      {
+       chunk = new LWO_Chunk("CLIP", 0, NULL);
+       lwofile.AddSubChunk(chunk);
+       chunk->AddData(4, &index);
+       for (int i = 0; i < 1 /*!animation.animation*/; i++)
+        {
+         subchunk = new LWO_SubChunk("STIL", 0, NULL);
+         chunk->AddSubChunk(subchunk);
+         sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[animation.animation[i]].name, extention);
+         subchunk->AddBasicData(strlen(buf) + 1, buf);
+        }
+       animation.index = index++;
+      }
 
-   return textures[textindex].index;
+     return animation.index;
+    }
+  }
+ else
+  {
+   if (textindex < !textures)
+    {
+     if (textures[textindex].index == ~0u)
+      {
+       chunk = new LWO_Chunk("CLIP", 0, NULL);
+       lwofile.AddSubChunk(chunk);
+       chunk->AddData(4, &index);
+       subchunk = new LWO_SubChunk("STIL", 0, NULL);
+       chunk->AddSubChunk(subchunk);
+       sprintf(buf, "%c%s%s.%s", textures_drive, TEXTURES_ROOT, textures[textindex].name, extention);
+       subchunk->AddBasicData(strlen(buf) + 1, buf);
+       textures[textindex].index = index++;
+      }
+
+     return textures[textindex].index;
+    }
   }
  return 0;
+}
+
+const char* EET::GetAnimation(unsigned textindex)
+{
+ return textindex < !animations ? animations[textindex].name : 0;
 }
 
 unsigned EET::Append(const char* name)

@@ -7,8 +7,8 @@
 #include <sys/stat.h>
 
 #include "../common/common.h"
-#include "../ee_exp/names.cpp"
 #include "../ee_exp/ee3dexp.cpp"
+#include "../ee_exp/names.cpp"
 #include "../ee_exp/scenes.cpp"
 #include "../ee_exp/trans.cpp"
 #include "../ee_exp/lws_exp.cpp"
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
  char filename[1024];
 
  EET eet(*getcwd(filename, sizeof(filename)));
- AllNames names;
+ AllNames names(eet);
  Cameras cameras;
  AggTranslator translator;
  const Scene scene(argv[1], names, cameras, translator);

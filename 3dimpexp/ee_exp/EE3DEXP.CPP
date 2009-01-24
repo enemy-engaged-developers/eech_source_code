@@ -118,16 +118,10 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
    if (number_of_surface_points == 0)
     number_of_surface_points = 256;
 
-   if (current_surface->detail)
-    printf("\tSurface %u: detail not supported\n", i);
    if (current_surface->additive)
     printf("\tSurface %u: additive not supported\n", i);
    if (current_surface->luminous)
     printf("\tSurface %u: luminous not supported\n", i);
-   if (current_surface->texture_animation)
-    printf("\tSurface %u: texture_animation not supported\n", i);
-   if (current_surface->luminosity_texture_animation)
-    printf("\tSurface %u: luminosity_texture_animation not supported\n", i);
 
    value = 0.0;
    if (current_surface->textured)
@@ -222,9 +216,9 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
    const OBJECT_3D::FACE_SURFACE_DESCRIPTION* current_surface = &obj.surfaces[i];
 
    if (current_surface->textured)
-    eet.GetIndex(lwofile, current_surface->texture_index);
+    eet.GetIndex(lwofile, current_surface->texture_index, current_surface->texture_animation);
    if (current_surface->has_luminosity_texture)
-    eet.GetIndex(lwofile, current_surface->luminosity_texture_index);
+    eet.GetIndex(lwofile, current_surface->luminosity_texture_index, current_surface->luminosity_texture_animation);
 
    chunk = new LWO_Chunk("SURF", 0, NULL);
    lwofile.AddSubChunk(chunk);
@@ -319,7 +313,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
      ssc = new LWO_SubChunk("IMAG", 0, NULL);
      subchunk->AddSubChunk(ssc);
-     ssc->AddIndex(eet.GetIndex(lwofile, current_surface->texture_index));
+     ssc->AddIndex(eet.GetIndex(lwofile, current_surface->texture_index, current_surface->texture_animation));
 
      ssc = new LWO_SubChunk("WRAP", 0, NULL);
      subchunk->AddSubChunk(ssc);
@@ -382,7 +376,7 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
      ssc = new LWO_SubChunk("IMAG", 0, NULL);
      subchunk->AddSubChunk(ssc);
-     ssc->AddIndex(eet.GetIndex(lwofile, current_surface->luminosity_texture_index));
+     ssc->AddIndex(eet.GetIndex(lwofile, current_surface->luminosity_texture_index, current_surface->luminosity_texture_animation));
 
      ssc = new LWO_SubChunk("WRAP", 0, NULL);
      subchunk->AddSubChunk(ssc);
@@ -408,6 +402,32 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
      j = current_surface->luminosity_texture_filtered;
      ssc->AddData(2, &j);
     }
+
+   char comment[256] = "";
+   if (current_surface->detail)
+   	strcat(comment, "detail= ");
+   if (current_surface->texture_animation)
+    {
+	 const char* animation = eet.GetAnimation(current_surface->texture_index);
+	 if (animation)
+	  {
+	   strcat(comment, "texture_animation=");
+	   strcat(comment, animation);
+	   strcat(comment, " ");
+	  }
+	}
+   if (current_surface->luminosity_texture_animation)
+    {
+	 const char* animation = eet.GetAnimation(current_surface->luminosity_texture_index);
+	 if (animation)
+	  {
+	   strcat(comment, "luminosity_animation=");
+	   strcat(comment, animation);
+	   strcat(comment, " ");
+	  }
+	}
+   subchunk = new LWO_SubChunk("CMNT", strlen(comment) + 1, comment);
+   chunk->AddSubChunk(subchunk);
   }
 }
 
