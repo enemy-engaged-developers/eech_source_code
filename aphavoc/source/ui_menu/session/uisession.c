@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -88,9 +88,9 @@ static int
 
 entity
    *players_group;
-   
+
 char // Jabberwock 031210 Session filter
-	session_filter_value [256] = "root"; 
+	session_filter_value [256] = "root";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,9 +121,9 @@ void initialise_session_list (void)
    session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
    // Jabberwock 031210 ends
    session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
-	
+
 	sprintf (session_filter_value, "%s", "root"); // Jabberwock 040201 Session filter
-	
+
 	destroy_session_list (&session_list_head);
 }
 
@@ -293,7 +293,7 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 
 			if (ptr)
 			{
-				
+
 				*ptr = '\0';
 			}
 		}
@@ -328,7 +328,7 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 			unique_session = FALSE;
 
 			insert_position = session_item;
-			
+
 			break;
 		}
 
@@ -540,7 +540,7 @@ void compile_multi_session_list (session_list_data_type **list)
 
 		int number_of_sessions;
 		int currentServer;
-		
+
 		// Jabberwock 040201 Session filter
 		if (command_line_session_filter)
 		{
@@ -549,7 +549,7 @@ void compile_multi_session_list (session_list_data_type **list)
 				add_session ("-Multiplayer-", SESSION_LIST_TYPE_FILTER, 1, NULL, "-Multiplayer-", NULL, NULL, "-Multiplayer-", list, NULL);
 			}
 		}
-		
+
 		if ( !this_connection->one_way_hosting_setup )
 		{
 
@@ -581,7 +581,7 @@ void compile_multi_session_list (session_list_data_type **list)
 					if ((!command_line_session_filter) || (strcmp ("-Multiplayer-", session_filter_value) == 0)) // Jabberwock 031210 Session filter
 					{
 						sprintf (text, "%s", this_session->session->lpszSessionNameA);
-						
+
 						session_number ++;
 
 						add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "-Multiplayer-", list, NULL); // Jabberwock 031210 Session filter
@@ -591,7 +591,7 @@ void compile_multi_session_list (session_list_data_type **list)
 				this_session = this_session->next_session;
 			}
 		}
-		
+
 		//Werewolf 14 May 2003
 		//Fetch active servers from masterserver
 		net_getServerList();
@@ -661,7 +661,7 @@ void get_first_multi_session (session_list_data_type **list)
 		{
 
 			this_session = direct_play_get_session_table ();
-			
+
 			if (!this_session)
 			  debug_log ("GETFIRSTSESSION: direct_play_get_session_table() returned ZERO :(");
 
@@ -955,11 +955,11 @@ int store_session (session_list_data_type *game_session, const char *filename)
 		int
 			value;
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-	
+
 		set_file_tag (file_ptr, application_tag_strings, FILE_TAG_VERSION_NUMBER);
 		value = get_local_entity_int_value ( get_session_entity (), INT_TYPE_VERSION_NUMBER );
 		set_file_int (file_ptr, value);
-	
+
 		set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 	}
 
@@ -1037,7 +1037,7 @@ int store_session (session_list_data_type *game_session, const char *filename)
 			server_version_number = get_local_entity_int_value (get_session_entity (), INT_TYPE_VERSION_NUMBER);
 
 			quick_set_list_item (save_ptr, int, server_version_number);
-	
+
 			buffer_size -= sizeof (int);
 			//
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1058,10 +1058,11 @@ int store_session (session_list_data_type *game_session, const char *filename)
 	//
 	//
 
-	set_current_game_session (game_session);
+	// arneh feb 2009 - this call shouldn't be necessary, and it will double initialise things which confuses EECH
+	//	set_current_game_session (game_session);
 
 	#endif
-	
+
 	return TRUE;
 }
 
@@ -1111,7 +1112,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		sprintf(temp_warzone_name, "%s", get_directory_file_filename (warzone_file));
 
 	//  Vadim 051120, if chc filename has spaces, capitalize every word
- 
+
 		for (upper=1, i = 0; i < (strlen (temp_warzone_name) - 4); i++)
 		{
 			if (upper)
@@ -1129,18 +1130,18 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		}
 
 		temp_warzone_name[i] = '\0';
-		
+
 		for (i = 0; i < (strlen (directory) - 7); i++)
 		{
 			warzone_path[i] = directory[i];
 		}
-		
+
 		warzone_path[i] = '\0';
-		
+
 
 		add_session (temp_warzone_name, SESSION_LIST_TYPE_FILTER, 1, NULL, warzone_path, NULL, NULL, temp_warzone_name, list, NULL);
 	}
-	
+
 
 	directory_listing = get_first_directory_file (directory_search_path);
 
@@ -1213,7 +1214,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 							get_next_file_string (file_ptr, temp_warzone_name, sizeof (temp_warzone_name));
 
 							warzone_name = temp_warzone_name;
-							
+
 							break;
 						}
 
@@ -1230,9 +1231,9 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 							strcpy (path, directory);
 
 							ptr = strstr (path, "\\maps\\");
-							
+
 							ptr += strlen ("\\maps\\");
-							
+
 							while (ptr = strstr (ptr, "\\"))
 							{
 
@@ -1240,9 +1241,9 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 								last_ptr = ptr;
 							}
-		
+
 							sprintf (campaign_directory, "%s", last_ptr);
-							
+
 							sprintf (campaign_filename, "%s", get_directory_file_filename (directory_listing));
 
 							last_ptr -= strlen ("\\");
@@ -1254,77 +1255,77 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 						case FILE_TAG_LANGUAGE_TEXT_START:
 						{
-			
+
 							// skip script till correct language
-			
+
 							while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 							{
-		
+
 								#if (LANGUAGE == LANGUAGE_FRENCH)
 
 								if (tag == FILE_TAG_LANGUAGE_FRENCH)
 								{
-		
+
 									break;
 								}
 								#elif (LANGUAGE == LANGUAGE_GERMAN)
 
 								if (tag == FILE_TAG_LANGUAGE_GERMAN)
 								{
-		
+
 									break;
 								}
 								#elif (LANGUAGE == LANGUAGE_ITALIAN)
 
 								if (tag == FILE_TAG_LANGUAGE_ITALIAN)
 								{
-		
+
 									break;
 								}
 								#elif (LANGUAGE == LANGUAGE_SPANISH)
 
 								if (tag == FILE_TAG_LANGUAGE_SPANISH)
 								{
-		
+
 									break;
 								}
 	  							#else //LANGUAGE_ENGLISH
 
 								if (tag == FILE_TAG_LANGUAGE_ENGLISH)
 								{
-		
+
 									break;
 								}
 								#endif
 
 								if (tag == FILE_TAG_LANGUAGE_TEXT_STOP)
 								{
-		
+
 									break;
 								}
 							}
-			
+
 							break;
 						}
 
 						case FILE_TAG_LANGUAGE_TEXT_END:
 						{
-			
+
 							// skip script till end of languages
-			
+
 							while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 							{
-		
+
 								if (tag == FILE_TAG_LANGUAGE_TEXT_STOP)
 								{
-		
+
 									break;
 								}
 							}
-			
+
 							break;
 						}
-						
+
 						case FILE_TAG_CAMPAIGN_DATA:
 						{
 
@@ -1387,17 +1388,17 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
-							debug_log("session filter: campaign_title %s", campaign_title);							
+							debug_log("session filter: campaign_title %s", campaign_title);
 							// VJ 050123 aphavoc install hack, do not close map if it exists but EEAH is not offcially installed
 							if (!global_aphavoc_maps)
-							{ 								
-								if (!get_global_apache_havoc_installed ()) 
+							{
+								if (!get_global_apache_havoc_installed ())
 								{
-                     	
+
 									end_flag = TRUE;
-                     	
+
 									debug_log ("SESSION: Campaign %s required Apache-Havoc to be installed", campaign_title);
-                     	
+
 									break;
 								}
 							}
@@ -1408,7 +1409,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 						{
 
 							end_flag = TRUE;
-							
+
 							if ((!command_line_session_filter) || (strcmp(session_filter_value, "root") != 0))
 							{
 								if (session_type == SESSION_LIST_TYPE_HOST)
@@ -1547,9 +1548,9 @@ void set_current_game_session (session_list_data_type *game_session)
 		set_ui_object_drawable (session_screen_next_bdrop, FALSE);
 
 		set_ui_object_drawable (session_screen_next_button, FALSE);
-		
+
 		set_ui_object_drawable (session_screen_continue_button, FALSE); // Jabberwock 031118 Server side settings
-		
+
 		set_ui_object_drawable (session_screen_continue_bdrop, FALSE);
 
 		set_ui_object_drawable (session_briefing_overlay, FALSE);
@@ -1604,9 +1605,9 @@ void start_campaign (void)
 		case SESSION_LIST_TYPE_MASTER:
 		{
                         current_game_session->type = SESSION_LIST_TYPE_JOIN;
-                        
+
                         //TODO: Setup dplay connection, then get first active session.
-                                               
+
 			if (!get_session_entity ())
 			{
 
