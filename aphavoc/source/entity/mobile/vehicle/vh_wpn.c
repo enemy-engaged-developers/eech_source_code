@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define DEBUG_MODULE 1
+#define DEBUG_MODULE 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	if (en == get_external_view_entity ())
 	{
-		debug_flag = TRUE;
+		debug_flag = DEBUG_MODULE;
 	}
 
 	#endif
@@ -162,7 +162,7 @@ void update_vehicle_weapon_fire (entity *en)
 	//
 	// Check Suppress AI fire
 	//
-	
+
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_SUPPRESS_AI_FIRE))
 	{
 		if (raw->weapon_burst_timer > 0.0)
@@ -230,7 +230,7 @@ void update_vehicle_weapon_fire (entity *en)
 	}
 
 	//
-	// check vehicle not sleeping 
+	// check vehicle not sleeping
 	//
 
 	if (raw->sleep > 0.0)
@@ -259,7 +259,7 @@ void update_vehicle_weapon_fire (entity *en)
 			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
 		}
 
-		if (debug_flag)
+		if (debug_flag >= 2)
 		{
 			debug_log ("VH_WPN: Not Firing - No Target");
 		}
@@ -316,7 +316,7 @@ void update_vehicle_weapon_fire (entity *en)
 	range = get_3d_range (pos, target_pos);
 
 	if ((range < weapon_database [raw->selected_weapon].min_range) || (range > weapon_database [raw->selected_weapon].max_range))
-	{	
+	{
 		if (raw->weapon_burst_timer > 0.0)
 		{
 			pause_client_server_continuous_weapon_sound_effect (en, raw->selected_weapon);
@@ -497,12 +497,12 @@ void update_vehicle_weapon_fire (entity *en)
 		//
 
 		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
-			
+
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
 			config_type = get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
 		}
-			
+
 		set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 
 		#if DEBUG_MODULE || DEBUG_SUPPLY
@@ -534,9 +534,9 @@ int vehicle_select_best_weapon (entity *en, entity *target)
 	//
 	// Find best weapon
 	//
-	
+
 	weapon_type = get_best_weapon_for_target (en, target, BEST_WEAPON_CRITERIA_ALL);
-	
+
 	//
 	// abort engage task and re-arm if no suitable weapon
 	//
@@ -554,7 +554,7 @@ int vehicle_select_best_weapon (entity *en, entity *target)
 										get_local_entity_index (en),
 										get_local_entity_string (target, STRING_TYPE_FULL_NAME),
 										get_local_entity_index (target));
-										
+
 			#endif
 
 			guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
@@ -564,7 +564,7 @@ int vehicle_select_best_weapon (entity *en, entity *target)
 				task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
 				ASSERT (task);
-		
+
 				notify_local_entity (ENTITY_MESSAGE_TASK_TERMINATED, task, en, TASK_TERMINATED_ABORTED);
 			}
 		}
@@ -743,22 +743,22 @@ float get_fire_timer_difficulty_factor (entity *en)
 	if (pilot_en)
 	{
 		difficulty = get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
-	
+
 		loop = 0;
-	
+
 		while (fire_timer_difficulty_table [loop].difficulty >= 0)
 		{
 			if (fire_timer_difficulty_table [loop].difficulty == difficulty)
 			{
 				return fire_timer_difficulty_table [loop].timer_scale;
 			}
-	
+
 			loop ++;
 		}
-	
+
 		debug_fatal ("VH_WPN: No fire timer modifier for difficulty level %d", difficulty);
 	}
-	
+
 	return 1.0;
 }
 
