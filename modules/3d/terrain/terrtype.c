@@ -983,10 +983,10 @@ void initialise_3d_custom_terrain_types( void )
    	if (index == terrain_texture_reservoir_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_RESERVOIR, terrain_texture_reservoir_detail, terrain_texture_reservoir_colour_pass, 1.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_reservoir );
 
 
-   	if (index == terrain_texture_road_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 8.0, sld, sld, sl, sl,  255, 255, 255, terrain_surface_road );
-   	if (index == terrain_texture_track_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_track );
-   	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 8.0, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
-   	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 8.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
+   	if (index == terrain_texture_road_detail   ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD, terrain_texture_road_detail, terrain_texture_road_colour_pass, 2.0, sld, sld, sl, sl,  255, 255, 255, terrain_surface_road );
+   	if (index == terrain_texture_track_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_TRACK, terrain_texture_track_detail, terrain_texture_track_colour_pass, 2.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_track );
+   	if (index == terrain_texture_rail_detail       ) set_terrain_type_textures ( TERRAIN_TYPE_RAIL, terrain_texture_rail_detail, terrain_texture_rail_colour_pass, 2.0, sl, sl, 0, 0, 38, 38, 38, terrain_surface_rail );
+   	if (index == terrain_texture_road_bank_detail  ) set_terrain_type_textures ( TERRAIN_TYPE_ROAD_BANK, terrain_texture_road_bank_detail, terrain_texture_road_bank_colour_pass, 2.0, sld, sld, sl, sl, 255, 255, 255, terrain_surface_road_bank );
 
 		if ( ( active_3d_environment ) && ( active_3d_environment->render_filter == RENDER_INFRARED ) )
 		{
