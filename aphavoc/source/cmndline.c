@@ -254,8 +254,7 @@ int
 	command_line_export_mfd_left_pos[4]				={0,0,256,256},
 	command_line_export_mfd_right_pos[4]				={384,0,640,256},
 	command_line_export_mfd_single_pos[4]				={0,0,256,256},
-	command_line_ui_sounds_muted = FALSE, //ataribaby 29/12/2008 for muted UI sounds 
-	command_line_use_hind_cpg_for_cannon = FALSE; //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode
+	command_line_ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds 
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
