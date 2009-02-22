@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -77,6 +77,8 @@
 #define SOUND_BLOCK_DATA_FILE 	"sound.dat"
 
 #define SOUND_OVERRIDE_DIRECTORY "..\\COHOKUM\\AUDIO"
+
+#define DEBUG_MODILE 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +134,7 @@ static int open_application_sound_file_system ( char *directory );
 static void close_application_sound_file_system ( void );
 
 int get_sound_block_header_index ( char *filename, int sample_index );
-		
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,7 +254,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_MEDIUM_EXPLOSION, 						ENTITY_SIDE_NEUTRAL,	"m_explsn.pcm",	22050,	250, 0.0, 0.0, 3 * KILOMETRE },
 //		{ SOUND_SAMPLE_INDEX_SMALL_EXPLOSION, 							ENTITY_SIDE_NEUTRAL,	"s_explsn.pcm",	22050,	100, 0.0, 0.0, 1 * KILOMETRE },
 		{ SOUND_SAMPLE_INDEX_SMALL_EXPLOSION, 							ENTITY_SIDE_NEUTRAL,	"grstrafe.pcm",	11025,	250, 0.0, 0.0, 0.5 * KILOMETRE },
-		
+
 		{ SOUND_SAMPLE_INDEX_AIRCRAFT_CRASH, 							ENTITY_SIDE_NEUTRAL,	"ac_crash.pcm",	22050,	250, 0.0, 0.0, 1 * KILOMETRE },
 		{ SOUND_SAMPLE_INDEX_HELICOPTER_CRASH, 						ENTITY_SIDE_NEUTRAL,	"hc_crash.pcm",	22050,	250, 0.0, 0.0, 1 * KILOMETRE },
 
@@ -406,7 +408,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_ATC_WARRIOR, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\ATC\\WARRIOR.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_ATC_WILDCAT, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\ATC\\WILDCAT.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_ATC_WOLFPACK, 			ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\ATC\\WOLFPACK.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_ATC_0,						ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\ATC\\0.PCM",					11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_ATC_01,					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\ATC\\01.PCM",				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_ATC_02,					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\ATC\\02.PCM",				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -600,7 +602,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_GC_KNOTS, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\GC\\KNOTS.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_GC_RANGE, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\GC\\RANGE.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_GC_SPEED, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\GC\\SPEED.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-		
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_GC_0, 					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\GC\\0.PCM", 					11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_GC_01, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\GC\\01.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_GC_01_CL, 			ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\GC\\01_CL.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -669,7 +671,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_GC_SPEED, 			ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\GC\\SPEED.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 
 		#endif
-	
+
 		//
 		// Wingman1
 		//
@@ -878,7 +880,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN1_WING_56, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN1\\WING_56.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN1_WING_57, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN1\\WING_57.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN1_WING_58, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN1\\WING_58.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN1_0, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN1\\0.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN1_01, 			ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN1\\01.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN1_01_CL, 		ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN1\\01_CL.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -1292,7 +1294,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN2_WING_56, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN2\\WING_56.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN2_WING_57, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN2\\WING_57.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_WINGMAN2_WING_58, 		ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\WINGMAN2\\WING_58.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN2_0, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN2\\0.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN2_01, 			ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN2\\01.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN2_01_CL, 		ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN2\\01_CL.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -1497,9 +1499,9 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_WINGMAN2_WOLFPACK, 	ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\WINGMAN2\\WOLFPACK.PCM", 11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 
 		#endif
-	
+
 		//
-		// Forward Air Control 
+		// Forward Air Control
 		//
 
 		#if !DEMO_VERSION
@@ -1616,7 +1618,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_FAC_WARRIOR, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\FAC\\WARRIOR.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_FAC_WILDCAT, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\FAC\\WILDCAT.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_FAC_WOLFPACK, 			ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\FAC\\WOLFPACK.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_FAC_0, 					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\FAC\\0.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_FAC_01, 					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\FAC\\01.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_FAC_02,	 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\FAC\\02.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -1779,7 +1781,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_SYSTEM_WARN_41, 			ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\SYSTEM\\WARN_41.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_SYSTEM_WARN_42, 			ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\SYSTEM\\WARN_42.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_SYSTEM_WARN_43, 			ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\SYSTEM\\WARN_43.PCM", 		11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_SYSTEM_WARN_01, 		ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\SYSTEM\\WARN_01.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_SYSTEM_WARN_02, 		ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\SYSTEM\\WARN_02.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 	//	{ SOUND_SAMPLE_INDEX_SPEECH_CIS_SYSTEM_WARN_03, 		ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\SYSTEM\\WARN_03.PCM", 	11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -2009,7 +2011,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_CPG_WEP_61, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\CPG\\WEP_61.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_CPG_WEP_62, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\CPG\\WEP_62.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_US_CPG_WEP_63, 				ENTITY_SIDE_BLUE_FORCE,	"SPEECH\\US\\CPG\\WEP_63.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
-	
+
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_0, 					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\01.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_01, 					ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\01.PCM", 				11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
 		{ SOUND_SAMPLE_INDEX_SPEECH_CIS_CPG_01_CL, 				ENTITY_SIDE_RED_FORCE,	"SPEECH\\CIS\\CPG\\01_CL.PCM", 			11025,	SOUND_MAXIMUM_VOLUME,	0.0 },
@@ -2278,7 +2280,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_6, 				ENTITY_SIDE_NEUTRAL,	"explosion_distant6.pcm", 	22050,	250,	0.8 * KILOMETRE, 2 * KILOMETRE, 6 * KILOMETRE },
 		{ SOUND_SAMPLE_INDEX_EXPLOSION_DISTANT_7, 				ENTITY_SIDE_NEUTRAL,	"explosion_distant7.pcm", 	22050,	250,	0.8 * KILOMETRE, 2 * KILOMETRE, 6 * KILOMETRE },
 
-        // Maverick's sound mod 
+        // Maverick's sound mod
         //now every plane has its own sound
         { SOUND_SAMPLE_INDEX_STINGER1, 						ENTITY_SIDE_NEUTRAL,	"stinger_e.pcm", 	22050,	250,	0.0, 0.0, 1 * KILOMETRE },
         { SOUND_SAMPLE_INDEX_STINGER2, 						ENTITY_SIDE_NEUTRAL,	"stinger_i.pcm", 	22050,	250,	0.0, 0.0, 1 * KILOMETRE },
@@ -2290,7 +2292,7 @@ sound_sample_information
        //{ SOUND_SAMPLE_INDEX_AH1, 						    ENTITY_SIDE_NEUTRAL,	"ah1.pcm", 	        22050,	250,	0.0, 0.0, 1 * KILOMETRE },
         { SOUND_SAMPLE_INDEX_V22, 						    ENTITY_SIDE_NEUTRAL,	"v22.pcm", 	        22050,	250,	0.0, 0.0, 1 * KILOMETRE },
         { SOUND_SAMPLE_INDEX_A10, 						    ENTITY_SIDE_NEUTRAL,	"a10.pcm", 	        22050,	250,	0.0, 0.0, 1 * KILOMETRE },
-       
+
         { SOUND_SAMPLE_INDEX_AMB1, 					        ENTITY_SIDE_NEUTRAL,	"amb1.pcm", 		22050,	350,	0.0, 0.0, 250.0 },
         { SOUND_SAMPLE_INDEX_AMB2, 					        ENTITY_SIDE_NEUTRAL,	"amb2.pcm", 		22050,	350,	0.0, 0.0, 250.0 },
         { SOUND_SAMPLE_INDEX_AMB3, 					        ENTITY_SIDE_NEUTRAL,	"amb3.pcm", 		22050,	350,	0.0, 0.0, 250.0 },
@@ -2303,8 +2305,8 @@ sound_sample_information
         { SOUND_SAMPLE_INDEX_ATAKA2, 						ENTITY_SIDE_NEUTRAL,	"ataka_i.pcm", 	    22050,	250,	0.0, 0.0, 1 * KILOMETRE },
         { SOUND_SAMPLE_INDEX_CHAPARRAL, 				    ENTITY_SIDE_NEUTRAL,	"chaparral.pcm", 	22050,	250,	0.0, 0.0, 1 * KILOMETRE },
         { SOUND_SAMPLE_INDEX_SMOKEGRENADE,                  ENTITY_SIDE_NEUTRAL,	"smokeGrenade.pcm", 22050,	250,	0.0, 0.0, 1 * KILOMETRE },
-        
-        
+
+
 
         // Maverick:
 		// AH1T SEACOBRA AND AH1W SUPERCOBRA HELICOPTER
@@ -2322,7 +2324,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_AH1T_SEACOBRA_LOCK_ON, 					ENTITY_SIDE_NEUTRAL,	"ah1t_seacobra_a2a.pcm",		    22050,	80,	    0.0, 0.0, 0.0 },
 		{ SOUND_SAMPLE_INDEX_AH1T_SEACOBRA_MCA, 						ENTITY_SIDE_NEUTRAL,	"ah1t_seacobra_mca.pcm",		    22050,	100,	0.0, 0.0, 0.0 },
 
-        
+
         // Maverick:
 		// KIOWA HELICOPTER
 		//
@@ -2371,7 +2373,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_INTERIOR_KA29_ROTOR_TURBINE, 		         ENTITY_SIDE_NEUTRAL,	"ka29_turbine_int.pcm", 	        22050,	150,	0.1, 0.1, 0.1 },
 		{ SOUND_SAMPLE_INDEX_KA29_LOCK_ON, 					             ENTITY_SIDE_NEUTRAL,	"ka29_a2a.pcm",		                22050,	80,	    0.0, 0.0, 0.0 },
 		{ SOUND_SAMPLE_INDEX_KA29_MCA, 						             ENTITY_SIDE_NEUTRAL,	"ka29_mca.pcm",		                22050,	100,	0.0, 0.0, 0.0 },
-        
+
         // Maverick:
 		// CH46E AND CH47D CHINOOK HELICOPTER
 		//
@@ -2404,7 +2406,7 @@ sound_sample_information
 		{ SOUND_SAMPLE_INDEX_CH3_LOCK_ON, 					             ENTITY_SIDE_NEUTRAL,	"ch3_a2a.pcm",		                22050,	80,	    0.0, 0.0, 0.0 },
 		{ SOUND_SAMPLE_INDEX_CH3_MCA, 						             ENTITY_SIDE_NEUTRAL,	"ch3_mca.pcm",		                22050,	100,	0.1, 0.0, 0.0 },
 
-   
+
 	};
 
 int
@@ -2429,14 +2431,14 @@ void load_application_sound_samples ( void )
 
 	if ( application_sound_system_enabled )
 	{
-	
+
 		if ( !command_line_no_sound )
 		{
-		
+
 			number_of_application_sound_samples = ( sizeof ( application_sound_samples ) / sizeof ( sound_sample_information ) );
-		
+
 			allocate_source_sound_samples ( NUM_SOUND_SAMPLE_INDICES + 1 );
-		
+
 			load_side_dependant_application_sound_samples ( ENTITY_SIDE_NEUTRAL );
 		}
 	}
@@ -2452,107 +2454,107 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 
 	if ( application_sound_system_enabled )
 	{
-		
+
 		int
 			samples_loaded,
 			count;
-	
+
 		if ( !command_line_no_sound )
 		{
-			
+
 			sound_system_side_loaded = side;
-		
+
 			samples_loaded = FALSE;
-		
+
 			//
 			// Load up the blocked sound data if there is some there
 			//
-		
+
 			while ( !samples_loaded )
 			{
-			
+
 				if ( open_application_sound_file_system ( SOUND_DIRECTORY ) )
 				{
-			
+
 					int
 						passed;
-			
+
 					//
 					// verify the sound data is the stuff we want
 					//
-			
+
 					passed = TRUE;
-		
+
 					for ( count = 0; count < number_of_application_sound_samples; count++ )
 					{
-				
+
 						int
 							sound_block_header_index;
-				
+
 						char
 							filename[256];
-				
+
 						if ( application_sound_samples[count].name )
 						{
-					
+
 							sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
-				
+
 							sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
-		
+
 							//
 							// If the sound sample is incorrect - it doesn't match the enumerated type we have to reconstruct the sound block.
 							// 	But, if the sound sample is just missing, we can still search for it manually
-		
+
 							if ( sound_block_header_index == SOUND_SAMPLE_INCORRECT )
 							{
-		
+
 								debug_log ( "%s is incorrect", filename );
-		
+
 								passed = FALSE;
 							}
 						}
 					}
-			
+
 					//
 					// If the data is consistant - we can load them
 					//
-			
+
 					if ( passed )
 					{
-		
+
 						samples_loaded = TRUE;
-		
+
 						for ( count = 0; count < number_of_application_sound_samples; count++ )
 						{
-			
+
 							char
 								filename[256];
-					
+
 							unsigned char
 								*ptr;
-			
+
 							int
 								should_load_sample,
 								sound_block_header_index;
-					
+
 							if (	( application_sound_samples[count].side == sound_system_side_loaded ) ||
 									( application_sound_samples[count].side == ENTITY_SIDE_NEUTRAL ) ||
 									( sound_system_side_loaded == NUM_ENTITY_SIDES ) )
 							{
-		
+
 								should_load_sample = TRUE;
 							}
 							else
 							{
-		
+
 								should_load_sample = FALSE;
 							}
-				
+
 							if ( application_sound_samples[count].name )
 							{
-		
+
 								sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
-				
+
 								sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
 
 								//--Werewolf sound override support
@@ -2560,7 +2562,10 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 								{
 									int size;
 									FILE *fp;
-									debug_log ( "**SOUNDFILE OVERRIDES* found file %s", filename );
+
+									#if DEBUG_MODULE
+									debug_log ( "SND_DATA: SOUNDFILE OVERRIDES* found file %s", filename );
+									#endif
 									size = file_size ( filename );
 									application_sound_effects[application_sound_samples[count].sound_sample_index].size = size;
 									if ( should_load_sample )
@@ -2595,90 +2600,92 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 								{
 									int
 										size;
-		
+
 									FILE
 										*fp;
 
 									debug_log ( "Sound not found in sound.dat: %s", filename );
-				
+
 									size = file_size ( filename );
-		
+
 									application_sound_effects[application_sound_samples[count].sound_sample_index].size = size;
-					
+
 									if ( should_load_sample )
 									{
-		
+
 										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
 										{
-		
+
 											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
 																						SAMPLE_TYPE_MONO_8BIT,
 																						application_sound_samples[count].rate,
 																						size );
-				
+
 											fp = safe_fopen ( filename, "rb" );
-						
+
 											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-									
+
 											if ( ptr )
 											{
-							
+
 												fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-							
+
 												fread ( ptr, 1, size, fp );
-									
+
 												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
 											}
-				
+
 											safe_fclose ( fp );
 										}
 									}
 									else
 									{
-		
+
 										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
 										{
-		
+
 											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
 										}
 									}
 								}
 								else
 								{
-									debug_log ( "Sound loading from sound.dat: %s", filename );
-		
+									#if DEBUG_MODULE
+									debug_log ( "SND_DATA: Sound loading from sound.dat: %s", filename );
+									#endif
+
 									application_sound_effects[application_sound_samples[count].sound_sample_index].size = blocked_sound_samples[sound_block_header_index].sound_data_length;
-			
+
 									if ( should_load_sample )
 									{
-		
+
 										if ( !is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
 										{
-		
+
 											create_source_sound_sample ( application_sound_samples[count].sound_sample_index,
 																						SAMPLE_TYPE_MONO_8BIT,
 																						application_sound_samples[count].rate,
 																						blocked_sound_samples[sound_block_header_index].sound_data_length );
-					
+
 											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-									
+
 											if ( ptr )
 											{
-							
+
 												fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-							
+
 												fread ( ptr, 1, blocked_sound_samples[sound_block_header_index].sound_data_length, block_sound_sample_data_file );
-									
+
 												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
 											}
 										}
 									}
 									else
 									{
-		
+
 										if ( is_source_sound_sample_valid ( application_sound_samples[count].sound_sample_index ) )
 										{
-		
+
 											destroy_source_sound_sample ( application_sound_samples[count].sound_sample_index );
 										}
 									}
@@ -2686,164 +2693,166 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 							}
 						}
 					}
-			
+
 					//
 					// Now close the blocked sound samples file etc
 					//
-			
+
 					close_application_sound_file_system ();
 				}
-		
+
 				//
 				// If we haven't loaded the samples, create the sound block from the array
 				//
-		
+
 				if ( !samples_loaded )
 				{
-		
+
 					int
 						current_blocked_sample;
-		
+
 					FILE
 						*fp;
-		
+
 					char
 						filename[256];
-		
+
 					current_blocked_sample = 0;
-		
+
 					number_of_blocked_sound_samples = 0;
-		
+
 					//
 					// Count number of samples
 					//
-		
+
+					#if DEBUG_MODULE
 					debug_log ( "CREATING SOUND BLOCK SYSTEM" );
-		
+					#endif
+
 					for ( count = 0; count < number_of_application_sound_samples; count++ )
 					{
-				
+
 						if ( application_sound_samples[count].name )
 						{
-		
+
 							number_of_blocked_sound_samples++;
 						}
 					}
-		
+
 					//
 					// Malloc the headers bit
 					//
-		
+
 					blocked_sound_samples = safe_malloc ( sizeof ( sound_block_data_header ) * number_of_blocked_sound_samples );
-		
+
 					//
 					// Now fill in the data
 					//
-		
+
 					sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, SOUND_BLOCK_DATA_FILE );
-		
+
 					block_sound_sample_data_file = safe_fopen ( filename, "wb" );
-		
+
 					for ( count = 0; count < number_of_application_sound_samples; count++ )
 					{
-				
+
 						int
 							size;
-				
+
 						char
 							filename[256];
-				
+
 						if (application_sound_samples [count].name)
 						{
-		
+
 							char
 								*temp_memory;
-					
+
 							sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
-					
+
 							size = file_size ( filename );
-					
+
 							fp = safe_fopen ( filename, "rb" );
-		
+
 							temp_memory = safe_malloc ( size );
-		
+
 							fread ( temp_memory, size, 1, fp );
-		
+
 							safe_fclose ( fp );
-		
+
 							//
 							// Fill in the header bit
 							//
-		
+
 							blocked_sound_samples[current_blocked_sample].sound_sample_index = application_sound_samples[count].sound_sample_index;
 							blocked_sound_samples[current_blocked_sample].sound_data_offset = ftell ( block_sound_sample_data_file );
 							blocked_sound_samples[current_blocked_sample].sound_data_length = size;
 							blocked_sound_samples[current_blocked_sample].filename = safe_malloc ( strlen ( filename ) + 1 );
 							strcpy ( blocked_sound_samples[current_blocked_sample].filename, filename );
 							current_blocked_sample++;
-		
+
 							//
 							// Write the data out
 							//
-		
+
 							fwrite ( temp_memory, 1, size, block_sound_sample_data_file );
-		
+
 							//
 							// Free the memory
 							//
-		
+
 							safe_free ( temp_memory );
 						}
 					}
-		
+
 					//
 					// Close the data file
 					//
-		
+
 					safe_fclose ( block_sound_sample_data_file );
-		
+
 					//
 					// Write out the headers
 					//
-		
+
 					sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, SOUND_BLOCK_HEADER_FILE );
-		
+
 					fp = safe_fopen ( filename, "wb" );
-		
+
 					fwrite ( &number_of_blocked_sound_samples, sizeof ( int ), 1, fp );
-		
+
 					for ( count = 0; count < number_of_blocked_sound_samples; count++ )
 					{
-		
+
 						int
 							length;
-		
+
 						fwrite ( &blocked_sound_samples[count].sound_sample_index, sizeof ( int ), 1, fp );
 						fwrite ( &blocked_sound_samples[count].sound_data_offset, sizeof ( int ), 1, fp );
 						fwrite ( &blocked_sound_samples[count].sound_data_length, sizeof ( int ), 1, fp );
-		
+
 						length = strlen ( blocked_sound_samples[count].filename ) + 1;
 						fwrite ( &length, sizeof ( int ), 1, fp );
-		
+
 						fwrite ( blocked_sound_samples[count].filename, 1, length, fp );
-		
+
 						//
 						// Free the filename up now
 						//
-		
+
 						safe_free ( blocked_sound_samples[count].filename );
 						blocked_sound_samples[count].filename = NULL;
 					}
-		
+
 					fclose ( fp );
-		
+
 					//
 					// Free the memory up from the headers
 					//
-		
+
 					safe_free ( blocked_sound_samples );
 					blocked_sound_samples = NULL;
-		
+
 					number_of_blocked_sound_samples = 0;
 				}
 			}
@@ -2955,9 +2964,9 @@ void close_application_sound_file_system ( void )
 
 	if ( blocked_sound_samples )
 	{
-	
+
 		safe_free ( blocked_sound_samples );
-	
+
 		blocked_sound_samples = NULL;
 	}
 
@@ -3011,7 +3020,7 @@ int get_sound_block_header_index ( char *filename, int sample_index )
 
 				if ( blocked_sound_samples[count].sound_sample_index == sample_index )
 				{
-	
+
 					return ( count );
 				}
 			}
@@ -3020,7 +3029,7 @@ int get_sound_block_header_index ( char *filename, int sample_index )
 
 	return ( SOUND_SAMPLE_NOT_FOUND );
 }
-		
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3075,13 +3084,13 @@ void initialise_application_sound_effects ( void )
 
 			char
 				filename[256];
-	
+
 			int
 				sound_block_header_index;
-	
+
 			if (application_sound_samples[count].name)
 			{
-		
+
 				sprintf ( filename, "%s\\%s", SOUND_DIRECTORY, application_sound_samples[count].name );
 
 				sound_block_header_index = get_sound_block_header_index ( filename, application_sound_samples[count].sound_sample_index );
