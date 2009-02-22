@@ -854,7 +854,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 						new_intercept_point.y = current_target_position.y + (target_motion_vector.y * target_move_distance);
 						new_intercept_point.z = current_target_position.z + (target_motion_vector.z * target_move_distance);
 
-						#ifdef DEBUG_MODULE
+						#if DEBUG_MODULE
 						debug_log("intercept point range: %.0f, ToF: %.2f, position: (%.0f, %.0f, %.0f)", range, time_of_flight, new_intercept_point.x, new_intercept_point.z, new_intercept_point.y);
 						#endif
 						if (point_inside_map_area (&new_intercept_point))
@@ -1592,110 +1592,13 @@ void update_entity_weapon_systems (entity *source)
 									  // in HMS mode gun follows head, simulates co-pilot aiming
 									if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
 									{
-									  //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode
-									  if (!command_line_use_hind_cpg_for_cannon)
-									  {
-										  required_heading_offset = -pilot_head_heading;
-										  required_pitch_offset = pilot_head_pitch;
-										}
-										else
-										{
-                      //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode
-										  required_heading_offset = 0.0;
-										  required_pitch_offset = 0.0;
-										}
+										required_heading_offset = -pilot_head_heading;
+										required_pitch_offset = pilot_head_pitch;
 									}
 									else  // fire straight ahead, where the pilot has a sight
 									{
-                    //ataribaby 3/1/2009 use Hind CPG for aiming cannon if not in HMS mode, then it is boresight pilot mode		
-                    if (!command_line_use_hind_cpg_for_cannon)
-									  {						   
-										  required_heading_offset = 0.0;
-										  required_pitch_offset = 0.0;
-								    }
-								    else
-								    {
-  								    // slave to EO system if it is active (and doesn't have a target)
-      								if (!target)
-      								{
-      									vec3d* tracking_point = get_eo_tracking_point();
-      
-      									ASSERT(source == get_gunship_entity());
-      
-      									required_heading_offset = eo_azimuth;
-      									required_pitch_offset = eo_elevation;
-      
-      									// if using point lock, then aim for that point
-      									if (tracking_point && weapon_database[selected_weapon].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-      									{
-      										float pitch, dummy;
-      										float height_diff;
-      										float range;
-      
-      										#ifdef DEBUG_MODULE
-      										debug_log("Aiming for point lock at %.0f, %.0f,  %.0f", tracking_point->x, tracking_point->y, tracking_point->z);
-      										#endif
-      
-      										// if we don't already have it we need to get the viewpoint of the weapon
-      										if (!located_heading_and_pitch_devices)
-      										{
-      											located_heading_and_pitch_devices =
-      												get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
-      
-      											if (!located_heading_and_pitch_devices)
-      												debug_fatal("Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
-      										}
-      
-      										height_diff = vp.position.y - tracking_point->y;
-      										range = get_range_to_target();
-      
-      										if (range <= 0.0)
-      											range = 1000.0;   // use 1000 meters if unable to determine range
-      
-      										// adjust weapon elevation for range
-      										if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE))
-      										{
-      											matrix3x3 m;
-      											float dx, dz;
-      											float heading;
-      											vec3d offset_vector, tracking_vector;
-      
-      											// get heading and pitch offsets
-      
-      											dx = tracking_point->x - vp.position.x;
-      											dz = tracking_point->z - vp.position.z;
-      
-      											heading = atan2 (dx, dz);
-      
-      											// need to adjust for the gun's attitude, as the helicopter may not fly level all the time
-      											get_3d_transformation_matrix (m, heading, pitch, 0.0);
-      
-      											tracking_vector.x = m[2][0];
-      											tracking_vector.y = m[2][1];
-      											tracking_vector.z = m[2][2];
-      
-      											multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &tracking_vector);
-      
-      											required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
-      
-      											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
-      											required_pitch_offset = atan2 (offset_vector.y, flat_range);
-      										}
-      									}
-      									set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
-      								  set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
-      								}
-        							else
-        							{
-        								if ((get_comms_model () == COMMS_MODEL_SERVER) && (get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING) || get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH)))
-        								{
-        									required_heading_offset = get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING);
-        
-        									required_pitch_offset = get_local_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH);
-        								}
-        							}
-								    }
-								    
+										required_heading_offset = 0.0;
+										required_pitch_offset = 0.0;
 									}
 								}
 								else
