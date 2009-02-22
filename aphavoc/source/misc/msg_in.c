@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -170,7 +170,8 @@ message_log_type *get_current_display_message (void)
 
 void initialise_message_log (void)
 {
-	ASSERT (message_log == NULL);
+	if (message_log)
+		deinitialise_message_log();
 
 	num_messages = 0;
 
@@ -329,7 +330,7 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 			if (target == get_session_entity ())
 			{
 				//
-				// message broadcast to all pilots 
+				// message broadcast to all pilots
 				//
 
 				return TRUE;
@@ -374,13 +375,13 @@ static int message_intended_for_recipient (entity *sender, entity *target, messa
 
 			break;
 		}
-		
+
 		case MESSAGE_WINGMAN_STATUS_REPORT:
 		{
 			if (target == get_pilot_entity())
 				return TRUE;
 
-			break;	
+			break;
 		}
 
 		default:
@@ -493,7 +494,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 
 			break;
 		}
-		
+
 		case MESSAGE_WINGMAN_STATUS_REPORT:
 		{
 			group = get_local_entity_parent (sender, LIST_TYPE_MEMBER);
@@ -527,7 +528,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 						&& weapon_load[i].weapon_type != ENTITY_SUB_TYPE_WEAPON_FLARE
 						&& weapon_load[i].count > 0)
 					{
-						snprintf (temp_string, 511, "%s%s %s %d ", 
+						snprintf (temp_string, 511, "%s%s %s %d ",
 							temp_string, (not_first ? "," : ""),
 							weapon_database[weapon_load[i].weapon_type].hud_name, weapon_load[i].count);
 
@@ -541,10 +542,10 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 			{
 				helicopter
 					*raw;
-			
+
 				int
 					percent_damaged;
-			
+
 				char
 					*damage;
 
@@ -561,13 +562,13 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 					damage = "Heavy damage";
 				else
 					damage = "Critical damage";
-				
+
 				snprintf (temp_string, 511, "%s, %s", temp_string, damage);
 			}
 
 			message->colour = message_side_colour [ENTITY_SIDE_NEUTRAL];
 
-			break;	
+			break;
 		}
 
 		case MESSAGE_TEXT_SYSTEM_ENTITY_KILLED:
@@ -707,7 +708,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 			}
 
 			if (pos)
-			{		
+			{
 				message->position = *pos;
 			}
 
@@ -817,7 +818,7 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 			//
 			// Show victim (target is a group) + aggressor
 			//
-			
+
 			if (get_local_entity_type (target) == ENTITY_TYPE_GROUP)
 			{
 				en = get_local_entity_ptr_value (target, PTR_TYPE_GROUP_LEADER);
@@ -832,13 +833,13 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 
 			break;
 		}
-		
+
 		case MESSAGE_TEXT_SYSTEM_TASK_COMPLETED:
 		{
 			//
 			// Show group leader (sender is a group)
 			//
-			
+
 			en = get_local_entity_ptr_value (sender, PTR_TYPE_GROUP_LEADER);
 
 			if (en)
@@ -925,7 +926,7 @@ void set_incoming_message (entity *sender, entity *target, message_text_types ty
 	subject = format_incoming_message (new_message, sender, target, string);
 
 	num_messages ++;
-	
+
 	// Jabberwock 031129 Chat server log
 	if ((type == MESSAGE_TEXT_PILOT_STRING) && (get_comms_model () == COMMS_MODEL_SERVER))
 	{
@@ -981,8 +982,8 @@ void process_radio_message (entity *en, message_categories type, int value)
 		{
 			wingman = get_local_entity_safe_ptr (value);
 			process_message_attack_pfz (en, wingman);
-			
-			break;	
+
+			break;
 		}
 		case MESSAGE_WINGMAN_RETURN_TO_BASE:
 		{
@@ -995,7 +996,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 			wingman = get_local_entity_safe_ptr (value);
 			if (wingman == get_gunship_entity())
 			{
-				debug_log("request message from me!");	
+				debug_log("request message from me!");
 			}
 
 			break;
@@ -1100,7 +1101,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 		{
 			group = get_local_entity_safe_ptr (value);
 
-			process_message_change_formation (en, group, FORMATION_WEDGE);    
+			process_message_change_formation (en, group, FORMATION_WEDGE);
 
 			break;
 	    }
@@ -1128,7 +1129,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 			process_message_change_formation (en, group, FORMATION_STAGGERED_TRAIL_RIGHT);
 
 			break;
-       
+
 		}
 //VJ 060305 three new formations for maverick <====
 		case MESSAGE_LOCAL_BASE_REQUEST_AIRSTRIKE:
@@ -1161,7 +1162,7 @@ void process_radio_message (entity *en, message_categories type, int value)
 			create_reaction_to_map_click (en);
 
 			break;
-		}		
+		}
 // Jabberwock 031119 ends
 	}
 }
@@ -1249,7 +1250,7 @@ static void play_client_server_radio_message_affirmative_response (entity *en, i
 			//
 			// forward through w/m list
 			//
-			
+
 			sender = get_local_entity_first_child (en, LIST_TYPE_MEMBER);
 
 			while (sender)
@@ -1266,7 +1267,7 @@ static void play_client_server_radio_message_affirmative_response (entity *en, i
 			//
 			// backward through w/m list
 			//
-			
+
 			sender = get_local_entity_first_child (en, LIST_TYPE_MEMBER);
 
 			while (get_local_entity_child_succ (sender, LIST_TYPE_MEMBER))
@@ -1289,7 +1290,7 @@ static void play_client_server_radio_message_affirmative_response (entity *en, i
 		//
 		// only play speech if the responder is AI controlled
 		//
-	
+
 		play_radio_message_affirmative_response (en, speech_index, priority, expire_time);
 	}
 }
@@ -1344,7 +1345,7 @@ static void play_client_server_radio_message_negative_response (entity *en, int 
 			//
 			// forward through w/m list
 			//
-			
+
 			sender = get_local_entity_first_child (en, LIST_TYPE_MEMBER);
 
 			while (sender)
@@ -1361,7 +1362,7 @@ static void play_client_server_radio_message_negative_response (entity *en, int 
 			//
 			// backward through w/m list
 			//
-			
+
 			sender = get_local_entity_first_child (en, LIST_TYPE_MEMBER);
 
 			while (get_local_entity_child_succ (sender, LIST_TYPE_MEMBER))
@@ -1384,7 +1385,7 @@ static void play_client_server_radio_message_negative_response (entity *en, int 
 		//
 		// only play speech if the responder is AI controlled
 		//
-	
+
 		play_radio_message_negative_response (en, speech_index, priority, expire_time);
 	}
 }
@@ -1489,7 +1490,7 @@ void process_message_attack_pfz(entity *en, entity *wingman)
 			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ACKNOWLEDGE, 1.0, 10.0);
 		else
 			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_ENGAGING_TARGET, 1.0, 10.0);
-	
+
 		return;
 	}
 
@@ -1658,7 +1659,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 				//
 				// If setting weapons free, see if member should be assigned to existing engage tasks
 				//
-				
+
 				if (!state)
 				{
 					entity* target;
@@ -1666,7 +1667,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 					if (get_local_entity_int_value (group, INT_TYPE_ENGAGE_ENEMY))
 					{
 						member_number = (1 << get_local_entity_int_value (member, INT_TYPE_GROUP_MEMBER_NUMBER));
-	
+
 						// add engage task for all PFZ targets
 						for (target = get_local_entity_first_child (member, LIST_TYPE_DESIGNATED_TARGET);
 							 target;
@@ -1675,7 +1676,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 							engage_specific_target(group, target, member_number, FALSE);
 						}
 					}
-					
+
 					guide = get_local_entity_parent (member, LIST_TYPE_FOLLOWER);
 
 					if (guide)
@@ -1683,9 +1684,9 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 						task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
 						ASSERT (task);
-						
+
 						if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_TASK_ENGAGE)
-						{	
+						{
 							valid_members |= member_number;
 						}
 					}
@@ -1698,15 +1699,15 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 	else
 	{
 		member = wingman;
-	
+
 		group = get_local_entity_parent (member, LIST_TYPE_MEMBER);
-		
+
 		set_client_server_entity_int_value (member, INT_TYPE_WEAPONS_HOLD, state);
 
 		//
 		// If setting weapons free, see if member should be assigned to existing engage tasks
 		//
-				
+
 		if (!state)
 		{
 			entity* target;
@@ -1731,7 +1732,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 				task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
 
 				ASSERT (task);
-						
+
 				if (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) != ENTITY_SUB_TYPE_TASK_ENGAGE)
 					valid_members |= member_number;
 			}
@@ -1749,7 +1750,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_WEAPONS_FREE, 0.6, 6.0);
 		}
 	}
-	
+
 	//
 	// re-assign "forgotten" engage tasks
 	//
@@ -1757,7 +1758,7 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 	if (valid_members)
 	{
 		ASSERT (group);
-		
+
 		assign_engage_tasks_to_group (group, valid_members);
 	}
 }
@@ -1840,7 +1841,7 @@ void process_message_rejoin_formation (entity *en, entity *wingman)
 		//
 		// Cancel Position Hold
 		//
-		
+
 		set_client_server_entity_int_value (wingman, INT_TYPE_POSITION_HOLD, FALSE);
 
 		//
@@ -2237,7 +2238,7 @@ void process_message_request_artillery (entity *en)
 				//
 				// Negative response speech... (group available but can't engage)
 				//
-			
+
 				play_client_server_speech
 				(
 					get_session_entity (),
@@ -2262,7 +2263,7 @@ void process_message_request_artillery (entity *en)
 			//
 			// Negative response speech... (no group available)
 			//
-		
+
 			play_client_server_speech
 			(
 				get_session_entity (),
@@ -2362,7 +2363,7 @@ void display_in_flight_incoming_messages (void)
 
 	if (command_line_disable_message_text)
 		return;
-	
+
 	//
 	// Don't display message if status message active
 	//
@@ -2502,11 +2503,11 @@ void pack_local_message_log (pack_modes mode)
 
 			pack_int_value (NULL, INT_TYPE_VALUE, num_packed_messages);
 			pack_int_value (NULL, INT_TYPE_VALUE, current_message);
-		
+
 			for (loop = 0; loop < num_packed_messages; loop ++)
 			{
 				index = (num_messages - loop) - 1;
-				
+
 				log = &message_log [index];
 
 				ASSERT (log);
@@ -2520,7 +2521,7 @@ void pack_local_message_log (pack_modes mode)
 				if (point_inside_map_volume (&(log->position)))
 				{
 					pack_int_value (NULL, INT_TYPE_VALID, TRUE);
-					
+
 					pack_vec3d (NULL, VEC3D_TYPE_POSITION, &(log->position));
 				}
 				else
@@ -2558,7 +2559,7 @@ void unpack_local_message_log (pack_modes mode)
 
 	static char
 		s [STRING_TYPE_MESSAGE_LENGTH + 4];
-		
+
    ASSERT ((mode >= 0) && (mode < NUM_PACK_MODES));
 
    switch (mode)
@@ -2577,27 +2578,28 @@ void unpack_local_message_log (pack_modes mode)
 			{
 				current_message = num_messages - 1;
 			}
-		
-			max_messages = num_messages; 
+
+			max_messages = num_messages;
 
 			if (max_messages > 0)
 			{
+				debug_log("*** allocating message_log");
 				message_log = malloc_heap_mem (sizeof (message_log_type) * max_messages);
-	
+
 				for (loop = 0; loop < num_messages; loop ++)
 				{
 					index = (num_messages - loop) - 1;
-				
+
 					log = &message_log [index];
-	
+
 					ASSERT (log);
-	
+
 					log->type = unpack_int_value (NULL, INT_TYPE_VALUE);
-	
+
 					log->day = unpack_int_value (NULL, INT_TYPE_DAY);
-	
+
 					log->time_of_day = unpack_float_value (NULL, FLOAT_TYPE_TIME_OF_DAY);
-	
+
 					if (unpack_int_value (NULL, INT_TYPE_VALID))
 					{
 						unpack_vec3d (NULL, VEC3D_TYPE_POSITION, &(log->position));
@@ -2608,18 +2610,18 @@ void unpack_local_message_log (pack_modes mode)
 						log->position.y = -1;
 						log->position.z = -1;
 					}
-	
+
 					log->colour.r = unpack_int_value (NULL, INT_TYPE_COLOUR_RED);
 					log->colour.g = unpack_int_value (NULL, INT_TYPE_COLOUR_GREEN);
 					log->colour.b = unpack_int_value (NULL, INT_TYPE_COLOUR_BLUE);
 					log->colour.a = 255;
-	
+
 					unpack_string (NULL, STRING_TYPE_PILOT_MESSAGE, s);
 
 					length = strlen (s);
 
 					ASSERT (length <= STRING_TYPE_MESSAGE_LENGTH);
-					
+
 					log->string = malloc_heap_mem (length + 4);
 
 					strcpy (log->string, s);
