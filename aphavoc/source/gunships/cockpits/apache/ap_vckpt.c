@@ -115,8 +115,8 @@ static float pnvs_heading;
 // crew position in first dimension, min/max limit in second
 static vec3d head_limits[2][2];
 
-//ataribaby 27/12/2008 for new head g-force movement	
-static float	
+//ataribaby 27/12/2008 for new head g-force movement
+static float
 	x_head_g_movement = 0.0,
   y_head_g_movement = 0.0,
   random_vibration_x = 0.0,
@@ -236,11 +236,33 @@ void initialise_apache_virtual_cockpit (void)
 
 	if (custom_3d_models.arneh_ah64d_cockpit)  // move instruments to where they are in this cockpit
 	{
+		object_3d_sub_object_index_numbers
+			index;
+
 		throttle_pitch_1 = 0;
 		throttle_pitch_2 = 0;
 
 		// co-pilot's helmet
 		initialise_co_pilot_head_animations();
+
+		virtual_cockpit_inst3d = virtual_cockpit_level1_inst3d;
+
+		// MFD view is too high for pilot in ees file, so move it down 5 cm
+		for (index = OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_LHS_1; index <= OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_RHS_1; index += (OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_RHS_1 - OBJECT_3D_SUB_OBJECT_COCKPIT_VIEW_MFD_LHS_1))
+		{
+			object_3d_sub_object_search_data
+				search;
+
+			search.search_depth = 0;
+			search.search_object = virtual_cockpit_inst3d;
+			search.sub_object_index = index;
+
+			if (find_object_3d_sub_object (&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
+				debug_fatal ("Failed to locate display viewpoint in virtual cockpit");
+
+			search.result_sub_object->relative_position.y -= 0.05;
+		}
+
 	}
 
 #if DEBUG_MODULE
@@ -801,16 +823,16 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
 			head_object->relative_position.y -= current_custom_cockpit_viewpoint.y;
 			head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
 		}
-		
+
 		//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
 		if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
     {
-      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
       random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
     }
     x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-    
+
     head_object->relative_position.x -= x_head_g_movement;
 		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
 		head_object->relative_position.y -= y_head_g_movement;
