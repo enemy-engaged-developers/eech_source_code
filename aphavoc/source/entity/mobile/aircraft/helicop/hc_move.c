@@ -135,6 +135,7 @@ static void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_
 void helicopter_movement (entity *en)
 {
 	entity
+		*wp,
 		*guide,
 		*group,
 		*member;
@@ -200,6 +201,8 @@ void helicopter_movement (entity *en)
 		return;
 	}
 
+	wp = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
+
 	//
 	//
 	//
@@ -224,7 +227,31 @@ void helicopter_movement (entity *en)
 	wp_vec.z = wp_pos.z - hc_pos->z;
 
 	// calcualte max_vel
-	max_vel = aircraft_database [raw->ac.mob.sub_type].cruise_velocity * ((2.0 * range_scaler) - (range_scaler * range_scaler));
+	max_vel = aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
+
+	switch (get_local_entity_int_value(wp, INT_TYPE_ENTITY_SUB_TYPE))
+	{
+	case ENTITY_SUB_TYPE_WAYPOINT_NAVIGATION:
+	case ENTITY_SUB_TYPE_WAYPOINT_CAP_LOOP:
+	case ENTITY_SUB_TYPE_WAYPOINT_CAP_START:
+		break;
+	case ENTITY_SUB_TYPE_WAYPOINT_HOLDING:
+	case ENTITY_SUB_TYPE_WAYPOINT_HOLDING_LOOP:
+	case ENTITY_SUB_TYPE_WAYPOINT_TAXI:
+		max_vel = min(max_vel * ((2.0 * range_scaler) - (range_scaler * range_scaler)), 15.0);
+		max_vel = 15.0;
+		break;
+	default:
+		max_vel *= ((2.0 * range_scaler) - (range_scaler * range_scaler));
+		break;
+	}
+
+	if (en == get_external_view_entity())
+	{
+
+		waypoint* raw = get_local_entity_data (wp);
+		debug_log("wp: %c, type: %s, max_vel: %.2f, range: %.0f", raw->tag, get_sub_type_name(wp), knots(max_vel), range);
+	}
 
 	// bound speeds to something realistic
 	max_x_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
@@ -1374,9 +1401,7 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 		//
 
 		pitch = -(HELICOPTER_MAX_PITCH * min ((model_motion_vector->z / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY)), 1.0));
-    
-    pitch *= 1.3; //ataribaby 4/1/2009 add more forward flight pitch to AI controled helis to look more real
-    
+
 		// reduce pitch if climbing, upto 0 pitch
 		pitch = min (pitch + HELICOPTER_MAX_PITCH * bound (((fabs (model_motion_vector->y) * G) / aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].g_max), -1.0, 1.0), 0.0);
 
@@ -1392,7 +1417,7 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 
 		pitch += get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_SHAFT_ANGLE);
 	}
-  
+
 	return pitch;
 }
 
