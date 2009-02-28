@@ -71,17 +71,17 @@
 // razorworks\cohokum\graphics\textures\terrain
 // then according to the warzone (map1-map10)
 // the file texturedirs.txt is read and any directory names in it, e.g. if "alaska" is found
-// the directory razorworks\cohokum\graphics\textures\alaska is searched and
+// the directory razorworks\cohokum\graphics\textures\alaska is searched and 
 // the textures are put into the list. If a texture name already exists it is overwritten, so that the
 // last occurence i the one used.
-// Last if the eech.ini option "texture_colour=1" is set, the terrain textures specific to
+// Last if the eech.ini option "texture_colour=1" is set, the terrain textures specific to 
 // the warzones are read, of map1-map6 only (the others have only one texture)
 
 
 // a list of pointers is stored in these structures
 //    *backup_system_textures[MAX_TEXTURES];
 //    backup_system_texture_info[MAX_TEXTURES];
-// in flight.c the warzone specific textures are loaded and
+// in flight.c the warzone specific textures are loaded and 
 // in flight.c the default textures are restored after the flight
 // warzone textures are created and destroyed, the default custom textures are created but never destroyed.
 //
@@ -501,6 +501,7 @@ void release_system_textures ( void )
 
 int get_system_texture_index ( const char *name )
 {
+
 	int
 		hash,
 		hash_index;
@@ -524,7 +525,7 @@ int get_system_texture_index ( const char *name )
 		camo = 1;
 	}
 
-	hash = get_hash ( name );
+	hash = get_hash(name);
 	hash_index = hash & 0xff;
 
 	entry = system_texture_name_hash_table[hash_index];
@@ -534,11 +535,13 @@ int get_system_texture_index ( const char *name )
 		if (entry->hash == hash &&
 			stricmp ( system_texture_names[entry->texture_index], name ) == 0 &&
 			camo == system_texture_info[entry->texture_index].flags.camoflage_texture )
-		{
-			return ( entry->texture_index );
-		}
+			{
+
+				return ( entry->texture_index );
+			}
 		else
 		{
+
 			entry = entry->succ;
 		}
 	}
@@ -666,7 +669,7 @@ BOOL load_texturemap_data ( const char *path )
 
 			strupr ( system_texture_names[count] );
 
-			add_texture_to_name_hash ( count );
+			add_texture_to_name_hash(count);
 
 			if ( flags.reserved_texture )
 			{
@@ -3389,21 +3392,21 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 			 	if (!is_terrain_directory)
 			 	{
 					const char *this_entry = get_directory_file_filename ( directory_listing );
-
+	
 					if (*this_entry == '.')
 					{
 						valid_file = get_next_directory_file ( directory_listing );
 						continue;
 					}
-
+					
 					snprintf(filename, sizeof(filename), "%s\\%s", mapname, this_entry);
-
+	
 					strupr(filename);
-
+	
 					#if DEBUG_MODULE
 					debug_log("Entering directory %s", filename);
 					#endif
-
+	
 					initialize_texture_override_names(system_texture_override_names, filename);
 			 	}
 			}
@@ -4291,6 +4294,8 @@ void initialise_custom_map_info( void )
 
 	current_map_info.dry_river = 0;
 
+	current_map_info.gouraud_shading = 0; // Craig Feb. 2009
+
 	current_map_info.last_texture = number_of_system_textures;
 
 	for (i = 0; i < 3; i++){
@@ -4448,6 +4453,17 @@ void read_map_info_data ( void )
 
 			fscanf(fin,"%[^\n]\n",buf);
 		}
+
+		// Craig start Feb. 2009
+		if (strstr(buf, "gouraud_shading"))
+		{
+			p = strtok(buf,"=");
+			p = strtok(NULL,"#");
+			if (p)
+				current_map_info.gouraud_shading = atoi(p);
+			debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: gouraud_shading: %d",	current_map_info.gouraud_shading);
+		}
+		// Craig end
 
 		fclose(fin);
 	}

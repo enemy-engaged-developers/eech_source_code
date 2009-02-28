@@ -501,7 +501,18 @@ int load_3d_terrain ( const char *path )
 			offset = get_list_item ( terrain_3d_local_data, int );
 			
 			terrain_sectors[z][x].point_colours = ( terrain_3d_colour * ) ( terrain_3d_colour_data + offset );
-			if (command_line_texture_colour)
+
+  // Craig start Feb. 2009
+			////////////////////////////////////////////////////////////////////////////////////////
+			// Changed the above if() to this so gouraud shading can be used as was originally
+			// designed by Razorworks and still be able to use all the work VJ (Gotcha)
+			// did on the external textures.
+			// The gouraud_shading variable is set in mapinfo.txt, if the field exists,
+			// and is set to the default zero if the field doesn't exist as in the existing
+			// mapinfo.txt files  -  Craig
+			////////////////////////////////////////////////////////////////////////////////////////
+
+			if (command_line_texture_colour && !current_map_info.gouraud_shading)
 			{
 				// the colour is mixed with the textures' colours.  
 				// This will however darken the texture substantially, so disable it
@@ -511,7 +522,8 @@ int load_3d_terrain ( const char *path )
 				if (terrain_sectors[z][x].number_of_points < ARRAY_LENGTH(white_col))
 					terrain_sectors[z][x].point_colours = white_col;
 			}
-
+			
+// Craig end
 			//
 			// Set the approximation to off
 			//

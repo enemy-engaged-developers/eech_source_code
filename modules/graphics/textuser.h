@@ -131,6 +131,10 @@ struct CUSTOM_MAP_INFO
 	int 
 		dry_river;  
 
+	// for using gouraud shading on the terrain with the colors in default.rgb // Craig
+	int
+		gouraud_shading;
+
 	//contour heigths 9 intervals
 	int
 		user_defined_contour_heights;
