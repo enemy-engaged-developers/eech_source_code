@@ -152,10 +152,13 @@ int
 	command_line_player_start_rank							= PILOT_RANK_LIEUTENANT,
 	command_line_3d_visual_screen_width						= 640,
 	command_line_3d_visual_screen_height					= 480,
+	command_line_3d_reset									= FALSE,
+	command_line_force_resolution							= FALSE,
 	command_line_3d_visual_clear_edges						= FALSE,
 	command_line_cpu_blit_textures							= FALSE,
 	command_line_d3d_use_texture_management				= FALSE, //VJ 030511 changed to FALSE, was TRUE,
 	command_line_no_hardware_tnl								= TRUE,
+	command_line_no_dx9zbuffer_fix							= FALSE,
 	command_line_no_render_to_texture						= FALSE,
 	command_line_display_bpp									= 16,
 	command_line_persistent_smoke								= TRUE,
@@ -172,7 +175,7 @@ int
 	command_line_eo_pan_horizontal_joystick_axis			= 8,		// loke 030319
 	command_line_eo_zoom_joystick_index						= -1,		// loke 030319
 	command_line_eo_zoom_joystick_axis						= 7,		// loke 030319
-	command_line_field_of_view_joystick_index               = -1,	
+	command_line_field_of_view_joystick_index               = -1,
 	command_line_field_of_view_joystick_axis                = 4,
 	command_line_ground_radar_ignores_infantry			= 1,		// loke 030322
 	command_line_ground_stabilisation_available			= 1,		// loke 030322
@@ -228,11 +231,11 @@ int
 	command_line_3d_cockpit							= 0,	// VJ 050101 3d cockpit mod
 	command_line_shared_mem_export					= 0,	// Retro 14Aug2006
 	global_aphavoc_maps								= 0,	// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
-	global_hud_alpha									= 0,  // VJ 050126 hud mod: background 
+	global_hud_alpha									= 0,  // VJ 050126 hud mod: background
 	global_mipmapping									= 0,  //VJ 050530 mipmapping on/off
 	global_anisotropic								= 0,	//VJ 050530 AF on/off
 	global_PNVS_level									= 0,  // VJ 050704 light setting for PNVS
-	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures	
+	global_dynamic_water								= 0,  // VJ 050817 dynamic water textures
 	global_tsd_detail                   = 0,  //VJ 061213 toggle TSD colour grid detail level
 	command_line_disable_message_text  = FALSE,
 //VJ 060120 OBSOLETE	global_zbuffer										= 0,	//VJ 051011 zbuffer correction //VJ 060120 OBSOLETE
@@ -254,7 +257,7 @@ int
 	command_line_export_mfd_left_pos[4]				={0,0,256,256},
 	command_line_export_mfd_right_pos[4]				={384,0,640,256},
 	command_line_export_mfd_single_pos[4]				={0,0,256,256},
-	command_line_ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds 
+	command_line_ui_sounds_muted = FALSE; //ataribaby 29/12/2008 for muted UI sounds
 
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
@@ -281,7 +284,7 @@ float
 	command_line_g_force_head_movment_modifier					= 0.0,
 	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0,	// VJ 050126 hud mod: size
-  command_line_external_sounds_volume			= 1.0; //ataribaby 28/12/2008 volume for external sounds when in cockpit  
+  command_line_external_sounds_volume			= 1.0; //ataribaby 28/12/2008 volume for external sounds when in cockpit
 
 char
 	command_line_themes[128] = "", // Casm 21DEC07
@@ -472,6 +475,14 @@ void process_command_line (int argc, char *argv[])
 			set_global_3d_visual_screen_height (480.0);
 
 			debug_log ("ARG:%s", s1);
+
+			command_line_3d_reset = TRUE;
+		}
+		////////////////////////////////////////
+		else if ((s2 = strarg (s1, "force_resolution")))
+		////////////////////////////////////////
+		{
+			command_line_force_resolution = TRUE;
 		}
 		////////////////////////////////////////
 		else if ((s2 = strarg (s1, "version_number")) || (s2 = strarg (s1, "vn")))
@@ -1991,7 +2002,7 @@ void process_command_line (int argc, char *argv[])
 			{
 				sscanf (s2 + 1, "%d", &command_line_unpadlock_on_handover);
 			}
-		}	
+		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "pilot_as_periscope_default"))		// GCsDriver 08-12-2007
 		////////////////////////////////////////
@@ -2027,7 +2038,7 @@ void process_command_line (int argc, char *argv[])
 			{
 				sscanf (s2 + 1, "%d", &command_line_render_tree_shadows);
 			}
-		}				
+		}
 		////////////////////////////////////////
 		else if (s2 = strarg (s1, "high_res_mfd"))		// loke 030420
 		////////////////////////////////////////

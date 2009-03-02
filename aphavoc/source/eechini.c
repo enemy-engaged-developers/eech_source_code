@@ -433,6 +433,7 @@ void process_ini_file(int argc, char *argv[])
 
 		if (strcmp(p, "nrt")==0)  	command_line_no_render_to_texture = d1;
 		if (strcmp(p, "notnl")==0) 	command_line_no_hardware_tnl = d1;
+		if (strcmp(p, "nodx9zbufferfix")==0)  command_line_no_dx9zbuffer_fix = d1;
 		if (strcmp(p, "3dreset")==0)
 		{
 			if (d1 == 1)
@@ -726,6 +727,7 @@ void dump_ini_file(void)
 	fprintf(f,"32bit=%d			# 32-bit rendering (0 = off, 1 = on) (def = 1)\n", command_line_display_bpp != 16);
 	fprintf(f,"nrt=%d			# rendering to texture (0 = enabled, 1 = disabled) (def = 0) (disable in case of visual problems with MFDs or TADS)\n",command_line_no_render_to_texture);
 	fprintf(f,"notnl=%d			# GeForce \"TnL\" support (0 = enabled, 1 = disabled) (def = 0)\n",command_line_no_hardware_tnl);
+	fprintf(f,"nodx9zbufferfix=%d   # Disable the dx9 zbuffer fix introduced in 1.11.1.  In case it causes graphical problems\n", command_line_no_dx9zbuffer_fix);
 	fprintf(f,"3dreset=0		# reset screen resolution to 640x480 (0 = off, 1 = on) (def = 0)\n");
 	fprintf(f,"dxtm=%d			# DirectX texture management (should fix \"unable to allocate hardware slot\" error) (0 = off, 1 = on) (def = 0)\n",command_line_d3d_use_texture_management);
 	fprintf(f,"cg=0			# (clean graphics) re-installs graphics files (0 = off, 1 = on) (def = 0)\n");
@@ -880,7 +882,7 @@ void dump_ini_file(void)
   fprintf(f,"\n[Sounds]\n");
   //ataribaby 28/12/2008 volume for external sounds when in cockpit
   fprintf(f, "external_sounds_volume=%.1f			# volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)\n", command_line_external_sounds_volume);
-  //ataribaby 29/12/2008 for muted UI sounds 
+  //ataribaby 29/12/2008 for muted UI sounds
   fprintf(f, "ui_sounds_muted=%d			# campaign UI mute (0 = normal UI sounds, 1 = UI sounds muted) (default = 0)\n", command_line_ui_sounds_muted);
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d				# key mapping (0 = off, 1 = on) (def = 0)\n",command_line_key_mapping);

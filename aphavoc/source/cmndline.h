@@ -128,10 +128,13 @@ extern int
 	command_line_player_start_rank,
 	command_line_3d_visual_screen_width,
 	command_line_3d_visual_screen_height,
+	command_line_3d_reset,
+	command_line_force_resolution,
 	command_line_3d_visual_clear_edges,
 	command_line_cpu_blit_textures,
 	command_line_d3d_use_texture_management,
 	command_line_no_hardware_tnl,
+	command_line_no_dx9zbuffer_fix,
 	command_line_no_render_to_texture,
 	command_line_display_bpp,
 	command_line_persistent_smoke,								// arneh 2007-07-10
@@ -148,8 +151,8 @@ extern int
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
 	command_line_eo_zoom_joystick_index,					// loke 030319
 	command_line_eo_zoom_joystick_axis,						// loke 030319
-	command_line_field_of_view_joystick_index,	
-	command_line_field_of_view_joystick_axis,	
+	command_line_field_of_view_joystick_index,
+	command_line_field_of_view_joystick_axis,
 	command_line_ground_radar_ignores_infantry,			// loke 030322
 	command_line_ground_stabilisation_available,			// loke 030322
 	command_line_manual_laser_radar,						// arneh 2006-11-06
@@ -204,10 +207,10 @@ extern int
 	command_line_3d_cockpit,								//VJ 050101 3d cpckpit mod
 	command_line_shared_mem_export,								// Retro 14Aug2006
 	global_aphavoc_maps,									// VJ 050123 aphavoc install hack, NOT A COMMAND LINE VARIABLE BUT GLOBAL BOOL
-	global_hud_alpha, 									// VJ 050126 hud mod: background 
+	global_hud_alpha, 									// VJ 050126 hud mod: background
 	command_line_texture_colour, 						//VJ 050303 texture mod using the colours of the terrain texture bitmaps directly
 	global_mipmapping,  										//VJ 050530 mipmapping on/off
-	global_anisotropic,										//VJ 050530 AF on/off	
+	global_anisotropic,										//VJ 050530 AF on/off
 	global_PNVS_level, 									 // VJ 050704 light setting for PNVS
 	global_dynamic_water,  								//VJ 050817 dynamic water textures
 	global_tsd_detail,                   //VJ 061213 toggle TSD colour grid detail level
@@ -229,7 +232,7 @@ extern int
 	command_line_export_mfd_right_pos[4],
 	command_line_export_mfd_left_pos[4],
 	command_line_export_mfd_single_pos[4],
-  command_line_ui_sounds_muted; //ataribaby 29/12/2008 for muted UI sounds 
+  command_line_ui_sounds_muted; //ataribaby 29/12/2008 for muted UI sounds
 
 extern float
 	command_line_dynamics_retreating_blade_stall_effect,
@@ -255,7 +258,7 @@ extern float
 	command_line_smoke_effectiveness,
 	command_line_g_force_head_movment_modifier,
 	global_night_light_level, //VJ 060920 night light levels (0-1)
-	global_hud_size2, // VJ 050126 hud mod: size 	
+	global_hud_size2, // VJ 050126 hud mod: size
 	command_line_external_sounds_volume; //ataribaby 28/12/2008 volume for external sounds when in cockpit
 
 extern char

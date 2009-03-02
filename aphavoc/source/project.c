@@ -377,7 +377,7 @@ void application_main (int argc, char **argv)
 
 		get_ddraw_device_guid ( &this_graphics_device );
 
-		if ( memcmp ( &this_graphics_device, &global_options.graphics_card_device_identifier, sizeof ( GUID ) ) != 0 )
+		if (command_line_3d_reset || memcmp ( &this_graphics_device, &global_options.graphics_card_device_identifier, sizeof ( GUID ) ) != 0 )
 		{
 
 			if ( assess_graphic_device_resolutions () )
