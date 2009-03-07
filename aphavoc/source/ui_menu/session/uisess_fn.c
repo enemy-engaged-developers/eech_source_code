@@ -587,6 +587,12 @@ void session_list_function (ui_object *obj, void *arg)
 	  		
 	  		session_list_rescan_function (NULL, NULL); //Jabberwock
 
+			{
+				ui_object
+					*slider;
+				slider = get_ui_object_vslider (session_list_area);
+				set_ui_object_vslider_virtual_position (slider, 0.0);
+			}
 	  		break;
 	  }
 
