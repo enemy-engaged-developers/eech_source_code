@@ -262,7 +262,7 @@ unsigned char
 #define BITMAP_ID		(0x4D42)
 
 enum FILE_TYPE {
-	TYPE_INVALID,
+	TYPE_ORIGINAL,
 	TYPE_BMP,
 	TYPE_DDS,
 };
@@ -332,8 +332,7 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 //VJ 050814 cleaned up differences between dds and bmp download
 static int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
 static int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
-static void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES]);
-static void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES]);
+void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES]);
 static void clear_texture_override_names ( void );
 static screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
 static screen *load_bmp_file_screen (const char *full_override_texture_filename);
@@ -351,6 +350,7 @@ void set_texture_camoflage ( int set )
 	int
 		count;
 
+#ifdef DEBUG
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
 
@@ -381,6 +381,7 @@ void set_texture_camoflage ( int set )
 			}
 		}
 	}
+#endif
 
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
@@ -508,6 +509,8 @@ int get_system_texture_index ( const char *name )
 
 	texture_name_hash_entry
 		*entry;
+	int
+		length = strlen ( name );
 	char
 		real_name[256];
 	int
@@ -515,33 +518,32 @@ int get_system_texture_index ( const char *name )
 	int
 		camo;
 
+	memcpy ( real_name, name, length + 1 );
+	strupr ( real_name );
+
 	camo = 0;
-	offset = strlen ( name ) - sizeof ( DESERTIND_2 ) + 1;
-	if ( offset > 0 && !strcmp ( name + offset, DESERTIND_2 ) )
+	offset = length - ( int ) sizeof ( DESERTIND_2 ) + 1;
+	if ( offset > 0 && !memcmp ( real_name + offset, DESERTIND_2, sizeof ( DESERTIND_2 ) ) )
 	{
-		strncpy ( real_name, name, offset );
 		real_name[offset] = 0;
-		name = real_name;
 		camo = 1;
 	}
 
-	hash = get_hash(name);
+	hash = get_hash ( real_name );
 	hash_index = hash & 0xff;
 
 	entry = system_texture_name_hash_table[hash_index];
 
 	while ( entry )
 	{
-		if (entry->hash == hash &&
-			stricmp ( system_texture_names[entry->texture_index], name ) == 0 &&
+		if ( entry->hash == hash &&
+			!strcmp ( system_texture_names[entry->texture_index], real_name ) &&
 			camo == system_texture_info[entry->texture_index].flags.camoflage_texture )
-			{
-
-				return ( entry->texture_index );
-			}
+		{
+			return ( entry->texture_index );
+		}
 		else
 		{
-
 			entry = entry->succ;
 		}
 	}
@@ -630,6 +632,7 @@ BOOL load_texturemap_data ( const char *path )
 	create_internal_texture_palettes ();
 
 	fread ( &number_of_system_textures, 4, 1, fp );
+	ASSERT ( number_of_system_textures == TEXTURE_INDEX_LAST_DEFAULT_INDEX + 1 );
 
 	debug_log ( "Reading in %d textures", number_of_system_textures );
 
@@ -2358,7 +2361,7 @@ int match_system_texture_name ( const char *name )
 		*ptr;
 
 	int
-		count, special_camo = 0;
+		index, special_camo = 0;
 
 	ptr = real_name;
 	// convert to uppercase and strip filename extention
@@ -2366,7 +2369,7 @@ int match_system_texture_name ( const char *name )
 	{
 		*ptr++ = toupper ( *name++ );
 	}
-	*ptr++ = '\0';
+	*ptr = '\0';
 
 
 	//VJ 04/12/12 if textimpex name then delete -BIN-etc	24bit
@@ -2381,56 +2384,52 @@ int match_system_texture_name ( const char *name )
 		*p = '\0';
 	}
 
-//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
-	if (strstr(real_name, "BREEZE_BLOCKS_DESERT_CAMO"))
+	switch ( get_global_season() )
 	{
-		// this is the only name with _DESERT_ inside its name, must be an overview
-		// treat as an exception
-		 return (385);
-	}
-else
-	if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_1)))
-	{
-		//check for _DESERT
-		*p = '\0';
-		special_camo = 1;
-	}
-	else
-	if (get_global_season() == SESSION_SEASON_DESERT && (p = strstr(real_name, DESERTIND_2)))
-	{
-		//check for -D
-		*p = '\0';
-		special_camo = 1;
-	}
-	else
-//VJ 051011 add winter textures
-	if (get_global_season() == SESSION_SEASON_WINTER && (p = strstr(real_name, DESERTIND_3)))
-	{
-		//check for -W
-		*p = '\0';
-		special_camo = 0;
-	}
-
-	for ( count = 0; count < number_of_system_textures; count++ )
-	{
-		if ( strcmp ( system_texture_names[count], real_name ) == 0 )
+		case SESSION_SEASON_DESERT:
 		{
-			system_textures_referenced[count] = TRUE;
-
-
-		//arneh 070121 - reverted this fix as it caused completly white units in some campaigns
-		//VJ 061230 if the original name does not have _DESERT then do not increase camo
-		// not all textures have a desert version of course so assuming that messes up the texture numbers!
-		//OLD bug ;)
-//			if (special_camo == 1 && !strstr(system_texture_names[count], "_DESERT"))
-//				 special_camo = 0;
-
-			return ( count + special_camo );
+			//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
+			if ((p = strstr(real_name, DESERTIND_2)))
+			{
+				//check for -D
+				*p = '\0';
+				special_camo = 1;
+			}
+			else if ((p = strstr(real_name, DESERTIND_1)))
+			{
+				//check for _DESERT
+				if (strstr(real_name, "BREEZE_BLOCKS_DESERT_CAMO"))
+				{
+					// this is the only name with _DESERT_ inside its name, must be an overview
+					// treat as an exception
+					 return (385);
+				}
+				*p = '\0';
+				special_camo = 1;
+			}
+			break;
+		}
+		case SESSION_SEASON_WINTER:
+		{
+			//VJ 051011 add winter textures
+			if ((p = strstr(real_name, DESERTIND_3)))
+			{
+				//check for -W
+				*p = '\0';
+				special_camo = 0;
+			}
+			break;
 		}
 	}
 
-	// if no solution return 0
-	return ( 0 );
+	index = get_system_texture_index ( real_name );
+	if ( index < 0 )
+	{
+		return -1;
+	}
+
+	system_textures_referenced[index] = TRUE;
+	return index + special_camo;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3295,63 +3294,11 @@ void clear_texture_override_names ( void )
 	for ( count = 0; count < MAX_TEXTURES; count++ ){
 		system_texture_override_names[count].name[0] = '\0';
 		system_texture_override_names[count].path[0] = '\0';
-		system_texture_override_names[count].type = TYPE_INVALID;
+		system_texture_override_names[count].type = TYPE_ORIGINAL;
 		system_texture_override_names[count].camo = CAMO_REGULAR;
 	}
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//VJ 050618 load the bmp files, assumed not mipmapped
-void load_texture_override_bmp ( overridename system_texture_override_names[MAX_TEXTURES])
-{
-	const char
-		*full_override_texture_filename;//[128];
-	int
-		count;
-	screen
-		*override_screen;
-
-	// Now that all the screens are loaded we check to see if there is are any overrides
-	for( count=0; count < number_of_system_textures; count++ )
-	{
-		if (count >= TEXTURE_INDEX_LAST &&
-			// need to provide all these textures ourselves
-			system_texture_override_names[count].type == TYPE_INVALID)
-		{
-			debug_fatal("Missing texture (%d): %s", count, get_system_texture_name(count));
-		}
-
-		// if flagged as bmp file
-		if( system_texture_override_names[count].type == 1)
-		{
-
-			full_override_texture_filename = system_texture_override_names[count].path;
-
-#if DEBUG_MODULE
-			debug_log ("++OVERRIDES++ found file %s",full_override_texture_filename);
-#endif
-
-			override_screen = load_bmp_file_screen(full_override_texture_filename);
-
-			// now we set the pointer in the system textxures array to point to this
-			// screen rather than the original screen
-			//VJ 050821 check if it worked
-			if (override_screen) {
-				set_system_texture_screen (override_screen, count);
-
-				//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
-				system_texture_info[count].texture_screen = override_screen;
-			}else{
-				//not done, reset flag
-				system_texture_override_names[count].type = 0;
-			}
-		}   // if text type = 1
-	}	//count maxtextures
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3413,7 +3360,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 			else if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
 			{
 				const char* extension;
-				file_type type = TYPE_INVALID;
+				file_type type = TYPE_ORIGINAL;
 
 				strcpy(filename, get_directory_file_filename ( directory_listing ));
 				strupr(filename);
@@ -3439,7 +3386,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 
 				retrieved_index = match_system_texture_name ( filename );
 
-				if (retrieved_index > 0 && retrieved_index < MAX_TEXTURES){
+				if (retrieved_index >= 0 && retrieved_index < MAX_TEXTURES){
 					index = retrieved_index;
 
 //VJ 051011 add winter textures ==>
@@ -3602,10 +3549,8 @@ void load_warzone_override_textures ()
 	//now we have all the names, load the bmp and dds files
 
 	//VJ 050530 read single bmp files
-	load_texture_override_bmp ( system_texture_override_names );
-
 	//VJ 050530 read mipmapped dds files
-	load_texture_override_dds ( system_texture_override_names );
+	load_texture_override ( system_texture_override_names );
 
 	//VJ 050820 dynamic water
 	if (global_dynamic_water)
@@ -3627,7 +3572,7 @@ void restore_default_textures ( void )
 	command_line_texture_colour = texture_colour_bak;
 
 	for (count = 0; count < MAX_TEXTURES; count++)
-	if (system_texture_override_names[count].type > 0)
+	if ( system_texture_override_names[count].type != TYPE_ORIGINAL )
 	{
 
 #if DEBUG_MODULE
@@ -3780,46 +3725,64 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_texture_override_dds ( overridename system_texture_override_names[MAX_TEXTURES])
+void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES])
 {
 	const char
-		*full_override_texture_filename;//[128];
+		*full_override_texture_filename;
 
 	int
 		count;
 
-	//static
-	screen
-		*override_screen;
-
 	// Now that all the screens are loaded we check to see if there is are any overrides
-	for( count=0; count < MAX_TEXTURES; count++ )
+	for ( count = 0; count < MAX_TEXTURES; count++ )
 	{
+		screen
+			*override_screen = NULL;
 
-		//flagged as dds file
-		if(system_texture_override_names[count].type == 2)
+		full_override_texture_filename = system_texture_override_names[count].path;
+		switch ( system_texture_override_names[count].type )
 		{
-			full_override_texture_filename = system_texture_override_names[count].path;
-
-			//debug_log ("++OVERRIDES++ found dds file %s",full_override_texture_filename);
-
-			override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
-
-			//VJ 050821 check if it worked
-			if (override_screen) {
-				// adjust alpha bit if user screen contains alpha
-				if (override_screen->contains_alpha)
-					system_texture_info[count].flags.contains_alpha = 1;
-
-				// now we set the pointer in the system textxures array to point to this
-				// screen rather than the original screen
-				system_textures[count] = override_screen;
-				//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
-				system_texture_info[count].texture_screen = override_screen;
-			}else{
-				//not done, reset flag
-				system_texture_override_names[count].type = 0;
+			case TYPE_BMP:
+			{
+#if DEBUG_MODULE
+				debug_log ("++OVERRIDES++ found bmp file %s", full_override_texture_filename);
+#endif
+				override_screen = load_bmp_file_screen(full_override_texture_filename);
+				break;
 			}
+			case TYPE_DDS:
+			{
+#if DEBUG_MODULE
+				debug_log ("++OVERRIDES++ found dds file %s", full_override_texture_filename);
+#endif
+				override_screen = load_dds_file_screen(full_override_texture_filename, 0, texture_gamma_correction(count));
+				break;
+			}
+			default:
+			{
+				// need to provide all these textures ourselves
+				if ( count >= TEXTURE_INDEX_LAST && count < number_of_system_textures )
+				{
+					debug_fatal ( "Missing texture (%d): %s", count, get_system_texture_name ( count ) );
+				}
+				break;
+			}
+		}
+		//VJ 050821 check if it worked
+		if (override_screen)
+		{
+			// now we set the pointer in the system textxures array to point to this
+			// screen rather than the original screen
+			system_textures[count] = override_screen;
+			//VJ 04/12/12 add the sreen also to this array because the function set_texture_camoflage uses it and it is called after this stuff
+			system_texture_info[count].texture_screen = override_screen;
+			// adjust alpha bit
+			system_texture_info[count].flags.contains_alpha = override_screen->contains_alpha;
+		}
+		else
+		{
+			//not done, reset flag
+			system_texture_override_names[count].type = TYPE_ORIGINAL;
 		}
 	}
 }
@@ -3974,13 +3937,20 @@ void load_texture_water( void )
 
 			rivernr++;
 
-			if (current_map_info.water_info[i].type == 1){
+			switch ( current_map_info.water_info[i].type )
+			{
+			case TYPE_BMP:
+			{
 				sprintf(filename,"%s\\%s\\%s.bmp", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
 				override_screen = load_bmp_file_screen(filename);
+				break;
 			}
-			if (current_map_info.water_info[i].type == 2){
+			case TYPE_DDS:
+			{
 				sprintf(filename,"%s\\%s\\%s.dds", TEXTURE_OVERRIDE_DIRECTORY,TEXTURE_OVERRIDE_DIRECTORY_WATER,system_texture_names[count] );
 				override_screen = load_dds_file_screen(filename, current_map_info.water_info[i].alpha, 1.0);
+				break;
+			}
 			}
 
 			if (override_screen) {
@@ -4305,7 +4275,7 @@ void initialise_custom_map_info( void )
 		current_map_info.water_info[i].scale_top = 0;
 		current_map_info.water_info[i].scale_bottom = 0;
 		current_map_info.water_info[i].alpha = 0;
-		current_map_info.water_info[i].type = 0;
+		current_map_info.water_info[i].type = TYPE_ORIGINAL;
 		current_map_info.water_info[i].placenr = 0;
 		current_map_info.water_info[i].name_top[0] = '\0';
 		current_map_info.water_info[i].name_bottom[0] = '\0';
@@ -4520,6 +4490,8 @@ int add_new_texture(char* texture_name)
 	system_texture_names[number_of_system_textures][127] = '\0';
 
 	strupr ( system_texture_names[number_of_system_textures] );
+
+	debug_log ( "Adding texture '%s'", system_texture_names[number_of_system_textures] );
 
 	add_texture_to_name_hash(number_of_system_textures);
 
