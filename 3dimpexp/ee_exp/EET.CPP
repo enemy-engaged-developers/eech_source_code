@@ -30,7 +30,8 @@ class EET
  unsigned Append(const char* name);
  void Clear(void);
  unsigned long GetIndex(LWO_File& lwofile, unsigned textindex, bool animation);
- const char* GetAnimation(unsigned textindex);
+ const char* GetAnimation(unsigned textindex) const;
+ void ExportAnimations(void) const;
 };
 
 EET::EET(char drive, const char* ext)
@@ -126,7 +127,7 @@ unsigned long EET::GetIndex(LWO_File& lwofile, unsigned textindex, bool animatio
  return 0;
 }
 
-const char* EET::GetAnimation(unsigned textindex)
+const char* EET::GetAnimation(unsigned textindex) const
 {
  return textindex < !animations ? animations[textindex].name : 0;
 }
@@ -138,4 +139,18 @@ unsigned EET::Append(const char* name)
  strcpy(texture.name, name);
  textures.Append(texture);
  return !textures - 1;
+}
+
+void EET::ExportAnimations(void) const
+{
+ for (unsigned i = 0; i < !animations; i++)
+  {
+   const Animation& animation = animations[i];
+   char filename[128];
+   sprintf(filename, "_OBJECTS\\%04X_%s.TXT", i, animation.name);
+   FILE* file = safe_fopen(filename, "w");
+   for (unsigned j = 0; j < !animation.animation; j++)
+    fprintf(file, "%s\n", textures[animation.animation[j]].name);
+   fclose(file);
+  }
 }

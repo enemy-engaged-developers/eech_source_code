@@ -36,6 +36,8 @@ int main(void)
 
  mkdir("_OBJECTS");
 
+ eet.ExportAnimations();
+
  for (int i = 1; i <= objects.GetNumberOfObjects(); i++)
   {
    const OBJECT_3D& obj = objects.GetObject(i);
