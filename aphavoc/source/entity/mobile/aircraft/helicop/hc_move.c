@@ -246,15 +246,6 @@ void helicopter_movement (entity *en)
 		break;
 	}
 
-#ifdef DEBUG
-	if (en == get_external_view_entity())
-	{
-
-		waypoint* raw = get_local_entity_data (wp);
-		debug_log("wp: %c, type: %s, max_vel: %.2f, range: %.0f", raw->tag, get_sub_type_name(wp), knots(max_vel), range);
-	}
-#endif
-
 	// bound speeds to something realistic
 	max_x_vel = 0.2 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
 	max_y_vel = 0.1 * aircraft_database [raw->ac.mob.sub_type].cruise_velocity;
