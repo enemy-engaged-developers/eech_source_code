@@ -579,6 +579,8 @@ static char
 		0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
 	};
 
+static mfd_modes get_mfd_mode_for_eo_sensor (void);
+
 static char
 	large_display_moving_target_symbol[] =
 	{
@@ -12156,7 +12158,7 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static mfd_modes get_mfd_mode_for_eo_sensor (void)
+mfd_modes get_mfd_mode_for_eo_sensor (void)
 {
 	mfd_modes
 		mfd_mode;
