@@ -4579,7 +4579,7 @@ void map_draw_grid (ui_object *obj)
 
 	char
 		scale_text [32],
-		grid_number [10];
+		grid_number [10] = "";
 
 	float
 		wxmin,
@@ -4732,15 +4732,15 @@ void map_draw_grid (ui_object *obj)
 		}
 
 		pos1.x = wxmax;
+		pos1.x = wxmin;
 		pos1.z = wzmax;
 
 		map_get_screen_coords_from_world (obj, &pos1, &pos1);
 
 // GCsDriver  08-12-2007
-//		set_ui_font_colour (sys_col_slate_grey);
 		set_ui_font_colour (ui_colour_white);
 
-		ui_display_text (scale_text, pos1.x - (ui_get_string_length (scale_text) + 5), pos1.z - ui_get_font_height ());
+		ui_display_text (scale_text, pos1.x + (ui_get_string_length(grid_number) + 15), pos1.z - ui_get_font_height ());
 	}
 }
 
@@ -5210,6 +5210,7 @@ void define_map_objects (ui_object *parent, map_dimension_type *data, void *draw
 		x1 = 0.0;
 		y1 = 0.0;
 		x2 = 0.915;
+		x2 = 1.0;
 		y2 = 1.0;
 
 		map_window = create_ui_object
