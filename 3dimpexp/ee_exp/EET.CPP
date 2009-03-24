@@ -147,7 +147,7 @@ void EET::ExportAnimations(void) const
   {
    const Animation& animation = animations[i];
    char filename[128];
-   sprintf(filename, "_OBJECTS\\%04X_%s.TXT", i, animation.name);
+   sprintf(filename, "_OBJECTS/%04X_%s.TXT", i, animation.name);
    FILE* file = safe_fopen(filename, "w");
    for (unsigned j = 0; j < !animation.animation; j++)
     fprintf(file, "%s\n", textures[animation.animation[j]].name);
