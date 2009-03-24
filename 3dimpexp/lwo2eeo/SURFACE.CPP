@@ -248,8 +248,8 @@ struct RSurface
      {
       const Comment* c = static_cast<const Comment*>(attr);
 
-	  if (strstr(&c->comment, "detail="))
-	   detail = 1;
+      if (strstr(&c->comment, "detail="))
+       detail = 1;
 
       texture_animation = ProcessAnimation(&c->comment, "texture_animation=", texture);
       luminosity_texture_animation = ProcessAnimation(&c->comment, "luminosity_animation=", ltexture);
@@ -395,14 +395,14 @@ struct RSurface
 
     for (unsigned j = 0; j < !Global->Point; j++)
      for (unsigned k = 0; k < !Global->Point[j].pl; k++)
-      if (Global->Point[j].pl[k].pl == polys[j].pl)
+      if (Global->Point[j].pl[k].pl == polys[i].pl)
        {
         for (unsigned l = 0; l < !Global->Point[j].vm; l++)
          if (strcmp(Global->Point[j].vm[l]->name, vmap) == 0)
           {
            if (vm)
             error("Surface '%s': Duplicate vertex mapping '%s'", &s->name, vmap);
-           vm = Global->Point[j].vm[k];
+           vm = Global->Point[j].vm[l];
           }
 
         for (unsigned l = 0; l < !Global->Point[j].pl[k].dvm; l++)
@@ -478,8 +478,8 @@ struct RSurface
        }
 
     for (unsigned j = 0; j < !polys[i].points; j++)
-     if (!((polys[i].points[j].*tp).set))
-      error("Surface '%s': Not all texture points set", &s->name);
+     if (!(polys[i].points[j].*tp).set)
+      error("Surface '%s': Not all texture points set for polygon # %i", &s->name, polys[i].index + 1);
    }
  }
  void GetTextureName(char* texture, const char* filename)
