@@ -3443,7 +3443,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 //VJ load warzone specific textures, called from: eech-new\aphavoc\source\flight.c about line 130
 //with this function textures are called from just before you go into campaign
 //they are called in a crtain order and later occurences of a texture take precedence over earlier
-void load_warzone_override_textures ()
+void load_warzone_override_textures ( void )
 {
 	char directory_textdir_path[256];
 	int nrtextfound = 0;

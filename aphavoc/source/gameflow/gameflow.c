@@ -310,6 +310,11 @@ void process_game_initialisation_phases (void)
 					}
 				}
 			}
+
+			// Casm 31MAR2009 Loading custom map textures before the first
+			// 3d object is shown
+			//VJ 050116 custom texture mod: destroy override textures and restore default ones
+			restore_default_textures ();
 		}
 		case GAME_INITIALISATION_PHASE_GAME_TYPE:
 		{
