@@ -286,16 +286,16 @@ static int
 static float
 	door_handle_timer = 0.0,
 	door_state = 0.0;
-	
-//ataribaby 27/12/2008 for new head g-force movement	
-static float	
+
+//ataribaby 27/12/2008 for new head g-force movement
+static float
 	x_head_g_movement = 0.0,
   y_head_g_movement = 0.0,
   over_stress_light_value = 0.0,
   random_vibration_x = 0.0,
   random_vibration_y = 0.0;
 
-//static void animate_shutoff_valve(object3d_sub_instance* inst, int closed);
+static void animate_shutoff_valve(object_3d_sub_instance* inst, int closed);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,20 +1129,20 @@ static void get_crew_viewpoint (viewpoint *crew_viewpoint)
 			head_object->relative_position.y -= current_custom_cockpit_viewpoint.y;
 			head_object->relative_position.z -= current_custom_cockpit_viewpoint.z;
 		}
-    
+
     //ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
     if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
     {
-      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
+      random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
       random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
     }
     x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
     y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-    
+
     head_object->relative_position.x -= x_head_g_movement;
 		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
 	  head_object->relative_position.y -= y_head_g_movement;
-    
+
 		// keep head inside reasonable limimts
 		head_object->relative_position.x = bound(head_object->relative_position.x, head_limits[is_copilot][0].x, head_limits[is_copilot][1].x);
 		head_object->relative_position.y = bound(head_object->relative_position.y, head_limits[is_copilot][0].y, head_limits[is_copilot][1].y);
@@ -1320,10 +1320,10 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 			blade_pitch_needle->relative_roll = rad(98) - rad(185.0) *
 				(current_flight_dynamics->main_blade_pitch.value - current_flight_dynamics->main_blade_pitch.min)
 					/ (current_flight_dynamics->main_blade_pitch.max - current_flight_dynamics->main_blade_pitch.min);
-      
+
       //ataribaby 27/12/2008 fixed flickering g-force needle
 			g_force->relative_roll = move_by_rate(g_force->relative_roll, bound(rad(-59.5) * current_flight_dynamics->g_force.value, rad(-210.0), rad(90.0)), rad(200.0));
-			
+
 			get_mi24_clock_hand_values(&clock_hour_hand->relative_roll, &clock_minute_hand->relative_roll, &clock_second_hand->relative_roll);
 
 			get_mi24_hydraulic_pressure_values(&gear_hydraulic_psi->relative_roll, &primary_hydraulic_psi->relative_roll, &secondary_hydraulic_psi->relative_roll);
@@ -1393,11 +1393,11 @@ void draw_hind_internal_3d_cockpit (unsigned int flags)
 				fire_light->visible_object = left_engine_fire_light->visible_object || right_engine_fire_light->visible_object;
 				left_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LEFT_ENGINE) != 0;
 				right_engine_fail_light->visible_object = (current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_RIGHT_ENGINE) != 0;
-				
+
 				//ataribaby 27/12/2008 fixed flickering g-force stress light
         over_stress_light_value = move_by_rate(over_stress_light_value, current_flight_dynamics->g_force.value, 1.0) ;
         over_stress_light->visible_object = over_stress_light_value > 1.8;
-				
+
         low_fuel_lights->visible_object = current_flight_dynamics->fuel_weight.value < current_flight_dynamics->fuel_weight.max * 0.25;
 				gyro_fail_lights->visible_object = hind_damage.navigation_computer;
 				left_engine_over_temperature_light->visible_object = (current_flight_dynamics->left_engine_temp.value > 800.0);
@@ -2273,6 +2273,6 @@ float move_by_rate(float oldval, float newval, float rate)
     if (value >= newval) {
 			value = newval;
 		}
-  }  
+  }
 	return value;
 }
