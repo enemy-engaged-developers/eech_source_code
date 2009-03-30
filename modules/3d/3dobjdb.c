@@ -192,6 +192,12 @@ static void construct_3d_sub_objects ( object_3d_sub_instance *parent, object_3d
 
 static void count_sub_object_statistics ( object_3d_database_entry *sub_object, int approximation, int *triangles, int *points, int *objects );
 
+static int get_subobject ( FILE *fp );
+
+static int read_object ( object_3d *obj, const char* filename );
+
+static void read_custom_scene ( const char* filename );
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,7 +665,7 @@ const char* object_3d_subobject_names[] = {
 #undef OBJECT_3D_CAMERA
 #undef OBJECT_3D_CAMERA_
 
-static int get_subobject ( FILE *fp )
+int get_subobject ( FILE *fp )
 {
 	char
 		name[1024];
@@ -1242,7 +1248,7 @@ void debug_database_scene(object_3d_scene_database_entry* db_entry, FILE* out)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void read_custom_scene ( const char* filename )
+void read_custom_scene ( const char* filename )
 {
 	FILE
 		*fp;
@@ -1258,7 +1264,7 @@ static void read_custom_scene ( const char* filename )
 }
 
 
-static int read_object ( object_3d *obj, const char* filename )
+int read_object ( object_3d *obj, const char* filename )
 {
 	FILE
 		*file;
