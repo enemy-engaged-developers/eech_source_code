@@ -24,7 +24,9 @@ void write_tacview_header(entity* pilot, entity* player_gunship);
 
 void write_tacview_frame_header(void);
 void write_tacview_new_unit(entity* en);
-void write_tacview_unit_removed(entity* en, tacview_event_type type);
-void write_tacview_unit_update(entity* en);
+void write_tacview_unit_event(entity* en, tacview_event_type type, entity* related);
+void write_tacview_unit_update(entity* en, int moved, int rotated, int force);
+
+int tacview_reset_frame(void);
 
 #endif /* TACVIEW_H_ */
