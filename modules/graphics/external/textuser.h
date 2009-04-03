@@ -206,6 +206,9 @@ extern void initialise_custom_map_info( void );
 
 extern void read_map_info_data( void );
 
+extern float get_current_map_latitude_offset(void);
+extern float get_current_map_longitude_offset(void);
+
 // returns index of texture
 // returns 0 if no more texture indices left (increase MAX_TEXTURES if this happens under normal circumstances)
 extern int add_new_texture(char* texture_name);

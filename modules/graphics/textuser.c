@@ -71,17 +71,17 @@
 // razorworks\cohokum\graphics\textures\terrain
 // then according to the warzone (map1-map10)
 // the file texturedirs.txt is read and any directory names in it, e.g. if "alaska" is found
-// the directory razorworks\cohokum\graphics\textures\alaska is searched and 
+// the directory razorworks\cohokum\graphics\textures\alaska is searched and
 // the textures are put into the list. If a texture name already exists it is overwritten, so that the
 // last occurence i the one used.
-// Last if the eech.ini option "texture_colour=1" is set, the terrain textures specific to 
+// Last if the eech.ini option "texture_colour=1" is set, the terrain textures specific to
 // the warzones are read, of map1-map6 only (the others have only one texture)
 
 
 // a list of pointers is stored in these structures
 //    *backup_system_textures[MAX_TEXTURES];
 //    backup_system_texture_info[MAX_TEXTURES];
-// in flight.c the warzone specific textures are loaded and 
+// in flight.c the warzone specific textures are loaded and
 // in flight.c the default textures are restored after the flight
 // warzone textures are created and destroyed, the default custom textures are created but never destroyed.
 //
@@ -3339,21 +3339,21 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 			 	if (!is_terrain_directory)
 			 	{
 					const char *this_entry = get_directory_file_filename ( directory_listing );
-	
+
 					if (*this_entry == '.')
 					{
 						valid_file = get_next_directory_file ( directory_listing );
 						continue;
 					}
-					
+
 					snprintf(filename, sizeof(filename), "%s\\%s", mapname, this_entry);
-	
+
 					strupr(filename);
-	
+
 					#if DEBUG_MODULE
 					debug_log("Entering directory %s", filename);
 					#endif
-	
+
 					initialize_texture_override_names(system_texture_override_names, filename);
 			 	}
 			}
@@ -4268,6 +4268,8 @@ void initialise_custom_map_info( void )
 
 	current_map_info.last_texture = number_of_system_textures;
 
+	current_map_info.latitude = current_map_info.longitude = 0.0;
+
 	for (i = 0; i < 3; i++){
 		current_map_info.water_info[i].start = 0;
 		current_map_info.water_info[i].number = 0;
@@ -4282,9 +4284,63 @@ void initialise_custom_map_info( void )
 	}
 }
 
+float get_current_map_latitude_offset(void)
+{
+	return current_map_info.latitude;
+}
+
+float get_current_map_longitude_offset(void)
+{
+	return current_map_info.longitude;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static 	initialize_known_coordinates(void)
+{
+	switch (current_map_info.mapnr)
+	{
+	case 1:  // Thailand
+		break;
+	case 2:  // Cuba
+		current_map_info.latitude = rad(19.577);
+		current_map_info.longitude = rad(-78.628);
+		break;
+	case 3:  // Georgia
+		break;
+	case 4:  // Taiwan
+		current_map_info.latitude = rad(21.96);
+		current_map_info.longitude = rad(119.75);
+		break;
+	case 5:  // Lebanon
+		current_map_info.latitude = rad(32.86);
+		current_map_info.longitude = rad(35.01);
+		break;
+	case 6:  // Yemen
+		current_map_info.latitude = rad(16.77);
+		current_map_info.longitude = rad(43.03);
+		break;
+	case 7:  // Alaska
+	case 8:  // Alutean islands
+	case 9:  // Kuwait
+	case 10: // Libya
+	case 11: // Grand Canoyon
+	case 12: // Mars
+	case 13: // Alexander Archipelago
+	case 14: // Skagway
+	case 15: // Red Sea
+	case 17: // Afognak
+	case 18: // Puerto Rico
+		break;
+	}
+}
+
+static int startswith(const char* string, const char* prefix)
+{
+	return strncmp(string, prefix, strlen(prefix)) == 0;
+}
 
 //VJ 052127 read map info data
 //VJ 060319 further bug fixes
@@ -4294,15 +4350,13 @@ void initialise_custom_map_info( void )
 void read_map_info_data ( void )
 {
 	FILE *fin;
-	int
-		i, j;
 
 	char
 		buf[256],
 		filename[128];
 
 	const char
-		*map, *p;
+		*map;
 
 	directory_file_list
 		*list;
@@ -4328,6 +4382,8 @@ void read_map_info_data ( void )
 		map++;
 		current_map_info.mapnr = atoi(map);
 	}
+
+	initialize_known_coordinates();
 
 	debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: warzone number: %d",current_map_info.mapnr);
 
@@ -4360,30 +4416,28 @@ void read_map_info_data ( void )
 	//VJ 050820 added file checking to prevent crash
 	if ( file_exist ( filename ) )
 	{
-
 		debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: reading mainfo.txt: %s",filename);
 
 		fin = fopen(filename,"r");
 
-		// read comments
-		fscanf(fin,"%[^\n]\n",buf);
-		while (buf[0] == '#')
-			fscanf(fin,"%[^\n]\n",buf);
-
-		for (j = 0 ; j < 3; j++)
+		while (fgets(buf, sizeof(buf), fin))
 		{
+			char
+				*variable = strtok(buf,"="),
+				*value = strtok(NULL,"#");
+
+			if (!*variable || !value || !*value)
+				continue;
+
 			//VJ 051225 added more map info for custom map reading
 			//scan contours and camo
 
 			// if a season is not determined by the interface, MP or savegame
-			if (current_map_info.season == SESSION_SEASON_INVALID)
+			if (startswith(variable, "season"))
 			{
-				if (strstr(buf, "season"))
+				if (current_map_info.season == SESSION_SEASON_INVALID)
 				{
-					p = strtok(buf,"=");
-					p = strtok(NULL,"#");
-					if (p)
-						current_map_info.season = atoi(p);
+					current_map_info.season = atoi(value);
 					if (current_map_info.season == 0)
 						current_map_info.season = 1;
 					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: season: %d",	current_map_info.season);
@@ -4391,49 +4445,30 @@ void read_map_info_data ( void )
 				}
 			}
 
-			//scan for 2D map contour info
-			if (strstr(buf, "contour"))
+			else if (startswith(variable, "dry river"))
 			{
-				p = strtok(buf,"=");
-				for (i = 0; i <= 8; i++)
-				{
-					p = strtok(NULL,",#");
-					if (p)
-						current_map_info.contour_heights[i] = atof(p);
-					debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: custom contour %f",current_map_info.contour_heights[i]);
-				}
-
-				// rude check if info makes sense
-				if (current_map_info.contour_heights[8] > 0)
-					current_map_info.user_defined_contour_heights = 1;
-
-				// set the contours again, this is also done in the terrtype.c
-				if (current_map_info.user_defined_contour_heights)
-					set_2d_terrain_contour_heights ( 9, current_map_info.contour_heights );
-			}
-
-			if (strstr(buf, "dry river"))
-			{
-				p = strtok(buf,"=");
-				p = strtok(NULL,"#");
-				if (p)
-					current_map_info.dry_river = atoi(p);
+				current_map_info.dry_river = atoi(value);
 				debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: dry river: %d",	current_map_info.dry_river);
 			}
 
-			fscanf(fin,"%[^\n]\n",buf);
-		}
+			else if (startswith(variable, "coordinate"))
+			{
+				float lat, lng;
+				if (sscanf(value, "%f,%f", &lat, &lng) == 2)
+				{
+					current_map_info.latitude = rad(lat);
+					current_map_info.longitude = rad(lng);
+				}
+			}
 
-		// Craig start Feb. 2009
-		if (strstr(buf, "gouraud_shading"))
-		{
-			p = strtok(buf,"=");
-			p = strtok(NULL,"#");
-			if (p)
-				current_map_info.gouraud_shading = atoi(p);
-			debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: gouraud_shading: %d",	current_map_info.gouraud_shading);
+			// Craig start Feb. 2009
+			else if (startswith(variable, "gouraud_shading"))
+			{
+				current_map_info.gouraud_shading = atoi(value);
+				debug_log("###CUSTOM TEXTURE STARTUP: read_map_info_data: mapinfo.txt: gouraud_shading: %d",	current_map_info.gouraud_shading);
+			}
+			// Craig end
 		}
-		// Craig end
 
 		fclose(fin);
 	}
