@@ -190,6 +190,8 @@ extern int
 	command_line_campaign_map,									// arneh 2007-07-01 campaign map mode
 	command_line_campaign_map_palette,							// arneh 2007-07-01 pallette used for campaign map
 	command_line_campaign_map_update_interval,					// arneh 2007-07-08 how often enemy units are updated on campaign map
+	command_line_tacview_logging, 									// 0 = off, 1 = mission, fog of war, 2 = mission, all, 3 = campaign all
+	command_line_tacview_generate_srtm_height_data,				// generate srtm height data for use with tacview
 	command_line_joylook_joystick_index,						// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis,						// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis,						// Jabberwock 031104 Joystick look

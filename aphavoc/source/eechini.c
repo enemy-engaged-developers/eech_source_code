@@ -602,6 +602,7 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "camcom") == 0)		command_line_camcom = d1; // Jabberwock 031007 Campaign Commander
 		if (strcmp(p, "campaign_map_mode") == 0)	command_line_campaign_map = d1;
 		if (strcmp(p, "campaign_map_palette") == 0)	command_line_campaign_map_palette = d1;
+		if (strcmp(p, "tacview_logging") == 0)	command_line_tacview_logging = d1;
 		if (strcmp(p, "map_update_interval") == 0)	command_line_campaign_map_update_interval = d1;
 		if (strcmp(p, "destgt") == 0)		command_line_designated_targets = d1; // Jabberwock 031107 Designated targets
 		if (strcmp(p, "filter") == 0)		command_line_session_filter = d1; // Jabberwock 031210 Session filter
@@ -815,6 +816,7 @@ void dump_ini_file(void)
 	fprintf(f,"campaign_map_mode=%d		# campaign map resolution (1 = default resolution, 2 = high resolution) (def = 1)\n",command_line_campaign_map);
 	fprintf(f,"campaign_map_palette=%d		# campaign map palette    (1 = default shades, 2 = like paper map\n",command_line_campaign_map_palette);
 	fprintf(f,"map_update_interval=%d		# enemy units update rate (n = seconds) (def = 120)\n",command_line_campaign_map_update_interval);
+	fprintf(f,"tacview_logging=%d           # generate log for tacview (0 = off, 1 = generate log for mission with fog of war, 2 = generate log for mission, all units visible, 3 = generate log for entire campaing\n", command_line_tacview_logging);
 	fprintf(f,"destgt=%d			# designated target list (0 = off, 1 = on) (def = 0)\n",command_line_designated_targets); // Jabberwock 031107
 	fprintf(f,"cannontrack=%d                   # cannon tracking boresight (0 = no tracking, 1 = track if no acquire, 2 = always track IHADSS/HIDSS/HMS) (def = 1) \n",command_line_cannontrack);	// Jabberwock 050120 Cannon tracking
 	fprintf(f,"unpadlock_on_handover=%d		# unpadlock on handover from HMS to TADS = 0 (off)\n",command_line_unpadlock_on_handover);  //GCsDriver  08-12-2007

@@ -214,6 +214,8 @@ int
 	command_line_campaign_map						= 1,		// campaign map mode
 	command_line_campaign_map_palette				= 1,		// palette used for campaign map
 	command_line_campaign_map_update_interval       = 120,      // seconds
+	command_line_tacview_logging					= 0,		// 0 = off, 1 = mission, fog of war, 2 = mission, all, 3 = campaign all
+	command_line_tacview_generate_srtm_height_data  = 0,		// generate srtm height data for use with tacview
 	command_line_joylook_joystick_index			= -1,	// Jabberwock 031104 Joystick look
 	command_line_joylookh_joystick_axis				= 1,	// Jabberwock 031104 Joystick look
 	command_line_joylookv_joystick_axis				= 2,	// Jabberwock 031104 Joystick look
@@ -2115,6 +2117,17 @@ void process_command_line (int argc, char *argv[])
 			else
 			{
 				command_line_camcom = FALSE;
+			}
+		}
+		else if (s2 = strarg (s1, "generate_srtm_data"))
+		{
+			if (*s2 == ':')
+			{
+				sscanf (s2 + 1, "%d", &command_line_tacview_generate_srtm_height_data);
+			}
+			else
+			{
+				command_line_tacview_generate_srtm_height_data = FALSE;
 			}
 		}
 		////////////////////////////////////////
