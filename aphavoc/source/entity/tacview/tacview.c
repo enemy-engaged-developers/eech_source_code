@@ -7,8 +7,8 @@
 
 #include "project.h"
 
-#include "version.h"
 #include "tacview.h"
+#include "version.h"
 
 #define M1 111132.92
 #define M2 -559.82
@@ -25,15 +25,8 @@
 static FILE* log_file = NULL;
 
 static float
-	// cuba
-//	latitude_offset = rad(20.73 - 1.153),
-//	longitude_offset = rad(-76.32 - 2.308),
-	// lebanon
-//	latitude_offset = rad(32.86),
-//	longitude_offset = rad(35.01),
-	// taiwan
-	latitude_offset = rad(21.96),
-	longitude_offset = rad(119.75),
+	latitude_offset = 0.0,
+	longitude_offset = 0.0,
 	latitude_scale = 0.0,
 	tacview_starttime = 0.0;
 
@@ -44,7 +37,6 @@ static int
 	frequent_update_group = 0;
 
 static void write_coordinates(entity* en);
-static void clean_variable(const char* input, char* output, unsigned output_len);
 static void write_srtm3_grid(int latitude, int longitude);
 static void write_srtm3_terrain_elevation(void);
 static int tacview_log_this_frame(entity* en);
@@ -104,14 +96,22 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 		game_second;
 
 	session_list_data_type
-		*session = NULL;
+		*session = get_current_game_session();
 
 	entity
 		*player_task = pilot ? get_player_task(pilot) : NULL;
 
 	tacview_starttime = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 
-	// TODO: initialise latitude and longitude offset
+	if (!session)
+		return;
+
+	latitude_offset = get_current_map_latitude_offset();
+	longitude_offset = get_current_map_longitude_offset();
+
+	if (longitude_offset == 0.0 && latitude_offset == 0.0)
+		debug_fatal("Current map has no longitude and latitude which is needed by tacview.  Add this information in mapinfo.txt as e.g. coordinate=10.0,20.1");
+
 	latitude_scale = 1.0 / (M1 + (M2 * cos(2 * rad(latitude_offset)) + (M3 * cos(4 * rad(latitude_offset)))));
 
 	get_system_date(&day, &month, &year);
@@ -130,22 +130,18 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 	fputs("Author=", log_file);
 	if (pilot)
 	{
-		// TODO UTF-8 version of name if non-ascii chars supported
 		const char* pilot_name = get_local_entity_string(pilot, STRING_TYPE_PILOTS_NAME);
 		if (pilot_name)
 		{
-			clean_variable(pilot_name, cleaned_variable, sizeof(cleaned_variable));
+			latin1_to_utf8(pilot_name, cleaned_variable, sizeof(cleaned_variable), TRUE);
 			fputs(cleaned_variable, log_file);
-//			fprintf(log_file, "Author=%s\n", pilot_name);
 		}
 	}
 	fputs("\n", log_file);
 
-	session = get_current_game_session();
-
 	// DECLARATIONS
 
-	clean_variable(session->displayed_title, cleaned_variable, sizeof(cleaned_variable));
+	latin1_to_utf8(session->displayed_title, cleaned_variable, sizeof(cleaned_variable), TRUE);
 	fprintf(log_file, "Title=%s\n", cleaned_variable);
 	if (player_task)
 		fprintf(log_file, "Category=%s\n", get_local_entity_string(player_task, STRING_TYPE_SHORT_DISPLAY_NAME));
@@ -157,14 +153,14 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 	fputs("Coalition=Neutral,Green\n", log_file);
 	fputs("Coalition=Blue,Blue\n", log_file);
 	fputs("Coalition=Red,Red\n", log_file);
-	// TODO: provided events
+	fputs("ProvidedEvents=Takeoff,Landing,Destroyed,LeftArea\n", log_file);
 
 	// ADDITIONAL INFO
 
 	if (player_gunship)
 		fprintf(log_file, "MainAircraftID=%x\n", tacview_id(player_gunship));
 
-	if (command_line_tacview_generate_srtm_height_data)
+	//if (command_line_tacview_generate_srtm_height_data)
 		write_srtm3_terrain_elevation();
 }
 
@@ -177,19 +173,10 @@ void write_tacview_frame_header(void)
 void write_tacview_new_unit(entity* en)
 {
 	entity_sub_types sub_type;
+	int is_mobile = TRUE;
 
 	if (!en || !log_file)
 		return;
-
-	switch (en->type)
-	{
-	case ENTITY_TYPE_HELICOPTER:
-	case ENTITY_TYPE_FIXED_WING:
-	case ENTITY_TYPE_KEYSITE:
-		break;
-	default:
-		return;
-	}
 
 	sub_type = get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -203,8 +190,9 @@ void write_tacview_new_unit(entity* en)
 			entity
 				*group = NULL;
 			const char
-				*callsign = NULL,
-				*pilot = NULL;
+				*callsign = NULL;
+			char
+				pilot[128] = "";
 
 			if (get_local_entity_int_value(en, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
@@ -213,8 +201,10 @@ void write_tacview_new_unit(entity* en)
 				{
 					if (get_local_entity_int_value(aircrew, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_PILOT_PILOT)
 					{
-						// TODO: UTF-8 string
-						pilot = get_local_entity_string(aircrew, STRING_TYPE_PILOTS_NAME);
+						const char* raw_pilot = get_local_entity_string(aircrew, STRING_TYPE_PILOTS_NAME);
+						if (raw_pilot)
+							latin1_to_utf8(raw_pilot, pilot, sizeof(pilot), TRUE);
+
 						break;
 					}
 				}
@@ -271,8 +261,11 @@ void write_tacview_new_unit(entity* en)
 				break;
 			}
 			case ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE:
-				type = 0x34;
-				break;
+//				type = 0x34;
+//				length = width = height = 0;
+				// carriers have a ship entity too, so use that for tacview
+				return;
+//				break;
 			default:
 				break;
 			}
@@ -280,6 +273,7 @@ void write_tacview_new_unit(entity* en)
 			if (type == 0x88)
 				snprintf(height_str, sizeof(height_str), ",%d", height);
 
+#if 0
 			if (type == 0x34)  // carrier, add as object
 				// id, parent (empty), object type, coalition, country(empty), name, pilot(empty), group(empty), rank(empty)
 				fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
@@ -288,6 +282,7 @@ void write_tacview_new_unit(entity* en)
 						get_local_entity_int_value(en, INT_TYPE_SIDE),
 						get_local_entity_string(en, STRING_TYPE_KEYSITE_NAME));
 			else
+#endif
 				// id,, type, coalition, country(empty), name, length, width, height(for type 88)
 				fprintf(log_file, "+%x,,%x,%d,,%s,%d,%d%s\n",
 						tacview_id(en),
@@ -298,47 +293,140 @@ void write_tacview_new_unit(entity* en)
 						width,
 						height_str);
 
+			is_mobile = FALSE;
 			break;
 		}
-	case ENTITY_TYPE_UNKNOWN:
+	case ENTITY_TYPE_WEAPON:
+		{
+			int type = 0;
+			const char* name = "";
+			entity* parent = NULL;
+			char parent_str[16] = "?";
+
+			// gun rounds
+			if (sub_type <= ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				return;
+
+			parent = get_local_entity_parent(en, LIST_TYPE_LAUNCHED_WEAPON);
+			if (parent && get_local_entity_int_value(parent, INT_TYPE_TACVIEW_LOGGING))
+				sprintf(parent_str, "%x", tacview_id(parent));
+
+			if (sub_type <= ENTITY_SUB_TYPE_WEAPON_2A65_152MM_ROUND)
+			{
+				if (sub_type == ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND
+					|| sub_type == ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND
+					|| sub_type == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND
+					|| sub_type == ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND
+					|| sub_type == ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND)  // Kiev's AA gun
+				{
+					type = 0x49;  // bullets
+				}
+				else if (sub_type == ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET
+						 || sub_type == ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET)
+				{
+					// these are actually rockets, despite being in the projectile section
+					name = weapon_database[sub_type].full_name;
+					type = 0x44;
+				}
+				else
+					type = 0x48;  // shell
+			}
+			// rockets
+			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_S13)
+			{
+				type = 0x44;
+				name = weapon_database[sub_type].full_name;
+			}
+			// missiles
+			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_AT11_SNIPER)
+			{
+				type = 0x40;
+				name = weapon_database[sub_type].full_name;
+			}
+			else if (sub_type == ENTITY_SUB_TYPE_WEAPON_CHAFF)
+			{
+				type = 0x50;
+			}
+			// flares and smoke grenades
+			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_SMOKE_GRENADE)
+			{
+				type = 0x54;
+			}
+			else  // crates, debris etc.
+			{
+				type = 0x46;
+			}
+
+			// id, parent (empty), object type, coalition(empty), country(empty), name, pilot(empty), group(empty), rank(empty)
+			fprintf(log_file, "+%x,%s,%x,,,%s,,,\n",
+					tacview_id(en),
+					parent_str,
+					type,
+					name);
+
+			break;
+		}
 	case ENTITY_TYPE_ANTI_AIRCRAFT:
+	case ENTITY_TYPE_ROUTED_VEHICLE:
+	case ENTITY_TYPE_SHIP_VEHICLE:
+		{
+			int type;
+			const char* name = "";
+
+			switch (en->type)
+			{
+			case ENTITY_TYPE_ANTI_AIRCRAFT:
+				if (vehicle_database[sub_type].view_category == VIEW_CATEGORY_INFANTRY)
+					type = 0x2c;
+				else
+					type = 0x20;
+				break;
+			case ENTITY_TYPE_ROUTED_VEHICLE:
+				if (vehicle_database[sub_type].default_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+					type = 0x28;
+				else
+					type = 0x24;
+				break;
+			case ENTITY_TYPE_SHIP_VEHICLE:
+				if (vehicle_database[sub_type].map_icon == MAP_ICON_CARRIER)
+					type = 0x34;
+				else if (vehicle_database[sub_type].force_info_catagory == FORCE_INFO_CATAGORY_ARMED_SHIP_VEHICLE)
+					type = 0x30;
+				else
+					type = 0x38;
+
+				break;
+			}
+			name = vehicle_database[sub_type].full_name;
+
+			// id, parent (empty), object type, coalition, country(empty), name, pilot, group, rank
+			fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
+					tacview_id(en),
+					type,
+					get_local_entity_int_value(en, INT_TYPE_SIDE),
+					name);
+
+			set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, TRUE);
+			break;
+		}
+
+		break;
+#if 0
 	case ENTITY_TYPE_BRIDGE:
-	case ENTITY_TYPE_CAMERA:
 	case ENTITY_TYPE_CARGO:
 	case ENTITY_TYPE_CITY:
 	case ENTITY_TYPE_CITY_BUILDING:
-	case ENTITY_TYPE_CRATER:
-	case ENTITY_TYPE_DIVISION:
-	case ENTITY_TYPE_EXPLOSION:
-	case ENTITY_TYPE_FORCE:
-	case ENTITY_TYPE_GROUP:
-	case ENTITY_TYPE_GUIDE:
-	case ENTITY_TYPE_LANDING:
 	case ENTITY_TYPE_OBJECT:
-	case ENTITY_TYPE_PARTICLE:
-	case ENTITY_TYPE_PERSON:
-	case ENTITY_TYPE_PILOT:
-	case ENTITY_TYPE_PYLON:
-	case ENTITY_TYPE_REGEN:
-	case ENTITY_TYPE_ROUTED_VEHICLE:
 	case ENTITY_TYPE_SCENIC:
-	case ENTITY_TYPE_SECTOR:
-	case ENTITY_TYPE_SEGMENT:
-	case ENTITY_TYPE_SESSION:
-	case ENTITY_TYPE_SHIP_VEHICLE:
 	case ENTITY_TYPE_SITE:
 	case ENTITY_TYPE_SITE_UPDATABLE:
-	case ENTITY_TYPE_SMOKE_LIST:
-	case ENTITY_TYPE_SOUND_EFFECT:
-	case ENTITY_TYPE_SPRITE:
-	case ENTITY_TYPE_TASK:
-	case ENTITY_TYPE_UPDATE:
-	case ENTITY_TYPE_WAYPOINT:
-	case ENTITY_TYPE_WEAPON:
+#endif
 	default:
-		ASSERT(FALSE);
-		break;
+		return;
 	}
+
+	if (is_mobile)
+		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, TRUE);
 
 	write_tacview_unit_update(en, TRUE, TRUE, TRUE);
 }
@@ -347,13 +435,23 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 {
 	int event_type;
 
+	if (!get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
+		return;
+
 	switch(type)
 	{
 	case TACVIEW_UNIT_LEFT_AREA:
 		fprintf(log_file, "!28,%x\n", tacview_id(en));
-		break;
+
+		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
+
+		return;
 	case TACVIEW_UNIT_DESTROYED:
 		event_type = 0x2c;
+
+		write_tacview_unit_update(en, TRUE, TRUE, TRUE);
+
+		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
 		break;
 	case TACVIEW_UNIT_TOOK_OFF:
 		event_type = 0x40;
@@ -375,6 +473,10 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 {
 	if (!tacview_log_this_frame(en) && !force)
+		return;
+
+	// TODO: start logging if in mission mode and inside area/FoW
+	if (!get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
 		return;
 
 	fprintf(log_file, "%x,", tacview_id(en));
@@ -407,22 +509,6 @@ void write_coordinates(entity* en)
 		longitude = (pos->x / longitude_length);
 
 	fprintf(log_file, "%.6f,%.6f,%.2f", latitude, longitude, pos->y);
-}
-
-void clean_variable(const char* input, char* output, unsigned output_len)
-{
-	int i;
-	const char* c;
-
-	for (i=0, c = input; i < output_len-1 && *c; c++)
-	{
-		if (*c != '=')
-		{
-			output[i] = *c;
-			i++;
-		}
-	}
-	output[i] = '\0';
 }
 
 // latitude in degrees, not rads!
@@ -535,7 +621,7 @@ int tacview_reset_frame(void)
 	medium_update_group = update_group & 7;
 	slow_update_group = update_group;
 
-	return frequent_update_group == 0;
+	return TRUE; // frequent_update_group == 0;
 }
 
 static int tacview_log_this_frame(entity* en)
