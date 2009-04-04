@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -475,6 +475,7 @@ void brief_initialise_game (void)
 	}
 
 	initialise_dinput_to_ascii_conversion_table ();
+	initialise_utf8_conversion_table();
 
 	debug_log ( "Initialising ui system" );
 
@@ -610,13 +611,13 @@ void full_initialise_game (void)
 	}
 
 	save_global_options_data ();
-	
+
 //VJ 030807 added wut file name display for startup screen
    if (command_line_wut)
 		sprintf ( buffer, "%s: %s", "WUT", WUT_filename);
 	else
 		sprintf ( buffer, "%s: %s", "WUT", "NONE");
-		
+
 	set_ui_object_text (WUT_text, buffer);
 
 	ui_force_update ();
@@ -644,7 +645,7 @@ void full_initialise_game (void)
 	//
 	////////////////////////////////////////
 
-	#if !DEMO_VERSION	
+	#if !DEMO_VERSION
 		if (get_global_apache_havoc_installed () || global_aphavoc_maps)
 		{
 			char
@@ -653,11 +654,11 @@ void full_initialise_game (void)
 // VJ 050123 aphavoc install hack
 			if (global_aphavoc_maps && !get_global_apache_havoc_installed ())
 				sprintf (buffer, "Apache Havoc: %s", "Maps enabled");
-			else			
+			else
 				sprintf (buffer, "Apache Havoc: %s", get_trans ("MP_INSTALLED"));
-	
+
 			set_ui_object_text (ah_installed_text, buffer);
-	
+
 			process_ingame_text_object_size (ah_installed_text, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 			ui_force_update ();
@@ -747,15 +748,15 @@ void full_initialise_game (void)
 
 	////////////////////////////////////////
 	//
-	// INIT SHARED MEM 
+	// INIT SHARED MEM
 	//
 	////////////////////////////////////////
-	
+
 	// Retro 8Mar2005 - 14Aug2006
 	if (command_line_shared_mem_export != 0)
 	{
 		debug_log ( "Initialising Shared Memory" );
-		
+
 		sprintf (buffer, "%s...%s", get_trans ("Loading"), "Shared Memory");
 
 		set_ui_object_text (initialising_text, buffer);
@@ -896,10 +897,10 @@ void full_initialise_game (void)
 	ui_force_update ();
 
 	//Xhit: added another 10000 enities (prev. 125000) that are reserved no comms local entities (030428)
-	//VJ 030508 if downwash 
+	//VJ 030508 if downwash
 	if (command_line_downwash)
 		initialise_entity_system (135000);
-	else	
+	else
 		initialise_entity_system (125000);
 
 	////////////////////////////////////////
@@ -970,14 +971,14 @@ void full_initialise_game (void)
 
 	initialise_game_initialisation_phases ();
 
-//VJ WUT mod 26-mar-03	
+//VJ WUT mod 26-mar-03
 
 	////////////////////////////////////////
 	//
-	// Parse the WUT text file 
+	// Parse the WUT text file
 	//
 	////////////////////////////////////////
-	
+
     if (command_line_wut)
     {
 		debug_log ( "reading WUT file %s",WUT_filename );
@@ -991,7 +992,7 @@ void full_initialise_game (void)
 */
     	parse_WUT_file(WUT_filename);
     }
-    
+
     //Werewolf
     net_init_heartbeat();
 
@@ -1019,41 +1020,41 @@ int check_apache_havoc_ffp_files (void)
 
 	int
 		flag;
-		
+
 // VJ 050118 aphavoc install hack, check even if graphics not installed
 /*
 	if (get_global_apache_havoc_installed ())
-	{	
-*/		
+	{
+*/
 		flag = TRUE;
-	
+
 		if (!file_exist ("..\\common\\maps\\map1\\terrain\\terrain.ffp"))
 		{
-	
+
 			flag = FALSE;
 		}
-	
+
 		if (!file_exist ("..\\common\\maps\\map2\\terrain\\terrain.ffp"))
 		{
-	
+
 			flag = FALSE;
 		}
-	
+
 		if (!file_exist ("..\\common\\maps\\map3\\terrain\\terrain.ffp"))
 		{
-	
+
 			flag = FALSE;
 		}
-		
+
 		if (!flag)
 		{
-	
+
 			set_global_apache_havoc_installed (FALSE);
 
 			return FALSE;
 		}
 // VJ 050118 aphavoc install hack, check even if graphics not installed
-/*		
+/*
 	}
 */
 	return TRUE;
