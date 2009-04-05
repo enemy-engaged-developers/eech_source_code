@@ -453,7 +453,7 @@ void initialise_utf8_conversion_table(void)
 	for (chr = 192; chr <= 255; chr++)
 	{
 		conversion_table[chr - utf8_start].utf8[0] = 0xc3;
-		conversion_table[chr - utf8_start].utf8[1] = 0x80 + (chr-utf8_start);
+		conversion_table[chr - utf8_start].utf8[1] = 0x80 + (chr-192);
 	}
 }
 
