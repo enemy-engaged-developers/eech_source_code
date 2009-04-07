@@ -73,7 +73,7 @@ extern int ascii_to_dinput (int ascii_code);
 
 // Tacview want output in UTF8, while EECH uses latin1.  So this function can be used to convert
 // result should point to a buffer where result will be put, result_len is length of buffer
-// remove_equals parameter removed = characters, as tacview doesn't handle them.
+// escape_tacview_control_chars - if true will escape =, , and \n as tacview can't handle them bare
 extern void latin1_to_utf8(const char* latin1_text, char* result, unsigned result_len, int remove_equals);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

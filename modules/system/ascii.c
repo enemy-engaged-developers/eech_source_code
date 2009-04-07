@@ -457,17 +457,19 @@ void initialise_utf8_conversion_table(void)
 	}
 }
 
-void latin1_to_utf8(const char* latin1_text, char* result, unsigned result_len, int remove_equals)
+void latin1_to_utf8(const char* latin1_text, char* result, unsigned result_len, int escape_tacview_control_chars)
 {
 	const char* tmp = latin1_text;
 	char* out = result;
 
 	for (tmp = latin1_text; *tmp && ((out - result) < (result_len - 2)); tmp++)
 	{
-		if (remove_equals && *tmp == '=')
-			continue;
-
-		if (*tmp < utf8_start)
+		if (escape_tacview_control_chars && (*tmp == '=' || *tmp == ',' || *tmp == '\n'))
+		{
+			*out++ = '\\';
+			*out++ = *tmp;
+		}
+		else if (*tmp < utf8_start)
 			*out++ = *tmp;
 		else
 		{
