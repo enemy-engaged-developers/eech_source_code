@@ -292,7 +292,7 @@ overridename
 
 //VJ 050621 backup of commandline
 static int
-	texture_colour_bak;
+	texture_colour_bak = -1;
 
 //VJ 040814 dynamic water
 //VJ 051226 moved to map info structure
@@ -3474,7 +3474,10 @@ void load_warzone_override_textures ( void )
 
 	// Casm 20AUG05 Moved backup before "if"
 	//VJ 050621 backup commandline var, set to 0 if no textures found
-	texture_colour_bak = command_line_texture_colour;
+	if ( texture_colour_bak == -1 )
+	{
+		texture_colour_bak = command_line_texture_colour;
+	}
 
 
 	if (command_line_texture_colour)
@@ -3569,7 +3572,10 @@ void restore_default_textures ( void )
 	int count = 0;
 
 	//VJ 050621 restore backup commandline
-	command_line_texture_colour = texture_colour_bak;
+	if ( texture_colour_bak != -1 )
+	{
+		command_line_texture_colour = texture_colour_bak;
+	}
 
 	for (count = 0; count < MAX_TEXTURES; count++)
 	if ( system_texture_override_names[count].type != TYPE_ORIGINAL )
