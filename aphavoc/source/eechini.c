@@ -321,68 +321,68 @@ static void initialize_radar_ranges(void)
 
 void process_ini_file(int argc, char *argv[])
 {
-	 FILE *f;
+	FILE *f;
 
 //VJ 040816 (and 041002) bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
-	 char *buf, *buf1;
-	 char *p, *q, *r;
-	 char fname[12] = "eech.ini";
-	 float v1;
-	 int d1, k;
-     size_t str_length = 0;
+	char *buf, *buf1;
+	char *p, *q, *r;
+	char fname[12] = "eech.ini";
+	float v1;
+	int d1, k;
+	size_t str_length = 0;
 
 //VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
-	 wide_cockpit_initialize();
+	wide_cockpit_initialize();
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work
 //VJ 050125 changed back: this should always be done
-    initialize_radar_ranges();
+	initialize_radar_ranges();
 
-	 buf = ( char * ) malloc (255);
-	 if (buf == NULL)
-	 {
-		  debug_fatal ("Could not allocate buffer");
-		  return;
-	 }
-     *buf = '\0';
+	buf = ( char * ) malloc (255);
+	if (buf == NULL)
+	{
+		debug_fatal ("Could not allocate buffer");
+		return;
+	}
+	*buf = '\0';
 
 //VJ 030414, commandline /ini:0 starts up without ini file
-	 while(argc--)
-	 {
-		 p = *argv++;
-		 debug_log("eech.ini %s",p);
-		 if( strstr(p, "ini:0"))
-		 {
+	while(argc--)
+	{
+		p = *argv++;
+		debug_log("eech.ini %s",p);
+		if( strstr(p, "ini:0"))
+		{
 			free(buf);
 			return;
-		 }
-	 }
+		}
+	}
 
 //VJ 030409, changed to generate eech.ini when it doesn't exist
-	 if (command_line_dump_ini && !file_exist(fname))
-	 {
-		 dump_ini_file();
-	 }
+	if (command_line_dump_ini && !file_exist(fname))
+	{
+		dump_ini_file();
+	}
 
-	 f = fopen(fname, "r");
-	 if (!f)
-	 {
-		 free(buf);
-		 debug_fatal("Error opening eech.ini");
-		 return;
-	 }
+	f = fopen(fname, "r");
+	if (!f)
+	{
+		free(buf);
+		debug_fatal("Error opening eech.ini");
+		return;
+	}
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
-    buf1 = ( char * ) malloc(255);
+	buf1 = ( char * ) malloc(255);
 
-	 // main loop to parse eech.ini file
-	 while (!strstr(buf,"end of file") && !feof(f))
-	 {
+	// main loop to parse eech.ini file
+	while (!strstr(buf,"end of file") && !feof(f))
+	{
 		int i = 0, j = 0;
 		fscanf(f,"%[^\n]\n",buf);
 
 		if (!strchr(buf,'='))
-		  continue;
+			continue;
 
 //VJ 040816 bug fix: make a copy of the text buf to buf1 and strip the spaces before the '#' char
 		j=0;
@@ -401,10 +401,10 @@ void process_ini_file(int argc, char *argv[])
 		r = strchr(buf1, '=');
 		r++;
 		if (r[0] == '#'){
-  			p = strtok(buf1,"=");
+			p = strtok(buf1,"=");
 			q[0] = '\0';
 		}else{
-  			p = strtok(buf1,"=");
+			p = strtok(buf1,"=");
 			q = strtok(NULL,"#");
 		}
 
@@ -438,8 +438,8 @@ void process_ini_file(int argc, char *argv[])
 		{
 			if (d1 == 1)
 			{
-				 set_global_3d_visual_screen_width(640.0);
-				 set_global_3d_visual_screen_height(480.0);
+				set_global_3d_visual_screen_width(640.0);
+				set_global_3d_visual_screen_height(480.0);
 			}
 		}
 		if (strcmp(p, "dxtm")==0) 	command_line_d3d_use_texture_management = d1;
@@ -529,29 +529,29 @@ void process_ini_file(int argc, char *argv[])
 //VJ 030511 added the wideview params to eech.ini
 //VJ 041225 fixed bug: no spaces in variable name allowed, comanche with 1 'm'!
 //VJ 050207 cleaning up the wideview code
-	 	if (strcmp(p, "comanche_pilot")==0)
+		if (strcmp(p, "comanche_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_PILOT);
-	 	else if (strcmp(p, "comanche_co-pilot")==0)
+		else if (strcmp(p, "comanche_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_COMANCHE_COPILOT);
-	 	else if (strcmp(p, "hokum_pilot")==0)
+		else if (strcmp(p, "hokum_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_PILOT);
-	 	else if (strcmp(p, "hokum_co-pilot")==0)
+		else if (strcmp(p, "hokum_co-pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HOKUM_COPILOT);
-	 	else if (strcmp(p, "apache_pilot")==0)
+		else if (strcmp(p, "apache_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_APACHE_PILOT);
-	 	else if (strcmp(p, "apache_copilot")==0)
+		else if (strcmp(p, "apache_copilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_APACHE_COPILOT);
-	 	else if (strcmp(p, "havoc_pilot")==0)
+		else if (strcmp(p, "havoc_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HAVOC_PILOT);
-	 	else if (strcmp(p, "hind_pilot")==0)
+		else if (strcmp(p, "hind_pilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HIND_PILOT);
-	 	else if (strcmp(p, "hind_copilot")==0)
+		else if (strcmp(p, "hind_copilot")==0)
 			read_wideview_parameters(q, WIDEVIEW_HIND_COPILOT);
 		//VJ 060211 save hud config info
-	 	else if (strcmp(p, "hud_code")==0)
-	 		read_hud_parameters(q);
-	 	else if (strcmp(p, "g-force_head_movement")==0)
-	 		command_line_g_force_head_movment_modifier = v1;
+		else if (strcmp(p, "hud_code")==0)
+			read_hud_parameters(q);
+		else if (strcmp(p, "g-force_head_movement")==0)
+			command_line_g_force_head_movment_modifier = v1;
 //MODS
 		if (strcmp(p, "msl") == 0) 			command_line_mouse_look = d1;
 		if (strcmp(p, "msls") == 0)			command_line_mouse_look_speed = d1;
@@ -656,10 +656,10 @@ void process_ini_file(int argc, char *argv[])
 		if (strcmp(p, "export_mfd_single_pos") == 0) read_export_mfd_pos(q,command_line_export_mfd_single_pos);		// mue 070223
 		if (strcmp(p, "themes") == 0) if (str_length < 128) set_themes(q); // Casm 21DEC07
 
-    //ataribaby 28/12/2008 volume for external sounds when in cockpit
-    if (strcmp(p, "external_sounds_volume")==0) command_line_external_sounds_volume = v1;
-    //ataribaby 29/12/2008 for muted UI sounds
-    if (strcmp(p, "ui_sounds_muted")==0) command_line_ui_sounds_muted = d1;
+	//ataribaby 28/12/2008 volume for external sounds when in cockpit
+	if (strcmp(p, "external_sounds_volume")==0) command_line_external_sounds_volume = v1;
+	//ataribaby 29/12/2008 for muted UI sounds
+	if (strcmp(p, "ui_sounds_muted")==0) command_line_ui_sounds_muted = d1;
 
 	}// while (!strstr(buf,"end of file"))
 	fclose(f);
@@ -669,8 +669,8 @@ void process_ini_file(int argc, char *argv[])
 		global_dynamic_water = 0;
 
 //VJ 040816 forgot these
-   if (buf1) free(buf1);
-   if (buf) free(buf);
+	if (buf1) free(buf1);
+	if (buf) free(buf);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -863,8 +863,6 @@ void dump_ini_file(void)
 	fprintf(f,"goto=%d			# \"GOTO\" (teleport) functionality on campaign map (0 = off, 1 = on) (def = 0)\n",command_line_planner_goto_button);
 	fprintf(f,"vfm=%d			# vector flight model (activates viewer or \"UFO\" flight mode) (0 = off, 1 = on) (def = 0)\n",command_line_vector_flight_model);
 	fprintf(f,"psr=%d			# player start rank for new pilots (1 - 5) (def = 1)\n",command_line_player_start_rank);
-	fprintf(f,"ns=%d			# bypass soundcard (useful for tracking hardware conflicts) (0 = off, 1 = on) (def = 0)\n",command_line_no_sound);
-	fprintf(f,"hdwrbuf=%d		# hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)\n",command_line_sound_hdwrbuf); //VJ 050904 added "for sound"
 	fprintf(f,"mta=%d			# maximum time acceleration (n = time multiplier) (default = 4)\n",command_line_max_time_acceleration);
 	fprintf(f,"nomcm=%d			# no mission complete music (0 = off, 1 = on) (def = 0)\n",command_line_no_mission_complete_music);
 	fprintf(f,"disable_text_messages=%d		# Disables the text messages displayed at top of screen (messages can still be heard) (def = 0)\n", command_line_disable_message_text); // VJ 061215 detailed TSD
@@ -881,11 +879,13 @@ void dump_ini_file(void)
 	fprintf(f,"export_mfd_single_pos=%d,%d,%d,%d	# single MFD position (Havoc, Hind and Black Shark only) (def = 0,0,256,256)\n",command_line_export_mfd_single_pos[0],
 			command_line_export_mfd_single_pos[1],command_line_export_mfd_single_pos[2],command_line_export_mfd_single_pos[3]);
 
-  fprintf(f,"\n[Sounds]\n");
-  //ataribaby 28/12/2008 volume for external sounds when in cockpit
-  fprintf(f, "external_sounds_volume=%.1f			# volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)\n", command_line_external_sounds_volume);
-  //ataribaby 29/12/2008 for muted UI sounds
-  fprintf(f, "ui_sounds_muted=%d			# campaign UI mute (0 = normal UI sounds, 1 = UI sounds muted) (default = 0)\n", command_line_ui_sounds_muted);
+	fprintf(f,"\n[Sounds]\n");
+	fprintf(f,"ns=%d			# bypass soundcard (useful for tracking hardware conflicts) (0 = off, 1 = on) (def = 0)\n",command_line_no_sound);
+	fprintf(f,"hdwrbuf=%d		# hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)\n",command_line_sound_hdwrbuf); //VJ 050904 added "for sound"
+	//ataribaby 28/12/2008 volume for external sounds when in cockpit
+	fprintf(f, "external_sounds_volume=%.1f			# volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)\n", command_line_external_sounds_volume);
+	//ataribaby 29/12/2008 for muted UI sounds
+	fprintf(f, "ui_sounds_muted=%d			# campaign UI mute (0 = normal UI sounds, 1 = UI sounds muted) (default = 0)\n", command_line_ui_sounds_muted);
 
 //Retro27NovDEAD	fprintf(f,"keymap=%d				# key mapping (0 = off, 1 = on) (def = 0)\n",command_line_key_mapping);
 
