@@ -179,7 +179,8 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 	// CORE HEADER
 
 	ASSERT(0 < fputs("FileType=text/acmi/tacview\n", log_file));
-	ASSERT(0 < fputs("FileVersion=1.2\n", log_file));
+	ASSERT(0 < fputs("FileVersion=1.3\n", log_file));
+//	ASSERT(0 < fputs("FileVersion=1.2\n", log_file));
 	ASSERT(0 < fprintf(log_file, "Source=EECH %d.%d.%d\n", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION));
 	ASSERT(0 < fprintf(log_file, "Recorder=EECH %d.%d.%d\n", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION));
 	ASSERT(0 < fprintf(log_file, "RecordingTime=%04d-%02d-%02dT%02d:%02d:%02dZ\n", year, month, day, hour, minute, second));
@@ -544,13 +545,15 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 
 		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
 
-		return;
+		break;
 	case TACVIEW_UNIT_DESTROYED:
 		event_type = 0x2c;
 
 		write_tacview_unit_update(en, TRUE, TRUE, TRUE);
 
 		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
+
+//		fprintf(log_file, "!%x,%x,?\n", event_type, tacview_id(en));
 		break;
 	case TACVIEW_UNIT_TOOK_OFF:
 		event_type = 0x40;
@@ -564,9 +567,34 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 	}
 
 	if (related)
+	{
 		ASSERT(0 < fprintf(log_file, "!%x,%x,%x\n", event_type, tacview_id(en), tacview_id(related)));
+	}
 	else
+	{
 		ASSERT(0 < fprintf(log_file, "!%x,%x,?\n", event_type, tacview_id(en)));
+	}
+}
+
+void write_tacview_debug_event(entity* en, const char* format, ...)
+{
+	static char
+		message[1000],
+		buffer[1000];
+
+	va_list
+		args;
+
+	va_start (args, format);
+	vsnprintf (buffer, sizeof(buffer), format, args);
+	va_end(args);
+
+	latin1_to_utf8(buffer, message, sizeof(message), TRUE);
+
+	if (en)
+		fprintf(log_file, "!f8,%x,%s\n", tacview_id(en), message);
+	else
+		fprintf(log_file, "!f8,,%s\n", message);
 }
 
 void tacview_update_gunship(void)
@@ -654,7 +682,9 @@ void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 //			write_coordinates(en);
 		}
 		else
+		{
 			ASSERT(0 < fputs(",,", log_file));
+		}
 
 		if (rotated)
 		{
@@ -665,21 +695,10 @@ void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 					deg(get_heading_from_attitude_matrix(raw->attitude))));
 		}
 		else
+		{
 			ASSERT(0 < fprintf(log_file, ",,,\n"));
+		}
 	}
-}
-
-void write_coordinates(entity* en)
-{
-	vec3d
-		*pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
-	float
-		latitude = (pos->z * latitude_scale),
-		abs_lat = fabs(latitude_offset + rad(latitude)),
-		longitude_length = (P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)),
-		longitude = (pos->x / longitude_length);
-
-	ASSERT(0 < fprintf(log_file, "%.6f,%.6f,%.2f", latitude, longitude, pos->y));
 }
 
 // latitude in degrees, not rads!

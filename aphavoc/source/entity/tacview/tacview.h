@@ -29,6 +29,7 @@ void write_tacview_frame_header(void);
 void write_tacview_new_unit(entity* en);
 void write_tacview_unit_event(entity* en, tacview_event_type type, entity* related);
 void write_tacview_unit_update(entity* en, int moved, int rotated, int force);
+void write_tacview_debug_event(entity* en, const char* format, ...);
 
 int tacview_reset_frame(void);
 
