@@ -9,6 +9,7 @@
 
 #include "tacview.h"
 #include "version.h"
+#include "ai/ai_misc/ai_dbase.h"
 
 #define M1 111132.92
 #define M2 -559.82
@@ -19,6 +20,8 @@
 #define FAST_UPDATE_FREQ 4
 #define MEDIUM_UPDATE_FREQ 8
 #define SLOW_UPDATE_FREQ 16
+
+#define LIMITED_SECTORS 5
 
 #define tacview_id(obj)  (get_local_entity_safe_index(obj) + 2)
 
@@ -31,6 +34,10 @@ static float
 	tacview_starttime = 0.0;
 
 static int
+	last_xsector = -1,
+	last_zsector = -1,
+	changed_sector = TRUE,
+	friendly_side = 0,
 	update_group = 0,
 	slow_update_group = 0,
 	medium_update_group = 0,
@@ -40,8 +47,48 @@ static void write_coordinates(entity* en);
 static void write_srtm3_grid(int latitude, int longitude);
 static void write_srtm3_terrain_elevation(void);
 static int tacview_log_this_frame(entity* en);
+static void open_tacview_log(void);
+static int hidden_unit(entity* en);
 
-void open_tacview_log(void)
+void start_tacview_logging(entity* gunship)
+{
+	entity* en;
+
+	open_tacview_log();
+	write_tacview_header(get_pilot_entity(), gunship);
+	write_tacview_frame_header();
+
+//		write_tacview_town_names();
+
+	// add tacview unites
+	en = get_local_entity_first_child (get_update_entity (), LIST_TYPE_UPDATE);
+
+	while (en)
+	{
+		set_update_succ (get_local_entity_child_succ (en, LIST_TYPE_UPDATE));
+		switch (en->type)
+		{
+		case ENTITY_TYPE_HELICOPTER:
+		case ENTITY_TYPE_FIXED_WING:
+		case ENTITY_TYPE_WEAPON:
+		case ENTITY_TYPE_ANTI_AIRCRAFT:
+		case ENTITY_TYPE_ROUTED_VEHICLE:
+		case ENTITY_TYPE_SHIP_VEHICLE:
+			if (command_line_tacview_logging == 3 || !hidden_unit(en))
+				write_tacview_new_unit(en);
+			break;
+		case ENTITY_TYPE_KEYSITE:
+			if (command_line_tacview_logging == 3 || get_local_entity_int_value(en, INT_TYPE_SIDE) == friendly_side || !hidden_unit(en))
+				write_tacview_new_unit(en);
+			break;
+		}
+		en = get_update_succ ();
+	}
+
+	set_update_succ (NULL);
+}
+
+static void open_tacview_log(void)
 {
 	char
 		log_filename[256];
@@ -53,6 +100,15 @@ void open_tacview_log(void)
 		day,
 		month,
 		year;
+
+	// init variables
+	last_xsector = last_zsector = -1;
+	changed_sector = TRUE;
+	friendly_side = 0;
+	update_group = 0;
+	slow_update_group = 0;
+	medium_update_group = 0;
+	frequent_update_group = 0;
 
 	get_system_date(&day, &month, &year);
 	year += 2000;
@@ -118,64 +174,71 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 	year += 2000;
 	get_digital_clock_int_values (tacview_starttime, &game_hour, &game_minute, &game_second);
 
-	fputs(byte_order_mark, log_file);
+	ASSERT(0 < fputs(byte_order_mark, log_file));
 
 	// CORE HEADER
 
-	fputs("FileType=text/acmi/tacview\n", log_file);
-	fputs("FileVersion=1.2\n", log_file);
-	fprintf(log_file, "Source=EECH %d.%d.%d\n", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION);
-	fputs("Recorder=EECH\n", log_file);
-	fprintf(log_file, "RecordingTime=%04d-%02d-%02dT%02d:%02d:%02dZ\n", year, month, day, hour, minute, second);
-	fputs("Author=", log_file);
+	ASSERT(0 < fputs("FileType=text/acmi/tacview\n", log_file));
+	ASSERT(0 < fputs("FileVersion=1.2\n", log_file));
+	ASSERT(0 < fprintf(log_file, "Source=EECH %d.%d.%d\n", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION));
+	ASSERT(0 < fprintf(log_file, "Recorder=EECH %d.%d.%d\n", MAJOR_VERSION, DATA_VERSION, MINOR_VERSION));
+	ASSERT(0 < fprintf(log_file, "RecordingTime=%04d-%02d-%02dT%02d:%02d:%02dZ\n", year, month, day, hour, minute, second));
+	ASSERT(0 < fputs("Author=", log_file));
 	if (pilot)
 	{
 		const char* pilot_name = get_local_entity_string(pilot, STRING_TYPE_PILOTS_NAME);
+
+		friendly_side = get_local_entity_int_value(pilot, INT_TYPE_SIDE);
+
 		if (pilot_name)
 		{
 			latin1_to_utf8(pilot_name, cleaned_variable, sizeof(cleaned_variable), TRUE);
-			fputs(cleaned_variable, log_file);
+			ASSERT(0 < fputs(cleaned_variable, log_file));
 		}
 	}
-	fputs("\n", log_file);
+	ASSERT(0 < fputs("\n", log_file));
 
 	// DECLARATIONS
 
 	latin1_to_utf8(session->displayed_title, cleaned_variable, sizeof(cleaned_variable), TRUE);
-	fprintf(log_file, "Title=%s\n", cleaned_variable);
+	ASSERT(0 < fprintf(log_file, "Title=%s\n", cleaned_variable));
 	if (player_task)
-		fprintf(log_file, "Category=%s\n", get_local_entity_string(player_task, STRING_TYPE_SHORT_DISPLAY_NAME));
-	fprintf(log_file, "MissionTime=%04d-%02d-%02dT%02d:%02d:%02dZ\n", year, month, day + game_day - 1, game_hour, game_minute, game_second);
+		ASSERT(0 < fprintf(log_file, "Category=%s\n", get_local_entity_string(player_task, STRING_TYPE_SHORT_DISPLAY_NAME)));
+	ASSERT(0 < fprintf(log_file, "MissionTime=%04d-%02d-%02dT%02d:%02d:%02dZ\n", year, month, day + game_day - 1, game_hour, game_minute, game_second));
 
-	fprintf(log_file, "LatitudeOffset=%f\n", deg(latitude_offset));
-	fprintf(log_file, "LongitudeOffset=%f\n", deg(longitude_offset));
+	ASSERT(0 < fprintf(log_file, "LatitudeOffset=%f\n", deg(latitude_offset)));
+	ASSERT(0 < fprintf(log_file, "LongitudeOffset=%f\n", deg(longitude_offset)));
 
-	fputs("Coalition=Neutral,Green\n", log_file);
-	fputs("Coalition=Blue,Blue\n", log_file);
-	fputs("Coalition=Red,Red\n", log_file);
-	fputs("ProvidedEvents=Takeoff,Landing,Destroyed,LeftArea\n", log_file);
+	ASSERT(0 < fputs("Coalition=Neutral,Green\n", log_file));
+	ASSERT(0 < fputs("Coalition=Blue,Blue\n", log_file));
+	ASSERT(0 < fputs("Coalition=Red,Red\n", log_file));
+	ASSERT(0 < fputs("ProvidedEvents=Takeoff,Landing,Destroyed,LeftArea\n", log_file));
 
 	// ADDITIONAL INFO
 
 	if (player_gunship)
-		fprintf(log_file, "MainAircraftID=%x\n", tacview_id(player_gunship));
+		ASSERT(0 < fprintf(log_file, "MainAircraftID=%x\n", tacview_id(player_gunship)));
 
-	//if (command_line_tacview_generate_srtm_height_data)
+//	if (command_line_tacview_generate_srtm_height_data)
 		write_srtm3_terrain_elevation();
 }
 
 void write_tacview_frame_header(void)
 {
 	float time = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
-	fprintf(log_file, "#%.2f\n", time - tacview_starttime);
+	ASSERT(0 < fprintf(log_file, "#%.2f\n", time - tacview_starttime));
 }
 
 void write_tacview_new_unit(entity* en)
 {
 	entity_sub_types sub_type;
 	int is_mobile = TRUE;
+//	int is_mobile = en->type == ENTITY_TYPE_FIXED_WING;
 
 	if (!en || !log_file)
+		return;
+
+	if (command_line_tacview_logging < 3 && hidden_unit(en))
 		return;
 
 	sub_type = get_local_entity_int_value(en, INT_TYPE_ENTITY_SUB_TYPE);
@@ -215,14 +278,14 @@ void write_tacview_new_unit(entity* en)
 				callsign = get_local_entity_string (group, STRING_TYPE_GROUP_CALLSIGN);
 
 			// id, parent (empty), object type, coalition, country(empty), name, pilot, group, rank
-			fprintf(log_file, "+%x,,%x,%x,,%s,%s,%s,%d\n",
+			ASSERT(0 < fprintf(log_file, "+%x,,%x,%x,,%s,%s,%s,%d\n",
 					tacview_id(en),
 					type,
 					get_local_entity_int_value(en, INT_TYPE_SIDE),
 					aircraft_database[sub_type].full_name,
 					pilot ? pilot : "",
 					callsign ? callsign : "",
-					get_local_entity_int_value (en, INT_TYPE_GROUP_MEMBER_ID));
+					get_local_entity_int_value (en, INT_TYPE_GROUP_MEMBER_ID)));
 
 			set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, TRUE);
 			break;
@@ -276,22 +339,22 @@ void write_tacview_new_unit(entity* en)
 #if 0
 			if (type == 0x34)  // carrier, add as object
 				// id, parent (empty), object type, coalition, country(empty), name, pilot(empty), group(empty), rank(empty)
-				fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
+				ASSERT(0 < fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
 						tacview_id(en),
 						type,
 						get_local_entity_int_value(en, INT_TYPE_SIDE),
-						get_local_entity_string(en, STRING_TYPE_KEYSITE_NAME));
+						get_local_entity_string(en, STRING_TYPE_KEYSITE_NAME)));
 			else
 #endif
 				// id,, type, coalition, country(empty), name, length, width, height(for type 88)
-				fprintf(log_file, "+%x,,%x,%d,,%s,%d,%d%s\n",
+				ASSERT(0 < fprintf(log_file, "+%x,,%x,%d,,%s,%d,%d%s\n",
 						tacview_id(en),
 						type,
 						get_local_entity_int_value(en, INT_TYPE_SIDE),
 						get_local_entity_string(en, STRING_TYPE_KEYSITE_NAME),
 						length,
 						width,
-						height_str);
+						height_str));
 
 			is_mobile = FALSE;
 			break;
@@ -313,23 +376,30 @@ void write_tacview_new_unit(entity* en)
 
 			if (sub_type <= ENTITY_SUB_TYPE_WEAPON_2A65_152MM_ROUND)
 			{
-				if (sub_type == ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND
-					|| sub_type == ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND
-					|| sub_type == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND
-					|| sub_type == ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND
-					|| sub_type == ENTITY_SUB_TYPE_WEAPON_ADMG_630_30MM_ROUND)  // Kiev's AA gun
+				switch (sub_type)
 				{
+				case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_NSV_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_KPV_14P5MM_ROUND:
 					type = 0x49;  // bullets
-				}
-				else if (sub_type == ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET
-						 || sub_type == ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET)
-				{
+					break;
+				case ENTITY_SUB_TYPE_WEAPON_M75_76MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_M284_155MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_CIS_NAVAL_100MM_ROUND:
+				case ENTITY_SUB_TYPE_WEAPON_2A65_152MM_ROUND:
+					type = 0x4a;  // artillery
+					break;
+				case ENTITY_SUB_TYPE_WEAPON_BM21_122MM_ROCKET:
+				case ENTITY_SUB_TYPE_WEAPON_M270_227MM_ROCKET:
 					// these are actually rockets, despite being in the projectile section
 					name = weapon_database[sub_type].full_name;
 					type = 0x44;
-				}
-				else
+					break;
+				default:
 					type = 0x48;  // shell
+					break;
+				}
 			}
 			// rockets
 			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_S13)
@@ -347,10 +417,13 @@ void write_tacview_new_unit(entity* en)
 			{
 				type = 0x50;
 			}
-			// flares and smoke grenades
-			else if (sub_type <= ENTITY_SUB_TYPE_WEAPON_SMOKE_GRENADE)
+			else if (sub_type == ENTITY_SUB_TYPE_WEAPON_FLARE)
 			{
 				type = 0x54;
+			}
+			else if (sub_type == ENTITY_SUB_TYPE_WEAPON_SMOKE_GRENADE)
+			{
+				type = 0x58;
 			}
 			else  // crates, debris etc.
 			{
@@ -358,11 +431,11 @@ void write_tacview_new_unit(entity* en)
 			}
 
 			// id, parent (empty), object type, coalition(empty), country(empty), name, pilot(empty), group(empty), rank(empty)
-			fprintf(log_file, "+%x,%s,%x,,,%s,,,\n",
+			ASSERT(0 < fprintf(log_file, "+%x,%s,%x,,,%s,,,\n",
 					tacview_id(en),
 					parent_str,
 					type,
-					name);
+					name));
 
 			break;
 		}
@@ -376,13 +449,13 @@ void write_tacview_new_unit(entity* en)
 			switch (en->type)
 			{
 			case ENTITY_TYPE_ANTI_AIRCRAFT:
-				if (vehicle_database[sub_type].view_category == VIEW_CATEGORY_INFANTRY)
-					type = 0x2c;
-				else
-					type = 0x20;
+				type = 0x20;
 				break;
 			case ENTITY_TYPE_ROUTED_VEHICLE:
-				if (vehicle_database[sub_type].default_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
+				// moving anti aircraft are vehicles, not ANTI_AIRCRAFT, so be sure to detect them here
+				if (vehicle_database[sub_type].target_symbol_type == TARGET_SYMBOL_AIR_DEFENCE_UNIT)
+					type = 0x20;
+				else if (vehicle_database[sub_type].default_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 					type = 0x28;
 				else
 					type = 0x24;
@@ -400,13 +473,12 @@ void write_tacview_new_unit(entity* en)
 			name = vehicle_database[sub_type].full_name;
 
 			// id, parent (empty), object type, coalition, country(empty), name, pilot, group, rank
-			fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
+			ASSERT(0 < fprintf(log_file, "+%x,,%x,%x,,%s,,,\n",
 					tacview_id(en),
 					type,
 					get_local_entity_int_value(en, INT_TYPE_SIDE),
-					name);
+					name));
 
-			set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, TRUE);
 			break;
 		}
 
@@ -431,17 +503,44 @@ void write_tacview_new_unit(entity* en)
 	write_tacview_unit_update(en, TRUE, TRUE, TRUE);
 }
 
+void write_tacview_town_names(void)
+{
+#if 0
+	population_name_database_type
+		*item;
+
+	for (item = population_name_database; item; item = item->next)
+		if (item->type == POPULATION_TYPE_TOWN)
+		{
+			float
+				latitude = (item->z * latitude_scale),
+				abs_lat = fabs(latitude_offset + rad(latitude)),
+				longitude_length = (P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)),
+				longitude = (item->x / longitude_length);
+
+			ASSERT(0 < fprintf(log_file, "+%x,,88,0,,%s,%d,%d%,%ds\n",
+					item,  // have no real id, but that's ok because we're not going to reference it
+					item->name,
+					0,
+					0,
+					0));
+
+			ASSERT(0 < fprintf(log_file, "%x,%.6f,%.6f,%.2f,0,0,0\n", item, latitude, longitude, get_3d_terrain_elevation(item->x, item->z)));
+		}
+#endif
+}
+
 void write_tacview_unit_event(entity* en, tacview_event_type type, entity* related)
 {
 	int event_type;
 
-	if (!get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
+	if (!log_file || !get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
 		return;
 
 	switch(type)
 	{
 	case TACVIEW_UNIT_LEFT_AREA:
-		fprintf(log_file, "!28,%x\n", tacview_id(en));
+		ASSERT(0 < fprintf(log_file, "!28,%x\n", tacview_id(en)));
 
 		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
 
@@ -465,37 +564,109 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 	}
 
 	if (related)
-		fprintf(log_file, "!%x,%x,%x\n", event_type, tacview_id(en), tacview_id(related));
+		ASSERT(0 < fprintf(log_file, "!%x,%x,%x\n", event_type, tacview_id(en), tacview_id(related)));
 	else
-		fprintf(log_file, "!%x,%x,?\n", event_type, tacview_id(en));
+		ASSERT(0 < fprintf(log_file, "!%x,%x,?\n", event_type, tacview_id(en)));
+}
+
+void tacview_update_gunship(void)
+{
+	if (gunship_current_sector->x_sector != last_xsector ||
+		gunship_current_sector->z_sector != last_zsector)
+	{
+		changed_sector = TRUE;
+	}
+	else
+		changed_sector = FALSE;
+}
+
+int hidden_unit(entity* en)
+{
+	vec3d* pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+	entity* sec = NULL;
+
+	if (!pos)
+	{
+		debug_log("%s", get_sub_type_name(en));
+		ASSERT(FALSE);
+		return TRUE;
+	}
+
+	sec = get_local_sector_entity(pos);
+
+	if (command_line_tacview_logging == 1 && get_sector_fog_of_war_value (sec, friendly_side) <= 0.25)
+		return TRUE;
+
+	if (!gunship_current_sector)
+		return TRUE;
+
+	if (changed_sector &&
+		(abs(gunship_current_sector->x_sector - get_local_entity_int_value(sec, INT_TYPE_X_SECTOR)) >= LIMITED_SECTORS
+		 || abs(gunship_current_sector->z_sector - get_local_entity_int_value(sec, INT_TYPE_Z_SECTOR)) >= LIMITED_SECTORS))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 {
-	if (!tacview_log_this_frame(en) && !force)
-		return;
+	ASSERT(command_line_tacview_logging);
 
-	// TODO: start logging if in mission mode and inside area/FoW
-	if (!get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
-		return;
-
-	fprintf(log_file, "%x,", tacview_id(en));
-
-	if (moved)
-		write_coordinates(en);
-	else
-		fputs(",,", log_file);
-
-	if (rotated)
+	if (!force)
 	{
-		mobile* raw = get_local_entity_data(en);
-		fprintf(log_file, ",%.1f,%.1f,%.1f\n",
-				deg(get_roll_from_attitude_matrix(raw->attitude)),
-				deg(get_pitch_from_attitude_matrix(raw->attitude)),
-				deg(get_heading_from_attitude_matrix(raw->attitude)));
+		if (!tacview_log_this_frame(en))
+			return;
+
+		if (command_line_tacview_logging < 3)
+		{
+			// TODO: start logging if in mission mode and inside area/FoW
+			if (!get_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING))
+			{
+				if (!hidden_unit(en))
+					write_tacview_new_unit(en);
+
+				return;
+			}
+			else if (command_line_tacview_logging < 3 && hidden_unit(en))
+				write_tacview_unit_event(en, TACVIEW_UNIT_LEFT_AREA, NULL);
+
+			if (!moved && !rotated)
+				return;
+		}
 	}
-	else
-		fprintf(log_file, ",,,\n");
+
+	ASSERT(0 < fprintf(log_file, "%x,", tacview_id(en)));
+
+	{
+		vec3d
+			*pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
+		float
+			latitude = (pos->z * latitude_scale),
+			abs_lat = fabs(latitude_offset + rad(latitude)),
+			longitude_length = (P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)),
+			longitude = (pos->x / longitude_length);
+
+		if (moved)
+		{
+			ASSERT(0 < fprintf(log_file, "%.6f,%.6f,%.2f", latitude, longitude, pos->y));
+//			write_coordinates(en);
+		}
+		else
+			ASSERT(0 < fputs(",,", log_file));
+
+		if (rotated)
+		{
+			mobile* raw = get_local_entity_data(en);
+			ASSERT(0 < fprintf(log_file, ",%.1f,%.1f,%.1f\n",
+					deg(get_roll_from_attitude_matrix(raw->attitude)),
+					deg(get_pitch_from_attitude_matrix(raw->attitude)),
+					deg(get_heading_from_attitude_matrix(raw->attitude))));
+		}
+		else
+			ASSERT(0 < fprintf(log_file, ",,,\n"));
+	}
 }
 
 void write_coordinates(entity* en)
@@ -508,7 +679,7 @@ void write_coordinates(entity* en)
 		longitude_length = (P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)),
 		longitude = (pos->x / longitude_length);
 
-	fprintf(log_file, "%.6f,%.6f,%.2f", latitude, longitude, pos->y);
+	ASSERT(0 < fprintf(log_file, "%.6f,%.6f,%.2f", latitude, longitude, pos->y));
 }
 
 // latitude in degrees, not rads!
@@ -614,6 +785,9 @@ static void write_srtm3_grid(int latitude, int longitude)
 
 int tacview_reset_frame(void)
 {
+	if (!log_file)
+		return FALSE;
+
 	if (++update_group == SLOW_UPDATE_FREQ)
 		update_group = 0;
 

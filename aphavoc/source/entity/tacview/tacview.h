@@ -17,10 +17,13 @@ typedef enum {
 	TACVIEW_UNIT_LANDED
 } tacview_event_type;
 
-void open_tacview_log(void);
+void start_tacview_logging(entity* player_gunship);
+
+//void open_tacview_log(void);
 void close_tacview_log(void);
 
 void write_tacview_header(entity* pilot, entity* player_gunship);
+void write_tacview_town_names(void);
 
 void write_tacview_frame_header(void);
 void write_tacview_new_unit(entity* en);
