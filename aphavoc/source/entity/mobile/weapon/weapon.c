@@ -1532,6 +1532,7 @@ void update_entity_weapon_systems (entity *source)
 										if (get_pitch_device_to_target_vector (source, target, selected_weapon, &vp.position, &target_vector))
 										{
 											vec3d offset_vector;
+											float min_pitch = weapon_config_database[config_type][package].min_pitch_limit;
 
 											//
 											// get heading and pitch offsets
@@ -1550,10 +1551,18 @@ void update_entity_weapon_systems (entity *source)
 											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
 
 											required_pitch_offset = atan2 (offset_vector.y, flat_range);
+
+											// fire ground launched missiles with slight climb angle to avoid missile hitting ground as often
+											if (weapon_database[selected_weapon].guidance_type != WEAPON_GUIDANCE_TYPE_NONE
+												&& (source->type == ENTITY_TYPE_ANTI_AIRCRAFT || source->type == ENTITY_TYPE_ROUTED_VEHICLE))
+											{
+												min_pitch = max(rad(10.0), min_pitch);
+											}
+
 											required_pitch_offset = bound
 											(
 												required_pitch_offset,
-												weapon_config_database[config_type][package].min_pitch_limit,
+												min_pitch,
 												weapon_config_database[config_type][package].max_pitch_limit
 											);
 										}
