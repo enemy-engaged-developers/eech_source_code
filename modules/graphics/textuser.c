@@ -102,11 +102,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include "project.h"
 #include "graphics.h"
 
 //VJ 051223 changed to project.h to access get_current_game_session()
 //this includes cmndline.h and global.h needed for texture colour mod and winter textures
-#include "project.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4311,6 +4311,8 @@ static void initialize_known_coordinates(void)
 	switch (current_map_info.mapnr)
 	{
 	case 1:  // Thailand
+		current_map_info.latitude = rad(18.393);
+		current_map_info.longitude = rad(97.87);
 		break;
 	case 2:  // Cuba
 		current_map_info.latitude = rad(19.577);
@@ -4331,16 +4333,38 @@ static void initialize_known_coordinates(void)
 		current_map_info.longitude = rad(43.03);
 		break;
 	case 7:  // Alaska
-	case 8:  // Alutean islands
+		current_map_info.latitude = rad(64.34);
+		current_map_info.longitude = rad(-167.13);
+		break;
+	case 8:  // Aleutean islands
+		current_map_info.latitude = rad(51.25);
+		current_map_info.longitude = rad(-178.53);
+		break;
 	case 9:  // Kuwait
+		current_map_info.latitude = rad(28.29);
+		current_map_info.longitude = rad(45.82);
+		break;
 	case 10: // Libya
-	case 11: // Grand Canoyon
+		current_map_info.latitude = rad(21.33);
+		current_map_info.longitude = rad(17.27);
+		break;
+	case 11: // Grand Canyon
 	case 12: // Mars
 	case 13: // Alexander Archipelago
+		break;
 	case 14: // Skagway
+		current_map_info.latitude = rad(59.01);
+		current_map_info.longitude = rad(-137.055);
+		break;
 	case 15: // Red Sea
+		current_map_info.latitude = rad(21.0);
+		current_map_info.longitude = rad(35.5);
+		break;
 	case 17: // Afognak
+		break;
 	case 18: // Puerto Rico
+		current_map_info.latitude = rad(17.55);
+		current_map_info.longitude = rad(-68.06);
 		break;
 	}
 }
