@@ -1,11 +1,11 @@
 // Retro 8Mar2005
 
-#define INTERNAL_MODULES 1
-
 #include "project.h"
 
+#define INTERNAL_MODULES 1
+
 /********* IMPORTANT ************************************************
- * please increase this number when changing the layout of the data, 
+ * please increase this number when changing the layout of the data,
  * it makes life so much easier for those using the data
  *******************************************************************/
 #define SHARED_MEM_DATA_VERSION 2
@@ -18,15 +18,15 @@ int Initialise_Shared_Memory()
 {
 	gPtrSharedMemory = 0;
 
-	gHandleSharedMemory = CreateFileMapping(INVALID_HANDLE_VALUE,			// current file handle 
-											NULL,                           // default security 
-											PAGE_READWRITE,                 // read/write permission 
-											0,								// max. object size 
-											sizeof(shared_memory_t),        // size of hFile 
-											"EECHSharedMemory");            // name of mapping object 
-		
-	if (gHandleSharedMemory != NULL) 
-	{ 
+	gHandleSharedMemory = CreateFileMapping(INVALID_HANDLE_VALUE,			// current file handle
+											NULL,                           // default security
+											PAGE_READWRITE,                 // read/write permission
+											0,								// max. object size
+											sizeof(shared_memory_t),        // size of hFile
+											"EECHSharedMemory");            // name of mapping object
+
+	if (gHandleSharedMemory != NULL)
+	{
 		gPtrSharedMemory = MapViewOfFile(gHandleSharedMemory, FILE_MAP_WRITE, 0, 0, 0);
 
 		((shared_memory_t*)gPtrSharedMemory)->version = SHARED_MEM_DATA_VERSION;

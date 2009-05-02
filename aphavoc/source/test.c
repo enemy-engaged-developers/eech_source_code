@@ -1,64 +1,64 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
-
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "project.h"
 #include "ai/taskgen/taskgen.h"
 #include "ai/ai_misc/ai_misc.h"
 
@@ -337,49 +336,49 @@ static float display_in_flight_debug_misc_info (float y)
 					print_mono_font_string (s);
 
 					y += y_add_on;
-	
+
 					if (!get_gunship_entity ())
 					{
 						set_mono_font_position (0.0, y);
-	
+
 						sprintf (s, "%-20.20s: %d", "Invulnerable from Collisions", get_local_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS));
-	
+
 						print_mono_font_string (s);
-	
+
 						y += y_add_on;
-	
+
 						set_mono_font_position (0.0, y);
-	
+
 						sprintf (s, "%-20.20s: %d", "Invulnerable from Weapons", get_local_entity_int_value (get_session_entity (), INT_TYPE_INVULNERABLE_FROM_WEAPONS));
-	
+
 						print_mono_font_string (s);
 
 						y += y_add_on;
 					}
 					else
 					{
-	
+
 						set_mono_font_position (0.0, y);
-	
+
 						sprintf (s, "%-20.20s: %d", "Invulnerable from Collisions", get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INVULNERABLE_FROM_COLLISIONS));
-	
+
 						print_mono_font_string (s);
-	
+
 						y += y_add_on;
-	
+
 						set_mono_font_position (0.0, y);
-	
+
 						sprintf (s, "%-20.20s: %d", "Invulnerable from Weapons", get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INVULNERABLE_FROM_WEAPONS));
-	
+
 						print_mono_font_string (s);
 
 						y += y_add_on;
 					}
 
 					set_mono_font_position (0.0, y);
-	
+
 					sprintf (s, "%-20.20s: %d", "AI Invulnerable", get_damage_debug_invulnerable_flag ());
-	
+
 					print_mono_font_string (s);
 
 					y += y_add_on;
@@ -564,7 +563,7 @@ static float display_in_flight_debug_misc_info (float y)
 			{
 				player_log_type
 					*player;
-				
+
 				int
 					side,
 					counter,
@@ -574,11 +573,11 @@ static float display_in_flight_debug_misc_info (float y)
 				player = get_current_player_log ();
 
 				side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
-				
+
 				medals = player->side_log[side].medals;
-				
+
 				counter = player->side_log[side].air_medal_counter;
-					
+
 				medal_count = *(medals + MEDAL_AIR_MEDAL);
 
 				set_mono_font_position (0.0, y);
@@ -738,32 +737,32 @@ static float display_in_flight_debug_keysite_info (float y)
 
 			if (group)
 			{
-	
+
 				keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
 
 				if ((!keysite) || (get_local_entity_type (keysite) != ENTITY_TYPE_KEYSITE))
 				{
 					return y;
 				}
-	
+
 				set_mono_font_position (0.0, y);
 				sprintf (s, "Keysite %s (%d) data", get_local_entity_string (keysite, STRING_TYPE_FULL_NAME), get_local_entity_index (keysite));
 				print_mono_font_string (s);
 				y += y_add_on;
-	
+
 				landing = get_local_entity_first_child (keysite, LIST_TYPE_LANDING_SITE);
-	
+
 				while (landing)
 				{
-	
+
 					if (in_flight_debug_keysite_info - 1 == get_local_entity_int_value (landing, INT_TYPE_ENTITY_SUB_TYPE))
 					{
-			
+
 						set_mono_font_position (0.0, y);
 						sprintf (s, "Landing %s (%d) data", entity_sub_type_landing_names [get_local_entity_int_value (landing, INT_TYPE_ENTITY_SUB_TYPE)], get_local_entity_index (landing));
 						print_mono_font_string (s);
 						y+= y_add_on;
-			
+
 						set_mono_font_position (0.0, y);
 						sprintf (s, "  Locks: Reserved %d, landed %d, landing %d, takeoff %d",
 										get_local_entity_int_value (landing, INT_TYPE_RESERVED_LANDING_SITES),
@@ -772,17 +771,17 @@ static float display_in_flight_debug_keysite_info (float y)
 										get_local_entity_int_value (landing, INT_TYPE_TAKEOFF_LOCK));
 						print_mono_font_string (s);
 						y += y_add_on;
-		
+
 						// reserved list
-		
+
 						item = debug_landing_lock_list;
-		
+
 						while (item)
 						{
-		
+
 							if (item->landing_en == landing)
 							{
-		
+
 								set_mono_font_position (0.0, y);
 								sprintf (s, "  %s (%d) has locks [Res %d, lnd %d, lnding %d, toff %d (Q %d)]",
 											get_local_entity_string (item->en, STRING_TYPE_FULL_NAME),
@@ -795,11 +794,11 @@ static float display_in_flight_debug_keysite_info (float y)
 								print_mono_font_string (s);
 								y += y_add_on;
 							}
-		
+
 							item = item->next;
 						}
 					}
-	
+
 					landing = get_local_entity_child_succ (landing, LIST_TYPE_LANDING_SITE);
 				}
 			}
@@ -1103,7 +1102,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 		sprintf (s, "   Operational state = %s", operational_state_names [get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE)]);
 		print_mono_font_string (s);
 
-		// In hangar 
+		// In hangar
 		y += get_mono_font_char_height ('X');
 		set_mono_font_position (0.0, y);
 
@@ -1422,7 +1421,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 	{
 
 		en = get_external_view_entity ();
-	
+
 		en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
@@ -1440,7 +1439,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
 
 			set_mono_font_colour (hud_colour);
-	
+
 			//
 			// members
 			//
@@ -1468,19 +1467,19 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 			if (current_task)
 			{
 				////////////////////////////////////////
-		
+
 				set_mono_font_position (0.0, y);
-	
+
 				sprintf (s, "Task Info");
 				print_mono_font_string (s);
-	
+
 				// Type
 				y += get_mono_font_char_height ('X');
 				set_mono_font_position (0.0, y);
-	
+
 				sprintf (s, "   Type = %s (%d)", get_local_entity_string (current_task, STRING_TYPE_FULL_NAME), get_local_entity_index (current_task));
 				print_mono_font_string (s);
-	
+
 				// Stop timer
 				stop_timer = get_local_entity_float_value (current_task, FLOAT_TYPE_STOP_TIMER);
 
@@ -1488,37 +1487,37 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 				{
 					y += get_mono_font_char_height ('X');
 					set_mono_font_position (0.0, y);
-	
+
 					get_digital_countdown_values (stop_timer, NULL, &hrs, &mins, &secs);
 
 					sprintf (s, "   Time till stop = %02d hrs %02d mins %02d secs", hrs, mins, secs);
 
 					print_mono_font_string (s);
 				}
-				
+
 				//
 				// Waypoint list
 				//
-	
+
 				y += get_mono_font_char_height ('X');
-	
+
 				cwp = get_local_entity_current_waypoint (en);
-	
+
 				task_parent = get_local_entity_parent (current_task, LIST_TYPE_ASSIGNED_TASK);
-	
+
 				keysite = get_local_entity_parent (group, LIST_TYPE_KEYSITE_GROUP);
-	
+
 				if ((keysite) && (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE))
 				{
 					y += get_mono_font_char_height ('X');
 					set_mono_font_position (0.0, y);
-	
+
 					sprintf (s, "Current base keysite %s", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
 					print_mono_font_string (s);
 				}
-	
+
 				wp = get_local_entity_first_child (current_task, LIST_TYPE_WAYPOINT);
-	
+
 				while (wp)
 				{
 
@@ -1526,57 +1525,57 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 						*wp_pos;
 
 					wp_pos = get_local_entity_vec3d_ptr (wp, VEC3D_TYPE_POSITION);
-	
+
 					y += get_mono_font_char_height ('X');
 					set_mono_font_position (0.0, y);
-	
+
 					if (wp == cwp)
 					{
-	
+
 						range = get_2d_range (en_pos, wp_pos);
-	
+
 						sprintf (s, "WP %s (%s), (flt time %f), range %f",
 									get_local_entity_string (wp, STRING_TYPE_FULL_NAME),
 									get_formation_name ((formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
 									get_local_entity_float_value (wp, FLOAT_TYPE_FLIGHT_TIME),
 									range);
-	
+
 					}
 					else
 					{
-	
+
 						sprintf (s, "WP %s (%s), (flt time %f)",
 									get_local_entity_string (wp, STRING_TYPE_FULL_NAME),
 									get_formation_name ((formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION)),
 									get_local_entity_float_value (wp, FLOAT_TYPE_FLIGHT_TIME));
 					}
-	
+
 					if ((get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_PICK_UP) ||
 						(get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_WAYPOINT_DROP_OFF))
 					{
-	
+
 						keysite = get_local_entity_parent (wp, LIST_TYPE_TASK_DEPENDENT);
-	
+
 						if (keysite)
 						{
 							char
 								buffer [128];
-	
+
 							sprintf (buffer, " keysite %s", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME));
-	
+
 							strcat (s, buffer);
 						}
 					}
-	
+
 					print_mono_font_string (s);
 
 					// display waypoint position
-	
+
 					y += get_mono_font_char_height ('X');
 					set_mono_font_position (0.0, y);
 					sprintf (s, "   [%f, %f, %f]", wp_pos->x, wp_pos->y, wp_pos->z);
 					print_mono_font_string (s);
-	
+
 					wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
 				}
 			}
@@ -1617,7 +1616,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 
 					y += get_mono_font_char_height ('X');
 					set_mono_font_position (0.0, y);
-	
+
 					print_mono_font_string (s);
 				}
 				else
@@ -2298,7 +2297,7 @@ static void display_in_flight_external_view_entity_guide_info (void)
 
 							float
 								value;
-								
+
 							criteria_name = guide_criteria_type_names [loop];
 
 							value = get_guide_criteria_value (guide, ( guide_criteria_types ) loop);
