@@ -171,7 +171,7 @@ static unsigned short
 	// assumes major version will never be more than 3, data and minor never more than 127
 //	application_version_number = ( MAJOR_VERSION << 14 ) | (DATA_VERSION << 7) | MINOR_VERSION;
 
-////041009 Moje Gives us trouble with saved games :( Original resotred.            
+////041009 Moje Gives us trouble with saved games :( Original resotred.
 	application_version_number = ( MAJOR_VERSION << 8 ) | DATA_VERSION;
 
 #else
@@ -386,7 +386,7 @@ void initialise_global_options_data_version2 (void)
 
 	set_global_cockpit_detail_level (COCKPIT_DETAIL_LEVEL_HIGH);
 
-	set_global_simple_avionics (TRUE);
+	set_global_simple_avionics (FALSE);
 
 	set_global_display_in_flight_intelligence_messages (TRUE);
 
@@ -406,9 +406,9 @@ void initialise_global_options_data_version2 (void)
 	);
 
 	set_global_sound_channel_volume (SOUND_CHANNEL_SOUND_EFFECT, 				10);
-	set_global_sound_channel_volume (SOUND_CHANNEL_SYSTEM, 						10);
-	set_global_sound_channel_volume (SOUND_CHANNEL_CO_PILOT, 					8);
-	set_global_sound_channel_volume (SOUND_CHANNEL_WINGMAN, 						7);
+	set_global_sound_channel_volume (SOUND_CHANNEL_SYSTEM, 						9);
+	set_global_sound_channel_volume (SOUND_CHANNEL_CO_PILOT, 					10);
+	set_global_sound_channel_volume (SOUND_CHANNEL_WINGMAN, 						9);
 	set_global_sound_channel_volume (SOUND_CHANNEL_AIR_TRAFFIC_CONTROLLER, 	5);
 	set_global_sound_channel_volume (SOUND_CHANNEL_FORWARD_AIR_CONTROLLER, 	6);
 	set_global_sound_channel_volume (SOUND_CHANNEL_GROUND_CONTROLLER, 		5);
