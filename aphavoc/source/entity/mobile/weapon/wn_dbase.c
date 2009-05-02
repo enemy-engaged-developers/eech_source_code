@@ -880,7 +880,7 @@ weapon_data
 			// customised for M270 MLRS (pitch limits 15.0 to 50.0 degrees)
 			//
 
-			"M270 227mm Rocket",				  								// full_name
+			"M26A1 227mm Rocket",				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -2537,7 +2537,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AIM-92 Stinger",					  								// full_name
+			"AIM-92A Stinger",					  								// full_name
 			"AAM",		 														// hud_name
 			"AAM",																// mfd_name
 			"AIM-92",	  														// weapon_loading_list_name
@@ -2667,7 +2667,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AIM-120 AMRAAM",		 				  							// full_name
+			"AIM-120C AMRAAM",		 				  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -2927,7 +2927,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AA-10A Alamo",						  							// full_name
+			"R-27R",						  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -2992,7 +2992,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AA-10B Alamo",						  							// full_name
+			"R-27T",						  							// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3057,7 +3057,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AA-11 Archer",													// full_name
+			"R-73",																// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3389,11 +3389,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"9M120 Ataka",				 				 								// full_name
+			"9M120 Ataka-V",				 				 								// full_name
 			"ATAKA",	  															// hud_name
 			"ATAKA",																	// mfd_name
 			"Ataka",													 			// weapon_loading_list_name
-			"9M120 Ataka",													 			// weapon_loading_name_text
+			"9M120 Ataka-V",													 			// weapon_loading_name_text
 
 			OBJECT_3D_ATAKA_MISSILE,	  									// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_RADIO_COMMAND,							// guidance_type
@@ -3584,7 +3584,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AS-10 Karen",				 				 						// full_name
+			"Kh-25MT",						 				 						// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3649,7 +3649,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AS-14 Kedge",				 				 						// full_name
+			"Kh-29L",						 				 						// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3721,7 +3721,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Chaparral",						  								// full_name
+			"MIM-72G Chaparral",						  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3916,7 +3916,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Sea Sparrow",														// full_name
+			"RIM-7P Sea Sparrow",													// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -3981,7 +3981,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"SA-7 Grail",		  				  								// full_name
+			"9K32 Strela 2",		  				  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4046,7 +4046,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"SA-13 Gopher",		 			  								// full_name
+			"9M333",						 			  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4111,7 +4111,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"SA-19 Grison SAM",	 			  								// full_name
+			"9M311",					 			  								// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4176,7 +4176,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"SA-N-3 Goblet",													// full_name
+			"M-11 Shtorm",															// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4241,7 +4241,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"SA-N-4 Gecko",													// full_name
+			"9K33M",																// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4313,7 +4313,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"M220 TOW2B", 														// full_name
+			"BGM-71D TOW-2", 														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4378,7 +4378,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AT-5 Spandrel", 	 												// full_name
+			"9M113 Konkurs",	 	 												// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4443,7 +4443,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AT-10 Stabber",													// full_name
+			"9M117 Bastion",														// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
@@ -4508,7 +4508,7 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"AT-11 Sniper", 	 		 										// full_name
+			"9M119 Svir",		 	 		 										// full_name
 			"?",																	// hud_name
 			"?",																	// mfd_name
 			"?",																	// weapon_loading_list_name
