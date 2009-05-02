@@ -1,64 +1,64 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
-
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +76,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,10 +127,10 @@ static void update_server (entity *en)
 	success_required_count = 0;
 
 	success_achieved_count = 0;
-	
+
 	if (raw->sleep <= 0.0)
 	{
-				
+
 		raw->sleep = CAMPAIGN_COMPLETION_TIMER;
 
 		//
@@ -172,14 +170,14 @@ static void update_server (entity *en)
 		//
 		// assess completion. (also work out objective_sectors_percentage and time_percentage)
 		//
-		
+
 		campaign_status = CAMPAIGN_CRITERIA_RESULT_NONE;
 
 		this_campaign_criteria = raw->campaign_criteria;
-	
+
   		while (this_campaign_criteria)
 		{
-	
+
 			if ( this_campaign_criteria->result == CAMPAIGN_CRITERIA_RESULT_SUCCESS )
 			{
 
@@ -188,7 +186,7 @@ static void update_server (entity *en)
 
 			switch (this_campaign_criteria->criteria_type)
 			{
-	
+
 				case CAMPAIGN_CRITERIA_BALANCE_OF_POWER:
 				{
 
@@ -212,7 +210,7 @@ static void update_server (entity *en)
 							}
 
 							#if DEBUG_MODULE
-	
+
 							debug_log ("FC_UPDT: Met Campaign criteria %s type %d, goal %d, count %d to %s",
 										campaign_criteria_names [this_campaign_criteria->criteria_type],
 										this_campaign_criteria->type,
@@ -233,7 +231,7 @@ static void update_server (entity *en)
 
 					if (this_campaign_criteria->goal != 0)
 					{
-	
+
 						objective_sectors_percentage = (float) this_campaign_criteria->count / this_campaign_criteria->goal;
 					}
 
@@ -260,10 +258,10 @@ static void update_server (entity *en)
 				case CAMPAIGN_CRITERIA_SPECIAL_KILLS:
 				case CAMPAIGN_CRITERIA_SURRENDERED_SIDES:
 				{
-	
+
 					if (this_campaign_criteria->valid)
 					{
-			
+
 						if (this_campaign_criteria->count >= this_campaign_criteria->goal)
 						{
 
@@ -282,7 +280,7 @@ static void update_server (entity *en)
 							}
 
 							#if DEBUG_MODULE
-	
+
 							debug_log ("FC_UPDT: Met Campaign criteria %s type %d, goal %d, count %d to %s",
 										campaign_criteria_names [this_campaign_criteria->criteria_type],
 										this_campaign_criteria->type,
@@ -293,10 +291,10 @@ static void update_server (entity *en)
 							#endif
 						}
 					}
-	
+
 					break;
 				}
-	
+
 				case CAMPAIGN_CRITERIA_TIME_DURATION:
 				{
 
@@ -311,7 +309,7 @@ static void update_server (entity *en)
 
 					if (this_campaign_criteria->valid)
 					{
-	
+
 						session_raw = get_local_entity_data (get_session_entity ());
 
 						//
@@ -346,11 +344,11 @@ static void update_server (entity *en)
 						//
 						// check time criteria
 						//
-	
+
 						get_digital_clock_values (session_raw->elapsed_time_of_day, &elapsed_hours, &elapsed_minutes, &elapsed_seconds);
 
 						#if DEBUG_MODULE
-	
+
 						debug_log ("FC_UPDT: Campaign criteria %s hours %02f, minutes %02f, seconds %02f to %s",
 											campaign_criteria_names [this_campaign_criteria->criteria_type],
 											this_campaign_criteria->hours - elapsed_hours,
@@ -359,19 +357,19 @@ static void update_server (entity *en)
 											campaign_result_names [this_campaign_criteria->result]);
 
 						#endif
-					
+
 						if (session_raw->elapsed_days >= this_campaign_criteria->days)
 						{
-	
+
 							if (elapsed_hours >= this_campaign_criteria->hours)
 							{
-	
+
 								if (elapsed_minutes >= this_campaign_criteria->minutes)
 								{
-	
+
 									if (elapsed_seconds >= this_campaign_criteria->seconds)
 									{
-	
+
 										if (campaign_status != CAMPAIGN_CRITERIA_RESULT_FAIL)
 										{
 
@@ -386,7 +384,7 @@ static void update_server (entity *en)
 
 										if ( this_campaign_criteria->result == CAMPAIGN_CRITERIA_RESULT_SUCCESS )
 										{
-			
+
 											success_achieved_count++;
 										}
 									}
@@ -394,13 +392,13 @@ static void update_server (entity *en)
 							}
 						}
 					}
-	
+
 					break;
 				}
-	
+
 				default:
 				{
-	
+
 					debug_fatal ("FC_UPDT: undefined campaign critera type %s", campaign_criteria_names [this_campaign_criteria->criteria_type]);
 				}
 			}
@@ -408,10 +406,10 @@ static void update_server (entity *en)
 			//
 			// If any of the result are FAIL then stop
 			//
-	
+
 			if (campaign_status == CAMPAIGN_CRITERIA_RESULT_FAIL)
 			{
-	
+
   				break;
 			}
 
@@ -433,7 +431,7 @@ static void update_server (entity *en)
 		}
 
 		log = get_current_player_log ();
-	
+
 		if (campaign_status == CAMPAIGN_CRITERIA_RESULT_SUCCESS)
 		{
 
