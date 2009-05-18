@@ -4319,6 +4319,8 @@ static void initialize_known_coordinates(void)
 		current_map_info.longitude = rad(-78.628);
 		break;
 	case 3:  // Georgia
+		current_map_info.latitude = rad(41.16);
+		current_map_info.longitude = rad(40.185);
 		break;
 	case 4:  // Taiwan
 		current_map_info.latitude = rad(21.96);
@@ -4361,6 +4363,8 @@ static void initialize_known_coordinates(void)
 		current_map_info.longitude = rad(35.5);
 		break;
 	case 17: // Afognak
+		current_map_info.latitude = rad(55.99);
+		current_map_info.longitude = rad(-155.86);
 		break;
 	case 18: // Puerto Rico
 		current_map_info.latitude = rad(17.55);
