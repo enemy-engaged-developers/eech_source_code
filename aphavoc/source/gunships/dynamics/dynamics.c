@@ -1150,6 +1150,10 @@ void update_flight_dynamics (void)
 			current_flight_dynamics->g_force.value = 1.0 + current_flight_dynamics->model_acceleration_vector.y / G;
 		else
 			current_flight_dynamics->g_force.value = 1.0;
+
+		// TODO: don't do this unconditionally
+		set_local_entity_int_value(get_gunship_entity(), INT_TYPE_MOVED, TRUE);
+		set_local_entity_int_value(get_gunship_entity(), INT_TYPE_ROTATED, TRUE);
 	}
 }
 
@@ -3299,7 +3303,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 
 				flag = FALSE;
 			}
-      
+
       //ataribaby 1/1/2009 enable ALT HOLD for Apache and Havoc
       /*
 			if ((current_flight_dynamics->sub_type == ENTITY_SUB_TYPE_AIRCRAFT_AH64D_APACHE_LONGBOW) ||
@@ -3309,7 +3313,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 				flag = FALSE;
 			}
       */
-      
+
 			if (flag)
 			{
 
@@ -3912,17 +3916,20 @@ void create_rotor_vibration(float force)
 // by pressing debugging keys
 void debug_dynamics_event1(event* ev)
 {
-	command_line_high_res_hud = 1;
+	debug_log("debug event 1");
+	command_line_tacview_logging = 0;
 }
 
 void debug_dynamics_event2(event* ev)
 {
-	command_line_high_res_hud = 0;
+	debug_log("debug event 2");
+	command_line_tacview_logging = 1;
 }
 
 void debug_dynamics_event3(event* ev)
 {
-	dynamics_damage_model(DYNAMICS_DAMAGE_MAIN_ROTOR, FALSE);
+	debug_log("debug event 3");
+	command_line_tacview_logging = 3;
 }
 
 void debug_dynamics_event4(event* ev)
