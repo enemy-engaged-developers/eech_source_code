@@ -10,6 +10,9 @@
 #ifndef TACVIEW_H_
 #define TACVIEW_H_
 
+extern FILE* tacview_log_file;
+#define tacview_is_logging()  (tacview_log_file != NULL)
+
 typedef enum {
 	TACVIEW_UNIT_LEFT_AREA,
 	TACVIEW_UNIT_DESTROYED,
