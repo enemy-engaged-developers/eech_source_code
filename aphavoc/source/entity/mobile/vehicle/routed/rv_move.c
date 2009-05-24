@@ -97,7 +97,7 @@ static void routed_vehicle_movement_get_waypoint_position (entity *en, vec3d *wp
 void routed_vehicle_movement (entity *en)
 {
 
-   routed_vehicle
+	routed_vehicle
       *raw;
 
    entity
@@ -117,7 +117,7 @@ void routed_vehicle_movement (entity *en)
 		pitch,
 		heading;
 
-   raw = get_local_entity_data (en);
+    raw = get_local_entity_data (en);
 
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
@@ -279,6 +279,9 @@ void routed_vehicle_movement (entity *en)
 	{
 
 		float
+			old_heading = 0,
+			old_roll = 0,
+			old_pitch = 0,
 			movement_distance,
 			delta_velocity,
 			max_accel;
@@ -325,6 +328,13 @@ void routed_vehicle_movement (entity *en)
 		//
 		////////////////////////////////////////
 
+		if (raw->vh.mob.tacview_logging)
+		{
+			old_roll = get_roll_from_attitude_matrix(raw->vh.mob.attitude);
+			old_pitch = get_pitch_from_attitude_matrix(raw->vh.mob.attitude);
+			old_heading = get_heading_from_attitude_matrix(raw->vh.mob.attitude);
+		}
+
 		if (get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE) != GUIDE_TERRAIN_FOLLOW_NONE)
 		{
 
@@ -358,6 +368,16 @@ void routed_vehicle_movement (entity *en)
 		// Set Position
 		//
 		////////////////////////////////////////
+
+		if (raw->vh.mob.tacview_logging)
+		{
+			if (fabs(get_roll_from_attitude_matrix(raw->vh.mob.attitude) - old_roll) > rad(0.001)
+				|| fabs(get_pitch_from_attitude_matrix(raw->vh.mob.attitude) - old_pitch) > rad(0.001)
+				|| fabs(heading - old_heading) > rad(0.001))
+			{
+				set_local_entity_int_value(en, INT_TYPE_ROTATED, TRUE);
+			}
+		}
 
 		movement_distance = min (distance, raw->vh.mob.velocity * get_entity_movement_delta_time ());
 
