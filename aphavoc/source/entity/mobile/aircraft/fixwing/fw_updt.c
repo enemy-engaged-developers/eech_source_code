@@ -208,8 +208,6 @@ static void update_server (entity *en)
 				moved = get_local_entity_int_value(en, INT_TYPE_MOBILE_MOVING),
 				rotated = get_local_entity_int_value(en, INT_TYPE_ROTATED);
 
-			rotated = moved;
-
 			if (moved || rotated || command_line_tacview_logging < 3)
 				write_tacview_unit_update(en, moved, rotated, FALSE);
 		}
@@ -301,14 +299,12 @@ static void update_client (entity *en)
 
 		//
 		////////////////////////////////////////
-		
+
 		if (tacview_is_logging() && raw->ac.mob.alive)
 		{
 			int
 				moved = get_local_entity_int_value(en, INT_TYPE_MOBILE_MOVING),
 				rotated = get_local_entity_int_value(en, INT_TYPE_ROTATED);
-
-			rotated = moved;
 
 			if (moved || rotated || command_line_tacview_logging < 3)
 				write_tacview_unit_update(en, moved, rotated, FALSE);

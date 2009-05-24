@@ -346,7 +346,7 @@ static void kill_local (entity *en)
 
 	remove_from_force_info (get_local_force_entity (raw->ac.mob.side), en);
 
-	if (command_line_tacview_logging)
+	if (tacview_is_logging())
 		write_tacview_unit_event(en, TACVIEW_UNIT_DESTROYED, NULL);
 
 	////////////////////////////////////////

@@ -313,7 +313,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		insert_local_entity_into_parents_child_list (en, LIST_TYPE_UPDATE, get_update_entity (), NULL);
 
-		if (command_line_tacview_logging)
+		if (tacview_is_logging())
 			write_tacview_new_unit(en);
 	}
 
