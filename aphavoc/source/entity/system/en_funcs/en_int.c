@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -1091,6 +1091,13 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
+			"INT_TYPE_MOVED_TYPE",	                			// name
+			INT_PACK_TYPE_SIGNED,                     			// pack_type
+			1,													// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
 			"INT_TYPE_MOVEMENT_TYPE",	                			// name
 			INT_PACK_TYPE_SIGNED,                     			// pack_type
 			NUM_MOVEMENT_TYPE_BITS,										// num_pack_bits (including sign bit)
@@ -1322,6 +1329,13 @@ int_type_data
 			FALSE,															// fast_track
 		},
 		{
+				"INT_TYPE_ROTATED",		                 			// name
+				INT_PACK_TYPE_SIGNED,                   			// pack_type
+				1,													// num_pack_bits (including sign bit)
+				(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+				FALSE,															// fast_track
+		},
+		{
 			"INT_TYPE_ROUTE_CHECK_SUM",                 			// name
 			INT_PACK_TYPE_UNSIGNED,                   			// pack_type
 			NUM_ROUTE_CHECK_SUM_BITS,									// num_pack_bits (including sign bit)
@@ -1535,6 +1549,13 @@ int_type_data
 			"INT_TYPE_SUPPRESS_AI_FIRE",								// name
 			INT_PACK_TYPE_UNSIGNED,										// pack_type
 			NUM_SUPPRESS_AI_FIRE_BITS,									// num_pack_bits (including sign bit)
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"INT_TYPE_TACVIEW_LOGGING",		        			// name
+			INT_PACK_TYPE_SIGNED,                   			// pack_type
+			1,																	// num_pack_bits (including sign bit)
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
@@ -2065,7 +2086,7 @@ void debug_log_pack_overflow(const char* type, const char* name, unsigned int wi
 {
 	debug_log("Overflow - type: %s, width %d, value: %d", name, width, value);
 
-	#ifdef DEBUG_PACK_OVERFLOW	
+	#ifdef DEBUG_PACK_OVERFLOW
 		if (!debug_pack_file)
 			debug_pack_file = fopen("debug-save-errors.txt","a");
 		if (!debug_pack_file)
@@ -2076,7 +2097,7 @@ void debug_log_pack_overflow(const char* type, const char* name, unsigned int wi
 		}
 
 		ASSERT(debug_pack_file);
-		
+
 		fprintf(debug_pack_file, "Overflow %s type: %s, width %d, int value: %d, float value: %f\n", type, name, width, value, fvalue);
 		fclose(debug_pack_file);
 	#endif
@@ -2084,7 +2105,7 @@ void debug_log_pack_overflow(const char* type, const char* name, unsigned int wi
 
 /*static void debug_log_pack(const char* string)
 {
-	#ifdef DEBUG_PACK_OVERFLOW	
+	#ifdef DEBUG_PACK_OVERFLOW
 		if (!debug_pack_file)
 			debug_pack_file = fopen("debug-save-errors.txt","a");
 		if (!debug_pack_file)
@@ -2095,7 +2116,7 @@ void debug_log_pack_overflow(const char* type, const char* name, unsigned int wi
 		}
 
 		ASSERT(debug_pack_file);
-		
+
 		fprintf(debug_pack_file, string);
 		fclose(debug_pack_file);
 	#endif
@@ -2374,8 +2395,8 @@ static int default_get_entity_int_value (entity *en, int_types type)
 }
 
 /*
-   The definition below is used to offer a compile time check for bits packing. It 
-   uses the fact that you can't define a zero length array. It is only usable with 
+   The definition below is used to offer a compile time check for bits packing. It
+   uses the fact that you can't define a zero length array. It is only usable with
    a num_bits argument of less than 32 since a left shift of one by 32 overflows.
  */
 #define COMPILE_ASSERT_PACK(max_value, num_bits, msg) {\
@@ -2415,7 +2436,7 @@ void debug_check_pack_types (void)
 
 	COMPILE_ASSERT_PACK(NUM_MESSAGE_TEXT_TYPES, NUM_MESSAGE_TEXT_TYPE_BITS, "Not enough bits, increase definition of second argument");
 	COMPILE_ASSERT_PACK(NUM_META_EXPLOSION_TYPES, NUM_META_EXPLOSION_TYPE_BITS, "Not enough bits, increase definition of second argument");
-	COMPILE_ASSERT_PACK(NUM_META_SMOKE_LIST_TYPES, NUM_META_SMOKE_LIST_TYPE_BITS, "Not enough bits, increase definition of second argument"); 
+	COMPILE_ASSERT_PACK(NUM_META_SMOKE_LIST_TYPES, NUM_META_SMOKE_LIST_TYPE_BITS, "Not enough bits, increase definition of second argument");
 	COMPILE_ASSERT_PACK(NUM_MOVEMENT_TYPES, NUM_MOVEMENT_TYPE_BITS, "Not enough bits, increase definition of second argument");
 	COMPILE_ASSERT_PACK(NUM_OPERATIONAL_STATE_TYPES, NUM_OPERATIONAL_STATE_BITS, "Not enough bits, increase definition of second argument");
 	COMPILE_ASSERT_PACK(NUM_POSITION_TYPES, NUM_POSITION_TYPE_BITS, "Not enough bits, increase definition of second argument");
@@ -2479,7 +2500,7 @@ void initialise_entity_int_value_default_functions (void)
 void pack_int_value (entity *en, int_types type, int value)
 {
 	unsigned int pack_bits;
-	
+
 	ASSERT ((type >= 0) && (type < NUM_INT_TYPES));
 
 	pack_bits = int_type_database[type].num_pack_bits;
@@ -2502,18 +2523,18 @@ void pack_int_value (entity *en, int_types type, int value)
 		{
 			int max_val = (1 << (pack_bits - 1)) - 1;
 			int min_val = -max_val - 1;
-			
+
 			if (pack_bits < 32 && (value > max_val || value < min_val))
 			{
 				#ifdef DEBUG_PACK_OVERFLOW
 					debug_log_pack_overflow("signed int", get_int_type_name(type), pack_bits, value, 0.0);
 				#endif
-				
+
 				if (value > 0)
 					value = max_val;
 				else
 					value = min_val;
-				
+
 				ASSERT(!"Overflow when packing signed int type!");
 			}
 
@@ -2530,12 +2551,12 @@ void pack_int_value (entity *en, int_types type, int value)
 				#ifdef DEBUG_PACK_OVERFLOW
 					debug_log_pack_overflow("unsigned int", get_int_type_name(type), pack_bits, value, 0.0);
 				#endif
-				
+
 				value = (1 << pack_bits) - 1;
-				
+
 				ASSERT(!"Overflow when packing unsigned int type!");
 			}
-			
+
 			pack_unsigned_data (value, pack_bits);
 
 			break;
