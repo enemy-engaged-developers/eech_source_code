@@ -500,7 +500,7 @@ void assign_entity_to_user (entity *en)
 			}
 		}
 
-		if (tacview_is_logging() && command_line_tacview_logging < 3)
+		if (command_line_tacview_logging && command_line_tacview_logging < 3)
 			start_tacview_logging(en);
 
 		//
