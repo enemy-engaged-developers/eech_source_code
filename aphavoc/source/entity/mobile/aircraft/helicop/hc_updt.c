@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -65,6 +65,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "project.h"
+
+#include "entity/tacview/tacview.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,12 +213,21 @@ static void update_server (entity *en)
 			case ENTITY_PLAYER_LOCAL:
 			////////////////////////////////////////
 			{
+				vec3d* pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+				entity* sec = NULL;
+
 				ASSERT (en == get_gunship_entity ());
 
 				if (raw->invulnerable_timer > 0.0)
 				{
 
 					raw->invulnerable_timer -= get_delta_time ();
+				}
+
+				if (pos)
+				{
+					sec = get_local_sector_entity(pos);
+					gunship_current_sector = get_local_entity_data(sec);
 				}
 
 				update_current_flight_dynamics_fuel_weight ();
@@ -233,7 +244,6 @@ static void update_server (entity *en)
 				}
 				else
 				{
-
 					if ((damage_type == AIRCRAFT_DAMAGE_CRITICAL) || (get_local_entity_int_value (en, INT_TYPE_EJECTED)) || (get_local_entity_int_value (en, INT_TYPE_LANDED)))
 					{
 
@@ -398,6 +408,19 @@ static void update_server (entity *en)
 
 				break;
 			}
+		}
+
+		if (tacview_is_logging() && raw->ac.mob.alive)
+		{
+			int
+				moved = get_local_entity_int_value(en, INT_TYPE_MOBILE_MOVING),
+				rotated = get_local_entity_int_value(en, INT_TYPE_ROTATED);
+
+			if (en == get_gunship_entity())
+				tacview_update_gunship();
+
+			if (moved || rotated || command_line_tacview_logging < 3)
+				write_tacview_unit_update(en, moved, rotated, FALSE);
 		}
 	}
 	else
@@ -711,6 +734,20 @@ static void update_client (entity *en)
 				break;
 			}
 		}
+
+		if (tacview_is_logging() && raw->ac.mob.alive)
+		{
+			int
+				moved = get_local_entity_int_value(en, INT_TYPE_MOVED),
+				rotated = get_local_entity_int_value(en, INT_TYPE_ROTATED);
+
+			if (en == get_gunship_entity())
+				tacview_update_gunship();
+
+			if (moved || rotated)
+				write_tacview_unit_update(en, moved, rotated, FALSE);
+		}
+
 	}
 	else
 	{
@@ -802,15 +839,15 @@ void interpolate_entity_position (entity *en)
 
 	if (connection)
 	{
-	
+
 		delta_time = (float) (get_system_time () - connection->interpolation_time) / TIME_1_SECOND;
-	
+
 		new_position.x = position->x + motion_vector->x * delta_time;
 		new_position.y = position->y + motion_vector->y * delta_time;
 		new_position.z = position->z + motion_vector->z * delta_time;
-	
+
 		set_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &new_position);
-						
+
 		if (get_comms_model () == COMMS_MODEL_SERVER)
 		{
 
@@ -818,7 +855,7 @@ void interpolate_entity_position (entity *en)
 		}
 
 		#if DEBUG_MODULE
-	
+
 		debug_log ("SERVER: interpolating entity %s (%d) old [%f, %f, %f], new [%f, %f, %f], motion_vector [%f, %f, %f], deltatime %f",
 						get_local_entity_string (en, STRING_TYPE_FULL_NAME),
 						get_local_entity_index (en),

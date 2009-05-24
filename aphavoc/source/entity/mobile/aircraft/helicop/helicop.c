@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -66,6 +66,7 @@
 
 #include "project.h"
 #include "ai/taskgen/assign.h"
+#include "entity/tacview/tacview.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,6 +80,9 @@
 
 entity
 	*gunship_entity = NULL;
+
+sector
+	*gunship_current_sector = NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,7 @@ static int mission_logged = FALSE;
 
 int player_mission_logged(void)
 {
-	return mission_logged;	
+	return mission_logged;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +181,7 @@ void assign_entity_to_user (entity *en)
 	//
 	// Maintain Input Events
 	//
-	
+
 	if (get_event_stack_head_function () == set_input_events)
 	{
 		pop_event (set_input_events);
@@ -192,7 +196,7 @@ void assign_entity_to_user (entity *en)
 	//
 	// Maintain Planner Events
 	//
-	
+
 	if (get_event_stack_head_function () == ingame_screen_set_events)
 	{
 		ASSERT (get_in_flight_game_mode () == IN_FLIGHT_GAME_MODE_PLANNER);
@@ -255,7 +259,7 @@ void assign_entity_to_user (entity *en)
 			if (previous)
 			{
 				set_external_view_entity (previous);
-	
+
 				notify_local_entity (ENTITY_MESSAGE_SET_CAMERA_ACTION, get_camera_entity (), NULL, CAMERA_ACTION_END_OF_MISSION);
 			}
 			else
@@ -285,13 +289,17 @@ void assign_entity_to_user (entity *en)
 		int
 			alive = get_local_entity_int_value(gunship_entity, INT_TYPE_ALIVE),
 			side = get_global_gunship_side();
-				
+
 		player_log_type
 			*log = get_current_player_log();
-		
+
 		//
 		// Award Points for mission
 		//
+
+
+		if (tacview_is_logging() && command_line_tacview_logging < 3)
+			close_tacview_log();
 
 		primary_task = get_local_entity_primary_task (gunship_entity);
 
@@ -316,7 +324,7 @@ void assign_entity_to_user (entity *en)
 			else
 			{
 				debug_log("pilot killed");
-				inc_player_log_deaths(side, log);			
+				inc_player_log_deaths(side, log);
 				inc_player_log_helicopters_lost(side, log);
 			}
 		}
@@ -361,6 +369,8 @@ void assign_entity_to_user (entity *en)
 		}
 
 		old_group = get_local_entity_parent (gunship_entity, LIST_TYPE_MEMBER);
+
+		gunship_current_sector = NULL;
 	}
 
 	//
@@ -478,11 +488,27 @@ void assign_entity_to_user (entity *en)
 
 		set_client_server_entity_int_value (en, INT_TYPE_UNIQUE_ID, direct_play_get_player_id ());
 
+		// set gunship sector
+		{
+			vec3d* pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+			entity* sec = NULL;
+
+			if (pos)
+			{
+				sec = get_local_sector_entity(pos);
+				gunship_current_sector = get_local_entity_data(sec);
+			}
+		}
+
+		if (tacview_is_logging() && command_line_tacview_logging < 3)
+			start_tacview_logging(en);
+
 		//
 		// Notify campaign screen
 		//
 
 		activate_accept_selections_button ();
+
 	}
 	else
 	{
@@ -549,7 +575,7 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 		*task;
 
 	pilot = get_pilot_entity ();
-	
+
 	if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_SESSION_COMPLETE))
 	{
 		en = get_external_view_entity ();
@@ -559,7 +585,7 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 			if (get_local_entity_suitable_for_player (en, get_pilot_entity ()))
 			{
 				task = get_local_entity_primary_task (en);
-				
+
 				if (task)
 				{
 					//
@@ -567,7 +593,7 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 					//
 
 					set_gunship_entity (NULL);
-					
+
 					set_currently_selected_member (get_local_entity_safe_index (en));
 
 					player_assigned_new_task (en, task);
@@ -580,12 +606,12 @@ void set_gunship_entity_to_external_view_entity (event *ev)
 						set_gunship_entity (en);
 					}
 				}
-				
+
 				if (get_local_entity_int_value (pilot, INT_TYPE_SIDE) != get_local_entity_int_value (en, INT_TYPE_SIDE))
 				{
 					set_local_entity_int_value (en, INT_TYPE_SIDE, get_local_entity_int_value (pilot, INT_TYPE_SIDE));
 				}
-				
+
 				// Jabberwock 040201 ends
 			}
 		}
@@ -812,7 +838,7 @@ void notify_gunship_entity_mission_terminated (entity *en, entity *task)
 	//
 
 	autoselect_debriefing_page (task, TRUE);
-	
+
 	mission_logged = TRUE;
 }
 
@@ -1290,9 +1316,9 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 		SOUND_CHANNEL_SOUND_EFFECT,
 		locality,
 		NULL,												// position
-		0.0,												// amplification  
+		0.0,												// amplification
 		1.0,												// Werewolf pitch
-		FALSE,											// valid sound effect 
+		FALSE,											// valid sound effect
 		TRUE,												// looping
 		1,													// sample count
 		&rotorslap_effect								// sample index list
@@ -1319,7 +1345,7 @@ void create_specified_helicopter_rotor_sound_effects (entity *en, sound_locality
 			1,													// sample count
 			&wind_up_effect								// sample index list
 		);
-		
+
 		create_client_server_sound_effect_entity
 		(
 			en,
@@ -1497,7 +1523,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		float rrpm = current_flight_dynamics->right_engine_n1_rpm.value;
 		float apu_rpm = current_flight_dynamics->apu_rpm.value;
 		short play_both_sounds = fabs(lrpm - rrpm) > 1.0;    // only play one sound if both engines have same RPM
-		
+
 		// sound for left turbine:
 		left_turbine_pitch = lrpm / 100.0;
 		left_turbine_pitch = bound (left_turbine_pitch, 0.0, 1.6)+0.6;
@@ -1514,7 +1540,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 			right_turbine_pitch = rrpm / 100.0;
 			right_turbine_pitch = bound (right_turbine_pitch, 0.0, 1.6)+0.6;
 			right_turbine_amp = 0.2 + bound((rrpm - 40.0) * 0.02, 0.0, 0.4);
-	
+
 			if (rrpm > 1)
 				resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2);
 			else
@@ -1525,7 +1551,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 			pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2, 0.0);
 			left_turbine_amp *= 1.2;  // if only one sound is used for both engines, compensate by making it louder
 		}
-		
+
 		// sound for APU:
 		if (apu_rpm > 0.0)
 		{
@@ -1574,19 +1600,19 @@ void update_local_helicopter_rotor_sounds (entity *en)
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
 //			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING)
 				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, (looping_amp-slap_amp)); //Werewolf: regular rotor sound cuts out when slapping sets in
-				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, looping_pitch);            
-				break;			
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, looping_pitch);
+				break;
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
 				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, left_turbine_amp); //Werewolf: turbine sound
-				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, left_turbine_pitch); 
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, left_turbine_pitch);
 				break;
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
 				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, right_turbine_amp);
-				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, right_turbine_pitch); 
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, right_turbine_pitch);
 				break;
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE:
 				set_local_entity_float_value (spec, FLOAT_TYPE_AMPLIFICATION, apu_amp);
-				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, apu_pitch); 
+				set_local_entity_float_value (spec, FLOAT_TYPE_SOUNDPITCH, apu_pitch);
 				break;
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
 			case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
@@ -1643,7 +1669,7 @@ float kill_sound_effect(entity* en, entity_sub_types type)
 
 		spec = get_local_entity_child_succ (spec, LIST_TYPE_SPECIAL_EFFECT);
 	}
-	
+
 	return start_position;
 }
 
@@ -1679,9 +1705,9 @@ void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine
 	{
 		if (engine_num == 1)
 			start_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1;
-		else 
+		else
 			start_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2;
-		
+
 		if (engine_num == 1)
 			stop_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1;
 		else
@@ -1693,7 +1719,7 @@ void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine
 			start_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1;
 		else
 			start_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2;
-			
+
 		if (engine_num == 1)
 			stop_type = ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1;
 		else
@@ -1843,7 +1869,7 @@ int get_local_entity_suitable_for_player (entity *en, entity *pilot)
 	//
 	// check that new gunship entity is not already being flown by another human
 	//
-	
+
 	if (get_local_entity_int_value (en, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 	{
 		return FALSE;
@@ -1952,7 +1978,7 @@ void helicopter_assume_player_control (entity *en)
 
 			reassign_group_members_to_valid_tasks (group, task, member_number, FALSE);
 		}
-	}	
+	}
 
 	set_client_server_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_SPIN_UP_TIMER, 0.0);
 
@@ -1986,27 +2012,27 @@ void helicopter_release_player_control (entity *en)
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
 		group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
-	
+
 		ASSERT (group);
-	
+
 		guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
-	
+
 		if (guide)
 		{
 			task = get_local_entity_parent (guide, LIST_TYPE_GUIDE);
-	
+
 			ASSERT (task);
-	
+
 			if (get_local_entity_int_value (task, INT_TYPE_PRIMARY_TASK))
 			{
 				member_number = (1 << get_local_entity_int_value (en, INT_TYPE_GROUP_MEMBER_NUMBER));
-	
+
 				reassign_group_members_to_valid_tasks (group, task, member_number, TRUE);
 			}
-		}	
-	
+		}
+
 		update_player_helicopter_waypoint_distance (en);
-	
+
 		if (get_local_entity_int_value (en, INT_TYPE_LANDED))
 		{
 			set_client_server_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_SPIN_UP_TIMER, MAIN_ROTOR_SPIN_UP_TIMER);
@@ -2044,7 +2070,7 @@ void transmit_player_recon_data (entity *en)
 		if (get_guide_criteria_valid (guide, GUIDE_CRITERIA_TRANSMIT_DATA))
 		{
 			current_waypoint = get_local_entity_parent (guide, LIST_TYPE_CURRENT_WAYPOINT);
-	
+
 			ASSERT (current_waypoint);
 
 			en_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
@@ -2121,7 +2147,7 @@ int helicopter_within_keysite_area (entity *en)
 		vec3d
 			position,
 			*keysite_pos;
-	
+
 		struct OBJECT_3D_BOUNDS
 			*bounding_box;
 
@@ -2130,7 +2156,7 @@ int helicopter_within_keysite_area (entity *en)
 			xmax,
 			zmin,
 			zmax;
-	
+
 //		debug_log ("DYNAMICS: landed close to keysite %s (range %f)", get_local_entity_string (keysite, STRING_TYPE_KEYSITE_NAME), actual_range);
 
 		xmin = 0.0;
@@ -2143,35 +2169,35 @@ int helicopter_within_keysite_area (entity *en)
 
 			case ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE:
 			{
-	
+
 				float
 					heading = 0.0;
-	
+
 				entity
 					*ship;
-	
+
 				ship = get_local_entity_parent (keysite, LIST_TYPE_MOVEMENT_DEPENDENT);
-	
+
 				ASSERT (ship);
 				ASSERT (get_local_entity_type (ship) == ENTITY_TYPE_SHIP_VEHICLE);
-	
+
 				heading = get_local_entity_float_value (ship, FLOAT_TYPE_HEADING);
-	
+
 				//
 				// rotate model position into 'keysite space'
 				//
-	
+
 				keysite_pos = get_local_entity_vec3d_ptr (ship, VEC3D_TYPE_POSITION);
-		
+
 				position.x = hc_position->x - keysite_pos->x;
 				position.y = hc_position->y - keysite_pos->y;
 				position.z = hc_position->z - keysite_pos->z;
-	
+
 				position.x = position.x * cos (-heading) + position.z * sin (-heading);
 				position.z = position.z * cos (-heading) - position.x * sin (-heading);
-	
+
 				inst3d = get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (inst3d->object_number);
 
 				// make sure that the keysite is at least 200 m radius
@@ -2184,13 +2210,13 @@ int helicopter_within_keysite_area (entity *en)
 			}
 			case ENTITY_SUB_TYPE_KEYSITE_FARP:
 			{
-		
+
 				keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-		
+
 				position.x = hc_position->x - keysite_pos->x;
 				position.y = hc_position->y - keysite_pos->y;
 				position.z = hc_position->z - keysite_pos->z;
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the keysite is at least 400 m radius
@@ -2203,13 +2229,13 @@ int helicopter_within_keysite_area (entity *en)
 			}
 			default:
 			{
-		
+
 				keysite_pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
-		
+
 				position.x = hc_position->x - keysite_pos->x;
 				position.y = hc_position->y - keysite_pos->y;
 				position.z = hc_position->z - keysite_pos->z;
-	
+
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the airbase is at least 400 m radius
@@ -2221,7 +2247,7 @@ int helicopter_within_keysite_area (entity *en)
 				break;
 			}
 		}
-	
+
 		if (((position.x > xmin) && (position.x < xmax)) && ((position.z > zmin) && (position.z < zmax)))
 		{
 

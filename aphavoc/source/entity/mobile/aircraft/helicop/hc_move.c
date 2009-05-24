@@ -372,6 +372,8 @@ void helicopter_movement (entity *en)
 	// set velocity
 	speed = get_3d_vector_magnitude (&raw->ac.mob.motion_vector);
 	set_local_entity_float_value (en, FLOAT_TYPE_VELOCITY, speed);
+	if (fabs(speed) > 0.1)
+		set_local_entity_int_value(en, INT_TYPE_MOVED, TRUE);
 
 	current_heading = get_heading_from_attitude_matrix (raw->ac.mob.attitude);
 	current_pitch = get_pitch_from_attitude_matrix (raw->ac.mob.attitude);
@@ -407,6 +409,9 @@ void helicopter_movement (entity *en)
 
 	new_pitch = current_pitch + (desired_pitch - current_pitch) * 0.5 * get_entity_movement_delta_time ();
 	new_roll = current_roll + (desired_roll - current_roll) * 0.5 * get_entity_movement_delta_time ();
+
+	if (fabs(new_pitch - current_pitch) > rad(0.1) || fabs(new_heading - current_heading) > rad(0.1) || fabs(new_roll - current_roll) > rad(0.1))
+		set_local_entity_int_value(en, INT_TYPE_ROTATED, TRUE);
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, new_roll);
 
