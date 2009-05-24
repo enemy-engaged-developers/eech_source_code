@@ -1,6 +1,8 @@
 ;NSIS Modern User Interface
 ;EECH setup exe script, by gotcha jan 2005
 
+SetCompressor /SOLID lzma
+
 ;--------------------------------
 ;Include Modern UI
 
@@ -10,7 +12,7 @@
 ;General
   
   ;define these variable 
-  !define VERSION "1.11.1"
+  !define VERSION "1.12"
   
   ;Name and file
   Name "EECH Dev release ${VERSION}"
@@ -84,8 +86,10 @@ Section "cohokum.exe" SectionExe
   File readme.html
   File motd.txt
   File TrackIR.dll	
-  File gwut1110.csv
+  File gwut1120.csv
   File eech_keyguide_2.pdf
+
+  SetOutPath "$INSTDIR\cohokum\tacview-logs"
 
   SetOutPath "$INSTDIR\common\data"
   File ..\common\data\FORMS.DAT
