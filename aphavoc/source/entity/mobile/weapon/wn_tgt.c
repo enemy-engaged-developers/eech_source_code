@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -121,7 +121,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 	if (launcher == get_external_view_entity ())
 	{
 		debug_log ("WN_TGT : Get Suitable Weapon ( Launcher %s , Target %s )", get_local_entity_string (launcher, STRING_TYPE_FULL_NAME), get_local_entity_string (target, STRING_TYPE_FULL_NAME));
-	
+
 		debug_log ("WN_TGT : Available Weapon List :");
 	}
 
@@ -216,23 +216,23 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 
 			suitable_weapon_classes = WEAPON_CLASS_AIR_TO_SURFACE + WEAPON_CLASS_SURFACE_TO_SURFACE;
 		}
-	
+
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
 			if (suitability[package])
 			{
 				weapon_type = weapon_config_database[config_type][package].sub_type;
-	
+
 				weapon_class = weapon_database[weapon_type].weapon_class;
 
 				//
 				// bitwise AND to test weapon class compatibility
 				//
-				
+
 				if ((suitable_weapon_classes & weapon_class) == 0)
 				{
 					suitability[package] = FALSE;
-	
+
 					suitable_weapon_count --;
 				}
 				else
@@ -242,31 +242,44 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 						//
 						// if target is airborne, and launcher is a vehicle - check launchers floor and ceiling scanning ability
 						//
-	
+
 						if ((get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT)) && (get_local_entity_int_value (launcher, INT_TYPE_IDENTIFY_VEHICLE)))
 						{
 							float
 								target_altitude;
-	
+
 							target_altitude = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE);
-	
+
 							if ((target_altitude > get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_CEILING)) ||
 									(target_altitude < get_local_entity_float_value (launcher, FLOAT_TYPE_AIR_SCAN_FLOOR)))
 							{
 								suitability[package] = FALSE;
-		
+
 								suitable_weapon_count --;
 							}
 						}
 					}
-				}
 
+#if 0  // disable until we have a way of aborting attacking other targets until air defences are out of the way
+					// TODO: not do for some criteria?
+					if (get_local_entity_int_value(launcher, INT_TYPE_AIRBORNE_AIRCRAFT)
+							 && get_local_entity_int_value(target, INT_TYPE_VIEW_CATEGORY) == VIEW_CATEGORY_AIR_DEFENCE_UNITS)
+					{
+						// don't try to take out anti-aircaft systems with unguided weapons, it's suicide
+						if (weapon_database[weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_NONE)
+						{
+							suitability[package] = FALSE;
+							suitable_weapon_count --;
+						}
+					}
+#endif
+				}
 				#if DEBUG_MODULE
 
 				if (launcher == get_external_view_entity ())
-				{	
+				{
 					if (suitability [package])
-					{				
+					{
 						debug_log ("WN_TGT : (%d) %s :", package, weapon_database[weapon_type].full_name);
 					}
 				}
@@ -282,7 +295,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 	}
 
 	//
-	// special case for vehicles - only fire projectiles if no line of sight 
+	// special case for vehicles - only fire projectiles if no line of sight
 	//
 
 	if (criteria & BEST_WEAPON_LOS_CHECK)
@@ -296,24 +309,24 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 			if (!los_to_target)
 			{
 				#if DEBUG_MODULE
-		
+
 				if (launcher == get_external_view_entity ())
 				{
 					debug_log ("WN_TGT : Suitable Weapon List After LOS Filter :");
 				}
-		
+
 				#endif
-		
+
 				for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 				{
 					if (suitability[package])
 					{
 						weapon_type = weapon_config_database[config_type][package].sub_type;
-		
+
 						if (weapon_database[weapon_type].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 						{
 							suitability[package] = FALSE;
-		
+
 							suitable_weapon_count --;
 						}
 						#if DEBUG_MODULE
@@ -329,13 +342,13 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				}
 			}
 		}
-	
+
 		if (suitable_weapon_count == 0)
 		{
 			return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 		}
 	}
-	
+
 	//
 	// filter out unsuitables with respect to range
 	//
@@ -373,7 +386,8 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				weapon_type = weapon_config_database[config_type][package].sub_type;
 
 				min_weapon_range = weapon_database[weapon_type].min_range;
-				max_weapon_range = weapon_database[weapon_type].max_range;
+//				max_weapon_range = weapon_database[weapon_type].max_range;
+				max_weapon_range = weapon_database[weapon_type].effective_range;
 
 				if ((target_range < min_weapon_range) || (target_range > max_weapon_range))
 				{
@@ -442,7 +456,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 					*/
 					// ...But since only one round gets fired per frame, do it like so :-
 					damage_capability = weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
-											* get_one_over_delta_time ()
+											* weapon_database[weapon_type].rate_of_fire
 											* weapon_database[weapon_type].burst_duration;
 				}
 
@@ -505,7 +519,7 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 			}
 		}
 	}
-	
+
 	//
 	// find the most suitable weapon
 	//
