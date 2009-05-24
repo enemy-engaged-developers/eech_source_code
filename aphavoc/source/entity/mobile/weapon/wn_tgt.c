@@ -448,13 +448,6 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 				}
 				else
 				{
-					/*
-					// With a perfect frame rate, this would be correct....
-					damage_capability = weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
-											* weapon_database[weapon_type].rate_of_fire
-											* weapon_database[weapon_type].burst_duration / ONE_MINUTE;
-					*/
-					// ...But since only one round gets fired per frame, do it like so :-
 					damage_capability = weapon_is_suitable_for_damaging_target (weapon_type, target, TRUE)
 											* weapon_database[weapon_type].rate_of_fire
 											* weapon_database[weapon_type].burst_duration;
