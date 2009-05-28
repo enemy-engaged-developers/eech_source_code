@@ -853,7 +853,6 @@ static int tacview_log_this_frame(entity* en)
 		}
 		break;
 	case ENTITY_TYPE_FIXED_WING:
-	case ENTITY_TYPE_WEAPON:
 		if (++medium_update_group == MEDIUM_UPDATE_FREQ)
 		{
 			medium_update_group = 0;
@@ -862,6 +861,7 @@ static int tacview_log_this_frame(entity* en)
 		break;
 	default:
 #if 0
+	case ENTITY_TYPE_WEAPON:
 	case ENTITY_TYPE_ROUTED_VEHICLE:
 	case ENTITY_TYPE_ANTI_AIRCRAFT:
 	case ENTITY_TYPE_CARGO:
