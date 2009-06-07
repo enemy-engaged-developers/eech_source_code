@@ -4351,8 +4351,15 @@ static void initialize_known_coordinates(void)
 		current_map_info.longitude = rad(17.27);
 		break;
 	case 11: // Grand Canyon
+		current_map_info.latitude = rad(35.65);
+		current_map_info.longitude = rad(-114.04);
+		break;
 	case 12: // Mars
+		// not on earth...
+		break;
 	case 13: // Alexander Archipelago
+		current_map_info.latitude = rad(54.44);
+		current_map_info.longitude = rad(-134.55);
 		break;
 	case 14: // Skagway
 		current_map_info.latitude = rad(59.01);
@@ -4369,6 +4376,10 @@ static void initialize_known_coordinates(void)
 	case 18: // Puerto Rico
 		current_map_info.latitude = rad(17.55);
 		current_map_info.longitude = rad(-68.06);
+		break;
+	case 31: // New Grand Canyon
+		current_map_info.latitude = rad(35.65);
+		current_map_info.longitude = rad(-114.04);
 		break;
 	}
 }
