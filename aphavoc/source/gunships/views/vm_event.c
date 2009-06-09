@@ -101,13 +101,6 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int
-	max_fov = 80;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define STATIC (0)
 #define LEFT   (-1)
 #define RIGHT  (1)
@@ -2098,36 +2091,9 @@ static void std_fov_event(event *ev)
 static void hi_fov_event(event *ev)
 {
 	// Casm 08OCT05 Max fov depends on gunship type
-	switch (get_global_gunship_type ())
-	{
-		case GUNSHIP_TYPE_APACHE:
-			max_fov = command_line_max_fov0;
-			break;
-		case GUNSHIP_TYPE_HAVOC:
-			max_fov = command_line_max_fov1;
-			break;
-		case GUNSHIP_TYPE_COMANCHE:
-			max_fov = command_line_max_fov2;
-			break;
-		case GUNSHIP_TYPE_HOKUM:
-			max_fov = command_line_max_fov3;
-			break;
-		case GUNSHIP_TYPE_BLACKHAWK:
-			max_fov = command_line_max_fov0;
-			break;
-		case GUNSHIP_TYPE_HIND:
-			max_fov = command_line_max_fov1;
-			break;
-		case GUNSHIP_TYPE_AH64A:
-			max_fov = command_line_max_fov0;
-			break;
-		case GUNSHIP_TYPE_KA50:
-			max_fov = command_line_max_fov1;
-			break;
-		default:
-			max_fov = command_line_max_fov0;
-			break;
-	}
+	int
+		max_fov = get_max_fov ();
+
 	full_screen_width_view_angle	= rad (max_fov);
 	full_screen_height_view_angle	= rad (max_fov / full_screen_aspect_ratio);
 }

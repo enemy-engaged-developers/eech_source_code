@@ -64,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void process_command_line (int argc, char *argv[]);
+extern void process_command_line (int argc, char *argv[128]);
 
 extern void process_environment_variable (const char *name);
 
@@ -146,6 +146,7 @@ extern int
 	command_line_max_fov1,										// Casm 08OCT05
 	command_line_max_fov2,										// Casm 08OCT05
 	command_line_max_fov3,										// Casm 08OCT05
+	command_line_max_fov4,										// Casm 09JUN09
 	command_line_eo_pan_joystick_index,						// loke 030319
 	command_line_eo_pan_vertical_joystick_axis,			// loke 030319
 	command_line_eo_pan_horizontal_joystick_axis,		// loke 030319
@@ -264,15 +265,15 @@ extern float
 	command_line_external_sounds_volume; //ataribaby 28/12/2008 volume for external sounds when in cockpit
 
 extern char
-	command_line_themes[], //Casm 21DEC07
-	command_line_game_initialisation_phase_path [],
-	command_line_game_initialisation_phase_directory [],
-	command_line_game_initialisation_phase_filename [],
-	command_line_debug_log_name[],
-	command_line_ip_address[],
-	command_line_primary_server_setting[],	 //VJ for werewolf and eech.ini 030403
-	command_line_secondary_server_setting[], //VJ for werewolf and eech.ini 030403
-	command_line_server_log_filename[]; // Jabberwock 031119 Server log
+	command_line_themes[128], //Casm 21DEC07
+	command_line_game_initialisation_phase_path [128],
+	command_line_game_initialisation_phase_directory [128],
+	command_line_game_initialisation_phase_filename [128],
+	command_line_debug_log_name[100],
+	command_line_ip_address[128],
+	command_line_primary_server_setting[128],	 //VJ for werewolf and eech.ini 030403
+	command_line_secondary_server_setting[128], //VJ for werewolf and eech.ini 030403
+	command_line_server_log_filename[128]; // Jabberwock 031119 Server log
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

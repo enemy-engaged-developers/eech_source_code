@@ -36,4 +36,6 @@ void write_tacview_debug_event(entity* en, const char* format, ...);
 
 int tacview_reset_frame(void);
 
+void tacview_update_gunship(void);
+
 #endif /* TACVIEW_H_ */

@@ -334,6 +334,9 @@ static void display_time_acceleration (void)
 
 static void update_field_of_view(void)
 {
+	int
+		max_fov = get_max_fov ();
+
 	if (command_line_field_of_view_joystick_index != -1)
 	{
 		int joyval = get_joystick_axis(command_line_field_of_view_joystick_index, command_line_field_of_view_joystick_axis);
@@ -356,7 +359,7 @@ static void update_field_of_view(void)
 		}
 		else if (decrease_fov_key_down)
 		{
-			full_screen_width_view_angle = bound(full_screen_width_view_angle - FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(command_line_max_fov0));
+			full_screen_width_view_angle = bound(full_screen_width_view_angle - FOV_CHANGE_RATE * get_delta_time(), rad(max_fov), rad(command_line_max_fov0));
 			full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 		}
 	}

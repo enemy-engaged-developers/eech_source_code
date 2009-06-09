@@ -70,6 +70,46 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+int get_max_fov ( void )
+{
+	int
+		max_fov;
+
+	switch ( get_global_gunship_type () )
+	{
+		case GUNSHIP_TYPE_APACHE:
+			max_fov = command_line_max_fov0;
+			break;
+		case GUNSHIP_TYPE_HAVOC:
+			max_fov = command_line_max_fov1;
+			break;
+		case GUNSHIP_TYPE_COMANCHE:
+			max_fov = command_line_max_fov2;
+			break;
+		case GUNSHIP_TYPE_HOKUM:
+			max_fov = command_line_max_fov3;
+			break;
+		case GUNSHIP_TYPE_BLACKHAWK:
+			max_fov = command_line_max_fov0;
+			break;
+		case GUNSHIP_TYPE_HIND:
+			max_fov = command_line_max_fov1;
+			break;
+		case GUNSHIP_TYPE_AH64A:
+			max_fov = command_line_max_fov0;
+			break;
+		case GUNSHIP_TYPE_KA50:
+			max_fov = command_line_max_fov1;
+			break;
+		default:
+			max_fov = command_line_max_fov0;
+			break;
+	}
+
+	return max_fov;
+}
+
+
 static int view_mode_available (view_modes mode)
 {
 	int
