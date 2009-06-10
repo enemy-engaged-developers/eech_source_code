@@ -310,6 +310,8 @@ void process_command_line (int argc, char *argv[])
 	const char
 		*s1,
 		*s2;
+	char
+		buf[128];
 
 	initialize_options ();
 
@@ -334,6 +336,13 @@ void process_command_line (int argc, char *argv[])
 		s1++;
 
 		s2 = strchr ( s1, ':' );
+
+		if ( s2 )
+		{
+			memcpy ( buf, s1, s2 - s1 );
+			buf[s2 - s1] = '\0';
+			s1 = buf;
+		}
 
 		if ( !parse_option ( s1, s2 ? s2 + 1 : NULL ) )
 		{
