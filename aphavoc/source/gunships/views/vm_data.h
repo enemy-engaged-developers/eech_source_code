@@ -229,8 +229,12 @@ typedef enum WIDEVIEW_NRS wideview_nrs;
 extern cockpit_position current_custom_cockpit_viewpoint;				// Retro 6Feb2005
 
 //VJ 030324 framerate
-extern float framerate, framerate_avg;
-extern int doframerate;
+extern float
+    framerate;
+extern float
+	timeframes;
+extern int
+	frames;
 
 //VJ 030423 TSD render mod
 //VJ 030511, changed order

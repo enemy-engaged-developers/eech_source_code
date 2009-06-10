@@ -454,9 +454,11 @@ cockpit_position
 
 //VJ 030324 framerate 
 float
-    framerate, framerate_avg;
-int 
-    doframerate;           
+    framerate;
+float
+	timeframes;
+int
+	frames;
 
 //VJ 030423 TSD render mod
 tsd_render_modes 	

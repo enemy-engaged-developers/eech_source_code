@@ -900,9 +900,9 @@ void draw_view (void)
 		display_eject_message ();
 
 //VJ framerate 24-mar-03
-    	if (command_line_framerate)
-		   ShowFramerate();
-    
+		if (command_line_framerate)
+			ShowFramerate();
+
 		end_3d_scene ();
 	}
 }
@@ -913,27 +913,32 @@ void draw_view (void)
 //VJ framerate 24-mar-03
 void ShowFramerate(void)
 {
-	char buf[12];
-	float dummy = 0;
-	FILE *f;	
-	if (doframerate > 30)
-	{			   
-		framerate = framerate_avg /(doframerate+1);
-		framerate_avg = 0;
-    	doframerate = 0;
+	char buf[25];
+
+	timeframes += get_delta_time ();
+	frames++; 
+
+	if (timeframes >= 1.0)
+	{
+		framerate = frames / timeframes;
+		frames = 0;
+		timeframes = 0;
 
 		if (command_line_framerate == 2)
 		{
-		   f=fopen("framerate.txt","a");
-		   fprintf (f,"%6.1f\n", framerate);
-		   fclose(f);
-		}   
+			FILE *file = fopen ("framerate.txt", "a");
+			fprintf (file, "%6.1f\n", framerate);
+			fclose (file);
+		}
+	}
 
-    }   
-    dummy = get_one_over_delta_time ();
-   	framerate_avg += dummy; 
-   	doframerate++; 
-	
-	sprintf (buf, "%6.1f", framerate);
-    ui_display_text (buf, 10, 24);               
-}	
+	if (command_line_framerate == 3)
+	{
+		sprintf (buf, "%6.1f %6.1f", framerate, get_one_over_delta_time ());
+	}
+	else
+	{
+		sprintf (buf, "%6.1f", framerate);
+	}
+	ui_display_text (buf, 10, 24);
+}

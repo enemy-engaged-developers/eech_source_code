@@ -126,6 +126,12 @@ void flight (void)
 
 	ASSERT (get_current_game_session ());
 
+	// Casm 11JUN09 Loading textures here if DEMO mode
+	if (get_game_type () == GAME_TYPE_DEMO)
+	{
+		load_warzone_override_textures ();
+	}
+
 	//repaint the screen to show the textures are loaded
 	ui_repaint ();
 /////////////////////////////////////////

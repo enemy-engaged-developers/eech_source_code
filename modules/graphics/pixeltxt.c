@@ -663,7 +663,7 @@ void set_texture_pixel_formats ( void )
 		set_shift_and_mask ( texture_formats[TEXTURE_TYPE_NOALPHA_NOPALETTE].format.dwGBitMask, &texture_colour_nopalette_green_mask, &texture_colour_nopalette_green_shift );
 		set_shift_and_mask ( texture_formats[TEXTURE_TYPE_NOALPHA_NOPALETTE].format.dwBBitMask, &texture_colour_nopalette_blue_mask, &texture_colour_nopalette_blue_shift );
 
-		colour_texture_pixel_width = texture_formats[TEXTURE_TYPE_NOALPHA_NOPALETTE].format.dwRGBBitCount;
+		colour_nopalette_texture_pixel_width = texture_formats[TEXTURE_TYPE_NOALPHA_NOPALETTE].format.dwRGBBitCount;
 	}
 
 	if ( !texture_formats[TEXTURE_TYPE_SINGLEALPHA].palette )
