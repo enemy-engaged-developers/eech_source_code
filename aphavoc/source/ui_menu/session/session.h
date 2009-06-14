@@ -83,13 +83,13 @@
 enum SESSION_LIST_TYPES
 {
 
-   SESSION_LIST_TYPE_INVALID     = 0,
-   SESSION_LIST_TYPE_HOST        = 1,
-   SESSION_LIST_TYPE_JOIN        = 2,
-   SESSION_LIST_TYPE_RESTORE     = 4,
-   SESSION_LIST_TYPE_MASTER      = 8,
-   SESSION_LIST_TYPE_FILTER      = 16, // Jabberwock 031210 Session filter
-   NUM_SESSION_LIST_TYPE         = 32
+	SESSION_LIST_TYPE_INVALID     = 0,
+	SESSION_LIST_TYPE_HOST        = 1,
+	SESSION_LIST_TYPE_JOIN        = 2,
+	SESSION_LIST_TYPE_RESTORE     = 4,
+	SESSION_LIST_TYPE_MASTER      = 8,
+	SESSION_LIST_TYPE_FILTER      = 16, // Jabberwock 031210 Session filter
+	NUM_SESSION_LIST_TYPE         = 32
 };
 
 typedef enum SESSION_LIST_TYPES session_list_types;
@@ -101,33 +101,34 @@ typedef enum SESSION_LIST_TYPES session_list_types;
 struct SESSION_LIST_DATA_TYPE
 {
 
-   char
+	char
 		*displayed_title,
-      *title;
+		*title;
 
-   session_list_types
-      type;
+	session_list_types
+		type;
 
-   int
-      list_id, 								// number in list (absolute)
-      type_id; 								// number in type (hosted, joinable, saved)
+	int
+		list_id, 								// number in list (absolute)
+		type_id; 								// number in type (hosted, joinable, saved)
 
-   session_table_type
-      *join_session;
+	session_table_type
+		*join_session;
 
-   char
+	char
 		*warzone_name;
-   char
+	char
 		data_path [256],
 		campaign_directory [64],
 		campaign_filename [64];
 
-   char ip_address [256];
+	char ip_address [256];
 
+	int season;
 
-   struct SESSION_LIST_DATA_TYPE
+	struct SESSION_LIST_DATA_TYPE
 		*child,									// next non-unique session (ie same name, different map)
-      *next;									// next unique session
+		*next;									// next unique session
 };
 
 typedef struct SESSION_LIST_DATA_TYPE session_list_data_type;
@@ -139,12 +140,12 @@ typedef struct SESSION_LIST_DATA_TYPE session_list_data_type;
 struct SESSION_INFO_TYPE
 {
 
-   int
-      valid,
-      gunship_number;
+	int
+		valid,
+		gunship_number;
 
-   char
-      name [128];
+	char
+		name [128];
 };
 
 typedef struct SESSION_INFO_TYPE session_info_type;
@@ -154,15 +155,15 @@ typedef struct SESSION_INFO_TYPE session_info_type;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern session_list_types
-   session_filter [NUM_GAME_TYPES];
+	session_filter [NUM_GAME_TYPES];
 
 extern session_list_data_type
-   *current_game_session,
+	*current_game_session,
 	*session_child_head,
-   *session_list_head;
+	*session_list_head;
 
 extern session_info_type
-   session_info [MAX_NUMBER_OF_PLAYERS];
+	session_info [MAX_NUMBER_OF_PLAYERS];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -74,18 +74,18 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 session_list_types
-   session_filter [NUM_GAME_TYPES];
+	session_filter [NUM_GAME_TYPES];
 
 session_list_data_type
 	*session_child_head,
-   *current_game_session,
-   *session_list_head;
+	*current_game_session,
+	*session_list_head;
 
 static int
-   list_id = 0;
+	list_id = 0;
 
 entity
-   *players_group;
+	*players_group;
 
 char // Jabberwock 031210 Session filter
 	session_filter_value [256] = "root";
@@ -95,13 +95,13 @@ char // Jabberwock 031210 Session filter
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 session_info_type
-   session_info [MAX_NUMBER_OF_PLAYERS];
+	session_info [MAX_NUMBER_OF_PLAYERS];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address);
+static session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address, int season);
 
 static void recursive_check_campaign_files (const char *directory, session_list_data_type **list, const char *extension);
 
@@ -112,13 +112,13 @@ static void recursive_check_campaign_files (const char *directory, session_list_
 void initialise_session_list (void)
 {
 
-   session_filter [GAME_TYPE_INVALID] = SESSION_LIST_TYPE_INVALID;
-   session_filter [GAME_TYPE_FREE_FLIGHT] = SESSION_LIST_TYPE_HOST;
-   // Jabberwock 031210 Session filter
-   session_filter [GAME_TYPE_CAMPAIGN] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
-   session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
-   // Jabberwock 031210 ends
-   session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
+	session_filter [GAME_TYPE_INVALID] = SESSION_LIST_TYPE_INVALID;
+	session_filter [GAME_TYPE_FREE_FLIGHT] = SESSION_LIST_TYPE_HOST;
+	// Jabberwock 031210 Session filter
+	session_filter [GAME_TYPE_CAMPAIGN] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
+	session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
+	// Jabberwock 031210 ends
+	session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
 
 	sprintf (session_filter_value, "%s", "root"); // Jabberwock 040201 Session filter
 
@@ -132,7 +132,7 @@ void initialise_session_list (void)
 void deinitialise_session_list (void)
 {
 
-   leave_mission ();
+	leave_mission ();
 
 	destroy_session_list (&session_list_head);
 }
@@ -144,35 +144,35 @@ void deinitialise_session_list (void)
 void destroy_session_list (session_list_data_type **list)
 {
 
-   session_list_data_type
+	session_list_data_type
 		*child,
 		*destroy_child,
-      *destroy_session;
+		*destroy_session;
 
-   while (*list)
-   {
+	while (*list)
+	{
 
-      destroy_session = *list;
+		destroy_session = *list;
 
-      *list = (*list)->next;
+		*list = (*list)->next;
 
-      if (destroy_session->title)
-      {
+		if (destroy_session->title)
+		{
 
-         free_mem (destroy_session->title);
-      }
+			free_mem (destroy_session->title);
+		}
 
-      if (destroy_session->displayed_title)
-      {
+		if (destroy_session->displayed_title)
+		{
 
-         free_mem (destroy_session->displayed_title);
-      }
+			free_mem (destroy_session->displayed_title);
+		}
 
-      if (destroy_session->warzone_name)
-      {
+		if (destroy_session->warzone_name)
+		{
 
-         free_mem (destroy_session->warzone_name);
-      }
+			free_mem (destroy_session->warzone_name);
+		}
 
 		//
 		// destroy child sessions
@@ -212,19 +212,19 @@ void destroy_session_list (session_list_data_type **list)
 			set_current_game_session_invalid ();
 		}
 
-      free_mem (destroy_session);
-   }
+		free_mem (destroy_session);
+	}
 
-   *list = NULL;
+	*list = NULL;
 
-   list_id = 0;
+	list_id = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address)
+session_list_data_type *add_session (const char *title, session_list_types type, int type_id, session_table_type *join_session, char *path, char *directory, char *filename, char *warzone_name, session_list_data_type **list, const char *address, int season)
 {
 
 	char
@@ -234,19 +234,22 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 	int
 		unique_session;
 
-   session_list_data_type
+	session_list_data_type
 		*child,
-      *session_item,
-      *insert_position,
-      *new_session;
+		*session_item,
+		*insert_position,
+		*new_session;
 
-   new_session = (session_list_data_type *) malloc_heap_mem (sizeof (session_list_data_type));
+	new_session = (session_list_data_type *) malloc_heap_mem (sizeof (session_list_data_type));
 
 	memset (new_session, 0, sizeof (session_list_data_type));
 
-   new_session->title = (char *) malloc_heap_mem (strlen (title) + 1);
-   if (address)
-     sprintf (new_session->ip_address, "%s", address);
+	new_session->title = (char *) malloc_heap_mem (strlen (title) + 1);
+	if (address)
+		sprintf (new_session->ip_address, "%s", address);
+
+	// 15JUN09 Casm retrieving season earlier
+	new_session->season = season;
 
 	// test
 	if (type == SESSION_LIST_TYPE_RESTORE)
@@ -305,22 +308,22 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 	}
 	// test
 
-   // work out where new item belongs in list (Alphabetically)
+	// work out where new item belongs in list (Alphabetically)
 
-   session_item = *list;
+	session_item = *list;
 
-   insert_position = NULL;
+	insert_position = NULL;
 
 	unique_session = TRUE;
 
-   while (session_item)
-   {
+	while (session_item)
+	{
 
 		//
 		// non-unique sessions
 		//
 
-      if ((strcmp (new_session->displayed_title, session_item->displayed_title) == 0) && (type == session_item->type))
+		if ((strcmp (new_session->displayed_title, session_item->displayed_title) == 0) && (type == session_item->type))
 		{
 
 			unique_session = FALSE;
@@ -337,9 +340,9 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 // Jabberwock 040201 Session filter
 		if (session_item->type == SESSION_LIST_TYPE_FILTER)
 		{
-            if (type == SESSION_LIST_TYPE_FILTER)
+			if (type == SESSION_LIST_TYPE_FILTER)
 			{
-            	if ((strcmp (new_session->displayed_title, session_item->displayed_title) < 0))
+				if ((strcmp (new_session->displayed_title, session_item->displayed_title) < 0))
 				{
 					break;
 				}
@@ -347,7 +350,7 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 		}
 		else
 		{
-           	if (type == SESSION_LIST_TYPE_FILTER)
+			if (type == SESSION_LIST_TYPE_FILTER)
 			{
 				break;
 			}
@@ -361,26 +364,26 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 		}
 
 // Jabberwock ends
-	 	insert_position = session_item;
+		insert_position = session_item;
 
-     	session_item = session_item->next;
-   }
+		session_item = session_item->next;
+	}
 
-   //
-   // create new list item
-   //
+	//
+	// create new list item
+	//
 
-   list_id ++;
+	list_id ++;
 
-   sprintf (new_session->data_path, "%s", path);
+	sprintf (new_session->data_path, "%s", path);
 
-   if (filename)
-   {
+	if (filename)
+	{
 
-         sprintf (new_session->campaign_directory, "%s", directory);
+			sprintf (new_session->campaign_directory, "%s", directory);
 
-      sprintf (new_session->campaign_filename, "%s", filename);
-   }
+		sprintf (new_session->campaign_filename, "%s", filename);
+	}
 
 	if (warzone_name)
 	{
@@ -426,19 +429,19 @@ session_list_data_type *add_session (const char *title, session_list_types type,
 		sprintf (new_session->warzone_name, "%s", last_ptr);
 	}
 
-   sprintf (new_session->title, "%s", title);
+	sprintf (new_session->title, "%s", title);
 
-   new_session->type_id = type_id;
+	new_session->type_id = type_id;
 
-   new_session->list_id = list_id;
+	new_session->list_id = list_id;
 
-   new_session->type = type;
+	new_session->type = type;
 
-   new_session->join_session = join_session;
+	new_session->join_session = join_session;
 
-   //
-   // add to session list
-   //
+	//
+	// add to session list
+	//
 
 	// Casm 18AUG05 Allow to show different saved games with the same name
 	if (unique_session || type == SESSION_LIST_TYPE_RESTORE)
@@ -519,7 +522,7 @@ void compile_multi_session_list (session_list_data_type **list)
 {
 	#if !DEMO_VERSION
 
-   int
+	int
 		session_number = 0;
 
 	session_table_type
@@ -544,7 +547,7 @@ void compile_multi_session_list (session_list_data_type **list)
 		{
 			if ((strcmp(session_filter_value, "root") == 0) || (strcmp(session_filter_value, "-Multiplayer-") == 0))
 			{
-				add_session ("-Multiplayer-", SESSION_LIST_TYPE_FILTER, 1, NULL, "-Multiplayer-", NULL, NULL, "-Multiplayer-", list, NULL);
+				add_session ("-Multiplayer-", SESSION_LIST_TYPE_FILTER, 1, NULL, "-Multiplayer-", NULL, NULL, "-Multiplayer-", list, NULL, SESSION_SEASON_INVALID);
 			}
 		}
 
@@ -582,7 +585,7 @@ void compile_multi_session_list (session_list_data_type **list)
 
 						session_number ++;
 
-						add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "-Multiplayer-", list, NULL); // Jabberwock 031210 Session filter
+						add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "-Multiplayer-", list, NULL, SESSION_SEASON_INVALID); // Jabberwock 031210 Session filter
 					}
 				}
 
@@ -601,7 +604,7 @@ void compile_multi_session_list (session_list_data_type **list)
 
 				session_number ++;
 
-				add_session (text, SESSION_LIST_TYPE_MASTER, session_number, NULL, NULL, NULL, NULL, "-Multiplayer-", list, Servers[currentServer].Adress); // Jabberwock 031210 Session filter
+				add_session (text, SESSION_LIST_TYPE_MASTER, session_number, NULL, NULL, NULL, NULL, "-Multiplayer-", list, Servers[currentServer].Adress, SESSION_SEASON_INVALID); // Jabberwock 031210 Session filter
 			}
 		}
 	}
@@ -661,7 +664,7 @@ void get_first_multi_session (session_list_data_type **list)
 			this_session = direct_play_get_session_table ();
 
 			if (!this_session)
-			  debug_log ("GETFIRSTSESSION: direct_play_get_session_table() returned ZERO :(");
+				debug_log ("GETFIRSTSESSION: direct_play_get_session_table() returned ZERO :(");
 
 
 			if (this_session)
@@ -673,7 +676,7 @@ void get_first_multi_session (session_list_data_type **list)
 
 				session_number ++;
 
-//				list = add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "-Multiplayer-", &this_session_list, NULL); // Jabberwock 031210 Session filter
+//				list = add_session (text, SESSION_LIST_TYPE_JOIN, session_number, this_session, NULL, NULL, NULL, "-Multiplayer-", &this_session_list, NULL, SESSION_SEASON_INVALID); // Jabberwock 031210 Session filter
 
 				return;
 
@@ -963,8 +966,8 @@ int store_session (session_list_data_type *game_session, const char *filename)
 
 	// End
 
-   //VJ 051202 add season (camo) info to file description
-   //use set and get_global_season
+	//VJ 051202 add season (camo) info to file description
+	//use set and get_global_season
 	set_file_comment (file_ptr, "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
 	set_file_tag (file_ptr, application_tag_strings, FILE_TAG_SEASON);
 	set_file_int (file_ptr, (int) get_global_season() );
@@ -1082,7 +1085,8 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		i,
 		value,
 		valid_file,
-	    upper;
+		upper,
+		season;
 
 	static char
 		operator [64],
@@ -1137,7 +1141,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		warzone_path[i] = '\0';
 
 
-		add_session (temp_warzone_name, SESSION_LIST_TYPE_FILTER, 1, NULL, warzone_path, NULL, NULL, temp_warzone_name, list, NULL);
+		add_session (temp_warzone_name, SESSION_LIST_TYPE_FILTER, 1, NULL, warzone_path, NULL, NULL, temp_warzone_name, list, NULL, SESSION_SEASON_INVALID);
 	}
 
 
@@ -1197,6 +1201,8 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 				end_flag = FALSE;
 
 				warzone_name = NULL;
+
+				season = SESSION_SEASON_INVALID;
 
 				while (!end_flag)
 				{
@@ -1287,7 +1293,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 									break;
 								}
-	  							#else //LANGUAGE_ENGLISH
+								#else //LANGUAGE_ENGLISH
 
 								if (tag == FILE_TAG_LANGUAGE_ENGLISH)
 								{
@@ -1384,6 +1390,14 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 							break;
 						}
 
+						case FILE_TAG_SEASON:
+						{
+							// 15JUN09 Casm retrieving season earlier
+							season = get_next_file_int (file_ptr);
+
+							break;
+						}
+
 						case FILE_TAG_CAMPAIGN_REQUIRES_APACHE_HAVOC:
 						{
 							debug_log("session filter: campaign_title %s", campaign_title);
@@ -1410,17 +1424,15 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 							if ((!command_line_session_filter) || (strcmp(session_filter_value, "root") != 0))
 							{
-								if (session_type == SESSION_LIST_TYPE_HOST)
+								// 15JUN09 Casm retrieving season earlier
+								const char
+									*title;
+								// if host get the Translated campaign name
+								// not hosted game so just use the name
+								title = session_type == SESSION_LIST_TYPE_HOST ? get_trans (campaign_title) :  campaign_title;
+								if (session_type == SESSION_LIST_TYPE_HOST || (session_type == SESSION_LIST_TYPE_MASTER) || (session_type == SESSION_LIST_TYPE_RESTORE))
 								{
-
-									// if host get the Translated campaign name
-									add_session (get_trans (campaign_title), session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL);
-								}
-								else if ((session_type == SESSION_LIST_TYPE_MASTER) || (session_type == SESSION_LIST_TYPE_RESTORE))
-								{
-
-									// not hosted game so just use the name
-									add_session (campaign_title, session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL);
+									add_session (title, session_type, 1, NULL, path, campaign_directory, campaign_filename, warzone_name, list, NULL, season);
 								}
 							}
 							// Jabberwock 0400201 ends
@@ -1519,15 +1531,10 @@ void set_current_game_session (session_list_data_type *game_session)
 
 			set_ui_object_drawable (session_screen_next_button, TRUE);
 
-			if (game_session->type != SESSION_LIST_TYPE_RESTORE)
+			// 15JUN09 Casm setting map information for saved games
+			notify_session_parameters ();
+			if (game_session->type == SESSION_LIST_TYPE_RESTORE)
 			{
-				notify_session_parameters ();
-			}
-			else
-			{
-
-				notify_clear_all_session_parameters ();
-
 				set_ui_object_drawable (session_briefing_overlay, TRUE);
 			}
 		}
@@ -1602,9 +1609,9 @@ void start_campaign (void)
 		}
 		case SESSION_LIST_TYPE_MASTER:
 		{
-                        current_game_session->type = SESSION_LIST_TYPE_JOIN;
+			current_game_session->type = SESSION_LIST_TYPE_JOIN;
 
-                        //TODO: Setup dplay connection, then get first active session.
+			//TODO: Setup dplay connection, then get first active session.
 
 			if (!get_session_entity ())
 			{

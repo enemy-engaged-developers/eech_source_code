@@ -157,6 +157,9 @@ void notify_session_parameters (void)
 	//VJ 080215 add initialize to avoid being stuck on season first selected campaign
 	initialise_custom_map_info();
 
+	// 15JUN09 Casm setting season information for saved game
+	set_global_season (get_current_game_session()->season);
+
 	read_map_info_data();
 
 	//
@@ -166,6 +169,11 @@ void notify_session_parameters (void)
 	//VJ 051227 set season info with map_info structure
 	set_global_season( current_map_info.season );
 	initialise_noisemaps();
+
+	if (get_current_game_session()->type == SESSION_LIST_TYPE_RESTORE)
+	{
+		return;
+	}
 
 	if (current_map_info.season != SESSION_SEASON_SUMMER && current_map_info.season != SESSION_SEASON_WINTER)
 	{
@@ -371,7 +379,7 @@ void define_session_parameter_objects (void)
 	x1 = 0.506;
 	y1 = 0.5333;
 
-   season_area = create_ui_object
+	season_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -398,8 +406,8 @@ void define_session_parameter_objects (void)
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (season_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Season")),
@@ -420,7 +428,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   season_button = create_ui_object
+	season_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -428,10 +436,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -446,7 +454,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   time_of_day_area = create_ui_object
+	time_of_day_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -473,8 +481,8 @@ void define_session_parameter_objects (void)
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (time_of_day_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Time Of Day")),
@@ -495,7 +503,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   time_of_day_button = create_ui_object
+	time_of_day_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -503,10 +511,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -523,7 +531,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   weather_area = create_ui_object
+	weather_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -545,13 +553,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = create_ui_object
+	title_text_obj = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (weather_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Weather")),
@@ -573,7 +581,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   weather_button = create_ui_object
+	weather_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -581,10 +589,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -599,7 +607,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   realism_suppress_ai_fire_area = create_ui_object
+	realism_suppress_ai_fire_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -621,13 +629,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = create_ui_object
+	title_text_obj = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (realism_suppress_ai_fire_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Environment")),
@@ -649,7 +657,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   realism_suppress_ai_fire_button = create_ui_object
+	realism_suppress_ai_fire_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -657,10 +665,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -675,7 +683,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   realism_inf_weapons_area = create_ui_object
+	realism_inf_weapons_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -698,13 +706,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = realism_inf_weapons_title = create_ui_object
+	title_text_obj = realism_inf_weapons_title = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (realism_inf_weapons_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Infinite Weapons")),
@@ -726,7 +734,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   realism_inf_weapons_button = create_ui_object
+	realism_inf_weapons_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -734,10 +742,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -752,7 +760,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   realism_inf_fuel_area = create_ui_object
+	realism_inf_fuel_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -774,13 +782,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = realism_inf_fuel_title = create_ui_object
+	title_text_obj = realism_inf_fuel_title = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (realism_inf_fuel_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Infinite Fuel")),
@@ -802,7 +810,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   realism_inf_fuel_button = create_ui_object
+	realism_inf_fuel_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -810,10 +818,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -828,7 +836,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   realism_collisions_area = create_ui_object
+	realism_collisions_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -850,13 +858,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = create_ui_object
+	title_text_obj = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (realism_collisions_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Collisions")),
@@ -878,7 +886,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   realism_collisions_button = create_ui_object
+	realism_collisions_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -886,10 +894,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
@@ -904,7 +912,7 @@ void define_session_parameter_objects (void)
 
 	y1 += OPTION_AREA_OFFSET_Y;
 
-   realism_weapons_damage_area = create_ui_object
+	realism_weapons_damage_area = create_ui_object
 								(
 									UI_TYPE_AREA,
 									UI_ATTR_PARENT (session_screen),
@@ -926,13 +934,13 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   title_text_obj = create_ui_object
+	title_text_obj = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (realism_weapons_damage_area),
 		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
-      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BOX_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
 		UI_ATTR_TEXT (get_trans ("Weapons Damage")),
@@ -954,7 +962,7 @@ void define_session_parameter_objects (void)
 		UI_ATTR_END
 	);
 
-   realism_weapons_damage_button = create_ui_object
+	realism_weapons_damage_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
 		UI_ATTR_PARENT (button_box_obj),
@@ -962,10 +970,10 @@ void define_session_parameter_objects (void)
 		UI_ATTR_VIRTUAL_POSITION (SETUP_BUTTON_TEXT_OFFSET_X, SETUP_BOX_TEXT_OFFSET_Y),
 		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
 		UI_ATTR_TEXT (""),
-      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
-      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
-      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+		UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+		UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
 		UI_ATTR_HIGHLIGHTABLE (TRUE),
 		UI_ATTR_CLEAR (TRUE),
 		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
