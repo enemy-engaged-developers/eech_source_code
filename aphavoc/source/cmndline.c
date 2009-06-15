@@ -313,8 +313,6 @@ void process_command_line (int argc, char *argv[])
 	char
 		buf[128];
 
-	initialize_options ();
-
 	debug_log ("%s command line (argc = %d)", *argv, argc);
 
 	//

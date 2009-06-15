@@ -124,17 +124,21 @@ void application_main (int argc, char **argv)
 
 	set_registry_language_settings ();
 
-	//
-	// process eech.ini file, call before commandline
-	//
-	//vj 030409, changed to generate eech.ini when it doesn't exist
-    process_ini_file(argc, argv);
+	initialize_options ();
 
 	//
 	// process command line
 	//
 
 	process_environment_variable (ENV_NAME);
+
+	process_command_line (argc, argv);
+
+	//
+	// process eech.ini file, call before commandline
+	//
+	//vj 030409, changed to generate eech.ini when it doesn't exist
+	process_ini_file ();
 
 	process_command_line (argc, argv);
 

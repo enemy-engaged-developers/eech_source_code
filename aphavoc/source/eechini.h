@@ -71,7 +71,7 @@
 
 extern void initialize_options ( void );
 extern int parse_option ( const char *name, const char *value );
-extern void process_ini_file(int argc, char *argv[]);
+extern void process_ini_file (void);
 extern void dump_ini_file(void);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

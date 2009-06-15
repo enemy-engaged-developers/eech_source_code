@@ -1003,7 +1003,7 @@ void initialize_options ( void )
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 }
 
-void process_ini_file(int argc, char *argv[])
+void process_ini_file (void)
 {
 	FILE *file;
 
