@@ -75,7 +75,7 @@
 //VJ 060211 save hud info to eech.ini
 int hud_code[8][3];
 
-#define DEFAULT_GWUT_FILE "gwut1110.csv"
+#define DEFAULT_GWUT_FILE "gwut1120.csv"
 
 // Casm 09JUN09 Advanced options processing BEGIN
 
