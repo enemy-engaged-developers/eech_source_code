@@ -345,7 +345,7 @@ static void update_field_of_view(void)
 		if (joyval <= 0)
 			fov = DEFAULT_FOV - (((float)joyval / JOYSTICK_AXIS_MINIMUM) * (DEFAULT_FOV - rad(command_line_min_fov)));
 		else
-			fov = DEFAULT_FOV + (((float)joyval / JOYSTICK_AXIS_MAXIMUM) * (rad(command_line_max_fov0) - DEFAULT_FOV));
+			fov = DEFAULT_FOV + (((float)joyval / JOYSTICK_AXIS_MAXIMUM) * (rad(max_fov) - DEFAULT_FOV));
 
 		full_screen_width_view_angle = fov;
 		full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
@@ -354,12 +354,12 @@ static void update_field_of_view(void)
 	{		
 		if (increase_fov_key_down)
 		{
-			full_screen_width_view_angle = bound(full_screen_width_view_angle + FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(command_line_max_fov0));
+			full_screen_width_view_angle = bound(full_screen_width_view_angle + FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov));
 			full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 		}
 		else if (decrease_fov_key_down)
 		{
-			full_screen_width_view_angle = bound(full_screen_width_view_angle - FOV_CHANGE_RATE * get_delta_time(), rad(max_fov), rad(command_line_max_fov0));
+			full_screen_width_view_angle = bound(full_screen_width_view_angle - FOV_CHANGE_RATE * get_delta_time(), rad(command_line_min_fov), rad(max_fov));
 			full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 		}
 	}

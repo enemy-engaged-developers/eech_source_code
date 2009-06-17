@@ -93,7 +93,7 @@ int get_max_fov ( void )
 			max_fov = command_line_max_fov0;
 			break;
 		case GUNSHIP_TYPE_HIND:
-			max_fov = command_line_max_fov1;
+			max_fov = command_line_max_fov4;
 			break;
 		case GUNSHIP_TYPE_AH64A:
 			max_fov = command_line_max_fov0;
