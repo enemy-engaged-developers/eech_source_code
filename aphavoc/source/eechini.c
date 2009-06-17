@@ -1001,6 +1001,8 @@ void initialize_options ( void )
 	initialize_radar_ranges();
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
+
+	strcpy(command_line_themes, "2");
 }
 
 void process_ini_file (void)
