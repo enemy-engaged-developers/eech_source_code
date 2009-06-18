@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.12.0</title>
+<title>EECH Community Release Version 1.12.1</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.12.0</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.12.1</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -71,10 +71,10 @@ h4 {
       and the <a
       href="http://www.simhq.com/cgi-bin/ultimatebb.cgi?ubb=forum&f=30"
       target="_blank">SimHQ forum</a>
-      </p> 
+      </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by arneh: May 24, 2009
+      italic;'>Last edited by FireBird: June 19, 2009
       </p>
 
 
@@ -84,69 +84,34 @@ h4 {
         <li><a href="#trouble">Troubleshooting</a></li>
         <li><a href="#gameinfo">General game info</span> (flyable choppers, WUT, MP)</a> </li>
         <li><a href="#eechini">The <strong>eech.ini</strong> file and
-	      <strong>mod info</strong></a> </li> 
+	      <strong>mod info</strong></a> </li>
         <li><a href="#ingame">New in-game key commands</a> </li>
         <li><a href="#sourceandversion">Source code and Bugs</a> </li>
         <li><a href="#fan">Fan sites</a></li>
         <li><a href="#history">Version history</a></li>
       </ul>
 
-      
-      <h2>What's NEW in EECH 1.12?</h2>
-      Note that some of these changes requires that you use the new
-      GWUT file (gwut1120.csv.  If you're upgrading open eech.ini and
-      change the line with wut= to say wut=gwut1120.csv).
+
+      <h2>What's NEW in EECH 1.12.1?</h2>
       <ul>
 	<dl>
 	  <dd>Features</dd>
 	  <dt>
-	  <li>Added support for generating log files
-	  for <a href="http://lomac.strasoftware.com/tacview-en.php">Tacview</a>
-	  analysis.
-	  To enable it set tacview_logging in eech.ini to one of the
-	  values 1, 2 or 3.  3 will log everything that happens from
-	  the moment the campaign starts.  1 and 2 will only start
-	  logging once you start a mission, and will only log units
-	  which are close to your helicopter.  Log mode 1 will also
-	  not show enemy units which are not yet discovered, so it
-	  will not "spoil" the campaign for you if you don't want to
-	  know where all enemy units are.
-	    The logs can be found in the directory cohokum/tacview-logs.
+	  <li>Added two visual themes: one for Apache and one for Hind
+	  (by GCsDriver). Don't forget to set themes=2 in EECH.INI.
+	  <li>Added different maxfov settings for different cockpits in EECH.INI.
 	  </dt>
 
-	  <dd>AI fixes</dd>
+	  <dd>Suspension fix</dd>
 	  <dt>
-	<li>Surface launched missiles will now fire with a slight
-	climb angle to avoid hitting the ground or surrounding
-	vehicles immediately.
-	<li>Fixed bug where SA-19 missiles would often guide towards
-	the completly wrong direction.  Combined with the above fix
-	the SA-19 is a much more serious threat now.
-	<li>Fixed bug where aircraft would miss with unguided weapons
-	because they didn't adjust for projectile drop
-	<li>Fixed problem where helicopters would miss with rockets
-	because of very sloppy aiming (fixed in gwut file)
+	  <li>Player-controllable Comanche, Apache, Blackhawk, Havoc
+	and Hokum-B won't stand above or below surface (by W4chund).
 	  </dt>
-	
-	  <dd>Weapon loadout changes</dd>
+
+	  <dd>Bug fixes</dd>
 	  <dt>
-	<li>Changed Su-33 to carry R-73(AA-11) short range missiles instead
-	of R-60(AA-8)
-	<li>Gave A-10 and Harrier AGM-65 Mavericks (and fewer rocket
-	pods)
-	<li>Replaced 4 of the rocket pods with Kh-25MT(AS-10) missiles
-	for Su-25
-	<li>Changed AH-1T to carry TOW instead of Hellfire as the
-	AH-1T is unable to carry Hellfire in real life
-	<li>Changed AH-1W to carry TOW on one wing (Hellfire on the
-	other) as this is a common load on real AH-1Ws
-	<li>Changed default weapon load for blackhawk to be just
-	rockets
-	  <li>Changed rocket salvo for most aircraft firing rockets to
-	  4 or 8 rockets per salvo (used to be 2).  Useful since
-	  rockets are much less accurate now, and aircraft flying
-	  round and firing two rockets at a time will spend a lot of
-	  time over the target.
+	<li>Restored respecting of season for loaded saves.
+	<li>Restored broken Alt-F3/F4 support.
 	  </dt>
       </ul>
 
@@ -154,7 +119,7 @@ h4 {
 
       <p align="right"><a href="#top">[top ^]</a></p>
 
-    
+
 
       <h2><a name="installation"></a>Installation and addons</h2>
       See the installation guide at <a href="http://www.eechcentral.com/wiki/index.php?title=Installation_guide">eechcentral</a>.
@@ -176,7 +141,7 @@ h4 {
         <li>Use custom textures to improve the looks of the game.</li>
         <li>Browse through the <a href="#eechini">eech.ini</a> and activate for instance &quot;faa=1&quot; (fly any aircraft, jump in returning choppers and have a field day) or for instance &quot;camcom=1&quot;, the campaign commander which lets you create missions and give you a greater control of the campaign. </li>
         <li>Play online with MP (look <a href="http://hoxdna.org/eech/" target="_blank">on this server</a> to see what's up). </li>
-      </ol>      
+      </ol>
       <h3><span class="style37" lang=EN-GB>Flyable choppers</span></h3>
       <p><span lang=EN-GB>As of version 1.6.0.W12 you can fly, change the loadout and repair the following choppers: Comanche, Apache Longbow, HokumB, Havoc, Blackhawk, Hind, AH64-A (Apache), and KA50 (Hokum). The cockpits and the flight behaviour of the new blue choppers default to the Apache Longbow, of the red choppers to the Havok. </span></p>
       <p><span lang=EN-GB>Note that you can pick a returning chopper to fly rogue. Spot the wanted Helo in the 2D-map, click on it, accept, auto-select (mission), confirm and off you go (you can't choose it from the mission or group list since it has no task). You can only do this if the option &quot;faa&quot; in eech.ini is set to &quot;1&quot; (see <a href="#eechini">eech.ini</a>). </span></p>
@@ -361,7 +326,7 @@ the EECH wiki for documentation of the eech.ini options</a>
         through the TSD render options: old TSD screen, the terrain
         map with/without contours, shaded relief with/without
         contours. Alt-D cycles through the elevation colour palettes
-        (0-2).</span></p></td> 
+        (0-2).</span></p></td>
         </tr>
 
         <tr>
@@ -435,7 +400,7 @@ the EECH wiki for documentation of the eech.ini options</a>
 	<tr>
           <td width="190" class="style43">ALT + F3/F4</td>
 	  <td>Increase/decrease field of view (zoom) smoothly.
-	</tr>	  
+	</tr>
 
         <tr>
           <td colspan=2><strong>Mouse controlled view panning </strong></td>
@@ -462,7 +427,7 @@ the EECH wiki for documentation of the eech.ini options</a>
         </em>and with mouse <em>wheel</em> you control <em>zoom
         </em>level. It is also possible to switch mouselook on/off
         with<strong> ctrl-delete </strong>key combination or with a
-        middle mouse button.</td> 
+        middle mouse button.</td>
         </tr>
 
         <tr>
@@ -616,6 +581,63 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.12?</h4>
+      Note that some of these changes requires that you use the new
+      GWUT file (gwut1120.csv.  If you're upgrading open eech.ini and
+      change the line with wut= to say wut=gwut1120.csv).
+      <ul>
+	<dl>
+	  <dd>Features</dd>
+	  <dt>
+	  <li>Added support for generating log files
+	  for <a href="http://lomac.strasoftware.com/tacview-en.php">Tacview</a>
+	  analysis.
+	  To enable it set tacview_logging in eech.ini to one of the
+	  values 1, 2 or 3.  3 will log everything that happens from
+	  the moment the campaign starts.  1 and 2 will only start
+	  logging once you start a mission, and will only log units
+	  which are close to your helicopter.  Log mode 1 will also
+	  not show enemy units which are not yet discovered, so it
+	  will not "spoil" the campaign for you if you don't want to
+	  know where all enemy units are.
+	    The logs can be found in the directory cohokum/tacview-logs.
+	  </dt>
+
+	  <dd>AI fixes</dd>
+	  <dt>
+	<li>Surface launched missiles will now fire with a slight
+	climb angle to avoid hitting the ground or surrounding
+	vehicles immediately.
+	<li>Fixed bug where SA-19 missiles would often guide towards
+	the completly wrong direction.  Combined with the above fix
+	the SA-19 is a much more serious threat now.
+	<li>Fixed bug where aircraft would miss with unguided weapons
+	because they didn't adjust for projectile drop
+	<li>Fixed problem where helicopters would miss with rockets
+	because of very sloppy aiming (fixed in gwut file)
+	  </dt>
+
+	  <dd>Weapon loadout changes</dd>
+	  <dt>
+	<li>Changed Su-33 to carry R-73(AA-11) short range missiles instead
+	of R-60(AA-8)
+	<li>Gave A-10 and Harrier AGM-65 Mavericks (and fewer rocket
+	pods)
+	<li>Replaced 4 of the rocket pods with Kh-25MT(AS-10) missiles
+	for Su-25
+	<li>Changed AH-1T to carry TOW instead of Hellfire as the
+	AH-1T is unable to carry Hellfire in real life
+	<li>Changed AH-1W to carry TOW on one wing (Hellfire on the
+	other) as this is a common load on real AH-1Ws
+	<li>Changed default weapon load for blackhawk to be just
+	rockets
+	  <li>Changed rocket salvo for most aircraft firing rockets to
+	  4 or 8 rockets per salvo (used to be 2).  Useful since
+	  rockets are much less accurate now, and aircraft flying
+	  round and firing two rockets at a time will spend a lot of
+	  time over the target.
+	  </dt>
+      </ul>
 
       <h4>Fixes/features in 1.11.1?</h2>
       <ul>
@@ -646,7 +668,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	resolution it should remember it so you only have to do this
 	once.  But you still won't be able to select it from the options
 	menu, so don't change resolution from there afterwards.
-      
+
         <li>Fix for gear automaticly extending/retracting for player
 	      helicopter in insertion missions (ataribaby)
 	<li>Fixed bug in Apache where selected target didn't show up
@@ -680,7 +702,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	<dd>
 	  <ul>
 	    <li>Adjusted flight model for Mi-24.  It gives feeling of
-	    more weight and inertia.  Enable by 
+	    more weight and inertia.  Enable by
 	    setting flight_model=2 in eech.ini
 	    <li>Added suspension modelling.  Only animated in external
 	    view for Mi-24, but physics modelling is included for all
@@ -714,7 +736,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	    <li>Added Mi-24's weapons to pilot log statistics
 	  </ul>
 	<dt>Other changes
-	<dd>      
+	<dd>
 	  <ul>
 	    <li>Added support for noisemaps for terrain.  Increases
 	    terrain texture detail.  Enable with texture_colour=2 in
@@ -757,7 +779,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	<dd>
 	  <ul>
 	    <li>Adjusted flight model for Mi-24.  It gives feeling of
-	    more weight and inertia.  Enable by 
+	    more weight and inertia.  Enable by
 	    setting flight_model=2 in eech.ini
 	    <li>Added suspension modelling.  Only animated in external
 	    view for Mi-24, but physics modelling is included for all
@@ -791,7 +813,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	    <li>Added Mi-24's weapons to pilot log statistics
 	  </ul>
 	<dt>Other changes
-	<dd>      
+	<dd>
 	  <ul>
 	    <li>Added support for noisemaps for terrain.  Increases
 	    terrain texture detail.  Enable with texture_colour=2 in
@@ -897,7 +919,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	   <li>Switchable tree shadows and optimised tree models for better performance.(GCsDriver)
            <li>Russian NVG without FLIR effect via eech.ini.(GCsDriver)
            <li>Added support for background image themes for UI(casm)
-         </ul>    
+         </ul>
 
       <dt>Non-standard helicopter changes (by GCsDriver)
       <dd>
@@ -973,7 +995,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
           </ul>
 
       <dt>Campaign map changes
-      <dd>      
+      <dd>
           <ul>
 	    <li>New relief shaded topographical campaign map
 	    <li>Hi-res campaign map and alternative map palette also
@@ -1004,7 +1026,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       <dd>
           <ul>
 	    <li>You can now disable the persistent smoke
-	    (persistent_smoke=0 in eech.ini).  With it enabled smoke 
+	    (persistent_smoke=0 in eech.ini).  With it enabled smoke
 	    will only be created for about 10 seconds, instead of minutes.
 	     <li>Rockets and missiles only generate smoke as long as
 	     the rocket engine is burning.
@@ -1231,7 +1253,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       enabled you will have to activate and deactivate the laser and
       radar manually (keypad * and / keys respectively. Switching
       radar to single sweep mode has been moved to SHIFT + keypad /).
-      In non-radar targeting modes the laser needs to 
+      In non-radar targeting modes the laser needs to
       be active to get accurate range to target, and must be active to
       fire laser guided missiles.
       Radar activates automatically when switching to a radar targeting
@@ -1263,7 +1285,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       </ol>
 
       <li>Weapons changes
-      <ol> 
+      <ol>
         <li>Changed Hellfire flight profiles.  LOBL Hellfires now
       follow a slightly high trajectory (instead of going straigt for
       target), LOAL Hellfires follow a high trajectory.
@@ -1306,7 +1328,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       hopefully less connection problems in multiplayer (sugggested
       by Kimchoc1).
       </ol>
-      
+
       <li>Bug fixes
       <ol>
         <li>Fixed the head-on-a-stick movement of the head in
@@ -1340,7 +1362,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       <ul>
         <li>Fixed version number used for checking multiplayer compatability
       </ul>
-      
+
 
       <h4>Fixes/features in 1.7:</h4>
 
@@ -1349,7 +1371,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
       <dd><ol>
 	<li>Numerous changes to make autorotation work (read <a
 	href="http://www.copters.com/pilot/autorotation.html">here</a>
-	to learn how to autorotate). 
+	to learn how to autorotate).
 	  <ul>
 	    <li>Rotor brake is now actually engaging/disenging rotor
 	    to engine, it's not a brake</li>
@@ -1413,7 +1435,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	<li>Implemented high-res MFDs for the Apache and Havoc</li>
 	<li>Made new weapons page MFD for Apache which is more like
 	the page in the real AH-64D</li>
-    
+
       </ol></dd>
       <dt>Sound changes</dt>
       <dd><ol>
@@ -1502,7 +1524,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	   correct WUT when you want to join a game.
         <li>Standardized terrain bitmaps with mipmapping and linear
 	   filtering between identical textures (reacts to graphics card
-	   anisotropy setting). 
+	   anisotropy setting).
           Set in eech.ini: texture_colour=1, mipmapping=1, texture_filtering =1
         <li>Dynamic water textures give the impression of flowing
 	  river, reservoir and sea (eech.ini: dynamic_water=1)
