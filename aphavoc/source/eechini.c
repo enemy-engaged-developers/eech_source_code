@@ -224,18 +224,30 @@ static void set_wut ( const struct config_option *option, const char *value )
 	}
 }
 
+static void set_ip_address ( const struct config_option *option, const char *value )
+{
+	if ( value && *value && strlen ( value ) < option->flag_length )
+	{
+		strcpy ( option->str_value, value );
+
+		strcpy ( global_options.ip_address, command_line_ip_address );
+	}
+}
+
 static void set_faa ( const struct config_option *option, const char *value )
 {
 	int craft;
 
 	set_int ( option, value );
 
-	for ( craft = 4; craft < NUM_ENTITY_SUB_TYPE_AIRCRAFT; craft++ )
+	if ( !value)
 	{
-		aircraft_database[craft].player_controllable = *option->int_value;
+		aircraft_database[4].player_controllable = FALSE;
+		for ( craft = 6; craft < NUM_ENTITY_SUB_TYPE_AIRCRAFT; craft++ )
+		{
+			aircraft_database[craft].player_controllable = FALSE;
+		}
 	}
-
-	aircraft_database[GUNSHIP_TYPE_HIND].player_controllable = TRUE;
 }
 
 // Casm 21DEC07
@@ -387,7 +399,7 @@ static const struct config_option options[] =
 	{ "maxplayers", "", "maximum number of players in a multiplayer game (def = 4)",
 		INT(command_line_maxplayers) },
 	{ "ipa", "ip_address", "IP address (TCP/IP address) to connect to. A host can leave out the value.",
-		STR(command_line_ip_address) },
+		SPECSTR(command_line_ip_address, set_ip_address, get_string) },
 	{ "usemaster", "", "Report game to internet masterserver (0 = off/private game, 1 = on) (def = 0) (recommended = 1)",
 		INT(command_line_report_to_masterserver) },
 	{ "pss", "primary_server_setting", "primary masterserver internet address (def = hoxdna.org)",
