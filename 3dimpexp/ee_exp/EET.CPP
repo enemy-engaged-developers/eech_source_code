@@ -50,17 +50,17 @@ void EET::LoadAnimations(FILE* file)
    fread(&length, sizeof(int), 1, file);
    for (int count = 0; count < number_of_texture_animations; count++)
     {
-	 Animation animation;
-	 animation.index = ~0u;
+     Animation animation;
+     animation.index = ~0u;
      fread(&length, sizeof(int), 1, file);
-	 fread(animation.name, length, 1, file);
+     fread(animation.name, length, 1, file);
      fread(&length, sizeof(int), 1, file);
      animations[count].index = ~0u;
      for (int temp = 0; temp < length; temp++)
       {
-	   unsigned texture;
+       unsigned texture;
        fread(&texture, sizeof(int), 1, file);
-	   animation.animation.Append(texture);
+       animation.animation.Append(texture);
       }
      animations[count] = animation;
     }

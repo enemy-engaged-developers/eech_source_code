@@ -405,27 +405,27 @@ void convert(const OBJECT_3D& obj, LWO_File& lwofile, EET& eet)
 
    char comment[256] = "";
    if (current_surface->detail)
-   	strcat(comment, "detail= ");
+    strcat(comment, "detail= ");
    if (current_surface->texture_animation)
     {
-	 const char* animation = eet.GetAnimation(current_surface->texture_index);
-	 if (animation)
-	  {
-	   strcat(comment, "texture_animation=");
-	   strcat(comment, animation);
-	   strcat(comment, " ");
-	  }
-	}
+     const char* animation = eet.GetAnimation(current_surface->texture_index);
+     if (animation)
+      {
+       strcat(comment, "texture_animation=");
+       strcat(comment, animation);
+       strcat(comment, " ");
+      }
+    }
    if (current_surface->luminosity_texture_animation)
     {
-	 const char* animation = eet.GetAnimation(current_surface->luminosity_texture_index);
-	 if (animation)
-	  {
-	   strcat(comment, "luminosity_animation=");
-	   strcat(comment, animation);
-	   strcat(comment, " ");
-	  }
-	}
+     const char* animation = eet.GetAnimation(current_surface->luminosity_texture_index);
+     if (animation)
+      {
+       strcat(comment, "luminosity_animation=");
+       strcat(comment, animation);
+       strcat(comment, " ");
+      }
+    }
    subchunk = new LWO_SubChunk("CMNT", strlen(comment) + 1, comment);
    chunk->AddSubChunk(subchunk);
   }

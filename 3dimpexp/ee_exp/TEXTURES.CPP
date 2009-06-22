@@ -119,8 +119,8 @@ class TexturesExporter
     printf("%i %s", count, name);
 
     if (flags.camoflage_texture)
-	 strcat(name, "-D");
-	eet.Append(name);
+     strcat(name, "-D");
+    eet.Append(name);
 
     if (flags.reserved_texture)
      {
