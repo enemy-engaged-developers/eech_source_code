@@ -17,19 +17,21 @@ class Object : public OBJECT_3D
  {
   FILE *file;
 
-  int format_version, number_of_texture_points, number_of_polygoned_faces, number_of_point_normals, number_of_lighting_normals, number_of_point_references, number_of_surface_point_references, number_of_surface_point_normals;
+  int format_version, number_of_texture_points, number_of_polygoned_faces, number_of_face_normals, number_of_point_normals, number_of_lighting_normals, number_of_point_references, number_of_surface_point_references, number_of_surface_point_normals;
 
-  file = fopen(filename, "rb");
-  if (!file)
-   return;
+  file = safe_fopen(filename, "rb");
 
   fread(&format_version, 4, 1, file);
-  if (format_version != 1)
-   return;
+  if (format_version < 1 || format_version > 2)
+   error("Invalid format version %i", format_version);
 
   fread(&number_of_points, 4, 1, file);
   fread(&number_of_faces, 4, 1, file);
   fread(&number_of_polygoned_faces, 4, 1, file);
+  if (format_version > 1)
+   fread ( &number_of_face_normals, 4, 1, file );
+  else
+   number_of_face_normals = number_of_polygoned_faces;
   fread(&number_of_surfaces, 4, 1, file);
   fread(&number_of_point_normals, 4, 1, file);
   fread(&number_of_lighting_normals, 4, 1, file);
@@ -71,7 +73,7 @@ class Object : public OBJECT_3D
    }
   else
    surfaces = NULL;
-  fseek(file, 2 * number_of_polygoned_faces, SEEK_CUR);
+  fseek(file, 2 * number_of_face_normals, SEEK_CUR);
   if (number_of_texture_points)
    {
     surface_texture_points = new OBJECT_3D_SHORT_TEXTURED_POINT[number_of_texture_points];
@@ -94,12 +96,12 @@ class Object : public OBJECT_3D
     if (!get_nul_string(texture_name, sizeof(texture_name), file))
      break;
     if (*texture_name)
-     surfaces[i].texture_index = (unsigned short int)eet.Append(texture_name);
+     surfaces[i].texture_index = /*surfaces[i].texture_animation ? 0 :*/ (unsigned short int)eet.Append(texture_name);
 
     if (!get_nul_string(texture_name, sizeof(texture_name), file))
      break;
     if (*texture_name)
-     surfaces[i].luminosity_texture_index = (unsigned short int)eet.Append(texture_name);
+     surfaces[i].luminosity_texture_index = /*surfaces[i].luminosity_texture_animation ? 0 :*/ (unsigned short int)eet.Append(texture_name);
    }
 
   fclose (file);

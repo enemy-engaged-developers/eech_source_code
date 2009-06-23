@@ -11,6 +11,7 @@ class OBJECT_3D : private Convert
   number_of_surfaces = 0;
   number_of_texture_points = 0;
   number_of_polygoned_faces = 0;
+  number_of_face_normal_references = 0;
   number_of_point_normals = 0;
   number_of_lighting_normals = 0;
   number_of_point_references = 0;
@@ -25,15 +26,31 @@ class OBJECT_3D : private Convert
     if (rs[i].polygons)
      {
       number_of_polygoned_faces += !rs[i].polys;
+      if (!rs[i].smoothed)
+       number_of_face_normal_references += !rs[i].polys;
+
       for (unsigned j = 0; j < !rs[i].polys; j++)
        {
         number_of_point_references += !rs[i].polys[j].points;
-        AddPoint(normals, rs[i].polys[j].norm);
+        if (rs[i].smoothed)
+         {
+          for (unsigned k = 0; k < !rs[i].polys[j].points; k++)
+           {
+            RNormal norm;
+            rs[i].polys[j].points[k].normal.SetTo(norm);
+            AddPoint(normals, norm);
+            rs[i].polys[j].points[k].normal.index = norm.index;
+           }
+         }
+        else
+         AddPoint(normals, rs[i].polys[j].norm);
        }
      }
     else
      number_of_point_references += 2 * !rs[i].polys;
     number_of_surface_point_references += !rs[i].points;
+    if (rs[i].smoothed)
+     number_of_surface_point_normals += !rs[i].points;
     if (rs[i].texture[0] != '\0')
      number_of_texture_points += !rs[i].points;
     if (rs[i].ltexture[0] != '\0')
@@ -108,14 +125,15 @@ class OBJECT_3D : private Convert
      if (!!rs[i].polys)
       continue;
 
-	 SURFACE_TEXTURE* t = &textures[m];
+     SURFACE_TEXTURE* t = &textures[m];
      FACE_SURFACE_DESCRIPTION* su = &surfaces[m++];
      const RSurface* s = &rs[i];
 
-	 strcpy(t->texture, s->texture);
-	 strcpy(t->luminosity, s->ltexture);
+     strcpy(t->texture, s->texture);
+     strcpy(t->luminosity, s->ltexture);
      su->polygons = s->polygons;
-	 su->detail = s->detail;
+     su->detail = s->detail;
+     su->smoothed = s->smoothed;
      su->textured = t->texture[0] != '\0';
      su->has_luminosity_texture = t->luminosity[0] != '\0';
      su->translucent = s->translucent;
@@ -145,7 +163,7 @@ class OBJECT_3D : private Convert
     error("number_of_surfaces");
   }
 
-  object_face_normal_references = new POINT_3D_PLAIN_REFERENCE[number_of_polygoned_faces];
+  object_face_normal_references = new POINT_3D_PLAIN_REFERENCE[number_of_face_normal_references];
   {
    unsigned m = 0;
    for (unsigned i = 0; i < !rs; i++)
@@ -154,11 +172,13 @@ class OBJECT_3D : private Convert
       continue;
      if (!rs[i].polygons)
       continue;
+     if (rs[i].smoothed)
+      continue;
      for (unsigned j = 0; j < !rs[i].polys; j++)
       object_face_normal_references[m++].point = (unsigned short)rs[i].polys[j].norm.index;
     }
-   if (m != number_of_polygoned_faces)
-    error("number_of_polygoned_faces");
+   if (m != number_of_face_normal_references)
+    error("number_of_face_normal_references");
   }
 
   surface_texture_points = new OBJECT_3D_SHORT_TEXTURED_POINT[number_of_texture_points];
@@ -203,10 +223,27 @@ class OBJECT_3D : private Convert
    if (m != number_of_surface_point_references)
     error("number_of_surface_point_references");
   }
+
+  surface_point_normals = new POINT_3D_PLAIN_REFERENCE[number_of_surface_point_normals];
+  {
+   unsigned m = 0;
+   for (unsigned i = 0; i < !rs; i++)
+    {
+     if (!!rs[i].polys)
+      continue;
+     if (!rs[i].smoothed)
+      continue;
+     for (unsigned j = 0; j < !rs[i].points; j++)
+      surface_point_normals[m++].point = (unsigned short)rs[i].points[j].normal.index;
+    }
+   if (m != number_of_surface_point_normals)
+    error("number_of_surface_point_references");
+  }
  }
 
  void Clear(void)
  {
+  delete [] surface_point_normals;
   delete [] surface_points;
   delete [] surface_texture_points;
   delete [] object_face_normal_references;
@@ -224,11 +261,12 @@ class OBJECT_3D : private Convert
   if (!file)
    error("Failed to create %s", filename);
 
-  int format = 1;
+  int format = 2;
   fwrite(&format, 4, 1, file);
   fwrite(&number_of_points, 4, 1, file);
   fwrite(&number_of_faces, 4, 1, file);
   fwrite(&number_of_polygoned_faces, 4, 1, file);
+  fwrite(&number_of_face_normal_references, 4, 1, file);
   fwrite(&number_of_surfaces, 4, 1, file);
   fwrite(&number_of_point_normals, 4, 1, file);
   fwrite(&number_of_lighting_normals, 4, 1, file);
@@ -244,10 +282,10 @@ class OBJECT_3D : private Convert
   fwrite(point_normals, 2, number_of_point_normals, file);
   fwrite(object_faces_point_plain_list, 1, number_of_point_references, file);
   fwrite(surfaces, 16, number_of_surfaces, file);
-  fwrite(object_face_normal_references, 2, number_of_polygoned_faces, file);
+  fwrite(object_face_normal_references, 2, number_of_face_normal_references, file);
   fwrite(surface_texture_points, 8, number_of_texture_points, file);
   fwrite(surface_points, 2, number_of_surface_point_references, file);
-  //fwrite(surface_point_normals, 2, number_of_surface_point_normals, file);
+  fwrite(surface_point_normals, 2, number_of_surface_point_normals, file);
   for (unsigned i = 0; i < number_of_surfaces; i++)
   {
    fwrite(textures[i].texture, 1, strlen(textures[i].texture) + 1, file);
@@ -296,10 +334,12 @@ class OBJECT_3D : private Convert
  struct POINT_3D_PLAIN_REFERENCE { unsigned short int point; } *object_face_normal_references;
  struct OBJECT_3D_SHORT_TEXTURED_POINT { float u, v; } *surface_texture_points;
  struct POINT_3D_PLAIN_REFERENCE /*{ unsigned short int point; }*/ *surface_points;
+ struct POINT_3D_PLAIN_REFERENCE /*{ unsigned short int point; }*/ *surface_point_normals;
 
 
  unsigned number_of_texture_points;
  unsigned number_of_polygoned_faces;
+ unsigned number_of_face_normal_references;
  unsigned number_of_point_references;
  unsigned number_of_surface_point_references;
  unsigned number_of_surface_point_normals;

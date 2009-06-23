@@ -77,21 +77,9 @@ struct RTPoint
  }
 };
 
-struct RPolyPoint
-{
- RPoint p;
- RTPoint tp;
- RTPoint lp;
- unsigned index;
-
- int operator == (const RPolyPoint& rp)
- {
-  return p == rp.p && tp == rp.tp && lp == rp.lp;
- }
-};
-
 struct RNormal
 {
+ double _heading, _pitch;
  unsigned char heading, pitch;
  unsigned index;
 
@@ -101,7 +89,6 @@ struct RNormal
   {
    long x, y, z;
   } u, v, n;
-  double _heading, _pitch;
 
   u.x = p2.x - p1.x;
   u.y = p2.y - p1.y;
@@ -114,79 +101,94 @@ struct RNormal
   n.y = u.z * v.x - u.x * v.z;
   n.z = u.x * v.y - u.y * v.x;
 
-  if (!n.x && !n.y && !n.z)
+  return Set(n.x, n.y, n.z);
+ }
+
+ int Set(long x, long y, long z)
+ {
+  if (!x && !y && z)
    {
-    /*printf("%i %i %i | %i %i %i | %i %i %i |\n%li %li %li | %li %li %li | %li %li %li\n",
-             p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z,
-             u.x, u.y, u.z, v.x, v.y, v.z, n.x, n.y, n.z);*/
+    _heading = 0;
+    _pitch = 0;
     return -1;
    }
 
-  if (!n.x && !n.z)
+  if (!x && !z)
    {
     _heading = 0;
-    _pitch = n.y < 0 ? M_PI / 2 : - M_PI / 2;
+    _pitch = y < 0 ? M_PI / 2 : - M_PI / 2;
    }
   else
-   if (!n.z)
+   if (!z)
     {
-     _heading = n.x > 0 ? M_PI / 2 : - M_PI / 2;
-     _pitch = atan2(n.y, fabs(n.x));
+     _heading = x > 0 ? M_PI / 2 : - M_PI / 2;
+     _pitch = atan2(y, fabs(x));
     }
    else
-    if (!n.x)
+    if (!x)
      {
-      _pitch = atan2(n.y, fabs(n.z));
-      _heading = n.z > 0 ? 0 : - M_PI;
+      _pitch = atan2(y, fabs(z));
+      _heading = z > 0 ? 0 : - M_PI;
      }
     else
      {
-      _pitch = atan2(n.y, sqrt(( double) n.x * n.x +(double) n.z * n.z));
-      _heading = atan2(n.x, n.z);
+      _pitch = atan2(y, sqrt((double)x * x + (double)z * z));
+      _heading = atan2(x, z);
      }
 
-  _pitch += M_PI / 2;
-  _pitch *= 256 / M_PI;
-  pitch = _pitch < 0 ? 0 : _pitch > 255 ? 255 :(int)(_pitch + 0.5);
+  double _pitch_ = _pitch;
+  _pitch_ += M_PI / 2;
+  _pitch_ *= 256 / M_PI;
+  pitch = _pitch_ < 0 ? 0 : _pitch_ > 255 ? 255 : (int)(_pitch_ + 0.5);
 
-  _heading += M_PI;
-  _heading *= 128 / M_PI;
-  heading = _heading < 0 ? 0 : _heading > 255 ? 255 :(int)(_heading + 0.5);
-
-#if 0
-  double d = sqrt(( double) n.x * n.x +(double) n.y * n.y +(double) n.z * n.z);
-  struct
-  {
-   double x, y, z;
-  } n1, n2;
-  n2.x = n.x / d;
-  n2.y = n.y / d;
-  n2.z = n.z / d;
-
-  _heading = heading / 256.0;
-  _pitch = pitch / 256.0;
-
-  _heading *= 2 * M_PI;
-  _pitch *= M_PI;
-
-  _heading -= M_PI;
-  _pitch -= M_PI / 2;
-
-  n1.x = cos(_pitch) * sin(_heading);
-  n1.y = sin(_pitch);
-  n1.z = cos(_pitch) * cos(_heading);
-  if (fabs(n1.x * n2.x + n1.y * n2.y + n1.z * n2.z) < cos(M_PI / 128))
-   error("Normal\n%f\n%f\n%f %f\n(%f %f %f)\n(%f %f %f)",
-           fabs(n1.x * n2.x + n1.y * n2.y + n1.z * n2.z), cos(M_PI / 128),
-           _pitch, _heading,
-           n2.x, n2.y, n2.z, n1.x, n1.y, n1.z);
-#endif
+  double _heading_ = _heading;
+  _heading_ += M_PI;
+  _heading_ *= 128 / M_PI;
+  heading = _heading_ < 0 ? 0 : _heading_ > 255 ? 255 : (int)(_heading_ + 0.5);
 
   return 0;
  }
- int operator == (const RNormal& n)
+ int operator ==(const RNormal& n)
  {
   return heading == n.heading && pitch == n.pitch;
+ }
+};
+
+struct RANormal
+{
+ double x, y, z;
+ unsigned index;
+
+ RANormal() : x(0.0), y(0.0), z(0.0), index(0) {}
+
+ void operator +=(const RNormal& n)
+ {
+  x += cos(n._heading) * cos(n._pitch);
+  y += sin(n._heading) * cos(n._pitch);
+  z += sin(n._pitch);
+  float d = sqrt(x * x + y * y + z * z);
+  x /= d;
+  y /= d;
+  z /= d;
+ }
+
+ int SetTo(RNormal& normal)
+ {
+   return normal.Set((long)(x * 10000), (long)(y * 10000), (long)(z * 10000));
+ }
+};
+
+struct RPolyPoint
+{
+ RPoint p;
+ RTPoint tp;
+ RTPoint lp;
+ unsigned index;
+ RANormal normal;
+
+ int operator ==(const RPolyPoint& rp)
+ {
+  return p == rp.p && tp == rp.tp && lp == rp.lp;
  }
 };
 
