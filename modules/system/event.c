@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -77,27 +77,30 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-   event_input,
-   event_output,
-   event_list_size;
+	event_input,
+	event_output,
+	event_list_size;
 
 int
 	last_key_event_time,
 	last_joystick_event_time,
 	last_mouse_event_time;
 
+static HANDLE
+	mutex;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static event
-   event_list[MAX_NUMBER_EVENTS];
+	event_list[MAX_NUMBER_EVENTS];
 
 registered_event_type
-   registered_events [MAX_NUMBER_REGISTERED_EVENTS][NUM_MODIFIER_TYPES];
+	registered_events [MAX_NUMBER_REGISTERED_EVENTS][NUM_MODIFIER_TYPES];
 
 int
-   current_modifier_states = MODIFIER_NONE;
+	current_modifier_states = MODIFIER_NONE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +109,7 @@ int
 const char
 	*button_state_names [] =
 	{
-	
+
 		"STATE_INVALID",
 		"STATE_UP",
 		"STATE_DOWN",
@@ -120,7 +123,7 @@ const char
 const char
 	*modifier_type_names [] =
 	{
-	
+
 		"MODIFIER_NONE",
 		"MODIFIER_LEFT_SHIFT",
 		"MODIFIER_LEFT_CONTROL",
@@ -139,12 +142,13 @@ const char
 
 int initialise_event_system (void)
 {
+	mutex = CreateMutex(NULL, FALSE, "EEEvent");
 
-   event_input = 0;
+	event_input = 0;
 
-   event_output = 0;
+	event_output = 0;
 
-   event_list_size = 0;
+	event_list_size = 0;
 
 	last_key_event_time = 0;
 
@@ -152,9 +156,9 @@ int initialise_event_system (void)
 
 	last_mouse_event_time = 0;
 
-   clear_events ();
+	clear_events ();
 
-   return ( TRUE );
+	return ( TRUE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,11 +168,11 @@ int initialise_event_system (void)
 void clear_events (void)
 {
 
-   #if DEBUG_EVENT_
+	#if DEBUG_EVENT_
 
-   debug_log ("EVENT: clear events ");
+	debug_log ("EVENT: clear events ");
 
-   #endif
+	#endif
 
 	memset (registered_events, 0, sizeof (registered_events));
 }
@@ -183,14 +187,14 @@ void reset_events (void)
 	int
 		loop1;
 
-   #if DEBUG_EVENT_
+	#if DEBUG_EVENT_
 
-   debug_log ("EVENT: reset events ");
+	debug_log ("EVENT: reset events ");
 
-   #endif
+	#endif
 	for (loop1 = 0; loop1 < MAX_NUMBER_REGISTERED_EVENTS; loop1 ++)
 	{
-		
+
 		reset_event_key (loop1);
 	}
 }
@@ -219,9 +223,9 @@ void reset_event_key (int dik_code)
 			if ((registered_events [dik_code][loop2].notify_state == BUTTON_STATE_EITHER) ||
 			(registered_events [dik_code][loop2].notify_state == BUTTON_STATE_UP))
 			{
-	
+
 				registered_events [dik_code][loop2].function (&ev);
-	
+
 				registered_events [dik_code][loop2].current_state = KEY_STATE_INVALID;
 			}
 		}
@@ -234,31 +238,35 @@ void reset_event_key (int dik_code)
 
 void create_joystick_event ( int device_index, int button, enum BUTTON_STATES state )
 {
+	WaitForSingleObject(mutex, 0);
 
-   if ( event_list_size == MAX_NUMBER_EVENTS )
-   {
+	if ( event_list_size == MAX_NUMBER_EVENTS )
+	{
+		ReleaseMutex(mutex);
 
-      return;
-   }
+		return;
+	}
 
-   event_list[event_input].type = EVENT_TYPE_JOYSTICK_BUTTON;
+	event_list[event_input].type = EVENT_TYPE_JOYSTICK_BUTTON;
 
 	// button = 0 -> 31. Offset to end of event array
-   event_list[event_input].button = button + NUM_DEVICE_EVENTS;
+	event_list[event_input].button = button + NUM_DEVICE_EVENTS;
 
-   event_list[event_input].device_index = device_index;
+	event_list[event_input].device_index = device_index;
 
-   event_list[event_input].state = state;
+	event_list[event_input].state = state;
 
-   event_input++;
+	event_input++;
 
-   if ( event_input == MAX_NUMBER_EVENTS )
-   {
+	if ( event_input == MAX_NUMBER_EVENTS )
+	{
 
-      event_input = 0;
-   }
+		event_input = 0;
+	}
 
-   event_list_size++;
+	event_list_size++;
+
+	ReleaseMutex(mutex);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,12 +275,14 @@ void create_joystick_event ( int device_index, int button, enum BUTTON_STATES st
 
 void create_key_event ( int key, enum KEY_STATES state )
 {
+	WaitForSingleObject(mutex, 0);
 
-   if ( event_list_size == MAX_NUMBER_EVENTS )
-   {
+	if ( event_list_size == MAX_NUMBER_EVENTS )
+	{
+		ReleaseMutex(mutex);
 
-      return;
-   }
+		return;
+	}
 
 #ifdef COMMERCIAL
 
@@ -308,21 +318,23 @@ void create_key_event ( int key, enum KEY_STATES state )
 
 	memset (&event_list [event_input], 0, sizeof (event));
 
-   event_list[event_input].type = EVENT_TYPE_KEY;
+	event_list[event_input].type = EVENT_TYPE_KEY;
 
-   event_list[event_input].key = key;
+	event_list[event_input].key = key;
 
-   event_list[event_input].state = state;
+	event_list[event_input].state = state;
 
-   event_input++;
+	event_input++;
 
-   if ( event_input == MAX_NUMBER_EVENTS )
-   {
+	if ( event_input == MAX_NUMBER_EVENTS )
+	{
 
-      event_input = 0;
-   }
+		event_input = 0;
+	}
 
-   event_list_size++;
+	event_list_size++;
+
+	ReleaseMutex(mutex);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,30 +343,34 @@ void create_key_event ( int key, enum KEY_STATES state )
 
 void create_mouse_button_event ( enum DEVICE_EVENTS button, enum BUTTON_STATES state )
 {
+	WaitForSingleObject(mutex, 0);
 
-   if ( event_list_size == MAX_NUMBER_EVENTS )
-   {
+	if ( event_list_size == MAX_NUMBER_EVENTS )
+	{
+		ReleaseMutex(mutex);
 
-      return;
-   }
+		return;
+	}
 
 	memset (&event_list [event_input], 0, sizeof (event));
 
-   event_list[event_input].type = EVENT_TYPE_MOUSE_BUTTON;
+	event_list[event_input].type = EVENT_TYPE_MOUSE_BUTTON;
 
-   event_list[event_input].button = button;
+	event_list[event_input].button = button;
 
-   event_list[event_input].state = state;
+	event_list[event_input].state = state;
 
-   event_input++;
+	event_input++;
 
-   if ( event_input == MAX_NUMBER_EVENTS )
-   {
+	if ( event_input == MAX_NUMBER_EVENTS )
+	{
 
-      event_input = 0;
-   }
+		event_input = 0;
+	}
 
-   event_list_size++;
+	event_list_size++;
+
+	ReleaseMutex(mutex);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,15 +379,17 @@ void create_mouse_button_event ( enum DEVICE_EVENTS button, enum BUTTON_STATES s
 
 void create_mouse_move_event ( int dx, int dy, int dz )
 {
-
 	int
 		last_event_index;
 
-   if ( event_list_size == MAX_NUMBER_EVENTS )
-   {
+	WaitForSingleObject(mutex, 0);
 
-      return;
-   }
+	if ( event_list_size == MAX_NUMBER_EVENTS )
+	{
+		ReleaseMutex(mutex);
+
+		return;
+	}
 
 	last_event_index = event_input - 1;
 
@@ -392,23 +410,25 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 	{
 
 		memset (&event_list [event_input], 0, sizeof (event));
-	
+
 		event_list[event_input].type = EVENT_TYPE_MOUSE_MOVE;
-	
+
 		event_list[event_input].dx = dx;
 		event_list[event_input].dy = dy;
 		event_list[event_input].dz = dz;
-	
+
 		event_input++;
-	
+
 		if ( event_input == MAX_NUMBER_EVENTS )
 		{
-	
+
 			event_input = 0;
 		}
-	
+
 		event_list_size++;
 	}
+
+	ReleaseMutex(mutex);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -417,31 +437,35 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 
 int get_event ( event *ev )
 {
+	WaitForSingleObject(mutex, 0);
 
-   ASSERT ( ev );
+	ASSERT ( ev );
 
-   if ( event_list_size )
-   {
+	if ( event_list_size )
+	{
 
-      memcpy ( ev, &event_list[event_output], sizeof ( event ) );
+		memcpy ( ev, &event_list[event_output], sizeof ( event ) );
 
-      event_output++;
+		event_output++;
 
-      if ( event_output == MAX_NUMBER_EVENTS )
-      {
+		if ( event_output == MAX_NUMBER_EVENTS )
+		{
 
-         event_output = 0;
-      }
+			event_output = 0;
+		}
 
-      event_list_size --;
+		event_list_size --;
 
-      return ( TRUE );
-   }
-   else
-   {
+		ReleaseMutex(mutex);
 
-      return ( FALSE );
-   }
+		return ( TRUE );
+	}
+	else
+	{
+		ReleaseMutex(mutex);
+
+		return ( FALSE );
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -451,11 +475,11 @@ int get_event ( event *ev )
 void set_event (int event, int modifier, int notify_state, void (*func) ( struct EVENT *ev))
 {
 
-   ASSERT ((modifier >= MODIFIER_NONE) && (modifier < NUM_MODIFIER_TYPES));
+	ASSERT ((modifier >= MODIFIER_NONE) && (modifier < NUM_MODIFIER_TYPES));
 
-   #if EVENT_DEBUG
+	#if EVENT_DEBUG
 
-   debug_log ("EVENT: SET EVENT: event %d, modifier %d, notify_state %d, function %d", event, modifier, notify_state, func);
+	debug_log ("EVENT: SET EVENT: event %d, modifier %d, notify_state %d, function %d", event, modifier, notify_state, func);
 
 
 	if (registered_events [event][modifier].in_use == TRUE)
@@ -464,15 +488,15 @@ void set_event (int event, int modifier, int notify_state, void (*func) ( struct
 		debug_log ("SET EVENT WARNING: event %d (%c) modifier %s is already in use", event, dinput_to_ascii (event), modifier_type_names [modifier]);
 	}
 
-   #endif
+	#endif
 
-   registered_events [event][modifier].in_use = TRUE;
+	registered_events [event][modifier].in_use = TRUE;
 
-   registered_events [event][modifier].current_state = KEY_STATE_UP;
+	registered_events [event][modifier].current_state = KEY_STATE_UP;
 
-   registered_events [event][modifier].notify_state = notify_state;
+	registered_events [event][modifier].notify_state = notify_state;
 
-   registered_events [event][modifier].function = func;
+	registered_events [event][modifier].function = func;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,10 +511,10 @@ void process_events (void)
 
 	while (get_event (&current_event))
 	{
-	
+
 		switch (current_event.type)
 		{
-	
+
 			case EVENT_TYPE_KEY:
 			{
 
@@ -503,10 +527,10 @@ void process_events (void)
 				last_key_event_time = get_system_time ();
 
 				process_key_event (&current_event);
-	
+
 				break;
 			}
-	
+
 			case EVENT_TYPE_JOYSTICK_BUTTON:
 			case EVENT_TYPE_JOYSTICK_MOVE:
 			{
@@ -520,10 +544,10 @@ void process_events (void)
 				last_joystick_event_time = get_system_time ();
 
 				process_joystick_event (&current_event);
-	
+
 				break;
 			}
-			
+
 			case EVENT_TYPE_TIMER:
 			{
 
@@ -542,37 +566,37 @@ void process_events (void)
 
 				if (get_mouse_on ())
 				{
-	
+
 					#if EVENT_DEBUG
-	
+
 					debug_log ("EVENT: process mouse: mouse dx %d, dy %d, button %d, state %d", current_event.dx, current_event.dy, current_event.button, current_event.state);
-	
+
 					#endif
 
 					last_mouse_event_time = get_system_time ();
-	
+
 					process_mouse_event (&current_event);
 				}
 				else
 				{
-	
+
 					#if EVENT_DEBUG
-	
+
 					debug_log ("EVENT: MOUSE OFF NOT processing mouse: mouse dx %d, dy %d, button %d, state %d", current_event.dx, current_event.dy, current_event.button, current_event.state);
-	
+
 					#endif
 				}
 
 				break;
 			}
-	
-  			// add new events here !
+
+			// add new events here !
 
 			default:
 			{
-	
+
 				debug_fatal ("EVENT: Error in process_events, unknown event %d", current_event.type);
-	
+
 				break;
 			}
 		}
