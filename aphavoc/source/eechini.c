@@ -783,6 +783,23 @@ static const struct config_option options[] =
 	{ NULL, NULL, "",
 		NONE },
 
+	{ NULL, "25", "[Random weather]",
+		NONE },
+	{ "rw_rrmin", "", "Rain effect minimum radius (meters)",
+		FLOAT(weather_rain_radius_min) },
+	{ "rw_rrmax", "", "Rain effect maximum radius (meters)",
+		FLOAT(weather_rain_radius_max) },
+	{ "rw_rsp", "", "Rain effect speed (meters per second)",
+		FLOAT(weather_rain_speed) },
+	{ "rw_wrmin", "", "Wind effect minimum radius (meters)",
+		FLOAT(weather_wind_radius_min) },
+	{ "rw_wrmax", "", "Wind effect maximum radius (meters)",
+		FLOAT(weather_wind_radius_max) },
+	{ "rw_wsp", "", "Wind effect speed (meters per second)",
+		FLOAT(weather_wind_speed) },
+	{ NULL, NULL, "",
+		NONE },
+
 	{ NULL, NULL, "[end of file]",
 		NONE },
 

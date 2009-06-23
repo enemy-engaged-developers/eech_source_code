@@ -76,6 +76,19 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+float
+	weather_rain_radius_min = MIN_WEATHER_RADIUS,
+	weather_rain_radius_max = MAX_WEATHER_RADIUS,
+	weather_rain_speed = WEATHER_EFFECT_SPEED,
+	weather_wind_radius_min = MIN_WIND_RADIUS,
+	weather_wind_radius_max = MAX_WIND_RADIUS,
+	weather_wind_speed = WIND_EFFECT_SPEED;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 entity
 	*session_entity = NULL;
 
@@ -542,7 +555,7 @@ void set_session_random_weather_mode (entity *en)
 	// Rain
 	//
 
-	raw->weather_radius = MIN_WEATHER_RADIUS + ((MAX_WEATHER_RADIUS - MIN_WEATHER_RADIUS) * frand1 ());
+	raw->weather_radius = weather_rain_radius_min + ((weather_rain_radius_max - weather_rain_radius_min) * frand1 ());
 
 	raw->weather_increasing = (rand16 () & 1);
 
@@ -552,15 +565,15 @@ void set_session_random_weather_mode (entity *en)
 
 	theta = PI * sfrand1 ();
 
-	raw->weather_velocity.x = sin (theta) * WEATHER_EFFECT_SPEED;
+	raw->weather_velocity.x = sin (theta) * weather_rain_speed;
 	raw->weather_velocity.y = 0.0;
-	raw->weather_velocity.z = cos (theta) * WEATHER_EFFECT_SPEED;
+	raw->weather_velocity.z = cos (theta) * weather_rain_speed;
 
 	//
 	// Wind
 	//
 
-	raw->wind_effect_radius = MIN_WIND_RADIUS + ((MAX_WIND_RADIUS - MIN_WIND_RADIUS) * frand1 ());
+	raw->wind_effect_radius = weather_wind_radius_min + ((weather_wind_radius_max - weather_wind_radius_min) * frand1 ());
 
 	raw->wind_increasing = (rand16 () & 1);
 
@@ -570,9 +583,9 @@ void set_session_random_weather_mode (entity *en)
 
 	theta = PI * sfrand1 ();
 
-	raw->wind_effect_velocity.x = sin (theta) * WIND_EFFECT_SPEED;
+	raw->wind_effect_velocity.x = sin (theta) * weather_wind_speed;
 	raw->wind_effect_velocity.y = 0.0;
-	raw->wind_effect_velocity.z = cos (theta) * WIND_EFFECT_SPEED;
+	raw->wind_effect_velocity.z = cos (theta) * weather_wind_speed;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
