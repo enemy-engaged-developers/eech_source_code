@@ -1276,6 +1276,7 @@ int read_object ( object_3d *obj, const char* filename )
 		number_of_surfaces,
 		number_of_texture_points,
 		number_of_polygoned_faces,
+		number_of_face_normals,
 		number_of_point_normals,
 		number_of_lighting_normals,
 		number_of_point_references,
@@ -1290,7 +1291,7 @@ int read_object ( object_3d *obj, const char* filename )
 
 	fread ( &format_version, 4, 1, file );
 
-	if ( format_version != 1 )
+	if ( format_version < 1 || format_version > 2 )
 	{
 		debug_log ( "Incompatible object: %s (object version %d)", filename, format_version );
 		return FALSE;
@@ -1299,6 +1300,10 @@ int read_object ( object_3d *obj, const char* filename )
 	fread ( &number_of_points, 4, 1, file );
 	fread ( &number_of_faces, 4, 1, file );
 	fread ( &number_of_polygoned_faces, 4, 1, file );
+	if (format_version > 1)
+		fread ( &number_of_face_normals, 4, 1, file );
+	else
+		number_of_face_normals = number_of_polygoned_faces;
 	fread ( &number_of_surfaces, 4, 1, file );
 	fread ( &number_of_point_normals, 4, 1, file );
 	fread ( &number_of_lighting_normals, 4, 1, file );
@@ -1352,10 +1357,10 @@ int read_object ( object_3d *obj, const char* filename )
 	}
 	else
 		obj->surfaces = NULL;
-	if ( number_of_polygoned_faces )   // read face normals
+	if ( number_of_face_normals )   // read face normals
 	{
-		obj->object_face_normal_references = safe_malloc ( 2 * number_of_polygoned_faces );
-		fread ( obj->object_face_normal_references, 2, number_of_polygoned_faces, file );
+		obj->object_face_normal_references = safe_malloc ( 2 * number_of_face_normals );
+		fread ( obj->object_face_normal_references, 2, number_of_face_normals, file );
 	}
 	else
 		obj->object_face_normal_references = NULL;
@@ -1405,6 +1410,27 @@ int read_object ( object_3d *obj, const char* filename )
 	}
 
 	fclose ( file );
+
+	{
+		int
+			i;
+		for ( i = 0; i < number_of_polygoned_faces; i++ )
+		{
+			if ( obj->faces[i].number_of_points < 3 )
+			{
+				ASSERT ( FALSE );
+				return FALSE;
+			}
+		}
+		for ( i = 0; i < obj->number_of_surfaces; i++ )
+		{
+			if ( !obj->surfaces[i].polygons && obj->surfaces[i].smoothed )
+			{
+				ASSERT ( FALSE );
+				return FALSE;
+			}
+		}
+	}
 
 	return TRUE;
 }
@@ -1749,7 +1775,7 @@ void initialise_3d_objects ( const char *directory )
 			// Read in the data for the object
 			//
 
-			if ( objects_3d_data[count].number_of_faces )
+			if ( number_of_real_polygons )
 			{
 
 				fread ( current_faces, sizeof ( struct OBJECT_3D_FACE ), number_of_real_polygons, fp );
