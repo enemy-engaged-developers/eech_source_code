@@ -82,6 +82,8 @@ void zrender_unclipped_3d_object_textured_polygon ( object_3d_face *this_face, s
 	int
 		surface_point_index;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	colour.alpha = current_object_3d_dissolve_value;
 
 	specular_colour.colour = d3d_fog_intensity;
@@ -234,6 +236,8 @@ void zrender_unclipped_3d_object_gouraud_textured_polygon ( object_3d_face *this
 	float
 		specular;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + object_base->points_base;
 
 	if ( current_object_3d_texture->contains_alpha )
@@ -346,6 +350,8 @@ void zrender_unclipped_3d_object_gouraud_textured_nospecular_polygon ( object_3d
 
 	LPD3DTLVERTEX
 		destination_vertices;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	transformed_points = transformed_3d_2d_points + object_base->points_base;
 
@@ -481,6 +487,8 @@ void zrender_unclipped_3d_object_polygon ( object_3d_face *this_face, struct OBJ
 	object_transformed_2d_point
 		*vert,
 		*transformed_points;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	if ( current_object_3d_surface->luminous )
 	{
@@ -645,6 +653,8 @@ void zrender_unclipped_3d_object_gouraud_polygon ( object_3d_face *this_face, st
 	// The face is a true polygon - triangle or above
 	//
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + object_base->points_base;
 	
 	surface_red = ( ( float ) current_object_3d_surface->red ) / 255.0;
@@ -776,6 +786,8 @@ void zrender_unclipped_3d_object_white_polygon ( object_3d_face *this_face, stru
 		colour,
 		specular_colour;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	if ( current_object_3d_surface->luminous )
 	{
 
@@ -868,6 +880,8 @@ void zrender_unclipped_3d_object_gouraud_white_polygon ( object_3d_face *this_fa
 	// The face is a true polygon - triangle or above
 	//
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	{
 
 		if ( !current_object_3d_surface->translucent )
@@ -948,6 +962,8 @@ void zrender_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *thi
 		colour,
 		lightmap_colour,
 		specular_colour;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	specular_colour.colour = d3d_fog_intensity;
 
@@ -1172,6 +1188,8 @@ void zrender_unclipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_f
 	real_colour
 		lightmap_colour;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	//
 	// Figure out the lightmap colours
 	//
@@ -1324,6 +1342,8 @@ void zrender_unclipped_3d_object_textured_line ( object_3d_face *this_face, stru
 	vertex
 		*line;
 
+	ASSERT ( !current_object_3d_surface->polygons );
+
 	line = construct_3d_surface_unclipped_textured_line ( object_base->points_base );
 
 	if ( current_object_3d_surface->smoothed )
@@ -1378,6 +1398,8 @@ void zrender_unclipped_3d_object_plain_line ( object_3d_face *this_face, struct 
 	vertex
 		*line;
 
+	ASSERT ( !current_object_3d_surface->polygons );
+
 	clip_3d_coord = 0;
 
 	commit_deferred_state_changes ();
@@ -1413,6 +1435,8 @@ void zrender_unclipped_3d_object_plain_white_line ( object_3d_face *this_face, s
 		*line;
 
 	clip_3d_coord = 0;
+
+	ASSERT ( !current_object_3d_surface->polygons );
 
 	commit_deferred_state_changes ();
 

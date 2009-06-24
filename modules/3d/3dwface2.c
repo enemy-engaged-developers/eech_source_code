@@ -82,6 +82,8 @@ void wrender_unclipped_3d_object_textured_polygon ( object_3d_face *this_face )
 	int
 		surface_point_index;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	colour.alpha = current_object_3d_dissolve_value;
 
 	specular_colour.colour = d3d_fog_intensity;
@@ -319,6 +321,8 @@ void wrender_unclipped_3d_object_gouraud_textured_polygon ( object_3d_face *this
 	float
 		specular;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
 
 	if ( ( current_object_3d_texture->contains_alpha ) || ( current_object_3d_surface->translucent ) )
@@ -525,6 +529,8 @@ void wrender_unclipped_3d_object_gouraud_textured_nospecular_polygon ( object_3d
 
 	LPD3DTLVERTEX
 		destination_vertices;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
 
@@ -740,6 +746,8 @@ void wrender_unclipped_3d_object_polygon ( object_3d_face *this_face )
 	object_transformed_2d_point
 		*vert,
 		*transformed_points;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	if ( current_object_3d_surface->luminous )
 	{
@@ -983,6 +991,8 @@ void wrender_unclipped_3d_object_gouraud_polygon ( object_3d_face *this_face )
 	// The face is a true polygon - triangle or above
 	//
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
 	
 	surface_red = ( ( float ) current_object_3d_surface->red ) / 255.0;
@@ -1190,6 +1200,8 @@ void wrender_unclipped_3d_object_white_polygon ( object_3d_face *this_face )
 		colour,
 		specular_colour;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	if ( current_object_3d_surface->luminous )
 	{
 
@@ -1278,6 +1290,8 @@ void wrender_unclipped_3d_object_white_textured_polygon ( object_3d_face *this_f
 	real_colour
 		colour,
 		specular_colour;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	if ( current_object_3d_surface->luminous )
 	{
@@ -1369,6 +1383,8 @@ void wrender_unclipped_3d_object_gouraud_white_polygon ( object_3d_face *this_fa
 	// The face is a true polygon - triangle or above
 	//
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	{
 
 		if ( !current_object_3d_surface->translucent )
@@ -1449,6 +1465,8 @@ void wrender_unclipped_3d_object_textured_lightmap_polygon ( object_3d_face *thi
 		colour,
 		lightmap_colour,
 		specular_colour;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	specular_colour.colour = d3d_fog_intensity;
 
@@ -1673,6 +1691,8 @@ void wrender_unclipped_3d_object_gouraud_textured_lightmap_polygon ( object_3d_f
 	real_colour
 		lightmap_colour;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	//
 	// Figure out the lightmap colours
 	//
@@ -1825,6 +1845,8 @@ void wrender_unclipped_3d_object_textured_line ( void )
 	vertex
 		*line;
 
+	ASSERT ( !current_object_3d_surface->polygons );
+
 	line = construct_3d_surface_unclipped_textured_line ( current_object_3d_object_base->points_base );
 
 	if ( current_object_3d_surface->smoothed )
@@ -1879,6 +1901,8 @@ void wrender_unclipped_3d_object_plain_line ( void )
 	vertex
 		*line;
 
+	ASSERT ( !current_object_3d_surface->polygons );
+
 	clip_3d_coord = 0;
 
 	commit_deferred_state_changes ();
@@ -1912,6 +1936,8 @@ void wrender_unclipped_3d_object_plain_white_line ( void )
 
 	vertex
 		*line;
+
+	ASSERT ( !current_object_3d_surface->polygons );
 
 	clip_3d_coord = 0;
 
@@ -1962,6 +1988,8 @@ void wrender_translucent_unclipped_3d_object_textured_polygon ( object_3d_face *
 
 	LPD3DTLVERTEX
 		destination_vertices;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	colour.alpha = current_object_3d_dissolve_value;
 
@@ -2067,6 +2095,8 @@ void wrender_translucent_unclipped_3d_object_gouraud_textured_polygon ( object_3
 	float
 		specular;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
 
 	destination_vertices = get_d3d_vertices_points_address ( this_face->number_of_points );
@@ -2139,6 +2169,8 @@ void wrender_translucent_unclipped_3d_object_polygon ( object_3d_face *this_face
 	object_transformed_2d_point
 		*vert,
 		*transformed_points;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	if ( current_object_3d_surface->luminous )
 	{
@@ -2258,6 +2290,8 @@ void wrender_translucent_unclipped_3d_object_gouraud_polygon ( object_3d_face *t
 	real_colour
 		specular_colour;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
 	
 	surface_red = ( ( float ) current_object_3d_surface->red ) / 255.0;
@@ -2350,6 +2384,8 @@ void wrender_translucent_unclipped_3d_object_reflective_polygon ( object_3d_face
 		*vert,
 		*transformed_points;
 
+	ASSERT ( current_object_3d_surface->polygons );
+
 	destination_vertices = get_d3d_vertices_points_address ( this_face->number_of_points );
 
 	transformed_points = transformed_3d_2d_points + current_object_3d_object_base->points_base;
@@ -2430,6 +2466,8 @@ void wrender_translucent_unclipped_3d_object_reflective_gouraud_polygon ( object
 	object_transformed_2d_point
 		*vert,
 		*transformed_points;
+
+	ASSERT ( current_object_3d_surface->polygons );
 
 	destination_vertices = get_d3d_vertices_points_address ( this_face->number_of_points );
 
