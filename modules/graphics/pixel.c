@@ -79,13 +79,6 @@ int
 
 void set_pixel ( const int x, const int y, const rgb_colour colour )
 {
-
-	unsigned int
-		red,
-		green,
-		blue,
-		alpha;
-
 	ASSERT ( active_screen );
 
 	if ( get_screen_locked ( active_screen ) )
@@ -93,56 +86,24 @@ void set_pixel ( const int x, const int y, const rgb_colour colour )
 
 		if ( get_screen_pixel_width ( active_screen ) == 2 )
 		{
-	
 			unsigned short int
 				value;
-		
-			red = ( ( unsigned int ) colour.r ) << 24;
-			green = ( ( unsigned int ) colour.g ) << 24;
-			blue = ( ( unsigned int ) colour.b ) << 24;
-			alpha = ( ( unsigned int ) colour.a ) << 24;
-		
-			red &= active_screen_red_mask;
-			green &= active_screen_green_mask;
-			blue &= active_screen_blue_mask;
-			alpha &= active_screen_alpha_mask;
-		
-			red >>= active_screen_red_shift;
-			green >>= active_screen_green_shift;
-			blue >>= active_screen_blue_shift;
-			alpha >>= active_screen_alpha_shift;
-		
-			value =  ( red | green | blue | alpha );
-		
+
+			value = get_packed_colour ( colour );
+
 			* ( (USHORT *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x ) = value;
 		}
 		else
 		{
-
 			unsigned int
 				value;
-		
+
 			//
 			// Assume 4 bytes per pixel
 			//
 
-			red = ( ( unsigned int ) colour.r ) << 24;
-			green = ( ( unsigned int ) colour.g ) << 24;
-			blue = ( ( unsigned int ) colour.b ) << 24;
-			alpha = ( ( unsigned int ) colour.a ) << 24;
-		
-			red &= active_screen_red_mask;
-			green &= active_screen_green_mask;
-			blue &= active_screen_blue_mask;
-			alpha &= active_screen_alpha_mask;
-		
-			red >>= active_screen_red_shift;
-			green >>= active_screen_green_shift;
-			blue >>= active_screen_blue_shift;
-			alpha >>= active_screen_alpha_shift;
-		
-			value =  ( red | green | blue | alpha );
-		
+			value = colour.colour;
+
 			* ( (ULONG *) ( get_screen_data ( active_screen ) + y * get_screen_pitch ( active_screen ) ) + x ) = value;
 		}
 	}
@@ -334,6 +295,19 @@ rgb_packed get_user_rgb_packed_value ( const rgb_colour colour )
 	alpha >>= user_screen_alpha_shift;
 
 	return ( red | green | blue | alpha );
+}
+
+rgb_colour get_general_colour_value ( const rgb_packed colour )
+{
+	rgb_colour
+		colour_value;
+
+	colour_value.r = (colour & 0xF800) >> 8;
+	colour_value.g = (colour & 0x07E0) >> 3;
+	colour_value.b = (colour & 0x001F) << 3;
+	colour_value.a = 0;
+
+	return colour_value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
