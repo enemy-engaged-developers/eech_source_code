@@ -384,6 +384,9 @@ struct RSurface
   if (!points > 256)
    error("Surface '%s': More than 256 different points", &s->name);
 
+  if (!polygons)
+   smoothed = 0;
+
   if (smoothed)
    {
     for (unsigned i = 0; i < !polys; i++)
