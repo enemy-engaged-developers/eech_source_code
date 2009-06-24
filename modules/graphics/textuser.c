@@ -258,6 +258,7 @@ unsigned char
 //VJ 050814 dynamic water and general directories
 #define TEXTURE_OVERRIDE_DIRECTORY_WATER "TERRAIN\\WATER"
 #define TEXTURE_OVERRIDE_DIRECTORY_GENERAL "GENERAL"
+#define TEXTURE_OVERRIDE_DIRECTORY_TEMP "TEMP"
 
 #define BITMAP_ID		(0x4D42)
 
@@ -346,37 +347,24 @@ static void initialize_terrain_texture_scales ( const char *mapname );
 //VJ 04/12/12 comment: set = 0 for default or 1 for desert
 void set_texture_camoflage ( int set )
 {
-
 	int
 		count;
 
 #ifdef DEBUG
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
-
-		if ( system_texture_info[count].flags.main_texture )
+		int
+			camo;
+		camo = system_texture_info[count].flags.number_of_camoflage_textures; 
+		if ( camo )
 		{
-
-			if ( system_texture_info[count].flags.number_of_camoflage_textures )
+			int
+				index;
+			for ( index = 1; index <= camo; index++ )
 			{
-
+				if ( !system_texture_info[count + index].flags.camoflage_texture || system_texture_info[count + index].flags.camoflage_index != index )
 				{
-
-					int
-						index;
-
-					for ( index = 1; index <= system_texture_info[count].flags.number_of_camoflage_textures; index++ )
-					{
-
-						if ( system_texture_info[count+index].flags.camoflage_texture )
-						{
-
-							if ( system_texture_info[count+index].flags.camoflage_index > 1 )
-							{
-								debug_log ( "Error: Texture: %s has incorrect camoflage name", system_texture_names[count] );
-							}
-						}
-					}
+					debug_log ( "Error: Texture: %s has incorrect camoflage name", system_texture_names[count] );
 				}
 			}
 		}
@@ -385,35 +373,9 @@ void set_texture_camoflage ( int set )
 
 	for ( count = 0; count < number_of_system_textures; count++ )
 	{
-		if ( system_texture_info[count].flags.main_texture )
+		if ( system_texture_info[count].flags.number_of_camoflage_textures )
 		{
-
-			if ( system_texture_info[count].flags.number_of_camoflage_textures )
-			{
-				if ( set == 0 )
-				{
-					system_textures[count] = system_texture_info[count].texture_screen;
-				}
-				else
-				{
-
-					int
-						index;
-
-					for ( index = 1; index <= system_texture_info[count].flags.number_of_camoflage_textures; index++ )
-					{
-
-						if ( system_texture_info[count+index].flags.camoflage_texture )
-						{
-							if ( system_texture_info[count+index].flags.camoflage_index == set )
-							{
-								system_textures[count] = system_texture_info[count+index].texture_screen;
-								break;
-							}
-						}
-					}
-				}
-			}
+			system_textures[count] = system_texture_info[count + set].texture_screen;
 		}
 	}
 }
@@ -502,7 +464,6 @@ void release_system_textures ( void )
 
 int get_system_texture_index ( const char *name )
 {
-
 	int
 		hash,
 		hash_index;
@@ -532,19 +493,18 @@ int get_system_texture_index ( const char *name )
 	hash = get_hash ( real_name );
 	hash_index = hash & 0xff;
 
-	entry = system_texture_name_hash_table[hash_index];
-
-	while ( entry )
+	
+	for ( entry = system_texture_name_hash_table[hash_index]; entry; entry = entry->succ )
 	{
 		if ( entry->hash == hash &&
 			!strcmp ( system_texture_names[entry->texture_index], real_name ) &&
-			camo == system_texture_info[entry->texture_index].flags.camoflage_texture )
+			!system_texture_info[entry->texture_index].flags.camoflage_texture )
 		{
+			if ( camo && !system_texture_info[entry->texture_index].flags.number_of_camoflage_textures )
+			{
+				debug_log ( "Clash between new camo texture and existing non-camo one '%s'", real_name );
+			}
 			return ( entry->texture_index );
-		}
-		else
-		{
-			entry = entry->succ;
 		}
 	}
 
@@ -3546,6 +3506,8 @@ void load_warzone_override_textures ( void )
 		}
 	}
 
+	// Global overrider. For testing mostly
+	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TEMP );
 
 	debug_log("Nr override textures found %d",nrtextfound);
 
@@ -4560,23 +4522,52 @@ void read_map_info_data ( void )
 
 int add_new_texture(char* texture_name)
 {
-	int texture_index = get_system_texture_index(texture_name);
+	int
+		offset,
+		camo,
+		texture_index;
+	
+	char
+		*name;
 
-	if (texture_index != -1)
+	texture_flags
+		*flags;
+
+	texture_index = get_system_texture_index ( texture_name );
+	if ( texture_index != -1 )
+	{
 		return texture_index;
+	}
 
-	if (number_of_system_textures >= MAX_TEXTURES)
+	if ( number_of_system_textures >= MAX_TEXTURES )
+	{
 		return 0;
+	}
 
-	strncpy(system_texture_names[number_of_system_textures], texture_name, 127);
-	system_texture_names[number_of_system_textures][127] = '\0';
+	name = system_texture_names[number_of_system_textures];
+	strncpy ( name, texture_name, 127 );
+	name[127] = '\0';
+	strupr ( name );
 
-	strupr ( system_texture_names[number_of_system_textures] );
+	offset = strlen ( name ) - ( int ) sizeof ( DESERTIND_2 ) + 1;
+	camo = offset > 0 && ( !memcmp ( name + offset, DESERTIND_2, sizeof ( DESERTIND_2 ) ) || !memcmp ( name + offset, DESERTIND_3, sizeof ( DESERTIND_3 ) ) );
+	if ( camo )
+	{
+		name[offset] = '\0';
+		debug_log ( "Adding texture '%s' camo main", name );
+
+		flags = &system_texture_info[number_of_system_textures].flags;
+		flags->main_texture = 1;
+		add_texture_to_name_hash ( number_of_system_textures++ );
+
+		strcpy ( system_texture_names[number_of_system_textures], name );
+	}
 
 	debug_log ( "Adding texture '%s'", system_texture_names[number_of_system_textures] );
-
-	add_texture_to_name_hash(number_of_system_textures);
-
+	flags = &system_texture_info[number_of_system_textures].flags;
+	flags->camoflage_texture = camo;
+	flags->camoflage_index = camo;
+	add_texture_to_name_hash ( number_of_system_textures );
 	return number_of_system_textures++;
 }
 
