@@ -5,7 +5,7 @@ class LwsExport;
 // FIXME!!!!!
 #define OBJECT_3D_LAST 2762
 #define OBJECT_3D_INVALID_SUB_OBJECT_INDEX 0
-#define OBJECT_3D_SUB_OBJECT_LAST 285
+#define OBJECT_3D_SUB_OBJECT_LAST (285 + 100)
 
 #include "cameras.cpp"
 
