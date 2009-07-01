@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -360,45 +360,45 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 			if ( object_outcode )
 			{
-	
+
 				if ( current_3d_object_is_flat )
 				{
-	
-	
+
+
 					transform_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
 				}
 				else
 				{
-	
+
 					transform_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
 				}
 			}
 			else
 			{
-	
+
 				if ( current_3d_object_is_flat )
 				{
-	
+
 					transform_unclipped_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
 				}
 				else
 				{
-	
+
 					transform_unclipped_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
 				}
 			}
-	
+
 			if ( object_outcode )
 			{
-	
+
 				if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 				{
-	
+
 					draw_3d_object_clipped_faces ( object_number );
 				}
 				else
 				{
-	
+
 					draw_3d_object_untextured_clipped_faces ( object_number );
 				}
 			}
@@ -407,7 +407,7 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 				if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 				{
-		
+
 					draw_3d_object_unclipped_faces ( object_number );
 				}
 				else
@@ -431,15 +431,15 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 		if ( obj->sub_objects )
 		{
-	
+
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( obj->sub_objects[count].visible_object ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( &obj->sub_objects[count], &scene->sub_objects[count], &obj->vp, current_object_3d_relative_position, infrared_override );
 				}
 			}
@@ -449,12 +449,12 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( scene->sub_objects[count].default_visibility ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( NULL, &scene->sub_objects[count], &obj->vp, current_object_3d_relative_position, infrared_override );
 				}
 			}
@@ -467,11 +467,11 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 	if ( get_number_of_temporary_translucent_polygons () )
 	{
-	
+
 		//
 		// Set the translucent rendering mode - and turn off specular highlighting
 		//
-		
+
 #if !ALWAYS_SPECULAR_RENDER
 		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
 #endif
@@ -483,19 +483,19 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 		}
 		else
 		{
-	
+
 			set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-		
+
 			draw_temporary_translucent_polygons ();
 
 			if ( active_3d_environment->fogmode == FOGMODE_OFF )
 			{
-	
+
 				set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
 			}
 			else
 			{
-	
+
 				set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 			}
 		}
@@ -509,24 +509,24 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 			if ( d3d_transparency_enabled )
 			{
-	
+
 				draw_3d_translucent_object ( current_object_3d_translucent_surfaces );
 			}
 			else
 			{
-		
+
 				set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-		
+
 				draw_3d_translucent_object ( current_object_3d_translucent_surfaces );
-		
+
 				if ( active_3d_environment->fogmode == FOGMODE_OFF )
 				{
-		
+
 					set_d3d_alpha_fog_zbuffer ( FALSE, FALSE, TRUE, TRUE );
 				}
 				else
 				{
-		
+
 					set_d3d_alpha_fog_zbuffer ( FALSE, TRUE, TRUE, TRUE );
 				}
 			}
@@ -538,22 +538,22 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 			scene_slot_drawing_list
 				*buffer;
-		
+
 			//
 			// Insert surface list into renderer
 			//
 
 			buffer = get_3d_scene_slot ();
-	
+
 			if ( buffer )
 			{
 
 				buffer->type = OBJECT_3D_DRAW_TYPE_TRANSLUCENT_OBJECT;
-	
+
 				buffer->z = *( ( int * ) &obj->view_position );
-	
+
 				buffer->translucent_surfaces = current_object_3d_translucent_surfaces;
-	
+
 				insert_transparent_buffer_into_3d_scene ( buffer );
 			}
 		}
@@ -613,7 +613,7 @@ void draw_wbuffered_3d_object ( object_3d_instance *obj, int object_is_flat, int
 
 void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *scene, viewpoint *parent_viewpoint, vec3d *position, int infrared_override )
 {
-	
+
 	int
 		count,
 		object_number,
@@ -844,117 +844,117 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 		//
 		// Calculate the relative camera position in the object viewspace
 		//
-	
+
 		{
-	
+
 			vec3d
 				rel_pos;
-	
+
 			rel_pos.x = visual_3d_vp->x - vp.x;
 			rel_pos.y = visual_3d_vp->y - vp.y;
 			rel_pos.z = visual_3d_vp->z - vp.z;
-	
+
 			object_camera_position.x = ( rel_pos.x * vp.attitude[0][0] + rel_pos.y * vp.attitude[0][1] + rel_pos.z * vp.attitude[0][2] );
 			object_camera_position.y = ( rel_pos.x * vp.attitude[1][0] + rel_pos.y * vp.attitude[1][1] + rel_pos.z * vp.attitude[1][2] );
 			object_camera_position.z = ( rel_pos.x * vp.attitude[2][0] + rel_pos.y * vp.attitude[2][1] + rel_pos.z * vp.attitude[2][2] );
-	
+
 			object_camera_direction.x = ( visual_3d_vp->zv.x * vp.attitude[0][0] + visual_3d_vp->zv.y * vp.attitude[1][0] + visual_3d_vp->zv.z * vp.attitude[2][0] );
 			object_camera_direction.y = ( visual_3d_vp->zv.x * vp.attitude[0][1] + visual_3d_vp->zv.y * vp.attitude[1][1] + visual_3d_vp->zv.z * vp.attitude[2][1] );
 			object_camera_direction.z = ( visual_3d_vp->zv.x * vp.attitude[0][2] + visual_3d_vp->zv.y * vp.attitude[1][2] + visual_3d_vp->zv.z * vp.attitude[2][2] );
 		}
-	
+
 		//
 		// Calculate the vector from the object to the viewpoint, in the object's view system
 		//
-	
+
 		{
-	
+
 			float
 				x,
 				y,
 				z;
-	
+
 			x = ( ( visual_3d_vp->x - vp.x ) * vp.xv.x );
 			x += ( ( visual_3d_vp->y - vp.y ) *  vp.xv.y );
 			x += ( ( visual_3d_vp->z - vp.z ) *  vp.xv.z );
-	
+
 			y = ( ( visual_3d_vp->x - vp.x ) * vp.yv.x );
 			y += ( ( visual_3d_vp->y - vp.y ) *  vp.yv.y );
 			y += ( ( visual_3d_vp->z - vp.z ) *  vp.yv.z );
-	
+
 			z = ( ( visual_3d_vp->x - vp.x ) * vp.zv.x );
 			z += ( ( visual_3d_vp->y - vp.y ) *  vp.zv.y );
 			z += ( ( visual_3d_vp->z - vp.z ) *  vp.zv.z );
-	
+
 			object_unit_pos.x = -x;
 			object_unit_pos.y = -y;
 			object_unit_pos.z = -z;
-	
+
 			normalise_any_3d_vector ( &object_unit_pos );
 
 			current_object_3d_unit_position = &object_unit_pos;
 		}
-	
+
 		//
 		// Rotate the light source vector to be relative to the object.
 		//
 
 		light = generate_relative_lights ( &vp, current_object_3d_unit_position, current_3d_lights );
-	
+
 		object_3d_object_base[object_3d_object_current_base].lights = light;
-	
+
 		//
 		//	Set up this objects' object info structure
 		//
-	
+
 		object_3d_object_base[object_3d_object_current_base].points_base = object_3d_points_current_base;
 		object_3d_object_base[object_3d_object_current_base].camera_position = object_camera_position;
 		object_3d_object_base[object_3d_object_current_base].camera_direction = object_camera_direction;
 		object_3d_object_base[object_3d_object_current_base].object_vp = &vp;
 		object_3d_object_base[object_3d_object_current_base].object_number = object_number;
-	
+
 		current_object_3d_object_base = &object_3d_object_base[object_3d_object_current_base];
-	
+
 		if ( objects_3d_data[object_number].number_of_points )
 		{
-		
+
 			int
 				object_outcode;
-	
+
 			//
 			// Setup the objects scaling information
 			//
-		
+
 			if ( !get_object_3d_outcode ( object_number, current_object_3d_relative_position, &object_outcode ) )
 			{
-		
+
 				illuminate_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 
 				if ( object_outcode )
 				{
-		
+
 					if ( current_3d_object_is_flat )
 					{
-			
+
 						transform_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 					else
 					{
-			
+
 						transform_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 				}
 				else
 				{
-		
+
 					if ( current_3d_object_is_flat )
 					{
-			
+
 						transform_unclipped_flat_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 					else
 					{
-			
+
 						transform_unclipped_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					}
 				}
@@ -962,32 +962,32 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 				//
 				// Render the faces now.
 				//
-		
+
 				if ( object_outcode )
 				{
-		
+
 					if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 					{
-			
+
 						draw_3d_object_clipped_faces ( object_number );
 					}
 					else
 					{
-			
+
 						draw_3d_object_untextured_clipped_faces ( object_number );
 					}
 				}
 				else
 				{
-		
+
 					if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 					{
-			
+
 						draw_3d_object_unclipped_faces ( object_number );
 					}
 					else
 					{
-			
+
 						draw_3d_object_untextured_unclipped_faces ( object_number );
 					}
 				}
@@ -1004,30 +1004,30 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 
 		if ( ( obj ) && ( obj->sub_objects ) )
 		{
-	
+
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( obj->sub_objects[count].visible_object ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( &obj->sub_objects[count], &scene->sub_objects[count], &vp, current_object_3d_relative_position, infrared_override );
 				}
 			}
 		}
 		else
 		{
-	
+
 			for ( count = ( scene->number_of_sub_objects -1 ); count >= 0; count-- )
 			{
-	
+
 				if (	( scene->sub_objects[count].default_visibility ) &&
 						( scene->sub_objects[count].sub_object_approximation_in_level <= object_3d_approximation_level ) &&
 						( scene->sub_objects[count].sub_object_approximation_out_level >= object_3d_approximation_level ) )
 				{
-	
+
 					draw_sub_object ( NULL, &scene->sub_objects[count], &vp, current_object_3d_relative_position, infrared_override );
 				}
 			}
@@ -1067,7 +1067,6 @@ void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_entry *sc
 
 void draw_3d_object_clipped_faces ( int object_number )
 {
-
 	int
 		number_of_surface_points,
 		faces_left,
@@ -1087,60 +1086,48 @@ void draw_3d_object_clipped_faces ( int object_number )
 
 	for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 	{
-
 		number_of_surface_points = current_object_3d_surface->number_of_points;
-
 		if ( number_of_surface_points == 0 )
 		{
-
 			number_of_surface_points = 256;
 		}
-	
+
 		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) )
 		{
-
 			add_transparent_surface ( TRUE );
 		}
 		else
 		{
-	
 			zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
 			current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
-	
+
 			if ( current_object_3d_surface->textured )
 			{
-
 				if ( current_object_3d_surface->texture_animation )
 				{
-			
 					int
 						frame;
-			
+
 					frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
-			
 					current_object_3d_texture = system_textures[ texture_animations[current_object_3d_surface->texture_index].texture_indices[frame] ];
 				}
 				else
 				{
-			
 					current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 				}
-
 				if ( current_object_3d_texture->contains_alpha )
 				{
-
 					add_transparent_surface ( TRUE );
 				}
 				else
 				{
-		
 					current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 					current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 					current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
 					current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 
 					reset_deferred_state_changes ();
-			
+
 #if ALWAYS_SPECULAR_RENDER
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -1148,44 +1135,40 @@ void draw_3d_object_clipped_faces ( int object_number )
 #endif
 
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
-	
+
 					set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-		
+
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_filter );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, current_object_3d_texture_mipmap );
-		
+
 					if ( current_object_3d_surface->has_luminosity_texture )
 					{
-		
 						if ( current_object_3d_surface->luminosity_texture_animation )
 						{
-					
 							int
 								frame;
-					
+
 							frame = texture_animations[current_object_3d_surface->luminosity_texture_index].current_frame;
-					
 							current_object_3d_luminosity_texture = system_textures[ texture_animations[current_object_3d_surface->luminosity_texture_index].texture_indices[frame] ];
 						}
 						else
 						{
-					
 							current_object_3d_luminosity_texture = system_textures[current_object_3d_surface->luminosity_texture_index];
 						}
-		
+
 						if ( current_object_3d_surface->luminosity_texture_wrapped_u )	{ current_object_3d_luminosity_texture_u_address = D3DTADDRESS_WRAP; }
 						else																				{ current_object_3d_luminosity_texture_u_address = D3DTADDRESS_CLAMP; }
-				
+
 						if ( current_object_3d_surface->luminosity_texture_wrapped_v )	{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_WRAP; }
 						else																				{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_CLAMP; }
-				
+
 						if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTFG_LINEAR; }
 						else																				{ current_object_3d_luminosity_texture_filter = D3DTFG_POINT; }
-				
+
 		#if ( FORCE_LIGHTMAP_MIPMAPPING )
 						if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
 						else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
@@ -1193,57 +1176,45 @@ void draw_3d_object_clipped_faces ( int object_number )
 						if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
 						else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFP_NONE; }
 		#endif
-		
+
 						if ( current_object_3d_surface->smoothed )
 						{
-			
 							for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 							{
-
 								if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, 0, &current_object_3d_outcode ) )
 								{
-			
 									if ( current_object_3d_outcode == 0 )
 									{
-				
 										wrender_unclipped_3d_object_gouraud_textured_lightmap_polygon ( current_object_3d_faces );
 									}
 									else
 									{
-			
 										wrender_clipped_3d_object_gouraud_textured_lightmap_polygon ( current_object_3d_faces );
 									}
 								}
-			
-//								current_object_3d_face_normal_list++;
+
 								current_object_3d_point_list += current_object_3d_faces->number_of_points;
 								current_object_3d_faces++;
 							}
 						}
 						else
 						{
-
 							if ( current_object_3d_surface->polygons )
 							{
-	
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-			
 									if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 									{
-				
 										if ( current_object_3d_outcode == 0 )
 										{
-				
 											wrender_unclipped_3d_object_textured_lightmap_polygon ( current_object_3d_faces );
 										}
 										else
 										{
-				
 											wrender_clipped_3d_object_textured_lightmap_polygon ( current_object_3d_faces );
 										}
 									}
-		
+
 									current_object_3d_face_normal_list++;
 									current_object_3d_point_list += current_object_3d_faces->number_of_points;
 									current_object_3d_faces++;
@@ -1251,29 +1222,22 @@ void draw_3d_object_clipped_faces ( int object_number )
 							}
 							else
 							{
-	
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-			
 									if ( d3d_textured_lines )
 									{
-		
 										if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 										{
-					
 											if ( current_object_3d_outcode == 0 )
 											{
-					
 												wrender_unclipped_3d_object_textured_line ();
 											}
 											else
 											{
-					
 												wrender_clipped_3d_object_textured_line ();
 											}
 										}
 									}
-				
 									current_object_3d_point_list += 2;
 								}
 							}
@@ -1281,66 +1245,50 @@ void draw_3d_object_clipped_faces ( int object_number )
 					}
 					else
 					{
-		
 						if ( current_object_3d_surface->smoothed )
 						{
-			
 							for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 							{
-			
 								if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 								{
-			
 									if ( current_object_3d_outcode == 0 )
 									{
-	
 										if ( current_object_3d_specular )
 										{
-		
 											wrender_unclipped_3d_object_gouraud_textured_polygon ( current_object_3d_faces );
 										}
 										else
 										{
-		
 											wrender_unclipped_3d_object_gouraud_textured_nospecular_polygon ( current_object_3d_faces );
 										}
 									}
 									else
 									{
-			
 										wrender_clipped_3d_object_gouraud_textured_polygon ( current_object_3d_faces );
 									}
 								}
-			
-//								current_object_3d_face_normal_list++;
+
 								current_object_3d_point_list += current_object_3d_faces->number_of_points;
 								current_object_3d_faces++;
 							}
 						}
 						else
 						{
-
 							if ( current_object_3d_surface->polygons )
 							{
-
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-			
 									if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 									{
-				
 										if ( current_object_3d_outcode == 0 )
 										{
-			
 											wrender_unclipped_3d_object_textured_polygon ( current_object_3d_faces );
 										}
 										else
 										{
-			
 											wrender_clipped_3d_object_textured_polygon ( current_object_3d_faces );
 										}
 									}
-		
 									current_object_3d_face_normal_list++;
 									current_object_3d_point_list += current_object_3d_faces->number_of_points;
 									current_object_3d_faces++;
@@ -1348,30 +1296,22 @@ void draw_3d_object_clipped_faces ( int object_number )
 							}
 							else
 							{
-	
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-			
 									if ( d3d_textured_lines )
 									{
-			
 										if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 										{
-					
 											if ( current_object_3d_outcode == 0 )
 											{
-				
 												wrender_unclipped_3d_object_textured_line ();
 											}
 											else
 											{
-				
 												wrender_clipped_3d_object_textured_line ();
 											}
 										}
 									}
-			
-				
 									current_object_3d_point_list += 2;
 								}
 							}
@@ -1381,9 +1321,8 @@ void draw_3d_object_clipped_faces ( int object_number )
 			}
 			else
 			{
-	
 				reset_deferred_state_changes ();
-		
+
 #if ALWAYS_SPECULAR_RENDER
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -1391,59 +1330,47 @@ void draw_3d_object_clipped_faces ( int object_number )
 #endif
 
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
-	
+
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
-	
+
 				if ( current_object_3d_surface->smoothed )
 				{
-	
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
-	
 						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 						{
-	
 							if ( current_object_3d_outcode == 0 )
 							{
-		
 								wrender_unclipped_3d_object_gouraud_polygon ( current_object_3d_faces );
 							}
 							else
 							{
-	
 								wrender_clipped_3d_object_gouraud_polygon ( current_object_3d_faces );
 							}
 						}
-	
-//						current_object_3d_face_normal_list++;
+
 						current_object_3d_point_list += current_object_3d_faces->number_of_points;
 						current_object_3d_faces++;
 					}
 				}
 				else
 				{
-
 					if ( current_object_3d_surface->polygons )
 					{
-		
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 							{
-		
 								if ( current_object_3d_outcode == 0 )
 								{
-			
 									wrender_unclipped_3d_object_polygon ( current_object_3d_faces );
 								}
 								else
 								{
-		
 									wrender_clipped_3d_object_polygon ( current_object_3d_faces );
 								}
 							}
-	
+
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
@@ -1451,29 +1378,22 @@ void draw_3d_object_clipped_faces ( int object_number )
 					}
 					else
 					{
-		
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 							{
-		
 								if ( current_object_3d_outcode == 0 )
 								{
-		
 									wrender_unclipped_3d_object_plain_line ();
 								}
 								else
 								{
-		
 									wrender_clipped_3d_object_plain_line ();
 								}
 							}
-		
 							current_object_3d_point_list += 2;
 						}
 					}
-
 				}
 			}
 		}
@@ -1482,19 +1402,16 @@ void draw_3d_object_clipped_faces ( int object_number )
 
 		if ( current_object_3d_surface->smoothed )
 		{
-	
 			current_object_3d_surface_point_normal_list += number_of_surface_points;
 		}
 
 		if ( current_object_3d_surface->textured )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
 
 		if ( current_object_3d_surface->has_luminosity_texture )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
 
@@ -1508,7 +1425,6 @@ void draw_3d_object_clipped_faces ( int object_number )
 
 void draw_3d_object_unclipped_faces ( int object_number )
 {
-
 	int
 		number_of_surface_points,
 		faces_left,
@@ -1529,60 +1445,50 @@ void draw_3d_object_unclipped_faces ( int object_number )
 
 	for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 	{
-
 		number_of_surface_points = current_object_3d_surface->number_of_points;
-
 		if ( number_of_surface_points == 0 )
 		{
-
 			number_of_surface_points = 256;
 		}
-	
+
 		if ( ( current_object_3d_surface->additive ) || ( current_object_3d_surface->translucent ) )
 		{
-
 			add_transparent_surface ( FALSE );
 		}
 		else
 		{
-	
 			zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
 			current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
-	
+
 			if ( current_object_3d_surface->textured )
 			{
-
 				if ( current_object_3d_surface->texture_animation )
 				{
-			
 					int
 						frame;
-			
+
 					frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
-			
+
 					current_object_3d_texture = system_textures[ texture_animations[current_object_3d_surface->texture_index].texture_indices[frame] ];
 				}
 				else
 				{
-			
 					current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 				}
-	
+
 				if ( current_object_3d_texture->contains_alpha )
 				{
-
 					add_transparent_surface ( FALSE );
 				}
 				else
 				{
-	
 					current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 					current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 					current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
 					current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 
 					reset_deferred_state_changes ();
-			
+
 #if ALWAYS_SPECULAR_RENDER
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -1590,44 +1496,40 @@ void draw_3d_object_unclipped_faces ( int object_number )
 #endif
 
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
-	
+
 					set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-		
+
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, current_object_3d_texture_filter );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, current_object_3d_texture_mipmap );
-		
+
 					if ( current_object_3d_surface->has_luminosity_texture )
 					{
-		
 						if ( current_object_3d_surface->luminosity_texture_animation )
 						{
-					
 							int
 								frame;
-					
+
 							frame = texture_animations[current_object_3d_surface->luminosity_texture_index].current_frame;
-					
 							current_object_3d_luminosity_texture = system_textures[ texture_animations[current_object_3d_surface->luminosity_texture_index].texture_indices[frame] ];
 						}
 						else
 						{
-					
 							current_object_3d_luminosity_texture = system_textures[current_object_3d_surface->luminosity_texture_index];
 						}
-		
+
 						if ( current_object_3d_surface->luminosity_texture_wrapped_u )	{ current_object_3d_luminosity_texture_u_address = D3DTADDRESS_WRAP; }
 						else																				{ current_object_3d_luminosity_texture_u_address = D3DTADDRESS_CLAMP; }
-				
+
 						if ( current_object_3d_surface->luminosity_texture_wrapped_v )	{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_WRAP; }
 						else																				{ current_object_3d_luminosity_texture_v_address = D3DTADDRESS_CLAMP; }
-				
+
 						if ( current_object_3d_surface->luminosity_texture_filtered )	{ current_object_3d_luminosity_texture_filter = D3DTFG_LINEAR; }
 						else																				{ current_object_3d_luminosity_texture_filter = D3DTFG_POINT; }
-				
+
 #if ( FORCE_LIGHTMAP_MIPMAPPING )
 						if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
 						else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
@@ -1635,31 +1537,23 @@ void draw_3d_object_unclipped_faces ( int object_number )
 						if ( current_object_3d_surface->luminosity_texture_mipmapped )	{ current_object_3d_luminosity_texture_mipmap = D3DTFP_POINT; }
 						else																				{ current_object_3d_luminosity_texture_mipmap = D3DTFP_NONE; }
 #endif
-		
+
 						if ( current_object_3d_surface->smoothed )
 						{
-			
 							for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 							{
-			
 								wrender_unclipped_3d_object_gouraud_textured_lightmap_polygon ( current_object_3d_faces );
-			
-//								current_object_3d_face_normal_list++;
 								current_object_3d_point_list += current_object_3d_faces->number_of_points;
 								current_object_3d_faces++;
 							}
 						}
 						else
 						{
-
 							if ( current_object_3d_surface->polygons )
 							{
-				
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-				
 									wrender_unclipped_3d_object_textured_lightmap_polygon ( current_object_3d_faces );
-		
 									current_object_3d_face_normal_list++;
 									current_object_3d_point_list += current_object_3d_faces->number_of_points;
 									current_object_3d_faces++;
@@ -1667,16 +1561,12 @@ void draw_3d_object_unclipped_faces ( int object_number )
 							}
 							else
 							{
-				
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-				
 									if ( d3d_textured_lines )
 									{
-				
 										wrender_unclipped_3d_object_textured_line ();
 									}
-			
 									current_object_3d_point_list += 2;
 								}
 							}
@@ -1684,60 +1574,48 @@ void draw_3d_object_unclipped_faces ( int object_number )
 					}
 					else
 					{
-		
 						commit_deferred_state_changes ();
-			
+
 						current_object_3d_surface_vertices = get_d3d_new_vertices_points_address ( number_of_surface_points, &current_object_3d_surface_point_index );
-			
+
 						memset ( current_object_3d_surface_vertices_used, 0, number_of_surface_points );
-	
+
 						if ( current_object_3d_surface->smoothed )
 						{
-		
 							for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 							{
-			
 								add_triangle_fan_primitive_to_buffer ( current_object_3d_faces->number_of_points, current_object_3d_surface_point_index, ( unsigned char * ) current_object_3d_point_list );
 
 								current_object_3d_point_list += current_object_3d_faces->number_of_points;
-//								current_object_3d_face_normal_list++;
 								current_object_3d_faces++;
 							}
-	
+
 							if ( current_object_3d_specular )
 							{
-								
 								wrender_3d_object_gouraud_textured_surface ( number_of_surface_points );
 							}
 							else
 							{
-			
 								wrender_3d_object_gouraud_textured_nospecular_surface ( number_of_surface_points );
 							}
 						}
 						else
 						{
-
 							if ( current_object_3d_surface->polygons )
 							{
-	
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-				
 									real_colour
 										colour,
 										specular_colour;
 
 									int
 										point_index;
-			
+
 									get_textured_surface_face_colour ( &colour, &specular_colour );
-
 									add_triangle_fan_primitive_to_buffer ( current_object_3d_faces->number_of_points, current_object_3d_surface_point_index, ( unsigned char * ) current_object_3d_point_list );
-
 									for ( point_index = 0; point_index < current_object_3d_faces->number_of_points; point_index++ )
 									{
-
 										int
 											index;
 
@@ -1745,26 +1623,21 @@ void draw_3d_object_unclipped_faces ( int object_number )
 										current_object_3d_surface_vertices[index].color = colour.colour;
 										current_object_3d_surface_vertices[index].specular = specular_colour.colour;
 									}
-		
 									current_object_3d_face_normal_list++;
 									current_object_3d_point_list += current_object_3d_faces->number_of_points;
 									current_object_3d_faces++;
 								}
-		
+
 								wrender_3d_object_textured_surface ( number_of_surface_points );
 							}
 							else
 							{
-	
 								for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 								{
-				
 									if ( d3d_textured_lines )
 									{
-			
 										wrender_unclipped_3d_object_textured_line ();
 									}
-				
 									current_object_3d_point_list += 2;
 								}
 							}
@@ -1774,9 +1647,9 @@ void draw_3d_object_unclipped_faces ( int object_number )
 			}
 			else
 			{
-	
+
 				reset_deferred_state_changes ();
-		
+
 #if ALWAYS_SPECULAR_RENDER
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -1785,43 +1658,35 @@ void draw_3d_object_unclipped_faces ( int object_number )
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
-	
+
 				//
 				// Set up the vertex buffer for this set of triangles / vertices
 				//
-	
+
 				commit_deferred_state_changes ();
-	
+
 				current_object_3d_surface_vertices = get_d3d_new_vertices_points_address ( number_of_surface_points, &current_object_3d_surface_point_index );
-	
+
 				memset ( current_object_3d_surface_vertices_used, 0, number_of_surface_points );
 
 				vertices_used = FALSE;
-	
+
 				if ( current_object_3d_surface->smoothed )
 				{
-
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
-		
 						add_triangle_fan_primitive_to_buffer ( current_object_3d_faces->number_of_points, current_object_3d_surface_point_index, ( unsigned char * ) current_object_3d_point_list );
-
-//						current_object_3d_face_normal_list++;
 						current_object_3d_point_list += current_object_3d_faces->number_of_points;
 						current_object_3d_faces++;
 					}
-
 					wrender_3d_object_gouraud_surface ( number_of_surface_points );
 				}
 				else
 				{
-
 					if ( current_object_3d_surface->polygons )
 					{
-	
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-			
 							real_colour
 								colour,
 								specular_colour;
@@ -1830,12 +1695,9 @@ void draw_3d_object_unclipped_faces ( int object_number )
 								point_index;
 
 							get_surface_face_colour ( &colour, &specular_colour );
-
 							add_triangle_fan_primitive_to_buffer ( current_object_3d_faces->number_of_points, current_object_3d_surface_point_index, ( unsigned char * ) current_object_3d_point_list );
-	
 							for ( point_index = 0; point_index < current_object_3d_faces->number_of_points; point_index++ )
 							{
-
 								int
 									index;
 
@@ -1843,22 +1705,18 @@ void draw_3d_object_unclipped_faces ( int object_number )
 								current_object_3d_surface_vertices[index].color = colour.colour;
 								current_object_3d_surface_vertices[index].specular = specular_colour.colour;
 							}
-		
+
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
 						}
-	
 						wrender_3d_object_surface ( number_of_surface_points );
 					}
 					else
 					{
-	
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-			
 							wrender_unclipped_3d_object_plain_line ();
-			
 							current_object_3d_point_list += 2;
 						}
 					}
@@ -1870,19 +1728,16 @@ void draw_3d_object_unclipped_faces ( int object_number )
 
 		if ( current_object_3d_surface->smoothed )
 		{
-	
 			current_object_3d_surface_point_normal_list += number_of_surface_points;
 		}
 
 		if ( current_object_3d_surface->textured )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
 
 		if ( current_object_3d_surface->has_luminosity_texture )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
 
@@ -1896,7 +1751,6 @@ void draw_3d_object_unclipped_faces ( int object_number )
 
 void draw_3d_object_untextured_clipped_faces ( int object_number )
 {
-
 	int
 		number_of_surface_points,
 		faces_left,
@@ -1916,57 +1770,47 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 
 	for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 	{
-
 		int
 			skip_surface;
 
 		number_of_surface_points = current_object_3d_surface->number_of_points;
-
 		if ( number_of_surface_points == 0 )
 		{
-
 			number_of_surface_points = 256;
 		}
 
 		skip_surface = FALSE;
-	
+
 		if ( current_object_3d_surface->translucent )
 		{
-
 			skip_surface = TRUE;
 		}
 
 		if ( current_object_3d_surface->textured )
 		{
-
 			if ( current_object_3d_surface->texture_animation )
 			{
-		
 				int
 					frame;
-		
+
 				frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
-		
 				current_object_3d_texture = system_textures[ texture_animations[current_object_3d_surface->texture_index].texture_indices[frame] ];
 			}
 			else
 			{
-		
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
 			if ( current_object_3d_texture->contains_alpha )
 			{
-
 				skip_surface = TRUE;
 			}
 		}
 
 		if ( !skip_surface )
 		{
-
 			reset_deferred_state_changes ();
-	
+
 			zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
 			current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
 
@@ -1979,7 +1823,6 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 
 			if ( current_object_3d_surface->additive )
 			{
-
 				current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 				current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 				current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
@@ -1987,7 +1830,7 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 
 				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-	
+
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
@@ -2000,64 +1843,49 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 			}
 			else
 			{
-		
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_ALPHABLENDENABLE, FALSE );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 			}
 
 			if ( current_object_3d_surface->smoothed )
 			{
-
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
-
 						if ( current_object_3d_outcode == 0 )
 						{
-	
 							wrender_unclipped_3d_object_gouraud_white_polygon ( current_object_3d_faces );
 						}
 						else
 						{
-
 							wrender_clipped_3d_object_gouraud_white_polygon ( current_object_3d_faces );
 						}
 					}
-
 					current_object_3d_point_list += current_object_3d_faces->number_of_points;
-//					current_object_3d_face_normal_list++;
 					current_object_3d_faces++;
 				}
 			}
 			else
 			{
-
 				if ( current_object_3d_surface->polygons )
 				{
-
 					if ( current_object_3d_surface->additive )
 					{
-	
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 							{
-		
 								if ( current_object_3d_outcode == 0 )
 								{
-			
 									wrender_unclipped_3d_object_white_textured_polygon ( current_object_3d_faces );
 								}
 								else
 								{
-		
 									wrender_clipped_3d_object_white_textured_polygon ( current_object_3d_faces );
 								}
 							}
-	
+
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
@@ -2065,25 +1893,20 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 					}
 					else
 					{
-	
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 							{
-		
 								if ( current_object_3d_outcode == 0 )
 								{
-			
 									wrender_unclipped_3d_object_white_polygon ( current_object_3d_faces );
 								}
 								else
 								{
-		
 									wrender_clipped_3d_object_white_polygon ( current_object_3d_faces );
 								}
 							}
-	
+
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
@@ -2092,25 +1915,19 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 				}
 				else
 				{
-	
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
-	
 						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 						{
-	
 							if ( current_object_3d_outcode == 0 )
 							{
-	
 								wrender_unclipped_3d_object_plain_white_line ();
 							}
 							else
 							{
-	
 								wrender_clipped_3d_object_plain_white_line ();
 							}
 						}
-	
 						current_object_3d_point_list += 2;
 					}
 				}
@@ -2118,55 +1935,41 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 		}
 		else
 		{
-
 			//
 			// Move on through the point list & normals list
 			//
 
 			if ( current_object_3d_surface->polygons )
 			{
-	
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-			
 					if ( !current_object_3d_surface->smoothed )
 					{
-			
 						current_object_3d_face_normal_list++;
 					}
-			
 					current_object_3d_point_list += current_object_3d_faces->number_of_points;
 					current_object_3d_faces++;
 				}
 			}
 			else
 			{
-	
 				current_object_3d_point_list += 2 * current_object_3d_surface->number_of_faces;
-				current_object_3d_faces += current_object_3d_surface->number_of_faces;
 			}
 		}
 
 		current_object_3d_surface_point_list += number_of_surface_points;
-
 		if ( current_object_3d_surface->smoothed )
 		{
-	
 			current_object_3d_surface_point_normal_list += number_of_surface_points;
 		}
-
 		if ( current_object_3d_surface->textured )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
-
 		if ( current_object_3d_surface->has_luminosity_texture )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
-
 		current_object_3d_surface++;
 	}
 }
@@ -2177,7 +1980,6 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 
 void draw_3d_object_untextured_unclipped_faces ( int object_number )
 {
-
 	int
 		number_of_surface_points,
 		faces_left,
@@ -2197,55 +1999,45 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 
 	for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 	{
-
 		int
 			skip_surface;
 
 		number_of_surface_points = current_object_3d_surface->number_of_points;
-
 		if ( number_of_surface_points == 0 )
 		{
-
 			number_of_surface_points = 256;
 		}
 
 		skip_surface = FALSE;
-	
+
 		if ( current_object_3d_surface->translucent )
 		{
-
 			skip_surface = TRUE;
 		}
 
 		if ( current_object_3d_surface->textured )
 		{
-
 			if ( current_object_3d_surface->texture_animation )
 			{
-		
 				int
 					frame;
-		
+
 				frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
-		
 				current_object_3d_texture = system_textures[ texture_animations[current_object_3d_surface->texture_index].texture_indices[frame] ];
 			}
 			else
 			{
-		
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
 			if ( current_object_3d_texture->contains_alpha )
 			{
-
 				skip_surface = TRUE;
 			}
 		}
 
 		if ( !skip_surface )
 		{
-
 			reset_deferred_state_changes ();
 
 			zbuffer_constant = ( current_object_3d_surface->detail ) ? zbuffer_constant_elevated_bias: zbuffer_constant_normal_bias;
@@ -2260,7 +2052,6 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 
 			if ( current_object_3d_surface->additive )
 			{
-
 				current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 				current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 				current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
@@ -2268,7 +2059,7 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 
 				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-	
+
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, current_object_3d_texture_filter );
@@ -2281,38 +2072,28 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 			}
 			else
 			{
-		
 				set_deferred_d3d_int_state ( D3DRENDERSTATE_ALPHABLENDENABLE, FALSE );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 			}
 
 			if ( current_object_3d_surface->smoothed )
 			{
-
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					wrender_unclipped_3d_object_gouraud_white_polygon ( current_object_3d_faces );
-
 					current_object_3d_point_list += current_object_3d_faces->number_of_points;
-//					current_object_3d_face_normal_list++;
 					current_object_3d_faces++;
 				}
 			}
 			else
 			{
-
 				if ( current_object_3d_surface->polygons )
 				{
-
 					if ( current_object_3d_surface->additive )
 					{
-
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							wrender_unclipped_3d_object_white_textured_polygon ( current_object_3d_faces );
-	
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
@@ -2320,12 +2101,9 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 					}
 					else
 					{
-	
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-		
 							wrender_unclipped_3d_object_white_polygon ( current_object_3d_faces );
-	
 							current_object_3d_face_normal_list++;
 							current_object_3d_point_list += current_object_3d_faces->number_of_points;
 							current_object_3d_faces++;
@@ -2334,12 +2112,9 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 				}
 				else
 				{
-	
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
-	
 						wrender_unclipped_3d_object_plain_white_line ();
-	
 						current_object_3d_point_list += 2;
 					}
 				}
@@ -2347,55 +2122,42 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 		}
 		else
 		{
-
 			//
 			// Move on through the point list & normals list
 			//
 
 			if ( current_object_3d_surface->polygons )
 			{
-	
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-			
 					if ( !current_object_3d_surface->smoothed )
 					{
-			
 						current_object_3d_face_normal_list++;
 					}
-			
+
 					current_object_3d_point_list += current_object_3d_faces->number_of_points;
 					current_object_3d_faces++;
 				}
 			}
 			else
 			{
-	
 				current_object_3d_point_list += 2 * current_object_3d_surface->number_of_faces;
-				current_object_3d_faces += current_object_3d_surface->number_of_faces;
 			}
 		}
 
 		current_object_3d_surface_point_list += number_of_surface_points;
-
 		if ( current_object_3d_surface->smoothed )
 		{
-	
 			current_object_3d_surface_point_normal_list += number_of_surface_points;
 		}
-
 		if ( current_object_3d_surface->textured )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
-
 		if ( current_object_3d_surface->has_luminosity_texture )
 		{
-
 			current_object_3d_surface_point_texture_list += number_of_surface_points;
 		}
-
 		current_object_3d_surface++;
 	}
 }
@@ -2407,7 +2169,6 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 
 void add_transparent_surface ( int clipped )
 {
-
 	int
 		faces_left;
 
@@ -2415,16 +2176,14 @@ void add_transparent_surface ( int clipped )
 
 	if ( !current_object_3d_surface->polygons )
 	{
-
 		current_object_3d_point_list += ( 2 * current_object_3d_surface->number_of_faces );
 	}
 	else
 	{
-	
 		//
 		// Setup the data in the translucent surface holder
 		//
-	
+
 		memcpy ( object_3d_translucent_surfaces[object_3d_transparent_surface_index].vp.attitude, current_object_3d_object_base->object_vp->attitude, sizeof ( matrix3x3 ) );
 		object_3d_translucent_surfaces[object_3d_transparent_surface_index].vp.position = current_object_3d_object_base->object_vp->position;
 		object_3d_translucent_surfaces[object_3d_transparent_surface_index].object_view_position = *current_object_3d_relative_position;
@@ -2444,47 +2203,40 @@ void add_transparent_surface ( int clipped )
 
 		if ( current_object_3d_surface->textured )
 		{
-	
 			if ( current_object_3d_surface->texture_animation )
 			{
-		
 				int
 					frame;
-		
+
 				frame = texture_animations[current_object_3d_surface->texture_index].current_frame;
-		
 				object_3d_translucent_surfaces[object_3d_transparent_surface_index].texture_index = texture_animations[current_object_3d_surface->texture_index].texture_indices[frame];
 			}
 			else
 			{
-	
 				object_3d_translucent_surfaces[object_3d_transparent_surface_index].texture_index = current_object_3d_surface->texture_index;
 			}
 		}
-		
+
 		//
 		// Attach this surface to the list of transparent surfaces
 		//
-	
+
 		object_3d_translucent_surfaces[object_3d_transparent_surface_index].succ = current_object_3d_translucent_surfaces;
-	
+
 		current_object_3d_translucent_surfaces = &object_3d_translucent_surfaces[object_3d_transparent_surface_index];
-	
+
 		object_3d_transparent_surface_index++;
 
 		//
 		// Skip over the faces & increment the points ptr along
 		//
-	
+
 		for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 		{
-
 			if ( !current_object_3d_surface->smoothed )
 			{
-	
 				current_object_3d_face_normal_list++;
 			}
-
 			current_object_3d_point_list += current_object_3d_faces->number_of_points;
 			current_object_3d_faces++;
 		}
@@ -2520,119 +2272,119 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 
 		if ( surface->surface->polygons )
 		{
-		
+
 			//
 			// Set up the object drawing global variables
 			//
-		
+
 			object_3d_points_current_base = 0;
 			object_3d_object_current_base = 0;
 			object_3d_light_3d_current_base = 0;
-		
+
 			current_object_3d_light_maps_enabled = surface->lightmaps_enabled;
-		
+
 			//
 			// Get the object's position relative to the camera
 			//
-		
+
 			current_object_3d_relative_position = &surface->object_view_position;
-		
+
 			//
 			// Set the main objects' scaling values
 			//
-		
+
 			object_3d_scale = surface->object_3d_scale;
-		
+
 			//
 			// Set the object dissolve variables
 			//
-		
+
 			current_object_3d_dissolve_value = surface->dissolve_value;
 			current_object_3d_dissolve_factor = current_object_3d_dissolve_value;
 			current_object_3d_dissolve_factor /= 255.0;
-		
+
 			//
 			// Calculate the object's rotation matrix, to transform its 3d points relative to the view.
 			//
-		
+
 			rotation_3d[0][0] = ( surface->vp.xv.x * visual_3d_vp->xv.x + surface->vp.xv.y * visual_3d_vp->xv.y + surface->vp.xv.z * visual_3d_vp->xv.z );
 			rotation_3d[0][1] = ( surface->vp.xv.x * visual_3d_vp->yv.x + surface->vp.xv.y * visual_3d_vp->yv.y + surface->vp.xv.z * visual_3d_vp->yv.z );
 			rotation_3d[0][2] = ( surface->vp.xv.x * visual_3d_vp->zv.x + surface->vp.xv.y * visual_3d_vp->zv.y + surface->vp.xv.z * visual_3d_vp->zv.z );
-		
+
 			rotation_3d[1][0] = ( surface->vp.yv.x * visual_3d_vp->xv.x + surface->vp.yv.y * visual_3d_vp->xv.y + surface->vp.yv.z * visual_3d_vp->xv.z );
 			rotation_3d[1][1] = ( surface->vp.yv.x * visual_3d_vp->yv.x + surface->vp.yv.y * visual_3d_vp->yv.y + surface->vp.yv.z * visual_3d_vp->yv.z );
 			rotation_3d[1][2] = ( surface->vp.yv.x * visual_3d_vp->zv.x + surface->vp.yv.y * visual_3d_vp->zv.y + surface->vp.yv.z * visual_3d_vp->zv.z );
-		
+
 			rotation_3d[2][0] = ( surface->vp.zv.x * visual_3d_vp->xv.x + surface->vp.zv.y * visual_3d_vp->xv.y + surface->vp.zv.z * visual_3d_vp->xv.z );
 			rotation_3d[2][1] = ( surface->vp.zv.x * visual_3d_vp->yv.x + surface->vp.zv.y * visual_3d_vp->yv.y + surface->vp.zv.z * visual_3d_vp->yv.z );
 			rotation_3d[2][2] = ( surface->vp.zv.x * visual_3d_vp->zv.x + surface->vp.zv.y * visual_3d_vp->zv.y + surface->vp.zv.z * visual_3d_vp->zv.z );
-	
+
 			memcpy ( object_to_eye_attitude, rotation_3d, sizeof ( matrix3x3 ) );
-	
+
 			rotation_3d[0][0] *= surface->object_3d_scale.x;
 			rotation_3d[1][0] *= surface->object_3d_scale.y;
 			rotation_3d[2][0] *= surface->object_3d_scale.z;
-		
+
 			rotation_3d[0][1] *= surface->object_3d_scale.x;
 			rotation_3d[1][1] *= surface->object_3d_scale.y;
 			rotation_3d[2][1] *= surface->object_3d_scale.z;
-		
+
 			rotation_3d[0][2] *= surface->object_3d_scale.x;
 			rotation_3d[1][2] *= surface->object_3d_scale.y;
 			rotation_3d[2][2] *= surface->object_3d_scale.z;
-		
+
 			//
 			// Get the object number
 			//
-		
+
 			object_number = surface->object_index;
-		
+
 			//
 			// Rotate the light source vector to be relative to the object.
 			//
-		
+
 			light = generate_relative_lights ( &surface->vp, &surface->object_unit_position, current_3d_lights );
-		
+
 			{
-		
+
 				vec3d
 					rel_pos;
-		
+
 				//
 				// Calculate the relative camera position in the object viewspace
 				//
-		
+
 				rel_pos.x = visual_3d_vp->x - surface->vp.x;
 				rel_pos.y = visual_3d_vp->y - surface->vp.y;
 				rel_pos.z = visual_3d_vp->z - surface->vp.z;
-		
+
 				object_camera_position.x = ( rel_pos.x * surface->vp.attitude[0][0] + rel_pos.y * surface->vp.attitude[0][1] + rel_pos.z * surface->vp.attitude[0][2] );
 				object_camera_position.y = ( rel_pos.x * surface->vp.attitude[1][0] + rel_pos.y * surface->vp.attitude[1][1] + rel_pos.z * surface->vp.attitude[1][2] );
 				object_camera_position.z = ( rel_pos.x * surface->vp.attitude[2][0] + rel_pos.y * surface->vp.attitude[2][1] + rel_pos.z * surface->vp.attitude[2][2] );
-		
+
 				object_camera_direction.x = ( visual_3d_vp->zv.x * surface->vp.attitude[0][0] + visual_3d_vp->zv.y * surface->vp.attitude[1][0] + visual_3d_vp->zv.z * surface->vp.attitude[2][0] );
 				object_camera_direction.y = ( visual_3d_vp->zv.x * surface->vp.attitude[0][1] + visual_3d_vp->zv.y * surface->vp.attitude[1][1] + visual_3d_vp->zv.z * surface->vp.attitude[2][1] );
 				object_camera_direction.z = ( visual_3d_vp->zv.x * surface->vp.attitude[0][2] + visual_3d_vp->zv.y * surface->vp.attitude[1][2] + visual_3d_vp->zv.z * surface->vp.attitude[2][2] );
 			}
-		
-		
+
+
 			//
 			//	Set up this objects' object info structure
 			//
-		
+
 			object_3d_object_base[object_3d_object_current_base].lights = light;
 			object_3d_object_base[object_3d_object_current_base].camera_position = object_camera_position;
 			object_3d_object_base[object_3d_object_current_base].camera_direction = object_camera_direction;
 			object_3d_object_base[object_3d_object_current_base].points_base = object_3d_points_current_base;
 			object_3d_object_base[object_3d_object_current_base].object_number = object_number;
 			object_3d_object_base[object_3d_object_current_base].object_vp = &surface->vp;
-		
+
 			current_object_3d_object_base = &object_3d_object_base[object_3d_object_current_base];
-		
+
 			//
 			// Now start transforming etc
 			//
-		
+
 			current_object_3d_surface = surface->surface;
 			current_object_3d_faces = surface->faces;
 			current_object_3d_surface_point_list = surface->surface_point_list;
@@ -2641,32 +2393,32 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 			current_object_3d_point_list = surface->faces_point_list;
 			current_object_3d_face_normal_list = surface->faces_normal_list;
 			current_object_3d_light_maps_enabled = surface->lightmaps_enabled;
-		
+
 			if ( objects_3d_data[object_number].number_of_points )
 			{
-		
+
 				int
 					illuminated_surface;
-		
+
 				illuminated_surface = TRUE;
-		
+
 				if ( illuminated_surface )
 				{
-			
+
 		//			illuminate_3d_object ( &objects_3d_data[object_number], current_object_3d_relative_position, object_3d_object_base[object_3d_object_current_base].lights, &object_camera_position, object_3d_points_current_base );
 					illuminate_3d_object_surface ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
 				}
-		
+
 				if ( surface->clipped )
 				{
-		
+
 					transform_3d_object_surface ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
-		
+
 					draw_3d_translucent_surface_clipped_faces ( surface );
-	
+
 					if ( ( surface->surface->polygons ) && ( surface->surface->reflectivity != 0 ) )
 					{
-	
+
 						current_object_3d_surface = surface->surface;
 						current_object_3d_faces = surface->faces;
 						current_object_3d_surface_point_list = surface->surface_point_list;
@@ -2675,20 +2427,20 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 						current_object_3d_point_list = surface->faces_point_list;
 						current_object_3d_face_normal_list = surface->faces_normal_list;
 						current_object_3d_light_maps_enabled = surface->lightmaps_enabled;
-	
+
 						draw_3d_translucent_surface_clipped_reflection_faces ( surface );
 					}
 				}
 				else
 				{
-	
+
 					transform_unclipped_3d_object_surface ( &objects_3d_data[object_number], current_object_3d_relative_position, light, &object_camera_position, object_3d_points_current_base );
-					
+
 					draw_3d_translucent_surface_unclipped_faces ( surface );
-	
+
 					if ( ( surface->surface->polygons ) && ( surface->surface->reflectivity != 0 ) )
 					{
-	
+
 						current_object_3d_surface = surface->surface;
 						current_object_3d_faces = surface->faces;
 						current_object_3d_surface_point_list = surface->surface_point_list;
@@ -2697,7 +2449,7 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 						current_object_3d_point_list = surface->faces_point_list;
 						current_object_3d_face_normal_list = surface->faces_normal_list;
 						current_object_3d_light_maps_enabled = surface->lightmaps_enabled;
-	
+
 						draw_3d_translucent_surface_unclipped_reflection_faces ( surface );
 					}
 				}
@@ -2714,16 +2466,13 @@ void draw_3d_translucent_object ( translucent_object_surface *translucent_surfac
 
 void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *surface )
 {
-
 	int
 		number_of_surface_points,
 		faces_left;
 
 	number_of_surface_points = current_object_3d_surface->number_of_points;
-
 	if ( number_of_surface_points == 0 )
 	{
-
 		number_of_surface_points = 256;
 	}
 
@@ -2731,23 +2480,20 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 	current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
 
 	set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-		
+
 	if ( current_object_3d_surface->additive )
 	{
-
 		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE );
 		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE );
 	}
 	else
 	{
-
 		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
 	}
 
 	if ( current_object_3d_surface->textured )
 	{
-
 		current_object_3d_texture = system_textures[surface->texture_index];
 		current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 		current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
@@ -2772,88 +2518,71 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 
 		if ( current_object_3d_surface->smoothed )
 		{
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
-
 				if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 				{
-
 					if ( current_object_3d_outcode == 0 )
 					{
-
 						wrender_translucent_unclipped_3d_object_gouraud_textured_polygon ( current_object_3d_faces );
 					}
 					else
 					{
-
 						wrender_translucent_clipped_3d_object_gouraud_textured_polygon ( current_object_3d_faces );
 					}
 				}
 
-//				current_object_3d_face_normal_list++;
 				current_object_3d_point_list += current_object_3d_faces->number_of_points;
 				current_object_3d_faces++;
 			}
 		}
 		else
 		{
-
-			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			if ( current_object_3d_surface->polygons )
 			{
-
-				if ( current_object_3d_faces->number_of_points > 2 )
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
-
 						if ( current_object_3d_outcode == 0 )
 						{
-
 							wrender_translucent_unclipped_3d_object_textured_polygon ( current_object_3d_faces );
 						}
 						else
 						{
-
 							wrender_translucent_clipped_3d_object_textured_polygon ( current_object_3d_faces );
 						}
 					}
-
 					current_object_3d_face_normal_list++;
+					current_object_3d_point_list += current_object_3d_faces->number_of_points;
+					current_object_3d_faces++;
 				}
-				else
+			}
+			else
+			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( d3d_textured_lines )
 					{
-
 						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 						{
-	
 							if ( current_object_3d_outcode == 0 )
 							{
-
 								wrender_unclipped_3d_object_textured_line ();
 							}
 							else
 							{
-
 								wrender_clipped_3d_object_textured_line ();
 							}
 						}
 					}
+					current_object_3d_point_list += 2;
 				}
-
-
-				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-				current_object_3d_faces++;
 			}
 		}
 	}
 	else
 	{
-
 #if ALWAYS_SPECULAR_RENDER
 		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -2865,77 +2594,63 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 
 		if ( current_object_3d_surface->smoothed )
 		{
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
-
 				if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 				{
-
 					if ( current_object_3d_outcode == 0 )
 					{
-
 						wrender_translucent_unclipped_3d_object_gouraud_polygon ( current_object_3d_faces );
 					}
 					else
 					{
-
 						wrender_translucent_clipped_3d_object_gouraud_polygon ( current_object_3d_faces );
 					}
 				}
-
 				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-//				current_object_3d_face_normal_list++;
 				current_object_3d_faces++;
 			}
 		}
 		else
 		{
-
-			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			if ( current_object_3d_surface->polygons )
 			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 
-				if ( current_object_3d_faces->number_of_points > 2 )
 				{
-
 					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
-
 						if ( current_object_3d_outcode == 0 )
 						{
-	
 							wrender_translucent_unclipped_3d_object_polygon ( current_object_3d_faces );
 						}
 						else
 						{
-
 							wrender_translucent_clipped_3d_object_polygon ( current_object_3d_faces );
 						}
 					}
-
 					current_object_3d_face_normal_list++;
+					current_object_3d_point_list += current_object_3d_faces->number_of_points;
+					current_object_3d_faces++;
 				}
-				else
+			}
+			else
+			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
-
 						if ( current_object_3d_outcode == 0 )
 						{
-
 							wrender_unclipped_3d_object_plain_line ();
 						}
 						else
 						{
-
 							wrender_clipped_3d_object_plain_line ();
 						}
 					}
+					current_object_3d_point_list += 2;
 				}
-
-				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-				current_object_3d_faces++;
 			}
 		}
 	}
@@ -2948,16 +2663,13 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 
 void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *surface )
 {
-
 	int
 		number_of_surface_points,
 		faces_left;
 
 	number_of_surface_points = current_object_3d_surface->number_of_points;
-
 	if ( number_of_surface_points == 0 )
 	{
-
 		number_of_surface_points = 256;
 	}
 
@@ -2966,20 +2678,17 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 
 	if ( current_object_3d_surface->additive )
 	{
-
 		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE );
 		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_ONE );
 	}
 	else
 	{
-
 		set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 		set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
 	}
 
 	if ( current_object_3d_surface->textured )
 	{
-
 		current_object_3d_texture = system_textures[surface->texture_index];
 		current_object_3d_texture_u_address = ( current_object_3d_surface->texture_wrapped_u ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
 		current_object_3d_texture_v_address = ( current_object_3d_surface->texture_wrapped_v ) ? D3DTADDRESS_WRAP: D3DTADDRESS_CLAMP;
@@ -3004,49 +2713,40 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 
 		if ( current_object_3d_surface->smoothed )
 		{
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
-
 				wrender_translucent_unclipped_3d_object_gouraud_textured_polygon ( current_object_3d_faces );
-
-//				current_object_3d_face_normal_list++;
 				current_object_3d_point_list += current_object_3d_faces->number_of_points;
 				current_object_3d_faces++;
 			}
 		}
 		else
 		{
-
-			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			if ( current_object_3d_surface->polygons )
 			{
-
-				if ( current_object_3d_faces->number_of_points > 2 )
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					wrender_translucent_unclipped_3d_object_textured_polygon ( current_object_3d_faces );
-
 					current_object_3d_face_normal_list++;
+					current_object_3d_point_list += current_object_3d_faces->number_of_points;
+					current_object_3d_faces++;
 				}
-				else
+			}
+			else
+			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( d3d_textured_lines )
 					{
-
 //						wrender_translucent_unclipped_3d_object_textured_line ( current_object_3d_faces );
 					}
+					current_object_3d_point_list += 2;
 				}
-
-
-				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-				current_object_3d_faces++;
 			}
 		}
 	}
 	else
 	{
-
 #if ALWAYS_SPECULAR_RENDER
 		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, TRUE );
 #else
@@ -3058,38 +2758,33 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 
 		if ( current_object_3d_surface->smoothed )
 		{
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
-
 				wrender_translucent_unclipped_3d_object_gouraud_polygon ( current_object_3d_faces );
-
 				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-//				current_object_3d_face_normal_list++;
 				current_object_3d_faces++;
 			}
 		}
 		else
 		{
-
-			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			if ( current_object_3d_surface->polygons )
 			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 
-				if ( current_object_3d_faces->number_of_points > 2 )
 				{
-
 					wrender_translucent_unclipped_3d_object_polygon ( current_object_3d_faces );
-
 					current_object_3d_face_normal_list++;
+					current_object_3d_point_list += current_object_3d_faces->number_of_points;
+					current_object_3d_faces++;
 				}
-				else
+			}
+			else
+			{
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 //					wrender_translucent_unclipped_3d_object_plain_line ( current_object_3d_faces );
+					current_object_3d_point_list += 2;
 				}
-
-				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-				current_object_3d_faces++;
 			}
 		}
 	}
@@ -3102,16 +2797,13 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 
 void draw_3d_translucent_surface_clipped_reflection_faces ( translucent_object_surface *surface )
 {
-
 	int
 		number_of_surface_points,
 		faces_left;
 
 	number_of_surface_points = current_object_3d_surface->number_of_points;
-
 	if ( number_of_surface_points == 0 )
 	{
-
 		number_of_surface_points = 256;
 	}
 
@@ -3119,18 +2811,17 @@ void draw_3d_translucent_surface_clipped_reflection_faces ( translucent_object_s
 	current_object_3d_specular = ( current_object_3d_surface->specularity )	?	specular_rendering_enabled : FALSE;
 
 	set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
-		
+
 	set_d3d_int_state ( D3DRENDERSTATE_SRCBLEND, D3DBLEND_SRCALPHA );
 	set_d3d_int_state ( D3DRENDERSTATE_DESTBLEND, D3DBLEND_INVSRCALPHA );
 
 	{
-
 		current_object_3d_texture = current_object_3d_reflection_texture_map;
 		current_object_3d_texture_u_address = D3DTADDRESS_WRAP;
 		current_object_3d_texture_v_address = D3DTADDRESS_WRAP;
 		current_object_3d_texture_filter = D3DTFG_LINEAR;
 		current_object_3d_texture_mipmap = D3DTFP_POINT;
-	
+
 		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
 		set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
@@ -3145,54 +2836,49 @@ void draw_3d_translucent_surface_clipped_reflection_faces ( translucent_object_s
 
 		if ( current_object_3d_surface->smoothed )
 		{
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
-
 				if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 				{
-
 					if ( current_object_3d_outcode == 0 )
 					{
-
 						wrender_translucent_unclipped_3d_object_reflective_gouraud_polygon ( current_object_3d_faces );
 					}
 					else
 					{
-
 						wrender_translucent_clipped_3d_object_reflective_gouraud_polygon ( current_object_3d_faces );
 					}
 				}
-
-//				current_object_3d_face_normal_list++;
 				current_object_3d_point_list += current_object_3d_faces->number_of_points;
 				current_object_3d_faces++;
 			}
 		}
 		else
 		{
-
-			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			if ( current_object_3d_surface->polygons )
 			{
-
-				if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
-					if ( current_object_3d_outcode == 0 )
+					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
-
-						wrender_translucent_unclipped_3d_object_reflective_polygon ( current_object_3d_faces );
+						if ( current_object_3d_outcode == 0 )
+						{
+							wrender_translucent_unclipped_3d_object_reflective_polygon ( current_object_3d_faces );
+						}
+						else
+						{
+							wrender_translucent_clipped_3d_object_reflective_polygon ( current_object_3d_faces );
+						}
 					}
-					else
-					{
-
-						wrender_translucent_clipped_3d_object_reflective_polygon ( current_object_3d_faces );
-					}
+					current_object_3d_face_normal_list++;
+					current_object_3d_point_list += current_object_3d_faces->number_of_points;
+					current_object_3d_faces++;
 				}
-
-				current_object_3d_face_normal_list++;
-				current_object_3d_point_list += current_object_3d_faces->number_of_points;
-				current_object_3d_faces++;
+			}
+			else
+			{
+				ASSERT ( FALSE );
+				current_object_3d_point_list += 2 * current_object_3d_surface->number_of_faces;
 			}
 		}
 	}
@@ -3204,16 +2890,13 @@ void draw_3d_translucent_surface_clipped_reflection_faces ( translucent_object_s
 
 void draw_3d_translucent_surface_unclipped_reflection_faces ( translucent_object_surface *surface )
 {
-
 	int
 		number_of_surface_points,
 		faces_left;
 
 	number_of_surface_points = current_object_3d_surface->number_of_points;
-
 	if ( number_of_surface_points == 0 )
 	{
-
 		number_of_surface_points = 256;
 	}
 
@@ -3243,28 +2926,29 @@ void draw_3d_translucent_surface_unclipped_reflection_faces ( translucent_object
 
 	if ( current_object_3d_surface->smoothed )
 	{
-
 		for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 		{
-
 			wrender_translucent_unclipped_3d_object_reflective_gouraud_polygon ( current_object_3d_faces );
-
-//			current_object_3d_face_normal_list++;
 			current_object_3d_point_list += current_object_3d_faces->number_of_points;
 			current_object_3d_faces++;
 		}
 	}
 	else
 	{
-
-		for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+		if ( current_object_3d_surface->polygons )
 		{
-
-			wrender_translucent_unclipped_3d_object_reflective_polygon ( current_object_3d_faces );
-
-			current_object_3d_face_normal_list++;
-			current_object_3d_point_list += current_object_3d_faces->number_of_points;
-			current_object_3d_faces++;
+			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
+			{
+				wrender_translucent_unclipped_3d_object_reflective_polygon ( current_object_3d_faces );
+				current_object_3d_face_normal_list++;
+				current_object_3d_point_list += current_object_3d_faces->number_of_points;
+				current_object_3d_faces++;
+			}
+		}
+		else
+		{
+			ASSERT ( FALSE );
+			current_object_3d_point_list += 2 * current_object_3d_surface->number_of_faces;
 		}
 	}
 }

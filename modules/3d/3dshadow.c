@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -154,7 +154,6 @@ int get_3d_shadows_translucent ( void )
 
 void draw_3d_object_shadow ( object_3d_instance *obj )
 {
-
 	int
 		object_number,
 		draw_sub_objects,
@@ -187,7 +186,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 	if ( current_3d_sun->light_direction.y < 0.1 )
 	{
-
 		return;
 	}
 
@@ -205,7 +203,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 	//
 
 	{
-
 		float
 			light_angle,
 			light_intensity,
@@ -222,7 +219,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		if ( !position_on_3d_terrain ( real_object_position.x, real_object_position.z ) )
 		{
-
 			return;
 		}
 
@@ -251,7 +247,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		if ( !position_on_3d_terrain ( shadow_world_position.x, shadow_world_position.z ) )
 		{
-
 			return;
 		}
 
@@ -271,7 +266,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		if ( view_distance > MAX_SHADOW_VIEW_DISTANCE )
 		{
-
 			return;
 		}
 
@@ -358,7 +352,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		if ( translucent_3d_shadows )
 		{
-				
 			set_d3d_shadow_colour ( 0, 0, 0, shadow_intensity );
 		}
 	}
@@ -369,7 +362,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 	if ( shadow_intensity < 1 )
 	{
-
 		return;
 	}
 
@@ -396,7 +388,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 	pos = &obj->view_position;
 
 	{
-
 		float
 			fog_intensity;
 
@@ -513,7 +504,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 	if ( object_number )
 	{
-
 		//
 		// We have a soft shadow object
 		//
@@ -525,7 +515,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		//
 
 		{
-
 			vec3d
 				scale;
 
@@ -535,8 +524,8 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 			scale.x *= obj->relative_scale.x;	//1;
 			scale.y *= obj->relative_scale.y;	//1;
 			scale.z *= obj->relative_scale.z;	//1;
-	
-		
+
+
 			transform_3d_object_shadow ( &objects_3d_data[object_number],
 													&scale,
 													&obj->vp, &obj->vp.position,
@@ -551,11 +540,11 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
-	
+
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
-	
+
 		set_d3d_texture_stage_state ( 0, D3DTSS_MAGFILTER, D3DTFG_LINEAR );
 		set_d3d_texture_stage_state ( 0, D3DTSS_MINFILTER, D3DTFN_LINEAR );
 		set_d3d_texture_stage_state ( 0, D3DTSS_MIPFILTER, D3DTFP_POINT );
@@ -567,23 +556,22 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_NONE );
 
 		shadow_intensity = bound ( shadow_intensity, 0, 255 );
-	
-		{
 
+		{
 			face_surface_description
 				*surface;
-	
+
 			int
 				number_of_surface_points,
 				surfaces_left,
 				surface_face_count,
 				point_reference_index,
 				texture_reference_index;
-	
+
 			point_reference_index = 0;
-	
+
 			texture_reference_index = 0;
-		
+
 			surface = objects_3d_data[object_number].surfaces;
 
 			faces = objects_3d_data[object_number].faces;
@@ -594,39 +582,33 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 			current_object_3d_point_list = objects_3d_data[object_number].object_faces_point_plain_list;
 			current_object_3d_face_normal_list = objects_3d_data[object_number].object_face_normal_references;
 			current_object_3d_transformed_normals = transformed_3d_normals;
-		
+
 			current_object_3d_surface_point_list = objects_3d_data[object_number].surface_points;
 			current_object_3d_surface_point_texture_list = objects_3d_data[object_number].surface_texture_points;
 			current_object_3d_surface_point_normal_list = objects_3d_data[object_number].surface_point_normals;
-		
+
 			for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 			{
-
 				int
 					faces_left;
-	
+
 				number_of_surface_points = current_object_3d_surface->number_of_points;
-		
 				if ( number_of_surface_points == 0 )
 				{
-		
 					number_of_surface_points = 256;
 				}
-			
+
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-	
-					if ( faces->number_of_points > 2 )
+					if ( surface->polygons )
 					{
-			
 						if ( surface->textured )
 						{
-	
 							vec3d
 								vec1,
 								vec2,
 								face_normal;
-	
+
 							object_short_3d_point
 								*points;
 
@@ -634,12 +616,12 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 								point0,
 								point1,
 								point2;
-	
+
 							float
 								angle;
-	
+
 							points = objects_3d_data[object_number].points;
-	
+
 							//
 							// Calculate the face normal
 							//
@@ -654,99 +636,95 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 							vec1.x = points[point1].x - points[point0].x;
 							vec1.y = points[point1].y - points[point0].y;
 							vec1.z = points[point1].z - points[point0].z;
-					
+
 							face_normal.x = ( vec1.y * vec2.z ) - ( vec1.z * vec2.y );
 							face_normal.y = ( vec1.z * vec2.x ) - ( vec1.x * vec2.z );
 							face_normal.z = ( vec1.x * vec2.y ) - ( vec1.y * vec2.x );
-	
+
 							normalise_any_3d_vector ( &face_normal );
-	
+
 							//
 							// Calculate the angle this face makes with the light.
 							//
-	
+
 							angle = (	face_normal.x * current_sun_object_view_vector.x +
 											face_normal.y * current_sun_object_view_vector.y +
 											face_normal.z * current_sun_object_view_vector.z  );
-	
+
 							//
 							// Angle goes between -1 & 1 ( for -90 to +90 )
 							//
 							// Scale to -0.707 to 0.707 ( for -45 to +45 )
 							//
-	
+
 							angle = fabs ( angle );
-	
+
 							angle -= 0.5;
-	
+
 							angle *= ( 1.0 / ( 1.0 - 0.5 ) );
-	
+
 							angle *= shadow_intensity * 2;
-	
+
 							{
-	
+
 								float
 									new_shadow_intensity;
-	
+
 								new_shadow_intensity = angle;
-	
+
 								new_shadow_intensity = bound ( new_shadow_intensity, 0, 255 );
-	
+
 								set_d3d_shadow_colour ( 0, 0, 0, new_shadow_intensity );
-	
+
 								wrender_3d_shadow_surface_alpha_textured_polygon ( faces );
 							}
 						}
+						if ( !current_object_3d_surface->smoothed )
+						{
+							current_object_3d_face_normal_list++;
+						}
+						current_object_3d_point_list += faces->number_of_points;
+						faces++;
 					}
-					
-					current_object_3d_point_list += faces->number_of_points;
-
-					faces++;
+					else
+					{
+						current_object_3d_point_list += 2;
+					}
 				}
 
 				current_object_3d_surface_point_list += number_of_surface_points;
-		
 				if ( current_object_3d_surface->smoothed )
 				{
-			
 					current_object_3d_surface_point_normal_list += number_of_surface_points;
 				}
-		
 				if ( current_object_3d_surface->textured )
 				{
-		
 					current_object_3d_surface_point_texture_list += number_of_surface_points;
 				}
-		
 				if ( current_object_3d_surface->has_luminosity_texture )
 				{
-		
 					current_object_3d_surface_point_texture_list += number_of_surface_points;
 				}
-		
 				current_object_3d_surface++;
 			}
 		}
-	
+
 		//
 		// Set the renderstates back to where they were
 		//
-	
+
 		set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
 
 		set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
 	}
 	else
 	{
-
 		double
 			zbias_decrement;
 
 		object_number = get_object_shadow_approximation_number ( obj->object_number, pos->z, &draw_sub_objects );
-
 		if ( object_number == 0 )
 		{
-
 			return;
 		}
 
@@ -761,14 +739,13 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 		zbias_decrement = ( POLYGON_ZDISTANCE_ELEVATED_BIAS - POLYGON_ZDISTANCE_SHADOW_ELEVATED_BIAS );	//( 8.0 / 65535.0 ) - ( 6.0 / 65535.0 ) );
 
 		{
-	
 			int
 				surfaces_left,
 				point_reference_index,
 				number_of_faces_to_render;
-	
+
 			point_reference_index = 0;
-	
+
 			number_of_faces_to_render = 0;
 
 			faces = objects_3d_data[object_number].faces;
@@ -779,23 +756,22 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 			for ( surfaces_left = objects_3d_data[object_number].number_of_surfaces; surfaces_left > 0; surfaces_left-- )
 			{
-
 				int
 					faces_left;
-	
+
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-
 					if ( current_object_3d_surface->polygons )
 					{
-
 //						if ( transformed_3d_normal_visibilities[current_object_3d_face_normal_list->point] )
 						{
-
 							number_of_faces_to_render++;
 						}
 
-						current_object_3d_face_normal_list++;
+						if ( !current_object_3d_surface->smoothed )
+						{
+							current_object_3d_face_normal_list++;
+						}
 						faces++;
 					}
 				}
@@ -808,7 +784,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 		if ( object_number )
 		{
-
 			object_3d_object_base[object_3d_object_current_base].object_number = object_number;
 
 			//
@@ -816,14 +791,13 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 			//
 
 			{
-		
 				vec3d
 					scale;
-	
+
 				scale.x = 1;
 				scale.y = 1;
 				scale.z = 1;
-	
+
 				transform_3d_object_shadow ( &objects_3d_data[object_number],
 														&scale,
 														&obj->vp, &obj->vp.position,
@@ -832,14 +806,13 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 														projection_constant, projection_factor,
 														object_3d_points_current_base );
 			}
-		
+
 			if ( translucent_3d_shadows )
 			{
-			
 				//
 				// Alpha blending is already on - set the Ztest & enable writing.
 				//
-			
+
 				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_shadow_comparison );	//D3DCMP_GREATER );
 				set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, TRUE );
 
@@ -848,23 +821,21 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 			}
 			else
 			{
-		
 				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
 			}
 
 			{
-		
 				int
 					surface;
-		
+
 				int
 					surface_face_count,
 					point_reference_index;
-		
+
 				point_reference_index = 0;
-		
+
 				surface = 0;
-		
+
 				current_object_3d_surface = objects_3d_data[object_number].surfaces;
 				current_object_3d_point_list = objects_3d_data[object_number].object_faces_point_plain_list;
 				current_object_3d_face_normal_list = objects_3d_data[object_number].object_face_normal_references;
@@ -875,7 +846,6 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 
 				for ( count = objects_3d_data[object_number].number_of_surfaces; count > 0; count-- )
 				{
-
 					int
 						number_of_surface_points,
 						face_count;
@@ -883,52 +853,43 @@ void draw_3d_object_shadow ( object_3d_instance *obj )
 					surface_face_count = current_object_3d_surface->number_of_faces;
 
 					number_of_surface_points = current_object_3d_surface->number_of_points;
-			
 					if ( number_of_surface_points == 0 )
 					{
-			
 						number_of_surface_points = 256;
 					}
 
 					for ( face_count = surface_face_count; face_count > 0; face_count-- )
 					{
-
-
 						if ( current_object_3d_surface->polygons )
 						{
-				
 //							if (transformed_3d_normal_visibilities[current_object_3d_face_normal_list->point])
 							{
-		
 								wrender_3d_shadow_surface_plain_polygon ( faces );
 							}
-	
 							current_object_3d_point_list += faces->number_of_points;
-							current_object_3d_face_normal_list++;
+							if ( !current_object_3d_surface->smoothed )
+							{
+								current_object_3d_face_normal_list++;
+							}
 							faces++;
 						}
 						else
 						{
-
 							current_object_3d_point_list += 2;
 						}
-						
-		
 						zbuffer_constant -= zbuffer_constant_shadow_bias_decrement;
 					}
-
 					current_object_3d_surface_point_list += number_of_surface_points;
 					current_object_3d_surface++;
 				}
 			}
-		
+
 			if ( translucent_3d_shadows )
 			{
-		
 				//
 				// Set the renderstates back to where they were
 				//
-			
+				//
 				set_d3d_int_state ( D3DRENDERSTATE_ZFUNC, zbuffer_default_comparison );
 				set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, FALSE );
 			}
@@ -1093,7 +1054,7 @@ void transform_3d_object_shadow ( object_3d *object, vec3d *object_3d_scale, vie
 			oxmin = last_transformed_point->i - active_viewport.x_min;
 			oymax = active_viewport.y_max - last_transformed_point->j;
 			oymin = last_transformed_point->j - active_viewport.y_min;
-		
+
 			ixmax = *( ( int * ) &oxmax );
 			ixmin = *( ( int * ) &oxmin );
 			iymax = *( ( int * ) &oymax );
@@ -1165,7 +1126,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 	object_3d_point
 		*object_points,
 		object_box[8];
-	
+
 	vec3d
 		*pos,
 		terrain_normal,
@@ -1210,7 +1171,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 
 	if ( !object_number )
 	{
-	
+
 		object_number = get_object_approximation_number ( obj->object_number, pos->z, &draw_sub_objects );
 	}
 
@@ -1406,13 +1367,13 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 	object_points = object_box;
 
 	{
-	
+
 		object_3d_point
 			*points;
-	
+
 		vertex
 			*result_points;
-	
+
 		float
 			pos_x,
 			pos_y,
@@ -1421,24 +1382,24 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 			oxmin,
 			oymax,
 			oymin;
-	
+
 		int
 			ixmax,
 			ixmin,
 			iymax,
 			iymin;
-	
+
 		points = object_points;	//objects_3d_data[object_number].points;
 
 		result_points = &transformed_3d_points[0];
-	
+
 		pos_x = pos->x;
 		pos_y = pos->y;
 		pos_z = pos->z;
-	
+
 		for ( count = 8; count > 0; count-- )
 		{
-	
+
 			float
 				n_s,
 				t,
@@ -1510,7 +1471,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 				oxmin = result_points->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - result_points->j;
 				oymin = result_points->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
@@ -1529,7 +1490,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_shadow_visibility ( object_3d_i
 			}
 
 			result_points++;
-	
+
 			points++;
 		}
 	}

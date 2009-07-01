@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -90,7 +90,7 @@ static float
 
 vertex
 	transformed_3d_points[MAX_POINTS];
-	
+
 object_3d_transformed_point_normal
 	transformed_3d_normals[MAX_POINTS];
 
@@ -217,10 +217,10 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 
 		for ( count = number_of_normals; count > 0; count-- )
 		{
-	
+
 			result_normals->colour = normal_colour.colour;
 			result_normals->specular = 0;
-	
+
 			result_normals++;
 		}
 	}
@@ -238,10 +238,10 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 		highlight_vector.x = lights->highlight_vector.x;
 		highlight_vector.y = lights->highlight_vector.y;
 		highlight_vector.z = lights->highlight_vector.z;
-	
+
 		for ( count = number_of_normals; count > 0; count-- )
 		{
-	
+
 			float
 				r,
 				g,
@@ -249,7 +249,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 				s,
 				d_intensity,
 				s_intensity;
-	
+
 			int
 				ir,
 				ig,
@@ -258,11 +258,11 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			//
 			// Set the light levels
 			//
-	
+
 			r = ambient_3d_light.colour.red;
 			g = ambient_3d_light.colour.green;
 			b = ambient_3d_light.colour.blue;
-	
+
 			s = 0;
 
 			//
@@ -270,7 +270,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			//
 
 			generate_object_3d_point_normal ( normals, &normal );
-	
+
 			//
 			// Calculate diffuse colour intensities
 			//
@@ -326,7 +326,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 
 				s_test = 1.0 - s;
 				is_test = *( ( int * ) &s_test );
-	
+
 				s = float_light_bounds[ (((unsigned int) is_test) >> 31) ];
 			}
 
@@ -335,9 +335,9 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			result_normals->b = ib;
 			result_normals->alpha = current_object_3d_dissolve_value;
 			result_normals->specular = s;
-	
+
 			normals++;
-	
+
 			result_normals++;
 		}
 	}
@@ -346,87 +346,87 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 
 		for ( count = number_of_normals; count > 0; count-- )
 		{
-	
+
 			float
 				r,
 				g,
 				b,
 				specular;
-	
+
 			int
 				ir,
 				ig,
 				ib;
-	
+
 			light_3d_source
 				*this_light;
-	
+
 			//
 			// Set the light levels
 			//
-	
+
 			r = ambient_3d_light.colour.red;
 			g = ambient_3d_light.colour.green;
 			b = ambient_3d_light.colour.blue;
-	
+
 			specular = 0;
-	
+
 			//
 			// Calculate normal
 			//
 
 			generate_object_3d_point_normal ( normals, &normal );
-	
+
 			this_light = lights;
-	
+
 			while ( this_light )
 			{
-	
+
 				float
 					temp_intensity;
-	
+
 				//
 				// Calculate diffuse colour intensities
 				//
-	
+
 				temp_intensity = normal.x * this_light->lx + normal.y * this_light->ly + normal.z * this_light->lz;
 //				temp_intensity *= 1.0 / 32767.0;
-	
+
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					temp_intensity *= temp_intensity;
-	
+
 					r += temp_intensity * this_light->colour.red;
 					g += temp_intensity * this_light->colour.green;
 					b += temp_intensity * this_light->colour.blue;
 				}
-	
+
 				//
 				// Calculate specular colour intensities
 				//
-	
+
 				temp_intensity = normal.x * this_light->highlight_vector.x +
 										normal.y * this_light->highlight_vector.y +
 										normal.z * this_light->highlight_vector.z;
 
 //				temp_intensity *= 1.0 / 32767.0;
-	
+
 				if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					temp_intensity *= temp_intensity;
 					temp_intensity *= temp_intensity;
 					temp_intensity *= temp_intensity;
 					temp_intensity *= temp_intensity;
 					temp_intensity *= temp_intensity;
-	
+
 					specular += temp_intensity * this_light->intensity;
 				}
-	
+
 				this_light = this_light->succ;
 			}
-	
+
 			asm_convert_float_to_int ( ( r * 255 ), &int_light_bounds[0] );
 			asm_convert_float_to_int ( ( g * 255 ), &int_light_bounds[2] );
 			asm_convert_float_to_int ( ( b * 255 ), &int_light_bounds[4] );
@@ -446,7 +446,7 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 
 				s_test = 1.0 - specular;
 				is_test = *( ( int * ) &s_test );
-	
+
 				specular = float_light_bounds[ (is_test >> 31) ];
 			}
 
@@ -455,9 +455,9 @@ void illuminate_object_point_normals ( object_3d_heading_pitch_normal *normals, 
 			result_normals->b = ib;
 			result_normals->alpha = current_object_3d_dissolve_value;
 			result_normals->specular = specular;
-	
+
 			normals++;
-	
+
 			result_normals++;
 		}
 	}
@@ -576,7 +576,7 @@ void illuminate_3d_object ( object_3d *object, vec3d *pos, light_3d_source *ligh
 /*
 	if ( camera_direction )
 	{
-		
+
 		calculate_object_normal_factors ( object->point_normals + object->culling_normals_offset,
 														object->number_of_point_normals - object->culling_normals_offset,
 														camera_direction, &object->bounding_box, points_base + object->culling_normals_offset );
@@ -885,7 +885,7 @@ void transform_flat_3d_object ( object_3d *object, vec3d *pos, light_3d_source *
 				oxmin = last_transformed_point->i - active_viewport.x_min;
 				oymax = active_viewport.y_max - last_transformed_point->j;
 				oymin = last_transformed_point->j - active_viewport.y_min;
-			
+
 				ixmax = *( ( int * ) &oxmax );
 				ixmin = *( ( int * ) &oxmin );
 				iymax = *( ( int * ) &oymax );
@@ -1027,14 +1027,14 @@ void transform_unclipped_3d_object ( object_3d *object, vec3d *pos, light_3d_sou
 	{
 
 		{
-	
+
 			float
 				point_x,
 				point_y,
 				point_z,
 				x,
 				y;
-	
+
 			point_x = points->x;
 			point_y = points->y;
 			point_z = points->z;
@@ -1043,19 +1043,19 @@ void transform_unclipped_3d_object ( object_3d *object, vec3d *pos, light_3d_sou
 			x += point_x * scaled_rotation[0][0];
 			x += point_y * scaled_rotation[1][0];
 			x += point_z * scaled_rotation[2][0];
-	
+
 			y = pos_y;
 			y += point_x * scaled_rotation[0][1];
 			y += point_y * scaled_rotation[1][1];
 			y += point_z * scaled_rotation[2][1];
-	
+
 			result_2d_points->z = pos_z +
 											 point_x * scaled_rotation[0][2] +
 											 point_y * scaled_rotation[1][2] +
 											 point_z * scaled_rotation[2][2];
-	
+
 			result_2d_points->q = ( 1.0 / result_2d_points->z );
-	
+
 			result_2d_points->j = environment_y_origin - ( y * result_2d_points->q );
 			result_2d_points->i = environment_x_origin + ( x * result_2d_points->q );
 
@@ -1129,30 +1129,30 @@ void transform_unclipped_flat_3d_object ( object_3d *object, vec3d *pos, light_3
 				q,
 				i,
 				j;
-	
+
 			pointx = points->x;
 			pointz = points->z;
-	
+
 			x = pointx * rotation_3d[0][0];
 			y = pointx * rotation_3d[0][1];
 			z = pointx * rotation_3d[0][2];
-	
+
 			x += pointz * rotation_3d[2][0];
 			y += pointz * rotation_3d[2][1];
 			z += pointz * rotation_3d[2][2];
-	
+
 			x += pos_x;
 			y += pos_y;
 			z += pos_z;
-	
+
 			q = 1.0 / z;
-	
+
 			i = ( active_3d_environment->screen_i_scale * x * q );
 			j = ( active_3d_environment->screen_j_scale * y * q );
-	
+
 			result_2d_points->j = active_3d_environment->y_origin - j;
 			result_2d_points->i = active_3d_environment->x_origin + i;
-	
+
 			result_2d_points->q = q;
 			result_2d_points->z = z;
 
@@ -1212,40 +1212,40 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 		point_list = current_object_3d_surface_point_normal_list;
 
 		number_of_points = current_object_3d_surface->number_of_points;
-	
+
 		if ( number_of_points == 0 )
 		{
-	
+
 			number_of_points = 256;
 		}
-	
+
 		ASSERT ( ( number_of_points + points_base ) < MAX_POINTS );
 
 		if ( !lights )
 		{
-	
+
 			int
 				ir,
 				ig,
 				ib;
-	
+
 			real_colour
 				normal_colour;
-	
+
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.red * 255 ), &ir );
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.green * 255 ), &ig );
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.blue * 255 ), &ib );
-	
+
 			normal_colour.red = ir;
 			normal_colour.green = ig;
 			normal_colour.blue = ib;
 			normal_colour.alpha = current_object_3d_dissolve_value;
-	
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
 
 				point_index = point_list->point;
-		
+
 				result_normals[point_index].colour = normal_colour.colour;
 				result_normals[point_index].specular = 0;
 
@@ -1254,22 +1254,22 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 		}
 		else if ( !lights->succ )
 		{
-	
+
 			vec3d
 				light_vector,
 				highlight_vector;
-	
+
 			light_vector.x = lights->lx;
 			light_vector.y = lights->ly;
 			light_vector.z = lights->lz;
-	
+
 			highlight_vector.x = lights->highlight_vector.x;
 			highlight_vector.y = lights->highlight_vector.y;
 			highlight_vector.z = lights->highlight_vector.z;
-		
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
-		
+
 				float
 					r,
 					g,
@@ -1277,22 +1277,22 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 					s,
 					d_intensity,
 					s_intensity;
-		
+
 				int
 					ir,
 					ig,
 					ib;
-		
+
 				//
 				// Set the light levels
 				//
-		
+
 				r = ambient_3d_light.colour.red;
 				g = ambient_3d_light.colour.green;
 				b = ambient_3d_light.colour.blue;
-		
+
 				s = 0;
-	
+
 				point_index = point_list->point;
 
 				generate_object_3d_point_normal ( &normals[point_index], &normal );
@@ -1300,189 +1300,190 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 				//
 				// Calculate diffuse colour intensities
 				//
-	
+
 				d_intensity = normal.x * lights->lx + normal.y * lights->ly + normal.z * lights->lz;
 				s_intensity =	normal.x * lights->highlight_vector.x +
 									normal.y * lights->highlight_vector.y +
 									normal.z * lights->highlight_vector.z;
-	
+
 //				d_intensity *= 1.0 / 32767.0;
 //				s_intensity *= 1.0 / 32767.0;
-	
+
 				if ( *( ( int *) &d_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					d_intensity *= d_intensity;
-	
+
 					r += d_intensity * lights->colour.red;
 					g += d_intensity * lights->colour.green;
 					b += d_intensity * lights->colour.blue;
 				}
-	
+
 				//
 				// Calculate specular colour intensities
 				//
-	
+
 				if ( *( ( int *) &s_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
-	
+
 					s += s_intensity * lights->intensity;
 				}
-		
+
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
 				if ( *( ( int *) &g ) > *( ( int *) &float_value_one ) )	{ g = 1.0; }
 				if ( *( ( int *) &b ) > *( ( int *) &float_value_one ) )	{ b = 1.0; }
 				if ( *( ( int *) &s ) > *( ( int *) &float_value_one ) )	{ s = 1.0; }
-		
+
 				asm_convert_float_to_int ( ( r * 255 ), &ir );
 				asm_convert_float_to_int ( ( g * 255 ), &ig );
 				asm_convert_float_to_int ( ( b * 255 ), &ib );
-		
+
 				result_normals[point_index].r = ir;
 				result_normals[point_index].g = ig;
 				result_normals[point_index].b = ib;
 				result_normals[point_index].alpha = current_object_3d_dissolve_value;
 				result_normals[point_index].specular = s;
-	
+
 				point_list++;
 			}
 		}
 		else
 		{
-	
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
-		
+
 				float
 					r,
 					g,
 					b,
 					specular;
-		
+
 				int
 					ir,
 					ig,
 					ib;
-		
+
 				light_3d_source
 					*this_light;
-		
+
 				//
 				// Set the light levels
 				//
-		
+
 				r = ambient_3d_light.colour.red;
 				g = ambient_3d_light.colour.green;
 				b = ambient_3d_light.colour.blue;
-		
+
 				specular = 0;
-	
+
 				point_index = point_list->point;
 
 				generate_object_3d_point_normal ( &normals[point_index], &normal );
-		
+
 				this_light = lights;
-		
+
 				while ( this_light )
 				{
-		
+
 					float
 						temp_intensity;
-		
+
 					//
 					// Calculate diffuse colour intensities
 					//
-		
+
 					temp_intensity = normal.x * this_light->lx + normal.y * this_light->ly + normal.z * this_light->lz;
 //					temp_intensity *= 1.0 / 32767.0;
-		
+
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
-		
+
 						temp_intensity *= temp_intensity;
-		
+
 						r += temp_intensity * this_light->colour.red;
 						g += temp_intensity * this_light->colour.green;
 						b += temp_intensity * this_light->colour.blue;
 					}
-		
+
 					//
 					// Calculate specular colour intensities
 					//
-		
+
 					temp_intensity = normal.x * this_light->highlight_vector.x +
 											normal.y * this_light->highlight_vector.y +
 											normal.z * this_light->highlight_vector.z;
-	
+
 //					temp_intensity *= 1.0 / 32767.0;
-		
+
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
-		
+
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
-		
+
 						specular += temp_intensity * this_light->intensity;
 					}
-		
+
 					this_light = this_light->succ;
 				}
-		
+
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
 				if ( *( ( int *) &g ) > *( ( int *) &float_value_one ) )	{ g = 1.0; }
 				if ( *( ( int *) &b ) > *( ( int *) &float_value_one ) )	{ b = 1.0; }
 				if ( *( ( int *) &specular ) > *( ( int *) &float_value_one ) )	{ specular = 1.0; }
-		
+
 				asm_convert_float_to_int ( ( r * 255 ), &ir );
 				asm_convert_float_to_int ( ( g * 255 ), &ig );
 				asm_convert_float_to_int ( ( b * 255 ), &ib );
-		
+
 				result_normals[point_index].r = ir;
 				result_normals[point_index].g = ig;
 				result_normals[point_index].b = ib;
 				result_normals[point_index].alpha = current_object_3d_dissolve_value;
 				result_normals[point_index].specular = specular;
-	
+
 				point_list++;
 			}
 		}
 	}
 	else
 	{
+		ASSERT ( current_object_3d_surface->polygons );
 
 		point_list = current_object_3d_face_normal_list;
 
 		number_of_points = current_object_3d_surface->number_of_faces;
-	
+
 		if ( !lights )
 		{
-	
+
 			int
 				ir,
 				ig,
 				ib;
-	
+
 			real_colour
 				normal_colour;
-	
+
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.red * 255 ), &ir );
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.green * 255 ), &ig );
 			asm_convert_float_to_int (  ( ambient_3d_light.colour.blue * 255 ), &ib );
-	
+
 			normal_colour.red = ir;
 			normal_colour.green = ig;
 			normal_colour.blue = ib;
 			normal_colour.alpha = current_object_3d_dissolve_value;
-	
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
 
@@ -1496,22 +1497,22 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 		}
 		else if ( !lights->succ )
 		{
-	
+
 			vec3d
 				light_vector,
 				highlight_vector;
-	
+
 			light_vector.x = lights->lx;
 			light_vector.y = lights->ly;
 			light_vector.z = lights->lz;
-	
+
 			highlight_vector.x = lights->highlight_vector.x;
 			highlight_vector.y = lights->highlight_vector.y;
 			highlight_vector.z = lights->highlight_vector.z;
-		
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
-		
+
 				float
 					r,
 					g,
@@ -1519,181 +1520,181 @@ void illuminate_3d_object_surface ( object_3d *object, vec3d *pos, light_3d_sour
 					s,
 					d_intensity,
 					s_intensity;
-		
+
 				int
 					ir,
 					ig,
 					ib;
-		
+
 				//
 				// Set the light levels
 				//
-		
+
 				r = ambient_3d_light.colour.red;
 				g = ambient_3d_light.colour.green;
 				b = ambient_3d_light.colour.blue;
-		
+
 				s = 0;
-	
+
 				point_index = point_list->point;
 
 				generate_object_3d_point_normal ( &normals[point_index], &normal );
-		
+
 				//
 				// Calculate diffuse colour intensities
 				//
-	
+
 				d_intensity = normal.x * lights->lx + normal.y * lights->ly + normal.z * lights->lz;
 				s_intensity =	normal.x * lights->highlight_vector.x +
 									normal.y * lights->highlight_vector.y +
 									normal.z * lights->highlight_vector.z;
-	
+
 //				d_intensity *= 1.0 / 32767.0;
 //				s_intensity *= 1.0 / 32767.0;
-	
+
 				if ( *( ( int *) &d_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					d_intensity *= d_intensity;
-	
+
 					r += d_intensity * lights->colour.red;
 					g += d_intensity * lights->colour.green;
 					b += d_intensity * lights->colour.blue;
 				}
-	
+
 				//
 				// Calculate specular colour intensities
 				//
-	
+
 				if ( *( ( int *) &s_intensity ) > *( ( int *) &float_value_zero ) )
 				{
-	
+
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
 					s_intensity *= s_intensity;
-	
+
 					s += s_intensity * lights->intensity;
 				}
-		
+
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
 				if ( *( ( int *) &g ) > *( ( int *) &float_value_one ) )	{ g = 1.0; }
 				if ( *( ( int *) &b ) > *( ( int *) &float_value_one ) )	{ b = 1.0; }
 				if ( *( ( int *) &s ) > *( ( int *) &float_value_one ) )	{ s = 1.0; }
-		
+
 				asm_convert_float_to_int ( ( r * 255 ), &ir );
 				asm_convert_float_to_int ( ( g * 255 ), &ig );
 				asm_convert_float_to_int ( ( b * 255 ), &ib );
-		
+
 				result_normals[point_index].r = ir;
 				result_normals[point_index].g = ig;
 				result_normals[point_index].b = ib;
 				result_normals[point_index].alpha = current_object_3d_dissolve_value;
 				result_normals[point_index].specular = s;
-	
+
 				point_list++;
 			}
 		}
 		else
 		{
-	
+
 			for ( count = number_of_points; count > 0; count-- )
 			{
-		
+
 				float
 					r,
 					g,
 					b,
 					specular;
-		
+
 				int
 					ir,
 					ig,
 					ib;
-		
+
 				light_3d_source
 					*this_light;
-		
+
 				//
 				// Set the light levels
 				//
-		
+
 				r = ambient_3d_light.colour.red;
 				g = ambient_3d_light.colour.green;
 				b = ambient_3d_light.colour.blue;
-		
+
 				specular = 0;
-	
+
 				point_index = point_list->point;
-		
+
 				generate_object_3d_point_normal ( &normals[point_index], &normal );
 
 				this_light = lights;
-		
+
 				while ( this_light )
 				{
-		
+
 					float
 						temp_intensity;
-		
+
 					//
 					// Calculate diffuse colour intensities
 					//
-		
+
 					temp_intensity = normal.x * this_light->lx + normal.y * this_light->ly + normal.z * this_light->lz;
 //					temp_intensity *= 1.0 / 32767.0;
-		
+
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
-		
+
 						temp_intensity *= temp_intensity;
-		
+
 						r += temp_intensity * this_light->colour.red;
 						g += temp_intensity * this_light->colour.green;
 						b += temp_intensity * this_light->colour.blue;
 					}
-		
+
 					//
 					// Calculate specular colour intensities
 					//
-		
+
 					temp_intensity = normal.x * this_light->highlight_vector.x +
 											normal.y * this_light->highlight_vector.y +
 											normal.z * this_light->highlight_vector.z;
-	
+
 //					temp_intensity *= 1.0 / 32767.0;
-		
+
 					if ( *( ( int *) &temp_intensity ) > *( ( int *) &float_value_zero ) )
 					{
-		
+
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
 						temp_intensity *= temp_intensity;
-		
+
 						specular += temp_intensity * this_light->intensity;
 					}
-		
+
 					this_light = this_light->succ;
 				}
-		
+
 				if ( *( ( int *) &r ) > *( ( int *) &float_value_one ) )	{ r = 1.0; }
 				if ( *( ( int *) &g ) > *( ( int *) &float_value_one ) )	{ g = 1.0; }
 				if ( *( ( int *) &b ) > *( ( int *) &float_value_one ) )	{ b = 1.0; }
 				if ( *( ( int *) &specular ) > *( ( int *) &float_value_one ) )	{ specular = 1.0; }
-		
+
 				asm_convert_float_to_int ( ( r * 255 ), &ir );
 				asm_convert_float_to_int ( ( g * 255 ), &ig );
 				asm_convert_float_to_int ( ( b * 255 ), &ib );
-		
+
 				result_normals[point_index].r = ir;
 				result_normals[point_index].g = ig;
 				result_normals[point_index].b = ib;
 				result_normals[point_index].alpha = current_object_3d_dissolve_value;
 				result_normals[point_index].specular = specular;
-	
+
 				point_list++;
 			}
 		}

@@ -399,7 +399,7 @@ void insert_z_sorted_3d_face ( object_3d_face *this_face, int z, int surface, in
 	new_list_item->gouraud_point_index = gouraud_index;
 	new_list_item->face_normal_index = face_normal_index;
 	new_list_item->texture_point_index = texture_index;
-	new_list_item->face = this_face;
+	new_list_item->face = this_surface->polygons ? this_face : NULL;
 	new_list_item->object_base = this_object_3d_info;
 
 	if ( this_surface->detail )
