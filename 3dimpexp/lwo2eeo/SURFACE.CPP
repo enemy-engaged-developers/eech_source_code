@@ -469,21 +469,18 @@ struct RSurface
        }
      }
     else
-     if (dvm)
+     if (vm)
       {
-       for (unsigned j = 0; j < !dvm->mapping; j++)
-        if (polys[i].index == dvm->mapping[j].poly)
-         for (unsigned k = 0; k < !polys[i].points; k++)
-          if (polys[i].points[k].p.index == dvm->mapping[j].vert)
-           (polys[i].points[k].*tp).Set(&dvm->mapping[j].value[0]);
-      }
-     else
-      if (vm)
-       {
-        for (unsigned j = 0; j < !vm->mapping; j++)
-         for (unsigned k = 0; k < !polys[i].points; k++)
-          if (polys[i].points[k].p.index == vm->mapping[j].vert)
-           (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
+       for (unsigned j = 0; j < !vm->mapping; j++)
+        for (unsigned k = 0; k < !polys[i].points; k++)
+         if (polys[i].points[k].p.index == vm->mapping[j].vert)
+          (polys[i].points[k].*tp).Set(&vm->mapping[j].value[0]);
+       if (dvm)
+        for (unsigned j = 0; j < !dvm->mapping; j++)
+         if (polys[i].index == dvm->mapping[j].poly)
+          for (unsigned k = 0; k < !polys[i].points; k++)
+           if (polys[i].points[k].p.index == dvm->mapping[j].vert)
+            (polys[i].points[k].*tp).Set(&dvm->mapping[j].value[0]);
        }
       else
        {
