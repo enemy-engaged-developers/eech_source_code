@@ -761,7 +761,7 @@ struct Comment : public SurfaceAttribute
  }
  void Print ( void )
  {
-  printf ( " Subchunk %s comment '%s'\n", &comment );
+  printf ( " Subchunk %s comment '%s'\n", &tag, &comment );
  }
 };
 
