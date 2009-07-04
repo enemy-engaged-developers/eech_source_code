@@ -32,19 +32,20 @@ class OBJECT_3D : private Convert
       for (unsigned j = 0; j < !rs[i].polys; j++)
        {
         number_of_point_references += !rs[i].polys[j].points;
-        if (rs[i].smoothed)
-         {
-          for (unsigned k = 0; k < !rs[i].polys[j].points; k++)
-           {
-            RNormal norm;
-            rs[i].points[rs[i].polys[j].points[k].index].normal.SetTo(norm);
-            AddPoint(normals, norm);
-            rs[i].polys[j].points[k].normal.index = norm.index;
-           }
-         }
-        else
+        if (!rs[i].smoothed)
          AddPoint(normals, rs[i].polys[j].norm);
        }
+
+       if (rs[i].smoothed)
+        {
+         for (unsigned j = 0; j < !rs[i].points; j++)
+          {
+           RNormal norm;
+           rs[i].points[j].normal.SetTo(norm);
+           AddPoint(normals, norm);
+           rs[i].points[j].normal.index = norm.index;
+          }
+		}
      }
     else
      number_of_point_references += 2 * !rs[i].polys;

@@ -116,7 +116,7 @@ struct RNormal
   if (!x && !z)
    {
     _heading = 0;
-    _pitch = y < 0 ? M_PI / 2 : - M_PI / 2;
+    _pitch = y > 0 ? M_PI / 2 : - M_PI / 2;
    }
   else
    if (!z)
@@ -127,14 +127,26 @@ struct RNormal
    else
     if (!x)
      {
-      _pitch = atan2(y, fabs(z));
       _heading = z > 0 ? 0 : - M_PI;
+      _pitch = atan2(y, fabs(z));
      }
     else
      {
       _pitch = atan2(y, sqrt((double)x * x + (double)z * z));
       _heading = atan2(x, z);
      }
+
+  {
+   double xd, yd, zd;
+   xd = sin(_heading) * cos(_pitch);
+   yd = sin(_pitch);
+   zd = cos(_heading) * cos(_pitch);
+   double an = (x * xd + y * yd + z * zd) /
+    sqrt((xd * xd + yd * yd + zd * zd) *
+     ((double)x * x + (double)y * y + (double)z * z));
+   if (an < cos(3 * M_PI / 180))
+    error("Invalid normal vector");
+  }
 
   double _pitch_ = _pitch;
   _pitch_ += M_PI / 2;
@@ -163,13 +175,9 @@ struct RANormal
 
  void operator +=(const RNormal& n)
  {
-  x += cos(n._heading) * cos(n._pitch);
-  y += sin(n._heading) * cos(n._pitch);
-  z += sin(n._pitch);
-  float d = sqrt(x * x + y * y + z * z);
-  x /= d;
-  y /= d;
-  z /= d;
+  x += sin(n._heading) * cos(n._pitch);
+  y += sin(n._pitch);
+  z += cos(n._heading) * cos(n._pitch);
  }
 
  int SetTo(RNormal& normal)
