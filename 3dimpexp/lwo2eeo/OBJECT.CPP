@@ -37,7 +37,7 @@ class OBJECT_3D : private Convert
           for (unsigned k = 0; k < !rs[i].polys[j].points; k++)
            {
             RNormal norm;
-            rs[i].polys[j].points[k].normal.SetTo(norm);
+            rs[i].points[rs[i].polys[j].points[k].index].normal.SetTo(norm);
             AddPoint(normals, norm);
             rs[i].polys[j].points[k].normal.index = norm.index;
            }
