@@ -142,11 +142,12 @@ const char
 
 int initialise_event_system (void)
 {
-	mutex = CreateMutex(NULL, FALSE, "EEEvent");
+	mutex = CreateMutex ( NULL, FALSE, NULL );
+	ASSERT ( mutex );
 
-	event_input = 0;
+	event_input = 1;
 
-	event_output = 0;
+	event_output = 1;
 
 	event_list_size = 0;
 
@@ -238,11 +239,11 @@ void reset_event_key (int dik_code)
 
 void create_joystick_event ( int device_index, int button, enum BUTTON_STATES state )
 {
-	WaitForSingleObject(mutex, 0);
+	WaitForSingleObject ( mutex, INFINITE );
 
 	if ( event_list_size == MAX_NUMBER_EVENTS )
 	{
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return;
 	}
@@ -266,7 +267,7 @@ void create_joystick_event ( int device_index, int button, enum BUTTON_STATES st
 
 	event_list_size++;
 
-	ReleaseMutex(mutex);
+	ReleaseMutex ( mutex );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,11 +276,11 @@ void create_joystick_event ( int device_index, int button, enum BUTTON_STATES st
 
 void create_key_event ( int key, enum KEY_STATES state )
 {
-	WaitForSingleObject(mutex, 0);
+	WaitForSingleObject ( mutex, INFINITE );
 
 	if ( event_list_size == MAX_NUMBER_EVENTS )
 	{
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return;
 	}
@@ -334,7 +335,7 @@ void create_key_event ( int key, enum KEY_STATES state )
 
 	event_list_size++;
 
-	ReleaseMutex(mutex);
+	ReleaseMutex ( mutex );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,11 +344,11 @@ void create_key_event ( int key, enum KEY_STATES state )
 
 void create_mouse_button_event ( enum DEVICE_EVENTS button, enum BUTTON_STATES state )
 {
-	WaitForSingleObject(mutex, 0);
+	WaitForSingleObject ( mutex, INFINITE );
 
 	if ( event_list_size == MAX_NUMBER_EVENTS )
 	{
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return;
 	}
@@ -370,7 +371,7 @@ void create_mouse_button_event ( enum DEVICE_EVENTS button, enum BUTTON_STATES s
 
 	event_list_size++;
 
-	ReleaseMutex(mutex);
+	ReleaseMutex ( mutex );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -382,11 +383,11 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 	int
 		last_event_index;
 
-	WaitForSingleObject(mutex, 0);
+	WaitForSingleObject ( mutex, INFINITE );
 
 	if ( event_list_size == MAX_NUMBER_EVENTS )
 	{
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return;
 	}
@@ -396,7 +397,7 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 	if ( last_event_index < 0 )
 	{
 
-		last_event_index = MAX_NUMBER_EVENTS;
+		last_event_index = MAX_NUMBER_EVENTS - 1;
 	}
 
 	if ( ( event_list_size ) && ( event_list[last_event_index].type == EVENT_TYPE_MOUSE_MOVE ) )
@@ -428,7 +429,7 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 		event_list_size++;
 	}
 
-	ReleaseMutex(mutex);
+	ReleaseMutex ( mutex );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -437,9 +438,9 @@ void create_mouse_move_event ( int dx, int dy, int dz )
 
 int get_event ( event *ev )
 {
-	WaitForSingleObject(mutex, 0);
-
 	ASSERT ( ev );
+
+	WaitForSingleObject ( mutex, INFINITE );
 
 	if ( event_list_size )
 	{
@@ -456,13 +457,13 @@ int get_event ( event *ev )
 
 		event_list_size --;
 
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return ( TRUE );
 	}
 	else
 	{
-		ReleaseMutex(mutex);
+		ReleaseMutex ( mutex );
 
 		return ( FALSE );
 	}
