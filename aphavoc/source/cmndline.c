@@ -287,6 +287,7 @@ float
 	command_line_g_force_head_movment_modifier					= 0.0,
 	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0,	// VJ 050126 hud mod: size
+	global_mfd_size								= 1.0,
   command_line_external_sounds_volume			= 1.0; //ataribaby 28/12/2008 volume for external sounds when in cockpit
 
 char

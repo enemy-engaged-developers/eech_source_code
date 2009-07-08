@@ -188,9 +188,20 @@ enum HUD_COLOURS
 
 typedef enum HUD_COLOURS hud_colours;
 
+enum HUD_CODES
+{
+	HUD_CODES_COLOUR,
+	HUD_CODES_ALPHA,
+	HUD_CODES_SIZE,
+	HUD_CODES_MFD,
+	HUD_CODES_LAST
+};
+
+typedef enum HUD_CODES hud_codes;
+
 //VJ 060211 save hud info to eech.ini, for every gunship
 //declared in eechini.c
-extern int hud_code[8][3];
+extern int hud_code[8][HUD_CODES_LAST];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

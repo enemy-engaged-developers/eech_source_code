@@ -950,21 +950,36 @@ static void toggle_unscaled_displays_event (event *ev)
 {
 	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
 	//VJ 050205, 050210, 060913 hud scaling mod
-    global_hud_size2 += 0.1;
-    if (global_hud_size2 > 1.3)
-      global_hud_size2 = 0.7;
-   	
+	global_hud_size2 += 0.1;
+	if (global_hud_size2 > 1.41)
+		global_hud_size2 = 0.7;
+
 	//VJ 060211 hud_code: store hud info
 	hud_code[(int)get_global_gunship_type ()][2] = (int)(global_hud_size2*10)+1;
 
-   if (global_hud_size2 <= 1.0)
-   {
-   	set_global_unscaled_displays (TRUE);
-   }	
-   else
-   {
-   	set_global_unscaled_displays (FALSE);
-	}	   	
+	set_global_unscaled_displays (global_hud_size2 <= 1.0 ? TRUE : FALSE);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void set_next_mfd_size_event (event *ev)
+{
+	gunship_types type = get_global_gunship_type();
+
+	if (type >= (sizeof(hud_code) / sizeof(hud_code[0])))
+	{
+		type = GUNSHIP_TYPE_AH64A;
+	}
+
+	global_mfd_size += 0.05;
+	if (global_mfd_size >= 1.2)
+	{
+		global_mfd_size = 0.4;
+	}
+
+	hud_code[(int)type][HUD_CODES_MFD] = ( int ) ( global_mfd_size * 20.0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2215,6 +2230,7 @@ void set_view_mode_events (void)
 
 	set_event (DIK_F11, MODIFIER_NONE, KEY_STATE_DOWN, camera_auto_edit_event);
 	set_event (DIK_F11, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, cinematic_camera_event);
+	set_event (DIK_F11, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, set_next_mfd_size_event);
 
 	////////////////////////////////////////
 	//

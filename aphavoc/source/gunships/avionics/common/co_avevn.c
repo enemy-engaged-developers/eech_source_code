@@ -93,7 +93,7 @@ static void set_next_hud_colour_event (event *ev)
 	set_next_hud_colour ();
 
 	//VJ 060211 hud_code: store hud info
-	hud_code[(int)type][0] = get_global_hud_colour();
+	hud_code[(int)type][HUD_CODES_COLOUR] = get_global_hud_colour();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ static void set_next_hud_alpha_event (event *ev)
 		global_hud_alpha = 0;
 		
 	//VJ 060211 hud_code: store hud info
-	hud_code[(int)type][1] = global_hud_alpha;
+	hud_code[(int)type][HUD_CODES_ALPHA] = global_hud_alpha;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

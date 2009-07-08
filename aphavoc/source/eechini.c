@@ -73,7 +73,7 @@
 #define EECH_INI "EECH.INI"
 
 //VJ 060211 save hud info to eech.ini
-int hud_code[8][3];
+int hud_code[8][HUD_CODES_LAST];
 
 #define DEFAULT_GWUT_FILE "gwut1120.csv"
 
@@ -164,12 +164,55 @@ static void get_position ( const struct config_option *option, char *value )
 
 static void set_hud_code ( const struct config_option *option, const char *value )
 {
-	sscanf ( value, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", &hud_code[0][0],&hud_code[0][1],&hud_code[0][2], &hud_code[1][0],&hud_code[1][1],&hud_code[1][2], &hud_code[2][0],&hud_code[2][1],&hud_code[2][2], &hud_code[3][0],&hud_code[3][1],&hud_code[3][2]);
+	int
+		i, j;
+	const char
+		*cur;
+
+	if ( *value != 'A' )
+	{
+	 	sscanf ( value, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", &hud_code[0][0],&hud_code[0][1],&hud_code[0][2], &hud_code[1][0],&hud_code[1][1],&hud_code[1][2], &hud_code[2][0],&hud_code[2][1],&hud_code[2][2], &hud_code[3][0],&hud_code[3][1],&hud_code[3][2]);
+		return;
+	}
+
+	cur = value + 1;
+	for ( i = 0; i < sizeof ( hud_code ) / sizeof ( *hud_code ) ; i++ )
+	{
+		for ( j = 0; j < sizeof ( *hud_code ) / sizeof ( **hud_code ) ; j++ )
+		{
+			const char
+				*next;
+			for ( next = cur + 1; isdigit ( *next ); next++ );
+			if ( *next == ';' )
+			{
+				cur = next + 1;
+				break;
+			}
+			if ( !sscanf ( cur, "%d", &hud_code[i][j] ) || !*next )
+			{
+				return;
+			}
+			cur = next + 1;
+		}
+	}
 }
 
 static void get_hud_code ( const struct config_option *option, char *value )
 {
-	sprintf ( value, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", hud_code[0][0],hud_code[0][1],hud_code[0][2], hud_code[1][0],hud_code[1][1],hud_code[1][2], hud_code[2][0],hud_code[2][1],hud_code[2][2], hud_code[3][0],hud_code[3][1],hud_code[3][2]);
+	int
+		i, j;
+
+	strcpy ( value, "A" );
+	for ( i = 0; i < sizeof ( hud_code ) / sizeof ( *hud_code ) ; i++ )
+	{
+		for ( j = 0; j < sizeof ( *hud_code ) / sizeof ( **hud_code ) ; j++ )
+		{
+			char buf[128];
+			sprintf ( buf, "%s%d", j ? "," : "", hud_code[i][j] );
+			strcat ( value, buf );
+		}
+		strcat ( value, ";" );
+	}
 }
 
 static void set_axis ( const struct config_option *option, const char *value )
@@ -963,57 +1006,46 @@ static void wide_cockpit_initialize(void)
 //LEAVE THESE:  even if they are not in eech.ini they need to be initialized before a wut file is read
 static void initialize_radar_ranges(void)
 {
-		radar_range_apache[0] = 500;
-		radar_range_apache[1] = 1000;
-		radar_range_apache[2] = 2000;
-		radar_range_apache[3] = 4000;
-		radar_range_apache[4] = 8000;
+	radar_range_apache[0] = 500;
+	radar_range_apache[1] = 1000;
+	radar_range_apache[2] = 2000;
+	radar_range_apache[3] = 4000;
+	radar_range_apache[4] = 8000;
 
-		radar_range_comanche[0] = 500;
-		radar_range_comanche[1] = 1000;
-		radar_range_comanche[2] = 2000;
-		radar_range_comanche[3] = 4000;
-		radar_range_comanche[4] = 8000;
+	radar_range_comanche[0] = 500;
+	radar_range_comanche[1] = 1000;
+	radar_range_comanche[2] = 2000;
+	radar_range_comanche[3] = 4000;
+	radar_range_comanche[4] = 8000;
 
-		radar_range_blackhawk[0] = 500;
-		radar_range_blackhawk[1] = 1000;
-		radar_range_blackhawk[2] = 2000;
-		radar_range_blackhawk[3] = 4000;
-		radar_range_blackhawk[4] = 8000;
+	radar_range_blackhawk[0] = 500;
+	radar_range_blackhawk[1] = 1000;
+	radar_range_blackhawk[2] = 2000;
+	radar_range_blackhawk[3] = 4000;
+	radar_range_blackhawk[4] = 8000;
 
-		radar_range_havoc[0] = 1000;
-		radar_range_havoc[1] = 2000;
-		radar_range_havoc[2] = 4000;
-		radar_range_havoc[3] = 6000;
+	radar_range_havoc[0] = 1000;
+	radar_range_havoc[1] = 2000;
+	radar_range_havoc[2] = 4000;
+	radar_range_havoc[3] = 6000;
 
-		radar_range_hokum[0] = 1000;
-		radar_range_hokum[1] = 2000;
-		radar_range_hokum[2] = 4000;
-		radar_range_hokum[3] = 6000;
-		radar_range_hokum[4] = 10000;
+	radar_range_hokum[0] = 1000;
+	radar_range_hokum[1] = 2000;
+	radar_range_hokum[2] = 4000;
+	radar_range_hokum[3] = 6000;
+	radar_range_hokum[4] = 10000;
 
-		radar_range_hind[0] = 1000;
-		radar_range_hind[1] = 2000;
-		radar_range_hind[2] = 4000;
-		radar_range_hind[3] = 6000;
+	radar_range_hind[0] = 1000;
+	radar_range_hind[1] = 2000;
+	radar_range_hind[2] = 4000;
+	radar_range_hind[3] = 6000;
 
-		// GCsDriver  08-12-2007
-		radar_range_default[0] = 500;
-		radar_range_default[1] = 1000;
-		radar_range_default[2] = 2000;
-		radar_range_default[3] = 4000;
-		radar_range_default[4] = 8000;
-
-		//VJ 060212 hud info mod
-		memset(	hud_code, 0, 8*3*sizeof(int));
-		hud_code[0][2] = 10;
-		hud_code[1][2] = 10;
-		hud_code[2][2] = 10;
-		hud_code[3][2] = 10;
-		hud_code[4][2] = 10;
-		hud_code[5][2] = 10;
-		hud_code[6][2] = 10;
-		hud_code[7][2] = 10;
+	// GCsDriver  08-12-2007
+	radar_range_default[0] = 500;
+	radar_range_default[1] = 1000;
+	radar_range_default[2] = 2000;
+	radar_range_default[3] = 4000;
+	radar_range_default[4] = 8000;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1022,12 +1054,23 @@ static void initialize_radar_ranges(void)
 
 void initialize_options ( void )
 {
+	int
+		i;
+
 //VJ 030511, get wideview cockpit mod defaults in aphavoc\source\gunships\views\vm_event.c
 	wide_cockpit_initialize();
 
 //VJ 030807 initialize radar ranges, do it here because they need initializing even if eech.ini doesn't work
 //VJ 050125 changed back: this should always be done
 	initialize_radar_ranges();
+
+	//VJ 060212 hud info mod
+	memset ( hud_code, 0, sizeof ( hud_code ) );
+	for ( i = 0; i < sizeof ( hud_code ) / sizeof ( *hud_code ) ; i++ )
+	{
+		hud_code[i][HUD_CODES_SIZE] = 10;
+		hud_code[i][HUD_CODES_MFD] = 20;
+	}
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 

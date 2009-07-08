@@ -107,20 +107,20 @@ void initialise_common_hud (void)
 	
 	if (gt == 4 || gt == 6) gt = 0;
 	if (gt == 5 || gt == 7) gt = 1;
-	debug_log("hud colour %d %d",gt,hud_code[gt][0]);
-	set_global_hud_colour(hud_code[gt][0]);
-	global_hud_alpha = hud_code[gt][1];
-	global_hud_size2 = 0.1* (float) hud_code[gt][2];
-   if (global_hud_size2 <= 1.0)
-   {
-   	set_global_unscaled_displays (TRUE);
-   }	
-   else
-   {
-   	set_global_unscaled_displays (FALSE);
-	}	   	
+	debug_log("hud colour %d %d",gt,hud_code[gt][HUD_CODES_COLOUR]);
+	set_global_hud_colour(hud_code[gt][HUD_CODES_COLOUR]);
+	global_hud_alpha = hud_code[gt][HUD_CODES_ALPHA];
+	global_hud_size2 = 0.1* (float) hud_code[gt][HUD_CODES_SIZE];
+	if (global_hud_size2 <= 1.0)
+	{
+		set_global_unscaled_displays (TRUE);
+	}
+	else
+	{
+		set_global_unscaled_displays (FALSE);
+	}
 	//<=== VJ 060212 save hud info mod 
-	
+	global_mfd_size = hud_code[gt][HUD_CODES_MFD] / 20.0;
 
 	display_hud_layout_grid = FALSE;
 
