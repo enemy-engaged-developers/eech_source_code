@@ -4525,7 +4525,7 @@ int add_new_texture(char* texture_name)
 		{
 			debug_fatal ( "Clash between new camo texture and existing non-camo one '%s'", name );
 		}
-		if ( texture_index <= TEXTURE_INDEX_LAST_DEFAULT_INDEX && !camo && system_texture_info[texture_index].flags.number_of_camoflage_textures )
+		if ( texture_index > TEXTURE_INDEX_LAST_DEFAULT_INDEX && !camo && system_texture_info[texture_index].flags.number_of_camoflage_textures )
 		{
 			debug_fatal ( "Clash between new non-camo texture and existing camo one '%s'", name );
 		}
