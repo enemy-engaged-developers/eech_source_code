@@ -262,7 +262,8 @@ unsigned char
 
 #define BITMAP_ID		(0x4D42)
 
-enum FILE_TYPE {
+enum FILE_TYPE
+{
 	TYPE_ORIGINAL,
 	TYPE_BMP,
 	TYPE_DDS,
@@ -270,7 +271,8 @@ enum FILE_TYPE {
 
 typedef enum FILE_TYPE file_type;
 
-enum CAMO_TYPE {
+enum CAMO_TYPE
+{
 	CAMO_REGULAR,
 	CAMO_WINTER,
 	CAMO_DESERT,
@@ -278,7 +280,8 @@ enum CAMO_TYPE {
 
 typedef enum CAMO_TYPE camo_type;
 
-struct OVERRIDENAME {
+struct OVERRIDENAME
+{
 	char name[64]; //texture name
 	char path[260];  //full path+file name on disk
 	file_type type;
@@ -332,8 +335,8 @@ void convert_multiple_alpha_32bit_texture_map_data ( unsigned char *data, int wi
 
 //VJ 050814 cleaned up differences between dds and bmp download
 static int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_texture_filename );
-static int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname );
-void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES]);
+static int initialize_texture_override_names ( const char *mapname );
+void load_texture_override ( void );
 static void clear_texture_override_names ( void );
 static screen *load_dds_file_screen (const char *full_override_texture_filename, int step, float gamma_adjustment);
 static screen *load_bmp_file_screen (const char *full_override_texture_filename);
@@ -375,7 +378,13 @@ void set_texture_camoflage ( int set )
 	{
 		if ( system_texture_info[count].flags.number_of_camoflage_textures )
 		{
-			system_textures[count] = system_texture_info[count + set].texture_screen;
+			screen
+				*texture;
+			texture = system_texture_info[count + set].texture_screen;
+			if ( texture )
+			{
+				system_textures[count] = texture;
+			}
 		}
 	}
 }
@@ -500,10 +509,6 @@ int get_system_texture_index ( const char *name )
 			!strcmp ( system_texture_names[entry->texture_index], real_name ) &&
 			!system_texture_info[entry->texture_index].flags.camoflage_texture )
 		{
-			if ( camo && !system_texture_info[entry->texture_index].flags.number_of_camoflage_textures )
-			{
-				debug_log ( "Clash between new camo texture and existing non-camo one '%s'", real_name );
-			}
 			return ( entry->texture_index );
 		}
 	}
@@ -1123,14 +1128,6 @@ BOOL load_texturemap_data ( const char *path )
 
 	// adjust for texture indices added since EECH was released (i.e. not in the big texures-file)
 	number_of_system_textures += TEXTURE_INDEX_LAST - TEXTURE_INDEX_LAST_DEFAULT_INDEX - 1;
-
-	//VJ 050619 make a backup of the original pointers to the screens
-	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
-	for (count = 0; count < number_of_system_textures; count++)
-	{
-		backup_system_textures[count] = system_textures[count];
-		backup_system_texture_info[count] = system_texture_info[count];
-	}
 
 	return ( TRUE );
 }
@@ -2310,9 +2307,8 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 
 //VJ 050619 this function assumes that the name has no path information
 //and is the filename with extention only, which it should be to work with the rest
-int match_system_texture_name ( const char *name )
+static int match_system_texture_name ( const char *name, camo_type* camo )
 {
-
 	char
 		real_name[128];
 
@@ -2321,7 +2317,7 @@ int match_system_texture_name ( const char *name )
 		*ptr;
 
 	int
-		index, special_camo = 0;
+		index;
 
 	ptr = real_name;
 	// convert to uppercase and strip filename extention
@@ -2344,41 +2340,28 @@ int match_system_texture_name ( const char *name )
 		*p = '\0';
 	}
 
-	switch ( get_global_season() )
+	*camo = CAMO_REGULAR;
+
+	//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
+	if ((p = strstr(real_name, DESERTIND_2)))
 	{
-		case SESSION_SEASON_DESERT:
-		{
-			//VJ 04/12/12 increase count by 1 assuming the _DESERT of -D indicates a desert camoflage texture
-			if ((p = strstr(real_name, DESERTIND_2)))
-			{
-				//check for -D
-				*p = '\0';
-				special_camo = 1;
-			}
-			else if ((p = strstr(real_name, DESERTIND_1)))
-			{
-				//check for _DESERT
-				if (strstr(real_name, "BREEZE_BLOCKS_DESERT_CAMO"))
-				{
-					// this is the only name with _DESERT_ inside its name, must be an overview
-					// treat as an exception
-					 return (385);
-				}
-				*p = '\0';
-				special_camo = 1;
-			}
-			break;
-		}
-		case SESSION_SEASON_WINTER:
+		//check for -D
+		*p = '\0';
+		*camo = CAMO_DESERT;
+	}
+	else if ((p = strstr(real_name, DESERTIND_3)))
+	{
+		if (get_global_season() == SESSION_SEASON_WINTER)
 		{
 			//VJ 051011 add winter textures
-			if ((p = strstr(real_name, DESERTIND_3)))
-			{
-				//check for -W
-				*p = '\0';
-				special_camo = 0;
-			}
-			break;
+			//check for -W
+			*p = '\0';
+			*camo = CAMO_WINTER;
+		}
+		else
+		{
+			// Don't load winter textures if season differs from WINTER
+			return -1;
 		}
 	}
 
@@ -2389,7 +2372,7 @@ int match_system_texture_name ( const char *name )
 	}
 
 	system_textures_referenced[index] = TRUE;
-	return index + special_camo;
+	return index + (*camo == CAMO_DESERT ? 1 : 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3251,7 +3234,8 @@ void clear_texture_override_names ( void )
 {
 	int count;
 
-	for ( count = 0; count < MAX_TEXTURES; count++ ){
+	for ( count = 0; count < MAX_TEXTURES; count++ )
+	{
 		system_texture_override_names[count].name[0] = '\0';
 		system_texture_override_names[count].path[0] = '\0';
 		system_texture_override_names[count].type = TYPE_ORIGINAL;
@@ -3268,59 +3252,67 @@ void clear_texture_override_names ( void )
 // and puts them in the override names structure.
 // NOTE: dds files take preference over bmp files.
 // NOTE: if a name already exists from previous calls to this function they are overwritten
-int initialize_texture_override_names ( overridename system_texture_override_names[MAX_TEXTURES], const char *mapname )
+int initialize_texture_override_names ( const char *mapname )
 {
 	directory_file_list
 		*directory_listing;
 
 	int
-		valid_file, retrieved_index,
-		index = 0,
 		count = 0;
 
-	unsigned char
-		directory_search_path[260];
 	char
+		directory_search_path[260],
 		filename[260];
 
+	const int
+		is_terrain_directory = strnicmp(mapname, "terrain", 7) == 0;
+
+	const camo_type
+		overrider = get_global_season() == SESSION_SEASON_WINTER ? CAMO_WINTER : CAMO_REGULAR,
+		overridee =  get_global_season() == SESSION_SEASON_WINTER ? CAMO_REGULAR : CAMO_WINTER;
+
 	snprintf (directory_search_path, sizeof(directory_search_path), "%s\\%s\\*", TEXTURE_OVERRIDE_DIRECTORY, mapname);
-
 	directory_listing = get_first_directory_file ( directory_search_path );
+	if ( !directory_listing )
+		return 0;
 
-	if ( directory_listing )
+	do
 	{
-		int is_terrain_directory = strnicmp(mapname, "terrain", 7) == 0;
-		valid_file = TRUE;
-
-		while ( valid_file )
+		switch ( get_directory_file_type ( directory_listing ) )
 		{
-			if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_DIRECTORY)
+		case DIRECTORY_FILE_TYPE_DIRECTORY:
 			{
-			 	if (!is_terrain_directory)
-			 	{
-					const char *this_entry = get_directory_file_filename ( directory_listing );
+				if (!is_terrain_directory)
+				{
+					const char
+						*this_entry = get_directory_file_filename ( directory_listing );
 
 					if (*this_entry == '.')
 					{
-						valid_file = get_next_directory_file ( directory_listing );
-						continue;
+						break;
 					}
 
 					snprintf(filename, sizeof(filename), "%s\\%s", mapname, this_entry);
-
 					strupr(filename);
 
 					#if DEBUG_MODULE
 					debug_log("Entering directory %s", filename);
 					#endif
 
-					initialize_texture_override_names(system_texture_override_names, filename);
-			 	}
+					count += initialize_texture_override_names(filename);
+				}
+				break;
 			}
-			else if ( get_directory_file_type ( directory_listing ) == DIRECTORY_FILE_TYPE_FILE )
+		case DIRECTORY_FILE_TYPE_FILE:
 			{
-				const char* extension;
-				file_type type = TYPE_ORIGINAL;
+				int
+					index;
+				camo_type
+					camo;
+				const char*
+					extension;
+				file_type
+					type = TYPE_ORIGINAL;
 
 				strcpy(filename, get_directory_file_filename ( directory_listing ));
 				strupr(filename);
@@ -3329,8 +3321,7 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 				if (!extension)
 				{
 					debug_log("No extension for file: %s", filename);
-					valid_file = get_next_directory_file ( directory_listing );
-					continue;
+					break;
 				}
 
 				if (strcmp(extension, ".BMP") == 0)
@@ -3340,59 +3331,36 @@ int initialize_texture_override_names ( overridename system_texture_override_nam
 				else
 				{
 					debug_log("Texture file not BMP or DDS: %s", filename);
-					valid_file = get_next_directory_file ( directory_listing );
 					continue;
 				}
 
-				retrieved_index = match_system_texture_name ( filename );
+				index = match_system_texture_name ( filename, &camo );
 
-				if (retrieved_index >= 0 && retrieved_index < MAX_TEXTURES){
-					index = retrieved_index;
+				if (index >= 0 && index < MAX_TEXTURES)
+				{
+					if ( system_texture_override_names[index].camo == overrider && camo == overridee )
+						break;
 
-//VJ 051011 add winter textures ==>
-					//VJ 051010 force winter textures
-					if ((get_global_season() == SESSION_SEASON_WINTER) && strstr(filename,DESERTIND_3))
-					{
-							system_texture_override_names[index].camo = CAMO_WINTER;
-							sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-							strupr(system_texture_override_names[index].path);
-							strcpy(system_texture_override_names[index].name, filename);
-							system_texture_override_names[index].type = type;
-							#if DEBUG_MODULE
-							debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-							#endif
-					}
-					//VJ 051010 force desert textures
-					if ((get_global_season() == SESSION_SEASON_DESERT) && strstr(filename,DESERTIND_2))
-					{
-						system_texture_override_names[index].camo = CAMO_DESERT;
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-						strupr(system_texture_override_names[index].path);
-						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = type;
-						#if DEBUG_MODULE
-						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-						#endif
-					}
-					//VJ 051010 use normal textures for the rest
-					if (system_texture_override_names[index].camo == CAMO_REGULAR)
-					{
-						sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
-						strupr(system_texture_override_names[index].path);
-						strcpy(system_texture_override_names[index].name, filename);
-						system_texture_override_names[index].type = type;
-						#if DEBUG_MODULE
-						debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, retrieved_index );
-						#endif
-					}
-//VJ 051011 <== add winter textures
+					system_texture_override_names[index].type = type;
+					sprintf(system_texture_override_names[index].path,"%s\\%s\\%s", TEXTURE_OVERRIDE_DIRECTORY, mapname, filename);
+					strupr(system_texture_override_names[index].path);
+					strcpy(system_texture_override_names[index].name, filename);
+					system_texture_override_names[index].camo = camo;
+					#if DEBUG_MODULE
+					debug_log ("++TEXTURE OVERRIDES++ found override file %s %d", filename, index );
+					#endif
 
 					count++;
 				}
+				break;
 			}
-			valid_file = get_next_directory_file ( directory_listing );
+		default:
+			break;
 		}
 	}
+	while ( get_next_directory_file ( directory_listing ) );
+
+	destroy_directory_file_list ( directory_listing );
 
 	return (count);
 }
@@ -3407,6 +3375,7 @@ void load_warzone_override_textures ( void )
 {
 	char directory_textdir_path[256];
 	int nrtextfound = 0;
+	int count;
 
 	// VJ 051226 NOTE: map_info structure is called from aphavoc\source\ui_menu\sessparm\sparm_sc.c
 	// and main variables are already set (warzone name, number, countours etc.
@@ -3416,15 +3385,15 @@ void load_warzone_override_textures ( void )
 
 	// first seek all textures in common directories
 	//VJ 051024 do not use root directory to search
-	//nrtextfound = initialize_texture_override_names ( system_texture_override_names, "." );
+	//nrtextfound = initialize_texture_override_names ( "." );
 
-	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_GENERAL );
 
-	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_COCKPIT );
 
-	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_CAMO );
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_CAMO );
 
-	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_TERRAIN );
 
 	//VJ 051229 changed the order of reading: first all the official dirs, last the user defined dirs.
 	//Makes more sense, else people make textures but they are not shown
@@ -3450,7 +3419,7 @@ void load_warzone_override_textures ( void )
 		debug_log("=== loading custom info: texture dir:  %s",directory_textdir_path);
 
 		//note: TEXTURE_OVERRIDE_DIRECTORY is concatinated in functions
-		nrtextfound += initialize_texture_override_names ( system_texture_override_names, directory_textdir_path );
+		nrtextfound += initialize_texture_override_names ( directory_textdir_path );
 
 		if (nrtextfound == 0)
 			command_line_texture_colour = 0;
@@ -3498,7 +3467,7 @@ void load_warzone_override_textures ( void )
 				debug_log("=== Looking for additional textures in %s",p);
 
 				// get override texture names in array
-				nrtextfound += initialize_texture_override_names ( system_texture_override_names, p );
+				nrtextfound += initialize_texture_override_names ( p );
 
 			}
 			// get the next specified dir
@@ -3507,15 +3476,23 @@ void load_warzone_override_textures ( void )
 	}
 
 	// Global overrider. For testing mostly
-	nrtextfound += initialize_texture_override_names ( system_texture_override_names, TEXTURE_OVERRIDE_DIRECTORY_TEMP );
+	nrtextfound += initialize_texture_override_names ( TEXTURE_OVERRIDE_DIRECTORY_TEMP );
 
 	debug_log("Nr override textures found %d",nrtextfound);
 
 	//now we have all the names, load the bmp and dds files
 
+	//VJ 050619 make a backup of the original pointers to the screens
+	memset ( backup_system_textures, 0, sizeof ( backup_system_textures ) );
+	for (count = 0; count < number_of_system_textures; count++)
+	{
+		backup_system_textures[count] = system_textures[count];
+		backup_system_texture_info[count] = system_texture_info[count];
+	}
+
 	//VJ 050530 read single bmp files
 	//VJ 050530 read mipmapped dds files
-	load_texture_override ( system_texture_override_names );
+	load_texture_override ();
 
 	//VJ 050820 dynamic water
 	if (global_dynamic_water)
@@ -3695,7 +3672,7 @@ int check_bitmap_header ( BITMAPINFOHEADER bmih, const char *full_override_textu
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void load_texture_override ( overridename system_texture_override_names[MAX_TEXTURES])
+void load_texture_override ( void )
 {
 	const char
 		*full_override_texture_filename;
@@ -3977,17 +3954,17 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 /*
 			if ( width != height )
 			{
-			 	debug_fatal("Only square dds files supported for now: %s",full_override_texture_filename);
+				debug_fatal("Only square dds files supported for now: %s",full_override_texture_filename);
 			}
 */
 		/*			if ( ddsh.dwFlags & DDSD_LINEARSIZE )
 			{
-			 	debug_fatal("Compressed dds files not supported: %s",full_override_texture_filename);
+				debug_fatal("Compressed dds files not supported: %s",full_override_texture_filename);
 			}
 
 			if ( ddsh.ddpfPixelFormat.dwFlags & DDPF_FOURCC )
 			{
-			 	debug_fatal("Only RGB dds files supported: %s",full_override_texture_filename);
+				debug_fatal("Only RGB dds files supported: %s",full_override_texture_filename);
 			}
 */
 		mipmap = ddsh.dwMipMapCount;
@@ -4032,14 +4009,12 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			{
 				for ( x = 0; x < width; x++ )
 				{
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 2] * gamma_adjustment), 255);
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 1] * gamma_adjustment), 255);
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 0] * gamma_adjustment), 255);
-				//add alpha layer if necessary
-				if (nrbyte == 4){
-					 bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 3] = min(255, max(0, buffer[y*width*nrbyte + x*nrbyte + 3]+step));
-				}
-
+					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 0] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 2] * gamma_adjustment), 255);
+					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 1] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 1] * gamma_adjustment), 255);
+					bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 2] = min((int)(buffer[y*width*nrbyte + x*nrbyte + 0] * gamma_adjustment), 255);
+					//add alpha layer if necessary
+					if (nrbyte == 4)
+						bufferswap[(height-y-1)*width*nrbyte + x*nrbyte + 3] = min(255, max(0, buffer[y*width*nrbyte + x*nrbyte + 3]+step));
 				}
 			}
 
@@ -4160,9 +4135,9 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		{
 			for ( x = 0; x < width; x++ )
 			{
-				 bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*3 + x*3 + 2];
-				 bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*3 + x*3 + 1];
-				 bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*3 + x*3 + 0];
+				bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*3 + x*3 + 2];
+				bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*3 + x*3 + 1];
+				bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*3 + x*3 + 0];
 			}
 		}
 	}
@@ -4173,9 +4148,9 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 			for ( x = 0; x < width; x++ )
 			{
 				// ignore alpha channel
-				 bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*4 + x*4 + 2];
-				 bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*4 + x*4 + 1];
-				 bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*4 + x*4 + 0];
+				bufferswap[(height-y-1)*width*3 + x*3 + 0] = buffer[y*width*4 + x*4 + 2];
+				bufferswap[(height-y-1)*width*3 + x*3 + 1] = buffer[y*width*4 + x*4 + 1];
+				bufferswap[(height-y-1)*width*3 + x*3 + 2] = buffer[y*width*4 + x*4 + 0];
 //				 bufferswap[(height-y-1)*width*4 + x*4 + 3] = buffer[y*width*4 + x*4 + 3];
 			}
 		}
@@ -4526,49 +4501,63 @@ int add_new_texture(char* texture_name)
 		offset,
 		camo,
 		texture_index;
-	
+
 	char
-		*name;
+		name[128];
 
 	texture_flags
 		*flags;
 
-	texture_index = get_system_texture_index ( texture_name );
-	if ( texture_index != -1 )
-	{
-		return texture_index;
-	}
-
-	if ( number_of_system_textures >= MAX_TEXTURES )
-	{
-		return 0;
-	}
-
-	name = system_texture_names[number_of_system_textures];
 	strncpy ( name, texture_name, 127 );
 	name[127] = '\0';
 	strupr ( name );
-
 	offset = strlen ( name ) - ( int ) sizeof ( DESERTIND_2 ) + 1;
 	camo = offset > 0 && ( !memcmp ( name + offset, DESERTIND_2, sizeof ( DESERTIND_2 ) ) || !memcmp ( name + offset, DESERTIND_3, sizeof ( DESERTIND_3 ) ) );
 	if ( camo )
 	{
 		name[offset] = '\0';
-		debug_log ( "Adding texture '%s' camo main", name );
+	}
+
+	texture_index = get_system_texture_index ( name );
+	if ( texture_index != -1 )
+	{
+		if ( camo && !system_texture_info[texture_index].flags.number_of_camoflage_textures )
+		{
+			debug_fatal ( "Clash between new camo texture and existing non-camo one '%s'", name );
+		}
+		if ( texture_index <= TEXTURE_INDEX_LAST_DEFAULT_INDEX && !camo && system_texture_info[texture_index].flags.number_of_camoflage_textures )
+		{
+			debug_fatal ( "Clash between new non-camo texture and existing camo one '%s'", name );
+		}
+		return texture_index;
+	}
+
+	if ( number_of_system_textures >= MAX_TEXTURES )
+	{
+		debug_log ( "No available slot for a new texture" );
+		return 0;
+	}
+
+	strcpy ( system_texture_names[number_of_system_textures], name );
+	if ( camo )
+	{
+		debug_log ( "Adding texture %i '%s' camo main", number_of_system_textures, name );
 
 		flags = &system_texture_info[number_of_system_textures].flags;
 		flags->main_texture = 1;
+		flags->number_of_camoflage_textures = 1;
 		add_texture_to_name_hash ( number_of_system_textures++ );
 
 		strcpy ( system_texture_names[number_of_system_textures], name );
 	}
 
-	debug_log ( "Adding texture '%s'", system_texture_names[number_of_system_textures] );
+	debug_log ( "Adding texture %i '%s'", number_of_system_textures, system_texture_names[number_of_system_textures] );
 	flags = &system_texture_info[number_of_system_textures].flags;
+	flags->main_texture = !camo;
 	flags->camoflage_texture = camo;
 	flags->camoflage_index = camo;
 	add_texture_to_name_hash ( number_of_system_textures );
-	return number_of_system_textures++;
+	return number_of_system_textures++ - camo;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

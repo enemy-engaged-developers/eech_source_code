@@ -184,8 +184,6 @@ extern struct SCREEN *get_system_texture_ptr ( int index );
 
 extern int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, enum SCREEN_FORMAT_TYPES type );
 
-extern int match_system_texture_name ( const char *name );
-
 extern const char *get_system_texture_name ( int index );
 
 extern void report_system_texture_stats ( void );
