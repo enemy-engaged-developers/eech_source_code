@@ -11680,31 +11680,20 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 		float
 			scalex,
 			scaley,
-			scales,
 			org_offset;
 
 		scalex = full_screen_width * (1.0 / 640.0);
 		scaley = full_screen_height * (1.0 / 480.0);
-		scales = global_mfd_size * scalex;
 
-		mfd_screen_size = size * scales;
-
+		mfd_screen_size = size * global_mfd_size * scalex;
 		mfd_screen_half_size = mfd_screen_size * 0.5;
 
 		mfd_screen_x_org = x_org * scalex;
 		mfd_screen_y_org = y_org * scaley;
 
 		org_offset = size * scalex * 0.5 - mfd_screen_half_size;
-
-		if (location == MFD_LOCATION_LHS)
-		{
-			mfd_screen_x_org -= org_offset;
-		}
-		else
-		{
-			mfd_screen_x_org += org_offset;
-		}
-		mfd_screen_y_org += org_offset;
+		mfd_screen_x_org += location == MFD_LOCATION_LHS ? -org_offset : org_offset;
+		mfd_screen_y_org += size * scaley * 0.5 - mfd_screen_half_size;
 
 		mfd_screen_x_min = mfd_screen_x_org - mfd_screen_half_size;
 		mfd_screen_y_min = mfd_screen_y_org - mfd_screen_half_size;
