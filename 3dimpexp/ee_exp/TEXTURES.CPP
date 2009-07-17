@@ -155,7 +155,7 @@ class TexturesExporter
        }
 
       if (temp)
-       sprintf(filename, "\\TEXTURES\\%s_%i.TGA", name, temp);
+       sprintf(filename, "\\TEXTURES\\%s@%i.TGA", name, temp);
       else
        sprintf(filename, "\\TEXTURES\\%s.TGA", name);
       save_tga();
