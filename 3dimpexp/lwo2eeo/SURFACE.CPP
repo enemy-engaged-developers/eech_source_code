@@ -11,13 +11,13 @@ struct RSurface
 
  Array<RPolyPoint> points;
 
- unsigned polygons:1, detail:1, smoothed:1, translucent:1, has_specularity:1, texture_animation:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_animation, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1;
+ unsigned polygons:1, detail:1, smoothed:1, translucent:1, has_specularity:1, texture_animation:1, texture_filtered:1, texture_mipmapped:1, texture_wrapped_u:1, texture_wrapped_v:1, luminosity_texture_animation, luminosity_texture_filtered:1, luminosity_texture_mipmapped:1, luminosity_texture_wrapped_u:1, luminosity_texture_wrapped_v:1, camo:1;
  unsigned char reflectivity, specularity;
  unsigned char blue, green, red, alpha;
 
  RSurface(void)
   : Global(NULL), s(NULL),
-    polygons(0), detail(0), smoothed(0), translucent(0), has_specularity(0), texture_animation(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_animation(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0),
+    polygons(0), detail(0), smoothed(0), translucent(0), has_specularity(0), texture_animation(0), texture_filtered(0), texture_mipmapped(0), texture_wrapped_u(0), texture_wrapped_v(0), luminosity_texture_animation(0), luminosity_texture_filtered(0), luminosity_texture_mipmapped(0), luminosity_texture_wrapped_u(0), luminosity_texture_wrapped_v(0), camo(0),
     reflectivity(0), specularity(0),
     blue(0), green(0), red(0), alpha(0)
  {
@@ -186,6 +186,14 @@ struct RSurface
           if (texture[0] != '\0')
            error("Surface '%s': Duplicate texture for surface", &s->name);
           GetTextureName(texture, filename);
+          {
+           int length = strlen(texture);
+           if (length > 2 && texture[length - 2] == '-' && strchr("DW", texture[length - 1]))
+            {
+             camo = 1;
+             texture[length - 2] = '\0';
+            }
+          }
           break;
          case LUMINOSITY:
           if (ltexture[0] != '\0')
@@ -250,6 +258,8 @@ struct RSurface
 
       if (strstr(&c->comment, "detail="))
        detail = 1;
+      if (strstr(&c->comment, "camo="))
+       camo = 1;
 
       texture_animation = ProcessAnimation(&c->comment, "texture_animation=", texture);
       luminosity_texture_animation = ProcessAnimation(&c->comment, "luminosity_animation=", ltexture);
@@ -388,15 +398,9 @@ struct RSurface
    smoothed = 0;
 
   if (smoothed)
-   {
-    for (unsigned i = 0; i < !polys; i++)
-     {
-      for (unsigned j = 0; j < !polys[i].points; j++)
-       {
-        points[polys[i].points[j].index].normal += polys[i].norm;
-       }
-     }
-   }
+   for (unsigned i = 0; i < !polys; i++)
+    for (unsigned j = 0; j < !polys[i].points; j++)
+     points[polys[i].points[j].index].normal += polys[i].norm;
  }
  void UV(const char* vmap, RTPoint RPolyPoint::* tp)
  {

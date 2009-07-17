@@ -131,6 +131,8 @@ class OBJECT_3D : private Convert
      const RSurface* s = &rs[i];
 
      strcpy(t->texture, s->texture);
+     if (s->camo)
+      strcat(t->texture, "-D");
      strcpy(t->luminosity, s->ltexture);
      su->polygons = s->polygons;
      su->detail = s->detail;
