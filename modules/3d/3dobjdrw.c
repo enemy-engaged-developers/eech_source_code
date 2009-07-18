@@ -1226,7 +1226,7 @@ void draw_3d_object_clipped_faces ( int object_number )
 								{
 									if ( d3d_textured_lines )
 									{
-										if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+										if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 										{
 											if ( current_object_3d_outcode == 0 )
 											{
@@ -1300,7 +1300,7 @@ void draw_3d_object_clipped_faces ( int object_number )
 								{
 									if ( d3d_textured_lines )
 									{
-										if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+										if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 										{
 											if ( current_object_3d_outcode == 0 )
 											{
@@ -1380,7 +1380,7 @@ void draw_3d_object_clipped_faces ( int object_number )
 					{
 						for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 						{
-							if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+							if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 							{
 								if ( current_object_3d_outcode == 0 )
 								{
@@ -1917,7 +1917,7 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 				{
 					for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 					{
-						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+						if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 						{
 							if ( current_object_3d_outcode == 0 )
 							{
@@ -2564,7 +2564,7 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 				{
 					if ( d3d_textured_lines )
 					{
-						if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+						if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 						{
 							if ( current_object_3d_outcode == 0 )
 							{
@@ -2638,7 +2638,7 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 			{
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-					if ( !outcode_3d_object_surface_polygon ( current_object_3d_faces->number_of_points, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
+					if ( !outcode_3d_object_surface_polygon ( 2, current_object_3d_object_base->points_base, &current_object_3d_outcode ) )
 					{
 						if ( current_object_3d_outcode == 0 )
 						{
@@ -2782,7 +2782,7 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 			{
 				for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 				{
-//					wrender_translucent_unclipped_3d_object_plain_line ( current_object_3d_faces );
+//					wrender_translucent_unclipped_3d_object_plain_line ();
 					current_object_3d_point_list += 2;
 				}
 			}
