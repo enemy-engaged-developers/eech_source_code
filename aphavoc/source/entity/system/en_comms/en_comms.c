@@ -439,14 +439,14 @@ void transmit_pfz(entity* sender, entity* receiver, float x1, float y1, float x2
 	pack_entity_safe_ptr (sender);
 	pack_entity_safe_ptr (receiver);
 
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x1);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y1);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x2);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y2);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x3);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y3);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, x4);
-	pack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED, y4);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_X1, x1);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_Y1, y1);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_X2, x2);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_Y2, y2);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_X3, x3);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_Y3, y3);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_X4, x4);
+	pack_float_value(NULL, FLOAT_TYPE_PFZ_Y1, y4);
 
 	// pack list of targets
 	for (target = targets[0], i=0; target && i < 16; target = targets[i], i++)
@@ -4238,14 +4238,14 @@ void process_received_entity_comms_messages (void)
 				sender = unpack_entity_safe_ptr ();
 				wingman = unpack_entity_safe_ptr ();
 
-				corner1.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner1.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner2.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner2.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner3.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner3.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner4.x = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
-				corner4.z = unpack_float_value(NULL, FLOAT_PACK_TYPE_UNPACKED);
+				corner1.x = unpack_float_value(NULL, FLOAT_TYPE_PFZ_X1);
+				corner1.z = unpack_float_value(NULL, FLOAT_TYPE_PFZ_Y1);
+				corner2.x = unpack_float_value(NULL, FLOAT_TYPE_PFZ_X2);
+				corner2.z = unpack_float_value(NULL, FLOAT_TYPE_PFZ_Y2);
+				corner3.x = unpack_float_value(NULL, FLOAT_TYPE_PFZ_X3);
+				corner3.z = unpack_float_value(NULL, FLOAT_TYPE_PFZ_Y3);
+				corner4.x = unpack_float_value(NULL, FLOAT_TYPE_PFZ_X4);
+				corner4.z = unpack_float_value(NULL, FLOAT_TYPE_PFZ_Y4);
 
 				for (i=0; i < 16; i++)
 				{

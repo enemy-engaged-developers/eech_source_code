@@ -177,7 +177,7 @@ void initialise_session_screen (void)
 											UI_ATTR_PARENT (session_briefing_overlay),
 											UI_ATTR_VIRTUAL_POSITION (x1, y1),
 											UI_ATTR_VIRTUAL_SIZE (x2, y2),
-											UI_ATTR_VSLIDER (0, 0, ui_get_font_height (UI_FONT_ARIAL_10)),
+											UI_ATTR_VSLIDER (0, 0, ui_get_font_height ()),
 											UI_ATTR_CLEAR (TRUE),
 											UI_ATTR_END
 										);
@@ -230,7 +230,7 @@ void initialise_session_screen (void)
 							UI_ATTR_PARENT (session_list_bdrop),
 							UI_ATTR_VIRTUAL_POSITION (x1, y1),
 							UI_ATTR_VIRTUAL_SIZE (x2, y2),
-							UI_ATTR_VSLIDER (0, 1000, ui_get_font_height (UI_FONT_ARIAL_18)),
+							UI_ATTR_VSLIDER (0, 1000, ui_get_font_height ()),
 							UI_ATTR_CLEAR (TRUE),
 							UI_ATTR_END
 						);

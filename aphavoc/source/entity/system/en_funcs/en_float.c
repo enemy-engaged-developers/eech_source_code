@@ -1431,6 +1431,70 @@ float_type_data
 			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
 			FALSE,															// fast_track
 		},
+		{
+			"FLOAT_TYPE_PFZ_X1",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_Y1",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_X2",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_Y2",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_X3",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_Y3",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_X4",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
+		{
+			"FLOAT_TYPE_PFZ_Y4",									// name
+			FLOAT_PACK_TYPE_UNPACKED,								// pack_type
+			0,																	// pack_num_whole_bits (excluding sign bit)
+			0,																	// pack_num_fractional_bits
+			(DEBUG_MODULE_PACK_ALL || 0),								// debug_pack
+			FALSE,															// fast_track
+		},
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

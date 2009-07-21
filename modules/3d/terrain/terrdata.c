@@ -86,7 +86,7 @@ terrain_3d_sector
 terrain_3d_tree_sector
 	**terrain_tree_sectors;
 
-unsigned char
+static unsigned char
 	*terrain_3d_geometry_data,
 	*terrain_3d_colour_data,
 	*terrain_3d_trees_data;

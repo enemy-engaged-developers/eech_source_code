@@ -80,8 +80,7 @@ static ui_object
 	*dedicated_server_title_text,
 	*dedicated_server_map_text,
 	*dedicated_server_game_text,
-	*dedicated_server_time_text,
-	*dedicated_server_quit_button;
+	*dedicated_server_time_text;
 
 texture_graphic
 	*dedicated_server_screen_texture;

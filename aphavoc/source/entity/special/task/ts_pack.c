@@ -701,7 +701,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			if (raw->route_length)
 			{
 
-				raw->route_dependents = malloc_heap_mem (sizeof (entity **) * raw->route_length);
+				raw->route_dependents = malloc_heap_mem (sizeof (entity *) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{

@@ -118,13 +118,13 @@ void initialise_ai_sector_exposure (void)
       for (z = 0; z < (NUM_MAP_Z_SECTORS * 2); z ++)
       {
 
-			if (terrain_sectors [z][x].maximum_height > max_terrain_height)
+			if (!x && !z || terrain_sectors [z][x].maximum_height > max_terrain_height)
 			{
 
 				max_terrain_height = terrain_sectors [z][x].maximum_height;
 			}
 
-			if (terrain_sectors [z][x].minimum_height < min_terrain_height)
+			if (!x && !z || terrain_sectors [z][x].minimum_height < min_terrain_height)
 			{
 
 				min_terrain_height = terrain_sectors [z][x].minimum_height;
