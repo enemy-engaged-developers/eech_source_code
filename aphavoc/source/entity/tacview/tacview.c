@@ -11,6 +11,7 @@
 #include "version.h"
 #include "ai/ai_misc/ai_dbase.h"
 
+// these values are used to convert from grid coordinates to latitude/longitude
 #define M1 111132.92
 #define M2 -559.82
 #define M3 1.175
@@ -22,6 +23,7 @@
 #define MEDIUM_UPDATE_FREQ 8
 #define SLOW_UPDATE_FREQ 16
 
+// Radius of sectors visible when only logging sectors close to own helicopter
 #define LIMITED_SECTORS 5
 
 #define tacview_id(obj)  (get_local_entity_safe_index(obj) + 2)
@@ -64,7 +66,7 @@ void start_tacview_logging(entity* gunship)
 
 //		write_tacview_town_names();
 
-	// add tacview unites
+	// add initially visible tacview unites
 	en = get_local_entity_first_child (get_update_entity (), LIST_TYPE_UPDATE);
 
 	while (en)
@@ -93,6 +95,7 @@ void start_tacview_logging(entity* gunship)
 	set_update_succ (NULL);
 }
 
+// Opens file and initialises variables
 static void open_tacview_log(void)
 {
 	int
@@ -112,6 +115,7 @@ static void open_tacview_log(void)
 	medium_update_group = 0;
 	frequent_update_group = 0;
 
+	// EECH doesn't have a specific date in game, so use real life date
 	get_system_date(&day, &month, &year);
 	year += 2000;
 	snprintf(log_filename, ARRAY_LENGTH(log_filename), "tacview-logs\\eech-%4d-%02d-%02dT%02d%02d.txt.acmi", year, month, day, hour, minute);
@@ -305,6 +309,7 @@ void write_tacview_new_unit(entity* en)
 		}
 	case ENTITY_TYPE_KEYSITE:
 		{
+			// Needs a size of the box representing site in tacview
 			int
 				length = 50,
 				width = 50,
@@ -469,7 +474,7 @@ void write_tacview_new_unit(entity* en)
 				if (vehicle_database[sub_type].target_symbol_type == TARGET_SYMBOL_AIR_DEFENCE_UNIT)
 					type = 0x20;
 				else if (vehicle_database[sub_type].default_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-					type = 0x28;
+					type = 0x28;  // unarmed vehicle
 				else
 					type = 0x24;
 				break;
@@ -497,6 +502,7 @@ void write_tacview_new_unit(entity* en)
 
 		break;
 #if 0
+	// Currently don't log these types
 	case ENTITY_TYPE_BRIDGE:
 	case ENTITY_TYPE_CARGO:
 	case ENTITY_TYPE_CITY:
@@ -561,11 +567,12 @@ void write_tacview_unit_event(entity* en, tacview_event_type type, entity* relat
 	case TACVIEW_UNIT_DESTROYED:
 		event_type = 0x2c;
 
+		// write a last position update, so that the destroyed position will be accurate
 		write_tacview_unit_update(en, TRUE, TRUE, TRUE);
 
+		// don't log this unit anymore
 		set_local_entity_int_value(en, INT_TYPE_TACVIEW_LOGGING, FALSE);
 
-//		fprintf(tacview_log_file, "!%x,%x,?\n", event_type, tacview_id(en);
 		break;
 	case TACVIEW_UNIT_TOOK_OFF:
 		event_type = 0x40;
@@ -841,8 +848,16 @@ int tacview_reset_frame(void)
 	return TRUE; // frequent_update_group == 0;
 }
 
+// Returns TRUE if this object should be updated this frame
 static int tacview_log_this_frame(entity* en)
 {
+	// We only update some objects each frame to save FPS and filesize.
+	// We update every N object each frame, and by changing which object is first logged
+	// we cycle through them so that after N frames all objects have been updated.
+	//
+	// In addition there are separate update frequencies for different types of objects
+	// Objects which move slower, or have more predictable flight paths require less
+	// updates
 	switch (en->type)
 	{
 	case ENTITY_TYPE_HELICOPTER:
