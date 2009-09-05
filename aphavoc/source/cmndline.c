@@ -327,12 +327,8 @@ void process_command_line (int argc, char *argv[])
 	{
 		s1 = *argv++;
 
-		if ( *s1 != '-' && *s1 != '/' )
-		{
-			continue;
-		}
-
-		s1++;
+		if ( *s1 == '-' || *s1 == '/' )
+			s1++;
 
 		s2 = strchr ( s1, ':' );
 
