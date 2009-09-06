@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -942,8 +942,8 @@ static void draw_heading_scale (float heading, int draw_command_heading)
 		y_position = -0.8375;
 	}
 
-	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, TRUE, MFD_COLOUR_BLUE);
-	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(-0.5, y_position - 0.1, 0.5, y_position + 0.1, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
 
 	set_2d_window (mfd_env, MFD_WINDOW_X_MIN * 0.5, MFD_WINDOW_Y_MIN, MFD_WINDOW_X_MAX * 0.5, MFD_WINDOW_Y_MAX);
 
@@ -1446,7 +1446,7 @@ static void display_radar_target_details (entity *target, float target_range, ra
 
 		set_mono_font_rel_position (-width -1.0, y_adjust);
 
-		print_mono_font_string ("MARKED");		
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 }
@@ -1513,9 +1513,9 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 	entity_sides
 		source_side;
-	entity	
+	entity
 		*source;
-		
+
 	float
 		dx,
 		dy;
@@ -1532,7 +1532,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 //VJ 030423 TSD render mod
 	source = get_gunship_entity ();
 	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
-	
+
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 	dx = (target_position->x - source_position->x) * scale;
@@ -1559,7 +1559,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			{
 					target_symbol_colour = MFD_COLOUR_RED;
 			}
-		}		
+		}
 		else
 			target_symbol_colour = MFD_COLOUR_RED;
 	}
@@ -1580,7 +1580,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 			{
 					target_symbol_colour = MFD_COLOUR_RED;
 			}
-		}		
+		}
 		else
 			target_symbol_colour = MFD_COLOUR_RED;
 	}
@@ -1845,16 +1845,16 @@ static void draw_radar_range_arcs(float radius)
 			{
 				set_2d_window_rotation (mfd_env, relative_heading);
 				draw_2d_line(0.0, radius, 0.0, radius + 0.03, MFD_COLOUR_YELLOW);
-	
+
 				sprintf(s, "%d", int_heading);
 				x_adjust = -get_mono_font_string_width(s) / 2;
-	
+
 				set_2d_mono_font_position(0.0, radius + 0.06);
 				set_mono_font_rel_position(x_adjust, -2.0);
-	
+
 				print_mono_font_string(s);
 			}
-			
+
 			int_heading += 10;
 			if (int_heading > 360)
 				int_heading -= 360;
@@ -2024,7 +2024,7 @@ static void draw_ground_radar_mfd (void)
 
 			break;
 		}
-		// Jabberwock 031107 ends	
+		// Jabberwock 031107 ends
 	}
 
 	//
@@ -2356,7 +2356,7 @@ static void draw_air_radar_mfd (void)
 
 			if (target)
 			{
-//VJ 030423 TSD render mod				
+//VJ 030423 TSD render mod
 				draw_radar_target_symbol (target, source_position, scale, TRUE, FALSE);
 			}
 		}
@@ -3099,7 +3099,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	if (has_range && eo_is_tracking_point())
 	{
 		vec3d* tracking_point = get_eo_tracking_point();
-		
+
 	}
 	else if (target && has_range)
 	{
@@ -3403,9 +3403,9 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	}
 
 // Jabberwock 031107 Designated targets
-	
+
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	
+
 	if (target && get_local_entity_parent (target, LIST_TYPE_DESIGNATED_TARGET))
 	{
 		if (draw_large_mfd)
@@ -3418,12 +3418,12 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 		}
 
 		width = get_mono_font_string_width ("MARKED");
-		
+
 		set_2d_mono_font_position (1.0, -1.0);
 
 		set_mono_font_rel_position (-width - 1.0, y_adjust);
-		
-		print_mono_font_string ("MARKED");		
+
+		print_mono_font_string ("MARKED");
 	}
 // Jabberwock 031107 ends
 
@@ -3883,11 +3883,11 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		//VJ 030530 colour tweaks: black and dark gray are best
 		set_rgb_colour (MFD_COLOUR7,    64, 64, 64, 255);
 		set_rgb_colour (MFD_COLOUR8,    0,   0,  0, 255);
-	
+
 	   draw_tsd_terrain_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, FALSE);
 
 		if (command_line_colour_mfd)
-		{	   
+		{
 		   	set_rgb_colour (MFD_COLOUR1,            255, 255, 255, 255);
 			set_rgb_colour (MFD_COLOUR2,            200, 200, 200, 255);
 			set_rgb_colour (MFD_COLOUR3,            176, 176, 176, 255);
@@ -3905,13 +3905,13 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 			set_rgb_colour (MFD_COLOUR6,             50,  25,   0, 255);
 		}
 	}
-	
+
 	////////////////////////////////////////
 	//
 	// contour map
 	//
 	////////////////////////////////////////
-	
+
 //VJ 030423 TSD render mod, added mfd_env
 	if (!hokum_damage.navigation_computer)
 		draw_tsd_contour_map (mfd_env, -y_origin, tsd_ase_range, scale, source_position, source_heading, draw_large_mfd, FALSE);
@@ -4108,7 +4108,7 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 							air_scan_range = get_local_entity_float_value (target, FLOAT_TYPE_AIR_SCAN_RANGE) * scale;
 
 							draw_2d_circle (dx, dy, air_scan_range, MFD_COLOUR_RED);
-							
+
 						}
 					}
 				}
@@ -4212,8 +4212,8 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		}
 	}
 
-	draw_2d_box(-1.0, 1.0, 1.0, 0.87, TRUE, MFD_BACKGROUND_COLOUR);
-	draw_2d_box(-1.0, -1.0, 1.0, y_origin, TRUE, MFD_BACKGROUND_COLOUR);
+	draw_2d_box(-1.0, 1.0, 1.0, 0.87, TRUE, FALSE, MFD_BACKGROUND_COLOUR);
+	draw_2d_box(-1.0, -1.0, 1.0, y_origin, TRUE, FALSE, MFD_BACKGROUND_COLOUR);
 
 	////////////////////////////////////////
 	//
@@ -4407,24 +4407,24 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		if (target_range > 0.0)
 		{
 			sprintf (buffer, "%   4d M", (int) target_range);
-	
+
 			if (draw_large_mfd)
 			{
 				width += 2.0;
-	
+
 				y_adjust = 5.0;
 			}
 			else
 			{
 				width += 1.0;
-	
+
 				y_adjust = 2.0;
 			}
-	
+
 			set_2d_mono_font_position (0.5, -0.75);
-	
+
 			set_mono_font_rel_position (1.0, y_adjust);
-	
+
 			print_mono_font_string (buffer);
 		}
 	}
@@ -4449,10 +4449,10 @@ static void draw_tactical_situation_display_mfd (hokum_mfd_locations mfd_locatio
 		{
 			int sz, sx;
 			entity* sec = get_local_sector_entity(source_position);
-	
+
 			sx = get_local_entity_int_value(sec, INT_TYPE_X_SECTOR);
 			sz = get_local_entity_int_value(sec, INT_TYPE_Z_SECTOR);
-	
+
 			sprintf(buffer, "SECTOR: %d,%d", sx, sz);
 			set_2d_mono_font_position (-1.0, -0.65);
 			set_mono_font_rel_position (5.0, 5.0);
@@ -6291,7 +6291,7 @@ static void draw_engine_dial(char* name, float x_pos, float y_pos, float size, f
 {
 	float x_adjust, y_adjust;
 	char s[20];
-	
+
 	draw_2d_arc(x_pos, y_pos, size, green_zone, MFD_COLOUR_GREEN);
 	if (yellow_zone)
 		draw_2d_arc(x_pos, y_pos, size, yellow_zone, MFD_COLOUR_YELLOW);
@@ -6337,8 +6337,8 @@ static void draw_engine_display_mfd (void)
 
 	set_mono_font_colour (MFD_COLOUR1);
 
-	draw_2d_box(-0.9, 0.9, -0.4, -0.9, FALSE, MFD_COLOUR1);
-	draw_2d_box( 0.9, 0.9,  0.4, -0.9, FALSE, MFD_COLOUR1);
+	draw_2d_box(-0.9, 0.9, -0.4, -0.9, FALSE, FALSE, MFD_COLOUR1);
+	draw_2d_box( 0.9, 0.9,  0.4, -0.9, FALSE, FALSE, MFD_COLOUR1);
 
 	set_mono_font_type(MONO_FONT_TYPE_6X10);
 
@@ -6411,11 +6411,11 @@ static void draw_engine_display_mfd (void)
 
 		set_2d_mono_font_position (-0.4, -0.4);
 		set_mono_font_rel_position (8.0, -8.0);
-	
+
 		digital_readout = bound (current_flight_dynamics->fuel_weight.value, 0.0, 9999.0);
 		convert_float_to_int (digital_readout, &i);
 		sprintf (s, "FUEL      %4d", i);
-		
+
 		print_mono_font_string(s);
 	}
 
@@ -6436,13 +6436,13 @@ static void draw_engine_display_mfd (void)
 
 		set_2d_mono_font_position (-0.4, -0.6);
 		set_mono_font_rel_position (8.0, -8.0);
-	
+
 		digital_readout = bound (current_flight_dynamics->apu_rpm.value, 0.0, 100.0);
 		sprintf (s, "APU       %3.0f%%", digital_readout);
-		
+
 		print_mono_font_string(s);
 	}
-	
+
 	// Throttle
 	{
 		int i;
@@ -6457,7 +6457,7 @@ static void draw_engine_display_mfd (void)
 
 		digital_readout = bound (current_flight_dynamics->left_engine_n1_rpm.max, 0.0, 110.0);
 		convert_float_to_int (digital_readout, &i);
-	
+
 		if (i < 60)
 			sprintf(buffer2, "OFF ");
 		else if (i == 60)
@@ -6469,7 +6469,7 @@ static void draw_engine_display_mfd (void)
 
 		digital_readout = bound (current_flight_dynamics->right_engine_n1_rpm.max, 0.0, 110.0);
 		convert_float_to_int (digital_readout, &i);
-	
+
 		if (i< 60)
 			sprintf(s, " %s OFF ", buffer2);
 		else if (i == 60)
@@ -6478,7 +6478,7 @@ static void draw_engine_display_mfd (void)
 			sprintf(s, " %s FLY ", buffer2);
 		else
 			sprintf(s, " %s %03d%%", buffer2, (i-60) * 2);
-	
+
 		x_adjust = get_mono_font_string_width (s) * -0.5;
 
 		set_2d_mono_font_position (0.0, -0.9);
@@ -6616,7 +6616,7 @@ static void draw_pitch_ladder (void)
 		sky_colour.green = 120;
 		sky_colour.blue = 192;
 		sky_colour.alpha = 255;
-	
+
 		ground_colour.red =   0;
 		ground_colour.green =  90;
 		ground_colour.blue =  10;
@@ -6625,7 +6625,7 @@ static void draw_pitch_ladder (void)
 	else
 	{
 		sky_colour = MFD_COLOUR2;
-		ground_colour = MFD_COLOUR5;	
+		ground_colour = MFD_COLOUR5;
 	}
 
 	if (draw_large_mfd)
@@ -6688,14 +6688,14 @@ static void draw_pitch_ladder (void)
 		mod_pitch = fmod (pitch, rad (10.0));
 		tan_mod_pitch = -tan (mod_pitch);
 		int_pitch = (int) (pitch * (1.0 / rad (10.0)));
-	
+
 		//
 		// get x and y scale factors
 		//
 
 		x_scale = -sin (roll) * 1.5 * pitch_bar_scale;
 		y_scale = cos (roll) * 1.5 * pitch_bar_scale;
-	
+
 		x_horizon = tan_mod_pitch * x_scale;
 		y_horizon = tan_mod_pitch * y_scale;
 
@@ -6757,7 +6757,7 @@ static void draw_pitch_ladder (void)
 				left_colour = &sky_colour;
 				right_colour = &ground_colour;
 			}
-			
+
 			draw_2d_filled_triangle(x_horizon_abs, 1.0, 1.0, 1.0, 1.0, -1.0, *right_colour);
 			draw_2d_filled_triangle(1.0, -1.0, x_horizon_abs, -1.0, x_horizon_abs, 1.0, *right_colour);
 
@@ -6770,20 +6770,20 @@ static void draw_pitch_ladder (void)
 		// draw pitch ladder
 		//
 		////////////////////////////////////////
-	
+
 		step_direction = -1;
-	
+
 		int_pitch = limit_pitch (int_pitch + 3, &step_direction);
-	
+
 		x = x_horizon + x_10_deg_step * 3.0;
 		y = y_horizon + y_10_deg_step * 3.0;
-	
+
 		set_2d_instance_rotation (mfd_env, roll);
-	
+
 		for (loop = 0; loop < 7; loop++)
 		{
 			set_2d_instance_position (mfd_env, x, y);
-	
+
 			switch (int_pitch)
 			{
 				////////////////////////////////////////
@@ -6800,15 +6800,15 @@ static void draw_pitch_ladder (void)
 
 					sprintf (s, "%d0", abs(int_pitch));
 					x_adjust = get_mono_font_string_width (s) * -0.5;
-	
+
 					set_2d_mono_font_position (+PITCH_BAR_X4, +PITCH_BAR_Y4);
 					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
 					print_mono_font_string (s);
-	
+
 					set_2d_mono_font_position (-PITCH_BAR_X4, +PITCH_BAR_Y4);
 					set_mono_font_rel_position (x_adjust, y_adjust_above_line);
 					print_mono_font_string (s);
-	
+
 					break;
 				}
 				////////////////////////////////////////
@@ -6817,7 +6817,7 @@ static void draw_pitch_ladder (void)
 				{
 					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
 					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
-	
+
 					break;
 				}
 				////////////////////////////////////////
@@ -6826,19 +6826,19 @@ static void draw_pitch_ladder (void)
 				{
 					draw_2d_line (+PITCH_BAR_X1, +PITCH_BAR_Y1, +PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR_LIGHT_BLUE);
 					draw_2d_line (-PITCH_BAR_X1, +PITCH_BAR_Y1, -PITCH_BAR_X2, +PITCH_BAR_Y2, MFD_COLOUR_LIGHT_BLUE);
-	
+
 					draw_2d_line (+PITCH_BAR_X3, +PITCH_BAR_Y3, +PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR_LIGHT_BLUE);
 					draw_2d_line (-PITCH_BAR_X3, +PITCH_BAR_Y3, -PITCH_BAR_X4, +PITCH_BAR_Y4, MFD_COLOUR_LIGHT_BLUE);
-	
+
 					draw_2d_line (+PITCH_BAR_X5, +PITCH_BAR_Y5, +PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
 					draw_2d_line (-PITCH_BAR_X5, +PITCH_BAR_Y5, -PITCH_BAR_X6, +PITCH_BAR_Y6, MFD_COLOUR_LIGHT_BLUE);
-	
+
 					break;
 				}
 			}
-	
+
 			int_pitch = limit_pitch (int_pitch + step_direction, &step_direction);
-	
+
 			x -= x_10_deg_step;
 			y -= y_10_deg_step;
 		}
@@ -6922,8 +6922,8 @@ static void draw_altitude_scale (void)
 		displayed_altitude = (int)((barometric_altitude + 5) / 10);
 
 
-	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, MFD_COLOUR_BLUE);
-	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
 
 	// draw scale
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
@@ -6954,7 +6954,7 @@ static void draw_altitude_scale (void)
 		float scale_step_5 = altitude * 0.4;
 		int int_scale_step_5 = (int) scale_step_5;
 		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
-	
+
 //		int tick_type = (int_scale_step_5 % 4) == 0;
 		float y = -(8.0 + mod_scale_step_5) * scale_step;
 		int loop;
@@ -6980,8 +6980,8 @@ static void draw_altitude_scale (void)
 
 					set_2d_mono_font_position (x2, y);
 					set_mono_font_rel_position (x_adjust, y_adjust);
-					print_mono_font_string(buffer); 
-				}					
+					print_mono_font_string(buffer);
+				}
 			}
 
 			int_scale_step_5++;
@@ -7053,8 +7053,8 @@ static void draw_airspeed_scale (void)
 		u1, u2, v1, v2;
 
 
-	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, MFD_COLOUR_BLUE);
-	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, MFD_COLOUR_LIGHT_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, TRUE, FALSE, MFD_COLOUR_BLUE);
+	draw_2d_box(x1, scale_top, x5, scale_bottom, FALSE, FALSE, MFD_COLOUR_LIGHT_BLUE);
 
 	// draw scale
 	get_2d_float_screen_x_coordinate (-y_centre, &v);
@@ -7074,7 +7074,7 @@ static void draw_airspeed_scale (void)
 		float scale_step_5 = airspeed * 0.4;
 		int int_scale_step_5 = (int) scale_step_5;
 		float mod_scale_step_5 = scale_step_5 - (float) int_scale_step_5;
-	
+
 //		int tick_type = (int_scale_step_5 % 4) == 0;
 		float y = -(8.0 + mod_scale_step_5) * scale_step;
 		int loop;
@@ -7100,8 +7100,8 @@ static void draw_airspeed_scale (void)
 
 					set_2d_mono_font_position (x4, y);
 					set_mono_font_rel_position (-x_adjust, y_adjust);
-					print_mono_font_string(buffer); 
-				}					
+					print_mono_font_string(buffer);
+				}
 			}
 
 			int_scale_step_5++;
@@ -8381,7 +8381,7 @@ void initialise_hokum_mfd (void)
 //VJ 030423 TSd render mod
 
    Initialise_TSD_render_terrain();
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8446,11 +8446,11 @@ void draw_hokum_mfd (void)
 			case VIEW_MODE_VIRTUAL_COCKPIT_CO_PILOT_RHS_DISPLAY:
 			////////////////////////////////////////
 			{
-				
+
 				large_mfd = 1;
-		
+
 				break;
-			}		
+			}
 			////////////////////////////////////////
 			default:
 			////////////////////////////////////////
@@ -8494,13 +8494,13 @@ void draw_hokum_mfd (void)
 
 	if (get_crew_role () == CREW_ROLE_PILOT)
 	{
-		export_left=pilot_lhs_mfd_texture_screen; 
-		export_right=pilot_rhs_mfd_texture_screen; 
+		export_left=pilot_lhs_mfd_texture_screen;
+		export_right=pilot_rhs_mfd_texture_screen;
 	}
 	else
 	{
-		export_left=co_pilot_lhs_mfd_texture_screen; 
-		export_right=co_pilot_rhs_mfd_texture_screen; 
+		export_left=co_pilot_lhs_mfd_texture_screen;
+		export_right=co_pilot_rhs_mfd_texture_screen;
 	}
 
 	set_system_texture_screen (pilot_lhs_mfd_texture_screen, TEXTURE_INDEX_HOKUM_COCKPIT_MFD_LHS_2);
