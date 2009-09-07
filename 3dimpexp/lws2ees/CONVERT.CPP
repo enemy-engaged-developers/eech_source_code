@@ -162,23 +162,27 @@ class Convert
 
     {
      if (itor->motion.nchannels != 9)
-      error("Invalid motion for object %08lX", itor->index);
+      error("Invalid motion for object %08lX: number of channels is %u", itor->index, itor->motion.nchannels);
      for (int i = 1; i < 9; i++)
       {
-       if (itor->motion.channels[0].keys.size() != itor-> motion.channels[i].keys.size())
-        error("Invalid motion for object %08lX", itor->index);
+       if (itor->motion.channels[0].keys.size() != itor->motion.channels[i].keys.size())
+        error("Invalid motion for object %08lX: size %i %u %u", itor->index, i, itor->motion.channels[0].keys.size(), itor->motion.channels[i].keys.size());
        for (int j = 0; j < itor->motion.channels[0].keys.size(); j++)
-        if (itor->motion.channels[0].keys[j].time != itor->motion.channels[i].keys[j].time ||
-            itor->motion.channels[0].keys[j].spantime != itor->motion.channels[i].keys[j].spantime ||
-            itor->motion.channels[0].keys[j].spantime != 0 &&
-            itor->motion.channels[0].keys[j].spantime != 3 ||
-            itor->motion.channels[0].keys[j].p[0] != itor->motion.channels[i].keys[j].p[0] ||
-            itor->motion.channels[0].keys[j].p[1] != itor->motion.channels[i].keys[j].p[1] ||
-            itor->motion.channels[0].keys[j].p[2] != itor->motion.channels[i].keys[j].p[2] ||
-            itor->motion.channels[0].keys[j].p[3] != itor->motion.channels[i].keys[j].p[3] ||
-            itor->motion.channels[0].keys[j].p[4] != itor->motion.channels[i].keys[j].p[4] ||
-            itor->motion.channels[0].keys[j].p[5] != itor->motion.channels[i].keys[j].p[5])
-         error("Invalid motion for object %08lX", itor->index);
+        {
+#define CHECK(name, type) \
+ if (itor->motion.channels[0].keys[j]. ## name != itor->motion.channels[i].keys[j]. ## name) \
+  warning("Invalid motion for object %08lX: " #name " %i %i %" type " %" type, itor->index, i, j, itor->motion.channels[0].keys[j]. ## name, itor->motion.channels[i].keys[j]. ## name);
+         CHECK(time, "f")
+         CHECK(spantype, "i")
+         if (itor->motion.channels[0].keys[j].spantype != 0 && itor->motion.channels[0].keys[j].spantype != 3)
+          error("Invalid motion for object %08lX: 0 %i spantype %i", itor->index, j, itor->motion.channels[0].keys[j].spantype);
+         CHECK(p[0], "f")
+         CHECK(p[1], "f")
+         CHECK(p[2], "f")
+         CHECK(p[3], "f")
+         CHECK(p[4], "f")
+         CHECK(p[5], "f")
+        }
       }
     }
 
@@ -393,7 +397,7 @@ class Convert
   for (Channel::Keys::const_iterator itor(channel.keys.begin()); itor != channel.keys.end(); ++itor)
    {
     fw(static_cast<int>(itor->time * fps));
-    fw(itor->spantime ? 1 : 0);
+    fw(itor->spantype ? 1 : 0);
     fw(itor->value);
     fw(itor->p[0]);
     fw(itor->p[1]);
@@ -407,7 +411,7 @@ class Convert
   for (int i = 0; i < motion.channels[0].keys.size(); i++)
    {
     fw(static_cast<int>(motion.channels[0].keys[i].time * fps));
-    fw(motion.channels[0].keys[i].spantime ? 1 : 0);
+    fw(motion.channels[0].keys[i].spantype ? 1 : 0);
     fw(motion.channels[0].keys[i].value);
     fw(motion.channels[1].keys[i].value);
     fw(motion.channels[2].keys[i].value);

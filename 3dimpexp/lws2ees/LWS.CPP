@@ -18,7 +18,7 @@ void PrintAll(T begin, T end)
 struct Key
 {
  Key(void)
-  : value(0), time(0), spantime(0)
+  : value(0), time(0), spantype(0)
  {
   for (size_t i = 0; i < sizeof(p) / sizeof(*p); i++)
    p[i] = 0;
@@ -26,12 +26,12 @@ struct Key
 
  void Print(void) const
  {
-  printf("  Key %f %f %i %f %f %f %f %f %f\n", value, time, spantime, p[0], p[1], p[2], p[3], p[4], p[5]);
+  printf("  Key %f %f %i %f %f %f %f %f %f\n", value, time, spantype, p[0], p[1], p[2], p[3], p[4], p[5]);
  }
 
  float value;
  float time;
- int spantime;
+ int spantype;
  float p[6];
 };
 
@@ -404,8 +404,8 @@ class LwsFile : public Lws
 
   if (!gets() || strcmp(str, "LWSC"))
    error("Provided file is not Lightwave Scene");
-  if (!gets() || strcmp(str, "4") && strcmp(str, "3"))
-   error("Provided file is not Lightwave Scene version 3 or 4");
+  if (!gets() || strcmp(str, "5") && strcmp(str, "4") && strcmp(str, "3"))
+   error("Provided file is not Lightwave Scene version 3, 4 or 5");
 
   while (gets())
    {
@@ -467,7 +467,7 @@ class LwsFile : public Lws
     Key key;
     gets();
     sscanf(str, "  Key %f %f %i %f %f %f %f %f %f",
-           &key.value, &key.time, &key.spantime,
+           &key.value, &key.time, &key.spantype,
            &key.p[0], &key.p[1], &key.p[2], &key.p[3], &key.p[4], &key.p[5]);
     channel.keys.push_back(key);
    }
@@ -562,6 +562,8 @@ class LwsFile : public Lws
     if (LastObject)
      LastObject->search.assign(str + 1, strlen(str) - 2);
     gets();
+    if (strcmp(str, "EndPlugin"))
+     gets();
    }
   else
   if (!strcmp(str, "CustomObjHandler 1 FX_Collision"))
