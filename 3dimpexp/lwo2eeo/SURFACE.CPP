@@ -501,18 +501,22 @@ struct RSurface
  }
  void GetTextureName(char* texture, const char* filename)
  {
-  char* ptr;
+  {
+   const char* ptr;
 
-  ptr = strrchr(filename, '\\');
-  if (!ptr)
-   ptr = strchr(filename, ':');
-  if (ptr)
-   strcpy(texture, ptr + 1);
-  else
-   strcpy(texture, filename);
-  ptr = strchr(texture, '.');
-  if (ptr)
-   *ptr = '\0';
+   ptr = strrchr(filename, '\\');
+   if (!ptr)
+    ptr = strchr(filename, ':');
+   if (ptr)
+    strcpy(texture, ptr + 1);
+   else
+    strcpy(texture, filename);
+  }
+  {
+   char* ptr = strchr(texture, '.');
+   if (ptr)
+    *ptr = '\0';
+  }
  }
  unsigned ProcessAnimation(const char* comment, const char* tag, char* name)
  {

@@ -122,18 +122,18 @@ struct RNormal
    if (!z)
     {
      _heading = x > 0 ? M_PI / 2 : - M_PI / 2;
-     _pitch = atan2(y, fabs(x));
+     _pitch = atan2((double) y, fabs((double) x));
     }
    else
     if (!x)
      {
       _heading = z > 0 ? 0 : - M_PI;
-      _pitch = atan2(y, fabs(z));
+      _pitch = atan2((double) y, fabs((double) z));
      }
     else
      {
       _pitch = atan2(y, sqrt((double)x * x + (double)z * z));
-      _heading = atan2(x, z);
+      _heading = atan2((double) x, (double) z);
      }
 
   {
