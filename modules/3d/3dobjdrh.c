@@ -2127,12 +2127,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 
 					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
-					if ( FAILED ( ret ) )
-					{
-
-						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
-					}
-					else
+					if ( !FAILED ( ret ) )
 					{
 	
 						xmax = max ( fabs ( objects_3d_data[object_number].bounding_box.xmin ), fabs ( objects_3d_data[object_number].bounding_box.xmax ) );
@@ -2157,7 +2152,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 							calculate_line_normal ( this_object_3d_info, &normal );
 	
-							surface_point_index = current_object_3d_point_list->point;
+							surface_point_index = current_object_3d_point_list[point_count].point;
 							point_index = current_object_3d_surface_point_list[surface_point_index].point;
 	
 							vertices[point_count].x = ( float ) objects_3d_data[object_number].points[point_index].x * xmax;
@@ -2169,10 +2164,9 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 							vertices[point_count].ny = normal.y;
 							vertices[point_count].nz = normal.z;
 	
-							current_object_3d_point_list++;
 							point_count++;
 	
-							surface_point_index = current_object_3d_point_list->point;
+							surface_point_index = current_object_3d_point_list[point_count].point;
 							point_index = current_object_3d_surface_point_list[surface_point_index].point;
 	
 							vertices[point_count].x = ( float ) objects_3d_data[object_number].points[point_index].x * xmax;
@@ -2183,7 +2177,6 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 							vertices[point_count].ny = normal.y;
 							vertices[point_count].nz = normal.z;
 	
-							current_object_3d_point_list++;
 							point_count++;
 						}
 	
@@ -2278,12 +2271,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 
 					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
 
-					if ( FAILED ( ret ) )
-					{
-
-						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
-					}
-					else
+					if ( !FAILED ( ret ) )
 					{
 						
 						xmax = max ( fabs ( objects_3d_data[object_number].bounding_box.xmin ), fabs ( objects_3d_data[object_number].bounding_box.xmax ) );
@@ -2308,7 +2296,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 							calculate_line_normal ( this_object_3d_info, &normal );
 	
-							surface_point_index = current_object_3d_point_list->point;
+							surface_point_index = current_object_3d_point_list[point_count].point;
 							point_index = current_object_3d_surface_point_list[surface_point_index].point;
 	
 							vertices[point_count].x = ( float ) objects_3d_data[object_number].points[point_index].x * xmax;
@@ -2319,10 +2307,9 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 							vertices[point_count].ny = normal.y;
 							vertices[point_count].nz = normal.z;
 	
-							current_object_3d_point_list++;
 							point_count++;
 	
-							surface_point_index = current_object_3d_point_list->point;
+							surface_point_index = current_object_3d_point_list[point_count].point;
 							point_index = current_object_3d_surface_point_list[surface_point_index].point;
 	
 							vertices[point_count].x = ( float ) objects_3d_data[object_number].points[point_index].x * xmax;
@@ -2333,7 +2320,6 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 							vertices[point_count].ny = normal.y;
 							vertices[point_count].nz = normal.z;
 	
-							current_object_3d_point_list++;
 							point_count++;
 						}
 	
@@ -2374,10 +2360,6 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 			int
 				faces_left;
 
-			//
-			// Only update point list if they're polygons - lines already have been updated.
-			//
-
 			for ( faces_left = current_object_3d_surface->number_of_faces; faces_left > 0; faces_left-- )
 			{
 
@@ -2391,6 +2373,10 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 
 				current_object_3d_faces++;
 			}
+		}
+		else
+		{
+			current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
 		}
 
 		current_object_3d_surface_point_list += number_of_surface_points;
