@@ -81,6 +81,8 @@ enum MONO_FONT_TYPES
 	MONO_FONT_TYPE_8X14,
 	MONO_FONT_TYPE_10X16,
 	MONO_FONT_TYPE_12X20,
+	MONO_FONT_TYPE_14X21,
+	MONO_FONT_TYPE_17X26,
 	NUM_MONO_FONT_TYPES
 };
 
@@ -113,6 +115,7 @@ extern void print_mono_font_char (const char c);
 extern float get_mono_font_string_width (const char *s);
 
 extern void print_mono_font_string (const char *s);
+extern void print_vertical_mono_font_string(float x, float y, const char* string, float h_align, int v_centre);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

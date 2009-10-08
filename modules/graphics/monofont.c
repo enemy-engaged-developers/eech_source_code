@@ -66,6 +66,8 @@
 
 #include "graphics.h"
 
+#include "../2d/2dwrap.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +190,26 @@ static const char
 		#include "mono12x20.h"
 	};
 
+#define CELL_WIDTH_14X21	(14)
+#define CELL_HEIGHT_14X21	(21)
+#define CELL_SIZE_14X21		(CELL_HEADER_SIZE + CELL_WIDTH_14X21 * CELL_HEIGHT_14X21)
+
+static const char
+	mono_font_14x21_cells[NUM_CHARACTERS][CELL_SIZE_14X21] =
+	{
+		#include "mono14x21.h"
+	};
+
+#define CELL_WIDTH_17X26	(17)
+#define CELL_HEIGHT_17X26	(26)
+#define CELL_SIZE_17X26		(CELL_HEADER_SIZE + CELL_WIDTH_17X26 * CELL_HEIGHT_17X26)
+
+static const char
+	mono_font_17x26_cells[NUM_CHARACTERS][CELL_SIZE_17X26] =
+	{
+		#include "mono17x26.h"
+	};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +225,9 @@ static const char
 		( const char * ) mono_font_7x12_cells,
 		( const char * ) mono_font_8x14_cells,
 		( const char * ) mono_font_10x16_cells,
-		( const char * ) mono_font_12x20_cells
+		( const char * ) mono_font_12x20_cells,
+		( const char * ) mono_font_14x21_cells,
+		( const char * ) mono_font_17x26_cells
 	};
 
 static const float
@@ -218,6 +242,8 @@ static const float
 		CELL_WIDTH_8X14,
 		CELL_WIDTH_10X16,
 		CELL_WIDTH_12X20,
+		CELL_WIDTH_14X21,
+		CELL_WIDTH_17X26,
 	};
 
 static const float
@@ -232,6 +258,8 @@ static const float
 		CELL_HEIGHT_8X14,
 		CELL_HEIGHT_10X16,
 		CELL_HEIGHT_12X20,
+		CELL_HEIGHT_14X21,
+		CELL_HEIGHT_17X26,
 	};
 
 static const int
@@ -246,6 +274,8 @@ static const int
 		CELL_SIZE_8X14,
 		CELL_SIZE_10X16,
 		CELL_SIZE_12X20,
+		CELL_SIZE_14X21,
+		CELL_SIZE_17X26,
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -419,3 +449,29 @@ void print_mono_font_string (const char *s)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void print_vertical_mono_font_string(float x, float y, const char* string, float h_align, int v_centre)
+{
+	float
+		x_adjust,
+		y_height,
+		y_pos;
+
+	x_adjust = h_align * mono_font_width;
+	y_height = 3.0 * x_adjust;
+	y_height = mono_font_height - 1.0;
+	y_pos = 0.4 * y_height;
+
+	if (v_centre)
+		y_pos -= 0.5 * y_height * strlen(string);
+
+	while (*string)
+	{
+		set_2d_mono_font_position(x, y);
+		set_mono_font_rel_position(x_adjust, y_pos);
+		print_mono_font_char(*string);
+
+		string++;
+		y_pos += y_height;
+	}
+}
