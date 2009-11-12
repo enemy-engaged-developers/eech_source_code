@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
  AllNames names(eet);
  Cameras cameras;
  AggTranslator translator;
+ translator.Add("");
  const Scene scene(argv[1], names, cameras, translator);
  LwsExport exporter(names, cameras, translator);
  exporter.ExportScene(argv[2], scene);

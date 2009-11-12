@@ -10,11 +10,15 @@ int get_object(FILE* fp)
 
  char* ptr = strrchr(filename, '/');
  if (!ptr)
-  ptr = strrchr(filename, '\\');
- if (!ptr)
-  ptr = strrchr(filename, ':');
+  {
+   ptr = strrchr(filename, '\\');
+   if (!ptr)
+    ptr = strrchr(filename, ':');
+  }
  if (!ptr)
   ptr = filename;
+ else
+  ptr++;
  char* ext = strrchr(ptr, '.');
  if (ext)
   *ext = '\0';
@@ -120,7 +124,7 @@ void read_indices(FILE *fp, int *number_of_sub_object_indices, struct OBJECT_3D_
 
 void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent, struct OBJECT_3D_DATABASE_ENTRY *sub_object)
 {
- int flag, index, contributes_to_collisions, sub_object_approximation_in_level, sub_object_approximation_out_level;
+ int index, contributes_to_collisions, sub_object_approximation_in_level, sub_object_approximation_out_level;
 
  sub_object->parent = parent;
  index = get_object(fp);
@@ -136,8 +140,8 @@ void initialise_3d_sub_object(FILE *fp, struct OBJECT_3D_DATABASE_ENTRY *parent,
  sub_object->sub_object_approximation_in_level = sub_object_approximation_in_level;
  sub_object->sub_object_approximation_out_level = sub_object_approximation_out_level;
 
- fread(&flag, sizeof(int), 1, fp);
- if (flag)
+ fread(&sub_object->flag, sizeof(int), 1, fp);
+ if (sub_object->flag)
  {
   fread(&sub_object->relative_heading_maximum, sizeof(float), 1, fp);
   fread(&sub_object->relative_heading_minimum, sizeof(float), 1, fp);
