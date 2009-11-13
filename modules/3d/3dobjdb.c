@@ -602,6 +602,8 @@ static int get_object ( FILE *fp )
 		ptr = strrchr ( filename, ':' );
 	if ( !ptr )
 		ptr = filename;
+	else
+		ptr++;
 	strupr ( ptr );
 
 	if ( isxdigit ( ptr[0] ) && isxdigit ( ptr[1] ) &&
@@ -674,13 +676,13 @@ int get_subobject ( FILE *fp )
 
 
 	if ( !get_nul_string ( name, sizeof ( name ), fp, TRUE ) || !*name )
-		return 0;
+		return -1;
 
 	for ( i = 1; object_3d_subobject_names[i]; i++ )
 		if ( !strcmp ( name, object_3d_subobject_names[i] + 21 ) )
 			return i;
 
-	return 0;
+	return -1;
 }
 
 static int get_camera ( FILE *fp )
