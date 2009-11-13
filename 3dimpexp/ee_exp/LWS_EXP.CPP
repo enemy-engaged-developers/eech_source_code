@@ -235,9 +235,7 @@ void ExportKeyFrames(FILE* fp, const char* type, int visibility, int color, int 
         value = f->scale_z;
         break;
       }
-     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n",
-             value, f->index, f->linear ? 3 : 0,
-             f->tension, f->continuity, f->bias);
+     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n", value, f->index, f->linear ? 3 : 0, f->tension, f->continuity, f->bias);
     }
    fprintf(fp, "  Behaviors 1 2\n}\n");
   }
@@ -443,8 +441,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
    for (int i = 0; i < scene->number_of_object_dissolve_keyframes; i++)
     {
      const struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME* f = &scene->object_dissolve_keyframes[i];
-     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n",
-             f->value, f->index, f->linear ? 3 : 0, f->tension, f->continuity, f->bias);
+     fprintf(fp, "  Key %f %i %i %f %f %f 0 0 0\n", f->value, f->index, f->linear ? 3 : 0, f->tension, f->continuity, f->bias);
     }
    fprintf(fp, "  Behaviors 1 2\n}\n");
   }

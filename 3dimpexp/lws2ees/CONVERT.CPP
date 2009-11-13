@@ -133,7 +133,7 @@ class Convert
       if (!itor->layer)
        continue;
       if (shadow)
-       error("Duplicate shadow objects found: %08lX and %08lX", shadow->index, itor->index);
+       error("Duplicate shadow objects found: %s and %s", shadow->print_name.c_str(), itor->print_name.c_str());
       shadow = &*itor;
       continue;
      }
@@ -143,7 +143,7 @@ class Convert
       if (!itor->layer)
        continue;
       if (collision)
-       error("Duplicate collision objects found: %08lX and %08lX", collision->index, itor->index);
+       error("Duplicate collision objects found: %s and %s", collision->print_name.c_str(), itor->print_name.c_str());
       collision = &*itor;
       continue;
      }
@@ -157,25 +157,54 @@ class Convert
     {
      Cache::iterator found(cache.find(itor->index));
      if (found != cache.end())
-      error("Objects with duplicate index %08lX are found", itor->index);
+      error("Objects with duplicate index are found: %s and %s", itor->print_name.c_str(), found->second->object->print_name.c_str());
     }
 
     {
      if (itor->motion.nchannels != 9)
-      error("Invalid motion for object %08lX: number of channels is %u", itor->index, itor->motion.nchannels);
+      error("Invalid motion for object %s: number of channels is %u", itor->print_name.c_str(), itor->motion.nchannels);
+
+     typedef std::set<float> Times;
+     Times times;
+     for (int i = 0; i < 9; i++)
+      {
+       const Channel::Keys& keys = itor->motion.channels[i].keys;
+       for (int j = 0; j < keys.size(); j++)
+        {
+         times.insert(keys[j].time);
+        }
+      }
+     if (times.size() > 1)
+      {
+       for (int i = 0; i < 9; i++)
+        {
+         Channel::Keys& keys = const_cast<Channel::Keys&>(itor->motion.channels[i].keys);
+         if (keys.size() == 1)
+          {
+           warning("Adding keys for object %s channel %i", itor->print_name.c_str(), i);
+           Key key(keys.front());
+           keys.clear();
+           for (Times::const_iterator itor(times.begin()); itor != times.end(); ++itor)
+            {
+             key.time = *itor;
+             keys.push_back(key);
+            }
+          }
+        }
+      }
      for (int i = 1; i < 9; i++)
       {
        if (itor->motion.channels[0].keys.size() != itor->motion.channels[i].keys.size())
-        error("Invalid motion for object %08lX: size %i %u %u", itor->index, i, itor->motion.channels[0].keys.size(), itor->motion.channels[i].keys.size());
+        error("Invalid motion for object %s: size for channel 0 is %u, for channel %i is %u", itor->print_name.c_str(), itor->motion.channels[0].keys.size(), i, itor->motion.channels[i].keys.size());
        for (int j = 0; j < itor->motion.channels[0].keys.size(); j++)
         {
 #define CHECK(name, type) \
  if (itor->motion.channels[0].keys[j]. ## name != itor->motion.channels[i].keys[j]. ## name) \
-  warning("Invalid motion for object %08lX: " #name " %i %i %" type " %" type, itor->index, i, j, itor->motion.channels[0].keys[j]. ## name, itor->motion.channels[i].keys[j]. ## name);
+  warning("Invalid motion for object %s: parameter " #name " channel %i key %i expected %" type " got %" type, itor->print_name.c_str(), i, j, itor->motion.channels[0].keys[j]. ## name, itor->motion.channels[i].keys[j]. ## name);
          CHECK(time, "f")
          CHECK(spantype, "i")
          if (itor->motion.channels[0].keys[j].spantype != 0 && itor->motion.channels[0].keys[j].spantype != 3)
-          error("Invalid motion for object %08lX: 0 %i spantype %i", itor->index, j, itor->motion.channels[0].keys[j].spantype);
+          error("Invalid motion for object %s: 0 %i spantype %i", itor->print_name.c_str(), j, itor->motion.channels[0].keys[j].spantype);
          CHECK(p[0], "f")
          CHECK(p[1], "f")
          CHECK(p[2], "f")
@@ -206,7 +235,7 @@ class Convert
      {
       if (root)
        {
-        error("Only one root object allowed, but two found: %08lX and %08lX", root->object->index, hierobj->object->index);
+        error("Only one root object allowed, but at least two are found: %s and %s", root->object->print_name.c_str(), hierobj->object->print_name.c_str());
 #if 0
         if (root->object)
          {
@@ -232,7 +261,7 @@ class Convert
       {
        Cache::iterator found(cache.find(hierobj->object->index));
        if (found != cache.end())
-        error("Objects with duplicate index %08lX are found", hierobj->object->index);
+        error("Objects with duplicate index are found %s and %s ", hierobj->object->print_name.c_str(), found->second->object->print_name.c_str());
       }
       Cache::iterator found(cache.find(hierobj->object->motion.parent));
       if (found != cache.end())
@@ -246,8 +275,7 @@ class Convert
        ++itor;
      }
     if (!modified)
-     error("Either cyclic dependency within hierarchy or inexisting parent for object(s) "
-           "(at least %08lX)", deferred.front()->object->index);
+     error("Either cyclic dependency within hierarchy or inexisting parent for object(s) (at least %s)", deferred.front()->object->print_name.c_str());
    }
 
   for (Lws::Lights::const_iterator itor(lws.lights.begin()); itor != lws.lights.end(); ++itor)
@@ -266,7 +294,7 @@ class Convert
      {
       Cache::iterator found(cache.find(itor->target));
       if (found == cache.end())
-       error("Failed to find object with index %08lX as target for camera '%s'", itor->target, itor->name);
+       error("Failed to find object with index %08lX as target for camera '%s'", itor->target, itor->print_name.c_str());
       cameradesc.target = found->second->object;
      }
     cameras.push_back(cameradesc);
@@ -405,8 +433,19 @@ class Convert
    }
  }
 
- void save_animation(const Motion& motion) const
+ void save_animation(const GeneralObject& general_object) const
  {
+  const Motion& motion = general_object.motion;
+  if (motion.channels[0].keys.empty())
+   error("Empty motion for %s", general_object.print_name.c_str());
+  for (int i = 1; i < motion.channels[0].keys.size(); i++)
+   {
+    int cur = static_cast<int>(motion.channels[0].keys[i].time * fps);
+    int prev = static_cast<int>(motion.channels[0].keys[i - 1].time * fps);
+    if (cur <= prev)
+     error("Invalid motion for %s: time is not increasing in channel 0 between keys %i (%i) and %i (%i)", general_object.print_name.c_str(), i - 1, prev, i, cur);
+   }
+
   fw(static_cast<int>(motion.channels[0].keys.size()));
   for (int i = 0; i < motion.channels[0].keys.size(); i++)
    {
@@ -462,7 +501,7 @@ class Convert
   else
    fw(0);
 
-  save_animation(subobject.object->motion);
+  save_animation(*subobject.object);
 
   save_dissolve(subobject.object->dissolve);
 
@@ -490,7 +529,7 @@ class Convert
     fw(itor->camera->locked & 8 ? 1 : 0);
     fw(itor->camera->locked & 16 ? 1 : 0);
     fw(itor->camera->locked & 32 ? 1 : 0);
-    save_animation(itor->camera->motion);
+    save_animation(*itor->camera);
    }
 
   fw(static_cast<int>(links.size()));
@@ -566,7 +605,7 @@ class Convert
   else
    fw("");
 
-  save_animation(main.object->motion);
+  save_animation(*main.object);
 
   save_dissolve(main.object->dissolve);
 

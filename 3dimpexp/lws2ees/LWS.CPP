@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <vector>
+#include <map>
 #include <string>
 
 #include "../common/common.h"
@@ -116,7 +117,7 @@ struct PluginLod
 struct GeneralObject
 {
  GeneralObject(void)
-  : visibility(0), color(0)
+  : visibility(0), color(0), index(0)
  {
  }
 
@@ -129,11 +130,13 @@ struct GeneralObject
   printf("\n");
  }
 
+ std::string print_name;
  int visibility;
  int color;
  Motion motion;
  PluginLod lods;
  Channel dissolve;
+ long index;
 };
 
 struct Limits
@@ -179,7 +182,7 @@ struct Collision
 struct Object : GeneralObject
 {
  Object(void)
-  : index(0), layer(-1)
+  : layer(-1)
  {
  }
 
@@ -225,7 +228,6 @@ struct Object : GeneralObject
    }
  }
 
- long index;
  int layer;
  std::string filename;
  std::string search;
@@ -251,7 +253,7 @@ struct Color
 struct Light : GeneralObject
 {
  Light(void)
-  : index(0), intensity(0.0), type(0)
+  : intensity(0.0), type(0)
  {
  }
 
@@ -266,7 +268,6 @@ struct Light : GeneralObject
   printf("\n");
  }
 
- long index;
  std::string name;
  Color light;
  float intensity;
@@ -276,7 +277,7 @@ struct Light : GeneralObject
 struct Camera : GeneralObject
 {
  Camera(void)
-  : index(0), locked(0), target(0)
+  : locked(0), target(0)
  {
  }
 
@@ -291,11 +292,12 @@ struct Camera : GeneralObject
   printf("\n");
  }
 
- long index;
  std::string name;
  unsigned locked;
  long target;
 };
+
+typedef std::map<std::string, int> GeneralObjectNumbers;
 
 struct Lws
 {
@@ -616,6 +618,8 @@ class LwsFile : public Lws
     object.filename = keyword;
    }
 
+  std::string fname(object.filename.substr(object.filename.rfind('\\') + 1));
+  MakeName(object, fname.substr(0, fname.rfind('.')), ObjectNumbers);
   objects.push_back(object);
   LastObject = &objects.back();
  }
@@ -650,6 +654,7 @@ class LwsFile : public Lws
   if (str[0] && str[1])
    object.filename.assign(str + 1, strlen(str) - 2);
   object.layer = 0;
+  MakeName(object, "NullObject", ObjectNumbers);
   objects.push_back(object);
   LastObject = &objects.back();
  }
@@ -668,6 +673,7 @@ class LwsFile : public Lws
   if (!LastLight)
    error("Line %i: LightName without previous light", line);
   LastLight->name = str;
+  MakeName(*LastLight, LastLight->name, LightNumbers);
  }
 
  void ProcessLightColor(void)
@@ -706,6 +712,7 @@ class LwsFile : public Lws
   if (!LastCamera)
    error("Line %i: CameraName without previous camera", line);
   LastCamera->name = str;
+  MakeName(*LastCamera, LastCamera->name, CameraNumbers);
  }
 
  void ProcessCameraLocked(void)
@@ -748,12 +755,22 @@ class LwsFile : public Lws
   ProcessLimits(&Object::b);
  }
 
+ MakeName(GeneralObject& general_object, const std::string& name, GeneralObjectNumbers& numbers)
+ {
+   char print_name[1024];
+   sprintf(print_name, "%08lX:%i [%s (%i)]", general_object.index, line, name.c_str(), ++numbers[name]);
+   general_object.print_name = print_name;
+ }
+
 
  FILE* fp;
  int line;
  char str[1024];
  std::string keyword;
 
+ GeneralObjectNumbers ObjectNumbers;
+ GeneralObjectNumbers CameraNumbers;
+ GeneralObjectNumbers LightNumbers;
 
  GeneralObject* LastGeneralObject;
  Object* LastObject;
