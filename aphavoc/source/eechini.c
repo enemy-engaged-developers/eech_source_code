@@ -457,7 +457,7 @@ static const struct config_option options[] =
 		INT(command_line_comms_pack_buffer_size) },
 	{ "cpds", "comms_packet_data_size", "packet data size (def = 512)",
 		INT(command_line_comms_packet_data_size) },
-	{ "cgs", "command_line_comms_guaranteed_send", "force the comms to use DirectPlay guaranteed send instead of its own (0 = off, 1 = on) (def = 0)",
+	{ "cgs", "command_line_comms_guaranteed_send", "force the comms to use DirectPlay guaranteed send instead of its own (0 = off, 1 = on) (def = 1)",
 		SPECINT(command_line_comms_guaranteed_send, set_guarsend, get_int) },
 	{ "crls", "comms_resend_list_size", "packet history list size, increase if client keeps getting kicked out by server (default = 1000)",
 		INT(command_line_comms_resend_list_size) },

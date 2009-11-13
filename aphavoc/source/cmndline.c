@@ -132,7 +132,7 @@ int
 	command_line_comms_timeout									= (15.0),
 	command_line_comms_pack_buffer_size						= (210 * 1024),
 	command_line_comms_initial_sleep_time					= 500,
-	command_line_comms_guaranteed_send						= FALSE,  ////Moje 040304 Could be slightly better...
+	command_line_comms_guaranteed_send						= TRUE,
 	command_line_comms_dedicated_server						= FALSE,
 	command_line_comms_interpolate_gunships				= TRUE,
 	command_line_comms_validate_connections				= TRUE, // Jabberwock - We need validate_connections...
