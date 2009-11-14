@@ -383,9 +383,9 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  current = -1;
 
 #ifdef SCENE_3
- fprintf(fp, "LWSC\n3\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
+ fprintf(fp, "LWSC\n3\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
 #else
- fprintf(fp, "LWSC\n4\n\nFirstFrame 1\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
+ fprintf(fp, "LWSC\n4\n\nFirstFrame 0\nLastFrame 600\nFramesPerSecond 1\n"); //FIXME
 #endif
 
  if (scene->shadow_polygon_object_index > 0)
