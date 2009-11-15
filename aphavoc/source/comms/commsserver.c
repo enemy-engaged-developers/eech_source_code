@@ -119,7 +119,7 @@ connection_list_type *register_connection (DPID connection_id)
 
 		memset (new_connection, 0, sizeof (connection_list_type));
 
-		new_connection->connection_receive_buffer = (char *) malloc_heap_mem (command_line_comms_connection_receive_size);
+		new_connection->connection_receive_buffer = (unsigned char *) malloc_heap_mem (command_line_comms_connection_receive_size);
 
 		new_connection->connection_receive_buffer_size = command_line_comms_connection_receive_size;
 

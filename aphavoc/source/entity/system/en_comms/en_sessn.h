@@ -70,9 +70,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern int pack_session (char *buffer, int *buffer_size, pack_modes mode);
+extern int pack_session (unsigned char *buffer, int *buffer_size, pack_modes mode);
 
-extern int unpack_session (char *buffer, int buffer_size, pack_modes mode);
+extern int unpack_session (unsigned char *buffer, int buffer_size, pack_modes mode);
 
 extern void initialise_entity_list_validation (void);
 

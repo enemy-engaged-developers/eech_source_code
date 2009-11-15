@@ -188,7 +188,7 @@ static float calculate_group_to_task_suitability (entity_sub_types group_type, e
 
 		b = (float)(task_factors->air_attack_strength);
 
-		result *= min ((a / b), 1.0);
+		result *= min ((a / b), 1.0f);
 	}
 
 	if (task_factors->ground_attack_strength > 0)
@@ -197,7 +197,7 @@ static float calculate_group_to_task_suitability (entity_sub_types group_type, e
 
 		b = (float)(task_factors->ground_attack_strength);
 
-		result *= min ((a / b), 1.0);
+		result *= min ((a / b), 1.0f);
 	}
 
 	ASSERT ((result >= 0.0) && (result <= 1.0));
@@ -228,11 +228,11 @@ void initialise_group_task_array (void)
 
 	ASSERT (!group_task_array);
 
-	group_task_array = malloc_heap_mem (sizeof (float *) * NUM_ENTITY_SUB_TYPE_GROUPS);
+	group_task_array = (float **) malloc_heap_mem (sizeof (float *) * NUM_ENTITY_SUB_TYPE_GROUPS);
 
 	for (group = 0; group < NUM_ENTITY_SUB_TYPE_GROUPS; group ++)
 	{
-		group_task_array [group] = malloc_heap_mem (sizeof (float) * NUM_ENTITY_SUB_TYPE_TASKS);
+		group_task_array [group] = (float*) malloc_heap_mem (sizeof (float) * NUM_ENTITY_SUB_TYPE_TASKS);
 
 		for (task = 0; task < NUM_ENTITY_SUB_TYPE_TASKS; task ++)
 		{

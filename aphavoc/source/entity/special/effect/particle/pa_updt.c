@@ -131,7 +131,7 @@ int update_particle( entity *en )
 		m,
 		rotation_matrix;
 
-	raw = get_local_entity_data (en);
+	raw = (particle *) get_local_entity_data (en);
 
 	//
 	// get special effect root - list of all smoke trails attached to the particles

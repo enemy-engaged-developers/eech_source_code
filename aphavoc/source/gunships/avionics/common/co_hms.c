@@ -191,7 +191,7 @@ static void deinitialise_hms_target_list (void)
 static void insert_entity_into_hms_target_list (entity *target, entity *locked_target, float cos_angular_error, vec3d *target_position)
 {
 	hms_target
-		*new,
+		*new_,
 		*succ,
 		*pred;
 
@@ -200,12 +200,12 @@ static void insert_entity_into_hms_target_list (entity *target, entity *locked_t
 
 	ASSERT (target_position);
 
-	new = malloc_fast_mem (sizeof (hms_target));
+	new_ = (hms_target *) malloc_fast_mem (sizeof (hms_target));
 
-	new->target = target;
-	new->cos_angular_error = cos_angular_error;
-	new->target_position = *target_position;
-	new->locked = FALSE;
+	new_->target = target;
+	new_->cos_angular_error = cos_angular_error;
+	new_->target_position = *target_position;
+	new_->locked = FALSE;
 
 	//
 	// sort list in descending order of cos_angular_error
@@ -222,7 +222,7 @@ static void insert_entity_into_hms_target_list (entity *target, entity *locked_t
 
 		if (target == locked_target)
 		{
-			new->locked = TRUE;
+			new_->locked = TRUE;
 
 			insert = TRUE;
 		}
@@ -248,21 +248,21 @@ static void insert_entity_into_hms_target_list (entity *target, entity *locked_t
 
 		if (insert)
 		{
-			new->succ = succ;
-			new->pred = pred;
+			new_->succ = succ;
+			new_->pred = pred;
 
 			if (succ)
 			{
-				succ->pred = new;
+				succ->pred = new_;
 			}
 
 			if (pred)
 			{
-				pred->succ = new;
+				pred->succ = new_;
 			}
 			else
 			{
-				hms_target_root = new;
+				hms_target_root = new_;
 			}
 
 			break;
@@ -769,7 +769,7 @@ void update_common_hms (void)
 {
 	entity
 		*current_target,
-		*new_target;
+		*new__target;
 
 	get_pilot_head_viewpoint ();
 
@@ -783,25 +783,25 @@ void update_common_hms (void)
 		}
 	}
 
-	new_target = get_hms_boresight_target ();
+	new__target = get_hms_boresight_target ();
 
 	if (hms_target_locked)
 	{
-		if (new_target != current_target)
+		if (new__target != current_target)
 		{
 			hms_target_locked = FALSE;
 		}
 	}
 
-	if (new_target)
+	if (new__target)
 	{
-		if (get_local_entity_parent (new_target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
+		if (get_local_entity_parent (new__target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
 		{
-			insert_local_entity_into_parents_child_list (new_target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
+			insert_local_entity_into_parents_child_list (new__target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
 		}
 	}
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
 	target_locked = hms_target_locked;
 
@@ -945,10 +945,10 @@ void select_next_hms_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	hms_target_locked = FALSE;
 
@@ -968,7 +968,7 @@ void select_next_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -984,7 +984,7 @@ void select_next_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -994,13 +994,13 @@ void select_next_hms_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
-	if (new_target)
+	if (new__target)
 	{
 		hms_target_locked = TRUE;
 
-		get_pilot_head_heading_and_pitch_to_target (new_target);
+		get_pilot_head_heading_and_pitch_to_target (new__target);
 
 		if (in_cockpit)
 		{
@@ -1020,10 +1020,10 @@ void select_previous_hms_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	hms_target_locked = FALSE;
 
@@ -1043,7 +1043,7 @@ void select_previous_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1059,7 +1059,7 @@ void select_previous_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1069,13 +1069,13 @@ void select_previous_hms_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
-	if (new_target)
+	if (new__target)
 	{
 		hms_target_locked = TRUE;
 
-		get_pilot_head_heading_and_pitch_to_target (new_target);
+		get_pilot_head_heading_and_pitch_to_target (new__target);
 
 		if (in_cockpit)
 		{
@@ -1097,10 +1097,10 @@ void select_next_designated_hms_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	hms_target_locked = FALSE;
 
@@ -1120,7 +1120,7 @@ void select_next_designated_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1136,7 +1136,7 @@ void select_next_designated_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1146,13 +1146,13 @@ void select_next_designated_hms_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
-	if (new_target)
+	if (new__target)
 	{
 		hms_target_locked = TRUE;
 
-		get_pilot_head_heading_and_pitch_to_target (new_target);
+		get_pilot_head_heading_and_pitch_to_target (new__target);
 
 		if (in_cockpit)
 		{
@@ -1172,10 +1172,10 @@ void select_previous_designated_hms_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	hms_target_locked = FALSE;
 
@@ -1195,7 +1195,7 @@ void select_previous_designated_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1211,7 +1211,7 @@ void select_previous_designated_hms_target (void)
 			{
 				if (get_selectable_hms_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1221,13 +1221,13 @@ void select_previous_designated_hms_target (void)
 		}
 	}
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
-	if (new_target)
+	if (new__target)
 	{
 		hms_target_locked = TRUE;
 
-		get_pilot_head_heading_and_pitch_to_target (new_target);
+		get_pilot_head_heading_and_pitch_to_target (new__target);
 
 		if (in_cockpit)
 		{

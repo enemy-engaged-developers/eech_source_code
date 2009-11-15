@@ -240,7 +240,7 @@ void allocate_source_sound_samples ( int number )
 	// Allocate an array of pointers
 	//
 
-	source_sound_samples = safe_malloc ( number * sizeof ( sound_sample ) );
+	source_sound_samples = ( sound_sample * ) safe_malloc ( number * sizeof ( sound_sample ) );
 
 	if ( !source_sound_samples )
 	{

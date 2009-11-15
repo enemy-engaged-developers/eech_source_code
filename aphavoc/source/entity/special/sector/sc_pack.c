@@ -138,13 +138,13 @@ void pack_local_sector_data (pack_modes mode)
 
 	en = get_local_raw_sector_entity (0, 0);
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	pack_int_value (NULL, INT_TYPE_SIDE, raw->side);
 
 	sector_pack_size += NUM_SIDE_BITS;
 
-	current_side = raw->side;
+	current_side = (entity_sides) raw->side;
 
 	side_count = 0;
 
@@ -158,12 +158,12 @@ void pack_local_sector_data (pack_modes mode)
 
 			en = get_local_raw_sector_entity(x_sec, z_sec);
 
-			raw = get_local_entity_data (en);
+			raw = (sector *) get_local_entity_data (en);
 
 			if (current_side != raw->side)
 			{
 
-				current_side = raw->side;
+				current_side = (entity_sides) raw->side;
 
 				pack_int_value (NULL, INT_TYPE_LENGTH, side_count);
 
@@ -227,7 +227,7 @@ void pack_local_sector_data (pack_modes mode)
 		{
 			en = get_local_raw_sector_entity(x_sec, z_sec);
 
-			raw = get_local_entity_data (en);
+			raw = (sector *) get_local_entity_data (en);
 
 			pack_float_value (en, FLOAT_TYPE_FOG_OF_WAR, raw->fog_of_war [ENTITY_SIDE_BLUE_FORCE]);
 			pack_float_value (en, FLOAT_TYPE_FOG_OF_WAR, raw->fog_of_war [ENTITY_SIDE_RED_FORCE]);
@@ -249,7 +249,7 @@ void pack_local_sector_data (pack_modes mode)
 
 				en = get_local_raw_sector_entity(x_sec, z_sec);
 
-				raw = get_local_entity_data (en);
+				raw = (sector *) get_local_entity_data (en);
 
 				/////////////////////////////////////////////////////////////////
 				if (raw->sector_task_root.first_child)
@@ -328,7 +328,7 @@ void unpack_local_sector_data (pack_modes mode)
 
 	en = NULL;
 
-	side = unpack_int_value (NULL, INT_TYPE_SIDE);
+	side = (entity_sides) unpack_int_value (NULL, INT_TYPE_SIDE);
 
 	side_count = unpack_int_value (NULL, INT_TYPE_LENGTH);
 
@@ -340,7 +340,7 @@ void unpack_local_sector_data (pack_modes mode)
 		while (side_count > 0)
 		{
 
-			raw = get_local_entity_data (en);
+			raw = (sector *) get_local_entity_data (en);
 
 			raw->side = side;
 
@@ -349,7 +349,7 @@ void unpack_local_sector_data (pack_modes mode)
 			en ++;
 		}
 
-		side = unpack_int_value (NULL, INT_TYPE_SIDE);
+		side = (entity_sides) unpack_int_value (NULL, INT_TYPE_SIDE);
 
 		side_count = unpack_int_value (NULL, INT_TYPE_LENGTH);
 	}
@@ -364,7 +364,7 @@ void unpack_local_sector_data (pack_modes mode)
 		{
 			en = get_local_raw_sector_entity(x_sec, z_sec);
 
-			raw = get_local_entity_data (en);
+			raw = (sector *) get_local_entity_data (en);
 
 			raw->fog_of_war [ENTITY_SIDE_BLUE_FORCE] = unpack_float_value (en, FLOAT_TYPE_FOG_OF_WAR);
 			raw->fog_of_war [ENTITY_SIDE_RED_FORCE] = unpack_float_value (en, FLOAT_TYPE_FOG_OF_WAR);
@@ -386,7 +386,7 @@ void unpack_local_sector_data (pack_modes mode)
 
 				en = get_local_raw_sector_entity(x_sec, z_sec);
 
-				raw = get_local_entity_data (en);
+				raw = (sector *) get_local_entity_data (en);
 
 				if (unpack_int_value (en, INT_TYPE_VALID))
 				{

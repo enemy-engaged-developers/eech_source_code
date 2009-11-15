@@ -201,7 +201,7 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	#if DEBUG_MODULE
 
@@ -229,7 +229,7 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 
 	landing_route_first_wp = get_local_entity_first_child (landing_task, LIST_TYPE_WAYPOINT);
 
-	formation_data = get_formation (get_local_entity_int_value (landing_route_first_wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (landing_route_first_wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	while (member)
 	{
@@ -348,7 +348,7 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 					(
 						get_session_entity (),
 						member,
-						get_local_entity_int_value (member, INT_TYPE_SIDE),
+						(entity_sides) get_local_entity_int_value (member, INT_TYPE_SIDE),
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
@@ -431,7 +431,7 @@ static int response_to_landing_site_request (entity_messages message, entity *re
 					(
 						get_session_entity (),
 						member,
-						get_local_entity_int_value (member, INT_TYPE_SIDE),
+						(entity_sides) get_local_entity_int_value (member, INT_TYPE_SIDE),
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
@@ -488,13 +488,13 @@ static int response_to_lock_landing_route (entity_messages message, entity *rece
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_landing = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
 	wp = get_local_landing_entity_route (receiver, ENTITY_SUB_TYPE_TASK_LANDING);
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_landing %= formation_data->number_in_formation;
 
@@ -605,7 +605,7 @@ static int response_to_lock_landing_site (entity_messages message, entity *recei
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_landing = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
@@ -729,7 +729,7 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_takeoff = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
@@ -745,7 +745,7 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 		wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
 	}
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_takeoff %= formation_data->number_in_formation;
 
@@ -914,7 +914,7 @@ static int response_to_lock_takeoff_route (entity_messages message, entity *rece
 			(
 				get_session_entity (),
 				sender,
-				get_local_entity_int_value (sender, INT_TYPE_SIDE),
+				(entity_sides) get_local_entity_int_value (sender, INT_TYPE_SIDE),
 				ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 				SOUND_LOCALITY_RADIO,
 				0.0,
@@ -955,7 +955,7 @@ static int response_to_reserve_landing_site (entity_messages message, entity *re
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	count = va_arg (pargs, int);
 	
@@ -1193,7 +1193,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 
 	holding_task = get_local_landing_entity_task (receiver, ENTITY_SUB_TYPE_TASK_LANDING_HOLDING);
 
-	formation_data = get_formation (get_local_entity_int_value (landing_route_first_wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (landing_route_first_wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	next_landing_member = NULL;
 
@@ -1453,13 +1453,13 @@ static int response_to_unlock_landing_route (entity_messages message, entity *re
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_landing = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
 	wp = get_local_landing_entity_route (receiver, ENTITY_SUB_TYPE_TASK_LANDING);
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_landing %= formation_data->number_in_formation;
 
@@ -1572,7 +1572,7 @@ static int response_to_unlock_landing_site (entity_messages message, entity *rec
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_landing = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
@@ -1701,7 +1701,7 @@ static int response_to_unlock_takeoff_route (entity_messages message, entity *re
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	formation_takeoff = get_local_entity_int_value (sender, INT_TYPE_FORMATION_POSITION);
 
@@ -1715,7 +1715,7 @@ static int response_to_unlock_takeoff_route (entity_messages message, entity *re
 	}
 	// end test
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_takeoff %= formation_data->number_in_formation;
 
@@ -1885,7 +1885,7 @@ static int response_to_unreserve_landing_site (entity_messages message, entity *
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (landing *) get_local_entity_data (receiver);
 
 	count = va_arg (pargs, int);
 
@@ -2088,7 +2088,7 @@ void debug_update_entity_landing_locks (entity *en, entity *landing, debug_landi
 	if (!item)
 	{
 
-		item = malloc_heap_mem (sizeof (debug_landing_lock_type));
+		item = (debug_landing_lock_type *) malloc_heap_mem (sizeof (debug_landing_lock_type));
 
 		memset (item, 0, sizeof (debug_landing_lock_type));
 
@@ -2301,7 +2301,7 @@ void unpack_debug_entity_landing_locks (pack_modes mode)
 	while (valid)
 	{
 
-		item = malloc_heap_mem (sizeof (debug_landing_lock_type));
+		item = (debug_landing_lock_type *) malloc_heap_mem (sizeof (debug_landing_lock_type));
 
 		memset (item, 0, sizeof (debug_landing_lock_type));
 

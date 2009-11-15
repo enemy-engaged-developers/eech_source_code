@@ -126,7 +126,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 				if (frand1x (&random_seed) > 0.8)
 				{
 	
-					warhead_type = get_local_entity_int_value (sender, INT_TYPE_WEAPON_WARHEAD_TYPE);
+					warhead_type = (weapon_warhead_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_WARHEAD_TYPE);
 	
 					if ((warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE) ||
 							(warhead_type == WEAPON_WARHEAD_TYPE_HIGH_EXPLOSIVE_ANTI_TANK))
@@ -169,7 +169,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		aggressor = NULL;
 	}
 
-	force = get_local_force_entity (get_local_entity_int_value (receiver, INT_TYPE_SIDE));
+	force = get_local_force_entity ((entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE));
 
 	enemy_force = get_local_force_entity (get_enemy_side (get_local_entity_int_value (receiver, INT_TYPE_SIDE)));
 
@@ -235,7 +235,7 @@ static int response_to_articulate_loading_doors (entity_messages message, entity
 
 	#endif
 
-	inst3d = get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{

@@ -87,7 +87,7 @@ void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -204,7 +204,7 @@ int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	switch (type)
 	{

@@ -87,7 +87,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (pilot *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_CREW_ROLE:
 		////////////////////////////////////////
 		{
-			raw->crew_role = value;
+			raw->crew_role = (crew_roles) value;
 
 			break;
 		}
@@ -226,7 +226,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (pilot *) get_local_entity_data (en);
 
 	switch (type)
 	{

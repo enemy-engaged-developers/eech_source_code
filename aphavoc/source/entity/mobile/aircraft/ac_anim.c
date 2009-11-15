@@ -114,7 +114,7 @@ void animate_aircraft_loading_doors( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_LOADING_DOOR, raw->loading_door_state );
 }
@@ -137,7 +137,7 @@ void update_aircraft_loading_doors( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	door_state = update_entity_reversable_keyframed_value( en, &raw->loading_door_state, 0.5 );
 
@@ -203,7 +203,7 @@ void animate_aircraft_cargo_doors( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_CARGO_DOOR, raw->cargo_door_state );
 }
@@ -226,7 +226,7 @@ void update_aircraft_cargo_doors( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	door_state = update_entity_reversable_keyframed_value( en, &raw->cargo_door_state, 0.5 );
 
@@ -280,7 +280,7 @@ void animate_aircraft_rudder( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_RUDDER, raw->rudder_state );
 	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_KA52_RUDDER, raw->rudder_state );
@@ -301,7 +301,7 @@ void update_aircraft_rudder( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	update_entity_simple_keyframed_value( en, &raw->rudder_state, 0.16666 );
 }
@@ -344,7 +344,7 @@ void animate_aircraft_undercarriage( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_UNDERCARRIAGE, raw->undercarriage_state );
 
@@ -372,7 +372,7 @@ void update_aircraft_undercarriage( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	old_uc_state = raw->undercarriage_state;
 
@@ -491,7 +491,7 @@ void animate_aircraft_weapon_system_ready( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_READY, raw->weapon_system_ready_state );
 }
@@ -514,7 +514,7 @@ void update_aircraft_weapon_system_ready( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (aircraft *) get_local_entity_data( en );
 
 	wsr_state = update_entity_reversable_keyframed_value( en, &raw->weapon_system_ready_state, 0.5 );
 
@@ -558,7 +558,7 @@ void animate_aircraft_shadow (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	raw->inst3d->object_has_shadow = TRUE;
 
@@ -666,7 +666,7 @@ void uneject_aircraft_crew (entity *en)
 			// reload weapons
 			//
 
-			config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 			set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 		}

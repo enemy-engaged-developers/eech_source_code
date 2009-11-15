@@ -84,7 +84,7 @@ static float get_local_float_value (entity *en, float_types type)
 	float
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (scenic *) get_local_entity_data (en);
 
 	switch (type)
 	{

@@ -107,7 +107,7 @@ static void draw_local_3d_object (entity *en, float range)
 	sys_colours
 		col;
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	if (raw->position_type == POSITION_TYPE_VIRTUAL)
 	{
@@ -248,7 +248,7 @@ void draw_local_waypoint_2d_symbol (entity *en, int add_waypoint_flag, int draw_
 
 	ASSERT (en->type == ENTITY_TYPE_WAYPOINT);
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	task = get_local_entity_parent (en, LIST_TYPE_WAYPOINT);
 
@@ -268,7 +268,7 @@ void draw_local_waypoint_2d_symbol (entity *en, int add_waypoint_flag, int draw_
 	// Draw waypoint (with formation positions if AI-tool)
 	//
 
-	formation_data = get_formation (raw->waypoint_formation);
+	formation_data = get_formation ((formation_types) raw->waypoint_formation);
 
 	for (loop = 0; loop < formation_data->number_in_formation; loop ++)
 	{

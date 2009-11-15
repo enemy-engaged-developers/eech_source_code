@@ -416,7 +416,7 @@ static void draw_pitch_scale (void)
 	pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 	pitch = deg(pitch);
 
-	mod_pitch_step_10 = fmod (pitch, 10.0);
+	mod_pitch_step_10 = fmod (pitch, 10.0f);
 
 	int_pitch_step_10 = ((int)(pitch * 0.1)) * 10;
 	int_pitch_step_10 -= 30;
@@ -543,7 +543,7 @@ static void draw_heading_scale (void)
 
 	heading = deg (heading);
 
-	mod_heading_step_10 = fmod (heading, 10.0);
+	mod_heading_step_10 = fmod (heading, 10.0f);
 
 	int_heading_step_10 = ((int) (heading * 0.1));
 
@@ -737,7 +737,7 @@ static void draw_velocity_vector(void)
 	draw_line_func(0.0, 0.0, x, z, hud_colour);
 }
 
-static void draw_velocity_scale(airspeed)
+static void draw_velocity_scale(float airspeed)
 {
 	float y_offset = bound(airspeed, 0.0, 500.0) * 0.0014;
 	

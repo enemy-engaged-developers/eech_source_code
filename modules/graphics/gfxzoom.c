@@ -73,7 +73,7 @@
 zoomable_graphic * load_zoomable_graphic ( const char *filename )
 {
 
-	char
+	unsigned char
 		*memory_mapped_file,
 		*data;
 
@@ -87,7 +87,7 @@ zoomable_graphic * load_zoomable_graphic ( const char *filename )
 	zoomable_graphic
 		*graphic;
 
-	data = memory_map_tga_file ( filename, &memory_mapped_file, &width, &height, &bits );
+	data = ( unsigned char * ) memory_map_tga_file ( filename, &memory_mapped_file, &width, &height, &bits );
 
 	if ( bits != 8 )
 	{
@@ -105,19 +105,19 @@ zoomable_graphic * load_zoomable_graphic ( const char *filename )
 			total,
 			count;
 
-		graphic = malloc_fast_mem ( sizeof ( zoomable_graphic ) );
+		graphic = ( zoomable_graphic * ) malloc_fast_mem ( sizeof ( zoomable_graphic ) );
 
 		graphic->width = width;
 
 		graphic->height = height;
 
-		graphic->data = data;
+		graphic->data = ( unsigned char * ) data;
 
-		graphic->memory_mapped_file = memory_mapped_file;
+		graphic->memory_mapped_file = ( unsigned char * ) memory_mapped_file;
 
 		graphic->inverted = tga_image_origin_bottom_left;
 
-		graphic->palette = safe_malloc ( 256 * sizeof ( unsigned int ) );
+		graphic->palette = ( unsigned int * ) safe_malloc ( 256 * sizeof ( unsigned int ) );
 
 		for ( count = 0; count < 256; count++ )
 		{
@@ -133,9 +133,9 @@ zoomable_graphic * load_zoomable_graphic ( const char *filename )
 			colour.b = tga_image_palette[count].peBlue;
 			colour.a = 0;
 
-			palette_colour = get_rgb_packed_value ( colour );
+			palette_colour = get_packed_colour ( colour );
 			palette_colour <<= 16;
-			palette_colour |= get_rgb_packed_value ( colour );
+			palette_colour |= get_packed_colour ( colour );
 			graphic->palette[count] = palette_colour;
 		}
 

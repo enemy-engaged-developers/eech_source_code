@@ -86,7 +86,7 @@ static void create_screen_ui_object (ui_object *obj, ui_object_types type, va_li
 
    obj->type = type;
 
-   new_screen = safe_malloc (sizeof (screen_ui_object));
+   new_screen = (screen_ui_object *) safe_malloc (sizeof (screen_ui_object));
 
    obj->data = new_screen;
 

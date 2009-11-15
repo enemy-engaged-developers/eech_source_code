@@ -69,6 +69,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "system.h"
+#include "3d/3dfunc.h"
 
 // crh 030408 new single global version header
 #include "version.h"
@@ -585,6 +586,7 @@ BOOL initialise_windows ( HINSTANCE hInstance, int nCmdShow )
 
 void end_application ( void )
 {
+	f3d_context_leave ();
 
 	SendMessage ( application_window, WM_USER, exit_message_id, 0 );
 

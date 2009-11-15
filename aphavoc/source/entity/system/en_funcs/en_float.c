@@ -2231,7 +2231,7 @@ float_types unpack_float_type (void)
 	float_types
 		type;
 
-	type = unpack_unsigned_data (NUM_FLOAT_TYPE_PACK_BITS);
+	type = (float_types) unpack_unsigned_data (NUM_FLOAT_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_FLOAT_TYPES));
 

@@ -128,13 +128,13 @@ void set_hatched_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 	screen_pitch = get_screen_pitch ( active_screen );
 	screen_ptr += ( screen_pitch * y1 );
 
-	if ( get_screen_pixel_width ( active_screen ) == 2 )
+	if ( active_screen->pixel_length <= 16 )
 	{
 	
 		USHORT
 			screen_colour;
 	
-		screen_colour = get_rgb_packed_value ( colour );
+		screen_colour = get_packed_colour ( colour );
 
 		for ( y = y1; y < y2; y++ )
 		{

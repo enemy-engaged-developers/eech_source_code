@@ -81,7 +81,7 @@ static void draw_local_3d_object (entity *en, float range)
 	anti_aircraft
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	//
 	// update viewpoint

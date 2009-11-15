@@ -76,7 +76,7 @@ static void set_area_ui_object_function (ui_object *obj, void (*function) (ui_ob
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->function = function;
 }
@@ -85,13 +85,13 @@ static void set_area_ui_object_function (ui_object *obj, void (*function) (ui_ob
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_area_ui_object_function (ui_object *obj)
+static FUNCTION get_area_ui_object_function (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->function);
 }
@@ -106,7 +106,7 @@ static void set_area_ui_object_right_function (ui_object *obj, void (*function) 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->right_function = function;
 }
@@ -115,13 +115,13 @@ static void set_area_ui_object_right_function (ui_object *obj, void (*function) 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_area_ui_object_right_function (ui_object *obj)
+static FUNCTION get_area_ui_object_right_function (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->right_function);
 }
@@ -136,7 +136,7 @@ static void set_area_ui_object_draw_function (ui_object *obj, void (*function) (
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->draw_function = function;
 }
@@ -145,13 +145,13 @@ static void set_area_ui_object_draw_function (ui_object *obj, void (*function) (
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_area_ui_object_draw_function (ui_object *obj)
+static FUNCTION get_area_ui_object_draw_function (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->draw_function);
 }
@@ -166,7 +166,7 @@ static void set_area_ui_object_highlighted_function (ui_object *obj, void (*func
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_function = function;
 }
@@ -175,13 +175,13 @@ static void set_area_ui_object_highlighted_function (ui_object *obj, void (*func
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_area_ui_object_highlighted_function (ui_object *obj)
+static FUNCTION get_area_ui_object_highlighted_function (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->highlighted_function);
 }
@@ -206,7 +206,7 @@ static void call_area_ui_object_function (ui_object *obj, void *arg)
 		mouse_state,
 		mouse_graphic_state;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	function = area->function;
 
@@ -285,7 +285,7 @@ static void call_area_ui_object_right_function (ui_object *obj, void *arg)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	function = area->right_function;
 
@@ -328,7 +328,7 @@ static void call_area_ui_object_draw_function (ui_object *obj, void *arg)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	function = area->draw_function;
 
@@ -352,7 +352,7 @@ static void call_area_ui_object_highlighted_function (ui_object *obj, void *arg)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	function = area->highlighted_function;
 

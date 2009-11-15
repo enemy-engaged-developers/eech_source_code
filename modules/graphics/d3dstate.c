@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +99,66 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+struct RENDER_STATE_INFORMATION
+{
+
+	DWORD
+		value;
+
+	int
+		count;
+};
+
+typedef struct RENDER_STATE_INFORMATION render_state_information;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct TEXTURE_STATE_INFORMATION
+{
+
+	screen
+		*texture;
+
+	int
+		count;
+};
+
+typedef struct TEXTURE_STATE_INFORMATION texture_state_information;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct RENDER_STATE_INT_CHANGE
+{
+	DWORD
+		render_state,
+		value;
+};
+
+typedef struct RENDER_STATE_INT_CHANGE render_state_int_change;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct RENDER_STATE_FLOAT_CHANGE
+{
+	DWORD
+		render_state;
+
+	float
+		value;
+};
+
+typedef struct RENDER_STATE_FLOAT_CHANGE render_state_float_change;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int
 	running_total_number_of_d3d_triangles,
 	running_total_number_of_d3d_flushes,
@@ -107,14 +168,14 @@ int
 	number_of_d3d_triangles_drawn,
 	number_of_d3d_lines_drawn;
 
-render_state_information
+static render_state_information
 	render_d3d_state_table[MAX_RENDER_STATES],
 	render_d3d_texture_stage_state_table[MAX_TEXTURE_STAGES][MAX_TEXTURE_STAGE_STATES];
 
-texture_state_information
-	texture_stage_interfaces[8];
+static texture_state_information
+	texture_stage_interfaces[MAX_TEXTURE_STAGES];
 
-D3DMATERIAL7
+static D3DMATERIAL7
 	d3d_material;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,14 +208,43 @@ int
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void
+immediate_set_render_state ( DWORD state, DWORD data )
+{
+	render_d3d_state_table[state].value = data;
+	render_d3d_state_table[state].count++;
+
+	f3d_render_state ( state, data );
+}
+
+void
+immediate_set_texture ( int stage, screen *texture )
+{
+	texture_stage_interfaces[stage].texture = texture;
+	texture_stage_interfaces[stage].count++;
+
+	f3d_set_texture ( stage, texture );
+}
+
+void
+immediate_set_texture_state ( int stage, DWORD state, DWORD data )
+{
+	render_d3d_texture_stage_state_table[stage][state].value = data;
+
+	f3d_set_texture_state(stage, state, data);
+}
+
+void
+immediate_set_material ( D3DMATERIAL7 *material )
+{
+	f3d_set_material ( material );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void initialise_d3d_state ( void )
 {
-
 	int
 		stage;
-
-	HRESULT
-		d3drval;
 
 #if DEBUG_REPORT_TRIANGLES
 
@@ -168,16 +258,9 @@ void initialise_d3d_state ( void )
 	// Set the default state of d3d
 	//
 
-	if ( d3d.device )
+	if ( d3d_initialised /*d3d_data.device*/ )
 	{
-	
-		d3drval = IDirect3DDevice7_BeginScene ( d3d.device );
-	
-		if ( FAILED ( d3drval ) )
-		{
-	
-			debug_log ( "Unable to start 3d scene: %s", get_ddraw_error_message ( d3drval ) );
-		}
+		f3d_scene_begin ();
 	
 		force_set_d3d_int_state ( D3DRENDERSTATE_LASTPIXEL, TRUE );
 		force_set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
@@ -202,7 +285,7 @@ void initialise_d3d_state ( void )
 		force_set_d3d_float_state ( D3DRENDERSTATE_FOGTABLEDENSITY, 0.0 );
 		force_set_d3d_float_state ( D3DRENDERSTATE_FOGTABLEEND, 0.0 );
 	
-		if ( ddraw.lpZBuffer )
+		if ( TRUE /*ddraw.lpZBuffer*/ )
 		{
 	
 			force_set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, TRUE );
@@ -261,14 +344,8 @@ void initialise_d3d_state ( void )
 		force_set_d3d_int_state ( D3DRENDERSTATE_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL );
 		force_set_d3d_int_state ( D3DRENDERSTATE_SPECULARMATERIALSOURCE, D3DMCS_MATERIAL );
 		force_set_d3d_int_state ( D3DRENDERSTATE_EMISSIVEMATERIALSOURCE, D3DMCS_MATERIAL );
-	
-		d3drval = IDirect3DDevice7_EndScene ( d3d.device );
-	
-		if ( FAILED ( d3drval ) )
-		{
-	
-			debug_log ( "Unable to EndScene at end of default renderstate setup: %s", get_ddraw_error_message ( d3drval ) );
-		}
+
+		f3d_scene_end();
 	}
 }
 
@@ -644,7 +721,7 @@ void report_d3d_state_performance ( void )
 			DWORD
 				value;
 
-			IDirect3DDevice7_GetRenderState ( d3d.device3, count, &value );
+			I//Direct3DDevice7_GetRenderState ( d3d.device3, count, &value );
 
 			debug_log ( "State: %s, value: %d", get_render_state_name ( count ), value );
 		}
@@ -661,7 +738,7 @@ void report_d3d_state_performance ( void )
 				DWORD
 					value;
 
-				IDirect3DDevice7_GetTextureStageState ( d3d.device3, count, state, &value );
+				I//Direct3DDevice7_GetTextureStageState ( d3d.device3, count, state, &value );
 
 				debug_log ( "Stage: %d, State: %s, value: %d", count, get_texture_stage_state_name ( state ), value );
 			}
@@ -680,16 +757,12 @@ void report_d3d_state_performance ( void )
 
 void set_d3d_material_colour ( int red, int green, int blue, int alpha, int specular )
 {
-
 	float
 		r,
 		g,
 		b,
 		a,
 		s;
-
-	HRESULT
-		ret;
 
 	r = red;
 	g = green;
@@ -709,13 +782,7 @@ void set_d3d_material_colour ( int red, int green, int blue, int alpha, int spec
 	d3d_material.dcvSpecular.r = s;	d3d_material.dcvSpecular.g = s;	d3d_material.dcvSpecular.b = s;	d3d_material.dcvSpecular.a = a;
 	d3d_material.dvPower = 10.0;
 
-	ret = IDirect3DDevice7_SetMaterial ( d3d.device, &d3d_material );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_log ( "Unable to set material: %s", get_ddraw_error_message ( ret ) );
-	}
+	immediate_set_material ( &d3d_material );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -724,15 +791,11 @@ void set_d3d_material_colour ( int red, int green, int blue, int alpha, int spec
 
 void set_d3d_material_emissive_colour ( int red, int green, int blue, int alpha )
 {
-
 	float
 		r,
 		g,
 		b,
 		a;
-
-	HRESULT
-		ret;
 
 	r = red;
 	g = green;
@@ -749,15 +812,19 @@ void set_d3d_material_emissive_colour ( int red, int green, int blue, int alpha 
 	d3d_material.dcvEmissive.r = r;	d3d_material.dcvEmissive.g = g;	d3d_material.dcvEmissive.b = b;	d3d_material.dcvEmissive.a = a;
 	d3d_material.dcvSpecular.r = 0;	d3d_material.dcvSpecular.g = 0;	d3d_material.dcvSpecular.b = 0;	d3d_material.dcvSpecular.a = a;
 
-	ret = IDirect3DDevice7_SetMaterial ( d3d.device, &d3d_material );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_log ( "Unable to set material: %s", get_ddraw_error_message ( ret ) );
-	}
+	immediate_set_material ( &d3d_material );
 }
 
+void set_d3d_material_default ( void )
+{
+	d3d_material.dcvDiffuse.r = 1;	d3d_material.dcvDiffuse.g = 1;	d3d_material.dcvDiffuse.b = 1;	d3d_material.dcvDiffuse.a = 1;
+	d3d_material.dcvAmbient.r = 1;	d3d_material.dcvAmbient.g = 1;	d3d_material.dcvAmbient.b = 1;	d3d_material.dcvAmbient.a = 1;
+	d3d_material.dcvEmissive.r = 0;	d3d_material.dcvEmissive.g = 0;	d3d_material.dcvEmissive.b = 0;	d3d_material.dcvEmissive.a = 1;
+	d3d_material.dcvSpecular.r = 1;	d3d_material.dcvSpecular.g = 1;	d3d_material.dcvSpecular.b = 1;	d3d_material.dcvSpecular.a = 1;
+	d3d_material.dvPower = 1;
+
+	immediate_set_material ( &d3d_material );
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -791,7 +858,7 @@ void set_d3d_gouraud_shaded_renderstate ( void )
 void set_d3d_flat_shaded_textured_renderstate ( struct SCREEN *texture )
 {
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( texture ) );
+	set_d3d_texture ( 0, texture );
 
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
@@ -805,7 +872,7 @@ void set_d3d_flat_shaded_textured_renderstate ( struct SCREEN *texture )
 void set_d3d_gouraud_shaded_textured_renderstate ( struct SCREEN *texture )
 {
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( texture ) );
+	set_d3d_texture ( 0, texture );
 
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
@@ -818,28 +885,14 @@ void set_d3d_gouraud_shaded_textured_renderstate ( struct SCREEN *texture )
 
 void force_set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data )
 {
-
-	HRESULT
-		ret;
-
-	render_d3d_state_table[state].value = data;
-	render_d3d_state_table[state].count++;
-
 	flush_triangle_primitives ();
-
 	flush_line_primitives ();
 
 #if DEBUG_STATE_CHANGE_FLUSHES
 	debug_log ( "[FORCED] Renderstate %s change caused flush", get_render_state_name ( state ) );
 #endif
 
-	ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, data );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-	}
+	immediate_set_render_state ( state, data );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -848,73 +901,34 @@ void force_set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data )
 
 void force_set_d3d_float_state ( D3DRENDERSTATETYPE state, float data )
 {
-
-	HRESULT
-		ret;
-
-	int
-		int_data;
-
-	int_data = *(  ( int * ) &data );
-
-	render_d3d_state_table[state].value = int_data;
-
-	render_d3d_state_table[state].count++;
-
 	flush_triangle_primitives ();
-
 	flush_line_primitives ();
 
 #if DEBUG_STATE_CHANGE_FLUSHES
 	debug_log ( "[FORCED] Renderstate %s change caused flush", get_render_state_name ( state ) );
 #endif
 
-	ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, int_data );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-	}
+	immediate_set_render_state ( state, * ( DWORD * ) &data );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void force_set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
+void force_set_d3d_texture ( int stage, screen *texture )
 {
-
 #if ALLOW_SET_TEXTURE
 
-	texture_stage_interfaces[stage].texture = texture;
-
-	texture_stage_interfaces[stage].count++;
-
 	flush_triangle_primitives ();
-
 	flush_line_primitives ();
 
-	{
-
-		HRESULT
-			ret;
-	
 #if DEBUG_STATE_CHANGE_FLUSHES
-		debug_log ( "[FORCED] SetTexture %08x change caused flush", texture );
+	debug_log ( "[FORCED] SetTexture %08x change caused flush", texture );
 #endif
 
-		ret = IDirect3DDevice7_SetTexture ( d3d.device, stage, texture );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-		}
-	}
+	immediate_set_texture ( stage, texture );
 
 #endif
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -923,29 +937,16 @@ void force_set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
 
 void force_set_d3d_texture_stage_state ( int stage, int state, int data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
 
 	flush_triangle_primitives ();
-
 	flush_line_primitives ();
 
 #if DEBUG_STATE_CHANGE_FLUSHES
 	debug_log ( "[FORCED] Texture stage state %s change caused flush", get_texture_stage_state_name ( state ) );
 #endif
 
-	ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, stage, state, data );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-	}
-
-	render_d3d_texture_stage_state_table[stage][state].value = data;
+	immediate_set_texture_state ( stage, state, data );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -956,10 +957,6 @@ extern int d3d_texture_batching_vertex_maximum;
 
 void set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( state < MAX_RENDER_STATES );
 
 #if ( !DEBUG_SEND_ALL_STATES )
@@ -973,17 +970,25 @@ void set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data )
 
 		flush_triangle_primitives ();
 		flush_line_primitives ();
-	
-		ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, data );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-		}
 
-		render_d3d_state_table[state].value = data;
-		render_d3d_state_table[state].count++;
+		immediate_set_render_state ( state, data );
+	}
+}
+
+void set_d3d_int_state_no_flush ( D3DRENDERSTATETYPE state, DWORD data )
+{
+	ASSERT ( state < MAX_RENDER_STATES );
+
+#if ( !DEBUG_SEND_ALL_STATES )
+	if ( render_d3d_state_table[state].value != data )
+#endif
+	{
+
+#if DEBUG_STATE_CHANGE_FLUSHES
+		debug_log ( "Renderstate %s change caused flush", get_render_state_name ( state ) );
+#endif
+
+		immediate_set_render_state ( state, data );
 	}
 }
 
@@ -993,40 +998,21 @@ void set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data )
 
 void set_d3d_float_state ( D3DRENDERSTATETYPE state, float data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( state < MAX_RENDER_STATES );
 
 #if ( !DEBUG_SEND_ALL_STATES )
 	if ( render_d3d_state_table[state].value != *( ( DWORD * ) &data ) )
 #endif
 	{
-
-		int
-			int_value;
 	
 #if DEBUG_STATE_CHANGE_FLUSHES
 		debug_log ( "Renderstate %s change caused flush", get_render_state_name ( state ) );
 #endif
 
 		flush_triangle_primitives ();
-	
 		flush_line_primitives ();
 
-		int_value = *( ( DWORD * ) &data );
-	
-		ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, int_value );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		render_d3d_state_table[state].value = *( ( DWORD * ) &data );
-		render_d3d_state_table[state].count++;
+		immediate_set_render_state ( state, *( ( DWORD * ) &data ) );
 	}
 }
 
@@ -1034,12 +1020,8 @@ void set_d3d_float_state ( D3DRENDERSTATETYPE state, float data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
+void set_d3d_texture ( int stage, screen *texture )
 {
-
-	HRESULT
-		ret;
-		
 	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
 
 #if ALLOW_SET_TEXTURE
@@ -1054,19 +1036,9 @@ void set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
 #endif
 
 		flush_triangle_primitives ();
-
 		flush_line_primitives ();
 
-		ret = IDirect3DDevice7_SetTexture ( d3d.device, stage, texture );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		texture_stage_interfaces[stage].texture = texture;
-		texture_stage_interfaces[stage].count++;
+		immediate_set_texture ( stage, texture );
 	}
 
 #endif
@@ -1078,10 +1050,6 @@ void set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
 
 void set_d3d_texture_stage_state ( int stage, int state, int data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
 
 #if ( !DEBUG_SEND_ALL_STATES )
@@ -1094,18 +1062,26 @@ void set_d3d_texture_stage_state ( int stage, int state, int data )
 #endif
 
 		flush_triangle_primitives ();
-
 		flush_line_primitives ();
 
-		ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, stage, state, data );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-		}
+		immediate_set_texture_state ( stage, state, data );
+	}
+}
 
-		render_d3d_texture_stage_state_table[stage][state].value = data;
+void set_d3d_texture_stage_state_no_flush ( int stage, int state, int data )
+{
+	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
+
+#if ( !DEBUG_SEND_ALL_STATES )
+	if ( render_d3d_texture_stage_state_table[stage][state].value != data )
+#endif
+	{
+	
+#if DEBUG_STATE_CHANGE_FLUSHES
+		debug_log ( "Texture stage state %s change caused flush", get_texture_stage_state_name ( state ) );
+#endif
+
+		immediate_set_texture_state ( stage, state, data );
 	}
 }
 
@@ -1115,27 +1091,13 @@ void set_d3d_texture_stage_state ( int stage, int state, int data )
 
 void set_d3d_int_state_immediate ( D3DRENDERSTATETYPE state, DWORD data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( state < MAX_RENDER_STATES );
 
 #if ( !DEBUG_SEND_ALL_STATES )
 	if ( render_d3d_state_table[state].value != data )
 #endif
 	{
-
-		ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, data );
-
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		render_d3d_state_table[state].value = data;
-		render_d3d_state_table[state].count++;
+		immediate_set_render_state ( state, data );
 	}
 }
 
@@ -1145,28 +1107,13 @@ void set_d3d_int_state_immediate ( D3DRENDERSTATETYPE state, DWORD data )
 
 void set_d3d_float_state_immediate ( D3DRENDERSTATETYPE state, float data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( state < MAX_RENDER_STATES );
 
 #if ( !DEBUG_SEND_ALL_STATES )
 	if ( render_d3d_state_table[state].value != *( ( DWORD * ) &data ) )
 #endif
 	{
-	
-		ret = IDirect3DDevice7_SetRenderState ( d3d.device, state, *( ( DWORD * ) &data ) );
-
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		render_d3d_state_table[state].value = *( ( DWORD * ) &data );
-		render_d3d_state_table[state].count++;
-	
+		immediate_set_render_state ( state, *( ( DWORD * ) &data ) );
 	}
 }
 
@@ -1174,12 +1121,8 @@ void set_d3d_float_state_immediate ( D3DRENDERSTATETYPE state, float data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_d3d_texture_immediate ( int stage, LPDIRECTDRAWSURFACEX texture )
+void set_d3d_texture_immediate ( int stage, screen *texture )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
 
 #if ALLOW_SET_TEXTURE
@@ -1188,17 +1131,7 @@ void set_d3d_texture_immediate ( int stage, LPDIRECTDRAWSURFACEX texture )
 	if ( texture_stage_interfaces[stage].texture != texture )
 #endif
 	{
-
-		ret = IDirect3DDevice7_SetTexture ( d3d.device, stage, texture );
-
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		texture_stage_interfaces[stage].texture = texture;
-		texture_stage_interfaces[stage].count++;
+		immediate_set_texture ( stage, texture );
 	}
 
 #endif
@@ -1210,26 +1143,13 @@ void set_d3d_texture_immediate ( int stage, LPDIRECTDRAWSURFACEX texture )
 
 void set_d3d_texture_stage_state_immediate ( int stage, int state, int data )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( ( stage >= 0 ) && ( stage < 8 ) );
 
 #if ( !DEBUG_SEND_ALL_STATES )
 	if ( render_d3d_texture_stage_state_table[stage][state].value != data )
 #endif
 	{
-
-		ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, stage, state, data );
-
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set texture stage state: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		render_d3d_texture_stage_state_table[stage][state].value = data;
+		immediate_set_texture_state ( stage, state, data );
 	}
 }
 
@@ -1237,16 +1157,18 @@ void set_d3d_texture_stage_state_immediate ( int stage, int state, int data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 int get_d3d_int_state ( D3DRENDERSTATETYPE render_state )
 {
 
 	DWORD
 		state;
 
-	IDirect3DDevice7_GetRenderState ( d3d.device, render_state, &state );
+	I//Direct3DDevice7_GetRenderState ( d3d.device, render_state, &state );
 
 	return ( ( int ) state );
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1281,8 +1203,8 @@ struct DEFERRED_TEXTURE_CHANGE
 	int
 		stage;
 
-	LPDIRECTDRAWSURFACEX
-		texture;
+	screen
+		*texture;
 
 	int
 		count;
@@ -1311,16 +1233,16 @@ typedef struct DEFERRED_TEXTURE_STAGE_STATE_CHANGE deferred_texture_stage_state_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-deferred_renderstate_change
+static deferred_renderstate_change
 	deferred_renderstate_changes[MAX_RENDER_STATES];
 
-deferred_texture_change
+static deferred_texture_change
 	deferred_texture_changes[MAX_TEXTURE_STAGES];
 
-deferred_texture_stage_state_change
+static deferred_texture_stage_state_change
 	deferred_texture_stage_state_changes[ ( MAX_TEXTURE_STAGES * MAX_TEXTURE_STAGE_STATES ) ];
 
-int
+static int
 	number_of_deferred_d3d_renderstate_changes,
 	number_of_deferred_d3d_texture_changes,
 	number_of_deferred_d3d_texture_stage_state_changes,
@@ -1384,7 +1306,7 @@ void set_deferred_d3d_float_state ( D3DRENDERSTATETYPE state, float data )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_deferred_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture )
+void set_deferred_d3d_texture ( int stage, screen *texture )
 {
 
 #if ALLOW_SET_TEXTURE
@@ -1459,15 +1381,10 @@ void commit_deferred_state_changes ( void )
 
 	if ( deferred_d3d_changes )
 	{
-	
 		int
 			count;
 
-		HRESULT
-			ret;
-
 		flush_triangle_primitives ();
-	
 		flush_line_primitives ();
 	
 #if DEBUG_STATE_CHANGE_FLUSHES
@@ -1478,62 +1395,20 @@ void commit_deferred_state_changes ( void )
 
 		for ( count = 0; count < number_of_deferred_d3d_renderstate_changes; count++ )
 		{
-
-			render_d3d_state_table[deferred_renderstate_changes[count].state].value = deferred_renderstate_changes[count].int_data;
-		
-			render_d3d_state_table[deferred_renderstate_changes[count].state].count++;
-
 #if DEBUG_STATE_CHANGE_FLUSHES
 			debug_log ( "Renderstate: %s: %d", get_render_state_name ( deferred_renderstate_changes[count].state ), deferred_renderstate_changes[count].int_data );
 #endif
 
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device,
-																		deferred_renderstate_changes[count].state,
-																		deferred_renderstate_changes[count].int_data );
-
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-
-		for ( count = 0; count < number_of_deferred_d3d_texture_stage_state_changes; count++ )
-		{
-
-			int
-				stage,
-				state;
-
-			stage = deferred_texture_stage_state_changes[count].stage;
-
-			state = deferred_texture_stage_state_changes[count].state;
-
-#if DEBUG_STATE_CHANGE_FLUSHES
-
-			debug_log ( "Texture stage %d state %s value %d", stage, get_texture_stage_state_name ( state ), deferred_texture_stage_state_changes[count].data );
-
-#endif
-
-			render_d3d_texture_stage_state_table[stage][state].value = deferred_texture_stage_state_changes[count].data;
-		
-			render_d3d_texture_stage_state_table[stage][state].count++;
-
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, stage, state, deferred_texture_stage_state_changes[count].data );
-
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
+			immediate_set_render_state ( deferred_renderstate_changes[count].state,
+				deferred_renderstate_changes[count].int_data );
 		}
 
 		for ( count = 0; count < number_of_deferred_d3d_texture_changes; count++ )
 		{
+#if ALLOW_SET_TEXTURE
 
-			texture_stage_interfaces[deferred_texture_changes[count].stage].texture = deferred_texture_changes[count].texture;
-
-			texture_stage_interfaces[deferred_texture_changes[count].stage].count++;
+			immediate_set_texture ( deferred_texture_changes[count].stage,
+				deferred_texture_changes[count].texture );
 
 #if DEBUG_STATE_CHANGE_FLUSHES
 
@@ -1541,103 +1416,34 @@ void commit_deferred_state_changes ( void )
 
 #endif
 
-#if ALLOW_SET_TEXTURE
-
-			ret = IDirect3DDevice7_SetTexture ( d3d.device,
-																	deferred_texture_changes[count].stage,
-																	deferred_texture_changes[count].texture );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-
 #endif
-		}
-
-		deferred_d3d_changes = FALSE;
-	}
-
-#endif
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void raw_commit_deferred_state_changes ( void )
-{
-
-	if ( deferred_d3d_changes )
-	{
-	
-		int
-			count;
-
-		HRESULT
-			ret;
-
-		for ( count = 0; count < number_of_deferred_d3d_renderstate_changes; count++ )
-		{
-
-			render_d3d_state_table[deferred_renderstate_changes[count].state].value = deferred_renderstate_changes[count].int_data;
-		
-			render_d3d_state_table[deferred_renderstate_changes[count].state].count++;
-
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device, deferred_renderstate_changes[count].state, deferred_renderstate_changes[count].int_data );
-
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
 		}
 
 		for ( count = 0; count < number_of_deferred_d3d_texture_stage_state_changes; count++ )
 		{
+			immediate_set_texture_state ( deferred_texture_stage_state_changes[count].stage,
+				deferred_texture_stage_state_changes[count].state,
+				deferred_texture_stage_state_changes[count].data );
 
-			int
-				stage,
-				state;
+#if DEBUG_STATE_CHANGE_FLUSHES
 
-			stage = deferred_texture_stage_state_changes[count].stage;
+			debug_log ( "Texture stage %d state %s value %d", stage, get_texture_stage_state_name ( state ), deferred_texture_stage_state_changes[count].data );
 
-			state = deferred_texture_stage_state_changes[count].state;
+#endif
 
-			render_d3d_texture_stage_state_table[stage][state].value = deferred_texture_stage_state_changes[count].data;
-		
-			render_d3d_texture_stage_state_table[stage][state].count++;
-
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, stage, state, deferred_texture_stage_state_changes[count].data );
-
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-
-		for ( count = 0; count < number_of_deferred_d3d_texture_changes; count++ )
-		{
-
-			texture_stage_interfaces[deferred_texture_changes[count].stage].texture = deferred_texture_changes[count].texture;
-
-			texture_stage_interfaces[deferred_texture_changes[count].stage].count++;
-
-			ret = IDirect3DDevice7_SetTexture ( d3d.device, deferred_texture_changes[count].stage, deferred_texture_changes[count].texture );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
 		}
 
 		deferred_d3d_changes = FALSE;
 	}
+
+#endif
+
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1658,7 +1464,7 @@ void get_d3d_current_texture_pointer ( vertex_buffer_texture_data *data )
 	else
 	{
 
-		data->texture = (unsigned int) texture_stage_interfaces[0].texture;
+		data->texture = texture_stage_interfaces[0].texture;
 
 		data->mipmap_filter = render_d3d_texture_stage_state_table[0][D3DTSS_MIPFILTER].value;
 		data->linear_filter = render_d3d_texture_stage_state_table[0][D3DTSS_MAGFILTER].value;
@@ -1673,128 +1479,29 @@ void get_d3d_current_texture_pointer ( vertex_buffer_texture_data *data )
 
 void set_d3d_current_texture_pointer ( vertex_buffer_texture_data *data )
 {
-
-	HRESULT
-		ret;
-
 	if ( data->texture )
 	{
 
-		if ( (unsigned int) texture_stage_interfaces[0].texture != data->texture )
+		if ( texture_stage_interfaces[0].texture != data->texture )
 		{
-
-			texture_stage_interfaces[0].texture = (LPDIRECTDRAWSURFACEX) data->texture;
-			texture_stage_interfaces[0].count++;
-
-			ret = IDirect3DDevice7_SetTexture ( d3d.device, 0, (LPDIRECTDRAWSURFACEX) data->texture );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
+			immediate_set_texture ( 0, data->texture );
 		}
 
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_COLOROP].value != D3DTOP_MODULATE )
-		{
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
-			render_d3d_texture_stage_state_table[0][D3DTSS_COLOROP].value = D3DTOP_MODULATE;
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_MIPFILTER, data->mipmap_filter );
 
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_MAGFILTER, data->linear_filter );
 
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_MIPFILTER].value != data->mipmap_filter )
-		{
-		
-			render_d3d_texture_stage_state_table[0][D3DTSS_MIPFILTER].value = data->mipmap_filter;
-		
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_MIPFILTER, data->mipmap_filter );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_MINFILTER, data->linear_filter );
 
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_MAGFILTER].value != data->linear_filter )
-		{
-		
-			render_d3d_texture_stage_state_table[0][D3DTSS_MAGFILTER].value = data->linear_filter;
-		
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_MAGFILTER, data->linear_filter );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_ADDRESSU, data->clamp_u );
 
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_MINFILTER].value != data->linear_filter )
-		{
-		
-			render_d3d_texture_stage_state_table[0][D3DTSS_MINFILTER].value = data->linear_filter;
-		
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_MINFILTER, data->linear_filter );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_ADDRESSU].value != data->clamp_u )
-		{
-		
-			render_d3d_texture_stage_state_table[0][D3DTSS_ADDRESSU].value = data->clamp_u;
-		
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_ADDRESSU, data->clamp_u );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_ADDRESSV].value != data->clamp_v )
-		{
-		
-			render_d3d_texture_stage_state_table[0][D3DTSS_ADDRESSV].value = data->clamp_v;
-		
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_ADDRESSV, data->clamp_v );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_ADDRESSV, data->clamp_v );
 	}
 	else
 	{
-
-		if ( render_d3d_texture_stage_state_table[0][D3DTSS_COLOROP].value != D3DTOP_DISABLE )
-		{
-
-			render_d3d_texture_stage_state_table[0][D3DTSS_COLOROP].value = D3DTOP_DISABLE;
-
-			ret = IDirect3DDevice7_SetTextureStageState ( d3d.device, 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set texture: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_texture_stage_state_no_flush ( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
 	}
 }
 
@@ -1808,7 +1515,7 @@ void assert_check_texture_match ( void )
 	if ( d3d.triangle_buffer->texture.texture )
 	{
 
-		ASSERT ( d3d.triangle_buffer->texture.texture == (unsigned int) texture_stage_interfaces[0].texture );
+		ASSERT ( d3d.triangle_buffer->texture.texture == texture_stage_interfaces[0].texture );
 	}
 }
 
@@ -2024,6 +1731,7 @@ const char * get_texture_stage_state_name ( int state )
 
 void report_all_d3d_states ( void )
 {
+#if 0
 
 	int
 		count,
@@ -2037,10 +1745,11 @@ void report_all_d3d_states ( void )
 		DWORD
 			value;
 
-		IDirect3DDevice7_GetRenderState ( d3d.device, render_state_names[count].state, &value );
+		I//Direct3DDevice7_GetRenderState ( d3d.device, render_state_names[count].state, &value );
 
 		debug_log ( "%s: %d", render_state_names[count].name, value );
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

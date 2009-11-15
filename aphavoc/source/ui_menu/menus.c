@@ -168,7 +168,7 @@ void preprocess_translation_object_size (ui_object *change_obj, ui_object *check
 	}
 	else
 	{
-		int
+		font_types
 			old_font;
 
 		float
@@ -271,7 +271,7 @@ void preprocess_translation_object_size (ui_object *change_obj, ui_object *check
 
 		if ((justification == TEXT_JUSTIFY_RIGHT_CENTRE) || (justification == TEXT_JUSTIFY_RIGHT_TOP) || (justification == TEXT_JUSTIFY_RIGHT_BOTTOM))
 		{
-			x1 = max (0.0, (x_origin + current_x_size - x2));
+			x1 = max (0.0f, (x_origin + current_x_size - x2));
 		}
 //		else if ((justification == TEXT_JUSTIFY_CENTRE) || (justification == TEXT_JUSTIFY_CENTRE_TOP) || (justification == TEXT_JUSTIFY_CENTRE_BOTTOM))
 //		{
@@ -386,7 +386,8 @@ void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_ob
 {
 	int
 		i,
-		justification,
+		justification;
+	font_types
 		current_font,
 		old_font;
 
@@ -486,7 +487,7 @@ void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_ob
 
 		if ((justification == TEXT_JUSTIFY_RIGHT_CENTRE) || (justification == TEXT_JUSTIFY_RIGHT_TOP) || (justification == TEXT_JUSTIFY_RIGHT_BOTTOM))
 		{
-			x1 = max (0.0, (x_origin + current_x_size - x2));
+			x1 = max (0.0f, (x_origin + current_x_size - x2));
 		}
 		else
 		{
@@ -558,7 +559,7 @@ void process_ingame_text_object_size (ui_object *change_obj, ui_object *check_ob
 
 void set_text_option_backdrop_object (ui_object *bdrop_obj, ui_object *check_obj)
 {
-	int
+	font_types
 		new_font,
 		old_font;
 

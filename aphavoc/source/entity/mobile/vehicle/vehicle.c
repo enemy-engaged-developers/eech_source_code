@@ -106,9 +106,9 @@ void play_vehicle_shot_at_speech (entity *victim, entity *aggressor)
 
 	ASSERT (pos);
 
-	victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
 
-	aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	if (aggressor_side == victim_side)
 	{
@@ -292,9 +292,9 @@ void play_vehicle_destroyed_speech (entity *victim, entity *aggressor)
 
 	ASSERT (aggressor);
 
-	victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
 
-	aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	if (victim_side == aggressor_side)
 	{
@@ -379,7 +379,7 @@ void play_vehicle_destroyed_speech (entity *victim, entity *aggressor)
 					3.0,
 					SPEECH_CATEGORY_ATTACKING_TARGETS, 10.0,
 					vehicle_destroyed_wingman_comments [val].introduction,
-					array_type, speech_index
+					(speech_array_types) array_type, speech_index
 				);
 			}
 		}

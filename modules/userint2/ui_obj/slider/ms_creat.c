@@ -89,7 +89,7 @@ static void create_mslider_ui_object (ui_object *obj, ui_object_types type, va_l
 
    obj->type   = type;
 
-   new_mslider	= safe_malloc (sizeof (slider_ui_object));
+   new_mslider	= (slider_ui_object *) safe_malloc (sizeof (slider_ui_object));
 
    obj->data   = new_mslider;
 

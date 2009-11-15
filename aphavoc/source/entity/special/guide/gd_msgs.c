@@ -342,7 +342,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_TASK);
 
-	task_terminated = va_arg (pargs, int);
+	task_terminated = (task_terminated_types) va_arg (pargs, int);
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_GUIDE_STACK);
 		

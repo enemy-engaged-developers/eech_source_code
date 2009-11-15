@@ -109,7 +109,7 @@ static void set_local_first_child (entity *en, list_types type, entity *first_ch
 	helicopter
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/set_frst.h"
 }
@@ -130,7 +130,7 @@ static entity *get_local_first_child (entity *en, list_types type)
 	entity
 		*first_child;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/get_frst.h"
 

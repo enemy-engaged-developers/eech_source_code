@@ -216,7 +216,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 	task
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (task *) get_local_entity_data (receiver);
 
 	position = va_arg (pargs, vec3d *);
 
@@ -282,9 +282,9 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	task_terminated = va_arg (pargs, int);
+	task_terminated = (task_terminated_types) va_arg (pargs, int);
 
-	raw = get_local_entity_data (receiver);
+	raw = (task *) get_local_entity_data (receiver);
 
 	if (raw->task_completed == TASK_INCOMPLETE)
 	{
@@ -340,7 +340,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 						// Notify force 
 						//		
 			
-						force = get_local_force_entity (raw->side);
+						force = get_local_force_entity ((entity_sides) raw->side);
 	
 						notify_local_entity (ENTITY_MESSAGE_TASK_COMPLETED, force, receiver, task_terminated);
 
@@ -414,7 +414,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (task *) get_local_entity_data (receiver);
 
 	if (task_database [raw->sub_type].persistent_task)
 	{

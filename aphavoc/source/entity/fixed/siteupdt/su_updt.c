@@ -82,7 +82,7 @@ static void update_server (entity *en)
 	site_updatable
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	ASSERT (raw->fix.alive);
 
@@ -114,7 +114,7 @@ static void update_client (entity *en)
 	site_updatable
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	ASSERT (raw->fix.alive);
 	

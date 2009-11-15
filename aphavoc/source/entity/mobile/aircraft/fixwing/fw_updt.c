@@ -87,7 +87,7 @@ static void update_propellors (entity *en)
 	entity
 		*group;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -123,7 +123,7 @@ static void update_server (entity *en)
 	aircraft_damage_types
 		damage_type;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 
@@ -247,7 +247,7 @@ static void update_client (entity *en)
 	int
 		loop;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 

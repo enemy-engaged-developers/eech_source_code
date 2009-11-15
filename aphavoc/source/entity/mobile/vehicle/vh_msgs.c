@@ -236,7 +236,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 	vehicle
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (vehicle *) get_local_entity_data (receiver);
 
 	#if DEBUG_MODULE_MESSAGE_TEXT
 

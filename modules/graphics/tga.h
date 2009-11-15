@@ -126,7 +126,7 @@ extern int
 
 extern void *load_tga_file (const char *filename, short int *width, short int *height, int *bits_per_pixel);
 
-extern void *memory_map_tga_file (const char *filename, char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel);
+extern void *memory_map_tga_file (const char *filename, unsigned char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel);
 
 extern void save_tga_screen (const char *filename);
 

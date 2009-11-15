@@ -80,7 +80,7 @@ static void initialise_land_downwash_database()
 
 	this_downwash->number_of_components	=	1;
 
-	this_downwash->component = malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
+	this_downwash->component = (downwash_component *) malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
 	
 	// FIRST COMPONENT IN LAND DOWNWASH EFFECT, 
 
@@ -101,7 +101,7 @@ static void initialise_land_downwash_database()
 
 	this_downwash->number_of_components	=	1;
 
-	this_downwash->component = malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
+	this_downwash->component = (downwash_component *) malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
 	
 	// FIRST COMPONENT IN LAND DOWNWASH EFFECT FOR DUAL ROTOR HELICOPTERS 
 
@@ -136,7 +136,7 @@ void initialise_water_downwash_database()
 
 	this_downwash->number_of_components	=	1;
 
-	this_downwash->component = malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
+	this_downwash->component = (downwash_component *) malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
 	
 	// FIRST COMPONENT IN WATER DOWNWASH EFFECT, 
 
@@ -158,7 +158,7 @@ void initialise_water_downwash_database()
 
 	this_downwash->number_of_components	=	1;
 
-	this_downwash->component = malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
+	this_downwash->component = (downwash_component *) malloc_fast_mem( sizeof( downwash_component ) * this_downwash->number_of_components);
 	
 	// FIRST COMPONENT IN WATER DOWNWASH EFFECT FOR DUAL ROTOR HELICOPTERS 
 

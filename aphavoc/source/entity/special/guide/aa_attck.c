@@ -550,7 +550,7 @@ void set_attack_guide_fire_intercept_position (entity *en)
 
 	lead_distance = time * get_local_entity_float_value (aggressor, FLOAT_TYPE_VELOCITY);
 
-	lead_distance = max (lead_distance, 0.5 * KILOMETRE);
+	lead_distance = max (lead_distance, 0.5f * KILOMETRE);
 
 	//
 	// calculate guide position (relative to target)

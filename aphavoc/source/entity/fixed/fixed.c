@@ -83,7 +83,7 @@ static int
 static speech_instance_type
 	building_destroyed_cpg_comments [] =
 	{
-		{ -1,															-1, 										100,	SPEECH_INTRODUCTION_NEVER },
+		{ -1,												(speech_array_types) -1, 										100,	SPEECH_INTRODUCTION_NEVER },
 		{ SPEECH_CPG_TARGET_DESTROYED,						SPEECH_ARRAY_CPG_MESSAGES,			25,	SPEECH_INTRODUCTION_SOMETIMES },
 	};
 
@@ -109,7 +109,7 @@ void play_building_destroyed_speech (entity *building, entity *aggressor)
 		//
 		// (There goes the neighbourhood) | (meeting adjourned) etc.
 
-		aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+		aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 		
 		val = get_speech_random_value
 				(

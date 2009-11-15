@@ -145,11 +145,11 @@ weapon_data
 			"None",																// weapon_loading_name_text
 
 			0,							  											// default_3d_shape
-			0,		 																// guidance_type
-			0,																		// aiming_type
-			0,																		// decoy_type
-			0,																		// warhead_type
-			0,																		// threat_type
+			(weapon_guidance_types) 0,		 																// guidance_type
+			(weapon_aiming_types) 0,																		// aiming_type
+			(weapon_decoy_types) 0,																		// decoy_type
+			(weapon_warhead_types) 0,																		// warhead_type
+			(threat_types) 0,																		// threat_type
 			0,																		// interior_launch_sound_effect
 			0,																		// exterior_launch_sound_effect
 			0,																		// continuous_sound_effect

@@ -82,7 +82,9 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 		ix,
 		iy,
 		iwidth,
-		iheight,
+		iheight;
+
+	display_3d_tints
 		tint;
 		
 	day_segment_types
@@ -111,7 +113,7 @@ void draw_campaign_screen_3d_scene (ui_object *obj, viewpoint *vp)
 	width = iwidth;
 	height = iheight;
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	if (day_segment_type == DAY_SEGMENT_TYPE_NIGHT)
 	{
@@ -150,9 +152,9 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 		width,
 		height;
 
-	int
+	display_3d_tints
 		tint;
-		
+
 	day_segment_types
 		day_segment_type;
 
@@ -172,7 +174,7 @@ void draw_campaign_screen_3d_scene_to_texture (screen *scr, viewpoint *vp, float
 
 	height = size;
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	if (day_segment_type == DAY_SEGMENT_TYPE_NIGHT)
 	{

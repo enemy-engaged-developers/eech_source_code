@@ -84,7 +84,7 @@ static void draw_local_3d_object (entity *en, float range)
 	day_segment_types
 		day_segment_type;
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	//
 	// update viewpoint
@@ -106,7 +106,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 	animate_vehicle_weapon_system_ready (en);
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	raw->vh.inst3d->object_internal_lighting = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 

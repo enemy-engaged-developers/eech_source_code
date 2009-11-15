@@ -68,6 +68,7 @@
 #include "cmndline.h"
 #include "global.h"
 #include "external\pixel.h"
+#include "../3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,11 +132,11 @@ struct direct_draw_data
 	{
 		NULL,							// LPDIRECTDRAW7 ddrawX
 
-		TRUE,							// BOOL use_double_buffer
+//		TRUE,							// BOOL use_double_buffer
 		TRUE,							// BOOL use_full_screen,
-		FALSE,						// BOOL use_software_driver
-		FALSE,						// BOOL use_system_memory
-		FALSE,						// BOOL use_z_buffer,
+//		FALSE,						// BOOL use_software_driver
+//		FALSE,						// BOOL use_system_memory
+//		FALSE,						// BOOL use_z_buffer,
 
 		NULL,							//	LPDIRECTDRAWSURFACE lpFrontBuffer
 		NULL,							//	LPDIRECTDRAWSURFACE lpBackBuffer
@@ -157,11 +158,11 @@ struct direct_draw_data
 	{
 		NULL,							// LPDIRECTDRAW7 ddrawX
 
-		TRUE,							// BOOL use_double_buffer
+//		TRUE,							// BOOL use_double_buffer
 		TRUE,							// BOOL use_full_screen,
-		FALSE,						// BOOL use_software_driver
-		FALSE,						// BOOL use_system_memory
-		FALSE,						// BOOL use_z_buffer,
+//		FALSE,						// BOOL use_software_driver
+//		FALSE,						// BOOL use_system_memory
+//		FALSE,						// BOOL use_z_buffer,
 
 		NULL,							//	LPDIRECTDRAWSURFACE lpFrontBuffer
 		NULL,							//	LPDIRECTDRAWSURFACE lpBackBuffer
@@ -236,7 +237,7 @@ BOOL initialise_graphics_system ( GUID *device_guid )
 
 	initialise_graphics_colours ();
 
-	register_exit_function ((void *)ddraw_release_objects );
+	register_exit_function ( ( void ( * ) ( void ) ) ddraw_release_objects );
 
 	initialise_system_graphics_screens ();
 
@@ -265,41 +266,41 @@ BOOL initialise_graphics_system ( GUID *device_guid )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ddraw_use_double_buffering ( int flag )
+/*void set_ddraw_use_double_buffering ( int flag )
 {
 
 	ddraw.use_double_buffer = flag;
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ddraw_use_software_driver ( int flag )
+/*void set_ddraw_use_software_driver ( int flag )
 {
 
 	ddraw.use_software_driver = flag;
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ddraw_use_system_memory ( int flag )
+/*void set_ddraw_use_system_memory ( int flag )
 {
 
 	ddraw.use_system_memory = flag;
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_ddraw_use_z_buffer ( int flag )
+/*void set_ddraw_use_z_buffer ( int flag )
 {
 
 	ddraw.use_z_buffer = flag;
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -400,7 +401,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	//
 	//
 
-	if ( ( device_guid ) && ( ddraw.use_full_screen ) && ( !ddraw.use_software_driver ) )
+	if ( ( device_guid ) && ( ddraw.use_full_screen ) /*&& ( !ddraw.use_software_driver )*/ )
 	{
 
 		display_device
@@ -417,7 +418,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 				if ( memcmp ( device_guid, &device->guid, sizeof ( GUID ) ) == 0 )
 				{
 
-					ret = DirectDrawCreateEx ( &device->guid, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+					ret = DirectDrawCreateEx ( &device->guid, ( LPVOID * ) &ddraw.ddraw, GUID_PREFIX IID_IDirectDraw7, NULL );
 			
 					if ( FAILED ( ret ) )
 					{
@@ -448,18 +449,18 @@ BOOL ddraw_initialise ( GUID *device_guid )
 		// If we're running fullscreen, or its the primary, we can use it.
 		//
 	
-		if ( ( ( best_display_device->is_primary ) || ( ddraw.use_full_screen ) ) && ( !ddraw.use_software_driver ) )
+		if ( ( ( best_display_device->is_primary ) || ( ddraw.use_full_screen ) ) && ( device_guid /*!ddraw.use_software_driver*/ ) )
 		{
 
 			if ( best_display_device->is_primary )
 			{
 	
-				ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+				ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, GUID_PREFIX IID_IDirectDraw7, NULL );
 			}
 			else
 			{
 
-				ret = DirectDrawCreateEx ( &best_display_device->guid, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+				ret = DirectDrawCreateEx ( &best_display_device->guid, ( LPVOID * ) &ddraw.ddraw, GUID_PREFIX IID_IDirectDraw7, NULL );
 			}
 	
 			if ( FAILED ( ret ) )
@@ -486,7 +487,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	if ( !ddraw.ddraw )
 	{
 
-		ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, &IID_IDirectDraw7, NULL );
+		ret = DirectDrawCreateEx ( NULL, ( LPVOID * ) &ddraw.ddraw, GUID_PREFIX IID_IDirectDraw7, NULL );
 
 		if ( FAILED ( ret ) )
 		{
@@ -533,7 +534,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 	// Get a d3d driver interface
 	//
 
-	ret = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, ( LPVOID FAR * ) &d3d.d3d );
+	ret = IDirectDraw7_QueryInterface ( ddraw.ddraw, GUID_PREFIX IID_IDirect3D7, ( LPVOID FAR * ) &d3d_data.d3d );
 
 	if ( ret != DD_OK )
 	{
@@ -571,7 +572,7 @@ BOOL ddraw_initialise ( GUID *device_guid )
 			}
 		}
 
-		ret = DirectDrawCreateEx ( &export_display_device->guid, ( LPVOID * ) &ddraw_export.ddraw, &IID_IDirectDraw7, NULL );
+		ret = DirectDrawCreateEx ( &export_display_device->guid, ( LPVOID * ) &ddraw_export.ddraw, GUID_PREFIX IID_IDirectDraw7, NULL );
 		if ( FAILED ( ret ) )
 		{
 			debug_log ( "Unable to create direct draw object (export_mfd): %s", get_ddraw_error_message ( ret ) );
@@ -651,7 +652,7 @@ static void ddraw_restore_objects ( int activate )
 	
 				IDirectDraw7_RestoreAllSurfaces ( ddraw.ddraw );
 
-				d3d.recreate_d3d = TRUE;
+				d3d_data.recreate_d3d = TRUE;
 			}
 		}
 			if ( ddraw_export.ddraw )
@@ -675,10 +676,10 @@ BOOL ddraw_release_objects ( void )
 	if ( ddraw.ddraw )
 	{
 
-		if ( d3d.d3d )
+		if ( d3d_data.d3d )
 		{
 	
-			refs = IDirect3D7_Release ( d3d.d3d );
+			refs = IDirect3D7_Release ( d3d_data.d3d );
 
 			if ( refs < DD_OK )
 			{
@@ -686,7 +687,7 @@ BOOL ddraw_release_objects ( void )
 				debug_log ( "Unable to release d3d: %s", get_d3d_error_message ( refs ) );
 			}
 	
-			d3d.d3d = NULL;
+			d3d_data.d3d = NULL;
 		}
 
 		if ( ddraw.lpClipper )
@@ -751,7 +752,7 @@ BOOL ddraw_release_objects ( void )
 			if ( ddraw.lpFrontBuffer )
 			{
 
-				if ( ddraw.use_double_buffer )
+				//if ( ddraw.use_double_buffer )
 				{
 
 					IDirectDrawSurface7_Release ( ddraw.lpBackBuffer );
@@ -766,7 +767,7 @@ BOOL ddraw_release_objects ( void )
 				ddraw.lpFrontBuffer = NULL;
 			}
 
-			if ( ddraw.use_system_memory )
+			/*if ( ddraw.use_system_memory )
 			{
 
 				if ( ddraw.lpRenderBuffer )
@@ -776,7 +777,7 @@ BOOL ddraw_release_objects ( void )
 
 					ddraw.lpRenderBuffer = NULL;
 				}
-			}
+			}*/
 		}
 
 		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_NORMAL );
@@ -1000,13 +1001,13 @@ BOOL ddraw_flip_surface ( void )
 
 	running_total_number_of_d3d_flushes = 0;
 	
-	if ( ( ddraw.ddraw ) && ( ddraw.use_double_buffer ) && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
+	if ( ( ddraw.ddraw ) /*&& ( ddraw.use_double_buffer )*/ && ( ddraw.lpFrontBuffer ) && ( ddraw.lpBackBuffer ) )
 	{
 
 		if ( !ddraw.application_windowed )
 		{
 
-			if ( ddraw.use_system_memory )
+			/*if ( ddraw.use_system_memory )
 			{
 
 				{
@@ -1081,7 +1082,7 @@ BOOL ddraw_flip_surface ( void )
 	
 //				ddrval = IDirectDrawSurface7_Blt ( ddraw.lpBackBuffer, NULL, ddraw.lpRenderBuffer, NULL, 0, &ddbltfx );
 			}
-			else
+			else*/
 			{
 	
 				ddrval = IDirectDrawSurface7_Flip ( ddraw.lpFrontBuffer, NULL, DDFLIP_WAIT );
@@ -1275,7 +1276,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 //		ddsd.ddsCaps.dwCaps2 = DDSCAPS2_HINTANTIALIASING;
 
-		if ( ddraw.use_double_buffer )
+		//if ( ddraw.use_double_buffer )
 		{
 			
 			ddsd.dwFlags |= DDSD_BACKBUFFERCOUNT;
@@ -1295,7 +1296,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 			return ( FALSE );
 		}
 
-		if ( ddraw.use_double_buffer )
+		//if ( ddraw.use_double_buffer )
 		{
 			
 			//
@@ -1317,7 +1318,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 			}
 		}
 
-		if ( ddraw.use_system_memory )
+		/*if ( ddraw.use_system_memory )
 		{
 
 			//
@@ -1348,26 +1349,26 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 				return ( FALSE );
 			}
 		}
-		else
+		else*/
 		{
 
 			//
 			// Set the render buffer
 			//
 
-			if ( ddraw.use_double_buffer )
+			//if ( ddraw.use_double_buffer )
 			{
 
 				ddraw.lpRenderBuffer = ddraw.lpBackBuffer;
 			}
-			else
+			/*else
 			{
 	
 				ddraw.lpRenderBuffer = ddraw.lpFrontBuffer;
-			}
+			}*/
 		}
 		
-		if ( ddraw.use_z_buffer )
+		//if ( ddraw.use_z_buffer )
 		{
 
 			//
@@ -1537,12 +1538,12 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		
 		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 
-		if ( ddraw.use_system_memory )
+		/*if ( ddraw.use_system_memory )
 		{
 
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY;
 		}
-		else
+		else*/
 		{
 
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE;
@@ -1600,7 +1601,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		// If needed, create the zbuffer and attach it to the render buffer.
 		//
 
-		if ( ddraw.use_z_buffer )
+		//if ( ddraw.use_z_buffer )
 		{
 
 			memset ( &ddsd, 0, sizeof ( ddsd ) );
@@ -1710,7 +1711,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 //		ddsd.ddsCaps.dwCaps2 = DDSCAPS2_HINTANTIALIASING;
 
-		if ( ddraw_export.use_double_buffer )
+		//if ( ddraw_export.use_double_buffer )
 		{
 			
 			ddsd.dwFlags |= DDSD_BACKBUFFERCOUNT;
@@ -1730,7 +1731,7 @@ BOOL ddraw_set_display_resolution ( int width, int height, int depth, display_ty
 			return ( FALSE );
 		}
 
-		if ( ddraw.use_double_buffer )
+		//if ( ddraw.use_double_buffer )
 		{
 			
 			//
@@ -1879,7 +1880,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 			}
 		}
 
-		if ( ddraw.use_system_memory )
+		/*if ( ddraw.use_system_memory )
 		{
 
 			if ( ddraw.lpRenderBuffer )
@@ -1893,7 +1894,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 					debug_log ( "Unable to release old front buffer: %s", get_ddraw_error_message ( ret ) );
 				}
 			}
-		}
+		}*/
 
 		//
 		// Set the buffer pointers
@@ -1915,7 +1916,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 
-		if ( ddraw.use_double_buffer )
+		//if ( ddraw.use_double_buffer )
 		{
 			
 			ddsd.dwFlags |= DDSD_BACKBUFFERCOUNT;
@@ -1935,7 +1936,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 			return ( FALSE );
 		}
 
-		if ( ddraw.use_double_buffer )
+		//if ( ddraw.use_double_buffer )
 		{
 			
 			//
@@ -1957,7 +1958,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 			}
 		}
 
-		if ( ddraw.use_system_memory )
+		/*if ( ddraw.use_system_memory )
 		{
 
 			//
@@ -1994,26 +1995,26 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 				return ( FALSE );
 			}
 		}
-		else
+		else*/
 		{
 
 			//
 			// Set the render buffer
 			//
 
-			if ( ddraw.use_double_buffer )
+			//if ( ddraw.use_double_buffer )
 			{
 
 				ddraw.lpRenderBuffer = ddraw.lpBackBuffer;
 			}
-			else
+			/*else
 			{
 	
 				ddraw.lpRenderBuffer = ddraw.lpFrontBuffer;
-			}
+			}*/
 		}
 		
-		if ( ddraw.use_z_buffer )
+		//if ( ddraw.use_z_buffer )
 		{
 
 			//
@@ -2095,7 +2096,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 		// As we're in fullscreen mode, we have just wiped out all the d3d devices & hardware textures, recreate them
 		//
 
-		d3d.recreate_d3d = TRUE;
+		d3d_data.recreate_d3d = TRUE;
 
 		return ( TRUE );
 	}
@@ -2214,12 +2215,12 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 		
 		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 
-		if ( ddraw.use_system_memory )
+		/*if ( ddraw.use_system_memory )
 		{
 
 			ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY;
 		}
-		else
+		else*/
 		{
 
 			ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
@@ -2249,7 +2250,7 @@ BOOL ddraw_change_display_resolution ( int width, int height, int depth )
 		// If needed, create the zbuffer and attach it to the render buffer.
 		//
 
-		if ( ddraw.use_z_buffer )
+		//if ( ddraw.use_z_buffer )
 		{
 
 			memset ( &ddsd, 0, sizeof ( ddsd ) );
@@ -2361,9 +2362,9 @@ void get_ddraw_zbuffer_pixel_format ( DDPIXELFORMAT *format )
 	HRESULT
 		ret;
 
-	ASSERT ( d3d.d3d );
+	ASSERT ( d3d_data.d3d );
 
-	ret = IDirect3D7_EnumZBufferFormats ( d3d.d3d, &IID_IDirect3DHALDevice, ddraw_enumerate_zbuffer_formats, ( void * ) format );
+	ret = IDirect3D7_EnumZBufferFormats ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw_enumerate_zbuffer_formats, ( void * ) format );
 
 	if ( FAILED ( ret ) )
 	{
@@ -2498,53 +2499,29 @@ int ddraw_internal_set_display_mode ( void *data )
 
 LPDIRECTDRAWSURFACEX ddraw_create_surface ( int width, int height, int video_memory )
 {
-
 	LPDIRECTDRAWSURFACEX
 		lpSurface;
-
 	DDSURFACEDESC2
 		ddsd;
-
-	HRESULT
-		ddrval;
 
 	//
 	// Create the surface
 	//
-
 	memset ( &ddsd, 0, sizeof ( ddsd ) );
-
 	ddsd.dwSize = sizeof ( ddsd );
-
-	ddrval = IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
-
+	f3d_surface_description ( f3d_surface_front (), &ddsd );
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-
 	if ( !video_memory )
 	{
-
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_SYSTEMMEMORY;
 	}
 	else
 	{
-
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 	}
-	
 	ddsd.dwHeight = height;
-	
 	ddsd.dwWidth = width;
-	
-	ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &lpSurface, NULL );
-
-	if ( ddrval != DD_OK )
-	{
-
-		debug_log ( "Unable to create a surface: %s", get_ddraw_error_message ( ddrval ) );
-
-		return ( FALSE );
-	}
-
+	f3d_surface_create ( &ddsd, &lpSurface );
 	return ( lpSurface );
 }
 
@@ -2803,7 +2780,7 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 	// Create the driver
 	//
 
-	ddrval = DirectDrawCreateEx ( lpGUID, ( LPVOID * ) &lpDD, &IID_IDirectDraw7, NULL );
+	ddrval = DirectDrawCreateEx ( lpGUID, ( LPVOID * ) &lpDD, GUID_PREFIX IID_IDirectDraw7, NULL );
 
 	if ( ddrval != DD_OK )
 	{
@@ -2847,11 +2824,11 @@ static BOOL WINAPI ddraw_enumerate_drivers ( GUID FAR* lpGUID, LPSTR lpDriverDes
 		// Add this driver to the list
 		//
 	
-		device = safe_malloc ( sizeof ( display_device ) );
+		device = ( display_device * ) safe_malloc ( sizeof ( display_device ) );
 	
 		device->succ = display_devices;
 	
-		device->name = safe_malloc ( strlen ( lpDriverDesc ) + 1 );
+		device->name = ( char *) safe_malloc ( strlen ( lpDriverDesc ) + 1 );
 	
 		strcpy ( device->name, lpDriverDesc );
 	
@@ -3384,8 +3361,8 @@ void copy_surface_to_surface(LPDIRECTDRAWSURFACEX src, RECT src_rect, LPDIRECTDR
 		}
 		h=src_rect.bottom-src_rect.top;
 
-		source_screen = src_ddsd.lpSurface;
-		dest_screen = dest_ddsd.lpSurface;
+		source_screen = ( unsigned char * ) src_ddsd.lpSurface;
+		dest_screen = ( unsigned char * ) dest_ddsd.lpSurface;
 				
 		for ( height=0; height < h; height++ )
 		{

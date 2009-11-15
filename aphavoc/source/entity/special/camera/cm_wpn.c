@@ -86,7 +86,7 @@ entity *get_external_view_entity_viewable_weapon (void)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	ASSERT (raw->external_view_entity);
 
@@ -249,7 +249,7 @@ void update_weapon_camera (camera *raw)
 
 	get_matrix3x3_from_unit_vec3d (raw->attitude, &direction);
 
-	lifetime_zoom_factor = 10.0 * max(get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME), 0.0);
+	lifetime_zoom_factor = 10.0 * max(get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME), 0.0f);
 
 	raw->position.x = weapon_position->x - (raw->attitude[2][0] * (5.0 + 100.0 * raw->chase_camera_zoom + lifetime_zoom_factor)) + (raw->attitude[1][0] * 1.0);
 	raw->position.y = weapon_position->y - (raw->attitude[2][1] * (5.0 + 100.0 * raw->chase_camera_zoom + lifetime_zoom_factor)) + (raw->attitude[1][1] * 1.0);

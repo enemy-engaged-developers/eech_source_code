@@ -304,6 +304,7 @@ void initialise_debug_system ( int logging )
 
 #ifdef DEBUG
 
+	// opengl
 	SendMessage ( application_window, WM_USER, debug_initialise_message_id, 0 );
 
 #endif
@@ -1709,7 +1710,7 @@ static void update_window (HWND window_handle)
 			rest.left = x + ( tsize & 0xffff );	//size.cx;
 			rest.right = rect.right - rect.left;
 
-			FillRect ( hdc, &rest, GetStockObject (WHITE_BRUSH) );
+			FillRect ( hdc, &rest, (HBRUSH) GetStockObject (WHITE_BRUSH) );
 
 			y += size.cy;
 
@@ -1721,7 +1722,7 @@ static void update_window (HWND window_handle)
 		rest.left = 0;
 		rest.right = rect.right - rect.left;
 
-		FillRect ( hdc, &rest, GetStockObject (WHITE_BRUSH) );
+		FillRect ( hdc, &rest, (HBRUSH) GetStockObject (WHITE_BRUSH) );
 
 		ReleaseDC ( window_handle, hdc );
 	}

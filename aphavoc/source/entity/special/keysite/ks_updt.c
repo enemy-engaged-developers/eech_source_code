@@ -90,7 +90,7 @@ static void update_server (entity *en)
 	vec3d
 		*pos;
 
-	raw = get_local_entity_data (en);
+	raw = (keysite *) get_local_entity_data (en);
 
 	if (!raw->alive)
 	{
@@ -194,7 +194,7 @@ static void update_server (entity *en)
 		{
 			if (keysite_database [raw->sub_type].repairable)
 			{
-				side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+				side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 				if (!entity_is_object_of_task (en, ENTITY_SUB_TYPE_TASK_REPAIR, side))
 				{

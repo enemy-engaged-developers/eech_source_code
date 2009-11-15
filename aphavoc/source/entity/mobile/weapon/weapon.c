@@ -114,13 +114,13 @@ void load_local_entity_weapon_config (entity *en)
 
 	ASSERT (en);
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
 		memset (package_status, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
@@ -250,11 +250,11 @@ int get_local_entity_weapon_available (entity *launcher, entity_sub_types weapon
 
 	if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
-		package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+		package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		if (package_status)
 		{
-			config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 			ASSERT (weapon_config_type_valid (config_type));
 
@@ -372,11 +372,11 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 
 	found = FALSE;
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
@@ -391,7 +391,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 		//
 		if (found_package_number > 0)
 		{
-			inst3d = get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
+			inst3d = (object_3d_instance *) get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 			ASSERT (inst3d);
 
@@ -901,8 +901,8 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 
 unsigned get_number_of_pods_firing(entity* launcher, entity_sub_types weapon_type)
 {
-	weapon_package_status *package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
-	weapon_config_types config_type = get_local_entity_int_value(launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+	weapon_package_status *package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	weapon_config_types config_type = (weapon_config_types) get_local_entity_int_value(launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 	int package, number = 0;
 
 	for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
@@ -1304,13 +1304,13 @@ void update_entity_weapon_systems (entity *source)
 
 	////////////////////////////////////////
 
-	package_status = get_local_entity_ptr_value (source, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (source, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
 		////////////////////////////////////////
 
-		config_type = get_local_entity_int_value (source, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (source, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
@@ -1322,7 +1322,7 @@ void update_entity_weapon_systems (entity *source)
 
 			////////////////////////////////////////
 
-			inst3d = get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
+			inst3d = (object_3d_instance *) get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 			ASSERT (inst3d);
 
@@ -1556,7 +1556,7 @@ void update_entity_weapon_systems (entity *source)
 											if (weapon_database[selected_weapon].guidance_type != WEAPON_GUIDANCE_TYPE_NONE
 												&& (source->type == ENTITY_TYPE_ANTI_AIRCRAFT || source->type == ENTITY_TYPE_ROUTED_VEHICLE))
 											{
-												min_pitch = max(rad(10.0), min_pitch);
+												min_pitch = max(rad(10.0f), min_pitch);
 											}
 
 											required_pitch_offset = bound
@@ -2050,15 +2050,15 @@ void animate_and_draw_entity_muzzle_flash_effect (entity *en)
 		return;
 	}
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
-		entity_inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		entity_inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		ASSERT (entity_inst3d);
 
@@ -2255,7 +2255,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 	weapon_to_target_vector_ptr->y = 0.0;
 	weapon_to_target_vector_ptr->z = -1.0;
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
@@ -2267,7 +2267,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 
 			if (target || get_local_entity_int_value(launcher, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 			{
-				config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+				config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 				//
 				// find undamaged package with most weapons remaining
@@ -2298,7 +2298,7 @@ void update_entity_weapon_system_weapon_and_target_vectors (entity *launcher)
 
 				if (found_package_number > 0)
 				{
-					inst3d = get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
+					inst3d = (object_3d_instance *) get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 					ASSERT (inst3d);
 
@@ -2408,7 +2408,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 
 	result = FALSE;
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
@@ -2420,7 +2420,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 
 			if (target)
 			{
-				config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+				config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 				//
 				// find undamaged package with most weapons remaining
@@ -2451,7 +2451,7 @@ int get_local_entity_selected_weapon_to_target_offsets (entity *launcher, float 
 
 				if (found_package_number > 0)
 				{
-					inst3d = get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
+					inst3d = (object_3d_instance *) get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 					ASSERT (inst3d);
 
@@ -2532,7 +2532,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 
 	result = FALSE;
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
@@ -2540,7 +2540,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 
 		if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
-			config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 			//
 			// find undamaged package with most weapons remaining
@@ -2571,7 +2571,7 @@ int get_local_entity_selected_weapon_viewpoint (entity *launcher, viewpoint *vp)
 
 			if (found_package_number > 0)
 			{
-				inst3d = get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
+				inst3d = (object_3d_instance *) get_local_entity_ptr_value (launcher, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 				ASSERT (inst3d);
 
@@ -2669,14 +2669,14 @@ int get_local_entity_weapon_ammunition_available (entity *launcher)
 	// get list of weapons available on the launcher
 	//
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (!package_status)
 	{
 		return FALSE;
 	}
 
-	config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+	config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 	ASSERT (weapon_config_type_valid (config_type));
 
@@ -2734,11 +2734,11 @@ int get_local_entity_weapon_salvo_size (entity *launcher, entity_sub_types weapo
 
 	if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
-		package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+		package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		if (package_status)
 		{
-			config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 			ASSERT (weapon_config_type_valid (config_type));
 
@@ -2846,7 +2846,7 @@ void suppress_ineffective_ship_weapons (entity *source)
 	// check valid package status
 	//
 
-	package_status = get_local_entity_ptr_value (source, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (source, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (!package_status)
 	{
@@ -2857,7 +2857,7 @@ void suppress_ineffective_ship_weapons (entity *source)
 	// get config type
 	//
 
-	config_type = get_local_entity_int_value (source, INT_TYPE_WEAPON_CONFIG_TYPE);
+	config_type = (weapon_config_types) get_local_entity_int_value (source, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 	ASSERT (weapon_config_type_valid (config_type));
 
@@ -2941,7 +2941,7 @@ void suppress_ineffective_ship_weapons (entity *source)
 	// update the source's 3D instance position and attitude (in case it has not been drawn yet)
 	//
 
-	inst3d = get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

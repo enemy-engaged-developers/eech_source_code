@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,8 @@
 //
 
 struct DIRECT_3D_DATA
+	d3d_data;
+struct DIRECT_3D_VECTORS
 	d3d;
 
 int
@@ -266,7 +269,7 @@ BOOL initialise_direct_3d ( void )
 	//
 	//
 
-	d3d.recreate_d3d = FALSE;
+	d3d_data.recreate_d3d = FALSE;
 
 	return ( TRUE );
 }
@@ -436,9 +439,9 @@ BOOL initialise_direct_3d_driver ( void )
 		{
 	
 #if USE_D3D_SOFTWARE_TNL
-			ret = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d.device );
+			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
 #else
-			ret = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DTnLHalDevice, ddraw.lpRenderBuffer, &d3d.device );
+			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DTnLHalDevice, ddraw.lpRenderBuffer, &d3d_data.device );
 #endif
 	
 			if ( FAILED ( ret ) )
@@ -448,7 +451,7 @@ BOOL initialise_direct_3d_driver ( void )
 	
 				d3d_using_hardware_tnl = FALSE;
 	
-				ret = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d.device );
+				ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
 			}
 			else
 			{
@@ -463,13 +466,13 @@ BOOL initialise_direct_3d_driver ( void )
 
 			d3d_using_hardware_tnl = FALSE;
 
-			ret = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d.device );
+			ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d_data.device );
 		}
 	}
 	else
 	{
 
-		ret = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DRGBDevice, ddraw.lpRenderBuffer, &d3d.device );
+		ret = IDirect3D7_CreateDevice ( d3d_data.d3d, GUID_PREFIX IID_IDirect3DRGBDevice, ddraw.lpRenderBuffer, &d3d_data.device );
 	}
 
 	if ( ret != DD_OK )
@@ -484,7 +487,7 @@ BOOL initialise_direct_3d_driver ( void )
 
 	memset ( &hardware_desc, 0, sizeof ( hardware_desc ) );
 
-	ret = IDirect3DDevice7_GetCaps ( d3d.device, &hardware_desc );
+	ret = IDirect3DDevice7_GetCaps ( d3d_data.device, &hardware_desc );
 
 	if ( ret != DD_OK )
 	{
@@ -507,7 +510,7 @@ BOOL initialise_direct_3d_driver ( void )
 
 		render_target_set = TRUE;
 
-		ret = IDirect3DDevice7_SetRenderTarget ( d3d.device, ddraw.lpRenderBuffer, 0 );
+		ret = IDirect3DDevice7_SetRenderTarget ( d3d_data.device, ddraw.lpRenderBuffer, 0 );
 
 		if ( ret != DD_OK )
 		{
@@ -538,13 +541,8 @@ BOOL initialise_direct_3d_driver ( void )
 		viewdata.dvMinZ = 0;
 		viewdata.dvMaxZ = 1;
 
-		ret = IDirect3DDevice7_SetViewport ( d3d.device, &viewdata );
-
-		if ( ret != D3D_OK )
+		if ( !f3d_set_viewport ( &viewdata ) )
 		{
-
-			debug_log ( "Unable to set viewport2: %s", get_d3d_error_message ( ret ) );
-
 			return ( FALSE );
 		}
 		else
@@ -578,11 +576,8 @@ BOOL initialise_direct_3d_driver ( void )
 void destroy_d3d_vertex_buffers ( void )
 {
 
-	if ( d3d.d3d )
+	if ( d3d_data.d3d )
 	{
-
-		HRESULT
-			ddrval;
 
 		int
 			count;
@@ -593,12 +588,8 @@ void destroy_d3d_vertex_buffers ( void )
 			if ( d3d.triangle_buffers[count].buffer )
 			{
 
-				ddrval = IDirect3DVertexBuffer7_Release ( d3d.triangle_buffers[count].buffer );
+				f3d_vertex_release ( &d3d.triangle_buffers[count].buffer );
 	
-				if ( ddrval > 0 )				{ debug_log ( "Unable to release triangle vertex buffer: %d instances left", ddrval ); }
-				else if ( ddrval < DD_OK )	{ debug_log ( "Unable to release triangle vertex buffer: %s", get_d3d_error_message ( ddrval ) ); }
-	
-				d3d.triangle_buffers[count].buffer = NULL;
 				d3d.triangle_buffers[count].vertices = NULL;
 				d3d.triangle_buffers[count].texture.texture = 0;
 				d3d.triangle_buffers[count].texture.texture_settings = 0;
@@ -612,13 +603,8 @@ void destroy_d3d_vertex_buffers ( void )
 
 			if ( d3d.line_buffers[count].buffer )
 			{
+				f3d_vertex_release ( &d3d.line_buffers[count].buffer );
 
-				ddrval = IDirect3DVertexBuffer7_Release ( d3d.line_buffers[count].buffer );
-	
-				if ( ddrval > 0 )				{ debug_log ( "Unable to release line vertex buffer: %d instances left", ddrval ); }
-				else if ( ddrval < DD_OK )	{ debug_log ( "Unable to release line vertex buffer: %s", get_d3d_error_message ( ddrval ) ); }
-	
-				d3d.line_buffers[count].buffer = NULL;
 				d3d.line_buffers[count].vertices = NULL;
 				d3d.line_buffers[count].texture.texture = 0;
 				d3d.line_buffers[count].texture.texture_settings = 0;
@@ -629,13 +615,7 @@ void destroy_d3d_vertex_buffers ( void )
 
 		if ( d3d.point_vertex_buffer )
 		{
-
-			ddrval = IDirect3DVertexBuffer7_Release ( d3d.point_vertex_buffer );
-
-			if ( ddrval > 0 )				{ debug_log ( "Unable to release point vertex buffer: %d instances left", ddrval ); }
-			else if ( ddrval < DD_OK )	{ debug_log ( "Unable to release point vertex buffer: %s", get_d3d_error_message ( ddrval ) ); }
-
-			d3d.point_vertex_buffer = NULL;
+			f3d_vertex_release ( &d3d.point_vertex_buffer );
 		}
 
 		for ( count = 0; count < MAX_ALPHA_VERTEX_BUFFERS; count++ )
@@ -643,25 +623,14 @@ void destroy_d3d_vertex_buffers ( void )
 
 			if ( d3d.alpha_vertex_buffer[count] )
 			{
-
-				ddrval = IDirect3DVertexBuffer7_Release ( d3d.alpha_vertex_buffer[count] );
-
-				if ( ddrval > 0 )				{ debug_log ( "Unable to release %d alpha vertex buffer: %d instances left", count, ddrval ); }
-				else if ( ddrval < DD_OK ) { debug_log ( "Unable to release %d alpha vertex buffer: %s", count, get_d3d_error_message ( ddrval ) ); }
+				f3d_vertex_release ( &d3d.alpha_vertex_buffer[count] );
 			}
-
-			d3d.alpha_vertex_buffer[count] = NULL;
 		}
 
 		if ( d3d.hardware_untransformed_buffer )
 		{
 
-			ddrval = IDirect3DVertexBuffer7_Release ( d3d.hardware_untransformed_buffer );
-
-			if ( ddrval > 0 )				{ debug_log ( "Unable to release hardware untransformed buffer: %d instances left", ddrval ); }
-			else if ( ddrval < DD_OK ) { debug_log ( "Unable to release hardware untransformed buffer: %s", get_d3d_error_message ( ddrval ) ); }
-
-			d3d.hardware_untransformed_buffer = NULL;
+			f3d_vertex_release ( &d3d.hardware_untransformed_buffer );
 		}
 	}
 }
@@ -675,9 +644,6 @@ void create_d3d_vertex_buffers ( void )
 
 	D3DVERTEXBUFFERDESC
 		desc;
-
-	HRESULT
-		ret;
 
 	int
 		count;
@@ -702,14 +668,7 @@ void create_d3d_vertex_buffers ( void )
 
 	for ( count = 0; count < MAXIMUM_TRIANGLE_BUFFERS; count++ )
 	{
-	
-		ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.triangle_buffers[count].buffer, 0 );
-
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_create ( &desc, &d3d.triangle_buffers[count].buffer );
 
 		d3d.triangle_buffers[count].vertices = NULL;
 		d3d.triangle_buffers[count].texture.texture = 0;
@@ -719,14 +678,7 @@ void create_d3d_vertex_buffers ( void )
 
 	for ( count = 0; count < MAXIMUM_LINE_BUFFERS; count++ )
 	{
-	
-		ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.line_buffers[count].buffer, 0 );
-
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_create ( &desc, &d3d.line_buffers[count].buffer );
 
 		d3d.line_buffers[count].vertices = NULL;
 		d3d.line_buffers[count].texture.texture = 0;
@@ -734,24 +686,11 @@ void create_d3d_vertex_buffers ( void )
 		d3d.line_buffers[count].indices_index = 0;
 	}
 
-	ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.point_vertex_buffer, 0 );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-	}
+	f3d_vertex_create ( &desc, &d3d.point_vertex_buffer );
 
 	for ( count = 0; count < MAX_ALPHA_VERTEX_BUFFERS; count++ )
 	{
-	
-		ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.alpha_vertex_buffer[count], 0 );
-
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_create ( &desc, &d3d.alpha_vertex_buffer[count] );
 	}
 
 	memset ( &desc, 0, sizeof ( D3DVERTEXBUFFERDESC ) );
@@ -767,13 +706,7 @@ void create_d3d_vertex_buffers ( void )
 	desc.dwNumVertices = 2048;
 	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1;
 
-	ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &d3d.hardware_untransformed_buffer, 0 );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_fatal ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-	}
+	f3d_vertex_create ( &desc, &d3d.hardware_untransformed_buffer );
 
 	d3d.triangle_buffer = NULL;
 	d3d.line_buffer = NULL;
@@ -1311,7 +1244,7 @@ void d3d_restore_objects ( int activate )
 			// Flag the fact we need to recreate the d3d devices/textures
 			//
 
-			d3d.recreate_d3d = TRUE;
+			d3d_data.recreate_d3d = TRUE;
 		}
 	}
 }
@@ -1353,7 +1286,7 @@ void recreate_d3d ( void )
 		restore_vb_friend_function ();
 	}
 
-	d3d.recreate_d3d = FALSE;
+	d3d_data.recreate_d3d = FALSE;
 
 	//
 	// Set the FPU to zero rounding!
@@ -1380,10 +1313,10 @@ void d3d_release_objects ( void )
 
 	destroy_d3d_vertex_buffers ();
 
-	if ( d3d.device )
+	if ( d3d_data.device )
 	{
 
-		ddrval = IDirect3DDevice7_Release ( d3d.device );
+		ddrval = IDirect3DDevice7_Release ( d3d_data.device );
 
 		if ( ddrval < DD_OK )
 		{
@@ -1391,7 +1324,7 @@ void d3d_release_objects ( void )
 			debug_log ( "Unable to release d3d device7: %s", get_d3d_error_message ( ddrval ) );
 		}
 
-		d3d.device = NULL;
+		d3d_data.device = NULL;
 	}
 }
 
@@ -1401,15 +1334,11 @@ void d3d_release_objects ( void )
 
 BOOL d3d_begin_scene ( void )
 {
-
-	HRESULT
-		ret;
-
 	d3d_number_of_executions = 0;
 
 	d3d_number_of_texture_loads = 0;
 
-	if ( d3d.recreate_d3d )
+	if ( d3d_data.recreate_d3d )
 	{
 
 		recreate_d3d ();
@@ -1418,24 +1347,13 @@ BOOL d3d_begin_scene ( void )
 	if ( d3d_valid )
 	{
 
-		if ( d3d.device )
+		if ( d3d_data.device )
 		{
 
 			reset_primitives ();
 
-			ret = IDirect3DDevice7_BeginScene ( d3d.device );
-			
-			if ( ret != D3D_OK )
+			if ( !f3d_scene_begin () )
 			{
-
-
-				debug_log ( "Unable to begin_scene - %s", get_d3d_error_message ( ret ) );
-				//
-				// End the scene
-				//
-	
-				IDirect3DDevice7_EndScene ( d3d.device );
-	
 				return ( FALSE );
 			}
 
@@ -1472,11 +1390,7 @@ BOOL d3d_begin_scene ( void )
 
 BOOL d3d_end_scene ( void )
 {
-
-	HRESULT
-		ret;
-
-	if ( d3d.device )
+	if ( d3d_data.device )
 	{
 
 		flush_triangle_primitives ();
@@ -1485,13 +1399,8 @@ BOOL d3d_end_scene ( void )
 
 		finalise_primitives ();
 
-		ret = IDirect3DDevice7_EndScene ( d3d.device );
-
-		if ( ret != D3D_OK )
+		if ( !f3d_scene_end () )
 		{
-	
-			debug_log ( "Unable to end_scene: %s", get_d3d_error_message ( ret ) );
-	
 			return ( FALSE );
 		}
 
@@ -1520,7 +1429,7 @@ void d3d_render_target_recreated ( void )
 	HRESULT
 		ret;
 
-	ret = IDirect3DDevice7_SetRenderTarget ( d3d.device, ddraw.lpRenderBuffer, 0 );
+	ret = IDirect3DDevice7_SetRenderTarget ( d3d_data.device, ddraw.lpRenderBuffer, 0 );
 
 	if ( ret != DD_OK )
 	{

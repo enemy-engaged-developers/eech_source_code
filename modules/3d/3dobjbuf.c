@@ -2228,8 +2228,8 @@ void draw_z_sorted_scene_objects ( scene_slot_drawing_list *object_order )
 		object_order = object_order->succ;
 	}
 
-	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, ddraw.use_z_buffer );
-	set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, ddraw.use_z_buffer );
+	set_d3d_int_state ( D3DRENDERSTATE_ZENABLE, TRUE/*ddraw.use_z_buffer*/ );
+	set_d3d_int_state ( D3DRENDERSTATE_ZWRITEENABLE, TRUE/*ddraw.use_z_buffer*/ );
 	set_d3d_int_state ( D3DRENDERSTATE_CULLMODE, D3DCULL_CCW );
 }
 
@@ -2287,10 +2287,6 @@ void set_3d_exclusive_instance ( object_3d_instance *instance )
 
 void set_up_tnl_hardware ( void )
 {
-
-	HRESULT
-		ret;
-
 	matrix4x4
 		m;
 
@@ -2354,23 +2350,11 @@ void set_up_tnl_hardware ( void )
 			light.dvDirection.x = -this_light->light_direction.x;
 			light.dvDirection.y = -this_light->light_direction.y;
 			light.dvDirection.z = -this_light->light_direction.z;
-	
-			ret = IDirect3DDevice7_SetLight ( d3d.device, count, &light );
-		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set light: %s", get_ddraw_error_message ( ret ) );
-			}
-	
-			ret = IDirect3DDevice7_LightEnable ( d3d.device, count, TRUE );
-		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to enable light: %s", get_ddraw_error_message ( ret ) );
-			}
 
+			f3d_set_light(count, &light);
+
+			f3d_light_enable(count, TRUE);
+	
 			this_light = this_light->succ;
 
 			count++;
@@ -2378,14 +2362,7 @@ void set_up_tnl_hardware ( void )
 
 		for ( ; count < 4; count++ )
 		{
-
-			ret = IDirect3DDevice7_LightEnable ( d3d.device, count, FALSE );
-
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to disable light: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_light_enable(count, FALSE);
 		}
 	}
 
@@ -2433,13 +2410,7 @@ void set_up_tnl_hardware ( void )
 
 		memcpy ( &d3d_matrix, m, sizeof ( D3DMATRIX ) );
 	
-		ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_VIEW, &d3d_matrix );
-	
-		if ( FAILED ( ret ) )
-		{
-	
-			debug_log ( "Unable to set view transfom: %s", get_ddraw_error_message ( ret ) );
-		}
+		f3d_set_transform ( D3DTRANSFORMSTATE_VIEW, &d3d_matrix );
 	}
 
 	//
@@ -2474,35 +2445,14 @@ void set_up_tnl_hardware ( void )
 	
 		memcpy ( &d3d_matrix, m, sizeof ( D3DMATRIX ) );
 	
-		ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_PROJECTION, &d3d_matrix );
-	
-		if ( FAILED ( ret ) )
-		{
-	
-			debug_log ( "Unable to set view transfom: %s", get_ddraw_error_message ( ret ) );
-		}
+		f3d_set_transform ( D3DTRANSFORMSTATE_PROJECTION, &d3d_matrix );
 	}
 
 	//
 	// Set default material
 	//
 
-	{
-	
-		d3d_material.dcvDiffuse.r = 1;	d3d_material.dcvDiffuse.g = 1;	d3d_material.dcvDiffuse.b = 1;	d3d_material.dcvDiffuse.a = 1;
-		d3d_material.dcvAmbient.r = 1;	d3d_material.dcvAmbient.g = 1;	d3d_material.dcvAmbient.b = 1;	d3d_material.dcvAmbient.a = 1;
-		d3d_material.dcvEmissive.r = 0;	d3d_material.dcvEmissive.g = 0;	d3d_material.dcvEmissive.b = 0;	d3d_material.dcvEmissive.a = 1;
-		d3d_material.dcvSpecular.r = 1;	d3d_material.dcvSpecular.g = 1;	d3d_material.dcvSpecular.b = 1;	d3d_material.dcvSpecular.a = 1;
-		d3d_material.dvPower = 1;
-	
-		ret = IDirect3DDevice7_SetMaterial ( d3d.device, &d3d_material );
-	
-		if ( FAILED ( ret ) )
-		{
-	
-			debug_log ( "Unable to set material: %s", get_ddraw_error_message ( ret ) );
-		}
-	}
+	set_d3d_material_default ();
 
 	//
 	// Setup the Z buffering properly
@@ -2531,13 +2481,7 @@ void set_up_tnl_hardware ( void )
 		viewdata.dvMinZ = 0.0;	//active_3d_environment->zbuffer_z_maximum_value;
 		viewdata.dvMaxZ = 1.0;	//active_3d_environment->zbuffer_z_minimum_value;
 
-		ret = IDirect3DDevice7_SetViewport ( d3d.device, &viewdata );
-
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set viewport7: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_set_viewport ( &viewdata );
 	}
 }
 

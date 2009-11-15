@@ -1364,10 +1364,10 @@ void ReadGWutInfo(const char *fname)
 		p = strtok(NULL,",");
 		//skip full name
 
-		weapon_database[i].guidance_type                   = IntValue(p);
-		weapon_database[i].aiming_type                     = IntValue(p);
-		weapon_database[i].decoy_type                      = IntValue(p);
-		weapon_database[i].warhead_type                    = IntValue(p);
+		weapon_database[i].guidance_type                   = ( weapon_guidance_types ) IntValue(p);
+		weapon_database[i].aiming_type                     = ( weapon_aiming_types ) IntValue(p);
+		weapon_database[i].decoy_type                      = ( weapon_decoy_types ) IntValue(p);
+		weapon_database[i].warhead_type                    = ( weapon_warhead_types ) IntValue(p);
 		weapon_database[i].threat_type                     = ( threat_types ) IntValue(p);
 		weapon_database[i].report_ammo_low_count           = IntValue(p);
 		weapon_database[i].gun_shake                       = IntValue(p);

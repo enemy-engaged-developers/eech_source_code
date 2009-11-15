@@ -76,13 +76,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define BUILDING_CAMERA_ROTATE_RATE			(rad (90.0))
-#define BUILDING_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
-#define BUILDING_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
+#define BUILDING_CAMERA_ROTATE_RATE			(rad (90.0f))
+#define BUILDING_CAMERA_ROTATE_UP_LIMIT	(rad (90.0f))
+#define BUILDING_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0f))
 
-#define BUILDING_CAMERA_ZOOM_RATE			(0.5)
-#define BUILDING_CAMERA_ZOOM_IN_LIMIT		(0.0)
-#define BUILDING_CAMERA_ZOOM_OUT_LIMIT		(1.0)
+#define BUILDING_CAMERA_ZOOM_RATE			(0.5f)
+#define BUILDING_CAMERA_ZOOM_IN_LIMIT		(0.0f)
+#define BUILDING_CAMERA_ZOOM_OUT_LIMIT		(1.0f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ void reset_building_camera_values (entity *en)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	//
 	// position

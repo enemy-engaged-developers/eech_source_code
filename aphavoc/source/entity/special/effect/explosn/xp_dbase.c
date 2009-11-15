@@ -163,7 +163,7 @@ void initialise_misc_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -259,7 +259,7 @@ void initialise_misc_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -309,7 +309,7 @@ void initialise_armour_piercing_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -358,7 +358,7 @@ void initialise_armour_piercing_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -440,7 +440,7 @@ void initialise_armour_piercing_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -536,7 +536,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -687,7 +687,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -847,7 +847,7 @@ void initialise_high_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1064,7 +1064,7 @@ void initialise_earth_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1124,7 +1124,7 @@ void initialise_earth_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1187,7 +1187,7 @@ void initialise_earth_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1264,7 +1264,7 @@ void initialise_water_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1305,7 +1305,7 @@ void initialise_water_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1379,7 +1379,7 @@ void initialise_water_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1467,7 +1467,7 @@ void initialise_object_dust_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1516,7 +1516,7 @@ void initialise_object_dust_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1629,7 +1629,7 @@ void initialise_object_dust_explosion_database()
 
 	this_explosion->show_on_map				=	FALSE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1772,7 +1772,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -1870,7 +1870,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0
@@ -2080,7 +2080,7 @@ void initialise_object_explosive_explosion_database()
 
 	this_explosion->show_on_map				=	TRUE;
 
-	this_explosion->component = malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
+	this_explosion->component = (meta_explosion_component *) malloc_fast_mem( sizeof( meta_explosion_component ) * this_explosion->number_of_components );
 
 	//
 	// component 0

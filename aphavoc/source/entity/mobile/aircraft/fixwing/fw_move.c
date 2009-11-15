@@ -84,17 +84,17 @@
 
 #define DEBUG_INFINITY_SLIDE			0
 
-#define GROUND_ACCELERATION 			3.0
+#define GROUND_ACCELERATION 			3.0f
 
-#define AIR_ACCELERATION 				30.0
+#define AIR_ACCELERATION 				30.0f
 
-#define PITCH_MIN 						-30.0
+#define PITCH_MIN 						-30.0f
 
-#define PITCH_MAX 						30.0
+#define PITCH_MAX 						30.0f
 
-#define AIRCRAFT_MAX_FLARE_ANGLE					rad (15.0)
+#define AIRCRAFT_MAX_FLARE_ANGLE					rad (15.0f)
 
-#define AIRCRAFT_MAX_LANDING_FLARE_ANGLE		rad (4.0)
+#define AIRCRAFT_MAX_LANDING_FLARE_ANGLE		rad (4.0f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ void fixed_wing_collision_avoidance (entity *en, vec3d *des_acc)
 
 	nearest = NULL;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	// if entity is not the leader, test for potential collision
 	if (!get_local_entity_int_value(en, INT_TYPE_GROUP_LEADER))
@@ -205,7 +205,7 @@ void fixed_wing_collision_avoidance (entity *en, vec3d *des_acc)
 		{
 			if (member != en)
 			{
-				jet_raw = get_local_entity_data (member);
+				jet_raw = (fixed_wing *) get_local_entity_data (member);
 
 				jet_pos = get_local_entity_vec3d_ptr (member, VEC3D_TYPE_POSITION);
 
@@ -293,7 +293,7 @@ void fixed_wing_attain_waypoint (entity *en, vec3d *wp_vec, vec3d *vel)
 		distance_to_wp,
 		max_turn_radius;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	distance_to_wp = get_3d_vector_magnitude (wp_vec);
 
@@ -331,7 +331,7 @@ void fixed_wing_aim_correction (entity *en, vec3d *wp_vec, vec3d *vel)
 	vec3d
 		dir_vec;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	if (!check_zero_3d_vector (vel))
 	{
@@ -405,7 +405,7 @@ void fixed_wing_follow_waypoint (entity *en, vec3d *vel, vec3d *des_acc)
 	float
 		wp_vel;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	fixed_wing_movement_get_waypoint_position (en, &wp_pos);
 
@@ -474,17 +474,17 @@ void fixed_wing_pursue_guide (entity *en, vec3d *vel, vec3d *des_acc)
 		ramped_speed,
 		curr_speed;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
 	ASSERT (guide);
 
-	leader = get_local_entity_ptr_value(guide, PTR_TYPE_TASK_LEADER);
+	leader = (entity *) get_local_entity_ptr_value(guide, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (leader);
 
-	leader_raw = get_local_entity_data(leader);
+	leader_raw = (fixed_wing *) get_local_entity_data(leader);
 
 	wp_speed = get_local_entity_float_value (guide, FLOAT_TYPE_VELOCITY);
 
@@ -591,7 +591,7 @@ void fixed_wing_set_velocity (entity *en, vec3d *acc, vec3d *velocity)
 		min_speed,
 		max_speed;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	curr_speed = raw->ac.mob.velocity;
 
@@ -727,7 +727,7 @@ void fixed_wing_calc_attitude(entity *en, vec3d *acc, vec3d *vel)
 		max_roll,
 		factor;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	old_heading = get_heading_from_attitude_matrix (raw->ac.mob.attitude);
 
@@ -828,7 +828,7 @@ void fixed_wing_land_jet (entity *en, vec3d *new_pos)
 		delta_pitch,
 		delta_roll;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	fixed_wing_movement_get_waypoint_position (en, &wp_pos);
 
@@ -942,7 +942,7 @@ void fixed_wing_flight (entity *en, vec3d *new_pos)
 	int
 		curr_wp;
 
-	raw = get_local_entity_data(en);
+	raw = (fixed_wing *) get_local_entity_data(en);
 
 	current_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -1006,7 +1006,7 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 		desired_velocity;
 
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	//
 	// aircraft on the ground
@@ -1206,7 +1206,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 				// terrain check
 				//
 
-				terrain_follow = get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE);
+				terrain_follow = (guide_terrain_follow_modes) get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE);
 
 				if (terrain_follow != GUIDE_TERRAIN_FOLLOW_NONE)
 				{
@@ -1216,7 +1216,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 					fixed_wing
 						*raw;
 
-					raw = get_local_entity_data (en);
+					raw = (fixed_wing *) get_local_entity_data (en);
 
 					sector = get_local_entity_parent (en, LIST_TYPE_SECTOR);
 
@@ -1264,7 +1264,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 					// find flight leader
 					//
 
-					group_leader = get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
+					group_leader = (entity *) get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
 
 					ASSERT (group_leader);
 
@@ -1274,7 +1274,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 
 					type = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 
-					formation = get_formation (type);
+					formation = get_formation ((formation_types) type);
 
 					formation_count = formation->number_in_formation;
 
@@ -1348,7 +1348,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 				// find flight leader
 				//
 
-				task_leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+				task_leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 				ASSERT (task_leader);
 
@@ -1358,7 +1358,7 @@ void fixed_wing_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 
 				type = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 
-				formation = get_formation (type);
+				formation = get_formation ((formation_types) type);
 
 				formation_count = formation->number_in_formation;
 
@@ -1556,7 +1556,7 @@ void basic_fixed_wing_movement (entity *en)
 		new_pos,
 		*current_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	// abort if mobile is not moving (i.e. landed, or dead)
 	//
@@ -2023,7 +2023,7 @@ void basic_fixed_wing_death_movement (entity *en)
 	terrain_classes
 		terrain_class;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	//
 	// get current position, speed, and velocity
@@ -2411,7 +2411,7 @@ void fixed_wing_crash_movement (entity *en)
 	matrix3x3
 		m;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -2562,7 +2562,7 @@ void fixed_wing_impact_movement (entity *en)
 	int
 		seed;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	seed = get_client_server_entity_random_number_seed(en);
 
@@ -2703,7 +2703,7 @@ void draw_debug_takeoff_landing_routes (entity *en)
 	fixed_wing
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 

@@ -818,7 +818,7 @@ list_types unpack_list_type (void)
 	list_types
 		type;
 
-	type = unpack_unsigned_data (NUM_LIST_TYPE_PACK_BITS);
+	type = (list_types) unpack_unsigned_data (NUM_LIST_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_LIST_TYPES));
 

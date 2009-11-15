@@ -159,7 +159,7 @@ static void person_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 
 			group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
-			task_leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			task_leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 			ASSERT (task_leader);
 	
@@ -169,7 +169,7 @@ static void person_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 	
 			type = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 	
-			formation = get_formation (type);
+			formation = get_formation ((formation_types) type);
 	
 			formation_count = formation->number_in_formation;
 	
@@ -253,7 +253,7 @@ void person_movement (entity *en)
 
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
-	raw = get_local_entity_data (en);
+	raw = (person *) get_local_entity_data (en);
 
 	get_keyframed_animation_state (raw->person_animation_state, &state, &remainder);
 
@@ -315,7 +315,7 @@ void person_movement (entity *en)
 		state = PERSON_ANIM_WALK;
 	}
 
-	ps_vel = get_person_database_velocity (state);
+	ps_vel = get_person_database_velocity ((person_animations) state);
 
 	raw->person_animation_state = state + remainder;
 

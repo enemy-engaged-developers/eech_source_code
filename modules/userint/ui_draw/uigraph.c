@@ -646,6 +646,8 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, unsigned sho
 		*screen_ptr,
 		*this_image_ptr;
 
+	ASSERT ( get_screen_pixel_width ( active_screen ) == 2 );
+
 	//
 	// store some variables in alternative types for speed
 	//
@@ -737,7 +739,7 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, unsigned sho
 					result_colour.g = pixel_colour.g + ig;	//(dg * alpha_factor);
 					result_colour.b = pixel_colour.b + ib;	//(db * alpha_factor);
 	
-					*line_ptr = get_rgb_packed_value (result_colour);
+					*line_ptr = get_packed_colour (result_colour);
 				}
 				else
 				{

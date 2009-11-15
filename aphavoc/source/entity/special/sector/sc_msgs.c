@@ -101,7 +101,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (sector *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 
@@ -160,7 +160,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 			(get_local_entity_int_value (sender, INT_TYPE_IDENTIFY_VEHICLE))
 		)
 		{
-			side = get_local_entity_int_value (sender, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (sender, INT_TYPE_SIDE);
 
 			////////////////////////////////////////
 			//

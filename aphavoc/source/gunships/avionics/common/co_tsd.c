@@ -1213,7 +1213,7 @@ void draw_tsd_terrain_map (env_2d *mfd_env, float y_translate, float range, floa
 	if (paper_map)
 		map_palette = paper_colour;
 	else
-		map_palette = &terrain_colour[tsd_render_palette];
+		map_palette = terrain_colour[tsd_render_palette];
                                  
 	ASSERT (position);            
 
@@ -1913,11 +1913,11 @@ void draw_tsd_map_grid (vec3d* centre_position, float scale, rgb_colour colour)
 	one_over_sector_side_length = 1.0 / SECTOR_SIDE_LENGTH;
 
 	// 1.5 is a little more than sqrt(2), so that it is long enough even when rotated 45 degrees
-	wxmin = max((centre_position->x - range * 1.5), MIN_MAP_X);
-	wxmax = min((centre_position->x + range * 1.5), MAX_MAP_X);
+	wxmin = max((centre_position->x - range * 1.5f), MIN_MAP_X);
+	wxmax = min((centre_position->x + range * 1.5f), MAX_MAP_X);
 
-	wzmin = max((centre_position->z - range * 1.5), MIN_MAP_Z);
-	wzmax = min((centre_position->z + range * 1.5), MAX_MAP_Z);
+	wzmin = max((centre_position->z - range * 1.5f), MIN_MAP_Z);
+	wzmax = min((centre_position->z + range * 1.5f), MAX_MAP_Z);
 
 	inew_wxmin = (((int) (wxmin * one_over_sector_side_length)) - 1.0) * SECTOR_SIDE_LENGTH;
 	inew_wxmax = (((int) (wxmax * one_over_sector_side_length)) + 1.0) * SECTOR_SIDE_LENGTH;

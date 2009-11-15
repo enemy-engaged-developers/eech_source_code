@@ -238,7 +238,7 @@ int recurse_count_redraw_number (ui_object *obj)
 	
 			new_count = recurse_count_redraw_number (raw->child);
 
-			count = max (raw->redraw, new_count);
+			count = max (( int ) raw->redraw, new_count);
 		}
 	}
 
@@ -249,7 +249,7 @@ int recurse_count_redraw_number (ui_object *obj)
 
 		new_count = max (count, new_count);
 
-		count = max (raw->redraw, new_count);
+		count = max ( ( int ) raw->redraw, new_count);
 	}
 
 	return count;

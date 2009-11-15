@@ -282,7 +282,7 @@ void update_decoy (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	ASSERT (weapon_database[raw->mob.sub_type].decoy_type != WEAPON_DECOY_TYPE_NONE);
 
@@ -384,7 +384,7 @@ entity_sub_types get_decoy_type_for_weapon (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	switch (weapon_database[raw->mob.sub_type].guidance_type)
 	{

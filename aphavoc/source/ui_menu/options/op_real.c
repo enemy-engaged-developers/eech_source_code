@@ -659,7 +659,7 @@ void notify_co_pilot_target_option_button ( ui_object *obj, void *arg )
 		
 	selection = (get_global_cpg_assist_type () + 1) % NUM_CPG_ASSISTANCE_TYPES;
 
-	set_global_cpg_assist_type (selection);
+	set_global_cpg_assist_type ((cpg_assist_types) selection);
 
 	set_ui_object_text (obj, option_cpg_text [selection]);
 
@@ -726,7 +726,7 @@ void notify_difficulty_option_button ( ui_object *obj, void *arg )
 		selection = GAME_DIFFICULTY_EASY;
 	}
 	
-	set_global_difficulty_level (selection);
+	set_global_difficulty_level ((enum GAME_DIFFICULTY_SETTINGS) selection);
 
 	set_ui_object_text (obj, option_difficulty_text [selection - 1]);
 

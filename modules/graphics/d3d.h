@@ -88,11 +88,13 @@ typedef LPDIRECT3DVERTEXBUFFER7 LPDIRECT3DVERTEXBUFFERX;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+struct SCREEN;
+
 struct VERTEX_BUFFER_TEXTURE_DATA
 {
 
-	unsigned int
-		texture;
+	struct SCREEN
+		*texture;
 
 	union
 	{
@@ -150,13 +152,20 @@ typedef struct VERTEX_BUFFER_HEADER vertex_buffer_header;
 
 struct DIRECT_3D_DATA
 {
-
 	LPDIRECT3DX
 		d3d;
 
 	LPDIRECT3DDEVICEX
 		device;
 
+	int
+		use_emulation,
+		use_rgb,
+		recreate_d3d;
+};
+
+struct DIRECT_3D_VECTORS
+{
 	vertex_buffer_header
 		triangle_buffers[MAXIMUM_TRIANGLE_BUFFERS],
 		line_buffers[MAXIMUM_LINE_BUFFERS],
@@ -177,11 +186,6 @@ struct DIRECT_3D_DATA
 		point_vertex_buffer,
 		hardware_untransformed_buffer,
 		alpha_vertex_buffer[MAX_ALPHA_VERTEX_BUFFERS];
-
-	int
-		use_emulation,
-		use_rgb,
-		recreate_d3d;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,10 +193,13 @@ struct DIRECT_3D_DATA
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extern struct DIRECT_3D_DATA
+	d3d_data;
+extern struct DIRECT_3D_VECTORS
 	d3d;
 
 extern int
 	d3d_override_render_to_texture,
+	d3d_initialised,
 	d3d_valid,
 	d3d_in_3d_scene,
 	d3d_use_rgb_device,

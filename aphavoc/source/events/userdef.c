@@ -106,7 +106,7 @@ void create_user_defined_file (void);
 void initialise_user_defined_events (void)
 {
 
-	user_defined_events
+	int
 		ev;
 
 	user_defined_key_type
@@ -141,7 +141,7 @@ void initialise_user_defined_events (void)
 			if (stricmp (user_defined_events_strings [ev], enum_event) == 0)
 			{
 		
-				new_user_defined_key->ev = ev;
+				new_user_defined_key->ev = (user_defined_events) ev;
 		
 				new_user_defined_key->dik_code = (int) key [0];
 

@@ -341,7 +341,7 @@ void draw_software_plain_triangle ( float x1, float y1, float x2, float y2, floa
 			// Draw the polygon
 			//
 
-			col = get_rgb_packed_value ( colour );
+			col = get_packed_colour ( colour );
 
 			triangle_colour = col;
 			triangle_colour <<= 16;

@@ -358,7 +358,7 @@ static void dedicated_server_build_player_list (void)
 		{
 			if (pilot != get_pilot_entity ())
 			{
-				side = get_local_entity_int_value (pilot, INT_TYPE_SIDE);
+				side = (entity_sides) get_local_entity_int_value (pilot, INT_TYPE_SIDE);
 
 				col.r = 255;
 				col.g = 255;

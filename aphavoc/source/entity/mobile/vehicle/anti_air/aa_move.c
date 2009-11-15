@@ -104,7 +104,7 @@ void anti_aircraft_death_movement (entity *en)
 		*velocity,
 		new_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	//
 	// first check to see if vehicle is on the ground or not
@@ -160,7 +160,7 @@ void anti_aircraft_death_movement (entity *en)
 
 	speed -= (4.0 * get_entity_movement_delta_time());
 
-	speed = max (0.0, speed);
+	speed = max (0.0f, speed);
 	
 	set_local_entity_float_value (en, FLOAT_TYPE_VELOCITY, speed);
 
@@ -210,7 +210,7 @@ void anti_aircraft_falling_movement (entity *en)
 		*velocity,
 		new_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	//
 	// get current position and velocity
@@ -385,7 +385,7 @@ void anti_aircraft_impact_movement (entity *en)
 	// when a vehicle is killed it needs to be "moved out the way", so give it an instantaneous sideways velocity
 	//
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	seed = get_client_server_entity_random_number_seed(en);
 

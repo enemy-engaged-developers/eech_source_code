@@ -167,7 +167,7 @@ void notify_show_flight_hours_page (ui_object *obj)
 
 void rebuild_flight_hours_list (player_log_type *log, int side)
 {
-	gunship_types i;
+	int i;
 	ui_object *temp;
 	unsigned int hours, minutes, missions;
 	char buff[12];

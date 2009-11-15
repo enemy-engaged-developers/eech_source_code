@@ -87,7 +87,7 @@ void set_local_float_value (entity *en, float_types type, float value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -188,7 +188,7 @@ float get_local_float_value (entity *en, float_types type)
 	float
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	switch (type)
 	{

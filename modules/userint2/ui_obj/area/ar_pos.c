@@ -76,7 +76,7 @@ static void set_area_ui_object_x (ui_object *obj, float x)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	//if (area->x != x)
 	{
@@ -113,7 +113,7 @@ static float get_area_ui_object_x (ui_object *obj)
 		px = get_ui_object_x (parent);
 	}
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	x = area->x_start + ( get_ui_object_bounded_t_value (obj) * ( area->x_end - area->x_start ) );
 
@@ -145,7 +145,7 @@ static void set_area_ui_object_y (ui_object *obj, float y)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	//if (area->y != y)
 	{
@@ -182,7 +182,7 @@ static float get_area_ui_object_y (ui_object *obj)
 		py = get_ui_object_y (parent);
 	}
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	y = area->y_start + (get_ui_object_bounded_t_value (obj) * (area->y_end - area->y_start));
 						
@@ -214,7 +214,7 @@ static void set_area_ui_object_x_end (ui_object *obj, float x)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->x_end = x;
 
@@ -231,7 +231,7 @@ static float get_area_ui_object_x_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_end;
 }
@@ -246,7 +246,7 @@ static void set_area_ui_object_y_end (ui_object *obj, float y)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->y_end = y;
 
@@ -263,7 +263,7 @@ static float get_area_ui_object_y_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->y_end;
 }
@@ -278,7 +278,7 @@ static void set_area_ui_object_x_start (ui_object *obj, float x)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->x_start = x;
 
@@ -295,7 +295,7 @@ static float get_area_ui_object_x_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_start;
 }
@@ -310,7 +310,7 @@ static void set_area_ui_object_y_start (ui_object *obj, float y)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->y_start = y;
 
@@ -327,7 +327,7 @@ static float get_area_ui_object_y_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->y_start;
 }
@@ -342,7 +342,7 @@ static void set_area_ui_object_cx (ui_object *obj, float cx)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 	
 	area->cx = cx;
 }
@@ -357,7 +357,7 @@ static float get_area_ui_object_cx (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->cx;
 }
@@ -372,7 +372,7 @@ static void set_area_ui_object_cy (ui_object *obj, float cy)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->cy = cy;
 }
@@ -387,7 +387,7 @@ static float get_area_ui_object_cy (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->cy;
 }
@@ -402,7 +402,7 @@ static void set_area_ui_object_virtual_x (ui_object *obj, float x)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->virtual_coords = TRUE;
 
@@ -441,7 +441,7 @@ static float get_area_ui_object_virtual_x (ui_object *obj)
 			//px = get_ui_object_virtual_x (parent);
 		}
 	
-		area = obj->data;
+		area = (area_ui_object *) obj->data;
 	
 		return area->x_start + px;
 	}
@@ -481,7 +481,7 @@ static void set_area_ui_object_virtual_y (ui_object *obj, float y)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->virtual_coords = TRUE;
 
@@ -520,7 +520,7 @@ static float get_area_ui_object_virtual_y (ui_object *obj)
 			//py = get_ui_object_virtual_y (parent);
 		}
 	
-		area = obj->data;
+		area = (area_ui_object *) obj->data;
 	
 		return area->y_start + py;
 	}

@@ -84,7 +84,7 @@ static void draw_local_3d_object (entity *en, float range)
 	object_3d_instance
 		*inst3d;
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	if (!raw->mob.alive)
 	{
@@ -437,7 +437,7 @@ static void draw_local_3d_object (entity *en, float range)
 							pitch_ratio,
 							delta_pitch;
 
-						pitch_ratio = min (lifetime, 3.0) * (1.0 / 3.0);
+						pitch_ratio = min (lifetime, 3.0f) * (1.0 / 3.0);
 
 						delta_pitch = rad (90.0) - pitch;
 
@@ -476,11 +476,11 @@ static void draw_local_3d_object (entity *en, float range)
 						// rock & roll
 						//
 
-						t = fmod (lifetime, 7.0) * PI2 / 7.0;
+						t = fmod (lifetime, 7.0f) * PI2 / 7.0;
 
 						pitch = rad (90.0) + (sin (t) * rad (6.0));
 
-						t = fmod (lifetime, 5.0) * PI2 / 5.0;
+						t = fmod (lifetime, 5.0f) * PI2 / 5.0;
 
 						heading += sin (t) * rad (10.0);
 
@@ -560,7 +560,7 @@ static void draw_local_3d_object (entity *en, float range)
 						{
 							case OBJECT_3D_KA52_PILOT_SEAT_WEAPON:
 							{
-								anim_frame = fmod (lifetime, 6.0) / 6.0;
+								anim_frame = fmod (lifetime, 6.0f) / 6.0;
 
 								anim_frame = bound (anim_frame, 0.0, 1.0);
 
@@ -572,7 +572,7 @@ static void draw_local_3d_object (entity *en, float range)
 							}
 							case OBJECT_3D_KA52_WSO_SEAT_WEAPON:
 							{
-								anim_frame = fmod (lifetime, 6.0) / 6.0;
+								anim_frame = fmod (lifetime, 6.0f) / 6.0;
 
 								anim_frame = bound (anim_frame, 0.0, 1.0);
 
@@ -668,11 +668,11 @@ static void draw_local_3d_object (entity *en, float range)
 						// rock & roll
 						//
 
-						t = fmod (lifetime, 7.0) * PI2 / 7.0;
+						t = fmod (lifetime, 7.0f) * PI2 / 7.0;
 
 						pitch = rad (90.0) + (sin (t) * rad (6.0));
 
-						t = fmod (lifetime, 5.0) * PI2 / 5.0;
+						t = fmod (lifetime, 5.0f) * PI2 / 5.0;
 
 						heading += sin (t) * rad (10.0);
 
@@ -801,7 +801,7 @@ int get_local_weapon_entity_parachute_open (entity *en)
 
 	ASSERT (get_local_entity_int_value (en, INT_TYPE_IDENTIFY_WEAPON));
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
 	{

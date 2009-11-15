@@ -256,7 +256,7 @@ char_types unpack_char_type (void)
 	char_types
 		type;
 
-	type = unpack_unsigned_data (NUM_CHAR_TYPE_PACK_BITS);
+	type = (char_types) unpack_unsigned_data (NUM_CHAR_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_CHAR_TYPES));
 

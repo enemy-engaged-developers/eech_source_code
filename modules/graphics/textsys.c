@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +95,8 @@ texture_format
 int
 	number_available_texture_formats;
 
-LPDIRECTDRAWPALETTE
-	hardware_texture_palette;
+/*LPDIRECTDRAWPALETTE
+	hardware_texture_palette;*/
 
 PALETTEENTRY
 	hardware_texture_colour_table[256];
@@ -118,12 +119,8 @@ static HRESULT CALLBACK enumerate_texture_formats ( LPDDPIXELFORMAT format, LPVO
 
 BOOL initialise_system_texture_formats ( void )
 {
-
 	int
 		count;
-
-	HRESULT
-		d3drval;
 
 	DDSURFACEDESC2
 		ddsd;
@@ -132,11 +129,9 @@ BOOL initialise_system_texture_formats ( void )
 	// Get the surface description of the render buffer.
 	//
 
-	ASSERT ( ddraw.lpRenderBuffer );
+	ASSERT ( get_graphics_system_initialised() /*ddraw.lpRenderBuffer*/ );
 
-	ddsd.dwSize = sizeof ( ddsd );
-
-	IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpRenderBuffer, &ddsd );
+	f3d_surface_description ( f3d_surface_render (), &ddsd );
 
 	//
 	// Enumerate the texture formats
@@ -144,13 +139,8 @@ BOOL initialise_system_texture_formats ( void )
 
 	number_available_texture_formats = 0;
 
-	d3drval = IDirect3DDevice7_EnumTextureFormats ( d3d.device, ( LPVOID ) enumerate_texture_formats, NULL );
-
-	if ( d3drval != DD_OK )
+	if ( !f3d_enumerate_formats ( enumerate_texture_formats, NULL ) )
 	{
-
-		debug_log ( "Error during texture format enumeration: %s", get_d3d_error_message ( d3drval ) );
-
 		return ( FALSE );
 	}
 
@@ -572,10 +562,6 @@ static HRESULT CALLBACK enumerate_texture_formats ( LPDDPIXELFORMAT format, LPVO
 
 void release_all_textures ( void )
 {
-
-	HRESULT
-		ddrval;
-
 	//
 	// First, the hardware textures
 	//
@@ -586,29 +572,10 @@ void release_all_textures ( void )
 	// Now release the hardware colour palette
 	//
 
-	if ( hardware_texture_palette )
+	/*if ( hardware_texture_palette )
 	{
-
-		ddrval = IDirectDrawPalette_Release ( hardware_texture_palette );
-
-		if ( ddrval < DD_OK )
-		{
-
-			debug_log ( "Unable to release the hardware palette: %s", get_ddraw_error_message ( ddrval ) );
-		}
-		else if ( ddrval > DD_OK )
-		{
-
-			debug_log ( "Unable to release hardware palette: references: %d", ddrval );
-		}
-		else
-		{
-
-			debug_log ( "Released hardware texture palette" );
-		}
-
-		hardware_texture_palette = NULL;
-	}
+		f3d_palette_release ( &hardware_texture_palette );
+	}*/
 
 	//
 	// Finally, get rid of any system textures
@@ -623,15 +590,11 @@ void release_all_textures ( void )
 
 void free_all_hardware_textures ( void )
 {
-
-	HRESULT
-		ret;
-
 	//
 	// Free the hardware textures
 	//
 
-	if ( d3d.d3d )
+	if ( get_graphics_system_initialised () /*d3d.d3d*/ )
 	{
 
 		if ( d3d_use_evict_textures )
@@ -641,13 +604,7 @@ void free_all_hardware_textures ( void )
 			// Evict any video / agp memory textures
 			//
 
-			ret = IDirect3D7_EvictManagedTextures ( d3d.d3d );
-	
-			if ( FAILED ( ret ) )
-			{
-	
-				debug_log ( "Unable to evict managed textures: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_evict_textures ();
 		}
 	}
 }
@@ -658,102 +615,7 @@ void free_all_hardware_textures ( void )
 
 BOOL lock_texture ( screen *texture, int mipmap_level )
 {
-
-	int
-		count;
-
-	LPDIRECTDRAWSURFACEX
-		texture_surface,
-		next_level;
-
-	HRESULT
-		ddrval;
-
-	DDSURFACEDESC2
-		ddsd;
-
-	ASSERT ( ddraw.ddraw );
-	ASSERT ( texture );
-	ASSERT ( texture->surface );
-	ASSERT ( !texture->locked );
-
-	texture_surface = texture->surface;
-
-	for ( count = 0; count < mipmap_level; count++ )
-	{
-
-		DDSCAPS2
-			ddscaps;
-
-		memset ( &ddscaps, 0, sizeof ( ddscaps ) );
-
-		ddscaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_MIPMAP;
-
-		ddrval = IDirectDrawSurface7_GetAttachedSurface ( texture_surface, &ddscaps, &next_level );
-
-		if ( ddrval != DD_OK )
-		{
-
-			debug_log ( "Failed to get attached surface: %s", get_ddraw_error_message ( ddrval ) );
-
-			memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-			ddsd.dwSize = sizeof ( ddsd );
-
-			ddrval = IDirectDrawSurface7_GetSurfaceDesc ( texture_surface, &ddsd );
-
-			if ( ddrval != DD_OK )
-			{
-
-				debug_log ( "Failed to get surface description: %s", get_ddraw_error_message ( ddrval ) );
-			}
-		
-			debug_log ( "Failed to find mipmap %d, from %d levels: %s", count, ddsd.dwMipMapCount, get_ddraw_error_message ( ddrval ) );
-
-			return ( FALSE );
-		}
-
-		if ( texture_surface != texture->surface )
-		{
-
-			IDirectDrawSurface7_Release ( texture_surface );
-		}
-
-		texture_surface = next_level;
-	}
-
-
-	ddsd.dwSize = sizeof ( ddsd );
-
-	ddrval = IDirectDrawSurface7_GetSurfaceDesc ( texture_surface, &ddsd );
-
-	if ( ddrval != DD_OK )
-	{
-
-		debug_log ( "Failed to get surface description of texture: %s", get_ddraw_error_message ( ddrval ) );
-
-		return ( FALSE );
-	}
-
-	ddrval = IDirectDrawSurface7_Lock ( texture_surface, NULL, &ddsd, DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL );
-		
-	if ( ddrval != DD_OK )
-	{
-
-		debug_log ( "failed to lock texture: %s", get_ddraw_error_message ( ddrval ) );
-
-		return ( FALSE );
-	}
-
-	texture->surface_locked = texture_surface;
-
-	texture->locked = TRUE;
-
-	texture->data = ddsd.lpSurface;
-
-	texture->pitch = ddsd.lPitch;
-
-	return ( TRUE );
+	return f3d_texture_lock(texture, mipmap_level);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -762,60 +624,7 @@ BOOL lock_texture ( screen *texture, int mipmap_level )
 
 BOOL unlock_texture ( screen *texture )
 {
-
-	HRESULT
-		ddrval;
-
-	ASSERT ( ddraw.ddraw );
-	ASSERT ( texture );
-	ASSERT ( texture->surface );
-	ASSERT ( texture->surface_locked );
-	ASSERT ( texture->locked );
-	ASSERT ( texture->data );
-
-	// Casm 16AUG05 Set the second argument to NULL - Thanks to Tamlin!
-	ddrval = IDirectDrawSurface7_Unlock ( texture->surface_locked, NULL );
-
-	if ( ddrval != DD_OK )
-	{
-
-		debug_log ( "Unable to unlock texture: %s", get_ddraw_error_message ( ddrval ) );
-
-		return ( FALSE );
-	}
-
-	if ( texture->surface_locked != texture->surface )
-	{
-
-		IDirectDrawSurface7_Release ( texture->surface_locked );
-	}
-
-	texture->locked = FALSE;
-
-	texture->surface_locked = NULL;
-
-	texture->data = NULL;
-
-	return ( TRUE );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-LPDIRECTDRAWSURFACEX load_hardware_texture_map ( screen *texture )
-{
-
-	if ( texture )
-	{
-
-		return ( texture->surface );
-	}
-	else
-	{
-
-		return ( NULL );
-	}
+	return f3d_texture_unlock(texture);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -824,19 +633,11 @@ LPDIRECTDRAWSURFACEX load_hardware_texture_map ( screen *texture )
 
 void report_free_texture_memory ( void )
 {
-
 	DWORD
 		total,
 		free;
 
-	DDSCAPS2
-		caps;
-
-	memset ( &caps, 0, sizeof ( caps ) );
-
-	caps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
-
-	IDirectDraw7_GetAvailableVidMem ( ddraw.ddraw, &caps, &total, &free );
+	f3d_memory(&total, &free);
 
 	debug_log ( "Texture memory: %d, Free: %d", total, free );
 }

@@ -3277,7 +3277,7 @@ static entity *get_first_air_threat (void)
 
 	ASSERT (source);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
@@ -3326,7 +3326,7 @@ static entity *get_next_air_threat (void)
 
 	ASSERT (source);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	threat = get_local_entity_first_child (source, LIST_TYPE_PADLOCK);
 
@@ -3431,7 +3431,7 @@ static entity *get_first_ground_threat (void)
 
 	ASSERT (source);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
@@ -3480,7 +3480,7 @@ static entity *get_next_ground_threat (void)
 
 	ASSERT (source);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	threat = get_local_entity_first_child (source, LIST_TYPE_PADLOCK);
 
@@ -3605,7 +3605,7 @@ static entity *get_first_missile_threat (void)
 
 			threat_velocity = get_local_entity_float_value (threat, FLOAT_TYPE_VELOCITY);
 
-			time_to_impact = threat_range / max (threat_velocity, 1.0);
+			time_to_impact = threat_range / max (threat_velocity, 1.0f);
 
 			//
 			// guard against 'overshot target' to prevent spurious indications

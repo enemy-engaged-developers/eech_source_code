@@ -108,7 +108,7 @@ void initialise_common_hud (void)
 	if (gt == 4 || gt == 6) gt = 0;
 	if (gt == 5 || gt == 7) gt = 1;
 	debug_log("hud colour %d %d",gt,hud_code[gt][HUD_CODES_COLOUR]);
-	set_global_hud_colour(hud_code[gt][HUD_CODES_COLOUR]);
+	set_global_hud_colour((hud_colours) hud_code[gt][HUD_CODES_COLOUR]);
 	global_hud_alpha = hud_code[gt][HUD_CODES_ALPHA];
 	global_hud_size2 = 0.1* (float) hud_code[gt][HUD_CODES_SIZE];
 	if (global_hud_size2 <= 1.0)
@@ -198,7 +198,8 @@ void set_next_hud_colour (void)
 			col;
 
 		col = get_global_hud_colour ();
-		col = (++col <= NUM_HUD_COLOURS - 1) ? col : 0;
+		col = (hud_colours) ((int) col + 1);
+		col = (col <= NUM_HUD_COLOURS - 1) ? col : (hud_colours) 0;
 
 		set_global_hud_colour (col);
 		hud_colour = hud_colour_table[col];	
@@ -219,7 +220,8 @@ void set_prev_hud_colour (void)
 			col;
 
 		col = get_global_hud_colour ();
-		col = (--col >= 0) ? col : NUM_HUD_COLOURS - 1;
+		col = (hud_colours) ((int) col - 1);
+		col = (col >= 0) ? col : (hud_colours) (NUM_HUD_COLOURS - 1);
 
 		set_global_hud_colour (col);
 		hud_colour = hud_colour_table[col];

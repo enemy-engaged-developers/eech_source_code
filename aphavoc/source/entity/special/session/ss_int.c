@@ -87,7 +87,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -191,7 +191,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_TARGET_WEATHER_MODE:
 		////////////////////////////////////////
 		{
-			raw->target_weather_mode = value;
+			raw->target_weather_mode = (weathermodes) value;
 
 			break;
 		}
@@ -215,7 +215,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_WEATHER_MODE:
 		////////////////////////////////////////
 		{
-			raw->weather_mode = value;
+			raw->weather_mode = (weathermodes) value;
 
 			break;
 		}
@@ -300,7 +300,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	switch (type)
 	{

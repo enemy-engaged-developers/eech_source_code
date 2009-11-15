@@ -76,7 +76,7 @@ static void set_input_ui_object_state (ui_object *obj, int flag)
 	input_ui_object
 		*input;
 
-	input = obj->data;
+	input = (input_ui_object *) obj->data;
 
 	if (input->area.state != flag)
 	{

@@ -164,7 +164,7 @@ static void ship_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 			// find task leader
 			//
 
-			task_leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			task_leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 			ASSERT (task_leader);
 	
@@ -174,7 +174,7 @@ static void ship_movement_get_waypoint_position (entity *en, vec3d *wp_pos)
 	
 			type = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 	
-			formation = get_formation (type);
+			formation = get_formation ((formation_types) type);
 	
 			formation_count = formation->number_in_formation;
 	
@@ -259,7 +259,7 @@ void ship_vehicle_movement (entity *en)
 		current_velocity,
 		new_velocity;
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	//
 	// abort if mobile is not moving (i.e. landed, or dead)
@@ -474,7 +474,7 @@ void ship_vehicle_death_movement (entity *en)
 		*velocity,
 		new_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	//
 	// work out new position 

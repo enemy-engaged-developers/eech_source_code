@@ -202,7 +202,7 @@ void pack_local_pylon_data (pack_modes mode)
 
 			total ++;
 
-			raw = get_local_entity_data (en);
+			raw = (pylon *) get_local_entity_data (en);
 
 			if (alive == raw->fix.alive)
 			{
@@ -318,7 +318,7 @@ void unpack_local_pylon_data (pack_modes mode)
 
 			count --;
 
-			raw = get_local_entity_data (destroy_en);
+			raw = (pylon *) get_local_entity_data (destroy_en);
 
 			raw->fix.alive = alive;
 

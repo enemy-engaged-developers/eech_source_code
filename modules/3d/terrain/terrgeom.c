@@ -1386,7 +1386,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	reset_deferred_state_changes ();
 
-	set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	//
 	// Set the zdistance bias level
@@ -1422,7 +1422,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -1480,7 +1480,7 @@ void draw_3d_terrain_3d_clipped_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -1873,7 +1873,7 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 	reset_deferred_state_changes ();
 
-	set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	set_terrain_3d_zbuffer_constant ( slot );
 
@@ -1905,7 +1905,7 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -1964,7 +1964,7 @@ void draw_3d_terrain_2d_clipped_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -2265,7 +2265,7 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 	reset_terrain_3d_buffered_polygons ();
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	set_terrain_3d_zbuffer_constant ( slot );
 
@@ -2295,7 +2295,7 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -2333,7 +2333,7 @@ void draw_3d_terrain_unclipped_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -2742,7 +2742,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 	reset_deferred_state_changes ();
 
-	set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	set_terrain_3d_zbuffer_constant ( slot );
 
@@ -2774,7 +2774,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -2828,7 +2828,7 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -3228,7 +3228,7 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 	reset_deferred_state_changes ();
 
-	set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	set_terrain_3d_zbuffer_constant ( slot );
 
@@ -3260,7 +3260,7 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -3318,7 +3318,7 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				reset_deferred_state_changes ();
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_deferred_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -3630,7 +3630,7 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 
 	reset_terrain_3d_buffered_polygons ();
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+	set_d3d_texture ( 0, current_terrain_type_class->texture );
 
 	set_terrain_3d_zbuffer_constant ( slot );
 
@@ -3660,7 +3660,7 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );
@@ -3698,7 +3698,7 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 
 				draw_terrain_3d_buffered_polygons ();
 
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+				set_d3d_texture ( 0, current_terrain_type_class->texture );
 			}
 
 			number_of_points = polygon->number_of_points;	//get_3d_terrain_face_number_of_points ( polygon );

@@ -76,7 +76,7 @@ static void set_area_ui_object_graphic (ui_object *obj, unsigned short int *grap
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->graphic = graphic;
 
@@ -102,7 +102,7 @@ static unsigned short int *get_area_ui_object_graphic (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->graphic);
 }
@@ -117,7 +117,7 @@ static void set_area_ui_object_texture_graphic (ui_object *obj, struct TEXTURE_G
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->texture_graphic = graphic;
 
@@ -143,7 +143,7 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_texture_graphic (ui_object *ob
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->texture_graphic);
 }
@@ -158,7 +158,7 @@ static void set_area_ui_object_highlighted_texture_graphic (ui_object *obj, stru
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_texture_graphic = graphic;
 
@@ -184,7 +184,7 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_highlighted_texture_graphic (u
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->highlighted_texture_graphic);
 }
@@ -199,7 +199,7 @@ static void set_area_ui_object_selected_texture_graphic (ui_object *obj, struct 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->selected_texture_graphic = graphic;
 
@@ -225,7 +225,7 @@ static struct TEXTURE_GRAPHIC *get_area_ui_object_selected_texture_graphic (ui_o
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->selected_texture_graphic);
 }
@@ -240,7 +240,7 @@ static void set_area_ui_object_memory_graphic (ui_object *obj, struct SCREEN *me
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->memory_graphic = memory_graphic;
 
@@ -266,7 +266,7 @@ static struct SCREEN *get_area_ui_object_memory_graphic (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->memory_graphic);
 }
@@ -281,7 +281,7 @@ static void set_area_ui_object_zoomable_palette_graphic (ui_object *obj, struct 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->zoomable_palette_graphic = graphic;
 
@@ -307,7 +307,7 @@ static struct ZOOMABLE_GRAPHIC *get_area_ui_object_zoomable_palette_graphic (ui_
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->zoomable_palette_graphic);
 }
@@ -322,7 +322,7 @@ static void set_area_ui_object_graphic_type (ui_object *obj, int graphic_type)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->graphic_type = graphic_type;
 }
@@ -337,7 +337,7 @@ static int get_area_ui_object_graphic_type (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->graphic_type);
 }
@@ -352,7 +352,7 @@ static void set_area_ui_object_graphic_zoom (ui_object *obj, int zoom)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->zoom = zoom;
 }
@@ -367,7 +367,7 @@ static int get_area_ui_object_graphic_zoom (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->zoom);
 }
@@ -382,7 +382,7 @@ static void set_area_ui_object_active_screen (ui_object *obj, struct SCREEN *act
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->active_screen = active_screen;
 }
@@ -397,7 +397,7 @@ static struct SCREEN *get_area_ui_object_active_screen (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->active_screen);
 }

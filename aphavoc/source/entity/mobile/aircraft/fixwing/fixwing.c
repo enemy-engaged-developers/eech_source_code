@@ -130,7 +130,7 @@ static struct ATTACHED_META_SMOKE_LIST_TABLE
 		//
 		////////////////////////////////////////////////
 		{
-			-1,
+			(meta_smoke_list_types) -1,
 			{
 				-1,
 				-1
@@ -228,7 +228,7 @@ void pack_fixed_wing_meta_smoke_lists (entity *en, pack_modes mode)
 
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
-		inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -351,7 +351,7 @@ void unpack_fixed_wing_meta_smoke_lists (entity *en, pack_modes mode)
 
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
-		inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -396,7 +396,7 @@ void unpack_fixed_wing_meta_smoke_lists (entity *en, pack_modes mode)
 							{
 								count *= count_entities_in_meta_smoke_list (type);						
 
-								entity_index_list = malloc_fast_mem (sizeof (int) * count);
+								entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 								for (loop = 0; loop < count; loop ++)
 								{
@@ -469,7 +469,7 @@ void assess_fixed_wing_damage_level (entity *en, int old_damage_level, int new_d
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	initial_damage = (float)(aircraft_database[raw->ac.mob.sub_type].initial_damage_level);
 	

@@ -93,7 +93,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			task
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (task *) get_local_entity_data (en);
 
 			switch (raw->sub_type)
 			{
@@ -363,7 +363,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			task
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (task *) get_local_entity_data (en);
 
 			switch (raw->sub_type)
 			{
@@ -654,7 +654,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (task));
+			raw = (task *) malloc_fast_mem (sizeof (task));
 
 			set_local_entity_data (en, raw);
 
@@ -666,7 +666,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->sub_type = unpack_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-			raw->task_state = unpack_int_value (en, INT_TYPE_TASK_STATE);
+			raw->task_state = (task_state_types) unpack_int_value (en, INT_TYPE_TASK_STATE);
 
 			unpack_vec3d (en, VEC3D_TYPE_POSITION, &raw->position);
 
@@ -675,7 +675,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			if (raw->route_length)
 			{
 	
-				raw->route_nodes = malloc_heap_mem (sizeof (vec3d) * (raw->route_length));
+				raw->route_nodes = (vec3d *) malloc_heap_mem (sizeof (vec3d) * (raw->route_length));
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
@@ -701,7 +701,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			if (raw->route_length)
 			{
 
-				raw->route_dependents = malloc_heap_mem (sizeof (entity *) * raw->route_length);
+				raw->route_dependents = (entity **) malloc_heap_mem (sizeof (entity *) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
@@ -718,15 +718,15 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 					}
 				}
 
-				raw->route_formation_types = malloc_heap_mem (sizeof (formation_types) * raw->route_length);
+				raw->route_formation_types = (formation_types *) malloc_heap_mem (sizeof (formation_types) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 	
-					raw->route_formation_types [loop] = unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
+					raw->route_formation_types [loop] = (formation_types) unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
 				}
 	
-				raw->route_waypoint_types = malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
+				raw->route_waypoint_types = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
@@ -781,7 +781,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			// update_link 
 
-			raw->task_terminated = unpack_int_value (en, INT_TYPE_TASK_TERMINATED);
+			raw->task_terminated = (task_terminated_types) unpack_int_value (en, INT_TYPE_TASK_TERMINATED);
 
 			/////////////////////////////////////////////////////////////////
 			// kill/loss data
@@ -921,7 +921,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (task));
+			raw = (task *) malloc_fast_mem (sizeof (task));
 
 			set_local_entity_data (en, raw);
 
@@ -933,7 +933,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->sub_type = unpack_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-			raw->task_state = unpack_int_value (en, INT_TYPE_TASK_STATE);
+			raw->task_state = (task_state_types) unpack_int_value (en, INT_TYPE_TASK_STATE);
 
 			unpack_vec3d (en, VEC3D_TYPE_POSITION, &raw->position);
 
@@ -942,7 +942,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			if (raw->route_length > 0)
 			{
 	
-				raw->route_nodes = malloc_heap_mem (sizeof (vec3d) * (raw->route_length));
+				raw->route_nodes = (vec3d *) malloc_heap_mem (sizeof (vec3d) * (raw->route_length));
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
@@ -968,7 +968,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			if (raw->route_length)
 			{
 
-				raw->route_dependents = malloc_heap_mem (sizeof (entity **) * raw->route_length);
+				raw->route_dependents = (entity **) malloc_heap_mem (sizeof (entity *) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
@@ -985,15 +985,15 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 					}
 				}
 
-				raw->route_formation_types = malloc_heap_mem (sizeof (formation_types) * raw->route_length);
+				raw->route_formation_types = (formation_types *) malloc_heap_mem (sizeof (formation_types) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 	
-					raw->route_formation_types [loop] = unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
+					raw->route_formation_types [loop] = (formation_types) unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
 				}
 	
-				raw->route_waypoint_types = malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
+				raw->route_waypoint_types = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 	
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{

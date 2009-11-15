@@ -99,7 +99,7 @@ static map_dimension_type
 void show_debriefing_page (entity *mission, int force_update, int force_final_debrief)
 {
 
-	medal_types
+	int
 		medal;
 
 	int
@@ -271,7 +271,7 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 		min_pos = *base_pos;
 		max_pos = *base_pos;
 
-		route_nodes = get_local_entity_ptr_value (mission, PTR_TYPE_ROUTE_NODE);
+		route_nodes = (vec3d *) get_local_entity_ptr_value (mission, PTR_TYPE_ROUTE_NODE);
 
 		route_length = get_local_entity_int_value (mission, INT_TYPE_ROUTE_LENGTH);
 
@@ -296,7 +296,7 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 
 		page_map_dimensions.size *= 1.2;
 
-		page_map_dimensions.size = max (page_map_dimensions.size, 4.0 * KILOMETRE);
+		page_map_dimensions.size = max (page_map_dimensions.size, 4.0f * KILOMETRE);
 
 		page_map_dimensions.subject_entity = mission;
 	}
@@ -419,7 +419,7 @@ static void update_debriefing_page_objects (ui_object *obj, void *arg)
 			aircraft_count [NUM_ENTITY_SUB_TYPE_AIRCRAFT],
 			vehicle_count [NUM_ENTITY_SUB_TYPE_VEHICLES];
 
-		task_raw = get_local_entity_data (mission);
+		task_raw = (task *) get_local_entity_data (mission);
 
 		//
 		// Kills

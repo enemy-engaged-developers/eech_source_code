@@ -87,7 +87,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
    #endif
 
-   raw = get_local_entity_data (en);
+   raw = (task *) get_local_entity_data (en);
 
    switch (type)
    {
@@ -215,7 +215,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
       case INT_TYPE_TASK_STATE:
       ////////////////////////////////////////
       {
-         raw->task_state = value;
+         raw->task_state = (task_state_types) value;
 
          break;
       }
@@ -223,7 +223,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
       case INT_TYPE_TASK_TERMINATED:
       ////////////////////////////////////////
       {
-         raw->task_terminated = value;
+         raw->task_terminated = (task_terminated_types) value;
 
          break;
       }
@@ -300,7 +300,7 @@ static int get_local_int_value (entity *en, int_types type)
    int
       value;
 
-   raw = get_local_entity_data (en);
+   raw = (task *) get_local_entity_data (en);
 
    switch (type)
    {

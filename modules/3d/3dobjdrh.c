@@ -350,9 +350,6 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 			matrix4x4
 				matrix;
 
-			HRESULT
-				ret;
-
 			vec3d
 				posn,
 				rel;
@@ -391,14 +388,8 @@ void draw_hardware_3d_object ( object_3d_instance *obj, int infrared_override )
 
 			memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 
-			ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
+			f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-			}
-
 			if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 			{
 	
@@ -898,9 +889,6 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 				matrix4x4
 					matrix;
 
-				HRESULT
-					ret;
-	
 				vec3d
 					posn,
 					rel;
@@ -944,13 +932,7 @@ static void draw_sub_object ( object_3d_sub_instance *obj, object_3d_database_en
 
 				memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 	
-				ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
-
-				if ( FAILED ( ret ) )
-				{
-
-					debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-				}
+				f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 
 				if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 				{
@@ -1273,9 +1255,6 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 			matrix4x4
 				matrix;
 
-			HRESULT
-				ret;
-
 			//
 			// Set the world transformation matrix
 			//
@@ -1321,14 +1300,8 @@ void draw_hardware_zbuffered_3d_object ( object_3d_instance *obj, int object_is_
 
 			memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 
-			ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
+			f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-			}
-
 			if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 			{
 	
@@ -1812,9 +1785,6 @@ static void draw_zbuffered_sub_object ( object_3d_sub_instance *obj, object_3d_d
 				matrix4x4
 					matrix;
 
-				HRESULT
-					ret;
-	
 				//
 				// Set the world transformation matrix
 				//
@@ -1859,14 +1829,8 @@ static void draw_zbuffered_sub_object ( object_3d_sub_instance *obj, object_3d_d
 
 				memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 	
-				ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
+				f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 
-				if ( FAILED ( ret ) )
-				{
-
-					debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-				}
-	
 				if ( ( textured_object_rendering_enabled ) || ( infrared_override ) )
 				{
 		
@@ -2032,7 +1996,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 				current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 
 				set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
-				set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+				set_d3d_texture ( 0, current_object_3d_texture );
 				set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 				set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2087,7 +2051,7 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 						set_d3d_material_emissive_colour ( current_object_3d_surface->red, current_object_3d_surface->green, current_object_3d_surface->blue, current_object_3d_surface->alpha );
 	
-						set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_luminosity_texture ) );
+						set_d3d_texture ( 0, current_object_3d_luminosity_texture );
 						set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 	
 						set_d3d_int_state ( D3DRENDERSTATE_ALPHABLENDENABLE, TRUE );
@@ -2117,17 +2081,17 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 					D3DVERTEX
 						*vertices;
 
-					HRESULT
-						ret;
-
 					float
 						xmax,
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
+					if ( !f3d_vertex_lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices ) )
+					{
 
-					if ( !FAILED ( ret ) )
+						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
+					}
+					else
 					{
 	
 						xmax = max ( fabs ( objects_3d_data[object_number].bounding_box.xmin ), fabs ( objects_3d_data[object_number].bounding_box.xmax ) );
@@ -2182,26 +2146,13 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 						ASSERT ( point_count < 2048 );
 	
-						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
+						f3d_vertex_unlock ( d3d.hardware_untransformed_buffer );
 	
-						if ( FAILED ( ret ) )
-						{
-	
-							debug_log ( "Unable to unlock hardware vertices: %s", get_ddraw_error_message ( ret ) );
-						}
-	
-						ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
+						f3d_draw_vb ( D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
 																							0,
 																							current_object_3d_surface->number_of_faces * 2,
 																							d3d_hardware_vertex_indices,
-																							current_object_3d_surface->number_of_faces * 2,
-																							0 );
-	
-						if ( FAILED ( ret ) )
-						{
-				
-							debug_log ( "Unable to draw indexed primitive: %s", get_d3d_error_message ( ret ) );
-						}
+																							current_object_3d_surface->number_of_faces * 2 );
 					}
 				}
 			}
@@ -2261,17 +2212,17 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 					D3DVERTEX
 						*vertices;
 
-					HRESULT
-						ret;
-
 					float
 						xmax,
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
+					if ( !f3d_vertex_lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices ) )
+					{
 
-					if ( !FAILED ( ret ) )
+						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
+					}
+					else
 					{
 						
 						xmax = max ( fabs ( objects_3d_data[object_number].bounding_box.xmin ), fabs ( objects_3d_data[object_number].bounding_box.xmax ) );
@@ -2325,26 +2276,13 @@ static void draw_3d_object_hardware_faces ( int object_number, object_3d_info *t
 	
 						ASSERT ( point_count < 2048 );
 	
-						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
+						f3d_vertex_unlock ( d3d.hardware_untransformed_buffer );
 	
-						if ( FAILED ( ret ) )
-						{
-	
-							debug_log ( "Unable to unlock hardware vertices: %s", get_ddraw_error_message ( ret ) );
-						}
-	
-						ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
+						f3d_draw_vb ( D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
 																							0,
 																							current_object_3d_surface->number_of_faces * 2,
 																							d3d_hardware_vertex_indices,
-																							current_object_3d_surface->number_of_faces * 2,
-																							0 );
-	
-						if ( FAILED ( ret ) )
-						{
-				
-							debug_log ( "Unable to draw indexed primitive: %s", get_d3d_error_message ( ret ) );
-						}
+																							current_object_3d_surface->number_of_faces * 2 );
 					}
 				}
 			}
@@ -2510,7 +2448,7 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 						current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
 						current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 		
-						set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+						set_d3d_texture ( 0, current_object_3d_texture );
 						set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 		
 						set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2565,17 +2503,12 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 					D3DVERTEX
 						*vertices;
 
-					HRESULT
-						ret;
-
 					float
 						xmax,
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
-
-					if ( FAILED ( ret ) )
+					if ( !f3d_vertex_lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices ) )
 					{
 
 						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
@@ -2637,26 +2570,13 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 	
 						ASSERT ( point_count < 2048 );
 	
-						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
+						f3d_vertex_unlock ( d3d.hardware_untransformed_buffer );
 	
-						if ( FAILED ( ret ) )
-						{
-	
-							debug_log ( "Unable to unlock hardware vertices: %s", get_ddraw_error_message ( ret ) );
-						}
-	
-						ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
+						f3d_draw_vb ( D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
 																							0,
 																							current_object_3d_surface->number_of_faces * 2,
 																							d3d_hardware_vertex_indices,
-																							current_object_3d_surface->number_of_faces * 2,
-																							0 );
-	
-						if ( FAILED ( ret ) )
-						{
-				
-							debug_log ( "Unable to draw indexed primitive: %s", get_d3d_error_message ( ret ) );
-						}
+																							current_object_3d_surface->number_of_faces * 2 );
 					}
 				}
 			}
@@ -2731,17 +2651,12 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 					D3DVERTEX
 						*vertices;
 
-					HRESULT
-						ret;
-
 					float
 						xmax,
 						ymax,
 						zmax;
 
-					ret = IDirect3DVertexBuffer7_Lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices, NULL );
-
-					if ( FAILED ( ret ) )
+					if ( !f3d_vertex_lock ( d3d.hardware_untransformed_buffer, DDLOCK_DISCARDCONTENTS, ( LPVOID * ) &vertices ) )
 					{
 
 						current_object_3d_point_list += current_object_3d_surface->number_of_faces * 2;
@@ -2802,26 +2717,13 @@ static void draw_3d_object_untextured_hardware_faces ( int object_number, object
 	
 						ASSERT ( point_count < 2048 );
 	
-						ret = IDirect3DVertexBuffer7_Unlock ( d3d.hardware_untransformed_buffer );
+						f3d_vertex_unlock ( d3d.hardware_untransformed_buffer );
 	
-						if ( FAILED ( ret ) )
-						{
-	
-							debug_log ( "Unable to unlock hardware vertices: %s", get_ddraw_error_message ( ret ) );
-						}
-	
-						ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
+						f3d_draw_vb ( D3DPT_LINELIST, d3d.hardware_untransformed_buffer,
 																							0,
 																							current_object_3d_surface->number_of_faces * 2,
 																							d3d_hardware_vertex_indices,
-																							current_object_3d_surface->number_of_faces * 2,
-																							0 );
-	
-						if ( FAILED ( ret ) )
-						{
-				
-							debug_log ( "Unable to draw indexed primitive: %s", get_d3d_error_message ( ret ) );
-						}
+																							current_object_3d_surface->number_of_faces * 2 );
 					}
 				}
 			}
@@ -3095,9 +2997,6 @@ void draw_3d_hardware_translucent_object ( translucent_object_surface *transluce
 			matrix4x4
 				matrix;
 
-			HRESULT
-				ret;
-
 			matrix[0][0] = surface->vp.attitude[0][0] * surface->object_3d_scale.x;
 			matrix[0][1] = surface->vp.attitude[0][1] * surface->object_3d_scale.x;
 			matrix[0][2] = surface->vp.attitude[0][2] * surface->object_3d_scale.x;
@@ -3130,13 +3029,7 @@ void draw_3d_hardware_translucent_object ( translucent_object_surface *transluce
 
 			memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 	
-			ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
-		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 		}
 
 		draw_3d_object_hardware_translucent_faces ( surface );
@@ -3293,9 +3186,6 @@ void draw_3d_hardware_zbuffered_translucent_object ( translucent_object_surface 
 			matrix4x4
 				matrix;
 
-			HRESULT
-				ret;
-
 			matrix[0][0] = surface->vp.attitude[0][0] * object_3d_scale.x;
 			matrix[0][1] = surface->vp.attitude[0][1] * object_3d_scale.x;
 			matrix[0][2] = surface->vp.attitude[0][2] * object_3d_scale.x;
@@ -3336,13 +3226,7 @@ void draw_3d_hardware_zbuffered_translucent_object ( translucent_object_surface 
 
 			memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 	
-			ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
-		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_set_transform ( D3DTRANSFORMSTATE_WORLD, &d3d_matrix );
 
 			matrix[0][0] = visual_3d_vp->xv.x * 0.5;
 			matrix[1][0] = visual_3d_vp->yv.x * 0.5;
@@ -3366,13 +3250,7 @@ void draw_3d_hardware_zbuffered_translucent_object ( translucent_object_surface 
 
 			memcpy ( &d3d_matrix, matrix, sizeof ( matrix ) );
 	
-			ret = IDirect3DDevice7_SetTransform ( d3d.device, D3DTRANSFORMSTATE_TEXTURE0, &d3d_matrix );
-		
-			if ( FAILED ( ret ) )
-			{
-		
-				debug_log ( "Unable to set world transfom: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_set_transform ( D3DTRANSFORMSTATE_TEXTURE0, &d3d_matrix );
 		}
 
 		draw_3d_object_hardware_translucent_faces ( surface );
@@ -3475,7 +3353,7 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 			else																	{ current_object_3d_texture_mipmap = D3DTFP_NONE; }
 	
 			set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, current_object_3d_specular );
-			set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+			set_d3d_texture ( 0, current_object_3d_texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 	
 			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -3572,7 +3450,7 @@ void draw_3d_object_hardware_translucent_faces ( translucent_object_surface *sur
 			set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
 			set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 		
-			set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+			set_d3d_texture ( 0, current_object_3d_texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 		
 			set_d3d_int_state ( D3DRENDERSTATE_NORMALIZENORMALS, TRUE );

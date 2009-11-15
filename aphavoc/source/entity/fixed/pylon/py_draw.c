@@ -110,7 +110,7 @@ static void draw_local_3d_object (entity *en, float range)
 	rgb_colour
 		cable_colour;
 
-	raw = get_local_entity_data (en);
+	raw = (pylon *) get_local_entity_data (en);
 
 	if (raw->fix.alive)
 	{
@@ -177,7 +177,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			if (raw->succ)
 			{
-				succ = get_local_entity_data (raw->succ);
+				succ = (pylon *) get_local_entity_data (raw->succ);
 
 				if (succ->fix.alive)
 				{
@@ -323,7 +323,7 @@ static void draw_local_3d_object (entity *en, float range)
 	pylon
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (pylon *) get_local_entity_data (en);
 
 	if (!raw->fix.alive)
 	{

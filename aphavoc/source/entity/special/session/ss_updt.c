@@ -86,7 +86,7 @@ static void update_time_of_day (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	//
 	// Time of day
@@ -130,7 +130,7 @@ static void update_time_of_day_resync (entity *en)
 		
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	raw->time_of_day_resync += get_delta_time ();
 
@@ -169,7 +169,7 @@ void update_lightning_effect (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	if (get_comms_model () == COMMS_MODEL_SERVER)
 	{
@@ -308,7 +308,7 @@ void update_transitional_weather (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	if (raw->local_weather_model)
 	{
@@ -556,7 +556,7 @@ void update_session_sound_effects (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	if (in_cockpit)
 	{

@@ -203,7 +203,7 @@ entity *create_task
 
 	force_en = get_local_force_entity (side);
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *) get_local_entity_data (force_en);
 
 	force_raw->task_generation [sub_type].created ++;
 
@@ -396,7 +396,7 @@ entity *create_task
 			entity
 				*enemy_force;
 
-			enemy_force = get_local_force_entity (get_local_entity_int_value (task_objective, INT_TYPE_SIDE));
+			enemy_force = (entity*) get_local_force_entity ((entity_sides) get_local_entity_int_value (task_objective, INT_TYPE_SIDE));
 
 			if (enemy_force)
 			{
@@ -430,7 +430,7 @@ entity *create_task
 
 	ASSERT (sec);
 
-	sec_raw = get_local_entity_data (sec);
+	sec_raw = (sector *) get_local_entity_data (sec);
 
 	insert_local_entity_into_parents_child_list (new_task, LIST_TYPE_SECTOR_TASK, sec, NULL);
 
@@ -626,7 +626,7 @@ entity *create_barcap_task (entity_sides side, entity *this_keysite, entity *ori
 
 	debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
-	keysite_raw = get_local_entity_data (this_keysite);
+	keysite_raw = (keysite *) get_local_entity_data (this_keysite);
 
 	ASSERT (duration > 0.0);
 
@@ -807,7 +807,7 @@ entity *create_cap_task (entity_sides side, entity *this_keysite, entity *origin
 
 	debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
-	keysite_raw = get_local_entity_data (this_keysite);
+	keysite_raw = (keysite *) get_local_entity_data (this_keysite);
 
 	ASSERT (duration > 0.0);
 
@@ -1059,7 +1059,7 @@ entity *create_escort_task (entity *group, int critical, float priority, entity 
 
 	start = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
@@ -1148,7 +1148,7 @@ entity *create_ground_force_task (entity_sub_types type, entity *group, int from
 
 	new_task = NULL;
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	start = &road_node_positions [from_node];
 	stop = &road_node_positions [to_node];
@@ -1166,7 +1166,7 @@ entity *create_ground_force_task (entity_sub_types type, entity *group, int from
 
 	member = get_local_entity_first_child (group, LIST_TYPE_MEMBER);
 
-	original_formation = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
+	original_formation = (formation_types) get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 
 	ASSERT (original_formation <= get_formation_database_count ());
 
@@ -1631,7 +1631,7 @@ entity *create_supply_task (entity *requester, entity *supplier, entity *cargo, 
 
 	start = get_local_entity_vec3d_ptr (cargo, VEC3D_TYPE_POSITION);
 
-	side = get_local_entity_int_value (requester, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (requester, INT_TYPE_SIDE);
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
@@ -2075,7 +2075,7 @@ entity *create_user_task (entity *en, entity_sub_types task_type, vec3d *start_p
 	entity_sides
 		side;
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	start_ks = start_keysite;
 	end_ks = end_keysite;
@@ -2289,7 +2289,7 @@ float get_estimated_task_duration (entity *task_en)
 
 	range = 0;
 
-	task_raw = get_local_entity_data (task_en);
+	task_raw = (task *) get_local_entity_data (task_en);
 
 	wp = task_raw->waypoint_root.first_child;
 
@@ -2385,7 +2385,7 @@ void display_task_generation_stats (entity *force_en)
 
 	//suppress_debug_log_timing_info (TRUE);
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *)get_local_entity_data (force_en);
 
 	debug_log ("======================================================================================");
 	debug_log ("TASK GENERATION STATISTICS");

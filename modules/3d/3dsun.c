@@ -213,7 +213,7 @@ void draw_3d_sun ( void )
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAOP, D3DTOP_DISABLE );
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( sun_texture ) );
+		set_d3d_texture ( 0, sun_texture );
 
 		draw_wbuffered_flat_shaded_textured_polygon ( sun_polygon, colour, specular );
 	}
@@ -281,7 +281,7 @@ void draw_3d_sun ( void )
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAOP, D3DTOP_DISABLE );
 	
-		set_d3d_texture ( 0, load_hardware_texture_map ( sun_flare_texture ) );
+		set_d3d_texture ( 0, sun_flare_texture );
 
 		draw_wbuffered_flat_shaded_textured_polygon ( sun_polygon, colour, specular );
 	}

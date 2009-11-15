@@ -247,7 +247,7 @@ void scan_local_entity_sounds (viewpoint *vp)
 	while (snd_eff)
 	{
 
-		en = get_system_sound_effect_user_data (snd_eff);
+		en = (entity *) get_system_sound_effect_user_data (snd_eff);
 
 		if (!get_system_sound_effect_playing (snd_eff))
 		{
@@ -316,7 +316,7 @@ void stop_local_entity_sounds ()
 	while (snd_eff)
 	{
 
-		en = get_system_sound_effect_user_data (snd_eff);
+		en = (entity *) get_system_sound_effect_user_data (snd_eff);
 
 		if (en)
 		{

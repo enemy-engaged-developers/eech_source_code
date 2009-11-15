@@ -91,7 +91,7 @@ void initialise_attack_guide (entity *en)
 
 	ASSERT (get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_TASK_ENGAGE);
 
-	aggressor = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
 
@@ -251,7 +251,7 @@ int attack_guide_find_best_weapon (entity *en)
 	// check weapon
 	//
 
-	aggressor = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
 

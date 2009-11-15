@@ -76,7 +76,7 @@ struct REGENERATION_OBJECT_DATABASE_STRUCTURE
 	object_3d_index_numbers
 		object_index;
 
-	entity_sub_types
+	enum ENTITY_SUB_TYPE_REGEN
 		regeneration_sub_type;
 };
 
@@ -205,7 +205,7 @@ int get_3d_object_updateable_flag ( int object )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-regeneration_building_types get_object_3d_regeneration_type ( object_3d_index_numbers object, int *landing_sub_type )
+enum ENTITY_SUB_TYPE_REGEN get_object_3d_regeneration_type ( object_3d_index_numbers object, int *landing_sub_type )
 {
 
 	ASSERT ( object > OBJECT_3D_INVALID_OBJECT_INDEX );

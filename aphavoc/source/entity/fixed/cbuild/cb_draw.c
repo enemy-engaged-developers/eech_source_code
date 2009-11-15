@@ -90,7 +90,7 @@ void draw_local_city_building_object (entity *en, float range)
 
 	float rangefactor; //Werewolf 16Apr03
 
-	raw = get_local_entity_data (en);
+	raw = (city_building *) get_local_entity_data (en);
 
 	//Werewolf 16Apr03
 	//rangefactor is 1 for default cbar value

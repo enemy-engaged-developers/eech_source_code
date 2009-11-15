@@ -227,7 +227,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 	//
 	//
 
-	force = get_local_force_entity (get_local_entity_int_value (receiver, INT_TYPE_SIDE));
+	force = get_local_force_entity ((entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE));
 
 	enemy_force = get_local_force_entity (get_enemy_side (get_local_entity_int_value (receiver, INT_TYPE_SIDE)));
 
@@ -456,7 +456,7 @@ static int response_to_articulate_loading_doors (entity_messages message, entity
 
 	#endif
 
-	inst3d = get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{
@@ -506,7 +506,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 	helicopter
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (helicopter *) get_local_entity_data (receiver);
 
 	position = va_arg (pargs, vec3d *);
 
@@ -753,7 +753,7 @@ static int response_to_check_mobile_reached_guide (entity_messages message, enti
 		// Check distance to task leader
 		//
 
-		leader = get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
+		leader = (entity *) get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
 
 		ASSERT (leader);
 

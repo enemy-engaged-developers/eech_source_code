@@ -80,7 +80,7 @@ void set_radio_buttons_off (ui_object *obj)
 		*next,
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	parent = get_ui_object_parent (obj);
 
@@ -101,7 +101,7 @@ void set_radio_buttons_off (ui_object *obj)
 		if (next->type == UI_TYPE_RADIO)
 		{
 	
-			area = next->data;
+			area = (area_ui_object *) next->data;
 	
 			area->state = UI_OBJECT_STATE_OFF;
 		}
@@ -146,7 +146,7 @@ void set_radio_button_on (ui_object *obj)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->state = UI_OBJECT_STATE_ON;
 

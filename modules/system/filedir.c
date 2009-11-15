@@ -82,7 +82,7 @@ directory_file_list *get_first_directory_file ( const char *path )
 
 	ASSERT ( get_memory_block_system_installed () );
 
-	first_file = malloc_fast_mem ( sizeof ( directory_file_list ) );
+	first_file = (directory_file_list*) malloc_fast_mem ( sizeof ( directory_file_list ) );
 
 	if ( first_file )
 	{

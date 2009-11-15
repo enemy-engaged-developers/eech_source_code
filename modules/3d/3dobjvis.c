@@ -280,7 +280,7 @@ enum OBJECT_3D_VISIBILITY get_object_3d_instance_visibility ( object_3d_instance
 
 	radius = objects_3d_scene_database[obj->object_number].radius;
 
-	scale = max ( 1.0, obj->relative_scale.x );
+	scale = max ( 1.0f, obj->relative_scale.x );
 	scale = max ( scale, obj->relative_scale.y );
 	scale = max ( scale, obj->relative_scale.z );
 

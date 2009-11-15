@@ -103,7 +103,7 @@ int pause_local_entity_sound_type (entity *en, entity_sub_types type, float dela
 	{
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
-			raw = get_local_entity_data (spec);
+			raw = (sound_effect *) get_local_entity_data (spec);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -151,7 +151,7 @@ int resume_local_entity_sound_type (entity *en, entity_sub_types type)
 	{
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
-			raw = get_local_entity_data (spec);
+			raw = (sound_effect *) get_local_entity_data (spec);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -260,7 +260,7 @@ void kill_local_entity_sound_type (entity *en, entity_sub_types type)
 
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
-			raw = get_local_entity_data (spec);
+			raw = (sound_effect *) get_local_entity_data (spec);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -297,7 +297,7 @@ void kill_client_server_entity_sound_type (entity *en, entity_sub_types type)
 
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
-			raw = get_local_entity_data (spec);
+			raw = (sound_effect *) get_local_entity_data (spec);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -452,7 +452,7 @@ int get_local_entity_sound_type_valid (entity *en, entity_sub_types type)
 	{
 		if (get_local_entity_type (spec) == ENTITY_TYPE_SOUND_EFFECT)
 		{
-			raw = get_local_entity_data (spec);
+			raw = (sound_effect *) get_local_entity_data (spec);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -484,7 +484,7 @@ void set_local_sound_effect_sample_indices (entity *en, int count, sound_sample_
 
 	ASSERT (indices);
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	ASSERT (!raw->effect_index);
 
@@ -494,7 +494,7 @@ void set_local_sound_effect_sample_indices (entity *en, int count, sound_sample_
 
 	raw->sound_effect_sequence_count = count;
 
-	raw->effect_index = malloc_fast_mem (sizeof (sound_sample_indices) * count);	
+	raw->effect_index = (sound_sample_indices *) malloc_fast_mem (sizeof (sound_sample_indices) * count);	
 	
 	memcpy (raw->effect_index, indices, sizeof (sound_sample_indices) * count);
 
@@ -529,7 +529,7 @@ void set_local_sound_effect_sample_indices (entity *en, int count, sound_sample_
 
 		ASSERT (raw->effect_lifetime < 40.0);
 
-		raw->effect_lifetime = min (raw->effect_lifetime, 40.0);
+		raw->effect_lifetime = min (raw->effect_lifetime, 40.0f);
 	}
 }
 

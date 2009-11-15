@@ -813,7 +813,7 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-	mod_pitch = fmod (pitch, rad (10.0));
+	mod_pitch = fmod (pitch, rad (10.0f));
 
 	tan_mod_pitch = -tan (mod_pitch);
 
@@ -2437,7 +2437,7 @@ static void draw_bob_up_overlay (void)
 
 			if ((length < knots_to_metres_per_second (-0.1)) || (length > knots_to_metres_per_second (0.1)))
 			{
-				length = min (length, knots_to_metres_per_second (10.0));
+				length = min (length, knots_to_metres_per_second (10.0f));
 
 				length *= 0.5 / knots_to_metres_per_second (10.0);
 
@@ -2734,7 +2734,7 @@ void draw_blackhawk_hud (void)
 
 	hud_viewport_y_max = HUD_VIEWPORT_SIZE - 0.001;
 */
-	hud_viewport_size = HUD_VIEWPORT_SIZE * min( 1.0, global_hud_size2); //VJ 060212 clean up hud info
+	hud_viewport_size = HUD_VIEWPORT_SIZE * min( 1.0f, global_hud_size2); //VJ 060212 clean up hud info
    
 	hud_viewport_x_org = hud_viewport_size * 0.5;
    

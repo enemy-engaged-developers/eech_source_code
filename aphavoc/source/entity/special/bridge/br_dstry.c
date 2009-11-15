@@ -95,7 +95,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (bridge *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//

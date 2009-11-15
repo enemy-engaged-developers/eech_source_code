@@ -345,7 +345,7 @@ void read_sector_side_file ( const char *sides_filename )
 		unsigned char
 			*sides_data;
 
-		sides_data = load_psd_file ( sides_filename, &width, &height, &channels );
+		sides_data = (unsigned char*) load_psd_file ( sides_filename, &width, &height, &channels );
 
 		if ( sides_data )
 		{
@@ -427,7 +427,7 @@ void reset_population_sector_values ( int width, int height )
 
 			sector = get_local_raw_sector_entity ( x, ( MAX_MAP_Z_SECTOR - y ) );
 
-			sector_raw = get_local_entity_data ( sector );
+			sector_raw = (struct SECTOR *) get_local_entity_data ( sector );
 
 			set_local_entity_int_value ( sector, INT_TYPE_SIDE, ENTITY_SIDE_NEUTRAL );
 		}
@@ -453,7 +453,7 @@ void process_population_forces ( psd_rgb *ptr, int width, int height )
 		current_initial_sector_sides = NULL;
 	}
 
-	current_initial_sector_sides = safe_malloc ( sizeof ( psd_rgb ) * width * height );
+	current_initial_sector_sides = ( psd_rgb * ) safe_malloc ( sizeof ( psd_rgb ) * width * height );
 
 	memcpy ( current_initial_sector_sides, ptr, ( sizeof ( psd_rgb ) * width * height ) );
 
@@ -521,7 +521,7 @@ void process_population_importance ( psd_rgb *ptr, int side, int width, int heig
 		population_importances = NULL;
 	}
 
-	population_importances = safe_malloc ( sizeof ( int ) * width * height );
+	population_importances = ( int * ) safe_malloc ( sizeof ( int ) * width * height );
 
 	for ( y = 0; y < height; y++ )
 	{
@@ -747,7 +747,7 @@ void read_population_templates ( FILE *fp )
 		number_of_temporary_templates = -number_of_temporary_templates;
 	}
 
-	temporary_templates = safe_malloc ( number_of_temporary_templates * sizeof ( temporary_template ) );
+	temporary_templates = ( temporary_template * ) safe_malloc ( number_of_temporary_templates * sizeof ( temporary_template ) );
 
 	for ( count = 0; count < number_of_temporary_templates; count++ )
 	{
@@ -846,7 +846,7 @@ void read_population_templates ( FILE *fp )
 		if ( temporary_templates[count].number_of_objects )
 		{
 
-			objects = safe_malloc ( temporary_templates[count].number_of_objects * sizeof ( temporary_template_object ) );
+			objects = ( temporary_template_object * ) safe_malloc ( temporary_templates[count].number_of_objects * sizeof ( temporary_template_object ) );
 
 			temporary_templates[count].objects = objects;
 
@@ -2209,7 +2209,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 			number_of_matching_slots = total_landing_sites;
 
-			matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+			matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 			memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -2291,7 +2291,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 			number_of_matching_slots = total_landing_sites;
 
-			matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+			matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 			memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -2365,7 +2365,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 			number_of_matching_slots = total_landing_sites;
 
-			matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+			matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 			memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -2439,7 +2439,7 @@ void validate_airport_links ( object_3d_index_numbers object_index )
 
 			number_of_matching_slots = total_landing_sites;
 
-			matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+			matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 			memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -2648,7 +2648,7 @@ void insert_airport_fixedwing_routes ( int entity_subtype, vec3d *position, obje
 
 	number_of_matching_slots = total_landing_sites;
 
-	matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+	matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 	memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -2923,7 +2923,7 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 
 	number_of_matching_slots = total_landing_sites;
 
-	matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+	matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 	memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -3358,7 +3358,7 @@ void insert_airport_general_takeoff_landing_routes ( int entity_subtype, vec3d *
 
 	number_of_matching_slots = total_landing_sites;
 
-	matching_slots = safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
+	matching_slots = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_matching_slots );
 
 	memcpy ( matching_slots, route_waypoint_positions[current_route_waypoint_offset].offsets, ( sizeof ( vec3d ) * number_of_matching_slots ) );
 
@@ -4017,7 +4017,7 @@ void initialise_object_3d_troop_landing_routes ( void )
 	if ( !object_3d_troop_routes )
 	{
 
-		object_3d_troop_routes = safe_malloc ( sizeof ( troop_landing_route_information ) * OBJECT_3D_LAST );
+		object_3d_troop_routes = ( troop_landing_route_information * ) safe_malloc ( sizeof ( troop_landing_route_information ) * OBJECT_3D_LAST );
 
 		for ( count = 0; count < OBJECT_3D_LAST; count++ )
 		{
@@ -4083,7 +4083,7 @@ int get_object_3d_troop_landing_route ( int object_index, vec3d **route )
 	
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
 	
-				object_3d_troop_routes[object_index].landing_route = safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
+				object_3d_troop_routes[object_index].landing_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
 				object_3d_troop_routes[object_index].number_of_landing_route_nodes = number_of_route_waypoint_positions;
 	
@@ -4155,7 +4155,7 @@ int get_object_3d_troop_takeoff_route ( int object_index, vec3d **route )
 	
 				parse_waypoint_routes_from_object ( route->index, 0, NULL );
 	
-				object_3d_troop_routes[object_index].takeoff_route = safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
+				object_3d_troop_routes[object_index].takeoff_route = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * number_of_route_waypoint_positions );
 
 				object_3d_troop_routes[object_index].number_of_takeoff_route_nodes = number_of_route_waypoint_positions;
 	
@@ -4196,7 +4196,7 @@ int get_object_3d_troop_landing_position_and_heading ( int object_index, vec3d *
 	if ( !object_3d_troop_routes )
 	{
 
-		object_3d_troop_routes = safe_malloc ( sizeof ( troop_landing_route_information ) * OBJECT_3D_LAST );
+		object_3d_troop_routes = ( troop_landing_route_information * ) safe_malloc ( sizeof ( troop_landing_route_information ) * OBJECT_3D_LAST );
 
 		for ( count = 0; count < OBJECT_3D_LAST; count++ )
 		{

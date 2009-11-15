@@ -82,7 +82,7 @@ static void update_server (entity *en)
 	sound_effect
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	ASSERT (raw->effect_index);
 
@@ -142,7 +142,7 @@ static void update_server (entity *en)
 	{
 		if (raw->valid_effect_lifetime > 0.0)
 		{
-			raw->valid_effect_lifetime = max (raw->valid_effect_lifetime - get_delta_time (), 0.0);
+			raw->valid_effect_lifetime = max (raw->valid_effect_lifetime - get_delta_time (), 0.0f);
 		}
 		else
 		{
@@ -167,7 +167,7 @@ static void update_client (entity *en)
 	sound_effect
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	if (raw->valid_sound_effect)
 	{
@@ -185,7 +185,7 @@ static void update_client (entity *en)
 	{
 		if (raw->valid_effect_lifetime > 0.0)
 		{
-			raw->valid_effect_lifetime = max (raw->valid_effect_lifetime - get_delta_time (), 0.0);
+			raw->valid_effect_lifetime = max (raw->valid_effect_lifetime - get_delta_time (), 0.0f);
 		}
 		else
 		{

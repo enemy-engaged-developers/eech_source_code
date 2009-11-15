@@ -209,7 +209,7 @@ pylon_types get_pylon_sub_type( entity_sub_types sub_type )
 	{
 		if ( pylon_type_conversion_table[ loop ].entity_sub_type == sub_type )
 		{
-			return pylon_type_conversion_table[ loop ].pylon_type;
+			return (pylon_types) pylon_type_conversion_table[ loop ].pylon_type;
 		}
 
 		loop ++;
@@ -217,7 +217,7 @@ pylon_types get_pylon_sub_type( entity_sub_types sub_type )
 
 	debug_fatal( "Fixed sub type %d is not a valid pylon type", sub_type );
 
-	return FALSE;
+	return NUM_PYLON_TYPES;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

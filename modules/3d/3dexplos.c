@@ -1226,7 +1226,7 @@ void draw_3d_explosion_clipped_faces ( int object_number, vec3d *pos, light_3d_s
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
-			set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+			set_deferred_d3d_texture ( 0, current_object_3d_texture );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, current_object_3d_texture_v_address );
@@ -1547,7 +1547,7 @@ void draw_3d_explosion_unclipped_faces ( int object_number, vec3d *pos, light_3d
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
-			set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+			set_deferred_d3d_texture ( 0, current_object_3d_texture );
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 			set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -1746,9 +1746,9 @@ explosion_object_points_lookup * generate_explosion_object_texture_points ( int 
 			ymax,
 			zmax;
 
-		list = safe_malloc ( sizeof ( explosion_object_points_lookup ) );
+		list = ( explosion_object_points_lookup * ) safe_malloc ( sizeof ( explosion_object_points_lookup ) );
 
-		list->points = safe_malloc ( objects_3d_data[object_number].number_of_points * sizeof ( explosion_point_uv_lookup ) );
+		list->points = ( explosion_point_uv_lookup * ) safe_malloc ( objects_3d_data[object_number].number_of_points * sizeof ( explosion_point_uv_lookup ) );
 
 		xmax = max ( fabs ( objects_3d_data[object_number].bounding_box.xmin ), fabs ( objects_3d_data[object_number].bounding_box.xmax ) );
 		ymax = max ( fabs ( objects_3d_data[object_number].bounding_box.ymin ), fabs ( objects_3d_data[object_number].bounding_box.ymax ) );

@@ -110,7 +110,7 @@ static void internal_initialise_input_system ( void )
 	// We always need to create the DirectInput device - the joystick always uses it.
 	//
 
-	ret = DirectInputCreateEx ( application_instance, DIRECTINPUT_VERSION, &IID_IDirectInput7, ( LPVOID * ) &direct_input, NULL );
+	ret = DirectInputCreateEx ( application_instance, DIRECTINPUT_VERSION, GUID_PREFIX IID_IDirectInput7, ( LPVOID * ) &direct_input, NULL );
 
 	if ( ret != DI_OK )
 	{

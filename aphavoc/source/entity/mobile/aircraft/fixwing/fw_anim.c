@@ -107,7 +107,7 @@ void set_client_server_fixed_wing_afterburner_state (entity *en, int state)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -205,7 +205,7 @@ void set_local_fixed_wing_afterburner_state (entity *en, int state)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -296,7 +296,7 @@ void animate_fixed_wing_afterburners( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (fixed_wing *) get_local_entity_data( en );
 
 	inst3d = raw->ac.inst3d;
 
@@ -324,7 +324,7 @@ void update_fixed_wing_afterburners (entity *en)
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (fixed_wing *) get_local_entity_data( en );
 
 	//
 	// break down afterburner state into integer and fractional parts
@@ -447,7 +447,7 @@ void animate_fixed_wing_airbrakes( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	animate_entity_reversable_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_AIR_BRAKE, raw->airbrake_state );
 }
@@ -470,7 +470,7 @@ void update_fixed_wing_airbrakes( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (fixed_wing *) get_local_entity_data( en );
 
 	airbrake_state = update_entity_reversable_keyframed_value( en, &raw->airbrake_state, 0.5 );
 
@@ -536,7 +536,7 @@ void animate_fixed_wing_flaps( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	animate_entity_reversable_keyframed_sub_objects( raw->ac.inst3d, OBJECT_3D_SUB_OBJECT_FLAPS, raw->flap_state );
 }
@@ -559,7 +559,7 @@ void update_fixed_wing_flaps( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (fixed_wing *) get_local_entity_data( en );
 
 	flap_state = update_entity_reversable_keyframed_value( en, &raw->flap_state, 0.5 );
 
@@ -619,7 +619,7 @@ void animate_fixed_wing_propellors( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -700,7 +700,7 @@ void initialise_fixed_wing_propellors (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -744,7 +744,7 @@ void damage_fixed_wing_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	//
 	// destruct old object
@@ -778,7 +778,7 @@ void set_fixed_wing_id_number (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	if (raw->ac.mob.side == ENTITY_SIDE_BLUE_FORCE)
 	{

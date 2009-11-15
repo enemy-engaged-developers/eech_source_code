@@ -117,7 +117,7 @@ void leave_mission (void)
 
 
 ////Moje 040618	Leave the player removal to cvc ;)
-	send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
+	send_packet (get_server_id (), PACKET_TYPE_END_GAME, (unsigned char *) &index_number, 4, SEND_TYPE_PERSONAL);
 // Jabberwock 050320 - Restored, should work now
 		}
 

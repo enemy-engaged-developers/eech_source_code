@@ -272,7 +272,7 @@ int check_guide_reached_waypoint (entity *en)
 	// find task leader
 	//
 
-	leader = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	leader = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	if (!leader)
 	{
@@ -342,7 +342,7 @@ int check_guide_waypoint_action_reached (entity *en)
 	// find task leader
 	//
 
-	leader = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	leader = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	if (!leader)
 	{
@@ -401,8 +401,10 @@ int set_guide_new_waypoint (entity *en, entity *wp)
 	entity_sub_types
 		guide_type,
 		group_type,
-		member_type,
 		waypoint_type;
+		
+	entity_types
+		member_type;
 
 	if (get_comms_model () != COMMS_MODEL_SERVER)
 	{
@@ -478,7 +480,7 @@ int set_guide_new_waypoint (entity *en, entity *wp)
 	// Set distance to task leader
 	//
 
-	leader = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	leader = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	if (leader)
 	{
@@ -581,7 +583,7 @@ void get_local_guide_position (entity *en, vec3d *pos)
 
 	ASSERT (pos);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 	
 	switch (raw->guide_position_type)
 	{
@@ -968,7 +970,7 @@ void set_client_server_guide_entity_new_position (entity *en, vec3d *position, e
 	// set new position type
 	//
 	
-	position_type = guide_database [sub_type].position_type;
+	position_type = (guide_position_types) guide_database [sub_type].position_type;
 
 	set_client_server_entity_int_value (en, INT_TYPE_GUIDE_POSITION_TYPE, position_type);
 
@@ -1095,7 +1097,7 @@ void get_local_guide_entity_pointers (entity *en, entity **aggressor, entity **w
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	agg = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	agg = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (agg);
 
@@ -1342,7 +1344,7 @@ int get_guide_criteria_valid (entity *en, guide_criteria_types type)
 
 	ASSERT (type < NUM_GUIDE_CRITERIA_TYPES);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	return raw->criteria [type].valid;
 }
@@ -1360,7 +1362,7 @@ float get_guide_criteria_value (entity *en, guide_criteria_types type)
 
 	ASSERT (type < NUM_GUIDE_CRITERIA_TYPES);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	return raw->criteria [type].value;
 }
@@ -1378,7 +1380,7 @@ void set_client_server_guide_criteria_valid (entity *en, guide_criteria_types ty
 
 	ASSERT (type < NUM_GUIDE_CRITERIA_TYPES);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	if ((raw->criteria [type].valid != valid) || (raw->criteria [type].value != value))
 	{
@@ -1405,7 +1407,7 @@ void set_local_guide_criteria_valid (entity *en, guide_criteria_types type, int 
 
 	ASSERT (type < NUM_GUIDE_CRITERIA_TYPES);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	raw->criteria [type].valid = valid;
 	raw->criteria [type].value = value;
@@ -1424,11 +1426,13 @@ void initialise_guide_criteria (entity *en)
 	entity_sub_types
 		waypoint_type,
 		group_type,
-		guide_type,
+		guide_type;
+
+	entity_types
 		mobile_type;
 
 	int
-		loop;
+		loop_;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
@@ -1460,8 +1464,13 @@ void initialise_guide_criteria (entity *en)
 	// get values from GUIDE DATABASE
 	//
 
-	for (loop = 0; loop < NUM_GUIDE_CRITERIA_TYPES; loop ++)
+	for (loop_ = 0; loop_ < NUM_GUIDE_CRITERIA_TYPES; loop_++)
 	{
+		guide_criteria_types
+			loop;
+
+		loop = (guide_criteria_types) loop_;
+
 		if (guide_database [guide_type].criteria [loop].valid)
 		{
 			set_client_server_guide_criteria_valid (en, loop, TRUE, guide_database [guide_type].criteria [loop].value);

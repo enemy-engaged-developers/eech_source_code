@@ -126,13 +126,13 @@ void initialise_game_initialisation_phases (void)
 	if (command_line_game_initialisation_phase_game_type != GAME_TYPE_INVALID)
 	{
 
-		set_game_type (command_line_game_initialisation_phase_game_type);
+		set_game_type ((game_types) command_line_game_initialisation_phase_game_type);
 	}
 
 	if (command_line_game_initialisation_phase_gunship_type != NUM_GUNSHIP_TYPES)
 	{
 
-		set_global_gunship_type (command_line_game_initialisation_phase_gunship_type);
+		set_global_gunship_type ((gunship_types) command_line_game_initialisation_phase_gunship_type);
 	}
 
 	game_initialisation_phase = GAME_INITIALISATION_PHASE_NONE;
@@ -159,7 +159,7 @@ void process_game_initialisation_phases (void)
 		value;
 
 	char
-		operator [64],
+		operator_ [64],
 		variable [64];
 
 	switch (game_initialisation_phase)
@@ -425,7 +425,7 @@ void process_game_initialisation_phases (void)
 						while (flag)
 						{
 
-							tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+							tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 							switch (tag)
 							{
@@ -482,16 +482,16 @@ void process_game_initialisation_phases (void)
 
 									get_next_file_word (file_ptr, variable, sizeof (variable));
 
-									get_next_file_word (file_ptr, operator, sizeof (operator));
+									get_next_file_word (file_ptr, operator_, sizeof (operator_));
 
 									value = get_next_file_int (file_ptr);
 
-									if (!if_file_tag_variable (variable, operator, value))
+									if (!if_file_tag_variable (variable, operator_, value))
 									{
 
 										// skip script till endif
 
-										while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+										while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 										{
 
 											if (tag == FILE_TAG_ENDIF)
@@ -522,7 +522,7 @@ void process_game_initialisation_phases (void)
 								case FILE_TAG_CAMPAIGN_DATA:
 								{
 
-									while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+									while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 									{
 
 										if (tag == FILE_TAG_END)
@@ -583,7 +583,7 @@ void process_game_initialisation_phases (void)
 
 									// skip script till correct language
 
-									while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+									while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 									{
 
 										#if (LANGUAGE == LANGUAGE_FRENCH)
@@ -638,7 +638,7 @@ void process_game_initialisation_phases (void)
 
 									// skip script till end of languages
 
-									while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+									while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 									{
 
 										if (tag == FILE_TAG_LANGUAGE_TEXT_STOP)

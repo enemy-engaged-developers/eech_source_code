@@ -86,7 +86,7 @@ static void create_input_ui_object (ui_object *obj, ui_object_types type, va_lis
 
    obj->type = type;
 
-   new_object = safe_malloc (sizeof (input_ui_object));
+   new_object = (input_ui_object*) safe_malloc (sizeof (input_ui_object));
 
    obj->data = new_object;
 

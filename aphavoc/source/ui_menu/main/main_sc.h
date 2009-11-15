@@ -72,81 +72,81 @@
 
 // screen title positions & sizes
 
-#define TITLE_TEXT_POSITION_X					0.025
+#define TITLE_TEXT_POSITION_X					0.025f
 
-#define TITLE_TEXT_POSITION_Y					0.039
+#define TITLE_TEXT_POSITION_Y					0.039f
 
-#define TITLE_TEXT_WIDTH						(0.95 - TITLE_TEXT_POSITION_X)
+#define TITLE_TEXT_WIDTH						(0.95f - TITLE_TEXT_POSITION_X)
 
-#define TITLE_TEXT_HEIGHT						0.039
+#define TITLE_TEXT_HEIGHT						0.039f
 
 
 // text option button backdrop graphics
 
-#define TEXT_OPTION_BDROP_WIDTH				0.483
+#define TEXT_OPTION_BDROP_WIDTH				0.483f
 
-#define TEXT_OPTION_BDROP_HEIGHT				0.057
+#define TEXT_OPTION_BDROP_HEIGHT				0.057f
 
 
 // main screen button dimensions
 
-#define MAIN_BUTTON_WIDTH 						0.05
+#define MAIN_BUTTON_WIDTH 						0.05f
 
-#define MAIN_BUTTON_HEIGHT 					0.06
+#define MAIN_BUTTON_HEIGHT 					0.06f
 
 
 // area for buttons & titles
 
-#define OPTION_AREA_HEIGHT 					0.058
-#define OPTION_SMALL_AREA_HEIGHT			0.040	// Retro 10Jul2004 for the controller option screen
+#define OPTION_AREA_HEIGHT 					0.058f
+#define OPTION_SMALL_AREA_HEIGHT			0.040f	// Retro 10Jul2004 for the controller option screen
 
-#define OPTION_AREA_WIDTH 						1.0
+#define OPTION_AREA_WIDTH 						1.0f
 
-#define SECOND_OPTION_START					0.55		// Retro 17Jul2004
+#define SECOND_OPTION_START					0.55f		// Retro 17Jul2004
 
 
 // title box sizes & offsets
 
-#define OPTION_BOX_HEIGHT 						1.000 
+#define OPTION_BOX_HEIGHT 						1.000f
 
-#define OPTION_BOX_WIDTH 						0.298
+#define OPTION_BOX_WIDTH 						0.298f
 
-#define OPTION_TITLE_OFFSET_X					0.117
+#define OPTION_TITLE_OFFSET_X					0.117f
 
-#define OPTION_TITLE_OFFSET_Y					0.260
+#define OPTION_TITLE_OFFSET_Y					0.260f
 
 // Retro 10Jul2004 - those Input Device Names can get bloody long
-#define CONTROLLER_OPTION_TITLE_OFFSET_X		0.01
-#define CONTROLLER_OPTION_TITLE_OFFSET_Y		0.260
+#define CONTROLLER_OPTION_TITLE_OFFSET_X		0.01f
+#define CONTROLLER_OPTION_TITLE_OFFSET_Y		0.260f
 
 
 // button sizes
 
-#define OPTION_BOX_SMALL_WIDTH 				0.108
+#define OPTION_BOX_SMALL_WIDTH 				0.108f
 
-#define OPTION_BOX_MEDIUM_WIDTH 				0.169
+#define OPTION_BOX_MEDIUM_WIDTH 				0.169f
 
-#define OPTION_BOX_LARGE_WIDTH 				0.298
+#define OPTION_BOX_LARGE_WIDTH 				0.298f
 
-#define OPTION_BOX_EXTRA_LARGE_WIDTH 		0.45
+#define OPTION_BOX_EXTRA_LARGE_WIDTH 		0.45f
 
 // gaps between buttons
 
-#define OPTION_BOX_GAP_HEIGHT 				0.004
+#define OPTION_BOX_GAP_HEIGHT 				0.004f
 
-#define OPTION_BOX_GAP_WIDTH 					0.0026
+#define OPTION_BOX_GAP_WIDTH 					0.0026f
 
 
 // option box text is right justified
 
-#define OPTION_BOX_TEXT_OFFSET_X 			0.95
+#define OPTION_BOX_TEXT_OFFSET_X 			0.95f
 	
-#define OPTION_BOX_TEXT_OFFSET_Y 			0.143
+#define OPTION_BOX_TEXT_OFFSET_Y 			0.143f
 
 
 // option button text is left justified
 
-#define OPTION_BUTTON_TEXT_OFFSET_X 		0.008
+#define OPTION_BUTTON_TEXT_OFFSET_X 		0.008f
 
 #define OPTION_AREA_OFFSET_Y (OPTION_AREA_HEIGHT + OPTION_BOX_GAP_HEIGHT)
 #define OPTION_SMALL_AREA_OFFSET_Y (OPTION_SMALL_AREA_HEIGHT + OPTION_BOX_GAP_HEIGHT)	// Retro 10Jul2004 for the controller option screen
@@ -154,48 +154,48 @@
 
 // area for buttons & titles
 
-#define SETUP_AREA_HEIGHT 						0.058
+#define SETUP_AREA_HEIGHT 						0.058f
 
-#define SETUP_AREA_WIDTH 						0.466
+#define SETUP_AREA_WIDTH 						0.466f
 
 
 // title box sizes
 
-#define SETUP_BOX_HEIGHT 						1.000 
+#define SETUP_BOX_HEIGHT 						1.000f
 
-#define SETUP_BOX_WIDTH 						0.635
+#define SETUP_BOX_WIDTH 						0.635f
 
 
 // button sizes
 
-#define SETUP_BOX_SMALL_WIDTH 				0.142
+#define SETUP_BOX_SMALL_WIDTH 				0.142f
 
-#define SETUP_BOX_MEDIUM_WIDTH 				0.360 
+#define SETUP_BOX_MEDIUM_WIDTH 				0.360f
 
-#define SETUP_BOX_LARGE_WIDTH 				0.360
+#define SETUP_BOX_LARGE_WIDTH 				0.360f
 
 
 // gaps between buttons
 
-#define SETUP_BOX_GAP_HEIGHT 					0.004
+#define SETUP_BOX_GAP_HEIGHT 					0.004f
 
-#define SETUP_BOX_GAP_WIDTH 					0.004
+#define SETUP_BOX_GAP_WIDTH 					0.004f
 
-#define SETUP_DIVIDER_HEIGHT					0.075
+#define SETUP_DIVIDER_HEIGHT					0.075f
 
 
 // option box text is right justified
 
-#define SETUP_BOX_TEXT_OFFSET_X 			0.597
+#define SETUP_BOX_TEXT_OFFSET_X 			0.597f
 	
-#define SETUP_BOX_TEXT_OFFSET_Y 			0.143
+#define SETUP_BOX_TEXT_OFFSET_Y 			0.143f
 
 
 // option button text is left justified
 
-//#define SETUP_BUTTON_TEXT_OFFSET_X 		0.666
+//#define SETUP_BUTTON_TEXT_OFFSET_X 		0.666f
 
-#define SETUP_BUTTON_TEXT_OFFSET_X 		0.05
+#define SETUP_BUTTON_TEXT_OFFSET_X 		0.05f
 
 #define SETUP_AREA_OFFSET_Y (OPTION_AREA_HEIGHT + OPTION_BOX_GAP_HEIGHT)
 
@@ -209,28 +209,28 @@
 
 // ok, cancel & exit button positions
 
-#define OPTIONS_OK_BUTTON_POS_X 				0.038
+#define OPTIONS_OK_BUTTON_POS_X 				0.038f
 
-#define OPTIONS_OK_BUTTON_POS_Y 				0.829
+#define OPTIONS_OK_BUTTON_POS_Y 				0.829f
 
-#define OPTIONS_CANCEL_BUTTON_POS_X 		0.038
+#define OPTIONS_CANCEL_BUTTON_POS_X 		0.038f
 
-#define OPTIONS_CANCEL_BUTTON_POS_Y 		0.877
+#define OPTIONS_CANCEL_BUTTON_POS_Y 		0.877f
 
 
 // ok, cancel, exit button sizes
 
-#define OPTIONS_OK_BUTTON_X 					0.150
+#define OPTIONS_OK_BUTTON_X 					0.150f
 
-#define OPTIONS_OK_BUTTON_Y 					0.050
+#define OPTIONS_OK_BUTTON_Y 					0.050f
 
-#define OPTIONS_CANCEL_BUTTON_X 				0.150
+#define OPTIONS_CANCEL_BUTTON_X 				0.150f
 
-#define OPTIONS_CANCEL_BUTTON_Y 				0.050
+#define OPTIONS_CANCEL_BUTTON_Y 				0.050f
 
-#define OPTIONS_EXIT_BUTTON_X 				0.100
+#define OPTIONS_EXIT_BUTTON_X 				0.100f
 
-#define OPTIONS_EXIT_BUTTON_Y 				0.050
+#define OPTIONS_EXIT_BUTTON_Y 				0.050f
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

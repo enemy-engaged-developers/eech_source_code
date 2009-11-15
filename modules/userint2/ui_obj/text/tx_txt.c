@@ -88,7 +88,7 @@ static void set_text_ui_object_text (ui_object *obj, const char *text)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->text)
 	{
@@ -103,7 +103,7 @@ static void set_text_ui_object_text (ui_object *obj, const char *text)
 	if (area->font_type != -1)
 	{
 
-		set_ui_font_type (area->font_type);
+		set_ui_font_type ((font_types) area->font_type);
 	}
 
 	parent = get_ui_object_parent (obj);
@@ -161,7 +161,7 @@ static void set_text_ui_object_text (ui_object *obj, const char *text)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_text_ui_object_font_type (ui_object *obj, int font_id)
+static void set_text_ui_object_font_type (ui_object *obj, font_types font_id)
 {
 
 	font_types
@@ -170,7 +170,7 @@ static void set_text_ui_object_font_type (ui_object *obj, int font_id)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->font_type = font_id;
 

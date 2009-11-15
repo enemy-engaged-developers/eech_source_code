@@ -98,7 +98,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	if (raw->player_task)
 	{
@@ -341,7 +341,7 @@ static void kill_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	ASSERT (get_local_task_list_type (en) != LIST_TYPE_UNASSIGNED_TASK);
 

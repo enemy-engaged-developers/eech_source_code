@@ -170,7 +170,7 @@ void show_base_page (entity *base, int force_update)
 	{
 		page_3d_heading = 0.0;
 		page_3d_pitch = (PI * 0.25);
-		page_3d_distance = max (50.0, get_local_entity_float_value (base, FLOAT_TYPE_RECON_DISTANCE));
+		page_3d_distance = max (50.0f, get_local_entity_float_value (base, FLOAT_TYPE_RECON_DISTANCE));
 	}
 
 	//
@@ -496,7 +496,7 @@ static void notify_base_destroy_button (ui_object *obj, void *arg)
 
 	if (keysite_database [sub_type].troop_insertion_target)
 	{
-		side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 		new_side = get_enemy_side (side);
 

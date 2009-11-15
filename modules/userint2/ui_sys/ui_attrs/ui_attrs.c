@@ -379,10 +379,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            void
-               *function;
+            FUNCTION
+               function;
 
-            function = va_arg (pargs, void *);
+            function = va_arg (pargs, FUNCTION);
 
             set_ui_object_draw_function (obj, function);
 
@@ -417,10 +417,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			////////////////////////////////////////
 			{
 
-				int
+				font_types
 					font_id;
 
-				font_id = va_arg (pargs, int);
+				font_id = (font_types) va_arg (pargs, int);
 
 				set_ui_object_font_type (obj, font_id);
 
@@ -487,10 +487,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            void
-               *function;
+            FUNCTION
+               function;
 
-            function = va_arg (pargs, void *);
+            function = va_arg (pargs, FUNCTION);
 
             set_ui_object_function (obj, function);
 
@@ -652,10 +652,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			////////////////////////////////////////
 			{
 
-				int
+				font_types
 					font_id;
 
-				font_id = va_arg (pargs, int);
+				font_id = (font_types) va_arg (pargs, int);
 
 				set_ui_object_highlighted_font_type (obj, font_id);
 
@@ -722,10 +722,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            void
-               *function;
+            FUNCTION
+               function;
 
-            function = va_arg (pargs, void *);
+            function = va_arg (pargs, FUNCTION);
 
             set_ui_object_highlighted_function (obj, function);
 
@@ -742,7 +742,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
             event = va_arg (pargs, int);
 
-            set_ui_object_highlighted_notify_on (obj, event);
+            set_ui_object_highlighted_notify_on (obj, (notify_types)event);
 
             break;
          }
@@ -934,7 +934,7 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 
             event = va_arg (pargs, int);
 
-            set_ui_object_notify_on (obj, event);
+            set_ui_object_notify_on (obj, (notify_types)event);
 
             break;
          }
@@ -1095,10 +1095,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
          ////////////////////////////////////////
          {
 
-            void
-               *function;
+            FUNCTION
+               function;
 
-            function = va_arg (pargs, void *);
+            function = va_arg (pargs, FUNCTION);
 
             set_ui_object_right_function (obj, function);
 
@@ -1220,10 +1220,10 @@ void set_ui_object_attributes (ui_object *obj, va_list pargs)
 			////////////////////////////////////////
 			{
 
-				int
+				font_types
 					font_id;
 
-				font_id = va_arg (pargs, int);
+				font_id = (font_types) va_arg (pargs, int);
 
 				set_ui_object_selected_font_type (obj, font_id);
 

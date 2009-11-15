@@ -137,8 +137,6 @@ extern BOOL lock_texture ( struct SCREEN *texture, int mipmap_level );
 
 extern BOOL unlock_texture ( struct SCREEN *texture );
 
-extern LPDIRECTDRAWSURFACEX load_hardware_texture_map ( struct SCREEN *texture );
-
 extern void report_free_texture_memory ( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

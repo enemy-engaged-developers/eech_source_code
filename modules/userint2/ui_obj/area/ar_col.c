@@ -76,7 +76,7 @@ static void set_area_ui_object_colour (ui_object *obj, char colour_r, char colou
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->colour_end.r = colour_r;
 	area->colour_end.g = colour_g;
@@ -99,7 +99,7 @@ static void set_area_ui_object_colour_end (ui_object *obj, char colour_r, char c
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->colour_end.r = colour_r;
 	area->colour_end.g = colour_g;
@@ -117,7 +117,7 @@ static void set_area_ui_object_colour_start (ui_object *obj, char colour_r, char
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->colour_start.r = colour_r;
 	area->colour_start.g = colour_g;
@@ -157,7 +157,7 @@ static rgb_colour get_area_ui_object_colour (ui_object *obj)
 	// Interpolate the colour values
 	//
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	dr = ( int ) area->colour_end.r - ( int ) area->colour_start.r;
 	dg = ( int ) area->colour_end.g - ( int ) area->colour_start.g;
@@ -187,7 +187,7 @@ static rgb_colour get_area_ui_object_colour_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->colour_end;
 }
@@ -202,7 +202,7 @@ static rgb_colour get_area_ui_object_colour_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->colour_start;
 }
@@ -217,7 +217,7 @@ static void set_area_ui_object_highlighted_colour (ui_object *obj, char colour_r
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->highlighted_colour_end.r = colour_r;
 	area->highlighted_colour_end.g = colour_g;
@@ -240,7 +240,7 @@ static void set_area_ui_object_highlighted_colour_end (ui_object *obj, char colo
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->highlighted_colour_end.r = colour_r;
 	area->highlighted_colour_end.g = colour_g;
@@ -258,7 +258,7 @@ static void set_area_ui_object_highlighted_colour_start (ui_object *obj, char co
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->highlighted_colour_start.r = colour_r;
 	area->highlighted_colour_start.g = colour_g;
@@ -276,7 +276,7 @@ static rgb_colour get_area_ui_object_highlighted_colour (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->highlighted_colour_start;
 }
@@ -291,7 +291,7 @@ static rgb_colour get_area_ui_object_highlighted_colour_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->highlighted_colour_end;
 }
@@ -306,7 +306,7 @@ static rgb_colour get_area_ui_object_highlighted_colour_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->highlighted_colour_start;
 }
@@ -321,7 +321,7 @@ static void set_area_ui_object_selected_colour (ui_object *obj, char colour_r, c
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->selected_colour_end.r = colour_r;
 	area->selected_colour_end.g = colour_g;
@@ -344,7 +344,7 @@ static void set_area_ui_object_selected_colour_end (ui_object *obj, char colour_
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->selected_colour_end.r = colour_r;
 	area->selected_colour_end.g = colour_g;
@@ -362,7 +362,7 @@ static void set_area_ui_object_selected_colour_start (ui_object *obj, char colou
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	area->selected_colour_start.r = colour_r;
 	area->selected_colour_start.g = colour_g;
@@ -380,7 +380,7 @@ static rgb_colour get_area_ui_object_selected_colour (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->selected_colour_start;
 }
@@ -395,7 +395,7 @@ static rgb_colour get_area_ui_object_selected_colour_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->selected_colour_end;
 }
@@ -410,7 +410,7 @@ static rgb_colour get_area_ui_object_selected_colour_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = ( area_ui_object * ) obj->data;
 
 	return area->selected_colour_start;
 }

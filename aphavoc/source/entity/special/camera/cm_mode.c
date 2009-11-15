@@ -82,7 +82,7 @@ camera_modes get_camera_mode (entity* cam)
 
 	ASSERT(cam);
 
-	raw = get_local_entity_data (cam);
+	raw = (camera *) get_local_entity_data (cam);
 	return raw->camera_mode;
 }
 

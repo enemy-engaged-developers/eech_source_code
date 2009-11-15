@@ -89,7 +89,7 @@ void initialise_inverse_square_root_table ( void )
 		fi,
 		fo;
 
-	inverse_sqrt_table = safe_malloc ( TABLE_SIZE * sizeof ( unsigned int ) );
+	inverse_sqrt_table = ( unsigned int * ) safe_malloc ( TABLE_SIZE * sizeof ( unsigned int ) );
 
 	h = inverse_sqrt_table;
 

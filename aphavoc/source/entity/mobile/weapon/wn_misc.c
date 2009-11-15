@@ -87,12 +87,12 @@ void get_local_entity_weapon_load(entity* en, weapon_count weapon_load[], unsign
 	ASSERT(weapon_load);
 	ASSERT(max_num_weapons > 0);
 
-	package_status = get_local_entity_ptr_value(en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value(en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
 		int package;
-		weapon_config_types config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		weapon_config_types config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
@@ -151,11 +151,11 @@ float get_local_entity_weapon_load_weight (entity *en)
 
 	weapon_load_weight = 0.0;
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
@@ -199,11 +199,11 @@ int get_local_entity_weapon_count (entity *en, entity_sub_types weapon_sub_type)
 
 	if (weapon_sub_type != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 	{
-		package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+		package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		if (package_status)
 		{
-			config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 			for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 			{
@@ -296,7 +296,7 @@ weapon_config_types get_apache_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1; config_type <= WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_1; config_type <= WEAPON_CONFIG_TYPE_AH64D_APACHE_LONGBOW_50; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -356,7 +356,7 @@ weapon_config_types get_havoc_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1; config_type <= WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_1; config_type <= WEAPON_CONFIG_TYPE_MI28N_HAVOC_B_30; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -406,7 +406,7 @@ weapon_config_types get_comanche_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1; config_type <= WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_RAH66_COMANCHE_1; config_type <= WEAPON_CONFIG_TYPE_RAH66_COMANCHE_384; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (stub_wing_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -478,7 +478,7 @@ weapon_config_types get_hokum_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1; config_type <= WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_KA52_HOKUM_B_1; config_type <= WEAPON_CONFIG_TYPE_KA52_HOKUM_B_30; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -526,7 +526,7 @@ weapon_config_types get_blackhawk_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1; config_type <= WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_1; config_type <= WEAPON_CONFIG_TYPE_UH60_BLACK_HAWK_9; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -580,7 +580,7 @@ weapon_config_types get_hind_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_MI24D_HIND_1; config_type < WEAPON_CONFIG_TYPE_CH46E_SEA_KNIGHT_1; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_MI24D_HIND_1; config_type < WEAPON_CONFIG_TYPE_CH46E_SEA_KNIGHT_1; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -642,7 +642,7 @@ weapon_config_types get_ah64a_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_AH64A_APACHE_1; config_type <= WEAPON_CONFIG_TYPE_AH64A_APACHE_32; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_AH64A_APACHE_1; config_type <= WEAPON_CONFIG_TYPE_AH64A_APACHE_32; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -705,7 +705,7 @@ weapon_config_types get_ka50_weapon_config
 	int
 		ok;
 
-	for (config_type = WEAPON_CONFIG_TYPE_KA50_HOKUM_1; config_type <= WEAPON_CONFIG_TYPE_KA50_HOKUM_30; config_type++)
+	for (config_type = WEAPON_CONFIG_TYPE_KA50_HOKUM_1; config_type <= WEAPON_CONFIG_TYPE_KA50_HOKUM_30; config_type = (weapon_config_types) (((int) config_type) + 1))
 	{
 		if (inner_hardpoint_weapon == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
 		{
@@ -1175,11 +1175,11 @@ void set_local_entity_weapon_damage (entity *en, int heading_depth, entity_sub_t
 
 	ASSERT (en);
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
@@ -1298,11 +1298,11 @@ int get_local_entity_weapon_hardpoint_info
 
 	result = FALSE;
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		for (package = 0; package < NUM_WEAPON_PACKAGES; package++)
 		{
@@ -1386,11 +1386,11 @@ void set_comanche_stub_wing_visibility (entity *en)
 
 	stub_wings_required = FALSE;
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
@@ -1418,7 +1418,7 @@ void set_comanche_stub_wing_visibility (entity *en)
 	// set visibility status
 	//
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 
@@ -1469,11 +1469,11 @@ int get_comanche_stub_wings_attached (entity *en)
 	// search packages for stub wings (include empty and damaged weapons)
 	//
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 

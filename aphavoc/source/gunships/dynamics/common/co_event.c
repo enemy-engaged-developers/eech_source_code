@@ -305,7 +305,7 @@ void debug_dynamics_damage_model (event *ev)
 	dynamics_damage_types
 		damage;
 
-	damage = 1 << ((ev->key)- (DIK_1));
+	damage = (dynamics_damage_types) (1 << ((ev->key)- (DIK_1)));
 
 	dynamics_damage_model (damage, FALSE);
 }

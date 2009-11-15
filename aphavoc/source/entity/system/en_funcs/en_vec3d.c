@@ -836,7 +836,7 @@ vec3d_types unpack_vec3d_type (void)
 	vec3d_types
 		type;
 
-	type = unpack_unsigned_data (NUM_VEC3D_TYPE_PACK_BITS);
+	type = (vec3d_types) unpack_unsigned_data (NUM_VEC3D_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_VEC3D_TYPES));
 

@@ -186,7 +186,7 @@ void pack_local_anti_aircraft_data (pack_modes mode)
 
 			total ++;
 
-			raw = get_local_entity_data (en);
+			raw = (anti_aircraft *) get_local_entity_data (en);
 
 			if (alive == raw->vh.mob.alive)
 			{
@@ -300,7 +300,7 @@ void unpack_local_anti_aircraft_data (pack_modes mode)
 
 			count --;
 
-			raw = get_local_entity_data (destroy_en);
+			raw = (anti_aircraft *) get_local_entity_data (destroy_en);
 
 			raw->vh.mob.alive = TRUE;
 

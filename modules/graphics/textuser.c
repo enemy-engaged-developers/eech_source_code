@@ -108,6 +108,8 @@
 //VJ 051223 changed to project.h to access get_current_game_session()
 //this includes cmndline.h and global.h needed for texture colour mod and winter textures
 
+#include "3d/3dfunc.h"
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +422,7 @@ void release_system_textures ( void )
 				if ( system_textures[count].palette )
 				{
 
-					IDirectDrawSurface7_SetPalette ( system_textures[count].surface, NULL );
+					f3d_surface_palette ( system_textures[count].surface, NULL );
 
 					system_textures[count].palette = NULL;
 				}
@@ -438,29 +440,9 @@ void release_system_textures ( void )
 
 	for ( count = 0; count < number_of_system_texture_palettes; count++ )
 	{
-
 		if ( system_texture_palettes[count] )
 		{
-
-			ddrval = IDirectDrawPalette_Release ( system_texture_palettes[count] );
-
-			if ( ddrval < DD_OK )
-			{
-
-				debug_log ( "Unable to release palette: %s", get_ddraw_error_message ( ddrval ) );
-			}
-			else if ( ddrval > DD_OK )
-			{
-
-				debug_log ( "Palette not released, %d references left", ddrval );
-			}
-			else
-			{
-
-				debug_log ( "Released palette!" );
-			}
-
-			system_texture_palettes[count] = NULL;
+			f3d_palette_release ( &system_texture_palettes[count] );
 		}
 	}
 	*/
@@ -529,7 +511,9 @@ BOOL load_texturemap_data ( const char *path )
 	int
 		width,
 		height,
-		type,
+		type;
+
+	texture_map_types
 		texture_format_type;
 
 	FILE
@@ -660,7 +644,7 @@ BOOL load_texturemap_data ( const char *path )
 				fread ( &height, sizeof ( int ), 1, fp );
 				fread ( &palette_index, sizeof ( int ), 1, fp );
 
-				texture_format_type = type;
+				texture_format_type = (texture_map_types) type;
 
 				ASSERT ( width <= MAX_TEXTURE_WIDTH );
 				ASSERT ( height <= MAX_TEXTURE_HEIGHT );
@@ -913,7 +897,7 @@ BOOL load_texturemap_data ( const char *path )
 					type = TEXTURE_TYPE_NOALPHA_NOPALETTE;
 				}
 
-				texture_format_type = type;
+				texture_format_type = (texture_map_types) type;
 
 				//
 				// If we compress the textures, skip over the first level texture
@@ -2064,26 +2048,12 @@ screen *get_system_texture_ptr ( int index )
 
 void create_internal_texture_palettes ( void )
 {
-
 	int
 		count;
 
-	HRESULT
-		ddrval;
-
 	for ( count = 0; count < number_of_system_texture_palettes; count++ )
 	{
-
-		ddrval = IDirectDraw7_CreatePalette ( ddraw.ddraw, DDPCAPS_8BIT | DDPCAPS_ALLOW256,
-															system_texture_colour_tables[count],
-															&system_texture_palettes[count],
-															NULL );
-
-		if ( ddrval != DD_OK )
-		{
-
-			debug_log ( "Unable to create a texture palette: %s", get_ddraw_error_message ( ddrval ) );
-		}
+		f3d_palette_create ( system_texture_colour_tables[count], &system_texture_palettes[count] );
 	}
 }
 
@@ -2105,7 +2075,7 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 	texture = get_free_screen ();
 
-	texture->type = type;
+	texture->type = (SCREEN_FORMAT_TYPES) type;
 	texture->width = width;
 	texture->height = height;
 
@@ -2142,31 +2112,13 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 #if ( ALLOW_TEXTURE_CREATION )
 	{
-
-		HRESULT
-			ddrval;
-//see http://msdn.microsoft.com/archive/default.asp?url=/archive/en-us/ddraw7/directdraw7/ddref_1f7b.asp
-		ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->surface, NULL );
-
-		if ( ddrval != DD_OK )
-		{
-
-			debug_fatal ( "Unable to create texture surface: %s ( %d, %d )", get_ddraw_error_message ( ddrval ), width, height );
-		}
+		f3d_surface_create ( &ddsd, &texture->surface );
 
 		//
 		// Get the surface description to check the texture
 		//
 
-		ddsd.dwSize = sizeof ( ddsd );
-
-		ddrval = IDirectDrawSurface7_GetSurfaceDesc ( texture->surface, &ddsd );
-
-		if ( ddrval != DD_OK )
-		{
-
-			debug_fatal ( "Unable to get texture surface description: %s", get_ddraw_error_message ( ddrval ) );
-		}
+		f3d_surface_description ( texture->surface, &ddsd );
 
 		//
 		//
@@ -2188,15 +2140,7 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 		if ( texture_paletted )
 		{
-
-			ddrval = IDirectDrawSurface7_SetPalette ( texture->surface, texture_palette );
-
-			if ( ddrval != DD_OK )
-			{
-
-				debug_fatal ( "Unable to set palette on texture: %s", get_ddraw_error_message ( ddrval ) );
-			}
-
+			f3d_surface_palette ( texture->surface, texture_palette );
 			texture->palette = texture_palette;
 		}
 		else
@@ -2219,16 +2163,12 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, texture_map_types type )
+int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, int height, int index, enum SCREEN_FORMAT_TYPES type )
 {
-
 	DDSURFACEDESC2
 		ddsd;
 
-	HRESULT
-		ddrval;
-
-	this_screen->type = type;
+	this_screen->type = (SCREEN_FORMAT_TYPES) type;
 	this_screen->width = width;
 	this_screen->height = height;
 	this_screen->video_memory = FALSE;
@@ -2282,13 +2222,8 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 	ddsd.ddsCaps.dwCaps3 = 0;
 	ddsd.ddsCaps.dwCaps4 = 0;
 
-	ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &this_screen->surface, NULL );
-
-	if ( ddrval != DD_OK )
+	if ( !f3d_surface_create ( &ddsd, &this_screen->surface ) )
 	{
-
-		debug_log ( "Unable to create texture surface: %s", get_ddraw_error_message ( ddrval ) );
-
 		return ( FALSE );
 	}
 
@@ -2624,9 +2559,9 @@ texture_graphic *create_texture_graphic ( const char *filename )
 
 	old_active_screen = get_active_screen ();
 
-	data = load_psd_file ( filename, &width, &height, &channels );
+	data = ( char * ) load_psd_file ( filename, &width, &height, &channels );
 
-	if ( ( d3d_total_video_texture_memory < 8192*1024 ) && ( ( width > 64 ) || ( height > 64 ) ) )
+	/*if ( ( d3d_total_video_texture_memory < 8192*1024 ) && ( ( width > 64 ) || ( height > 64 ) ) )
 	{
 
 		if ( channels == 3 )
@@ -2676,9 +2611,9 @@ texture_graphic *create_texture_graphic ( const char *filename )
 		height += ( height & 1 );
 		width /= 2;
 		height /= 2;
-	}
+	}*/
 
-	graphic = safe_malloc ( sizeof ( texture_graphic ) );
+	graphic = ( texture_graphic * ) safe_malloc ( sizeof ( texture_graphic ) );
 
 	{
 
@@ -2811,7 +2746,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 
 	graphic->number_of_textures = graphic->number_of_textures_wide * graphic->number_of_textures_high;
 
-	graphic->textures = safe_malloc ( sizeof ( texture_graphic_texture ) * graphic->number_of_textures );
+	graphic->textures = ( texture_graphic_texture * ) safe_malloc ( sizeof ( texture_graphic_texture ) * graphic->number_of_textures );
 
 	count = 0;
 
@@ -2876,9 +2811,9 @@ texture_graphic *create_texture_graphic ( const char *filename )
 	// Grab pointers & pitches of all the texture screens
 	//
 
-	texture_data = safe_malloc ( sizeof ( char * ) * graphic->number_of_textures );
+	texture_data = ( char * * ) safe_malloc ( sizeof ( char * ) * graphic->number_of_textures );
 
-	texture_pitch = safe_malloc ( sizeof ( int ) * graphic->number_of_textures );
+	texture_pitch = ( int * ) safe_malloc ( sizeof ( int ) * graphic->number_of_textures );
 
 	for ( count = 0; count < graphic->number_of_textures; count++ )
 	{
@@ -2889,7 +2824,7 @@ texture_graphic *create_texture_graphic ( const char *filename )
 			debug_fatal ( "Unable to lock screen during load_texture_graphic" );
 		}
 
-		texture_data[count] = get_screen_data ( graphic->textures[count].texture );
+		texture_data[count] = ( char * ) get_screen_data ( graphic->textures[count].texture );
 
 		texture_pitch[count] = get_screen_pitch ( graphic->textures[count].texture );
 	}
@@ -3526,7 +3461,7 @@ void restore_default_textures ( void )
 
 		if ( system_textures[count]->palette )
 		{
-			IDirectDrawSurface7_SetPalette ( system_textures[count]->surface, NULL );
+			f3d_surface_palette ( system_textures[count]->surface, NULL );
 			system_textures[count]->palette = NULL;
 		}
 		release_texture_surface ( &system_textures[count]->surface );
@@ -3929,9 +3864,10 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 
 		DWORD dwmagic;
 
-		int type;
+		texture_map_types
+		    type;
 
-		char
+		unsigned char
 			*buffer, *bufferswap;
 
 		int
@@ -3999,8 +3935,8 @@ screen *load_dds_file_screen (const char *full_override_texture_filename, int st
 			//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 
 			buffer_size = width * height * nrbyte;
-			buffer = safe_malloc (buffer_size);
-			bufferswap = safe_malloc (buffer_size);
+			buffer = ( unsigned char * ) safe_malloc (buffer_size);
+			bufferswap = ( unsigned char * ) safe_malloc (buffer_size);
 
 			fread (buffer, buffer_size, 1, fp);
 
@@ -4062,7 +3998,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 	BITMAPINFOHEADER
 		bmih;
 
-	char
+	unsigned char
 		*buffer, *bufferswap;
 
 	int
@@ -4110,7 +4046,7 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 
 	//C:\gms\Razorworks\eech-new\modules\graphics\scrnstr.h
 	debug_log(full_override_texture_filename);
-	override_screen = create_texture_map (width, height, type,
+	override_screen = create_texture_map (width, height, (texture_map_types)type,
 							mipmap+1, system_texture_palettes[0], system_texture_colour_tables[0] );
 
 	if (bmih.biBitCount == 8)
@@ -4121,8 +4057,8 @@ screen *load_bmp_file_screen (const char *full_override_texture_filename)
 		buffer_size = width * height * 4;
 	// note color depth is assumed here
 
-	buffer = safe_malloc (buffer_size);
-	bufferswap = safe_malloc (buffer_size);
+	buffer = ( unsigned char * ) safe_malloc (buffer_size);
+	bufferswap = ( unsigned char * ) safe_malloc (buffer_size);
 
 	fread (buffer, buffer_size, 1, fp);
 

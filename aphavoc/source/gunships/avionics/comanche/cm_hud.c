@@ -668,7 +668,7 @@ static void draw_heading_scale (void)
 		x,
 		u,
 		aircraft_heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING),
-		heading = fmod(aircraft_heading - pilot_head_heading, 360.0),
+		heading = fmod(aircraft_heading - pilot_head_heading, 360.0f),
 		heading_step_5,
 		mod_heading_step_5;
 
@@ -2507,7 +2507,7 @@ char buffer[255];
 
 //VJ 050126 hud mod start
 
-	hud_viewport_size = HUD_VIEWPORT_SIZE * min(1.0,global_hud_size2); //VJ 060212 clean up hud mod
+	hud_viewport_size = HUD_VIEWPORT_SIZE * min(1.0f, global_hud_size2); //VJ 060212 clean up hud mod
 
 	hud_viewport_x_org = hud_viewport_size * 0.5;
 

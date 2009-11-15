@@ -119,7 +119,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (person));
+		raw = (person *) malloc_fast_mem (sizeof (person));
 
 		set_local_entity_data (en, raw);
 
@@ -290,7 +290,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// weapon config
 		//
 
-		raw->vh.weapon_package_status_array = malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
+		raw->vh.weapon_package_status_array = (weapon_package_status *) malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		memset (raw->vh.weapon_package_status_array, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 

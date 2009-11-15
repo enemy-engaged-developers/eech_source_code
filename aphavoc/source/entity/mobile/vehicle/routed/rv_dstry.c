@@ -98,7 +98,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	set_local_entity_int_value (en, INT_TYPE_ALIVE, FALSE);
 
@@ -329,7 +329,7 @@ static void kill_local (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -342,7 +342,7 @@ static void kill_local (entity *en)
 	// update force info
 	//
 
-	remove_from_force_info (get_local_force_entity (raw->vh.mob.side), en);
+	remove_from_force_info (get_local_force_entity ((entity_sides) raw->vh.mob.side), en);
 
 	////////////////////////////////////////
 	//
@@ -368,7 +368,7 @@ static void kill_local (entity *en)
 
 		add_entity_to_regen_queue
 		(
-			get_local_entity_int_value(en, INT_TYPE_SIDE),
+			(entity_sides) get_local_entity_int_value(en, INT_TYPE_SIDE),
 			get_local_entity_type(en),
 			get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE),
 			get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)

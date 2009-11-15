@@ -89,7 +89,7 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (object *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -180,7 +180,7 @@ static void get_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 
 	ASSERT (v);
 
-	raw = get_local_entity_data (en);
+	raw = (object *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -215,7 +215,7 @@ static vec3d *get_local_vec3d_ptr (entity *en, vec3d_types type)
 	vec3d
 		*v;
 
-	raw = get_local_entity_data (en);
+	raw = (object *) get_local_entity_data (en);
 
 	switch (type)
 	{

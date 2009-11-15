@@ -180,7 +180,7 @@ void pack_local_keysite_data (pack_modes mode)
 
 			pack_entity_safe_ptr (en);
 
-			raw = get_local_entity_data (en);
+			raw = (keysite *) get_local_entity_data (en);
 
 			pack_float_value (en, FLOAT_TYPE_AMMO_SUPPLY_LEVEL, raw->supplies.ammo_supply_level);
 
@@ -245,7 +245,7 @@ void pack_local_keysite_data (pack_modes mode)
 				while (landing_en)
 				{
 	
-					landing_raw = get_local_entity_data (landing_en);
+					landing_raw = (landing *) get_local_entity_data (landing_en);
 	
 					pack_int_value (landing_en, INT_TYPE_RESERVED_LANDING_SITES, landing_raw->reserved_landing_sites);
 	
@@ -320,7 +320,7 @@ void unpack_local_keysite_data (pack_modes mode)
 
 			index = unpack_entity_safe_index ();
 
-			raw = get_local_entity_data (en);
+			raw = (keysite *) get_local_entity_data (en);
 
 			raw->supplies.ammo_supply_level = unpack_float_value (en, FLOAT_TYPE_AMMO_SUPPLY_LEVEL);
 
@@ -354,7 +354,7 @@ void unpack_local_keysite_data (pack_modes mode)
 				// change side of keysite buildings
 				//
 
-				change_local_keysite_building_sides (en, side);
+				change_local_keysite_building_sides (en, (entity_sides) side);
 
 				//
 				// place into other sides force
@@ -362,12 +362,12 @@ void unpack_local_keysite_data (pack_modes mode)
 
 				delete_local_entity_from_parents_child_list (en, LIST_TYPE_KEYSITE_FORCE);
 
-				insert_local_entity_into_parents_child_list (en, LIST_TYPE_KEYSITE_FORCE, get_local_force_entity (side), NULL);
+				insert_local_entity_into_parents_child_list (en, LIST_TYPE_KEYSITE_FORCE, get_local_force_entity ((entity_sides) side), NULL);
 
 				if (mode == PACK_MODE_SERVER_SESSION)
 				{
 					// Must be done after removed from force
-					update_imap_distance_to_friendly_base (raw->side);
+					update_imap_distance_to_friendly_base ((entity_sides) raw->side);
 				}
 
 				//
@@ -388,7 +388,7 @@ void unpack_local_keysite_data (pack_modes mode)
 					{
 						update_imap_importance_level (en, TRUE);
 
-						update_keysite_distance_to_friendly_base (en, side);
+						update_keysite_distance_to_friendly_base (en, (entity_sides) side);
 					}
 				}
 			}
@@ -415,11 +415,11 @@ void unpack_local_keysite_data (pack_modes mode)
 
 					if (in_use)
 					{
-						update_keysite_distance_to_friendly_base (en, side);
+						update_keysite_distance_to_friendly_base (en, (entity_sides) side);
 					}
 					else
 					{
-						update_imap_distance_to_friendly_base (side);
+						update_imap_distance_to_friendly_base ((entity_sides) side);
 					}
 				}
 			}
@@ -462,7 +462,7 @@ void unpack_local_keysite_data (pack_modes mode)
 				while (landing_en)
 				{
 	
-					landing_raw = get_local_entity_data (landing_en);
+					landing_raw = (landing *) get_local_entity_data (landing_en);
 	
 					landing_raw->reserved_landing_sites = unpack_int_value (landing_en, INT_TYPE_RESERVED_LANDING_SITES);
 	

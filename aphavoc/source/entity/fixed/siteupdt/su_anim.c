@@ -114,7 +114,7 @@ void animate_site_loading_doors( entity *en, object_3d_instance *inst3d )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	animate_entity_reversable_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_LOADING_DOOR, raw->loading_door_state );
 }
@@ -137,7 +137,7 @@ void update_site_loading_doors( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (site_updatable *) get_local_entity_data( en );
 
 	door_state = update_entity_reversable_keyframed_value( en, &raw->loading_door_state, 0.5 );
 
@@ -195,7 +195,7 @@ void animate_site_radar( entity *en, object_3d_instance *inst3d )
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	animate_entity_simple_keyframed_sub_objects( inst3d, OBJECT_3D_SUB_OBJECT_RADAR, raw->radar_rotation_state );
 }
@@ -215,7 +215,7 @@ void update_site_radar( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (site_updatable *) get_local_entity_data( en );
 
 	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, 0.16666 );
 }

@@ -899,7 +899,7 @@ void select_external_view (void)
 	}
 	else
 	{
-		mode = get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE);
+		mode = (camera_modes) get_local_entity_int_value (get_camera_entity (), INT_TYPE_CAMERA_MODE);
 
 		switch (mode)
 		{

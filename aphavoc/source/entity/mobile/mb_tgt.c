@@ -84,23 +84,23 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define LOS_COARSE_CHECK_DISTANCE					200.0
+#define LOS_COARSE_CHECK_DISTANCE					200.0f
 
-#define LOS_FINE_CHECK_DISTANCE_SOURCE_END		40.0
-#define LOS_NUMBER_OF_FINE_CHECKS_SOURCE_END		8
+#define LOS_FINE_CHECK_DISTANCE_SOURCE_END		40.0f
+#define LOS_NUMBER_OF_FINE_CHECKS_SOURCE_END		8.0f
 
-#define LOS_FINE_CHECK_DISTANCE_TARGET_END		24.0
-#define LOS_NUMBER_OF_FINE_CHECKS_TARGET_END		8
+#define LOS_FINE_CHECK_DISTANCE_TARGET_END		24.0f
+#define LOS_NUMBER_OF_FINE_CHECKS_TARGET_END		8.0f
 
-#define LOS_OBJECT_CHECK_DISTANCE_SOURCE_END		200.0
+#define LOS_OBJECT_CHECK_DISTANCE_SOURCE_END		200.0f
 
-#define LOS_OBJECT_CHECK_DISTANCE_TARGET_END		200.0
+#define LOS_OBJECT_CHECK_DISTANCE_TARGET_END		200.0f
 
 //
 // Ignore any obstacles within a certain radius of the target
 //
 
-#define LOS_OBJECT_EXCLUDE_DISTANCE_TARGET_END	12.0
+#define LOS_OBJECT_EXCLUDE_DISTANCE_TARGET_END	12.0f
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

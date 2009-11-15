@@ -1041,7 +1041,7 @@ void notify_cockpit_detail_option_button ( ui_object *obj, void *arg )
 
 	lod = get_global_cockpit_detail_level ();
 
-	lod++;
+	lod = (cockpit_detail_levels)((int)lod + 1);
 
 	if (lod == NUM_COCKPIT_DETAIL_LEVELS)
 	{

@@ -215,7 +215,7 @@ void assign_keysite_tasks (entity *keysite, task_category_types category)
 	// Assign tasks
 	//
 
-	assign_count = max (keysite_database [keysite_type].assign_task_count, 1);
+	assign_count = max (keysite_database [keysite_type].assign_task_count, 1u);
 
 	non_critical_task_count = keysite_database [keysite_type].reserve_task_count;
 

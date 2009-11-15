@@ -85,7 +85,7 @@ static void set_number_ui_object_text (ui_object *obj, const char *text)
 	ui_object
 		*parent;
 
-	number = obj->data;
+	number = (number_ui_object *) obj->data;
 
 	if (number->area.text)
 	{

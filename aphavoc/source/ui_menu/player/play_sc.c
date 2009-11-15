@@ -1396,7 +1396,7 @@ void player_select_side_function ( ui_object *obj, void *arg )
 	entity_sides
 		side;
 
-	side = get_ui_object_item_number ( obj );
+	side = (entity_sides) get_ui_object_item_number ( obj );
 
 	player_log_current_side  = side;
 
@@ -1502,7 +1502,7 @@ void load_player_list (void)
 			if ( string_length > 0 )
 			{
 
-				new_player->name = malloc_heap_mem ( sizeof ( char ) * (string_length  + 2));
+				new_player->name = ( char * ) malloc_heap_mem ( sizeof ( char ) * (string_length  + 2));
 	
 				fread ( new_player->name, 1, string_length, file_ptr );
 			}
@@ -1595,7 +1595,7 @@ void load_player_list (void)
 
 		// name
 			
-		new_player->name = malloc_heap_mem (sizeof (char) * (strlen (DEFAULT_LOG_NAME) + 2));
+		new_player->name = (char *) malloc_heap_mem (sizeof (char) * (strlen (DEFAULT_LOG_NAME) + 2));
 	
 		sprintf ( new_player->name, "%s", DEFAULT_LOG_NAME );
 

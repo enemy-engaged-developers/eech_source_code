@@ -130,9 +130,9 @@ static int load_local_pylon_entities (const char *name)
 
 		fread (&node_count, sizeof (int), 1, pylon_node_file_ptr);
 
-		node_positions = malloc_heap_mem (sizeof (vec3d) * node_count);
+		node_positions = (vec3d *) malloc_heap_mem (sizeof (vec3d) * node_count);
 
-		node_link_count = malloc_heap_mem (sizeof (int) * node_count);
+		node_link_count = (int *) malloc_heap_mem (sizeof (int) * node_count);
 
 		for (node_loop = 0 ; node_loop < node_count ; node_loop ++)
 		{
@@ -294,7 +294,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (pylon));
+		raw = (pylon *) malloc_fast_mem (sizeof (pylon));
 
 		set_local_entity_data (en, raw);
 

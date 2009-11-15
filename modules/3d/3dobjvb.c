@@ -256,16 +256,13 @@ void initialise_3d_objects_in_d3d_old ( void )
 	object_3d_face
 		*faces;
 
-	HRESULT
-		ret;
-
 	debug_log ( "Number of objects to vb: %d", total_number_of_raw_3d_objects );
 
 	debug_watch ( "Current vb object: %d", MT_INT, &current_vb_object );
 	debug_watch ( "Total vbs: %d", MT_INT, &total_vb_created );
 	debug_watch ( "Total vbs vertices: %d", MT_INT, &total_vb_vertices );
 
-	objects_3d_extra_data = safe_malloc ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( object_3d_extra_object_info ) );
+	objects_3d_extra_data = ( object_3d_extra_object_info * ) safe_malloc ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( object_3d_extra_object_info ) );
 
 	memset ( objects_3d_extra_data, 0, ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( object_3d_extra_object_info ) ) );
 
@@ -273,9 +270,9 @@ void initialise_3d_objects_in_d3d_old ( void )
 	// Allocate an array to store the size of each vertex buffer ( maximum possible buffers is number of 3d objects )
 	//
 
-	objects_3d_vertex_buffer_sizes = safe_malloc ( ( total_number_of_raw_3d_objects + 3 ) * sizeof ( int ) );
+	objects_3d_vertex_buffer_sizes = ( int * ) safe_malloc ( ( total_number_of_raw_3d_objects + 3 ) * sizeof ( int ) );
 
-	objects_3d_vertex_buffer_types = safe_malloc ( ( total_number_of_raw_3d_objects + 3 ) * sizeof ( int ) );
+	objects_3d_vertex_buffer_types = ( int * )safe_malloc ( ( total_number_of_raw_3d_objects + 3 ) * sizeof ( int ) );
 
 	memset ( objects_3d_vertex_buffer_sizes, 0, ( ( total_number_of_raw_3d_objects + 3 ) * sizeof ( int ) ) );
 
@@ -391,13 +388,13 @@ void initialise_3d_objects_in_d3d_old ( void )
 		}
 	}
 
-	objects_3d_extra_data_surfaces = safe_malloc ( total_surfaces * sizeof ( object_3d_surface_info ) );
-	objects_3d_extra_data_indices = safe_malloc ( total_indices * sizeof ( WORD ) );
+	objects_3d_extra_data_surfaces = ( object_3d_surface_info * ) safe_malloc ( total_surfaces * sizeof ( object_3d_surface_info ) );
+	objects_3d_extra_data_indices = ( WORD * ) safe_malloc ( total_indices * sizeof ( WORD ) );
 
 	total_number_of_d3d_object_surfaces = total_surfaces;
 	total_number_of_objects_3d_vertex_buffers = next_vertex_buffer_index;
 
-	objects_3d_vertex_buffers = safe_malloc ( ( sizeof ( LPDIRECT3DVERTEXBUFFERX ) ) * total_number_of_objects_3d_vertex_buffers );
+	objects_3d_vertex_buffers = ( LPDIRECT3DVERTEXBUFFERX * ) safe_malloc ( ( sizeof ( LPDIRECT3DVERTEXBUFFERX ) ) * total_number_of_objects_3d_vertex_buffers );
 
 	total_vb_memory_allocated = 0;
 
@@ -432,13 +429,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 		total_vb_created++;
 		total_vb_vertices += objects_3d_vertex_buffer_sizes[count];
 
-		ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &objects_3d_vertex_buffers[count], 0 );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_fatal ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_create ( &desc, &objects_3d_vertex_buffers[count] );
 	}
 
 	debug_log ( "Allocated %d bytes for object VBs", total_vb_memory_allocated );
@@ -465,29 +456,11 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 	next_vertex_buffer_index = 3;
 
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices, NULL );
+	f3d_vertex_lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
 
-	if ( FAILED ( ret ) )
-	{
+	f3d_vertex_lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
 
-		debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-	}
-
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices, NULL );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-	}
-
-	ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices, NULL );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-	}
+	f3d_vertex_lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
 
 	for ( count = 1; count <= total_number_of_raw_3d_objects; count++ )
 	{
@@ -564,21 +537,9 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								ASSERT ( current_lightmap_vertex_buffer_size == 0 );
 
-								ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
+								f3d_vertex_unlock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
 
-								if ( FAILED ( ret ) )
-								{
-
-									debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-								}
-
-								ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], d3d.device, 0 );
-
-								if ( ret != DD_OK )
-								{
-
-									debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-								}
+								f3d_vertex_optimize ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
 
 								current_lightmap_vertex_buffer_index = next_vertex_buffer_index;
 
@@ -590,14 +551,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								if ( current_lightmap_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
-
-									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices, NULL );
-
-									if ( FAILED ( ret ) )
-									{
-
-										debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-									}
+									f3d_vertex_lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
 								}
 								else
 								{
@@ -717,21 +671,9 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								ASSERT ( current_textured_vertex_buffer_size == 0 );
 
-								ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
+								f3d_vertex_unlock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
 
-								if ( FAILED ( ret ) )
-								{
-
-									debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-								}
-
-								ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], d3d.device, 0 );
-
-								if ( ret != DD_OK )
-								{
-
-									debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-								}
+								f3d_vertex_optimize ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
 
 								current_textured_vertex_buffer_index = next_vertex_buffer_index;
 
@@ -743,14 +685,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								if ( current_textured_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
-
-									ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices, NULL );
-
-									if ( FAILED ( ret ) )
-									{
-
-										debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-									}
+									f3d_vertex_lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
 								}
 								else
 								{
@@ -869,21 +804,9 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 							ASSERT ( current_plain_vertex_buffer_size == 0 );
 
-							ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
+							f3d_vertex_unlock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
 
-							if ( FAILED ( ret ) )
-							{
-
-								debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-							}
-
-							ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], d3d.device, 0 );
-
-							if ( ret != DD_OK )
-							{
-
-								debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-							}
+							f3d_vertex_optimize ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
 
 							current_plain_vertex_buffer_index = next_vertex_buffer_index;
 
@@ -895,14 +818,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 							if ( current_plain_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 							{
-
-								ret = IDirect3DVertexBuffer7_Lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices, NULL );
-
-								if ( FAILED ( ret ) )
-								{
-
-									debug_fatal ( "Unable to lock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-								}
+								f3d_vertex_lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
 							}
 							else
 							{
@@ -1106,62 +1022,23 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 	if ( lightmap_vertices )
 	{
+		f3d_vertex_unlock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
 
-		ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
-
-		ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], d3d.device, 0 );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_optimize ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index] );
 	}
 
 	if ( textured_vertices )
 	{
+		f3d_vertex_unlock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
 
-		ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
-
-		ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], d3d.device, 0 );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_optimize ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index] );
 	}
 
 	if ( plain_vertices )
 	{
+		f3d_vertex_unlock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
 
-		ret = IDirect3DVertexBuffer7_Unlock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_fatal ( "Unable to unlock vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
-
-		ret = IDirect3DVertexBuffer_Optimize ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], d3d.device, 0 );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_fatal ( "Unable to optimize vertex buffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_vertex_optimize ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index] );
 	}
 
 
@@ -1194,24 +1071,12 @@ void deinitialise_3d_objects_in_d3d_old ( void )
 		int
 			count;
 
-		HRESULT
-			ret;
-
 		for ( count = 0; count < total_number_of_objects_3d_vertex_buffers; count++ )
 		{
 
 			if ( objects_3d_vertex_buffers[count] )
 			{
-
-				ret = IDirect3DVertexBuffer_Release ( objects_3d_vertex_buffers[count] );
-
-				if ( FAILED ( ret ) )
-				{
-
-					debug_log ( "Unable to release primary vertex buffer: %s", get_d3d_error_message ( ret ) );
-				}
-
-				objects_3d_vertex_buffers[count] = NULL;
+				f3d_vertex_release ( &objects_3d_vertex_buffers[count] );
 
 				total_vb_created--;
 			}
@@ -1323,11 +1188,11 @@ void initialise_3d_objects_in_d3d ( void )
 			int
 				slot_index;
 
-			d3d_vb_slots[type][size_slot] = safe_malloc ( sizeof ( d3d_vb_object_3d_info ) * number_of_d3d_vb_slots[type][size_slot] );
+			d3d_vb_slots[type][size_slot] = ( d3d_vb_object_3d_info * ) safe_malloc ( sizeof ( d3d_vb_object_3d_info ) * number_of_d3d_vb_slots[type][size_slot] );
 
-			object_3d_d3d_vbs[type][size_slot] = safe_malloc ( sizeof ( LPDIRECT3DVERTEXBUFFERX ) * number_of_d3d_vbs[type][size_slot] );
+			object_3d_d3d_vbs[type][size_slot] = ( LPDIRECT3DVERTEXBUFFERX * ) safe_malloc ( sizeof ( LPDIRECT3DVERTEXBUFFERX ) * number_of_d3d_vbs[type][size_slot] );
 
-			object_3d_d3d_vb_indices[type][size_slot] = safe_malloc ( sizeof ( WORD ) * ( number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR * number_of_d3d_vb_slots[type][size_slot] ) );
+			object_3d_d3d_vb_indices[type][size_slot] = ( WORD * ) safe_malloc ( sizeof ( WORD ) * ( number_of_vertices_in_slot * NUMBER_OF_INDICES_PER_SLOT_FACTOR * number_of_d3d_vb_slots[type][size_slot] ) );
 
 			slot_index = 0;
 
@@ -1336,9 +1201,6 @@ void initialise_3d_objects_in_d3d ( void )
 
 				D3DVERTEXBUFFERDESC
 					desc;
-
-				HRESULT
-					ret;
 
 				int
 					temp;
@@ -1364,13 +1226,7 @@ void initialise_3d_objects_in_d3d ( void )
 					case D3D_VB_LIGHTMAP_TYPE:	desc.dwFVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX2; break;
 				}
 
-				ret = IDirect3D7_CreateVertexBuffer ( d3d.d3d, &desc, &object_3d_d3d_vbs[type][size_slot][count], 0 );
-
-				if ( FAILED ( ret ) )
-				{
-
-					debug_fatal ( "Unable to create vertex buffer: %s", get_d3d_error_message ( ret ) );
-				}
+				f3d_vertex_create ( &desc, &object_3d_d3d_vbs[type][size_slot][count] );
 
 				//
 				// Now create the slots for this vertex buffer
@@ -1432,7 +1288,7 @@ void initialise_3d_objects_in_d3d ( void )
 		total_surfaces += objects_3d_data[count].number_of_surfaces;
 	}
 
-	object_3d_vb_slot_references = safe_malloc ( sizeof ( d3d_vb_object_3d_info * ) * total_surfaces );
+	object_3d_vb_slot_references = ( d3d_vb_object_3d_info * * ) safe_malloc ( sizeof ( d3d_vb_object_3d_info * ) * total_surfaces );
 
 	memset ( object_3d_vb_slot_references, 0, ( sizeof ( d3d_vb_object_3d_info * ) * total_surfaces ) );
 
@@ -1519,19 +1375,7 @@ void deinitialise_3d_objects_in_d3d ( void )
 
 					if ( object_3d_d3d_vbs[type][size_slot][count] )
 					{
-
-						HRESULT
-							ret;
-
-						ret = IDirect3DVertexBuffer_Release ( object_3d_d3d_vbs[type][size_slot][count] );
-
-						if ( FAILED ( ret ) )
-						{
-
-							debug_log ( "Unable to release primary vertex buffer: %s", get_d3d_error_message ( ret ) );
-						}
-
-						object_3d_d3d_vbs[type][size_slot][count] = NULL;
+						f3d_vertex_release ( &object_3d_d3d_vbs[type][size_slot][count] );
 					}
 				}
 
@@ -1557,9 +1401,6 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		number_of_vertices_in_slot,
 		half_number_of_vertices_in_slot,
 		number_of_surface_points;
-
-	HRESULT
-		ret;
 
 	d3d_vb_object_3d_info
 		*surface;
@@ -1629,6 +1470,9 @@ void object_3d_render_hardware_surface ( object_3d *object )
 	if ( !surface )
 	{
 		int
+			ret;
+
+		int
 			face_count,
 			vertex_count,
 			current_face_index_offset,
@@ -1675,9 +1519,9 @@ void object_3d_render_hardware_surface ( object_3d *object )
 
 		switch ( type )
 		{
-			case D3D_VB_PLAIN_TYPE:		ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &plain_vertices, NULL ); break;
-			case D3D_VB_TEXTURED_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &textured_vertices, NULL ); break;
-			case D3D_VB_LIGHTMAP_TYPE: ret = IDirect3DVertexBuffer7_Lock ( surface->buffer, lock_flags, ( LPVOID * ) &lightmap_vertices, NULL ); break;
+			case D3D_VB_PLAIN_TYPE:		ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &plain_vertices ); break;
+			case D3D_VB_TEXTURED_TYPE: ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &textured_vertices ); break;
+			case D3D_VB_LIGHTMAP_TYPE: ret = f3d_vertex_lock ( surface->buffer, lock_flags, ( LPVOID * ) &lightmap_vertices ); break;
 		}
 
 #if REPORT_RERENDER
@@ -1689,7 +1533,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 		}
 #endif
 
-		if ( FAILED ( ret ) )
+		if ( !ret )
 		{
 			//
 			// Don't try to draw this vertex buffer!!!!
@@ -1998,11 +1842,7 @@ void object_3d_render_hardware_surface ( object_3d *object )
 			// Unlock the vertex buffer
 			//
 
-			ret = IDirect3DVertexBuffer7_Unlock ( surface->buffer );
-			if ( FAILED ( ret ) )
-			{
-				debug_fatal ( "Unable to unlock vertex buffer: %s", get_ddraw_error_message ( ret ) );
-			}
+			f3d_vertex_unlock ( surface->buffer );
 
 			//
 			// Fill in the surface attributes
@@ -2065,13 +1905,9 @@ void object_3d_render_hardware_surface ( object_3d *object )
 
 #endif
 
-		ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_TRIANGLELIST, surface->buffer,
+		f3d_draw_vb ( D3DPT_TRIANGLELIST, surface->buffer,
 																			surface->vertex_offset, surface->number_of_vertices,
-																			surface->indices, surface->number_of_indices, 0 );
-		if ( FAILED ( ret ) )
-		{
-			debug_log ( "Unable to draw indexed primitive: %s", get_d3d_error_message ( ret ) );
-		}
+																			surface->indices, surface->number_of_indices );
 	}
 }
 

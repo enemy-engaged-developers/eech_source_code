@@ -184,7 +184,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		aggressor = NULL;
 	}
 
-	force = get_local_force_entity (get_local_entity_int_value (receiver, INT_TYPE_SIDE));
+	force = get_local_force_entity ((entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE));
 
 	enemy_force = get_local_force_entity (get_enemy_side (get_local_entity_int_value (receiver, INT_TYPE_SIDE)));
 

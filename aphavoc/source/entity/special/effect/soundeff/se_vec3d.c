@@ -89,7 +89,7 @@ static void set_local_vec3d (entity *en, vec3d_types type, vec3d *v)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	switch (type)
 	{

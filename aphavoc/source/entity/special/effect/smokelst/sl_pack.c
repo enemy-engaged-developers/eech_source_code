@@ -90,7 +90,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			smoke_list
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (smoke_list *) get_local_entity_data (en);
 
 			if (effect_database [raw->eff.sub_type].constructed_locally)
 			{
@@ -207,7 +207,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_heap_mem (sizeof (smoke_list));
+			raw = (smoke_list *) malloc_heap_mem (sizeof (smoke_list));
 
 			set_local_entity_data (en, raw);
 
@@ -223,7 +223,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// unpack smokelist data
 			//
 
-			raw->smoke_type = unpack_int_value (en, INT_TYPE_SMOKE_TYPE);
+			raw->smoke_type = (smoke_list_types) unpack_int_value (en, INT_TYPE_SMOKE_TYPE);
 
 			raw->frequency = unpack_float_value (en, FLOAT_TYPE_FREQUENCY);
 
@@ -281,9 +281,9 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			// Build array of smoke positions, and mark all as inactive ( -1, -1, -1 )
 			// 
 	
-			raw->position = malloc_fast_mem (sizeof (vec3d) * number_of_slots);
+			raw->position = (vec3d *) malloc_fast_mem (sizeof (vec3d) * number_of_slots);
 	
-			raw->valid = malloc_fast_mem (sizeof (unsigned char) * number_of_slots);
+			raw->valid = (unsigned char *) malloc_fast_mem (sizeof (unsigned char) * number_of_slots);
 	
 			for ( loop = number_of_slots - 1 ; loop >= 0 ; loop -- )
 			{
@@ -294,11 +294,11 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				raw->position[ loop ].z = -1.0;
 			}
 	
-			raw->motion_vector = malloc_fast_mem (sizeof (vec3d) * number_of_slots);
+			raw->motion_vector = (vec3d *) malloc_fast_mem (sizeof (vec3d) * number_of_slots);
 	
 			memset( raw->motion_vector, 0, sizeof( vec3d ) * number_of_slots );
 	
-			raw->start_rotation = malloc_fast_mem (sizeof (float) * number_of_slots);
+			raw->start_rotation = (float *) malloc_fast_mem (sizeof (float) * number_of_slots);
 
 			raw->head = 0;
 	

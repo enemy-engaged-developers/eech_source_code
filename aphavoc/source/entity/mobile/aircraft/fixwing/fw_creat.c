@@ -115,7 +115,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (fixed_wing));
+		raw = (fixed_wing *) malloc_fast_mem (sizeof (fixed_wing));
 
 		set_local_entity_data (en, raw);
 
@@ -283,7 +283,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// weapon config
 		//
 
-		raw->ac.weapon_package_status_array = malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
+		raw->ac.weapon_package_status_array = (weapon_package_status *) malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		memset (raw->ac.weapon_package_status_array, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
@@ -293,7 +293,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// update force info
 		//
 
-		add_to_force_info (get_local_force_entity (raw->ac.mob.side), en);
+		add_to_force_info (get_local_force_entity ((entity_sides) raw->ac.mob.side), en);
 
 		////////////////////////////////////////
 		//
@@ -487,7 +487,7 @@ entity *create_client_server_entity_fixed_wing (int index, entity_sub_types sub_
 	// initialise terrain elevation cache
 	//
 
-	raw = get_local_entity_data (new_entity);
+	raw = (fixed_wing *) get_local_entity_data (new_entity);
 
 	get_3d_terrain_point_data (position->x, position->z, &raw->ac.terrain_info);
 

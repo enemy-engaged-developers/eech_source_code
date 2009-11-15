@@ -707,7 +707,7 @@ static void common_list_mission_selected (ui_object *obj)
 		{
 			ASSERT ((state >= 0) && (state < NUM_TASK_STATE_TYPES));
 
-			toggle_mission_type_collapse_state (index, state);
+			toggle_mission_type_collapse_state (index, (task_state_types) state);
 
 			update_current_common_list ();
 
@@ -751,7 +751,7 @@ static void common_list_group_selected (ui_object *obj)
 		{
 			ASSERT ((state >= 0) && (state < NUM_GROUP_MODE_TYPES));
 
-			toggle_group_type_collapse_state (index, state);
+			toggle_group_type_collapse_state (index, (group_mode_types) state);
 
 			update_current_common_list ();
 
@@ -817,7 +817,7 @@ void notify_scroll_common_list (ui_object *obj, void *arg)
 
 	y_max = get_next_list_position (common_list [current_list_mode]) - get_ui_object_y_size (common_list [current_list_mode]);
 
-	y_max = -max (y_max, 0.0);
+	y_max = -max (y_max, 0.0f);
 
 	y_origin = get_ui_object_y_origin (common_list [current_list_mode]);
 

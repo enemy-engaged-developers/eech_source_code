@@ -106,13 +106,13 @@ void draw_line ( float fx1, float fy1, float fx2, float fy2, rgb_colour colour )
 		unsigned char
 			*screen_data;
 	
-		if ( get_screen_pixel_width ( active_screen ) == 2 )
+		if ( active_screen->pixel_length <= 16 )
 		{
 		
 			unsigned short int
 				col;
 	
-			col = get_rgb_packed_value (colour);
+			col = get_packed_colour (colour);
 		
 			screen_data = get_screen_data (active_screen);
 			screen_pitch = get_screen_pitch (active_screen);
@@ -733,7 +733,7 @@ void draw_half_thick_line ( float fx1, float fy1, float fx2, float fy2, rgb_colo
 	unsigned char
 		*screen_data;
 
-	if ( get_screen_pixel_width ( active_screen ) == 2 )
+	if ( active_screen->pixel_length <= 16 )
 	{
 		
 		USHORT
@@ -742,7 +742,7 @@ void draw_half_thick_line ( float fx1, float fy1, float fx2, float fy2, rgb_colo
 		ASSERT ( active_screen );
 		ASSERT ( get_screen_locked ( active_screen ) );
 	
-		col = get_rgb_packed_value (colour);
+		col = get_packed_colour (colour);
 	
 		screen_data = get_screen_data (active_screen);
 		screen_pitch = get_screen_pitch (active_screen);

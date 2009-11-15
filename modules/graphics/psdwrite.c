@@ -72,7 +72,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int run_length_encode_data ( const unsigned char *source_data, char *result, int length );
+int run_length_encode_data ( const unsigned char *source_data, unsigned char *result, int length );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,15 +133,15 @@ void write_psd_screen_file ( const char *filename, int width, int height, int pi
 	// Allocate the memory arrays.
 	//
 
-	red_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	red_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	green_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	green_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	blue_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	blue_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	channel_compressed_data = safe_malloc ( width * 2 );
+	channel_compressed_data = ( unsigned char * ) safe_malloc ( width * 2 );
 
-	channel_line_data = safe_malloc ( width );
+	channel_line_data = ( unsigned char * ) safe_malloc ( width );
 
 	//
 	// Write out the signature of the file
@@ -242,7 +242,7 @@ void write_psd_screen_file ( const char *filename, int width, int height, int pi
 			rgb_colour
 				this_colour;
 
-			this_colour = get_rgb_colour_value ( ( rgb_packed ) source_line[x] );
+			this_colour = get_general_colour_value ( ( rgb_packed ) source_line[x] );
 
 			channel_line_data[x] = this_colour.r;
 		}
@@ -397,15 +397,15 @@ void write_psd_rgb_file ( const char *filename, int width, int height, int pitch
 	// Allocate the memory arrays.
 	//
 
-	red_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	red_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	green_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	green_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	blue_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	blue_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	channel_compressed_data = safe_malloc ( width * 4 );
+	channel_compressed_data = ( unsigned char * ) safe_malloc ( width * 4 );
 
-	channel_line_data = safe_malloc ( width );
+	channel_line_data = ( unsigned char * ) safe_malloc ( width );
 
 	//
 	// Write out the signature of the file
@@ -648,11 +648,11 @@ void write_psd_greyscale ( const char *filename, int width, int height, int pitc
 	// Allocate the memory arrays.
 	//
 
-	red_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	red_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	channel_compressed_data = safe_malloc ( width * 8 );
+	channel_compressed_data = ( unsigned char * ) safe_malloc ( width * 8 );
 
-	channel_line_data = safe_malloc ( width );
+	channel_line_data = ( unsigned char * ) safe_malloc ( width );
 
 	//
 	// Write out the signature of the file
@@ -820,13 +820,13 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 	// Allocate the memory arrays.
 	//
 
-	red_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	red_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	green_channel_line_lengths = safe_malloc ( height * sizeof ( short int ) );
+	green_channel_line_lengths = ( unsigned short * ) safe_malloc ( height * sizeof ( short int ) );
 
-	channel_compressed_data = safe_malloc ( width * 8 );
+	channel_compressed_data = ( unsigned char * ) safe_malloc ( width * 8 );
 
-	channel_line_data = safe_malloc ( width );
+	channel_line_data = ( unsigned char * ) safe_malloc ( width );
 
 	//
 	// Write out the signature of the file
@@ -1038,7 +1038,7 @@ void write_psd_colourindex_and_alpha ( const char *filename, int width, int heig
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int run_length_encode_data ( const unsigned char *source_data, char *result, int length )
+int run_length_encode_data ( const unsigned char *source_data, unsigned char *result, int length )
 {
 
 	int

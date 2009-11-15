@@ -168,7 +168,7 @@ static struct WINGMAN_MESSAGE_TEXT_TABLE
 		MESSAGE_WINGMAN_HOLD_POSITION,			"Hold Position",
 		MESSAGE_WINGMAN_REJOIN_FORMATION,		"Rejoin Formation",
 		MESSAGE_WINGMAN_RETURN_TO_BASE,			"Return To Base",
-		-1
+		(message_categories)-1
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1279,7 +1279,7 @@ message_action_type *create_message_database_list (message_categories type, int 
 
 		ASSERT (text);
 
-		new_message_action->title = malloc_fast_mem (strlen (text) + 4);
+		new_message_action->title = (char *) malloc_fast_mem (strlen (text) + 4);
 
 		strcpy (new_message_action->title, text);
 	}
@@ -1297,10 +1297,10 @@ message_action_type *create_message_database_list (message_categories type, int 
 		new_message_action->actions = (message_type *) malloc_fast_mem (sizeof (message_type) * number_of_actions);
 		memset (new_message_action->actions, 0, sizeof (message_type) * number_of_actions);
 
-		new_message_action->keycodes = malloc_fast_mem (sizeof (int) * number_of_actions);
+		new_message_action->keycodes = (int *) malloc_fast_mem (sizeof (int) * number_of_actions);
 		memset (new_message_action->keycodes, 0, sizeof (int) * number_of_actions);
 
-		new_message_action->action_text = malloc_fast_mem (sizeof (char *) * number_of_actions);
+		new_message_action->action_text = (char * *) malloc_fast_mem (sizeof (char *) * number_of_actions);
 		memset (new_message_action->action_text, 0, sizeof (char *) * number_of_actions);
 	}
 
@@ -1361,7 +1361,7 @@ void add_message_action_to_database (message_action_type *parent, int index, mes
 
 		ASSERT (translated_text);
 
-		parent->action_text [index] = malloc_fast_mem (strlen (translated_text) + 4);
+		parent->action_text [index] = (char *) malloc_fast_mem (strlen (translated_text) + 4);
 
 		strcpy (parent->action_text [index], translated_text);
 	}
@@ -1529,7 +1529,7 @@ void send_text_message (entity *sender, entity *target, message_text_types type,
 
 		if (strlen (text) > 0)
 		{
-			parsed_message = malloc_fast_mem (strlen (text) + 1);
+			parsed_message = (char *) malloc_fast_mem (strlen (text) + 1);
 
 			pm = parsed_message;
 

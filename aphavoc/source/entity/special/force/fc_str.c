@@ -89,7 +89,7 @@ static void set_local_string (entity *en, string_types type, const char *s)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -180,7 +180,7 @@ static const char *get_local_string (entity *en, string_types type)
 	char
 		*s;
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	switch (type)
 	{

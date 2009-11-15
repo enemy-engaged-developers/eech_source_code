@@ -177,7 +177,7 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
 
@@ -316,7 +316,7 @@ static int response_to_task_assigned (entity_messages message, entity *receiver,
 	
 				if (get_local_entity_int_value (sender, INT_TYPE_ASSESS_LANDING))
 				{
-					end_keysite = get_local_entity_ptr_value (sender, PTR_TYPE_RETURN_KEYSITE);
+					end_keysite = (entity *) get_local_entity_ptr_value (sender, PTR_TYPE_RETURN_KEYSITE);
 		
 					ASSERT (end_keysite);
 		
@@ -524,7 +524,7 @@ static int response_to_waypoint_attack_action (entity_messages message, entity *
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	//
 	// if the groups current task has an objective - create engage tasks in the objectives sector,
@@ -542,7 +542,7 @@ static int response_to_waypoint_attack_action (entity_messages message, entity *
 
 	ASSERT (task);
 
-	side = get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
 	//
 	// Play Speech
@@ -689,7 +689,7 @@ static int response_to_waypoint_convoy_reached (entity_messages message, entity 
 
 	group_count = 0;
 	
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	set_local_entity_float_value (receiver, FLOAT_TYPE_VIEW_INTEREST_LEVEL, DEFAULT_VIEW_INTEREST_LEVEL);
 
@@ -727,7 +727,7 @@ static int response_to_waypoint_convoy_reached (entity_messages message, entity 
   		// allow for distance from wp
 		sleep -= distance / get_local_entity_float_value (mb, FLOAT_TYPE_CRUISE_VELOCITY);
 
-		sleep = max (sleep, 0.0);
+		sleep = max (sleep, 0.0f);
 	
 		set_client_server_entity_float_value (mb, FLOAT_TYPE_SLEEP, sleep);
 
@@ -790,7 +790,7 @@ static int response_to_waypoint_defend_reached (entity_messages message, entity 
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
 
@@ -1119,7 +1119,7 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	group = get_local_entity_parent (receiver, LIST_TYPE_MEMBER);
 
@@ -1219,7 +1219,7 @@ static int response_to_waypoint_land_reached (entity_messages message, entity *r
 		{
 			new_task = get_local_group_primary_task (group);
 	
-			new_keysite = get_local_entity_ptr_value (new_task, PTR_TYPE_RETURN_KEYSITE);
+			new_keysite = (entity *) get_local_entity_ptr_value (new_task, PTR_TYPE_RETURN_KEYSITE);
 	
 			new_landing = get_local_entity_landing_entity (new_keysite, group_database [get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].default_landing_type);
 	
@@ -1289,7 +1289,7 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	//
 	// Notify end task
@@ -1366,12 +1366,12 @@ static int response_to_waypoint_landed_reached (entity_messages message, entity 
 		// ammo
 		//
 	
-		config_type = get_local_entity_int_value (receiver, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (receiver, INT_TYPE_WEAPON_CONFIG_TYPE);
 	
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
 	
-			config_type = get_local_entity_int_value (receiver, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (receiver, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
 		}
 	
 		set_client_server_entity_int_value (receiver, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
@@ -1691,7 +1691,7 @@ static int response_to_waypoint_sub_route_navigation_reached (entity_messages me
 				routed_vehicle
 					*raw;
 
-				raw = get_local_entity_data (mb);
+				raw = (routed_vehicle *) get_local_entity_data (mb);
 
 				set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_NEXT_INDEX, to_node);
 				set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_THIS_INDEX, from_node);
@@ -2052,7 +2052,7 @@ static int response_to_waypoint_taken_off_reached (entity_messages message, enti
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (mobile *) get_local_entity_data (receiver);
 
 	landing_en = get_local_group_member_landing_entity_from_task (receiver);
 
@@ -2237,7 +2237,7 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 	
 			if (d < r) 
 			{
-				capture_keysite (destination_keysite, side);
+				capture_keysite (destination_keysite, (entity_sides) side);
 			}
 		}
 		else
@@ -2246,7 +2246,7 @@ static int response_to_waypoint_troop_capture_reached (entity_messages message, 
 			// Efficiency not applicable
 			//
 			
-			capture_keysite (destination_keysite, side);
+			capture_keysite (destination_keysite, (entity_sides) side);
 		}
 	}
 
@@ -2318,7 +2318,7 @@ static int response_to_waypoint_troop_insert_reached (entity_messages message, e
 
 	keysite = get_local_entity_parent (insert_task, LIST_TYPE_TASK_DEPENDENT);
 
-	side = get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
 	//
 	// Open Leader's Doors
@@ -2460,7 +2460,7 @@ static int response_to_waypoint_troop_putdown_point_reached (entity_messages mes
 
 		if (guide)
 		{
-			leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 			if (leader)
 			{

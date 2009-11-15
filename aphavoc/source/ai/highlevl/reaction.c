@@ -106,7 +106,7 @@ void create_task_assigned_reactionary_tasks (entity *task)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	task_side = get_local_entity_int_value (task, INT_TYPE_SIDE);
+	task_side = (entity_sides) get_local_entity_int_value (task, INT_TYPE_SIDE);
 
 	task_type = get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -161,7 +161,7 @@ void create_task_completed_reactionary_tasks (entity *task)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	task_side = get_local_entity_int_value (task, INT_TYPE_SIDE);
+	task_side = (entity_sides) get_local_entity_int_value (task, INT_TYPE_SIDE);
 
 	task_type = get_local_entity_int_value (task, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -236,7 +236,7 @@ void create_reaction_to_offensive_keysite_task_assigned (entity *task)
 		ai_log ("REACTION TO OFFENSIVE KEYSITE TASK ASSIGNED");
 		ai_log ("-------------------------------------------");
 
-		objective_side = get_local_entity_int_value (objective, INT_TYPE_SIDE);
+		objective_side = (entity_sides) get_local_entity_int_value (objective, INT_TYPE_SIDE);
 
 		objective_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -334,7 +334,7 @@ void create_reaction_to_recon_task_completed (entity *task)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	task_side = get_local_entity_int_value (task, INT_TYPE_SIDE);
+	task_side = (entity_sides) get_local_entity_int_value (task, INT_TYPE_SIDE);
 
 	force = get_local_force_entity (task_side);
 
@@ -605,7 +605,7 @@ void create_reaction_to_strike_task_completed (entity *task)
 	ai_log ("REACTION TO STRIKE TASK COMPLETED");
 	ai_log ("--------------------------------");
 
-	task_side = get_local_entity_int_value (task, INT_TYPE_SIDE);
+	task_side = (entity_sides) get_local_entity_int_value (task, INT_TYPE_SIDE);
 
 	objective = get_local_entity_parent (task, LIST_TYPE_TASK_DEPENDENT);
 
@@ -704,7 +704,7 @@ void create_reaction_to_artillery_fire (entity *group, entity *target)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	side = get_local_entity_int_value (target, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE);
 
 	if ((entity_is_object_of_task (group, ENTITY_SUB_TYPE_TASK_BAI, side)) ||
 			(entity_is_object_of_task (group, ENTITY_SUB_TYPE_TASK_RECON, side)))
@@ -712,7 +712,7 @@ void create_reaction_to_artillery_fire (entity *group, entity *target)
 		return;
 	}
 	
-	enemy_side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	enemy_side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	pos = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
 
@@ -799,7 +799,7 @@ void create_reaction_to_map_click (entity *objective)
 	float
 		efficiency;
 
-	task_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	task_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	force = get_local_force_entity (task_side);
 

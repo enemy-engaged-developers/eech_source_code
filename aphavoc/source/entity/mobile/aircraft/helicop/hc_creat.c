@@ -121,7 +121,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (helicopter));
+		raw = (helicopter *) malloc_fast_mem (sizeof (helicopter));
 
 		set_local_entity_data (en, raw);
 
@@ -323,7 +323,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// weapon config
 		//
 
-		raw->ac.weapon_package_status_array = malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
+		raw->ac.weapon_package_status_array = (weapon_package_status *) malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		memset (raw->ac.weapon_package_status_array, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
@@ -333,7 +333,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// update force info
 		//
 
-		add_to_force_info (get_local_force_entity (raw->ac.mob.side), en);
+		add_to_force_info (get_local_force_entity ((entity_sides) raw->ac.mob.side), en);
 
 		////////////////////////////////////////
 		//
@@ -614,7 +614,7 @@ entity *create_client_server_entity_helicopter (int index, entity_sub_types sub_
 	// initialise terrain elevation cache
 	//
 
-	raw = get_local_entity_data (new_entity);
+	raw = (helicopter *) get_local_entity_data (new_entity);
 
 	get_3d_terrain_point_data (position->x, position->z, &raw->ac.terrain_info);
 
@@ -637,7 +637,7 @@ void create_helicopter_cockpit_sound_effect (entity *en, entity_sub_types sub_ty
 		create_client_server_sound_effect_entity
 		(
 			en,
-			get_local_entity_int_value (en, INT_TYPE_SIDE),
+			(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 			sub_type,
 			SOUND_CHANNEL_SOUND_EFFECT,
 			SOUND_LOCALITY_INTERIOR,

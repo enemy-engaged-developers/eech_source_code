@@ -125,7 +125,7 @@ void reset_fly_by_camera (camera *raw)
 	// get rotation limits and fly-by duration wrt force
 	//
 
-	force = get_local_entity_int_value (en, INT_TYPE_FORCE);
+	force = (entity_forces) get_local_entity_int_value (en, INT_TYPE_FORCE);
 
 	switch (force)
 	{
@@ -137,7 +137,7 @@ void reset_fly_by_camera (camera *raw)
 			{
 				if (get_local_entity_int_value (en, INT_TYPE_AIRBORNE_AIRCRAFT))
 				{
-					rad_alt = max (pos.y - get_3d_terrain_elevation (pos.x, pos.z), 0.0);
+					rad_alt = max (pos.y - get_3d_terrain_elevation (pos.x, pos.z), 0.0f);
 
 					if (rad_alt < min_dist)
 					{

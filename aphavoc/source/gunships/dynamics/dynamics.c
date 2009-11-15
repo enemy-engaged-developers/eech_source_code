@@ -471,7 +471,7 @@ void initialise_flight_dynamics_collision_points (void)
 		*moving_collision_points,
 		*last_frame_moving_collision_points;
 
-	dynamics_collision_point_types
+	int
 		collision_type;
 
 	object_3d_instance
@@ -495,7 +495,7 @@ void initialise_flight_dynamics_collision_points (void)
 	//
 	//
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	// JB 030313 Fly any aircraft HACK HACK HACK
 /*     ////Moje030713 The code should look like the following lines, but then the added choppers sink through the ground
@@ -599,7 +599,7 @@ void initialise_flight_dynamics_collision_points (void)
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.y = vp.position.y;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].model_point.z = vp.position.z;
 
-						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type = collision_type;
+						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].collision_point_type = (dynamics_collision_point_types) collision_type;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->fixed_collision_points [current_flight_dynamics->number_of_fixed_collision_points - depth - 1].violated = FALSE;
 
@@ -685,7 +685,7 @@ void initialise_flight_dynamics_collision_points (void)
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.y = vp.position.y;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].model_point.z = vp.position.z;
 
-						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type = collision_type;
+						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].collision_point_type = (dynamics_collision_point_types) collision_type;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].terrain_elevation = 0.0;
 						current_flight_dynamics->moving_collision_points [current_flight_dynamics->number_of_moving_collision_points - depth - 1].violated = FALSE;
 
@@ -844,7 +844,7 @@ void set_dynamics_entity_values (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (get_current_flight_dynamics_rotor_brake ())
 	{
@@ -959,7 +959,7 @@ void set_dynamics_entity_values (entity *en)
 		if (get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM) != 0.0)
 		{
 
-			current_flight_dynamics->input_data.collective.value = max (50.0, get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM));
+			current_flight_dynamics->input_data.collective.value = max (50.0f, get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_RPM));
 		}
 	}
 
@@ -1169,7 +1169,7 @@ void update_gunship_dynamics (void)
 
 	int check_collisions_each_frame = helicopter_has_undercarriage_modelling();
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 	ASSERT(raw);
 	if (!raw)
 		return;
@@ -1454,7 +1454,7 @@ void update_dynamics_external_values (void)
 
 	value -= centre_of_gravity_to_ground_distance;
 
-	value = max (value, 0.0);
+	value = max (value, 0.0f);
 
 	current_flight_dynamics->barometric_altitude.value = value;
 
@@ -1468,7 +1468,7 @@ void update_dynamics_external_values (void)
 
 	value -= centre_of_gravity_to_ground_distance;
 
-	value = max (value, 0.0);
+	value = max (value, 0.0f);
 
 	current_flight_dynamics->radar_altitude.value = value;
 
@@ -1539,7 +1539,7 @@ void update_dynamics_external_values (void)
 		// position and attitude
 		//
 
-		raw = get_local_entity_data (get_gunship_entity ());
+		raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 		bound_double_position_to_adjusted_map_volume (&current_flight_dynamics->position);
 
@@ -2687,7 +2687,7 @@ void dynamics_land (void)
 				model_position.x = model_position.x * cos (-heading) + model_position.z * sin (-heading);
 				model_position.z = model_position.z * cos (-heading) - model_position.x * sin (-heading);
 
-				inst3d = get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
+				inst3d = (object_3d_instance *) get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 				bounding_box = get_object_3d_bounding_box_without_lines (inst3d->object_number);
 
@@ -2723,10 +2723,10 @@ void dynamics_land (void)
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the airbase is at least 400 m radius
-				xmin = min (bounding_box->xmin, -400.0);
-				xmax = max (bounding_box->xmax, 400.0);
-				zmin = min (bounding_box->zmin, -400.0);
-				zmax = max (bounding_box->zmax, 400.0);
+				xmin = min (bounding_box->xmin, -400.0f);
+				xmax = max (bounding_box->xmax, 400.0f);
+				zmin = min (bounding_box->zmin, -400.0f);
+				zmax = max (bounding_box->zmax, 400.0f);
 
 				break;
 			}
@@ -3473,7 +3473,7 @@ void flight_dynamics_start_engine (int engine_number)
 		break;
 	}
 
-	engine_rpm->max = max(engine_rpm->max, 20.0);
+	engine_rpm->max = max(engine_rpm->max, 20.0f);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3741,7 +3741,7 @@ void update_engine_rpm_dynamics (int engine_number)
 	ASSERT(engine_number == 1 || engine_number == 2);
 
 	collect = (current_flight_dynamics->input_data.collective.value / 120.0);
-	collect = max (1.0, collect);
+	collect = max (1.0f, collect);
 
 	if (engine_number == 1)
 	{
@@ -3832,7 +3832,7 @@ void update_engine_rpm_dynamics (int engine_number)
 			if (n1_rpm->max < current_flight_dynamics->engine_idle_rpm)  // only APU
 				n1_rpm->delta = min(apu_contribution, delta);
 			else  // engine itself is helping
-				n1_rpm->delta = min(delta, 1.0 + apu_contribution);
+				n1_rpm->delta = min(delta, 1.0f + apu_contribution);
 		}
 	}
 

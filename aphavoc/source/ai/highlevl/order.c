@@ -175,7 +175,7 @@ static void initialise_armoured_divisions (entity *force)
 
 	if (frontline_count > 0)
 	{
-		frontline_groups = malloc_heap_mem (sizeof (entity *) * frontline_count);
+		frontline_groups = (entity **) malloc_heap_mem (sizeof (entity *) * frontline_count);
 	}
 	else
 	{
@@ -184,7 +184,7 @@ static void initialise_armoured_divisions (entity *force)
 
 	if (artillery_count > 0)
 	{
-		artillery_groups = malloc_heap_mem (sizeof (entity *) * artillery_count);
+		artillery_groups = (entity **) malloc_heap_mem (sizeof (entity *) * artillery_count);
 	}
 	else
 	{
@@ -248,7 +248,7 @@ static void initialise_armoured_divisions (entity *force)
 
 	for (d = 0; d < division_count; d ++)
 	{
-		division = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARMOURED_DIVISION, side, force, NULL, TRUE);
+		division = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARMOURED_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
 		//
 		// decide how many of each group type are to be added to this division
@@ -304,7 +304,7 @@ static void initialise_armoured_divisions (entity *force)
 
 		pos1 = get_local_entity_vec3d_ptr (first_group, VEC3D_TYPE_POSITION);
 
-		keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, side, pos1, 0.0, NULL, NULL);
+		keysite = get_closest_keysite (ENTITY_SUB_TYPE_KEYSITE_AIRBASE, (entity_sides) side, pos1, 0.0, NULL, NULL);
 
 		//
 		// Sort Frontline groups
@@ -322,7 +322,7 @@ static void initialise_armoured_divisions (entity *force)
 
 			ASSERT (frontline_count > 0);
 
-			rating = malloc_heap_mem (sizeof (float) * frontline_count);
+			rating = (float*) malloc_heap_mem (sizeof (float) * frontline_count);
 			
 			for (loop = 0; loop < frontline_count; loop ++)
 			{
@@ -358,7 +358,7 @@ static void initialise_armoured_divisions (entity *force)
 
 			for (c = 0; c < company_count; c ++)
 			{
-				company = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARMOURED_COMPANY, side, division, keysite, TRUE);
+				company = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARMOURED_COMPANY, (entity_sides) side, division, keysite, TRUE);
 
 				n = 0;
 
@@ -400,7 +400,7 @@ static void initialise_armoured_divisions (entity *force)
 
 			ASSERT (artillery_count > 0);
 
-			rating = malloc_heap_mem (sizeof (float) * artillery_count);
+			rating = (float*) malloc_heap_mem (sizeof (float) * artillery_count);
 			
 			for (loop = 0; loop < artillery_count; loop ++)
 			{
@@ -434,7 +434,7 @@ static void initialise_armoured_divisions (entity *force)
 
 			for (c = 0; c < company_count; c ++)
 			{
-				company = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARTILLERY_COMPANY, side, division, keysite, TRUE);
+				company = create_new_division (ENTITY_SUB_TYPE_DIVISION_ARTILLERY_COMPANY, (entity_sides) side, division, keysite, TRUE);
 
 				en = artillery_groups [loop];
 	
@@ -488,11 +488,11 @@ static void initialise_airborne_divisions (entity *force)
 
 	side = get_local_entity_int_value (force, INT_TYPE_SIDE);
 
-	hc_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_HELICOPTER_DIVISION, side, force, NULL, TRUE);
+	hc_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_HELICOPTER_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
-	fw_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_FIXED_WING_DIVISION, side, force, NULL, TRUE);
+	fw_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_FIXED_WING_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
-	transport_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_TRANSPORT_DIVISION, side, force, NULL, TRUE);
+	transport_division = create_new_division (ENTITY_SUB_TYPE_DIVISION_AIRBORNE_TRANSPORT_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
 	keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 
@@ -504,15 +504,15 @@ static void initialise_airborne_divisions (entity *force)
 			// Assign one company of each type per airbase
 			//
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_ATTACK_COMPANY, side, hc_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_ATTACK_COMPANY, (entity_sides) side, hc_division, keysite, TRUE);
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_TRANSPORT_COMPANY, side, transport_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_TRANSPORT_COMPANY, (entity_sides) side, transport_division, keysite, TRUE);
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_ATTACK_COMPANY, side, fw_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_ATTACK_COMPANY, (entity_sides) side, fw_division, keysite, TRUE);
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_FIGHTER_COMPANY, side, fw_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_FIGHTER_COMPANY, (entity_sides) side, fw_division, keysite, TRUE);
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_TRANSPORT_COMPANY, side, transport_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_FW_TRANSPORT_COMPANY, (entity_sides) side, transport_division, keysite, TRUE);
 		}
 		else if (get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_SUB_TYPE_KEYSITE_ANCHORAGE)
 		{
@@ -520,9 +520,9 @@ static void initialise_airborne_divisions (entity *force)
 			// Assign one company of each type per carrier
 			//
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_ATTACK_COMPANY, side, hc_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_ATTACK_COMPANY, (entity_sides) side, hc_division, keysite, TRUE);
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_TRANSPORT_COMPANY, side, hc_division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_HC_TRANSPORT_COMPANY, (entity_sides) side, hc_division, keysite, TRUE);
 		}
 
 		keysite = get_local_entity_child_succ (keysite, LIST_TYPE_KEYSITE_FORCE);
@@ -546,7 +546,7 @@ static void initialise_infantry_divisions (entity *force)
 
 	side = get_local_entity_int_value (force, INT_TYPE_SIDE);
 
-	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_INFANTRY_DIVISION, side, force, NULL, TRUE);
+	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_INFANTRY_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
 	keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 
@@ -558,7 +558,7 @@ static void initialise_infantry_divisions (entity *force)
 			// Assign one company of each type per airbase
 			//
 
-			create_new_division (ENTITY_SUB_TYPE_DIVISION_INFANTRY_COMPANY, side, division, keysite, TRUE);
+			create_new_division (ENTITY_SUB_TYPE_DIVISION_INFANTRY_COMPANY, (entity_sides) side, division, keysite, TRUE);
 		}
 
 		keysite = get_local_entity_child_succ (keysite, LIST_TYPE_KEYSITE_FORCE);
@@ -584,7 +584,7 @@ static void initialise_carrier_divisions (entity *force)
 
 	side = get_local_entity_int_value (force, INT_TYPE_SIDE);
 
-	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_CARRIER_DIVISION, side, force, NULL, TRUE);
+	division = create_new_division (ENTITY_SUB_TYPE_DIVISION_CARRIER_DIVISION, (entity_sides) side, force, NULL, TRUE);
 
 	keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 
@@ -596,7 +596,7 @@ static void initialise_carrier_divisions (entity *force)
 			// Assign one company per carrier
 			//
 
-			company = create_new_division (ENTITY_SUB_TYPE_DIVISION_CARRIER_COMPANY, side, division, keysite, TRUE);
+			company = create_new_division (ENTITY_SUB_TYPE_DIVISION_CARRIER_COMPANY, (entity_sides) side, division, keysite, TRUE);
 
 			//
 			// Assign everything at that carrier to the company

@@ -215,7 +215,7 @@ int damage_client_server_entity (entity *en, entity *weapon, float damage_modifi
 
 	ASSERT ((damage_modifier >= 0.0) && (damage_modifier <= 1.0));
 
-	warhead_type = get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	warhead_type = (weapon_warhead_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
 
 	ASSERT ((warhead_type >= WEAPON_WARHEAD_TYPE_NONE) && (warhead_type < NUM_WEAPON_WARHEAD_TYPES));
 
@@ -439,11 +439,13 @@ void assess_effectiveness_of_all_weapons_on_entity (entity *en)
 	// open file
 	//
 
-	filename = malloc_fast_mem (strlen (target_name) + 6);
+	filename = (char *) malloc_fast_mem (strlen (target_name) + 6);
 
 	sprintf (filename, "%s.dmg", target_name);
 
 	fp = safe_fopen (filename, "w");
+
+    safe_free (filename);
 
 	//
 	// output target name
@@ -744,9 +746,9 @@ void initialise_destroyed_object_database (void)
 
 	keyword_length = strlen (DESTROYED_OBJECT_KEYWORD);
 
-	destroyed_object_table = safe_malloc (sizeof (object_3d_index_numbers) * OBJECT_3D_LAST);
+	destroyed_object_table = (object_3d_index_numbers *) safe_malloc (sizeof (object_3d_index_numbers) * OBJECT_3D_LAST);
 
-	restored_object_table = safe_malloc (sizeof (object_3d_index_numbers) * OBJECT_3D_LAST);
+	restored_object_table = (object_3d_index_numbers *) safe_malloc (sizeof (object_3d_index_numbers) * OBJECT_3D_LAST);
 
 	//
 	// set defaults
@@ -771,7 +773,7 @@ void initialise_destroyed_object_database (void)
 
 		normal_object_string = object_3d_information_database [normal_object].name;
 
-		destroyed_object_string = malloc_fast_mem (strlen (normal_object_string) + keyword_length + 4);
+		destroyed_object_string = (char *) malloc_fast_mem (strlen (normal_object_string) + keyword_length + 4);
 
 		strcpy (destroyed_object_string, normal_object_string);
 
@@ -860,7 +862,7 @@ static struct PLAYER_DAMAGE_MODIFIER_TABLE
 		GAME_DIFFICULTY_EASY,		0.5,
 		GAME_DIFFICULTY_MEDIUM,		0.75,
 		GAME_DIFFICULTY_HARD,		1.0,
-		-1
+		(game_difficulty_settings) -1
 	};
 
 float get_player_damage_modifier (entity *en)
@@ -880,7 +882,7 @@ float get_player_damage_modifier (entity *en)
 
 	if (pilot_en)
 	{
-		difficulty = get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
+		difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
 	
 		loop = 0;
 	

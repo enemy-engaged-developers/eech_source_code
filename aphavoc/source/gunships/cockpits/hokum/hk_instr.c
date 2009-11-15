@@ -227,7 +227,7 @@ void draw_hokum_virtual_cockpit_instruments (void)
 		float
 			altitude;
 
-		altitude = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0);
+		altitude = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0f);
 
 		altitude *= rad (-360.0) / 1000.0;
 
@@ -243,7 +243,7 @@ void draw_hokum_virtual_cockpit_instruments (void)
 		float
 			altitude;
 
-		altitude = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0);
+		altitude = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0f);
 
 		altitude *= rad (-360.0) / 10000.0;
 

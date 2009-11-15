@@ -85,20 +85,20 @@ static void update_server (entity *en)
 	// Group is only on update list when its sleeping or under attack
 	//
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	if (raw->sleep > 0.0)
 	{
 		raw->sleep -= get_delta_time ();
 
-		raw->sleep = max (raw->sleep, 0.0);
+		raw->sleep = max (raw->sleep, 0.0f);
 	}
 
 	if (raw->assist_timer > 0.0)
 	{
 		raw->assist_timer -= get_delta_time ();
 
-		raw->assist_timer = max (raw->assist_timer, 0.0);
+		raw->assist_timer = max (raw->assist_timer, 0.0f);
 	}
 
 	if ((raw->sleep == 0.0) && (raw->assist_timer == 0.0))

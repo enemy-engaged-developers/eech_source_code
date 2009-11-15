@@ -181,7 +181,7 @@ void aircraft_target_scan (entity *en)
 	task_target_source_types
 		target_source;
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	raw->target_scan_timer -= get_delta_time (); 
 		
@@ -233,7 +233,7 @@ void aircraft_target_scan (entity *en)
 	// What type of target does task allow 
 	//
 
-	target_source = get_local_entity_int_value (task, INT_TYPE_TASK_TARGET_SOURCE);
+	target_source = (task_target_source_types) get_local_entity_int_value (task, INT_TYPE_TASK_TARGET_SOURCE);
 
 	switch (target_source)
 	{

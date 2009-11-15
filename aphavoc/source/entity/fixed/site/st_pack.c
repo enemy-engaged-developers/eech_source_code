@@ -144,7 +144,7 @@ void pack_local_site_data (pack_modes mode)
 
 			total ++;
 
-			raw = get_local_entity_data (en);
+			raw = (site *) get_local_entity_data (en);
 
 			if (alive == raw->fix.alive)
 			{
@@ -253,7 +253,7 @@ void unpack_local_site_data (pack_modes mode)
 
 			count --;
 
-			raw = get_local_entity_data (en);
+			raw = (site *) get_local_entity_data (en);
 
 			if (!alive)
 			{

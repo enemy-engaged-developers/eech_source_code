@@ -83,7 +83,7 @@ void store_reverse_tactical_camera_values (void)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	raw->stored_reverse_tactical_position = raw->position;
 
@@ -103,7 +103,7 @@ void restore_reverse_tactical_camera_values (void)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	raw->position = raw->stored_reverse_tactical_position;
 
@@ -151,7 +151,7 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 	
 	//
 	// get camera position
@@ -189,7 +189,7 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 	{
 		if (point_inside_map_area (&target_position))
 		{
-			rad_alt = max (target_position.y - get_3d_terrain_elevation (target_position.x, target_position.z), 0.0);
+			rad_alt = max (target_position.y - get_3d_terrain_elevation (target_position.x, target_position.z), 0.0f);
 
 			if (rad_alt > z_min)
 			{

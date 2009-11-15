@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_RETURN_KEYSITE:
 		////////////////////////////////////////
 		{
-			raw->return_keysite = ptr;
+			raw->return_keysite = (entity *) ptr;
 
 			break;
 		}
@@ -103,7 +103,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_ROUTE_DEPENDENTS:
 		////////////////////////////////////////
 		{
-			raw->route_dependents = ptr;
+			raw->route_dependents = (entity **) ptr;
 
 			break;
 		}
@@ -111,7 +111,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_ROUTE_FORMATION_TYPES:
 		////////////////////////////////////////
 		{
-			raw->route_formation_types = ptr;
+			raw->route_formation_types = (formation_types *) ptr;
 
 			break;
 		}
@@ -119,7 +119,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_ROUTE_NODE:
 		////////////////////////////////////////
 		{
-			raw->route_nodes = ptr;
+			raw->route_nodes = (vec3d *) ptr;
 
 			break;
 		}
@@ -127,7 +127,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_ROUTE_WAYPOINT_TYPES:
 		////////////////////////////////////////
 		{
-			raw->route_waypoint_types = ptr;
+			raw->route_waypoint_types = (entity_sub_types *) ptr;
 
 			break;
 		}
@@ -154,7 +154,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	switch (type)
 	{

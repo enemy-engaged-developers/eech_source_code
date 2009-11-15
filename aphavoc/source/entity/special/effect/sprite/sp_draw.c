@@ -95,7 +95,7 @@ static void draw_local_3d_object (entity *en, float range)
 	entity
 		*parent;
 
-	raw = get_local_entity_data (en);
+	raw = (sprite *) get_local_entity_data (en);
 
 	if ( raw->effect_lifetime < 0.0 )
 	{

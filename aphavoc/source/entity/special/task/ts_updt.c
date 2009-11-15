@@ -81,7 +81,7 @@ static void update_server (entity *en)
 	task
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	#ifdef DEBUG
 
@@ -209,7 +209,7 @@ static void update_client (entity *en)
 	task
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (task *) get_local_entity_data (en);
 
 	switch (raw->task_state)
 	{
@@ -223,7 +223,7 @@ static void update_client (entity *en)
 			{
 				raw->expire_timer -= get_delta_time ();
 		
-				raw->expire_timer = max (raw->expire_timer, 0.0);
+				raw->expire_timer = max (raw->expire_timer, 0.0f);
 			}
 
 			break;
@@ -239,7 +239,7 @@ static void update_client (entity *en)
 			{
 				raw->stop_timer -= get_delta_time ();
 		
-				raw->stop_timer = max (raw->stop_timer, 0.0);
+				raw->stop_timer = max (raw->stop_timer, 0.0f);
 			}
 
 			break;

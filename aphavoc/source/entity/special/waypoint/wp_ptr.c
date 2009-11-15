@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -99,7 +99,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 			{
 				debug_fatal ("WP_PTR: REMOVE");
 			}
-			raw->position_entity = ptr;
+			raw->position_entity = (entity *) ptr;
 
 			break;
 		}
@@ -126,7 +126,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{

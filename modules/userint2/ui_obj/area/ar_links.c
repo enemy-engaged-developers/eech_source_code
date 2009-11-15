@@ -82,7 +82,7 @@ static void set_area_ui_object_association (ui_object *obj, ui_object *associati
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->association = association;
 }
@@ -97,7 +97,7 @@ static ui_object *get_area_ui_object_association (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->association);
 }
@@ -168,7 +168,7 @@ static void set_area_ui_object_parent (ui_object *obj, ui_object *parent)
 	// insert obj into new_parents list
 	//
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	next = get_ui_object_child (parent);
 
@@ -221,7 +221,7 @@ static ui_object *get_area_ui_object_parent (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->parent);
 }
@@ -236,7 +236,7 @@ static void set_area_ui_object_child (ui_object *obj, ui_object *child)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->child = child;
 }
@@ -251,7 +251,7 @@ static ui_object *get_area_ui_object_child (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->child);
 }
@@ -266,7 +266,7 @@ static void set_area_ui_object_next (ui_object *obj, ui_object *next)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->next = next;
 }
@@ -281,7 +281,7 @@ static ui_object *get_area_ui_object_next (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->next);
 }
@@ -296,7 +296,7 @@ static void set_area_ui_object_prev (ui_object *obj, ui_object *prev)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->prev = prev;
 }
@@ -311,7 +311,7 @@ static ui_object *get_area_ui_object_prev (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->prev);
 }

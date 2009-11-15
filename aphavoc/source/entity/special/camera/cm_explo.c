@@ -104,7 +104,7 @@ void reset_weapon_explosion_camera_position (vec3d *position)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	length = get_3d_vector_magnitude (&raw->weapon_camera_direction);
 

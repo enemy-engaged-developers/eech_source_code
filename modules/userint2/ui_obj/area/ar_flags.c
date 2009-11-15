@@ -76,7 +76,7 @@ static void set_area_ui_object_state (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	if (area->state != flag)
 	{
@@ -97,7 +97,7 @@ static int get_area_ui_object_state (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->state);
 }
@@ -115,7 +115,7 @@ static void set_area_ui_object_drawable (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	if (area->drawable!= flag)
 	{
@@ -159,7 +159,7 @@ static int get_area_ui_object_drawable (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->drawable);
 }
@@ -174,7 +174,7 @@ static void set_area_ui_object_autosize (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 	
   	area->autosize = flag;
 }
@@ -189,7 +189,7 @@ static int get_area_ui_object_autosize (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->autosize);
 }
@@ -204,7 +204,7 @@ static void set_area_ui_object_redraw (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	if (area->child)
 	{
@@ -225,7 +225,7 @@ static int get_area_ui_object_redraw (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->redraw);
 }
@@ -243,7 +243,7 @@ void set_area_ui_object_redraw_all (ui_object *obj, int flag)
 	if (obj)
 	{
 	
-		area = obj->data;
+		area = (area_ui_object*) obj->data;
 	
 		if (area->child)
 		{
@@ -280,12 +280,12 @@ static void set_area_ui_object_moveable (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	if (obj)
 	{
 	
-		area = obj->data;
+		area = (area_ui_object*) obj->data;
 	
 		if (area->child)
 		{
@@ -313,7 +313,7 @@ static int get_area_ui_object_moveable (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->moveable);
 }
@@ -328,7 +328,7 @@ static void set_area_ui_object_resizeable (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->resizeable = flag;
 }
@@ -343,7 +343,7 @@ static int get_area_ui_object_resizeable (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->resizeable);
 }
@@ -358,7 +358,7 @@ static void set_area_ui_object_list_item (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->list_item = flag;
 }
@@ -373,7 +373,7 @@ static int get_area_ui_object_list_item (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->list_item);
 }
@@ -388,7 +388,7 @@ static void set_area_ui_object_item_number (ui_object *obj, int number)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->item_number = number;
 }
@@ -403,7 +403,7 @@ static int get_area_ui_object_item_number (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->item_number);
 }
@@ -418,7 +418,7 @@ static void set_area_ui_object_item_number2 (ui_object *obj, int number)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->item_number2 = number;
 }
@@ -433,7 +433,7 @@ static int get_area_ui_object_item_number2 (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->item_number2);
 }
@@ -448,7 +448,7 @@ static void set_area_ui_object_clear (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->clear = flag;
 }
@@ -463,7 +463,7 @@ static int get_area_ui_object_clear (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->clear);
 }
@@ -478,7 +478,7 @@ static void set_area_ui_object_user_flag1 (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->user_flag1 = value;
 }
@@ -493,7 +493,7 @@ static int get_area_ui_object_user_flag1 (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->user_flag1);
 }
@@ -508,7 +508,7 @@ static void set_area_ui_object_user_flag2 (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->user_flag2 = value;
 }
@@ -523,7 +523,7 @@ static int get_area_ui_object_user_flag2 (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->user_flag2);
 }
@@ -538,7 +538,7 @@ static void set_area_ui_object_user_flag3 (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->user_flag3 = value;
 }
@@ -553,7 +553,7 @@ static int get_area_ui_object_user_flag3 (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->user_flag3);
 }
@@ -568,7 +568,7 @@ static void set_area_ui_object_user_flag4 (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->user_flag4 = value;
 }
@@ -583,7 +583,7 @@ static int get_area_ui_object_user_flag4 (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->user_flag4);
 }
@@ -598,7 +598,7 @@ static void set_area_ui_object_virtual_coords (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->virtual_coords = value;
 }
@@ -613,7 +613,7 @@ static int get_area_ui_object_virtual_coords (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->virtual_coords);
 }
@@ -628,7 +628,7 @@ static void set_area_ui_object_tool_tips_timer (ui_object *obj, int value)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->tool_tips_timer = value;
 }
@@ -643,7 +643,7 @@ static int get_area_ui_object_tool_tips_timer (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->tool_tips_timer);
 }
@@ -658,7 +658,7 @@ static void set_area_ui_object_highlightable (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->highlightable = flag;
 }
@@ -673,7 +673,7 @@ static int get_area_ui_object_highlightable (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->highlightable);
 }
@@ -688,7 +688,7 @@ static void set_area_ui_object_highlighted (ui_object *obj, int flag)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->highlighted = flag;
 }
@@ -703,7 +703,7 @@ static int get_area_ui_object_highlighted (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->highlighted);
 }
@@ -718,7 +718,7 @@ static void set_area_ui_object_t_value (ui_object *obj, float t)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->t = t;
 }
@@ -733,7 +733,7 @@ static float get_area_ui_object_t_value (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->t);
 }
@@ -748,7 +748,7 @@ static void set_area_ui_object_time_length (ui_object *obj, int time)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->time_length = time;
 }
@@ -763,7 +763,7 @@ static int get_area_ui_object_time_length (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->time_length);
 }
@@ -778,7 +778,7 @@ static void set_area_ui_object_start_time (ui_object *obj, int start_time)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->start_time = start_time;
 }
@@ -793,7 +793,7 @@ static int get_area_ui_object_start_time (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->start_time);
 }
@@ -808,7 +808,7 @@ static void set_area_ui_object_offset_time (ui_object *obj, int offset_time)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	area->offset_time = offset_time;
 }
@@ -823,7 +823,7 @@ static int get_area_ui_object_offset_time (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object*) obj->data;
 
 	return (area->offset_time);
 }

@@ -210,7 +210,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	movement_types
 		movement_type;
 
-	entity_sub_types
+	entity_types
 		task_route_type;
 
 	entity_sub_types
@@ -311,7 +311,7 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 
 	ASSERT (member);
 
-	side = get_local_entity_int_value (group, INT_TYPE_SECTOR_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SECTOR_SIDE);
 
 	mb_vel = get_local_entity_float_value (member, FLOAT_TYPE_CRUISE_VELOCITY);
 
@@ -333,13 +333,13 @@ int create_generic_waypoint_route (entity *group, entity *task_en, entity *retur
 	//
 	//////////////////////////////////////////////////////////////////
 
-	route_points_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_NODE);
+	route_points_ptr = (vec3d*) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_NODE);
 
-	route_dependents_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_DEPENDENTS);
+	route_dependents_ptr = (entity**) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_DEPENDENTS);
 
-	route_waypoint_types_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_WAYPOINT_TYPES);
+	route_waypoint_types_ptr = (entity_sub_types *) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_WAYPOINT_TYPES);
 
-	route_formation_types_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_FORMATION_TYPES);
+	route_formation_types_ptr = (formation_types *) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_FORMATION_TYPES);
 
 	route_length = get_local_entity_int_value (task_en, INT_TYPE_ROUTE_LENGTH);
 
@@ -1151,9 +1151,9 @@ int generate_biased_vec3d_route (route_node *points, route_node **route, int sid
 	while (next_node)
 	{
 
-		fast_route = create_route (&this_node->position, &next_node->position, side, movement_type);
+		fast_route = create_route (&this_node->position, &next_node->position, (entity_sides) side, movement_type);
 
-		second_past_route (fast_route, side, movement_type);
+		second_past_route (fast_route, (entity_sides) side, movement_type);
 	
 		optimise_route (fast_route, movement_type);
 
@@ -1515,12 +1515,12 @@ float get_route_point_rating (float sample_number, vec3d *test_point, entity_sid
 	// minimum height of 1.0m to allow biasing
 
 	average_terrain_elevation = best_point_terrain_elevations [(int) sample_number] +
-										best_point_terrain_elevations [(int) (max ((sample_number - 1.0), 1))] +
-										best_point_terrain_elevations [(int) (min ((sample_number + 1.0), route_biasing_database [movement_type].num_route_samples))];
+										best_point_terrain_elevations [(int) (max ((sample_number - 1.0f), 1.0f))] +
+										best_point_terrain_elevations [(int) (min ((sample_number + 1.0f), route_biasing_database [movement_type].num_route_samples))];
 
 	average_terrain_elevation /= 3.0;
 
-	average_terrain_elevation = max (average_terrain_elevation, 0.0);
+	average_terrain_elevation = max (average_terrain_elevation, 0.0f);
 
 	elevation = route_biasing_database [movement_type].elevation_bias * average_terrain_elevation;
 
@@ -1530,13 +1530,13 @@ float get_route_point_rating (float sample_number, vec3d *test_point, entity_sid
 
 	sector_en = get_local_sector_entity (test_point);
 
-	sector_side = get_local_entity_int_value (sector_en, INT_TYPE_SECTOR_SIDE);
+	sector_side = (entity_sides) get_local_entity_int_value (sector_en, INT_TYPE_SECTOR_SIDE);
 
 	side_bias = route_biasing_database [movement_type].side_bias * (sector_side != side);
 
 	rating = elevation +
-				(range_bias * max (average_terrain_elevation, 1.0)) +
-				(side_bias * max (average_terrain_elevation, 1.0));
+				(range_bias * max (average_terrain_elevation, 1.0f)) +
+				(side_bias * max (average_terrain_elevation, 1.0f));
 
 	#if DEBUG_MODULE
 	if (debug_flag)
@@ -1791,7 +1791,7 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 
 	//ASSERT (member);
 
-	side = get_local_entity_int_value (task_en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (task_en, INT_TYPE_SIDE);
 
 	//mb_vel = get_local_entity_float_value (member, FLOAT_TYPE_CRUISE_VELOCITY);
 	mb_vel = 50.0;
@@ -1800,7 +1800,7 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 	height = 50.0;
 
 	//movement_type = group_database [get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].movement_type;
-	movement_type = get_local_entity_int_value (task_en, INT_TYPE_MOVEMENT_TYPE);
+	movement_type = (movement_types) get_local_entity_int_value (task_en, INT_TYPE_MOVEMENT_TYPE);
 
 	//landing_type = group_database [get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE)].default_landing_type;
 	landing_type = ENTITY_SUB_TYPE_LANDING_HELICOPTER;
@@ -1815,13 +1815,13 @@ route_node *temp_create_generic_waypoint_route (entity *group, entity *task_en, 
 	//
 	//////////////////////////////////////////////////////////////////
 
-	route_points_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_NODE);
+	route_points_ptr = (vec3d *) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_NODE);
 
-	route_dependents_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_DEPENDENTS);
+	route_dependents_ptr = (entity **) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_DEPENDENTS);
 
-	route_waypoint_types_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_WAYPOINT_TYPES);
+	route_waypoint_types_ptr = (entity_sub_types *) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_WAYPOINT_TYPES);
 
-	route_formation_types_ptr = get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_FORMATION_TYPES);
+	route_formation_types_ptr = (formation_types *) get_local_entity_ptr_value (task_en, PTR_TYPE_ROUTE_FORMATION_TYPES);
 
 	route_length = get_local_entity_int_value (task_en, INT_TYPE_ROUTE_LENGTH);
 

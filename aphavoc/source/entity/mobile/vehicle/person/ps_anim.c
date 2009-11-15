@@ -185,7 +185,7 @@ void animate_person (entity *en)
 	
 	ASSERT (en);
 	
-	raw = get_local_entity_data (en);
+	raw = (person *) get_local_entity_data (en);
 
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
@@ -249,7 +249,7 @@ void update_person_animation (entity *en)
 
 	ASSERT( en );
 
-	raw = get_local_entity_data (en);
+	raw = (person *) get_local_entity_data (en);
 
 	//update character animation
 
@@ -316,7 +316,7 @@ void damage_person_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (person *) get_local_entity_data (en);
 
 	// destruct old object
 

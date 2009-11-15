@@ -85,7 +85,7 @@ static int recognition_guide_camera_valid (camera *raw, object_3d_camera_index_n
 
 	ASSERT (raw->external_view_entity);
 
-	inst3d = get_local_entity_ptr_value (raw->external_view_entity, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (raw->external_view_entity, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 
@@ -219,7 +219,7 @@ static void update_recognition_guide_camera (camera *raw, object_3d_camera_index
 	// get camera position and attitude
 	//
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 
@@ -241,7 +241,7 @@ static void update_recognition_guide_camera (camera *raw, object_3d_camera_index
 
 	if (point_inside_map_area (&raw->position))
 	{
-		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5);
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5f);
 	}
 
 	//

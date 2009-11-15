@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,12 +79,10 @@
 
 struct RESOLUTION_INFO
 {
-
 	int
 		width,
 		height;
 };
-
 typedef struct RESOLUTION_INFO resolution_info;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,10 +100,6 @@ graphics_resolution_mode
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int test_video_resolution ( int width, int height, int depth );
-
-static void release_ddraw_surface_pointers ( void );
-
 /*static*/ int create_test_d3d_device ( int width, int height );
 
 /*static*/ void release_test_d3d_device ( void );
@@ -117,7 +112,6 @@ static int supported_resolution ( int width, int height );
 
 void initialise_graphics_resolution_modes ( void )
 {
-
 	number_of_graphics_resolution_modes_available = 0;
 }
 
@@ -127,16 +121,13 @@ void initialise_graphics_resolution_modes ( void )
 
 int get_graphics_resolution_index ( int width, int height )
 {
-
 	int
 		count;
 
 	for ( count = 0; count < number_of_graphics_resolution_modes_available; count++ )
 	{
-
 		if ( ( graphics_resolution_modes_available[count].width == width ) && ( graphics_resolution_modes_available[count].height == height ) )
 		{
-
 			return ( count );
 		}
 	}
@@ -150,7 +141,6 @@ int get_graphics_resolution_index ( int width, int height )
 
 int assess_graphic_device_resolutions ( void )
 {
-
 	int
 		low_water_mark,
 		high_water_mark,
@@ -164,87 +154,63 @@ int assess_graphic_device_resolutions ( void )
 
 	number_of_graphics_resolution_modes_available = 0;
 
-	switch ( ddraw.application_display_depth )
+	switch ( application_video_colourdepth )
 	{
-
 		case 16:
 		{
-
 			high_water_mark = 16;
-
 			low_water_mark = 12;
-
 			break;
 		}
 
 		case 32:
 		{
-
 			high_water_mark = 22;
-
 			low_water_mark = 32;
-
 			break;
 		}
 	}
 
 	if ( number_display_modes )
 	{
-	
 		DWORD
 			dwStyle;
 	
 		//
 		// Set the cooperative mode settings.
 		//
-
 		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_EXCLUSIVE );
 	
 		//
 		// Setup the window style for a fullscreen application
 		//
-		
 		dwStyle = GetWindowStyle ( application_window );
-		
 		dwStyle &= ~( WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX );
-		
 		dwStyle |= WS_POPUP;
-		
 		SetWindowLong ( application_window, GWL_STYLE, dwStyle );
 
 		//
 		// Go through all the graphics modes
 		//
-		
 		for ( count = 0; count < number_display_modes; count++ )
 		{
-	
 			if ( !display_modes[count].palette )
 			{
-
 				int
 					depth;
-
 				depth = ( display_modes[count].bpp_red + display_modes[count].bpp_green + display_modes[count].bpp_blue );
-	
 				if ( ( depth >= low_water_mark ) && ( depth <= high_water_mark ) )
 				{
-
 					int
 						width,
 						height;
-
 					width = display_modes[count].ddsd.dwWidth;
-
 					height = display_modes[count].ddsd.dwHeight;
-
 					if ( supported_resolution ( width, height ) )
 					{
-	
-						if ( test_video_resolution ( width, height, ddraw.application_display_depth ) )
+						if ( f3d_test_video_resolution ( width, height, application_video_colourdepth ) )
 						{
 							debug_log ( "Graphics mode: %d x %d enabled", width, height );
-
 							graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].width = width;
 							graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].height = height;
 							graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].compressed_texture_mode = FALSE;
@@ -254,26 +220,18 @@ int assess_graphic_device_resolutions ( void )
 							//
 							// Create the d3d device & set its abilities
 							//
-	
 							if ( create_test_d3d_device ( width, height ) )
 							{
-		
 								//
 								// Now check for available texture memory
 								//
-		
 								initialise_system_texture_formats ();
-	
 								compress_system_textures = FALSE;
-		
 								{
-		
 									//
 									// We can go into this mode
 									//
-	
 									debug_log ( "Graphics mode: %d x %d enabled", width, height );
-		
 									graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].width = width;
 									graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].height = height;
 									graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].compressed_texture_mode = FALSE;
@@ -281,11 +239,10 @@ int assess_graphic_device_resolutions ( void )
 									number_of_graphics_resolution_modes_available++;
 								}
 							}
-	
+
 							//
 							// Release the d3d device
 							//
-	
 							release_test_d3d_device ();
 							*/
 						}
@@ -294,7 +251,6 @@ int assess_graphic_device_resolutions ( void )
 					}
 					else
 						debug_log ( "%d x %d is below minimum resolution dimensions 640x480!", width, height );
-
 				}
 			}
 		}
@@ -302,14 +258,7 @@ int assess_graphic_device_resolutions ( void )
 		//
 		// Reset the cooperative mode settings
 		//
-
 		ddraw_set_cooperative_level ( COOPERATIVE_LEVEL_NORMAL );
-
-		//
-		// Release any surface pointers
-		//
-
-		release_ddraw_surface_pointers ();
 	}
 
 	return ( TRUE );
@@ -319,300 +268,9 @@ int assess_graphic_device_resolutions ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int test_video_resolution ( int width, int height, int depth )
-{
-
-	HRESULT
-		ddrval;
-
-	DDSURFACEDESC2
-		ddsd;
-
-	DDSCAPS2
-		caps;
-	
-	//
-	// Set the video mode
-	//
-
-	{
-
-		int
-			parms[3];
-
-		parms[0] = width;
-		parms[1] = height;
-		parms[2] = depth;
-
-		ddrval = system_thread_function ( ddraw_internal_set_display_mode, parms );
-	}
-	
-	if ( ddrval != DD_OK )
-	{
-		
-		debug_log ( "Unable to set display resolution: %d, %d, %d: %s", width, height, depth, get_ddraw_error_message ( ddrval ) );
-		
-		return ( FALSE );
-	}
-
-	//
-	// Release any previous pointers
-	//
-
-	release_ddraw_surface_pointers ();
-
-	//
-	// Create the primary surface
-	//
-
-	memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-	ddsd.dwSize = sizeof (ddsd);
-
-	ddsd.dwFlags = DDSD_CAPS;
-
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
-
-	if ( ddraw.use_double_buffer )
-	{
-		
-		ddsd.dwFlags |= DDSD_BACKBUFFERCOUNT;
-		
-		ddsd.dwBackBufferCount = 1;
-		
-		ddsd.ddsCaps.dwCaps |= DDSCAPS_FLIP | DDSCAPS_COMPLEX;
-	}
-	
-	ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &ddraw.lpFrontBuffer, NULL);
-	
-	if ( ddrval != DD_OK )
-	{
-		
-		debug_log ( "Unable to create primary surface: %s", get_ddraw_error_message ( ddrval ) );
-		
-		return ( FALSE );
-	}
-
-	if ( ddraw.use_double_buffer )
-	{
-		
-		//
-		// Get the back screen from this surface.
-		//
-
-		memset ( &caps, 0, sizeof ( caps ) );
-
-		caps.dwCaps = DDSCAPS_BACKBUFFER;
-		
-		ddrval = IDirectDrawSurface7_GetAttachedSurface ( ddraw.lpFrontBuffer, &caps, &ddraw.lpBackBuffer );
-		
-		if ( ddrval != DD_OK )
-		{
-			
-			debug_log ( "Unable to get backbuffer: %s", get_ddraw_error_message ( ddrval ) );
-			
-			return ( FALSE );
-		}
-	}
-
-	if ( ddraw.use_system_memory )
-	{
-
-		//
-		// Create the system memory surface
-		//
-
-		memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-		ddsd.dwSize = sizeof( ddsd );
-
-		ddrval = IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
-		
-		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-
-		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY;
-		
-		ddsd.dwHeight = height;
-		
-		ddsd.dwWidth = width;
-		
-		ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw , &ddsd, &ddraw.lpRenderBuffer, NULL );
-		
-		if ( ddrval != DD_OK )
-		{
-			
-			debug_log ( "Unable to create system memory surface: %s", get_ddraw_error_message ( ddrval ) );
-			
-			return ( FALSE );
-		}
-	}
-	else
-	{
-
-		//
-		// Set the render buffer
-		//
-
-		if ( ddraw.use_double_buffer )
-		{
-
-			ddraw.lpRenderBuffer = ddraw.lpBackBuffer;
-
-			ddraw.lpRenderBuffer = ddraw.lpBackBuffer;
-		}
-		else
-		{
-
-			ddraw.lpRenderBuffer = ddraw.lpFrontBuffer;
-
-			ddraw.lpRenderBuffer = ddraw.lpFrontBuffer;
-		}
-	}
-	
-	if ( ddraw.use_z_buffer )
-	{
-
-		//
-		// Create the zbuffer and attach it to the render buffer.
-		//
-
-		memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-		ddsd.dwSize = sizeof ( ddsd );
-
-		ddrval = IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
-		
-		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-
-		ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER | DDSCAPS_VIDEOMEMORY;
-		
-		ddsd.dwHeight = height;
-		
-		ddsd.dwWidth = width;
-
-		get_ddraw_zbuffer_pixel_format ( &ddsd.ddpfPixelFormat );
-
-		ddrval = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &ddraw.lpZBuffer, NULL );
-		
-		if ( ddrval != DD_OK )
-		{
-			
-			debug_log ( "Unable to create Zbuffer surface: %s", get_ddraw_error_message ( ddrval ) );
-			
-			return ( FALSE );
-		}
-
-		ddrval = IDirectDrawSurface7_AddAttachedSurface ( ddraw.lpRenderBuffer, ddraw.lpZBuffer );
-
-		if ( ddrval != DD_OK )
-		{
-
-			debug_log ( "Unable to attach Zbuffer surface: %s", get_ddraw_error_message ( ddrval ) );
-			
-			return ( FALSE );
-		}
-	}
-
-	application_video_width = width;
-
-	application_video_height = height;
-
-	return ( TRUE );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void release_ddraw_surface_pointers ( void )
-{
-
-	//
-	// Free up the previous video mode's pointers
-	//
-
-	if ( ddraw.lpZBuffer )
-	{
-
-		if ( ddraw.lpRenderBuffer )
-		{
-	
-			IDirectDrawSurface7_DeleteAttachedSurface ( ddraw.lpRenderBuffer, 0, ddraw.lpZBuffer );
-		}
-
-		IDirectDrawSurface7_Release ( ddraw.lpZBuffer );
-
-		ddraw.lpZBuffer = NULL;
-	}
-
-	if ( ddraw.lpFrontBuffer )
-	{
-
-		if ( ddraw.use_double_buffer )
-		{
-
-			if ( ddraw.lpBackBuffer )
-			{
-
-				IDirectDrawSurface7_Release ( ddraw.lpBackBuffer );
-
-				ddraw.lpBackBuffer = NULL;
-			}
-
-			if ( ddraw.lpBackBuffer )
-			{
-	
-				IDirectDrawSurface7_Release ( ddraw.lpBackBuffer );
-	
-				ddraw.lpBackBuffer = NULL;
-			}
-		}
-
-		if ( ddraw.lpFrontBuffer )
-		{
-
-			IDirectDrawSurface7_Release ( ddraw.lpFrontBuffer );
-	
-			ddraw.lpFrontBuffer = NULL;
-		}
-
-		if ( ddraw.lpFrontBuffer )
-		{
-	
-			IDirectDrawSurface7_Release ( ddraw.lpFrontBuffer );
-	
-			ddraw.lpFrontBuffer = NULL;
-		}
-	}
-
-	if ( ddraw.use_system_memory )
-	{
-
-		if ( ddraw.lpRenderBuffer )
-		{
-
-			IDirectDrawSurface7_Release ( ddraw.lpRenderBuffer );
-		}
-
-		if ( ddraw.lpRenderBuffer )
-		{
-
-			IDirectDrawSurface7_Release ( ddraw.lpRenderBuffer );
-		}
-	}
-
-	ddraw.lpRenderBuffer = NULL;
-
-	ddraw.lpRenderBuffer = NULL;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 int create_test_d3d_device ( int width, int height )
 {
-
 	D3DDEVICEDESC7
 		hardware_desc;
 
@@ -624,12 +282,9 @@ int create_test_d3d_device ( int width, int height )
 	//
 
 	d3drval = IDirectDraw7_QueryInterface ( ddraw.ddraw, &IID_IDirect3D7, ( LPVOID FAR * ) &d3d.d3d );
-
 	if ( d3drval != DD_OK )
 	{
-
 		debug_log ( "Can't get a d3d device in this resolution" );
-
 		return ( FALSE );
 	}
 
@@ -638,12 +293,9 @@ int create_test_d3d_device ( int width, int height )
 	//
 
 	d3drval = IDirect3D7_CreateDevice ( d3d.d3d, &IID_IDirect3DHALDevice, ddraw.lpRenderBuffer, &d3d.device );
-
 	if ( d3drval != DD_OK )
 	{
-
 		debug_log ( "Can't get a d3d device2 in this resolution" );
-
 		return ( FALSE );
 	}
 
@@ -652,56 +304,39 @@ int create_test_d3d_device ( int width, int height )
 	//
 
 	d3drval = IDirect3DDevice7_GetCaps ( d3d.device, &hardware_desc );
-
 	if ( d3drval != DD_OK )
 	{
-
 		debug_log ( "Unable to get the d3d device capabilities at this resolution" );
-
 		return ( FALSE );
 	}
 
 	//
 	// Set the capabilities of the 3dvisual according to the capabilities of the card.
 	//
-
 	set_d3d_capabilities ( &hardware_desc );
 
 	//
 	// Set render target
 	//
-
 	d3drval = IDirect3DDevice7_SetRenderTarget ( d3d.device, ddraw.lpRenderBuffer, 0 );
-
 	if ( d3drval != DD_OK )
 	{
-
 		debug_log ( "Unable to set render target" );
-
 		return ( FALSE );
 	}
 
 	{
-
 		D3DVIEWPORT7
 			viewdata;
-
 		viewdata.dwX = 0;
 		viewdata.dwY = 0;
-
 		viewdata.dwWidth = application_video_width;
 		viewdata.dwHeight = application_video_height;
-
 		viewdata.dvMinZ = 0;
 		viewdata.dvMaxZ = 1;
-
-		d3drval = IDirect3DDevice7_SetViewport ( d3d.device, &viewdata );
-
-		if ( d3drval != D3D_OK )
+		if ( !f3d_set_viewport ( &viewdata ) )
 		{
-
 			debug_log ( "Unable to set viewport2: %d, %d, %s", application_video_width, application_video_height, get_d3d_error_message ( d3drval ) );
-
 			return ( FALSE );
 		}
 	}
@@ -709,19 +344,19 @@ int create_test_d3d_device ( int width, int height )
 	//
 	// Create the vertex buffers
 	//
-
 	create_d3d_vertex_buffers ();
 
 	return ( TRUE );
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void release_test_d3d_device ( void )
 {
-
 	HRESULT
 		ddrval;
 
@@ -729,36 +364,28 @@ void release_test_d3d_device ( void )
 
 	if ( d3d.d3d )
 	{
-
 		if ( d3d.device )
 		{
-	
 			ddrval = IDirect3DDevice7_Release ( d3d.device );
-
 			if ( ddrval < DD_OK )
 			{
-	
 				debug_log ( "Unable to release d3d device: %s", get_d3d_error_message ( ddrval ) );
 			}
-	
 			d3d.device = NULL;
 		}
 
 		if ( d3d.d3d )
 		{
-	
 			ddrval = IDirect3D7_Release ( d3d.d3d );
-
 			if ( ddrval < DD_OK )
 			{
-	
 				debug_log ( "Unable to release d3d: %s", get_d3d_error_message ( ddrval ) );
 			}
-	
 			d3d.d3d = NULL;
 		}
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -766,15 +393,12 @@ void release_test_d3d_device ( void )
 
 int supported_resolution ( int width, int height )
 {
-
 	//Minimum supported screen resolution: 640x480
 	//The maximum depends on your monitor and graphics card, and will be determined by DirectX.
-
 	if ( ( width >= 640 ) && ( height >= 480 ) )
 	{
 		return ( TRUE );
 	}
-	
 	return ( FALSE );
 }
 

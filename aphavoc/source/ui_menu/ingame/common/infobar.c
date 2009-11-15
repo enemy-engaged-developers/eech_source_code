@@ -283,7 +283,7 @@ static void display_mouse_over_task_entity_description (entity *en, ui_object *a
 	
 			expire_timer = get_local_entity_float_value (en, FLOAT_TYPE_ELAPSED_MISSION_TIME);
 	
-			expire_timer = min (expire_timer, ONE_DAY);
+			expire_timer = min (expire_timer, (float) ONE_DAY);
 	
 			get_digital_countdown_values (expire_timer, NULL, &hours, &minutes, &seconds);
 		
@@ -517,7 +517,7 @@ static void display_mouse_over_group_entity_description (entity *en, ui_object *
 			{
 				expire_timer = get_local_entity_float_value (mission, FLOAT_TYPE_ELAPSED_MISSION_TIME);
 		
-				expire_timer = min (expire_timer, ONE_DAY);
+				expire_timer = min (expire_timer, (float) ONE_DAY);
 		
 				get_digital_countdown_values (expire_timer, NULL, &hours, &minutes, &seconds);
 			
@@ -666,11 +666,11 @@ void draw_mouse_over_description_area (ui_object *obj, void *arg)
 
 	ASSERT (obj);
 	
-	area1 = get_ui_object_user_ptr (obj);
+	area1 = (ui_object *) get_ui_object_user_ptr (obj);
 
 	ASSERT (area1);
 
-	area2 = get_ui_object_user_ptr (area1);
+	area2 = (ui_object *) get_ui_object_user_ptr (area1);
 
 	ASSERT (area2);
 

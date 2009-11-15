@@ -101,7 +101,7 @@ static int response_to_link_child (entity_messages message, entity *receiver, en
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (group *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 
@@ -186,7 +186,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (group *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 
@@ -256,7 +256,7 @@ static int response_to_link_parent (entity_messages message, entity *receiver, e
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (group *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 
@@ -330,7 +330,7 @@ static int response_to_entity_fired_at (entity_messages message, entity *receive
 
 			set_local_entity_float_value (receiver, FLOAT_TYPE_ASSIST_TIMER, DEFAULT_GROUP_ASSISTANCE_REQUEST_TIMER);
 
-			force = get_local_force_entity (side);
+			force = get_local_force_entity ((entity_sides) side);
 
 			assist = notify_local_entity (ENTITY_MESSAGE_REQUEST_ASSISTANCE, force, victim, sender);
 		}
@@ -432,7 +432,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 
 	advance_node = va_arg (pargs, int);
 
-	group_raw = get_local_entity_data (receiver);
+	group_raw = (struct GROUP *) get_local_entity_data (receiver);
 
 	if ((get_local_entity_int_value (receiver, INT_TYPE_GROUP_MODE) == GROUP_MODE_BUSY) || (!check_group_members_awake (receiver)))
 	{
@@ -452,7 +452,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 	ASSERT (get_road_link_breaks (current_node, advance_node) == 0);
 	//////////////////////////////////////////////////////////////
 
-	allied_force = get_local_force_entity (group_raw->side);
+	allied_force = get_local_force_entity ((entity_sides) group_raw->side);
 
 	#if DEBUG_MODULE
 
@@ -574,7 +574,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 				(
 					get_session_entity (),
 					receiver,
-					group_raw->side,
+					(entity_sides) group_raw->side,
 					ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 					SOUND_LOCALITY_RADIO,
 					0.0,
@@ -638,12 +638,12 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 							supporting_warmth;
 				
 						advancing_sector = get_local_sector_entity (&road_node_positions [current_node]);
-						advancing_sector_raw = get_local_entity_data (advancing_sector);
+						advancing_sector_raw = (sector *) get_local_entity_data (advancing_sector);
 //						advancing_warmth = advancing_sector_raw->side_ground_warmth [group_raw->side];
 						advancing_warmth = 1.0;
 				
 						supporting_sector = get_local_sector_entity (&road_node_positions [road_nodes [current_node].links [loop].node]);
-						supporting_sector_raw = get_local_entity_data (supporting_sector);
+						supporting_sector_raw = (sector *) get_local_entity_data (supporting_sector);
 //						supporting_warmth = supporting_sector_raw->side_ground_warmth [group_raw->side];
 						supporting_warmth = 0.0; 
 	
@@ -740,7 +740,7 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 	vec3d
 		*pos;
 
-	group_raw = get_local_entity_data (receiver);
+	group_raw = (group *) get_local_entity_data (receiver);
 
 	if ((get_local_entity_int_value (receiver, INT_TYPE_GROUP_MODE) == GROUP_MODE_BUSY) || (!check_group_members_awake (receiver)))
 	{
@@ -752,7 +752,7 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 
 	advancing_node = va_arg (pargs, int);
 
-	allied_force = get_local_force_entity (group_raw->side);
+	allied_force = get_local_force_entity ((entity_sides) group_raw->side);
 
 	//
 	// Locate node to retreat to, must be aware of it and not occupied by the enemy
@@ -881,7 +881,7 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 									(
 										get_session_entity (),
 										receiver,
-										group_raw->side,
+										(entity_sides) group_raw->side,
 										ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 										SOUND_LOCALITY_RADIO,
 										0.0,
@@ -1063,7 +1063,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 						(
 							get_session_entity (),
 							receiver,
-							get_local_entity_int_value (receiver, INT_TYPE_SIDE),
+							(entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE),
 							ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 							SOUND_LOCALITY_RADIO,
 							0.0,
@@ -1203,7 +1203,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_GUIDE);
 
-	raw = get_local_entity_data (receiver);
+	raw = (group *) get_local_entity_data (receiver);
 
 	guide = sender;
 

@@ -120,7 +120,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (weapon));
+		raw = (weapon *) malloc_fast_mem (sizeof (weapon));
 
 		set_local_entity_data (en, raw);
 
@@ -548,7 +548,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 				if ((target) && (!(weapon_database[weapon_sub_type].weapon_class & (WEAPON_CLASS_DECOY | WEAPON_CLASS_CARGO | WEAPON_CLASS_DEBRIS))))
 				{
-					force = get_local_force_entity (get_local_entity_int_value (target, INT_TYPE_SIDE));
+					force = get_local_force_entity ((entity_sides) get_local_entity_int_value (target, INT_TYPE_SIDE));
 
 					if (force)
 					{
@@ -569,7 +569,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 				// create smoke trail
 				//
 
-				smoke_trail_type = get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
+				smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
 				if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE)
 				{
@@ -583,7 +583,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 
 					ASSERT (num_smoke_trail_entities > 0);
 
-					smoke_trail_indices = malloc_fast_mem (sizeof (int) * num_smoke_trail_entities);
+					smoke_trail_indices = (int *) malloc_fast_mem (sizeof (int) * num_smoke_trail_entities);
 
 					for (i = 0; i < num_smoke_trail_entities; i++)
 					{
@@ -638,7 +638,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 						weapon_config_types
 							config_type;
 
-						config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+						config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 						set_client_server_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 					}
@@ -772,7 +772,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 			// create smoke trail
 			//
 
-			smoke_trail_type = get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
+			smoke_trail_type = (meta_smoke_list_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_SMOKE_TRAIL_TYPE);
 
 			if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE)
 			{

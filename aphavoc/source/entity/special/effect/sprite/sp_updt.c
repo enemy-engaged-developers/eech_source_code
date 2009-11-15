@@ -87,7 +87,7 @@ static void update_server (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sprite *) get_local_entity_data (en);
 
 	raw->effect_lifetime += get_delta_time ();
 
@@ -113,7 +113,7 @@ static void update_client (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sprite *) get_local_entity_data (en);
 
 	raw->effect_lifetime += get_delta_time ();
 }

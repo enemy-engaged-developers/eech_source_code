@@ -79,7 +79,7 @@ void set_toggle_button_off (ui_object *obj)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 	
 	area->state = UI_OBJECT_STATE_OFF;
 
@@ -110,7 +110,7 @@ void set_toggle_button_on (ui_object *obj)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->state = UI_OBJECT_STATE_ON;
 

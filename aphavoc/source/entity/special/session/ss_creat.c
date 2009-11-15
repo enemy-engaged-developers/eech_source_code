@@ -114,7 +114,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (session));
+		raw = (session *) malloc_fast_mem (sizeof (session));
 
 		set_local_entity_data (en, raw);
 

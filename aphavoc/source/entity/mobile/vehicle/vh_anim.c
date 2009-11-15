@@ -123,7 +123,7 @@ void animate_vehicle_loading_doors( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_LOADING_DOOR, raw->loading_door_state );
 }
@@ -146,7 +146,7 @@ void update_vehicle_loading_doors( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	door_state = update_entity_reversable_keyframed_value( en, &raw->loading_door_state, 0.5 );
 
@@ -212,7 +212,7 @@ void animate_vehicle_weapon_system_ready( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	animate_entity_reversable_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_WEAPON_SYSTEM_READY, raw->weapon_system_ready_state );
 }
@@ -235,7 +235,7 @@ void update_vehicle_weapon_system_ready( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	wsr_state = update_entity_reversable_keyframed_value( en, &raw->weapon_system_ready_state, 0.5 );
 
@@ -293,7 +293,7 @@ void animate_vehicle_radar( entity *en )
 		return;
 	}
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	animate_entity_simple_keyframed_sub_objects( raw->inst3d, OBJECT_3D_SUB_OBJECT_RADAR, raw->radar_rotation_state );
 }
@@ -313,7 +313,7 @@ void update_vehicle_radar( entity *en )
 
 	ASSERT( en );
 
-	raw = get_local_entity_data( en );
+	raw = (vehicle *) get_local_entity_data( en );
 
 	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, 0.16666 );
 }
@@ -335,7 +335,7 @@ void set_vehicle_headlight_state (entity *en, int state)
 
 	ASSERT (en);
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

@@ -1056,7 +1056,7 @@ void notify_time_of_day_function ( ui_object *obj, void *arg )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
 		{
-			set_global_session_free_flight_time_of_day (tod);
+			set_global_session_free_flight_time_of_day ((enum SESSION_TIME_OF_DAY_SETTINGS) tod);
 
 			set_ui_object_text (obj, time_of_day_text [get_global_session_free_flight_time_of_day () - 1]);
 
@@ -1066,7 +1066,7 @@ void notify_time_of_day_function ( ui_object *obj, void *arg )
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
-			set_global_session_campaign_time_of_day (tod);
+			set_global_session_campaign_time_of_day ((enum SESSION_TIME_OF_DAY_SETTINGS) tod);
 
 			set_ui_object_text (obj, time_of_day_text [get_global_session_campaign_time_of_day () - 1]);
 
@@ -1117,7 +1117,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 	{
 		case GAME_TYPE_FREE_FLIGHT:
 		{
-			set_global_session_free_flight_weather (weather);
+			set_global_session_free_flight_weather ((enum SESSION_WEATHER_SETTINGS) weather);
 
 			set_ui_object_text (obj, weather_text [get_global_session_free_flight_weather () - 1]);
 
@@ -1127,7 +1127,7 @@ void notify_weather_function ( ui_object *obj, void *arg )
 		case GAME_TYPE_CAMPAIGN:
 		case GAME_TYPE_SKIRMISH:
 		{
-			set_global_session_campaign_weather (weather);
+			set_global_session_campaign_weather ((enum SESSION_WEATHER_SETTINGS) weather);
 
 			set_ui_object_text (obj, weather_text [get_global_session_campaign_weather () - 1]);
 

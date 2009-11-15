@@ -139,7 +139,7 @@ void reset_guide_seek_cover_results (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	memset (&(raw->current_seek_cover_result), 0, sizeof (guide_seek_cover_result_type));
 
@@ -216,7 +216,7 @@ int update_guide_seek_cover_results (entity *en)
 	// seek cover
 	//
 
-	raw = get_local_entity_data (en);
+	raw = (struct GUIDE *) get_local_entity_data (en);
 
 	for (loop = 0; loop < NUM_COVER_CHECKS_PER_FRAME; loop ++)
 	{
@@ -339,7 +339,7 @@ void set_guide_seek_cover_next_search_mode (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	raw->current_seek_cover_result.search_mode ++;
 
@@ -413,7 +413,7 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 	entity_sub_types
 		selected_weapon;
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	result = 0;
 
@@ -968,7 +968,7 @@ static int check_fixed_structure_search_object_type (entity *en, entity *structu
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	switch (raw->current_seek_cover_result.search_mode)
 	{
@@ -1045,7 +1045,7 @@ int update_guide_seek_cover_fixed_structure_search (entity *en)
 
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	//
 	// get search sector
@@ -1273,7 +1273,7 @@ int update_guide_seek_cover_forest_search (entity *en)
 
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	target_pos = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 	
@@ -1337,7 +1337,7 @@ int update_guide_seek_cover_forest_search (entity *en)
 			return FALSE;
 		}
 
-		raw->terrain_polygon_list = malloc_fast_mem (sizeof (terrain_3d_triangle) * raw->terrain_polygon_count);
+		raw->terrain_polygon_list = (terrain_3d_triangle *) malloc_fast_mem (sizeof (terrain_3d_triangle) * raw->terrain_polygon_count);
 
 		get_terrain_3d_type_triangles_in_sector (x, z, TERRAIN_TYPE_FOREST_SIDE_MID_X, raw->terrain_polygon_list);
 
@@ -1548,7 +1548,7 @@ int update_guide_seek_cover_default_terrain_search (entity *en)
 
 	get_local_guide_entity_pointers (en, &aggressor, &wp, &task, &target);
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	//
 	// find constants

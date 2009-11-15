@@ -87,7 +87,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -112,7 +112,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_WEAPON_CONFIG_TYPE:
 		////////////////////////////////////////
 		{
-			raw->weapon_config_type = value;
+			raw->weapon_config_type = (weapon_config_types) value;
 
 			break;
 		}
@@ -142,7 +142,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -258,7 +258,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 				set_infinite_smoke_list_generating_state (en, ENTITY_SUB_TYPE_EFFECT_SMOKE_LIST_VEHICLE_WAKE, INFINITE_SMOKE_ON);
 
 				// lights
-				day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+				day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 				if ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK))
 				{
@@ -332,7 +332,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_WEAPON_CONFIG_TYPE:
 		////////////////////////////////////////
 		{
-			raw->weapon_config_type = value;
+			raw->weapon_config_type = (weapon_config_types) value;
 
 			load_local_entity_weapon_config (en);
 
@@ -411,7 +411,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	switch (type)
 	{

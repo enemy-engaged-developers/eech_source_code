@@ -87,7 +87,7 @@ static void set_local_float_value (entity *en, float_types type, float value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -205,7 +205,7 @@ static float get_local_float_value (entity *en, float_types type)
 	float
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	switch (type)
 	{

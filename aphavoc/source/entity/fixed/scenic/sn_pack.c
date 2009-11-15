@@ -144,7 +144,7 @@ void pack_local_scenic_data (pack_modes mode)
 
 			total ++;
 
-			raw = get_local_entity_data (en);
+			raw = (scenic *) get_local_entity_data (en);
 
 			if (alive == raw->fix.alive)
 			{
@@ -229,7 +229,7 @@ void unpack_local_scenic_data (pack_modes mode)
 
 			count --;
 
-			raw = get_local_entity_data (en);
+			raw = (scenic *) get_local_entity_data (en);
 
 			raw->fix.alive = alive;
 

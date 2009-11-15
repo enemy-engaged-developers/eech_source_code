@@ -101,7 +101,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (segment *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -449,7 +449,7 @@ void kill_routed_vehicles_on_segment (entity *en)
 	// get damage radius ( plus a little overlap )
 	//
 
-	bridge_segment_type = get_local_entity_int_value (en, INT_TYPE_BRIDGE_SEGMENT_TYPE);
+	bridge_segment_type = (bridge_segment_types) get_local_entity_int_value (en, INT_TYPE_BRIDGE_SEGMENT_TYPE);
 
 	damage_radius = bridge_segment_length (bridge_segment_type);
 

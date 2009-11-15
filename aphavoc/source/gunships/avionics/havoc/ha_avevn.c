@@ -600,7 +600,7 @@ static void select_next_mfd_event (event *ev)
 
 static void toggle_mfd_on_off_event (event *ev)
 {
-	if (get_havoc_mfd_mode == MFD_MODE_OFF)
+	if (get_havoc_mfd_mode () == MFD_MODE_OFF)
 		select_next_havoc_mfd_mode ();
 	else
 		select_havoc_mfd_mode (MFD_MODE_OFF);

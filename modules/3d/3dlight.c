@@ -140,7 +140,7 @@ light_3d_source * create_light_3d_source ( enum LIGHT_3D_TYPE type, int specular
 	light_3d_source
 		*light;
 
-	light = safe_malloc ( sizeof ( light_3d_source ) );
+	light = ( light_3d_source * ) safe_malloc ( sizeof ( light_3d_source ) );
 
 	if ( light )
 	{

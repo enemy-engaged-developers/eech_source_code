@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_SOUND_EFFECT_DATA:
 		////////////////////////////////////////
 		{
-			raw->sound_effect_data = ptr;
+			raw->sound_effect_data = (struct SYSTEM_SOUND_EFFECT *) ptr;
 
 			break;
 		}
@@ -132,7 +132,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	switch (type)
 	{

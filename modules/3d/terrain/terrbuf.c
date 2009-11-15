@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "terrain.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +271,7 @@ void draw_terrain_3d_buffered_polygons ( void )
 			// Set the texture handle
 			//
 	
-			set_d3d_texture ( 0, load_hardware_texture_map ( terrain_buffered_polygons_texture ) );
+			set_d3d_texture ( 0, terrain_buffered_polygons_texture );
 	
 			//
 			// Draw all the buffered vertex buffers
@@ -278,22 +279,11 @@ void draw_terrain_3d_buffered_polygons ( void )
 
 			for ( count = 0; count <= vertex_buffer; count++ )
 			{
-	
-				HRESULT
-					d3drval;
-
-				d3drval = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_TRIANGLELIST, d3d.alpha_vertex_buffer[count],
+				f3d_draw_vb ( D3DPT_TRIANGLELIST, d3d.alpha_vertex_buffer[count],
 																						0,
 																						vertex_buffer_indices[count].number_of_vertices_buffered,
 																						&buffered_indices[ vertex_buffer_indices[count].base_index ],
-																						vertex_buffer_indices[count].number,
-																						( DWORD ) ( 0 ) );
-	
-				if ( d3drval != DD_OK )
-				{
-	
-					debug_log ( "Unable to draw buffered triangles: %s", get_ddraw_error_message ( d3drval ) );
-				}
+																						vertex_buffer_indices[count].number );
 			}
 
 			//

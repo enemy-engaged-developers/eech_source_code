@@ -90,7 +90,7 @@ static void create_close_ui_object (ui_object *obj, ui_object_types type, va_lis
 
    obj->type   = type;
 
-   new_close    = safe_malloc (sizeof (close_ui_object));
+   new_close    = (close_ui_object*) safe_malloc (sizeof (close_ui_object));
 
    obj->data   = new_close;
 

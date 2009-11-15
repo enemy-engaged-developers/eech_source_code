@@ -93,7 +93,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//

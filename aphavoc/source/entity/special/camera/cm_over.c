@@ -158,7 +158,7 @@ void update_overview_camera (camera *raw)
 
 	if (point_inside_map_area (&raw->position))
 	{
-		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5);
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5f);
 	}
 
 	//

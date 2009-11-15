@@ -2122,7 +2122,9 @@ float get_waypoint_database_action_radius_value (entity_sub_types waypoint_type,
 float get_local_entity_waypoint_database_action_radius_value (entity *waypoint, entity *mobile)
 {
 	entity_sub_types
-		waypoint_type,
+		waypoint_type;
+
+	entity_types
 		mobile_type;
 
 	waypoint_type = get_local_entity_int_value (waypoint, INT_TYPE_ENTITY_SUB_TYPE);
@@ -2172,7 +2174,9 @@ float get_waypoint_database_reached_radius_value (entity_sub_types waypoint_type
 float get_local_entity_waypoint_database_reached_radius_value (entity *waypoint, entity *mobile)
 {
 	entity_sub_types
-		waypoint_type,
+		waypoint_type;
+
+	entity_types
 		mobile_type;
 
 	waypoint_type = get_local_entity_int_value (waypoint, INT_TYPE_ENTITY_SUB_TYPE);

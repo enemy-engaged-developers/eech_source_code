@@ -152,7 +152,7 @@ int update_smoke( entity *en )
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	number_of_slots = raw->smoke_lifetime / raw->frequency;
 
@@ -426,7 +426,7 @@ void create_new_point( entity *en, vec3d *new_pos, vec3d *initial_velocity, smok
 	float
 		iv_noise;
 	
-	raw = get_local_entity_data( en );
+	raw = (smoke_list *) get_local_entity_data( en );
 
 	//
 	// set position

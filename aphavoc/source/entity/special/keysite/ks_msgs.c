@@ -206,7 +206,7 @@ static int response_to_waypoint_drop_off_reached (entity_messages message, entit
 	entity
 		*cargo;
 
-	raw = get_local_entity_data (receiver);
+	raw = (keysite *) get_local_entity_data (receiver);
 
 	cargo = va_arg (pargs, entity *);
 
@@ -257,7 +257,7 @@ static int response_to_waypoint_pick_up_reached (entity_messages message, entity
 	keysite
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (keysite *) get_local_entity_data (receiver);
 
 	cargo = va_arg (pargs, entity *);
 

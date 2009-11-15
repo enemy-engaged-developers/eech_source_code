@@ -99,7 +99,7 @@ static void draw_local_3d_object (entity *en, float range)
 	int
 		internal_view;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	//
 	// the player's gunship is visible from the menus - where the in_cockpit flag is invalid
@@ -562,7 +562,7 @@ int object_internal_lighting_valid (entity *en)
 	}
 	else
 	{
-		day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+		day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 		return ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 	}

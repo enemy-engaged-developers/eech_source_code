@@ -96,7 +96,7 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 			{
 				unsigned i;
 
-				gear->gear_points = safe_malloc(sizeof(landing_gear_point) * gear->num_gear_points);
+				gear->gear_points = (landing_gear_point *) safe_malloc(sizeof(landing_gear_point) * gear->num_gear_points);
 				memset(gear->gear_points, 0, gear->num_gear_points * sizeof(landing_gear_point));
 
 				for (i = 0; i < gear->num_gear_points; i++)
@@ -105,7 +105,7 @@ static void initialise_landing_gear(landing_gear_system* gear, const char* filen
 					unsigned len;
 					unsigned nread = 0;
 
-					if (!fgets(&point->name, SUSPENSION_NAME_MAX_LENGTH, file))
+					if (!fgets(point->name, SUSPENSION_NAME_MAX_LENGTH, file))
 						break;
 
 					len = strlen(point->name);
@@ -173,7 +173,7 @@ static void update_suspension(void)
 	static float max_damp = 0.0;
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-	get_inverse_matrix(&inv_attitude, &attitude);
+	get_inverse_matrix(inv_attitude, attitude);
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
@@ -219,7 +219,7 @@ static void update_suspension(void)
 				}
 				else
 				{
-					point->damping = min(compression_change * inv_delta_time * point->damper_stiffness, 25.0);
+					point->damping = min(compression_change * inv_delta_time * point->damper_stiffness, 25.0f);
 
 					max_damp = max(point->damping, max_damp);
 
@@ -236,7 +236,7 @@ static void update_suspension(void)
 				if (point->can_turn && fabs(point->velocity.x) > 0.1)
 				{
 					float
-						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0)) * 0.5,
+						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0f)) * 0.5,
 						angle_diff,
 						new_angle;
 
@@ -333,7 +333,7 @@ static void apply_suspension_forces(void)
 						force_diff = 0.0,
 						max_force_change = get_model_delta_time() * 10.0;
 
-					max_force = min(wheel_load * 2.5, 1*G);  // depends on load on wheel
+					max_force = min(wheel_load * 2.5f, 1*G);  // depends on load on wheel
 
 					force = bound(point->velocity.x * 1.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->resistance_force;
@@ -358,7 +358,7 @@ static void apply_suspension_forces(void)
 					if (point->has_brakes && current_flight_dynamics->wheel_brake)
 						max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
 					else
-						max_force = min(wheel_load * 0.025, G);  // general rolling resistance
+						max_force = min(wheel_load * 0.025f, G);  // general rolling resistance
 
 					force = bound(point->velocity.z * 2.0, -1.0, 1.0);
 					force_diff = (max_force * force) - point->brake_force;
@@ -425,7 +425,7 @@ void initialise_undercarriage_dynamics(void)
 	current_landing_gear = &landing_gears[get_global_gunship_type()];
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-	get_inverse_matrix(&attitude, &attitude);
+	get_inverse_matrix(attitude, attitude);
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 	{
@@ -459,7 +459,7 @@ void reset_undercarriage_world_position(void)
 	current_landing_gear = &landing_gears[get_global_gunship_type()];
 
 	get_local_entity_attitude_matrix (get_gunship_entity (), attitude);
-	get_inverse_matrix(&attitude, &attitude);
+	get_inverse_matrix(attitude, attitude);
 
 	for (i = 0; i < current_landing_gear->num_gear_points; i++)
 		update_gear_world_position(&current_landing_gear->gear_points[i], attitude);

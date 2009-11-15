@@ -235,7 +235,7 @@ struct INPUT_VARIABLE_TYPE
 		collective_joystick_device,
 		pedal_joystick_device;
 
-	cyclic_pressure_types
+	int
 		cyclic_input_pressure;
 
 	// collective data
@@ -244,7 +244,7 @@ struct INPUT_VARIABLE_TYPE
 		collective,
 		collective_pressure;
 
-	collective_pressure_types
+	int
 		collective_input_pressure;
 
 	// pedal data
@@ -254,7 +254,7 @@ struct INPUT_VARIABLE_TYPE
 		pedal_trim,
 		pedal_pressure;
 
-	pedal_pressure_types
+	int
 		pedal_input_pressure;
 };
 

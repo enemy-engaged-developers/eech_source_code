@@ -87,11 +87,11 @@ void initialise_reciprocal_tables ( void )
 	int
 		loop;
 
-	one_over_table = safe_malloc ( sizeof ( float ) * ONE_OVER_MAX );
-	two_over_table = safe_malloc ( sizeof ( float ) * TWO_OVER_MAX );
-	four_over_table = safe_malloc ( sizeof ( float ) * FOUR_OVER_MAX );
-	eight_over_table = safe_malloc ( sizeof ( float ) * EIGHT_OVER_MAX );
-	sixteen_over_table = safe_malloc ( sizeof ( float ) * SIXTEEN_OVER_MAX );
+	one_over_table = ( float * ) safe_malloc ( sizeof ( float ) * ONE_OVER_MAX );
+	two_over_table = ( float * ) safe_malloc ( sizeof ( float ) * TWO_OVER_MAX );
+	four_over_table = ( float * ) safe_malloc ( sizeof ( float ) * FOUR_OVER_MAX );
+	eight_over_table = ( float * ) safe_malloc ( sizeof ( float ) * EIGHT_OVER_MAX );
+	sixteen_over_table = ( float * ) safe_malloc ( sizeof ( float ) * SIXTEEN_OVER_MAX );
 
 	for ( loop = 1; loop < ONE_OVER_MAX; loop++ )
 	{

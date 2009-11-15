@@ -115,8 +115,8 @@ void initialise_session_list (void)
 	session_filter [GAME_TYPE_INVALID] = SESSION_LIST_TYPE_INVALID;
 	session_filter [GAME_TYPE_FREE_FLIGHT] = SESSION_LIST_TYPE_HOST;
 	// Jabberwock 031210 Session filter
-	session_filter [GAME_TYPE_CAMPAIGN] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
-	session_filter [GAME_TYPE_SKIRMISH] = SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER;
+	session_filter [GAME_TYPE_CAMPAIGN] = (session_list_types) (SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER);
+	session_filter [GAME_TYPE_SKIRMISH] = (session_list_types) (SESSION_LIST_TYPE_HOST | SESSION_LIST_TYPE_JOIN | SESSION_LIST_TYPE_RESTORE | SESSION_LIST_TYPE_MASTER | SESSION_LIST_TYPE_FILTER);
 	// Jabberwock 031210 ends
 	session_filter [GAME_TYPE_DEMO] = SESSION_LIST_TYPE_HOST;
 
@@ -1089,7 +1089,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		season;
 
 	static char
-		operator [64],
+		operator_ [64],
 		variable [64],
 		temp_warzone_name [128],
 		*warzone_name,
@@ -1207,7 +1207,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 				while (!end_flag)
 				{
 
-					tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+					tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 					switch (tag)
 					{
@@ -1262,7 +1262,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 							// skip script till correct language
 
-							while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+							while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 							{
 
 								#if (LANGUAGE == LANGUAGE_FRENCH)
@@ -1317,7 +1317,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 							// skip script till end of languages
 
-							while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+							while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 							{
 
 								if (tag == FILE_TAG_LANGUAGE_TEXT_STOP)
@@ -1333,7 +1333,7 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 						case FILE_TAG_CAMPAIGN_DATA:
 						{
 
-							while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+							while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 							{
 
 								if (tag == FILE_TAG_END)
@@ -1361,16 +1361,16 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 
 							get_next_file_word (file_ptr, variable, sizeof (variable));
 
-							get_next_file_word (file_ptr, operator, sizeof (operator));
+							get_next_file_word (file_ptr, operator_, sizeof (operator_));
 
 							value = get_next_file_int (file_ptr);
 
-							if (!if_file_tag_variable (variable, operator, value))
+							if (!if_file_tag_variable (variable, operator_, value))
 							{
 
 								// skip script till endif
 
-								while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+								while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 								{
 
 									if ((tag == FILE_TAG_ENDIF) || (tag == FILE_TAG_END))

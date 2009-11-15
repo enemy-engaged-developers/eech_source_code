@@ -290,12 +290,12 @@ void update_weapon_load_shared_mem()
 	if (!gPtrSharedMemory || !get_gunship_entity())
 		return;
 
-	package_status = get_local_entity_ptr_value(get_gunship_entity(), PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value(get_gunship_entity(), PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
 		int package;
-		weapon_config_types config_type = get_local_entity_int_value (get_gunship_entity(), INT_TYPE_WEAPON_CONFIG_TYPE);
+		weapon_config_types config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity(), INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		for (package = 0; package < MAX_WEAPON_LOAD_DATA; package++)
 		{

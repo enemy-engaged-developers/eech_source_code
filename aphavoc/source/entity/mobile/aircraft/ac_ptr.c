@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -96,7 +96,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		////////////////////////////////////////
 		{
 
-			raw->sound_effect_data = ptr;
+			raw->sound_effect_data = (system_sound_effect *) ptr;
 
 			break;
 		}
@@ -123,7 +123,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	switch (type)
 	{

@@ -89,7 +89,7 @@ static LPDIRECTINPUTDEVICE7
 static DIDEVICEOBJECTDATA
 	direct_input_key_events[MAX_DI_KEY_EVENTS];
 
-static int translate_windows_virtual_key_code_to_directinput ( int virtual, int lparam );
+static int translate_windows_virtual_key_code_to_directinput ( int virtual_, int lparam );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ void initialise_keyboard ( void )
 	if ( input_system_type == INPUT_DIRECTINPUT )
 	{
 
-		ret = IDirectInput7_CreateDeviceEx ( direct_input, &GUID_SysKeyboard, &IID_IDirectInputDevice7, (LPVOID *) &direct_input_keyboard, NULL );
+		ret = IDirectInput7_CreateDeviceEx ( direct_input, GUID_PREFIX GUID_SysKeyboard, GUID_PREFIX IID_IDirectInputDevice7, (LPVOID *) &direct_input_keyboard, NULL );
 
 		if (ret != DI_OK )
 		{
@@ -568,7 +568,7 @@ int check_for_any_key ( void )
 #define	VK_MINUS		0xbd
 #define	VK_EQUALS	0xbb
 
-int translate_windows_virtual_key_code_to_directinput ( int virtual, int lparam )
+int translate_windows_virtual_key_code_to_directinput ( int virtual_, int lparam )
 {
 
 	int
@@ -578,7 +578,7 @@ int translate_windows_virtual_key_code_to_directinput ( int virtual, int lparam 
 	code = ( ( lparam >> 16 ) & 0xff );
 	code2 = ( ( lparam >> 16 ) & 0xfff );
 
-	switch ( virtual )
+	switch ( virtual_ )
 	{
 
 		case	VK_SHIFT:

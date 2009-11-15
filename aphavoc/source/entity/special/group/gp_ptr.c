@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -102,7 +102,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 			// make an entity group leader by removing it from the member list, and inserting it at the front
 			//
 
-			member = ptr;
+			member = (entity *) ptr;
 
 			ASSERT (member);
 
@@ -137,7 +137,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	switch (type)
 	{

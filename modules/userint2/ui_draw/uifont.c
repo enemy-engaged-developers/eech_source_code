@@ -205,7 +205,7 @@ ui_font_type
 
 static font_types
 	store_font,
-	current_font_type = -1;
+	current_font_type = NUM_FONT_TYPES;
 
 static rgb_colour
 	store_colour,
@@ -509,7 +509,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 	new_font->loaded = TRUE;
 
-	new_font->type_name = safe_malloc ( strlen ( type_name ) + 1 );
+	new_font->type_name = ( char * ) safe_malloc ( strlen ( type_name ) + 1 );
 
 	strcpy ( new_font->type_name, type_name );
 
@@ -543,7 +543,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 		number_of_fonts /= sizeof ( font_database_header );
 
-		font_headers = safe_mopen ( UI_FONT_HEADER_FILE );
+		font_headers = ( font_database_header * ) safe_mopen ( UI_FONT_HEADER_FILE );
 
 		for ( count = 0; count < number_of_fonts; count++ )
 		{
@@ -623,7 +623,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			fonts_data_file = safe_fopen ( UI_FONT_DATA_FILE, "wb" );
 		}
 
-		aliased_character = safe_malloc ( 128 * 128 );
+		aliased_character = ( unsigned char * ) safe_malloc ( 128 * 128 );
 
 		old_active_screen = get_active_screen ();
 
@@ -686,7 +686,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			KERNINGPAIR
 				*pairs;
 
-			pairs = safe_malloc ( number_of_kerning_pairs * sizeof ( KERNINGPAIR ) );
+			pairs = ( KERNINGPAIR * ) safe_malloc ( number_of_kerning_pairs * sizeof ( KERNINGPAIR ) );
 
 			GetKerningPairs ( hdc, number_of_kerning_pairs, pairs );
 
@@ -760,7 +760,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				size = 128 * 128;
 
-				glyph_character = safe_malloc ( size );
+				glyph_character = ( unsigned char * ) safe_malloc ( size );
 
 				GetGlyphOutlineW ( hdc, actual_character, GGO_GRAY8_BITMAP, &metrics, size, glyph_character, &mat2 );
 
@@ -916,7 +916,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				size = 128 * 128;
 
-				glyph_character = safe_malloc ( size );
+				glyph_character = ( unsigned char * ) safe_malloc ( size );
 
 				GetGlyphOutlineW ( hdc, 'o', GGO_METRICS, &metrics, size, glyph_character, &mat2 );
 
@@ -994,7 +994,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		font_database_header
 			*font_headers;
 
-		font_headers = safe_mopen ( UI_FONT_HEADER_FILE );
+		font_headers = ( font_database_header * ) safe_mopen ( UI_FONT_HEADER_FILE );
 
 		fp = safe_fopen ( UI_FONT_DATA_FILE, "rb" );
 
@@ -1018,7 +1018,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		if ( new_font->number_of_kerning_pairs )
 		{
 
-			new_font->kerning_pairs = safe_malloc ( sizeof ( KERNINGPAIR ) * new_font->number_of_kerning_pairs );
+			new_font->kerning_pairs = ( KERNINGPAIR * ) safe_malloc ( sizeof ( KERNINGPAIR ) * new_font->number_of_kerning_pairs );
 
 			fseek ( fp, font_headers[font_offset].kerning_data_offset, SEEK_SET );
 
@@ -1083,7 +1083,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			number_of_screens = ( sizeof ( font_character_table ) / ( characters_wide * characters_high ) ) + 1;
 		}
 
-		new_font->screens = safe_malloc ( sizeof ( screen * ) * number_of_screens );
+		new_font->screens = ( screen * * ) safe_malloc ( sizeof ( screen * ) * number_of_screens );
 
 		memset ( new_font->screens, 0, sizeof ( screen * ) * number_of_screens );
 
@@ -1184,6 +1184,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 				set_active_screen ( new_font->screens[screen_index] );
 
+#if 1
 				lock_screen ( active_screen );
 
 				for ( y = 0; y < character_height; y++ )
@@ -1202,6 +1203,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 				}
 
 				unlock_screen ( active_screen );
+#endif
 			}
 
 			//
@@ -1221,13 +1223,13 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 			new_font->characters[ font_character_table[character_count] ].u1 = u;
 			new_font->characters[ font_character_table[character_count] ].v1 = v;
 
-			if ( d3d_using_permedia2_chipset )
+			/*if ( d3d_using_permedia2_chipset )
 			{
 
 				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 0.0 ) / ( float ) texture_width );
 				new_font->characters[ font_character_table[character_count] ].v2 = v + ( ( ( float ) character_height + 0.0 ) / ( float ) texture_height );
 			}
-			else
+			else*/
 			{
 
 				new_font->characters[ font_character_table[character_count] ].u2 = u + ( ( ( float ) character_width + 1.0 ) / ( float ) texture_width );
@@ -1866,7 +1868,7 @@ void set_ui_font_colour ( rgb_colour colour )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_ui_font_type (void)
+font_types get_ui_font_type (void)
 {
 
 	return current_font_type;

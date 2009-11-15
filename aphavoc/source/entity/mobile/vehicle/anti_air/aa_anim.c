@@ -159,7 +159,7 @@ void damage_anti_aircraft_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	//
 	// destruct old object
@@ -193,7 +193,7 @@ void set_anti_aircraft_id_number (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	if (raw->vh.mob.side == ENTITY_SIDE_BLUE_FORCE)
 	{

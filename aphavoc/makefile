@@ -471,7 +471,7 @@ $(projectname).lnk : makefile $(c_object_files) $(c_modules_object_files) linkcl
                 @ %append $^@ OPTION STATICS
                 @ %append $^@ OPTION RESOURCE=cohokum.res
 #               @ %append $^@ OPTION ELIMINATE
-        @ %append $^@ OPTION STACK=128000
+        @ %append $^@ OPTION STACK=256000
         @ for %i in ($(lib_files)) do @ %append $^@ LIBRARY %i
         @ for %i in ($(c_module_object_files)) do @ %append $^@ FILE %i
         @ for %i in ($(c_object_files)) do @ %append $^@ FILE %i

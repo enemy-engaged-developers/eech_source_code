@@ -130,7 +130,7 @@ void set_number_of_terrain_objects ( int number )
 		safe_free ( terrain_object_slots );
 	}
 
-	terrain_object_slots = safe_malloc ( maximum_number_of_terrain_objects * sizeof ( struct TERRAIN_3D_OBJECT ) );
+	terrain_object_slots = ( struct TERRAIN_3D_OBJECT * ) safe_malloc ( maximum_number_of_terrain_objects * sizeof ( struct TERRAIN_3D_OBJECT ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

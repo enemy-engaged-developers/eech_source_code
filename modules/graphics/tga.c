@@ -226,7 +226,7 @@ void *load_tga_file (const char *filename, short int *width, short int *height, 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void *memory_map_tga_file (const char *filename, char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel)
+void *memory_map_tga_file (const char *filename, unsigned char **memory_mapped_file, short int *width, short int *height, int *bits_per_pixel)
 {
 
 	void
@@ -241,7 +241,7 @@ void *memory_map_tga_file (const char *filename, char **memory_mapped_file, shor
 	unsigned char
 		*ptr;
 
-	memory_ptr = mopen ( filename );
+	memory_ptr = ( unsigned char * ) mopen ( filename );
 
 	if ( !memory_ptr )
 	{
@@ -366,7 +366,7 @@ void save_tga_screen (const char *filename)
 
 	height = get_screen_height ( active_screen );
 
-	image = safe_malloc ( width * height * 3 );
+	image = ( unsigned char * ) safe_malloc ( width * height * 3 );
 
 	file_ptr = safe_fopen (filename, "wb");
 
@@ -485,7 +485,7 @@ void save_tga_screen_with_thumbnail ( const char *screen_filename, const char *t
 
 	height = get_screen_height ( video_screen );
 
-	tga_image = safe_malloc ( width * height * 3 );
+	tga_image = ( unsigned char * ) safe_malloc ( width * height * 3 );
 
 	image_ptr = tga_image;
 

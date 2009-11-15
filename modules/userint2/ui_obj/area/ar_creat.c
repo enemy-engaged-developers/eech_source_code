@@ -86,7 +86,7 @@ static void create_area_ui_object (ui_object *obj, ui_object_types type, va_list
 
    obj->type = type;
 
-   new_object = safe_malloc (sizeof (area_ui_object));
+   new_object = (area_ui_object*) safe_malloc (sizeof (area_ui_object));
 
    obj->data = new_object;
 
@@ -218,7 +218,7 @@ static void destroy_area_ui_object (ui_object *obj)
    //
    ////////////////////////////////////////
 
-   area = obj->data;
+   area = (area_ui_object*) obj->data;
 
 	// sort out parent
 

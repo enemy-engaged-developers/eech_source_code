@@ -249,7 +249,7 @@ int load_lbm_image ( const char *filename, lbm_image *lbm )
 		
 		form_length -= ( body_length + 4 );
 
-		if ( ( body = safe_malloc ( body_length ) ) == NULL )
+		if ( ( body = ( unsigned char * ) safe_malloc ( body_length ) ) == NULL )
 		{
 			
 			debug_log ( "No memory for source image data while loading %s in load_lbm_image", filename );
@@ -261,7 +261,7 @@ int load_lbm_image ( const char *filename, lbm_image *lbm )
 
 		fread ( body, body_length, 1, fp_in );
 
-		if ( ( lbm->image = safe_malloc ( lbm->header.width * lbm->header.height ) ) == NULL )
+		if ( ( lbm->image = ( unsigned char * ) safe_malloc ( lbm->header.width * lbm->header.height ) ) == NULL )
 		{
 
 			debug_log ("No memory for lbm image while loading %s", filename );
@@ -276,7 +276,7 @@ int load_lbm_image ( const char *filename, lbm_image *lbm )
 
 			rounded_width = ( lbm->header.width + ( lbm->header.width % 8 ) );
 
-			if ( ( ilbm_data = safe_malloc ( rounded_width * ( lbm->header.height + 16 ) ) ) == NULL )
+			if ( ( ilbm_data = ( unsigned char * ) safe_malloc ( rounded_width * ( lbm->header.height + 16 ) ) ) == NULL )
 			{
 
 				debug_log ("No memory for ilbm data while loading %s", filename );

@@ -200,7 +200,7 @@ static int
 	terrain_texture_trench_detail,						terrain_texture_trench_colour_pass;
 
 // Xhit: added following to set the surface_type for the terrain_type. (030328)
-static int
+static surface_types
 	terrain_surface_sea,
 	terrain_surface_beach,
 	terrain_surface_land,
@@ -1188,12 +1188,12 @@ void initialise_3d_terrain_types ( void )
 	// All the types that are used in the terrain generation tool
 	//
 
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_BEACH_MID,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_FRINGE,				0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_POWER_LINE,		0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_TELEPHONE_LINE,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
-   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, 0 );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_BEACH_MID,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_FRINGE,				0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_POWER_LINE,		0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_TELEPHONE_LINE,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_SEA_BANK,			0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
+   set_terrain_type_textures ( TEMP_TERRAIN_TYPE_COASTAL_RIVER,	0, 0, 1.0, 256, 256, 0, 0, 255, 0, 255, SURFACE_TYPE_NONE );
 
 }
 

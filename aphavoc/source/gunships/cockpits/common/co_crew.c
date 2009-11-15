@@ -107,7 +107,7 @@ crew_roles get_crew_role (void)
 
 	ASSERT (en);
 
-	return (get_local_entity_int_value (en, INT_TYPE_CREW_ROLE));
+	return (crew_roles) get_local_entity_int_value (en, INT_TYPE_CREW_ROLE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,7 +621,7 @@ static void load_skin_bitmap (char *filespec, screen *texture, int size)
 
 	buffer_size = size * size * 3;
 
-	buffer = safe_malloc (buffer_size);
+	buffer = (char *) safe_malloc (buffer_size);
 
 	fread (buffer, buffer_size, 1, fp);
 

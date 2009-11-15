@@ -134,7 +134,7 @@ void input_entry (int key_code)
 
 				overflow = ui_get_string_length (input_text) - (input_size - ui_get_font_width ());
 
-				overflow = max (0.0, overflow);
+				overflow = max (0.0f, overflow);
 
 				set_ui_object_x_origin (input_object, -overflow);
 			}
@@ -199,7 +199,7 @@ void input_entry (int key_code)
 	
 				overflow = ui_get_string_length (input_text) - (input_size - ui_get_font_width ());
 	
-				overflow = max (0.0, overflow);
+				overflow = max (0.0f, overflow);
 	
 				set_ui_object_x_origin (input_object, -overflow);
 		
@@ -227,8 +227,8 @@ void input_entry (int key_code)
 void input_end (int key_code)
 {
 
-	void
-		((*function) (ui_object *obj, void *arg));
+	FUNCTION
+		function;
 
 	function = get_ui_object_function (input_object);
 

@@ -114,7 +114,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (group));
+		raw = (group *) malloc_fast_mem (sizeof (group));
 
 		set_local_entity_data (en, raw);
 
@@ -234,11 +234,11 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// Link into registry
 		//
 
-		list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+		list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 
 		if (list_type != LIST_TYPE_INVALID)
 		{
-			force = get_local_force_entity (raw->side);
+			force = get_local_force_entity ((entity_sides) raw->side);
 
 			ASSERT (force);
 

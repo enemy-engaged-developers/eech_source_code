@@ -723,7 +723,7 @@ void draw_2d_terrain_map ( void )
 
 			current_terrain_type_class = &terrain_type_information[current_terrain_type];
 
-			set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+			set_d3d_texture ( 0, current_terrain_type_class->texture );
 
 			reset_terrain_3d_buffered_polygons ();
 
@@ -752,7 +752,7 @@ void draw_2d_terrain_map ( void )
 						if ( terrain_2d_map_textured )
 						{
 
-							set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+							set_d3d_texture ( 0, current_terrain_type_class->texture );
 						}
 					}
 
@@ -806,7 +806,7 @@ void draw_2d_terrain_map ( void )
 						if ( terrain_2d_map_textured )
 						{
 
-							set_d3d_texture ( 0, load_hardware_texture_map ( current_terrain_type_class->texture ) );
+							set_d3d_texture ( 0, current_terrain_type_class->texture );
 						}
 					}
 
@@ -896,7 +896,7 @@ void generate_2d_terrain_contour_mipmaps ( void )
 
 	ASSERT ( contour_map_number_of_mipmaps );
 
-	contour_map_mipmaps = safe_malloc ( sizeof ( float ) * contour_map_number_of_mipmaps );
+	contour_map_mipmaps = ( float * * ) safe_malloc ( sizeof ( float * ) * contour_map_number_of_mipmaps );
 
 	for ( count = 0; count < contour_map_number_of_mipmaps; count++ )
 	{
@@ -913,7 +913,7 @@ void generate_2d_terrain_contour_mipmaps ( void )
 		width++;
 		height++;
 
-		contour_map_mipmaps[count] = safe_malloc ( sizeof ( float ) * ( width * height ) );
+		contour_map_mipmaps[count] = ( float * ) safe_malloc ( sizeof ( float ) * ( width * height ) );
 
 		data = contour_map_mipmaps[count];
 
@@ -1368,7 +1368,7 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 
 	fread ( &contour_map_number_of_river_nodes, sizeof ( int ), 1, fp );
 
-	contour_map_river_nodes = safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_river_nodes );
+	contour_map_river_nodes = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_river_nodes );
 
 	fread ( contour_map_river_nodes, sizeof ( vec3d ), contour_map_number_of_river_nodes, fp );
 
@@ -1382,7 +1382,7 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 
 	fread ( &contour_map_number_of_river_paths, sizeof ( int ), 1, fp );
 
-	contour_map_river_paths = safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_river_paths );
+	contour_map_river_paths = ( contour_path * ) safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_river_paths );
 
 	//
 	// Process the paths
@@ -1405,7 +1405,7 @@ int load_2d_terrain_contour_river_data ( char *nodes_filename, char *path_filena
 
 	fseek ( fp, 4, SEEK_SET );
 
-	contour_map_river_path_positions = safe_malloc ( sizeof ( vec3d ) * total );
+	contour_map_river_path_positions = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * total );
 
 	current_position = contour_map_river_path_positions;
 
@@ -1470,7 +1470,7 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 
 	fread ( &contour_map_number_of_road_nodes, sizeof ( int ), 1, fp );
 
-	contour_map_road_nodes = safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_road_nodes );
+	contour_map_road_nodes = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_road_nodes );
 
 	fread ( contour_map_road_nodes, sizeof ( vec3d ), contour_map_number_of_road_nodes, fp );
 
@@ -1484,7 +1484,7 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 
 	fread ( &contour_map_number_of_road_paths, sizeof ( int ), 1, fp );
 
-	contour_map_road_paths = safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_road_paths );
+	contour_map_road_paths = ( contour_path * ) safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_road_paths );
 
 	//
 	// Process the paths
@@ -1507,7 +1507,7 @@ int load_2d_terrain_contour_road_data ( char *nodes_filename, char *path_filenam
 
 	fseek ( fp, 4, SEEK_SET );
 
-	contour_map_road_path_positions = safe_malloc ( sizeof ( vec3d ) * total );
+	contour_map_road_path_positions = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * total );
 
 	current_position = contour_map_road_path_positions;
 
@@ -1571,7 +1571,7 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 
 	fread ( &contour_map_number_of_boundary_nodes, sizeof ( int ), 1, fp );
 
-	contour_map_boundary_nodes = safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_boundary_nodes );
+	contour_map_boundary_nodes = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * contour_map_number_of_boundary_nodes );
 
 	fread ( contour_map_boundary_nodes, sizeof ( vec3d ), contour_map_number_of_boundary_nodes, fp );
 
@@ -1585,7 +1585,7 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 
 	fread ( &contour_map_number_of_boundary_paths, sizeof ( int ), 1, fp );
 
-	contour_map_boundary_paths = safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_boundary_paths );
+	contour_map_boundary_paths = ( contour_path * ) safe_malloc ( sizeof ( contour_path ) * contour_map_number_of_boundary_paths );
 
 	//
 	// Process the paths
@@ -1608,7 +1608,7 @@ int load_2d_terrain_contour_boundary_data ( char *nodes_filename, char *path_fil
 
 	fseek ( fp, 4, SEEK_SET );
 
-	contour_map_boundary_path_positions = safe_malloc ( sizeof ( vec3d ) * total );
+	contour_map_boundary_path_positions = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * total );
 
 	current_position = contour_map_boundary_path_positions;
 
@@ -1855,9 +1855,9 @@ void load_contour_map_lakes ( char *filename )
 	// Now read in the data properly
 	//
 
-	contour_lake_vertices = safe_malloc ( sizeof ( vec3d ) * 3 * total_triangles );
+	contour_lake_vertices = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * 3 * total_triangles );
 
-	contour_lakes = safe_malloc ( sizeof ( contour_lake ) * number_of_contour_lakes );
+	contour_lakes = ( contour_lake * ) safe_malloc ( sizeof ( contour_lake ) * number_of_contour_lakes );
 
 	fseek ( fp, 4, SEEK_SET );
 
@@ -1945,9 +1945,9 @@ void load_contour_map_citybases ( char *filename )
 	// Now read in the data properly
 	//
 
-	contour_citybase_vertices = safe_malloc ( sizeof ( vec3d ) * 3 * total_triangles );
+	contour_citybase_vertices = ( vec3d * ) safe_malloc ( sizeof ( vec3d ) * 3 * total_triangles );
 
-	contour_citybases = safe_malloc ( sizeof ( contour_lake ) * number_of_contour_citybases );
+	contour_citybases = ( contour_lake * ) safe_malloc ( sizeof ( contour_lake ) * number_of_contour_citybases );
 
 	fseek ( fp, 4, SEEK_SET );
 
@@ -2233,7 +2233,7 @@ void draw_2d_shaded_terrain_contour_map ( void )
 
 	set_d3d_fog_face_intensity ( 255 );
 
-	contour_height_difference_reciprocals = safe_malloc ( number_of_contour_height_lines * sizeof ( float ) );
+	contour_height_difference_reciprocals = ( float * ) safe_malloc ( number_of_contour_height_lines * sizeof ( float ) );
 
 	for ( count = 0; count < ( number_of_contour_height_lines - 1 ); count++ )
 	{

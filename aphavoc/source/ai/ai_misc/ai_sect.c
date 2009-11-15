@@ -101,8 +101,8 @@ void initialise_ai_sector_exposure (void)
 		*sector;
 
    int
-		min_terrain_height,
-		max_terrain_height,
+		min_terrain_height = 0.0,
+		max_terrain_height = 0.0,
 		delta_value,
 		value,
       x,
@@ -120,13 +120,11 @@ void initialise_ai_sector_exposure (void)
 
 			if (!x && !z || terrain_sectors [z][x].maximum_height > max_terrain_height)
 			{
-
 				max_terrain_height = terrain_sectors [z][x].maximum_height;
 			}
 
 			if (!x && !z || terrain_sectors [z][x].minimum_height < min_terrain_height)
 			{
-
 				min_terrain_height = terrain_sectors [z][x].minimum_height;
 			}
 		}

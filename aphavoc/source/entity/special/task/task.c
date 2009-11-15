@@ -129,7 +129,7 @@ task_completed_types assess_task_completeness (entity *en, task_terminated_types
 
 	ASSERT (task_database [sub_type].primary_task);
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	colour = (side == ENTITY_SIDE_BLUE_FORCE) ? DEBUG_COLOUR_BLUE : DEBUG_COLOUR_RED;
 
@@ -561,7 +561,7 @@ list_types get_local_task_list_type (entity *task_en)
 	task
 		*raw;
 
-	raw = get_local_entity_data (task_en);
+	raw = (task *) get_local_entity_data (task_en);
 
 	switch (raw->task_state)
 	{
@@ -743,7 +743,7 @@ int assess_task_difficulty (entity *task_en, int *route_air_threat, int *route_e
 
 	ASSERT (task_en);
 
-	raw = get_local_entity_data (task_en);
+	raw = (task *) get_local_entity_data (task_en);
 
 	//
 	// task type
@@ -917,7 +917,7 @@ void assess_task_sector_difficulty (entity *task_en, int x, int z, int *air_thre
 
 	sector_en = get_local_raw_sector_entity(x, z);
 
-	side = get_local_entity_int_value (task_en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (task_en, INT_TYPE_SIDE);
 
 	ASSERT (sector_en);
 
@@ -1011,15 +1011,15 @@ entity *get_local_entity_primary_task (entity *en)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define KEYSITE_TASK_IDLE_GROUP_COUNT_BIAS	5.0
+#define KEYSITE_TASK_IDLE_GROUP_COUNT_BIAS	5.0f
 
-#define KEYSITE_TASK_BUSY_GROUP_COUNT_BIAS	0.5
+#define KEYSITE_TASK_BUSY_GROUP_COUNT_BIAS	0.5f
 
-#define KEYSITE_TASK_MAX_GROUP_COUNT_BIAS		12.0
+#define KEYSITE_TASK_MAX_GROUP_COUNT_BIAS		12.0f
 
-#define KEYSITE_TASK_MAX_RANGE_BIAS				(100.0 * KILOMETRE)
+#define KEYSITE_TASK_MAX_RANGE_BIAS				(100.0f * KILOMETRE)
 
-#define KEYSITE_TASK_COUNT_BIAS					0.2
+#define KEYSITE_TASK_COUNT_BIAS					0.2f
 
 entity *find_most_suitable_keysite_for_task (entity_sub_types task_type, entity_sides side, vec3d *pos, int check_capacity)
 {
@@ -1325,7 +1325,7 @@ void add_kill_to_task (entity *task_en, entity *victim, entity *aggressor)
 	task_kill_loss_data
 		*new_kill;
 
-	task_raw = get_local_entity_data (task_en);
+	task_raw = (task *) get_local_entity_data (task_en);
 
 	new_kill = (task_kill_loss_data *) malloc_heap_mem (sizeof (task_kill_loss_data));
 
@@ -1334,8 +1334,8 @@ void add_kill_to_task (entity *task_en, entity *victim, entity *aggressor)
 	new_kill->victim_type = get_local_entity_type (victim);
 	new_kill->aggressor_type = get_local_entity_type (aggressor);
 
-	new_kill->victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
-	new_kill->aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	new_kill->victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	new_kill->aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	new_kill->victim_sub_type = get_local_entity_int_value (victim, INT_TYPE_ENTITY_SUB_TYPE);
 	new_kill->aggressor_sub_type = get_local_entity_int_value (aggressor, INT_TYPE_ENTITY_SUB_TYPE);
@@ -1366,7 +1366,7 @@ void add_loss_to_task (entity *task_en, entity *victim, entity *aggressor)
 	task_kill_loss_data
 		*new_loss;
 
-	task_raw = get_local_entity_data (task_en);
+	task_raw = (task *) get_local_entity_data (task_en);
 
 	new_loss = (task_kill_loss_data *) malloc_heap_mem (sizeof (task_kill_loss_data));
 
@@ -1375,8 +1375,8 @@ void add_loss_to_task (entity *task_en, entity *victim, entity *aggressor)
 	new_loss->victim_type = get_local_entity_type (victim);
 	new_loss->aggressor_type = get_local_entity_type (aggressor);
 
-	new_loss->victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
-	new_loss->aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	new_loss->victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	new_loss->aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	new_loss->victim_sub_type = get_local_entity_int_value (victim, INT_TYPE_ENTITY_SUB_TYPE);
 	new_loss->aggressor_sub_type = get_local_entity_int_value (aggressor, INT_TYPE_ENTITY_SUB_TYPE);
@@ -1468,7 +1468,7 @@ const char *get_task_objective_string (entity *en)
 
 	task_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-	info = task_database [task_type].task_objective_info;
+	info = (task_objective_info_types) task_database [task_type].task_objective_info;
 
 	//
 	// If No Objective, Or Task specified NONE, Return NULL...
@@ -1484,7 +1484,7 @@ const char *get_task_objective_string (entity *en)
 		return NULL;
 	}
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
 
@@ -1552,7 +1552,7 @@ void get_task_objective_mfd_display_string (entity *en, char *s)
 
 	task_type = get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 
-	info = task_database [task_type].task_objective_info;
+	info = (task_objective_info_types) task_database [task_type].task_objective_info;
 
 	sprintf (s, "Unknown");
 
@@ -1570,7 +1570,7 @@ void get_task_objective_mfd_display_string (entity *en, char *s)
 		return;
 	}
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
 
@@ -1619,7 +1619,7 @@ int get_task_friendly_fire_incidents (entity *task_en)
 	task_kill_loss_data
 		*item;
 
-	task_raw = get_local_entity_data (task_en);
+	task_raw = (task *) get_local_entity_data (task_en);
 
 	// check kill list
 

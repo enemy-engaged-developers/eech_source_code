@@ -124,7 +124,7 @@ int process_key_event (event *ev)
 
 						ev->modifier = loop;
 
-						registered_events [ev->key][loop].function ((void *) ev);
+						registered_events [ev->key][loop].function (ev);
 					}
 				}
 			}
@@ -234,7 +234,7 @@ int process_modifiers (event *ev)
                if (registered_events [loop][key].function)
                {
 
-                  registered_events [loop][key].function ((void *) ev);
+                  registered_events [loop][key].function (ev);
 
 						#if EVENT_DEBUG
 

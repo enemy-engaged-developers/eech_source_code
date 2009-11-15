@@ -88,7 +88,7 @@ void initialise_smoke_list_database (void)
 	smoke_list_data
 		*item;
 
-	smoke_list_database = safe_malloc (sizeof (smoke_list_data) * NUM_SMOKE_LIST_TYPES);
+	smoke_list_database = (smoke_list_data *) safe_malloc (sizeof (smoke_list_data) * NUM_SMOKE_LIST_TYPES);
 
 	////////////////////////////////////////
 	//

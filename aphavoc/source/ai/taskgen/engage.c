@@ -129,9 +129,9 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 		return NULL;
 	}
 
-	force_en = get_local_force_entity (get_local_entity_int_value (group, INT_TYPE_SIDE));
+	force_en = get_local_force_entity ((entity_sides)get_local_entity_int_value (group, INT_TYPE_SIDE));
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force*) get_local_entity_data (force_en);
 
 	if (expire)
 	{
@@ -152,7 +152,7 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 	// Create engage task to expire in task_time seconds - debug
 	//
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	pos = get_local_entity_vec3d_ptr (objective, VEC3D_TYPE_POSITION);
 
@@ -162,7 +162,7 @@ entity *create_engage_task (entity *group, entity *objective, entity *originator
 
 	new_task = create_task (ENTITY_SUB_TYPE_TASK_ENGAGE,
 									side,
-									get_local_entity_int_value (group, INT_TYPE_MOVEMENT_TYPE),
+									(movement_types) get_local_entity_int_value (group, INT_TYPE_MOVEMENT_TYPE),
 									NULL,
 									NULL,
 									originator,
@@ -210,13 +210,13 @@ int engage_targets_in_sector (entity *group, int sx, int sz, unsigned int task_t
 
 	target_sector = get_local_raw_sector_entity (sx, sz);
 
-	raw = get_local_entity_data (target_sector);
+	raw = (sector *) get_local_entity_data (target_sector);
 
 	//
 	// search for viable targets
 	//
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	objective = raw->sector_root.first_child;
 
@@ -318,7 +318,7 @@ int engage_targets_in_area (entity *group, vec3d *target_point, float radius, un
 	min_sector_z = bound (min_sector_z, MIN_MAP_Z_SECTOR, MAX_MAP_Z_SECTOR);
 	max_sector_z = bound (max_sector_z, MIN_MAP_Z_SECTOR, MAX_MAP_Z_SECTOR);
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	for (sz = min_sector_z; sz <= max_sector_z; sz ++)
 	{
@@ -327,7 +327,7 @@ int engage_targets_in_area (entity *group, vec3d *target_point, float radius, un
 
 			target_sector = get_local_raw_sector_entity (sx, sz);
 
-			raw = get_local_entity_data (target_sector);
+			raw = (sector *) get_local_entity_data (target_sector);
 
 			//
 			// search for viable targets
@@ -445,7 +445,7 @@ int debug_engage_targets_in_area (entity *group, vec3d *target_point, float radi
 	min_sector_z = bound (min_sector_z, MIN_MAP_Z_SECTOR, MAX_MAP_Z_SECTOR);
 	max_sector_z = bound (max_sector_z, MIN_MAP_Z_SECTOR, MAX_MAP_Z_SECTOR);
 
-	side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 	for (sz = min_sector_z; sz <= max_sector_z; sz ++)
 	{
@@ -453,7 +453,7 @@ int debug_engage_targets_in_area (entity *group, vec3d *target_point, float radi
 		{
 			target_sector = get_local_raw_sector_entity (sx, sz);
 
-			raw = get_local_entity_data (target_sector);
+			raw = (sector *) get_local_entity_data (target_sector);
 
 			//
 			// search for viable targets
@@ -853,9 +853,9 @@ unsigned int assign_engage_tasks_to_group (entity *group, unsigned int valid_mem
 	// get target priority
 	//
 
-	guide_list = malloc_fast_mem (sizeof (entity *) * task_count);
-	priority = malloc_fast_mem (sizeof (float) * task_count);
-	assigned_count = malloc_fast_mem (sizeof (int) * task_count);
+	guide_list = (entity * *) malloc_fast_mem (sizeof (entity *) * task_count);
+	priority = (float *) malloc_fast_mem (sizeof (float) * task_count);
+	assigned_count = (int *) malloc_fast_mem (sizeof (int) * task_count);
 
 	#if DEBUG_MODULE
 

@@ -94,7 +94,7 @@ static void debug_log_entity_list (entity *parent, list_types type, int indent_l
 
 	length = indent_level * 3;
 
-	prefix = malloc_heap_mem (length + 1);
+	prefix = (char *) malloc_heap_mem (length + 1);
 
 	memset (prefix, ' ', length);
 

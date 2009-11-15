@@ -169,7 +169,7 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 
 	enemy_side = get_enemy_side (side);
 
-	enemy_force = get_local_force_entity (enemy_side);
+	enemy_force = get_local_force_entity ((entity_sides) enemy_side);
 
 	ASSERT (enemy_force);
 
@@ -327,7 +327,7 @@ static int response_to_check_campaign_objectives (entity_messages message, entit
 		// THIS FORCE HAS MET ALL CAMPAIGN OBJECTIVES 
 		//
 
-		campaign_completed (side, complete);
+		campaign_completed ((entity_sides) side, complete);
 	}
 
 	return (TRUE);
@@ -431,7 +431,7 @@ static int response_to_force_armour_resisting (entity_messages message, entity *
 	
 		sector_en = get_local_sector_entity (get_local_entity_vec3d_ptr (enemy_entity, VEC3D_TYPE_POSITION));
 
-		side = get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
 		threat_level = get_local_sector_entity_enemy_surface_to_surface_defence_level (sector_en, side);
 		threat_level += get_local_sector_entity_enemy_surface_to_air_defence_level (sector_en, side);
@@ -541,7 +541,7 @@ static int response_to_force_destroyed (entity_messages message, entity *receive
 		//debug_fatal ("FC_MSGS: client not allowed here");
 	}
 
-	force_raw = get_local_entity_data (receiver);
+	force_raw = (force *) get_local_entity_data (receiver);
 
 	#if DEBUG_MODULE
 	
@@ -728,7 +728,7 @@ static int response_to_force_low_on_supplies (entity_messages message, entity *r
 
 	// replace en with sender!
 
-	if ((entity_is_object_of_task (sender, ENTITY_SUB_TYPE_TASK_SUPPLY, get_local_entity_int_value (sender, INT_TYPE_SIDE))))
+	if ((entity_is_object_of_task (sender, ENTITY_SUB_TYPE_TASK_SUPPLY, (entity_sides) get_local_entity_int_value (sender, INT_TYPE_SIDE))))
 	{
 		task = get_local_entity_first_child (sender, LIST_TYPE_TASK_DEPENDENT);
 
@@ -755,7 +755,7 @@ static int response_to_force_low_on_supplies (entity_messages message, entity *r
 	// Locate correct supplier
 	//
 
-	side = get_local_entity_int_value (sender, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (sender, INT_TYPE_SIDE);
 
 	pos = get_keysite_supply_position (sender);
 
@@ -921,7 +921,7 @@ static int response_to_force_special_kill (entity_messages message, entity *rece
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	force_raw = get_local_entity_data (receiver);
+	force_raw = (force *) get_local_entity_data (receiver);
 
 	kills = va_arg (pargs, int);
 
@@ -970,7 +970,7 @@ static int response_to_force_vacant_farp (entity_messages message, entity *recei
 	}
 	#endif
 
-	this_side =	get_local_entity_int_value (receiver, INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE);
 
 	if (!entity_is_object_of_task (sender, ENTITY_SUB_TYPE_TASK_RECON, this_side))
 	{
@@ -1298,7 +1298,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_TASK);
 
-	task_terminated = va_arg (pargs, int);
+	task_terminated = (task_terminated_types) va_arg (pargs, int);
 
 	sub_type = get_local_entity_int_value (sender, INT_TYPE_ENTITY_SUB_TYPE);
 
@@ -1320,7 +1320,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 	// Update force statistics
 	//
 	
-	force_raw = get_local_entity_data (receiver);
+	force_raw = (force *) get_local_entity_data (receiver);
 
 	ASSERT (get_local_entity_int_value (sender, INT_TYPE_TASK_COMPLETED) != TASK_INCOMPLETE);
 

@@ -76,7 +76,7 @@ static void set_area_ui_object_x_origin (ui_object *obj, float x_origin)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->x_origin != x_origin)
 	{
@@ -111,7 +111,7 @@ static float get_area_ui_object_x_origin (ui_object *obj)
 		px = get_ui_object_x_origin (parent);
 	}
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_origin + px;
 }
@@ -126,7 +126,7 @@ static void set_area_ui_object_y_origin (ui_object *obj, float y_origin)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->y_origin != y_origin)
 	{
@@ -161,7 +161,7 @@ static float get_area_ui_object_y_origin (ui_object *obj)
 		py = get_ui_object_y_origin (parent);
 	}
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->y_origin + py;
 }

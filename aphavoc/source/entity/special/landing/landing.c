@@ -355,9 +355,9 @@ void validate_landing_entity_routes (entity *en)
 	landing
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (landing *) get_local_entity_data (en);
 
-	side = get_local_entity_int_value (get_local_entity_parent (en, LIST_TYPE_LANDING_SITE), INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (get_local_entity_parent (en, LIST_TYPE_LANDING_SITE), INT_TYPE_SIDE);
 
 	if (((1 << raw->sub_type) & (DEBUG_LANDING_TYPE)) && (DEBUG_LANDING_SIDE & (1 << side)))
 	{
@@ -400,7 +400,7 @@ void validate_landing_entity_routes (entity *en)
 	
 		waypoint_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 	
-		formation_data = get_formation (waypoint_formation);
+		formation_data = get_formation ((formation_types) waypoint_formation);
 	
 		while (wp)
 		{
@@ -664,7 +664,7 @@ void validate_landing_entity_routes (entity *en)
 			wp = get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT);
 		}
 	
-		formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+		formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 	
 		wp = get_local_entity_first_child (task, LIST_TYPE_WAYPOINT);
 	
@@ -763,13 +763,13 @@ int check_available_landing_route_lock (entity *landing_en)
 		mask,
 		new_mask;
 
-	raw = get_local_entity_data (landing_en);
+	raw = (landing *) get_local_entity_data (landing_en);
 
 	wp = get_local_landing_entity_route (landing_en, ENTITY_SUB_TYPE_TASK_LANDING);
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
-	mask = pow (2, formation_data->number_in_formation) - 1;
+	mask = (1 << formation_data->number_in_formation) - 1;
 
 	new_mask = (~raw->landing_lock);// & (~raw->landed_lock);
 
@@ -795,13 +795,13 @@ int check_landing_route_lock_clear (entity *landing_en, entity *en)
 	unsigned int
 		formation_landing;
 
-	raw = get_local_entity_data (landing_en);
+	raw = (landing *) get_local_entity_data (landing_en);
 
 	formation_landing = get_local_entity_int_value (en, INT_TYPE_FORMATION_POSITION);
 
 	wp = get_local_landing_entity_route (landing_en, ENTITY_SUB_TYPE_TASK_LANDING);
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_landing %= formation_data->number_in_formation;
 
@@ -827,13 +827,13 @@ int check_takeoff_route_lock_clear (entity *landing_en, entity *en)
 	unsigned int
 		formation_takeoff;
 
-	raw = get_local_entity_data (landing_en);
+	raw = (landing *) get_local_entity_data (landing_en);
 
 	formation_takeoff = get_local_entity_int_value (en, INT_TYPE_FORMATION_POSITION);
 
 	wp = get_local_landing_entity_route (landing_en, ENTITY_SUB_TYPE_TASK_TAKEOFF);
 
-	formation_data = get_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+	formation_data = get_formation ((formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
 	formation_takeoff %= formation_data->number_in_formation;
 
@@ -853,7 +853,7 @@ int check_landing_site_lock_clear (entity *landing_en, entity *en)
 	unsigned int
 		formation_landing;
 
-	raw = get_local_entity_data (landing_en);
+	raw = (landing *) get_local_entity_data (landing_en);
 
 	formation_landing = get_local_entity_int_value (en, INT_TYPE_FORMATION_POSITION);
 
@@ -1062,7 +1062,7 @@ void play_landing_clear_for_takeoff_speech (entity *en)
 	(
 		get_session_entity (),
 		en,
-		get_local_entity_int_value (en, INT_TYPE_SIDE),
+		(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 		ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 		SOUND_LOCALITY_RADIO,
 		0.0,

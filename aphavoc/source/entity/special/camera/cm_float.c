@@ -95,7 +95,7 @@ static void set_local_float_value (entity *en, float_types type, float value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -188,7 +188,7 @@ static float get_local_float_value (entity *en, float_types type)
 	float
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -196,7 +196,7 @@ static float get_local_float_value (entity *en, float_types type)
 		case FLOAT_TYPE_RADAR_ALTITUDE:
 		////////////////////////////////////////
 		{
-			value = max (raw->position.y - get_3d_terrain_point_data_elevation (&raw->terrain_info), 0.0);
+			value = max (raw->position.y - get_3d_terrain_point_data_elevation (&raw->terrain_info), 0.0f);
 
 			break;
 		}

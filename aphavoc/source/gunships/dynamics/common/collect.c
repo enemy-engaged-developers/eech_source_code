@@ -176,14 +176,14 @@ void update_collective_pressure_inputs (void)
 			if (current_flight_dynamics->input_data.collective_input_pressure & COLLECTIVE_PRESSURE_BACKWARD)
 			{
 		
-				current_flight_dynamics->input_data.collective_pressure.value = min (0, current_flight_dynamics->input_data.collective_pressure.value);
+				current_flight_dynamics->input_data.collective_pressure.value = min (0.0f, current_flight_dynamics->input_data.collective_pressure.value);
 		
 				current_flight_dynamics->input_data.collective_pressure.value -= 5.0 * get_delta_time ();
 			}
 			else if (current_flight_dynamics->input_data.collective_input_pressure & COLLECTIVE_PRESSURE_FORWARD)
 			{
 		
-				current_flight_dynamics->input_data.collective_pressure.value = max (0, current_flight_dynamics->input_data.collective_pressure.value);
+				current_flight_dynamics->input_data.collective_pressure.value = max (0.0f, current_flight_dynamics->input_data.collective_pressure.value);
 		
 				current_flight_dynamics->input_data.collective_pressure.value += 5.0 * get_delta_time ();
 			}

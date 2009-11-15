@@ -132,7 +132,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 		}
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -181,7 +181,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 
 	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
 
-	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0);
+	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0f);
 
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 
@@ -593,7 +593,7 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 		}
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -605,7 +605,7 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	main_rotor_rpm = bound (main_rotor_rpm, 0.0, 100.0);
 
-	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0);
+	main_rotor_blade_coning_angle = max (main_rotor_blade_coning_angle, 0.0f);
 
 	main_rotor_pitch = -get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_PITCH);
 
@@ -780,7 +780,7 @@ void animate_helicopter_virtual_cockpit_main_rotors (entity *en, object_3d_insta
 
 	ASSERT (virtual_cockpit_main_rotor_inst3d);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	tmp = raw->ac.inst3d;
 
@@ -830,7 +830,7 @@ void animate_helicopter_tail_rotor (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	inst3d = raw->ac.inst3d;
 
@@ -1013,7 +1013,7 @@ void animate_helicopter_wipers (entity *en)
 
 	if (en == get_gunship_entity ())
 	{
-		raw = get_local_entity_data (en);
+		raw = (helicopter *) get_local_entity_data (en);
 
 		if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW)
 		{
@@ -1077,7 +1077,7 @@ void animate_helicopter_eo (entity *en)
 
 	if (en == get_gunship_entity ())
 	{
-		raw = get_local_entity_data (en);
+		raw = (helicopter *) get_local_entity_data (en);
 
 		if (raw->ac.object_3d_shape == OBJECT_3D_AH64D_APACHE_LONGBOW)
 		{
@@ -1147,7 +1147,7 @@ void animate_helicopter_suspension(entity *en)
 
 	if (en == get_gunship_entity ())
 	{
-		raw = get_local_entity_data (en);
+		raw = (helicopter *) get_local_entity_data (en);
 
 		if (raw->ac.object_3d_shape == OBJECT_3D_MI24_HIND)
 			animate_hind_suspension(raw->ac.inst3d);
@@ -1166,7 +1166,7 @@ void damage_helicopter_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	//
 	// store main rotor heading(s)
@@ -1226,7 +1226,7 @@ int damage_helicopter_main_rotors (entity *en)
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	ASSERT (raw->main_rotor_damaged == FALSE);
 
@@ -1479,7 +1479,7 @@ int damage_helicopter_tail_rotors (entity *en)
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	ASSERT (raw->tail_rotor_damaged == FALSE);
 
@@ -1596,7 +1596,7 @@ int restore_helicopter_main_rotors (entity *en)
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (!raw->main_rotor_damaged)
 	{
@@ -1833,7 +1833,7 @@ int restore_helicopter_tail_rotors (entity *en)
 
 	ASSERT (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (!raw->tail_rotor_damaged)
 	{
@@ -2119,7 +2119,7 @@ void set_helicopter_id_number (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (raw->ac.mob.side == ENTITY_SIDE_BLUE_FORCE)
 	{

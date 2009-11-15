@@ -91,7 +91,7 @@ static void draw_local_3d_object (entity *en, float range)
 	day_segment_types
 		day_segment_type;
 
-	raw = get_local_entity_data (en);
+	raw = (site *) get_local_entity_data (en);
 
 	inst3d = construct_temporary_3d_object (raw->fix.object_3d_shape, FALSE);
 
@@ -110,7 +110,7 @@ static void draw_local_3d_object (entity *en, float range)
 			get_3d_transformation_matrix (inst3d->vp.attitude, raw->fix.heading, 0.0, 0.0);
 		}
 
-		day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+		day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 		inst3d->object_sprite_lights = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 

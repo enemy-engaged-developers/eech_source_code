@@ -97,7 +97,7 @@ static int response_to_articulate_undercarriage (entity_messages message, entity
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	inst3d = get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (receiver, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{
@@ -301,7 +301,7 @@ static int response_to_task_terminated (entity_messages message, entity *receive
 	aircraft
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (aircraft *) get_local_entity_data (receiver);
 
 	#if DEBUG_MODULE_MESSAGE_TEXT
 

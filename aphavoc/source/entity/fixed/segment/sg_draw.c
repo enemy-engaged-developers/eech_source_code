@@ -90,7 +90,7 @@ static void draw_local_3d_object (entity *en, float range)
 	float
 		pitch;
 
-	raw = get_local_entity_data (en);
+	raw = (segment *) get_local_entity_data (en);
 
 	if (raw->fix.object_3d_shape == OBJECT_3D_INVALID_OBJECT_INDEX)
 	{

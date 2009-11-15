@@ -107,21 +107,21 @@ dynamics_collision_point_type
 			"DYNAMICS_COLLISION_POINT_MAIN_ROTOR",
 			OBJECT_3D_SUB_OBJECT_MAIN_ROTOR_COLLISION_POINT,
 			TRUE,
-			DYNAMICS_DAMAGE_MAIN_ROTOR |
-			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE,
+			(dynamics_damage_types) (DYNAMICS_DAMAGE_MAIN_ROTOR |
+			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE),
 		},
 		{
 			"DYNAMICS_COLLISION_POINT_TAIL_ROTOR",
 			OBJECT_3D_SUB_OBJECT_TAIL_ROTOR_COLLISION_POINT,
 			TRUE,
-			DYNAMICS_DAMAGE_TAIL_ROTOR | DYNAMICS_DAMAGE_STABILISER,
+			(dynamics_damage_types) (DYNAMICS_DAMAGE_TAIL_ROTOR | DYNAMICS_DAMAGE_STABILISER),
 		},
 		{
 			"DYNAMICS_COLLISION_POINT_FUSELAGE",
 			OBJECT_3D_SUB_OBJECT_FUSELAGE_COLLISION_POINT,
 			FALSE,
-			DYNAMICS_DAMAGE_LEFT_ENGINE | DYNAMICS_DAMAGE_RIGHT_ENGINE | DYNAMICS_DAMAGE_LOW_HYDRAULICS | DYNAMICS_DAMAGE_STABILISER |
-			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE | DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE | DYNAMICS_DAMAGE_LOW_OIL_PRESSURE | DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE,
+			(dynamics_damage_types) (DYNAMICS_DAMAGE_LEFT_ENGINE | DYNAMICS_DAMAGE_RIGHT_ENGINE | DYNAMICS_DAMAGE_LOW_HYDRAULICS | DYNAMICS_DAMAGE_STABILISER |
+			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE | DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE | DYNAMICS_DAMAGE_LOW_OIL_PRESSURE | DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE),
 		},
 		{
 			"DYNAMICS_COLLISION_POINT_NOSE_GUN",
@@ -972,7 +972,7 @@ void update_object_collision_dynamics (void)
 		return;
 	}
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	if ((current_flight_dynamics->valid_last_frame_fixed_collision_points) || (current_flight_dynamics->valid_last_frame_moving_collision_points))
 	{
@@ -1232,7 +1232,7 @@ void update_tree_collision_dynamics (void)
 		return;
 	}
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	collision = FALSE;
 
@@ -1397,7 +1397,7 @@ void update_fixed_ground_collision_dynamics (void)
 		return;
 	}
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	//
 	// Check FIXED collision points with GROUND
@@ -1468,7 +1468,7 @@ void update_moving_ground_collision_dynamics (void)
 		return;
 	}
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	//
 	// Check MOVING collision points with GROUND
@@ -1661,7 +1661,7 @@ void update_collision_dynamics (void)
 		return;
 	}
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	fixed_collision_count = 0;
 

@@ -94,7 +94,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -127,7 +127,7 @@ static void destroy_local (entity *en)
 
 	if (get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE) != LIST_TYPE_INVALID)
 	{
-		delete_local_entity_from_parents_child_list (en, get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE));
+		delete_local_entity_from_parents_child_list (en, (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE));
 	}
 
 	delete_local_entity_from_parents_child_list (en, LIST_TYPE_DIVISION);
@@ -278,15 +278,15 @@ static void kill_local (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	set_local_entity_int_value (en, INT_TYPE_ALIVE, FALSE);
 
-	list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+	list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 
 	if (list_type != LIST_TYPE_INVALID)
 	{
-		force = get_local_force_entity (raw->side);
+		force = get_local_force_entity ((entity_sides) raw->side);
 
 		ASSERT (force);
 

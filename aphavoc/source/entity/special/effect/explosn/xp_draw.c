@@ -84,7 +84,7 @@ static void draw_local_3d_object (entity *en, float range)
 	object_3d_explosion
 		explosion;
 
-	raw = get_local_entity_data (en);
+	raw = (struct EXPLOSION *) get_local_entity_data (en);
 
 	if (raw->explosion_state < 0.0)
 	{

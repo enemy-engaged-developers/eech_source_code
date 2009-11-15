@@ -100,7 +100,7 @@ void smoke_list_movement( entity *en )
 	smoke_list_data
 		*smoke_info;
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 

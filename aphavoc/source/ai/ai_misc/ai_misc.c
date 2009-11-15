@@ -785,14 +785,14 @@ int validate_landing_route (entity *route_task)
 					if (wp)
 					{
 			
-						route_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+						route_formation = (formation_types) get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 			
 						type = get_local_entity_int_value (wp, INT_TYPE_ENTITY_SUB_TYPE);
 			
 						while (type != ENTITY_SUB_TYPE_WAYPOINT_TAKEN_OFF)
 						{
 			
-							wp_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+							wp_formation = (formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 		/*
 							if (route_formation != wp_formation)
 							{
@@ -830,7 +830,7 @@ int validate_landing_route (entity *route_task)
 						// taken off waypoint
 						//
 			
-						wp_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+						wp_formation = (formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 		/*
 						if (route_formation != wp_formation)
 						{
@@ -878,12 +878,12 @@ int validate_landing_route (entity *route_task)
 					if (wp)
 					{
 			
-						route_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+						route_formation = (formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 			
 						while (get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT))
 						{
 			
-							wp_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+							wp_formation = (formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 		/*
 							if (route_formation != wp_formation)
 							{
@@ -907,7 +907,7 @@ int validate_landing_route (entity *route_task)
 						// taken off waypoint
 						//
 			
-						wp_formation = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
+						wp_formation = (formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 		/*
 						if (route_formation != wp_formation)
 						{

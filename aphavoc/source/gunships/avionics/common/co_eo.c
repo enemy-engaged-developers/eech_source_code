@@ -179,6 +179,9 @@ static int
 static void co_pilot_scan_for_eo_targets(void);
 static void slew_eo(float elevation, float azimuth);
 
+void update_eo_max_visual_range(void);
+static int get_selectable_eo_target (entity *target);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +297,6 @@ float get_triangulated_range(entity* target)
 	if (!target)
 		return 0.0;
 
-	ASSERT(system);
 	ASSERT(ownship);
 
 	ownship_position = get_local_entity_vec3d_ptr(ownship, VEC3D_TYPE_POSITION);
@@ -358,7 +360,7 @@ static void deinitialise_eo_target_list (void)
 static void insert_entity_into_eo_target_list (entity *target, float sqr_range, float radius, vec3d *target_position)
 {
 	eo_target
-		*new,
+		*new_,
 		*succ,
 		*pred;
 
@@ -367,12 +369,12 @@ static void insert_entity_into_eo_target_list (entity *target, float sqr_range, 
 
 	ASSERT (target_position);
 
-	new = malloc_fast_mem (sizeof (eo_target));
+	new_ = (eo_target *) malloc_fast_mem (sizeof (eo_target));
 
-	new->target = target;
-	new->sqr_range = sqr_range;
-	new->radius = radius;
-	new->target_position = *target_position;
+	new_->target = target;
+	new_->sqr_range = sqr_range;
+	new_->radius = radius;
+	new_->target_position = *target_position;
 
 	//
 	// sort list in ascending order of sqr_range
@@ -394,21 +396,21 @@ static void insert_entity_into_eo_target_list (entity *target, float sqr_range, 
 
 		if (insert)
 		{
-			new->succ = succ;
-			new->pred = pred;
+			new_->succ = succ;
+			new_->pred = pred;
 
 			if (succ)
 			{
-				succ->pred = new;
+				succ->pred = new_;
 			}
 
 			if (pred)
 			{
-				pred->succ = new;
+				pred->succ = new_;
 			}
 			else
 			{
-				eo_target_root = new;
+				eo_target_root = new_;
 			}
 
 			break;
@@ -1152,7 +1154,7 @@ void update_common_eo (void)
 
 	entity
 		*current_target,
-		*new_target;
+		*new__target;
 
 	viewpoint
 		vp;
@@ -1274,21 +1276,21 @@ void update_common_eo (void)
 	update_eo_visibility ();
 
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_DVO)
-		new_target = NULL;
+		new__target = NULL;
 	else
-		new_target = get_eo_boresight_target ();
+		new__target = get_eo_boresight_target ();
 
 	if (eo_target_locked & TARGET_LOCK)
 	{
-		if (new_target != current_target)
+		if (new__target != current_target)
 			eo_target_locked = 0;
 	}
 
 	// update target lock
-	if (new_target)
+	if (new__target)
 	{
-		if (get_local_entity_parent (new_target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
-			insert_local_entity_into_parents_child_list (new_target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
+		if (get_local_entity_parent (new__target, LIST_TYPE_GUNSHIP_TARGET) == NULL)
+			insert_local_entity_into_parents_child_list (new__target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity (), NULL);
 
 		if (lock_target)
 		{
@@ -1321,18 +1323,18 @@ void update_common_eo (void)
 	lock_target = (eo_target_locked & TARGET_LOCK) != 0;
 	lock_terrain = (eo_target_locked & POINT_LOCK) != 0;
 
-	set_gunship_target (new_target);
+	set_gunship_target (new__target);
 
 	target_locked = eo_target_locked;
 
 	if (!command_line_manual_laser_radar)
-		set_laser_is_active(target_locked != 0 || new_target);
+		set_laser_is_active(target_locked != 0 || new__target);
 
 	//
 	// flag eo on target for "CP/G IDENTIFYING..." message
 	//
 
-	eo_on_target = new_target != NULL;
+	eo_on_target = new__target != NULL;
 
 	// apply camera shake
 	// do this after check for boresight, otherwise the shaking will make it
@@ -1664,10 +1666,10 @@ void select_next_eo_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	if (!eo_low_light)
 	{
@@ -1685,7 +1687,7 @@ void select_next_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1701,7 +1703,7 @@ void select_next_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1711,10 +1713,10 @@ void select_next_eo_target (void)
 		}
 	}
 
-	set_eo_slave_target(new_target);
+	set_eo_slave_target(new__target);
 
-	if(new_target)
-		cpg_report_next_prev_target(new_target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
+	if(new__target)
+		cpg_report_next_prev_target(new__target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1725,10 +1727,10 @@ void select_previous_eo_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	if (!eo_low_light)
 	{
@@ -1746,7 +1748,7 @@ void select_previous_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1762,7 +1764,7 @@ void select_previous_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1772,11 +1774,11 @@ void select_previous_eo_target (void)
 		}
 	}
 
-	set_eo_slave_target(new_target);
+	set_eo_slave_target(new__target);
 
-  if(new_target)
+  if(new__target)
   {
-    cpg_report_next_prev_target(new_target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
+    cpg_report_next_prev_target(new__target); //ataribaby 4/1/2009 added CPG next/prev target lock and ID
   }
 }
 
@@ -1818,7 +1820,7 @@ float convert_linear_view_value (eo_params_dynamic_move *eo)
 float make_panning_offset_from_axis (long state)
 {
 	int panning_deadzone_size = 0;
-	long newstate;
+	long new_state;
 
 	if (state == 0 || (state > 0 && state < panning_deadzone_size) || (state < 0 && state > -panning_deadzone_size))
 	{
@@ -1827,14 +1829,14 @@ float make_panning_offset_from_axis (long state)
 
 	if (state > 0)
 	{
-		newstate = state - panning_deadzone_size;
+		new_state = state - panning_deadzone_size;
 	}
 	else
 	{
-		newstate = state + panning_deadzone_size;
+		new_state = state + panning_deadzone_size;
 	}
 
-	return newstate / (float)(10000 - panning_deadzone_size);
+	return new_state / (float)(10000 - panning_deadzone_size);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1848,10 +1850,10 @@ void select_next_designated_eo_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	if (!eo_low_light)
 	{
@@ -1865,7 +1867,7 @@ void select_next_designated_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1881,7 +1883,7 @@ void select_next_designated_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1891,7 +1893,7 @@ void select_next_designated_eo_target (void)
 		}
 	}
 
-	set_eo_slave_target(new_target);
+	set_eo_slave_target(new__target);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1902,10 +1904,10 @@ void select_previous_designated_eo_target (void)
 {
 	entity
 		*target,
-		*new_target,
+		*new__target,
 		*current_target;
 
-	new_target = NULL;
+	new__target = NULL;
 
 	if (!eo_low_light)
 	{
@@ -1923,7 +1925,7 @@ void select_previous_designated_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1939,7 +1941,7 @@ void select_previous_designated_eo_target (void)
 			{
 				if (get_selectable_eo_target (target))
 				{
-					new_target = target;
+					new__target = target;
 
 					break;
 				}
@@ -1949,7 +1951,7 @@ void select_previous_designated_eo_target (void)
 		}
 	}
 
-	set_eo_slave_target(new_target);
+	set_eo_slave_target(new__target);
 }
 
 
@@ -2169,7 +2171,7 @@ void keyboard_slew_eo_system(float fine_slew_rate, float medium_slew_rate, float
 		// keep point on ground (unless point off map)
 		if (has_moved && point_inside_map_area (&eo_tracking_point))
 		{
-			helicopter *raw = get_local_entity_data(get_gunship_entity());
+			helicopter *raw = (helicopter *) get_local_entity_data(get_gunship_entity());
 			eo_tracking_point.y = get_3d_terrain_point_data(eo_tracking_point.x, eo_tracking_point.z, &raw->ac.terrain_info);
 
 			// have to update server's tracking point so that missiles will aim in multiplayer
@@ -2310,7 +2312,7 @@ void joystick_slew_eo_system(float slew_rate)
 				// keep point on ground (unless point off map)
 				if (point_inside_map_area (&eo_tracking_point))
 				{
-					helicopter *raw = get_local_entity_data(get_gunship_entity());
+					helicopter *raw = (helicopter *) get_local_entity_data(get_gunship_entity());
 					eo_tracking_point.y = get_3d_terrain_point_data(eo_tracking_point.x, eo_tracking_point.z, &raw->ac.terrain_info);
 
 					// have to update server's tracking point so that missiles will aim in multiplayer
@@ -2513,7 +2515,7 @@ static void co_pilot_perform_eo_scan(void)
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
 	{
-		entity_sides source_side = get_local_entity_int_value(source, INT_TYPE_SIDE);
+		entity_sides source_side = (entity_sides) get_local_entity_int_value(source, INT_TYPE_SIDE);
 
 		heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 		cw_sweep_start_offset = co_pilot_sweep_heading;

@@ -96,7 +96,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (particle *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//

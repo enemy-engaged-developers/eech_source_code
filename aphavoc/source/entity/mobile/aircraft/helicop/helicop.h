@@ -121,7 +121,7 @@ typedef struct HELICOPTER helicopter;
 extern entity
 	*gunship_entity;
 
-extern struct SECTOR;
+struct SECTOR;
 
 extern struct SECTOR
 	*gunship_current_sector;

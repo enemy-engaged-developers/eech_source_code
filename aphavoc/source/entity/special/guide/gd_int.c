@@ -87,7 +87,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -111,7 +111,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_GUIDE_POSITION_TYPE:
 		////////////////////////////////////////
 		{
-			raw->guide_position_type = value;
+			raw->guide_position_type = (guide_position_types) value;
 
 			break;
 		}
@@ -196,7 +196,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	switch (type)
 	{

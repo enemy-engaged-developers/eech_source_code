@@ -105,7 +105,7 @@ static void update_input_ui_object (ui_object *obj)
 	old_viewport_x2 = active_viewport.x_max;
 	old_viewport_y2 = active_viewport.y_max;
 
-   input = obj->data;
+   input = (input_ui_object *) obj->data;
 
    // store parents viewport data
 

@@ -193,7 +193,7 @@ void pack_local_bridge_data (pack_modes mode)
 		if (get_local_entity_type (en) == ENTITY_TYPE_BRIDGE)
 		{
 
-			raw = get_local_entity_data (en);
+			raw = (bridge *) get_local_entity_data (en);
 
 			if (alive == raw->alive)
 			{
@@ -295,7 +295,7 @@ void unpack_local_bridge_data (pack_modes mode)
 
 			count --;
 
-			raw = get_local_entity_data (en);
+			raw = (bridge *) get_local_entity_data (en);
 
 			raw->alive = alive;
 

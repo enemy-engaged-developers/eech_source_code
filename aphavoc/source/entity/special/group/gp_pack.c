@@ -89,7 +89,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			group
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			if (group_database [raw->sub_type].local_only_group)
 			{
@@ -215,7 +215,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			group
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			if (group_database [raw->sub_type].local_only_group)
 			{
@@ -356,7 +356,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (group));
+			raw = (group *) malloc_fast_mem (sizeof (group));
 
 			set_local_entity_data (en, raw);
 
@@ -394,7 +394,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 			}
 			/////////////////////////////////////////////////////////////////
 
-			raw->group_list_type = unpack_int_value (en, INT_TYPE_GROUP_LIST_TYPE);
+			raw->group_list_type = (list_types) unpack_int_value (en, INT_TYPE_GROUP_LIST_TYPE);
 
 //			unpack_list_link (en, raw->group_list_type, &raw->group_link);
 			raw->group_link.parent = unpack_entity_safe_ptr ();
@@ -455,11 +455,11 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				entity
 					*force;
 	
-				list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+				list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 	
 				if (list_type != LIST_TYPE_INVALID)
 				{
-					force = get_local_force_entity (raw->side);
+					force = get_local_force_entity ((entity_sides) raw->side);
 	
 					ASSERT (force);
 	
@@ -492,7 +492,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (group));
+			raw = (group *) malloc_fast_mem (sizeof (group));
 
 			set_local_entity_data (en, raw);
 
@@ -524,7 +524,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			// task_dependent_link
 
-			raw->group_list_type = unpack_int_value (en, INT_TYPE_GROUP_LIST_TYPE);
+			raw->group_list_type = (list_types) unpack_int_value (en, INT_TYPE_GROUP_LIST_TYPE);
 
 //			unpack_list_link (en, raw->group_list_type, &raw->group_link);
 			raw->group_link.parent = unpack_entity_safe_ptr ();
@@ -580,11 +580,11 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 				entity
 					*force;
 	
-				list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+				list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 	
 				if (list_type != LIST_TYPE_INVALID)
 				{
-					force = get_local_force_entity (raw->side);
+					force = get_local_force_entity ((entity_sides) raw->side);
 	
 					ASSERT (force);
 	
@@ -649,7 +649,7 @@ void pack_local_group_data (pack_modes mode)
 	{
 		if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 		{
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			if (group_database [raw->sub_type].local_only_group)
 			{
@@ -705,7 +705,7 @@ void unpack_local_group_data (pack_modes mode)
 	{
 		if (get_local_entity_type (en) == ENTITY_TYPE_GROUP)
 		{
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			if (group_database [raw->sub_type].local_only_group)
 			{
@@ -765,7 +765,7 @@ void validate_local_group_data (void)
 		{
 			ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GROUP);
 
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			set_local_division_name (en, raw->division_name);
 
@@ -782,7 +782,7 @@ void validate_local_group_data (void)
 		{
 			ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GROUP);
 
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			set_local_division_name (en, raw->division_name);
 
@@ -799,7 +799,7 @@ void validate_local_group_data (void)
 		{
 			ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GROUP);
 
-			raw = get_local_entity_data (en);
+			raw = (group *) get_local_entity_data (en);
 
 			set_local_division_name (en, raw->division_name);
 

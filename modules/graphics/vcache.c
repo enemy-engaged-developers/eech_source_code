@@ -129,7 +129,7 @@ void set_vertex_cache_size ( int size )
 		vertex_cache_indices = NULL;
 	}
 
-	vertex_cache_indices = safe_malloc ( sizeof ( vertex_cache_info ) * size );
+	vertex_cache_indices = ( vertex_cache_info * ) safe_malloc ( sizeof ( vertex_cache_info ) * size );
 
 	vertex_cache_size = size;
 }

@@ -92,7 +92,7 @@ static void play_aircraft_weapon_launched_speech (entity *en, int weapon_type)
 
 	if (get_local_entity_int_value (en, INT_TYPE_PLAYER) == ENTITY_PLAYER_AI)
 	{
-		weapon_class = weapon_database [weapon_type].weapon_launched_wingman_speech;
+		weapon_class = (weapon_launch_wingman_speech_types) weapon_database [weapon_type].weapon_launched_wingman_speech;
 
 		switch (weapon_class)
 		{
@@ -177,7 +177,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	//
 	// Fire suppressed
@@ -261,7 +261,7 @@ aircraft_fire_result aircraft_fire_weapon (entity *en, unsigned int check_flags)
 
 		en_pos.y -= (get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE) + 2.0);
 
-		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, criteria))
+		if (!check_position_line_of_sight (en, target, &en_pos, target_pos, (mobile_los_check_criteria) criteria))
 		{
 			if (get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON) == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE
 				&& get_2d_range(&en_pos, target_pos) > weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].min_range_loal)
@@ -313,7 +313,7 @@ void update_aircraft_weapon_fire (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-   raw = get_local_entity_data (en);
+   raw = (aircraft *) get_local_entity_data (en);
 
 	if (raw->weapon_burst_timer > 0.0)
 	{
@@ -422,7 +422,7 @@ void update_aircraft_decoy_release (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -509,7 +509,7 @@ void update_aircraft_decoy_release (entity *en)
 
 							velocity = get_local_entity_float_value (persuer, FLOAT_TYPE_VELOCITY);
 
-							time_to_impact = range / max (velocity, 1.0);
+							time_to_impact = range / max (velocity, 1.0f);
 
 							if (time_to_impact < 10.0)
 							{
@@ -537,7 +537,7 @@ void update_aircraft_decoy_release (entity *en)
 
 							velocity = get_local_entity_float_value (persuer, FLOAT_TYPE_VELOCITY);
 
-							time_to_impact = range / max (velocity, 1.0);
+							time_to_impact = range / max (velocity, 1.0f);
 
 							if (time_to_impact < 10.0)
 							{

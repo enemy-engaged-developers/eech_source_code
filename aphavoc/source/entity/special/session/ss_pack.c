@@ -99,7 +99,7 @@ static void pack_local_data (entity *en, pack_modes mode)
          session
             *raw;
 
-         raw = get_local_entity_data (en);
+         raw = (session *) get_local_entity_data (en);
 
          pack_float_value (en, FLOAT_TYPE_ELAPSED_TIME, raw->elapsed_time);
 
@@ -241,7 +241,7 @@ void pack_local_session_data (pack_modes mode)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
    switch (mode)
    {
@@ -514,7 +514,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			ASSERT (en);
 			
-			raw = get_local_entity_data (en);
+			raw = (session *) get_local_entity_data (en);
 
 			raw->version_number = unpack_int_value (en, INT_TYPE_VERSION_NUMBER);
 		
@@ -544,8 +544,8 @@ void unpack_local_session_data (pack_modes mode)
 			raw->weather_mode_transitional_period = unpack_float_value (en, FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_PERIOD);
 			raw->weather_mode_transitional_status = unpack_float_value (en, FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_STATUS);
 		
-			raw->weather_mode = unpack_int_value (en, INT_TYPE_WEATHER_MODE);
-			raw->target_weather_mode = unpack_int_value (en, INT_TYPE_TARGET_WEATHER_MODE);
+			raw->weather_mode = (weathermodes) unpack_int_value (en, INT_TYPE_WEATHER_MODE);
+			raw->target_weather_mode = (weathermodes) unpack_int_value (en, INT_TYPE_TARGET_WEATHER_MODE);
 		
 			unpack_vec3d (en, VEC3D_TYPE_WEATHER_POSITION, &raw->weather_position);
 			unpack_vec3d (en, VEC3D_TYPE_WEATHER_VELOCITY, &raw->weather_velocity);
@@ -565,7 +565,7 @@ void unpack_local_session_data (pack_modes mode)
 		
 			//
 		
-			raw->day_segment_type = unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
+			raw->day_segment_type = (day_segment_types) unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
 
 			raw->population_x_min = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MIN);
 			raw->population_x_max = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MAX);
@@ -616,7 +616,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			set_local_entity_type (en, ENTITY_TYPE_SESSION);
 
-			raw = malloc_fast_mem (sizeof (session));
+			raw = (session *) malloc_fast_mem (sizeof (session));
 
 			set_local_entity_data (en, raw);
 
@@ -656,8 +656,8 @@ void unpack_local_session_data (pack_modes mode)
          raw->weather_mode_transitional_period = unpack_float_value (en, FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_PERIOD);
          raw->weather_mode_transitional_status = unpack_float_value (en, FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_STATUS);
 
-         raw->weather_mode = unpack_int_value (en, INT_TYPE_WEATHER_MODE);
-         raw->target_weather_mode = unpack_int_value (en, INT_TYPE_TARGET_WEATHER_MODE);
+         raw->weather_mode = (weathermodes) unpack_int_value (en, INT_TYPE_WEATHER_MODE);
+         raw->target_weather_mode = (weathermodes) unpack_int_value (en, INT_TYPE_TARGET_WEATHER_MODE);
 
 			unpack_vec3d (en, VEC3D_TYPE_WEATHER_POSITION, &raw->weather_position);
 			unpack_vec3d (en, VEC3D_TYPE_WEATHER_VELOCITY, &raw->weather_velocity);
@@ -677,7 +677,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			//
 
-			raw->day_segment_type = unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
+			raw->day_segment_type = (day_segment_types) unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
 
 			raw->population_x_min = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MIN);
 			raw->population_x_max = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MAX);
@@ -745,7 +745,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			set_local_entity_type (en, ENTITY_TYPE_SESSION);
 
-			raw = malloc_fast_mem (sizeof (session));
+			raw = (session *) malloc_fast_mem (sizeof (session));
 
 			set_local_entity_data (en, raw);
 
@@ -777,7 +777,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			// weather_mode_transitional_status
 
-			raw->weather_mode = unpack_int_value (en, INT_TYPE_WEATHER_MODE);
+			raw->weather_mode = (weathermodes) unpack_int_value (en, INT_TYPE_WEATHER_MODE);
 
 			// target_weather_mode
 
@@ -785,7 +785,7 @@ void unpack_local_session_data (pack_modes mode)
 
 			// weather velocity
 
-			raw->day_segment_type = unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
+			raw->day_segment_type = (day_segment_types) unpack_int_value (en, INT_TYPE_DAY_SEGMENT_TYPE);
 
 			raw->population_x_min = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MIN);
 			raw->population_x_max = unpack_float_value (en, FLOAT_TYPE_POPULATION_X_MAX);

@@ -485,7 +485,7 @@ void recalculate_slider_origin (ui_object *slider_object)
 		y_origin /= (slider_y_size - get_ui_object_y_size (slider_area));
 		y_origin *= overhang;
 
-		y_origin = max (y_origin, 0.0);
+		y_origin = max (y_origin, 0.0f);
 
 		// set 'object_to_slide' origins
 

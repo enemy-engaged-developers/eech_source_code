@@ -170,7 +170,7 @@ void initialise_mouse ( void )
 	if ( input_system_type == INPUT_DIRECTINPUT )
 	{
 	
-		ret = IDirectInput7_CreateDeviceEx ( direct_input, &GUID_SysMouse, &IID_IDirectInputDevice7, ( LPVOID * ) &direct_input_mouse, NULL );
+		ret = IDirectInput7_CreateDeviceEx ( direct_input, GUID_PREFIX GUID_SysMouse, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &direct_input_mouse, NULL );
 	
 		if (ret != DI_OK )
 		{
@@ -232,6 +232,8 @@ void initialise_mouse ( void )
 		register_pre_activate_message_function ( mouse_activation_routine );
 
 		ret = IDirectInputDevice7_Acquire ( direct_input_mouse );
+
+		ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
 	}
 	else
 	{
@@ -251,8 +253,6 @@ void initialise_mouse ( void )
 		register_system_message_function ( WM_MBUTTONUP, windows_middle_button_up_routine ); // Jabberwock 031016 Middle button
 
 	}
-
-	ret = IDirectInputDevice7_SetCooperativeLevel ( direct_input_mouse, application_window, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

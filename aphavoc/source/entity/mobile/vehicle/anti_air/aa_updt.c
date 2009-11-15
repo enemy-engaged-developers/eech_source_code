@@ -84,13 +84,13 @@ static void update_server (entity *en)
 	anti_aircraft
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 
 	raw->vh.sleep -= get_delta_time ();
 
-	raw->vh.sleep = max (raw->vh.sleep, 0.0);
+	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
 	if (raw->vh.mob.alive)
 	{
@@ -145,13 +145,13 @@ static void update_client (entity *en)
 	anti_aircraft
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 
 	raw->vh.sleep -= get_delta_time ();
 
-	raw->vh.sleep = max (raw->vh.sleep, 0.0);
+	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
 	if (raw->vh.mob.alive)
 	{

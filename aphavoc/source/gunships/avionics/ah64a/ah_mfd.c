@@ -1581,14 +1581,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 
 //VJ 030423 TSD render mod
 	source = get_gunship_entity ();
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);	
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);	
 
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 	dx = (target_position->x - source_position->x) * scale;
 	dy = (target_position->z - source_position->z) * scale;
 
-	target_symbol_type = get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
+	target_symbol_type = (target_symbol_types) get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
 
 	ASSERT ((target_symbol_type >= 0) && (target_symbol_type < NUM_TARGET_SYMBOL_TYPES));
 
@@ -1761,7 +1761,7 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 
 	if (radius < 2000.0)
 	{
-		radius = max (50.0, radius);
+		radius = max (50.0f, radius);
 
 		draw_2d_hatched_circle (dx, dy, radius * scale, MFD_COLOUR5);
 	}
@@ -2110,7 +2110,7 @@ static void draw_air_radar_mfd (void)
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	////////////////////////////////////////
 	//
@@ -2601,7 +2601,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 	day_segment_types
 		day_segment_type;
 
-	int
+	display_3d_tints
 		tint;
 
 	ASSERT (eo);
@@ -2657,7 +2657,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -2751,7 +2751,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 	day_segment_types
 		day_segment_type;
 
-	int
+	display_3d_tints
 		tint;
 
 	ASSERT (eo);
@@ -2810,7 +2810,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -2939,7 +2939,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -3531,7 +3531,7 @@ static void draw_tactical_situation_display_mfd (void)
 
 	source = get_gunship_entity ();
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -3835,7 +3835,7 @@ static void draw_tactical_situation_display_mfd (void)
 				{
 					if (source_side != get_local_entity_int_value (target, INT_TYPE_SIDE))
 					{
-						threat_type = get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
+						threat_type = (threat_types) get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
 
 						if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA))
 						{
@@ -3910,7 +3910,7 @@ static void draw_tactical_situation_display_mfd (void)
 					{
 						if (get_local_entity_int_value (target, INT_TYPE_RADAR_ON))
 						{
-							threat_type = get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
+							threat_type = (threat_types) get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
 
 							if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 							{
@@ -4428,7 +4428,7 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 
 			threat_velocity = get_local_entity_float_value (threat, FLOAT_TYPE_VELOCITY);
 
-			time_to_impact = threat_range / max (threat_velocity, 1.0);
+			time_to_impact = threat_range / max (threat_velocity, 1.0f);
 
 			//
 			// guard against 'overshot target' to prevent spurious indications
@@ -4510,7 +4510,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 
 	source = get_gunship_entity ();
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -4570,7 +4570,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 			{
 				if (source_side != get_local_entity_int_value (threat, INT_TYPE_SIDE))
 				{
-					threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+					threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 					if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA))
 					{
@@ -4601,7 +4601,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 			{
 				if (source_side != get_local_entity_int_value (threat, INT_TYPE_SIDE))
 				{
-					threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+					threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 					if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 					{
@@ -4627,7 +4627,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 				{
 					if (get_local_entity_int_value (threat, INT_TYPE_RADAR_ON))
 					{
-						threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+						threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 						if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 						{
@@ -4678,7 +4678,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (void)
 
 		while (threat)
 		{
-			threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+			threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 			if ((threat_type == THREAT_TYPE_RF_MISSILE) || (threat_type == THREAT_TYPE_IR_MISSILE) || (threat_type == THREAT_TYPE_LASER_MISSILE))
 			{

@@ -108,7 +108,7 @@ void animate_ship_rotors (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	inst3d = raw->vh.inst3d;
 
@@ -179,7 +179,7 @@ void damage_ship_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	if (raw->vh.object_3d_shape == get_local_entity_int_value (en, INT_TYPE_DESTROYED_3D_SHAPE))
 	{
@@ -218,7 +218,7 @@ void set_ship_vehicle_id_number (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (ship_vehicle *) get_local_entity_data (en);
 
 	if (raw->vh.mob.side == ENTITY_SIDE_BLUE_FORCE)
 	{

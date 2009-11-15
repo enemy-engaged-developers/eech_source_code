@@ -76,7 +76,7 @@ static void set_area_ui_object_user_ptr (ui_object *obj, void *ptr)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->user_ptr = ptr;
 }
@@ -91,7 +91,7 @@ static void *get_area_ui_object_user_ptr (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->user_ptr);
 }

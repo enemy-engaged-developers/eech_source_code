@@ -239,7 +239,7 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 
 	ASSERT (position);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	target = raw->mob.target_link.parent;
 
@@ -255,7 +255,7 @@ static int get_target_position (entity *en, vec3d *position, int can_guide_on_gr
 	{
 		if (get_local_entity_int_value (target, INT_TYPE_IDENTIFY_MOBILE))
 		{
-			weapon_decoy_type = get_local_entity_int_value (target, INT_TYPE_WEAPON_DECOY_TYPE);
+			weapon_decoy_type = (weapon_decoy_types) get_local_entity_int_value (target, INT_TYPE_WEAPON_DECOY_TYPE);
 
 			if (weapon_decoy_type == WEAPON_DECOY_TYPE_NONE)
 			{
@@ -326,7 +326,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	ASSERT (intercept_point);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -530,7 +530,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	turn_demand = acos (cos_turn_demand);
 
-	max_turn_rate = weapon_database[raw->mob.sub_type].g_max / max (raw->mob.velocity, 1.0);
+	max_turn_rate = weapon_database[raw->mob.sub_type].g_max / max (raw->mob.velocity, 1.0f);
 
 	turn_rate = bound (turn_demand, -max_turn_rate, max_turn_rate);
 
@@ -609,7 +609,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	raw->mob.velocity += acceleration * get_delta_time ();
 
-	raw->mob.velocity = max (raw->mob.velocity, 0.0);
+	raw->mob.velocity = max (raw->mob.velocity, 0.0f);
 
 	if (raw->weapon_lifetime < 0.0 && raw->mob.velocity < 20.0)  // self destruct if speed drops too low (after motor has burned out)
 	{
@@ -687,7 +687,7 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		// velocity
 
 		raw->mob.velocity += acceleration * delta_time;
-		raw->mob.velocity = max (raw->mob.velocity, 0.0);
+		raw->mob.velocity = max (raw->mob.velocity, 0.0f);
 	}
 
 
@@ -771,19 +771,19 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 				{
 					h_vel = bound (h_vel, -7.5, 7.5);
 
-					v_vel = max (v_vel, -15.0);
+					v_vel = max (v_vel, -15.0f);
 				}
 				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN2)
 				{
 					h_vel = bound (h_vel, -5.0, 5.0);
 
-					v_vel = max (v_vel, -10.0);
+					v_vel = max (v_vel, -10.0f);
 				}
 				else if (raw->parachute_status == PARACHUTE_STATUS_OPEN3)
 				{
 					h_vel = bound (h_vel, -2.5, 2.5);
 
-					v_vel = max (v_vel, -5.0);
+					v_vel = max (v_vel, -5.0f);
 				}
 
 				break;
@@ -792,7 +792,7 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 			{
 				h_vel = bound (h_vel, -10.0, 10.0);
 
-				v_vel = max (v_vel, -20.0);
+				v_vel = max (v_vel, -20.0f);
 
 				break;
 			}
@@ -950,7 +950,7 @@ void weapon_movement (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	ASSERT (entity_sub_type_weapon_valid (raw->mob.sub_type));
 
@@ -960,7 +960,7 @@ void weapon_movement (entity *en)
 	//
 	////////////////////////////////////////
 
-	raw->mob.velocity = max (raw->mob.velocity, 0.0);
+	raw->mob.velocity = max (raw->mob.velocity, 0.0f);
 
 	////////////////////////////////////////
 	//
@@ -1203,7 +1203,7 @@ void weapon_movement (entity *en)
 		// unless missile is a LOAL hellfire in phase 1 or 2, move as an unguided weapon when no target
 		if (!raw->loal_mode || raw->missile_phase > MISSILE_PHASE2)
 		{
-			weapon* weapon = get_local_entity_data (en);
+			weapon* weapon = (struct WEAPON *) get_local_entity_data (en);
 			move_unguided_weapon (weapon, &new_position, get_delta_time(), TRUE);
 		}
 		else
@@ -1594,8 +1594,8 @@ void calculate_projectory(weapon* wpn, FILE* output)
 	num_range_values = (int)(weapon_database[wpn->mob.sub_type].max_range / RANGE_STEP) + 2;
 
 	// initialize -90 and +90
-	data[0] = safe_malloc(sizeof(ballistics_data) * num_range_values);
-	data[TOTAL_PITCH_INDICES - 1] = safe_malloc(sizeof(ballistics_data) * num_range_values);
+	data[0] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
+	data[TOTAL_PITCH_INDICES - 1] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
 
 	for (i=0; i < num_range_values; i++)
 	{
@@ -1630,7 +1630,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 		ASSERT(get_floor_pitch_index(pitch + rad(0.1), &dummy) == pitch_index);
 
-		data[pitch_index] = safe_malloc(sizeof(ballistics_data) * num_range_values);
+		data[pitch_index] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
 
 		// initialize weapon for new firing
 		wpn->weapon_lifetime = weapon_database[wpn->mob.sub_type].burn_time;
@@ -1640,7 +1640,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 		wpn->mob.position.y = 0.0;
 		wpn->mob.position.z = 0.0;
 
-		get_identity_matrix3x3(&wpn->mob.attitude);
+		get_identity_matrix3x3(wpn->mob.attitude);
 		get_3d_transformation_matrix(wpn->mob.attitude, 0.0, pitch, 0.0);
 
 		// initialize 0-range:
@@ -1652,7 +1652,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 		// don't calculate out to entire range for very high or low pitch values (takes too long)
 		max_range = min(weapon_database[wpn->mob.sub_type].max_range,
-			weapon_database[wpn->mob.sub_type].max_range * cos(pitch) * 1.25);
+			weapon_database[wpn->mob.sub_type].max_range * cos(pitch) * 1.25f);
 
 		while (wpn->mob.position.z < max_range)
 		{
@@ -1850,7 +1850,7 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 	// times so that it stabalizes somewhat
 	for (i = 0; i < iterations; i++)
 	{
-		float use_pitch = min(straight_pitch + drop_compensation, rad(90.0));
+		float use_pitch = min(straight_pitch + drop_compensation, rad(90.0f));
 
 		pitch_index = get_floor_pitch_index(use_pitch, &pitch_delta);
 		ASSERT(pitch_index >= 0 && pitch_index < TOTAL_PITCH_INDICES);

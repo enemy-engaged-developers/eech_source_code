@@ -84,7 +84,7 @@ env_2d *create_2d_environment (void)
 	env_2d
 		*env;
 
-	env = safe_malloc (sizeof (env_2d));
+	env = (env_2d *) safe_malloc (sizeof (env_2d));
 
 	//
 	// initialise 'safe' values

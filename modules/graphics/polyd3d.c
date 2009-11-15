@@ -605,7 +605,7 @@ void draw_wbuffered_shadow_textured_polygon ( vertex *polygon, screen *texture )
 	// First, make sure the texture has a hardware component
 	//
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( texture ) );
+	set_d3d_texture ( 0, texture );
 
 	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_FLAT );
 

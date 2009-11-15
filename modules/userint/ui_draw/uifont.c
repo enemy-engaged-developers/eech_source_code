@@ -477,6 +477,8 @@ float ui_display_text (char *text, float x, float y)
 		return 0;
 	}
 
+	ASSERT ( active_screen->pixel_length <= 16 );
+
 	//
 	// setup stuff
 	//

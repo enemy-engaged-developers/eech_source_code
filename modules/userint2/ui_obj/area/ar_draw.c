@@ -535,7 +535,7 @@ static void tool_tips_draw_area_ui_object (ui_object *obj)
 	if (get_ui_object_tool_tips (obj))
 	{
 
-		int
+		font_types
 			old_font;
 
 		int

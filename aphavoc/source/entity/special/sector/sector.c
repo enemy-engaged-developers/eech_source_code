@@ -132,8 +132,7 @@ entity *get_local_sector_entity (vec3d *pos)
 
 static float get_local_sector_entity_enemy_defence_level (float *array, entity_sides side)
 {
-
-	entity_sides
+	int
 		loop;
 
 	float
@@ -167,7 +166,7 @@ float get_local_sector_entity_enemy_surface_to_air_defence_level (entity *sector
 	sector
 		*raw;
 
-	raw = get_local_entity_data (sector_en);
+	raw = (sector *) get_local_entity_data (sector_en);
 
 	return get_local_sector_entity_enemy_defence_level (raw->surface_to_air_defence_level, side);
 }
@@ -181,7 +180,7 @@ float get_local_sector_entity_enemy_surface_to_surface_defence_level (entity *se
 	sector
 		*raw;
 
-	raw = get_local_entity_data (sector_en);
+	raw = (sector *) get_local_entity_data (sector_en);
 
 	return get_local_sector_entity_enemy_defence_level (raw->surface_to_surface_defence_level, side);
 }
@@ -204,7 +203,7 @@ float get_sector_importance_level (int sx, int sz, entity_sides side)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	return raw->importance_level [side];
 }
@@ -227,7 +226,7 @@ float get_sector_distance_to_friendly_base (int sx, int sz, entity_sides side)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	return raw->distance_to_friendly_base [side];
 }
@@ -312,7 +311,7 @@ float get_local_sector_side_ratio (int sx, int sz, entity_sides side)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	total = raw->sector_side [ENTITY_SIDE_BLUE_FORCE] + raw->sector_side [ENTITY_SIDE_RED_FORCE];
 
@@ -418,7 +417,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 		return;
 	}
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -468,7 +467,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 
 			sec = get_local_raw_sector_entity(x, z);
 
-			sector_raw = get_local_entity_data (sec);
+			sector_raw = (sector *) get_local_entity_data (sec);
 
 			current_fog_value = sector_raw->fog_of_war [side];
 
@@ -488,7 +487,7 @@ void set_sector_fog_of_war_value (entity *en, entity *sector_en)
 
 				if (r <= recon_radius)
 				{
-					new_fog_value = max (current_fog_value, ((1.0 - (r / recon_radius)) * maximum_value));
+					new_fog_value = max (current_fog_value, ((1.0f - (r / recon_radius)) * maximum_value));
 				}
 			}
 
@@ -515,7 +514,7 @@ float get_sector_fog_of_war_value (entity *en, entity_sides side)
 		
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	if (get_local_entity_int_value (en, INT_TYPE_SECTOR_SIDE) == side)
 	{
@@ -548,7 +547,7 @@ void update_sector_fog_of_war (void)
 		{
 			sec = get_local_raw_sector_entity (x, z);
 
-			raw = get_local_entity_data (sec);
+			raw = (sector *) get_local_entity_data (sec);
 
 			raw->fog_of_war [ENTITY_SIDE_BLUE_FORCE] = max (0.0, raw->fog_of_war [ENTITY_SIDE_BLUE_FORCE] - FOG_OF_WAR_DECAY_RATE);
 			raw->fog_of_war [ENTITY_SIDE_RED_FORCE] = max (0.0, raw->fog_of_war [ENTITY_SIDE_RED_FORCE] - FOG_OF_WAR_DECAY_RATE);
@@ -592,7 +591,7 @@ void update_sector_side_count (void)
 	{
 		count [side] = 0;
 
-		force_entity [side] = get_local_force_entity (side);
+		force_entity [side] = get_local_force_entity ((entity_sides) side);
 	}
 
 	for (z = NUM_MAP_Z_SECTORS - 1; z >= 0; z --)
@@ -671,7 +670,7 @@ int get_sector_task_type_count (entity *en, entity_sub_types task_type, entity_s
 		sector
 			*raw;
 			
-		raw = get_local_entity_data (en);
+		raw = (sector *) get_local_entity_data (en);
 		
 		debug_log ("SECTOR : %d tasks of type %s in sector %d, %d",
 						count,

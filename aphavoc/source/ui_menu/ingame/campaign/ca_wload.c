@@ -213,7 +213,7 @@ void show_weapon_loading_page (entity *group, int force_update)
 
 	ASSERT (en);
 
-	type = get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
+	type = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
 
 	if (get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE) < NUM_GUNSHIP_TYPES)
 	{
@@ -352,7 +352,7 @@ static void notify_weapon_loading_page_change_weapon (ui_object *obj, void *arg)
 
 	if (get_helicopter_allowed_to_rearm (en))
 	{
-		weapon_loading_select_next_weapon (en, hardpoint);
+		weapon_loading_select_next_weapon (en, (weapon_loading_hardpoint_types) hardpoint);
 	}
 
 	rebuild_default_payload_list (en);
@@ -370,8 +370,8 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 	gunship_types
 		gunship;
 
-	weapon_loading_hardpoint_types
-		hardpoint;
+	int
+		hardpoint_;
 
 	int
 		count,
@@ -394,7 +394,7 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 
 	ASSERT (en);
 
-	gunship = get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
+	gunship = (gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE);
 
 	ASSERT (gunship < NUM_GUNSHIP_TYPES);
 
@@ -411,8 +411,13 @@ static void update_weapon_loading_gunship_page (ui_object *obj, void *arg)
 	// Set button text
 	//	
 
-	for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint ++)
+	for (hardpoint_ = 0; hardpoint_ < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint_++)
 	{
+		weapon_loading_hardpoint_types
+			hardpoint;
+
+		hardpoint = (weapon_loading_hardpoint_types) hardpoint_;
+
 		if (weapon_loading_button_list [gunship][hardpoint].valid)
 		{
 			button_object = weapon_loading_button_list [gunship][hardpoint].button_ptr;
@@ -718,8 +723,10 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	int
 		loop,
-		gunship,
 		hardpoint;
+
+	gunship_types
+		gunship;
 
 	ui_object
 		*page,
@@ -754,12 +761,12 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	// Clear buttons
 	//
 	
-	for (gunship = 0; gunship < NUM_GUNSHIP_TYPES; gunship ++)
+	for (loop = 0; loop < NUM_GUNSHIP_TYPES; loop++)
 	{
 		for (hardpoint = 0; hardpoint < NUM_WEAPON_LOADING_HARDPOINT_TYPES; hardpoint ++)
 		{
-			weapon_loading_button_list [gunship][hardpoint].valid = FALSE;
-			weapon_loading_button_list [gunship][hardpoint].button_ptr = NULL;
+			weapon_loading_button_list [loop][hardpoint].valid = FALSE;
+			weapon_loading_button_list [loop][hardpoint].button_ptr = NULL;
 		}
 	}
 

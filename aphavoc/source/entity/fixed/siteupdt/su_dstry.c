@@ -93,7 +93,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -236,7 +236,7 @@ static void kill_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (site_updatable *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//

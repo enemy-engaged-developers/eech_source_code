@@ -123,7 +123,7 @@ static void set_local_first_child (entity *en, list_types type, entity *first_ch
 	vehicle
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/set_frst.h"
 }
@@ -144,7 +144,7 @@ static entity *get_local_first_child (entity *en, list_types type)
 	entity
 		*first_child;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/get_frst.h"
 
@@ -164,7 +164,7 @@ static void set_local_parent (entity *en, list_types type, entity *parent)
 	vehicle
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/set_prnt.h"
 }
@@ -185,7 +185,7 @@ static entity *get_local_parent (entity *en, list_types type)
 	entity
 		*parent;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/get_prnt.h"
 
@@ -205,7 +205,7 @@ static void set_local_child_succ (entity *en, list_types type, entity *child_suc
 	vehicle
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/set_succ.h"
 }
@@ -226,7 +226,7 @@ static entity *get_local_child_succ (entity *en, list_types type)
 	entity
 		*child_succ;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/get_succ.h"
 
@@ -246,7 +246,7 @@ static void set_local_child_pred (entity *en, list_types type, entity *child_pre
 	vehicle
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/set_pred.h"
 }
@@ -267,7 +267,7 @@ static entity *get_local_child_pred (entity *en, list_types type)
 	entity
 		*child_pred;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	#include "entity/system/en_funcs/en_list/get_pred.h"
 

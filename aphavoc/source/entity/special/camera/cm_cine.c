@@ -99,7 +99,7 @@ void reset_cinematic_camera (camera *raw)
 
 	en = raw->external_view_entity;
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	//
 	// select 3D camera
@@ -312,7 +312,7 @@ void update_cinematic_camera (camera *raw)
 			object_3d_instance
 				*inst3d;
 
-			inst3d = get_local_entity_ptr_value (raw->external_view_entity, PTR_TYPE_INSTANCE_3D_OBJECT);
+			inst3d = (object_3d_instance *) get_local_entity_ptr_value (raw->external_view_entity, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 			if (raw->cinematic_camera_depth >= get_number_of_3d_object_cameras (inst3d, raw->cinematic_camera_index))
 			{
@@ -441,7 +441,7 @@ void update_cinematic_camera_continued (camera *raw)
 		{
 			normalised_timer = raw->cinematic_camera_timer / raw->cinematic_camera_lifetime;
 
-			inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+			inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
 
@@ -461,7 +461,7 @@ void update_cinematic_camera_continued (camera *raw)
 		{
 			normalised_timer = 0.0;
 
-			inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+			inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 			get_local_entity_vec3d (en, VEC3D_TYPE_POSITION, &inst3d->vp.position);
 
@@ -483,7 +483,7 @@ void update_cinematic_camera_continued (camera *raw)
 
 	if (point_inside_map_area (&raw->position))
 	{
-		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5);
+		raw->position.y = max (raw->position.y, get_3d_terrain_point_data (raw->position.x, raw->position.z, &raw->terrain_info) + 0.5f);
 	}
 
 	//

@@ -349,7 +349,7 @@ void create_client_pilot (void)
 	// Send request
 	//
 
-	send_packet (get_server_id (), PACKET_TYPE_CLIENT_PILOT_REQUEST, (void *) &pilot_data, sizeof (client_pilot_request_data), SEND_TYPE_PERSONAL);
+	send_packet (get_server_id (), PACKET_TYPE_CLIENT_PILOT_REQUEST, (unsigned char *) &pilot_data, sizeof (client_pilot_request_data), SEND_TYPE_PERSONAL);
 
 	// turn off NEXT button while Pilot entity is being created client_server
 	if (get_comms_model () == COMMS_MODEL_CLIENT)
@@ -480,7 +480,7 @@ int update_pilot_high_score_table (void)
 	// create arrays of player pilots and their scores
 	//
 
-	full_table = malloc_fast_mem (sizeof (pilot_score_type) * num_pilots);
+	full_table = (pilot_score_type *) malloc_fast_mem (sizeof (pilot_score_type) * num_pilots);
 
 	count = 0;
 
@@ -494,7 +494,7 @@ int update_pilot_high_score_table (void)
 		{
 			full_table [count].kills = get_local_entity_int_value (pilot_en, INT_TYPE_KILLS);
 
-			full_table [count].side = get_local_entity_int_value (pilot_en, INT_TYPE_SIDE);
+			full_table [count].side = (entity_sides) get_local_entity_int_value (pilot_en, INT_TYPE_SIDE);
 
 			full_table [count].valid = TRUE;
 

@@ -89,7 +89,7 @@ static void update_rotors (entity *en)
 	helicopter
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (!get_local_entity_parent (en, LIST_TYPE_FOLLOWER))
 	{
@@ -119,7 +119,7 @@ static void update_server (entity *en)
 	aircraft_damage_types
 		damage_type;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 
@@ -227,7 +227,7 @@ static void update_server (entity *en)
 				if (pos)
 				{
 					sec = get_local_sector_entity(pos);
-					gunship_current_sector = get_local_entity_data(sec);
+					gunship_current_sector = (sector *) get_local_entity_data(sec);
 				}
 
 				update_current_flight_dynamics_fuel_weight ();
@@ -470,7 +470,7 @@ static void update_client (entity *en)
 	aircraft_damage_types
 		damage_type;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 

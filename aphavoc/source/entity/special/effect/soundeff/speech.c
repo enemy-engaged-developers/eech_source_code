@@ -267,7 +267,7 @@ static int add_speech_to_list
 	// Create new queue entry
 	//
 
-	new_item = malloc_fast_mem (sizeof (speech_system_queue_type));
+	new_item = (speech_system_queue_type *) malloc_fast_mem (sizeof (speech_system_queue_type));
 
 	ASSERT (new_item);
 
@@ -299,7 +299,7 @@ static int add_speech_to_list
 
 	new_item->sample_count = sample_count;
 
-	new_item->sample_list = malloc_fast_mem (sizeof (sound_sample_indices) * sample_count);
+	new_item->sample_list = (sound_sample_indices *) malloc_fast_mem (sizeof (sound_sample_indices) * sample_count);
 
 	memcpy (new_item->sample_list, sample_list, (sizeof (sound_sample_indices) * sample_count));
 
@@ -543,7 +543,7 @@ void update_speech_buffers (void)
 				// play next speech
 				//
 
-				play_buffered_speech (side, originator);
+				play_buffered_speech ((entity_sides) side, (speech_originator_types) originator);
 			}
 
 			//
@@ -558,24 +558,24 @@ void update_speech_buffers (void)
 
 				if (item->expire_time < buffer->exclude_list [item->category].timer)
 				{
-					remove_speech_from_list (side, originator, item);
+					remove_speech_from_list ((entity_sides) side, (speech_originator_types) originator, item);
 				}
 				else
 				{
 					item->delay -= get_delta_time ();
 
-					item->delay = max (item->delay, 0.0);
+					item->delay = max (item->delay, 0.0f);
 
 					item->expire_time -= get_delta_time ();
 
 					if (item->category_silence_timer > 0.0)
 					{
-						item->category_silence_timer = max (0.0, item->category_silence_timer - get_delta_time ());
+						item->category_silence_timer = max (0.0f, item->category_silence_timer - get_delta_time ());
 					}
 
 					if (item->expire_time < 0.0)
 					{
-						remove_speech_from_list (side, originator, item);
+						remove_speech_from_list ((entity_sides) side, (speech_originator_types) originator, item);
 					}
 				}
 
@@ -590,7 +590,7 @@ void update_speech_buffers (void)
 			{
 				buffer->exclude_list [category].timer -= get_delta_time ();
 
-				buffer->exclude_list [category].timer = max (buffer->exclude_list [category].timer, 0.0);
+				buffer->exclude_list [category].timer = max (buffer->exclude_list [category].timer, 0.0f);
 			}
 		}
 	}
@@ -736,7 +736,7 @@ void notify_speech_buffers_entity_killed (entity *en)
 
 			if (item->parent == en)
 			{
-				remove_speech_from_list (side, originator, item);
+				remove_speech_from_list ((entity_sides) side, (speech_originator_types) originator, item);
 			}
 
 			item = next;
@@ -805,7 +805,7 @@ int play_client_server_speech
 
 	va_start (pargs, category_silence_timer);
 
-	array_type = va_arg (pargs, int);
+	array_type = (speech_array_types) va_arg (pargs, int);
 
 	while (array_type != -1)
 	{
@@ -832,7 +832,7 @@ int play_client_server_speech
 			debug_fatal ("SPEECH : More than %d samples in speech list", MAX_SEQUENCED_SAMPLES);
 		}
 
-		array_type = va_arg (pargs, int);
+		array_type = (speech_array_types) va_arg (pargs, int);
 	}
 
 	va_end (pargs);
@@ -914,11 +914,11 @@ void initialise_sample_index_array (speech_array_types array_type, speech_origin
 	//
 
 	blue_force_entry->num_items = max_items;
-	blue_force_entry->sample_indices = safe_malloc (sizeof (sound_sample_indices) * max_items);
+	blue_force_entry->sample_indices = (sound_sample_indices *) safe_malloc (sizeof (sound_sample_indices) * max_items);
 	memset (blue_force_entry->sample_indices, 0, (sizeof (sound_sample_indices) * max_items));
 
 	red_force_entry->num_items = max_items;
-	red_force_entry->sample_indices = safe_malloc (sizeof (sound_sample_indices) * max_items);
+	red_force_entry->sample_indices = (sound_sample_indices *) safe_malloc (sizeof (sound_sample_indices) * max_items);
 	memset (red_force_entry->sample_indices, 0, (sizeof (sound_sample_indices) * max_items));
 }
 
@@ -1306,7 +1306,7 @@ static int play_client_server_personal_message
 						(
 							en,
 							en,
-							get_local_entity_int_value (en, INT_TYPE_SIDE),
+							(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 							sub_type,
 							SOUND_LOCALITY_RADIO,
 							0.0,
@@ -1343,7 +1343,7 @@ int play_client_server_cpg_message (entity *en, float priority, float expire_tim
 							expire_time,
 							ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE,
 							SPEECH_ORIGINATOR_CO_PILOT,
-							speech_category,
+							(speech_category_types) speech_category,
 							category_silence_timer,
 							SPEECH_ARRAY_CPG_MESSAGES, speech_index
 						);
@@ -1385,7 +1385,7 @@ int play_client_server_cpg_contact_message (entity *en, int target_speech_index,
 		(
 			en,
 			en,
-			get_local_entity_int_value (en, INT_TYPE_SIDE),
+			(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE,
 			SOUND_LOCALITY_RADIO,
 			0.0,
@@ -1511,7 +1511,7 @@ int play_client_server_wingman_message
 		return play_client_server_radio_message
 					(
 						en,
-						get_local_entity_int_value (en, INT_TYPE_SIDE),
+						(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 						priority,
 						expire_time,
 						get_wingman_speech_originator (en),

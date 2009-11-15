@@ -64,29 +64,37 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_set_ui_object_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+typedef void (*FUNCTION)(ui_object *, void *);
+typedef void (*FUNCTION_SET)(ui_object *, FUNCTION);
+typedef FUNCTION (*FUNCTION_GET)(ui_object *);
 
-extern void *(*fn_get_ui_object_function [NUM_UI_TYPES]) (ui_object *obj);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern void (*fn_call_ui_object_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+extern FUNCTION_SET fn_set_ui_object_function [NUM_UI_TYPES];
 
-extern void (*fn_set_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+extern FUNCTION_GET fn_get_ui_object_function [NUM_UI_TYPES];
 
-extern void *(*fn_get_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj);
+extern FUNCTION fn_call_ui_object_function [NUM_UI_TYPES];
 
-extern void (*fn_call_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+extern FUNCTION_SET fn_set_ui_object_right_function [NUM_UI_TYPES];
 
-extern void (*fn_set_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+extern FUNCTION_GET fn_get_ui_object_right_function [NUM_UI_TYPES];
 
-extern void *(*fn_get_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj);
+extern FUNCTION fn_call_ui_object_right_function [NUM_UI_TYPES];
 
-extern void (*fn_call_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+extern FUNCTION_SET fn_set_ui_object_draw_function [NUM_UI_TYPES];
 
-extern void (*fn_set_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+extern FUNCTION_GET fn_get_ui_object_draw_function [NUM_UI_TYPES];
 
-extern void *(*fn_get_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj);
+extern FUNCTION fn_call_ui_object_draw_function [NUM_UI_TYPES];
 
-extern void (*fn_call_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+extern FUNCTION_SET fn_set_ui_object_highlighted_function [NUM_UI_TYPES];
+
+extern FUNCTION_GET fn_get_ui_object_highlighted_function [NUM_UI_TYPES];
+
+extern FUNCTION fn_call_ui_object_highlighted_function [NUM_UI_TYPES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +102,7 @@ extern void (*fn_call_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object 
 
 extern void default_set_ui_object_function (ui_object *obj, void (*function) (ui_object *obj, void *arg));
 
-extern void *default_get_ui_object_function (ui_object *obj);
+extern FUNCTION default_get_ui_object_function (ui_object *obj);
 
 extern void default_call_ui_object_function (ui_object *obj, void *arg);
 
@@ -107,7 +115,6 @@ extern void set_ui_object_function_default_functions (void);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define set_ui_object_function(OBJ,FUNCTION) (fn_set_ui_object_function [(OBJ)->type] ((OBJ), (FUNCTION)))
 
 #define get_ui_object_function(OBJ) (fn_get_ui_object_function [(OBJ)->type] ((OBJ)))

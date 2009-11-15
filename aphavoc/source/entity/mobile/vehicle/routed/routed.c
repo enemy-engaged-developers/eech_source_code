@@ -104,7 +104,7 @@ static struct ATTACHED_META_SMOKE_LIST_TABLE
 		//
 		////////////////////////////////////////////////
 		{
-			-1,
+			(meta_smoke_list_types) -1,
 			{
 				-1,
 				-1
@@ -193,7 +193,7 @@ void pack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
-		inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -307,7 +307,7 @@ void unpack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 
 	if (get_local_entity_int_value (en, INT_TYPE_ALIVE))
 	{
-		inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -345,7 +345,7 @@ void unpack_routed_vehicle_meta_smoke_lists (entity *en, pack_modes mode)
 							{
 								count *= count_entities_in_meta_smoke_list (type);						
 
-								entity_index_list = malloc_fast_mem (sizeof (int) * count);
+								entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 								for (loop = 0; loop < count; loop ++)
 								{
@@ -409,7 +409,7 @@ void stop_vehicles_on_route (int start_node, int end_node)
 
 			if (task)
 			{
-				member = get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
+				member = (entity *) get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
 	
 				ASSERT (member);
 			

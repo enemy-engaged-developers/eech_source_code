@@ -470,6 +470,8 @@ void blit_rgb_alpha_masked_sprite (const unsigned char *rgb_data, const unsigned
 
 	ASSERT (sprite_data);
 
+	ASSERT ( active_screen->pixel_length <= 16 );
+
 	screen_pitch = get_screen_pitch (active_screen);
 
 	screen_data = get_screen_data (active_screen);
@@ -720,7 +722,7 @@ void blit_rgb_alpha_masked_sprite_zero_mask_value_onto_texture (const unsigned c
 				col.a = 255;
 
 				if (screen_one_add_on == 2)
-					*(rgb_packed *)screen_data = get_rgb_packed_value (col);
+					*(rgb_packed *)screen_data = get_packed_colour (col);
 				else
 					*(ULONG *)screen_data = col.colour;
 			}
@@ -847,7 +849,7 @@ static rgb_alpha_masked_sprite_data
 				col.a = 255;
 
 				if (screen_one_add_on == 2)
-					*(rgb_packed *)screen_data = get_rgb_packed_value (col);
+					*(rgb_packed *)screen_data = get_packed_colour (col);
 				else
 					*(ULONG *)screen_data = col.colour;
 			}
@@ -905,13 +907,13 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 	// load tga file
 	//
 
-	image = load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
+	image = ( unsigned char * ) load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
 
 	//
 	// Allocate space for the destination image
 	//
 
-	destination_image = safe_malloc ( width * height * sizeof ( rgb_packed ) );
+	destination_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) );
 
 	ASSERT ( destination_image );
 
@@ -946,7 +948,7 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 
 				colour.r = this_pixel->r;
 
-				*destination_ptr++ = get_rgb_packed_value (colour);
+				*destination_ptr++ = get_packed_colour (colour);
 
 				this_pixel ++;
 			}
@@ -975,7 +977,7 @@ void convert_tga_to_rgb (const char *tga_filename, const char *rgb_filename)
 
 				colour.r = this_pixel->r;
 
-				*destination_ptr++ = get_rgb_packed_value (colour);
+				*destination_ptr++ = get_general_packed_colour (colour);
 
 				this_pixel ++;
 			}
@@ -1049,7 +1051,7 @@ void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_f
 	// load tga file
 	//
 
-	image_data = load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
+	image_data = ( tga_rgba * ) load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
 
 	if (bits_per_pixel != 32)
 	{
@@ -1061,7 +1063,7 @@ void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_f
 	// malloc memory for alpha data
 	//
 
-	alpha = (char *) safe_malloc (sizeof (char) * width * height);
+	alpha = ( unsigned char *) safe_malloc (sizeof (char) * width * height);
 
 	//
 	// write image out as rgb file format
@@ -1091,7 +1093,7 @@ void convert_tga_to_rgb_alpha (const char *tga_filename, const char *rgb_alpha_f
 
 			colour.a = this_pixel->a;
 
-			value = get_rgb_packed_value (colour);
+			value = get_general_packed_colour (colour);
 
 			alpha [(y_loop * width) + x_loop] = colour.a;
 
@@ -1137,7 +1139,7 @@ void convert_tga_to_alpha_mask (const char *tga_filename, const char *alpha_mask
 		debug_fatal ("Unable to open file %s during convert_tga_to_alpha_mask", alpha_mask_filename);
 	}
 
-	image_data = load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
+	image_data = ( tga_rgba * ) load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
 
 	if (bits_per_pixel != 32)
 	{
@@ -1202,7 +1204,7 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 	// load psd file
 	//
 
-	image = load_psd_file (psd_filename, &width, &height, &number_of_channels);
+	image = ( unsigned char * ) load_psd_file (psd_filename, &width, &height, &number_of_channels);
 
 	//
 	// Open the destination file
@@ -1218,7 +1220,7 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 	// Allocate space for the destination image
 	//
 
-	destination_image = safe_malloc ( width * height * sizeof ( rgb_packed ) );
+	destination_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) );
 
 	ASSERT ( destination_image );
 
@@ -1253,7 +1255,7 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 
 				colour.r = this_pixel->r;
 
-				*destination_ptr++ = get_rgb_packed_value (colour);
+				*destination_ptr++ = get_general_packed_colour (colour);
 
 				this_pixel ++;
 			}
@@ -1282,7 +1284,7 @@ void convert_psd_to_rgb (const char *psd_filename, const char *rgb_filename)
 
 				colour.r = this_pixel->r;
 
-				*destination_ptr++ = get_rgb_packed_value (colour);
+				*destination_ptr++ = get_general_packed_colour (colour);
 
 				this_pixel ++;
 			}
@@ -1356,7 +1358,7 @@ void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_f
 	// load tga file
 	//
 
-	image_data = load_psd_file (psd_filename, &width, &height, &number_of_channels);
+	image_data = ( psd_rgba * ) load_psd_file (psd_filename, &width, &height, &number_of_channels);
 
 	if (number_of_channels != 4)
 	{
@@ -1378,7 +1380,7 @@ void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_f
 	// malloc memory for alpha data
 	//
 
-	alpha = (char *) safe_malloc (sizeof (char) * width * height);
+	alpha = ( unsigned char *) safe_malloc (sizeof (char) * width * height);
 
 	//
 	// write image out as rgb file format
@@ -1412,7 +1414,7 @@ void convert_psd_to_rgb_alpha (const char *psd_filename, const char *rgb_alpha_f
 
 			colour.a = this_pixel->a;
 
-			value = get_rgb_packed_value (colour);
+			value = get_general_packed_colour (colour);
 
 			alpha [(y_loop * width) + x_loop] = colour.a;
 
@@ -1455,7 +1457,7 @@ void convert_psd_to_alpha_mask (const char *psd_filename, const char *alpha_mask
 		y_loop,
 		number_of_channels;
 
-	image_data = load_psd_file (psd_filename, &width, &height, &number_of_channels);
+	image_data = ( psd_rgba * ) load_psd_file (psd_filename, &width, &height, &number_of_channels);
 
 	if (number_of_channels != 4)
 	{
@@ -1525,7 +1527,7 @@ void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_f
 	// load psd file
 	//
 
-	image = load_psd_file ( psd_filename, &width, &height, &number_of_channels );
+	image = ( unsigned char * ) load_psd_file ( psd_filename, &width, &height, &number_of_channels );
 
 	//
 	// Open the destination file
@@ -1543,7 +1545,7 @@ void convert_and_dither_psd_to_rgb ( const char *psd_filename, const char *rgb_f
 
 	debug_log ( "READ WIDTH %d, HEIGHT %d", width, height );
 
-	destination_image = safe_malloc ( width * height * sizeof ( rgb_packed ) );
+	destination_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) );
 
 	//
 	// Convert the rgb to dithered information format
@@ -1626,7 +1628,7 @@ void convert_and_dither_psd_to_rgb_alpha ( const char *psd_filename, const char 
 	// Load psd file
 	//
 
-	image_data = load_psd_file ( psd_filename, &width, &height, &number_of_channels );
+	image_data = ( psd_rgba * ) load_psd_file ( psd_filename, &width, &height, &number_of_channels );
 
 	if ( number_of_channels != 4 )
 	{
@@ -1648,13 +1650,13 @@ void convert_and_dither_psd_to_rgb_alpha ( const char *psd_filename, const char 
 	// Malloc memory for alpha data
 	//
 
-	alpha = safe_malloc ( sizeof ( char ) * width * height );
+	alpha = ( unsigned char * ) safe_malloc ( sizeof ( char ) * width * height );
 
 	//
 	// Allocate space for the destination image
 	//
 
-	destination_image = safe_malloc ( width * height * sizeof ( unsigned short int ) );
+	destination_image = ( rgb_packed * ) safe_malloc ( width * height * sizeof ( unsigned short int ) );
 
 	//
 	// Now perform the dithering

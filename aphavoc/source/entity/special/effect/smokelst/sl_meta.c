@@ -106,7 +106,7 @@ int create_client_server_meta_smoke_list_sub_object_offset (meta_smoke_list_type
 
 	ASSERT (count);
 
-	entity_index_list = malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{
@@ -204,7 +204,7 @@ int create_meta_smoke_list_sub_object_offset( meta_smoke_list_types type, entity
 			effect_position_search,
 			effect_width_search;
 
-		inst3d = get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		if (inst3d)
 		{
@@ -307,7 +307,7 @@ int create_client_server_meta_smoke_list_specified_offset (meta_smoke_list_types
 
 	ASSERT (count);
 
-	entity_index_list = malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{
@@ -581,7 +581,7 @@ int create_meta_smoke_list_trails( meta_smoke_list_component *smoke_list_compone
 	// arneh - let rockets generate smoke only as long as the rocket engine burns
 	if (parent && parent->type == ENTITY_TYPE_WEAPON)
 	{
-		weapon* raw = get_local_entity_data (parent);
+		weapon* raw = (weapon *) get_local_entity_data (parent);
 		lifetime = weapon_database[raw->mob.sub_type].burn_time;
 	}
 

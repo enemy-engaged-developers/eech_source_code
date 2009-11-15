@@ -81,7 +81,7 @@ static void update_server (entity *en)
 	weapon
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	if (raw->mob.kill_next_update)
 	{
@@ -116,7 +116,7 @@ static void update_client (entity *en)
 	weapon
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	if (raw->mob.kill_next_update)
 	{

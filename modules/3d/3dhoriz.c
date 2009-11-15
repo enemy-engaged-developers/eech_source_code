@@ -110,7 +110,7 @@ void initialise_3d_horizon ( env_3d *env, object_3d_index_numbers index )
 
 	object = &objects_3d_data[env->horizon_3d_object_number];
 
-	env->horizon_point_colours = safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
+	env->horizon_point_colours = ( horizon_colour * ) safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
 
 	if ( !env->horizon_point_colours )
 	{
@@ -187,11 +187,11 @@ void add_3d_horizon_image ( env_3d *env, const char *filename, float time, weath
 
 			binary_loaded = TRUE;
 
-			horizon_image_info = malloc_fast_mem ( sizeof ( horizon_image_data ) );
+			horizon_image_info = ( horizon_image_data * ) malloc_fast_mem ( sizeof ( horizon_image_data ) );
 		
 			ASSERT ( horizon_image_info );
 		
-			point_colours = safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
+			point_colours = ( horizon_colour * ) safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
 	
 			horizon_image_info->point_colours = point_colours;
 		
@@ -217,7 +217,7 @@ void add_3d_horizon_image ( env_3d *env, const char *filename, float time, weath
 
 		sprintf ( binary_filename, "%s.tga", filename );
 
-		horizon_image = load_tga_file ( binary_filename, &width, &height, &bits );
+		horizon_image = ( unsigned char * ) load_tga_file ( binary_filename, &width, &height, &bits );
 	
 		horizon_image_width = width;
 	
@@ -229,7 +229,7 @@ void add_3d_horizon_image ( env_3d *env, const char *filename, float time, weath
 			debug_fatal ( "Unable to read the horizon file - not a 24bit image" );
 		}
 	
-		point_colours = safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
+		point_colours = ( horizon_colour * ) safe_malloc ( object->number_of_points * sizeof ( horizon_colour ) );
 	
 		if ( !point_colours )
 		{
@@ -310,7 +310,7 @@ void add_3d_horizon_image ( env_3d *env, const char *filename, float time, weath
 			point_colours[count].pad = 0;
 		}
 	
-		horizon_image_info = malloc_fast_mem ( sizeof ( horizon_image_data ) );
+		horizon_image_info = ( horizon_image_data * ) malloc_fast_mem ( sizeof ( horizon_image_data ) );
 	
 		ASSERT ( horizon_image_info );
 	
@@ -431,7 +431,7 @@ void insert_3d_horizon_image ( env_3d *env, weathermodes mode, horizon_image_dat
 void destroy_all_3d_horizon_images ( env_3d *env )
 {
 
-	weathermodes
+	int
 		mode;
 
 	ASSERT ( env );

@@ -90,7 +90,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			explosion
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (explosion *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -169,7 +169,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_heap_mem (sizeof (explosion));
+			raw = (explosion *) malloc_heap_mem (sizeof (explosion));
 
 			set_local_entity_data (en, raw);
 

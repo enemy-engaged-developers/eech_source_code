@@ -2102,7 +2102,7 @@ static void update_pilot_taking_controls (void)
 
 	pilot_main_anim_frame -= get_delta_time ();
 
-	pilot_main_anim_frame = max (pilot_main_anim_frame, 0.0);
+	pilot_main_anim_frame = max (pilot_main_anim_frame, 0.0f);
 
 	update_pilot_rest_animation (TRUE);
 
@@ -2259,7 +2259,7 @@ static void update_pilot_releasing_controls (void)
 
 	pilot_main_anim_frame += get_delta_time ();
 
-	pilot_main_anim_frame = min (pilot_main_anim_frame, 1.0);
+	pilot_main_anim_frame = min (pilot_main_anim_frame, 1.0f);
 
 	update_pilot_rest_animation (TRUE);
 

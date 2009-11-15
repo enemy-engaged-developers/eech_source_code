@@ -103,14 +103,14 @@ entity_sub_types get_best_weapon_for_target (entity *launcher, entity *target, u
 	// get list of weapons available on the launcher
 	//
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (!package_status)
 	{
 		return ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 	}
 
-	config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+	config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 	ASSERT (weapon_config_type_valid (config_type));
 
@@ -578,14 +578,14 @@ float get_local_entity_max_weapon_range (entity *launcher)
 	// get list of weapons available on the launcher
 	//
 
-	package_status = get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (launcher, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (!package_status)
 	{
 		return 0.0;
 	}
 
-	config_type = get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
+	config_type = (weapon_config_types) get_local_entity_int_value (launcher, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 	ASSERT (weapon_config_type_valid (config_type));
 

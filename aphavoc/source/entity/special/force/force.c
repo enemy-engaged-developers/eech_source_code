@@ -131,7 +131,7 @@ void add_force_campaign_critiera (entity *force_en, campaign_trigger criteria_ty
 	campaign_trigger_type
 		*new_campaign_trigger;
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *) get_local_entity_data (force_en);
 
 	new_campaign_criteria = (campaign_criteria_type *) malloc_heap_mem (sizeof (campaign_criteria_type));
 
@@ -180,7 +180,7 @@ campaign_criteria_type *get_force_campaign_criteria (entity *force_en, campaign_
 	campaign_criteria_type
 		*this_criteria;
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *) get_local_entity_data (force_en);
 
 	this_criteria = force_raw->campaign_criteria;
 
@@ -229,7 +229,7 @@ void add_to_force_info (entity *force_en, entity *new_en)
 		return;
 	}
 		
-	raw = get_local_entity_data (force_en);
+	raw = (force *) get_local_entity_data (force_en);
 
 	index = get_local_entity_int_value (new_en, INT_TYPE_FORCE_INFO_CATAGORY);
 
@@ -263,7 +263,7 @@ void remove_from_force_info (entity *force_en, entity *new_en)
 		return;
 	}
 		
-	raw = get_local_entity_data (force_en);
+	raw = (force *) get_local_entity_data (force_en);
 
 	index = get_local_entity_int_value (new_en, INT_TYPE_FORCE_INFO_CATAGORY);
 
@@ -290,7 +290,7 @@ void replace_into_force_info (entity *force_en, entity *new_en)
 		return;
 	}
 		
-	raw = get_local_entity_data (force_en);
+	raw = (force *) get_local_entity_data (force_en);
 
 	index = get_local_entity_int_value (new_en, INT_TYPE_FORCE_INFO_CATAGORY);
 
@@ -319,7 +319,7 @@ void add_mobile_to_force_kills_stats (entity *en, entity *victim)
 
 	ASSERT (victim);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (victim, LIST_TYPE_MEMBER);
 
@@ -349,7 +349,7 @@ void add_mobile_to_force_losses_stats (entity *en, entity *victim)
 
 	ASSERT (victim);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (victim, LIST_TYPE_MEMBER);
 
@@ -371,7 +371,7 @@ void add_group_type_to_force_info (entity *en, entity_sub_types group_type)
 		
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	raw->group_count [group_type] ++;
 }
@@ -387,7 +387,7 @@ void remove_group_type_from_force_info (entity *en, entity_sub_types group_type)
 		
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	ASSERT (raw->group_count [group_type] > 0);
 
@@ -405,7 +405,7 @@ int get_local_force_entity_group_count (entity *en, entity_sub_types group_type)
 		
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 
 	return (raw->group_count [group_type]);
 }
@@ -467,7 +467,7 @@ void display_campaign_criteria_time_remaining (void)
 
 	ASSERT (force_en);
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *) get_local_entity_data (force_en);
 /*
 	this_campaign_criteria = force_raw->campaign_criteria;
 
@@ -485,7 +485,7 @@ void display_campaign_criteria_time_remaining (void)
 	{
 		if (this_campaign_criteria->valid)
 		{
-			session_raw = get_local_entity_data (get_session_entity ());
+			session_raw = (force *) get_local_entity_data (get_session_entity ());
 
 			//
 			// clients don't display until AFTER first resync (otherwise time will be wrong)

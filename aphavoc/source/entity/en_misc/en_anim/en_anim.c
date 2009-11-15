@@ -400,7 +400,7 @@ void set_local_entity_id_number
 
 	ASSERT (en);
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{

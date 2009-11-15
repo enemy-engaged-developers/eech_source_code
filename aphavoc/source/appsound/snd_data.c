@@ -2743,7 +2743,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 					// Malloc the headers bit
 					//
 
-					blocked_sound_samples = safe_malloc ( sizeof ( sound_block_data_header ) * number_of_blocked_sound_samples );
+					blocked_sound_samples = (sound_block_data_header *) safe_malloc ( sizeof ( sound_block_data_header ) * number_of_blocked_sound_samples );
 
 					//
 					// Now fill in the data
@@ -2774,7 +2774,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 
 							fp = safe_fopen ( filename, "rb" );
 
-							temp_memory = safe_malloc ( size );
+							temp_memory = ( char * ) safe_malloc ( size );
 
 							fread ( temp_memory, size, 1, fp );
 
@@ -2787,7 +2787,7 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 							blocked_sound_samples[current_blocked_sample].sound_sample_index = application_sound_samples[count].sound_sample_index;
 							blocked_sound_samples[current_blocked_sample].sound_data_offset = ftell ( block_sound_sample_data_file );
 							blocked_sound_samples[current_blocked_sample].sound_data_length = size;
-							blocked_sound_samples[current_blocked_sample].filename = safe_malloc ( strlen ( filename ) + 1 );
+							blocked_sound_samples[current_blocked_sample].filename = ( char * ) safe_malloc ( strlen ( filename ) + 1 );
 							strcpy ( blocked_sound_samples[current_blocked_sample].filename, filename );
 							current_blocked_sample++;
 
@@ -2887,7 +2887,7 @@ int open_application_sound_file_system ( char *directory )
 
 		fread ( &number_of_blocked_sound_samples, sizeof ( int ), 1, fp );
 
-		blocked_sound_samples = safe_malloc ( sizeof ( sound_block_data_header ) * number_of_blocked_sound_samples );
+		blocked_sound_samples = ( sound_block_data_header * ) safe_malloc ( sizeof ( sound_block_data_header ) * number_of_blocked_sound_samples );
 
 		for ( count = 0; count < number_of_blocked_sound_samples; count++ )
 		{
@@ -2906,7 +2906,7 @@ int open_application_sound_file_system ( char *directory )
 			fread ( &blocked_sound_samples[count].sound_data_length, sizeof ( int ), 1, fp );
 			fread ( &length, sizeof ( int ), 1, fp );
 
-			blocked_sound_samples[count].filename = safe_malloc ( length );
+			blocked_sound_samples[count].filename = ( char * ) safe_malloc ( length );
 			fread ( blocked_sound_samples[count].filename, 1, length, fp );
 
 			ptr = blocked_sound_samples[count].filename;

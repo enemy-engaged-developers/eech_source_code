@@ -123,7 +123,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (particle));
+		raw = (particle *) malloc_fast_mem (sizeof (particle));
 
 		set_local_entity_data (en, raw);
 
@@ -183,13 +183,13 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// Build array of particle positions, and set all to effect position
 		//
 
-		raw->valid = malloc_fast_mem (sizeof (unsigned char) * raw->particle_count);
+		raw->valid = (unsigned char *) malloc_fast_mem (sizeof (unsigned char) * raw->particle_count);
 
-		raw->position = malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
+		raw->position = (vec3d *) malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
 
-		raw->motion_vector = malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
+		raw->motion_vector = (vec3d *) malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
 
-		raw->inst3d = malloc_fast_mem (sizeof (object_3d_instance *) * raw->particle_count);
+		raw->inst3d = (object_3d_instance **) malloc_fast_mem (sizeof (object_3d_instance *) * raw->particle_count);
 
 		seed = get_client_server_entity_random_number_seed( en );
 

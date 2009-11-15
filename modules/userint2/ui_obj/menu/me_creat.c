@@ -86,7 +86,7 @@ static void create_menu_ui_object (ui_object *obj, ui_object_types type, va_list
 
    obj->type = type;
 
-   new_menu = safe_malloc (sizeof (menu_ui_object));
+   new_menu = (menu_ui_object *) safe_malloc (sizeof (menu_ui_object));
 
    obj->data = new_menu;
 

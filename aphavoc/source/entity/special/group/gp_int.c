@@ -87,7 +87,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -137,7 +137,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_GROUP_LIST_TYPE:
 		////////////////////////////////////////
 		{
-			raw->group_list_type = value;
+			raw->group_list_type = (list_types) value;
 
 			break;
 		}		
@@ -202,11 +202,11 @@ static void set_local_int_value (entity *en, int_types type, int value)
 				list_types
 					list_type;
 
-				list_type = get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
+				list_type = (list_types) get_local_entity_int_value (en, INT_TYPE_REGISTRY_LIST_TYPE);
 				if (list_type != LIST_TYPE_INVALID)
 				{
-					old_force = get_local_force_entity (raw->side);
-					new_force = get_local_force_entity (value);
+					old_force = get_local_force_entity ((entity_sides) raw->side);
+					new_force = get_local_force_entity ((entity_sides) value);
 
 					delete_local_entity_from_parents_child_list (en, list_type);
 					remove_group_type_from_force_info (old_force, raw->sub_type);
@@ -309,7 +309,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	switch (type)
 	{

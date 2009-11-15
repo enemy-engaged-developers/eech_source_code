@@ -66,13 +66,13 @@
 
 #define DEBUG_MODULE 0
 
-#define CAMERA_MOVEMENT_RATE 8.0
-#define OFFSET_MOVEMENT_RATE 20.0
-#define MAX_OFFSET 20.0
+#define CAMERA_MOVEMENT_RATE 8.0f
+#define OFFSET_MOVEMENT_RATE 20.0f
+#define MAX_OFFSET 20.0f
 
-#define CHASE_CAMERA_ZOOM_RATE			(0.5)
-#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0)
-#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0)
+#define CHASE_CAMERA_ZOOM_RATE			(0.5f)
+#define CHASE_CAMERA_ZOOM_IN_LIMIT		(0.0f)
+#define CHASE_CAMERA_ZOOM_OUT_LIMIT		(2.0f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +218,7 @@ const char *get_camera_mode_name (camera_modes mode)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	switch (mode)
 	{

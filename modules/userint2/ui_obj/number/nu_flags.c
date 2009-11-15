@@ -80,7 +80,7 @@ static void set_number_ui_object_state (ui_object *obj, int flag)
 		*next,
 		*parent;
 
-	number = obj->data;
+	number = (number_ui_object *) obj->data;
 
 	if (flag == UI_OBJECT_STATE_ON)
 	{
@@ -104,7 +104,7 @@ static void set_number_ui_object_state (ui_object *obj, int flag)
 			if (next->type == UI_TYPE_NUMBER)
 			{
 		
-				number = next->data;
+				number = (number_ui_object *) next->data;
 		
 				number->area.state = UI_OBJECT_STATE_OFF;
 			}
@@ -112,7 +112,7 @@ static void set_number_ui_object_state (ui_object *obj, int flag)
 			next = get_ui_object_next (next);
 		}
 
-		number = obj->data;
+		number = (number_ui_object *) obj->data;
 								
 		number->area.state = flag;
 	

@@ -255,7 +255,7 @@ void initialise_formation_database (void)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{
@@ -276,7 +276,7 @@ void initialise_formation_database (void)
 				ASSERT (result == FILE_TAG_TYPE);
 				type = get_next_file_enum (file_ptr, formation_names, NUM_FORMATION_TYPES);
 
-				new_formation->formation = type;
+				new_formation->formation = (formation_types) type;
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_NAME);
@@ -406,7 +406,7 @@ int add_formation_to_database (int number_in_formation, vec3d *site_positions)
 	memset (new_formation, 0, sizeof (formation_type));
 
 	last_formation_index ++;
-	new_formation->formation = last_formation_index;
+	new_formation->formation = (formation_types) last_formation_index;
 
 	sprintf (name, "USER FORMATION %d", last_formation_index);
 	new_formation->name = (char *) malloc_heap_mem (sizeof (char) * (strlen (name) + 1));
@@ -696,7 +696,7 @@ void initialise_formation_component_database (void)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{
@@ -717,13 +717,13 @@ void initialise_formation_component_database (void)
 				ASSERT (result == FILE_TAG_TYPE);
 				type = get_next_file_enum (file_ptr, formation_component_names, NUM_FORMATION_COMPONENT_TYPES);
 
-				new_formation_component->formation_component = type;
+				new_formation_component->formation_component = (formation_component_types) type;
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_TYPE);
 				type = get_next_file_enum (file_ptr, formation_names, NUM_FORMATION_TYPES);
 
-				new_formation_component->formation = type;
+				new_formation_component->formation = (formation_types) type;
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_COUNT);

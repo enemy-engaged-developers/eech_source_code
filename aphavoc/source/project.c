@@ -149,6 +149,7 @@ void application_main (int argc, char **argv)
 
 	debug_fatal_warning_tone = FALSE;
 
+// opengl	if (command_line_full_screen || 1)
 	if (command_line_full_screen)
 	{
 
@@ -269,10 +270,10 @@ void application_main (int argc, char **argv)
 
 	d3d_override_render_to_texture = command_line_no_render_to_texture;
 
-	set_ddraw_use_double_buffering ( TRUE );
-	set_ddraw_use_software_driver ( FALSE );
-	set_ddraw_use_system_memory ( FALSE );
-	set_ddraw_use_z_buffer ( TRUE );
+	//set_ddraw_use_double_buffering ( TRUE );
+	//set_ddraw_use_software_driver ( FALSE );
+	//set_ddraw_use_system_memory ( FALSE );
+	//set_ddraw_use_z_buffer ( TRUE );
 	set_ddraw_use_full_screen ( command_line_full_screen );
 
 	{
@@ -286,7 +287,7 @@ void application_main (int argc, char **argv)
 			if ( get_global_graphics_device_selection_primary () )
 			{
 
-				set_ddraw_use_software_driver ( TRUE );
+				//set_ddraw_use_software_driver ( TRUE );
 
 				graphics_initialised = initialise_graphics_system ( NULL );
 			}

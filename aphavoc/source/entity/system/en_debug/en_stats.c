@@ -169,7 +169,7 @@ void display_entity_system_statistics (void)
 		((float) entity_peak_count * 100.0) / (float) number_of_entities
 	);
 
-	for (type = 0; type < NUM_ENTITY_TYPES; type++)
+	for (type = (entity_types) 0; type < NUM_ENTITY_TYPES; type = (entity_types) ((int)type + 1))
 	{
 		debug_colour_log
 	  	(

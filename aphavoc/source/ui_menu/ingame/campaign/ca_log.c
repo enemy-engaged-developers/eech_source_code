@@ -161,7 +161,7 @@ void add_message_to_campaign_log (int index)
 
 	get_digital_clock_int_values (message->time_of_day, &hours, &minutes, &seconds);
 
-	s = malloc_fast_mem (strlen (message->string) + 20);
+	s = (char *) malloc_fast_mem (strlen (message->string) + 20);
 
 	sprintf (s, "[%02d:%02d] %s", hours, minutes, message->string);
 

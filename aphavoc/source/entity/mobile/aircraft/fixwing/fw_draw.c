@@ -97,7 +97,7 @@ static void draw_local_3d_object (entity *en, float range)
 	day_segment_types
 		day_segment_type;
 
-	raw = get_local_entity_data (en);
+	raw = (fixed_wing *) get_local_entity_data (en);
 
 	//
 	// update viewpoint
@@ -135,7 +135,7 @@ static void draw_local_3d_object (entity *en, float range)
 	// draw
 	//
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	raw->ac.inst3d->object_internal_lighting = ((day_segment_type == DAY_SEGMENT_TYPE_NIGHT) || (day_segment_type == DAY_SEGMENT_TYPE_DUSK));
 

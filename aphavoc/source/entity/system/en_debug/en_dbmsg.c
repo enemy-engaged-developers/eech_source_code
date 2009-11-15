@@ -337,7 +337,7 @@ void debug_log_entity_message (entity_messages message, entity *receiver, entity
 			camera_actions
 				action;
 
-			action = va_arg (pargs, int);
+			action = (camera_actions) va_arg (pargs, int);
 
 			if ((action >= 0) && (action < NUM_CAMERA_ACTIONS))
 			{

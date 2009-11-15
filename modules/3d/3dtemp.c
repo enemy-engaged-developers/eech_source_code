@@ -138,7 +138,7 @@ object_3d_instance *construct_temporary_3d_object ( object_3d_index_numbers inde
 	object_3d_instance
 		*object;
 
-	this_instance = malloc_fast_mem ( sizeof ( temporary_object_3d_instance ) );
+	this_instance = ( temporary_object_3d_instance * ) malloc_fast_mem ( sizeof ( temporary_object_3d_instance ) );
 
 	ASSERT ( this_instance );
 
@@ -152,7 +152,7 @@ object_3d_instance *construct_temporary_3d_object ( object_3d_index_numbers inde
 	else
 	{
 
-		object = malloc_fast_mem ( sizeof ( object_3d_instance ) );
+		object = ( object_3d_instance * ) malloc_fast_mem ( sizeof ( object_3d_instance ) );
 
 		this_instance->instance = object;
 
@@ -175,7 +175,7 @@ object_3d_instance *construct_temporary_3d_object ( object_3d_index_numbers inde
 		if ( objects_3d_scene_database[index].number_of_texture_animations )
 		{
 	
-			object->texture_animations = malloc_fast_mem ( sizeof ( int ) * objects_3d_scene_database[index].number_of_texture_animations );
+			object->texture_animations = ( int * ) malloc_fast_mem ( sizeof ( int ) * objects_3d_scene_database[index].number_of_texture_animations );
 	
 			ASSERT ( object->texture_animations );
 	

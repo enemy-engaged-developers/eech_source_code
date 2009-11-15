@@ -209,7 +209,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 					current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 				}
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+				set_deferred_d3d_texture ( 0, current_object_3d_texture );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -299,7 +299,7 @@ void render_3d_object_face ( object_3d_face_list *face_order )
 					current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 				}
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+				set_deferred_d3d_texture ( 0, current_object_3d_texture );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 	
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );

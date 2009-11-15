@@ -95,7 +95,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (keysite *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -336,14 +336,14 @@ static void kill_local (entity *en)
 		{
 			update_imap_importance_level (en, FALSE);
 
-			update_imap_distance_to_friendly_base (get_local_entity_int_value (en, INT_TYPE_SIDE));
+			update_imap_distance_to_friendly_base ((entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE));
 
 			//
 			// Destroy anything landed on keysite - and redirect anything else belonging to keysite
 			// (Must be called AFTER keysite IN_USE set to FALSE)
 			//
 
-			destroy_keysite (en, get_local_entity_int_value (en, INT_TYPE_SIDE));
+			destroy_keysite (en, (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE));
 		}
 	}
 

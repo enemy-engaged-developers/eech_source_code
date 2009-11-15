@@ -171,7 +171,7 @@ void vehicle_target_scan (entity *en)
 	vec3d
 		*pos;
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	raw->target_scan_timer -= get_delta_time (); 
 		
@@ -204,7 +204,7 @@ void vehicle_target_scan (entity *en)
 
 		ASSERT (task);
 		
-		target_source = get_local_entity_int_value (task, INT_TYPE_TASK_TARGET_SOURCE);
+		target_source = (task_target_source_types) get_local_entity_int_value (task, INT_TYPE_TASK_TARGET_SOURCE);
 	}
 
 	//
@@ -269,7 +269,7 @@ void vehicle_target_scan (entity *en)
 					(
 						get_session_entity (),
 						en,
-						raw->mob.side,
+						(entity_sides) raw->mob.side,
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
@@ -355,7 +355,7 @@ void vehicle_target_scan (entity *en)
 					(
 						get_session_entity (),
 						en,
-						raw->mob.side,
+						(entity_sides) raw->mob.side,
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
@@ -497,7 +497,7 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 		source_air_scan_ceiling += source_position->y;
 
-		source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+		source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 		////////////////////////////////////////
 		//
@@ -669,7 +669,7 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 
 						if (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 						{
-							if (!check_entity_line_of_sight (source, target, MOBILE_LOS_CHECK_ALL))
+							if (!check_entity_line_of_sight (source, target, (mobile_los_check_criteria) MOBILE_LOS_CHECK_ALL))
 							{
 								continue;
 							}
@@ -883,7 +883,7 @@ entity *get_vehicle_surface_to_surface_scan_group_targets (entity *source, int *
 
 		source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-		source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+		source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 		////////////////////////////////////////
 		//

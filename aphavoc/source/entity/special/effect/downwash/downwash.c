@@ -65,7 +65,7 @@ int create_downwash_effect(downwash_types type, vec3d *position, float main_roto
 
 	ASSERT (count);
 
-	entity_index_list = malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 	//Xhit replaced ENTITY_INDEX_DONT_CARE with ENTITY_INDEX_CREATE_LOCAL (030428)
 	//This and the changes made to the entity heap and some smoke functions

@@ -362,7 +362,7 @@ void update_keysite_cargo (entity *en, float cargo_level, entity_sub_types sub_t
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (keysite *) get_local_entity_data (en);
 
 	if ((!raw->alive) || (!raw->in_use))
 	{
@@ -476,7 +476,7 @@ void update_keysite_cargo (entity *en, float cargo_level, entity_sub_types sub_t
 			{	
 				if (keysite_database [raw->sub_type].default_supply_usage.ammo_supply_level < 0.0)
 				{
-					force = get_local_force_entity (raw->side);
+					force = get_local_force_entity ((entity_sides) raw->side);
 			
 					notify_local_entity (ENTITY_MESSAGE_FORCE_LOW_ON_SUPPLIES, force, en, sub_type);
 				}
@@ -487,7 +487,7 @@ void update_keysite_cargo (entity *en, float cargo_level, entity_sub_types sub_t
 			{	
 				if (keysite_database [raw->sub_type].default_supply_usage.fuel_supply_level < 0.0)
 				{
-					force = get_local_force_entity (raw->side);
+					force = get_local_force_entity ((entity_sides) raw->side);
 			
 					notify_local_entity (ENTITY_MESSAGE_FORCE_LOW_ON_SUPPLIES, force, en, sub_type);
 				}
@@ -526,7 +526,7 @@ void initialise_keysite_farp_enable (entity *force)
 
 	keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 
-	force_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+	force_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 
 	while (keysite)
 	{
@@ -668,7 +668,7 @@ int add_local_entity_importance_to_keysite (entity *en, entity *keysite_en)
 	
 			if (value > 0.0)
 			{
-				raw = get_local_entity_data (keysite_en);
+				raw = (keysite *) get_local_entity_data (keysite_en);
 		
 				raw->keysite_strength += value;
 		
@@ -712,7 +712,7 @@ int restore_local_entity_importance_to_keysite (entity *en, entity *keysite_en)
 	
 			if (value > 0.0)
 			{
-				raw = get_local_entity_data (keysite_en);
+				raw = (keysite *) get_local_entity_data (keysite_en);
 		
 				raw->keysite_strength += value;
 		
@@ -769,7 +769,7 @@ void subtract_local_entity_importance_from_keysite (entity *en)
 	
 			if (value > 0.0)
 			{
-				raw = get_local_entity_data (keysite_en);
+				raw = (keysite *) get_local_entity_data (keysite_en);
 	
 				raw->keysite_strength -= value;
 
@@ -876,7 +876,7 @@ void notify_keysite_structure_under_attack (entity *structure, entity *aggressor
 		return;
 	}
 
-	side = get_local_entity_int_value (keysite, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
 	
 	if (get_local_entity_int_value (aggressor, INT_TYPE_SIDE) == side)
 	{
@@ -1310,9 +1310,9 @@ void capture_keysite (entity *en, entity_sides new_side)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (en);
+	raw = (keysite *) get_local_entity_data (en);
 
-	side = raw->side;
+	side = (entity_sides) raw->side;
 
 	ASSERT (side != new_side);
 
@@ -1571,7 +1571,7 @@ int repair_client_server_entity_keysite (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (en);
+	raw = (keysite *) get_local_entity_data (en);
 	
 	//
 	// Find next structure to repair
@@ -1760,7 +1760,7 @@ void dump_keysite_info (void)
 
 	force = get_local_entity_first_child (get_session_entity (), LIST_TYPE_FORCE);
 
-	raw = get_local_entity_data (get_session_entity ());
+	raw = (session *) get_local_entity_data (get_session_entity ());
 
 	get_digital_clock_values (raw->elapsed_time, &hours, &minutes, &seconds);
 
@@ -1939,7 +1939,7 @@ void play_keysite_under_attack_speech (entity *en, entity *aggressor)
 	(
 		get_session_entity (),
 		en,
-		get_local_entity_int_value (en, INT_TYPE_SIDE),
+		(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 		ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 		SOUND_LOCALITY_RADIO,
 		0.0,

@@ -511,7 +511,7 @@ void notify_game_type_screen (ui_object *obj, void *arg)
 void game_type_button_function (ui_object *obj, void *arg)
 {
 
-	set_game_type (get_ui_object_item_number (obj));
+	set_game_type ((game_types) get_ui_object_item_number (obj));
 
 	process_game_initialisation_phases ();
 

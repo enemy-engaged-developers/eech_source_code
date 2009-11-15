@@ -281,7 +281,7 @@ int get_mission_player_suitability_status (entity *mission)
 
 	if ((task_database [mission_type].primary_task) && (task_database [mission_type].visible_task))
 	{
-		state = get_local_entity_int_value (mission, INT_TYPE_TASK_STATE);
+		state = (task_state_types) get_local_entity_int_value (mission, INT_TYPE_TASK_STATE);
 
 		switch (state)
 		{

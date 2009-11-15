@@ -131,7 +131,7 @@ void set_serial_connection_status ( void )
 	if ( ( this_connection ) && ( this_connection->service_provider.guid ) )
 	{
 
-		if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
+		if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
 		{
 
 			set_direct_play_serial_address ( get_global_comms_port (), get_global_baud_rate (), get_global_stop_bits (), get_global_parity (), get_global_flow () );
@@ -185,19 +185,19 @@ void notify_multi_player_setup (void)
 
 		if ( this_connection->service_provider.name )
 		{
-			if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
+			if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_TCPIP, sizeof ( GUID ) ) == 0 )
 			{
 				set_ui_object_text (connection_type_button, get_trans("MP_INTERNET"));
 			}
-			else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
+			else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_SERIAL, sizeof ( GUID ) ) == 0 )
 			{
 				set_ui_object_text (connection_type_button, get_trans("MP_SERIAL"));
 			}
-			else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_MODEM, sizeof ( GUID ) ) == TRUE )
+			else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_MODEM, sizeof ( GUID ) ) == 0 )
 			{
 				set_ui_object_text (connection_type_button, get_trans("MP_MODEM"));
 			}
-			else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_IPX, sizeof ( GUID ) ) == TRUE )
+			else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_IPX, sizeof ( GUID ) ) == 0 )
 			{
 				set_ui_object_text (connection_type_button, get_trans("MP_IPX"));
 			}
@@ -865,7 +865,7 @@ void initialise_service_provider_connection ( void )
 
 		deinitialise_comms_manager ();
 
-		if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
+		if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_TCPIP, sizeof ( GUID ) ) == 0 )
 		{
 
 			// need good way to restore default values without overwritting commandline params
@@ -890,7 +890,7 @@ void initialise_service_provider_connection ( void )
 
 			set_direct_play_inet_address ( global_options.ip_address );
 		}
-		else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_SERIAL, sizeof ( GUID ) ) == 0 )
 		{
 
 			//command_line_comms_resend_list_size						= 1000;
@@ -914,7 +914,7 @@ void initialise_service_provider_connection ( void )
 
 			set_serial_connection_status ();
 		}
-		else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_MODEM, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_MODEM, sizeof ( GUID ) ) == 0 )
 		{
 
 			//command_line_comms_resend_list_size						= 1000;
@@ -1035,19 +1035,19 @@ void notify_connection_type_button (ui_object *obj, void *arg)
 	{
 
 		// set the conection type text
-		if ( memncmp ( ( char * ) this_service->guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
+		if ( memcmp ( this_service->guid, &DPSPGUID_TCPIP, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_text (obj, get_trans("MP_INTERNET"));
 		}
-		else if ( memncmp ( ( char * ) this_service->guid, ( char * ) &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_service->guid, &DPSPGUID_SERIAL, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_text (obj, get_trans("MP_SERIAL"));
 		}
-		else if ( memncmp ( ( char * ) this_service->guid, ( char * ) &DPSPGUID_MODEM, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_service->guid, &DPSPGUID_MODEM, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_text (obj, get_trans("MP_MODEM"));
 		}
-		else if ( memncmp ( ( char * ) this_service->guid, ( char * ) &DPSPGUID_IPX, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_service->guid, &DPSPGUID_IPX, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_text (obj, get_trans("MP_IPX"));
 		}
@@ -1138,7 +1138,7 @@ void install_global_options_service_provider (void)
    while ( this_service )
    {
 
-		if ( memncmp ( ( char * ) this_service->guid, ( char * ) &global_options.service_provider_guid, sizeof ( GUID ) ) == TRUE )
+		if ( memcmp ( this_service->guid, &global_options.service_provider_guid, sizeof ( GUID ) ) == 0 )
 		{
 
 			start_service_provider ( this_service );
@@ -1173,15 +1173,15 @@ void set_multiplayer_options_display ( void )
 	if ( ( this_connection ) && ( this_connection->service_provider.guid ) )
 	{
 
-		if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
+		if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_TCPIP, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_drawable ( tcpip_parameters_area, UI_OBJECT_STATE_ON );
 		}
-		else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_SERIAL, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_SERIAL, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_drawable ( serial_parameters_area, UI_OBJECT_STATE_ON );
 		}
-		else if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_MODEM, sizeof ( GUID ) ) == TRUE )
+		else if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_MODEM, sizeof ( GUID ) ) == 0 )
 		{
 			set_ui_object_drawable ( modem_parameters_area, UI_OBJECT_STATE_ON );
 		}

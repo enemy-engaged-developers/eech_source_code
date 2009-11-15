@@ -256,7 +256,7 @@ void draw_polygon_buffer ( polygon_buffer *buffer )
 		if ( polygon->texture )
 		{
 
-			set_d3d_texture ( 0, load_hardware_texture_map ( polygon->texture ) );
+			set_d3d_texture ( 0, polygon->texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, polygon->texture_u_address );

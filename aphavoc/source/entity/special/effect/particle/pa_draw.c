@@ -88,7 +88,7 @@ static void draw_local_3d_object (entity *en, float range)
 		loop,
 		count;
 
-	raw = get_local_entity_data (en);
+	raw = (particle *) get_local_entity_data (en);
 
 	count = raw->particle_count;
 

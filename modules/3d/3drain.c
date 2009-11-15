@@ -897,7 +897,7 @@ void draw_3d_rain ( void )
 		// First, set the snow texture
 		//
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( snow_3d_texture ) );
+		set_d3d_texture ( 0, snow_3d_texture );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP );
 		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP );

@@ -806,7 +806,7 @@ entity_attributes unpack_entity_attribute (void)
 	entity_attributes
 		attr;
 
-	attr = unpack_unsigned_data (NUM_ENTITY_ATTRIBUTE_PACK_BITS);
+	attr = (entity_attributes) unpack_unsigned_data (NUM_ENTITY_ATTRIBUTE_PACK_BITS);
 
 	ASSERT ((attr >= 0) && (attr < NUM_ENTITY_ATTRIBUTES));
 

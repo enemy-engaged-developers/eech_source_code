@@ -87,8 +87,8 @@ void ui_object_list_item_function (ui_object *obj, void *arg)
 		*next_parent,
 		*current_list_item;
 
-	void
-		((*pfunction) (ui_object *obj, void *arg));
+	FUNCTION
+		pfunction;
 
 	parent = get_ui_object_parent (obj);
 
@@ -232,7 +232,7 @@ float get_next_list_position (ui_object *list_object)
 	list_ui_object
 		*list;
 
-	list = list_object->data;
+	list = (list_ui_object*) list_object->data;
 
 	current_list_item = get_ui_object_child (list_object);
 
@@ -284,7 +284,7 @@ float get_next_list_virtual_position (ui_object *list_object)
 	list_ui_object
 		*list;
 
-	list = list_object->data;
+	list = (list_ui_object*) list_object->data;
 
 	current_list_item = get_ui_object_child (list_object);
 
@@ -672,7 +672,7 @@ void ui_object_unselect_list (ui_object *list)
 	while (item)
 	{
 
-		area = item->data;
+		area = (area_ui_object *) item->data;
 
 		area->state = UI_OBJECT_STATE_OFF;
 

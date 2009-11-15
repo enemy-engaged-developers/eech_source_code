@@ -139,7 +139,7 @@ void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 	// load TGA file
 	//
 
-	tga_image = load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
+	tga_image = ( tga_rgba * ) load_tga_file (tga_filename, &width, &height, &bits_per_pixel);
 
 	if (bits_per_pixel != 32)
 	{
@@ -150,7 +150,7 @@ void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 	// Allocate a buffer memory area - must be big enough to hold the worst possible rle case
 	//
 
-	rle_image = safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
+	rle_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
 
 	ASSERT ( rle_image );
 
@@ -244,7 +244,7 @@ void convert_tga_to_rle (const char *tga_filename, const char *rle_filename)
 
 						rgb_col.b = run_start->b;
 
-						packed_rgb_col = get_rgb_packed_value (rgb_col);
+						packed_rgb_col = get_packed_colour (rgb_col);
 
 						quick_set_list_item ( destination_ptr, unsigned short int, packed_rgb_col );
 
@@ -353,7 +353,7 @@ void convert_psd_to_rle ( const char *psd_filename, const char *rle_filename )
 	// Allocate a buffer memory area - must be big enough to hold the worst possible rle case
 	//
 
-	rle_image = safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
+	rle_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
 
 	destination_ptr = rle_image;
 
@@ -457,7 +457,7 @@ void convert_psd_to_rle ( const char *psd_filename, const char *rle_filename )
 						rgb_col.g = run_start->g;
 						rgb_col.b = run_start->b;
 
-						packed_rgb_col = get_rgb_packed_value ( rgb_col );
+						packed_rgb_col = get_general_packed_colour ( rgb_col );
 
 						quick_set_list_item ( destination_ptr, unsigned short int, packed_rgb_col );
 
@@ -570,13 +570,13 @@ void convert_and_dither_psd_to_rle (const char *psd_filename, const char *rle_fi
 	// Allocate a dither image
 	//
 
-	dither_image = safe_malloc ( width * height * sizeof ( rgb_packed ) );
+	dither_image = ( rgb_packed * ) safe_malloc ( width * height * sizeof ( rgb_packed ) );
 
 	//
 	// Allocate a buffer memory area - must be big enough to hold the worst possible rle case
 	//
 
-	rle_image = safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
+	rle_image = ( unsigned char * ) safe_malloc ( width * height * sizeof ( rgb_packed ) * 2 );
 
 	//
 	// Dither the image

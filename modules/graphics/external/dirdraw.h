@@ -147,13 +147,13 @@ typedef struct DISPLAY_DEVICE display_device;
 
 extern int initialise_graphics_system ( GUID *device_guid );
 
-extern void set_ddraw_use_double_buffering ( int flag );
+//extern void set_ddraw_use_double_buffering ( int flag );
 
-extern void set_ddraw_use_software_driver ( int flag );
+//extern void set_ddraw_use_software_driver ( int flag );
 
-extern void set_ddraw_use_system_memory ( int flag );
+//extern void set_ddraw_use_system_memory ( int flag );
 
-extern void set_ddraw_use_z_buffer ( int flag );
+//extern void set_ddraw_use_z_buffer ( int flag );
 
 extern void set_ddraw_use_full_screen ( int flag );
 

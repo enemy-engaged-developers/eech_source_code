@@ -323,11 +323,11 @@ extern void initialise_comms_debug (void);
 
 extern void deinitialise_comms (void);
 
-extern void send_packet (DPID player_id, packet_types type, char *data, int size, send_types send_type);
+extern void send_packet (DPID player_id, packet_types type, unsigned char *data, int size, send_types send_type);
 
 extern void receive_packets (void);
 
-extern int process_packet_list (send_types send_type, struct CONNECTION_LIST_TYPE *connection, DPID *player_id, char **data, int *size);
+extern int process_packet_list (send_types send_type, struct CONNECTION_LIST_TYPE *connection, DPID *player_id, unsigned char **data, int *size);
 
 extern DPID get_packet_destination (void);
 

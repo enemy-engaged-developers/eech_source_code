@@ -290,7 +290,7 @@ static entity *get_best_view_entity (camera *raw)
 entity *switch_auto_edit_entity (camera *raw)
 {
 	entity
-		*new;
+		*new_;
 
 	ASSERT (raw);
 
@@ -298,19 +298,19 @@ entity *switch_auto_edit_entity (camera *raw)
 
 	if (frand1 () < 0.667)
 	{
-		new = get_best_view_entity (raw);
+		new_ = get_best_view_entity (raw);
 
-		if (new)
+		if (new_)
 		{
-			set_external_view_entity (new);
+			set_external_view_entity (new_);
 		}
 	}
 	else
 	{
-		new = NULL;
+		new_ = NULL;
 	}
 
-	return (new);
+	return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

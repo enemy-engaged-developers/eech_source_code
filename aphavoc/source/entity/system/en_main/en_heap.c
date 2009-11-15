@@ -233,7 +233,7 @@ void initialise_entity_heap (int num_entities)
 	if (command_line_downwash)
 		start_of_local_entity_heap = number_of_entities - 10000;
 
-	entities = malloc_heap_mem (number_of_entities * sizeof (entity));
+	entities = (entity *) malloc_heap_mem (number_of_entities * sizeof (entity));
 	//VJ 050308 if not downwash than number_of_entities = 125000 (original)
 
 	reset_entity_heap ();

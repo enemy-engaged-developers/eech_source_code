@@ -81,7 +81,7 @@ typedef enum EO_FOV_LEVELS eo_fov_levels;
 
 struct EO_PARAMS
 {
-	eo_fov_levels
+	int
 		field_of_view,
 		min_field_of_view,
 		max_field_of_view;

@@ -1255,7 +1255,7 @@ int award_valour_medal (int side, int points)
 	
 			criteria++;
 	
-			medal_type--;
+			medal_type = (medal_types)((int)medal_type - 1);
 		}
 	}
 

@@ -247,7 +247,7 @@ void create_direct_play_interface ( void )
 
 	destroy_direct_play_interface ();
 
-	ret = CoCreateInstance ( &CLSID_DirectPlay, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlay4A, ( LPVOID * ) &direct_playx );
+	ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlay, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlay4A, ( LPVOID * ) &direct_playx );
 
 	if ( ret != 0 )
 	{
@@ -291,7 +291,7 @@ void direct_play_initialise_lobbies ( void )
 	HRESULT
 		ret;
 
-	ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby3 );
+	ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby3 );
 
 	if ( ret != DP_OK )
 	{
@@ -330,7 +330,7 @@ void direct_play_initialise_lobbies ( void )
 			// We were created by a lobby - so get the details!
 			//
 
-			direct_play_lobby3_connection_data = safe_malloc ( datasize );
+			direct_play_lobby3_connection_data = ( DPLCONNECTION * ) safe_malloc ( datasize );
 
 			ret = IDirectPlayLobby_GetConnectionSettings ( direct_play_lobby3, 0, direct_play_lobby3_connection_data, &datasize );
 
@@ -372,7 +372,7 @@ void direct_play_initialise_lobbies ( void )
 				// Now connect to the lobby's game
 				//
 
-				ret = IDirectPlayLobby_ConnectEx ( direct_play_lobby3, 0, &IID_IDirectPlay4A, ( LPVOID * ) &direct_playx, NULL );
+				ret = IDirectPlayLobby_ConnectEx ( direct_play_lobby3, 0, GUID_PREFIX IID_IDirectPlay4A, ( LPVOID * ) &direct_playx, NULL );
 
 				if ( ret != DP_OK )
 				{
@@ -468,7 +468,7 @@ void direct_play_register_application ( const char *app_name, const char *filena
 	application_description.lpszDescriptionA= ( LPSTR ) app_name;
 	application_description.lpszDescriptionW= NULL;
 
-	ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &dp_lobby3 );
+	ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &dp_lobby3 );
 
 	if ( ret != DP_OK )
 	{
@@ -625,7 +625,7 @@ int direct_play_enumerate_service_providers ( void )
 	
 	#endif
 	
-		hr = IDirectPlayX_EnumConnections ( direct_playx, &TEST_GUID, ( LPVOID ) direct_play_enumerate_connections,
+		hr = IDirectPlayX_EnumConnections ( direct_playx, &TEST_GUID, (LPDPENUMCONNECTIONSCALLBACK)direct_play_enumerate_connections,
 																NULL, DPCONNECTION_DIRECTPLAY | DPCONNECTION_DIRECTPLAYLOBBY );
 	
 	
@@ -684,7 +684,7 @@ int direct_play_enumerate_service_providers ( void )
 						if ( hr == DPERR_BUFFERTOOSMALL )
 						{
 
-							modem_address_data = safe_malloc ( modem_address_datasize );
+							modem_address_data = ( LPVOID * ) safe_malloc ( modem_address_datasize );
 
 							hr = IDirectPlayX_GetPlayerAddress ( direct_playx, 0, modem_address_data, &modem_address_datasize );
 
@@ -713,7 +713,7 @@ int direct_play_enumerate_service_providers ( void )
 							LPDIRECTPLAYLOBBY3A
 								direct_play_lobby;
 					
-							hr = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
+							hr = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
 					
 							if ( hr != DP_OK )
 							{
@@ -784,7 +784,7 @@ int direct_play_enumerate_service_providers ( void )
 	
 		service_provider_table = new_service_provider;
 	
-		new_service_provider->guid = safe_malloc ( sizeof ( GUID ) );
+		new_service_provider->guid = ( GUID * ) safe_malloc ( sizeof ( GUID ) );
 	
 		memcpy ( new_service_provider->guid, &TEST_GUID, sizeof ( GUID ) );
 	
@@ -806,8 +806,12 @@ int direct_play_enumerate_service_providers ( void )
 
 BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize, LPCVOID data, LPVOID context )
 {
-
-	if ( memcmp ( guid, &DPAID_Modem, sizeof ( GUID ) ) == 0 )
+#ifdef __cplusplus
+#define GUID_PREFIX2 &
+#else
+#define GUID_PREFIX2
+#endif
+	if ( memcmp ( GUID_PREFIX2 guid, GUID_PREFIX2 DPAID_Modem, sizeof ( GUID ) ) == 0 )
 	{
 
 		const char
@@ -825,9 +829,9 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 			// Add this modem to the list
 			//
 	
-			modem_name = safe_malloc ( sizeof ( modem_names ) );
+			modem_name = ( modem_names * ) safe_malloc ( sizeof ( modem_names ) );
 	
-			modem_name->name = safe_malloc ( strlen ( string ) + 1 );
+			modem_name->name = ( char * ) safe_malloc ( strlen ( string ) + 1 );
 	
 			strcpy ( modem_name->name, string );
 	
@@ -873,7 +877,7 @@ BOOL FAR PASCAL direct_play_enumerate_connections ( LPGUID lpSPGuid, LPVOID lpCo
 
 	service_provider_table = new_service_provider;
 
-	new_service_provider->guid = safe_malloc ( sizeof ( GUID ) );
+	new_service_provider->guid = ( GUID * ) safe_malloc ( sizeof ( GUID ) );
 
 	memcpy ( new_service_provider->guid, lpSPGuid, sizeof ( GUID ) );
 
@@ -909,9 +913,9 @@ int direct_play_create_interface ( service_provider_table_type *this_service )
 	
 		create_direct_play_interface ();
 	
-		connection_data.service_provider.guid = safe_malloc ( sizeof ( GUID ) );
+		connection_data.service_provider.guid = ( GUID * ) safe_malloc ( sizeof ( GUID ) );
 	
-		connection_data.service_provider.name = safe_malloc ( strlen ( this_service->name ) + 1 );
+		connection_data.service_provider.name = ( char * ) safe_malloc ( strlen ( this_service->name ) + 1 );
 	
 		connection_data.service_provider.connection = safe_malloc ( this_service->connection_size );
 
@@ -1433,7 +1437,7 @@ int direct_play_dial_modem ( const char *modem, const char *phone_number )
 	// Create a lobby
 	//
 
-	ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
+	ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
 
 	if ( ret != DP_OK )
 	{
@@ -1692,7 +1696,7 @@ int direct_play_answer_modem ( const char *modem, int user_data )
 	// Create a lobby
 	//
 
-	ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
+	ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
 
 	if ( ret != DP_OK )
 	{
@@ -1799,7 +1803,7 @@ int internal_direct_play_answer_modem ( void *data )
 	int
 		*user_data;
 
-	user_data = data;
+	user_data = ( int * ) data;
 
 	create_direct_play_interface ();
 
@@ -2055,7 +2059,7 @@ void direct_play_set_session_type_and_name ( int value )
 			( ( LPDPSESSIONDESC2 ) session_capabilities )->lpszSessionName = ( LPWSTR ) connection_data.session_name;
 
 
-			hr = IDirectPlayX_SetSessionDesc ( direct_playx, session_capabilities, 0 );
+			hr = IDirectPlayX_SetSessionDesc ( direct_playx, ( LPDPSESSIONDESC2 ) session_capabilities, 0 );
 
 			if ( hr != DP_OK )
 			{
@@ -2306,7 +2310,7 @@ const char *direct_play_session_admin_name (void)
 LPDPSESSIONDESC2 direct_play_get_session_capabilities (void)
 {
 
-	return session_capabilities;
+	return ( LPDPSESSIONDESC2 ) session_capabilities;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3192,7 +3196,7 @@ const char *direct_play_get_player_name (DPID player_id)
 
 	dp_name = ( LPDPNAME ) data;
 
-	name = safe_malloc ( strlen ( dp_name->lpszShortNameA ) + 1 );
+	name = ( char * ) safe_malloc ( strlen ( dp_name->lpszShortNameA ) + 1 );
 
 	strcpy ( name, dp_name->lpszShortNameA );
 
@@ -3685,7 +3689,7 @@ void set_direct_play_inet_address ( const char *ip_address )
 		// Create a lobby
 		//
 
-		ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
+		ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
 
 		if ( ret != DP_OK )
 		{
@@ -3811,7 +3815,7 @@ void set_direct_play_serial_address ( int com_port, int baud_rate, int stop_bits
 		// Create a lobby
 		//
 
-		ret = CoCreateInstance ( &CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, &IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
+		ret = CoCreateInstance ( GUID_PREFIX CLSID_DirectPlayLobby, NULL, CLSCTX_INPROC_SERVER, GUID_PREFIX IID_IDirectPlayLobby3A, ( LPVOID * ) &direct_play_lobby );
 
 		if ( ret != DP_OK )
 		{

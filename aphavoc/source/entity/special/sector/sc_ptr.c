@@ -84,7 +84,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (sector *) get_local_entity_data (en);
 
 	switch (type)
 	{

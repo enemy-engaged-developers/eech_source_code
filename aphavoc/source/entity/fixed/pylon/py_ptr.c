@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (pylon *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_SUCC:
 		////////////////////////////////////////
 		{
-			raw->succ = ptr;
+			raw->succ = (entity *) ptr;
 
 			break;
 		}
@@ -122,7 +122,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (pylon *) get_local_entity_data (en);
 
 	switch (type)
 	{

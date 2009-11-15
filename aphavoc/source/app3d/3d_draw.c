@@ -184,9 +184,9 @@ void draw_application_3d_scene (void)
 
 	set_3d_active_environment (main_3d_env);
 
-	set_3d_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
+	set_3d_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
 
-	set_3d_target_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
+	set_3d_target_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
 
 	set_3d_target_weathermode_transitional_status (main_3d_env, get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_STATUS));
 
@@ -444,9 +444,9 @@ void draw_application_highres_screen ( int x, int y, int x_repeat, int y_repeat 
 
 	set_3d_active_environment (main_3d_env);
 
-	set_3d_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
+	set_3d_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
 
-	set_3d_target_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
+	set_3d_target_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
 
 	set_3d_target_weathermode_transitional_status (main_3d_env, get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_STATUS));
 
@@ -546,9 +546,9 @@ void draw_application_ui_3d_scene (void)
 
 	set_3d_active_environment (main_3d_env);
 
-	set_3d_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
+	set_3d_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_WEATHER_MODE));
 
-	set_3d_target_weathermode (main_3d_env, get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
+	set_3d_target_weathermode (main_3d_env, (weathermodes) get_local_entity_int_value (get_session_entity (), INT_TYPE_TARGET_WEATHER_MODE));
 
 	set_3d_target_weathermode_transitional_status (main_3d_env, get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_WEATHER_MODE_TRANSITIONAL_STATUS));
 

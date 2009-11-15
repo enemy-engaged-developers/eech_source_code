@@ -81,7 +81,7 @@ static void update_server (entity *en)
 	crater
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (crater *) get_local_entity_data (en);
 
 	raw->crater_lifetime -= get_delta_time();
 

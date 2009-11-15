@@ -94,14 +94,14 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char
+unsigned char
     *tx_pack_buffer;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static char
+static unsigned char
     session_data,
     *data_record;
 
@@ -133,7 +133,7 @@ int numServers = 0;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void comms_record_data (char *data, int size);
+static void comms_record_data (unsigned char *data, int size);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ void initialise_comms_manager (void)
 
     set_server_response (SERVER_RESPONSE_UNKNOWN);
 
-    data_record = (char *) malloc_heap_mem (command_line_comms_data_record_size);
+    data_record = (unsigned char *) malloc_heap_mem (command_line_comms_data_record_size);
 
     add_update_function (send_comms_data, 1.0 / command_line_max_game_update_rate , 1.0);
     //add_update_function (data_exchange, 1.0 / command_line_max_game_update_rate , 1.0);
@@ -164,7 +164,7 @@ void initialise_comms_manager (void)
 		add_update_function (validate_connections, 3.0, 1.0); // Jabberwock - VC was called to rarely if cto was high
     }
 
-    tx_pack_buffer = (char *) malloc_heap_mem (sizeof (char) * command_line_comms_pack_buffer_size);
+    tx_pack_buffer = (unsigned char *) malloc_heap_mem (sizeof (unsigned char) * command_line_comms_pack_buffer_size);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,10 +223,10 @@ void comms_clear_data_record (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void comms_record_data (char *data, int size)
+void comms_record_data (unsigned char *data, int size)
 {
 
-    char
+    unsigned char
         *new_data_record;
 
     //
@@ -236,7 +236,7 @@ void comms_record_data (char *data, int size)
     while (data_record_size + size > command_line_comms_data_record_size)
     {
 
-        new_data_record = (char *) malloc_heap_mem (command_line_comms_data_record_size * 2);
+        new_data_record = (unsigned char *) malloc_heap_mem (command_line_comms_data_record_size * 2);
 
         ASSERT (data_record);
 
@@ -551,9 +551,9 @@ static void smart_memcpy ( void * dst, const void * src, int elemsize, int skips
 {
 	for ( ; elems > 0; elems--)
 	{
-		memcpy ( ( char * ) dst + skipsize, ( const char * ) src + skipsize, elemsize - skipsize );
-		src = ( const char * ) src + elemsize;
-		dst = ( char * ) dst + elemsize;
+		memcpy ( ( unsigned char * ) dst + skipsize, ( const unsigned char * ) src + skipsize, elemsize - skipsize );
+		src = ( unsigned const char * ) src + elemsize;
+		dst = ( unsigned char * ) dst + elemsize;
 	}
 }
 
@@ -590,7 +590,7 @@ void comms_process_data (void)
         *this_connection,
         *connection;
 
-    char
+    unsigned char
         *received_data;
 
     int
@@ -637,7 +637,7 @@ void comms_process_data (void)
             while (receive_flag)
             {
 
-                type = process_packet_list (send_type, this_connection, &received_id, &received_data, &received_size);
+                type = (packet_types) process_packet_list (send_type, this_connection, &received_id, &received_data, &received_size);
 
                 switch (type)
                 {
@@ -754,7 +754,7 @@ void comms_process_data (void)
                                 while (TRUE)
                                 {
 
-                                    ptr = new_connection->connection_receive_buffer;
+                                    ptr = (char *) new_connection->connection_receive_buffer;
 
                                     size = 0;
 
@@ -894,7 +894,7 @@ void comms_process_data (void)
 
                                     new_connection->connection_receive_buffer_size -= size;
 
-                                    if (!pack_session (ptr, &new_connection->connection_receive_buffer_size, PACK_MODE_BROWSE_SESSION))
+                                    if (!pack_session ((unsigned char *) ptr, &new_connection->connection_receive_buffer_size, PACK_MODE_BROWSE_SESSION))
                                     {
 
                                         break;
@@ -910,7 +910,7 @@ void comms_process_data (void)
 
                                     free_mem (new_connection->connection_receive_buffer);
 
-                                    new_connection->connection_receive_buffer = malloc_heap_mem (new_connection->connection_receive_buffer_size);
+                                    new_connection->connection_receive_buffer = (unsigned char *) malloc_heap_mem (new_connection->connection_receive_buffer_size);
                                 }
 
                                 //
@@ -966,7 +966,7 @@ void comms_process_data (void)
 
                             new_connection = get_connection_list_item (received_id);
 
-         		       	    ptr = new_connection->connection_receive_buffer;
+         		       	    ptr = (char *) new_connection->connection_receive_buffer;
 
 							size = 0;
 
@@ -1175,7 +1175,7 @@ void comms_process_data (void)
 						int
 							season;
 
-	                   	ptr = received_data;
+	                   	ptr = (char *) received_data;
 
                         size = 0;
 
@@ -1483,7 +1483,7 @@ void comms_process_data (void)
 
                         reinitialise_entity_system ();
 
-                        ptr = received_data;
+                        ptr = (char *) received_data;
 
                         size = 0;
 
@@ -1673,7 +1673,7 @@ void comms_process_data (void)
 
                         create_local_only_entities (PACK_MODE_BROWSE_SESSION);
 
-                        if (unpack_session (ptr, received_size, PACK_MODE_BROWSE_SESSION))
+                        if (unpack_session ((unsigned char *) ptr, received_size, PACK_MODE_BROWSE_SESSION))
                         {
 
                             debug_log ("COMMS MAN: browse: received size overflow"); // schorpp
@@ -1840,7 +1840,7 @@ void comms_process_data (void)
                         new_pilot = create_new_pilot_entity
                                         (
                                             pilot_data.name,
-                                            pilot_data.side,
+                                            (entity_sides) pilot_data.side,
                                             pilot_data.rank,
                                             pilot_data.sub_type,
                                             pilot_data.unique_id,
@@ -1939,7 +1939,7 @@ void comms_process_data (void)
 
 //                          #endif
 
-                            send_packet (received_id, PACKET_TYPE_GUNSHIP_REQUEST_ACCEPTED, (void *) &buffer, 4, SEND_TYPE_PERSONAL);
+                            send_packet (received_id, PACKET_TYPE_GUNSHIP_REQUEST_ACCEPTED, (unsigned char *) &buffer, 4, SEND_TYPE_PERSONAL);
 
                             new_connection->gunship_number = pilot_data.gunship_index;
 
@@ -2018,7 +2018,7 @@ void comms_process_data (void)
 
                                 free_mem (new_connection->connection_receive_buffer);
 
-                                new_connection->connection_receive_buffer = malloc_heap_mem (new_connection->connection_receive_buffer_size);
+                                new_connection->connection_receive_buffer = (unsigned char *) malloc_heap_mem (new_connection->connection_receive_buffer_size);
 
                                 memset (new_connection->connection_receive_buffer, 0, new_connection->connection_receive_buffer_size);
                             }
@@ -2277,7 +2277,7 @@ void comms_process_data (void)
 
                             new_connection->receive_group_frame_id = index_number;
 
-                            send_packet (get_server_id (), PACKET_TYPE_CLIENT_FRAME_ID, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
+                            send_packet (get_server_id (), PACKET_TYPE_CLIENT_FRAME_ID, (unsigned char *) &index_number, 4, SEND_TYPE_PERSONAL);
                         }
 
                         session_data = TRUE;
@@ -2314,7 +2314,7 @@ void comms_process_data (void)
 
                         new_connection->receive_group_frame_id = index_number;
 
-                        send_packet (get_server_id (), PACKET_TYPE_CLIENT_FRAME_ID, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
+                        send_packet (get_server_id (), PACKET_TYPE_CLIENT_FRAME_ID, (unsigned char *) &index_number, 4, SEND_TYPE_PERSONAL);
 
                         break;
                     }
@@ -2427,7 +2427,7 @@ void comms_process_data (void)
                 }
             }
 
-            send_type --;
+            send_type = (send_types) ((int) send_type - 1);
         }
     }
 }
@@ -2778,7 +2778,7 @@ void net_handle_heartbeat(void)
           connection_data_type *this_connection;
           this_connection = direct_play_get_connection_data ();
           // Check whether the current networking method is TCP/IP
-          if ( memncmp ( ( char * ) this_connection->service_provider.guid, ( char * ) &DPSPGUID_TCPIP, sizeof ( GUID ) ) == TRUE )
+          if ( memcmp ( this_connection->service_provider.guid, &DPSPGUID_TCPIP, sizeof ( GUID ) ) == 0 )
           {
             //Send heartbeat
             net_heartbeat();

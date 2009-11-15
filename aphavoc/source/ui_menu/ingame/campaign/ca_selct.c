@@ -754,7 +754,7 @@ static void notify_auto_select_mission (ui_object *obj, void *arg)
 	{
 		side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
-		force = get_local_force_entity (side);
+		force = get_local_force_entity ((entity_sides) side);
 
 		ASSERT (force);
 
@@ -892,7 +892,7 @@ static void notify_auto_select_member (ui_object *obj, void *arg)
 
 	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
-	force = get_local_force_entity (side);
+	force = get_local_force_entity ((entity_sides) side);
 
 	ASSERT (force);
 
@@ -1342,7 +1342,7 @@ static void update_current_selection_buttons (void)
 				process_ingame_text_object_size (mission_time_text, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
 				expire_timer = get_local_entity_float_value (en, FLOAT_TYPE_ELAPSED_MISSION_TIME);
-				expire_timer = min (expire_timer, ONE_DAY);
+				expire_timer = min (expire_timer, (float) ONE_DAY);
 				get_digital_countdown_values (expire_timer, NULL, &hours, &minutes, &seconds);
 				sprintf (string, "%01d:%02d:%02d", hours, minutes, seconds);
 

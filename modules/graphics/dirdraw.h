@@ -165,11 +165,11 @@ struct direct_draw_data
 		ddraw;
 
 	BOOL
-		use_double_buffer,
-		use_full_screen,
-		use_software_driver,		// Set if you want default graphics card
-		use_system_memory,		// Set if you want to debug graphics routines
-		use_z_buffer;
+//		use_double_buffer,
+		use_full_screen;
+//		use_software_driver,		// Set if you want default graphics card
+//		use_system_memory,		// Set if you want to debug graphics routines
+//		use_z_buffer;
 
 	LPDIRECTDRAWSURFACEX
 		lpFrontBuffer,
@@ -227,13 +227,13 @@ typedef struct DD_DISPLAY_DEVICE display_device;
 
 extern BOOL initialise_graphics_system ( GUID *device_guid );
 
-extern void set_ddraw_use_double_buffering ( int flag );
+//extern void set_ddraw_use_double_buffering ( int flag );
 
-extern void set_ddraw_use_software_driver ( int flag );
+//extern void set_ddraw_use_software_driver ( int flag );
 
-extern void set_ddraw_use_system_memory ( int flag );
+//extern void set_ddraw_use_system_memory ( int flag );
 
-extern void set_ddraw_use_z_buffer ( int flag );
+//extern void set_ddraw_use_z_buffer ( int flag );
 
 extern void set_ddraw_use_full_screen ( int flag );
 

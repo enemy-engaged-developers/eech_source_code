@@ -256,7 +256,7 @@ void show_briefing_page (entity *mission, int force_update)
 	// LANDING BASE 
 	//
 
-	base = get_local_entity_ptr_value (mission, PTR_TYPE_RETURN_KEYSITE);
+	base = (entity *) get_local_entity_ptr_value (mission, PTR_TYPE_RETURN_KEYSITE);
 
 	if ((base) && (get_local_entity_type (base) == ENTITY_TYPE_KEYSITE))
 	{
@@ -441,7 +441,7 @@ void show_briefing_page (entity *mission, int force_update)
 				loop,
 				route_length;
 
-			route_nodes = get_local_entity_ptr_value (mission, PTR_TYPE_ROUTE_NODE);
+			route_nodes = (vec3d *) get_local_entity_ptr_value (mission, PTR_TYPE_ROUTE_NODE);
 
 			route_length = get_local_entity_int_value (mission, INT_TYPE_ROUTE_LENGTH);
 
@@ -467,7 +467,7 @@ void show_briefing_page (entity *mission, int force_update)
 
 		page_map_dimensions.size *= 1.2;
 
-		page_map_dimensions.size = max (page_map_dimensions.size, 4.0 * KILOMETRE);
+		page_map_dimensions.size = max (page_map_dimensions.size, 4.0f * KILOMETRE);
 
 		page_map_dimensions.subject_entity = mission;
 	}
@@ -584,7 +584,7 @@ static void update_briefing_page_objects (ui_object *obj, void *arg)
 			expire_timer = get_local_entity_float_value (mission, FLOAT_TYPE_ELAPSED_MISSION_TIME);
 		}
 
-		expire_timer = min (expire_timer, ONE_DAY);
+		expire_timer = min (expire_timer, (float) ONE_DAY);
 
 		get_digital_countdown_values (expire_timer, NULL, &hours, &minutes, &seconds);
 	
@@ -2154,7 +2154,7 @@ void resize_briefing_list_size (ui_object *list)
 
 	// re-size the list objects when items are added
 
-	y = max (1.0, get_next_list_position (list) / get_ui_object_y_size (parent));
+	y = max (1.0f, get_next_list_position (list) / get_ui_object_y_size (parent));
 
 	//set_ui_object_virtual_y_size (list, y);
 	set_ui_object_virtual_y_size (list, 1.0);

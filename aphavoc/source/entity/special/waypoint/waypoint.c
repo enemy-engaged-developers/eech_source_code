@@ -308,7 +308,7 @@ void get_local_waypoint_formation_position_offset (int formation_position, entit
 
 	ASSERT (offset);
 
-	raw = get_local_entity_data (wp);
+	raw = (waypoint *) get_local_entity_data (wp);
 
 	//
 	// default values
@@ -414,7 +414,7 @@ void get_local_waypoint_formation_position_offset (int formation_position, entit
 		
 	type = get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION);
 	
-	formation = get_formation (type);
+	formation = get_formation ((formation_types) type);
 	
 	formation_count = formation->number_in_formation;
 	
@@ -525,7 +525,7 @@ void get_local_waypoint_simple_formation_position (int formation_position, vec3d
 	perpendicular.y = 0.0;
 	perpendicular.z = 0.0;
 
-	formation = get_formation (type);
+	formation = get_formation ((formation_types) type);
 
 	ASSERT (formation);
 	

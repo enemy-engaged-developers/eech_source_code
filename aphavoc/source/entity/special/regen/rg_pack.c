@@ -135,7 +135,7 @@ void pack_local_regen_data (pack_modes mode)
 
 			pack_entity_safe_ptr (en);
 
-			raw = get_local_entity_data (en);
+			raw = (regen *) get_local_entity_data (en);
 
 			pack_float_value (en, FLOAT_TYPE_SLEEP, raw->sleep);
 
@@ -199,7 +199,7 @@ void unpack_local_regen_data (pack_modes mode)
 		{
 			index = unpack_entity_safe_index ();
 
-			raw = get_local_entity_data (en);
+			raw = (regen *) get_local_entity_data (en);
 
 			raw->sleep = unpack_float_value (en, FLOAT_TYPE_SLEEP);
 
@@ -219,7 +219,7 @@ void unpack_local_regen_data (pack_modes mode)
 			regen_manager [i][j].count = unpack_int_value (en, INT_TYPE_VALUE);
 			regen_manager [i][j].front = unpack_int_value (en, INT_TYPE_VALUE);
 
-			regen_queue [i][j] = safe_malloc (sizeof (regen_list_element) * regen_manager [i][j].size);
+			regen_queue [i][j] = (regen_list_element *) safe_malloc (sizeof (regen_list_element) * regen_manager [i][j].size);
 
 			for (k = 0; k < regen_manager [i][j].size; k++)
 			{

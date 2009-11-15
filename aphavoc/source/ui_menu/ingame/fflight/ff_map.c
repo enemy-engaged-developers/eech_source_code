@@ -152,7 +152,7 @@ static void free_flight_map_left_click_function (ui_object *obj, void *arg)
 
 	map_dimensions->selected_entity = NULL;
 
-	side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 	
 	//
 	// Get current mouse-over entity

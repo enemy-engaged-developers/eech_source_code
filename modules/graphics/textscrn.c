@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,129 +77,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void create_texture_screen_data ( screen *texture, int width, int height, enum SCREEN_FORMAT_TYPES type, int number_of_mipmaps, int renderto )
+void create_texture_screen_data ( screen *texture, int width, int height, enum TEXTURE_MAP_TYPES type, int number_of_mipmaps, int renderto )
 {
-
-	DDSURFACEDESC2
-		ddsd;
-	
-	HRESULT
-		ret;
-
-
 	debug_log ( "Creating user texture screen: %d, %d ( %d mipmaps ) ( %d render to ) ", width, height, number_of_mipmaps, renderto );
 
-	memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-	ddsd.dwSize = sizeof ( ddsd );
-
-	//
-	// Allocate a d3d managed texture
-	//
-
-	memcpy ( &ddsd.ddpfPixelFormat, &texture_formats[type].format, sizeof ( DDPIXELFORMAT ) );
-
-	ddsd.dwMipMapCount = 0;
-	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE;
-	ddsd.dwHeight = height;
-	ddsd.dwWidth = width;
-	ddsd.ddsCaps.dwCaps3 = 0;
-	ddsd.ddsCaps.dwCaps4 = 0;
-	ddsd.ddsCaps.dwCaps2 = DDSCAPS2_HINTDYNAMIC | DDSCAPS2_TEXTUREMANAGE;
-
-	if ( ( d3d_mipmap_textures ) && ( number_of_mipmaps > 1 ) )
-	{
-		
-		ddsd.dwFlags |= DDSD_MIPMAPCOUNT;
-		ddsd.ddsCaps.dwCaps |= DDSCAPS_COMPLEX | DDSCAPS_MIPMAP;
-		ddsd.dwMipMapCount = number_of_mipmaps;
-	}
-
-	ret = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->surface, NULL );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_fatal ( "Unable to create texture surface: %s ( %d, %d )", get_ddraw_error_message ( ret ), width, height );
-	}
-
-	//
-	// Texture doesn't have a colour table
-	//
-
-	texture->type = type;
-	texture->palette = NULL;
-	texture->colour_table = NULL;
-	texture->pixel_length = texture_formats[type].bpp_red + texture_formats[type].bpp_green + texture_formats[type].bpp_blue + texture_formats[type].bpp_alpha;
-	texture->clone_screen = FALSE;
-	texture->do_not_destroy = FALSE;
-
-	//
-	// Setup render surface
-	//
-
-	if ( renderto )
-	{
-
-		memset ( &ddsd, 0, sizeof ( ddsd ) );
-	
-		ddsd.dwSize = sizeof ( ddsd );
-	
-		memcpy ( &ddsd.ddpfPixelFormat, &texture_formats[type].format, sizeof ( DDPIXELFORMAT ) );
-	
-		ddsd.dwSize = sizeof ( ddsd );
-		ddsd.dwMipMapCount = 0;
-		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-		ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE;
-		ddsd.dwHeight = height;
-		ddsd.dwWidth = width;
-		ddsd.ddsCaps.dwCaps3 = 0;
-		ddsd.ddsCaps.dwCaps4 = 0;
-		ddsd.ddsCaps.dwCaps2 = 0;
-		ddsd.ddsCaps.dwCaps |= ( d3d_use_rgb_device ) ? ( DDSCAPS_SYSTEMMEMORY ) : ( DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM );
-		
-		ret = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->render_texture_surface, NULL );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_fatal ( "Unable to create texture render surface: %s ( %d, %d )", get_ddraw_error_message ( ret ), width, height );
-		}
-
-		memset ( &ddsd, 0, sizeof ( ddsd ) );
-
-		ddsd.dwSize = sizeof ( ddsd );
-
-		ret = IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
-		
-		ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-		ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER;
-		ddsd.ddsCaps.dwCaps |= ( d3d_use_rgb_device ) ? ( DDSCAPS_SYSTEMMEMORY ) : ( DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM );
-		ddsd.dwWidth = width;
-		ddsd.dwHeight = height;
-
-		get_ddraw_zbuffer_pixel_format ( &ddsd.ddpfPixelFormat );
-//		ddsd.ddpfPixelFormat.dwSize = sizeof ( ddsd.ddpfPixelFormat );
-//		ddsd.ddpfPixelFormat.dwFlags = DDPF_ZBUFFER;
-//		ddsd.ddpfPixelFormat.dwZBufferBitDepth = 16;
-
-		ret = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &texture->zbuffer_surface, NULL );
-		
-		if ( ret != DD_OK )
-		{
-			
-			debug_fatal ( "Unable to create Zbuffer surface: %s", get_ddraw_error_message ( ret ) );
-		}
-
-		ret = IDirectDrawSurface7_AddAttachedSurface ( texture->render_texture_surface, texture->zbuffer_surface );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_fatal ( "Unable to attach Zbuffer surface: %s", get_ddraw_error_message ( ret ) );
-		}
-	}
+	f3d_texture_create(texture, width, height, type, number_of_mipmaps, renderto);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

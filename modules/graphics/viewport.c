@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,14 +120,11 @@ void set_viewport ( float x_min, float y_min, float x_max, float y_max )
 	convert_float_to_int (y_min, &active_int_viewport.y_min);
 	convert_float_to_int (y_max, &active_int_viewport.y_max);
 
-	if ( ( d3d.device ) && ( d3d_valid ) )
+	if ( ( d3d_initialised /*d3d.device*/ ) && ( d3d_valid ) )
 	{
 
 		D3DVIEWPORT7
 			viewdata;
-	
-		HRESULT
-			ret;
 	
 		float
 			fwidth,
@@ -171,15 +169,9 @@ void set_viewport ( float x_min, float y_min, float x_max, float y_max )
 		viewdata.dvMinZ = 0.0;
 		viewdata.dvMaxZ = 1.0;
 
-		ret = IDirect3DDevice7_SetViewport ( d3d.device, &viewdata );
+		f3d_set_viewport ( &viewdata );
 
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set viewport2: %s", get_d3d_error_message ( ret ) );
-		}
 #if REPORT_VIEWPORTS
-		else
 		{
 
 			debug_log ( "Set viewport: %d, %d ( %d, %d ) [ %f %f ]", viewdata.dwX, viewdata.dwY, viewdata.dwWidth, viewdata.dwHeight, viewdata.dvMinZ, viewdata.dvMaxZ );
@@ -229,16 +221,13 @@ void set_full_viewport ( float x_min, float y_min, float x_max, float y_max, flo
 	convert_float_to_int (y_min, &active_int_viewport.y_min);
 	convert_float_to_int (y_max, &active_int_viewport.y_max);
 
-	if ( ( d3d.device ) && ( d3d_valid ) )
+	if ( ( d3d_initialised /*d3d.device*/ ) && ( d3d_valid ) )
 	{
 
 
 		D3DVIEWPORT7
 			viewdata;
 	
-		HRESULT
-			ret;
-
 		float
 			fwidth,
 			fheight;
@@ -274,15 +263,9 @@ void set_full_viewport ( float x_min, float y_min, float x_max, float y_max, flo
 		viewdata.dvMinZ = z_max;
 		viewdata.dvMaxZ = z_min;
 
-		ret = IDirect3DDevice7_SetViewport ( d3d.device, &viewdata );
+		f3d_set_viewport ( &viewdata );
 
-		if ( ret != D3D_OK )
-		{
-
-			debug_log ( "Unable to set viewport2: %s", get_d3d_error_message ( ret ) );
-		}
 #if REPORT_VIEWPORTS
-		else
 		{
 
 			debug_log ( "Set viewport: %d, %d ( %d, %d ) [ %f %f ]", viewdata.dwX, viewdata.dwY, viewdata.dwWidth, viewdata.dwHeight, viewdata.dvMinZ, viewdata.dvMaxZ );

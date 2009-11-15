@@ -166,7 +166,7 @@ static void update_server (entity *en)
 	regen
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (regen *) get_local_entity_data (en);
 
 	if (!raw->alive)
 	{
@@ -231,7 +231,7 @@ entity *regen_update (entity *en)
 	regen_list_element
 		*e1;
 
-	raw = get_local_entity_data (en);
+	raw = (regen *) get_local_entity_data (en);
 
 	wp = get_local_entity_parent (en, LIST_TYPE_CURRENT_WAYPOINT);
 
@@ -241,9 +241,9 @@ entity *regen_update (entity *en)
 			
 	keysite = get_local_entity_parent (landing, LIST_TYPE_LANDING_SITE);
 
-	force_en = get_local_force_entity (raw->side);
+	force_en = get_local_force_entity ((entity_sides) raw->side);
 
-	force_raw = get_local_entity_data (force_en);
+	force_raw = (force *) get_local_entity_data (force_en);
 
 	group_type = NUM_ENTITY_SUB_TYPE_GROUPS;
 
@@ -408,7 +408,7 @@ entity *regen_update (entity *en)
 			if (get_local_entity_int_value (group, INT_TYPE_FRONTLINE))
 			{
 	
-				route_node = get_closest_side_road_node (get_local_entity_int_value (group, INT_TYPE_SIDE), &raw->position, 5 * KILOMETRE);
+				route_node = get_closest_side_road_node ((entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE), &raw->position, 5 * KILOMETRE);
 	
 				set_client_server_entity_int_value (group, INT_TYPE_ROUTE_NODE, route_node);
 			}
@@ -567,7 +567,7 @@ entity *regen_update (entity *en)
 			#endif
 
 			// update markers
-			regen_queue_use (raw->side, (raw->sub_type));
+			regen_queue_use ((entity_sides) raw->side, (raw->sub_type));
 
 			return member;
 		}
@@ -911,7 +911,7 @@ void initialise_regen_queues (void)
 				m1->size = REGEN_QUEUE_DEFAULT_SIZE;
 			}
 
-			regen_queue [i][j] = safe_malloc (sizeof (regen_list_element) * m1->size);
+			regen_queue [i][j] = (regen_list_element *) safe_malloc (sizeof (regen_list_element) * m1->size);
 
 			memset (regen_queue [i][j], -1, sizeof (regen_list_element) * m1->size);
 		}
@@ -1006,7 +1006,7 @@ int increment_regen_queue_size (entity_sides side, entity_types type, int shift)
 	// allocate new queue
 
 	//regen_queue[side][regen_type] = safe_malloc (sizeof (regen_list_element) * m1->size);
-	temp = safe_malloc (sizeof (regen_list_element) * m1->size);
+	temp = (regen_list_element *) safe_malloc (sizeof (regen_list_element) * m1->size);
 
 	//memset (regen_queue [side][regen_type], -1, sizeof (regen_list_element) * m1->size);
 	memset (temp, -1, sizeof (regen_list_element) * m1->size);

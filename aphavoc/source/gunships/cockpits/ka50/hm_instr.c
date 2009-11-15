@@ -532,15 +532,15 @@ void draw_ka50_barometric_altimeter (cockpit_panels panel)
 			value = 0.0;
 		}
 
-		large_needle_value = fmod (value, 1000.0);
+		large_needle_value = fmod (value, 1000.0f);
 
-		small_needle_value = fmod (value, 10000.0);
+		small_needle_value = fmod (value, 10000.0f);
 	}
 	else
 	{
-		large_needle_value = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0);
+		large_needle_value = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0f);
 
-		small_needle_value = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0);
+		small_needle_value = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0f);
 	}
 
 	switch (panel)
@@ -1833,10 +1833,10 @@ void draw_ka50_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel)
 			//
 			////////////////////////////////////////
 
-			#define ONE_REV		  				(1.0)
-			#define ONE_TENTH_REV				((ONE_REV) / 10.0)
-			#define ONE_OVER_ONE_TENTH_REV	(1.0 / (ONE_TENTH_REV))
-			#define DIGIT_CHANGE_THRESHOLD	(0.01)
+			#define ONE_REV		  				(1.0f)
+			#define ONE_TENTH_REV				((ONE_REV) / 10.0f)
+			#define ONE_OVER_ONE_TENTH_REV	(1.0f / (ONE_TENTH_REV))
+			#define DIGIT_CHANGE_THRESHOLD	(0.01f)
 
 			set_mono_font_colour (yellow_digit_colour);
 
@@ -1889,10 +1889,10 @@ void draw_ka50_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel)
 			//
 			////////////////////////////////////////
 
-			#define ONE_REV		  				(10.0)
-			#define ONE_TENTH_REV				((ONE_REV) / 10.0)
-			#define ONE_OVER_ONE_TENTH_REV	(1.0 / (ONE_TENTH_REV))
-			#define DIGIT_CHANGE_THRESHOLD	(0.01)
+			#define ONE_REV		  				(10.0f)
+			#define ONE_TENTH_REV				((ONE_REV) / 10.0f)
+			#define ONE_OVER_ONE_TENTH_REV	(1.0f / (ONE_TENTH_REV))
+			#define DIGIT_CHANGE_THRESHOLD	(0.01f)
 
 			set_mono_font_colour (white_digit_colour);
 
@@ -1945,10 +1945,10 @@ void draw_ka50_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel)
 			//
 			////////////////////////////////////////
 
-			#define ONE_REV		  				(100.0)
-			#define ONE_TENTH_REV				((ONE_REV) / 10.0)
-			#define ONE_OVER_ONE_TENTH_REV	(1.0 / (ONE_TENTH_REV))
-			#define DIGIT_CHANGE_THRESHOLD	(0.01)
+			#define ONE_REV		  				(100.0f)
+			#define ONE_TENTH_REV				((ONE_REV) / 10.0f)
+			#define ONE_OVER_ONE_TENTH_REV	(1.0f / (ONE_TENTH_REV))
+			#define DIGIT_CHANGE_THRESHOLD	(0.01f)
 
 			set_mono_font_colour (white_digit_colour);
 

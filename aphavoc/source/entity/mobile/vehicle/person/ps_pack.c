@@ -91,7 +91,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 		////////////////////////////////////////
 		{
 
-			raw = get_local_entity_data (en);
+			raw = (person *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -155,7 +155,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (person));
+			raw = (person *) malloc_fast_mem (sizeof (person));
 
 			set_local_entity_data (en, raw);
 

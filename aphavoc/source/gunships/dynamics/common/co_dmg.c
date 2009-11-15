@@ -299,7 +299,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 				count ++;
 			}
 
-			this_damage = this_damage << 1;
+			this_damage = (dynamics_damage_types) (this_damage << 1);
 		}
 
 		damage = damage_array [rand16 () % count];
@@ -780,7 +780,7 @@ void dynamics_damage_model (unsigned int damage, int random)
 			}
 		}
 
-		this_damage = this_damage << 1;
+		this_damage = (dynamics_damage_types) (this_damage << 1);
 	}
 }
 
@@ -1167,7 +1167,7 @@ void update_dynamics_at_keysite (void)
 
 			current_flight_dynamics->damage_repair_time -= get_delta_time ();
 
-			current_flight_dynamics->damage_repair_time = max (current_flight_dynamics->damage_repair_time, 0.0);
+			current_flight_dynamics->damage_repair_time = max (current_flight_dynamics->damage_repair_time, 0.0f);
 
 			#if DEBUG_MODULE
 
@@ -1232,7 +1232,7 @@ void update_dynamics_at_keysite (void)
 
 					#endif
 
-					restore_helicopter_entity (get_gunship_entity (), NULL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
+					restore_helicopter_entity (get_gunship_entity (), NULL, (operational_state_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_OPERATIONAL_STATE));
 
 					set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_DAMAGE_LEVEL, get_local_entity_int_value (get_gunship_entity (), INT_TYPE_INITIAL_DAMAGE_LEVEL));
 
@@ -1354,7 +1354,7 @@ void update_dynamics_damage (void)
 
 					current_flight_dynamics->fuel_weight.value -= FUEL_LEAK_RATE * get_delta_time ();
 
-					current_flight_dynamics->fuel_weight.value = max (current_flight_dynamics->fuel_weight.value, 0.0);
+					current_flight_dynamics->fuel_weight.value = max (current_flight_dynamics->fuel_weight.value, 0.0f);
 
 					#if DEBUG_MODULE
 

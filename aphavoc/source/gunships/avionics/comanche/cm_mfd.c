@@ -2043,14 +2043,14 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 
 //VJ 030423 TSD render mod
 	source = get_gunship_entity ();
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
 
 	dx = (target_position->x - source_position->x) * scale;
 	dy = (target_position->z - source_position->z) * scale;
 
-	target_symbol_type = get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
+	target_symbol_type = (target_symbol_types) get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
 
 	ASSERT ((target_symbol_type >= 0) && (target_symbol_type < NUM_TARGET_SYMBOL_TYPES));
 
@@ -2223,7 +2223,7 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 
 	if (radius < 2000.0)
 	{
-		radius = max (50.0, radius);
+		radius = max (50.0f, radius);
 
 		draw_2d_hatched_circle (dx, dy, radius * scale, MFD_COLOUR5);
 	}
@@ -2576,7 +2576,7 @@ static void draw_air_radar_mfd (void)
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	////////////////////////////////////////
 	//
@@ -3104,7 +3104,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	float
 		zoom;
 
-	int
+	display_3d_tints
 		tint;
 
 	display_3d_light_levels
@@ -3164,7 +3164,7 @@ static void draw_3d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -3347,7 +3347,7 @@ static void draw_full_screen_3d_eo_display (eo_params_dynamic_move *eo, target_a
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -3744,7 +3744,7 @@ static void draw_2d_eo_display (eo_params_dynamic_move *eo, target_acquisition_s
 	{
 		float
 			speed = knots(current_flight_dynamics->velocity_z.value),
-			altitude = min(feet(current_flight_dynamics->radar_altitude.value), 500.0);
+			altitude = min(feet(current_flight_dynamics->radar_altitude.value), 500.0f);
 
 		y_adjust = 0.0;
 
@@ -5338,7 +5338,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 
 	source = get_gunship_entity ();
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -5643,7 +5643,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 				{
 					if (source_side != get_local_entity_int_value (target, INT_TYPE_SIDE))
 					{
-						threat_type = get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
+						threat_type = (threat_types) get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
 
 						if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA))
 						{
@@ -5718,7 +5718,7 @@ static void draw_tactical_situation_display_mfd (comanche_main_mfd_locations mfd
 					{
 						if (get_local_entity_int_value (target, INT_TYPE_RADAR_ON))
 						{
-							threat_type = get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
+							threat_type = (threat_types) get_local_entity_int_value (target, INT_TYPE_THREAT_TYPE);
 
 							if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 							{
@@ -6256,7 +6256,7 @@ static entity *get_closest_missile (entity *source, vec3d *source_position, thre
 
 			threat_velocity = get_local_entity_float_value (threat, FLOAT_TYPE_VELOCITY);
 
-			time_to_impact = threat_range / max (threat_velocity, 1.0);
+			time_to_impact = threat_range / max (threat_velocity, 1.0f);
 
 			//
 			// guard against 'overshot target' to prevent spurious indications
@@ -6371,7 +6371,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (comanche_main_mfd
 
 	source = get_gunship_entity ();
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -6431,7 +6431,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (comanche_main_mfd
 			{
 				if (source_side != get_local_entity_int_value (threat, INT_TYPE_SIDE))
 				{
-					threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+					threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 					if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA))
 					{
@@ -6462,7 +6462,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (comanche_main_mfd
 			{
 				if (source_side != get_local_entity_int_value (threat, INT_TYPE_SIDE))
 				{
-					threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+					threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 					if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 					{
@@ -6489,7 +6489,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (comanche_main_mfd
 				{
 					if (get_local_entity_int_value (threat, INT_TYPE_RADAR_ON))
 					{
-						threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+						threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 						if ((threat_type == THREAT_TYPE_SAM) || (threat_type == THREAT_TYPE_AAA) || (threat_type == THREAT_TYPE_AIRBORNE_RADAR))
 						{
@@ -6540,7 +6540,7 @@ static void draw_aircraft_survivability_equipment_display_mfd (comanche_main_mfd
 
 		while (threat)
 		{
-			threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+			threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 			if ((threat_type == THREAT_TYPE_RF_MISSILE) || (threat_type == THREAT_TYPE_IR_MISSILE) || (threat_type == THREAT_TYPE_LASER_MISSILE))
 			{
@@ -10745,7 +10745,7 @@ static void draw_pitch_ladder (void)
 
 		pitch = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_PITCH);
 		tan_pitch = -tan(pitch);
-		mod_pitch = fmod (pitch, rad (10.0));
+		mod_pitch = fmod (pitch, rad (10.0f));
 		tan_mod_pitch = -tan (mod_pitch);
 		int_pitch = (int) (pitch * (1.0 / rad (10.0)));
 
@@ -12022,7 +12022,7 @@ static void draw_mission_display_mfd (void)
 		// end base
 		//
 
-		keysite = get_local_entity_ptr_value (task, PTR_TYPE_RETURN_KEYSITE);
+		keysite = (entity *) get_local_entity_ptr_value (task, PTR_TYPE_RETURN_KEYSITE);
 
 		if (keysite)
 		{
@@ -12459,7 +12459,7 @@ static void initalize_horizon_mask(int width, char** mask)
 
 	if (*mask)
 		safe_free(*mask);
-	horizon_mask = safe_malloc((width * height) + 4);
+	horizon_mask = (char *) safe_malloc((width * height) + 4);
 	*mask = horizon_mask;
 
 	horizon_mask[0] = width;
@@ -12638,7 +12638,7 @@ void initialise_comanche_mfd (void)
 
 	ASSERT ((num_main_weapon_line_points_with_stub_wings & 1) == 0);
 
-	main_weapon_line_points_with_stub_wings = safe_malloc (sizeof (vec3d) * num_main_weapon_line_points_with_stub_wings);
+	main_weapon_line_points_with_stub_wings = (vec3d *) safe_malloc (sizeof (vec3d) * num_main_weapon_line_points_with_stub_wings);
 
 	get_object_3d_poly_line_data (OBJECT_3D_COMANCHE_COCKPIT_WEAPONS_DISPLAY_ALL, main_weapon_line_points_with_stub_wings);
 
@@ -12666,7 +12666,7 @@ void initialise_comanche_mfd (void)
 
 	ASSERT ((num_main_weapon_line_points_without_stub_wings & 1) == 0);
 
-	main_weapon_line_points_without_stub_wings = safe_malloc (sizeof (vec3d) * num_main_weapon_line_points_without_stub_wings);
+	main_weapon_line_points_without_stub_wings = (vec3d *) safe_malloc (sizeof (vec3d) * num_main_weapon_line_points_without_stub_wings);
 
 	get_object_3d_poly_line_data (OBJECT_3D_COMANCHE_COCKPIT_WEAPONS_DISPLAY, main_weapon_line_points_without_stub_wings);
 
@@ -12694,7 +12694,7 @@ void initialise_comanche_mfd (void)
 
 	ASSERT ((num_side_weapon_line_points_with_stub_wings & 1) == 0);
 
-	side_weapon_line_points_with_stub_wings = safe_malloc (sizeof (vec3d) * num_side_weapon_line_points_with_stub_wings);
+	side_weapon_line_points_with_stub_wings = (vec3d *) safe_malloc (sizeof (vec3d) * num_side_weapon_line_points_with_stub_wings);
 
 	get_object_3d_poly_line_data (OBJECT_3D_COMANCHE_COCKPIT_WEAPONS_DISPLAY_ALL, side_weapon_line_points_with_stub_wings);
 
@@ -12722,7 +12722,7 @@ void initialise_comanche_mfd (void)
 
 	ASSERT ((num_side_weapon_line_points_without_stub_wings & 1) == 0);
 
-	side_weapon_line_points_without_stub_wings = safe_malloc (sizeof (vec3d) * num_side_weapon_line_points_without_stub_wings);
+	side_weapon_line_points_without_stub_wings = (vec3d *) safe_malloc (sizeof (vec3d) * num_side_weapon_line_points_without_stub_wings);
 
 	get_object_3d_poly_line_data (OBJECT_3D_COMANCHE_COCKPIT_WEAPONS_DISPLAY, side_weapon_line_points_without_stub_wings);
 
@@ -14519,7 +14519,7 @@ static comanche_main_mfd_modes get_main_mfd_mode_for_eo_sensor (void)
 	return (mfd_mode);
 }
 
-static mfd_modes get_mfd_mode_for_radar (void)
+static comanche_main_mfd_modes get_mfd_mode_for_radar (void)
 {
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR || air_radar_is_active())
 		return COMANCHE_MAIN_MFD_MODE_AIR_RADAR;
@@ -14831,8 +14831,7 @@ static comanche_side_mfd_modes get_next_side_mfd_mode (comanche_side_mfd_modes m
 	ASSERT (comanche_side_mfd_mode_valid (mfd_mode));
 	ASSERT (comanche_side_mfd_location_valid (mfd_location));
 
-	next_mfd_mode = mfd_mode++;
-		next_mfd_mode++;
+	next_mfd_mode = mfd_mode = (comanche_side_mfd_modes) ((int) mfd_mode + 1);
 
 	if (get_side_mfd_damage(mfd_location))
 	{
@@ -14846,7 +14845,7 @@ static comanche_side_mfd_modes get_next_side_mfd_mode (comanche_side_mfd_modes m
 		if (next_mfd_mode == NUM_COMANCHE_SIDE_MFD_MODES)
 			next_mfd_mode = COMANCHE_SIDE_MFD_MODE_OFF;
 		else if (next_mfd_mode == COMANCHE_SIDE_MFD_MODE_DAMAGED)
-			next_mfd_mode++;
+			next_mfd_mode = (comanche_side_mfd_modes) ((int) next_mfd_mode + 1);
 	}
 
 	return next_mfd_mode;

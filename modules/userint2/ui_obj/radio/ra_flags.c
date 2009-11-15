@@ -80,7 +80,7 @@ static void set_radio_ui_object_state (ui_object *obj, int flag)
 		*next,
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (flag == UI_OBJECT_STATE_ON)
 	{
@@ -104,7 +104,7 @@ static void set_radio_ui_object_state (ui_object *obj, int flag)
 			if (next->type == UI_TYPE_RADIO)
 			{
 		
-				area = next->data;
+				area = (area_ui_object *) next->data;
 		
 				area->state = UI_OBJECT_STATE_OFF;
 			}
@@ -112,7 +112,7 @@ static void set_radio_ui_object_state (ui_object *obj, int flag)
 			next = get_ui_object_next (next);
 		}
 
-		area = obj->data;
+		area = (area_ui_object *) obj->data;
 								
 		area->state = flag;
 	

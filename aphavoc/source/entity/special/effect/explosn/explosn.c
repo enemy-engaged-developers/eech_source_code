@@ -816,9 +816,9 @@ void create_client_server_weapon_killed_explosion_effect (entity *en)
 
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
-	kill_code = get_local_entity_int_value (en, INT_TYPE_WEAPON_KILL_CODE);
+	kill_code = (weapon_kill_codes) get_local_entity_int_value (en, INT_TYPE_WEAPON_KILL_CODE);
 
-	warhead_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
 
 	//
 	// calculate type of resulting explosion
@@ -1300,7 +1300,7 @@ void create_client_server_explosion_effect (meta_explosion_types type, vec3d *po
 
 	ASSERT (count);
 
-	entity_index_list = malloc_fast_mem (sizeof (int) * count);
+	entity_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 	for ( loop = 0 ; loop < count ; loop ++ )
 	{

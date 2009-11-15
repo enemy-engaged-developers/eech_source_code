@@ -87,7 +87,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -152,7 +152,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -263,7 +263,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{

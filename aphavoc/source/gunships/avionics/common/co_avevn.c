@@ -483,7 +483,7 @@ static void rearm_refuel_repair_event (event *ev)
 		// re-arm
 		//
 	
-		config_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE);
 	
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 	
@@ -528,7 +528,7 @@ static void load_air_to_ground_weapons_event (event *ev)
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
-		config_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_SURFACE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_SURFACE_WEAPON_CONFIG_TYPE);
 	
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 	
@@ -559,7 +559,7 @@ static void load_air_to_air_weapons_event (event *ev)
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
-		config_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_AIR_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_AIR_WEAPON_CONFIG_TYPE);
 	
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 	
@@ -590,7 +590,7 @@ static void load_scout_weapons_event (event *ev)
 
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
-		config_type = get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SCOUT_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SCOUT_WEAPON_CONFIG_TYPE);
 	
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
 	

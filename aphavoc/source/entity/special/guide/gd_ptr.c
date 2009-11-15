@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_POSITION_ENTITY:
 		////////////////////////////////////////
 		{
-			raw->position_entity = ptr;
+			raw->position_entity = (entity *) ptr;
 
 			break;
 		}
@@ -128,7 +128,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (guide *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -156,7 +156,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 
 			ASSERT (group);
 
-			group_leader = get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
+			group_leader = (entity *) get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
 
 			if (group_leader)
 			{

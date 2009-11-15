@@ -76,7 +76,7 @@ static void set_area_ui_object_x_size (ui_object *obj, float x_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->x_size_end = x_size;
 	area->x_size_start = x_size;
@@ -97,7 +97,7 @@ static float get_area_ui_object_x_size (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->time_length != 0.0)
 	{
@@ -143,7 +143,7 @@ static void set_area_ui_object_y_size (ui_object *obj, float y_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->y_size_end = y_size;
 	area->y_size_start = y_size;
@@ -164,7 +164,7 @@ static float get_area_ui_object_y_size (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->time_length != 0.0)
 	{
@@ -210,7 +210,7 @@ static void set_area_ui_object_x_size_end (ui_object *obj, float x_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->x_size_end = x_size;
 
@@ -227,7 +227,7 @@ static float get_area_ui_object_x_size_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_size_end;
 }
@@ -242,7 +242,7 @@ static void set_area_ui_object_y_size_end (ui_object *obj, float y_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->y_size_end = y_size;
 
@@ -259,7 +259,7 @@ static float get_area_ui_object_y_size_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_size_end;
 }
@@ -274,7 +274,7 @@ static void set_area_ui_object_x_size_start (ui_object *obj, float x_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->x_size_start = x_size;
 
@@ -291,7 +291,7 @@ static float get_area_ui_object_x_size_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->x_size_start;
 }
@@ -306,7 +306,7 @@ static void set_area_ui_object_y_size_start (ui_object *obj, float y_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->y_size_start = y_size;
 
@@ -323,7 +323,7 @@ static float get_area_ui_object_y_size_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return area->y_size_start;
 }
@@ -338,7 +338,7 @@ static void set_area_ui_object_virtual_x_size (ui_object *obj, float x_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->virtual_coords = TRUE;
 
@@ -358,7 +358,7 @@ static float get_area_ui_object_virtual_x_size (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->virtual_coords)
 	{
@@ -382,7 +382,7 @@ static void set_area_ui_object_virtual_y_size (ui_object *obj, float y_size)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->virtual_coords = TRUE;
 
@@ -402,7 +402,7 @@ static float get_area_ui_object_virtual_y_size (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->virtual_coords)
 	{

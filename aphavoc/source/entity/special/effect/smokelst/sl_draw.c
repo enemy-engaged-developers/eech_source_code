@@ -128,7 +128,7 @@ static void draw_local_3d_object (entity *en, float range)
 	smoke_list
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (smoke_list *) get_local_entity_data (en);
 
 	if ( smoke_list_draw_mode( raw->smoke_type ) == SMOKE_DRAW_TYPE_SPRITES )
 	{
@@ -169,7 +169,7 @@ static void draw_smoke_sprites( entity *en )
 	smoke_list_data
 		*smoke_info;
 
-	raw = get_local_entity_data( en );
+	raw = (smoke_list *) get_local_entity_data( en );
 
 	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 
@@ -259,7 +259,7 @@ static void draw_smoke_trails (entity *en)
 	// can only draw a trail if >1 point is "alive" ( EARLY OUT )
 	//
 
-	raw = get_local_entity_data( en );
+	raw = (smoke_list *) get_local_entity_data( en );
 
 	if ( raw->alive_count < 2 )
 	{
@@ -364,7 +364,7 @@ static void draw_smoke_trail( entity *en, int start, int end, int number_of_slot
 	smoke_list_data
 		*smoke_info;
 
-	raw = get_local_entity_data( en );
+	raw = (smoke_list *) get_local_entity_data( en );
 
 	smoke_info = &(smoke_list_database[ raw->smoke_type ]);
 
@@ -904,7 +904,7 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 	// set sprites rotation
 	// 
 
-	spr->roll = wrap_angle (raw->start_rotation[ index ] + (lifescale * PI * 0.75));
+	spr->roll = wrap_angle (raw->start_rotation[ index ] + (lifescale * PI * 0.75f));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1030,14 +1030,14 @@ void get_smoke_trail_display_values( smoke_list *raw, float lifetime, int trail_
 void initialise_smoke_list_draw_arrays (void)
 {
 
-	trail_data[ 0 ] = safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
-	trail_data[ 1 ] = safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
+	trail_data[ 0 ] = (smoke_trail_data *) safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
+	trail_data[ 1 ] = (smoke_trail_data *) safe_malloc (sizeof (smoke_trail_data) * MAX_SMOKE_TRAIL_POINTS);
 
-	trail_points = safe_malloc (sizeof (vec3d) * MAX_SMOKE_TRAIL_POINTS);
+	trail_points = (vec3d *) safe_malloc (sizeof (vec3d) * MAX_SMOKE_TRAIL_POINTS);
 
-	trail_lifetimes = safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
+	trail_lifetimes = (float *) safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
 
-	trail_radius = safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
+	trail_radius = (float *) safe_malloc (sizeof (float) * MAX_SMOKE_TRAIL_POINTS);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

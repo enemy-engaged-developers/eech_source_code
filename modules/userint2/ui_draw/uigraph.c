@@ -68,6 +68,8 @@
 
 #include "3d.h"
 
+#include "graphics/pixel.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +180,7 @@ void ui_draw_graphic (float x1, float y1, float x2, float y2, unsigned short int
 
 	// which ever is smaller, area or graphic
 
-	int_y_size = min (int_y2 - int_y1, graphic_y);
+	int_y_size = min (int_y2 - int_y1, (int) graphic_y);
 
 	clip_x_size *= sizeof (short int);
 
@@ -303,7 +305,7 @@ void ui_draw_part_graphic (float x1, float y1, float x2, float y2, int start_x, 
 
 	// which ever is smaller, area or graphic
 
-	int_y_size = min (int_y2 - int_y1, graphic_y);
+	int_y_size = min (int_y2 - int_y1, (int) graphic_y);
 
 	clip_x_size *= sizeof (short int);
 
@@ -486,7 +488,7 @@ void ui_draw_unscaled_memory_graphic (float x1, float y1, float x2, float y2, st
 
 	// which ever is smaller, area or graphic
 
-	int_y_size = min (int_y2 - int_y1, graphic_y);
+	int_y_size = min (int_y2 - int_y1, (int) graphic_y);
 
 	clip_x_size *= sizeof (short int);
 
@@ -646,6 +648,9 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, unsigned sho
 		*screen_ptr,
 		*this_image_ptr;
 
+	ASSERT ( get_screen_pixel_width ( active_screen ) == 2 );
+
+
 	//
 	// store some variables in alternative types for speed
 	//
@@ -736,8 +741,9 @@ void ui_draw_alpha_graphic (float x1, float y1, float x2, float y2, unsigned sho
 					result_colour.r = pixel_colour.r + ir;	//(dr * alpha_factor);
 					result_colour.g = pixel_colour.g + ig;	//(dg * alpha_factor);
 					result_colour.b = pixel_colour.b + ib;	//(db * alpha_factor);
+					result_colour.a = 0;
 	
-					*line_ptr = get_rgb_packed_value (result_colour);
+					*line_ptr = get_packed_colour (result_colour);
 				}
 				else
 				{
@@ -871,7 +877,7 @@ void ui_draw_part_alpha_graphic (float x1, float y1, float x2, float y2, int sta
 
 	// which ever is smaller, area or graphic
 
-	int_y_size = min (int_y2 - int_y1, graphic_y);
+	int_y_size = min (int_y2 - int_y1, (int) graphic_y);
 
 	clip_x_size *= sizeof (short int);
 

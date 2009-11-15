@@ -118,7 +118,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 3;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -153,7 +153,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 9;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -196,7 +196,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 16;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -240,7 +240,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 1;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -273,7 +273,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 1;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -306,7 +306,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 3;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -341,7 +341,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 1;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 
@@ -374,7 +374,7 @@ void initialise_bridge_database()
 
 	bridge_info->num_elements_in_mid_section_pattern	= 20;
 
-	bridge_info->mid_section_type = malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
+	bridge_info->mid_section_type = (bridge_segment_types *) malloc_fast_mem (sizeof (int) * bridge_info->num_elements_in_mid_section_pattern);
 
 	//
 

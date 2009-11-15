@@ -671,7 +671,7 @@ static void draw_radar_target_symbol (entity *target, vec3d *source_position, fl
 	dx = (target_position->x - source_position->x) * scale;
 	dy = (target_position->z - source_position->z) * scale;
 
-	target_symbol_type = get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
+	target_symbol_type = (target_symbol_types) get_local_entity_int_value (target, INT_TYPE_TARGET_SYMBOL_TYPE);
 
 	ASSERT ((target_symbol_type >= 0) && (target_symbol_type < NUM_TARGET_SYMBOL_TYPES));
 
@@ -821,7 +821,7 @@ static void draw_ground_radar_heading_scale (void)
 
 	heading = deg (heading);
 
-	mod_heading_step_10 = fmod (heading, 10.0);
+	mod_heading_step_10 = fmod (heading, 10.0f);
 
 	int_heading_step_10 = ((int) (heading * 0.1) * 10);
 
@@ -972,7 +972,7 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 
 	if (radius < 2000.0)
 	{
-		radius = max (50.0, radius);
+		radius = max (50.0f, radius);
 
 		draw_2d_hatched_circle (dx, dy, radius * scale, MFD_COLOUR5);
 	}
@@ -1329,7 +1329,7 @@ static void draw_air_radar_mfd (void)
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	////////////////////////////////////////
 	//
@@ -1740,7 +1740,7 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -1859,7 +1859,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
@@ -1976,7 +1976,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 

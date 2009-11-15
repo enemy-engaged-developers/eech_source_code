@@ -158,7 +158,7 @@ void initialise_joysticks (void)
 	// Allocate joystick device array
 	//
 
-	joystick_devices = safe_malloc (sizeof (joystick_device_info) * MAXIMUM_JOYSTICK_DEVICES);
+	joystick_devices = (joystick_device_info *) safe_malloc (sizeof (joystick_device_info) * MAXIMUM_JOYSTICK_DEVICES);
 
 	//
 	// First, enumerate all the joysticks that are available
@@ -293,7 +293,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 	// Create the device
 	//
 
-	di_err = IDirectInput7_CreateDeviceEx (direct_input, &device_instance->guidInstance, &IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
+	di_err = IDirectInput7_CreateDeviceEx (direct_input, GUID_PREFIX device_instance->guidInstance, GUID_PREFIX IID_IDirectInputDevice7, ( LPVOID * ) &device, NULL);
 
 	if (di_err != DI_OK)
 	{
@@ -426,7 +426,7 @@ BOOL FAR PASCAL enumerate_joystick_devices (LPCDIDEVICEINSTANCE device_instance,
 		effect.cbTypeSpecificParams = sizeof (constant_force);
 		effect.lpvTypeSpecificParams = &constant_force;
 
-		di_err = IDirectInputDevice7_CreateEffect (device, &GUID_ConstantForce, &effect, &device2_effect, NULL);
+		di_err = IDirectInputDevice7_CreateEffect (device, GUID_PREFIX GUID_ConstantForce, &effect, &device2_effect, NULL);
 
 		if (di_err != DI_OK)
 		{

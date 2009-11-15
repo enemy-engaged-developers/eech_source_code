@@ -91,7 +91,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			guide
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (guide *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -201,7 +201,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (guide));
+			raw = (guide *) malloc_fast_mem (sizeof (guide));
 
 			set_local_entity_data (en, raw);
 
@@ -223,7 +223,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			// update link
 
-			raw->guide_position_type = unpack_int_value (en, INT_TYPE_GUIDE_POSITION_TYPE);
+			raw->guide_position_type = (guide_position_types) unpack_int_value (en, INT_TYPE_GUIDE_POSITION_TYPE);
 
 			if (guide_position_type_virtual [raw->guide_position_type])
 			{

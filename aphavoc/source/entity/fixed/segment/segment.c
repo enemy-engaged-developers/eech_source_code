@@ -83,7 +83,7 @@ void repair_local_segment_entity (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (segment *) get_local_entity_data (en);
 
 	//
 	// reset alive flag

@@ -139,7 +139,7 @@ static void show_stats_objectives_page (void)
 
 	side = get_global_gunship_side (); 
 
-	en = get_local_force_entity (side);
+	en = get_local_force_entity ((entity_sides) side);
 
 	ASSERT (en);
 
@@ -377,7 +377,7 @@ static void draw_stats_page_unit_balance_of_power (ui_object *obj, int index, en
 	y1 = BPOWER_MAIN_AREA_YMIN + ((float)index * dy);
 	y2 = y1 + dy;
 
-	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	c = (float)count;
 	t = (float)total;
@@ -470,7 +470,7 @@ static void draw_stats_page_sector_side_balance_of_power (ui_object *obj, entity
 	y1 = BPOWER_SIDE_AREA_YMIN;
 	y2 = BPOWER_SIDE_AREA_YMAX;
 
-	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	c = (float)count;
 	t = (float)total;
@@ -557,7 +557,7 @@ static void update_stats_page_balance_of_power_objects (ui_object *obj, void *ar
 	float
 		y1, y2, dy;
 		
-	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	this_force = get_local_force_entity (this_side);
 
@@ -792,7 +792,7 @@ static void notify_page_objective_select_function (ui_object *obj, void *arg)
 
 		sub_type = get_local_entity_int_value (objective, INT_TYPE_ENTITY_SUB_TYPE);
 	
-		force_map_layer_control_object (keysite_database [sub_type].map_layer_type, TRUE);
+		force_map_layer_control_object ((map_layer_control_types) keysite_database [sub_type].map_layer_type, TRUE);
 
 		set_campaign_map_origin (objective);
 

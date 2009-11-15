@@ -183,7 +183,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 	waypoint
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (waypoint *) get_local_entity_data (receiver);
 	
 	position = va_arg (pargs, vec3d *);
 	
@@ -250,9 +250,9 @@ static int response_to_waypoint_action (entity_messages message, entity *receive
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_GUIDE);
 
-	raw = get_local_entity_data (receiver);
+	raw = (waypoint *) get_local_entity_data (receiver);
 
-	member = get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
+	member = (entity *) get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (member);
 
@@ -268,7 +268,7 @@ static int response_to_waypoint_action (entity_messages message, entity *receive
 		
 	if (msg != NUM_ENTITY_MESSAGES)
 	{
-		notify_local_entity (msg, member, receiver);
+		notify_local_entity ((entity_messages) msg, member, receiver);
 
 		return TRUE;
 	}
@@ -308,9 +308,9 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 
 	ASSERT (get_local_entity_type (sender) == ENTITY_TYPE_GUIDE);
 
-	raw = get_local_entity_data (receiver);
+	raw = (waypoint *) get_local_entity_data (receiver);
 
-	member = get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
+	member = (entity *) get_local_entity_ptr_value (sender, PTR_TYPE_TASK_LEADER);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -427,7 +427,7 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 		// notify force that waypoints reached
 		//
 
-		force = get_local_force_entity (get_local_entity_int_value (group, INT_TYPE_SIDE));
+		force = get_local_force_entity ((entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE));
 
 		notify_local_entity (ENTITY_MESSAGE_FORCE_WAYPOINT_REACHED, force, receiver, sender);
 
@@ -437,7 +437,7 @@ static int response_to_waypoint_reached (entity_messages message, entity *receiv
 		
 		if (msg != NUM_ENTITY_MESSAGES)
 		{
-			notify_local_entity (msg, member, receiver);
+			notify_local_entity ((entity_messages) msg, member, receiver);
 		}
 	}
 

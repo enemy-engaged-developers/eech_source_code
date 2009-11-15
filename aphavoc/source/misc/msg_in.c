@@ -549,7 +549,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 				char
 					*damage;
 
-				raw = get_local_entity_data (sender);
+				raw = (helicopter *) get_local_entity_data (sender);
 				percent_damaged = (100 * raw->ac.damage_level) / aircraft_database[raw->ac.mob.sub_type].initial_damage_level;
 
 				if (percent_damaged == 100)
@@ -784,7 +784,7 @@ static entity *format_incoming_message (message_log_type *message, entity *sende
 
 	ASSERT (strlen (temp_string) > 0);
 
-	message->string = malloc_heap_mem (strlen (temp_string) + 4);
+	message->string = (char *) malloc_heap_mem (strlen (temp_string) + 4);
 
 	strcpy (message->string, temp_string);
 
@@ -821,7 +821,7 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 
 			if (get_local_entity_type (target) == ENTITY_TYPE_GROUP)
 			{
-				en = get_local_entity_ptr_value (target, PTR_TYPE_GROUP_LEADER);
+				en = (entity *) get_local_entity_ptr_value (target, PTR_TYPE_GROUP_LEADER);
 
 				if (en)
 				{
@@ -840,7 +840,7 @@ static void set_message_objective_view_interest_level (entity *sender, entity *t
 			// Show group leader (sender is a group)
 			//
 
-			en = get_local_entity_ptr_value (sender, PTR_TYPE_GROUP_LEADER);
+			en = (entity *) get_local_entity_ptr_value (sender, PTR_TYPE_GROUP_LEADER);
 
 			if (en)
 			{
@@ -888,7 +888,7 @@ void set_incoming_message (entity *sender, entity *target, message_text_types ty
 	{
 		max_messages += MESSAGE_LIST_INC;
 
-		temp = malloc_heap_mem (sizeof (message_log_type) * max_messages);
+		temp = (message_log_type *) malloc_heap_mem (sizeof (message_log_type) * max_messages);
 
 		if (num_messages > 0)
 		{
@@ -1956,7 +1956,7 @@ void process_message_request_airstrike (entity *en)
 
 	if (target)
 	{
-		side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 		if (get_local_entity_int_value (target, INT_TYPE_SIDE) != side)
 		{
@@ -2046,7 +2046,7 @@ void process_message_request_airstrike (entity *en)
 						(
 							get_session_entity (),
 							en,
-							get_local_entity_int_value (en, INT_TYPE_SIDE),
+							(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 							ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 							SOUND_LOCALITY_RADIO,
 							0.0,
@@ -2073,7 +2073,7 @@ void process_message_request_airstrike (entity *en)
 			(
 				get_session_entity (),
 				en,
-				get_local_entity_int_value (en, INT_TYPE_SIDE),
+				(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 				ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 				SOUND_LOCALITY_RADIO,
 				0.0,
@@ -2132,7 +2132,7 @@ void process_message_request_artillery (entity *en)
 
 	if (target)
 	{
-		side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 		if (get_local_entity_int_value (target, INT_TYPE_SIDE) != side)
 		{
@@ -2218,7 +2218,7 @@ void process_message_request_artillery (entity *en)
 					(
 						get_session_entity (),
 						en,
-						get_local_entity_int_value (en, INT_TYPE_SIDE),
+						(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
@@ -2243,7 +2243,7 @@ void process_message_request_artillery (entity *en)
 				(
 					get_session_entity (),
 					en,
-					get_local_entity_int_value (en, INT_TYPE_SIDE),
+					(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 					ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 					SOUND_LOCALITY_RADIO,
 					0.0,
@@ -2268,7 +2268,7 @@ void process_message_request_artillery (entity *en)
 			(
 				get_session_entity (),
 				en,
-				get_local_entity_int_value (en, INT_TYPE_SIDE),
+				(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 				ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 				SOUND_LOCALITY_RADIO,
 				0.0,
@@ -2316,7 +2316,7 @@ void process_message_request_assistance (entity *en)
 
 		ASSERT (group);
 
-		force = get_local_force_entity (get_local_entity_int_value (en, INT_TYPE_SIDE));
+		force = get_local_force_entity ((entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE));
 
 		ASSERT (force);
 
@@ -2407,11 +2407,13 @@ void display_in_flight_incoming_messages (void)
 
 		get_digital_clock_int_values (log->time_of_day, &hours, &minutes, &seconds);
 
-		s = malloc_fast_mem (strlen (log->string) + 20);
+		s = (char *) malloc_fast_mem (strlen (log->string) + 20);
 
 		sprintf (s, "[%02d:%02d] %s", hours, minutes, log->string);
 
 		ui_display_text (s, 2, 2);
+
+		free_mem (s);
 	}
 }
 
@@ -2584,7 +2586,7 @@ void unpack_local_message_log (pack_modes mode)
 			if (max_messages > 0)
 			{
 				debug_log("*** allocating message_log");
-				message_log = malloc_heap_mem (sizeof (message_log_type) * max_messages);
+				message_log = (message_log_type *) malloc_heap_mem (sizeof (message_log_type) * max_messages);
 
 				for (loop = 0; loop < num_messages; loop ++)
 				{
@@ -2594,7 +2596,7 @@ void unpack_local_message_log (pack_modes mode)
 
 					ASSERT (log);
 
-					log->type = unpack_int_value (NULL, INT_TYPE_VALUE);
+					log->type = (message_text_types) unpack_int_value (NULL, INT_TYPE_VALUE);
 
 					log->day = unpack_int_value (NULL, INT_TYPE_DAY);
 
@@ -2622,7 +2624,7 @@ void unpack_local_message_log (pack_modes mode)
 
 					ASSERT (length <= STRING_TYPE_MESSAGE_LENGTH);
 
-					log->string = malloc_heap_mem (length + 4);
+					log->string = (char *) malloc_heap_mem (length + 4);
 
 					strcpy (log->string, s);
 				}

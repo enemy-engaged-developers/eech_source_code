@@ -339,7 +339,7 @@ string_types unpack_string_type (void)
 	string_types
 		type;
 
-	type = unpack_unsigned_data (NUM_STRING_TYPE_PACK_BITS);
+	type = (string_types) unpack_unsigned_data (NUM_STRING_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_STRING_TYPES));
 

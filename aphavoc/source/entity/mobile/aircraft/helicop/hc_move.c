@@ -74,23 +74,23 @@
 
 #define DEBUG_WAYPOINT_VECTOR												0
 
-#define HELICOPTER_VELOCITY_RAMP_DISTANCE								(500.0 * METRE)
+#define HELICOPTER_VELOCITY_RAMP_DISTANCE								(500.0f * METRE)
 
-#define HELICOPTER_MAX_PITCH 												(rad (20.0))
+#define HELICOPTER_MAX_PITCH 												(rad (20.0f))
 
-#define HELICOPTER_MAX_ROLL 												(rad (30.0))
+#define HELICOPTER_MAX_ROLL 												(rad (30.0f))
 
-#define HELICOPTER_LATERAL_TO_FORWARD_VELOCITY_SCALING			5.0
+#define HELICOPTER_LATERAL_TO_FORWARD_VELOCITY_SCALING			5.0f
 
-#define HELICOPTER_AVOIDANCE_DISTANCE									20.0
+#define HELICOPTER_AVOIDANCE_DISTANCE									20.0f
 
-#define HELICOPTER_STRUCTURE_AVOIDANCE_LOOKAHEAD_TIME				1.0
+#define HELICOPTER_STRUCTURE_AVOIDANCE_LOOKAHEAD_TIME				1.0f
 
-#define HELICOPTER_TERRAIN_AVOIDANCE_LOOKAHEAD_TIME				2.0
+#define HELICOPTER_TERRAIN_AVOIDANCE_LOOKAHEAD_TIME				2.0f
 
 #define HELICOPTER_TERRAIN_AVOIDANCE_LOOKAHEAD_SAMPLE_NUMBER	1
 
-#define RIVER_DEPTH 															3.0
+#define RIVER_DEPTH 															3.0f
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ void helicopter_movement (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	//
 	// abort if the mobile has no current guide
@@ -220,7 +220,7 @@ void helicopter_movement (entity *en)
 	height = helicopter_movement_altitude_follow (en, guide, &wp_pos);
 
 	// ramp vel from 0 to cruise_vel between 0m -> HELICOPTER_VELOCITY_RAMP_DISTANCE
-	range_scaler = min ((range / HELICOPTER_VELOCITY_RAMP_DISTANCE), 1.0);
+	range_scaler = min ((range / HELICOPTER_VELOCITY_RAMP_DISTANCE), 1.0f);
 
 	wp_vec.x = wp_pos.x - hc_pos->x;
 	wp_vec.y = wp_pos.y - hc_pos->y;
@@ -264,8 +264,8 @@ void helicopter_movement (entity *en)
 	wp_vec.z *= max_vel;
 
 	// limit max_velocity depending on required climb rate
-	max_z_vel -= (max_z_vel * min ((max (height - hc_pos->y, 0.0) / max_y_vel), 1.0));
-	max_x_vel -= (max_x_vel * min ((max (height - hc_pos->y, 0.0) / max_y_vel), 1.0));
+	max_z_vel -= (max_z_vel * min ((max (height - hc_pos->y, 0.0f) / max_y_vel), 1.0f));
+	max_x_vel -= (max_x_vel * min ((max (height - hc_pos->y, 0.0f) / max_y_vel), 1.0f));
 
 	// limit forward acceleration depending on climb demand
 
@@ -317,7 +317,7 @@ void helicopter_movement (entity *en)
 
 		raw->main_rotor_spin_up_timer -= get_entity_movement_delta_time ();
 
-		raw->main_rotor_spin_up_timer = max (raw->main_rotor_spin_up_timer, 0.0);
+		raw->main_rotor_spin_up_timer = max (raw->main_rotor_spin_up_timer, 0.0f);
 
 		return;
 	}
@@ -447,7 +447,7 @@ void helicopter_death_movement (entity *en)
 	terrain_classes
 		terrain_class;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	//
 	// wind down rotors
@@ -804,7 +804,7 @@ int helicopter_crash_movement (entity *en)
 	matrix3x3
 		m;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	//
 	// update attitude
@@ -888,7 +888,7 @@ int helicopter_crash_movement (entity *en)
 
 	speed -= (acc * get_entity_movement_delta_time ());
 
-	speed = max (speed, 0.0);
+	speed = max (speed, 0.0f);
 
 	velocity->x *= speed;
 	velocity->y *= speed;
@@ -961,7 +961,7 @@ void helicopter_impact_movement (entity *en)
 	int
 		seed;
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	seed = get_client_server_entity_random_number_seed(en);
 
@@ -1133,7 +1133,7 @@ void helicopter_movement_get_waypoint_position_and_velocity (entity *en, vec3d *
 					// find flight leader
 					//
 
-					task_leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+					task_leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 					ASSERT (task_leader);
 
@@ -1143,7 +1143,7 @@ void helicopter_movement_get_waypoint_position_and_velocity (entity *en, vec3d *
 
 					type = get_local_entity_int_value (group, INT_TYPE_GROUP_FORMATION);
 
-					formation = get_formation (type);
+					formation = get_formation ((formation_types) type);
 
 					formation_count = formation->number_in_formation;
 
@@ -1283,7 +1283,7 @@ float helicopter_movement_get_desired_heading (entity *en, vec3d *fly_to_pos, fl
 				}
 				else
 				{
-					leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+					leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 					if (leader != en)
 					{
@@ -1398,7 +1398,7 @@ float helicopter_movement_get_desired_pitch (entity *en, vec3d *model_motion_vec
 		// calculate pitch for helicopter at given velocity
 		//
 
-		pitch = -(HELICOPTER_MAX_PITCH * min ((model_motion_vector->z / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY)), 1.0));
+		pitch = -(HELICOPTER_MAX_PITCH * min ((model_motion_vector->z / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY)), 1.0f));
 
 		// reduce pitch if climbing, upto 0 pitch
 		pitch = min (pitch + HELICOPTER_MAX_PITCH * bound (((fabs (model_motion_vector->y) * G) / aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].g_max), -1.0, 1.0), 0.0);
@@ -1433,13 +1433,13 @@ float helicopter_movement_get_desired_roll (entity *en, float lateral_velocity, 
 	// calculate roll for helicopter at given velocity
 	//
 
-	roll = (HELICOPTER_MAX_ROLL * min (((lateral_velocity * HELICOPTER_LATERAL_TO_FORWARD_VELOCITY_SCALING) / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY)), 1.0));
+	roll = (HELICOPTER_MAX_ROLL * min (((lateral_velocity * HELICOPTER_LATERAL_TO_FORWARD_VELOCITY_SCALING) / get_local_entity_float_value (en, FLOAT_TYPE_CRUISE_VELOCITY)), 1.0f));
 
 	//
 	// calculate roll for helicopter at given acceleration
 	//
 
-	roll = HELICOPTER_MAX_ROLL * min (((lateral_acceleration * G) / aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].g_max), 1.0);
+	roll = HELICOPTER_MAX_ROLL * min (((lateral_acceleration * G) / aircraft_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].g_max), 1.0f);
 
 	return roll;
 }
@@ -1460,13 +1460,13 @@ void helicopter_movement_calculate_rotor_rpm (entity *en, float lift)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	ASSERT (aircraft_database [raw->ac.mob.sub_type].power_output != 0.0);
 
 	desired_rpm = (lift / aircraft_database [raw->ac.mob.sub_type].power_output) * 100.0;
 
-	desired_rpm = min (desired_rpm, 100.0);
+	desired_rpm = min (desired_rpm, 100.0f);
 
 	delta_rpm = desired_rpm - raw->main_rotor_rpm;
 
@@ -1511,7 +1511,7 @@ float helicopter_movement_structure_avoidance (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (get_local_entity_int_value (en, INT_TYPE_TASK_LEADER))
 	{
@@ -1623,7 +1623,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 
 	ASSERT (wp_pos);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -1635,7 +1635,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 	// Calculate required height (above sea level)
 	//
 
-	terrain_follow = get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE);
+	terrain_follow = (guide_terrain_follow_modes) get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE);
 
 	if (terrain_follow != GUIDE_TERRAIN_FOLLOW_NONE)
 	{
@@ -1649,7 +1649,7 @@ float helicopter_movement_altitude_follow (entity *en, entity *guide, vec3d *wp_
 		}
 		else
 		{
-			leader = get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
+			leader = (entity *) get_local_entity_ptr_value (guide, PTR_TYPE_TASK_LEADER);
 
 			if (en == leader)
 			{
@@ -1717,7 +1717,7 @@ void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3
 
 	ASSERT (guide);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -1731,7 +1731,7 @@ void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3
 
 	min_height = get_3d_terrain_point_data_elevation (&raw->ac.terrain_info) + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE);
 
-	if (get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE != GUIDE_TERRAIN_FOLLOW_NONE))
+	if (get_local_entity_int_value (guide, INT_TYPE_TERRAIN_FOLLOW_MODE != GUIDE_TERRAIN_FOLLOW_NONE ? TRUE : FALSE))
 	{
 
 		min_height += 2.0;
@@ -1749,7 +1749,7 @@ void helicopter_movement_calculate_new_position (entity *en, entity *guide, vec3
 
 		min_height += 5.0 * sin (fabs (pitch));
 
-		raw->ac.mob.motion_vector.y = max (raw->ac.mob.motion_vector.y, 0.0);
+		raw->ac.mob.motion_vector.y = max (raw->ac.mob.motion_vector.y, 0.0f);
 
 		position->y = max (position->y, min_height);
 	}
@@ -1960,7 +1960,7 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	hc_pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 

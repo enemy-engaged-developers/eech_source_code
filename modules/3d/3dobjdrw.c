@@ -1136,7 +1136,7 @@ void draw_3d_object_clipped_faces ( int object_number )
 
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-					set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+					set_deferred_d3d_texture ( 0, current_object_3d_texture );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -1497,7 +1497,7 @@ void draw_3d_object_unclipped_faces ( int object_number )
 
 					set_deferred_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-					set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+					set_deferred_d3d_texture ( 0, current_object_3d_texture );
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 					set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -1828,7 +1828,7 @@ void draw_3d_object_untextured_clipped_faces ( int object_number )
 				current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
 				current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+				set_deferred_d3d_texture ( 0, current_object_3d_texture );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2057,7 +2057,7 @@ void draw_3d_object_untextured_unclipped_faces ( int object_number )
 				current_object_3d_texture_filter = ( current_object_3d_surface->texture_filtered ) ? D3DTFG_LINEAR : D3DTFG_POINT;
 				current_object_3d_texture_mipmap = ( current_object_3d_surface->texture_mipmapped )	? D3DTFP_POINT : D3DTFP_NONE;
 
-				set_deferred_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+				set_deferred_d3d_texture ( 0, current_object_3d_texture );
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 				set_deferred_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2507,7 +2507,7 @@ void draw_3d_translucent_surface_clipped_faces ( translucent_object_surface *sur
 #endif
 		set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+		set_d3d_texture ( 0, current_object_3d_texture );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2702,7 +2702,7 @@ void draw_3d_translucent_surface_unclipped_faces ( translucent_object_surface *s
 #endif
 		set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+		set_d3d_texture ( 0, current_object_3d_texture );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2825,7 +2825,7 @@ void draw_3d_translucent_surface_clipped_reflection_faces ( translucent_object_s
 		set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
 		set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+		set_d3d_texture ( 0, current_object_3d_texture );
 		set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 		set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );
@@ -2915,7 +2915,7 @@ void draw_3d_translucent_surface_unclipped_reflection_faces ( translucent_object
 	set_d3d_int_state ( D3DRENDERSTATE_SPECULARENABLE, FALSE );
 	set_d3d_int_state ( D3DRENDERSTATE_SHADEMODE, D3DSHADE_GOURAUD );
 
-	set_d3d_texture ( 0, load_hardware_texture_map ( current_object_3d_texture ) );
+	set_d3d_texture ( 0, current_object_3d_texture );
 	set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 	set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, current_object_3d_texture_u_address );

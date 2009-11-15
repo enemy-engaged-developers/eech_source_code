@@ -66,19 +66,13 @@
 
 extern void set_pixel ( const int x, const int y, const rgb_colour colour );
 
-extern void set_packed_pixel ( const int x, const int y, const rgb_packed colour );
-
 extern void set_clipped_pixel ( const int x, const int y, const rgb_colour colour );
 
 extern void get_pixel ( const int x, const int y, rgb_colour *colour );
 
 extern rgb_packed get_packed_pixel ( const int x, const int y );
 
-extern rgb_packed get_rgb_packed_value ( const rgb_colour colour );
-
 extern rgb_colour get_rgb_colour_value ( const unsigned long colour );
-
-extern rgb_packed get_user_rgb_packed_value ( const rgb_colour colour );
 
 extern rgb_colour get_user_rgb_colour_value ( const rgb_packed colour );
 

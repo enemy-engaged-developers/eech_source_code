@@ -491,19 +491,19 @@ static void select_next_weapon_config_event (event *ev)
 
 	if (en)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
-			config_type = get_local_entity_int_value (en, INT_TYPE_MAX_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_MAX_WEAPON_CONFIG_TYPE);
 		}
 		else
 		{
-			config_type += 1;
+			config_type = (weapon_config_types) ((int) config_type + 1);
 
 			if (config_type > get_local_entity_int_value (en, INT_TYPE_MAX_WEAPON_CONFIG_TYPE))
 			{
-				config_type = get_local_entity_int_value (en, INT_TYPE_MIN_WEAPON_CONFIG_TYPE);
+				config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_MIN_WEAPON_CONFIG_TYPE);
 			}
 		}
 
@@ -534,19 +534,19 @@ static void select_previous_weapon_config_event (event *ev)
 
 	if (en)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
-			config_type = get_local_entity_int_value (en, INT_TYPE_MIN_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_MIN_WEAPON_CONFIG_TYPE);
 		}
 		else
 		{
-			config_type -= 1;
+			config_type = (weapon_config_types) ((int) config_type - 1);
 
 			if (config_type < get_local_entity_int_value (en, INT_TYPE_MIN_WEAPON_CONFIG_TYPE))
 			{
-				config_type = get_local_entity_int_value (en, INT_TYPE_MAX_WEAPON_CONFIG_TYPE);
+				config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_MAX_WEAPON_CONFIG_TYPE);
 			}
 		}
 
@@ -577,11 +577,11 @@ static void reload_weapon_config_event (event *ev)
 
 	if (en)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
-			config_type = get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
 		}
 
 		set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
@@ -1558,7 +1558,7 @@ static void restore_external_view_entity_main_rotors_event (event *ev)
 		{
 			debug_colour_log (DEBUG_COLOUR_RED, "Restore external view entity main rotors");
 
-			restore_helicopter_entity (en, NULL, get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
+			restore_helicopter_entity (en, NULL, (operational_state_types) get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
 
 			transmit_entity_comms_message (ENTITY_COMMS_RESTORE_ENTITY, en, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
 		}
@@ -1632,7 +1632,7 @@ static void create_dummy_task_event (event *ev)
 	// create CAP task and assign it to the group
 	//
 
-	task = create_cap_task (get_local_entity_int_value (en, INT_TYPE_SIDE), keysite, NULL, TRUE, 10.0, 30.0 * ONE_MINUTE, NULL, NULL);
+	task = create_cap_task ((entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE), keysite, NULL, TRUE, 10.0, 30.0 * ONE_MINUTE, NULL, NULL);
 
 	if (!task) return;
 
@@ -1868,7 +1868,7 @@ static void debug_capture_keysite_event (event *ev)
 
 						new_side = get_enemy_side (side);
 
-						capture_keysite (keysite, new_side);
+						capture_keysite (keysite, (entity_sides) new_side);
 					}
 				}
 			}
@@ -1917,9 +1917,9 @@ static void debug_create_troop_insert_event (event *ev)
 
 							new_side = get_enemy_side (side);
 
-							if (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, new_side))
+							if (!entity_is_object_of_task (keysite, ENTITY_SUB_TYPE_TASK_TROOP_INSERTION, (entity_sides) new_side))
 							{
-								new_task = create_troop_insertion_task (new_side, keysite, NULL, TRUE, 10, NULL, NULL);
+								new_task = create_troop_insertion_task ((entity_sides) new_side, keysite, NULL, TRUE, 10, NULL, NULL);
 
 								debug_log ("EV_DEBUG: Created TROOP INSERTION (%d) to %s",
 											get_local_entity_safe_index (new_task),
@@ -2190,7 +2190,7 @@ static void create_debug_advance_task (event *ev)
 					{
 						from_node = get_local_entity_int_value (group, INT_TYPE_ROUTE_NODE);
 		
-						side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+						side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 			
 						for (node = 0; node < road_nodes [from_node].number_of_links; node ++)
 						{

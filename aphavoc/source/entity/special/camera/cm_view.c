@@ -88,7 +88,7 @@ void set_raw_external_view_entity (entity *en)
 
 	ASSERT (get_camera_entity ());
 
-	raw = get_local_entity_data (get_camera_entity ());
+	raw = (camera *) get_local_entity_data (get_camera_entity ());
 
 	new_view_entity = raw->external_view_entity != en;
 
@@ -313,7 +313,7 @@ entity *get_external_view_entity (void)
 
 	if (get_camera_entity ())
 	{
-		en = get_local_entity_ptr_value (get_camera_entity (), PTR_TYPE_EXTERNAL_VIEW_ENTITY);
+		en = (entity *) get_local_entity_ptr_value (get_camera_entity (), PTR_TYPE_EXTERNAL_VIEW_ENTITY);
 	}
 	else
 	{

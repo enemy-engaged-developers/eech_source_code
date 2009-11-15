@@ -115,7 +115,7 @@ static int response_to_unlink_child (entity_messages message, entity *receiver, 
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (camera *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 
@@ -205,9 +205,9 @@ static int response_to_set_camera_action (entity_messages message, entity *recei
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (camera *) get_local_entity_data (receiver);
 
-	action = va_arg (pargs, int);
+	action = (camera_actions) va_arg (pargs, int);
 
 	set_camera_action (raw, action);
 

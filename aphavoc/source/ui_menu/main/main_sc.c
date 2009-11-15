@@ -866,7 +866,9 @@ void recurse_animate_screen_scene ( float t, object_3d_database_entry *scene, ob
 void set_ui_list_spacing_proportional_to_font (ui_object *list, float scaling)
 {
 	int
-		height,
+		height;
+
+	font_types
 		old_font;
 
 	float
@@ -891,7 +893,7 @@ void set_ui_list_spacing_proportional_to_font (ui_object *list, float scaling)
 
 	set_ui_object_list_box_y_space (list, spacing);
 
-	set_ui_font_type ((font_types) old_font);
+	set_ui_font_type (old_font);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

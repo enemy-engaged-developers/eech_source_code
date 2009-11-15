@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,31 +73,9 @@
 
 void release_texture_surface ( LPDIRECTDRAWSURFACEX *texture_surface )
 {
-
-	HRESULT
-		ddrval;
-
 	if ( texture_surface )
 	{
-
-		if ( *texture_surface )
-		{
-
-			ddrval = IDirectDrawSurface7_Release ( *texture_surface );
-
-			if ( ddrval < DD_OK )
-			{
-
-				debug_log ( "Unable to release texture surface ( %d ): %s", ddrval, get_d3d_error_message ( ddrval ) );
-			}
-			else if ( ddrval > DD_OK )
-			{
-
-				debug_log ( "Unable to release texture surface, references: %d", ddrval );
-			}
-
-			*texture_surface = NULL;
-		}
+		f3d_surface_release(texture_surface);
 	}
 }
 

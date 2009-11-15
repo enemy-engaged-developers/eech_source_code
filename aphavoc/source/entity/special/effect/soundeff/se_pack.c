@@ -93,7 +93,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			int
 				loop;
 
-			raw = get_local_entity_data (en);
+			raw = (sound_effect *) get_local_entity_data (en);
 
 			if (effect_database [raw->eff.sub_type].constructed_locally)
 			{
@@ -215,7 +215,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_heap_mem (sizeof (sound_effect));
+			raw = (sound_effect *) malloc_heap_mem (sizeof (sound_effect));
 
 			set_local_entity_data (en, raw);
 
@@ -235,7 +235,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			ASSERT (raw->sound_effect_sequence_count > 0);
 
-			raw->effect_index = malloc_fast_mem (sizeof (sound_sample_indices) * raw->sound_effect_sequence_count);
+			raw->effect_index = (sound_sample_indices *) malloc_fast_mem (sizeof (sound_sample_indices) * raw->sound_effect_sequence_count);
 
 			for (loop = 0; loop < raw->sound_effect_sequence_count; loop ++)
 			{
@@ -323,7 +323,7 @@ void pack_local_only_sound_effect_data (entity *en, pack_modes mode)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	//
 	// check properties
@@ -395,7 +395,7 @@ void unpack_local_only_sound_effect_data (entity *parent, pack_modes mode)
 
 	sample_index = unpack_int_value (NULL, INT_TYPE_SOUND_EFFECT_INDEX);
 
-	register_attach_sound_effect_to_object (parent, entity_index, side, sub_type, valid, sample_index);
+	register_attach_sound_effect_to_object (parent, entity_index, (entity_sides) side, sub_type, valid, sample_index);
 
 	#if DEBUG_MODULE
 

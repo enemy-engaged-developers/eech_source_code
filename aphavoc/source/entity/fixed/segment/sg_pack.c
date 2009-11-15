@@ -153,7 +153,7 @@ void pack_local_segment_data (pack_modes mode)
 
 			#endif
 
-			raw = get_local_entity_data (en);
+			raw = (segment *) get_local_entity_data (en);
 
 			if (segment_alive == raw->fix.alive)
 			{
@@ -255,7 +255,7 @@ void unpack_local_segment_data (pack_modes mode)
 
 			segment_count --;
 
-			raw = get_local_entity_data (en);
+			raw = (segment *) get_local_entity_data (en);
 
 			raw->fix.alive = segment_alive;
 
@@ -305,7 +305,7 @@ void unpack_local_segment_data (pack_modes mode)
 		if (en->type == ENTITY_TYPE_SEGMENT)
 		{
 
-			raw = get_local_entity_data (en);
+			raw = (segment *) get_local_entity_data (en);
 
 			pred = get_local_entity_child_pred (en, LIST_TYPE_SEGMENT);
 

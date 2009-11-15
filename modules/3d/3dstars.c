@@ -126,7 +126,7 @@ void initialise_3d_stars ( const char *filename )
 	// Allocate room for the surface information
 	//
 
-	star_3d_surfaces = safe_malloc ( sizeof ( object_3d_star_surface ) * number_of_3d_star_surfaces );
+	star_3d_surfaces = ( object_3d_star_surface * ) safe_malloc ( sizeof ( object_3d_star_surface ) * number_of_3d_star_surfaces );
 
 	ASSERT ( star_3d_surfaces );
 
@@ -147,7 +147,7 @@ void initialise_3d_stars ( const char *filename )
 	// Allocate room for the points
 	//
 
-	star_3d_points = safe_malloc ( sizeof ( object_3d_star_point ) * number_of_3d_star_points );
+	star_3d_points = ( object_3d_star_point * ) safe_malloc ( sizeof ( object_3d_star_point ) * number_of_3d_star_points );
 
 	ASSERT ( star_3d_points );
 

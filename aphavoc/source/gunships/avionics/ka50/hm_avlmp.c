@@ -497,7 +497,7 @@ static void update_threat_warning_display (void)
 
 		while (threat)
 		{
-			threat_type = get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
+			threat_type = (threat_types) get_local_entity_int_value (threat, INT_TYPE_THREAT_TYPE);
 
 			//
 			// check threat is active
@@ -720,7 +720,7 @@ static void update_threat_warning_display (void)
 
 					threat_velocity = get_local_entity_float_value (threat, FLOAT_TYPE_VELOCITY);
 
-					time_to_impact = threat_range / max (threat_velocity, 1.0);
+					time_to_impact = threat_range / max (threat_velocity, 1.0f);
 
 					overshot = FALSE;
 

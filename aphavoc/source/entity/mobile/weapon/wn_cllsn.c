@@ -118,7 +118,7 @@ int collision_test_weapon_with_given_target (entity *weapon, entity *target, vec
 
 	weapon_velocity = get_local_entity_float_value (weapon, FLOAT_TYPE_VELOCITY);
 
-	time_to_impact = range / max (weapon_velocity, 1.0);
+	time_to_impact = range / max (weapon_velocity, 1.0f);
 
 	//
 	// only proceed if close to impact
@@ -377,7 +377,7 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 
 				if (pilot)
 				{
-					difficulty = get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL);
+					difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot, INT_TYPE_DIFFICULTY_LEVEL);
 				}
 			}
 		}

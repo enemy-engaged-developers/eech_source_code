@@ -172,7 +172,7 @@ void set_dynamics_defaults (entity *en)
 		unsigned int
 			flag;
 
-		dynamics_options_types
+		int
 			option;
 
 		flag = parser_flight_dynamics_options;
@@ -185,7 +185,7 @@ void set_dynamics_defaults (entity *en)
 			if (flag & (1 << option))
 			{
 
-				set_current_dynamics_options (option, TRUE);
+				set_current_dynamics_options ((dynamics_options_types) option, TRUE);
 
 				#if DEBUG_MODULE
 
@@ -1718,7 +1718,7 @@ void update_attitude_dynamics (void)
 						main_rotor_pitch_angle_value) -
 						motion_vector_pitch);
 
-			force = max (force, 0.0);
+			force = max (force, 0.0f);
 
 			position.x = -0.4 * sin (main_blade_x_pitch_value);
 			position.y = 0.0;
@@ -2022,7 +2022,7 @@ void update_attitude_dynamics (void)
 			scaling = 1.0 - (1.0 / a);
 		}
 
-		scaling = min (fabs (scaling), 1.0);
+		scaling = min (fabs (scaling), 1.0f);
 
 		reaction_force += (tail_angular_force - main_angular_force) * scaling;
 
@@ -2162,7 +2162,7 @@ void update_attitude_dynamics (void)
 			sign,
 			drag;
 
-		drag = 0.00034 + (0.034 * command_line_dynamics_main_rotor_drag * max (current_flight_dynamics->pitch.value, 0.0));
+		drag = 0.00034 + (0.034 * command_line_dynamics_main_rotor_drag * max (current_flight_dynamics->pitch.value, 0.0f));
 
 		reaction_force = drag * motion_vector_magnitude * motion_vector_magnitude;
 
@@ -2202,7 +2202,7 @@ void update_attitude_dynamics (void)
 		if (current_flight_dynamics->velocity_x.max != 0.0)
 		{
 
-			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0);
+			reaction_force = Fmax * (fabs (model_motion_vector.x) * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0f);
 		}
 
 		position.x = 7.299;
@@ -2248,7 +2248,7 @@ void update_attitude_dynamics (void)
 		Fmax = 0.0;
 		// arneh 20060813 - reduce drag in sideway flight - compensated by reduced lift.
 		// makes it impossible to keep flying sideways at insane bank angles without losing altitude
-		sideways_drag = 5.0 * (model_motion_vector.x * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0);
+		sideways_drag = 5.0 * (model_motion_vector.x * model_motion_vector.x) / pow (current_flight_dynamics->velocity_x.max, 2.0f);
 
 		if (current_flight_dynamics->main_rotor_rpm.max != 0.0)
 		{
@@ -2261,7 +2261,7 @@ void update_attitude_dynamics (void)
 		if (current_flight_dynamics->velocity_y.max != 0.0)
 		{
 
-			reaction_force = Fmax * (fabs (model_motion_vector.y) * model_motion_vector.y) / pow (current_flight_dynamics->velocity_y.max, 2.0);
+			reaction_force = Fmax * (fabs (model_motion_vector.y) * model_motion_vector.y) / pow (current_flight_dynamics->velocity_y.max, 2.0f);
 		}
 
 		//
@@ -2371,7 +2371,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0);
+			altitude = max (altitude, 0.0f);
 
 			front_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - front_g_e_force) * get_model_delta_time ();
 
@@ -2432,7 +2432,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0);
+			altitude = max (altitude, 0.0f);
 
 			back_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - back_g_e_force) * get_model_delta_time ();
 
@@ -2492,7 +2492,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0);
+			altitude = max (altitude, 0.0f);
 
 			left_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - left_g_e_force) * get_model_delta_time ();
 
@@ -2552,7 +2552,7 @@ void update_attitude_dynamics (void)
 
 			altitude = world_position.y - get_3d_terrain_point_data_elevation (&terrain_info);
 
-			altitude = max (altitude, 0.0);
+			altitude = max (altitude, 0.0f);
 
 			right_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - right_g_e_force) * get_model_delta_time ();
 
@@ -2595,7 +2595,7 @@ void update_attitude_dynamics (void)
 		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
 		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
 		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
-					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0);
+					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
 		// arneh - create vibration when close to vortex ring state
 		if (vibration_limit > 0.0 && !(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE) && velocity_factor > 0.0)
@@ -2705,14 +2705,14 @@ void update_attitude_dynamics (void)
 		if (current_flight_dynamics->wheel_brake)
 		{
 			if (current_flight_dynamics->world_motion_vector.x > 0)
-				current_flight_dynamics->world_motion_vector.x -= min(20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= min(20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 			else
-				current_flight_dynamics->world_motion_vector.x -= max(-20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= max(-20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 
 			if (current_flight_dynamics->world_motion_vector.z > 0)
-				current_flight_dynamics->world_motion_vector.z -= min(5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= min(5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 			else
-				current_flight_dynamics->world_motion_vector.z -= max(-5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= max(-5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 
 			if (current_flight_dynamics->world_motion_vector.y < 0.0)
 				current_flight_dynamics->world_motion_vector.y = 0.0;
@@ -2795,7 +2795,7 @@ void update_power_dynamics (void)
 
 	current_flight_dynamics->power_surplus.value = current_flight_dynamics->power_avaliable.value - current_flight_dynamics->power_required.value;
 
-	current_flight_dynamics->power_surplus.value = max (current_flight_dynamics->power_surplus.value, 0);
+	current_flight_dynamics->power_surplus.value = max (current_flight_dynamics->power_surplus.value, 0.0f);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2826,7 +2826,7 @@ void update_acceleration_dynamics (void)
 	helicopter
 		*raw;
 
-	raw = get_local_entity_data (get_gunship_entity ());
+	raw = (helicopter *) get_local_entity_data (get_gunship_entity ());
 
 	// calculate total lift provided by main rotor
 
@@ -2894,23 +2894,23 @@ void update_acceleration_dynamics (void)
 	if (command_line_dynamics_flight_model != 2 && !get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIRBORNE_AIRCRAFT))
 	{
 
-		current_flight_dynamics->world_velocity_y.value = max (current_flight_dynamics->world_velocity_y.value, 0.0);
-		current_flight_dynamics->velocity_y.value = max (current_flight_dynamics->velocity_y.value, 0.0);
-		current_flight_dynamics->model_motion_vector.y = max (current_flight_dynamics->model_motion_vector.y, 0.0);
-		current_flight_dynamics->world_motion_vector.y = max (current_flight_dynamics->world_motion_vector.y, 0.0);
+		current_flight_dynamics->world_velocity_y.value = max (current_flight_dynamics->world_velocity_y.value, 0.0f);
+		current_flight_dynamics->velocity_y.value = max (current_flight_dynamics->velocity_y.value, 0.0f);
+		current_flight_dynamics->model_motion_vector.y = max (current_flight_dynamics->model_motion_vector.y, 0.0f);
+		current_flight_dynamics->world_motion_vector.y = max (current_flight_dynamics->world_motion_vector.y, 0.0f);
 
 		if (current_flight_dynamics->wheel_brake)
 		{
 			// arneh, june 2006 - reduces effectivness of wheel brakes
 			if (current_flight_dynamics->world_motion_vector.x > 0)
-				current_flight_dynamics->world_motion_vector.x -= min(20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= min(20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 			else
-				current_flight_dynamics->world_motion_vector.x -= max(-20.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= max(-20.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.x );
 
 			if (current_flight_dynamics->world_motion_vector.z > 0)
-				current_flight_dynamics->world_motion_vector.z -= min(5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= min(5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 			else
-				current_flight_dynamics->world_motion_vector.z -= max(-5.0 * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= max(-5.0f * get_model_delta_time (), current_flight_dynamics->world_motion_vector.z);
 		}
 	}
 	{

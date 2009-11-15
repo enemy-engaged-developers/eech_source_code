@@ -152,7 +152,7 @@ void initialise_view_events (void)
 	set_global_wide_cockpit (FALSE);	
 
 //VJ 030511 TSD render mod, linked to eech.ini
-	tsd_render_mode = command_line_tsd_render_mode+1;
+	tsd_render_mode = (tsd_render_modes) (command_line_tsd_render_mode + 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

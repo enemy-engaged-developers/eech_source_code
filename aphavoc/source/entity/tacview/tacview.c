@@ -637,14 +637,14 @@ int hidden_unit(entity* en)
 	vec3d* pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 	entity* sec = get_local_sector_entity(pos);
 
-	if (command_line_tacview_logging == 1 && get_sector_fog_of_war_value (sec, friendly_side) <= 0.25)
+	if (command_line_tacview_logging == 1 && get_sector_fog_of_war_value (sec, (entity_sides) friendly_side) <= 0.25)
 		return TRUE;
 
 	if (!gunship_current_sector)
 		return TRUE;
 
-	if ((abs(gunship_current_sector->x_sector - get_local_entity_int_value(sec, INT_TYPE_X_SECTOR)) >= LIMITED_SECTORS
-		 || abs(gunship_current_sector->z_sector - get_local_entity_int_value(sec, INT_TYPE_Z_SECTOR)) >= LIMITED_SECTORS))
+	if ((abs((int) gunship_current_sector->x_sector - get_local_entity_int_value(sec, INT_TYPE_X_SECTOR)) >= LIMITED_SECTORS
+		 || abs((int) gunship_current_sector->z_sector - get_local_entity_int_value(sec, INT_TYPE_Z_SECTOR)) >= LIMITED_SECTORS))
 	{
 		return TRUE;
 	}
@@ -708,7 +708,7 @@ void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 
 		if (rotated)
 		{
-			mobile* raw = get_local_entity_data(en);
+			mobile* raw = (mobile *) get_local_entity_data(en);
 			fprintf(tacview_log_file, ",%.1f,%.1f,%.1f\n",
 					deg(get_roll_from_attitude_matrix(raw->attitude)),
 					deg(get_pitch_from_attitude_matrix(raw->attitude)),

@@ -269,7 +269,7 @@ int parser_campaign_file (const char *filename, int *offset)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		if (debug_mode)
 		{
@@ -326,7 +326,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				add_while_loop (filename, file_offset);
 
 				// skip to WHILE_END to induce while_loop
-				while (tag = check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+				while (tag = (file_tags) check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 				{
 
 					if (tag == FILE_TAG_END_WHILE)
@@ -335,7 +335,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						break;
 					}
 
-					tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+					tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				}
 
 				break;
@@ -370,7 +370,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 					destroy_while_loop_head ();
 
-					while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+					while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 					{
 
 						if (tag == FILE_TAG_END_WHILE)
@@ -451,7 +451,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				{
 
 					// skip script to ENDIF
-					while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+					while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 					{
 
 						if ((tag == FILE_TAG_ENDIF) || (tag == FILE_TAG_ELSE))
@@ -469,7 +469,7 @@ int parser_campaign_file (const char *filename, int *offset)
 			{
 
 				// skip script to ENDIF
-				while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+				while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 				{
 
 					if ((tag == FILE_TAG_ENDIF) || (tag == FILE_TAG_ELSE))
@@ -583,7 +583,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				add_campaign_event (event_name, filename, file_offset);
 
 				// now skip event script
-				while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+				while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 				{
 
 					if (tag == FILE_TAG_END_EVENT)
@@ -643,7 +643,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
 						// trigger
-						trigger = type;
+						trigger = (campaign_trigger) type;
 
 						break;
 					}
@@ -668,7 +668,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
 						// trigger
-						trigger = type;
+						trigger = (campaign_trigger) type;
 
 						break;
 					}
@@ -781,7 +781,7 @@ int parser_campaign_file (const char *filename, int *offset)
 						get_next_file_word (file_ptr, event_name, sizeof (event_name));
 
 						// trigger
-						trigger = type;
+						trigger = (campaign_trigger) type;
 
 						break;
 					}
@@ -795,7 +795,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					}
 				}
 
-				add_campaign_trigger (type, value1, value2, value3, value4, event_name, trigger);
+				add_campaign_trigger ((campaign_trigger) type, value1, value2, value3, value4, event_name, trigger);
 
 				return_value = TRUE;
 
@@ -1198,7 +1198,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 					colour = get_next_file_enum (file_ptr, sys_colour_names, NUM_SYS_COLOURS);
 
-					create_faction (faction_side, colour);
+					create_faction ((entity_sides) faction_side, colour);
 
 					#if DEBUG_MODULE
 
@@ -1331,7 +1331,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					force
 						*raw;
 
-					raw = get_local_entity_data (get_parser_force ());
+					raw = (force *) get_local_entity_data (get_parser_force ());
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
@@ -1369,7 +1369,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				ASSERT (get_parser_force ());
 
-				force_raw = get_local_entity_data (get_parser_force ());
+				force_raw = (force *) get_local_entity_data (get_parser_force ());
 
 				while (check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_TYPE)
 				{
@@ -1377,7 +1377,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TYPE);
 
-					hardware_type = get_next_file_enum (file_ptr, force_info_catagory_names, NUM_FORCE_INFO_CATAGORIES);
+					hardware_type = (force_info_catagories) get_next_file_enum (file_ptr, force_info_catagory_names, NUM_FORCE_INFO_CATAGORIES);
 
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_COUNT);
@@ -1432,9 +1432,9 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				ASSERT (result == FILE_TAG_ATTITUDE);
 
-				attitude = get_next_file_enum (file_ptr, entity_force_attitude_names, NUM_ENTITY_FORCE_ATTITUDES);
+				attitude = (entity_force_attitude_types) get_next_file_enum (file_ptr, entity_force_attitude_names, NUM_ENTITY_FORCE_ATTITUDES);
 
-				set_parser_force (get_local_force_entity (faction_side));
+				set_parser_force (get_local_force_entity ((entity_sides) faction_side));
 
 				if (!get_parser_force ())
 				{
@@ -1473,7 +1473,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				ASSERT (frequency > 0.0);
 
-				side = get_local_entity_int_value (get_parser_force (), INT_TYPE_SIDE);
+				side = (entity_sides) get_local_entity_int_value (get_parser_force (), INT_TYPE_SIDE);
 
 				debug_log ("PARSER: %s setting regen frequency to %f", entity_side_names [side], frequency);
 
@@ -1498,7 +1498,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				static int
 					number_list [128];
 
-				side = get_next_file_enum (file_ptr, entity_side_names, NUM_ENTITY_SIDES);
+				side = (entity_sides) get_next_file_enum (file_ptr, entity_side_names, NUM_ENTITY_SIDES);
 
 				while (check_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG) == FILE_TAG_TYPE)
 				{
@@ -1799,9 +1799,9 @@ int parser_campaign_file (const char *filename, int *offset)
 
 					ASSERT (result == FILE_TAG_FORMATION_COMPONENT);
 
-					formation_components = get_next_file_enum (file_ptr, formation_component_names, NUM_FORMATION_COMPONENT_TYPES);
+					formation_components = (formation_component_types) get_next_file_enum (file_ptr, formation_component_names, NUM_FORMATION_COMPONENT_TYPES);
 
-					group = create_faction_members (get_parser_keysite (), group_type, formation_components, count, get_local_entity_int_value (get_parser_keysite (), INT_TYPE_SIDE), get_local_entity_vec3d_ptr (get_parser_keysite (), VEC3D_TYPE_POSITION), TRUE, TRUE);
+					group = create_faction_members (get_parser_keysite (), group_type, formation_components, count, (entity_sides) get_local_entity_int_value (get_parser_keysite (), INT_TYPE_SIDE), get_local_entity_vec3d_ptr (get_parser_keysite (), VEC3D_TYPE_POSITION), TRUE, TRUE);
 
 					ASSERT (group);
 
@@ -1910,7 +1910,7 @@ int parser_campaign_file (const char *filename, int *offset)
 					debug_fatal ("PARSER: campaign load: Side %s - Can't locate keysite %s", entity_side_short_names [faction_side], keysite_name);
 				}
 
-				group = create_landed_faction_group (get_parser_keysite (), group_type, formation_component_type);
+				group = create_landed_faction_group (get_parser_keysite (), group_type, (formation_component_types) formation_component_type);
 
 				#if DEBUG_MODULE
 
@@ -1968,11 +1968,11 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_SIDE);
-				side = get_next_file_enum (file_ptr, entity_side_names, NUM_ENTITY_SIDES);
+				side = (entity_sides) get_next_file_enum (file_ptr, entity_side_names, NUM_ENTITY_SIDES);
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				ASSERT (result == FILE_TAG_MOVEMENT);
-				movement_type = get_next_file_enum (file_ptr, movement_names, NUM_MOVEMENT_TYPES);
+				movement_type = (movement_types) get_next_file_enum (file_ptr, movement_names, NUM_MOVEMENT_TYPES);
 
 				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 				//ASSERT (result == FILE_TAG_TIME);
@@ -2179,9 +2179,10 @@ int parser_campaign_file (const char *filename, int *offset)
 				FILE
 					*saved_file_ptr;
 
-				char
+				unsigned char
 					*load_ptr,
-					*campaign_buffer,
+					*campaign_buffer;
+				char
 					filename [128];
 
 //				comms_model_types
@@ -2204,7 +2205,7 @@ int parser_campaign_file (const char *filename, int *offset)
 				// Get full pathname for .SAV file (must be done before campaign filename overwritten)
 				strcpy (temp_filename, current_session->campaign_filename);
 
-				load_ptr = strrchr (temp_filename, '.');
+				load_ptr = (unsigned char *) strrchr (temp_filename, '.');
 
 				*load_ptr = 0;
 
@@ -2225,7 +2226,7 @@ int parser_campaign_file (const char *filename, int *offset)
 
 				campaign_size = file_size (filename);
 
-				campaign_buffer = (char *) malloc_heap_mem (sizeof (char) * (campaign_size + 1));
+				campaign_buffer = (unsigned char *) malloc_heap_mem (sizeof (char) * (campaign_size + 1));
 
 				load_ptr = campaign_buffer;
 

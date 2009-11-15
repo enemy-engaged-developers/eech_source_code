@@ -408,10 +408,10 @@ void ReadWutFile(const char *fname)
 
 					get_values(q, &v2, &d2);
 				//VJ 030603 changed "Guidance Type" to "Guidance" for WUT 3.5
-				if ( strstr(buf1, "Guidance"                            )) { weapon_database[i].guidance_type = d2; }                         
-				if ( strstr(buf1, "Aiming Type"                         )) { weapon_database[i].aiming_type = d2; }                           
-				if ( strstr(buf1, "Decoy Type"                          )) { weapon_database[i].decoy_type = d2; }                            
-				if ( strstr(buf1, "Warhead Type"                        )) { weapon_database[i].warhead_type = d2; }                          
+				if ( strstr(buf1, "Guidance"                            )) { weapon_database[i].guidance_type = ( weapon_guidance_types ) d2; }                         
+				if ( strstr(buf1, "Aiming Type"                         )) { weapon_database[i].aiming_type = ( weapon_aiming_types ) d2; }                           
+				if ( strstr(buf1, "Decoy Type"                          )) { weapon_database[i].decoy_type = ( weapon_decoy_types ) d2; }                            
+				if ( strstr(buf1, "Warhead Type"                        )) { weapon_database[i].warhead_type = ( weapon_warhead_types ) d2; }                          
 				if ( strstr(buf1, "Threat Type"                         )) { weapon_database[i].threat_type = ( threat_types ) d2; }                           
 				if ( strstr(buf1, "Launch Sound Effect Sub Type"        )) { weapon_database[i].launch_sound_effect_sub_type = d2; }          
 				if ( strstr(buf1, "Interior Launch Sound Effect"        )) { weapon_database[i].interior_launch_sound_effect = d2; }          

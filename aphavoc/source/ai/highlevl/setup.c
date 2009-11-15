@@ -188,9 +188,9 @@ void create_force_campaign_objectives (entity *force)
 	// construct the list and rate each keysite according to sector importance
 	//
 
-	list = malloc_heap_mem (sizeof (entity *) * count);
+	list = (entity **) malloc_heap_mem (sizeof (entity *) * count);
 
-	rating = malloc_heap_mem (sizeof (float) * count);
+	rating = (float*)malloc_heap_mem (sizeof (float) * count);
 
 	highest = 0.0;
 
@@ -222,7 +222,7 @@ void create_force_campaign_objectives (entity *force)
 	
 						pos = get_local_entity_vec3d_ptr (keysite, VEC3D_TYPE_POSITION);
 	
-						get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, target_side, pos, 1.0 * KILOMETRE, &actual_range, keysite);
+						get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) target_side, pos, 1.0 * KILOMETRE, &actual_range, keysite);
 	
 						rating [count] = actual_range;
 	

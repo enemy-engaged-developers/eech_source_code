@@ -92,7 +92,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			routed_vehicle
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (routed_vehicle *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -173,7 +173,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			routed_vehicle
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (routed_vehicle *) get_local_entity_data (en);
 
 			pack_vec3d (en, VEC3D_TYPE_POSITION, &raw->vh.mob.position);
 
@@ -221,7 +221,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (routed_vehicle));
+			raw = (routed_vehicle *) malloc_fast_mem (sizeof (routed_vehicle));
 
 			set_local_entity_data (en, raw);
 
@@ -315,7 +315,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			insert_local_entity_into_parents_child_list (en, LIST_TYPE_UPDATE, get_update_entity (), NULL);
 
-			add_to_force_info (get_local_force_entity (raw->vh.mob.side), en);
+			add_to_force_info (get_local_force_entity ((entity_sides) raw->vh.mob.side), en);
 
 			//
 			// attached smoke lists must be unpacked after the entity is linked into the world

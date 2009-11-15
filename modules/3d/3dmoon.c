@@ -387,7 +387,7 @@ void draw_3d_moon ( void )
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
 		set_d3d_texture_stage_state ( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
 
-		set_d3d_texture ( 0, load_hardware_texture_map ( moon_texture ) );
+		set_d3d_texture ( 0, moon_texture );
 
 		draw_wbuffered_flat_shaded_textured_polygon ( moon_polygon, colour, specular );
 

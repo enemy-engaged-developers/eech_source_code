@@ -76,7 +76,7 @@ static void set_text_ui_object_function (ui_object *obj, void (*function) (ui_ob
 	text_ui_object
 		*text;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	text->area.function = function;
 }
@@ -85,13 +85,13 @@ static void set_text_ui_object_function (ui_object *obj, void (*function) (ui_ob
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_text_ui_object_function (ui_object *obj)
+static FUNCTION get_text_ui_object_function (ui_object *obj)
 {
 	
 	text_ui_object
 		*text;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	return (text->area.function);
 }
@@ -106,7 +106,7 @@ static void set_text_ui_object_right_function (ui_object *obj, void (*function) 
 	text_ui_object
 		*text;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	text->area.right_function = function;
 }
@@ -115,13 +115,13 @@ static void set_text_ui_object_right_function (ui_object *obj, void (*function) 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void *get_text_ui_object_right_function (ui_object *obj)
+static FUNCTION get_text_ui_object_right_function (ui_object *obj)
 {
 	
 	text_ui_object
 		*text;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	return (text->area.right_function);
 }
@@ -147,7 +147,7 @@ static void call_text_ui_object_function (ui_object *obj, void *arg)
 		mouse_state,
 		mouse_graphic_state;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	function = text->area.function;
 
@@ -247,7 +247,7 @@ static void call_text_ui_object_right_function (ui_object *obj, void *arg)
 	text_ui_object
 		*text;
 
-	text = obj->data;
+	text = (text_ui_object *) obj->data;
 
 	function = text->area.right_function;
 

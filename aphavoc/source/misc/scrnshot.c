@@ -271,7 +271,7 @@ void save_high_res_screen_image ( void )
 
 	screen_height = get_screen_height ( video_screen );
 
-	huge_screen_shot_memory = safe_malloc ( sizeof ( unsigned short int ) * screen_width * screen_height * x_repeat * y_repeat );
+	huge_screen_shot_memory = ( unsigned short int * ) safe_malloc ( sizeof ( unsigned short int ) * screen_width * screen_height * x_repeat * y_repeat );
 
 	for ( y = 0; y < y_repeat; y++ )
 	{

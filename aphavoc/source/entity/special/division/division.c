@@ -148,8 +148,10 @@ entity *create_new_division (entity_sub_types type, entity_sides side, entity *p
 
 entity *add_group_to_division (entity *group, entity *specified_division)
 {
+	entity_sides
+		side;
+
 	int
-		side,
 		count,
 		max_count,
 		group_type,
@@ -182,7 +184,7 @@ entity *add_group_to_division (entity *group, entity *specified_division)
 	}
 	else
 	{
-		side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 	
 		force = get_local_force_entity (side);
 	
@@ -705,7 +707,7 @@ void unpack_local_division_database (pack_modes mode)
 	
 					division_id_database [side][type].next = unpack_int_value (NULL, INT_TYPE_COUNT);
 	
-					division_id_database [side][type].number_list = malloc_heap_mem (sizeof (int) * count);
+					division_id_database [side][type].number_list = (int *) malloc_heap_mem (sizeof (int) * count);
 	
 					for (loop = 0; loop < count; loop ++)
 					{
@@ -737,7 +739,7 @@ void add_division_id_data (int side, int type, int count, int *number_list)
 
 	division_id_database [side][type].next = 0;
 
-	division_id_database [side][type].number_list = malloc_heap_mem (sizeof (int) * count);
+	division_id_database [side][type].number_list = (int *) malloc_heap_mem (sizeof (int) * count);
 
 	memcpy (division_id_database [side][type].number_list, number_list, sizeof (int) * count);
 }

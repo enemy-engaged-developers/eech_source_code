@@ -16,9 +16,9 @@
 //   	the non-exclusive right to create and distribute Derivative Works.
 //  2.2 	
 //  	Subject to the provisions of this Agreement we now grant you the
-// 	following rights in respect of the Object Code:
+// 	following rights in respect of the object Code:
 //   2.2.1 
-// 	the non-exclusive right to Exploit the Object Code on the same
+// 	the non-exclusive right to Exploit the object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void update_menu_ui_object (ui_object *obj)
+static void update_menu_ui_object (ui_object * obj)
 {
 
 	float
@@ -93,7 +93,7 @@ static void update_menu_ui_object (ui_object *obj)
    area_ui_object
       *area;
 
-   area = obj->data;
+   area = (area_ui_object *) obj->data;
 
 	// store parents viewport data
 

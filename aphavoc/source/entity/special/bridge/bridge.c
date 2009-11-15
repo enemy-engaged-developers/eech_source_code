@@ -127,7 +127,7 @@ void initialise_valid_warzone_bridge_database (void)
 		while (TRUE)
 		{
 
-			tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+			tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 			switch (tag)
 			{

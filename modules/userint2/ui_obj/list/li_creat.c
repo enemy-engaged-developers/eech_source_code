@@ -86,7 +86,7 @@ static void create_list_ui_object (ui_object *obj, ui_object_types type, va_list
 
    obj->type   = type;
 
-   new_object    = safe_malloc (sizeof (list_ui_object));
+   new_object    = (list_ui_object*) safe_malloc (sizeof (list_ui_object));
 
    obj->data   = new_object;
 

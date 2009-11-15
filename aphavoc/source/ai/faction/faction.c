@@ -307,7 +307,7 @@ entity *create_landed_faction_members (entity *keysite, entity_sub_types member_
 	
 	ASSERT (get_local_entity_type (keysite) == ENTITY_TYPE_KEYSITE);
 
-	side = get_local_entity_int_value (keysite, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
 
 	list_type = group_database [group_type].group_list_type;
 
@@ -537,7 +537,7 @@ entity *create_landed_faction_group (entity *keysite, entity_sub_types group_typ
 
    debug_assert (get_comms_model () == COMMS_MODEL_SERVER);
 
-	side = get_local_entity_int_value (keysite, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
 
 	list_type = group_database [group_type].group_list_type;
 
@@ -833,7 +833,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 
       wp = get_local_landing_entity_route (landing_en, ENTITY_SUB_TYPE_TASK_LANDING);
 
-		landing_formation = get_number_in_formation (get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
+		landing_formation = get_number_in_formation ((formation_types)get_local_entity_int_value (wp, INT_TYPE_WAYPOINT_FORMATION));
 
       while (get_local_entity_child_succ (wp, LIST_TYPE_WAYPOINT))
       {
@@ -941,7 +941,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 					member_type,
 					formation_position,
 					OPERATIONAL_STATE_TAXIING,
-					get_local_entity_int_value (keysite, INT_TYPE_SIDE),
+					(entity_sides)get_local_entity_int_value (keysite, INT_TYPE_SIDE),
 					AIRCRAFT_UNDERCARRIAGE_DOWN_FLOAT_VALUE
 				);
 
@@ -1012,7 +1012,7 @@ entity *create_landing_faction_members (entity *keysite, entity_sub_types member
 
 				update_imap_importance_level (keysite, TRUE);
 
-				update_keysite_distance_to_friendly_base (keysite, get_local_entity_int_value (keysite, INT_TYPE_SIDE));
+				update_keysite_distance_to_friendly_base (keysite, (entity_sides)get_local_entity_int_value (keysite, INT_TYPE_SIDE));
 			}
 
 			//
@@ -1172,9 +1172,9 @@ entity *create_faction_members (entity *keysite, entity_sub_types group_type, fo
 
 		formation_radius = get_formation_member_radius (formation_components->formation, number);
 
-		radius = min (road_nodes [road_node].safe_radius - 5, formation_radius);
+		radius = min ((float)(road_nodes [road_node].safe_radius - 5), formation_radius);
 
-		radius = max (radius, 5.0);
+		radius = max (radius, 5.0f);
 
 		for (loop = 0; loop < number; loop ++)
 		{
@@ -1346,7 +1346,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 	memset (frontline_forces_data, 0, sizeof (frontline_forces_placement_data) * total_number_of_road_nodes);
 
-	side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+	side = (entity_sides)get_local_entity_int_value (force, INT_TYPE_SIDE);
 
 	enemy_side = get_enemy_side (side);
 
@@ -1366,7 +1366,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 		sector_en = get_local_sector_entity (&road_node_positions [node]);
 
-		sector_raw = get_local_entity_data (sector_en);
+		sector_raw = (sector *) get_local_entity_data (sector_en);
 
 		if (sector_raw->side != side)
 		{
@@ -1405,7 +1405,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 		sector_en = get_local_sector_entity (&road_node_positions [node]);
 
-		sector_raw = get_local_entity_data (sector_en);
+		sector_raw = (sector *) get_local_entity_data (sector_en);
 
 		if (sector_raw->side != side)
 		{
@@ -1449,7 +1449,7 @@ void place_frontline_forces (entity *force, int force_size)
 
 		sector_en = get_local_sector_entity (&road_node_positions [node]);
 
-		sector_raw = get_local_entity_data (sector_en);
+		sector_raw = (sector *) get_local_entity_data (sector_en);
 
 		if (sector_raw->side != side)
 		{

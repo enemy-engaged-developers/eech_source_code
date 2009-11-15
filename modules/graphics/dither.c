@@ -119,9 +119,9 @@ void compute_dithered_rgb_image ( int width, int height, psd_rgb *image, rgb_pac
 
 	ASSERT ( image );
 
-	this_line_errors = safe_malloc ( width * sizeof ( dither_errors ) );
+	this_line_errors = ( dither_errors * ) safe_malloc ( width * sizeof ( dither_errors ) );
 
-	next_line_errors = safe_malloc ( width * sizeof ( dither_errors ) );
+	next_line_errors = ( dither_errors * ) safe_malloc ( width * sizeof ( dither_errors ) );
 
 	memset ( this_line_errors, 0, width * sizeof ( dither_errors ) );
 
@@ -279,9 +279,9 @@ void compute_dithered_rgba_image ( int width, int height, psd_rgba *image, rgb_p
 
 	ASSERT ( image );
 
-	this_line_errors = safe_malloc ( width * sizeof ( dither_errors ) );
+	this_line_errors = ( dither_errors * ) safe_malloc ( width * sizeof ( dither_errors ) );
 
-	next_line_errors = safe_malloc ( width * sizeof ( dither_errors ) );
+	next_line_errors = ( dither_errors * ) safe_malloc ( width * sizeof ( dither_errors ) );
 
 	memset ( this_line_errors, 0, width * sizeof ( dither_errors ) );
 
@@ -346,9 +346,9 @@ void compute_dithered_rgba_image ( int width, int height, psd_rgba *image, rgb_p
 			actual_colour.b = b;
 			actual_colour.a = 255;
 
-			packed_colour = get_rgb_packed_value ( actual_colour );
+			packed_colour = get_general_packed_colour ( actual_colour );
 
-			actual_colour = get_rgb_colour_value ( packed_colour );
+			actual_colour = get_general_colour_value ( packed_colour );
 
 			*result_image++ = packed_colour;
 

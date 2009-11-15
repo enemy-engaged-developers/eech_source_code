@@ -1105,7 +1105,7 @@ int *get_file_tag_variable (const char *variable_name)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int if_file_tag_variable (const char *variable_name, const char *operator, int value)
+int if_file_tag_variable (const char *variable_name, const char *operator_, int value)
 {
 
 	int
@@ -1120,7 +1120,7 @@ int if_file_tag_variable (const char *variable_name, const char *operator, int v
 
 	return_value = FALSE;
 
-	switch (*operator)
+	switch (*operator_)
 	{
 
 		case '=':
@@ -1185,7 +1185,7 @@ int if_file_tag_variable (const char *variable_name, const char *operator, int v
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int if_file_tag_operator (int value1, const char *operator, int value2)
+int if_file_tag_operator (int value1, const char *operator_, int value2)
 {
 
 	int
@@ -1200,7 +1200,7 @@ int if_file_tag_operator (int value1, const char *operator, int value2)
 
 	return_value = FALSE;
 
-	switch (*operator)
+	switch (*operator_)
 	{
 
 		case '=':
@@ -1245,7 +1245,7 @@ int if_file_tag_operator (int value1, const char *operator, int value2)
 			char
 				log_string [256];
 
-			sprintf (log_string, "FILE_TAG: unknown operator %c", operator [0]);
+			sprintf (log_string, "FILE_TAG: unknown operator %c", operator_ [0]);
 			debug_fatal (log_string);
 		}
 	}

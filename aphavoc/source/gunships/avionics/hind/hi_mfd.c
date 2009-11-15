@@ -674,7 +674,7 @@ static void draw_map_display(void)
 		*source_position;
 
 	source = get_gunship_entity ();
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 	source_heading = 0.0;  // hind map doesn't rotate
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 	source_target = get_local_entity_parent (source, LIST_TYPE_TARGET);
@@ -987,7 +987,7 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 	day_segment_types
 		day_segment_type;
 
-	int
+	display_3d_tints
 		tint;
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
@@ -995,7 +995,7 @@ static void set_eo_view_params(target_acquisition_systems system, int x_min, int
 	weather_mode = get_simple_session_weather_at_point (position);
 	ASSERT ((weather_mode > WEATHERMODE_INVALID) && (weather_mode < WEATHERMODE_LAST));
 
-	day_segment_type = get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
+	day_segment_type = (day_segment_types) get_local_entity_int_value (get_session_entity (), INT_TYPE_DAY_SEGMENT_TYPE);
 	ASSERT ((day_segment_type >= 0) && (day_segment_type < NUM_DAY_SEGMENT_TYPES));
 
 	switch (system)

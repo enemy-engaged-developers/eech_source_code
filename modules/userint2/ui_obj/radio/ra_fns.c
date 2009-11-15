@@ -83,7 +83,7 @@ static void call_radio_ui_object_function (ui_object *obj, void *arg)
 		mouse_state,
 		mouse_graphic_state;
 
-	radio = obj->data;
+	radio = (radio_ui_object *) obj->data;
 
 	function = radio->area.function;
 
@@ -143,7 +143,7 @@ static void call_radio_ui_object_right_function (ui_object *obj, void *arg)
 	radio_ui_object
 		*radio;
 
-	radio = obj->data;
+	radio = (radio_ui_object *) obj->data;
 
 	function = radio->area.right_function;
 

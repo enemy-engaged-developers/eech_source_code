@@ -113,7 +113,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (crater));
+		raw = (crater *) malloc_fast_mem (sizeof (crater));
 
 		set_local_entity_data (en, raw);
 
@@ -297,7 +297,7 @@ void create_client_server_weapon_hit_ground_crater (entity *weapon, vec3d *posit
 	crater_types
 		type;
 
-	warhead_type = get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	warhead_type = (weapon_warhead_types) get_local_entity_int_value (weapon, INT_TYPE_WEAPON_WARHEAD_TYPE);
 
 	switch (warhead_type)
 	{

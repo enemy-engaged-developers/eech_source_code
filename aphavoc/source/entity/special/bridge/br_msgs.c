@@ -152,7 +152,7 @@ static int response_to_child_killed (entity_messages message, entity *receiver, 
 
 			ASSERT (sec);
 			
-			if (!create_repair_task (get_local_entity_int_value (sec, INT_TYPE_SIDE), position, receiver, task_database [ENTITY_SUB_TYPE_TASK_REPAIR].task_priority, NULL, NULL))
+			if (!create_repair_task ((entity_sides) get_local_entity_int_value (sec, INT_TYPE_SIDE), position, receiver, task_database [ENTITY_SUB_TYPE_TASK_REPAIR].task_priority, NULL, NULL))
 			{
 				debug_log ("BR_MSGS: can't create repair mission");
 			}

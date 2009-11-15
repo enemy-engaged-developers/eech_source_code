@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +166,7 @@ screen * create_screen ( int width, int height, int video_memory )
 		{
 
 			this_screen = &screen_array[count];
-		
+
 			this_screen->width = width;
 			this_screen->height = height;
 			this_screen->locked = FALSE;
@@ -176,13 +177,13 @@ screen * create_screen ( int width, int height, int video_memory )
 			this_screen->clone_screen = FALSE;
 			this_screen->do_not_destroy = FALSE;
 			this_screen->usable_as_texture = FALSE;
-	
+
 			this_screen->pixel_length = video_screen->pixel_length;
 
 			this_screen->used = TRUE;
 
 			this_screen->surface = ddraw_create_surface ( width, height, video_memory );
-		
+
 			return ( this_screen );
 		}
 	}
@@ -241,7 +242,7 @@ screen * create_user_texture_screen ( int width, int height, int type, int numbe
 		{
 
 			this_screen = &screen_array[count];
-		
+
 			this_screen->width = width;
 			this_screen->height = height;
 			this_screen->locked = FALSE;
@@ -249,9 +250,9 @@ screen * create_user_texture_screen ( int width, int height, int type, int numbe
 			this_screen->pitch = 0;
 			this_screen->data = NULL;
 			this_screen->used = TRUE;
-	
-			create_texture_screen_data ( this_screen, width, height, type, number_of_mipmaps, FALSE );
-		
+
+			create_texture_screen_data ( this_screen, width, height, (TEXTURE_MAP_TYPES) type, number_of_mipmaps, FALSE );
+
 			return ( this_screen );
 		}
 	}
@@ -285,8 +286,8 @@ screen * create_system_texture_screen ( int width, int height, int texture_index
 		{
 
 			this_screen = &screen_array[count];
-		
-			if ( create_system_indexed_texture_map ( this_screen, width, height, texture_index, type ) )
+
+			if ( create_system_indexed_texture_map ( this_screen, width, height, texture_index, (SCREEN_FORMAT_TYPES) type ) )
 			{
 
 				return ( this_screen );
@@ -329,7 +330,7 @@ screen *create_user_3dvisual_texture_screen ( int width, int height, int type )
 		{
 
 			this_screen = &screen_array[count];
-		
+
 			this_screen->width = width;
 			this_screen->height = height;
 			this_screen->locked = FALSE;
@@ -337,9 +338,9 @@ screen *create_user_3dvisual_texture_screen ( int width, int height, int type )
 			this_screen->pitch = 0;
 			this_screen->data = NULL;
 			this_screen->used = TRUE;
-	
-			create_texture_screen_data ( this_screen, width, height, type, 0, TRUE );
-		
+
+			create_texture_screen_data ( this_screen, width, height, (TEXTURE_MAP_TYPES) type, 0, TRUE );
+
 			return ( this_screen );
 		}
 	}
@@ -379,84 +380,7 @@ screen * create_screen_for_system_texture ( int texture_index )
 
 BOOL destroy_screen ( screen *this_screen )
 {
-
-	HRESULT
-		ret;
-
-	ASSERT ( this_screen );
-	//ASSERT ( this_screen->surface );
-
-	if ( !this_screen->do_not_destroy )
-	{
-	
-		if ( !this_screen->clone_screen )
-		{
-
-			if ( this_screen->surface )
-			{
-
-				ddraw_destroy_surface ( this_screen->surface );
-
-				this_screen->surface = NULL;
-			}
-
-			this_screen->palette = NULL;
-			/*
-			if ( this_screen->palette )
-			{
-
-				ret = IDirectDrawPalette_Release ( this_screen->palette );
-
-				if ( FAILED ( ret ) )
-				{
-
-					debug_log ( "Unable to release a DDRAW palette: %s", get_ddraw_error_message ( ret ) );
-				}
-
-				this_screen->palette = NULL;
-			}
-			*/
-		}
-
-		if ( this_screen->usable_as_rendertarget )
-		{
-
-			ASSERT ( this_screen->zbuffer_surface );
-			ASSERT ( this_screen->render_texture_surface );
-
-			ret = IDirectDrawSurface7_DeleteAttachedSurface ( this_screen->render_texture_surface, 0, this_screen->zbuffer_surface );
-
-			if ( FAILED ( ret ) )
-			{
-
-				debug_log ( "Unable to detach zbuffer: %s", get_ddraw_error_message ( ret ) );
-			}
-
-			ret = IDirectDrawSurface7_Release ( this_screen->render_texture_surface );
-
-			if ( FAILED ( ret ) )
-			{
-
-				debug_log ( "Unable to release render surface: %s", get_ddraw_error_message ( ret ) );
-			}
-
-			ret = IDirectDrawSurface7_Release ( this_screen->zbuffer_surface );
-
-			if ( FAILED ( ret ) )
-			{
-
-				debug_log ( "Unable to release zbuffer surface: %s", get_ddraw_error_message ( ret ) );
-			}
-
-			this_screen->zbuffer_surface = NULL;
-
-			this_screen->render_texture_surface = NULL;
-		}
-	
-		this_screen->used = FALSE;
-	}
-
-	return ( TRUE );
+	return f3d_texture_release ( this_screen );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -477,7 +401,7 @@ void create_video_screen ( int width, int height, LPDIRECTDRAWSURFACEX surface )
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( surface, &ddsd );
+	f3d_surface_description ( surface, &ddsd );
 
 	video_screen_structure.width = width;
 
@@ -489,7 +413,7 @@ void create_video_screen ( int width, int height, LPDIRECTDRAWSURFACEX surface )
 
 	video_screen = &video_screen_structure;
 
-	video_screen_structure.pixel_length = ( ddsd.ddpfPixelFormat.dwRGBBitCount / 8 );
+	video_screen_structure.pixel_length = ddsd.ddpfPixelFormat.dwRGBBitCount;
 
 	//
 	// Create a screen for the display buffer ( possibly the same as the render buffer )
@@ -499,19 +423,19 @@ void create_video_screen ( int width, int height, LPDIRECTDRAWSURFACEX surface )
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
+	f3d_surface_description ( f3d_surface_front(), &ddsd );
 
 	display_screen_structure.width = width;
 
 	display_screen_structure.height = height;
 
-	display_screen_structure.surface = ddraw.lpFrontBuffer;
+	display_screen_structure.surface = f3d_surface_front ();
 
 	display_screen_structure.video_memory = TRUE;
 
 	display_screen = &display_screen_structure;
 
-	display_screen_structure.pixel_length = ( ddsd.ddpfPixelFormat.dwRGBBitCount / 8 );
+	display_screen_structure.pixel_length = ddsd.ddpfPixelFormat.dwRGBBitCount;
 
 	set_pixel_format ();
 }
@@ -531,7 +455,7 @@ void set_screen_pixel_format ( void )
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( active_screen->surface, &ddsd );
+	f3d_surface_description ( active_screen->surface, &ddsd );
 
 	set_surface_shift_and_mask ( ddsd.ddpfPixelFormat.dwRBitMask, &active_screen_red_mask, &active_screen_red_shift );
 
@@ -557,7 +481,7 @@ void set_user_screen_pixel_format ( screen *scr )
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( scr->surface, &ddsd );
+	f3d_surface_description ( scr->surface, &ddsd );
 
 	set_surface_shift_and_mask ( ddsd.ddpfPixelFormat.dwRBitMask, &user_screen_red_mask, &user_screen_red_shift );
 	set_surface_shift_and_mask ( ddsd.ddpfPixelFormat.dwGBitMask, &user_screen_green_mask, &user_screen_green_shift );
@@ -582,7 +506,7 @@ static void set_surface_shift_and_mask ( int source_mask, int *mask, int *shift 
 
 		for ( shiftcount = 0; !( source_mask & 0x80000000 ); shiftcount++ )
 		{
-	
+
 			source_mask <<= 1;
 		}
 	}
@@ -607,7 +531,7 @@ void get_screen_pixel_format ( int *red_mask, int *green_mask, int *blue_mask, i
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( active_screen->surface, &ddsd );
+	f3d_surface_description ( active_screen->surface, &ddsd );
 
 	*red_mask = ddsd.ddpfPixelFormat.dwRBitMask;
 	*green_mask = ddsd.ddpfPixelFormat.dwGBitMask;
@@ -639,37 +563,37 @@ int get_screen_pixel_width ( struct SCREEN *this_screen )
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( this_screen->surface, &ddsd );
+	f3d_surface_description ( this_screen->surface, &ddsd );
 
 	if ( ddsd.ddpfPixelFormat.dwFlags & DDPF_RGB )
 	{
 
 		for ( r=0, m=ddsd.ddpfPixelFormat.dwRBitMask; !(m & 1); r++, m >>= 1)
 				;
-		
+
 		for ( r=0; m & 1; r++, m >>= 1)
 				;
-		
+
 		for ( g=0, m=ddsd.ddpfPixelFormat.dwGBitMask; !(m & 1); g++, m >>= 1)
 				;
-		
+
 		for ( g=0; m & 1; g++, m >>= 1)
 				;
-		
+
 		for ( b=0, m=ddsd.ddpfPixelFormat.dwBBitMask; !(m & 1); b++, m >>= 1)
 				;
-		
+
 		for ( b=0; m & 1; b++, m >>= 1)
 				;
-	
+
 		a = 0;
-	
+
 		if ( ddsd.ddpfPixelFormat.dwRGBAlphaBitMask )
 		{
-	
+
 			for ( a=0, m=ddsd.ddpfPixelFormat.dwRGBAlphaBitMask; !(m & 1); a++, m >>= 1)
 					;
-	
+
 			for ( a=0; m & 1; a++, m >>= 1)
 					;
 		}
@@ -712,7 +636,7 @@ void get_screen_rgba_masks ( struct SCREEN *this_screen, unsigned int *rm, unsig
 
 	ddsd.dwSize = sizeof ( ddsd );
 
-	IDirectDrawSurface7_GetSurfaceDesc ( this_screen->surface, &ddsd );
+	f3d_surface_description ( this_screen->surface, &ddsd );
 
 	if ( ddsd.ddpfPixelFormat.dwFlags & DDPF_RGB )
 	{
@@ -723,7 +647,7 @@ void get_screen_rgba_masks ( struct SCREEN *this_screen, unsigned int *rm, unsig
 
 		if ( ddsd.ddpfPixelFormat.dwRGBAlphaBitMask )
 		{
-	
+
 			*am = ddsd.ddpfPixelFormat.dwRGBAlphaBitMask;
 		}
 	}
@@ -740,11 +664,12 @@ BOOL lock_screen ( screen *this_screen )
 	ASSERT ( this_screen->surface );
 	ASSERT ( !this_screen->locked );
 
-	if ( ddraw_lock_surface ( this_screen->surface, &this_screen->data, &this_screen->pitch ) )
+	/*if ( ddraw_lock_surface ( this_screen->surface, &this_screen->data, &this_screen->pitch ) )
 	{
 
 		this_screen->locked = TRUE;
-	}
+	}*/
+	f3d_texture_lock ( this_screen, 0 );
 
 	return ( this_screen->locked );
 }
@@ -756,14 +681,14 @@ BOOL lock_screen ( screen *this_screen )
 BOOL unlock_screen ( screen *this_screen )
 {
 
-	BOOL
-		ret;
+	/*BOOL
+		ret;*/
 
 	ASSERT ( this_screen );
 	ASSERT ( this_screen->surface );
 	ASSERT ( this_screen->locked );
 
-	ret = ddraw_unlock_surface ( this_screen->surface, this_screen->data );
+	/*ret = ddraw_unlock_surface ( this_screen->surface, this_screen->data );
 
 	if ( ret )
 	{
@@ -778,14 +703,17 @@ BOOL unlock_screen ( screen *this_screen )
 	{
 
 		return ( FALSE );
-	}
+	}*/
+
+	f3d_texture_unlock ( this_screen );
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HDC get_screen_dc ( screen *this_screen )
+/*HDC get_screen_dc ( screen *this_screen )
 {
 
 	HDC
@@ -798,20 +726,20 @@ HDC get_screen_dc ( screen *this_screen )
 	IDirectDrawSurface7_GetDC ( this_screen->surface, &dc );
 
 	return ( dc );
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void release_screen_dc ( screen *this_screen, HDC dc )
+/*void release_screen_dc ( screen *this_screen, HDC dc )
 {
 
 	ASSERT ( this_screen );
 	ASSERT ( this_screen->surface );
 
 	IDirectDrawSurface7_ReleaseDC ( this_screen->surface, dc );
-}
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -868,7 +796,7 @@ unsigned char * get_screen_data ( screen *this_screen )
 	ASSERT ( this_screen );
 	ASSERT ( this_screen->locked );
 
-	return ( this_screen->data );
+	return ( unsigned char * ) this_screen->data;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -925,41 +853,7 @@ int get_screen_locked ( screen *this_screen )
 
 void clear_screen ( void )
 {
-
-	HRESULT
-		ddrval;
-
-	LPDIRECTDRAWSURFACEX
-		surface;
-
-	DDBLTFX
-		fx;
-
-
-	ASSERT ( active_screen );
-	ASSERT ( active_screen->surface );
-
-	if ( active_screen->render_texture_surface )
-	{
-	
-		surface = active_screen->render_texture_surface;
-	}
-	else
-	{
-	
-		surface = active_screen->surface;
-	}
-
-	fx.dwSize = sizeof ( fx );
-	fx.dwFillColor = 0;
-
-	ddrval = IDirectDrawSurface7_Blt ( surface, NULL, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &fx );
-
-	if ( ddrval != DD_OK )
-	{
-
-		debug_log ( "Unable to blt during clear screen: %s", get_ddraw_error_message ( ddrval ) );
-	}
+	f3d_clear_screen ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -968,52 +862,7 @@ void clear_screen ( void )
 
 int set_3d_render_target ( screen *this_screen )
 {
-
-	HRESULT
-		ret;
-
-	if ( d3d.recreate_d3d )
-	{
-
-		recreate_d3d ();
-	}
-
-	if ( this_screen == video_screen )
-	{
-
-		zbuffer_target_surface = ddraw.lpRenderBuffer;
-
-		ret = IDirect3DDevice7_SetRenderTarget ( d3d.device, this_screen->surface, 0 );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_log ( "Unable to set render target to video screen: %s", get_ddraw_error_message ( ret ) );
-
-			return ( FALSE );
-		}
-
-		return ( TRUE );
-	}
-	else
-	{
-
-		zbuffer_target_surface = this_screen->render_texture_surface;
-
-		ret = IDirect3DDevice7_SetRenderTarget ( d3d.device, this_screen->render_texture_surface, 0 );
-
-		if ( FAILED ( ret ) )
-		{
-
-			debug_log ( "Unable to set render target to texture screen: %s", get_ddraw_error_message ( ret ) );
-
-			return ( FALSE );
-		}
-
-		return ( TRUE );
-	}
-
-	return ( FALSE );
+	return f3d_set_3d_render_target ( this_screen );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1022,21 +871,11 @@ int set_3d_render_target ( screen *this_screen )
 
 void finalise_3d_render_target_texture ( screen *this_screen )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( this_screen );
 	ASSERT ( this_screen->surface );
 	ASSERT ( this_screen->render_texture_surface );
 
-	ret = IDirectDrawSurface7_Blt ( this_screen->surface, NULL, this_screen->render_texture_surface, NULL, DDBLT_WAIT, NULL );
-
-	if ( FAILED ( ret ) )
-	{
-
-		debug_log ( "finalise_3d_render_target_texture: %s", get_ddraw_error_message ( ret ) );
-	}
+	f3d_surface_blt ( this_screen->surface, NULL, this_screen->render_texture_surface, NULL, DDBLT_WAIT, NULL );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1065,11 +904,13 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 			col,
 			*line;
 
+		ASSERT ( active_screen->pixel_length <= 16 );
+
 		//
 		// Perform the blit using the CPU
 		//
 
-		col = get_rgb_packed_value ( colour );
+		col = get_packed_colour ( colour );
 
 		pitch = get_screen_pitch ( active_screen );
 
@@ -1092,41 +933,32 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 
 		DDBLTFX
 			fx;
-	
+
 		RECT
 			rect;
-	
-		HRESULT
-			ret;
 
 		//
 		// Perform the blit using the blitter
 		//
 
 		fx.dwSize = sizeof ( fx );
-		fx.dwFillColor = get_rgb_packed_value ( colour );
-	
+		fx.dwFillColor = active_screen->pixel_length <= 16 ? get_packed_colour ( colour ) : colour.colour;
+
 		rect.left = x1;
 		rect.right = x2 + 1;
-	
+
 		rect.top = y1;
 		rect.bottom = y2 + 1;
 
 		if ( active_screen->render_texture_surface )
 		{
-	
-			ret = IDirectDrawSurface7_Blt ( active_screen->render_texture_surface, &rect, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &fx );
+
+			f3d_surface_blt ( active_screen->render_texture_surface, &rect, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &fx );
 		}
 		else
 		{
-	
-			ret = IDirectDrawSurface7_Blt ( active_screen->surface, &rect, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &fx );
-		}
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "set_block: %s", get_ddraw_error_message ( ret ) );
+
+			f3d_surface_blt ( active_screen->surface, &rect, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &fx );
 		}
 	}
 }
@@ -1137,10 +969,6 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 
 void blit_screens ( screen *source, screen *destination, int sx1, int sy1, int sx2, int sy2, int dx1, int dy1, int dx2, int dy2 )
 {
-
-	HRESULT
-		ret;
-
 	RECT
 		src_rect,
 		dst_rect;
@@ -1158,15 +986,7 @@ void blit_screens ( screen *source, screen *destination, int sx1, int sy1, int s
 	dst_rect.left = dx1;
 	dst_rect.right = dx2;
 
-	ret = IDirectDrawSurface7_Blt ( destination->surface, &dst_rect, source->surface, &src_rect, DDBLT_WAIT, NULL );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to blit screens, %s", get_ddraw_error_message ( ret ) );
-		debug_log ( "Source rect: %d, %d -> %d, %d", src_rect.left, src_rect.top, src_rect.right, src_rect.bottom );
-		debug_log ( "Dest rect: %d, %d -> %d, %d", dst_rect.left, dst_rect.top, dst_rect.right, dst_rect.bottom );
-	}
+	f3d_surface_blt ( destination->surface, &dst_rect, source->surface, &src_rect, DDBLT_WAIT, NULL );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1178,6 +998,8 @@ void destroy_all_screens ( void )
 
 	int
 		count;
+
+	f3d_context_set();
 
 	//
 	// Destroy all the direct draw surfaces - but in reverse order to their creation, as its a lot faster
@@ -1201,6 +1023,8 @@ void destroy_all_screens ( void )
 			destroy_screen ( &screen_array[count] );
 		}
 	}
+
+	f3d_context_leave();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1230,6 +1054,8 @@ void set_video_screen_edge ( int x, int y, int width, int height )
 	rgb_colour
 		col;
 
+	ASSERT ( video_screen->pixel_length <= 16 );
+
 	video_screen_edge_x = x;
 
 	video_screen_edge_y = y;
@@ -1245,18 +1071,18 @@ void set_video_screen_edge ( int x, int y, int width, int height )
 
 	set_active_screen ( video_screen );
 
-	video_edge_colour = get_rgb_packed_value ( col );
+	video_edge_colour = get_packed_colour ( col );
 
 	for ( count = 0; count < width; count++ )
 	{
 
-		set_packed_pixel ( count, y, video_edge_colour );
+	//	set_packed_pixel ( count, y, video_edge_colour );
 	}
 
 	for ( count = 0; count < height; count++ )
 	{
 
-		set_packed_pixel ( x, count, video_edge_colour );
+	//	set_packed_pixel ( x, count, video_edge_colour );
 	}
 }
 
@@ -1272,6 +1098,8 @@ void check_video_screen_edge ( void )
 
 	rgb_packed
 		col;
+
+	ASSERT ( video_screen->pixel_length <= 16 );
 
 	for ( count = 0; count < video_screen_edge_width; count++ )
 	{
@@ -1296,107 +1124,16 @@ void check_video_screen_edge ( void )
 
 void restore_graphics_screens ( void )
 {
-
 	int
 		count;
 
-	DDSURFACEDESC2
-		ddsd;
-	
-	HRESULT
-		ret;
-
-	if ( !d3d_use_rgb_device )
+	//if ( !d3d_use_rgb_device )
 	{
-	
 		for ( count = 0; count < MAX_INTERNAL_SCREENS; count++ )
 		{
-	
 			if ( ( screen_array[count].used ) && ( !screen_array[count].clone_screen ) )
 			{
-	
-				if ( ( screen_array[count].render_texture_surface ) && ( screen_array[count].zbuffer_surface ) )
-				{
-
-
-
-					//
-					// Free up the surfaces
-					//
-
-					IDirectDrawSurface7_DeleteAttachedSurface ( screen_array[count].render_texture_surface, 0, NULL );
-
-					IDirectDrawSurface7_Release ( screen_array[count].render_texture_surface );
-
-					screen_array[count].render_texture_surface = NULL;
-
-					IDirectDrawSurface7_Release ( screen_array[count].zbuffer_surface );
-
-					screen_array[count].zbuffer_surface = NULL;
-
-					//
-					// Reallocate the surfaces
-					//
-
-					memset ( &ddsd, 0, sizeof ( ddsd ) );
-				
-					ddsd.dwSize = sizeof ( ddsd );
-				
-					memcpy ( &ddsd.ddpfPixelFormat, &texture_formats[ screen_array[count].type ].format, sizeof ( DDPIXELFORMAT ) );
-				
-					ddsd.dwSize = sizeof ( ddsd );
-					ddsd.dwMipMapCount = 0;
-					ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-					ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE;
-					ddsd.dwHeight = screen_array[count].height;
-					ddsd.dwWidth = screen_array[count].width;
-					ddsd.ddsCaps.dwCaps3 = 0;
-					ddsd.ddsCaps.dwCaps4 = 0;
-					ddsd.ddsCaps.dwCaps2 = 0;
-					ddsd.ddsCaps.dwCaps |= ( d3d_use_rgb_device ) ? ( DDSCAPS_SYSTEMMEMORY ) : ( DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM );
-					
-					ret = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &screen_array[count].render_texture_surface, NULL );
-				
-					if ( ret != DD_OK )
-					{
-				
-						debug_fatal ( "Unable to create texture render surface: %s ( %d, %d )", get_ddraw_error_message ( ret ), screen_array[count].width, screen_array[count].height );
-					}
-			
-					memset ( &ddsd, 0, sizeof ( ddsd ) );
-			
-					ddsd.dwSize = sizeof ( ddsd );
-			
-					ret = IDirectDrawSurface7_GetSurfaceDesc ( ddraw.lpFrontBuffer, &ddsd );
-					
-					ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-					ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER;
-					ddsd.ddsCaps.dwCaps |= ( d3d_use_rgb_device ) ? ( DDSCAPS_SYSTEMMEMORY ) : ( DDSCAPS_VIDEOMEMORY );
-					ddsd.dwWidth = screen_array[count].width;
-					ddsd.dwHeight = screen_array[count].height;
-
-					get_ddraw_zbuffer_pixel_format ( &ddsd.ddpfPixelFormat );
-
-//					ddsd.ddpfPixelFormat.dwSize = sizeof ( ddsd.ddpfPixelFormat );
-//					ddsd.ddpfPixelFormat.dwFlags = DDPF_ZBUFFER;
-//					ddsd.ddpfPixelFormat.dwZBufferBitDepth = 16;
-			
-					ret = IDirectDraw7_CreateSurface ( ddraw.ddraw, &ddsd, &screen_array[count].zbuffer_surface, NULL );
-					
-					if ( ret != DD_OK )
-					{
-						
-						debug_fatal ( "Unable to create Zbuffer surface: %s", get_ddraw_error_message ( ret ) );
-					}
-			
-					ret = IDirectDrawSurface7_AddAttachedSurface ( screen_array[count].render_texture_surface, screen_array[count].zbuffer_surface );
-			
-					if ( ret != DD_OK )
-					{
-			
-						debug_fatal ( "Unable to attach Zbuffer surface: %s", get_ddraw_error_message ( ret ) );
-					}
-				}
+				f3d_texture_restore ( &screen_array[count] );
 			}
 		}
 	}
@@ -1405,16 +1142,3 @@ void restore_graphics_screens ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-

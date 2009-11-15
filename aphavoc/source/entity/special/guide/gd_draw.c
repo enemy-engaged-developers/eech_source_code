@@ -97,7 +97,7 @@ void draw_debug_guide_entity (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	//
 	// get guide position

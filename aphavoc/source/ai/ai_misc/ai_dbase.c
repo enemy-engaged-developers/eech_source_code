@@ -206,7 +206,7 @@ void initialise_population_name_database (void)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = ( file_tags ) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{
@@ -239,7 +239,7 @@ void initialise_population_name_database (void)
 
 				new_city = (population_name_database_type *) malloc_heap_mem (sizeof (population_name_database_type));
 
-				new_city->name = malloc_heap_mem (strlen (name) + 4);
+				new_city->name = ( char * ) malloc_heap_mem (strlen (name) + 4);
 
 				new_city->next = population_name_database;
 
@@ -251,17 +251,17 @@ void initialise_population_name_database (void)
 				// Type
 				//
 
-				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+				result = ( file_tags ) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 				ASSERT (result == FILE_TAG_POPULATION_TYPE);
 
-				new_city->type = get_next_file_enum (file_ptr, population_name_type_strings, NUM_POPULATION_NAME_TYPES);
+				new_city->type = ( population_name_types ) get_next_file_enum (file_ptr, population_name_type_strings, NUM_POPULATION_NAME_TYPES);
 
 				//
 				// Position
 				//
 		
-				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+				result = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 				ASSERT (result == FILE_TAG_POSITION);
 
@@ -272,7 +272,7 @@ void initialise_population_name_database (void)
 				// Zoom Level
 				//
 
-				result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+				result = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 				ASSERT (result == FILE_TAG_ZOOM);
 

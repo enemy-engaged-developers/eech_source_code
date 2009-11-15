@@ -93,7 +93,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			int
 				loop;
 
-			raw = get_local_entity_data (en);
+			raw = (particle *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -180,7 +180,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_heap_mem (sizeof (particle));
+			raw = (particle *) malloc_heap_mem (sizeof (particle));
 
 			set_local_entity_data (en, raw);
 
@@ -200,15 +200,15 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->particle_count = unpack_int_value (en, INT_TYPE_PARTICLE_COUNT);
 
-			raw->valid = malloc_fast_mem (sizeof (unsigned char) * raw->particle_count);
+			raw->valid = (unsigned char *) malloc_fast_mem (sizeof (unsigned char) * raw->particle_count);
 
 			raw->object_3d_shape = unpack_int_value (en, INT_TYPE_OBJECT_3D_SHAPE);
 
-			raw->inst3d = malloc_fast_mem (sizeof (object_3d_instance *) * raw->particle_count);
+			raw->inst3d = (object_3d_instance **) malloc_fast_mem (sizeof (object_3d_instance *) * raw->particle_count);
 
-			raw->motion_vector = malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
+			raw->motion_vector = (vec3d *) malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
 
-			raw->position = malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
+			raw->position = (vec3d *) malloc_fast_mem (sizeof (vec3d) * raw->particle_count);
 
 			for ( loop = 0 ; loop < raw->particle_count ; loop ++ )
 			{

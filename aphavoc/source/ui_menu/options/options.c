@@ -215,7 +215,7 @@ void notify_options_screen (ui_object *obj, void *arg)
 
 		//call most recently entered options page
 		
-		notify_options_page (current_options_page);
+		notify_options_page ((options_pages) current_options_page);
 
 		// get pointer to current graphics card
 

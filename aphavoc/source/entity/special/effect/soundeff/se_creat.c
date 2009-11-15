@@ -110,7 +110,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (sound_effect));
+		raw = (sound_effect *) malloc_fast_mem (sizeof (sound_effect));
 
 		set_local_entity_data (en, raw);
 
@@ -126,7 +126,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		memset (raw, 0, sizeof (sound_effect));
 
-		raw->effect_index = SOUND_SAMPLE_INDEX_NONE;
+		raw->effect_index = (sound_sample_indices) SOUND_SAMPLE_INDEX_NONE;
 
 		raw->amplification = 1.0;
 
@@ -158,7 +158,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		ASSERT (entity_sub_type_effect_valid (raw->eff.sub_type));
 
-		ASSERT (raw->effect_index == SOUND_SAMPLE_INDEX_NONE);			// samples haven't been specified at this point
+		ASSERT (raw->effect_index == (sound_sample_indices) SOUND_SAMPLE_INDEX_NONE);			// samples haven't been specified at this point
 
 		ASSERT (raw->eff.special_effect_link.parent);
 

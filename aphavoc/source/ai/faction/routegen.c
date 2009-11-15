@@ -678,7 +678,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 
 	number_of_route_waypoint_positions = maximum_tree_depth + 1;
 
-	route_waypoint_positions = safe_malloc ( number_of_route_waypoint_positions * sizeof ( route_waypoint_position ) );
+	route_waypoint_positions = ( route_waypoint_position * ) safe_malloc ( number_of_route_waypoint_positions * sizeof ( route_waypoint_position ) );
 
 	memset ( route_waypoint_positions, 0, ( number_of_route_waypoint_positions * sizeof ( route_waypoint_position ) ) );
 
@@ -698,7 +698,7 @@ void parse_waypoint_routes_from_object ( int object_index, int number_of_matchin
 
 		route_waypoint_positions[current_depth].number_of_positions = number_of_nodes;
 
-		route_waypoint_positions[current_depth].offsets = safe_malloc ( number_of_nodes * sizeof ( vec3d ) );
+		route_waypoint_positions[current_depth].offsets = ( vec3d * ) safe_malloc ( number_of_nodes * sizeof ( vec3d ) );
 
 		while ( number_of_nodes )
 		{

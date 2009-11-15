@@ -89,7 +89,7 @@ static void destroy_local (entity *en)
 	//
 	////////////////////////////////////////
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	#if DEBUG_MODULE
 

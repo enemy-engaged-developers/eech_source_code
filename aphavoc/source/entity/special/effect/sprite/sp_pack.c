@@ -90,7 +90,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			sprite
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (sprite *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -177,7 +177,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_heap_mem (sizeof (sprite));
+			raw = (sprite *) malloc_heap_mem (sizeof (sprite));
 
 			set_local_entity_data (en, raw);
 
@@ -203,7 +203,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			raw->end_scale = unpack_float_value (en, FLOAT_TYPE_END_SCALE);
 
-			raw->animated_texture = unpack_int_value (en, INT_TYPE_ANIMATED_TEXTURE);
+			raw->animated_texture = (texture_animation_indices) unpack_int_value (en, INT_TYPE_ANIMATED_TEXTURE);
 
 			unpack_vec3d (en, VEC3D_TYPE_RELATIVE_POSITION, &raw->relative_position);
 

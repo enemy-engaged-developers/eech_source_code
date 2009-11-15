@@ -81,7 +81,7 @@ static void update_server (entity *en)
 	explosion
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	raw->explosion_state += (get_delta_time () / raw->animation_frequency);
 
@@ -100,7 +100,7 @@ static void update_client (entity *en)
 	explosion
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (explosion *) get_local_entity_data (en);
 
 	raw->explosion_state += (get_delta_time () / raw->animation_frequency);
 

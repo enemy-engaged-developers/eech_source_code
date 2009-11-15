@@ -247,7 +247,7 @@ static void set_local_char_value (entity *en, char_types type, char value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -332,7 +332,7 @@ static char get_local_char_value (entity *en, char_types type)
 	char
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (waypoint *) get_local_entity_data (en);
 
 	switch (type)
 	{

@@ -164,9 +164,9 @@ void build_supply_heat_map (void)
 
 	if (!supply_heat_map)
 	{
-		supply_heat_bitmap = malloc_heap_mem (sizeof (unsigned char) * (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3));
+		supply_heat_bitmap = (unsigned char *) malloc_heap_mem (sizeof (unsigned char) * (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3));
 
-		supply_heat_map = malloc_heap_mem (sizeof (unsigned char) * (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS));
+		supply_heat_map = (unsigned char *) malloc_heap_mem (sizeof (unsigned char) * (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS));
 	}
 
 	#if DEBUG_MODULE

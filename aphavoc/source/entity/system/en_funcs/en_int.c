@@ -2654,7 +2654,7 @@ int_types unpack_int_type (void)
 	int_types
 		type;
 
-	type = unpack_unsigned_data (NUM_INT_TYPE_PACK_BITS);
+	type = (int_types) unpack_unsigned_data (NUM_INT_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_INT_TYPES));
 

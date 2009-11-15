@@ -132,7 +132,7 @@ void get_ah64a_eo_centred_viewpoint (viewpoint *vp)
 
 	source = get_gunship_entity ();
 
-	inst3d = get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (source, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

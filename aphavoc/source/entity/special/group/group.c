@@ -568,7 +568,7 @@ void set_group_verbose_operational_state (entity *en, int state)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	if (raw->verbose_operational_state == state)
 	{
@@ -628,7 +628,7 @@ void assess_group_supplies (entity *en)
 		required,
 		level;
 
-	raw = get_local_entity_data (en);
+	raw = (group *) get_local_entity_data (en);
 
 	if (get_local_entity_int_value (en, INT_TYPE_RESUPPLY_SOURCE) == RESUPPLY_SOURCE_GROUP)
 	{
@@ -640,7 +640,7 @@ void assess_group_supplies (entity *en)
 		if (raw->supplies.ammo_supply_level < 100.0)
 		{
 
-			force = get_local_force_entity (get_local_entity_int_value (en, INT_TYPE_SIDE));
+			force = get_local_force_entity ((entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE));
 
 			#if DEBUG_MODULE || DEBUG_SUPPLY
 
@@ -653,7 +653,7 @@ void assess_group_supplies (entity *en)
 		else if (raw->supplies.fuel_supply_level < 100.0)
 		{
 
-			force = get_local_force_entity (get_local_entity_int_value (en, INT_TYPE_SIDE));
+			force = get_local_force_entity ((entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE));
 
 			#if DEBUG_MODULE || DEBUG_SUPPLY
 
@@ -684,7 +684,7 @@ void assess_group_supplies (entity *en)
 
 				if ((!keysite) || (get_local_entity_type (keysite) != ENTITY_TYPE_KEYSITE))
 				{
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
 				}
 
 				ASSERT (keysite);
@@ -726,7 +726,7 @@ void assess_group_supplies (entity *en)
 
 				if ((!keysite) || (get_local_entity_type (keysite) != ENTITY_TYPE_KEYSITE))
 				{
-					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
+					keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) raw->side, get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION), 1.0 * KILOMETRE, NULL, NULL);
 				}
 
 				ASSERT (keysite);
@@ -1151,7 +1151,7 @@ int create_group_emergency_transfer_task (entity *en)
 
 	landing_type = group_database [get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE)].default_landing_type;
 
-	landing = get_closest_free_landing_site (landing_type, get_local_force_entity (side), pos, 0.0, NULL, sites_required);
+	landing = get_closest_free_landing_site (landing_type, get_local_force_entity ((entity_sides) side), pos, 0.0, NULL, sites_required);
 
 	if (landing)
 	{
@@ -1163,11 +1163,11 @@ int create_group_emergency_transfer_task (entity *en)
 
 		if (landing_type == ENTITY_SUB_TYPE_LANDING_HELICOPTER)
 		{
-			new_task = create_transfer_task (side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, 10.0, new_keysite, new_keysite);
+			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_HELICOPTER, 10.0, new_keysite, new_keysite);
 		}
 		else
 		{
-			new_task = create_transfer_task (side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, 10.0, new_keysite, new_keysite);
+			new_task = create_transfer_task ((entity_sides) side, ENTITY_SUB_TYPE_TASK_TRANSFER_FIXED_WING, 10.0, new_keysite, new_keysite);
 		}
 
 		ASSERT (new_task);
@@ -1310,7 +1310,7 @@ int group_task_specific_retaliation_checks (entity *group, entity *aggressor, in
 			return TRUE;
 		}
 
-		roe = get_local_entity_int_value (task, INT_TYPE_RULES_OF_ENGAGEMENT);
+		roe = (task_roe_types) get_local_entity_int_value (task, INT_TYPE_RULES_OF_ENGAGEMENT);
 
 		switch (roe)
 		{
@@ -1356,7 +1356,7 @@ int group_task_specific_retaliation_checks (entity *group, entity *aggressor, in
 						return TRUE;
 					}
 
-					side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+					side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 					group_pos = get_local_entity_vec3d_ptr (group, VEC3D_TYPE_POSITION);
 

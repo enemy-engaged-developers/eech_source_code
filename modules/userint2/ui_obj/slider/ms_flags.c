@@ -76,12 +76,12 @@ static void set_mslider_ui_object_moveable (ui_object *obj, int flag)
 	slider_ui_object
 		*slider;
 
-	slider = obj->data;
+	slider = (slider_ui_object *) obj->data;
 
 	if (obj)
 	{
 	
-		slider = obj->data;
+		slider = (slider_ui_object *) obj->data;
 	
 		if (slider->area.child)
 		{

@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include	"graphics.h"
+#include	"3d/3dfunc.h"
 
 #include "cmndline.h"
 
@@ -137,19 +138,9 @@ void clear_zbuffer_screen_using_viewport ( void )
 
 //	ASSERT ( !d3d_in_3d_scene );
 
-	if ( d3d.device )
+	if ( d3d_initialised /*d3d.device*/ )
 	{
-
-		HRESULT
-			ret;
-
-		ret = IDirect3DDevice7_Clear ( d3d.device, 0, NULL, D3DCLEAR_ZBUFFER, 0, 1.0, 0 );
-
-		if ( ret != DD_OK )
-		{
-
-			debug_log ( "Unable to clear zbuffer: %s", get_d3d_error_message ( ret ) );
-		}
+		f3d_zbuffer_clear(1.0);
 	}
 }
 
@@ -159,10 +150,6 @@ void clear_zbuffer_screen_using_viewport ( void )
 
 void clear_zbuffer_screen ( void )
 {
-
-	LPDIRECTDRAWSURFACEX
-		zbuffer;
-
 	// DirectDraw calls are emulated in DX9, since it's not supported any more.  But modern
 	// graphics drivers have buggy support for it.  So rather use clear_zbuffer_screen_using_viewport
 	// for clearing zbuffer.  Fix by Bodhammer.
@@ -172,58 +159,7 @@ void clear_zbuffer_screen ( void )
 		return;
 	}
 
-	if ( !active_screen )
-	{
-
-		return;
-	}
-
-	if ( active_screen == video_screen )
-	{
-
-		zbuffer = ddraw.lpZBuffer;
-	}
-	else
-	{
-
-		zbuffer = active_screen->zbuffer_surface;
-	}
-
-	if ( !zbuffer )
-	{
-
-		return;
-	}
-
-	{
-
-		HRESULT
-			d3drval;
-
-		DDBLTFX
-			fx;
-
-		fx.dwSize = sizeof ( DDBLTFX );
-
-		if ( application_video_colourdepth == 32 )
-		{
-
-			fx.dwFillDepth = 0xffffffff;
-		}
-		else
-		{
-
-			fx.dwFillDepth = 0xffff;
-		}
-
-		d3drval = IDirectDrawSurface7_Blt ( ddraw.lpZBuffer, NULL, NULL, NULL, DDBLT_DEPTHFILL, &fx );
-
-		if ( d3drval != DD_OK )
-		{
-
-			debug_log ( "Unable to blt to z buffer: %s", get_d3d_error_message ( d3drval ) );
-		}
-	}
+	f3d_clear_zbuffer ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

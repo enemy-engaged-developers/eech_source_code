@@ -210,7 +210,7 @@ static void add_stub_packet_to_list (stub_packet_type **list, stub_packet_type *
 
 static int count_packets_for_frame (stub_packet_type *packet_list, int player_id, int frame_id);
 
-static int get_comms_checksum (char *data, int send_size);
+static int get_comms_checksum (unsigned char *data, int send_size);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -370,12 +370,12 @@ void initialise_comms_debug (void)
 	debug_watch ("packets size								= %d", MT_INT, &command_line_comms_packet_data_size);
 	debug_watch ("packets sent							= %d", MT_INT, &num_packets_sent);
 	debug_watch ("packets send size (instant)			= %.02f", MT_FLOAT, &instant_packet_size_sent);
-	debug_colour_watch (COLOUR_RED, "packets send size (av)				= %.02f", MT_FLOAT, &av_packet_size_sent);
+	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "packets send size (av)				= %.02f", MT_FLOAT, &av_packet_size_sent);
 	debug_watch ("packets send size (max)				= %.02f", MT_FLOAT, &max_packet_size_sent);
 
 	debug_watch ("packets received						= %d", MT_INT, &num_packets_received);
 	debug_watch ("packets received size (instant) 		= %.02f", MT_FLOAT, &instant_packet_size_received);
-	debug_colour_watch (COLOUR_RED, "packets received size (av)			= %.02f", MT_FLOAT, &av_packet_size_received);
+	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "packets received size (av)			= %.02f", MT_FLOAT, &av_packet_size_received);
 	debug_watch ("packets received size (max)			= %.02f", MT_FLOAT, &max_packet_size_received);
 
 	debug_watch ("packets record count	 				= %d", MT_INT, &packet_record_data_count);
@@ -384,7 +384,7 @@ void initialise_comms_debug (void)
 
 	#if COMMS_STATS
 
-	debug_colour_watch (COLOUR_RED, "processed size (max)					= %.02f", MT_FLOAT, &max_processed_size);
+	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "processed size (max)					= %.02f", MT_FLOAT, &max_processed_size);
 
 	debug_watch ("re-request counter						= %d", MT_INT, &rerequest_packet_counter);
 	debug_watch ("resend packet counter				= %d", MT_INT, &resend_packet_counter);
@@ -483,7 +483,7 @@ void deinitialise_comms (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void send_packet (DPID player_id, packet_types type, char *data, int size, send_types send_type)
+void send_packet (DPID player_id, packet_types type, unsigned char *data, int size, send_types send_type)
 {
 
 	HRESULT
@@ -846,7 +846,7 @@ void receive_packets (void)
 			if (temp_packet)
 			{
 
-				if ((temp_packet->check_sum) != get_comms_checksum ((char *) &new_receive_packet_data [sizeof (packet_header_type)], (temp_packet->data_size)))
+				if ((temp_packet->check_sum) != get_comms_checksum ((unsigned char *) &new_receive_packet_data [sizeof (packet_header_type)], (temp_packet->data_size)))
 				{
 /*
 					char
@@ -877,7 +877,7 @@ void receive_packets (void)
 */
 					debug_log ("COMMS:    data check_sum failed receiver %d, calculated %d, datasize %d",
 									temp_packet->check_sum,
-									get_comms_checksum ((char *) &new_receive_packet_data [sizeof (packet_header_type)], temp_packet->data_size),
+									get_comms_checksum ((unsigned char *) &new_receive_packet_data [sizeof (packet_header_type)], temp_packet->data_size),
 									temp_packet->data_size);
 
 					request_resend_packet (connection, temp_packet->frame_id, temp_packet->packet_id, get_system_time (), send_type);
@@ -1014,7 +1014,7 @@ void receive_packets (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int process_packet_list (send_types send_type, connection_list_type *connection, DPID *player_id, char **data, int *size)
+int process_packet_list (send_types send_type, connection_list_type *connection, DPID *player_id, unsigned char **data, int *size)
 {
 
 	packet_types
@@ -1208,7 +1208,7 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 			if (predicted_size >= connection->connection_receive_buffer_size)
 			{
 
-				new_buffer = (char *) malloc_heap_mem (connection->connection_receive_buffer_size * 2);
+				new_buffer = (unsigned char *) malloc_heap_mem (connection->connection_receive_buffer_size * 2);
 
 				ASSERT (connection->connection_receive_buffer);
 
@@ -1503,7 +1503,7 @@ void request_resend_packet (connection_list_type *connection, int frame_id, int 
 	int
 		buffer [3];
 
-	char
+	unsigned char
 		*buffer_ptr;
 
 	//
@@ -1551,7 +1551,7 @@ void request_resend_packet (connection_list_type *connection, int frame_id, int 
 		new_stub_packet = new_stub_packet->next;
 	}
 
-	buffer_ptr = (char *) buffer;
+	buffer_ptr = (unsigned char *) buffer;
 
 	quick_set_list_item (buffer_ptr, int, frame_id);
 
@@ -1559,7 +1559,7 @@ void request_resend_packet (connection_list_type *connection, int frame_id, int 
 
 	quick_set_list_item (buffer_ptr, send_types, send_type);
 
-	send_packet (connection->connection_id, PACKET_TYPE_RESEND_PACKET, (char *) buffer, sizeof (buffer), SEND_TYPE_PERSONAL);
+	send_packet (connection->connection_id, PACKET_TYPE_RESEND_PACKET, (unsigned char *) buffer, sizeof (buffer), SEND_TYPE_PERSONAL);
 
 	rerequest_packet_counter ++;
 
@@ -1677,7 +1677,7 @@ stub_packet_type *resend_packet (DPID player_id, int frame_id, int packet_id, se
 
 			index_number = get_local_entity_index (get_gunship_entity ());
 
-			send_packet (get_server_id (), PACKET_TYPE_END_GAME, (void *) &index_number, 4, SEND_TYPE_PERSONAL);
+			send_packet (get_server_id (), PACKET_TYPE_END_GAME, (unsigned char *) &index_number, 4, SEND_TYPE_PERSONAL);
 
 			// should this call start_game_exit () ?
 		}
@@ -2240,7 +2240,7 @@ void debug_comms_stats (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int get_comms_checksum (char *data, int send_size)
+int get_comms_checksum (unsigned char *data, int send_size)
 {
 
 	int

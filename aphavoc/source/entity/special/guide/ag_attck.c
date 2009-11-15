@@ -183,7 +183,7 @@ void attack_guide_approach_reached (entity *en)
 	// change guide type to SEEK_COVER (Helicopter) or CLIMB (Jet) and calculate new position
 	//
 
-	aggressor = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
 
@@ -337,7 +337,7 @@ void attack_guide_take_cover_reached (entity *en)
 	// notify the group leader that the cover position has been reached
 	//
 
-	leader = get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
+	leader = (entity *) get_local_entity_ptr_value (group, PTR_TYPE_GROUP_LEADER);
 
 	ASSERT (leader);
 
@@ -400,7 +400,7 @@ void attack_guide_fire_reached (entity *en)
 	// Helicopter - Move back to TAKE_COVER
 	//
 
-	aggressor = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
 
@@ -589,7 +589,7 @@ void attack_guide_hasty_fire_reached (entity *en)
 		*aggressor,
 		*target;
 
-	aggressor = get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
+	aggressor = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_TASK_LEADER);
 
 	ASSERT (aggressor);
 
@@ -1417,12 +1417,12 @@ void set_attack_guide_disengage_position (entity *en)
 		weapon_effective_range;
 
 	int
-		virtual;
+		virtual_;
 
 	vec3d
 		position;
 
-	virtual = FALSE;
+	virtual_ = FALSE;
 
 	switch (get_local_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE))
 	{
@@ -1437,7 +1437,7 @@ void set_attack_guide_disengage_position (entity *en)
 		{
 			set_client_server_entity_int_value (en, INT_TYPE_ENTITY_SUB_TYPE, ENTITY_SUB_TYPE_GUIDE_ATTACK_AG_DISENGAGE_VIRTUAL);
 
-			virtual = TRUE;
+			virtual_ = TRUE;
 
 			break;
 		}
@@ -1474,17 +1474,17 @@ void set_attack_guide_disengage_position (entity *en)
 
 	time = weapon_database [selected_weapon].burst_duration;
 
-	time = max (time, 1.5);
+	time = max (time, 1.5f);
 
 	distance = weapon_effective_range - (velocity * time);
 
-	distance = max (distance, 250.0);
+	distance = max (distance, 250.0f);
 
 	//
 	// Set position
 	//
 
-	if (virtual)
+	if (virtual_)
 	{
 		//
 		// Use same lead distance as fire position

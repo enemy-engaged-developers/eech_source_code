@@ -611,9 +611,9 @@ void set_gunship_target (entity *target)
 				range = get_3d_range (source_position, target_position);
 
 				if (range < 5000.0)
-					cpg_identify_target_delay = (min (range, 5000.0) * 0.0004) + (frand1 () * 1.0) + 0.25;
+					cpg_identify_target_delay = (min (range, 5000.0f) * 0.0004) + (frand1 () * 1.0) + 0.25;
 				else  // really long ID time for targets beyond 5KM
-					cpg_identify_target_delay = (min (range, 8000.0) * 0.001) + (frand1 () * 1.0) + 60.0;
+					cpg_identify_target_delay = (min (range, 8000.0f) * 0.001) + (frand1 () * 1.0) + 60.0;
 			}
 		}
 	}

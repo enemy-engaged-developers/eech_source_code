@@ -145,14 +145,14 @@ void mslider_move_function (event *ev)
 		if (mouse_y < get_ui_object_y (current_object_to_slide))
 		{
 
-			scroll = max (-1.0, (get_ui_object_y (current_object_to_slide) - mouse_y) * get_delta_time ());
+			scroll = max (-1.0f, (get_ui_object_y (current_object_to_slide) - mouse_y) * get_delta_time ());
 
 			set_ui_object_state (current_object_to_slide, UI_OBJECT_STATE_OFF);
 		}
 		else if (mouse_y > get_ui_object_y (current_object_to_slide) + get_ui_object_y_size (current_object_to_slide))
 		{
 
-			scroll = min (1.0, (get_ui_object_y (current_object_to_slide) + get_ui_object_y_size (current_object_to_slide) - mouse_y) * get_delta_time ());
+			scroll = min (1.0f, (get_ui_object_y (current_object_to_slide) + get_ui_object_y_size (current_object_to_slide) - mouse_y) * get_delta_time ());
 
 			set_ui_object_state (current_object_to_slide, UI_OBJECT_STATE_OFF);
 		}

@@ -197,23 +197,23 @@ void cyclic_mouse_input (event *ev)
 	if (ev->dx > 0.0)
 	{
 
-		current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = max (0.0, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
+		current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = max (0.0f, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
 	}
 	else if (ev->dx < 0.0)
 	{
 
-		current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = min (0.0, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
+		current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = min (0.0f, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
 	}
 
 	if (ev->dy > 0.0)
 	{
 
-		current_flight_dynamics->input_data.cyclic_vertical_pressure.value = max (0.0, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
+		current_flight_dynamics->input_data.cyclic_vertical_pressure.value = max (0.0f, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
 	}
 	else if (ev->dy < 0.0)
 	{
 
-		current_flight_dynamics->input_data.cyclic_vertical_pressure.value = min (0.0, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
+		current_flight_dynamics->input_data.cyclic_vertical_pressure.value = min (0.0f, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
 	}
 
 	current_flight_dynamics->input_data.cyclic_horizontal_pressure.value += (float) (ev->dx) * (mouse_sensitivity / 50.0);
@@ -275,9 +275,9 @@ void update_cyclic_pressure_inputs (void)
 				if (current_flight_dynamics->input_data.cyclic_input_pressure & CYCLIC_PRESSURE_LEFT)
 				{
 
-					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = min (0.0, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
+					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = min (0.0f, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
 
-					current_flight_dynamics->input_data.cyclic_x.value = min ((current_flight_dynamics->input_data.cyclic_x.value) / 2.0, current_flight_dynamics->input_data.cyclic_x.value);
+					current_flight_dynamics->input_data.cyclic_x.value = min ((current_flight_dynamics->input_data.cyclic_x.value) / 2.0f, current_flight_dynamics->input_data.cyclic_x.value);
 
 					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value -= MODEL_FRAME_RATE * get_model_delta_time ();
 
@@ -292,9 +292,9 @@ void update_cyclic_pressure_inputs (void)
 				else if (current_flight_dynamics->input_data.cyclic_input_pressure & CYCLIC_PRESSURE_RIGHT)
 				{
 
-					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = max (0.0, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
+					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value = max (0.0f, current_flight_dynamics->input_data.cyclic_horizontal_pressure.value);
 
-					current_flight_dynamics->input_data.cyclic_x.value = max ((current_flight_dynamics->input_data.cyclic_x.value) / 2.0, current_flight_dynamics->input_data.cyclic_x.value);
+					current_flight_dynamics->input_data.cyclic_x.value = max ((current_flight_dynamics->input_data.cyclic_x.value) / 2.0f, current_flight_dynamics->input_data.cyclic_x.value);
 
 					current_flight_dynamics->input_data.cyclic_horizontal_pressure.value += MODEL_FRAME_RATE * get_model_delta_time ();
 
@@ -326,9 +326,9 @@ void update_cyclic_pressure_inputs (void)
 				if (current_flight_dynamics->input_data.cyclic_input_pressure & CYCLIC_PRESSURE_BACKWARD)
 				{
 
-					current_flight_dynamics->input_data.cyclic_vertical_pressure.value = min (0.0, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
+					current_flight_dynamics->input_data.cyclic_vertical_pressure.value = min (0.0f, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
 
-					current_flight_dynamics->input_data.cyclic_y.value = min (current_flight_dynamics->input_data.cyclic_y.value / 2.0, current_flight_dynamics->input_data.cyclic_y.value);
+					current_flight_dynamics->input_data.cyclic_y.value = min (current_flight_dynamics->input_data.cyclic_y.value / 2.0f, current_flight_dynamics->input_data.cyclic_y.value);
 
 					current_flight_dynamics->input_data.cyclic_vertical_pressure.value -= MODEL_FRAME_RATE * get_model_delta_time ();
 
@@ -343,9 +343,9 @@ void update_cyclic_pressure_inputs (void)
 				else if (current_flight_dynamics->input_data.cyclic_input_pressure & CYCLIC_PRESSURE_FORWARD)
 				{
 
-					current_flight_dynamics->input_data.cyclic_vertical_pressure.value = max (0.0, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
+					current_flight_dynamics->input_data.cyclic_vertical_pressure.value = max (0.0f, current_flight_dynamics->input_data.cyclic_vertical_pressure.value);
 
-					current_flight_dynamics->input_data.cyclic_y.value = max (current_flight_dynamics->input_data.cyclic_y.value / 2.0, current_flight_dynamics->input_data.cyclic_y.value);
+					current_flight_dynamics->input_data.cyclic_y.value = max (current_flight_dynamics->input_data.cyclic_y.value / 2.0f, current_flight_dynamics->input_data.cyclic_y.value);
 
 					current_flight_dynamics->input_data.cyclic_vertical_pressure.value += MODEL_FRAME_RATE * get_model_delta_time ();
 

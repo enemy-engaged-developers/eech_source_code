@@ -87,9 +87,9 @@
 // IMPLICIT PARAMETERS (deg to rad and rad to deg conversion)
 //
 
-#define deg(RAD) ((RAD) * (180.0 / PI))
+#define deg(RAD) ((RAD) * (180.0f / PI))
 
-#define rad(DEG) ((DEG) * (PI / 180.0))
+#define rad(DEG) ((DEG) * (PI / 180.0f))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,17 +103,17 @@
 
 #define miles(METRES) ((METRES) * ONE_OVER_ONE_MILE)
 
-#define feet_per_minute(METRES_PER_SECOND) ((METRES_PER_SECOND) * (60.0 / ONE_FOOT))
+#define feet_per_minute(METRES_PER_SECOND) ((METRES_PER_SECOND) * (60.0f / ONE_FOOT))
 
-#define miles_per_hour(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0 * 60.0) / ONE_MILE))
+#define miles_per_hour(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0f * 60.0f) / ONE_MILE))
 
-#define metres_per_minute(METRES_PER_SECOND) ((METRES_PER_SECOND) * 60.0)
+#define metres_per_minute(METRES_PER_SECOND) ((METRES_PER_SECOND) * 60.0f)
 
-#define kilometres_per_hour(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0 * 60.0) / KILOMETRE))
+#define kilometres_per_hour(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0f * 60.0f) / KILOMETRE))
 
 #define nautical_miles(METRES) ((METRES) * ONE_OVER_ONE_NAUTICAL_MILE)
 
-#define knots(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0 * 60.0) / ONE_NAUTICAL_MILE))
+#define knots(METRES_PER_SECOND) ((METRES_PER_SECOND) * ((60.0f * 60.0f) / ONE_NAUTICAL_MILE))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,13 +123,13 @@
 // EXPLICIT PARAMETERS
 //
 
-#define metres_per_second_to_knots(METRES_PER_SECOND) (((METRES_PER_SECOND) * (60.0 * 60.0)) / ONE_NAUTICAL_MILE)
+#define metres_per_second_to_knots(METRES_PER_SECOND) (((METRES_PER_SECOND) * (60.0f * 60.0f)) / ONE_NAUTICAL_MILE)
 
-#define knots_to_metres_per_second(KNOTS) ((KNOTS) * (ONE_NAUTICAL_MILE / (60.0 * 60.0)))
+#define knots_to_metres_per_second(KNOTS) ((KNOTS) * (ONE_NAUTICAL_MILE / (60.0f * 60.0f)))
 
-#define kilometres_per_hour_to_metres_per_second(KPH) (((KPH) * 1000.0) / (60.0 * 60.0))
+#define kilometres_per_hour_to_metres_per_second(KPH) (((KPH) * 1000.0f) / (60.0f * 60.0f))
 
-#define kilograms_to_pounds(KG) ((KG) * 2.205)
+#define kilograms_to_pounds(KG) ((KG) * 2.205f)
 
 #define pounds_to_kilograms(LBS) ((LBS) * 0.4535)
 

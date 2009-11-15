@@ -85,7 +85,7 @@ void update_helicopter_weapon_fire (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-   raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (raw->ac.weapon_burst_timer > 0.0)
 	{

@@ -242,7 +242,7 @@ int load_3d_terrain ( const char *path )
 	// Memory map the ffp file
 	//
 
-	terrain_3d_geometry_data = safe_mopen ( free_form_polygon_file );
+	terrain_3d_geometry_data = ( unsigned char * ) safe_mopen ( free_form_polygon_file );
 
 	if ( !terrain_3d_geometry_data )
 	{
@@ -254,7 +254,7 @@ int load_3d_terrain ( const char *path )
 	// Memory map the colour palette file
 	//
 
-	terrain_3d_colour_data = safe_mopen ( colour_file );
+	terrain_3d_colour_data = ( unsigned char * ) safe_mopen ( colour_file );
 
 	if ( !terrain_3d_colour_data )
 	{
@@ -270,7 +270,7 @@ int load_3d_terrain ( const char *path )
 	// Memory map the sector file
 	//
 
-	terrain_3d_sector_data = safe_mopen ( sector_file );
+	terrain_3d_sector_data = ( unsigned char * ) safe_mopen ( sector_file );
 
 	if ( !terrain_3d_sector_data )
 	{
@@ -346,7 +346,7 @@ int load_3d_terrain ( const char *path )
 	// Allocate the sectors themselves.
 	//
 
-	terrain_sector_memory = safe_malloc ( terrain_3d_map_width * terrain_3d_map_height * sizeof ( terrain_3d_sector ) );
+	terrain_sector_memory = ( terrain_3d_sector * ) safe_malloc ( terrain_3d_map_width * terrain_3d_map_height * sizeof ( terrain_3d_sector ) );
 
 	if ( !terrain_sector_memory )
 	{
@@ -368,7 +368,7 @@ int load_3d_terrain ( const char *path )
 	// Allocate enough space for the arrays
 	//
 
-	terrain_sectors = safe_malloc ( terrain_3d_map_height * sizeof ( terrain_3d_sector * ) );
+	terrain_sectors = ( terrain_3d_sector * * ) safe_malloc ( terrain_3d_map_height * sizeof ( terrain_3d_sector * ) );
 
 	if ( !terrain_sectors )
 	{
@@ -549,7 +549,7 @@ int load_3d_terrain ( const char *path )
 			terrain_sector_approximations = NULL;
 		}
 
-		terrain_sector_approximations = safe_malloc ( terrain_3d_number_of_sector_approximations * sizeof ( struct TERRAIN_3D_SECTOR ) );
+		terrain_sector_approximations = ( struct TERRAIN_3D_SECTOR * ) safe_malloc ( terrain_3d_number_of_sector_approximations * sizeof ( struct TERRAIN_3D_SECTOR ) );
 
 		debug_log ( "Got %d approximated sectors", terrain_3d_number_of_sector_approximations );
 
@@ -674,12 +674,12 @@ int load_3d_terrain ( const char *path )
 		// Map the datafile
 		//
 
-		terrain_3d_trees_data = safe_mopen ( tree_data_file );
+		terrain_3d_trees_data = ( unsigned char * ) safe_mopen ( tree_data_file );
 
 		if ( terrain_3d_trees_data )
 		{
 
-			terrain_3d_sector_data = safe_mopen ( tree_sector_file );
+			terrain_3d_sector_data = ( unsigned char * ) safe_mopen ( tree_sector_file );
 
 			if ( terrain_3d_sector_data )
 			{
@@ -714,12 +714,12 @@ int load_3d_terrain ( const char *path )
 				{
 
 
-					terrain_tree_sectors = safe_malloc ( terrain_3d_tree_map_height * sizeof ( terrain_3d_tree_sector * ) );
+					terrain_tree_sectors = ( terrain_3d_tree_sector * * ) safe_malloc ( terrain_3d_tree_map_height * sizeof ( terrain_3d_tree_sector * ) );
 
 					for ( z = 0; z < terrain_3d_tree_map_height; z++ )
 					{
 
-						terrain_tree_sectors[z] = safe_malloc ( terrain_3d_tree_map_width * sizeof ( terrain_3d_tree_sector ) );
+						terrain_tree_sectors[z] = ( terrain_3d_tree_sector * ) safe_malloc ( terrain_3d_tree_map_width * sizeof ( terrain_3d_tree_sector ) );
 
 						for ( x = 0; x < terrain_3d_tree_map_width; x++ )
 						{
@@ -978,7 +978,7 @@ void initialise_3d_terrain ( void )
 	// Set the terrain texture filtering states
 	//
 
-	if ( d3d_trilinear_filtering )
+	//if ( d3d_trilinear_filtering )
 	{
 		terrain_texture_mag_filter = D3DTFG_LINEAR;
 		terrain_texture_min_filter = D3DTFN_LINEAR;
@@ -990,7 +990,7 @@ void initialise_3d_terrain ( void )
 			{ terrain_texture_mip_filter = D3DTFP_POINT; }
 //		terrain_texture_mip_filter = D3DTFP_POINT;
 	}
-	else
+	/*else
 	{
 
 		terrain_texture_mag_filter = D3DTFG_LINEAR;
@@ -1002,7 +1002,7 @@ void initialise_3d_terrain ( void )
 		else 
 			{ terrain_texture_mip_filter = D3DTFP_POINT; }
 //		terrain_texture_mip_filter = D3DTFP_POINT;
-	}
+	}*/
 
 	//
 	// Set the terrain initialised flag to FALSE - as no terrain is loaded.

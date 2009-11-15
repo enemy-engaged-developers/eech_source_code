@@ -93,7 +93,7 @@ float mobile_terrain_adjust_waypoint_height (entity *en, vec3d *wp_pos, float mi
 	mobile
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (mobile *) get_local_entity_data (en);
 
 	//
 	// find point in front of mobile
@@ -201,7 +201,7 @@ void draw_mobile_entity_debug_info (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (mobile *) get_local_entity_data (en);
 	
 	pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
@@ -470,7 +470,7 @@ void credit_client_server_mobile_kill (entity *victim, entity *aggressor)
 
 	side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 	
-	force = get_local_force_entity (side);
+	force = get_local_force_entity ((entity_sides) side);
 
 	add_mobile_to_force_kills_stats (force, victim);
 
@@ -816,7 +816,7 @@ int mobile_check_all_members_taken_off (entity *en)
 
 		if (get_local_entity_int_value (group, INT_TYPE_DEFAULT_GROUP_LIST_TYPE) == LIST_TYPE_INDEPENDENT_GROUP)
 		{
-			side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 			force = get_local_force_entity (side);
 
@@ -962,7 +962,7 @@ void play_mobile_under_attack_speech (entity *en, entity *aggressor)
 			(
 				get_session_entity (),
 				en,
-				get_local_entity_int_value (en, INT_TYPE_SIDE),
+				(entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE),
 				ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 				SOUND_LOCALITY_RADIO,
 				0.0,

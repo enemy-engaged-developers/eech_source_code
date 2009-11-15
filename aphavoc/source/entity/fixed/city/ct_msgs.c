@@ -103,7 +103,7 @@ static void update_city_bounding_box (entity *this_city, entity *this_building)
 
 	ASSERT (this_building);
 
-	raw = get_local_entity_data (this_city);
+	raw = (city *) get_local_entity_data (this_city);
 
 	//
 	// get building bounding box minmax points (assume on flat ground)

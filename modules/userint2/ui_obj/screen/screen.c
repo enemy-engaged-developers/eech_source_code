@@ -127,6 +127,7 @@ void push_ui_screen (ui_object *this_screen)
 			if (function)
 			{
 		
+				// XXX: screen is NULL here
 				function (this_screen, &screen->screen_id);
 			}
 

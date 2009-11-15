@@ -96,7 +96,7 @@ void play_entity_weapon_selected_speech (entity *en, entity_sub_types weapon_typ
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 		{
-			side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 			remove_speech_category_from_buffers (side, SPEECH_ORIGINATOR_CO_PILOT, SPEECH_CATEGORY_WEAPONS_SYSTEMS);
 

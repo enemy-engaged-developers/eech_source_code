@@ -249,7 +249,7 @@ void initialise_briefing_parser (void)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{
@@ -482,7 +482,7 @@ void initialise_briefing_parser (void)
 					result = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 					ASSERT (result == FILE_TAG_TYPE);
 	
-					medal_type = get_next_file_enum (file_ptr, medal_type_names, NUM_MEDAL_TYPES);
+					medal_type = (medal_types)get_next_file_enum (file_ptr, medal_type_names, NUM_MEDAL_TYPES);
 	
 					current_medal_list |= (1 << medal_type);
 				}
@@ -1376,7 +1376,7 @@ int get_medal_briefing_text (entity *task, int medal_type, char *medal_text)
 	
 		text_choice = get_local_entity_index (task) % this_medal->text_count;
 	
-		build_substitution_info (task, medal_type, NUM_PILOT_RANKS, this_medal->briefing_text [text_choice], medal_text);
+		build_substitution_info (task, (medal_types) medal_type, NUM_PILOT_RANKS, this_medal->briefing_text [text_choice], medal_text);
 
 		return TRUE;
 	}
@@ -1412,7 +1412,7 @@ int get_promotion_briefing_text (entity *task, int rank_type, char *rank_text)
 	
 		text_choice = get_local_entity_index (task) % this_rank->text_count;
 	
-		build_substitution_info (task, NUM_MEDAL_TYPES, rank_type, this_rank->briefing_text [text_choice], rank_text);
+		build_substitution_info (task, NUM_MEDAL_TYPES, (pilot_rank_types) rank_type, this_rank->briefing_text [text_choice], rank_text);
 
 		return TRUE;
 	}

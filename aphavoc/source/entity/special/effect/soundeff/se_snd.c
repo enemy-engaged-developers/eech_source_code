@@ -132,7 +132,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		maximum_sound_range,
 		canopy_state_amp;
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	ASSERT (raw->effect_index);
 
@@ -487,7 +487,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 
 				ASSERT (!raw->looping);
 
-				samples = malloc_fast_mem (sizeof (sound_sequence_information) * raw->sound_effect_sequence_count);
+				samples = (sound_sequence_information *) malloc_fast_mem (sizeof (sound_sequence_information) * raw->sound_effect_sequence_count);
 
 				for (sample_loop = 0; sample_loop < raw->sound_effect_sequence_count; sample_loop ++)
 				{

@@ -636,7 +636,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_int_value (en, INT_TYPE_SIDE, side);
 
-			complete = va_arg (pargs, int);
+			complete = (campaign_completed_types) va_arg (pargs, int);
 
 			pack_int_value (en, INT_TYPE_SESSION_COMPLETE, complete);
 
@@ -775,7 +775,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			ASSERT (!en);
 
-			type = va_arg (pargs, int);
+			type = (meta_explosion_types) va_arg (pargs, int);
 
 			pack_int_value (en, INT_TYPE_META_EXPLOSION_TYPE, type);
 
@@ -1259,7 +1259,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			{
 				ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-				smoke_trail_type = weapon_database[weapon_sub_type].smoke_trail_type;
+				smoke_trail_type = (meta_smoke_list_types) weapon_database[weapon_sub_type].smoke_trail_type;
 
 				ASSERT (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE);
 
@@ -1737,7 +1737,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_entity_safe_ptr (target);
 
-			type = va_arg (pargs, int);
+			type = (message_text_types) va_arg (pargs, int);
 
 			pack_int_value (en, INT_TYPE_MESSAGE_TEXT_TYPE, type);
 
@@ -2204,7 +2204,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_entity_safe_ptr (en);
 
-			raw = get_local_entity_data (en);
+			raw = (routed_vehicle *) get_local_entity_data (en);
 
 			pack_int_value (en, INT_TYPE_WAYPOINT_THIS_INDEX, raw->waypoint_this_index);
 
@@ -2380,7 +2380,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 
 			pack_entity_safe_ptr (en);
 
-			raw = get_local_entity_data (en);
+			raw = (task *) get_local_entity_data (en);
 
 			// positions
 
@@ -3052,9 +3052,9 @@ void process_received_entity_comms_messages (void)
 
 				en = unpack_entity_safe_ptr ();
 
-				side = unpack_int_value (en, INT_TYPE_SIDE);
+				side = (entity_sides) unpack_int_value (en, INT_TYPE_SIDE);
 
-				complete = unpack_int_value (en, INT_TYPE_SESSION_COMPLETE);
+				complete = (campaign_completed_types) unpack_int_value (en, INT_TYPE_SESSION_COMPLETE);
 
 				campaign_completed (side, complete);
 
@@ -3082,7 +3082,7 @@ void process_received_entity_comms_messages (void)
 
 				en = unpack_entity_safe_ptr ();
 
-				side = unpack_int_value (en, INT_TYPE_SIDE);
+				side = (entity_sides) unpack_int_value (en, INT_TYPE_SIDE);
 
 				change_local_keysite_building_sides (en, side);
 
@@ -3170,7 +3170,7 @@ void process_received_entity_comms_messages (void)
 				vec3d
 					position;
 
-				type = unpack_int_value (NULL, INT_TYPE_META_EXPLOSION_TYPE);
+				type = (meta_explosion_types) unpack_int_value (NULL, INT_TYPE_META_EXPLOSION_TYPE);
 
 				unpack_vec3d (NULL, VEC3D_TYPE_POSITION, &position);
 
@@ -3178,7 +3178,7 @@ void process_received_entity_comms_messages (void)
 
 				list_count = count_entities_in_meta_explosion (type);
 
-				entity_index_list = malloc_fast_mem (sizeof (int) * list_count);
+				entity_index_list = (int *) malloc_fast_mem (sizeof (int) * list_count);
 
 				for (loop = 0; loop < list_count; loop ++)
 				{
@@ -3224,7 +3224,7 @@ void process_received_entity_comms_messages (void)
 				vec3d
 					rel_pos;
 
-				type = unpack_int_value (NULL, INT_TYPE_META_SMOKE_LIST_TYPE);
+				type = (meta_smoke_list_types) unpack_int_value (NULL, INT_TYPE_META_SMOKE_LIST_TYPE);
 
 				parent = unpack_entity_safe_ptr ();
 
@@ -3239,7 +3239,7 @@ void process_received_entity_comms_messages (void)
 
 				list_count = count_entities_in_meta_smoke_list (type);
 
-				entity_index_list = malloc_fast_mem (sizeof (int) * list_count);
+				entity_index_list = (int *) malloc_fast_mem (sizeof (int) * list_count);
 
 				for (loop = 0; loop < list_count; loop ++)
 				{
@@ -3284,7 +3284,7 @@ void process_received_entity_comms_messages (void)
 					sub_object_depth,
 					*entity_index_list;
 
-				type = unpack_int_value (NULL, INT_TYPE_META_SMOKE_LIST_TYPE);
+				type = (meta_smoke_list_types) unpack_int_value (NULL, INT_TYPE_META_SMOKE_LIST_TYPE);
 
 				parent = unpack_entity_safe_ptr ();
 
@@ -3294,7 +3294,7 @@ void process_received_entity_comms_messages (void)
 
 				list_count = count_entities_in_meta_smoke_list (type);
 
-				entity_index_list = malloc_fast_mem (sizeof (int) * list_count);
+				entity_index_list = (int *) malloc_fast_mem (sizeof (int) * list_count);
 
 				for (loop = 0; loop < list_count; loop ++)
 				{
@@ -3389,7 +3389,7 @@ void process_received_entity_comms_messages (void)
 
 				ASSERT (sample_count > 0);
 
-				sample_index_list = malloc_fast_mem (sizeof (sound_sample_indices) * sample_count);
+				sample_index_list = (int *) malloc_fast_mem (sizeof (sound_sample_indices) * sample_count);
 
 				for (loop = 0; loop < sample_count; loop ++)
 				{
@@ -3404,10 +3404,10 @@ void process_received_entity_comms_messages (void)
 				(
 					index,
 					parent,
-					side,
+					(entity_sides) side,
 					sub_type,
-					channel,
-					locality,
+					(sound_channel_types) channel,
+					(sound_locality_types) locality,
 					pos,
 					amp,
 					pitch,
@@ -3487,7 +3487,7 @@ void process_received_entity_comms_messages (void)
 
 				count = unpack_int_value (NULL, INT_TYPE_ROUTE_LENGTH);
 
-				waypoint_indices = malloc_heap_mem (sizeof (int) * count);
+				waypoint_indices = (unsigned int *) malloc_heap_mem (sizeof (unsigned int) * count);
 
 				for (loop = 0; loop < count; loop ++)
 				{
@@ -3585,7 +3585,7 @@ void process_received_entity_comms_messages (void)
 
 				if (get_comms_model () == COMMS_MODEL_CLIENT)
 				{
-					smoke_trail_type = weapon_database[weapon_sub_type].smoke_trail_type;
+					smoke_trail_type = (meta_smoke_list_types) weapon_database[weapon_sub_type].smoke_trail_type;
 
 					if (smoke_trail_type != META_SMOKE_LIST_TYPE_NONE)
 					{
@@ -3593,7 +3593,7 @@ void process_received_entity_comms_messages (void)
 
 						ASSERT (num_smoke_trail_entities > 0);
 
-						smoke_trail_indices = malloc_fast_mem (sizeof (int) * num_smoke_trail_entities);
+						smoke_trail_indices = (int *) malloc_fast_mem (sizeof (int) * num_smoke_trail_entities);
 
 						for (i = 0; i < num_smoke_trail_entities; i++)
 						{
@@ -3676,7 +3676,7 @@ void process_received_entity_comms_messages (void)
 
 				ASSERT (en);
 
-				damage_level = unpack_int_value (en, INT_TYPE_HELICOPTER_DAMAGE_LEVEL);
+				damage_level = (gunship_damage_levels) unpack_int_value (en, INT_TYPE_HELICOPTER_DAMAGE_LEVEL);
 
 				if (en == get_gunship_entity ())
 				{
@@ -4172,7 +4172,7 @@ void process_received_entity_comms_messages (void)
 
 				target = unpack_entity_safe_ptr ();
 
-				type = unpack_int_value (NULL, INT_TYPE_MESSAGE_TEXT_TYPE);
+				type = (message_text_types) unpack_int_value (NULL, INT_TYPE_MESSAGE_TEXT_TYPE);
 
 				if (message_text_type_send_string (type))
 				{
@@ -4595,7 +4595,7 @@ void process_received_entity_comms_messages (void)
 
 				set_force_local_entity_create_stack_attributes (TRUE);
 
-				process_radio_message (en, message_type, message_value);
+				process_radio_message (en, (message_categories) message_type, message_value);
 
 				set_force_local_entity_create_stack_attributes (create_stack_attributes);
 
@@ -4700,7 +4700,7 @@ void process_received_entity_comms_messages (void)
 					{
 						target_count = min (target_count, 255);
 
-						index_list = malloc_fast_mem (sizeof (int) * target_count);
+						index_list = (int *) malloc_fast_mem (sizeof (int) * target_count);
 
 						for (loop = 0; loop < target_count; loop ++)
 						{
@@ -4759,7 +4759,7 @@ void process_received_entity_comms_messages (void)
 
 				if (get_local_entity_type (en) == ENTITY_TYPE_HELICOPTER)
 				{
-					restore_helicopter_entity (en, &pos, operational_state);
+					restore_helicopter_entity (en, &pos, (operational_state_types) operational_state);
 				}
 
 				#if DEBUG_MODULE_MESSAGE_TEXT
@@ -4870,7 +4870,7 @@ void process_received_entity_comms_messages (void)
 					if (sub_route_node)
 					{
 	
-						raw = get_local_entity_data (mb);
+						raw = (routed_vehicle *) get_local_entity_data (mb);
 		
 						raw->sub_route = sub_route_node;
 					}
@@ -4923,7 +4923,7 @@ void process_received_entity_comms_messages (void)
 
 				ASSERT (target_count > 0);
 
-				index_list = malloc_fast_mem (sizeof (int) * target_count);
+				index_list = (int *) malloc_fast_mem (sizeof (int) * target_count);
 
 				for (loop = 0; loop < target_count; loop ++)
 				{
@@ -5020,7 +5020,7 @@ void process_received_entity_comms_messages (void)
 	
 				#endif
 	
-				set_local_guide_criteria_valid (en, type, valid, value);
+				set_local_guide_criteria_valid (en, (guide_criteria_types) type, valid, value);
 
 				break;
 			}
@@ -5076,7 +5076,7 @@ void process_received_entity_comms_messages (void)
 	
 				en = unpack_entity_safe_ptr ();
 	
-				raw = get_local_entity_data (en);
+				raw = (task *) get_local_entity_data (en);
 
 				// malloc memory
 
@@ -5105,7 +5105,7 @@ void process_received_entity_comms_messages (void)
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 
-					raw->route_formation_types [loop] = unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
+					raw->route_formation_types [loop] = (formation_types) unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
 				}
 	
 				// waypoint types
@@ -5639,7 +5639,7 @@ entity_comms_messages unpack_entity_comms_message (void)
 	entity_comms_messages
 		message;
 
-	message = unpack_unsigned_data (NUM_ENTITY_COMMS_MESSAGE_PACK_BITS);
+	message = (entity_comms_messages) unpack_unsigned_data (NUM_ENTITY_COMMS_MESSAGE_PACK_BITS);
 
 	ASSERT ((message >= 0) && (message < NUM_ENTITY_COMMS_MESSAGES));
 

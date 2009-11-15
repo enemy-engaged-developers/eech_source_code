@@ -293,7 +293,7 @@ void initialise_memory_block_system (void)
 	// initialise heap memory array
 	//
 
-	array = safe_malloc (sizeof (memarray));
+	array = (memarray*) safe_malloc (sizeof (memarray));
 
 	array->type = MEM_TYPE_HEAP;
 
@@ -477,7 +477,7 @@ void create_memory_blocks (int block_size, int num_blocks)
 	// initialise memory block array
 	//
 
-	new_array = safe_malloc (sizeof (memarray));
+	new_array = (memarray*) safe_malloc (sizeof (memarray));
 
 	new_array->type = MEM_TYPE_FAST;
 

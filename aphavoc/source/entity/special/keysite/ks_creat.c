@@ -120,7 +120,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (keysite));
+		raw = (keysite *) malloc_fast_mem (sizeof (keysite));
 
 		set_local_entity_data (en, raw);
 
@@ -234,7 +234,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 			update_imap_importance_level (en, TRUE);
 
-			update_keysite_distance_to_friendly_base (en, raw->side);
+			update_keysite_distance_to_friendly_base (en, (entity_sides) raw->side);
 		}
 
 		////////////////////////////////////////

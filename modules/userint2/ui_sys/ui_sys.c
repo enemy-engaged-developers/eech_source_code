@@ -143,7 +143,7 @@ void initialise_system_ui_objects (int num_ui_objects)
 
    size = num_ui_objects * sizeof (ui_object);
 
-   ui_objects = malloc_heap_mem (size);
+   ui_objects = (ui_object*) malloc_heap_mem (size);
 
    memset (ui_objects, 0, size);
 
@@ -213,7 +213,7 @@ ui_object *get_free_ui_object (void)
 {
 
    ui_object
-      *new;
+      *new_;
 
 /*
 	{
@@ -223,46 +223,46 @@ ui_object *get_free_ui_object (void)
 	
 		count = 0;
 	
-		new = first_free_ui_object;
+		new_ = first_free_ui_object;
 	
-		while (new)
+		while (new_)
 		{
 	
 			count ++;
 	
-			new = new->succ;
+			new_ = new_->succ;
 		}
 
 		debug_log ("UI_SYS: free list count = %d", count);
 	}
 */
 
-   new = first_free_ui_object;
+   new_ = first_free_ui_object;
 
-   if (new)
+   if (new_)
    {
 
-      // unlink new ui_object from free list
+      // unlink new_ ui_object from free list
 
-      first_free_ui_object = new->succ;
+      first_free_ui_object = new_->succ;
 
-      if (new->succ)
+      if (new_->succ)
       {
 
-         new->succ->pred = NULL;
+         new_->succ->pred = NULL;
       }
 
-      // insert new ui_object into used list
+      // insert new_ ui_object into used list
 
-      new->succ = first_used_ui_object;
+      new_->succ = first_used_ui_object;
 
-      if (new->succ)
+      if (new_->succ)
       {
 
-         new->succ->pred = new;
+         new_->succ->pred = new_;
       }
 
-      first_used_ui_object = new;
+      first_used_ui_object = new_;
    }
    else
    {
@@ -270,7 +270,7 @@ ui_object *get_free_ui_object (void)
       debug_log ("WARNING! Failed to get a free ui_object");
    }
 
-   return (new);
+   return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

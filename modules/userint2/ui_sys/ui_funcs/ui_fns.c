@@ -70,29 +70,29 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void (*fn_set_ui_object_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+FUNCTION_SET fn_set_ui_object_function [NUM_UI_TYPES];
 
-void *(*fn_get_ui_object_function [NUM_UI_TYPES]) (ui_object *obj);
+FUNCTION_GET fn_get_ui_object_function [NUM_UI_TYPES];
 
-void (*fn_call_ui_object_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+FUNCTION fn_call_ui_object_function [NUM_UI_TYPES];
 
-void (*fn_set_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+FUNCTION_SET fn_set_ui_object_right_function [NUM_UI_TYPES];
 
-void *(*fn_get_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj);
+FUNCTION_GET fn_get_ui_object_right_function [NUM_UI_TYPES];
 
-void (*fn_call_ui_object_right_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+FUNCTION fn_call_ui_object_right_function [NUM_UI_TYPES];
 
-void (*fn_set_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+FUNCTION_SET fn_set_ui_object_draw_function [NUM_UI_TYPES];
 
-void *(*fn_get_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj);
+FUNCTION_GET fn_get_ui_object_draw_function [NUM_UI_TYPES];
 
-void (*fn_call_ui_object_draw_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+FUNCTION fn_call_ui_object_draw_function [NUM_UI_TYPES];
 
-void (*fn_set_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj, void (*function) (ui_object *obj, void *arg));
+FUNCTION_SET fn_set_ui_object_highlighted_function [NUM_UI_TYPES];
 
-void *(*fn_get_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj);
+FUNCTION_GET fn_get_ui_object_highlighted_function [NUM_UI_TYPES];
 
-void (*fn_call_ui_object_highlighted_function [NUM_UI_TYPES]) (ui_object *obj, void *arg);
+FUNCTION fn_call_ui_object_highlighted_function [NUM_UI_TYPES];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ void default_set_ui_object_function (ui_object *obj, void (*function) (ui_object
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void *default_get_ui_object_function (ui_object *obj)
+FUNCTION default_get_ui_object_function (ui_object *obj)
 {
 
 	obj;

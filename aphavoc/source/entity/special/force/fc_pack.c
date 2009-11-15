@@ -166,7 +166,7 @@ void pack_local_force_data (entity *en, pack_modes mode)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 	
 	switch (mode)
 	{
@@ -429,7 +429,7 @@ void unpack_local_force_data (entity *en, pack_modes mode)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (force *) get_local_entity_data (en);
 		
 	switch (mode)
 	{
@@ -545,7 +545,7 @@ void unpack_local_force_data (entity *en, pack_modes mode)
 
 			set_local_entity_type (en, ENTITY_TYPE_FORCE);
 
-			raw = malloc_fast_mem (sizeof (force));
+			raw = (force *) malloc_fast_mem (sizeof (force));
 
 			set_local_entity_data (en, raw);
 
@@ -663,7 +663,7 @@ void unpack_local_force_data (entity *en, pack_modes mode)
 
 			set_local_entity_type (en, ENTITY_TYPE_FORCE);
 
-			raw = malloc_fast_mem (sizeof (force));
+			raw = (force *) malloc_fast_mem (sizeof (force));
 
 			set_local_entity_data (en, raw);
 

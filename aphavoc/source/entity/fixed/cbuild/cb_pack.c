@@ -144,7 +144,7 @@ void pack_local_city_building_data (pack_modes mode)
 
 			count ++;
 
-			raw = get_local_entity_data (en);
+			raw = (city_building *) get_local_entity_data (en);
 
 			if (city_building_alive == raw->fix.alive)
 			{
@@ -234,7 +234,7 @@ void unpack_local_city_building_data (pack_modes mode)
 
 			city_building_count --;
 
-			raw = get_local_entity_data (destroy_en);
+			raw = (city_building *) get_local_entity_data (destroy_en);
 
 			raw->fix.alive = city_building_alive;
 

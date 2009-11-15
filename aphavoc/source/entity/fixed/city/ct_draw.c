@@ -89,7 +89,7 @@ static void draw_local_3d_object (entity *en, float range)
 		
 	float rangefactor; //Werewolf 16Apr03
 
-	raw = get_local_entity_data (en);
+	raw = (city *) get_local_entity_data (en);
 
 	//
 	// Draw all city buildings

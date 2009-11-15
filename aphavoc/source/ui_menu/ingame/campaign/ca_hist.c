@@ -192,7 +192,7 @@ void pop_campaign_history (ui_object *obj, void *arg)
 
 		pop_flag = TRUE;
 
-		display_campaign_page (page, index, FALSE);
+		display_campaign_page ((campaign_pages) page, index, FALSE);
 
 		notify_campaign_screen (CAMPAIGN_SCREEN_FORCE_UPDATE, get_local_entity_safe_ptr (index));
 

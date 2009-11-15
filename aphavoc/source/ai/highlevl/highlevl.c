@@ -354,7 +354,7 @@ int add_high_level_ai_function (void ((*function) (void)), float frequency, floa
 
 	ASSERT ((frequency > 0.0) && (frequency <= (24.0 * ONE_HOUR)));
 
-	ASSERT (fmod ((24.0 * ONE_HOUR), frequency) == 0.0);
+	ASSERT (fmod ((24.0f * ONE_HOUR), frequency) == 0.0);
 
 	offset = fmod ((start_time - get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_ELAPSED_TIME)), frequency);
 
@@ -418,13 +418,13 @@ void create_advance_and_retreat_tasks (void)
 
 		count = 0;
 
-		side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		group = get_local_entity_first_child (force, LIST_TYPE_GROUND_REGISTRY);
 
 		while ((group) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			group_raw = get_local_entity_data (group);
+			group_raw = (struct GROUP *)get_local_entity_data (group);
 	
 			if (group_database [group_raw->sub_type].frontline_flag)
 			{
@@ -453,7 +453,7 @@ void create_advance_and_retreat_tasks (void)
 						rating += (1.0 * (1.0 - get_imap_value (IMAP_BASE_DISTANCE, get_enemy_side (side), x, z)));
 
 						// near to friendly base
-						rating += (1.0 * (get_imap_value (IMAP_BASE_DISTANCE, side, x, z)));
+						rating += (1.0 * (get_imap_value (IMAP_BASE_DISTANCE, (entity_sides)side, x, z)));
 
 						//
 						// Store
@@ -485,7 +485,7 @@ void create_advance_and_retreat_tasks (void)
 			{
 				group = target_list [loop];
 				
-				group_raw = get_local_entity_data (group);
+				group_raw = (struct GROUP *)get_local_entity_data (group);
 
 				best_node = group_raw->route_node;
 				from_node = group_raw->route_node;
@@ -616,13 +616,13 @@ void create_bai_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -856,13 +856,13 @@ void create_cas_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -1068,13 +1068,13 @@ void create_keysite_strike_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -1326,13 +1326,13 @@ void create_oca_strike_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -1512,13 +1512,13 @@ void create_oca_sweep_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -1699,13 +1699,13 @@ void create_troop_insertion_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -1924,13 +1924,13 @@ void create_sead_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 	
 		target_force = get_local_entity_first_child (get_session_entity(), LIST_TYPE_FORCE);
 	
 		while ((target_force) && (count < MAX_HIGHLEVEL_TARGET_CHECKS))
 		{
-			side = get_local_entity_int_value (target_force, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (target_force, INT_TYPE_SIDE);
 	
 			if (side != this_side)
 			{
@@ -2147,7 +2147,7 @@ void create_fixed_wing_transfer_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 
 		side = get_enemy_side (this_side);
 	
@@ -2222,7 +2222,7 @@ void create_fixed_wing_transfer_tasks (void)
 						rating += 4.0 * base_distance_rating;
 	
 						// low idle group count
-						idle_group_count = min (idle_group_count, 4.0) * 0.25;
+						idle_group_count = min (idle_group_count, 4.0f) * 0.25;
 	
 						rating += 4.0 * (1.0 - idle_group_count);
 	
@@ -2275,7 +2275,7 @@ void create_fixed_wing_transfer_tasks (void)
 	
 						ASSERT (landing_en);
 						
-						landing_raw = get_local_entity_data (landing_en);
+						landing_raw = (landing*) get_local_entity_data (landing_en);
 	
 						//if (landing_raw->free_landing_sites >= 4)
 						if (get_keysite_landing_sites_available (keysite, ENTITY_SUB_TYPE_LANDING_FIXED_WING))
@@ -2367,7 +2367,7 @@ void create_helicopter_transfer_tasks (void)
 
 		count = 0;
 
-		this_side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		this_side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 
 		side = get_enemy_side (this_side);
 	
@@ -2442,7 +2442,7 @@ void create_helicopter_transfer_tasks (void)
 						rating += 4.0 * base_distance_rating;
 	
 						// low idle group count
-						idle_group_count = min (idle_group_count, 4.0) * 0.25;
+						idle_group_count = min (idle_group_count, 4.0f) * 0.25;
 	
 						rating += 4.0 * (1.0 - idle_group_count);
 	
@@ -2495,7 +2495,7 @@ void create_helicopter_transfer_tasks (void)
 	
 						ASSERT (landing_en);
 						
-						landing_raw = get_local_entity_data (landing_en);
+						landing_raw = (landing*) get_local_entity_data (landing_en);
 	
 						//if (landing_raw->free_landing_sites >= 4)
 						if (get_keysite_landing_sites_available (keysite, ENTITY_SUB_TYPE_LANDING_HELICOPTER))
@@ -2561,7 +2561,7 @@ int create_sead_tasks_around_keysite (entity *original_task, entity *keysite, en
 
 	ASSERT (keysite);
 
-	enemy_side = get_local_entity_int_value (keysite, INT_TYPE_SIDE);
+	enemy_side = (entity_sides) get_local_entity_int_value (keysite, INT_TYPE_SIDE);
 
 	force = get_local_force_entity (enemy_side);
 
@@ -2669,7 +2669,7 @@ void create_troop_patrol_tasks (void)
 
 	while (force)
 	{
-		side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 			
 		keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 	
@@ -2777,7 +2777,7 @@ void create_artillery_strike_tasks (void)
 
 	while (force)
 	{
-		side = get_local_entity_int_value (force, INT_TYPE_SIDE);
+		side = (entity_sides) get_local_entity_int_value (force, INT_TYPE_SIDE);
 
 		enemy_side = get_enemy_side (side);
 
@@ -2803,7 +2803,7 @@ void create_artillery_strike_tasks (void)
 
 		if (group_count > 0)
 		{
-			group_list = malloc_fast_mem (sizeof (entity *) * group_count);
+			group_list = (entity**)malloc_fast_mem (sizeof (entity *) * group_count);
 
 			group_count = 0;
 	
@@ -2872,7 +2872,7 @@ void create_artillery_strike_tasks (void)
 	
 			if (target_count > 0)
 			{
-				target_list = malloc_fast_mem (sizeof (entity *) * target_count);
+				target_list = (entity**)malloc_fast_mem (sizeof (entity *) * target_count);
 	
 				target_count = 0;
 		

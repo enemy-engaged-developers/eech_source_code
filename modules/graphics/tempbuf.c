@@ -183,7 +183,7 @@ void draw_temporary_translucent_polygons ( void )
 		if ( temporary_polygons[count].texture )
 		{
 
-			set_d3d_texture ( 0, load_hardware_texture_map ( temporary_polygons[count].texture ) );
+			set_d3d_texture ( 0, temporary_polygons[count].texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 
 			set_d3d_texture_stage_state ( 0, D3DTSS_ADDRESSU, temporary_polygons[count].texture_u_address );

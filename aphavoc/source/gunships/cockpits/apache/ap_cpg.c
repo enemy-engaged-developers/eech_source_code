@@ -177,7 +177,7 @@ static void switch_head_aiming_state(object_3d_sub_instance* helmet_inst)
 
 	while (!valid_state)  // until we have a valid new state
 	{
-		looking_state = rand() % NUM_CPG_ANIM_STATES;
+		looking_state = (head_looking_states) (rand() % NUM_CPG_ANIM_STATES);
 
 		#if DEBUG_MODULE
 		debug_log("try state: %d", looking_state);

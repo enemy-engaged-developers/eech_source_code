@@ -93,7 +93,7 @@ static void modify_3d_objects_approximations ( float factor );
 void initialise_application_3d_system (void)
 {
 
-  float light_level = max(min(1.0,global_night_light_level),0);
+  float light_level = max(min(1.0f,global_night_light_level),0.0f);
 	
 	
 	
@@ -1620,7 +1620,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 			set_3d_fogmode ( main_3d_env, FOGMODE_ON_MANUAL );
 
-			raw = get_local_entity_data (get_camera_entity ());
+			raw = (camera *) get_local_entity_data (get_camera_entity ());
 						
 			interference = raw->fly_by_camera_timer;
 

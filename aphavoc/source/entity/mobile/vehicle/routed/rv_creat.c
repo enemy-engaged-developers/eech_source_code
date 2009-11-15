@@ -121,7 +121,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (routed_vehicle));
+		raw = (routed_vehicle *) malloc_fast_mem (sizeof (routed_vehicle));
 
 		set_local_entity_data (en, raw);
 
@@ -300,7 +300,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// weapon config
 		//
 
-		raw->vh.weapon_package_status_array = malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
+		raw->vh.weapon_package_status_array = (weapon_package_status *) malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 		memset (raw->vh.weapon_package_status_array, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
@@ -310,7 +310,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// update force info
 		//
 
-		add_to_force_info (get_local_force_entity (raw->vh.mob.side), en);
+		add_to_force_info (get_local_force_entity ((entity_sides) raw->vh.mob.side), en);
 
 		////////////////////////////////////////
 		//

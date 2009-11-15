@@ -79,7 +79,7 @@ static void call_number_ui_object_function (ui_object *obj, void *arg)
 	number_ui_object
 		*number;
 
-	number = obj->data;
+	number = (number_ui_object *) obj->data;
 
 	function = number->area.function;
 
@@ -127,7 +127,7 @@ static void call_number_ui_object_right_function (ui_object *obj, void *arg)
 	number_ui_object
 		*number;
 
-	number = obj->data;
+	number = (number_ui_object *) obj->data;
 
 	function = number->area.right_function;
 

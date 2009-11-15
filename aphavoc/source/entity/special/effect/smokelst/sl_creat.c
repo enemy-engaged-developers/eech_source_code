@@ -129,7 +129,7 @@ static entity *create_local (entity_types type, int index, char *pargs)
 
 		set_local_entity_type (en, type);
 
-		raw = malloc_fast_mem (sizeof (smoke_list));
+		raw = (smoke_list *) malloc_fast_mem (sizeof (smoke_list));
 
 		set_local_entity_data (en, raw);
 
@@ -220,9 +220,9 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		// Build array of smoke positions, and set all to ( -1, -1, -1 ), and mark invalid
 		//
 
-		raw->position = malloc_fast_mem (sizeof (vec3d) * number_of_slots);
+		raw->position = (vec3d *) malloc_fast_mem (sizeof (vec3d) * number_of_slots);
 
-		raw->valid = malloc_fast_mem (sizeof (unsigned char) * number_of_slots);
+		raw->valid = (unsigned char *) malloc_fast_mem (sizeof (unsigned char) * number_of_slots);
 
 		for ( loop = number_of_slots - 1 ; loop >= 0 ; loop -- )
 		{
@@ -233,11 +233,11 @@ static entity *create_local (entity_types type, int index, char *pargs)
 			raw->position[ loop ].z = -1.0;
 		}
 
-		raw->motion_vector = malloc_fast_mem (sizeof (vec3d) * number_of_slots);
+		raw->motion_vector = (vec3d *) malloc_fast_mem (sizeof (vec3d) * number_of_slots);
 
 		memset( raw->motion_vector, 0, sizeof( vec3d ) * number_of_slots );
 
-		raw->start_rotation = malloc_fast_mem (sizeof (float) * number_of_slots);
+		raw->start_rotation = (float *) malloc_fast_mem (sizeof (float) * number_of_slots);
 
 		raw->head = 0;
 

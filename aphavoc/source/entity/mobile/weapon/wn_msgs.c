@@ -87,7 +87,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (weapon *) get_local_entity_data (receiver);
 
 	raw->mob.kill_next_update = TRUE;
 
@@ -114,9 +114,9 @@ static int response_to_decoy_active (entity_messages message, entity *receiver, 
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (receiver);
+	raw = (weapon *) get_local_entity_data (receiver);
 
-	decoy_type = get_local_entity_int_value (sender, INT_TYPE_WEAPON_DECOY_TYPE);
+	decoy_type = (weapon_decoy_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_DECOY_TYPE);
 
 	if (get_weapon_locked_onto_decoy (decoy_type))
 	{
@@ -271,7 +271,7 @@ static int response_to_unlink_parent (entity_messages message, entity *receiver,
 
 	#endif
 
-	raw = get_local_entity_data (receiver);
+	raw = (weapon *) get_local_entity_data (receiver);
 
 	list_type = va_arg (pargs, list_types);
 

@@ -188,7 +188,7 @@ int load_terrain_simple_elevation ( const char *filename )
 	// Memory map the file ( we won't be altering the data! )
 	//
 	
-	terrain_3d_simple_elevation_memory_map = mopen ( filename );
+	terrain_3d_simple_elevation_memory_map = ( unsigned char * ) mopen ( filename );
 	
 	if ( !terrain_3d_simple_elevation_memory_map )
 	{
@@ -325,7 +325,7 @@ void generate_terrain_simple_elevation ( float elevation_grid_size )
 
 	z_size++;
 	
-	terrain_3d_simple_elevation_grid = safe_malloc ( x_size * z_size * sizeof ( float ) );
+	terrain_3d_simple_elevation_grid = ( float * ) safe_malloc ( x_size * z_size * sizeof ( float ) );
 	
 	terrain_3d_simple_elevation_width = x_size;
 	

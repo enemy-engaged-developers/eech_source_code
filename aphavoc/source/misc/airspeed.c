@@ -174,7 +174,7 @@ float get_air_density (float altitude)
 
 	index = (int) (altitude / 1000.0);
 
-	mod = fmod (altitude, 1000.0);
+	mod = fmod (altitude, 1000.0f);
 
 	air_density = air_density_table[index + 1] - air_density_table[index];
 

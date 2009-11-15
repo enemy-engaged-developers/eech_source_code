@@ -110,7 +110,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-   raw = get_local_entity_data (en);
+   raw = (vehicle *) get_local_entity_data (en);
 
 	target = raw->mob.target_link.parent;
 
@@ -422,7 +422,7 @@ void update_vehicle_weapon_fire (entity *en)
 	{
 		if (weapon_database[raw->selected_weapon].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 		{
-			if (!check_entity_line_of_sight (en, target, MOBILE_LOS_CHECK_ALL))
+			if (!check_entity_line_of_sight (en, target, (mobile_los_check_criteria) MOBILE_LOS_CHECK_ALL))
 			{
 				if (raw->weapon_burst_timer > 0.0)
 				{
@@ -496,11 +496,11 @@ void update_vehicle_weapon_fire (entity *en)
 		// set vehicle to rearmed
 		//
 
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		if (config_type == WEAPON_CONFIG_TYPE_UNARMED)
 		{
-			config_type = get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
+			config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_DEFAULT_WEAPON_CONFIG_TYPE);
 		}
 
 		set_client_server_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
@@ -613,7 +613,7 @@ void update_vehicle_decoy_release (entity *en)
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
-	raw = get_local_entity_data (en);
+	raw = (vehicle *) get_local_entity_data (en);
 
 	////////////////////////////////////////
 	//
@@ -687,7 +687,7 @@ void update_vehicle_decoy_release (entity *en)
 
 					velocity = get_local_entity_float_value (persuer, FLOAT_TYPE_VELOCITY);
 
-					time_to_impact = range / max (velocity, 1.0);
+					time_to_impact = range / max (velocity, 1.0f);
 
 					if (time_to_impact < 10.0)
 					{
@@ -720,7 +720,7 @@ static struct FIRE_TIMER_DIFFICULTY_TABLE
 		GAME_DIFFICULTY_HARD,		0.66,
 		GAME_DIFFICULTY_MEDIUM,		1.0,
 		GAME_DIFFICULTY_EASY,		1.33,
-		-1
+		(game_difficulty_settings) -1
 	};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -742,7 +742,7 @@ float get_fire_timer_difficulty_factor (entity *en)
 
 	if (pilot_en)
 	{
-		difficulty = get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
+		difficulty = (game_difficulty_settings) get_local_entity_int_value (pilot_en, INT_TYPE_DIFFICULTY_LEVEL);
 
 		loop = 0;
 

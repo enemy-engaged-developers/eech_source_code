@@ -246,7 +246,7 @@ void display_campaign_page (campaign_pages page, int index, int add_to_history)
 			
 			if ((page != current_page) || (index != current_index))
 			{
-				push_campaign_history (current_page, current_index);
+				push_campaign_history ((campaign_pages) current_page, current_index);
 			}
 		}
 	}
@@ -307,7 +307,7 @@ campaign_pages get_current_campaign_page (void)
 		}
 	}
 
-	return current_page;
+	return (campaign_pages) current_page;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,7 +482,7 @@ static void campaign_accept_quit_campaign (event *ev)
 	// Make all pages not drawable, otherwise last page will be added to history next time a game is started.
 	//
 	
-	display_campaign_page (-1, ENTITY_INDEX_DONT_CARE, FALSE);
+	display_campaign_page ((campaign_pages) -1, ENTITY_INDEX_DONT_CARE, FALSE);
 
 	//
 	// Quit
@@ -993,7 +993,7 @@ void setup_campaign_completed_dialog (entity_sides side, campaign_completed_type
 		}
 	}
 
-	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	if (side == this_side)
 	{

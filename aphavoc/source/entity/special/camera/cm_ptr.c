@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -95,7 +95,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 		case PTR_TYPE_EXTERNAL_VIEW_ENTITY:
 		////////////////////////////////////////
 		{
-			raw->external_view_entity = ptr;
+			raw->external_view_entity = (entity *) ptr;
 
 			break;
 		}
@@ -122,7 +122,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	switch (type)
 	{

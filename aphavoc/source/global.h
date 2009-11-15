@@ -622,7 +622,7 @@ extern global_options_data
 
 ////////////////////////////////////////
 
-#define get_global_gunship_side() (global_options.gunship_side)
+#define get_global_gunship_side() ((entity_sides) global_options.gunship_side)
 
 #define set_global_gunship_side(SIDE) (global_options.gunship_side = (SIDE))
 

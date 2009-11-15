@@ -200,7 +200,7 @@ static void display_status_message (void)
 		// (screen resolution switching can be time consuming - limit delta time to ensure the message gets displayed)
 		//
 
-		status_message_timer -= min (get_delta_time (), 1.0);
+		status_message_timer -= min (get_delta_time (), 1.0f);
 
 		if (status_message_timer < 0.0)
 		{

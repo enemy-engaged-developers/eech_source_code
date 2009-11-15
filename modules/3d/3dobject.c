@@ -398,7 +398,7 @@ void pre_render_object_faces ( int object_number )
 				current_object_3d_texture = system_textures[current_object_3d_surface->texture_index];
 			}
 
-			load_hardware_texture_map ( current_object_3d_texture );
+			current_object_3d_texture;
 
 			if ( current_object_3d_surface->has_luminosity_texture )
 			{
@@ -419,7 +419,7 @@ void pre_render_object_faces ( int object_number )
 					current_object_3d_luminosity_texture = system_textures[current_object_3d_surface->luminosity_texture_index];
 				}
 
-				load_hardware_texture_map ( current_object_3d_luminosity_texture );
+				current_object_3d_luminosity_texture;
 			}
 		}
 

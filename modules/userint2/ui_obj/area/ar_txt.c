@@ -82,7 +82,7 @@ static void set_area_ui_object_text (ui_object *obj, const char *text)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->text)
 	{
@@ -138,7 +138,7 @@ static const char *get_area_ui_object_text (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->text);
 }
@@ -160,7 +160,7 @@ static void set_area_ui_object_add_text (ui_object *obj, const char *text)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if ((!area->text) || (strlen (area->text) == 0))
 	{
@@ -195,7 +195,7 @@ static void set_area_ui_object_text_justify (ui_object *obj, text_justify_types 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->text_justify = justify;
 }
@@ -210,22 +210,22 @@ static text_justify_types get_area_ui_object_text_justify (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
-	return (area->text_justify);
+	return (text_justify_types) (area->text_justify);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_font_type (ui_object *obj, int font_id)
+static void set_area_ui_object_font_type (ui_object *obj, font_types font_id)
 {
 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->font_type = font_id;
 }
@@ -234,15 +234,15 @@ static void set_area_ui_object_font_type (ui_object *obj, int font_id)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_area_ui_object_font_type (ui_object *obj)
+static font_types get_area_ui_object_font_type (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
-	return (area->font_type);
+	return (font_types) (area->font_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ static void set_area_ui_object_font_colour (ui_object *obj, char red, char green
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->font_colour_end.r = red;
 	area->font_colour_end.g = green;
@@ -278,7 +278,7 @@ static void set_area_ui_object_font_colour_end (ui_object *obj, char red, char g
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->font_colour_end.r = red;
 	area->font_colour_end.g = green;
@@ -296,7 +296,7 @@ static void set_area_ui_object_font_colour_start (ui_object *obj, char red, char
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->font_colour_start.r = red;
 	area->font_colour_start.g = green;
@@ -326,7 +326,7 @@ static rgb_colour get_area_ui_object_font_colour (ui_object *obj)
 	float
 		t;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	t = get_ui_object_bounded_t_value (obj);
 
@@ -363,7 +363,7 @@ static rgb_colour get_area_ui_object_font_colour_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->font_colour_end);
 }
@@ -378,7 +378,7 @@ static rgb_colour get_area_ui_object_font_colour_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->font_colour_start);
 }
@@ -387,13 +387,13 @@ static rgb_colour get_area_ui_object_font_colour_start (ui_object *obj)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_highlighted_font_type (ui_object *obj, int font_id)
+static void set_area_ui_object_highlighted_font_type (ui_object *obj, font_types font_id)
 {
 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_font_type = font_id;
 }
@@ -402,15 +402,15 @@ static void set_area_ui_object_highlighted_font_type (ui_object *obj, int font_i
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_area_ui_object_highlighted_font_type (ui_object *obj)
+static font_types get_area_ui_object_highlighted_font_type (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
-	return (area->highlighted_font_type);
+	return (font_types) (area->highlighted_font_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +423,7 @@ static void set_area_ui_object_highlighted_font_colour (ui_object *obj, char red
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_font_colour_end.r = red;
 	area->highlighted_font_colour_end.g = green;
@@ -446,7 +446,7 @@ static void set_area_ui_object_highlighted_font_colour_end (ui_object *obj, char
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_font_colour_end.r = red;
 	area->highlighted_font_colour_end.g = green;
@@ -464,7 +464,7 @@ static void set_area_ui_object_highlighted_font_colour_start (ui_object *obj, ch
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->highlighted_font_colour_start.r = red;
 	area->highlighted_font_colour_start.g = green;
@@ -494,7 +494,7 @@ static rgb_colour get_area_ui_object_highlighted_font_colour (ui_object *obj)
 	float
 		t;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	t = get_ui_object_bounded_t_value (obj);
 
@@ -522,7 +522,7 @@ static rgb_colour get_area_ui_object_highlighted_font_colour (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->highlighted_font_colour_start);
 	*/
@@ -538,7 +538,7 @@ static rgb_colour get_area_ui_object_highlighted_font_colour_end (ui_object *obj
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->highlighted_font_colour_end);
 }
@@ -553,7 +553,7 @@ static rgb_colour get_area_ui_object_highlighted_font_colour_start (ui_object *o
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->highlighted_font_colour_start);
 }
@@ -562,13 +562,13 @@ static rgb_colour get_area_ui_object_highlighted_font_colour_start (ui_object *o
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void set_area_ui_object_selected_font_type (ui_object *obj, int font_id)
+static void set_area_ui_object_selected_font_type (ui_object *obj, font_types font_id)
 {
 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->selected_font_type = font_id;
 }
@@ -577,15 +577,15 @@ static void set_area_ui_object_selected_font_type (ui_object *obj, int font_id)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_area_ui_object_selected_font_type (ui_object *obj)
+static font_types get_area_ui_object_selected_font_type (ui_object *obj)
 {
 	
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
-	return (area->selected_font_type);
+	return (font_types) (area->selected_font_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -598,7 +598,7 @@ static void set_area_ui_object_selected_font_colour (ui_object *obj, char red, c
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->selected_font_colour_end.r = red;
 	area->selected_font_colour_end.g = green;
@@ -621,7 +621,7 @@ static void set_area_ui_object_selected_font_colour_end (ui_object *obj, char re
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->selected_font_colour_end.r = red;
 	area->selected_font_colour_end.g = green;
@@ -639,7 +639,7 @@ static void set_area_ui_object_selected_font_colour_start (ui_object *obj, char 
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	area->selected_font_colour_start.r = red;
 	area->selected_font_colour_start.g = green;
@@ -657,7 +657,7 @@ static rgb_colour get_area_ui_object_selected_font_colour (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->selected_font_colour_start);
 }
@@ -672,7 +672,7 @@ static rgb_colour get_area_ui_object_selected_font_colour_end (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->selected_font_colour_end);
 }
@@ -687,7 +687,7 @@ static rgb_colour get_area_ui_object_selected_font_colour_start (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->selected_font_colour_start);
 }
@@ -708,7 +708,7 @@ static void set_area_ui_object_tool_tips (ui_object *obj, const char *tool_tips)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	if (area->tool_tips)
 	{
@@ -764,7 +764,7 @@ static const char *get_area_ui_object_tool_tips (ui_object *obj)
 	area_ui_object
 		*area;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	return (area->tool_tips);
 }

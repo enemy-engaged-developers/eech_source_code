@@ -87,7 +87,7 @@ static void set_local_ptr_value (entity *en, ptr_types type, void *ptr)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (cargo *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -114,7 +114,7 @@ static void *get_local_ptr_value (entity *en, ptr_types type)
 	void
 		*ptr;
 
-	raw = get_local_entity_data (en);
+	raw = (cargo *) get_local_entity_data (en);
 
 	switch (type)
 	{

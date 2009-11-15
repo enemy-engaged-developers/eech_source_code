@@ -90,7 +90,7 @@ int set_infinite_smoke_list_generating_state (entity *parent, entity_sub_types t
 	{
 		if (en->type == ENTITY_TYPE_SMOKE_LIST)
 		{
-			raw = get_local_entity_data (en);
+			raw = (smoke_list *) get_local_entity_data (en);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -137,7 +137,7 @@ int clear_smoke_list_generator_lifetime (entity *parent, entity_sub_types type)
 	{
 		if (en->type == ENTITY_TYPE_SMOKE_LIST)
 		{
-			raw = get_local_entity_data (en);
+			raw = (smoke_list *) get_local_entity_data (en);
 
 			if (raw->eff.sub_type == type)
 			{
@@ -165,7 +165,7 @@ int attach_client_server_meta_smoke_lists_to_object (entity *parent, meta_smoke_
 
 	create_count = 0;
 
-	inst3d = get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{
@@ -196,7 +196,7 @@ int attach_local_meta_smoke_lists_to_object (entity *parent, meta_smoke_list_typ
 	int
 		create_count;
 
-	inst3d = get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (parent, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	create_count = 0;
 
@@ -229,7 +229,7 @@ int attach_local_meta_smoke_lists_to_object (entity *parent, meta_smoke_list_typ
 
 				ASSERT (count);
 
-				temp_index_list = malloc_fast_mem (sizeof (int) * count);
+				temp_index_list = (int *) malloc_fast_mem (sizeof (int) * count);
 
 				for ( i = 0 ; i < count ; i ++ )
 				{

@@ -188,7 +188,7 @@ void get_local_entity_target_point (entity *en, vec3d *target_point)
 
 	ASSERT (target_point);
 
-	inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	if (inst3d)
 	{

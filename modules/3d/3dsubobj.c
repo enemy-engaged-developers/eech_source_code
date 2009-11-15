@@ -207,7 +207,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 		// Allocate memory for the table
 		//
 
-		current_sub_object_table = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY ) * number_of_unique_indices );
+		current_sub_object_table = ( struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_SUB_OBJECT_TABLE_ENTRY ) * number_of_unique_indices );
 
 		ASSERT ( current_sub_object_table );
 
@@ -223,7 +223,7 @@ void initialise_scene_quick_sub_object_search ( int scene_index )
 		// Allocate memory for the entries in the table
 		//
 
-		sub_object_table_entries = safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY * ) * total_sub_object_indices );
+		sub_object_table_entries = ( struct OBJECT_3D_DATABASE_ENTRY * * ) safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY * ) * total_sub_object_indices );
 
 		//
 		// Go through initialising the table

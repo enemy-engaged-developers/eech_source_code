@@ -87,7 +87,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -103,7 +103,7 @@ static void set_local_raw_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_WEAPON_CONFIG_TYPE:
 		////////////////////////////////////////
 		{
-			raw->weapon_config_type = value;
+			raw->weapon_config_type = (weapon_config_types) value;
 
 			break;
 		}
@@ -133,7 +133,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	switch (type)
 	{
@@ -305,7 +305,7 @@ static void set_local_int_value (entity *en, int_types type, int value)
 		case INT_TYPE_WEAPON_CONFIG_TYPE:
 		////////////////////////////////////////
 		{
-			raw->weapon_config_type = value;
+			raw->weapon_config_type = (weapon_config_types) value;
 
 			load_local_entity_weapon_config (en);
 
@@ -393,7 +393,7 @@ static int get_local_int_value (entity *en, int_types type)
 	int
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	switch (type)
 	{

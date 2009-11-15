@@ -98,15 +98,15 @@ void reset_entity_weapon_config_animation (entity *en)
 		search_weapon_system_weapon_depth,
 		package;
 
-	package_status = get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
+	package_status = (weapon_package_status *) get_local_entity_ptr_value (en, PTR_TYPE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 	if (package_status)
 	{
-		config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+		config_type = (weapon_config_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 		ASSERT (weapon_config_type_valid (config_type));
 
-		inst3d = get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
+		inst3d = (object_3d_instance *) get_local_entity_ptr_value (en, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 		ASSERT (inst3d);
 
@@ -245,7 +245,7 @@ void update_weapon_animation (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (weapon *) get_local_entity_data (en);
 
 	ASSERT (entity_sub_type_weapon_valid (raw->mob.sub_type));
 

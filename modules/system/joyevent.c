@@ -122,7 +122,7 @@ int process_joystick_event (event *ev)
 
 						ev->modifier = loop;
 
-						registered_events [ev->button][loop].function ((void *) ev);
+						registered_events [ev->button][loop].function (ev);
 					}
 				}
 			}
@@ -232,7 +232,7 @@ int process_modifiers (event *ev)
                if (registered_events [loop][button].function)
                {
 
-                  registered_events [loop][button].function ((void *) ev);
+                  registered_events [loop][button].function (ev);
 
 						#if EVENT_DEBUG
 

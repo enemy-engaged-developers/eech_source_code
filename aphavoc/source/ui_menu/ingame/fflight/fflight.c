@@ -454,7 +454,7 @@ entity *free_flight_auto_assign_gunship (void)
 	// Create list of candidates
 	//
 	
-	gunship_list = safe_malloc (sizeof (entity *) * count);
+	gunship_list = (entity **) safe_malloc (sizeof (entity *) * count);
 
 	count = 0;
 

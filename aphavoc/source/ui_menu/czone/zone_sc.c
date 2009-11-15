@@ -258,7 +258,7 @@ int combat_zone_read_text (void)
 
 	char
 		variable [64],
-		operator [64],
+		operator_ [64],
 		line [1024],
 		filename [1024];
 
@@ -292,7 +292,7 @@ int combat_zone_read_text (void)
 	while (TRUE)
 	{
 
-		tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{
@@ -300,11 +300,11 @@ int combat_zone_read_text (void)
 			case FILE_TAG_LANGUAGE_TEXT_START:
 			{
 
-				get_next_file_word (file_ptr, operator, sizeof (operator));
+				get_next_file_word (file_ptr, operator_, sizeof (operator_));
 
 				// skip script till correct language
 
-				while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+				while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 				{
 
 					#if (LANGUAGE == LANGUAGE_FRENCH)
@@ -357,11 +357,11 @@ int combat_zone_read_text (void)
 			case FILE_TAG_LANGUAGE_TEXT_END:
 			{
 
-				get_next_file_word (file_ptr, operator, sizeof (operator));
+				get_next_file_word (file_ptr, operator_, sizeof (operator_));
 
 				// skip script till end of languages
 
-				while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+				while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 				{
 
 					if (tag == FILE_TAG_LANGUAGE_TEXT_STOP)
@@ -413,16 +413,16 @@ int combat_zone_read_text (void)
 	
 				get_next_file_word (file_ptr, variable, sizeof (variable));
 
-				get_next_file_word (file_ptr, operator, sizeof (operator));
+				get_next_file_word (file_ptr, operator_, sizeof (operator_));
 
 				value = get_next_file_int (file_ptr);
 
-				if (!if_file_tag_variable (variable, operator, value))
+				if (!if_file_tag_variable (variable, operator_, value))
 				{
 
 					// skip script till endif
 
-					while (tag = get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
+					while (tag = (file_tags) get_next_file_tag (file_ptr, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG))
 					{
 
 						if ((tag == FILE_TAG_ENDIF) || (tag == FILE_TAG_END))

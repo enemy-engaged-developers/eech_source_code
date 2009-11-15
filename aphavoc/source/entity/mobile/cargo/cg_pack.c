@@ -90,7 +90,7 @@ static void pack_local_data (entity *en, pack_modes mode)
 			cargo
 				*raw;
 
-			raw = get_local_entity_data (en);
+			raw = (cargo *) get_local_entity_data (en);
 
 			pack_entity_type (get_local_entity_type (en));
 
@@ -191,7 +191,7 @@ static void unpack_local_data (entity *en, entity_types type, pack_modes mode)
 
 			set_local_entity_type (en, type);
 
-			raw = malloc_fast_mem (sizeof (cargo));
+			raw = (cargo *) malloc_fast_mem (sizeof (cargo));
 
 			set_local_entity_data (en, raw);
 

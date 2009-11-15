@@ -135,7 +135,7 @@ BOOL initialise_file_system ( void )
 	int
 		count;
 
-	file_maps = safe_malloc ( sizeof ( filemap ) * MAX_NUMBER_FILES );
+	file_maps = (filemap *) safe_malloc ( sizeof ( filemap ) * MAX_NUMBER_FILES );
 
 	for ( count = 0; count < MAX_NUMBER_FILES; count++ )
 	{

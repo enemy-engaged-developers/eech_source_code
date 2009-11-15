@@ -796,9 +796,8 @@ void get_3d_transformation_matrix_from_face_normal_and_heading (matrix3x3 result
 int check_identity_matrix3x3 (const matrix3x3 m)
 {
 
-	if (memncmp ((char *) m, (char *) &identity_matrix3x3, sizeof (matrix3x3)))
+	if (memcmp (m, &identity_matrix3x3, sizeof (matrix3x3)) == 0)
 	{
-
 		return TRUE;
 	}
 

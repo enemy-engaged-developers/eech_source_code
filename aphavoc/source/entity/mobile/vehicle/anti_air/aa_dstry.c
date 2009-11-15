@@ -98,7 +98,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	set_local_entity_int_value (en, INT_TYPE_ALIVE, FALSE);
 
@@ -323,7 +323,7 @@ static void kill_local (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	group = get_local_entity_parent (en, LIST_TYPE_MEMBER);
 
@@ -336,7 +336,7 @@ static void kill_local (entity *en)
 	// update force info
 	//
 
-	remove_from_force_info (get_local_force_entity (raw->vh.mob.side), en);
+	remove_from_force_info (get_local_force_entity ((entity_sides) raw->vh.mob.side), en);
 
 	////////////////////////////////////////
 	//
@@ -589,7 +589,7 @@ void kill_local_restored_anti_aircraft_entity (entity *en)
 	entity
 		*group;
 
-	raw = get_local_entity_data (en);
+	raw = (anti_aircraft *) get_local_entity_data (en);
 
 	// must be done before alive flag set to FALSE
 	remove_mobile_values_from_sector (get_local_entity_parent (en, LIST_TYPE_SECTOR), en);

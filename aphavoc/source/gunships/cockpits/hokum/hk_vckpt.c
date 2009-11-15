@@ -659,7 +659,7 @@ void draw_hokum_virtual_cockpit (void)
 		animate_helicopter_main_rotors (get_gunship_entity (), TRUE, FALSE);
 	}
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
 
@@ -1233,7 +1233,7 @@ void damage_hokum_virtual_cockpit_main_rotors (int seed)
 	ASSERT (virtual_cockpit_inst3d_detail_level_low_inst3d);
 	ASSERT (virtual_cockpit_inst3d_detail_level_glass_inst3d);
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 
@@ -1274,7 +1274,7 @@ void restore_hokum_virtual_cockpit_main_rotors (void)
 	ASSERT (virtual_cockpit_inst3d_detail_level_low_inst3d);
 	ASSERT (virtual_cockpit_inst3d_detail_level_glass_inst3d);
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

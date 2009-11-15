@@ -87,13 +87,13 @@ static void update_server (entity *en)
 	int
 		loop;
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	update_local_entity_view_interest_level (en);
 
 	raw->vh.sleep -= get_delta_time ();
 
-	raw->vh.sleep = max (raw->vh.sleep, 0.0);
+	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
 	#if DEBUG_MODULE
 	// debug
@@ -229,11 +229,11 @@ static void update_client (entity *en)
 	int
 		loop;
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	raw->vh.sleep -= get_delta_time ();
 
-	raw->vh.sleep = max (raw->vh.sleep, 0.0);
+	raw->vh.sleep = max (raw->vh.sleep, 0.0f);
 
 	update_local_entity_view_interest_level (en);
 

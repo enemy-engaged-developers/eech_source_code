@@ -65,6 +65,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "graphics.h"
+#include "3d/3dfunc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,22 +193,12 @@ void force_flush_triangle_buffer ( vertex_buffer_header *buffer )
 
 	if ( buffer->vertices_used )
 	{
-	
-		HRESULT
-			ret;
-
 		//
 		// Unlock the vertex buffer
 		//
 	
-		ret = IDirect3DVertexBuffer7_Unlock ( buffer->buffer );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to unlock vertex buffer, %d vertices, %d indices: %s", buffer->vertices_used, buffer->indices_index, get_d3d_error_message ( ret ) );
-		}
-	
+		f3d_vertex_unlock ( buffer->buffer );
+
 #if DEBUG_REPORT_PRIMITIVES
 		debug_log ( "Drawing triangle primitive with %d vertices", buffer->vertices_used );
 #endif
@@ -219,36 +210,10 @@ void force_flush_triangle_buffer ( vertex_buffer_header *buffer )
 		//
 		// Make sure we're not telling D3D to clip or light
 		//
+
+		set_d3d_int_state_no_flush ( D3DRENDERSTATE_CLIPPING, FALSE );
 	
-		if ( render_d3d_state_table[D3DRENDERSTATE_CLIPPING].value != FALSE )
-		{
-	
-			render_d3d_state_table[D3DRENDERSTATE_CLIPPING].value = FALSE;
-			render_d3d_state_table[D3DRENDERSTATE_CLIPPING].count++;
-	
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device, D3DRENDERSTATE_CLIPPING, FALSE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-	
-		if ( render_d3d_state_table[D3DRENDERSTATE_LIGHTING].value != FALSE )
-		{
-	
-			render_d3d_state_table[D3DRENDERSTATE_LIGHTING].value = FALSE;
-			render_d3d_state_table[D3DRENDERSTATE_LIGHTING].count++;
-	
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device, D3DRENDERSTATE_LIGHTING, FALSE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
+		set_d3d_int_state_no_flush ( D3DRENDERSTATE_LIGHTING, FALSE );
 
 //		if ( d3d_texture_batching_vertex_maximum )
 		{
@@ -258,15 +223,7 @@ void force_flush_triangle_buffer ( vertex_buffer_header *buffer )
 //			set_d3d_current_texture_pointer ( &buffer->texture );
 		}
 		
-		ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_TRIANGLELIST, buffer->buffer, 0, buffer->vertices_used, ( LPWORD ) &buffer->indices[0], ( DWORD ) buffer->indices_index, ( DWORD ) ( 0 ) );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to draw triangle indexed primitive: %s", get_d3d_error_message ( ret ) );
-	
-			debug_log ( "Vertices: %d, Indices: %d, InScene: %d", buffer->vertices_used, buffer->indices_index, d3d_in_3d_scene );
-		}
+		f3d_draw_vb ( D3DPT_TRIANGLELIST, buffer->buffer, 0, buffer->vertices_used, ( LPWORD ) &buffer->indices[0], ( DWORD ) buffer->indices_index );
 /*
 		if ( d3d_texture_batching_vertex_maximum )
 		{
@@ -317,17 +274,7 @@ void force_flush_line_buffer ( vertex_buffer_header *buffer )
 
 	if ( buffer->vertices_used )
 	{
-
-		HRESULT
-			ret;
-
-		ret = IDirect3DVertexBuffer7_Unlock ( buffer->buffer );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to unlock line vertex buffer: %s", get_ddraw_error_message ( ret ) );
-		}
+		f3d_vertex_unlock ( buffer->buffer );
 
 #if DEBUG_REPORT_PRIMITIVES
 		debug_log ( "Drawing line primitive with %d vertices", buffer->vertices_used );
@@ -337,45 +284,11 @@ void force_flush_line_buffer ( vertex_buffer_header *buffer )
 		// Make sure we're not telling D3D to clip or light
 		//
 
-		if ( render_d3d_state_table[D3DRENDERSTATE_CLIPPING].value != FALSE )
-		{
+		set_d3d_int_state_no_flush ( D3DRENDERSTATE_CLIPPING, FALSE );
 	
-			render_d3d_state_table[D3DRENDERSTATE_CLIPPING].value = FALSE;
-			render_d3d_state_table[D3DRENDERSTATE_CLIPPING].count++;
-	
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device, D3DRENDERSTATE_CLIPPING, FALSE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-	
-		if ( render_d3d_state_table[D3DRENDERSTATE_LIGHTING].value != FALSE )
-		{
-	
-			render_d3d_state_table[D3DRENDERSTATE_LIGHTING].value = FALSE;
-			render_d3d_state_table[D3DRENDERSTATE_LIGHTING].count++;
-	
-			ret = IDirect3DDevice7_SetRenderState ( d3d.device, D3DRENDERSTATE_LIGHTING, FALSE );
-		
-			if ( ret != DD_OK )
-			{
-		
-				debug_log ( "Unable to set renderstate: %s", get_ddraw_error_message ( ret ) );
-			}
-		}
-		
-		ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device, D3DPT_LINELIST, buffer->buffer, 0, buffer->vertices_used, (LPWORD) &buffer->indices[0], (DWORD) buffer->indices_index, (DWORD) 0 );
+		set_d3d_int_state_no_flush ( D3DRENDERSTATE_LIGHTING, FALSE );
 
-		if ( ret != DD_OK )
-		{
-
-			debug_log ( "Unable to draw line indexed primitive: %s", get_d3d_error_message ( ret ) );
-
-			debug_log ( "Vertices: %d, Indices: %d, InScene: %d", buffer->vertices_used, buffer->indices_index, d3d_in_3d_scene );
-		}
+		f3d_draw_vb ( D3DPT_LINELIST, buffer->buffer, 0, buffer->vertices_used, (LPWORD) &buffer->indices[0], (DWORD) buffer->indices_index );
 
 		number_of_d3d_line_primitives_drawn++;
 	}
@@ -424,24 +337,12 @@ void finalise_primitives ( void )
 
 /*void render_alpha_vertex_buffer ( int buffer, LPWORD indices, int number_of_indices )
 {
-
-	HRESULT
-		ret;
-
-	ret = IDirect3DDevice7_DrawIndexedPrimitiveVB ( d3d.device,
-																			D3DPT_TRIANGLELIST,
+	f3d_draw_vb ( D3DPT_TRIANGLELIST,
 																			d3d.alpha_vertex_buffer[buffer],
 																			0,
 																			MAXIMUM_D3D_VERTICES_IN_VERTEX_BUFFER,
 																			indices,
-																			number_of_indices,
-																			( DWORD ) ( 0 ) );
-
-	if ( ret != DD_OK )
-	{
-
-		debug_log ( "Unable to draw alpha vertex indexed primitive: %s", get_d3d_error_message ( ret ) );
-	}
+																			number_of_indices );
 }*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -598,30 +499,14 @@ void draw_line_primitive ( LPD3DTLVERTEX vertices )
 
 void draw_point_list_primitive ( int number_of_vertices )
 {
-
-	HRESULT
-		ret;
-
 	ASSERT ( number_of_vertices < 256 );
 
 	if ( d3d.point_vertex_buffer )
 	{
 	
-		ret = IDirect3DVertexBuffer7_Unlock ( d3d.point_vertex_buffer );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to unlock point vertex buffer: %s", get_ddraw_error_message ( ret ) );
-		}
-	
-		ret = IDirect3DDevice7_DrawPrimitiveVB ( d3d.device, D3DPT_POINTLIST, d3d.point_vertex_buffer, 0, number_of_vertices, 0 );
-	
-		if ( ret != DD_OK )
-		{
-	
-			debug_log ( "Unable to draw point primitive: %s", get_ddraw_error_message ( ret ) );
-		}
+		f3d_vertex_unlock ( d3d.point_vertex_buffer );
+
+		f3d_draw ( D3DPT_POINTLIST, d3d.point_vertex_buffer, 0, number_of_vertices );
 	}
 }
 

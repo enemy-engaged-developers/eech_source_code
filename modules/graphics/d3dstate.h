@@ -64,68 +64,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-struct RENDER_STATE_INFORMATION
-{
-
-	DWORD
-		value;
-
-	int
-		count;
-};
-
-typedef struct RENDER_STATE_INFORMATION render_state_information;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct TEXTURE_STATE_INFORMATION
-{
-
-	LPDIRECTDRAWSURFACEX
-		texture;
-
-	int
-		count;
-};
-
-typedef struct TEXTURE_STATE_INFORMATION texture_state_information;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct RENDER_STATE_INT_CHANGE
-{
-
-	DWORD
-		render_state,
-		value;
-};
-
-typedef struct RENDER_STATE_INT_CHANGE render_state_int_change;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct RENDER_STATE_FLOAT_CHANGE
-{
-
-	DWORD
-		render_state;
-
-	float
-		value;
-};
-
-typedef struct RENDER_STATE_FLOAT_CHANGE render_state_float_change;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 extern int
 	running_total_number_of_d3d_triangles,
 	total_number_of_d3d_triangles,
@@ -137,21 +75,9 @@ extern int
 	number_of_d3d_state_int_changes,
 	number_of_d3d_state_float_changes;
 
-extern render_state_information
-	render_d3d_state_table[];
-
-extern render_state_int_change
-	render_d3d_state_int_changes[];
-
-extern render_state_float_change
-	render_d3d_state_float_changes[];
-
 extern int
 	d3d_transparency_enabled,
 	d3d_in_order_rendering;
-
-extern D3DMATERIAL7
-	d3d_material;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,6 +117,8 @@ extern void set_d3d_material_colour ( int red, int green, int blue, int alpha, i
 
 extern void set_d3d_material_emissive_colour ( int red, int green, int blue, int alpha );
 
+void set_d3d_material_default ( void );
+
 extern void set_d3d_gouraud_shaded_renderstate ( void );
 
 extern void set_d3d_flat_shaded_textured_renderstate ( struct SCREEN *texture );
@@ -200,9 +128,11 @@ extern void set_d3d_gouraud_shaded_textured_renderstate ( struct SCREEN *texture
 
 extern void set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data );
 
+extern void set_d3d_int_state_no_flush ( D3DRENDERSTATETYPE state, DWORD data );
+
 extern void set_d3d_float_state ( D3DRENDERSTATETYPE state, float data );
 
-extern void set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture );
+extern void set_d3d_texture ( int stage, screen *texture );
 
 extern void set_d3d_texture_stage_state ( int stage, int state, int data );
 
@@ -211,7 +141,7 @@ extern void set_d3d_int_state_immediate ( D3DRENDERSTATETYPE state, DWORD data )
 
 extern void set_d3d_float_state_immediate ( D3DRENDERSTATETYPE state, float data );
 
-extern void set_d3d_texture_immediate ( int stage, LPDIRECTDRAWSURFACEX texture );
+extern void set_d3d_texture_immediate ( int stage, screen *texture );
 
 extern void set_d3d_texture_stage_state_immediate ( int stage, int state, int data );
 
@@ -220,7 +150,7 @@ extern void force_set_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data );
 
 extern void force_set_d3d_float_state ( D3DRENDERSTATETYPE state, float data );
 
-extern void force_set_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture );
+extern void force_set_d3d_texture ( int stage, screen *texture );
 
 extern void force_set_d3d_texture_stage_state ( int stage, int state, int data );
 
@@ -229,7 +159,7 @@ extern void set_deferred_d3d_int_state ( D3DRENDERSTATETYPE state, DWORD data );
 
 extern void set_deferred_d3d_float_state ( D3DRENDERSTATETYPE state, float data );
 
-extern void set_deferred_d3d_texture ( int stage, LPDIRECTDRAWSURFACEX texture );
+extern void set_deferred_d3d_texture ( int stage, screen *texture );
 
 extern void set_deferred_d3d_texture_stage_state ( int stage, int state, int data );
 
@@ -242,7 +172,7 @@ extern void get_d3d_current_texture_pointer ( vertex_buffer_texture_data *data )
 
 extern void set_d3d_current_texture_pointer ( vertex_buffer_texture_data *data );
 
-extern int get_d3d_int_state ( D3DRENDERSTATETYPE render_state );
+//extern int get_d3d_int_state ( D3DRENDERSTATETYPE render_state );
 
 extern void assert_not_alpha_blending ( void );
 

@@ -194,7 +194,7 @@ static void process_entity_sound_effect_creation (void);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int pack_session (char *buffer, int *buffer_size, pack_modes mode)
+int pack_session (unsigned char *buffer, int *buffer_size, pack_modes mode)
 {
 	entity
 		*en;
@@ -494,7 +494,7 @@ int pack_session (char *buffer, int *buffer_size, pack_modes mode)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int unpack_session (char *buffer, int buffer_size, pack_modes mode)
+int unpack_session (unsigned char *buffer, int buffer_size, pack_modes mode)
 {
 	entity
 		*en;
@@ -838,7 +838,7 @@ int register_entity_list_link_for_post_unpack_validation (struct ENTITY *en, int
 
 	new_entity_list->en = en;
 
-	new_entity_list->list_type = list_type;
+	new_entity_list->list_type = (list_types) list_type;
 
 	new_entity_list->next = entity_list_link_validation;
 
@@ -874,7 +874,7 @@ int register_entity_list_root_for_post_unpack_validation (struct ENTITY *en, int
 
 	new_entity_list->en = en;
 
-	new_entity_list->list_type = list_type;
+	new_entity_list->list_type = (list_types) list_type;
 
 	new_entity_list->next = entity_list_root_validation;
 
@@ -1316,7 +1316,7 @@ void register_attach_meta_smoke_list_to_object (entity *en, int type, object_3d_
 
 	new_smoke_list_creation->en = en;
 
-	new_smoke_list_creation->meta_smoke_type = type;
+	new_smoke_list_creation->meta_smoke_type = (meta_smoke_list_types) type;
 
 	new_smoke_list_creation->attachment_point = attachment_point;
 
@@ -1432,7 +1432,7 @@ void process_entity_sound_effect_creation (void)
 		(
 			this_sound_effect_creation->entity_index,
 			this_sound_effect_creation->en,			// parent
-			this_sound_effect_creation->side,
+			(entity_sides) this_sound_effect_creation->side,
 			this_sound_effect_creation->sub_type,
 			SOUND_CHANNEL_SOUND_EFFECT,				// only sound effects are done this way
 			SOUND_LOCALITY_ALL,

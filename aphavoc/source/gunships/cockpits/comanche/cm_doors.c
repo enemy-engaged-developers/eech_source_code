@@ -163,7 +163,7 @@ void animate_comanche_virtual_cockpit_canopy_doors (void)
 	// keep external 3D model in sync
 	//
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

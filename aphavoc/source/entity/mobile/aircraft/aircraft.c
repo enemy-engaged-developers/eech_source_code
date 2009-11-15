@@ -94,7 +94,7 @@ aircraft_damage_types aircraft_critically_damaged (entity *en)
 	int
 		percent_damaged;
 
-	raw = get_local_entity_data (en);
+	raw = (aircraft *) get_local_entity_data (en);
 
 	percent_damaged = (100 * raw->damage_level) / aircraft_database[raw->mob.sub_type].initial_damage_level;
 
@@ -190,9 +190,9 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 
 	ASSERT (aggressor);
 
-	victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
 
-	aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	last_index = NULL;
 
@@ -324,7 +324,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 					8.0,
 					SPEECH_CATEGORY_UNDER_ATTACK, 16.0,
 					aircraft_hit_victim_wingman_comments [val].introduction,
-					array_type, speech_index
+					(speech_array_types) array_type, speech_index
 				);
 			}
 
@@ -386,7 +386,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 						5.0,
 						SPEECH_CATEGORY_ATTACKING_TARGETS, 16.0,
 						aircraft_hit_aggressor_wingman_comments [val].introduction,
-						array_type, speech_index
+						(speech_array_types) array_type, speech_index
 					);
 				}
 			}
@@ -428,9 +428,9 @@ void play_aircraft_destroyed_speech (entity *victim, entity *aggressor)
 
 	ASSERT (aggressor);
 
-	victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
 
-	aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	if (aggressor_side == victim_side)
 	{
@@ -529,9 +529,9 @@ void play_aircraft_targeted_speech (entity *victim, entity *aggressor)
 
 	ASSERT (aggressor);
 
-	victim_side = get_local_entity_int_value (victim, INT_TYPE_SIDE);
+	victim_side = (entity_sides) get_local_entity_int_value (victim, INT_TYPE_SIDE);
 
-	aggressor_side = get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
+	aggressor_side = (entity_sides) get_local_entity_int_value (aggressor, INT_TYPE_SIDE);
 
 	if (victim_side == aggressor_side)
 	{
@@ -555,9 +555,9 @@ void play_aircraft_flown_into_new_sector_speech (entity *en, entity *old_sector,
 
 	ASSERT (en);
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
-	if (side == get_local_entity_int_value (new_sector, INT_TYPE_SECTOR_SIDE))
+	if (side == (entity_sides) get_local_entity_int_value (new_sector, INT_TYPE_SECTOR_SIDE))
 	{
 		//
 		// flown into friendly sector

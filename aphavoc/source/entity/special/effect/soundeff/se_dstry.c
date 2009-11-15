@@ -93,7 +93,7 @@ static void destroy_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	ASSERT (raw->effect_index);
 
@@ -227,7 +227,7 @@ static void kill_local (entity *en)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (sound_effect *) get_local_entity_data (en);
 
 	#if DEBUG_MODULE
 	

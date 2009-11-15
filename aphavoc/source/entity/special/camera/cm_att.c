@@ -89,7 +89,7 @@ static void set_local_attitude_matrix (entity *en, matrix3x3 attitude)
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	memcpy (raw->attitude, attitude, sizeof (matrix3x3));
 }
@@ -105,7 +105,7 @@ static void get_local_attitude_matrix (entity *en, matrix3x3 attitude)
 
 	ASSERT (attitude);
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	memcpy (attitude, raw->attitude, sizeof (matrix3x3));
 }
@@ -119,7 +119,7 @@ static matrix3x3 *get_local_attitude_matrix_ptr (entity *en)
 	camera
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	return (&raw->attitude);
 }
@@ -139,7 +139,7 @@ static void set_local_attitude_angles (entity *en, float heading, float pitch, f
 
 	#endif
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	get_3d_transformation_matrix (raw->attitude, heading, pitch, roll);
 }
@@ -159,7 +159,7 @@ static void get_local_attitude_angles (entity *en, float *heading, float *pitch,
 
 	ASSERT (roll);
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	*heading = get_heading_from_attitude_matrix (raw->attitude);
 
@@ -180,7 +180,7 @@ static float get_local_float_value (entity *en, float_types type)
 	float
 		value;
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	switch (type)
 	{

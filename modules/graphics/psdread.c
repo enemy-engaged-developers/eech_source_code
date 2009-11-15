@@ -150,7 +150,7 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 
 		if (*psd_theme)
 		{
-			char
+			const char
 				*ptr = strrchr(filename, '\\');
 
 			if (ptr)
@@ -470,7 +470,7 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 			// Allocate enough memory for the whole image.
 			//
 		
-			data = safe_malloc ( width * height * psd_layers[current_layer].number_of_channels );
+			data = ( char * ) safe_malloc ( width * height * psd_layers[current_layer].number_of_channels );
 
 			ASSERT ( data );
 		
@@ -642,7 +642,7 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 				}
 			}
 
-			psd_layers[current_layer].data = data;
+			psd_layers[current_layer].data = ( unsigned char * ) data;
 		}
 
 		{
@@ -681,7 +681,7 @@ void * load_psd_file ( const char *filename, int *width_return, int *height_retu
 	// Allocate enough memory for the whole image.
 	//
 
-	data = safe_malloc ( width * height * number_of_channels );
+	data = ( char * ) safe_malloc ( width * height * number_of_channels );
 
 	ASSERT ( data );
 

@@ -109,7 +109,7 @@ static void update_mslider_ui_object (ui_object *obj)
 	old_viewport_x2 = active_viewport.x_max;
 	old_viewport_y2 = active_viewport.y_max;
 
-   area = obj->data;
+   area = (area_ui_object *) obj->data;
 
 	// Scroll if required
 

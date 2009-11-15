@@ -379,9 +379,9 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 		// Trivial case : Selected Group is already doing a mission, so only display that one mission
 		//
 
-		sort_list = malloc_fast_mem (sizeof (mission_list_sort_type) * 1);
+		sort_list = (mission_list_sort_type *) malloc_fast_mem (sizeof (mission_list_sort_type) * 1);
 	
-		indices = malloc_fast_mem (sizeof (int) * 1);
+		indices = (int *) malloc_fast_mem (sizeof (int) * 1);
 	
 		mission = get_local_group_primary_task (group_filter);
 
@@ -394,7 +394,7 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 		count = 0;
 
 		sort_list [count].en = mission;
-		sort_list [count].text_type = common_list_classify_mission_text (mission);
+		sort_list [count].text_type = (common_list_text_types) common_list_classify_mission_text (mission);
 		sort_list [count].type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 		
 		indices [count] = count;
@@ -453,9 +453,9 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 	
 		if (count > 0)
 		{
-			sort_list = malloc_fast_mem (sizeof (mission_list_sort_type) * count);
+			sort_list = (mission_list_sort_type *) malloc_fast_mem (sizeof (mission_list_sort_type) * count);
 	
-			indices = malloc_fast_mem (sizeof (int) * count);
+			indices = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			count = 0;
 			
@@ -474,7 +474,7 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 							ASSERT (get_local_entity_int_value (mission, INT_TYPE_PRIMARY_TASK));
 	
 							sort_list [count].en = mission;
-							sort_list [count].text_type = common_list_classify_mission_text (mission);
+							sort_list [count].text_type = (common_list_text_types) common_list_classify_mission_text (mission);
 							sort_list [count].type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 				
 							indices [count] = count;
@@ -552,9 +552,9 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 	
 		if (count > 0)
 		{
-			sort_list = malloc_fast_mem (sizeof (mission_list_sort_type) * count);
+			sort_list = (mission_list_sort_type *) malloc_fast_mem (sizeof (mission_list_sort_type) * count);
 	
-			indices = malloc_fast_mem (sizeof (int) * count);
+			indices = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			count = 0;
 			
@@ -573,7 +573,7 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 							ASSERT (get_local_entity_int_value (mission, INT_TYPE_PRIMARY_TASK));
 	
 							sort_list [count].en = mission;
-							sort_list [count].text_type = common_list_classify_mission_text (mission);
+							sort_list [count].text_type = (common_list_text_types) common_list_classify_mission_text (mission);
 							sort_list [count].type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 				
 							indices [count] = count;
@@ -651,9 +651,9 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 	
 		if (count > 0)
 		{
-			sort_list = malloc_fast_mem (sizeof (mission_list_sort_type) * count);
+			sort_list = (mission_list_sort_type *) malloc_fast_mem (sizeof (mission_list_sort_type) * count);
 	
-			indices = malloc_fast_mem (sizeof (int) * count);
+			indices = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			count = 0;
 			
@@ -672,7 +672,7 @@ void display_sorted_collapsed_mission_list (entity *force, entity *base_filter, 
 							ASSERT (get_local_entity_int_value (mission, INT_TYPE_PRIMARY_TASK));
 	
 							sort_list [count].en = mission;
-							sort_list [count].text_type = common_list_classify_mission_text (mission);
+							sort_list [count].text_type = (common_list_text_types) common_list_classify_mission_text (mission);
 							sort_list [count].type = get_local_entity_int_value (mission, INT_TYPE_ENTITY_SUB_TYPE);
 				
 							indices [count] = count;
@@ -883,9 +883,9 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 
 		ASSERT (get_local_entity_int_value (mission_filter, INT_TYPE_VISIBLE_TASK));
 
-		sort_list = malloc_fast_mem (sizeof (group_list_sort_type) * 1);
+		sort_list = (group_list_sort_type *) malloc_fast_mem (sizeof (group_list_sort_type) * 1);
 	
-		indices = malloc_fast_mem (sizeof (int) * 1);
+		indices = (int *) malloc_fast_mem (sizeof (int) * 1);
 	
 		guide = get_local_entity_first_child (mission_filter, LIST_TYPE_GUIDE);
 
@@ -899,7 +899,7 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 		count = 0;
 
 		sort_list [count].en = group;
-		sort_list [count].text_type = common_list_classify_group_text (group);
+		sort_list [count].text_type = (common_list_text_types) common_list_classify_group_text (group);
 		sort_list [count].type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 		sort_list [count].name = get_local_entity_string (group, STRING_TYPE_DIVISION_NAME);
 		
@@ -963,9 +963,9 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 	
 		if (group_count > 0)
 		{
-			sort_list = malloc_fast_mem (sizeof (group_list_sort_type) * group_count);
+			sort_list = (group_list_sort_type *) malloc_fast_mem (sizeof (group_list_sort_type) * group_count);
 		
-			indices = malloc_fast_mem (sizeof (int) * group_count);
+			indices = (int *) malloc_fast_mem (sizeof (int) * group_count);
 		}
 		else
 		{
@@ -1000,7 +1000,7 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 					if (!primary_task)
 					{
 						sort_list [count].en = group;
-						sort_list [count].text_type = common_list_classify_group_text (group);
+						sort_list [count].text_type = (common_list_text_types) common_list_classify_group_text (group);
 						sort_list [count].name = get_local_entity_string (group, STRING_TYPE_DIVISION_NAME);
 						sort_list [count].type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 			
@@ -1031,7 +1031,7 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 				if (!primary_task)
 				{
 					sort_list [count].en = group;
-					sort_list [count].text_type = common_list_classify_group_text (group);
+					sort_list [count].text_type = (common_list_text_types) common_list_classify_group_text (group);
 					sort_list [count].name = get_local_entity_string (group, STRING_TYPE_DIVISION_NAME);
 					sort_list [count].type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 			
@@ -1097,7 +1097,7 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 						if ((!mission_filter) || (primary_task == mission_filter))
 						{
 							sort_list [count].en = group;
-							sort_list [count].text_type = common_list_classify_group_text (group);
+							sort_list [count].text_type = (common_list_text_types) common_list_classify_group_text (group);
 							sort_list [count].name = get_local_entity_string (group, STRING_TYPE_DIVISION_NAME);
 							sort_list [count].type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 				
@@ -1131,7 +1131,7 @@ void display_sorted_collapsed_group_list (entity *force, entity *base_filter, en
 					if ((!mission_filter) || (primary_task == mission_filter))
 					{
 						sort_list [count].en = group;
-						sort_list [count].text_type = common_list_classify_group_text (group);
+						sort_list [count].text_type = (common_list_text_types) common_list_classify_group_text (group);
 						sort_list [count].name = get_local_entity_string (group, STRING_TYPE_DIVISION_NAME);
 						sort_list [count].type = get_local_entity_int_value (group, INT_TYPE_ENTITY_SUB_TYPE);
 			
@@ -1226,9 +1226,9 @@ void display_sorted_collapsed_base_list (entity *force)
 	// create item list
 	//
 
-	sort_list = malloc_fast_mem (sizeof (base_list_sort_type) * count);
+	sort_list = (base_list_sort_type *) malloc_fast_mem (sizeof (base_list_sort_type) * count);
 
-	indices = malloc_fast_mem (sizeof (int) * count);
+	indices = (int *) malloc_fast_mem (sizeof (int) * count);
 
 	count = 0;
 	
@@ -1240,7 +1240,7 @@ void display_sorted_collapsed_base_list (entity *force)
 		{
 			sort_list [count].en = keysite;
 		
-			sort_list [count].text_type = common_list_classify_base_text (keysite);
+			sort_list [count].text_type = (common_list_text_types) common_list_classify_base_text (keysite);
 	
 			sort_list [count].type = get_local_entity_int_value (keysite, INT_TYPE_ENTITY_SUB_TYPE);
 	
@@ -1486,7 +1486,7 @@ void sort_mission_list (mission_list_sort_type *sort_list, int *indices, int cou
 			// Sort by mission type
 			//
 		
-			int_order = malloc_fast_mem (sizeof (int) * count);
+			int_order = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			for (loop = 0; loop < count; loop ++)
 			{
@@ -1528,7 +1528,7 @@ void sort_group_list (group_list_sort_type *sort_list, int *indices, int count)
 			// Sort by group type
 			//
 		
-			int_order = malloc_fast_mem (sizeof (int) * count);
+			int_order = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			for (loop = 0; loop < count; loop ++)
 			{
@@ -1573,7 +1573,7 @@ void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 			// Sort by base type
 			//
 		
-			int_order = malloc_fast_mem (sizeof (int) * count);
+			int_order = (int *) malloc_fast_mem (sizeof (int) * count);
 	
 			for (loop = 0; loop < count; loop ++)
 			{
@@ -1593,7 +1593,7 @@ void sort_base_list (base_list_sort_type *sort_list, int *indices, int count)
 			// Sort by base name
 			//
 		
-			string_order = malloc_fast_mem (sizeof (const char *) * count);
+			string_order = (const char **) malloc_fast_mem (sizeof (const char *) * count);
 	
 			for (loop = 0; loop < count; loop ++)
 			{

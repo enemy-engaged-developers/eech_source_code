@@ -767,7 +767,7 @@ static int get_valid_ground_radar_target (entity *target)
 
 	if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
 	{
-		target_type = get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
+		target_type = (target_types) get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
 
 		switch (target_type)
 		{
@@ -847,7 +847,7 @@ int get_gunship_target_valid_for_ground_radar (entity *target)
 
 	ASSERT (target);
 
-	target_type = get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
+	target_type = (target_types) get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
 
 	switch (target_type)
 	{
@@ -1164,7 +1164,7 @@ static entity *get_best_ground_radar_target (void)
 						// SCORE: deviation from radar scan datum
 						//
 
-						theta = min (theta, rad (45.0));
+						theta = min (theta, rad (45.0f));
 
 						delta_score = 1.0 - (theta * (1.0 / rad (45.0)));
 
@@ -2076,7 +2076,7 @@ static entity *get_best_air_radar_target (void)
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -2412,7 +2412,7 @@ static int get_selectable_air_radar_target (entity *target)
 
 	source = get_gunship_entity ();
 
-	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	////////////////////////////////////////
 	//

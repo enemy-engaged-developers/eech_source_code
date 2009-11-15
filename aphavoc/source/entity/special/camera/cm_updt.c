@@ -90,7 +90,7 @@ static void update_server (entity *en)
 	camera
 		*raw;
 
-	raw = get_local_entity_data (en);
+	raw = (camera *) get_local_entity_data (en);
 
 	ASSERT (raw->external_view_entity);
 

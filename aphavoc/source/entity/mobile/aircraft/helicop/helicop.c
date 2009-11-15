@@ -144,7 +144,7 @@ void set_gunship_entity (entity *en)
 			// Send request
 			//
 
-			send_packet (get_server_id (), PACKET_TYPE_CLIENT_GUNSHIP_REQUEST, (void *) &pilot_data, sizeof (client_gunship_request_data), SEND_TYPE_PERSONAL);
+			send_packet (get_server_id (), PACKET_TYPE_CLIENT_GUNSHIP_REQUEST, (unsigned char *) &pilot_data, sizeof (client_gunship_request_data), SEND_TYPE_PERSONAL);
 		}
 	}
 }
@@ -247,7 +247,7 @@ void assign_entity_to_user (entity *en)
 			set_min_time_acceleration (NULL);
 		}
 
-		set_global_gunship_type (get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE));
+		set_global_gunship_type ((gunship_types) get_local_entity_int_value (en, INT_TYPE_GUNSHIP_TYPE));
 	}
 	else
 	{
@@ -446,7 +446,7 @@ void assign_entity_to_user (entity *en)
 
 		set_current_flight_dynamics_fuel_weight (fuel);
 
-		restore_helicopter_entity (en, NULL, get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
+		restore_helicopter_entity (en, NULL, (operational_state_types) get_local_entity_int_value (en, INT_TYPE_OPERATIONAL_STATE));
 
 		//
 		// set view mode
@@ -496,7 +496,7 @@ void assign_entity_to_user (entity *en)
 			if (pos)
 			{
 				sec = get_local_sector_entity(pos);
-				gunship_current_sector = get_local_entity_data(sec);
+				gunship_current_sector = (sector *) get_local_entity_data(sec);
 			}
 		}
 
@@ -1470,7 +1470,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (raw->main_rotor_rpm >= HELICOPTER_ROTOR_SOUNDS_LOOPING_MAX_RPM_VALUE)
 	{
@@ -1648,7 +1648,7 @@ float kill_sound_effect(entity* en, entity_sub_types type)
 		{
 			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == type)
 			{
-				sound_raw = get_local_entity_data (spec);
+				sound_raw = (sound_effect *) get_local_entity_data (spec);
 
 				if (sound_raw->valid_sound_effect)
 				{
@@ -1699,7 +1699,7 @@ void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine
 	ASSERT ((direction == 1) || (direction == -1));
 	ASSERT (engine_num >= 0 && engine_num <= 2);
 
-	raw = get_local_entity_data (en);
+	raw = (helicopter *) get_local_entity_data (en);
 
 	if (direction == 1)
 	{
@@ -1744,7 +1744,7 @@ void play_helicopter_winding_rotor_sounds (entity *en, int direction, int engine
 		{
 			if (get_local_entity_int_value (spec, INT_TYPE_ENTITY_SUB_TYPE) == start_type)
 			{
-				sound_raw = get_local_entity_data (spec);
+				sound_raw = (sound_effect *) get_local_entity_data (spec);
 
 				if (!sound_raw->valid_sound_effect)
 				{
@@ -2136,7 +2136,7 @@ int helicopter_within_keysite_area (entity *en)
 
 	hc_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 
-	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_local_entity_int_value (en, INT_TYPE_SIDE), hc_position, 5 * KILOMETRE, &actual_range, NULL);
+	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE), hc_position, 5 * KILOMETRE, &actual_range, NULL);
 
 	if (keysite)
 	{
@@ -2196,15 +2196,15 @@ int helicopter_within_keysite_area (entity *en)
 				position.x = position.x * cos (-heading) + position.z * sin (-heading);
 				position.z = position.z * cos (-heading) - position.x * sin (-heading);
 
-				inst3d = get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
+				inst3d = (object_3d_instance *) get_local_entity_ptr_value (ship, PTR_TYPE_INSTANCE_3D_OBJECT);
 
 				bounding_box = get_object_3d_bounding_box_without_lines (inst3d->object_number);
 
 				// make sure that the keysite is at least 200 m radius
-				xmin = min (bounding_box->xmin, -200.0);
-				xmax = max (bounding_box->xmax, 200.0);
-				zmin = min (bounding_box->zmin, -200.0);
-				zmax = max (bounding_box->zmax, 200.0);
+				xmin = min (bounding_box->xmin, -200.0f);
+				xmax = max (bounding_box->xmax, 200.0f);
+				zmin = min (bounding_box->zmin, -200.0f);
+				zmax = max (bounding_box->zmax, 200.0f);
 
 				break;
 			}
@@ -2220,10 +2220,10 @@ int helicopter_within_keysite_area (entity *en)
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the keysite is at least 400 m radius
-				xmin = min (bounding_box->xmin, -400.0);
-				xmax = max (bounding_box->xmax, 400.0);
-				zmin = min (bounding_box->zmin, -400.0);
-				zmax = max (bounding_box->zmax, 400.0);
+				xmin = min (bounding_box->xmin, -400.0f);
+				xmax = max (bounding_box->xmax, 400.0f);
+				zmin = min (bounding_box->zmin, -400.0f);
+				zmax = max (bounding_box->zmax, 400.0f);
 
 				break;
 			}
@@ -2239,10 +2239,10 @@ int helicopter_within_keysite_area (entity *en)
 				bounding_box = get_object_3d_bounding_box_without_lines (get_local_entity_int_value (keysite, INT_TYPE_OBJECT_INDEX));
 
 				// make sure that the airbase is at least 400 m radius
-				xmin = min (bounding_box->xmin, -400.0);
-				xmax = max (bounding_box->xmax, 400.0);
-				zmin = min (bounding_box->zmin, -400.0);
-				zmax = max (bounding_box->zmax, 400.0);
+				xmin = min (bounding_box->xmin, -400.0f);
+				xmax = max (bounding_box->xmax, 400.0f);
+				zmin = min (bounding_box->zmin, -400.0f);
+				zmax = max (bounding_box->zmax, 400.0f);
 
 				break;
 			}

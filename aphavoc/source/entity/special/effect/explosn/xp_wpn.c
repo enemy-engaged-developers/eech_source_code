@@ -149,7 +149,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -161,7 +161,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -173,7 +173,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_EARTH_META_EXPLOSION, table);
 
@@ -185,7 +185,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_WATER_META_EXPLOSION, table);
 
@@ -197,7 +197,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_AP_META_EXPLOSION, table);
 
@@ -209,7 +209,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -221,7 +221,7 @@ void initialise_ball_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 }
@@ -259,7 +259,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -271,7 +271,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -283,7 +283,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -297,7 +297,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
@@ -311,7 +311,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_AP_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -325,7 +325,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -339,7 +339,7 @@ void initialise_high_explosive_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, META_EXPLOSION_TYPE_NONE, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -379,7 +379,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -391,7 +391,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -403,7 +403,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_EARTH_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_EARTH_META_EXPLOSION, table);
@@ -417,7 +417,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
@@ -431,7 +431,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_AP_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_AP_META_EXPLOSION, table);
@@ -445,7 +445,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -457,7 +457,7 @@ void initialise_armour_piercing_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 }
@@ -495,7 +495,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
 
@@ -507,7 +507,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -519,7 +519,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -533,7 +533,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_WATER_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_WATER_META_EXPLOSION, table);
@@ -547,7 +547,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -561,7 +561,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
 
@@ -569,7 +569,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -583,7 +583,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, SMALL_HE_META_EXPLOSION, table);
 
@@ -592,7 +592,7 @@ void initialise_heat_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, 99, SMALL_HE_META_EXPLOSION, table);
 	add_explosion_criteria (1, kill_code, 100, 999, MEDIUM_HE_META_EXPLOSION, table);
@@ -632,7 +632,7 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -644,7 +644,7 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -656,7 +656,7 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, PURPLE_FLARE_META_EXPLOSION, table);
 
@@ -668,7 +668,7 @@ void initialise_smoke_grenade_explosion_criteria_table ()
 
 	table->kill_code_criteria_count [kill_code] = count;
 
-	table->kill_code_criteria [kill_code] = malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
+	table->kill_code_criteria [kill_code] = (weapon_explosion_kill_code_criteria *) malloc_heap_mem (sizeof (weapon_explosion_kill_code_criteria) * count);
 
 	add_explosion_criteria (0, kill_code, 0, INT_MAX, META_EXPLOSION_TYPE_NONE, table);
 
@@ -706,7 +706,7 @@ void deinitialise_weapon_explosion_criteria_tables ()
 	weapon_explosion_criteria
 		*table;
 
-	weapon_kill_codes
+	int
 		kill_code;
 
 	///////////////////////////////////////////////////////////////////////
@@ -803,7 +803,7 @@ meta_explosion_types get_suitable_weapon_explosion_type( entity *en, weapon_kill
 	weapon_explosion_criteria
 		*criteria_table;
 
-	warhead_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
+	warhead_type = (weapon_warhead_types) get_local_entity_int_value (en, INT_TYPE_WEAPON_WARHEAD_TYPE);
 
 	//
 	// get relevant criteria table, based on warhead type

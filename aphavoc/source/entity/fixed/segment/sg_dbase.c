@@ -787,7 +787,7 @@ object_3d_index_numbers get_bridge_segment_damaged_object (entity *en, entity *p
 		pred_alive,
 		succ_alive;
 
-	bridge_segment_type = get_local_entity_int_value (en, INT_TYPE_BRIDGE_SEGMENT_TYPE);
+	bridge_segment_type = (bridge_segment_types) get_local_entity_int_value (en, INT_TYPE_BRIDGE_SEGMENT_TYPE);
 
 	alive = get_local_entity_int_value (en, INT_TYPE_ALIVE);
 

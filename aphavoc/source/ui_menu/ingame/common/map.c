@@ -374,7 +374,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 
 	ASSERT (map_dimensions);
 
-	this_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	this_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	enemy_side = get_enemy_side (this_side);
 
@@ -658,7 +658,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 
 	font_height = ui_get_font_height ();
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	wp1 = get_local_entity_first_child (en, LIST_TYPE_WAYPOINT);
 
@@ -842,7 +842,7 @@ void draw_task_waypoint_routes (ui_object *obj, entity *en)
 		// Could be coded with a static ptr for "route" so the route is only generated with the task "en" changes...
 		//
 
-		route = temp_create_generic_waypoint_route (NULL, en, get_local_entity_ptr_value (en, PTR_TYPE_RETURN_KEYSITE), NULL, 0);
+		route = temp_create_generic_waypoint_route (NULL, en, (entity *) get_local_entity_ptr_value (en, PTR_TYPE_RETURN_KEYSITE), NULL, 0);
 
 		temp_route = route;
 
@@ -1288,7 +1288,7 @@ static int check_visible_entity (ui_object *obj, entity *en)
 
 	sector = get_local_sector_entity (pos);
 
-	if (get_sector_fog_of_war_value (sector, side) > 0.25)
+	if (get_sector_fog_of_war_value (sector, (entity_sides) side) > 0.25)
 	{
 		return TRUE;
 	}
@@ -1717,7 +1717,7 @@ void toggle_full_screen_function (ui_object *obj, void *arg)
 	{
 		ASSERT (*(map_dimensions->full_screen_parent));
 
-		info_area = get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
+		info_area = (ui_object *) get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
 
 		if (map_dimensions->full_screen)
 		{
@@ -1823,7 +1823,7 @@ static void minimize_full_screen_function (map_dimension_type *map_dimensions)
 			// Minimize map
 			//
 
-			info_area = get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
+			info_area = (ui_object *) get_ui_object_user_ptr (*(map_dimensions->full_screen_parent));
 
 			set_ui_object_drawable (*(map_dimensions->full_screen_parent), FALSE);
 
@@ -1910,7 +1910,7 @@ void map_goto_function (ui_object *obj)
 
 				altitude = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_RADAR_ALTITUDE);
 
-				altitude = min (altitude, 100.0);
+				altitude = min (altitude, 100.0f);
 
 				pos.y = get_3d_terrain_elevation (pos.x, pos.z) + altitude;
 
@@ -2367,7 +2367,7 @@ static void map_draw_threat_circle (ui_object *obj, entity *group, int circle_si
 
 		if (screen_radius > 0.0)
 		{
-			side = get_local_entity_int_value (group, INT_TYPE_SIDE);
+			side = (entity_sides) get_local_entity_int_value (group, INT_TYPE_SIDE);
 
 			if (side == ENTITY_SIDE_BLUE_FORCE)
 			{
@@ -2536,7 +2536,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 
 	ASSERT (map_dimensions);
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 	is_friendly = side == get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	if (get_gunship_entity ())
@@ -2569,7 +2569,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 		{
 			if (check_visible_entity (obj, member))
 			{
-				icon = get_local_entity_int_value (member, INT_TYPE_MAP_ICON);
+				icon = (map_icon_type) get_local_entity_int_value (member, INT_TYPE_MAP_ICON);
 
 				if (icon != MAP_ICON_NONE)
 				{
@@ -2590,7 +2590,7 @@ static void map_draw_group (ui_object *obj, entity *en)
 
 		if (check_visible_entity (obj, en))
 		{
-			icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
+			icon = (map_icon_type) get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
 
 			if (icon != MAP_ICON_NONE)
 			{
@@ -2756,7 +2756,7 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 
 	col = ui_colour_white;
 
-	side = get_local_entity_int_value (en, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (en, INT_TYPE_SIDE);
 
 	switch (side)
 	{
@@ -2778,7 +2778,7 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 
 	ASSERT (map_dimensions);
 
-	pilot_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	pilot_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	pilot_force = get_local_force_entity (pilot_side);
 
@@ -2792,7 +2792,7 @@ static void map_draw_keysite (ui_object *obj, entity *en, map_icon_type overlay_
 		// Draw Icon
 		//
 
-		icon = get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
+		icon = (map_icon_type) get_local_entity_int_value (en, INT_TYPE_MAP_ICON);
 
 		ASSERT (icon != MAP_ICON_NONE);
 
@@ -3562,7 +3562,7 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 			}
 			else
 			{
-				base = get_local_entity_ptr_value (en, PTR_TYPE_RETURN_KEYSITE);
+				base = (entity *) get_local_entity_ptr_value (en, PTR_TYPE_RETURN_KEYSITE);
 			}
 
 			if (base)
@@ -3611,7 +3611,7 @@ static void map_draw_highlighted_mission (ui_object *obj, entity *en, int overla
 			// Draw Base Icon
 			//
 
-			map_draw_keysite (obj, base, overlay_icon);
+			map_draw_keysite (obj, base, (map_icon_type) overlay_icon);
 		}
 	}
 
@@ -3642,7 +3642,7 @@ static void map_draw_highlighted_base (ui_object *obj, entity *en, int overlay_i
 	// Draw selected Base
 	//
 
-	map_draw_keysite (obj, en, overlay_icon);
+	map_draw_keysite (obj, en, (map_icon_type) overlay_icon);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3693,7 +3693,7 @@ static void map_draw_highlighted_waypoint (ui_object *obj, entity *en, int overl
 
 	ASSERT (task);
 
-	side = get_local_entity_int_value (task, INT_TYPE_SIDE);
+	side = (entity_sides) get_local_entity_int_value (task, INT_TYPE_SIDE);
 
 	map_draw_entity_icon (obj, en, pos, icon, side, ICON_RESOLUTION_SCALE);
 
@@ -4156,7 +4156,7 @@ static void create_fog_of_war_texture_overlay (void)
 
 			ASSERT (sec);
 
-			val = 140.0 * (1.0 - (get_sector_fog_of_war_value (sec, side) / max_fog));
+			val = 140.0 * (1.0 - (get_sector_fog_of_war_value (sec, (entity_sides) side) / max_fog));
 
 			convert_float_to_int (val, &fog);
 
@@ -4417,7 +4417,7 @@ void add_map_event (int type, float x, float z, float lifetime)
 	map_event_type
 		*new_event;
 
-	new_event = malloc_fast_mem (sizeof (map_event_type));
+	new_event = (map_event_type *) malloc_fast_mem (sizeof (map_event_type));
 
 	new_event->type = type;
 	new_event->x = x;

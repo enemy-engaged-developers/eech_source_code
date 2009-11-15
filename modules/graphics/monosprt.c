@@ -81,7 +81,7 @@
 void draw_mono_sprite (const char *sprite_ptr, const float x, const float y, const rgb_colour colour)
 {
 
-	if (get_screen_pixel_width (active_screen) == 2)
+	if ( active_screen->pixel_length <= 16 )
 	{
 		int
 			width,
@@ -107,7 +107,7 @@ void draw_mono_sprite (const char *sprite_ptr, const float x, const float y, con
 		unsigned short int
 			col;
 	
-		col = get_rgb_packed_value (colour);
+		col = get_packed_colour (colour);
 	
 		width = *sprite_ptr++;
 		height = *sprite_ptr++;

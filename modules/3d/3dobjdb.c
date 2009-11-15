@@ -396,7 +396,7 @@ static void read_keyframes ( FILE *fp, int *number_of_keyframes, struct OBJECT_3
 
 	ASSERT ( *number_of_keyframes );
 
-	*keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) * *number_of_keyframes );
+	*keyframes = ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME * ) safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_KEYFRAME ) * *number_of_keyframes );
 
 	for ( keyframe_count = 0; keyframe_count < *number_of_keyframes; keyframe_count++ )
 	{
@@ -434,7 +434,7 @@ static void read_value_keyframes ( FILE *fp, int *number_of_keyframes, struct OB
 		return;
 	}
 
-	*keyframes = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME ) * *number_of_keyframes );
+	*keyframes = ( struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME * ) safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_VALUE_KEYFRAME ) * *number_of_keyframes );
 
 	for ( keyframe_count = 0; keyframe_count < *number_of_keyframes; keyframe_count++ )
 	{
@@ -829,7 +829,7 @@ static void read_scene ( FILE *fp )
 		int
 			camera_count;
 
-		objects_3d_scene_database[scene_index].cameras = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA_INFO ) * number_of_scene_cameras );
+		objects_3d_scene_database[scene_index].cameras = ( struct OBJECT_3D_SCENE_CAMERA_INFO * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA_INFO ) * number_of_scene_cameras );
 
 		ASSERT ( objects_3d_scene_database[scene_index].cameras );
 
@@ -868,7 +868,7 @@ static void read_scene ( FILE *fp )
 		struct OBJECT_3D_SCENE_LINK_OBJECT
 			*objects_3d_scene_link_ptr;
 
-		objects_3d_scene_link_ptr = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_LINK_OBJECT ) * number_of_scene_links );
+		objects_3d_scene_link_ptr = ( struct OBJECT_3D_SCENE_LINK_OBJECT * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_LINK_OBJECT ) * number_of_scene_links );
 		objects_3d_scene_database[scene_index].scene_link_objects = objects_3d_scene_link_ptr;
 		for ( tmp = 0; tmp < number_of_scene_links; tmp++ )
 		{
@@ -910,7 +910,7 @@ static void read_scene ( FILE *fp )
 		struct OBJECT_3D_SPRITE_LIGHT
 			*objects_3d_scene_sprite_light_ptr;
 
-		objects_3d_scene_sprite_light_ptr = safe_malloc ( sizeof ( struct OBJECT_3D_SPRITE_LIGHT ) * number_of_sprite_lights );
+		objects_3d_scene_sprite_light_ptr = ( struct OBJECT_3D_SPRITE_LIGHT * ) safe_malloc ( sizeof ( struct OBJECT_3D_SPRITE_LIGHT ) * number_of_sprite_lights );
 		objects_3d_scene_database[scene_index].sprite_lights = objects_3d_scene_sprite_light_ptr;
 
 		for ( tmp = 0; tmp < number_of_sprite_lights; tmp++ )
@@ -948,11 +948,11 @@ static void read_scene ( FILE *fp )
 	fread ( &number_of_scene_named_sub_objects, sizeof ( int ), 1, fp );
 
 	if ( number_of_scene_named_sub_objects )
-		current_scene_sub_object_index_array = safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * number_of_scene_named_sub_objects );
+		current_scene_sub_object_index_array = ( struct OBJECT_3D_SUB_OBJECT_INDEX * ) safe_malloc ( sizeof ( struct OBJECT_3D_SUB_OBJECT_INDEX ) * number_of_scene_named_sub_objects );
 	else
 		current_scene_sub_object_index_array = NULL;
 	if ( number_of_scene_sub_objects )
-		current_scene_sub_object_array = safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY ) * number_of_scene_sub_objects );
+		current_scene_sub_object_array = ( struct OBJECT_3D_DATABASE_ENTRY * ) safe_malloc ( sizeof ( struct OBJECT_3D_DATABASE_ENTRY ) * number_of_scene_sub_objects );
 	else
 		current_scene_sub_object_array = NULL;
 
@@ -970,7 +970,7 @@ static void read_scene ( FILE *fp )
 
 	if ( number_of_texture_animations )
 	{
-		objects_3d_scene_database[scene_index].texture_animations = safe_malloc ( sizeof ( int ) * number_of_texture_animations );
+		objects_3d_scene_database[scene_index].texture_animations = ( int * ) safe_malloc ( sizeof ( int ) * number_of_texture_animations );
 
 		for ( tmp = 0; tmp < number_of_texture_animations; tmp++ )
 			fread ( &objects_3d_scene_database[scene_index].texture_animations[tmp], sizeof ( int ), 1, fp );
@@ -992,7 +992,7 @@ static void read_scene ( FILE *fp )
 
 	if ( number_of_approximations )
 	{
-		objects_3d_scene_database[scene_index].approximations = safe_malloc ( sizeof ( struct OBJECT_3D_APPROXIMATION_INFO ) * objects_3d_scene_database[scene_index].number_of_approximations );
+		objects_3d_scene_database[scene_index].approximations = ( struct OBJECT_3D_APPROXIMATION_INFO * ) safe_malloc ( sizeof ( struct OBJECT_3D_APPROXIMATION_INFO ) * objects_3d_scene_database[scene_index].number_of_approximations );
 		//
 		// Read any approximation information in
 		//
@@ -1183,7 +1183,7 @@ void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigne
 	char indent[128];
 	int i, nsubs;
 
-	for (i = 0; i < min(level * 2,127); i++)
+	for (i = 0; i < min(level * 2,127u); i++)
 		indent[i] = ' ';
 	indent[i] = '\0';
 
@@ -1326,63 +1326,63 @@ int read_object ( object_3d *obj, const char* filename )
 
 	if ( obj->number_of_points )  // read all points
 	{
-		obj->points = safe_malloc ( 6 * obj->number_of_points );
+		obj->points = ( struct OBJECT_SHORT_3D_POINT * ) safe_malloc ( 6 * obj->number_of_points );
 		fread ( obj->points, 6, obj->number_of_points, file );
 	}
 	else
 		obj->points = NULL;
 	if ( number_of_polygoned_faces )  // number of points in each poly
 	{
-		obj->faces = safe_malloc ( 1 * number_of_polygoned_faces );
+		obj->faces = ( struct OBJECT_3D_FACE * ) safe_malloc ( 1 * number_of_polygoned_faces );
 		fread ( obj->faces, 1, number_of_polygoned_faces, file );
 	}
 	else
 		obj->faces = NULL;
 	if ( obj->number_of_point_normals )
 	{
-		obj->point_normals = safe_malloc ( 2 * obj->number_of_point_normals );
+		obj->point_normals = ( struct OBJECT_3D_HEADING_PITCH_NORMAL * ) safe_malloc ( 2 * obj->number_of_point_normals );
 		fread ( obj->point_normals, 2, obj->number_of_point_normals, file );
 	}
 	else
 		obj->point_normals = NULL;
 	if ( number_of_point_references )  // the points of all faces in same order as faces
 	{
-		obj->object_faces_point_plain_list = safe_malloc ( 1 * number_of_point_references );
+		obj->object_faces_point_plain_list = ( struct POINT_3D_SHORT_REFERENCE * ) safe_malloc ( 1 * number_of_point_references );
 		fread ( obj->object_faces_point_plain_list, 1, number_of_point_references, file );
 	}
 	else
 		obj->object_faces_point_plain_list = NULL;
 	if ( obj->number_of_surfaces )
 	{
-		obj->surfaces = safe_malloc ( 16 * obj->number_of_surfaces );
+		obj->surfaces = ( struct FACE_SURFACE_DESCRIPTION * ) safe_malloc ( 16 * obj->number_of_surfaces );
 		fread ( obj->surfaces, 16, obj->number_of_surfaces, file );
 	}
 	else
 		obj->surfaces = NULL;
 	if ( number_of_face_normals )   // read face normals
 	{
-		obj->object_face_normal_references = safe_malloc ( 2 * number_of_face_normals );
+		obj->object_face_normal_references = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_malloc ( 2 * number_of_face_normals );
 		fread ( obj->object_face_normal_references, 2, number_of_face_normals, file );
 	}
 	else
 		obj->object_face_normal_references = NULL;
 	if ( number_of_texture_points )
 	{
-		obj->surface_texture_points = safe_malloc ( 8 * number_of_texture_points );
+		obj->surface_texture_points = ( struct OBJECT_3D_SHORT_TEXTURED_POINT * ) safe_malloc ( 8 * number_of_texture_points );
 		fread ( obj->surface_texture_points, 8, number_of_texture_points, file );
 	}
 	else
 		obj->surface_texture_points = NULL;
 	if ( number_of_surface_point_references )
 	{
-		obj->surface_points = safe_malloc ( 2 * number_of_surface_point_references );
+		obj->surface_points = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_malloc ( 2 * number_of_surface_point_references );
 		fread ( obj->surface_points, 2, number_of_surface_point_references, file );
 	}
 	else
 		obj->surface_points = NULL;
 	if ( number_of_surface_point_normals )
 	{
-		obj->surface_point_normals = safe_malloc ( 2 * number_of_surface_point_normals );
+		obj->surface_point_normals = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_malloc ( 2 * number_of_surface_point_normals );
 		fread ( obj->surface_point_normals, 2, number_of_surface_point_normals, file );
 	}
 	else
@@ -1505,16 +1505,16 @@ void initialise_3d_objects ( const char *directory )
 	fp = safe_fopen ( filename, "rb" );
 
 	sprintf ( filename, "%s\\3dobjs.pts", directory );
-	object_database_points = safe_mopen ( filename );
+	object_database_points = ( struct OBJECT_SHORT_3D_POINT * ) safe_mopen ( filename );
 
 	sprintf ( filename, "%s\\3dobjs.sp", directory );
-	object_database_surface_point_list = safe_mopen ( filename );
+	object_database_surface_point_list = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_mopen ( filename );
 
 	sprintf ( filename, "%s\\3dobjs.spn", directory );
-	object_database_surface_point_normal_list = safe_mopen ( filename );
+	object_database_surface_point_normal_list = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_mopen ( filename );
 
 	sprintf ( filename, "%s\\3dobjs.spt", directory );
-	object_database_surface_point_texture_list = safe_mopen ( filename );
+	object_database_surface_point_texture_list = ( struct OBJECT_3D_SHORT_TEXTURED_POINT * ) safe_mopen ( filename );
 
 #if REPORT_OBJECT_STATS
 	debug_log ( "Reading in 3d objects" );
@@ -1539,7 +1539,7 @@ void initialise_3d_objects ( const char *directory )
 
 	total_number_of_raw_3d_objects = total_number_of_objects + custom_number_of_objects;
 
-	objects_3d_data = safe_malloc ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
+	objects_3d_data = ( struct OBJECT_3D * ) safe_malloc ( ( total_number_of_raw_3d_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
 	memset ( objects_3d_data, 0, ( total_number_of_raw_3d_objects + 1 ) * sizeof ( struct OBJECT_3D ) );
 
 	//
@@ -1588,31 +1588,31 @@ void initialise_3d_objects ( const char *directory )
 	if ( total_number_of_polygons )
 	{
 
-		object_database_faces = safe_malloc ( sizeof ( object_3d_face ) * total_number_of_polygons );
+		object_database_faces = ( struct OBJECT_3D_FACE * ) safe_malloc ( sizeof ( object_3d_face ) * total_number_of_polygons );
 	}
 
 	if ( total_number_of_point_normals )
 	{
 
-		object_database_point_normals = safe_malloc ( sizeof ( object_3d_heading_pitch_normal ) * total_number_of_point_normals );
+		object_database_point_normals = ( struct OBJECT_3D_HEADING_PITCH_NORMAL * ) safe_malloc ( sizeof ( object_3d_heading_pitch_normal ) * total_number_of_point_normals );
 	}
 
 	if ( total_number_of_surfaces )
 	{
 
-		object_database_surfaces = safe_malloc ( sizeof ( face_surface_description ) * total_number_of_surfaces );
+		object_database_surfaces = ( struct FACE_SURFACE_DESCRIPTION * ) safe_malloc ( sizeof ( face_surface_description ) * total_number_of_surfaces );
 	}
 
 	if ( total_number_of_plain_points )
 	{
 
-		object_database_faces_point_list = safe_malloc ( sizeof ( point_3d_short_reference ) * total_number_of_plain_points );
+		object_database_faces_point_list = ( struct POINT_3D_SHORT_REFERENCE * ) safe_malloc ( sizeof ( point_3d_short_reference ) * total_number_of_plain_points );
 	}
 
 	if ( total_number_of_face_normal_points )
 	{
 
-		object_database_faces_face_normal_list = safe_malloc ( sizeof ( point_3d_plain_reference ) * total_number_of_face_normal_points );
+		object_database_faces_face_normal_list = ( struct POINT_3D_PLAIN_REFERENCE * ) safe_malloc ( sizeof ( point_3d_plain_reference ) * total_number_of_face_normal_points );
 	}
 
 	current_points = object_database_points;
@@ -1873,7 +1873,7 @@ void initialise_3d_objects ( const char *directory )
 
 	ASSERT ( total_number_of_scenes );
 
-	objects_3d_scene_database = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_DATABASE_ENTRY ) * OBJECT_3D_LAST );
+	objects_3d_scene_database = ( struct OBJECT_3D_SCENE_DATABASE_ENTRY * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_DATABASE_ENTRY ) * OBJECT_3D_LAST );
 
 	ASSERT ( objects_3d_scene_database );
 
@@ -1908,7 +1908,7 @@ void initialise_3d_objects ( const char *directory )
 
 	if ( total_number_of_cameras )
 	{
-		objects_3d_camera_database = safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA ) * ( total_number_of_cameras + custom_number_of_cameras ) );
+		objects_3d_camera_database = ( struct OBJECT_3D_SCENE_CAMERA * ) safe_malloc ( sizeof ( struct OBJECT_3D_SCENE_CAMERA ) * ( total_number_of_cameras + custom_number_of_cameras ) );
 
 		for ( count = 0; count < total_number_of_cameras; count++ )
 			read_camera ( fp, &objects_3d_camera_database[count] );
@@ -1929,7 +1929,7 @@ void initialise_3d_objects ( const char *directory )
 
 		for ( count = 1; count <= total_number_of_objects; count++ )
 			number_of_surfaces += objects_3d_data[count].number_of_surfaces;
-		surfaces = safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
+		surfaces = ( FACE_SURFACE_DESCRIPTION * ) safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
 		cursurface = surfaces;
 		for ( count = 1; count <= total_number_of_objects; count++ )
 		{
@@ -2467,10 +2467,10 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	if ( objects_3d_scene_database[index].total_number_of_sub_objects )
 	{
 
-		object_3d_sub_instance_construction_array = safe_malloc ( sizeof ( object_3d_sub_instance ) * objects_3d_scene_database[index].total_number_of_sub_objects );
+		object_3d_sub_instance_construction_array = ( object_3d_sub_instance * ) safe_malloc ( sizeof ( object_3d_sub_instance ) * objects_3d_scene_database[index].total_number_of_sub_objects );
 	}
 
-	object = safe_malloc ( sizeof ( object_3d_instance ) );
+	object = ( object_3d_instance * ) safe_malloc ( sizeof ( object_3d_instance ) );
 
 	object->object_number = index;
 
@@ -2483,7 +2483,7 @@ object_3d_instance *construct_3d_object ( object_3d_index_numbers index )
 	if ( objects_3d_scene_database[count].number_of_texture_animations )
 	{
 
-		object->texture_animations = malloc_fast_mem ( sizeof ( int ) * objects_3d_scene_database[count].number_of_texture_animations );
+		object->texture_animations = ( int * ) malloc_fast_mem ( sizeof ( int ) * objects_3d_scene_database[count].number_of_texture_animations );
 
 		ASSERT ( object->texture_animations );
 

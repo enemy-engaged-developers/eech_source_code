@@ -224,7 +224,7 @@ vec3d	*get_pylon_cable_lines_in_sector (entity *sector_en, int *number_of_lines)
 
 	max_number_of_lines = number_of_pylons_in_sector * NUM_PYLON_ATTACHMENT_POINTS * (NUMBER_OF_PYLON_CABLE_POINTS - 1);
 
-	pylon_sector_line_points = malloc_fast_mem (sizeof (vec3d) * max_number_of_lines * 2);
+	pylon_sector_line_points = (vec3d *) malloc_fast_mem (sizeof (vec3d) * max_number_of_lines * 2);
 
 	//
 	// process each pylon pair
@@ -236,7 +236,7 @@ vec3d	*get_pylon_cable_lines_in_sector (entity *sector_en, int *number_of_lines)
 	{
 		if (en->type == ENTITY_TYPE_PYLON)
 		{
-			raw = get_local_entity_data (en);
+			raw = (pylon *) get_local_entity_data (en);
 
 			if (raw->fix.alive)
 			{
@@ -247,7 +247,7 @@ vec3d	*get_pylon_cable_lines_in_sector (entity *sector_en, int *number_of_lines)
 
 				if (raw->succ)
 				{
-					succ = get_local_entity_data (raw->succ);
+					succ = (pylon *) get_local_entity_data (raw->succ);
 
 					if (succ->fix.alive)
 					{	

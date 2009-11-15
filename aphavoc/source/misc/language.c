@@ -207,17 +207,17 @@ void initialise_alphabet_pointers (void)
 language_struct *initialise_translation (void)
 {
 	language_struct
-		*new;
+		*new_;
 
-	new = safe_malloc (sizeof (language_struct));
+	new_ = (language_struct*) safe_malloc (sizeof (language_struct));
 
-	new->tag = NULL;
+	new_->tag = NULL;
 
-	new->translation = NULL;
+	new_->translation = NULL;
 
-	new->next = NULL;
+	new_->next = NULL;
 
-	return new;
+	return new_;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,7 +338,7 @@ void initialise_language_file (FILE *fp)
 	// read entries
 	while (!end)
 	{
-		tag = get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{	
@@ -781,7 +781,7 @@ void preprocess_language_file (FILE *fp, FILE *fp_out)
 	// read entries
 	while (!end)
 	{
-		tag = get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
+		tag = (file_tags) get_next_file_tag (fp, application_tag_strings, FILE_TAG_APPLICATION_LAST_TAG);
 
 		switch (tag)
 		{	

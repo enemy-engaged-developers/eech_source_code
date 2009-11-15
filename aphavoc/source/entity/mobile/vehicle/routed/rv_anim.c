@@ -121,7 +121,7 @@ void animate_routed_vehicle_wheels (entity *en)
 		return;
 	}
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	inst3d = raw->vh.inst3d;
 
@@ -330,7 +330,7 @@ void damage_routed_vehicle_3d_object (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	//
 	// destruct old object
@@ -364,7 +364,7 @@ void set_routed_vehicle_id_number (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	if (raw->vh.mob.side == ENTITY_SIDE_BLUE_FORCE)
 	{

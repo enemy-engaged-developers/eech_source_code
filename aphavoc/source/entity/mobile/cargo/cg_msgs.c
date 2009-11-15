@@ -165,7 +165,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 	cargo
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (cargo *) get_local_entity_data (receiver);
 
 	position = va_arg (pargs, vec3d *);
 

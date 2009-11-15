@@ -349,7 +349,7 @@ entity_types unpack_entity_type (void)
 	entity_types
 		type;
 
-	type = unpack_unsigned_data (NUM_ENTITY_TYPE_PACK_BITS);
+	type = (entity_types) unpack_unsigned_data (NUM_ENTITY_TYPE_PACK_BITS);
 
 	ASSERT ((type >= 0) && (type < NUM_ENTITY_TYPES));
 

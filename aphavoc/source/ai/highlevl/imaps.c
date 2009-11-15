@@ -101,17 +101,17 @@ void initialise_imaps (void)
 
 	for (loop = 0; loop < NUM_IMAP_TYPES; loop ++)
 	{
-		imaps [loop] = malloc_heap_mem (sizeof (unsigned char *) * NUM_ENTITY_SIDES);
+		imaps [loop] = (unsigned char**) malloc_heap_mem (sizeof (unsigned char *) * NUM_ENTITY_SIDES);
 
 		for (side = 0; side < NUM_ENTITY_SIDES; side ++)
 		{
-			imaps [loop][side] = malloc_heap_mem (sizeof (unsigned char) * NUM_MAP_Z_SECTORS * NUM_MAP_X_SECTORS);
+			imaps [loop][side] = (unsigned char*) malloc_heap_mem (sizeof (unsigned char) * NUM_MAP_Z_SECTORS * NUM_MAP_X_SECTORS);
 		}
 	}
 
 	// temporary array
 
-	imap_temp_array = malloc_heap_mem (sizeof (float) * NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS);
+	imap_temp_array = (float*)malloc_heap_mem (sizeof (float) * NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS);
 
 	imaps_initialised = TRUE;
 }
@@ -303,7 +303,7 @@ static float update_sector_side (int sx, int sz, entity_sides side, int in_use, 
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector*)get_local_entity_data (en);
 
 	if (scale > 0.0)
 	{
@@ -382,17 +382,17 @@ void update_imap_sector_side (entity *en, int in_use)
 
 		for (z = MIN_MAP_Z_SECTOR; z <= MAX_MAP_Z_SECTOR ; z ++)
 		{
-			dz = (constant * fabs (z - sz)) + 1.0;
+			dz = (constant * fabs ((float)(z - sz))) + 1.0;
 
 			for (x = MIN_MAP_X_SECTOR; x <= MAX_MAP_X_SECTOR ; x ++)
 			{
-				dx = (constant * fabs (x - sx)) + 1.0;
+				dx = (constant * fabs ((float)(x - sx))) + 1.0;
 
 				d2 = ((dx * dx) + (dz * dz));
 
 				scale = max_val / d2;
 
-				update_sector_side (x, z, side, in_use, scale);
+				update_sector_side (x, z, (entity_sides)side, in_use, scale);
 			}
 		}
 	}
@@ -422,7 +422,7 @@ static float update_sector_importance_level (int sx, int sz, entity_sides side, 
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector*) get_local_entity_data (en);
 
 	if (scale > 0.0)
 	{
@@ -522,7 +522,7 @@ void update_imap_importance_level (entity *en, int in_use)
 				{
 					scale = 1.0 - scale;
 
-					update_sector_importance_level (sx + x, sz + z, side, in_use, importance * scale);
+					update_sector_importance_level (sx + x, sz + z, (entity_sides)side, in_use, importance * scale);
 				}
 			}
 		}
@@ -559,7 +559,7 @@ void normalise_importance_imaps (void)
 
 				ASSERT (sec);
 
-				raw = get_local_entity_data (sec);
+				raw = (sector*) get_local_entity_data (sec);
 
 				val = raw->importance_level [side];
 
@@ -595,7 +595,7 @@ static float update_sector_distance_to_friendly_base (int sx, int sz, entity_sid
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector*) get_local_entity_data (en);
 
 	if (scale > 0.0)
 	{
@@ -713,7 +713,7 @@ void update_imap_distance_to_friendly_base (entity_sides side)
 
 			ASSERT (sec);
 
-			raw = get_local_entity_data (sec);
+			raw = (sector*) get_local_entity_data (sec);
 
 			raw->distance_to_friendly_base [side] = 0.0;
 		}
@@ -776,7 +776,7 @@ void normalise_base_distance_imaps (void)
 
 				ASSERT (sec);
 
-				raw = get_local_entity_data (sec);
+				raw = (sector*) get_local_entity_data (sec);
 
 				val = raw->distance_to_friendly_base [side];
 
@@ -812,7 +812,7 @@ static float update_sector_surface_to_air_defence_level (int sx, int sz, entity_
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector*) get_local_entity_data (en);
 
 	if (scale > 0.0)
 	{
@@ -904,7 +904,7 @@ void update_imap_surface_to_air_defence_level (entity *en, entity *sector, int i
 				{
 					scale = 1.0 - scale;
 
-					update_sector_surface_to_air_defence_level (sx + x, sz + z, side, in_use, value * scale);
+					update_sector_surface_to_air_defence_level (sx + x, sz + z, (entity_sides)side, in_use, value * scale);
 				}
 			}
 		}
@@ -941,7 +941,7 @@ void normalise_air_defence_imaps (void)
 
 				ASSERT (sec);
 
-				raw = get_local_entity_data (sec);
+				raw = (sector*) get_local_entity_data (sec);
 
 				val = raw->surface_to_air_defence_level [side];
 
@@ -977,7 +977,7 @@ static float update_sector_surface_to_surface_defence_level (int sx, int sz, ent
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (sector*) get_local_entity_data (en);
 
 	if (scale > 0.0)
 	{
@@ -1069,7 +1069,7 @@ void update_imap_surface_to_surface_defence_level (entity *en, entity *sector, i
 				{
 					scale = 1.0 - scale;
 
-					update_sector_surface_to_surface_defence_level (sx + x, sz + z, side, in_use, value * scale);
+					update_sector_surface_to_surface_defence_level (sx + x, sz + z, (entity_sides)side, in_use, value * scale);
 				}
 			}
 		}
@@ -1106,7 +1106,7 @@ void normalise_surface_defence_imaps (void)
 
 				ASSERT (sec);
 
-				raw = get_local_entity_data (sec);
+				raw = (sector*) get_local_entity_data (sec);
 
 				val = raw->surface_to_surface_defence_level [side];
 
@@ -1128,7 +1128,7 @@ void normalise_surface_defence_imaps (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_side_influence_map (unsigned char *filename)
+static void output_sector_side_influence_map (const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1157,7 +1157,7 @@ static void output_sector_side_influence_map (unsigned char *filename)
 
 	ASSERT (filename);
 
-	output = safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3);
+	output = (unsigned char*) safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3);
 
 	memset (output, 0, (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3));
 				
@@ -1169,7 +1169,7 @@ static void output_sector_side_influence_map (unsigned char *filename)
 
 			ASSERT (sec);
 
-			raw = get_local_entity_data (sec);
+			raw = (sector*) get_local_entity_data (sec);
 
 			total = raw->sector_side [ENTITY_SIDE_BLUE_FORCE] + raw->sector_side [ENTITY_SIDE_RED_FORCE];
 
@@ -1211,7 +1211,7 @@ static void output_sector_side_influence_map (unsigned char *filename)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_side_normalised_influence_map (unsigned char *filename)
+static void output_sector_side_normalised_influence_map (const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1231,7 +1231,7 @@ static void output_sector_side_normalised_influence_map (unsigned char *filename
 
 	ASSERT (filename);
 
-	output = safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3);
+	output = (unsigned char*) safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3);
 
 	memset (output, 0, (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS * 3));
 				
@@ -1284,7 +1284,7 @@ static void output_sector_side_normalised_influence_map (unsigned char *filename
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_fog_of_war_influence_map (entity_sides side, unsigned char *filename)
+static void output_sector_fog_of_war_influence_map (entity_sides side, const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1313,7 +1313,7 @@ static void output_sector_fog_of_war_influence_map (entity_sides side, unsigned 
 
 	max_fog = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_FOG_OF_WAR_MAXIMUM_VALUE);
 
-	output = safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS);
+	output = (unsigned char*) safe_malloc (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS);
 
 	memset (output, 0, (NUM_MAP_X_SECTORS * NUM_MAP_Z_SECTORS));
 				
@@ -1346,7 +1346,7 @@ static void output_sector_fog_of_war_influence_map (entity_sides side, unsigned 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_surface_to_air_influence_map (entity_sides side, unsigned char *filename)
+static void output_sector_surface_to_air_influence_map (entity_sides side, const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1374,7 +1374,7 @@ static void output_sector_surface_to_air_influence_map (entity_sides side, unsig
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_surface_to_surface_influence_map (entity_sides side, unsigned char *filename)
+static void output_sector_surface_to_surface_influence_map (entity_sides side, const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1402,7 +1402,7 @@ static void output_sector_surface_to_surface_influence_map (entity_sides side, u
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_importance_influence_map (entity_sides side, unsigned char *filename)
+static void output_sector_importance_influence_map (entity_sides side, const char *filename)
 {
 	#ifdef DEBUG
 
@@ -1430,7 +1430,7 @@ static void output_sector_importance_influence_map (entity_sides side, unsigned 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void output_sector_distance_to_friendly_base_influence_map (entity_sides side, unsigned char *filename)
+static void output_sector_distance_to_friendly_base_influence_map (entity_sides side, const char *filename)
 {
 	#ifdef DEBUG
 

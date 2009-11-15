@@ -79,7 +79,7 @@ static void set_toggle_ui_object_state (ui_object *obj, int flag)
 	ui_object
 		*parent;
 
-	area = obj->data;
+	area = (area_ui_object *) obj->data;
 
 	parent = get_ui_object_parent (obj);
 

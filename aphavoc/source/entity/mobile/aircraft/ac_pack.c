@@ -440,9 +440,9 @@ void unpack_aircraft_data (entity *en, aircraft *raw, pack_modes mode)
 
 			////////////////////////////////////////
 
-			raw->weapon_config_type = unpack_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+			raw->weapon_config_type = (weapon_config_types) unpack_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
-			raw->weapon_package_status_array = malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
+			raw->weapon_package_status_array = (weapon_package_status *) malloc_fast_mem (SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 
 			memset (raw->weapon_package_status_array, 0, SIZE_WEAPON_PACKAGE_STATUS_ARRAY);
 

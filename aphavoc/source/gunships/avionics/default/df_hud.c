@@ -1056,7 +1056,7 @@ static void draw_pitch_ladder (int draw_horizon_line_only)
 
 	roll = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_ROLL);
 
-	mod_pitch = fmod (pitch, rad (10.0));
+	mod_pitch = fmod (pitch, rad (10.0f));
 
 	tan_mod_pitch = -tan (mod_pitch);
 
@@ -3117,7 +3117,7 @@ void draw_default_hud (void)
 
 	hud_viewport_y_max = HUD_VIEWPORT_SIZE - 0.001;
 */
-	hud_viewport_size = HUD_VIEWPORT_SIZE * min( 1.0, global_hud_size2); //VJ
+	hud_viewport_size = HUD_VIEWPORT_SIZE * min( 1.0f, global_hud_size2); //VJ
    
 	hud_viewport_x_org = hud_viewport_size * 0.5;
    

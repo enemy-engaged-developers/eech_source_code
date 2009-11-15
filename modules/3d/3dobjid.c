@@ -154,10 +154,10 @@ void initialise_3d_objects_info ( const char *directory )
 		length += strlen ( object_invalid_index ) + 1;
 		length += strlen ( uninitialized_name ) + 1;
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
-		object_3d_information_database = safe_malloc ( OBJECT_3D_LAST * sizeof ( object_3d_information ) );
-		object_3d_enumeration_names = safe_malloc ( OBJECT_3D_LAST * sizeof ( char * ) );
+		object_3d_information_database = ( object_3d_information * ) safe_malloc ( OBJECT_3D_LAST * sizeof ( object_3d_information ) );
+		object_3d_enumeration_names = ( const char * * ) safe_malloc ( OBJECT_3D_LAST * sizeof ( char * ) );
 
 		object_3d_enumeration_names[0] = ptr;
 		object_3d_information_database[0].name = ptr;
@@ -203,13 +203,13 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_sub_object_names )
 	{
 
-		object_3d_sub_object_names = safe_malloc ( object_3d_number_of_sub_object_names * sizeof ( char * ) );
+		object_3d_sub_object_names = ( const char * * ) safe_malloc ( object_3d_number_of_sub_object_names * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
 		length += strlen ( "INVALID_SUB_OBJECT_INDEX" ) + 1;
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		object_3d_sub_object_names[0] = ptr;
 
@@ -241,13 +241,13 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_camera_names )
 	{
 
-		object_3d_camera_names = safe_malloc ( object_3d_number_of_camera_names * sizeof ( char * ) );
+		object_3d_camera_names = ( const char * * ) safe_malloc ( object_3d_number_of_camera_names * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
 		length += strlen ( "INVALID_CAMERA_INDEX" ) + 1;
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		object_3d_camera_names[0] = ptr;
 
@@ -279,11 +279,11 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( object_3d_number_of_camoflage_set_names )
 	{
 
-		object_3d_camoflage_set_names = safe_malloc ( object_3d_number_of_camoflage_set_names * sizeof ( char * ) );
+		object_3d_camoflage_set_names = ( const char * * ) safe_malloc ( object_3d_number_of_camoflage_set_names * sizeof ( char * ) );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < object_3d_number_of_camoflage_set_names; count++ )
 		{
@@ -309,13 +309,13 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( number_of_texture_animations )
 	{
 
-		texture_animations = safe_malloc ( sizeof ( texture_animation_information ) * number_of_texture_animations );
+		texture_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * number_of_texture_animations );
 
-		texture_animation_names = safe_malloc ( sizeof ( char * ) * number_of_texture_animations );
+		texture_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * number_of_texture_animations );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < number_of_texture_animations; count++ )
 		{
@@ -336,7 +336,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 			texture_animations[count].number_of_frames = number_of_frames;
 			texture_animations[count].current_frame = 0;
-			texture_animations[count].texture_indices = safe_malloc ( sizeof ( int ) * number_of_frames );
+			texture_animations[count].texture_indices = ( int * ) safe_malloc ( sizeof ( int ) * number_of_frames );
 
 			for ( temp = 0; temp < number_of_frames; temp++ )
 			{
@@ -357,13 +357,13 @@ void initialise_3d_objects_info ( const char *directory )
 	if ( number_of_displacement_animations )
 	{
 
-		displacement_animations = safe_malloc ( sizeof ( texture_animation_information ) * number_of_displacement_animations );
+		displacement_animations = ( texture_animation_information * ) safe_malloc ( sizeof ( texture_animation_information ) * number_of_displacement_animations );
 
-		displacement_animation_names = safe_malloc ( sizeof ( char * ) * number_of_displacement_animations );
+		displacement_animation_names = ( const char * * ) safe_malloc ( sizeof ( char * ) * number_of_displacement_animations );
 
 		fread ( &length, sizeof ( int ), 1, fp );
 
-		ptr = safe_malloc ( length * sizeof ( char ) );
+		ptr = ( char * ) safe_malloc ( length * sizeof ( char ) );
 
 		for ( count = 0; count < number_of_displacement_animations; count++ )
 		{
@@ -382,7 +382,7 @@ void initialise_3d_objects_info ( const char *directory )
 
 			displacement_animations[count].number_of_frames = number_of_frames;
 			displacement_animations[count].current_frame = 0;
-			displacement_animations[count].texture_indices = safe_malloc ( sizeof ( int ) * number_of_frames );
+			displacement_animations[count].texture_indices = ( int * ) safe_malloc ( sizeof ( int ) * number_of_frames );
 
 			for ( temp = 0; temp < number_of_frames; temp++ )
 			{

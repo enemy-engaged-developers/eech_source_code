@@ -108,7 +108,7 @@ BOOL initialise_direct_sound ( void )
 		{
 			// crh 030320 lack of (void *) cast generates a warning with open watcom
 			// feel free to yell at me if this is a problem
-			register_exit_function ( (void *)dsound_release_objects );
+			register_exit_function ( ( void (*) ( void ) ) dsound_release_objects );
 
 			register_post_activate_message_function ( dsound_restore_objects );
 		

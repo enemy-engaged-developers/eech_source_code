@@ -777,7 +777,7 @@ static void animate_doors(void)
 	if (open_door && door_handle_timer < 0.4)
 		new_state += max(-door_state, -door_movement_rate);
 	else
-		new_state += min(1.0 - door_state, door_movement_rate);
+		new_state += min(1.0f - door_state, door_movement_rate);
 
 
 	if (new_state != door_state)
@@ -1798,7 +1798,7 @@ void draw_hind_external_3d_cockpit (unsigned int flags, unsigned char *wiper_rle
 						animate_helicopter_main_rotors (get_gunship_entity (), TRUE, FALSE);
 					}
 
-					inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+					inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 					theta = get_rotation_angle_of_helicopter_main_rotors (inst3d);
 
@@ -2195,7 +2195,7 @@ void damage_hind_3d_cockpit_main_rotors (int seed)
 
 	ASSERT (virtual_cockpit_main_rotor_inst3d);
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 
@@ -2224,7 +2224,7 @@ void restore_hind_3d_cockpit_main_rotors (void)
 
 	ASSERT (virtual_cockpit_main_rotor_inst3d);
 
-	inst3d = get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
+	inst3d = (object_3d_instance *) get_local_entity_ptr_value (get_gunship_entity (), PTR_TYPE_INSTANCE_3D_OBJECT);
 
 	ASSERT (inst3d);
 

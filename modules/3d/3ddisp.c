@@ -96,7 +96,7 @@ void initialise_3d_displacement_maps ( const char *filename )
 	if ( number_of_displacement_maps )
 	{
 
-		displacement_maps = safe_malloc ( sizeof ( displacement_map ) * number_of_displacement_maps );
+		displacement_maps = ( displacement_map * ) safe_malloc ( sizeof ( displacement_map ) * number_of_displacement_maps );
 	
 		for ( count = 0; count < number_of_displacement_maps; count++ )
 		{
@@ -111,7 +111,7 @@ void initialise_3d_displacement_maps ( const char *filename )
 			displacement_maps[count].width = width;
 			displacement_maps[count].height = height;
 
-			displacement_maps[count].data = safe_malloc ( width * height );
+			displacement_maps[count].data = ( unsigned char * ) safe_malloc ( width * height );
 
 			fread ( displacement_maps[count].data, width, height, fp );
 		}

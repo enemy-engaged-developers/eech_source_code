@@ -614,7 +614,7 @@ static view_categories get_local_entity_view_category (entity *en)
 {
 	ASSERT (en);
 
-	return (get_local_entity_int_value (en, INT_TYPE_VIEW_CATEGORY));
+	return (view_categories) get_local_entity_int_value (en, INT_TYPE_VIEW_CATEGORY);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -625,7 +625,7 @@ static view_types get_local_entity_view_type (entity *en)
 {
 	ASSERT (en);
 
-	return (get_local_entity_int_value (en, INT_TYPE_VIEW_TYPE));
+	return (view_types) get_local_entity_int_value (en, INT_TYPE_VIEW_TYPE);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1115,7 +1115,7 @@ void initialise_view_menu (void)
 
 	memset (type_counters, 0, sizeof (type_counters));
 
-	search.players_side = get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
+	search.players_side = (entity_sides) get_local_entity_int_value (get_pilot_entity (), INT_TYPE_SIDE);
 
 	ASSERT (search.players_side != ENTITY_SIDE_NEUTRAL);
 
@@ -2141,7 +2141,7 @@ void select_view_menu_next_side (void)
 {
 	validate_view_menu ();
 
-	search.side = get_next_valid_array_index (side_counters, search.side, NUM_VIEW_SIDES);
+	search.side = (view_sides) get_next_valid_array_index (side_counters, search.side, NUM_VIEW_SIDES);
 
 	rebuild_view_menu ();
 }
@@ -2154,7 +2154,7 @@ void select_view_menu_previous_side_event (void)
 {
 	validate_view_menu ();
 
-	search.side = get_previous_valid_array_index (side_counters, search.side, NUM_VIEW_SIDES);
+	search.side = (view_sides) get_previous_valid_array_index (side_counters, search.side, NUM_VIEW_SIDES);
 
 	rebuild_view_menu ();
 }
@@ -2167,7 +2167,7 @@ void select_view_menu_next_category (void)
 {
 	validate_view_menu ();
 
-	search.category = get_next_valid_array_index (category_counters, search.category, NUM_VIEW_CATEGORIES);
+	search.category = (view_categories) get_next_valid_array_index (category_counters, search.category, NUM_VIEW_CATEGORIES);
 
 	rebuild_view_menu ();
 }
@@ -2180,7 +2180,7 @@ void select_view_menu_previous_category (void)
 {
 	validate_view_menu ();
 
-	search.category = get_previous_valid_array_index (category_counters, search.category, NUM_VIEW_CATEGORIES);
+	search.category = (view_categories) get_previous_valid_array_index (category_counters, search.category, NUM_VIEW_CATEGORIES);
 
 	rebuild_view_menu ();
 }
@@ -2193,7 +2193,7 @@ void select_view_menu_next_type (void)
 {
 	validate_view_menu ();
 
-	search.type = get_next_valid_array_index (type_counters, search.type, NUM_VIEW_TYPES);
+	search.type = (view_types) get_next_valid_array_index (type_counters, search.type, NUM_VIEW_TYPES);
 
 	rebuild_view_menu ();
 }
@@ -2206,7 +2206,7 @@ void select_view_menu_previous_type (void)
 {
 	validate_view_menu ();
 
-	search.type = get_previous_valid_array_index (type_counters, search.type, NUM_VIEW_TYPES);
+	search.type = (view_types) get_previous_valid_array_index (type_counters, search.type, NUM_VIEW_TYPES);
 
 	rebuild_view_menu ();
 }

@@ -296,7 +296,7 @@ static float get_barometric_altimeter_needle_value (void)
 	}
 	else
 	{
-		altimeter_needle_value = fmod (feet (current_flight_dynamics->barometric_altitude.value), 1000.0);
+		altimeter_needle_value = fmod (feet (current_flight_dynamics->barometric_altitude.value), 1000.0f);
 	}
 
 	return (altimeter_needle_value);
@@ -627,10 +627,10 @@ void draw_apache_fixed_cockpit_barometric_altimeter_digits (cockpit_panels panel
 			//
 			////////////////////////////////////////
 
-			#define ONE_REV		  				(10000.0)
-			#define ONE_TENTH_REV				((ONE_REV) / 10.0)
-			#define ONE_OVER_ONE_TENTH_REV	(1.0 / (ONE_TENTH_REV))
-			#define DIGIT_CHANGE_THRESHOLD	(20.0)
+			#define ONE_REV		  				(10000.0f)
+			#define ONE_TENTH_REV				((ONE_REV) / 10.0f)
+			#define ONE_OVER_ONE_TENTH_REV	(1.0f / (ONE_TENTH_REV))
+			#define DIGIT_CHANGE_THRESHOLD	(20.0f)
 
 			x = fx_640_480 + 583.0;
 			y = fy_640_480 + 438.0 + 6.0;
@@ -681,10 +681,10 @@ void draw_apache_fixed_cockpit_barometric_altimeter_digits (cockpit_panels panel
 			//
 			////////////////////////////////////////
 
-			#define ONE_REV		  				(100000.0)
-			#define ONE_TENTH_REV				((ONE_REV) / 10.0)
-			#define ONE_OVER_ONE_TENTH_REV	(1.0 / (ONE_TENTH_REV))
-			#define DIGIT_CHANGE_THRESHOLD	(20.0)
+			#define ONE_REV		  				(100000.0f)
+			#define ONE_TENTH_REV				((ONE_REV) / 10.0f)
+			#define ONE_OVER_ONE_TENTH_REV	(1.0f / (ONE_TENTH_REV))
+			#define DIGIT_CHANGE_THRESHOLD	(20.0f)
 
 			x = fx_640_480 + 579.0;
 			y = fy_640_480 + 438.0 + 6.0;

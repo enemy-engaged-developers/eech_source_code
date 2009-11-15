@@ -110,7 +110,7 @@ debug_3d_object *create_debug_3d_object (viewpoint *vp, object_3d_index_numbers 
 		relative_scale_vector;
 
 	debug_3d_object
-		*new;
+		*new_;
 
 	ASSERT (vp);
 
@@ -118,32 +118,32 @@ debug_3d_object *create_debug_3d_object (viewpoint *vp, object_3d_index_numbers 
 
 	ASSERT (lifetime >= 0.0);
 
-	new = malloc_fast_mem (sizeof (debug_3d_object));
+	new_ = (debug_3d_object *) malloc_fast_mem (sizeof (debug_3d_object));
 
-	new->vp = *vp;
+	new_->vp = *vp;
 
-	new->object_3d_shape = object_3d_shape;
+	new_->object_3d_shape = object_3d_shape;
 
-	new->lifetime = lifetime;
+	new_->lifetime = lifetime;
 
 	relative_scale_vector.x = relative_scale;
 	relative_scale_vector.y = relative_scale;
 	relative_scale_vector.z = relative_scale;
 
-	new->relative_scale = relative_scale_vector;
+	new_->relative_scale = relative_scale_vector;
 
-	new->succ = debug_3d_object_list;
+	new_->succ = debug_3d_object_list;
 
-	new->pred = NULL;
+	new_->pred = NULL;
 
-	if (new->succ)
+	if (new_->succ)
 	{
-		new->succ->pred = new;
+		new_->succ->pred = new_;
 	}
 
-	debug_3d_object_list = new;
+	debug_3d_object_list = new_;
 
-	return (new);
+	return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ debug_3d_object *create_debug_3d_object (viewpoint *vp, object_3d_index_numbers 
 debug_3d_object *create_rotated_debug_3d_object (vec3d *position, float heading, float pitch, float roll, object_3d_index_numbers object_3d_shape, float lifetime, float relative_scale)
 {
 	debug_3d_object
-		*new;
+		*new_;
 
 	viewpoint
 		vp;
@@ -168,9 +168,9 @@ debug_3d_object *create_rotated_debug_3d_object (vec3d *position, float heading,
 
 	get_3d_transformation_matrix (vp.attitude, heading, pitch, roll);
 
-	new = create_debug_3d_object (&vp, object_3d_shape, lifetime, relative_scale);
+	new_ = create_debug_3d_object (&vp, object_3d_shape, lifetime, relative_scale);
 
-	return (new);
+	return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ debug_3d_object *create_rotated_debug_3d_object (vec3d *position, float heading,
 debug_3d_object *create_vectored_debug_3d_object (vec3d *position, vec3d *vector, object_3d_index_numbers object_3d_shape, float lifetime, float relative_scale)
 {
 	debug_3d_object
-		*new;
+		*new_;
 
 	viewpoint
 		vp;
@@ -206,16 +206,16 @@ debug_3d_object *create_vectored_debug_3d_object (vec3d *position, vec3d *vector
 
 		get_matrix3x3_from_unit_vec3d (vp.attitude, &uvec);
 
-		new = create_debug_3d_object (&vp, object_3d_shape, lifetime, relative_scale);
+		new_ = create_debug_3d_object (&vp, object_3d_shape, lifetime, relative_scale);
 	}
 	else
 	{
 		debug_log ("Failed to create vectored debug 3D object");
 
-		new = NULL;
+		new_ = NULL;
 	}
 
-	return (new);
+	return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +334,7 @@ void deinitialise_debug_3d_lines (void)
 debug_3d_line *create_debug_3d_line (vec3d *point1, vec3d *point2, rgb_colour colour, float lifetime)
 {
 	debug_3d_line
-		*new;
+		*new_;
 
 	ASSERT (point1);
 
@@ -342,28 +342,28 @@ debug_3d_line *create_debug_3d_line (vec3d *point1, vec3d *point2, rgb_colour co
 
 	ASSERT (lifetime >= 0.0);
 
-	new = malloc_fast_mem (sizeof (debug_3d_line));
+	new_ = (debug_3d_line *) malloc_fast_mem (sizeof (debug_3d_line));
 
-	new->point1 = *point1;
+	new_->point1 = *point1;
 
-	new->point2 = *point2;
+	new_->point2 = *point2;
 
-	new->colour = colour;
+	new_->colour = colour;
 
-	new->lifetime = lifetime;
+	new_->lifetime = lifetime;
 
-	new->succ = debug_3d_line_list;
+	new_->succ = debug_3d_line_list;
 
-	new->pred = NULL;
+	new_->pred = NULL;
 
-	if (new->succ)
+	if (new_->succ)
 	{
-		new->succ->pred = new;
+		new_->succ->pred = new_;
 	}
 
-	debug_3d_line_list = new;
+	debug_3d_line_list = new_;
 
-	return (new);
+	return (new_);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -172,7 +172,7 @@ void add_3d_lightning_strike ( lightning_strike_types type, float time, float x,
 	
 				lightning_strikes[count].position.y = 6000;
 	
-				lightning_strikes[count].type = type;
+				lightning_strikes[count].type = ( LIGHTNING_STRIKE_TYPES ) type;
 	
 				lightning_strikes[count].current_frame_number = 0;
 	
@@ -576,7 +576,7 @@ void draw_3d_lightning_strike ( lightning_strike *strike )
 
 			set_d3d_alpha_fog_zbuffer ( TRUE, FALSE, TRUE, FALSE );
 
-			set_d3d_texture ( 0, load_hardware_texture_map ( texture ) );
+			set_d3d_texture ( 0, texture );
 
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 			set_d3d_texture_stage_state ( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
@@ -849,7 +849,7 @@ void draw_3d_lightning_cloud_burst ( lightning_strike *strike )
 			colour.blue = int_intensity;
 			colour.alpha = int_intensity;
 
-			set_d3d_texture ( 0, load_hardware_texture_map ( texture ) );
+			set_d3d_texture ( 0, texture );
 			set_d3d_texture_stage_state ( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
 			set_d3d_texture_stage_state ( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
 	

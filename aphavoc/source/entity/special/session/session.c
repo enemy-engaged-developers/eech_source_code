@@ -160,7 +160,7 @@ float calculate_session_time_of_day (entity *en, int *day)
 		count ++;
 	}
 
-	time_of_day = max (time_of_day, 0.0);
+	time_of_day = max (time_of_day, 0.0f);
 
 	if (day)
 	{
@@ -307,7 +307,7 @@ static struct SESSION_PRESET_TIME_OF_DAY_TABLE
 		SESSION_TIME_AFTERNOON,		(15.0 * ONE_HOUR) + (20 * ONE_MINUTE),
 		SESSION_TIME_DUSK,			(18.0 * ONE_HOUR) + (00 * ONE_MINUTE),
 		SESSION_TIME_MIDNIGHT,		(23.0 * ONE_HOUR) + (45 * ONE_MINUTE),
-		-1
+		(session_time_of_day_settings) -1
 	};
 
 float get_session_preset_time_of_day (session_time_of_day_settings preset_enum)
@@ -355,7 +355,7 @@ void get_session_weather_at_point (vec3d *pos, weathermodes *current_weather_mod
 
 	ASSERT (pos);
 
-	raw = get_local_entity_data (get_session_entity ());
+	raw = (session *) get_local_entity_data (get_session_entity ());
 
 	if (raw->local_weather_model)
 	{
@@ -521,7 +521,7 @@ void set_session_fixed_weather_mode (entity *en, weathermodes weather_mode)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	raw->local_weather_model = FALSE;
 
@@ -547,7 +547,7 @@ void set_session_random_weather_mode (entity *en)
 
 	ASSERT (en);
 
-	raw = get_local_entity_data (en);
+	raw = (session *) get_local_entity_data (en);
 
 	raw->local_weather_model = TRUE;
 
@@ -606,7 +606,7 @@ float get_session_wind_velocity_at_point (vec3d *pos, vec3d *wind_velocity)
 
 	ASSERT (pos);
 
-	raw = get_local_entity_data (get_session_entity ());
+	raw = (session *) get_local_entity_data (get_session_entity ());
 
 	if (raw->wind_effect_radius == 0.0)
 	{
@@ -949,7 +949,7 @@ int check_point_inside_population_area (vec3d *point)
 
 	debug_assert (get_session_entity ());
 
-	raw = get_local_entity_data (get_session_entity ());
+	raw = (session *) get_local_entity_data (get_session_entity ());
 
 	if ((raw->population_x_min < point->x) && (raw->population_x_max > point->x))
 	{

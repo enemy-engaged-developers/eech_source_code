@@ -1721,7 +1721,7 @@ static void display_in_flight_external_view_entity_weapon_info (void)
 			{
 				selected_weapon = get_local_entity_int_value (en, INT_TYPE_SELECTED_WEAPON);
 
-				config_type = get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
+				config_type = ( weapon_config_types ) get_local_entity_int_value (en, INT_TYPE_WEAPON_CONFIG_TYPE);
 
 				ASSERT (weapon_config_type_valid (config_type));
 

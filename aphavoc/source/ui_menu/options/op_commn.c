@@ -84,7 +84,7 @@ static void notify_options_page_button (ui_object *obj, void *arg)
 	options_pages
 		page;
 
-	page = get_ui_object_item_number (obj);
+	page = (options_pages) get_ui_object_item_number (obj);
 
 	notify_options_page (page);
 }

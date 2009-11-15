@@ -117,7 +117,7 @@ void routed_vehicle_movement (entity *en)
 		pitch,
 		heading;
 
-    raw = get_local_entity_data (en);
+    raw = (routed_vehicle *) get_local_entity_data (en);
 
 	guide = get_local_entity_parent (en, LIST_TYPE_FOLLOWER);
 
@@ -428,7 +428,7 @@ void routed_vehicle_death_movement (entity *en)
 		*velocity,
 		new_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	//
 	// first check to see if vehicle is on the ground or not
@@ -481,9 +481,9 @@ void routed_vehicle_death_movement (entity *en)
 
 	normalise_3d_vector_given_magnitude (velocity, speed);
 
-	speed -= (4.0 * get_entity_movement_delta_time());
+	speed -= (4.0f * get_entity_movement_delta_time());
 
-	speed = max (0.0, speed);
+	speed = max (0.0f, speed);
 
 	set_local_entity_float_value (en, FLOAT_TYPE_VELOCITY, speed);
 
@@ -533,7 +533,7 @@ void routed_vehicle_falling_movement (entity *en)
 		*velocity,
 		new_pos;
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	//
 	// get current position and velocity
@@ -708,7 +708,7 @@ void routed_vehicle_impact_movement (entity *en)
 	// when a routed vehicle is killed it needs to be "moved out the way", so give it an instantaneous sideways velocity
 	//
 
-	raw = get_local_entity_data (en);
+	raw = (routed_vehicle *) get_local_entity_data (en);
 
 	seed = get_client_server_entity_random_number_seed(en);
 
@@ -777,7 +777,7 @@ static void routed_vehicle_movement_get_waypoint_position (entity *en, vec3d *wp
 		// following sub_route
 		//
 
-		raw = get_local_entity_data (en);
+		raw = (routed_vehicle *) get_local_entity_data (en);
 
 		if ((raw->sub_route) && (raw->sub_waypoint_count > 0))
 		{

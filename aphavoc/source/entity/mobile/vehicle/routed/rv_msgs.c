@@ -118,7 +118,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 		aggressor = NULL;
 	}
 
-	force = get_local_force_entity (get_local_entity_int_value (receiver, INT_TYPE_SIDE));
+	force = get_local_force_entity ((entity_sides) get_local_entity_int_value (receiver, INT_TYPE_SIDE));
 
 	enemy_force = get_local_force_entity (get_enemy_side (get_local_entity_int_value (receiver, INT_TYPE_SIDE)));
 
@@ -251,7 +251,7 @@ static int response_to_set_entity_position (entity_messages message, entity *rec
 	routed_vehicle
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (routed_vehicle *) get_local_entity_data (receiver);
 
 	position = va_arg (pargs, vec3d *);
 
@@ -278,7 +278,7 @@ static int response_to_waypoint_reverse_convoy_reached (entity_messages message,
 	routed_vehicle
 		*raw;
 
-	raw = get_local_entity_data (receiver);
+	raw = (routed_vehicle *) get_local_entity_data (receiver);
 
 	#if DEBUG_MODULE
 
