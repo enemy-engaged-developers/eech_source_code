@@ -811,7 +811,7 @@ BOOL FAR PASCAL direct_play_enum_address_callback ( REFGUID guid, DWORD datasize
 #else
 #define GUID_PREFIX2
 #endif
-	if ( memcmp ( GUID_PREFIX2 guid, GUID_PREFIX2 DPAID_Modem, sizeof ( GUID ) ) == 0 )
+	if ( memcmp ( GUID_PREFIX2 guid, &DPAID_Modem, sizeof ( GUID ) ) == 0 )
 	{
 
 		const char

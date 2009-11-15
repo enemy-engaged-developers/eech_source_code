@@ -251,7 +251,7 @@ screen * create_user_texture_screen ( int width, int height, int type, int numbe
 			this_screen->data = NULL;
 			this_screen->used = TRUE;
 
-			create_texture_screen_data ( this_screen, width, height, (TEXTURE_MAP_TYPES) type, number_of_mipmaps, FALSE );
+			create_texture_screen_data ( this_screen, width, height, (texture_map_types) type, number_of_mipmaps, FALSE );
 
 			return ( this_screen );
 		}
@@ -287,7 +287,7 @@ screen * create_system_texture_screen ( int width, int height, int texture_index
 
 			this_screen = &screen_array[count];
 
-			if ( create_system_indexed_texture_map ( this_screen, width, height, texture_index, (SCREEN_FORMAT_TYPES) type ) )
+			if ( create_system_indexed_texture_map ( this_screen, width, height, texture_index, (screen_format_types) type ) )
 			{
 
 				return ( this_screen );
@@ -339,7 +339,7 @@ screen *create_user_3dvisual_texture_screen ( int width, int height, int type )
 			this_screen->data = NULL;
 			this_screen->used = TRUE;
 
-			create_texture_screen_data ( this_screen, width, height, (TEXTURE_MAP_TYPES) type, 0, TRUE );
+			create_texture_screen_data ( this_screen, width, height, (texture_map_types) type, 0, TRUE );
 
 			return ( this_screen );
 		}

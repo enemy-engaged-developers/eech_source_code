@@ -229,7 +229,7 @@ screen *get_texture_animation_texture_pointer ( enum TEXTURE_ANIMATION_INDICES i
 	if (index >= TEXTURE_INDEX_LAST)
 	{
 		debug_log ( "Trying to get texture index %d", index );
-		index = (TEXTURE_ANIMATION_INDICES)0;
+		index = (texture_animation_indices)0;
 		ASSERT(FALSE);
 	}
 

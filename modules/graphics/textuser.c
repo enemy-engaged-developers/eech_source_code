@@ -2075,7 +2075,7 @@ screen *create_texture_map ( int width, int height, texture_map_types type, int 
 
 	texture = get_free_screen ();
 
-	texture->type = (SCREEN_FORMAT_TYPES) type;
+	texture->type = (screen_format_types) type;
 	texture->width = width;
 	texture->height = height;
 
@@ -2168,7 +2168,7 @@ int create_system_indexed_texture_map ( struct SCREEN *this_screen, int width, i
 	DDSURFACEDESC2
 		ddsd;
 
-	this_screen->type = (SCREEN_FORMAT_TYPES) type;
+	this_screen->type = (screen_format_types) type;
 	this_screen->width = width;
 	this_screen->height = height;
 	this_screen->video_memory = FALSE;

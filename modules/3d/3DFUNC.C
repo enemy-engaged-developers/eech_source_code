@@ -553,7 +553,7 @@ void f3d_texture_create(screen *texture, int width, int height, unsigned type, i
 	// Texture doesn't have a colour table
 	//
 
-	texture->type = (SCREEN_FORMAT_TYPES) type;
+	texture->type = (screen_format_types) type;
 	texture->palette = NULL;
 	texture->colour_table = NULL;
 	texture->pixel_length = texture_formats[type].bpp_red + texture_formats[type].bpp_green + texture_formats[type].bpp_blue + texture_formats[type].bpp_alpha;

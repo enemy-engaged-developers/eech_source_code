@@ -1929,7 +1929,7 @@ void initialise_3d_objects ( const char *directory )
 
 		for ( count = 1; count <= total_number_of_objects; count++ )
 			number_of_surfaces += objects_3d_data[count].number_of_surfaces;
-		surfaces = ( FACE_SURFACE_DESCRIPTION * ) safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
+		surfaces = ( face_surface_description * ) safe_malloc ( sizeof ( face_surface_description ) * number_of_surfaces );
 		cursurface = surfaces;
 		for ( count = 1; count <= total_number_of_objects; count++ )
 		{
