@@ -172,7 +172,7 @@ void add_3d_lightning_strike ( lightning_strike_types type, float time, float x,
 	
 				lightning_strikes[count].position.y = 6000;
 	
-				lightning_strikes[count].type = ( LIGHTNING_STRIKE_TYPES ) type;
+				lightning_strikes[count].type = ( lightning_strike_types ) type;
 	
 				lightning_strikes[count].current_frame_number = 0;
 	
