@@ -49,7 +49,7 @@ int sub_object_suits(sub_object* subo, struct OBJECT_3D_DATABASE_ENTRY* sub, int
       sub->index != subo->lods[i].index)
    return 0;
 
- if (sub_object_index != subo->key.sub_object_index)
+ if (sub_object_index || subo->key.sub_object_index)
   return 0;
  CH_EQ(number_of_keyframes)
  CH_EQ(number_of_object_dissolve_keyframes)
@@ -273,8 +273,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
   int i = 1;
   for (int j = 1; j < subo->number_of_lods; j++)
    {
-    if (subo->lods[j].index == subo->lods[i - 1].index &&
-        subo->lods[j].sub_object_approximation_in_level <= subo->lods[i - 1].sub_object_approximation_out_level)
+    if (subo->lods[j].index == subo->lods[i - 1].index && subo->lods[j].sub_object_approximation_in_level <= subo->lods[i - 1].sub_object_approximation_out_level)
      {
       if (subo->lods[j].sub_object_approximation_out_level > subo->lods[i - 1].sub_object_approximation_out_level)
        subo->lods[i - 1].sub_object_approximation_out_level = subo->lods[j].sub_object_approximation_out_level;
@@ -415,15 +414,26 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
  ExportKeyFrames(fp, "Object", 7, 3, scene->number_of_keyframes, scene->keyframes);
  if (scene->number_of_approximations)
   {
-   struct OBJECT_3D_APPROXIMATION_INFO* last = &scene->approximations[scene->number_of_approximations - 1];
-   while (last > scene->approximations && last->object_number == last[-1].object_number)
-    last--;
-   if (last->object_number != scene->index)
+   struct OBJECT_3D_APPROXIMATION_INFO* all;
+   struct OBJECT_3D_APPROXIMATION_INFO* current;
+   all = new OBJECT_3D_APPROXIMATION_INFO [ scene->number_of_approximations + 1 ];
+   current = all;
+   current->object_number = scene->index;
+   current->distance = 0.0;
+   for (int i = 0; i < scene->number_of_approximations; i++)
     {
-     last++;
+     if (scene->approximations[i].object_number != current->object_number)
+      {
+       current++;
+       *current = scene->approximations[i];
+      }
+    }
+   if (current != all)
+    {
      fprintf(fp, "Plugin ObjReplacementHandler 1 LW_Level_Of_Detail\n1\n");
-     fprintf(fp, "%i\n", last - scene->approximations);
-     for (OBJECT_3D_APPROXIMATION_INFO* ap = scene->approximations; ap < last; ap++)
+     fprintf(fp, "%i\n", current - all);
+     current++;
+     for (OBJECT_3D_APPROXIMATION_INFO* ap = all + 1; ap < current; ap++)
       {
        fprintf(fp, "%f\n", ap->distance);
        if (ap->object_number)
@@ -433,6 +443,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
       }
      fprintf(fp, "EndPlugin\n");
     }
+	 delete [] all;
   }
 
  if (scene->number_of_object_dissolve_keyframes)
