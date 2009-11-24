@@ -370,12 +370,12 @@ void initialise_comms_debug (void)
 	debug_watch ("packets size								= %d", MT_INT, &command_line_comms_packet_data_size);
 	debug_watch ("packets sent							= %d", MT_INT, &num_packets_sent);
 	debug_watch ("packets send size (instant)			= %.02f", MT_FLOAT, &instant_packet_size_sent);
-	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "packets send size (av)				= %.02f", MT_FLOAT, &av_packet_size_sent);
+	debug_colour_watch ((debug_colours) COLOUR_RED, "packets send size (av)				= %.02f", MT_FLOAT, &av_packet_size_sent);
 	debug_watch ("packets send size (max)				= %.02f", MT_FLOAT, &max_packet_size_sent);
 
 	debug_watch ("packets received						= %d", MT_INT, &num_packets_received);
 	debug_watch ("packets received size (instant) 		= %.02f", MT_FLOAT, &instant_packet_size_received);
-	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "packets received size (av)			= %.02f", MT_FLOAT, &av_packet_size_received);
+	debug_colour_watch ((debug_colours) COLOUR_RED, "packets received size (av)			= %.02f", MT_FLOAT, &av_packet_size_received);
 	debug_watch ("packets received size (max)			= %.02f", MT_FLOAT, &max_packet_size_received);
 
 	debug_watch ("packets record count	 				= %d", MT_INT, &packet_record_data_count);
@@ -384,7 +384,7 @@ void initialise_comms_debug (void)
 
 	#if COMMS_STATS
 
-	debug_colour_watch ((DEBUG_COLOURS) COLOUR_RED, "processed size (max)					= %.02f", MT_FLOAT, &max_processed_size);
+	debug_colour_watch ((debug_colours) COLOUR_RED, "processed size (max)					= %.02f", MT_FLOAT, &max_processed_size);
 
 	debug_watch ("re-request counter						= %d", MT_INT, &rerequest_packet_counter);
 	debug_watch ("resend packet counter				= %d", MT_INT, &resend_packet_counter);

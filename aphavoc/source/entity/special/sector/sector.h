@@ -102,7 +102,7 @@ extern entity
 
 #ifdef DEBUG
 
-#define get_local_raw_sector_entity(X_SEC,Z_SEC) ((entity_sector_map [(X_SEC) + ((Z_SEC) * (NUM_MAP_X_SECTORS))]) ? (entity_sector_map[(X_SEC) + ((Z_SEC) * (NUM_MAP_X_SECTORS))]) : (process_assert (null_sector_entity_map_pointer_message, __FILE__, __LINE__), NULL))
+#define get_local_raw_sector_entity(X_SEC,Z_SEC) ((entity_sector_map [(X_SEC) + ((Z_SEC) * (NUM_MAP_X_SECTORS))]) ? (entity_sector_map[(X_SEC) + ((Z_SEC) * (NUM_MAP_X_SECTORS))]) : (process_assert (null_sector_entity_map_pointer_message, __FILE__, __LINE__), (entity*)NULL))
 
 #else
 
