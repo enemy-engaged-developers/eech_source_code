@@ -244,7 +244,7 @@ int parser_campaign_file (const char *filename, int *offset)
 		temp_filename [128],
 		keysite_name [STRING_TYPE_KEYSITE_NAME_MAX_LENGTH];
 
-	fcloseall ();
+	//fcloseall (); // Casm 26NOV09 Looks bad for recursive calls
 
 	file_ptr = safe_fopen (filename, "r");
 
