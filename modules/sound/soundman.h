@@ -90,11 +90,21 @@
 #define SOUND_MINIMUM_VOLUME	0
 #define SOUND_MIN_VOLUME	0
 
-#define SOUND_LEFT_PAN		DSBPAN_LEFT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SOUND_MIDDLE_PAN	DSBPAN_CENTER
+enum SAMPLE_TYPES
+{
 
-#define SOUND_RIGHT_PAN		DSBPAN_RIGHT
+	SAMPLE_TYPE_INVALID,
+	SAMPLE_TYPE_MONO_8BIT,
+	SAMPLE_TYPE_STEREO_8BIT,
+	SAMPLE_TYPE_MONO_16BIT,
+	SAMPLE_TYPE_STEREO_16BIT,
+};
+
+typedef enum SAMPLE_TYPES sample_types;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,12 +112,10 @@
 
 struct SOUND_SEQUENCE_INFORMATION
 {
-
 	int
 		sound_sample_index,
 		rate;
 };
-
 typedef struct SOUND_SEQUENCE_INFORMATION sound_sequence_information;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,8 +124,7 @@ typedef struct SOUND_SEQUENCE_INFORMATION sound_sequence_information;
 
 struct SYSTEM_SOUND_EFFECT
 {
-
-	LPDIRECTSOUNDBUFFER
+	void*
 		sound_buffer;
 
 	int
@@ -135,12 +142,13 @@ struct SYSTEM_SOUND_EFFECT
 		playing,
 		used,
 		looping;
-	float 	pitch;
+
+	float
+		pitch;
 
 	void
 		*user_data;
 };
-
 typedef struct SYSTEM_SOUND_EFFECT system_sound_effect;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +162,8 @@ typedef struct SYSTEM_SOUND_EFFECT system_sound_effect;
 extern int initialise_sound_system ( void );
 
 extern void deinitialise_sound_system ( void );
+
+extern int get_sound_system_devices ( const char **devices, const char **default_device );
 
 //
 // Sound Sample routines
@@ -169,17 +179,15 @@ extern void create_source_sound_sample ( int sample_index, sample_types type, in
 
 extern void destroy_source_sound_sample ( int sample_index );
 
-extern unsigned char * lock_source_sound_sample ( int sample_index );
-
-extern void unlock_source_sound_sample ( int sample_index );
+extern void load_source_sound_sample ( int sample_index, void *data );
 
 //
 // Sound EFFECT routines
 //
 
-extern system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int panning, int rate, int volume, int looping, void *user_data );
+extern system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data );
 
-extern system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int panning, int volume, void *user_data );
+extern system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data );
 
 extern int get_system_sound_effect_playing ( system_sound_effect *effect );
 
@@ -189,11 +197,9 @@ extern void set_system_sound_effect_user_data ( system_sound_effect *effect, voi
 
 extern void * get_system_sound_effect_user_data ( system_sound_effect *effect );
 
-extern float get_system_sound_effect_playing_time ( system_sound_effect *effect );
+extern void play_sequenced_system_sound_effect ( system_sound_effect *effect, int sequence_index, float time_position );
 
-extern void play_sequenced_system_sound_effect ( system_sound_effect *effect, int sequence_index, int buffer_position );
-
-extern void play_system_sound_effect ( system_sound_effect *effect, int buffer_position );
+extern void play_system_sound_effect ( system_sound_effect *effect, float time_position );
 
 extern void pause_system_sound_effect ( system_sound_effect *effect );
 
@@ -207,21 +213,13 @@ extern void destroy_all_system_sound_effects ( void );
 
 extern void update_system_sound_effect_system ( void );
 
-//
-// Set volume / pan routines
-//
-
 extern void set_system_sound_effect_volume ( system_sound_effect *effect, int volume );
 
-extern int get_system_sound_effect_volume ( system_sound_effect *effect );
+extern void set_system_sound_listener_orientation ( vec3d forward, vec3d up, vec3d right );
 
-extern void set_system_sound_effect_panning ( system_sound_effect *effect, int panning );
-
-extern int get_system_sound_effect_panning ( system_sound_effect *effect );
+extern void set_system_sound_effect_position ( system_sound_effect *effect, vec3d position );
 
 extern void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch ); //Werewolf 4 Feb 2006
-
-extern float get_system_sound_effect_pitch ( system_sound_effect *effect ); //Werewolf 4 Feb 2006
 
 //
 // Sound SYSTEM routines
@@ -231,7 +229,7 @@ extern void pause_sound_system ( void );
 
 extern void continue_sound_system ( void );
 
-extern int get_sound_system_paused (void);
+extern int get_sound_system_paused ( void );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

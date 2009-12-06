@@ -292,6 +292,7 @@ float
 
 char
 	command_line_themes[128] = "", // Casm 21DEC07
+	command_line_sound_device[128] = "", // Casm 07DEC09 OpenAL support
 	command_line_game_initialisation_phase_path [128]			= "\0",
 	command_line_game_initialisation_phase_directory [128]	= "\0",
 	command_line_game_initialisation_phase_filename [128]		= "\0",

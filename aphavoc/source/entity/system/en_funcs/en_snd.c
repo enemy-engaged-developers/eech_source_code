@@ -128,6 +128,9 @@ void scan_local_entity_sounds (viewpoint *vp)
 		return;
 	}
 
+	// Casm 07DEC09 OpenAL support
+	set_system_sound_listener_orientation ( vp->zv, vp->yv, vp->zv );
+
 	//
 	// update playing samples
 	//

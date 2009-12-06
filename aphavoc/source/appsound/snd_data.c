@@ -2576,13 +2576,12 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 																SAMPLE_TYPE_MONO_8BIT,
 																application_sound_samples[count].rate,
 																size );
+											// Casm 07DEC09 OpenAL support
 											fp = fopen ( filename, "rb" );
-											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-											if ( ptr )
-											{
-												fread ( ptr, 1, size, fp );
-												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-											}
+											ptr = safe_malloc ( size );
+											fread ( ptr, 1, size, fp );
+											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
+											safe_free ( ptr );
 											fclose ( fp );
 										}
 									}
@@ -2621,20 +2620,13 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 																						application_sound_samples[count].rate,
 																						size );
 
+											// Casm 07DEC09 OpenAL support
 											fp = safe_fopen ( filename, "rb" );
-
-											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-
-											if ( ptr )
-											{
-
-												fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-
-												fread ( ptr, 1, size, fp );
-
-												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-											}
-
+											ptr = safe_malloc ( size );
+											fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
+											fread ( ptr, 1, size, fp );
+											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
+											safe_free ( ptr );
 											safe_fclose ( fp );
 										}
 									}
@@ -2650,6 +2642,9 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 								}
 								else
 								{
+									int
+										size;
+
 									#if DEBUG_MODULE
 									debug_log ( "SND_DATA: Sound loading from sound.dat: %s", filename );
 									#endif
@@ -2667,17 +2662,14 @@ void load_side_dependant_application_sound_samples ( entity_sides side )
 																						application_sound_samples[count].rate,
 																						blocked_sound_samples[sound_block_header_index].sound_data_length );
 
-											ptr = lock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
 
-											if ( ptr )
-											{
-
-												fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
-
-												fread ( ptr, 1, blocked_sound_samples[sound_block_header_index].sound_data_length, block_sound_sample_data_file );
-
-												unlock_source_sound_sample ( application_sound_samples[count].sound_sample_index );
-											}
+											// Casm 07DEC09 OpenAL support
+											size = blocked_sound_samples[sound_block_header_index].sound_data_length;
+											ptr = safe_malloc ( size );
+											fseek ( block_sound_sample_data_file, blocked_sound_samples[sound_block_header_index].sound_data_offset, SEEK_SET );
+											fread ( ptr, 1, size, block_sound_sample_data_file );
+											load_source_sound_sample ( application_sound_samples[count].sound_sample_index, ptr );
+											safe_free ( ptr );
 										}
 									}
 									else

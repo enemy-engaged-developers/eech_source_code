@@ -429,34 +429,7 @@ void notify_clear_options_screen(void)
 	
 	// if the graphics display adapter has changed, boot the player out
 	{
-	
-		int
-			flag;
-
-		flag = FALSE;
-	
-		if (old_graphics_card_automatic_selection != get_global_graphics_device_selection_automatic ())
-		{
-			flag = TRUE;
-		}
-		else
-		{
-			flag = FALSE;
-		}
-	
-		if (!old_graphics_card_automatic_selection)
-		{
-			if (old_graphics_card_selection != get_card_selection_device ())
-			{
-				flag = TRUE;
-			}
-			else
-			{
-				flag = FALSE;
-			}
-		}
-
-		if (flag)
+		if (option_page_ok_button_reasons)
 		{
 			push_ui_screen (exit_screen);
 		}

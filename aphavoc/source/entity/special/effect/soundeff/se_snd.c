@@ -120,7 +120,6 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		*raw;
 
 	int
-		panning,
 		volume,
 		maximum_volume;
 
@@ -297,12 +296,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 			}
 			else if (minimum_sound_range == 0.0)
 			{
-           		if(range >= maximum_sound_range)
-	              	v = 0.0;
-           		else if(range > reference_sound_range)
-        	      	v = (reference_sound_range / range);
-    	       	else
-	              	v = 1.0;
+				v = range >= maximum_sound_range ? 0.0 : range > reference_sound_range ? reference_sound_range / range : 1.0;
 			}
 			else
 			{
@@ -314,10 +308,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 				else
 					v = 1- ((range-reference_sound_range) / (maximum_sound_range-reference_sound_range));
 				//Normalize
-				if (v < 0.0)
-					v = 0.0;
-				else if (v > 1.0)
-					v = 1.0;
+				v = bound(v, 0.0, 1.0);
 			}
 			v = v * maximum_volume;
 		}
@@ -335,24 +326,67 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 
 	if (in_cockpit)
 	{
+		// Casm 07DEC09
 		switch (raw->eff.sub_type)
 		{
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
+			//ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
+			if (parent == get_gunship_entity ())
+			{
+				v *= 1.5;
+				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
+			}
+			else
+			{
+				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.5);
+				canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+			}
+			break;
 		//ataribaby 28/12/2008 lets guns rocks
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN: 
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_GUN_PODS:
-		  canopy_state_amp = 0.4 + bound(canopy_door_state, 0.0, 0.6);
+			canopy_state_amp = 0.4 + bound(canopy_door_state, 0.0, 0.6);
 			break;
-    //ataribaby 28/12/2008 all external sound sources gets influenced by external_sounds_volume setting			
-    case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
+		//ataribaby 28/12/2008 all external sound sources gets influenced by external_sounds_volume setting			
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_RAIN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_WIND:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_RAIN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_WIND:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_JUNGLE:
-    case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
-		  canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
-		  canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
+			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.5);
+			canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+			break;
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
+			//ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
+			if (parent == get_gunship_entity ())
+			{
+				canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+			}
+			else
+			{
+				canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+			}
+			break;
+		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
+			if (parent == get_gunship_entity ())
+			{
+				canopy_state_amp = 1.0 + bound(canopy_door_state, 0.0, 0.7);
+			}
+			else
+			{
+				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.7);
+			}
 			break;
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_INCOMING_MISSILE_WARNING:
@@ -367,63 +401,13 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		default:
 			canopy_state_amp = 1.0;
 			break;
-	 }
-	 
-	 //ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
-	 if (parent == get_gunship_entity ())
-	 {
-      switch (raw->eff.sub_type)
-		  {
-	    case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
-  			v *= 1.5;
-  			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
-  			break;
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
-  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
-			break;
-      default:
-        break;
-		  }
-   }
-   else
-   {
-      switch (raw->eff.sub_type)
-		  {
-		  case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_LOOPING:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_SLAP:
-  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
-		    canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
-  			break;
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_UP2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING1:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ENGINE_LOOPING2:
-  		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2:
-  			canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
-			break;
-		  default:
-        break;
-		  }
-   }
-	 
-	 v *= canopy_state_amp;
+		}
+
+		v *= canopy_state_amp;
 	}
 
-  if (ui_sounds_muted == 1)
-  	v = 0.0; //ataribaby 29/12/2008 for muted UI sounds
+	if (ui_sounds_muted == 1)
+		v = 0.0; //ataribaby 29/12/2008 for muted UI sounds
 
 	//
 	// adjust volume with channel sound settings
@@ -471,8 +455,6 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	
 			#endif
 	
-			panning = SOUND_MIDDLE_PAN;
-
 			if (raw->sound_effect_sequence_count > 1)
 			{
 				//
@@ -496,7 +478,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 					samples [sample_loop].rate = application_sound_effects [raw->effect_index [sample_loop]].rate;
 				}
 
-				raw->sound_effect_data = create_sequenced_system_sound_effect (raw->sound_effect_sequence_count, samples, panning, volume, (void *) en);
+				raw->sound_effect_data = create_sequenced_system_sound_effect (raw->sound_effect_sequence_count, samples, volume, (void *) en);
 
 				free_mem (samples);
 			}
@@ -506,12 +488,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 				// play single sound
 				//
 
-				int
-					rate;
-
-				rate = application_sound_effects [raw->effect_index [0]].rate;
-
-				raw->sound_effect_data = create_single_system_sound_effect (raw->effect_index [0], panning, rate, volume, raw->looping, (void *) en);
+				raw->sound_effect_data = create_single_system_sound_effect (raw->effect_index [0], volume, raw->looping, (void *) en);
 			}
 
 			if (!raw->sound_effect_data)
@@ -540,11 +517,6 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 
 			if ((raw->panning) && (raw->sound_locality != SOUND_LOCALITY_INTERIOR))
 			{
-				float
-					ang,
-					temp,
-					length;
-
 				vec3d
 					sound_vector;
 
@@ -552,18 +524,8 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 				sound_vector.y = raw->eff.position.y - vp->y;
 				sound_vector.z = raw->eff.position.z - vp->z;
 
-				length = normalise_any_3d_vector (&sound_vector);
-
-				if (length > 0.0)
-				{
-					ang = fabs (acos (get_3d_unit_vector_dot_product (&sound_vector, &(vp->xv))));
-
-					temp = SOUND_RIGHT_PAN + ((SOUND_LEFT_PAN - SOUND_RIGHT_PAN) * (ang / PI));
-
-					convert_float_to_int (temp, &panning);
-
-					set_system_sound_effect_panning (raw->sound_effect_data, panning);
-				}
+				// Casm 07DEC09 OpenAL support
+				set_system_sound_effect_position (raw->sound_effect_data, sound_vector);
 			}
 
 			//Werewolf pitch 4 Feb 2006
@@ -583,12 +545,10 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 					if (raw->effect_lifetime > 0.0)
 					{
 						float
+							sample_time,
 							d,
 							rate,
 							size;
-	
-						int
-							buffer_position;
 	
 						//
 						// play sound part way through
@@ -604,7 +564,6 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 								current_index;
 
 							float
-								sample_time,
 								lifetime;
 
 							lifetime = raw->effect_lifetime;
@@ -614,17 +573,15 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 								rate = (float)(application_sound_effects [raw->effect_index [current_index]].rate);
 								size = (float)(application_sound_effects [raw->effect_index [current_index]].size);
 
-								sample_time = size / rate;
+								sample_time = size / rate; // It's not correct because of pitch
 
 								if (lifetime <= sample_time)
 								{
-									d = (size - (lifetime * rate));
+									d = sample_time - lifetime;
 
-									d = bound (d, 0.0, size);
+									d = bound (d, 0.0, sample_time);
 
-									convert_float_to_int (d, &buffer_position);
-
-									play_sequenced_system_sound_effect (raw->sound_effect_data, current_index, buffer_position);
+									play_sequenced_system_sound_effect (raw->sound_effect_data, current_index, d);
 
 									break;
 								}
@@ -641,19 +598,19 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 							rate = (float)(application_sound_effects [raw->effect_index [0]].rate);
 							size = (float)(application_sound_effects [raw->effect_index [0]].size);
 	
-							d = size - (raw->effect_lifetime * rate);
-	
-							d = bound (d, 0.0, size);
+							sample_time = size / rate; // It's not correct because of pitch
 
-							convert_float_to_int (d, &buffer_position);
-		
+							d = sample_time - raw->effect_lifetime;
+	
+							d = bound (d, 0.0, sample_time);
+
 							#if DEBUG_MODULE
 		
 							debug_log ("SE_SND: playing sound from byte %d / %.0f", buffer_position, size);
 			
 							#endif
 
-							play_system_sound_effect (raw->sound_effect_data, buffer_position);
+							play_system_sound_effect (raw->sound_effect_data, d);
 						}
 					}
 				}
@@ -669,7 +626,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		
 					#endif
 
-					play_system_sound_effect (raw->sound_effect_data, 0);
+					play_system_sound_effect (raw->sound_effect_data, 0.0);
 				}
 			}
 		}

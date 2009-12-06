@@ -1190,25 +1190,11 @@ void notify_card_selection_button ( ui_object *obj, void *arg )
 
 	// modify ok button text
 
-	if (old_graphics_card_automatic_selection != get_global_graphics_device_selection_automatic ())
-	{
-		set_ui_object_text (option_page_ok_button, get_trans ("Restart"));
-	}
-	else
-	{
-		set_ui_object_text (option_page_ok_button, get_trans ("UI_OK"));
-	}
+	set_option_page_ok_button_reason (OPOBR_GRAPHIC_CARD, old_graphics_card_automatic_selection != get_global_graphics_device_selection_automatic ());
 
 	if (!old_graphics_card_automatic_selection)
 	{
-		if (old_graphics_card_selection != get_card_selection_device ())
-		{
-			set_ui_object_text (option_page_ok_button, get_trans ("Restart"));
-		}
-		else
-		{
-			set_ui_object_text (option_page_ok_button, get_trans ("UI_OK"));
-		}
+		set_option_page_ok_button_reason (OPOBR_GRAPHIC_CARD, old_graphics_card_selection != get_card_selection_device ());
 	}
 
 	// don't leave text selected

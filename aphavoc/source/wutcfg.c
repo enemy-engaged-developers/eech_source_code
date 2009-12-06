@@ -135,7 +135,7 @@ void parse_WUT_file(const char *fname)
 	fclose(f);
 	
 //VJ 040321 relaxed crterium for checking GWUT file
-	if (!strstr(buf,"GWUT") == 0)
+	if (strstr(buf,"GWUT"))
 	{
 		ReadGWutInfo(fname);
 	}	

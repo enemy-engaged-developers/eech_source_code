@@ -64,9 +64,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "sound.h"
-
 #include "cmndline.h"
+
+#include "sound_internal.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,17 +83,12 @@ static int
 
 struct SOUND_SAMPLE
 {
-
 	LPDIRECTSOUNDBUFFER
 		sound_buffer;
 
 	int
 		size,
-		locked,
 		default_rate;
-
-	unsigned char
-		*data;
 };
 
 typedef struct SOUND_SAMPLE sound_sample;
@@ -117,6 +112,9 @@ int
 
 int
 	sound_volume_lookup_table[SOUND_MAXIMUM_VOLUME+1];
+
+static vec3d
+	listener_right;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,6 +214,11 @@ int initialise_sound_system ( void )
 
 void deinitialise_sound_system ( void )
 {
+}
+
+int get_sound_system_devices ( const char **devices, const char **default_device )
+{
+	return FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,7 +406,7 @@ int get_system_sound_effect_playing ( system_sound_effect *effect )
 		DWORD
 			status;
 
-		if ( IDirectSoundBuffer_GetStatus ( effect->sound_buffer, &status ) == DS_OK )
+		if ( IDirectSoundBuffer_GetStatus ( (LPDIRECTSOUNDBUFFER) effect->sound_buffer, &status ) == DS_OK )
 		{
 
 			if ( ( status && DSBSTATUS_LOOPING ) || ( status && DSBSTATUS_PLAYING ) )
@@ -464,10 +467,6 @@ void create_source_sound_sample ( int sample_index, sample_types type, int defau
 	source_sound_samples[sample_index].size = size;
 
 	source_sound_samples[sample_index].default_rate = default_rate;
-
-	source_sound_samples[sample_index].locked = FALSE;
-
-	source_sound_samples[sample_index].data = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,77 +489,42 @@ void destroy_source_sound_sample ( int sample_index )
 	source_sound_samples[sample_index].sound_buffer = NULL;
 	source_sound_samples[sample_index].size = 0;
 	source_sound_samples[sample_index].default_rate = 0;
-	source_sound_samples[sample_index].locked = FALSE;
-	source_sound_samples[sample_index].data = NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char * lock_source_sound_sample ( int sample_index )
+void load_source_sound_sample ( int sample_index, void *data )
 {
-
 	unsigned char
 		*ptr;
 
 	ASSERT ( sample_index >= 0 );
 	ASSERT ( sample_index < number_of_source_sound_samples );
 	ASSERT ( source_sound_samples[sample_index].sound_buffer );
-	ASSERT ( !source_sound_samples[sample_index].locked );
 
 	ptr = dsound_lock_sound_buffer ( source_sound_samples[sample_index].sound_buffer, 0, source_sound_samples[sample_index].size );
 
 	if ( ptr )
 	{
+		memcpy ( ptr, data, source_sound_samples[sample_index].size );
 
-		source_sound_samples[sample_index].data = ptr;
-
-		source_sound_samples[sample_index].locked = TRUE;
-
-		return ( ptr );
+		dsound_unlock_sound_buffer ( source_sound_samples[sample_index].sound_buffer, ptr, source_sound_samples[sample_index].size );
 	}
-
-	return ( NULL );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void unlock_source_sound_sample ( int sample_index )
+system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int volume, int looping, void *user_data )
 {
-
-	sound_sample
-		*sample;
-
-	ASSERT ( sample_index >= 0 );
-	ASSERT ( sample_index < number_of_source_sound_samples );
-	ASSERT ( source_sound_samples[sample_index].sound_buffer );
-	ASSERT ( source_sound_samples[sample_index].locked );
-	ASSERT ( source_sound_samples[sample_index].data );
-
-	sample = &source_sound_samples[sample_index];
-
-	dsound_unlock_sound_buffer ( sample->sound_buffer, sample->data, sample->size );
-
-	sample->locked = FALSE;
-	sample->data = NULL;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-system_sound_effect * create_single_system_sound_effect ( int sound_sample_index, int panning, int rate, int volume, int looping, void *user_data )
-{
-
 	system_sound_effect
 		*effect;
 
 	if ( !sound_system_initialised )
 	{
-
 		return ( NULL );
 	}
 
@@ -577,6 +541,10 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 
 	if ( effect )
 	{
+		float
+			rate;
+
+		rate = source_sound_samples[sound_sample_index].default_rate;
 
 		//
 		// Fill in the details about this sound effect
@@ -587,24 +555,14 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 		effect->sound_sample_sequence[0].sound_sample_index = sound_sample_index;
 		effect->sound_sample_sequence[0].rate = rate;
 
+		effect->rate = rate;
 		effect->playing = FALSE;
 		effect->paused = FALSE;
 		effect->looping = looping;
 		effect->volume = volume;
 		effect->pitch = 1.0;
-		effect->panning = panning;
+		effect->panning = 0;
 		effect->user_data = user_data;
-
-		if ( rate == 0 )
-		{
-
-			effect->rate = source_sound_samples[sound_sample_index].default_rate;
-		}
-		else
-		{
-	
-			effect->rate = rate;
-		}
 
 		//
 		// Duplicate the sound buffer concerned
@@ -632,7 +590,7 @@ system_sound_effect * create_single_system_sound_effect ( int sound_sample_index
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int panning, int volume, void *user_data )
+system_sound_effect * create_sequenced_system_sound_effect ( int number_of_samples, sound_sequence_information *samples, int volume, void *user_data )
 {
 
 	system_sound_effect
@@ -687,7 +645,7 @@ system_sound_effect * create_sequenced_system_sound_effect ( int number_of_sampl
 		}
 
 		effect->looping = FALSE;
-		effect->panning = panning;
+		effect->panning = 0;
 		effect->volume = volume;
 		effect->pitch = 1.0;
 		effect->rate = samples[0].rate;
@@ -762,54 +720,6 @@ void * get_system_sound_effect_user_data ( system_sound_effect *effect )
 	ASSERT ( effect );
 
 	return ( effect->user_data );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-float get_system_sound_effect_playing_time ( system_sound_effect *effect )
-{
-
-	int
-		count;
-
-	float
-		time;
-
-	if ( effect->looping )
-	{
-
-		return ( 0.0 );
-	}
-	else
-	{
-
-		//
-		// Go through all the sequenced sound samples, totalling up their playing times.
-		//
-	
-		time = 0;
-	
-		for ( count = 0; count < effect->number_of_sequenced_samples; count++ )
-		{
-	
-			int
-				sample_index;
-	
-			float
-				size,
-				rate;
-	
-			sample_index = effect->sound_sample_sequence[count].sound_sample_index;
-			rate = effect->sound_sample_sequence[count].rate;
-			size = source_sound_samples[sample_index].size;
-	
-			time += size / rate;
-		}
-	
-		return ( time );
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -928,13 +838,10 @@ void update_system_sound_effect_system ( void )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void play_sequenced_system_sound_effect ( system_sound_effect *effect, int sequence_index, int buffer_position )
+void play_sequenced_system_sound_effect ( system_sound_effect *effect, int sequence_index, float time_position )
 {
-
 	int
 		sound_sample_index;
-	int intrate; //Werewolf pitch - I hate typecasts
-	float floatrate = effect->rate*effect->pitch; //Werewolf
 
 	ASSERT ( effect );
 
@@ -946,8 +853,7 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 
 		if ( sequence_index == 0 )
 		{
-
-			play_system_sound_effect ( effect, buffer_position );
+			play_system_sound_effect ( effect, time_position );
 		}
 		else
 		{			
@@ -980,9 +886,17 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 
 			if ( effect->sound_buffer )
 			{
+				float
+					rate = effect->rate * effect->pitch,
+					position = time_position / rate;
+				int
+					int_rate,
+					buffer_position;
+
+				convert_float_to_int (rate, &int_rate);
+				convert_float_to_int (position, &buffer_position);
 	
-				convert_float_to_int (floatrate, &intrate);
-				dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate );  //Werewolf 4 Feb 2006
+				dsound_set_sound_buffer_rate ( effect->sound_buffer, int_rate );
 				
 				dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
@@ -1000,22 +914,28 @@ void play_sequenced_system_sound_effect ( system_sound_effect *effect, int seque
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void play_system_sound_effect ( system_sound_effect *effect, int buffer_position )
+void play_system_sound_effect ( system_sound_effect *effect, float time_position )
 {
-	int intrate; //Werewolf pitch - I hate typecasts
-	float floatrate = effect->rate*effect->pitch; //Werewolf
 	ASSERT ( effect );
 	ASSERT ( effect->sound_buffer );
 
 	if ( !effect->playing )
 	{
+		float
+			rate = effect->rate * effect->pitch,
+			position = time_position / rate;
+		int
+			int_rate,
+			buffer_position;
+
+		convert_float_to_int (rate, &int_rate);
+		convert_float_to_int (position, &buffer_position);
 	
 		effect->playing = TRUE;
 	
 		effect->paused = FALSE;
 	
-		convert_float_to_int (floatrate, &intrate);
-		dsound_set_sound_buffer_rate ( effect->sound_buffer, intrate); //Werewolf pitch 4 Feb 2006
+		dsound_set_sound_buffer_rate ( effect->sound_buffer, int_rate);
 	
 		dsound_set_sound_buffer_volume ( effect->sound_buffer, sound_volume_lookup_table[effect->volume] );
 	
@@ -1105,14 +1025,41 @@ void continue_system_sound_effect ( system_sound_effect *effect )
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void set_system_sound_effect_panning ( system_sound_effect *effect, int panning )
+void set_system_sound_listener_orientation ( vec3d forward, vec3d up, vec3d right )
 {
+	listener_right = right;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void set_system_sound_effect_position ( system_sound_effect *effect, vec3d position )
+{
+	float
+		length,
+		ang,
+		temp;
+
+	int
+		panning;
 
 	ASSERT ( effect );
 	ASSERT ( effect->sound_buffer );
 
-	ASSERT ( panning <= SOUND_RIGHT_PAN );
-	ASSERT ( panning >= SOUND_LEFT_PAN );
+	length = normalise_any_3d_vector ( &position );
+
+	if ( length == 0.0 )
+	{
+		return;
+	}
+
+	ang = fabs ( acos ( get_3d_unit_vector_dot_product ( &position, &listener_right) ) );
+
+	temp = 10000 + ( ( -10000 - 10000 ) * ( ang / PI ) );
+
+	convert_float_to_int ( temp, &panning );
 
 	effect->panning = panning;
 
@@ -1249,7 +1196,6 @@ void continue_sound_system ( void )
 	
 			if ( ( current_system_sound_effects[count].used ) && ( !current_system_sound_effects[count].paused ) )
 			{
-	
 				dsound_play_sound_buffer ( current_system_sound_effects[count].sound_buffer, current_system_sound_effects[count].looping );
 			}
 		}

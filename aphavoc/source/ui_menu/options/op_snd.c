@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -77,10 +77,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static ui_object
+	*sound_device_area,
 	*sound_effect_area,
 	*music_area,
 	*speech_area,
 	*co_pilot_speech_area,
+	*sound_device_option_button,
 	*sound_effect_option_button,
 	*music_option_button,
 	*speech_option_button,
@@ -89,9 +91,19 @@ static ui_object
 static const char
 	*option_boolean_text[2];
 
+static int
+	number_of_devices,
+	current_device,
+	original_device;
+
+static const char
+	**devices_array;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void notify_sound_device_option_button ( ui_object *obj, void *arg );
 
 void notify_sound_effect_option_button ( ui_object *obj, void *arg );
 
@@ -108,7 +120,9 @@ void notify_co_pilot_speech_option_button ( ui_object *obj, void *arg );
 void notify_show_sound_page (void)
 {
 	// initialise button text
-	
+
+	set_ui_object_text (sound_device_option_button, devices_array[current_device]);
+
 	set_ui_object_text (sound_effect_option_button, option_boolean_text[get_global_sound_effects_enabled ()]);
 
 	if (get_global_sound_music () == GAME_MUSIC_ON)
@@ -152,9 +166,50 @@ void define_options_screen_sound_page_objects (void)
 		*page;
 
 	ui_object
-		*title_change_array [4],
-		*check_array [4],
-		*change_array [4];
+		*title_change_array [5],
+		*check_array [5],
+		*change_array [5];
+
+	// Determine devices to show and select
+
+	// Casm 07DEC09 OpenAL support
+	if ( !devices_array )
+	{
+		const char
+			*devices,
+			*default_device,
+			*device;
+
+		if ( get_sound_system_devices ( &devices, &default_device ) )
+		{
+			if ( *command_line_sound_device )
+			{
+				default_device = command_line_sound_device;
+			}
+		}
+		else
+		{
+			devices = default_device = "Default\0\0";
+		}
+
+		number_of_devices = 0;
+		for ( device = devices; *device; device += strlen ( device ) + 1 )
+		{
+			number_of_devices++;
+		}
+		devices_array = ( const char ** ) safe_malloc ( number_of_devices * sizeof ( const char * ) );
+		original_device = -1;
+		for ( current_device = 0, device = devices; *device; current_device++, device += strlen ( device ) + 1 )
+		{
+			devices_array[current_device] = device;
+			if ( !strcmp ( devices_array[current_device], default_device ) )
+			{
+				original_device = current_device;
+			}
+		}
+		current_device = original_device;
+		ASSERT ( current_device != -1 );
+	}
 
 	/////////////////////////////////////////////////////////////////
 	// Initialise Button Strings
@@ -186,9 +241,59 @@ void define_options_screen_sound_page_objects (void)
 
 	// areas and titles
 
+	// sound device
+
+	x1 = 0.0;
+	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
+
+   sound_device_area = create_ui_object
+									(
+										UI_TYPE_AREA,
+										UI_ATTR_PARENT (page),
+										UI_ATTR_VIRTUAL_POSITION (x1, y1),
+										UI_ATTR_VIRTUAL_SIZE (OPTION_AREA_WIDTH, OPTION_AREA_HEIGHT),
+										UI_ATTR_CLEAR (TRUE),
+					               UI_ATTR_COLOUR_START (0,0,0,0),
+            					   UI_ATTR_COLOUR_END (255,255,255,255),
+										UI_ATTR_END
+									);
+
+	x1 = OPTION_TITLE_OFFSET_X;
+	y1 = 0.0;
+
+	title_change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (sound_device_area),
+		UI_ATTR_VIRTUAL_POSITION (x1, y1),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255,255,255,0),
+      UI_ATTR_COLOUR_END (255,255,255,255),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_large),
+		UI_ATTR_END
+	);
+
+   check_array[i] = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (title_change_array [i]),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ARIAL_18),
+      UI_ATTR_FONT_COLOUR_START (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_title_text_colour.r, ui_option_title_text_colour.g, ui_option_title_text_colour.b, 255),
+		UI_ATTR_VIRTUAL_POSITION (OPTION_BOX_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_RIGHT_CENTRE),
+		UI_ATTR_TEXT (get_trans ("Sound Device")),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
+
+
 	// sound effect
 
-	x1 = 0.0; 
+	i++;
+
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    sound_effect_area = create_ui_object
@@ -204,7 +309,7 @@ void define_options_screen_sound_page_objects (void)
 									);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -238,7 +343,7 @@ void define_options_screen_sound_page_objects (void)
 	y1 += OPTION_AREA_OFFSET_Y;
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    music_area = create_ui_object
@@ -254,7 +359,7 @@ void define_options_screen_sound_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -284,11 +389,11 @@ void define_options_screen_sound_page_objects (void)
 	preprocess_translation_object_size (title_change_array [i], check_array [i], NULL, 0, RESIZE_OPTION_BOX_TITLE);
 
 	//speech area
-	
+
 	y1 += OPTION_AREA_OFFSET_Y;
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    speech_area = create_ui_object
@@ -304,7 +409,7 @@ void define_options_screen_sound_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -338,7 +443,7 @@ void define_options_screen_sound_page_objects (void)
 	y1 += OPTION_AREA_OFFSET_Y;
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    co_pilot_speech_area = create_ui_object
@@ -354,7 +459,7 @@ void define_options_screen_sound_page_objects (void)
 										);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -389,8 +494,45 @@ void define_options_screen_sound_page_objects (void)
 
 	i = 0;
 
+	//sound device
+
+	change_array[i] = create_ui_object
+	(
+		UI_TYPE_AREA,
+		UI_ATTR_PARENT (sound_device_area),
+		UI_ATTR_VIRTUAL_POSITION ((get_ui_object_x_end (title_change_array [i]) + get_ui_object_x_size_end (title_change_array [i]) + OPTION_BOX_GAP_WIDTH), 0.0),
+		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
+		UI_ATTR_COLOUR_START (255,255,255,0),
+		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
+		UI_ATTR_TEXTURE_GRAPHIC (options_box_small),
+		UI_ATTR_END
+	);
+
+   sound_device_option_button = create_ui_object
+	(
+		UI_TYPE_TEXT,
+		UI_ATTR_PARENT (sound_device_area),
+		UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
+		UI_ATTR_VIRTUAL_POSITION (get_ui_object_x_end (change_array [i]) + OPTION_BUTTON_TEXT_OFFSET_X, OPTION_BOX_TEXT_OFFSET_Y),
+		UI_ATTR_TEXT_JUSTIFY (TEXT_JUSTIFY_LEFT_CENTRE),
+		UI_ATTR_TEXT (""),
+      UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
+      UI_ATTR_FONT_COLOUR_END (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 255),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_START (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 0),
+      UI_ATTR_HIGHLIGHTED_FONT_COLOUR_END (ui_option_text_hilite_colour.r, ui_option_text_hilite_colour.g, ui_option_text_hilite_colour.b, 255),
+		UI_ATTR_HIGHLIGHTABLE (TRUE),
+		UI_ATTR_CLEAR (TRUE),
+		UI_ATTR_NOTIFY_ON (NOTIFY_TYPE_BUTTON_UP),
+		UI_ATTR_FUNCTION (notify_sound_device_option_button),
+		UI_ATTR_END
+	);
+
+	preprocess_translation_object_size (change_array [i], sound_device_option_button, devices_array, number_of_devices, RESIZE_OPTION_CYCLE_BUTTON);
+
 	//sound effects
-	
+
+	i++;
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -427,7 +569,7 @@ void define_options_screen_sound_page_objects (void)
 	// music
 
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -462,9 +604,9 @@ void define_options_screen_sound_page_objects (void)
 	preprocess_translation_object_size (change_array [i], music_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
 	//speech
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -499,9 +641,9 @@ void define_options_screen_sound_page_objects (void)
 	preprocess_translation_object_size (change_array [i], speech_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
 	//co-pilot speech
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -543,6 +685,33 @@ void define_options_screen_sound_page_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void notify_sound_device_option_button ( ui_object *obj, void *arg )
+{
+	if (++current_device == number_of_devices)
+	{
+		current_device = 0;
+	}
+
+	strcpy (command_line_sound_device, devices_array[current_device]);
+	set_ui_object_text (sound_device_option_button, devices_array[current_device]);
+
+	set_option_page_ok_button_reason (OPOBR_SOUND_DEVICE, current_device != original_device);
+
+	// don't leave text selected
+
+	set_toggle_button_off (obj);
+
+	#if DEBUG_MODULE
+
+	debug_filtered_log ("sound device: %s", command_line_sound_device);
+
+	#endif
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void notify_sound_effect_option_button ( ui_object *obj, void *arg )
 {
 
@@ -550,7 +719,7 @@ void notify_sound_effect_option_button ( ui_object *obj, void *arg )
 		selection;
 
 	selection = !get_global_sound_effects_enabled ();
-	
+
 	set_ui_object_text (sound_effect_option_button, option_boolean_text [selection]);
 
 	set_global_sound_effects_enabled (selection);
@@ -573,7 +742,7 @@ void notify_sound_effect_option_button ( ui_object *obj, void *arg )
 			deinitialise_application_sound_system ();
 		}
 	}
-		
+
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
@@ -613,7 +782,7 @@ void notify_music_option_button ( ui_object *obj, void *arg )
 
 		stop_cd_music ();
 	}
-	
+
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
@@ -653,7 +822,7 @@ void notify_speech_option_button ( ui_object *obj, void *arg )
 		set_global_speech_effects_enabled ( FALSE );
 
 		if ( get_application_sound_system_status () && (!get_global_sound_effects_enabled ()))
-		{	
+		{
 			deinitialise_application_sound_system ();
 		}
 	}
@@ -661,7 +830,7 @@ void notify_speech_option_button ( ui_object *obj, void *arg )
 	// don't leave text selected
 
 	set_toggle_button_off (obj);
-	
+
 	#if DEBUG_MODULE
 
 	debug_filtered_log ("speech: %d", get_global_speech_effects_enabled ());
@@ -680,7 +849,7 @@ void notify_co_pilot_speech_option_button ( ui_object *obj, void *arg )
 		selection;
 
 	selection = !get_global_copilot_speech_effects_enabled ();
-	
+
 	set_ui_object_text (co_pilot_speech_option_button, option_boolean_text [selection]);
 
 	if(selection)
@@ -688,7 +857,7 @@ void notify_co_pilot_speech_option_button ( ui_object *obj, void *arg )
 		set_global_copilot_speech_effects_enabled ( TRUE );
 
 		if ( !get_application_sound_system_status () )
-		{	
+		{
 			initialise_application_sound_system ();
 		}
 	}
@@ -697,7 +866,7 @@ void notify_co_pilot_speech_option_button ( ui_object *obj, void *arg )
 		set_global_copilot_speech_effects_enabled ( FALSE );
 
 		if ( get_application_sound_system_status () && (!get_global_sound_effects_enabled ()))
-		{	
+		{
 			deinitialise_application_sound_system ();
 		}
 	}

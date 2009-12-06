@@ -235,6 +235,46 @@ static void get_mfd_pos ( const struct config_option *option, char *value )
 	sprintf ( value, "%d,%d,%d,%d", option->int_value[0], option->int_value[1], option->int_value[2], option->int_value[3]);
 }
 
+static void set_sound_device ( const struct config_option *option, const char *value )
+{
+	if ( value && *value && strlen ( value ) < option->flag_length )
+	{
+		int
+			i;
+		const char
+			*devices,
+			*default_device;
+
+		for ( i = 0; option->str_value[i] = value[i] == '_' ? ' ' : value[i]; i++ );
+
+		if ( get_sound_system_devices ( &devices, &default_device ) )
+		{
+			const char*
+				device;
+
+			ASSERT ( devices );
+			ASSERT ( default_device );
+
+			for ( device = devices; *device; device += strlen ( device ) + 1 )
+			{
+				if ( !strcmp ( device, option->str_value ) )
+				{
+					return;
+				}
+			}
+		}
+
+		option->str_value[0] = '\0';
+	}
+}
+
+static void get_sound_device ( const struct config_option *option, char *value )
+{
+	int
+		i;
+	for ( i = 0; value[i] = option->str_value[i] == ' ' ? '_' : option->str_value[i]; i++);
+}
+
 static void set_force_vectors ( const struct config_option *option, const char *value )
 {
 	set_global_dynamics_options_draw_flight_path ( value && atoi ( value ) );
@@ -817,6 +857,8 @@ static const struct config_option options[] =
 		NONE },
 	{ "ns", "no_sound", "bypass soundcard (useful for tracking hardware conflicts) (0 = off, 1 = on) (def = 0)",
 		INT(command_line_no_sound) },
+	{ "sound_device", "", "sound device name",
+		SPECSTR(command_line_sound_device, set_sound_device, get_sound_device) },
 	{ "hdwrbuf", "", "hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)",
 		INT(command_line_sound_hdwrbuf) },
 	{ "external_sounds_volume", "", "volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)",
