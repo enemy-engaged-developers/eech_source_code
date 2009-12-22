@@ -120,7 +120,7 @@ void set_viewport ( float x_min, float y_min, float x_max, float y_max )
 	convert_float_to_int (y_min, &active_int_viewport.y_min);
 	convert_float_to_int (y_max, &active_int_viewport.y_max);
 
-	if ( ( d3d_initialised /*d3d.device*/ ) && ( d3d_valid ) )
+	if ( ( d3d_initialised ) && ( d3d_valid ) )
 	{
 
 		D3DVIEWPORT7
@@ -221,7 +221,7 @@ void set_full_viewport ( float x_min, float y_min, float x_max, float y_max, flo
 	convert_float_to_int (y_min, &active_int_viewport.y_min);
 	convert_float_to_int (y_max, &active_int_viewport.y_max);
 
-	if ( ( d3d_initialised /*d3d.device*/ ) && ( d3d_valid ) )
+	if ( ( d3d_initialised ) && ( d3d_valid ) )
 	{
 
 

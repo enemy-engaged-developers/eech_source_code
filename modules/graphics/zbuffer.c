@@ -138,7 +138,7 @@ void clear_zbuffer_screen_using_viewport ( void )
 
 //	ASSERT ( !d3d_in_3d_scene );
 
-	if ( d3d_initialised /*d3d.device*/ )
+	if ( d3d_initialised )
 	{
 		f3d_zbuffer_clear(1.0);
 	}

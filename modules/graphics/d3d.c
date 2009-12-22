@@ -556,13 +556,13 @@ BOOL initialise_direct_3d_driver ( void )
 	// Initialise the d3d state system
 	//
 
+	d3d_initialised = TRUE,
+
 	initialise_d3d_state ();
 
 	//
 	// Set the device to valid
 	//
-
-	d3d_initialised = TRUE,
 
 	d3d_valid = TRUE;
 
