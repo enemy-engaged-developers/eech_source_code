@@ -1501,7 +1501,10 @@ void update_entity_weapon_systems (entity *source)
 
 					required_heading_offset = 0.0;
 
-					required_pitch_offset = 0.0;
+					if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND)
+						required_pitch_offset = rad(6.0);
+					else
+						required_pitch_offset = 0.0;
 
 					if (weapon_config_database[config_type][package].sub_type == selected_weapon)
 					{
@@ -1589,119 +1592,18 @@ void update_entity_weapon_systems (entity *source)
 						{
 							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
 							{
-								int use_eo_sight_for_direction = is_using_eo_system(command_line_cannontrack != 2);
-
-								// Mi-24's nose gun which doesn't have as good aiming devices as other helicopters
-								if (weapon_config_database[config_type][package].sub_type == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND)
+								// if we don't already have it we need to get the viewpoint of the weapon
+								if (!located_heading_and_pitch_devices)
 								{
-									target = NULL;
-									// in EO view fire along EO line of sight
-									use_eo_sight_for_direction = target_acquisition_system != TARGET_ACQUISITION_SYSTEM_HMS && view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE;
+									located_heading_and_pitch_devices =
+										get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
 
-									  // in HMS mode gun follows head, simulates co-pilot aiming
-									if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
-									{
-										required_heading_offset = -pilot_head_heading;
-										required_pitch_offset = pilot_head_pitch;
-									}
-									else  // fire straight ahead, where the pilot has a sight
-									{
-										required_heading_offset = 0.0;
-										required_pitch_offset = 0.0;
-									}
+									if (!located_heading_and_pitch_devices)
+										debug_fatal("Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
 								}
-								else
-									switch (command_line_cannontrack)
-									{
-										case 1:
-										{
-											if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
-											{
-												required_heading_offset = -pilot_head_heading;
-												required_pitch_offset = pilot_head_pitch;
-											}
-											break;
-										}
 
-										case 2:
-										{
-											if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
-											{
-												required_heading_offset = -pilot_head_heading;
-												required_pitch_offset = pilot_head_pitch;
-											}
-											break;
-										}
-									}
-
-								// slave to EO system if it is active (and doesn't have a target)
-								if (!target && use_eo_sight_for_direction)
-								{
-									vec3d* tracking_point = get_eo_tracking_point();
-
-									ASSERT(source == get_gunship_entity());
-
-									required_heading_offset = eo_azimuth;
-									required_pitch_offset = eo_elevation;
-
-									// if using point lock, then aim for that point
-									if (tracking_point && weapon_database[selected_weapon].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
-									{
-										float pitch, dummy;
-										float height_diff;
-										float range;
-
-										#ifdef DEBUG_MODULE
-										debug_log("Aiming for point lock at %.0f, %.0f,  %.0f", tracking_point->x, tracking_point->y, tracking_point->z);
-										#endif
-
-										// if we don't already have it we need to get the viewpoint of the weapon
-										if (!located_heading_and_pitch_devices)
-										{
-											located_heading_and_pitch_devices =
-												get_viewpoint_from_weapon(config_type, &package_status[package], package, inst3d, &vp, &search_weapon_system_heading, &search_weapon_system_pitch);
-
-											if (!located_heading_and_pitch_devices)
-												debug_fatal("Cannot locate device to rotate (name = %s, package = %d)", get_local_entity_string (source, STRING_TYPE_FULL_NAME), package);
-										}
-
-										height_diff = vp.position.y - tracking_point->y;
-										range = get_range_to_target();
-
-										if (range <= 0.0)
-											range = 1000.0;   // use 1000 meters if unable to determine range
-
-										// adjust weapon elevation for range
-										if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE))
-										{
-											matrix3x3 m;
-											float dx, dz;
-											float heading;
-											vec3d offset_vector, tracking_vector;
-
-											// get heading and pitch offsets
-
-											dx = tracking_point->x - vp.position.x;
-											dz = tracking_point->z - vp.position.z;
-
-											heading = atan2 (dx, dz);
-
-											// need to adjust for the gun's attitude, as the helicopter may not fly level all the time
-											get_3d_transformation_matrix (m, heading, pitch, 0.0);
-
-											tracking_vector.x = m[2][0];
-											tracking_vector.y = m[2][1];
-											tracking_vector.z = m[2][2];
-
-											multiply_transpose_matrix3x3_vec3d (&offset_vector, vp.attitude, &tracking_vector);
-
-											required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
-
-											flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
-											required_pitch_offset = atan2 (offset_vector.y, flat_range);
-										}
-									}
-								}
+								// player controlled weapons vector is in gunship code
+								get_requested_gunship_cannon_vector(target != NULL, &required_heading_offset, &required_pitch_offset, selected_weapon, &vp);
 
 								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
 								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);

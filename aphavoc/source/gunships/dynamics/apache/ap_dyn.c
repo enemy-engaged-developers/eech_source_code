@@ -517,7 +517,7 @@ void set_dynamics_defaults (entity *en)
 	current_flight_dynamics->mass.min = 5352.0;
 	current_flight_dynamics->mass.max = 0.0;
 
-	current_flight_dynamics->fuel_weight.value = 1108.0;
+	current_flight_dynamics->fuel_weight.value = 1110.0;
 	current_flight_dynamics->fuel_weight.min = 0.0;
 	current_flight_dynamics->fuel_weight.max = 1108.0;
 	current_flight_dynamics->fuel_weight.delta = 0.1450; // kg/s

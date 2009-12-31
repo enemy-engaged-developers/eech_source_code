@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -70,31 +70,39 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ 030807 radar range adjustable 
-float  	APACHE_RADAR_SCAN_RANGE_500,	
-			APACHE_RADAR_SCAN_RANGE_1000,
-			APACHE_RADAR_SCAN_RANGE_2000,			
-			APACHE_RADAR_SCAN_RANGE_4000,			
-			APACHE_RADAR_SCAN_RANGE_8000;			
-			
+//VJ 030807 radar range adjustable
+float
+			APACHE_RADAR_SCAN_RANGE_500 = 500.0,
+			APACHE_RADAR_SCAN_RANGE_1000 = 1000.0,
+			APACHE_RADAR_SCAN_RANGE_2000 = 2000.0,
+			APACHE_RADAR_SCAN_RANGE_4000 = 4000.0,
+			APACHE_RADAR_SCAN_RANGE_8000 = 8000.0,
+			APACHE_RADAR_SCAN_RANGE_TPM = 2500.0;  // only used for TPM mode
+
 float radar_range_apache[5];
 
 
 void initialise_apache_radar (void)
 {
-//VJ 030807 radar range adjustable 	
-   APACHE_RADAR_SCAN_RANGE_500 = radar_range_apache[0];	
-	APACHE_RADAR_SCAN_RANGE_1000 = radar_range_apache[1];
-	APACHE_RADAR_SCAN_RANGE_2000 = radar_range_apache[2];		
-	APACHE_RADAR_SCAN_RANGE_4000 = radar_range_apache[3];		
-	APACHE_RADAR_SCAN_RANGE_8000 = radar_range_apache[4];			
-	
+//VJ 030807 radar range adjustable
+	if (FALSE)
+	{
+		APACHE_RADAR_SCAN_RANGE_500 = radar_range_apache[0];
+		APACHE_RADAR_SCAN_RANGE_1000 = radar_range_apache[1];
+		APACHE_RADAR_SCAN_RANGE_2000 = radar_range_apache[2];
+		APACHE_RADAR_SCAN_RANGE_4000 = radar_range_apache[3];
+		APACHE_RADAR_SCAN_RANGE_8000 = radar_range_apache[4];
+	}
+
 	ground_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_8000;
 	ground_radar.scan_datum	  				= rad (0.0);
 	ground_radar.scan_arc_size	  			= APACHE_RADAR_SCAN_ARC_SIZE_90;
 	ground_radar.sweep_offset 				= rad (0.0);
 	ground_radar.sweep_rate		  			= rad (360.0) / 6.0;
 	ground_radar.sweep_direction			= RADAR_SWEEP_CW;
+	ground_radar.elevation					= rad (-3.0);
+	ground_radar.bar						= 0;
+	ground_radar.bar_scan					= 2;
 	ground_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_8000 + 2000.0;
 	ground_radar.show_allied_targets		= TRUE;
 	ground_radar.target_locked	  			= FALSE;
@@ -102,18 +110,54 @@ void initialise_apache_radar (void)
 	ground_radar.target_priority_type	= TARGET_PRIORITY_UNKNOWN;
 	ground_radar.sweep_mode		 			= RADAR_SWEEP_MODE_CONTINUOUS;
 
-	air_radar.scan_range			 			= APACHE_RADAR_SCAN_RANGE_8000;
-	air_radar.scan_datum	  		 			= rad (0.0);
+	air_radar.scan_range			 		= APACHE_RADAR_SCAN_RANGE_8000;
+	air_radar.scan_datum	  		 		= rad (0.0);
 	air_radar.scan_arc_size	  				= APACHE_RADAR_SCAN_ARC_SIZE_360;
 	air_radar.sweep_offset	  				= rad (0.0);
-	air_radar.sweep_rate		  				= rad (360.0) / 6.0;
+	air_radar.sweep_rate		  			= rad (360.0) / 6.0;
 	air_radar.sweep_direction 				= RADAR_SWEEP_CW;
+	air_radar.elevation						= rad (0.0);
+	air_radar.bar							= 0;
+	air_radar.bar_scan						= 1;
 	air_radar.max_target_track_range		= APACHE_RADAR_SCAN_RANGE_8000 + 2000.0;
 	air_radar.show_allied_targets			= TRUE;
 	air_radar.target_locked					= FALSE;
 	air_radar.auto_target					= TRUE;
-	air_radar.target_priority_type		= TARGET_PRIORITY_UNKNOWN;
-	air_radar.sweep_mode						= RADAR_SWEEP_MODE_CONTINUOUS;
+	air_radar.target_priority_type			= TARGET_PRIORITY_UNKNOWN;
+	air_radar.sweep_mode					= RADAR_SWEEP_MODE_CONTINUOUS;
+
+	tpm_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_TPM;
+//	tpm_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_8000;
+	tpm_radar.scan_datum	  				= rad (0.0);
+	tpm_radar.scan_arc_size	  			= APACHE_RADAR_SCAN_ARC_SIZE_180;
+	tpm_radar.sweep_offset 				= rad (0.0);
+	tpm_radar.sweep_rate		  			= rad (360.0) / 6.0;
+	tpm_radar.sweep_direction			= RADAR_SWEEP_CW;
+	tpm_radar.elevation					= 0.0;
+	tpm_radar.bar						= 0;
+	tpm_radar.bar_scan					= 2;
+	tpm_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_TPM;
+	tpm_radar.show_allied_targets		= TRUE;
+	tpm_radar.target_locked	  			= FALSE;
+	tpm_radar.auto_target				= FALSE;
+	tpm_radar.target_priority_type	= TARGET_PRIORITY_UNKNOWN;
+	tpm_radar.sweep_mode		 			= RADAR_SWEEP_MODE_CONTINUOUS;
+
+	zoomed_radar.scan_range		  		= APACHE_RADAR_SCAN_RANGE_8000;
+	zoomed_radar.scan_datum	  			= rad (0.0);
+	zoomed_radar.scan_arc_size	  			= APACHE_RADAR_SCAN_ARC_SIZE_90;
+	zoomed_radar.sweep_offset 				= rad (0.0);
+	zoomed_radar.sweep_rate		  		= rad (360.0) / 20.0;
+	zoomed_radar.sweep_direction			= RADAR_SWEEP_CW;
+	zoomed_radar.elevation					= 0.0;
+	zoomed_radar.bar						= 0;
+	zoomed_radar.bar_scan					= 1;
+	zoomed_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_8000;
+	zoomed_radar.show_allied_targets		= TRUE;
+	zoomed_radar.target_locked	  			= FALSE;
+	zoomed_radar.auto_target				= FALSE;
+	zoomed_radar.target_priority_type		= TARGET_PRIORITY_UNKNOWN;
+	zoomed_radar.sweep_mode		 			= RADAR_SWEEP_MODE_CONTINUOUS;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,26 +178,6 @@ void deinitialise_apache_radar (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void rotate_ground_radar_scan_datum_left (void)
-{
-	ground_radar.scan_datum -= APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
-
-	if ((ground_radar.scan_datum - (ground_radar.scan_arc_size * 0.5)) >= -APACHE_RADAR_SCAN_ARC_SIZE_45)
-	{
-		ground_radar.sweep_offset += APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
-	}
-	else
-	{
-		ground_radar.scan_datum = -APACHE_RADAR_SCAN_ARC_SIZE_45 + (ground_radar.scan_arc_size * 0.5);
-	}
-
-	limit_radar_sweep (&ground_radar);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static void fast_rotate_ground_radar_scan_datum_left (void)
 {
 	float
@@ -166,26 +190,6 @@ static void fast_rotate_ground_radar_scan_datum_left (void)
 	theta = ground_radar.scan_datum - theta;
 
 	ground_radar.sweep_offset -= theta;
-
-	limit_radar_sweep (&ground_radar);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void rotate_ground_radar_scan_datum_right (void)
-{
-	ground_radar.scan_datum += APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
-
-	if ((ground_radar.scan_datum + (ground_radar.scan_arc_size * 0.5)) <= APACHE_RADAR_SCAN_ARC_SIZE_45)
-	{
-		ground_radar.sweep_offset -= APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
-	}
-	else
-	{
-		ground_radar.scan_datum = APACHE_RADAR_SCAN_ARC_SIZE_45 - (ground_radar.scan_arc_size * 0.5);
-	}
 
 	limit_radar_sweep (&ground_radar);
 }
@@ -308,11 +312,7 @@ static void fast_dec_ground_radar_scan_arc_size (void)
 
 static void inc_ground_radar_scan_range (void)
 {
-	if (ground_radar.scan_range == APACHE_RADAR_SCAN_RANGE_500)
-	{
-		ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
-	}
-	else if (ground_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
+	if (ground_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
 	{
 		ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_2000;
 	}
@@ -353,10 +353,6 @@ static void dec_ground_radar_scan_range (void)
 	{
 		ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
 	}
-	else if (ground_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
-	{
-		ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_500;
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -365,7 +361,7 @@ static void dec_ground_radar_scan_range (void)
 
 static void fast_dec_ground_radar_scan_range (void)
 {
-	ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_500;
+	ground_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +387,7 @@ static void inc_ground_radar_target_priority (void)
 	{
 		ground_radar.target_priority_type = TARGET_PRIORITY_DESIGNATED;
 	}
-	// Jabberwock 031107 ends	
+	// Jabberwock 031107 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -426,7 +422,7 @@ static void dec_ground_radar_target_priority (void)
 	{
 		ground_radar.target_priority_type = TARGET_PRIORITY_HIGH;
 	}
-	// Jabberwock 031107 ends	
+	// Jabberwock 031107 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -466,8 +462,7 @@ void update_apache_ground_radar (void)
 
 	while (single_target_acquisition_system_steer_left_key)
 	{
-		rotate_ground_radar_scan_datum_left ();
-
+		rotate_radar_scan_datum(-APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
 		single_target_acquisition_system_steer_left_key--;
 	}
 
@@ -482,8 +477,7 @@ void update_apache_ground_radar (void)
 
 	while (single_target_acquisition_system_steer_right_key)
 	{
-		rotate_ground_radar_scan_datum_right ();
-
+		rotate_radar_scan_datum(APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
 		single_target_acquisition_system_steer_right_key--;
 	}
 
@@ -609,7 +603,7 @@ void update_apache_ground_radar (void)
 	}
 
 // Jabberwock 031107 Designated targets
-	
+
 	while (single_target_acquisition_system_select_next_designated_key)
 	{
 		select_next_designated_ground_radar_target ();
@@ -624,8 +618,8 @@ void update_apache_ground_radar (void)
 		select_next_designated_ground_radar_target ();
 
 		single_target_acquisition_system_select_previous_designated_key--;
-	}	
-// Jabberwock 031107 ends	
+	}
+// Jabberwock 031107 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -811,11 +805,7 @@ static void fast_dec_air_radar_scan_arc_size (void)
 
 static void inc_air_radar_scan_range (void)
 {
-	if (air_radar.scan_range == APACHE_RADAR_SCAN_RANGE_500)
-	{
-		air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
-	}
-	else if (air_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
+	if (air_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
 	{
 		air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_2000;
 	}
@@ -856,10 +846,6 @@ static void dec_air_radar_scan_range (void)
 	{
 		air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
 	}
-	else if (air_radar.scan_range == APACHE_RADAR_SCAN_RANGE_1000)
-	{
-		air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_500;
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -868,7 +854,7 @@ static void dec_air_radar_scan_range (void)
 
 static void fast_dec_air_radar_scan_range (void)
 {
-	air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_500;
+	air_radar.scan_range = APACHE_RADAR_SCAN_RANGE_1000;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1009,7 +995,7 @@ void update_apache_air_radar (void)
 		single_target_acquisition_system_select_previous_target_key--;
 	}
 // Jabberwock 031107 Designated targets
-	
+
 	while (single_target_acquisition_system_select_next_designated_key)
 	{
 		select_next_designated_air_radar_target ();
@@ -1024,8 +1010,8 @@ void update_apache_air_radar (void)
 		select_next_designated_air_radar_target ();
 
 		single_target_acquisition_system_select_previous_designated_key--;
-	}	
-// Jabberwock 031107 ends	
+	}
+// Jabberwock 031107 ends
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

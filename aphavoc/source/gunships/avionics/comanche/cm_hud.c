@@ -2385,46 +2385,6 @@ void draw_comanche_hud (void)
 		colour,
 		specular;
 
-/* VJ used for trying out
-char buffer[255];
-		if (check_key(DIK_NUMPAD7))
-		{
-			system_sleep(20);
-			_dx -= 0.001;
-		}
-		if (check_key(DIK_NUMPAD9))
-		{
-			system_sleep(20);
-			_dx += 0.001;
-		}
-		if (check_key(DIK_NUMPAD1))
-		{
-			system_sleep(20);
-			_dy -= 0.001;
-		}
-		if (check_key(DIK_NUMPAD3))
-		{
-			system_sleep(20);
-			_dy += 0.001;
-		}
-		if (check_key(DIK_Q))
-		{
-			system_sleep(20);
-			dc += 16;
-			df = 1.0;
-			_dx = 0;
-			_dy = 0;
-		}
-		if (check_key(DIK_A))
-		{
-			system_sleep(20);
-			df += 0.05;
-		}
-		if (dc > 160) dc = 0;
-		//if (dc < 0) dc = 160;
-		if (df > 1.0) df = 0.65;
-		//if (df < 0.65) df = 1.0;
-*/
 	////////////////////////////////////////
 	//
 	// do not draw damaged HUD

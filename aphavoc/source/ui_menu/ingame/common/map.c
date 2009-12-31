@@ -68,6 +68,7 @@
 
 #include "ai/taskgen/croute.h"
 #include "ai/ai_misc/ai_dbase.h"
+#include "gunships/avionics/apache/ap_coordinate_point.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1215,15 +1216,20 @@ void initialise_layer_control_objects (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void player_map_updated(entity* changed_task)
+static void player_map_updated(entity* waypoint, entity* changed_task, waypoint_update_action change)
 {
-	if (get_gunship_entity() && get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+	if (get_gunship_entity() && get_global_gunship_type() == GUNSHIP_TYPE_HIND || get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
 	{
 		entity* group = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_MEMBER);
 		entity* player_task = group ? get_local_group_primary_task(group) : NULL;
 
 		if (player_task && changed_task == player_task)
-			hind_map_waypoints_changed();
+		{
+			if (get_global_gunship_type() == GUNSHIP_TYPE_HIND)
+				hind_map_waypoints_changed();
+			else
+				apache_waypoint_changed(waypoint, change);
+		}
 	}
 }
 
@@ -1504,9 +1510,10 @@ void map_wheel_zoom_in_event (event *ev)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void map_add_waypoint (entity *wp1, vec3d *pos)
+entity* map_add_waypoint (entity *wp1, vec3d *pos, int signal_avionics)
 {
 	entity
+		*waypoint,
 		*task;
 
 	ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
@@ -1521,7 +1528,7 @@ void map_add_waypoint (entity *wp1, vec3d *pos)
 	ASSERT (task);
 	ASSERT (get_local_entity_type (task) == ENTITY_TYPE_TASK);
 
-	create_client_server_entity
+	waypoint = create_client_server_entity
 	(
 		ENTITY_TYPE_WAYPOINT,
 		ENTITY_INDEX_DONT_CARE,
@@ -1533,23 +1540,26 @@ void map_add_waypoint (entity *wp1, vec3d *pos)
 		ENTITY_ATTR_END
 	);
 
-	player_map_updated(task);
+	if (signal_avionics)
+		player_map_updated(waypoint, task, MAP_WAYPOINT_CREATED);
+
+	return waypoint;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void map_delete_waypoint_event ()
+void map_delete_waypoint_event (entity* en)
 {
 	entity
-		*en,
+//		*en,
 		*task;
 
 	entity_sub_types
 		sub_type;
 
-	en = get_ui_mouse_over_entity ();
+//	en = get_ui_mouse_over_entity ();
 
 	if (en)
 	{
@@ -1569,7 +1579,7 @@ void map_delete_waypoint_event ()
 					{
 						task = get_local_entity_parent (en, LIST_TYPE_WAYPOINT);
 
-						player_map_updated(task);
+						player_map_updated(en, task, MAP_WAYPOINT_DELETED);
 
 						ASSERT (task);
 
@@ -1645,7 +1655,7 @@ int map_insert_waypoint_function (ui_object *obj)
 
 		if (get_comms_model () == COMMS_MODEL_SERVER)
 		{
-			map_add_waypoint (wp1, &pos);
+			map_add_waypoint (wp1, &pos, TRUE);
 		}
 		else
 		{
@@ -2105,7 +2115,7 @@ void map_move_waypoint_position (event *ev)
 
 		set_local_entity_vec3d (map_dimensions->selected_entity, VEC3D_TYPE_POSITION, &pos);
 
-		player_map_updated(get_local_entity_parent(map_dimensions->selected_entity, LIST_TYPE_WAYPOINT));
+		player_map_updated(map_dimensions->selected_entity, get_local_entity_parent(map_dimensions->selected_entity, LIST_TYPE_WAYPOINT), MAP_WAYPOINT_MOVED);
 	}
 }
 

@@ -66,6 +66,7 @@
 #include "project.h"
 
 #include "common/co_undercarriage.h"
+#include "common/co_fuel.h"
 
 #include "ah64a/ah_dyn.h"
 #include "apache/ap_dyn.h"
@@ -337,6 +338,8 @@ void initialise_flight_dynamics (entity *en)
 	initialise_flight_dynamics_collision_points ();
 
 	initialise_flight_dynamics_input_devices ();
+
+	initialise_fuel_system();
 
 	add_update_function (update_flight_path, 10.0, 0.0);
 
@@ -1150,6 +1153,8 @@ void update_flight_dynamics (void)
 			current_flight_dynamics->g_force.value = 1.0 + current_flight_dynamics->model_acceleration_vector.y / G;
 		else
 			current_flight_dynamics->g_force.value = 1.0;
+
+		update_fuel_system();
 
 		// TODO: don't do this unconditionally
 		set_local_entity_int_value(get_gunship_entity(), INT_TYPE_MOVED, TRUE);
@@ -2585,6 +2590,7 @@ void dynamics_takeoff (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+extern entity *get_closest_keysite (entity_sub_types type, entity_sides side, vec3d *pos, float min_range, float *actual_range, entity *exclude_keysite);
 
 void dynamics_land (void)
 {
@@ -2636,7 +2642,11 @@ void dynamics_land (void)
 	model_position.y = current_flight_dynamics->position.y;
 	model_position.z = current_flight_dynamics->position.z;
 
-	keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &model_position, 5 * KILOMETRE, &actual_range, NULL);
+
+	{
+		float min_range = 5.0f * KILOMETRE;
+		keysite = get_closest_keysite (NUM_ENTITY_SUB_TYPE_KEYSITES, get_global_gunship_side (), &model_position, min_range, &actual_range, NULL);
+	}
 
 	if (keysite)
 	{
@@ -3001,6 +3011,7 @@ float set_flight_dynamics_mass (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 void update_current_flight_dynamics_fuel_weight (void)
 {
 
@@ -3010,9 +3021,7 @@ void update_current_flight_dynamics_fuel_weight (void)
 		return;
 	}
 
-	#if !DEMO_VERSION
 	if (!get_local_entity_int_value (get_session_entity (), INT_TYPE_INFINITE_FUEL))
-	#endif
 	{
 		float fuel_delta = current_flight_dynamics->fuel_weight.delta * get_delta_time ();
 		// arneh - adjust for engine RPM.  Adjusted to 1 at 85% N1 RPM on both engines
@@ -3044,7 +3053,7 @@ void update_current_flight_dynamics_fuel_weight (void)
 		}
 	}
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3585,7 +3594,7 @@ void flight_dynamics_start_apu (void)
 // arneh, july 06 - modelling of APU added
 void update_apu_rpm_dynamics (void)
 {
-	if (!current_flight_dynamics->apu_rpm.damaged)
+	if (!current_flight_dynamics->apu_rpm.damaged && engine_has_fuel_supply(0))
 		current_flight_dynamics->apu_rpm.delta = bound(current_flight_dynamics->apu_rpm.max - current_flight_dynamics->apu_rpm.value, -30.0, 30.0);
 	else
 		current_flight_dynamics->apu_rpm.delta = -100.0;
@@ -3847,7 +3856,7 @@ void update_engine_rpm_dynamics (int engine_number)
 	}
 	else
 	{
-		if (current_flight_dynamics->fuel_weight.value <= 0.0)
+		if (!engine_has_fuel_supply(engine_number))
 			n1_rpm->delta = -10.0;
 
 		n1_rpm->value += n1_rpm->delta * get_model_delta_time ();

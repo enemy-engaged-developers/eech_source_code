@@ -74,10 +74,10 @@
 #define MAJOR_VERSION	1
 
 // data version max value: 127
-#define DATA_VERSION	12
+#define DATA_VERSION	13
 
 // minor version max value: 127
-#define MINOR_VERSION   2
+#define MINOR_VERSION   0
 
 
 /* Please ensure you update the version number in BUILD_TYPE _and_ APP_NAME

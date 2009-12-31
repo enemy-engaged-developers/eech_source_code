@@ -114,8 +114,6 @@ typedef enum DYNAMICS_OPTIONS_TYPES dynamics_options_types;
 
 #define DYNAMICS_LOW_ROTOR_RPM_SPEECH_TIME		(20 * ONE_SECOND)
 
-#define DYNAMICS_LOW_FUEL_SPEECH_TIME				(20 * ONE_SECOND)
-
 #define DYNAMICS_EXCEEDING_VNE_SPEECH_TIME 		(20 * ONE_SECOND)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -584,7 +582,7 @@ extern void set_keysite_currently_landed_at (entity *en);
 
 extern float set_flight_dynamics_mass (void);
 
-extern void update_current_flight_dynamics_fuel_weight (void);
+//extern void update_current_flight_dynamics_fuel_weight (void);
 
 extern void update_current_flight_dynamics_flight_time (void);
 

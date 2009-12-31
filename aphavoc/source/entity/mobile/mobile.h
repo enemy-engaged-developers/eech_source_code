@@ -113,6 +113,7 @@ struct MOBILE
 		side		 	  		 	  			: NUM_SIDE_BITS,
 		kill_next_update	 	  			: NUM_KILL_NEXT_UPDATE_BITS,
 		tacview_logging : 1,
+		gunship_radar_target_index		: NUM_GUNSHIP_RADAR_TARGET_INDEX_BITS,
 		object_drawn_once_this_frame	: NUM_OBJECT_DRAWN_ONCE_THIS_FRAME_BITS;
 };
 

@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -94,6 +94,30 @@
 
 #define TERRAIN_LOS_MARKER_SMALL_STEP_3D_OBJECT	(OBJECT_3D_INTERCEPT_POINT_WHITE)
 
+#define RADAR_RETURN_WIDTH_SAMPLE_POINTS 255
+#define ZOOMED_RADAR_RETURN_WIDTH_SAMPLE_POINTS 159
+#define RADAR_RETURN_DISTANCE_SAMPLE_POINTS 100
+//#define RADAR_RETURN_WIDTH_SAMPLE_POINTS 51
+//#define RADAR_RETURN_DISTANCE_SAMPLE_POINTS 10
+#define RADAR_RETURN_CENTRE_SAMPLE_POINT_INDEX (RADAR_RETURN_WIDTH_SAMPLE_POINTS / 2)
+
+#define RADAR_BAR_COVERAGE_ANGLE (rad(5.0))
+
+#define ZOOMED_RADAR_RADIUS 350.0
+
+#define GROUND_RADAR_MIN_SCAN_ANGLE rad(-45.0)
+#define GROUND_RADAR_MAX_SCAN_ANGLE rad(45.0)
+
+#define FCR_POWERUP_TIME (180.0)
+
+#define MAX_RADAR_CONTACTS (1 << (NUM_GUNSHIP_RADAR_TARGET_INDEX_BITS - 1))
+
+#define use_separate_radar_target_list() (get_global_avionics_realism() == AVIONICS_DETAIL_REALISTIC && get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
+
+// time before target where contact is lost is removed from the radar
+#define GROUND_TARGET_LIFETIME (60.0)
+#define AIR_TARGET_LIFETIME (10.0)
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,13 +127,38 @@ int
 	draw_radar_terrain_los_markers = FALSE;
 
 radar_params
+	tpm_radar,
+	zoomed_radar,
 	ground_radar,
 	air_radar;
 
-static int
-	ground_radar_on = FALSE,
-	air_radar_on = FALSE;
+static radar_modes
+	radar_mode;
 
+static int
+	num_tpm_profile_lines;
+
+static float
+	fcr_power_up_timer,
+	tpm_clearance_height = feet_to_metres(200.0);
+
+static radar_tpm_profile_modes
+	tpm_profile_mode;
+
+vec3d
+	zoomed_radar_centre_pos,
+	zoomed_radar_relative_pos;
+
+static unsigned
+	fcr_powered,
+	rfi_powered,
+	mma_pinned,
+	tpm_near_mode,
+	auto_pan_scan_datum,
+	rfi_show_hostile_only,
+	radar_zoomed,
+	radar_active,
+	radar_terrain_sensivity;  // 0 = Auto sensivity
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,14 +185,116 @@ unsigned int
 		0x88888888, 0x22222222,
 	};
 
+static rgb_colour radar_return_palette[16];
+
+static radar_contact radar_contacts[MAX_RADAR_CONTACTS];
+static unsigned nradar_contacts;
+
+static signed char terrain_radar_return[RADAR_RETURN_WIDTH_SAMPLE_POINTS][RADAR_RETURN_DISTANCE_SAMPLE_POINTS];
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+typedef struct
+{
+	float
+		distance,
+		elevation;
+
+	vec3d
+		position;
+
+	unsigned
+		age : 2,
+		bar : 2;
+} radar_profile_information;
+
+static float profile_sample_ranges[NUM_TPM_PROFILE_LINES];
+static radar_profile_information highest_elevation_in_range[RADAR_RETURN_WIDTH_SAMPLE_POINTS][NUM_TPM_PROFILE_LINES];
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static entity *get_best_air_radar_target (void);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void set_radar_returns_pallette_colours(void)
+{
+	int i;
+	int last_colour_index = ARRAY_LENGTH(radar_return_palette) - 1;
+	rgb_colour brightest;
+	float luminocity_step = (1.0 - 0.2) / ARRAY_LENGTH(radar_return_palette);
+	float luminocity = 1.0 - luminocity_step;
+
+	float sensivity = ((radar_terrain_sensivity ? radar_terrain_sensivity : 4) * 0.1) + 0.4;
+
+	set_rgb_colour(brightest, (int)(30 * sensivity), (int)(190 * sensivity), (int)(10 * sensivity), 255);
+	radar_return_palette[last_colour_index] = brightest;
+
+	for (i = last_colour_index - 1; i >= 0 ; i--, luminocity -= luminocity_step)
+	{
+		radar_return_palette[i].r = (int)(brightest.r * luminocity);
+		radar_return_palette[i].g = (int)(brightest.g * luminocity);
+		radar_return_palette[i].b = (int)(brightest.b * luminocity);
+		radar_return_palette[i].a = 255;
+	}
+}
+
+unsigned get_radar_terrain_sensivity()
+{
+	return radar_terrain_sensivity;
+}
+
+void set_radar_terrain_sensivity(unsigned sensivity)
+{
+	radar_terrain_sensivity = sensivity;
+	set_radar_returns_pallette_colours();
+}
+
+static void clear_terrain_return_data(void)
+{
+	memset(terrain_radar_return, -1, sizeof(terrain_radar_return));
+	memset(highest_elevation_in_range, 0, sizeof(highest_elevation_in_range));
+}
+
 void initialise_common_radar (void)
 {
-	ground_radar_on = FALSE,
-	air_radar_on = FALSE;
+	radar_active = FALSE;
+	clear_terrain_return_data();
+	set_radar_returns_pallette_colours();
+
+	radar_zoomed = FALSE;
+	radar_mode = RADAR_MODE_NONE;
+
+	set_tpm_profile_mode(RADAR_TPM_PROFILE_ARITH);
+	num_tpm_profile_lines = 4;
+	tpm_clearance_height = feet_to_metres(200.0);
+	tpm_near_mode = FALSE;
+
+	radar_terrain_sensivity = 0;
+	auto_pan_scan_datum = FALSE;
+	fcr_power_up_timer = 0.0;
+
+	memset(radar_contacts, 0, sizeof(radar_contacts));
+	nradar_contacts = 0;
+
+	if (get_global_gunship_type() == GUNSHIP_TYPE_APACHE && get_global_avionics_realism() == AVIONICS_DETAIL_REALISTIC && command_line_dynamics_engine_startup)
+	{
+		fcr_powered = rfi_powered = FALSE;
+		mma_pinned = TRUE;
+		rfi_show_hostile_only = FALSE;
+	}
+	else
+	{
+		fcr_powered = rfi_powered = TRUE;
+		mma_pinned = FALSE;
+		rfi_show_hostile_only = TRUE;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,6 +303,287 @@ void initialise_common_radar (void)
 
 void deinitialise_common_radar (void)
 {
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+radar_params* get_current_radar_params(void)
+{
+	if (radar_mode == RADAR_MODE_ATM)
+		return &air_radar;
+	else if (radar_mode == RADAR_MODE_TPM)
+		return &tpm_radar;
+	else if (radar_zoomed)
+		return &zoomed_radar;
+	else
+		return &ground_radar;
+}
+
+radar_modes get_radar_mode(void)
+{
+	return radar_mode;
+}
+
+void set_radar_mode(radar_modes mode)
+{
+	if (mode != radar_mode)
+	{
+		radar_mode = mode;
+		if (mode == RADAR_MODE_RMAP || mode == RADAR_MODE_TPM)
+			clear_terrain_return_data();
+	}
+}
+
+unsigned get_radar_active(void)
+{
+	return radar_active && fcr_powered && !mma_pinned;
+}
+
+void set_radar_active(unsigned active)
+{
+	radar_active = active && fcr_powered;
+}
+
+void toggle_single_scan_active(void)
+{
+	radar_params* radar = get_current_radar_params();
+
+	radar_active = !radar_active && fcr_powered;
+
+	if (radar_active)
+	{
+		radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE;
+		radar->sweep_offset = -0.5 * radar->scan_arc_size;
+		radar->sweep_direction = RADAR_SWEEP_CW;
+		radar->bar = 0;
+	}
+}
+
+void toggle_continuous_radar_active(void)
+{
+	radar_params* radar = get_current_radar_params();
+
+	radar->sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
+	radar_active = !radar_active;
+}
+
+void set_air_radar_is_active(int active)
+{
+	if (active && fcr_powered)
+	{
+		radar_mode = RADAR_MODE_ATM;
+		radar_active = TRUE;
+	}
+	else
+		radar_active = FALSE;
+}
+
+void set_ground_radar_is_active(int active)
+{
+	radar_mode = (active && fcr_powered) ? RADAR_MODE_GTM : RADAR_MODE_NONE;
+}
+
+void activate_common_radar (void)
+{
+	radar_active = fcr_powered;
+
+	if (radar_mode == RADAR_MODE_NONE)
+		radar_mode = RADAR_MODE_GTM;
+}
+
+void deactivate_common_radar (void)
+{
+	radar_active = FALSE;
+}
+
+void toggle_common_radar_active(void)
+{
+	radar_active = !radar_active && fcr_powered;
+
+	if (radar_mode == RADAR_MODE_NONE)
+	{
+		ASSERT(FALSE);
+		radar_mode = RADAR_MODE_GTM;
+	}
+}
+
+void set_radar_zoomed(unsigned zoomed)
+{
+	if (radar_mode == RADAR_MODE_RMAP && zoomed != radar_zoomed)
+		clear_terrain_return_data();
+
+	if (zoomed && get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET))
+		radar_zoomed = TRUE;
+	else
+		radar_zoomed = FALSE;
+}
+
+unsigned get_radar_zoomed(void)
+{
+	return radar_zoomed;
+}
+
+void rotate_radar_scan_datum(float amount)
+{
+	radar_params* radar = get_current_radar_params();
+
+	amount = bound(amount, GROUND_RADAR_MIN_SCAN_ANGLE + (radar->scan_arc_size * 0.5) - radar->scan_datum, GROUND_RADAR_MAX_SCAN_ANGLE - (radar->scan_arc_size * 0.5) - radar->scan_datum);
+
+	radar->scan_datum += amount;
+	radar->sweep_offset -= amount;
+}
+
+void pan_radar_elevation(float amount)
+{
+	radar_params* radar = get_current_radar_params();
+
+	amount = bound(amount, MIN_RADAR_ELEVATION_ANGLE - radar->elevation, MAX_RADAR_ELEVATION_ANGLE - radar->elevation);
+
+	radar->elevation += amount;
+}
+
+void toggle_radar_auto_pan_scan_datum(void)
+{
+	auto_pan_scan_datum = !auto_pan_scan_datum;
+}
+
+unsigned get_radar_auto_pan_scan_datum(void)
+{
+	return auto_pan_scan_datum;
+}
+
+unsigned get_fcr_powered(void)
+{
+	return fcr_powered;
+}
+
+unsigned fcr_being_powered_up(void)
+{
+	return fcr_power_up_timer > 0.0;
+}
+
+void toggle_fcr_power(void)
+{
+	if (!fcr_powered && fcr_power_up_timer <= 0.0)
+		fcr_power_up_timer = FCR_POWERUP_TIME;
+	else
+	{
+		fcr_powered = FALSE;
+		fcr_power_up_timer = 0.0;
+	}
+}
+
+unsigned get_rfi_powered(void)
+{
+	return rfi_powered;
+}
+
+void toggle_rfi_power(void)
+{
+	rfi_powered = !rfi_powered;
+}
+
+unsigned get_radar_mma_pinned(void)
+{
+	return mma_pinned;
+}
+
+void toggle_radar_mma_pinned(void)
+{
+	mma_pinned = !mma_pinned;
+}
+
+unsigned get_rfi_show_hostile_only(void)
+{
+	return rfi_show_hostile_only;
+}
+
+void toggle_rfi_show_hostile_only(void)
+{
+	rfi_show_hostile_only = !rfi_show_hostile_only;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static const char* tpm_profile_mode_names[] =
+{
+	"GEOM",
+	"ARITH",
+	"TEST"
+};
+
+radar_tpm_profile_modes get_tpm_profile_mode(void)
+{
+	return tpm_profile_mode;
+}
+
+const char* get_tpm_profile_mode_name(void)
+{
+	return tpm_profile_mode_names[tpm_profile_mode];
+}
+
+void set_tpm_profile_mode(radar_tpm_profile_modes mode)
+{
+	tpm_profile_mode = mode;
+
+	if (mode == RADAR_TPM_PROFILE_GEOM)
+	{
+		profile_sample_ranges[0] = 200.0;
+		profile_sample_ranges[1] = 400.0;
+		profile_sample_ranges[2] = 800.0;
+		profile_sample_ranges[3] = 1600.0;
+		profile_sample_ranges[4] = 2500.0;
+	}
+	else
+	{
+		profile_sample_ranges[0] = 500.0;
+		profile_sample_ranges[1] = 1000.0;
+		profile_sample_ranges[2] = 1500.0;
+		profile_sample_ranges[3] = 2000.0;
+		profile_sample_ranges[4] = 2500.0;
+	}
+}
+
+unsigned get_tpm_profile_lines(void)
+{
+	return num_tpm_profile_lines;
+}
+
+void set_tpm_profile_lines(unsigned lines)
+{
+	num_tpm_profile_lines = lines;
+}
+
+float get_tpm_profile_range(unsigned index)
+{
+	if (index < NUM_TPM_PROFILE_LINES)
+		return profile_sample_ranges[index];
+
+	return 0.0;
+}
+
+void set_tpm_clearance_height(float height)
+{
+	tpm_clearance_height = height;
+}
+
+float get_tpm_clearance_height(void)
+{
+	return tpm_clearance_height;
+}
+
+void toggle_radar_tpm_far_near_mode(void)
+{
+	tpm_near_mode = !tpm_near_mode;
+}
+
+unsigned get_radar_tpm_near_mode(void)
+{
+	return tpm_near_mode;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,10 +610,8 @@ void limit_radar_sweep (radar_params *radar)
 
 			radar->sweep_direction = RADAR_SWEEP_CW;
 
-			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
-			{
-				radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-			}
+			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE)
+				radar_active = FALSE;
 		}
 		else if (radar->sweep_offset > sweep_max_limit)
 		{
@@ -189,17 +619,15 @@ void limit_radar_sweep (radar_params *radar)
 
 			radar->sweep_direction = RADAR_SWEEP_CCW;
 
-			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
-			{
-				radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-			}
+			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE)
+				radar_active = FALSE;
 		}
 
 		//
 		// if single sweep inactive then ensure that the sweep offset is kept to the sweep limit (when scan arc size is increased)
 		//
 
-		if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+		if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE && !radar_active)
 		{
 			if (radar->sweep_offset <= rad (0.0))
 			{
@@ -213,7 +641,7 @@ void limit_radar_sweep (radar_params *radar)
 	}
 	else
 	{
-		if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
+		if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE && !radar_active)
 		{
 			radar->sweep_offset = rad (0.0);
 		}
@@ -224,11 +652,13 @@ void limit_radar_sweep (radar_params *radar)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offset, float *cw_sweep_end_offset)
+static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offset, float *cw_sweep_end_offset, unsigned* completed_sweep)
 {
 	float
 		sweep_min_limit,
 		sweep_max_limit;
+
+	*completed_sweep = FALSE;
 
 	ASSERT (radar);
 
@@ -236,7 +666,8 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 
 	ASSERT (cw_sweep_end_offset);
 
-	ASSERT (radar->sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE);
+//	ASSERT (radar->sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE);
+	ASSERT (radar_active);
 
 	if (radar->scan_arc_size == RADAR_SCAN_ARC_SIZE_360)
 	{
@@ -244,7 +675,8 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 		{
 			*cw_sweep_start_offset = radar->sweep_offset;
 
-			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
+			if (!mma_pinned)
+				radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
 			if (radar->sweep_offset > rad (180.0))
 			{
@@ -253,14 +685,13 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 
 			*cw_sweep_end_offset = radar->sweep_offset;
 
-			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+			if ((*cw_sweep_start_offset < rad (0.0)) && (*cw_sweep_end_offset >= rad (0.0)))
 			{
-				if ((*cw_sweep_start_offset < rad (0.0)) && (*cw_sweep_end_offset >= rad (0.0)))
+				*completed_sweep = TRUE;
+				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE)
 				{
-					radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-
+					radar_active = FALSE;
 					radar->sweep_offset = rad (0.0);
-
 					*cw_sweep_end_offset = rad (0.0);
 				}
 			}
@@ -269,7 +700,8 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 		{
 			*cw_sweep_end_offset = radar->sweep_offset;
 
-			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
+			if (!mma_pinned)
+				radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
 			if (radar->sweep_offset < rad (-180.0))
 			{
@@ -278,15 +710,15 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 
 			*cw_sweep_start_offset = radar->sweep_offset;
 
-			if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+			if ((*cw_sweep_start_offset <= rad (0.0)) && (*cw_sweep_end_offset > rad (0.0)))
 			{
-				if ((*cw_sweep_start_offset <= rad (0.0)) && (*cw_sweep_end_offset > rad (0.0)))
+				*completed_sweep = TRUE;
+				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE)
 				{
-					radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-
+					radar_active = FALSE;
 					radar->sweep_offset = rad (0.0);
-
 					*cw_sweep_end_offset = rad (0.0);
+//					update_radar_contacts_after_full_sweep();
 				}
 			}
 		}
@@ -301,28 +733,33 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 		{
 			*cw_sweep_start_offset = radar->sweep_offset;
 
-			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
+			if (!mma_pinned)
+				radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
 			if (radar->sweep_offset > sweep_max_limit)
 			{
 				*cw_sweep_end_offset = sweep_max_limit;
 
-				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+				radar->bar++;
+				if (radar->bar >= radar->bar_scan)
 				{
-					radar->sweep_offset = sweep_max_limit;
+					radar->bar = 0;
+//					update_radar_contacts_after_full_sweep();
+					*completed_sweep = TRUE;
+				}
 
-					radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
+				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE && *completed_sweep)
+				{
+					radar_active = FALSE;
+					radar->sweep_offset = sweep_max_limit;
 				}
 				else
 				{
 					radar->sweep_offset = sweep_max_limit - (radar->sweep_offset - sweep_max_limit);
-
 					radar->sweep_offset = max (radar->sweep_offset, sweep_min_limit);
 
 					if (radar->sweep_offset < *cw_sweep_start_offset)
-					{
 						*cw_sweep_start_offset = radar->sweep_offset;
-					}
 				}
 
 				radar->sweep_direction = RADAR_SWEEP_CCW;
@@ -336,28 +773,33 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 		{
 			*cw_sweep_end_offset = radar->sweep_offset;
 
-			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
+			if (!mma_pinned)
+				radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
 			if (radar->sweep_offset < sweep_min_limit)
 			{
 				*cw_sweep_start_offset = sweep_min_limit;
 
-				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
+				radar->bar++;
+				if (radar->bar >= radar->bar_scan)
 				{
-					radar->sweep_offset = sweep_min_limit;
+					radar->bar = 0;
+					//update_radar_contacts_after_full_sweep();
+					*completed_sweep = TRUE;
+				}
 
-					radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
+				if (radar->sweep_mode == RADAR_SWEEP_MODE_SINGLE && radar->bar == 0)
+				{
+					radar_active = FALSE;
+					radar->sweep_offset = sweep_min_limit;
 				}
 				else
 				{
 					radar->sweep_offset = sweep_min_limit + (sweep_min_limit - radar->sweep_offset);
-
 					radar->sweep_offset = min (radar->sweep_offset, sweep_max_limit);
 
 					if (radar->sweep_offset > *cw_sweep_end_offset)
-					{
 						*cw_sweep_end_offset = radar->sweep_offset;
-					}
 				}
 
 				radar->sweep_direction = RADAR_SWEEP_CW;
@@ -758,88 +1200,6 @@ static int get_object_los_clear (entity *target, vec3d *source_position, vec3d *
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int get_valid_ground_radar_target (entity *target)
-{
-	target_types
-		target_type;
-
-	ASSERT (target);
-
-	if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
-	{
-		target_type = (target_types) get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
-
-		switch (target_type)
-		{
-			////////////////////////////////////////
-			case TARGET_TYPE_INVALID:
-			////////////////////////////////////////
-			{
-				return (get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER));
-
-				break;
-			}
-			////////////////////////////////////////
-			case TARGET_TYPE_GROUND:
-			////////////////////////////////////////
-			{
-				return (TRUE);
-
-				break;
-			}
-			////////////////////////////////////////
-			case TARGET_TYPE_AIR:
-			////////////////////////////////////////
-			{
-				if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
-				{
-					//
-					// allow low and slow flying aircraft
-					//
-
-					if (get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY) < knots_to_metres_per_second (50.0))
-					{
-						if (get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE) < 10.0)
-						{
-							return (TRUE);
-						}
-					}
-				}
-				else
-				{
-					if (!get_local_entity_int_value (target, INT_TYPE_INSIDE_HANGAR))
-					{
-						if (!get_local_entity_int_value (target, INT_TYPE_LANDED_ON_CARRIER))
-						{
-							return (TRUE);
-						}
-					}
-				}
-
-				return (FALSE);
-
-				break;
-			}
-			////////////////////////////////////////
-			default:
-			////////////////////////////////////////
-			{
-				debug_fatal ("Invalid target type = %d", target_type);
-
-				return (FALSE);
-
-				break;
-			}
-		}
-	}
-
-	return (FALSE);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 int get_gunship_target_valid_for_ground_radar (entity *target)
 {
 	target_types
@@ -864,12 +1224,19 @@ int get_gunship_target_valid_for_ground_radar (entity *target)
 			break;
 		}
 		////////////////////////////////////////
+		case TARGET_TYPE_HAZZARD:
+		////////////////////////////////////////
+		{
+			return TRUE;
+		}
+		////////////////////////////////////////
 		case TARGET_TYPE_GROUND:
 		////////////////////////////////////////
 		{
 
 			// loke 030322
 			// infantry should never show up on ground radar
+
 
 			if (session_ground_radar_ignores_infantry)
 			{
@@ -1323,7 +1690,7 @@ static entity *get_best_ground_radar_target (void)
 			}
 		}
 
-		
+
 	}
 
 	return (best_target);
@@ -1427,6 +1794,7 @@ static int get_selectable_ground_radar_target (entity *target)
 
 int get_target_matches_ground_radar_declutter_criteria (entity *target)
 {
+	// TODO
 	ASSERT (target);
 
 	if (ground_radar.target_priority_type == TARGET_PRIORITY_UNKNOWN)
@@ -1458,6 +1826,8 @@ int get_target_matches_ground_radar_declutter_criteria (entity *target)
 
 void get_next_ground_radar_target (void)
 {
+	// TODO
+
 	entity
 		*current_target,
 		*new_target;
@@ -1496,6 +1866,8 @@ void get_next_ground_radar_target (void)
 
 void get_previous_ground_radar_target (void)
 {
+	// TODO
+
 	entity
 		*current_target,
 		*new_target;
@@ -1532,7 +1904,792 @@ void get_previous_ground_radar_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_common_ground_radar (int inactive_check)
+void for_all_profile_lines(profile_line_iterator_handler handler)
+{
+	unsigned
+		num_angle_sample_points = RADAR_RETURN_WIDTH_SAMPLE_POINTS,
+		sample_x;
+
+	float
+		angle,
+		angle_step;
+
+	angle = rad(-180.0) * 0.5;
+	angle_step = rad(180.0) / (RADAR_RETURN_WIDTH_SAMPLE_POINTS - 1);
+
+	if (radar_mode != RADAR_MODE_TPM || tpm_profile_mode == RADAR_TPM_PROFILE_TEST)
+		return;
+
+	for (sample_x = 0; sample_x < num_angle_sample_points; sample_x++, angle += angle_step)
+	{
+		unsigned profile_line;
+		vec2d prev_vector, vector;
+
+		get_2d_unit_vector_from_heading(&prev_vector, angle - angle_step);
+		get_2d_unit_vector_from_heading(&vector, angle);
+
+		for (profile_line = 0; profile_line < NUM_TPM_PROFILE_LINES; profile_line++)
+		{
+			if (highest_elevation_in_range[sample_x][profile_line].elevation > 0 && highest_elevation_in_range[sample_x-1][profile_line].elevation > 0)
+			{
+				vec2d relative_point, prev_relative_point;
+
+				float
+					distance = highest_elevation_in_range[sample_x][profile_line].distance,
+					prev_distance;
+
+				relative_point.x = distance * vector.x;
+				relative_point.y = distance * vector.y;
+
+				if (sample_x > 0
+					&& highest_elevation_in_range[sample_x-1][profile_line].elevation >= 0.0
+					&& highest_elevation_in_range[sample_x][profile_line].bar == highest_elevation_in_range[sample_x-1][profile_line].bar
+					&& highest_elevation_in_range[sample_x][profile_line].age == highest_elevation_in_range[sample_x-1][profile_line].age)
+				{
+					prev_distance = highest_elevation_in_range[sample_x-1][profile_line].distance;
+
+					if (fabs(distance - prev_distance) > 100.0 || highest_elevation_in_range[sample_x-1][profile_line].distance < 0)
+						continue;
+
+					prev_relative_point.x = prev_distance * prev_vector.x;
+					prev_relative_point.y = prev_distance * prev_vector.y;
+
+					handler(&prev_relative_point, &relative_point, &highest_elevation_in_range[sample_x-1][profile_line].position, &highest_elevation_in_range[sample_x][profile_line].position, profile_line);
+				}
+				else
+					handler(NULL, &relative_point, NULL, &highest_elevation_in_range[sample_x][profile_line].position, profile_line);
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void get_zoomed_radar_limits(float* min_scan_angle, float* max_scan_angle, float* min_distance, float* max_distance)
+{
+	vec3d near_left, near_right, far_left, far_right;
+
+	ASSERT(radar_zoomed);
+	ASSERT(min_scan_angle && max_scan_angle && min_distance && max_distance);
+
+	near_left.x = zoomed_radar_relative_pos.x - ZOOMED_RADAR_RADIUS;
+	near_left.z = zoomed_radar_relative_pos.z - ZOOMED_RADAR_RADIUS;
+
+	near_right.x = zoomed_radar_relative_pos.x + ZOOMED_RADAR_RADIUS;
+	near_right.z = zoomed_radar_relative_pos.z - ZOOMED_RADAR_RADIUS;
+
+	far_left.x = zoomed_radar_relative_pos.x - ZOOMED_RADAR_RADIUS;
+	far_left.z = zoomed_radar_relative_pos.z + ZOOMED_RADAR_RADIUS;
+
+	far_right.x = zoomed_radar_relative_pos.x + ZOOMED_RADAR_RADIUS;
+	far_right.z = zoomed_radar_relative_pos.z + ZOOMED_RADAR_RADIUS;
+
+	if (near_left.x < 0)
+		*min_scan_angle = max(atan2(near_left.x, near_left.z), GROUND_RADAR_MIN_SCAN_ANGLE);
+	else
+		*min_scan_angle = max(atan2(far_left.x, far_left.z), GROUND_RADAR_MIN_SCAN_ANGLE);
+
+	if (near_right.x > 0)
+		*max_scan_angle = min(atan2(near_right.x, near_right.z), GROUND_RADAR_MAX_SCAN_ANGLE);
+	else
+		*max_scan_angle = min(atan2(far_right.x, far_right.z), GROUND_RADAR_MAX_SCAN_ANGLE);
+
+	*min_distance = max(50.0, (get_3d_vector_magnitude(&zoomed_radar_relative_pos) - ZOOMED_RADAR_RADIUS - 150.0));
+
+	if (fabs(far_left.x) > fabs(far_right.x))
+		*max_distance = sqrt((far_left.x * far_left.x) + (far_left.z * far_left.z));
+	else
+		*max_distance = sqrt((far_right.x * far_right.x) + (far_right.z * far_right.z));
+}
+
+#define TPM_TERRAIN_ABOVE_OWNSHIP_COLOUR 15
+#define TPM_IN_CLEARANCE_HEIGHT_COLOUR 0
+#define TPM_RADAR_SHADOW_COLOUR 7
+#define TPM_TERRAIN_CLEAR_COLOUR (-1)
+
+#define RMAP_RADAR_SHADOW_COLOUR (-1)
+
+static void update_terrain_radar_returns(vec3d* origin, radar_params* radar, float start_sweep_angle, float end_sweep_angle)
+{
+	unsigned x, y, num_angle_sample_points = RADAR_RETURN_WIDTH_SAMPLE_POINTS;
+	float angle, angle_step, distance, distance_step, regular_distance_step;
+	float radar_min_elevation, radar_max_elevation, radar_top_elevation;
+	float min_distance = 0.075 * radar->scan_range;
+	terrain_3d_point_data terrain_info;
+
+	memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
+
+	regular_distance_step = (radar->scan_range - min_distance) / RADAR_RETURN_DISTANCE_SAMPLE_POINTS;
+
+	// get x and y step
+	if (radar_zoomed && radar_mode == RADAR_MODE_RMAP)  // have to figure out area to cover when radar is zoomed
+	{
+		ASSERT(radar == &zoomed_radar);
+
+		num_angle_sample_points = ZOOMED_RADAR_RETURN_WIDTH_SAMPLE_POINTS;
+
+		//if (radar->sweep_offset == 0.0)
+		{
+			entity* source = get_gunship_entity();
+			entity* target = get_local_entity_parent(source, LIST_TYPE_TARGET);
+			vec3d* source_position = get_local_entity_vec3d_ptr(source, VEC3D_TYPE_POSITION);
+			float range, min_angle, max_angle;
+
+			// find position we're zoomed in on
+			if (target)
+				get_local_entity_vec3d(target, VEC3D_TYPE_POSITION, &zoomed_radar_centre_pos);
+
+			zoomed_radar_relative_pos.x = zoomed_radar_centre_pos.x - source_position->x;
+			zoomed_radar_relative_pos.y = zoomed_radar_centre_pos.y - source_position->y;
+			zoomed_radar_relative_pos.z = zoomed_radar_centre_pos.z - source_position->z;
+
+			rotate_3d_vector(&zoomed_radar_relative_pos, -current_flight_dynamics->heading.value);
+
+			// find limits of area surrounding zoomed point
+			get_zoomed_radar_limits(&min_angle, &max_angle, &radar->scan_min_range, &radar->scan_range);
+
+			radar->scan_arc_size = max_angle - min_angle;
+			radar->scan_datum = bound((max_angle + min_angle) * 0.5, rad(-45.0), rad(45.0));
+
+			range = sqrt((zoomed_radar_relative_pos.x * zoomed_radar_relative_pos.x) + (zoomed_radar_relative_pos.z * zoomed_radar_relative_pos.z));
+			radar->elevation = bound(atan2(zoomed_radar_relative_pos.y, range), MIN_RADAR_ELEVATION_ANGLE, MAX_RADAR_ELEVATION_ANGLE);
+		}
+
+		min_distance = radar->scan_min_range;
+		angle = radar->scan_datum - 0.5 * radar->scan_arc_size;
+		angle_step = radar->scan_arc_size / (num_angle_sample_points - 1);
+		distance_step = (radar->scan_range - min_distance) / RADAR_RETURN_DISTANCE_SAMPLE_POINTS;
+	}
+	else
+	{
+		angle = rad(-180.0) * 0.5;
+		angle_step = rad(180.0) / (RADAR_RETURN_WIDTH_SAMPLE_POINTS - 1);
+
+		distance_step = regular_distance_step;
+	}
+
+	if (radar->bar_scan == 1)  // second bar is lowest
+	{
+		radar_min_elevation = atan(radar->elevation - 0.5 * RADAR_BAR_COVERAGE_ANGLE);
+		radar_max_elevation = radar_top_elevation = atan(radar->elevation + 0.5 * RADAR_BAR_COVERAGE_ANGLE);
+	}
+	else if (radar->bar == 0)  // first bar is highest
+	{
+		radar_min_elevation = atan(radar->elevation);
+		radar_max_elevation = radar_top_elevation = atan(radar->elevation + RADAR_BAR_COVERAGE_ANGLE);
+	}
+	else  // use entire coverage area
+	{
+		radar_min_elevation = atan(radar->elevation - RADAR_BAR_COVERAGE_ANGLE);
+		radar_max_elevation = atan(radar->elevation);
+		radar_top_elevation = atan(radar->elevation + RADAR_BAR_COVERAGE_ANGLE);
+	}
+
+	// step through all through azimuth sample points
+	for (x = 0; x < num_angle_sample_points; x++, angle += angle_step)
+	{
+		vec3d scan_vector;
+		float radar_shadow_angle = radar_min_elevation, last_elevation = -1.0;
+		unsigned profile_line;
+
+		// ... but skip if it's not in the area being scanned this frame
+		if (angle < (radar->scan_datum + start_sweep_angle) || angle > (radar->scan_datum + end_sweep_angle))
+			continue;
+
+		get_3d_unit_vector_from_heading_and_pitch(&scan_vector, angle + current_flight_dynamics->heading.value, 0.0);
+
+		// reset profile line elevations for this azimuth (if old data was from same bar)
+		for (profile_line = 0; profile_line < NUM_TPM_PROFILE_LINES; profile_line++)
+			if (radar->bar == highest_elevation_in_range[x][profile_line].bar)  // always replace value if it's from the same bar in previous scan
+				highest_elevation_in_range[x][profile_line].elevation = -1.0;
+
+		profile_line = 0;
+
+		distance = regular_distance_step;
+
+		// we don't scan the area closest to helicopter (it's too close)
+		// but still need to figure out if the area shadows what's further away
+		for (; distance < min_distance; distance += regular_distance_step)
+		{
+			float elevation, elevation_angle;
+
+			elevation = get_3d_terrain_elevation(origin->x + scan_vector.x * distance, origin->z + scan_vector.z * distance);
+			elevation_angle = (elevation - origin->y + 1.0) / distance;
+
+			if (elevation_angle > radar_shadow_angle)
+				radar_shadow_angle = elevation_angle;
+		}
+
+		distance = min_distance;
+
+		// now start scanning sample points at regular intervals out on this azimuth
+		for (y = 0; y < RADAR_RETURN_DISTANCE_SAMPLE_POINTS; y++, distance = (y + 1) * distance_step + min_distance)
+		{
+			vec3d rel_position, world_position;
+			float elevation, elevation_angle;
+
+			if (radar_mode == RADAR_MODE_TPM && distance > profile_sample_ranges[profile_line])
+			{
+				// we're in the sample area for the next profile line now
+				profile_line++;
+				ASSERT(profile_line < NUM_TPM_PROFILE_LINES);
+			}
+
+			// get position of this sample point
+			rel_position.x = scan_vector.x * distance;
+			rel_position.y = 0.0;
+			rel_position.z = scan_vector.z * distance;
+
+			world_position.x = origin->x + rel_position.x;
+			world_position.y = 0.0;
+			world_position.z = origin->z + rel_position.z;
+
+			if (!point_inside_map_area(&world_position))
+			{
+				if (radar_mode == RADAR_MODE_TPM)
+					terrain_radar_return[x][y] = TPM_RADAR_SHADOW_COLOUR;
+				else
+					terrain_radar_return[x][y] = RMAP_RADAR_SHADOW_COLOUR;
+
+				break;
+			}
+
+			get_3d_terrain_point_data (world_position.x, world_position.z, &terrain_info);
+			world_position.y = elevation = get_3d_terrain_point_data_elevation (&terrain_info);
+
+			elevation_angle = (elevation - origin->y + 1.0) / distance;
+
+			if (elevation_angle > radar_shadow_angle && elevation_angle <= radar_max_elevation)
+			{
+				// this point is not in radar shadow
+
+				if (radar_mode == RADAR_MODE_TPM)
+				{
+					if (elevation > highest_elevation_in_range[x][profile_line].elevation)
+					{
+						// this is highest point for this profile line, keep it
+						highest_elevation_in_range[x][profile_line].elevation = elevation;
+						highest_elevation_in_range[x][profile_line].distance = distance;
+						highest_elevation_in_range[x][profile_line].bar = radar->bar;
+						highest_elevation_in_range[x][profile_line].age = 0;
+						highest_elevation_in_range[x][profile_line].position = world_position;
+					}
+
+					// compare to clearance etc.
+					if (elevation >= origin->y)
+						terrain_radar_return[x][y] = TPM_TERRAIN_ABOVE_OWNSHIP_COLOUR;
+					else if (elevation >= origin->y - tpm_clearance_height)
+						terrain_radar_return[x][y] = TPM_IN_CLEARANCE_HEIGHT_COLOUR;
+					else
+						terrain_radar_return[x][y] = TPM_TERRAIN_CLEAR_COLOUR;
+				}
+				else
+				{
+					// RMAP mode, colour according to terrain type
+					int colour;
+
+					switch (get_3d_terrain_point_data_type(&terrain_info))
+					{
+					case TERRAIN_TYPE_RIVER:
+					case TERRAIN_TYPE_RESERVOIR:
+					case TERRAIN_TYPE_TRENCH:
+					case TERRAIN_TYPE_SEA:
+						colour = 2;
+						break;
+					case TERRAIN_TYPE_RIVER_BANK:
+					case TERRAIN_TYPE_TRENCH_SIDE_X:
+					case TERRAIN_TYPE_TRENCH_SIDE_Z:
+						colour = 5;
+						break;
+						// Sunken features banks
+
+					case TERRAIN_TYPE_BEACH:
+						colour = 6;
+						break;
+
+					case TERRAIN_TYPE_LAND:
+						colour = 8;
+						break;
+
+					case TERRAIN_TYPE_FIELD1:
+					case TERRAIN_TYPE_FIELD2:
+					case TERRAIN_TYPE_FIELD3:
+					case TERRAIN_TYPE_FIELD4:
+					case TERRAIN_TYPE_FIELD5:
+					case TERRAIN_TYPE_FIELD6:
+					case TERRAIN_TYPE_FIELD7:
+					case TERRAIN_TYPE_FIELD8:
+					case TERRAIN_TYPE_FIELD9:
+					case TERRAIN_TYPE_FIELD10:
+					case TERRAIN_TYPE_FIELD11:
+						colour = 6;
+						break;
+
+					case TERRAIN_TYPE_ALTERED_LAND1:
+					case TERRAIN_TYPE_ALTERED_LAND2:
+					case TERRAIN_TYPE_ALTERED_LAND3:
+						colour = 10;
+						break;
+
+					case TERRAIN_TYPE_FOREST_FLOOR:
+						colour = 3;
+						break;
+
+						// Raised features banks
+					case TERRAIN_TYPE_ROAD_BANK:
+					case TERRAIN_TYPE_RAIL_BANK:
+						colour = 12;
+						break;
+
+						// Raised features sides
+					case TERRAIN_TYPE_HEDGE_SIDE_X:
+					case TERRAIN_TYPE_HEDGE_SIDE_Z:
+					case TERRAIN_TYPE_WALL_SIDE_X:
+					case TERRAIN_TYPE_WALL_SIDE_Z:
+						colour = 5;
+						break;
+
+					case TERRAIN_TYPE_FOREST_SIDE_BOTTOM_X:
+					case TERRAIN_TYPE_FOREST_SIDE_BOTTOM_Z:
+					case TERRAIN_TYPE_FOREST_SIDE_MID_X:
+					case TERRAIN_TYPE_FOREST_SIDE_MID_Z:
+					case TERRAIN_TYPE_FOREST_SIDE_TOP_X:
+					case TERRAIN_TYPE_FOREST_SIDE_TOP_Z:
+						colour = 3;
+						break;
+
+						// Raised features tops
+					case TERRAIN_TYPE_BUILT_UP_AREA1:
+					case TERRAIN_TYPE_BUILT_UP_AREA2:
+					case TERRAIN_TYPE_BUILT_UP_AREA3:
+					case TERRAIN_TYPE_BUILT_UP_AREA4:
+						colour = 9;
+						break;
+
+					case TERRAIN_TYPE_ROAD:
+					case TERRAIN_TYPE_TRACK:
+					case TERRAIN_TYPE_RAIL:
+						colour = 13;
+						break;
+					case TERRAIN_TYPE_WALL_TOP:
+					case TERRAIN_TYPE_HEDGE_TOP:
+						colour = 10;
+						break;
+
+					case TERRAIN_TYPE_FOREST_TOP:
+						colour = 3;
+						break;
+					}
+
+					// shade according to incline
+					if (y > 0)
+					{
+						if (elevation - last_elevation > distance_step * 0.10)
+							colour += 4;
+						else if (elevation - last_elevation > distance_step * 0.05)
+							colour += 3;
+						else if (elevation - last_elevation > distance_step * 0.02)
+							colour += 1;
+						else if (elevation - last_elevation > distance_step * 0.01)
+							colour += 1;
+
+						else if (last_elevation - elevation > distance_step * 0.10)
+							colour -= 4;
+						else if (last_elevation - elevation > distance_step * 0.05)
+							colour -= 3;
+						else if (last_elevation - elevation > distance_step * 0.02)
+							colour -= 2;
+						else if (last_elevation - elevation > distance_step * 0.01)
+							colour -= 1;
+					}
+
+					if (colour < 0)
+						colour = 0;
+					else if (colour >= ARRAY_LENGTH(radar_return_palette))
+						colour = ARRAY_LENGTH(radar_return_palette) - 1;
+
+					terrain_radar_return[x][y] = colour;
+				}
+			}
+			else if (radar->bar == 1)  // scan is complete
+			{
+				// ... and we got no returns
+				if (elevation_angle < radar_shadow_angle
+					|| elevation_angle > radar_top_elevation)
+				{
+					if (radar_mode == RADAR_MODE_TPM)
+						terrain_radar_return[x][y] = TPM_RADAR_SHADOW_COLOUR;
+					else
+						terrain_radar_return[x][y] = RMAP_RADAR_SHADOW_COLOUR;
+				}
+			}
+
+			if (elevation_angle > radar_shadow_angle)
+				radar_shadow_angle = elevation_angle;
+			last_elevation = elevation;
+		}
+	}
+}
+
+// ugly hack, but we need these values in the draw_radar_profile_lines function
+float draw_scale, draw_centre_y;
+
+static void draw_radar_profile_lines(vec2d* prev_vector, vec2d* vector, vec3d* prev_abs_pos, vec3d* abs_pos, unsigned profile_line)
+{
+	float
+		x1,
+		x2,
+		y1,
+		y2;
+
+	if (!prev_vector)
+		return;
+
+	x1 = prev_vector->x * draw_scale;
+	y1 = draw_centre_y + prev_vector->y * draw_scale;
+
+	x2 = vector->x * draw_scale;
+	y2 = draw_centre_y + vector->y * draw_scale;
+
+	draw_2d_half_thick_line(x1, y1, x2, y2, radar_return_palette[7]);
+}
+
+void draw_terrain_radar_returns(vec3d* origin, float centre_y, float scale)
+{
+	radar_params* radar = get_current_radar_params();
+	float min_distance = 0.075 * radar->scan_range;
+
+	int sample_x;
+	int low_y, hi_y;
+
+	float angle, angle_step, distance, distance_step;
+	float sweep_min_limit = radar->scan_arc_size * -0.5 + radar->scan_datum;
+	float sweep_max_limit = radar->scan_arc_size * 0.5 + radar->scan_datum;
+
+	unsigned num_angle_sample_points = RADAR_RETURN_WIDTH_SAMPLE_POINTS;
+
+	if (radar_zoomed && radar_mode == RADAR_MODE_RMAP)
+	{
+		num_angle_sample_points = ZOOMED_RADAR_RETURN_WIDTH_SAMPLE_POINTS;
+		angle = radar->scan_datum - 0.5 * radar->scan_arc_size;
+
+		angle_step = radar->scan_arc_size / (num_angle_sample_points - 1);
+		distance_step = (radar->scan_range - radar->scan_min_range) / RADAR_RETURN_DISTANCE_SAMPLE_POINTS;
+		min_distance = radar->scan_min_range;
+	}
+	else
+	{
+		angle = rad(-180.0) * 0.5;
+		angle_step = rad(180.0) / (RADAR_RETURN_WIDTH_SAMPLE_POINTS - 1);
+
+		distance_step = (radar->scan_range - min_distance) / RADAR_RETURN_DISTANCE_SAMPLE_POINTS;;
+	}
+
+	// draw terrain returns in sector
+	for (sample_x = 0; sample_x < num_angle_sample_points; sample_x++, angle += angle_step)
+	{
+		vec3d scan_vector_min, scan_vector_max;
+
+		distance = min_distance;
+
+		// vector for each side of this slice
+		get_3d_unit_vector_from_heading_and_pitch(&scan_vector_min, max(angle - 0.5 * angle_step, sweep_min_limit), 0.0);
+		get_3d_unit_vector_from_heading_and_pitch(&scan_vector_max, min(angle + 0.5 * angle_step, sweep_max_limit), 0.0);
+
+		low_y = 0;
+		hi_y = low_y + 1;
+		while (hi_y <= RADAR_RETURN_DISTANCE_SAMPLE_POINTS)
+		{
+			float x1, x2, x3, x4, y1, y2, y3, y4;
+			float start_distance, end_distance;
+			int index = terrain_radar_return[sample_x][low_y];
+
+			// find how far we have the same colour
+			while (hi_y < RADAR_RETURN_DISTANCE_SAMPLE_POINTS && terrain_radar_return[sample_x][hi_y] == index)
+				hi_y++;
+
+			if (index >= 0)
+			{
+				// draw slice from low to hi
+				start_distance = (low_y) * distance_step + min_distance;
+				end_distance = (hi_y) * distance_step + min_distance;
+
+				x1 = scan_vector_min.x * start_distance * scale;
+				y1 = centre_y + scan_vector_min.z * start_distance * scale;
+
+				x2 = scan_vector_max.x * start_distance * scale;
+				y2 = centre_y + scan_vector_max.z * start_distance * scale;
+
+				x3 = scan_vector_min.x * end_distance * scale;
+				y3 = centre_y + scan_vector_min.z * end_distance * scale;
+
+				x4 = scan_vector_max.x * end_distance * scale;
+				y4 = centre_y + scan_vector_max.z * end_distance * scale;
+
+				if (radar_zoomed && radar_mode == RADAR_MODE_RMAP)
+				{
+					x1 -= zoomed_radar_relative_pos.x * scale;
+					y1 -= zoomed_radar_relative_pos.z * scale;
+					x2 -= zoomed_radar_relative_pos.x * scale;
+					y2 -= zoomed_radar_relative_pos.z * scale;
+					x3 -= zoomed_radar_relative_pos.x * scale;
+					y3 -= zoomed_radar_relative_pos.z * scale;
+					x4 -= zoomed_radar_relative_pos.x * scale;
+					y4 -= zoomed_radar_relative_pos.z * scale;
+				}
+
+				draw_2d_filled_triangle(x1, y1, x3, y3, x2, y2, radar_return_palette[index]);
+				draw_2d_filled_triangle(x2, y2, x3, y3, x4, y4, radar_return_palette[index]);
+			}
+
+			low_y = hi_y;
+			hi_y++;
+		}
+
+	}
+
+	draw_scale = scale;
+	draw_centre_y = centre_y;
+	if (radar_mode == RADAR_MODE_TPM)
+		for_all_profile_lines(draw_radar_profile_lines);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_radar_target(entity* target, vec3d* absolute_position, vec3d* relative_position)
+{
+	if (use_separate_radar_target_list() && debug_var_x <= 0)
+	{
+		int index = get_local_entity_int_value(target, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX);
+
+		ASSERT(index > 0 && index < ARRAY_LENGTH(radar_contacts));
+		ASSERT(radar_contacts[index].en == target);
+
+		radar_contacts[index].previous_position = radar_contacts[index].last_position;
+		radar_contacts[index].last_position = *absolute_position;
+		radar_contacts[index].display_position.x = relative_position->x;
+		radar_contacts[index].display_position.y = relative_position->z;
+		get_local_entity_vec3d(target, VEC3D_TYPE_MOTION_VECTOR, &radar_contacts[index].velocity);
+
+		radar_contacts[index].age = 0;
+		radar_contacts[index].last_contact = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+	}
+	else
+	{
+		if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
+		{
+			set_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR, TRUE);
+			set_local_entity_float_value (target, FLOAT_TYPE_AIR_RADAR_CONTACT_TIMEOUT, AIR_RADAR_CONTACT_TIMEOUT);
+		}
+		else
+		{
+			delete_local_entity_from_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET);
+		}
+	}
+}
+
+void add_new_radar_target(entity* target, vec3d* absolute_position, vec3d* relative_position)
+{
+	if (use_separate_radar_target_list())
+	{
+		ASSERT(!get_local_entity_int_value(target, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX));
+		if (nradar_contacts < ARRAY_LENGTH(radar_contacts) - 1)  // TODO: remove lowest pri or oldest target if not room
+		{
+			nradar_contacts++;
+
+			radar_contacts[nradar_contacts].en = target;
+
+			radar_contacts[nradar_contacts].last_position = radar_contacts[nradar_contacts].previous_position = *absolute_position;
+			radar_contacts[nradar_contacts].display_position.x = relative_position->x;
+			radar_contacts[nradar_contacts].display_position.y = relative_position->z;
+			get_local_entity_vec3d(target, VEC3D_TYPE_MOTION_VECTOR, &radar_contacts[nradar_contacts].velocity);
+
+			radar_contacts[nradar_contacts].priority = 0;  // TODO
+			radar_contacts[nradar_contacts].age = 0;
+			radar_contacts[nradar_contacts].last_contact = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+
+			set_local_entity_int_value(target, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX, nradar_contacts);
+		}
+	}
+	else
+		insert_local_entity_into_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET, get_gunship_entity(), NULL);
+}
+
+void update_radar_contacts_after_full_sweep()
+{
+	unsigned
+		nremoved = 0,
+		i;
+
+	float
+		current_time = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
+
+
+	radar_params* radar = get_current_radar_params();
+
+	// clean up contact list, removing old targets etc.
+	for (i = 1; i <= nradar_contacts; i++)
+	{
+		int
+			remove_contact = FALSE,
+			is_airborne_target = get_local_entity_int_value(radar_contacts[i].en, INT_TYPE_AIRBORNE_AIRCRAFT);
+
+		float
+			lifetime = is_airborne_target ? AIR_TARGET_LIFETIME : GROUND_TARGET_LIFETIME;
+
+		if (current_time - radar_contacts[i].last_contact > lifetime)  // no contact for some time
+			remove_contact = TRUE;
+		else if (!valid_target_for_radar_mode(radar_contacts[i].en, TRUE))
+			remove_contact = TRUE;
+		else if (radar_contacts[i].age)  // no contact this sweep
+		{
+			vec3d
+				*gunship_position = get_local_entity_vec3d_ptr(get_gunship_entity(), VEC3D_TYPE_POSITION);
+
+			float
+				dx, dy,
+				bearing;
+
+			dx = radar_contacts[i].last_position.x - gunship_position->x;
+			dy = radar_contacts[i].last_position.z - gunship_position->z;
+
+			bearing = atan2(dx, dy);
+
+			// remove if outside of sweep sector
+			if (!check_bearing_within_cw_sweep_segment(bearing, radar->scan_datum - radar->scan_arc_size * 0.5, radar->scan_datum + radar->scan_arc_size * 0.5))
+				remove_contact = TRUE;
+		}
+
+		if (remove_contact)
+		{
+			set_local_entity_int_value(radar_contacts[i].en, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX, 0);
+
+			debug_log("remove: %s [%d]: lifetime: %.1f, age: %d", get_sub_type_name(radar_contacts[i].en), i, current_time - radar_contacts[i].last_contact, radar_contacts[i].age);
+
+			nremoved++;
+			continue;
+		}
+
+//		debug_log("after sweep: %s [%d]: bearing: %.1f, min sweep: %.1f max sweep: %.1f, age: %d", get_sub_type_name(radar_contacts[i].en), i, deg(bearing), deg(radar->scan_datum - radar->scan_arc_size * 0.5), deg(radar->scan_datum + radar->scan_arc_size * 0.5), radar_contacts[i].age);
+
+		// increase age
+		if (radar_contacts[i].age < 8)
+			radar_contacts[i].age++;
+
+		// move up contacts to fill space left by removed contacts
+		if (nremoved)
+		{
+			int new_index = i - nremoved;
+			radar_contacts[new_index] = radar_contacts[i];
+			set_local_entity_int_value(radar_contacts[i].en, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX, new_index);
+		}
+	}
+
+	nradar_contacts -= nremoved;
+}
+
+radar_contact* get_radar_contacts(unsigned* ncontacts)
+{
+	*ncontacts = nradar_contacts;
+	if (nradar_contacts > 0)
+		return &radar_contacts[1];  // index 0 is empty
+	else
+		return NULL;
+}
+
+radar_contact* get_radar_contact_from_entity(entity* en)
+{
+	unsigned index = get_local_entity_int_value(en, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX);
+
+	if (index)
+		return &radar_contacts[index];
+	else
+		return NULL;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int valid_target_for_radar_mode(entity* target, int strict)
+{
+	switch (radar_mode)
+	{
+	case RADAR_MODE_ATM:
+		if (strict)
+		{
+			if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
+				if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+					if (get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE) > 5.0)
+						return (TRUE);
+
+			return FALSE;
+		}
+		else
+			return get_local_entity_int_value(target, INT_TYPE_TARGET_TYPE) == TARGET_TYPE_AIR;
+	default:
+		if (strict)
+		{
+			if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
+			{
+				target_types target_type = get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE);
+
+				switch (target_type)
+				{
+					case TARGET_TYPE_INVALID:
+						return (get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER));
+
+					case TARGET_TYPE_GROUND:
+						if (radar_mode != RADAR_MODE_TPM)
+							return TRUE;
+						else
+						{
+							target_symbol_types symbol = get_local_entity_int_value(target, INT_TYPE_TARGET_SYMBOL_TYPE);
+
+							return symbol == TARGET_SYMBOL_HAZZARD || symbol == TARGET_SYMBOL_STRUCTURE;
+						}
+
+					case TARGET_TYPE_HAZZARD:
+						return TRUE;
+
+					case TARGET_TYPE_AIR:
+						if (!use_separate_radar_target_list() && get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
+						{
+							//
+							// allow low and slow flying aircraft
+							//
+
+							if (get_local_entity_float_value (target, FLOAT_TYPE_VELOCITY) < knots_to_metres_per_second (50.0))
+							{
+								if (get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE) < 10.0)
+									return TRUE;
+							}
+						}
+						else if (!get_local_entity_int_value (target, INT_TYPE_INSIDE_HANGAR))
+							if (!get_local_entity_int_value (target, INT_TYPE_LANDED_ON_CARRIER))
+								return (TRUE);
+
+						return FALSE;
+
+					default:
+						debug_fatal ("Invalid target type = %d", target_type);
+						return FALSE;
+				}
+			}
+		}
+		else  // not strict
+			return (get_local_entity_int_value(target, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID) || get_local_entity_int_value(target, INT_TYPE_GROUND_RADAR_CLUTTER);
+	}
+
+	return FALSE;
+}
+
+void update_common_radar (int inactive_check)
 {
 	int
 		x_sec,
@@ -1547,15 +2704,12 @@ void update_common_ground_radar (int inactive_check)
 		cw_sweep_end_offset,
 		cw_sweep_start_direction,
 		cw_sweep_end_direction,
-		sweep_direction,
 		heading,
-		bearing,
-		dx,
-		dz,
 		x_min,
 		z_min,
 		x_max,
 		z_max,
+		radar_stealth_factor,
 		sqr_scan_range,
 		sqr_target_range;
 
@@ -1563,7 +2717,7 @@ void update_common_ground_radar (int inactive_check)
 		*source,
 		*target,
 		*old_target,
-		*new_target,
+		*new_target = NULL,
 		*sector;
 
 	vec3d
@@ -1571,6 +2725,29 @@ void update_common_ground_radar (int inactive_check)
 		*target_position,
 		cw_sweep_start_position,
 		cw_sweep_end_position;
+
+	radar_params* radar = get_current_radar_params();
+
+	if (radar_mode == RADAR_MODE_TPM)
+	{
+		// TPM automaticly switches scan size depending on speed
+		if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second(55.0))
+			radar->scan_arc_size = rad(90.0);
+		else if (current_flight_dynamics->velocity_z.value < knots_to_metres_per_second(45.0))
+			radar->scan_arc_size = rad(180.0);
+	}
+
+	if (fcr_power_up_timer > 0.0)
+	{
+		fcr_power_up_timer -= get_delta_time();
+
+		if (fcr_power_up_timer <= 0.0)
+		{
+			fcr_powered = TRUE;
+			if (fcr_powered && get_global_gunship_type() == GUNSHIP_TYPE_APACHE)
+				add_apache_advisory("FCR POWERED");
+		}
+	}
 
 	////////////////////////////////////////
 	//
@@ -1588,10 +2765,14 @@ void update_common_ground_radar (int inactive_check)
 	//
 	////////////////////////////////////////
 
-	if ((ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE && ground_radar_is_active())
+	if ((radar_active && get_fcr_powered())
 		|| inactive_check)
 	{
-		update_radar_sweep (&ground_radar, &cw_sweep_start_offset, &cw_sweep_end_offset);
+		unsigned completed_sweep;
+
+		update_radar_sweep (radar, &cw_sweep_start_offset, &cw_sweep_end_offset, &completed_sweep);
+
+		update_terrain_radar_returns(source_position, radar, cw_sweep_start_offset, cw_sweep_end_offset);
 
 		//
 		// note: it is possible for sweep_mode to have switched to RADAR_SWEEP_MODE_SINGLE_INACTIVE after update_radar_sweep
@@ -1599,27 +2780,17 @@ void update_common_ground_radar (int inactive_check)
 
 		heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
-		cw_sweep_start_direction = heading + ground_radar.scan_datum + cw_sweep_start_offset;
-
+		cw_sweep_start_direction = heading + radar->scan_datum + cw_sweep_start_offset;
 		if (cw_sweep_start_direction > rad (180.0))
-		{
 			cw_sweep_start_direction -= rad (360.0);
-		}
 		else if (cw_sweep_start_direction < rad (-180.0))
-		{
 			cw_sweep_start_direction += rad (360.0);
-		}
 
-		cw_sweep_end_direction = heading + ground_radar.scan_datum + cw_sweep_end_offset;
-
+		cw_sweep_end_direction = heading + radar->scan_datum + cw_sweep_end_offset;
 		if (cw_sweep_end_direction > rad (180.0))
-		{
 			cw_sweep_end_direction -= rad (360.0);
-		}
 		else if (cw_sweep_end_direction < rad (-180.0))
-		{
 			cw_sweep_end_direction += rad (360.0);
-		}
 
 		////////////////////////////////////////
 		//
@@ -1627,13 +2798,13 @@ void update_common_ground_radar (int inactive_check)
 		//
 		////////////////////////////////////////
 
-		cw_sweep_start_position.x = source_position->x + (sin (cw_sweep_start_direction) * ground_radar.scan_range);
+		cw_sweep_start_position.x = source_position->x + (sin (cw_sweep_start_direction) * radar->scan_range);
 		cw_sweep_start_position.y = source_position->y;
-		cw_sweep_start_position.z = source_position->z + (cos (cw_sweep_start_direction) * ground_radar.scan_range);
+		cw_sweep_start_position.z = source_position->z + (cos (cw_sweep_start_direction) * radar->scan_range);
 
-		cw_sweep_end_position.x = source_position->x + (sin (cw_sweep_end_direction) * ground_radar.scan_range);
+		cw_sweep_end_position.x = source_position->x + (sin (cw_sweep_end_direction) * radar->scan_range);
 		cw_sweep_end_position.y = source_position->y;
-		cw_sweep_end_position.z = source_position->z + (cos (cw_sweep_end_direction) * ground_radar.scan_range);
+		cw_sweep_end_position.z = source_position->z + (cos (cw_sweep_end_direction) * radar->scan_range);
 
 		//
 		// draw sweep
@@ -1642,9 +2813,7 @@ void update_common_ground_radar (int inactive_check)
 		if (draw_radar_sweep && (get_view_mode () == VIEW_MODE_EXTERNAL))
 		{
 			create_debug_3d_line (source_position, &cw_sweep_start_position, sys_col_green, 0.0);
-
 			create_debug_3d_line (source_position, &cw_sweep_end_position, sys_col_red, 0.0);
-
 			create_debug_3d_line (&cw_sweep_start_position, &cw_sweep_end_position, sys_col_white, 0.0);
 		}
 
@@ -1680,7 +2849,7 @@ void update_common_ground_radar (int inactive_check)
 		//
 		////////////////////////////////////////
 
-		sqr_scan_range = ground_radar.scan_range * ground_radar.scan_range;
+		sqr_scan_range = radar->scan_range * radar->scan_range;
 
 		for (z_sec = z_sec_min; z_sec <= z_sec_max; z_sec++)
 		{
@@ -1688,25 +2857,30 @@ void update_common_ground_radar (int inactive_check)
 			{
 				sector = get_local_raw_sector_entity (x_sec, z_sec);
 
-				target = get_local_entity_first_child (sector, LIST_TYPE_SECTOR);
-
-				while (target)
+				for (target = get_local_entity_first_child (sector, LIST_TYPE_SECTOR);
+					 target;
+					 target = get_local_entity_child_succ (target, LIST_TYPE_SECTOR))
 				{
-					if ((get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE) != TARGET_TYPE_INVALID) || get_local_entity_int_value (target, INT_TYPE_GROUND_RADAR_CLUTTER))
+					if (valid_target_for_radar_mode(target, FALSE))
 					{
-						if (get_local_entity_parent (target, LIST_TYPE_GUNSHIP_TARGET))
-						{
-							////////////////////////////////////////
-							//
-							// target already on target list
-							//
-							////////////////////////////////////////
+						int
+							known_target = FALSE,
+							is_airborne_target = get_local_entity_int_value(target, INT_TYPE_TARGET_TYPE) == TARGET_TYPE_AIR;
 
+						if (use_separate_radar_target_list())
+							known_target = get_local_entity_int_value(target, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX);
+						else
+							known_target = get_local_entity_parent(target, LIST_TYPE_GUNSHIP_TARGET) != NULL;
+
+						if (known_target || ((target != source) && valid_target_for_radar_mode(target, TRUE)))
+						{
+// TODO: re-enable this code if needed.  possibly only for unrealistic mode, where scan heights are not as narrow?
+#if 0
 							//
 							// reduce number of los checks by only considering 'even' entities on CW sweep and 'odd' entities on CCW sweep
 							//
 
-							if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+							if (radar->sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
 							{
 								if (get_local_entity_index (target) & 1)
 								{
@@ -1723,117 +2897,84 @@ void update_common_ground_radar (int inactive_check)
 								// sweep all targets in single sweep mode
 								//
 
-								sweep_direction = ground_radar.sweep_direction;
+								sweep_direction = radar->sweep_direction;
 							}
-
-							if (ground_radar.sweep_direction == sweep_direction && !inactive_check)
+							if (radar->sweep_direction == sweep_direction && !inactive_check)
+#endif
 							{
-								//
 								// only update target info if the target is within range, sweep segment and los is clear
-								//
-
 								target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
 								sqr_target_range = get_sqr_3d_range (source_position, target_position);
+
+								radar_stealth_factor = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_STEALTH_FACTOR);
+								if (radar_stealth_factor < NO_RADAR_STEALTH_FACTOR)
+									sqr_target_range /= radar_stealth_factor * radar_stealth_factor;
 
 								if (sqr_target_range <= sqr_scan_range)
 								{
-									dx = target_position->x - source_position->x;
-									dz = target_position->z - source_position->z;
+									vec3d relative_position, target_vector;
+									float bearing, pitch;
 
-									bearing = atan2 (dx, dz);
+									relative_position.x = target_position->x - source_position->x;
+									relative_position.y = target_position->y - source_position->y;
+									relative_position.z = target_position->z - source_position->z;
 
-									if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
+									target_vector = relative_position;
+									normalise_any_3d_vector(&target_vector);
+
+									//bearing = atan2(relative_position.x, relative_position.y);
+
+									get_heading_and_pitch_from_3d_unit_vector(&target_vector, &bearing, &pitch);
+
+									if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction) &&
+										(!use_separate_radar_target_list() ||
+										 (pitch >= radar->elevation - 0.5 * RADAR_BAR_COVERAGE_ANGLE &&
+										  pitch <= radar->elevation + 0.5 * RADAR_BAR_COVERAGE_ANGLE)))
 									{
-										if (get_ground_radar_los_clear (target, source_position, target_position, dx, dz))
-										{
-											if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
-											{
-												set_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR, TRUE);
+										int los_clear = FALSE;
 
-												set_local_entity_float_value (target, FLOAT_TYPE_AIR_RADAR_CONTACT_TIMEOUT, AIR_RADAR_CONTACT_TIMEOUT);
-											}
-											else
-											{
-												delete_local_entity_from_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET);
-											}
-										}
+										if (is_airborne_target)
+											los_clear = get_los_clear (target, source_position, target_position);
 										else
+											los_clear = get_ground_radar_los_clear (target, source_position, target_position, relative_position.x, relative_position.y);
+
+										if (los_clear)
 										{
+											rotate_3d_vector(&relative_position, -current_flight_dynamics->heading.value);
+
+											if (known_target)  // old target, update it
+												update_radar_target(target, target_position, &relative_position);
+											else // new target - add it
+												add_new_radar_target(target, target_position, &relative_position);
+										}
+										else if (known_target)
 											set_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR, FALSE);
-										}
-									}
-								}
-							}
-						}
-						else
-						{
-							////////////////////////////////////////
-							//
-							// target not on target list
-							//
-							////////////////////////////////////////
-
-							if ((target != source) && get_valid_ground_radar_target (target))
-							{
-								//
-								// reduce number of los checks by only considering 'even' entities on CW sweep and 'odd' entities on CCW sweep
-								//
-
-								if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS && !inactive_check)
-								{
-									if (get_local_entity_index (target) & 1)
-									{
-										sweep_direction = RADAR_SWEEP_CCW;
-									}
-									else
-									{
-										sweep_direction = RADAR_SWEEP_CW;
-									}
-								}
-								else
-								{
-									//
-									// sweep all targets in single sweep mode
-									//
-
-									sweep_direction = ground_radar.sweep_direction;
-								}
-
-								if (ground_radar.sweep_direction == sweep_direction)
-								{
-									target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-									sqr_target_range = get_sqr_3d_range (source_position, target_position);
-
-									if (sqr_target_range <= sqr_scan_range)
-									{
-										dx = target_position->x - source_position->x;
-										dz = target_position->z - source_position->z;
-
-										bearing = atan2 (dx, dz);
-
-										if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
-										{
-											if (get_ground_radar_los_clear (target, source_position, target_position, dx, dz))
-											{
-												insert_local_entity_into_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
-											}
-										}
 									}
 								}
 							}
 						}
 					}
-
-					target = get_local_entity_child_succ (target, LIST_TYPE_SECTOR);
 				}
 			}
 		}
+
+		if (completed_sweep)
+		{
+			unsigned x;
+			update_radar_contacts_after_full_sweep();
+
+			for (x = 0; x < RADAR_RETURN_WIDTH_SAMPLE_POINTS; x++)
+			{
+				unsigned profile_line;
+				for (profile_line = 0; profile_line < NUM_TPM_PROFILE_LINES; profile_line++)
+					highest_elevation_in_range[x][profile_line].age = 1;
+			}
+		}
 	}
-	
-	
-	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+
+
+// TODO: check if we should only do this for some acquisition systems
+//	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 	{
 		////////////////////////////////////////
 		//
@@ -1841,66 +2982,122 @@ void update_common_ground_radar (int inactive_check)
 		//
 		////////////////////////////////////////
 
+		int select_new_target = FALSE;
+
 		old_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
 
 		new_target = old_target;
 
-		if (ground_radar.auto_target && !ground_radar.target_locked)
-		{
-			new_target = get_best_ground_radar_target ();
-
-			set_gunship_target (new_target);
-		}
+		if (radar->auto_target && !radar->target_locked)
+			select_new_target = TRUE;
 		else
 		{
 			if (old_target)
 			{
 				if (get_local_entity_parent (old_target, LIST_TYPE_GUNSHIP_TARGET))
 				{
-					if (!get_selectable_ground_radar_target (old_target))
-					{
-						//
-						// target is no longer valid
-						//
-
-						new_target = get_best_ground_radar_target ();
-
-						set_gunship_target (new_target);
-					}
+					// check if target is no longer valid
+					if (radar_mode == RADAR_MODE_ATM)
+						select_new_target = !get_selectable_air_radar_target(old_target);
+					else
+						select_new_target = !get_selectable_ground_radar_target (old_target);
 				}
-				else
-				{
-					//
-					// target is no longer on the ground radar
-					//
-
-					new_target = get_best_ground_radar_target ();
-
-					set_gunship_target (new_target);
-				}
+				else // target is no longer on the radar
+					select_new_target = TRUE;
 			}
-			else
-			{
-				//
-				// no target
-				//
-
-				new_target = get_best_ground_radar_target ();
-
-				set_gunship_target (new_target);
-			}
+			else // no target
+				select_new_target = TRUE;
 		}
 
-		if (ground_radar.target_locked)
+		if (select_new_target)
+		{
+			// TODO: new tgt selection algorithm for realistic radar - only select target after each full sweep
+			if (radar_mode == RADAR_MODE_ATM)
+				new_target = get_best_air_radar_target ();
+			else
+				new_target = get_best_ground_radar_target ();
+
+			set_gunship_target (new_target);
+		}
+
+		if (radar->target_locked)
 		{
 			if ((new_target != old_target) || (new_target == NULL))
+				radar->target_locked = FALSE;
+		}
+	}
+
+	if (get_global_avionics_realism() == AVIONICS_DETAIL_REALISTIC)
+	{
+		if (radar_mode == RADAR_MODE_TPM)
+			radar->elevation = tpm_near_mode ? atan(rad(-3.0)) : 0.0;
+		else if (auto_pan_scan_datum)
+		{
+			unsigned do_pan = FALSE;
+			float scan_to = 0.0, elevation_to = 0.0;
+
+			switch (target_acquisition_system)
 			{
-				ground_radar.target_locked = FALSE;
+			case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
+			case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
+				{
+	//				entity* target = get_local_entity_parent(source, LIST_TYPE_TARGET);
+
+					if (new_target)
+					{
+						vec3d* position = get_local_entity_vec3d_ptr(new_target, VEC3D_TYPE_POSITION);
+						vec3d relative_position;
+
+						relative_position.x = position->x - source_position->x;
+						relative_position.y = position->y - source_position->y;
+						relative_position.z = position->z - source_position->z;
+
+						normalise_3d_vector(&relative_position);
+	//					debug_log("target: %x, source: %.0f, %.0f;  target: %.0f, %.0f", target, source_position->x, source_position->z, position->x, position->z);
+	//					debug_log("x: %.0f, y: %.0f, z: %.0f", relative_position.x, relative_position.y, relative_position.z);
+
+						get_heading_and_pitch_from_3d_unit_vector(&relative_position, &scan_to, &elevation_to);
+						scan_to -= current_flight_dynamics->heading.value;
+						if (scan_to <= rad(-180.0))
+							scan_to += rad(360.0);
+						else if (scan_to > rad(180.0))
+							scan_to -= rad(360.0);
+	//					scan_to = atan2 (relative_position.x, relative_position.z) - current_flight_dynamics->heading.value;
+	//					elevation_to = atan2(relative_position.y, relative_position.z);
+						do_pan = TRUE;
+					}
+
+					break;
+				}
+			case TARGET_ACQUISITION_SYSTEM_FLIR:				// forward looking infra-red
+			case TARGET_ACQUISITION_SYSTEM_DTV:				// daytime TV
+			case TARGET_ACQUISITION_SYSTEM_DVO:				// direct view optics
+			case TARGET_ACQUISITION_SYSTEM_LLLTV:				// low light level TV
+			case TARGET_ACQUISITION_SYSTEM_PERISCOPE:		// periscope
+				get_eo_azimuth_and_elevation(&scan_to, &elevation_to);
+				do_pan = TRUE;
+				break;
+			case TARGET_ACQUISITION_SYSTEM_IHADSS:			// integrated helmet and display sighting system
+			case TARGET_ACQUISITION_SYSTEM_HIDSS:				// helmet integrated display sight system
+			case TARGET_ACQUISITION_SYSTEM_HMS:				// helmet mounted sight
+				scan_to = -pilot_head_heading;
+				elevation_to = pilot_head_pitch;
+				do_pan = TRUE;
+				break;
+			}
+
+			if (do_pan)
+			{
+				rotate_radar_scan_datum(scan_to - radar->scan_datum);
+				pan_radar_elevation(elevation_to - radar->elevation);
 			}
 		}
 	}
 
-	target_locked = ground_radar.target_locked;
+	if (!new_target)
+		radar_zoomed = FALSE;
+
+	target_locked = radar->target_locked;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1909,33 +3106,30 @@ void update_common_ground_radar (int inactive_check)
 
 void activate_common_ground_radar (void)
 {
+	radar_active = TRUE;
+
+/*
 	if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 	{
 		ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
 	}
-
-	ground_radar_on = TRUE;
-	air_radar_on = FALSE;
+*/
+	radar_mode = RADAR_MODE_GTM;
 
 	ground_radar.target_locked = target_locked;
 }
 
 void toggle_ground_radar_active(void)
 {
-	if (ground_radar_on)
+	if (radar_mode == RADAR_MODE_GTM && radar_active)
 		deactivate_common_ground_radar();
 	else
-		activate_common_ground_radar();	
+		activate_common_ground_radar();
 }
 
-int ground_radar_is_active(void)
+unsigned ground_radar_is_active(void)
 {
-	return ground_radar_on;
-}
-
-void set_ground_radar_is_active(int is_active)
-{
-	ground_radar_on = is_active;
+	return radar_mode == RADAR_MODE_GTM && radar_active;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1944,8 +3138,9 @@ void set_ground_radar_is_active(int is_active)
 
 void deactivate_common_ground_radar (void)
 {
-	ground_radar_on = FALSE;
-	
+	radar_active = FALSE;
+//	radar_mode = RADAR_MODE_NONE;
+
 	ground_radar.target_locked = FALSE;
 }
 
@@ -1955,28 +3150,6 @@ void deactivate_common_ground_radar (void)
 //
 // AIR RADAR
 //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static int get_valid_air_radar_target (entity *target)
-{
-	ASSERT (target);
-
-	if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
-	{
-		if (get_local_entity_int_value (target, INT_TYPE_AIRBORNE_AIRCRAFT))
-		{
-			if (get_local_entity_float_value (target, FLOAT_TYPE_RADAR_ALTITUDE) > 5.0)
-			{
-				return (TRUE);
-			}
-		}
-	}
-
-	return (FALSE);
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2002,7 +3175,7 @@ int get_gunship_target_valid_for_air_radar (entity *target)
 
 int get_los_clear (entity *target, vec3d *source_position, vec3d *target_position)
 {
-	ASSERT (target);
+//	ASSERT (target);
 
 	ASSERT (source_position);
 
@@ -2076,7 +3249,7 @@ static entity *get_best_air_radar_target (void)
 
 	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
 
-	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	source_heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
 
@@ -2121,6 +3294,7 @@ static entity *get_best_air_radar_target (void)
 		//
 		////////////////////////////////////////
 
+		// TODO
 		if (get_gunship_target_valid_for_air_radar (target))
 		{
 			//
@@ -2412,7 +3586,7 @@ static int get_selectable_air_radar_target (entity *target)
 
 	source = get_gunship_entity ();
 
-	source_side = (entity_sides) get_local_entity_int_value (source, INT_TYPE_SIDE);
+	source_side = get_local_entity_int_value (source, INT_TYPE_SIDE);
 
 	////////////////////////////////////////
 	//
@@ -2420,6 +3594,7 @@ static int get_selectable_air_radar_target (entity *target)
 	//
 	////////////////////////////////////////
 
+	// TODO
 	if (get_gunship_target_valid_for_air_radar (target))
 	{
 		//
@@ -2549,331 +3724,7 @@ void get_previous_air_radar_target (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void update_common_air_radar (void)
-{
-	int
-		x_sec,
-		z_sec,
-		x_sec_min,
-		z_sec_min,
-		x_sec_max,
-		z_sec_max;
 
-	float
-		cw_sweep_start_offset,
-		cw_sweep_end_offset,
-		cw_sweep_start_direction,
-		cw_sweep_end_direction,
-		heading,
-		bearing,
-		dx,
-		dz,
-		x_min,
-		z_min,
-		x_max,
-		z_max,
-		sqr_scan_range,
-		sqr_target_range,
-		radar_stealth_factor;
-
-	entity
-		*source,
-		*target,
-		*old_target,
-		*new_target,
-		*sector;
-
-	vec3d
-		*source_position,
-		*target_position,
-		cw_sweep_start_position,
-		cw_sweep_end_position;
-
-	////////////////////////////////////////
-	//
-	// get source data
-	//
-	////////////////////////////////////////
-
-	source = get_gunship_entity ();
-
-	source_position = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_POSITION);
-
-	////////////////////////////////////////
-	//
-	// get radar sweep start and end
-	//
-	////////////////////////////////////////
-
-	if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE && air_radar_is_active())
-	{
-		update_radar_sweep (&air_radar, &cw_sweep_start_offset, &cw_sweep_end_offset);
-
-		//
-		// note: it is possible for sweep_mode to have switched to RADAR_SWEEP_MODE_SINGLE_INACTIVE after update_radar_sweep
-		//
-
-		heading = get_local_entity_float_value (source, FLOAT_TYPE_HEADING);
-
-		cw_sweep_start_direction = heading + air_radar.scan_datum + cw_sweep_start_offset;
-
-		if (cw_sweep_start_direction > rad (180.0))
-		{
-			cw_sweep_start_direction -= rad (360.0);
-		}
-		else if (cw_sweep_start_direction < rad (-180.0))
-		{
-			cw_sweep_start_direction += rad (360.0);
-		}
-
-		cw_sweep_end_direction = heading + air_radar.scan_datum + cw_sweep_end_offset;
-
-		if (cw_sweep_end_direction > rad (180.0))
-		{
-			cw_sweep_end_direction -= rad (360.0);
-		}
-		else if (cw_sweep_end_direction < rad (-180.0))
-		{
-			cw_sweep_end_direction += rad (360.0);
-		}
-
-		////////////////////////////////////////
-		//
-		// get sector scan area
-		//
-		////////////////////////////////////////
-
-		cw_sweep_start_position.x = source_position->x + (sin (cw_sweep_start_direction) * air_radar.scan_range);
-		cw_sweep_start_position.y = source_position->y;
-		cw_sweep_start_position.z = source_position->z + (cos (cw_sweep_start_direction) * air_radar.scan_range);
-
-		cw_sweep_end_position.x = source_position->x + (sin (cw_sweep_end_direction) * air_radar.scan_range);
-		cw_sweep_end_position.y = source_position->y;
-		cw_sweep_end_position.z = source_position->z + (cos (cw_sweep_end_direction) * air_radar.scan_range);
-
-		//
-		// draw sweep
-		//
-
-		if (draw_radar_sweep && (get_view_mode () == VIEW_MODE_EXTERNAL))
-		{
-			create_debug_3d_line (source_position, &cw_sweep_start_position, sys_col_green, 0.0);
-
-			create_debug_3d_line (source_position, &cw_sweep_end_position, sys_col_red, 0.0);
-
-			create_debug_3d_line (&cw_sweep_start_position, &cw_sweep_end_position, sys_col_white, 0.0);
-		}
-
-		//
-		// sector scan min
-		//
-
-		x_min = min (min (cw_sweep_start_position.x, cw_sweep_end_position.x), source_position->x);
-		z_min = min (min (cw_sweep_start_position.z, cw_sweep_end_position.z), source_position->z);
-
-		get_x_sector (x_sec_min, x_min);
-		get_z_sector (z_sec_min, z_min);
-
-		x_sec_min = max (x_sec_min, MIN_MAP_X_SECTOR);
-		z_sec_min = max (z_sec_min, MIN_MAP_Z_SECTOR);
-
-		//
-		// sector scan max
-		//
-
-		x_max = max (max (cw_sweep_start_position.x, cw_sweep_end_position.x), source_position->x);
-		z_max = max (max (cw_sweep_start_position.z, cw_sweep_end_position.z), source_position->z);
-
-		get_x_sector (x_sec_max, x_max);
-		get_z_sector (z_sec_max, z_max);
-
-		x_sec_max = min (x_sec_max, MAX_MAP_X_SECTOR);
-		z_sec_max = min (z_sec_max, MAX_MAP_Z_SECTOR);
-
-		////////////////////////////////////////
-		//
-		// sector scan
-		//
-		////////////////////////////////////////
-
-		sqr_scan_range = air_radar.scan_range * air_radar.scan_range;
-
-		for (z_sec = z_sec_min; z_sec <= z_sec_max; z_sec++)
-		{
-			for (x_sec = x_sec_min; x_sec <= x_sec_max; x_sec++)
-			{
-				sector = get_local_raw_sector_entity (x_sec, z_sec);
-
-				target = get_local_entity_first_child (sector, LIST_TYPE_SECTOR);
-
-				while (target)
-				{
-					if (get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE) == TARGET_TYPE_AIR)
-					{
-						if (get_local_entity_parent (target, LIST_TYPE_GUNSHIP_TARGET))
-						{
-							////////////////////////////////////////
-							//
-							// target already on target list
-							//
-							////////////////////////////////////////
-
-							//
-							// only update target info if the target is within range, sweep segment and los is clear
-							//
-
-							target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-							sqr_target_range = get_sqr_3d_range (source_position, target_position);
-
-							radar_stealth_factor = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_STEALTH_FACTOR);
-
-							if (radar_stealth_factor < NO_RADAR_STEALTH_FACTOR)
-							{
-								sqr_target_range /= radar_stealth_factor * radar_stealth_factor;
-							}
-
-							if (sqr_target_range <= sqr_scan_range)
-							{
-								dx = target_position->x - source_position->x;
-								dz = target_position->z - source_position->z;
-
-								bearing = atan2 (dx, dz);
-
-								if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
-								{
-									if (get_los_clear (target, source_position, target_position))
-									{
-										if (get_local_entity_int_value (target, INT_TYPE_ALIVE))
-										{
-											set_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR, TRUE);
-
-											set_local_entity_float_value (target, FLOAT_TYPE_AIR_RADAR_CONTACT_TIMEOUT, AIR_RADAR_CONTACT_TIMEOUT);
-										}
-										else
-										{
-											delete_local_entity_from_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET);
-										}
-									}
-									else
-									{
-										set_local_entity_int_value (target, INT_TYPE_GUNSHIP_RADAR_LOS_CLEAR, FALSE);
-									}
-								}
-							}
-						}
-						else
-						{
-							////////////////////////////////////////
-							//
-							// target not on target list
-							//
-							////////////////////////////////////////
-
-							if ((target != source) && get_valid_air_radar_target (target))
-							{
-								target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
-
-								sqr_target_range = get_sqr_3d_range (source_position, target_position);
-
-								radar_stealth_factor = get_local_entity_float_value (target, FLOAT_TYPE_RADAR_STEALTH_FACTOR);
-
-								if (radar_stealth_factor < NO_RADAR_STEALTH_FACTOR)
-								{
-									sqr_target_range /= radar_stealth_factor * radar_stealth_factor;
-								}
-
-								if (sqr_target_range <= sqr_scan_range)
-								{
-									dx = target_position->x - source_position->x;
-									dz = target_position->z - source_position->z;
-
-									bearing = atan2 (dx, dz);
-
-									if (check_bearing_within_cw_sweep_segment (bearing, cw_sweep_start_direction, cw_sweep_end_direction))
-									{
-										if (get_los_clear (target, source_position, target_position))
-										{
-											insert_local_entity_into_parents_child_list (target, LIST_TYPE_GUNSHIP_TARGET, source, NULL);
-										}
-									}
-								}
-							}
-						}
-					}
-
-					target = get_local_entity_child_succ (target, LIST_TYPE_SECTOR);
-				}
-			}
-		}
-
-		////////////////////////////////////////
-		//
-		// update target
-		//
-		////////////////////////////////////////
-
-		old_target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-
-		new_target = old_target;
-
-		if (air_radar.auto_target && !air_radar.target_locked)
-		{
-			new_target = get_best_air_radar_target ();
-
-			set_gunship_target (new_target);
-		}
-		else
-		{
-			if (old_target)
-			{
-				if (get_local_entity_parent (old_target, LIST_TYPE_GUNSHIP_TARGET))
-				{
-					if (!get_selectable_air_radar_target (old_target))
-					{
-						//
-						// target is no longer valid
-						//
-
-						new_target = get_best_air_radar_target ();
-
-						set_gunship_target (new_target);
-					}
-				}
-				else
-				{
-					//
-					// target is no longer on the air radar
-					//
-
-					new_target = get_best_air_radar_target ();
-
-					set_gunship_target (new_target);
-				}
-			}
-			else
-			{
-				//
-				// no target
-				//
-
-				new_target = get_best_air_radar_target ();
-
-				set_gunship_target (new_target);
-			}
-		}
-
-		if (air_radar.target_locked)
-		{
-			if ((new_target != old_target) || (new_target == NULL))
-			{
-				air_radar.target_locked = FALSE;
-			}
-		}
-	}
-
-	target_locked = air_radar.target_locked;
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2881,33 +3732,29 @@ void update_common_air_radar (void)
 
 void activate_common_air_radar (void)
 {
+/*
 	if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 	{
 		air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
 	}
-	
-	ground_radar_on = FALSE;
-	air_radar_on = TRUE;
+*/
+	radar_mode = RADAR_MODE_ATM;
+	radar_active = TRUE;
 
 	air_radar.target_locked = target_locked;
 }
 
 void toggle_air_radar_active(void)
 {
-	if (air_radar_on)
+	if (radar_mode == RADAR_MODE_ATM && radar_active)
 		deactivate_common_air_radar();
 	else
-		activate_common_air_radar();	
+		activate_common_air_radar();
 }
 
 int air_radar_is_active(void)
 {
-	return air_radar_on;
-}
-
-void set_air_radar_is_active(int is_active)
-{
-	air_radar_on = is_active;
+	return radar_mode == RADAR_MODE_ATM && radar_active;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2916,7 +3763,8 @@ void set_air_radar_is_active(int is_active)
 
 void deactivate_common_air_radar (void)
 {
-	air_radar_on = FALSE;
+//	radar_mode = RADAR_MODE_NONE;
+	radar_active = FALSE;
 
 	air_radar.target_locked = FALSE;
 }

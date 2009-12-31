@@ -2292,12 +2292,13 @@ static void draw_ground_radar_mfd (void)
 		// Jabberwock 031107 ends
 	}
 
+/*
 	if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE || ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 	{
 		set_2d_mono_font_position (-0.9, 0.8);
 		print_mono_font_string ("SGL");
 	}
-
+*/
 	//
 	// scan range
 	//
@@ -10536,7 +10537,7 @@ static void display_waypoint_information (rgb_colour box_colour)
 
 		waypoint_range = get_2d_range (gunship_position, &waypoint_position);
 
-		if (!comanche_damage.navigation_computer)
+		if (!apache_damage.navigation_computer)
 		{
 			if (waypoint_range < 1000.0)
 			{

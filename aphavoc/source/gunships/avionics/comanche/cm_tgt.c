@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -113,7 +113,7 @@ static void deselect_comanche_target_acquisition_system (target_acquisition_syst
 			// laser is on in all modes but OFF in automatic mode
 			if (!command_line_manual_laser_radar)
 				set_laser_is_active(TRUE);
-			
+
 			break;
 		}
 		////////////////////////////////////////
@@ -347,7 +347,7 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 				target_acquisition_system = system;
 
 				activate_common_hms ();
-				
+
 				if (hud_mode != HUD_MODE_WEAPON)
 					previous_hud_mode = hud_mode;
 				hud_mode = HUD_MODE_WEAPON;
@@ -376,11 +376,8 @@ void select_comanche_target_acquisition_system (target_acquisition_systems syste
 
 void update_comanche_target_acquisition_system (void)
 {
-	if (ground_radar_is_active())
-		update_common_ground_radar(FALSE);
-	else if (air_radar_is_active())
-		update_common_air_radar();
-	
+	update_common_radar(FALSE);
+
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -507,13 +504,7 @@ void update_comanche_target_acquisition_system (void)
 		// radar on/off
 		//
 
-		radar_on = FALSE;
-
-		if (ground_radar_is_active() && ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			radar_on = TRUE;
-
-		else if (air_radar_is_active() && air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			radar_on = TRUE;
+		radar_on = get_radar_active();
 
 		if (radar_on != get_local_entity_int_value (source, INT_TYPE_RADAR_ON))
 			set_client_server_entity_int_value (source, INT_TYPE_RADAR_ON, radar_on);
@@ -876,6 +867,17 @@ void set_comanche_lock_target (int lock)
 
 void comanche_target_acquisition_system_misc_function1 (void)
 {
+	if (comanche_damage.radar)
+		set_radar_active(FALSE);
+	else
+	{
+		radar_params* radar = get_current_radar_params();
+		if (radar->sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+			radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE;
+		else
+			radar->sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
+	}
+#if 0
 	switch (target_acquisition_system)
 	{
 		case TARGET_ACQUISITION_SYSTEM_OFF:
@@ -900,7 +902,7 @@ void comanche_target_acquisition_system_misc_function1 (void)
 			else
 			{
 				set_ground_radar_is_active(ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
-				
+
 				ground_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
 
@@ -925,13 +927,14 @@ void comanche_target_acquisition_system_misc_function1 (void)
 			else
 			{
 				set_air_radar_is_active(air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
-				
+
 				air_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
 
 			break;
 		}
 	}
+#endif
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -939,6 +942,11 @@ void comanche_target_acquisition_system_misc_function1 (void)
 
 void comanche_target_acquisition_system_misc_function2 (void)
 {
+	if (comanche_damage.radar)
+		set_radar_active(FALSE);
+	else
+		toggle_common_radar_active();
+#if 0
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -991,6 +999,7 @@ void comanche_target_acquisition_system_misc_function2 (void)
 			break;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,27 +27,27 @@ static pfz nfzs[MAX_NFZS];
 pfz* get_pfz(unsigned int pfz_number)
 {
 	ASSERT(pfz_number < next_free_pfz);
-	
+
 	return &pfzs[pfz_number];
 }
 
 pfz* get_nfz(unsigned int nfz_number)
 {
 	ASSERT(nfz_number < next_free_nfz);
-	
+
 	return &nfzs[nfz_number];
 }
 
 void delete_pfz(unsigned int pfz_number)
 {
 	// deletes by moving all following elements one step up to fill the slot
-	
+
 	ASSERT(pfz_number < next_free_pfz);
 
 	memmove(&pfzs[pfz_number], &pfzs[pfz_number+1], (next_free_pfz - pfz_number) * sizeof(pfzs[0]));
 
 	next_free_pfz--;
-	
+
 	if (current_pfz >= next_free_pfz)
 		select_previous_pfz();
 }
@@ -61,7 +61,7 @@ void delete_nfz(unsigned int nfz_number)
 	next_free_nfz--;
 
 	if (!ground_radar_is_active())
-		update_common_ground_radar (TRUE);
+		update_common_radar (TRUE);
 }
 
 void add_pfz(vec3d* corner1, vec3d* corner2, vec3d* corner3, vec3d* corner4)
@@ -124,13 +124,13 @@ int coordinate_is_inside_pfz(vec3d* coordinate, unsigned int pfz_number, int is_
 {
 	if (is_nfz)
 	{
-		return coordinate_is_inside_square(coordinate, 
+		return coordinate_is_inside_square(coordinate,
 			&nfzs[pfz_number].corner1, &nfzs[pfz_number].corner2,
 			&nfzs[pfz_number].corner3, &nfzs[pfz_number].corner4);
 	}
 	else
 	{
-		return coordinate_is_inside_square(coordinate, 
+		return coordinate_is_inside_square(coordinate,
 			&pfzs[pfz_number].corner1, &pfzs[pfz_number].corner2,
 			&pfzs[pfz_number].corner3, &pfzs[pfz_number].corner4);
 	}
@@ -149,7 +149,7 @@ int coordinate_is_inside_square(vec3d* coordinate, vec3d* corner1, vec3d* corner
 					  - (coordinate->x - corner2->x) * (corner3->z - corner2->z);
 	if ((negative && winding_direction > 0) || (!negative && winding_direction < 0))
 		return FALSE;
-	
+
 	winding_direction = (coordinate->z - corner3->z) * (corner4->x - corner3->x)
 					  - (coordinate->x - corner3->x) * (corner4->z - corner3->z);
 	if ((negative && winding_direction > 0) || (!negative && winding_direction < 0))
@@ -160,7 +160,7 @@ int coordinate_is_inside_square(vec3d* coordinate, vec3d* corner1, vec3d* corner
 	if ((negative && winding_direction > 0) || (!negative && winding_direction < 0))
 		return FALSE;
 
-	return TRUE;	
+	return TRUE;
 }
 
 
@@ -170,12 +170,12 @@ void select_next_pfz(void)
 	if (next_free_pfz)  // there are any PFZs
 	{
 		current_pfz++;
-		
+
 		if (current_pfz >= next_free_pfz)
 			current_pfz = 0;
 
 		if (!ground_radar_is_active())
-			update_common_ground_radar (TRUE);
+			update_common_radar (TRUE);
 	}
 	else
 		current_pfz = NO_PFZ;
@@ -186,11 +186,11 @@ void select_previous_pfz(void)
 	if (next_free_pfz)  // there are any PFZs
 	{
 		current_pfz--;
-		
+
 		if (current_pfz <= -1)
 			current_pfz = next_free_pfz-1;
 
-		update_common_ground_radar (TRUE);
+		update_common_radar (TRUE);
 	}
 	else
 		current_pfz = NO_PFZ;
@@ -200,7 +200,7 @@ void deselect_pfz(void)
 {
 	current_pfz = NO_PFZ;
 	if (!ground_radar_is_active())
-		update_common_ground_radar (TRUE);
+		update_common_radar (TRUE);
 }
 
 void delete_current_pfz(void)
@@ -219,16 +219,16 @@ int is_valid_pfz_target(vec3d* target_position)
 	{
 		return FALSE;
 	}
-	
+
 	// If it is check that it is also not in a No Fire Zone
 	for (i=0; i < next_free_nfz; i++)
 		if (coordinate_is_inside_pfz(target_position, i, TRUE))
-			return FALSE;	
+			return FALSE;
 
 	return TRUE;
 }
 
 int pfz_active()
 {
-	return current_pfz != NO_PFZ;	
+	return current_pfz != NO_PFZ;
 }

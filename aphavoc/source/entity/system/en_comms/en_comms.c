@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -1132,7 +1132,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			pack_int_value (en, INT_TYPE_ROUTE_CHECK_SUM, check_sum);
 
 			////////////////////////////////////////
-			
+
 			count = 0;
 
 			wp = get_local_entity_first_child (en, LIST_TYPE_WAYPOINT);
@@ -2309,7 +2309,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GUIDE);
 
 			ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
-	
+
 			pack_entity_safe_ptr (en);
 
 			type = va_arg (pargs, int);
@@ -2348,7 +2348,7 @@ void transmit_entity_comms_message (entity_comms_messages message, entity *en, .
 			ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GUIDE);
 
 			ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
-	
+
 			pack_entity_safe_ptr (en);
 
 			position_entity = va_arg (pargs, entity *);
@@ -2955,7 +2955,7 @@ void process_received_entity_comms_messages (void)
 
 				set_force_local_entity_create_stack_attributes (TRUE);
 
-				map_add_waypoint (wp, &pos);
+				map_add_waypoint (wp, &pos, TRUE);
 
 				set_force_local_entity_create_stack_attributes (create_stack_attributes);
 
@@ -3447,13 +3447,13 @@ void process_received_entity_comms_messages (void)
 					*task,
 					*group,
 					*return_keysite;
-	
+
 				unsigned int
 					*waypoint_indices,
 					loop,
 					count,
 					check_sum;
-	
+
 				task = unpack_entity_safe_ptr ();
 
 				group = unpack_entity_safe_ptr ();
@@ -3478,11 +3478,11 @@ void process_received_entity_comms_messages (void)
 
 					stop_ptr = &stop;
 				}
-	
+
 				////////////////////////////////////////
-	
+
 				check_sum = unpack_int_value (NULL, INT_TYPE_ROUTE_CHECK_SUM);
-	
+
 				////////////////////////////////////////
 
 				count = unpack_int_value (NULL, INT_TYPE_ROUTE_LENGTH);
@@ -3502,13 +3502,13 @@ void process_received_entity_comms_messages (void)
 				}
 
 				free_mem (waypoint_indices);
-	
+
 				#if DEBUG_MODULE_MESSAGE_TEXT
-	
+
 				debug_log ("EN_COMMS: received create waypoint route for %s (%d) check_sum %d", get_local_entity_string (task, STRING_TYPE_FULL_NAME), get_local_entity_index (task), check_sum);
-	
+
 				#endif
-	
+
 				break;
 			}
 			////////////////////////////////////////
@@ -3532,25 +3532,25 @@ void process_received_entity_comms_messages (void)
 					smoke_trail_type;
 
 				launcher = unpack_entity_safe_ptr ();
-	
+
 				////////////////////////////////////////
 				// DEBUG COMMS WEAPON LAG TIMING
 				////////////////////////////////////////
 				if (get_comms_model () == COMMS_MODEL_CLIENT)
 				{
-	
+
 					if (launcher == get_gunship_entity ())
 					{
 
 						comms_weapon_lag_timing = FALSE;
-	
+
 						comms_weapon_lag_time = ((float) get_system_time () / (float) TIME_1_SECOND) - comms_weapon_lag_time;
 					}
 				}
 				////////////////////////////////////////
 				// DEBUG COMMS WEAPON LAG TIMING
 				////////////////////////////////////////
-	
+
 				////////////////////////////////////////
 
 				weapon_sub_type = unpack_int_value (NULL, INT_TYPE_ENTITY_SUB_TYPE);
@@ -3953,7 +3953,7 @@ void process_received_entity_comms_messages (void)
 				#endif
 
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_FORCE);
-	
+
 				add_mobile_to_force_kills_stats (en, victim);
 
 				break;
@@ -4230,7 +4230,7 @@ void process_received_entity_comms_messages (void)
 
 				entity
 					*targets[17];
-				
+
 				unsigned int i;
 
 				vec3d corner1, corner2, corner3, corner4;
@@ -4255,7 +4255,7 @@ void process_received_entity_comms_messages (void)
 
 					if (get_gunship_entity() == wingman)  // add targets to radar
 						if (!get_local_entity_parent (targets[i], LIST_TYPE_GUNSHIP_TARGET))  // target we don't have already
-							insert_local_entity_into_parents_child_list (targets[i], LIST_TYPE_GUNSHIP_TARGET, wingman, NULL);	
+							insert_local_entity_into_parents_child_list (targets[i], LIST_TYPE_GUNSHIP_TARGET, wingman, NULL);
 				}
 
 				// be sure to terminate
@@ -4312,9 +4312,9 @@ void process_received_entity_comms_messages (void)
 
 						member_number = get_local_entity_int_value(wingman, INT_TYPE_GROUP_MEMBER_NUMBER);
 						valid_members = (1 << member_number);
-						
+
 			//			clear_local_entity_list(wingman, LIST_TYPE_DESIGNATED_TARGET);
-				
+
 						for (target = targets[0];
 							 target;
 							 target++)
@@ -4337,7 +4337,7 @@ void process_received_entity_comms_messages (void)
 
 				entity
 					*en;
-	
+
 				int
 					pilot_index,
 					destination_id;
@@ -4346,15 +4346,15 @@ void process_received_entity_comms_messages (void)
 				//
 
 				en = unpack_entity_safe_ptr ();
-	
+
 				destination_id = unpack_int_value (en, INT_TYPE_VALUE);
-	
+
 				pilot_index = unpack_int_value (en, INT_TYPE_VALUE);
 
 				//#if DEBUG_MODULE_MESSAGE_TEXT
-		
+
 				debug_log ("EN_COMMS: received Pilot request accepted to %d for entity %d", destination_id, pilot_index);
-		
+
 				//#endif
 
 				if (destination_id == direct_play_get_player_id ())
@@ -4362,7 +4362,7 @@ void process_received_entity_comms_messages (void)
 
 					set_pilot_entity (get_local_entity_safe_ptr (pilot_index));
 				}
-	
+
 				break;
 			}
 			////////////////////////////////////////
@@ -4619,7 +4619,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				en = unpack_entity_safe_ptr ();
-				
+
 				ASSERT (en);
 
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GROUP);
@@ -4644,7 +4644,7 @@ void process_received_entity_comms_messages (void)
 				//
 
 				en = unpack_entity_safe_ptr ();
-				
+
 				ASSERT (en);
 
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_BRIDGE);
@@ -4826,7 +4826,7 @@ void process_received_entity_comms_messages (void)
 				//
 				// (entity_comms_messages message, entity *en, vec3d *pos, int operational_state)
 				//
-	
+
 				node_link_data
 					*sub_route_node;
 
@@ -4841,14 +4841,14 @@ void process_received_entity_comms_messages (void)
 					*mb;
 
 				// unpack group data
-	
+
 				en = unpack_entity_safe_ptr ();
-	
+
 				ASSERT (en);
-	
+
 				this_index = unpack_int_value (en, INT_TYPE_WAYPOINT_THIS_INDEX);
 				next_index = unpack_int_value (en, INT_TYPE_WAYPOINT_NEXT_INDEX);
-	
+
 				sub_route_node = get_road_sub_route (this_index, next_index, &count, NULL);
 
 				// loop each member
@@ -4859,31 +4859,29 @@ void process_received_entity_comms_messages (void)
 
 				while (mb)
 				{
-	
+
 					routed_vehicle
 						*raw;
-	
+
 					set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_THIS_INDEX, this_index);
 					set_local_entity_int_value (mb, INT_TYPE_WAYPOINT_NEXT_INDEX, next_index);
 					set_local_entity_int_value (mb, INT_TYPE_SUB_WAYPOINT_COUNT, count);
-	
+
 					if (sub_route_node)
 					{
-	
 						raw = (routed_vehicle *) get_local_entity_data (mb);
-		
 						raw->sub_route = sub_route_node;
 					}
-	
+
 					#if DEBUG_MODULE_MESSAGE_TEXT
-	
+
 					debug_log ("EN_COMMS: received routed_vehicle %d route between %d and %d", get_local_entity_index (mb), raw->waypoint_this_index, raw->waypoint_next_index);
-	
+
 					#endif
-	
+
 					mb = get_local_entity_child_succ (mb, LIST_TYPE_MEMBER);
 				}
-	
+
 				break;
 			}
 			////////////////////////////////////////
@@ -4992,34 +4990,33 @@ void process_received_entity_comms_messages (void)
 
 				entity
 					*en;
-	
+
 				int
 					type,
 					valid;
-	
+
 				float
 					value;
-	
+
 				en = unpack_entity_safe_ptr ();
 
 				ASSERT (en);
-	
+
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GUIDE);
 
 				ASSERT (get_comms_model () == COMMS_MODEL_CLIENT);
-	
+
 				type = unpack_int_value (en, INT_TYPE_GUIDE_CRITERIA_TYPE);
 
 				valid = unpack_int_value (en, INT_TYPE_VALID);
-	
+
 				value = unpack_float_value (en, FLOAT_TYPE_GUIDE_CRITERIA_VALUE);
-	
+
 				#if DEBUG_MODULE
-	
+
 				debug_log ("EN_COMMS: received set guide criteria for %d", get_local_entity_index (en));
-	
+
 				#endif
-	
 				set_local_guide_criteria_valid (en, (guide_criteria_types) type, valid, value);
 
 				break;
@@ -5035,23 +5032,23 @@ void process_received_entity_comms_messages (void)
 				entity
 					*en,
 					*position_entity;
-	
+
 				en = unpack_entity_safe_ptr ();
 
 				ASSERT (en);
-	
+
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GUIDE);
 
 				ASSERT (get_comms_model () == COMMS_MODEL_CLIENT);
-	
+
 				position_entity = unpack_entity_safe_ptr ();
 
 				#if DEBUG_MODULE
-	
+
 				debug_log ("EN_COMMS: received set guide position entity for %d", get_local_entity_index (en));
-	
+
 				#endif
-	
+
 				set_local_entity_ptr_value (en, PTR_TYPE_POSITION_ENTITY, position_entity);
 
 				break;
@@ -5073,71 +5070,70 @@ void process_received_entity_comms_messages (void)
 				//
 				// (entity_comms_messages message, entity *en)
 				//
-	
+
 				en = unpack_entity_safe_ptr ();
-	
 				raw = (task *) get_local_entity_data (en);
 
 				// malloc memory
 
 				raw->route_nodes = (vec3d *) malloc_heap_mem (sizeof (vec3d) * raw->route_length);
 				memset (raw->route_nodes, 0, sizeof (vec3d) * raw->route_length);
-			
+
 				raw->route_dependents = (entity **) malloc_heap_mem (sizeof (entity *) * raw->route_length);
 				memset (raw->route_dependents, 0, sizeof (entity *) * raw->route_length);
-			
+
 				raw->route_waypoint_types = (entity_sub_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 				memset (raw->route_waypoint_types, 0, sizeof (entity_sub_types) * raw->route_length);
-			
+
 				raw->route_formation_types = (formation_types *) malloc_heap_mem (sizeof (entity_sub_types) * raw->route_length);
 				memset (raw->route_formation_types, 0, sizeof (entity_sub_types) * raw->route_length);
-				
+
 				// positions
-	
+
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
-	
+
 					unpack_vec3d (en, VEC3D_TYPE_POSITION, &raw->route_nodes [loop]);
 				}
-	
+
 				// formations
-	
+
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 
 					raw->route_formation_types [loop] = (formation_types) unpack_int_value (en, INT_TYPE_WAYPOINT_FORMATION);
 				}
-	
+
 				// waypoint types
-	
+
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 
 					raw->route_waypoint_types [loop] = unpack_int_value (en, INT_TYPE_ENTITY_SUB_TYPE);
 				}
-	
+
 				// dependents
-	
+
 				for (loop = 0; loop < raw->route_length; loop ++)
 				{
 
 					if (unpack_int_value (en, INT_TYPE_VALID))
 					{
-	
+
 						raw->route_dependents [loop] = unpack_entity_safe_ptr ();
 					}
 				}
-	
+
 				// return keysite
-	
+
 				raw->return_keysite = unpack_entity_safe_ptr ();
-	
+
 				#if DEBUG_MODULE
-	
+
 				debug_log ("EN_COMMS: received set task pointers entity %s %d", get_local_entity_string (en, STRING_TYPE_FULL_NAME), get_local_entity_index (en));
-	
+
 				#endif
-	
+
 				break;
 			}
 			////////////////////////////////////////
@@ -5151,23 +5147,23 @@ void process_received_entity_comms_messages (void)
 				entity
 					*en,
 					*wp;
-	
+
 				en = unpack_entity_safe_ptr ();
 
 				wp = unpack_entity_safe_ptr ();
 
 				ASSERT (en);
-	
+
 				ASSERT (get_local_entity_type (en) == ENTITY_TYPE_GUIDE);
 
 				ASSERT (get_comms_model () == COMMS_MODEL_SERVER);
 
 				#if DEBUG_MODULE
-	
+
 				debug_log ("EN_COMMS: received set waypoint");
-	
+
 				#endif
-	
+
 				set_guide_new_waypoint (en, wp);
 
 				break;
@@ -5369,7 +5365,7 @@ void process_received_entity_comms_messages (void)
 				}
 
 //				#if DEBUG_MODULE_MESSAGE_TEXT
-				
+
 				if (task)
 				{
 
@@ -5389,58 +5385,58 @@ void process_received_entity_comms_messages (void)
 			case ENTITY_COMMS_TASK_KILL:
 			////////////////////////////////////////
 			{
-	
+
 				entity
 					*task_en,
 					*victim,
 					*aggressor;
-	
+
 				//
 				// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
 				//
-	
+
 				ASSERT (get_comms_model () == COMMS_MODEL_CLIENT);
-	
+
 				task_en = unpack_entity_safe_ptr ();
 				victim = unpack_entity_safe_ptr ();
 				aggressor = unpack_entity_safe_ptr ();
-	
+
 				add_kill_to_task (task_en, victim, aggressor);
-	
+
 				debug_log ("EN_COMMS: received task kill for %s (%d), victim %s (%d), aggressor %s (%d)",
 								get_local_entity_string (task_en, STRING_TYPE_FULL_NAME), get_local_entity_index (task_en),
 								get_local_entity_string (victim, STRING_TYPE_FULL_NAME), get_local_entity_index (victim),
 								get_local_entity_string (aggressor, STRING_TYPE_FULL_NAME), get_local_entity_index (aggressor));
-	
+
 				break;
 			}
 			////////////////////////////////////////
 			case ENTITY_COMMS_TASK_LOSS:
 			////////////////////////////////////////
 			{
-	
+
 				entity
 					*task_en,
 					*victim,
 					*aggressor;
-	
+
 				//
 				// (entity_comms_messages message, entity *task, entity *victim, entity *aggressor)
 				//
-	
+
 				ASSERT (get_comms_model () == COMMS_MODEL_CLIENT);
-	
+
 				task_en = unpack_entity_safe_ptr ();
 				victim = unpack_entity_safe_ptr ();
 				aggressor = unpack_entity_safe_ptr ();
-	
+
 				add_loss_to_task (task_en, victim, aggressor);
-	
+
 				debug_log ("EN_COMMS: received task loss for %s (%d), victim %s (%d), aggressor %s (%d)",
 								get_local_entity_string (task_en, STRING_TYPE_FULL_NAME), get_local_entity_index (task_en),
 								get_local_entity_string (victim, STRING_TYPE_FULL_NAME), get_local_entity_index (victim),
 								get_local_entity_string (aggressor, STRING_TYPE_FULL_NAME), get_local_entity_index (aggressor));
-	
+
 				break;
 			}
 			////////////////////////////////////////
@@ -5474,13 +5470,13 @@ void process_received_entity_comms_messages (void)
 					*en;
 
 				en = unpack_entity_safe_ptr ();
-	
+
 				#if DEBUG_MODULE_MESSAGE_TEXT
-	
+
 				debug_log ("EN_COMMS: received update fog of war");
-	
+
 				#endif
-	
+
 				update_sector_fog_of_war ();
 
 				break;
@@ -5517,13 +5513,13 @@ void process_received_entity_comms_messages (void)
 					*en;
 
 				en = unpack_entity_safe_ptr ();
-	
+
 				#if DEBUG_MODULE_MESSAGE_TEXT
-	
+
 				debug_log ("EN_COMMS: received update sector side count");
-	
+
 				#endif
-	
+
 				update_sector_side_count ();
 
 				break;

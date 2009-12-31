@@ -59,4 +59,8 @@ int tacview_reset_frame(void);
 // Updates some information from the playes gunship.  Call once per frame
 void tacview_update_gunship(void);
 
+
+void get_latitude_longitude(vec3d* pos, double* latitude, double* longitude);
+void get_position_from_latitude_longitude(double latitude, double longitude, vec3d* pos);
+
 #endif /* TACVIEW_H_ */

@@ -2407,6 +2407,7 @@ static float evaluate_target(entity* target, float sqr_range)
 		switch (get_local_entity_int_value (target, INT_TYPE_TARGET_TYPE))
 		{
 			case TARGET_TYPE_INVALID:
+			case TARGET_TYPE_HAZZARD:
 				return 0.0;
 
 			case TARGET_TYPE_GROUND:

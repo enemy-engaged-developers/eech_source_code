@@ -77,12 +77,19 @@ weapon_lock_types
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+gun_modes
+	gun_mode;
+
 int
 	fire_continuous_weapon,
 	fire_single_weapon,
 	rocket_salvo_size,
 	rocket_salvo_count,
-	gun_is_firing = FALSE;
+	gun_is_firing = FALSE,
+	gun_start_fire_count;
+
+unsigned
+	gun_burst_size;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +122,10 @@ void initialise_common_weapon_systems (void)
 	good_tone = FALSE;
 
 	good_tone_delay = 0.0;
+
+	gun_mode = GUN_MODE_NORMAL;
+	gun_burst_size = 0;
+	gun_start_fire_count = 0;
 
 	set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH, FALSE);
 
@@ -160,15 +171,36 @@ void update_weapon_lock_type (target_acquisition_systems system)
 	//
 	////////////////////////////////////////
 
+	source = get_gunship_entity ();
+	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
+
+	if (selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND && get_gun_burst_size())
+	{
+		int
+			number = get_local_entity_weapon_count(source, selected_weapon_type),
+			current_burst = gun_start_fire_count - number;
+
+		if (fire_continuous_weapon)
+		{
+			if (current_burst >= get_gun_burst_size())
+			{
+				weapon_lock_type = WEAPON_LOCK_BURST_LIMIT;
+				fire_continuous_weapon = FALSE;
+				pause_client_server_continuous_weapon_sound_effect (source, selected_weapon_type);
+
+				return;
+			}
+		}
+		else
+			gun_start_fire_count = number;
+	}
+
 	if (system == TARGET_ACQUISITION_SYSTEM_OFF)
 	{
 		weapon_lock_type = WEAPON_LOCK_NO_ACQUIRE;
 
 		return;
 	}
-
-	source = get_gunship_entity ();
-	selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
 
 	// trying to fire a laser guided without laser active
 	if (weapon_database[selected_weapon_type].guidance_type == WEAPON_GUIDANCE_TYPE_SEMI_ACTIVE_LASER
@@ -179,19 +211,6 @@ void update_weapon_lock_type (target_acquisition_systems system)
 		return;
 	}
 
-
-	////////////////////////////////////////
-	//
-	// WEAPON_LOCK_NO_WEAPON
-	//
-	////////////////////////////////////////
-
-	if (selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_NO_WEAPON)
-	{
-		weapon_lock_type = WEAPON_LOCK_NO_WEAPON;
-
-		return;
-	}
 
 	////////////////////////////////////////
 	//
@@ -889,4 +908,146 @@ float get_missile_flight_time (void)
 	}
 
 	return (flight_time);
+}
+
+void get_requested_gunship_cannon_vector(int has_target, float* required_heading_offset, float* required_pitch_offset, entity_sub_types selected_weapon, viewpoint* vp)
+{
+	int use_eo_sight_for_direction = is_using_eo_system(command_line_cannontrack != 2);
+
+	if (gun_mode == GUN_MODE_FIXED)
+	{
+		*required_heading_offset = 0.0;
+		*required_pitch_offset = rad(6.0);
+
+		return;
+	}
+
+	// Mi-24's nose gun which doesn't have as good aiming devices as other helicopters
+	if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND)
+	{
+		// in EO view fire along EO line of sight
+		use_eo_sight_for_direction = target_acquisition_system != TARGET_ACQUISITION_SYSTEM_HMS && view_mode == VIEW_MODE_VIRTUAL_COCKPIT_PERISCOPE;
+
+		  // in HMS mode gun follows head, simulates co-pilot aiming
+		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
+		{
+			*required_heading_offset = -pilot_head_heading;
+			*required_pitch_offset = pilot_head_pitch;
+		}
+		else  // fire straight ahead, where the pilot has a sight
+		{
+			*required_heading_offset = 0.0;
+			*required_pitch_offset = 0.0;
+		}
+	}
+	else
+		switch (command_line_cannontrack)
+		{
+			case 1:
+			{
+				if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_OFF)
+				{
+					*required_heading_offset = -pilot_head_heading;
+					*required_pitch_offset = pilot_head_pitch;
+				}
+				break;
+			}
+
+			case 2:
+			{
+				if ((target_acquisition_system == TARGET_ACQUISITION_SYSTEM_IHADSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HIDSS) || (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS))
+				{
+					*required_heading_offset = -pilot_head_heading;
+					*required_pitch_offset = pilot_head_pitch;
+				}
+				break;
+			}
+		}
+
+	// slave to EO system if it is active (and doesn't have a target)
+	if (!has_target && use_eo_sight_for_direction)
+	{
+		vec3d* tracking_point = get_eo_tracking_point();
+
+		*required_heading_offset = eo_azimuth;
+		*required_pitch_offset = eo_elevation;
+
+		// if using point lock, then aim for that point
+		if (tracking_point && weapon_database[selected_weapon].aiming_type == WEAPON_AIMING_TYPE_CALC_LEAD_AND_BALLISTIC)
+		{
+			float pitch, dummy;
+			float height_diff;
+			float range;
+
+			#ifdef DEBUG_MODULE
+			debug_log("Aiming for point lock at %.0f, %.0f,  %.0f", tracking_point->x, tracking_point->y, tracking_point->z);
+			#endif
+
+
+			height_diff = vp->position.y - tracking_point->y;
+			range = get_range_to_target();
+
+			if (range <= 0.0)
+				range = 1000.0;   // use 1000 meters if unable to determine range
+
+			// adjust weapon elevation for range
+			if (get_ballistic_pitch_deflection(selected_weapon, range, height_diff, &pitch, &dummy, FALSE, FALSE))
+			{
+				matrix3x3 m;
+				float dx, dz;
+				float heading, flat_range;
+				vec3d offset_vector, tracking_vector;
+
+				// get heading and pitch offsets
+
+				dx = tracking_point->x - vp->position.x;
+				dz = tracking_point->z - vp->position.z;
+
+				heading = atan2 (dx, dz);
+
+				// need to adjust for the gun's attitude, as the helicopter may not fly level all the time
+				get_3d_transformation_matrix (m, heading, pitch, 0.0);
+
+				tracking_vector.x = m[2][0];
+				tracking_vector.y = m[2][1];
+				tracking_vector.z = m[2][2];
+
+				multiply_transpose_matrix3x3_vec3d (&offset_vector, vp->attitude, &tracking_vector);
+
+				*required_heading_offset = atan2 (offset_vector.x, offset_vector.z);
+
+				flat_range = sqrt ((offset_vector.x * offset_vector.x) + (offset_vector.z * offset_vector.z));
+				*required_pitch_offset = atan2 (offset_vector.y, flat_range);
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+gun_modes get_gun_mode(void)
+{
+	return gun_mode;
+}
+
+void set_gun_mode(gun_modes mode)
+{
+	gun_mode = mode;
+}
+
+void toggle_gun_mode(void)
+{
+	gun_mode = (gun_mode == GUN_MODE_NORMAL) ? GUN_MODE_FIXED : GUN_MODE_NORMAL;
+}
+
+unsigned get_gun_burst_size(void)
+{
+	return gun_burst_size;
+}
+
+void set_gun_burst_size(unsigned size)
+{
+	gun_burst_size = size;
 }

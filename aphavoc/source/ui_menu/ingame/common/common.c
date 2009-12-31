@@ -665,7 +665,7 @@ void ingame_quit_function (event *ev)
 
 static void delete_waypoint_event (event *ev)
 {
-	map_delete_waypoint_event();
+	map_delete_waypoint_event(get_ui_mouse_over_entity());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

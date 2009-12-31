@@ -615,6 +615,8 @@ enum ENTITY_SUB_TYPE_WAYPOINTS
 	NUM_ENTITY_SUB_TYPE_WAYPOINTS
 };
 
+typedef enum ENTITY_SUB_TYPE_WAYPOINTS entity_sub_type_wapoints;
+
 #define entity_sub_type_waypoint_valid(SUB_TYPE) (((SUB_TYPE) >= 0) && ((SUB_TYPE) < NUM_ENTITY_SUB_TYPE_WAYPOINTS))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

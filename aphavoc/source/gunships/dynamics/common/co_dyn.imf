@@ -86,6 +86,7 @@ c_object_files		+=	$+ &
                      $(currentdir)\co_dyn.obj &
                      $(currentdir)\co_event.obj &
                      $(currentdir)\co_force.obj &
+                     $(currentdir)\co_fuel.obj &
                      $(currentdir)\co_undercarriage.obj &
 							$-
 

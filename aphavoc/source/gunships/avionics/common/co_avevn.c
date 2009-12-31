@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -76,7 +76,7 @@ static void toggle_high_LOD_event (event *ev)
 	if (command_line_high_lod_hack == 1)
 		command_line_high_lod_hack = 0;
 	else
-		command_line_high_lod_hack = 1;		
+		command_line_high_lod_hack = 1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,10 +86,10 @@ static void toggle_high_LOD_event (event *ev)
 static void set_next_hud_colour_event (event *ev)
 {
 	gunship_types type = get_global_gunship_type();
-	
+
 	if (type >= (sizeof(hud_code) / sizeof(hud_code[0])))
 		type = GUNSHIP_TYPE_AH64A;
-	
+
 	set_next_hud_colour ();
 
 	//VJ 060211 hud_code: store hud info
@@ -114,14 +114,14 @@ static void set_next_hud_colour_event (event *ev)
 static void set_next_hud_alpha_event (event *ev)
 {
 	gunship_types type = get_global_gunship_type();
-	
+
 	if (type >= (sizeof(hud_code) / sizeof(hud_code[0])))
 		type = GUNSHIP_TYPE_AH64A;
 
-	global_hud_alpha += 16;	   
+	global_hud_alpha += 16;
 	if (global_hud_alpha > 160)
 		global_hud_alpha = 0;
-		
+
 	//VJ 060211 hud_code: store hud info
 	hud_code[(int)type][HUD_CODES_ALPHA] = global_hud_alpha;
 }
@@ -135,7 +135,7 @@ static void toggle_hud_enlarge_event (event *ev)
 {
 
 	set_global_hud_enlarge (get_global_hud_enlarge () ^ 1);
-	
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ static void toggle_PNVS_level_event (event *ev)
 	global_PNVS_level++;
 	if (global_PNVS_level > 2)
 		global_PNVS_level = 0;
-}	
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,28 +482,28 @@ static void rearm_refuel_repair_event (event *ev)
 		//
 		// re-arm
 		//
-	
+
 		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE);
-	
+
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
-	
+
 		//
 		// refuel
 		//
-	
+
 		current_flight_dynamics->fuel_weight.value = current_flight_dynamics->fuel_weight.max;
-	
+
 		//
 		// repair
 		//
-	
+
 		fully_repair_local_entity_avionics (get_gunship_entity ());
-	
+
 		repair_damage_model (DYNAMICS_DAMAGE_ALL);
-	
+
 		set_status_message (get_trans ("Rearmed, refuelled and repaired"), STATUS_MESSAGE_TYPE_NONE);
 	}
-	
+
 	#endif
 }
 
@@ -529,12 +529,12 @@ static void load_air_to_ground_weapons_event (event *ev)
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
 		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_SURFACE_WEAPON_CONFIG_TYPE);
-	
+
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
-	
+
 		set_status_message (get_trans ("Loaded air-to-ground weapons"), STATUS_MESSAGE_TYPE_NONE);
 	}
-	
+
 	#endif
 }
 
@@ -560,12 +560,12 @@ static void load_air_to_air_weapons_event (event *ev)
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
 		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_AIR_TO_AIR_WEAPON_CONFIG_TYPE);
-	
+
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
-	
+
 		set_status_message (get_trans ("Loaded air-to-air weapons"), STATUS_MESSAGE_TYPE_NONE);
 	}
-	
+
 	#endif
 }
 
@@ -591,12 +591,12 @@ static void load_scout_weapons_event (event *ev)
 	if (get_local_entity_int_value (get_session_entity (), INT_TYPE_CHEATS_ENABLED))
 	{
 		config_type = (weapon_config_types) get_local_entity_int_value (get_gunship_entity (), INT_TYPE_SCOUT_WEAPON_CONFIG_TYPE);
-	
+
 		set_client_server_entity_int_value (get_gunship_entity (), INT_TYPE_WEAPON_CONFIG_TYPE, config_type);
-	
+
 		set_status_message (get_trans ("Loaded scout mission weapons"), STATUS_MESSAGE_TYPE_NONE);
 	}
-	
+
 	#endif
 }
 
@@ -631,7 +631,7 @@ static void mouse_left_event (event *ev)
 		mouse_move_left++;
 	}
 }
-	
+
 static void mouse_right_event (event *ev)
 {
 	if ((command_line_mouse_look == MOUSELOOK_OFF) || (command_line_mouse_look == MOUSELOOK_EXTERNAL) ||
@@ -693,7 +693,9 @@ static void mouse_left_button_event (event* ev)
 		}
 		// fall through
 	default:
-		store_point_left_event(ev);
+		//store_point_left_event(ev);
+		if (ev->state == BUTTON_STATE_DOWN)
+			handle_apache_mfd_click();
 		break;
 	}
 }
@@ -707,11 +709,17 @@ static void mouse_right_button_event (event* ev)
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 	case TARGET_ACQUISITION_SYSTEM_LLLTV:
 	case TARGET_ACQUISITION_SYSTEM_PERISCOPE:
-		if (ev->state == BUTTON_STATE_DOWN)
-			mouse_next_target_event(ev);
-		break;
+		if (get_global_gunship_type() != GUNSHIP_TYPE_APACHE || !command_line_mouse_tsd_target_select)
+		{
+			if (ev->state == BUTTON_STATE_DOWN)
+				mouse_next_target_event(ev);
+			break;
+		}
+		// fall through
 	default:
-		store_point_right_event(ev);
+		if (ev->state == BUTTON_STATE_DOWN)
+			swap_apache_mfd_focus();
+//		store_point_right_event(ev);
 	}
 }
 
@@ -725,7 +733,7 @@ static void mouselook_toggle (event *ev)
 	}
 	else
 	{
-		command_line_mouse_look = MOUSELOOK_ON;		
+		command_line_mouse_look = MOUSELOOK_ON;
 	}
 }
 
@@ -748,7 +756,7 @@ static void select_previous_designated_target_event (event *ev)
 
 static void toggle_electrical_sytem_event(event* ev)
 {
-	set_electrical_system_active(!electrical_system_active());	
+	set_electrical_system_active(!electrical_system_active());
 }
 
 
@@ -925,20 +933,20 @@ void set_common_avionics_events (void)
 	set_event (MOUSE_WHEEL_DOWN, MODIFIER_NONE, BUTTON_STATE_EITHER, mouse_wheel_down_event);
 
 	// Jabberwock 030930 ends
-	
+
 	// Jabberwock 031016 Mouselook toggle
-	
+
 	set_event (MOUSE_MIDDLE_BUTTON, MODIFIER_NONE, BUTTON_STATE_DOWN, mouselook_toggle);
 	set_event (DIK_DELETE, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, mouselook_toggle);
-	
+
 	// Jabberwock 031016 ends
-	
+
 	// Jabberwock 031107 Designated targets
-	
-	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, designate_toggle_event); 
+
+	set_event (DIK_NUMPADENTER, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, designate_toggle_event);
 
 	set_event (DIK_NUMPAD0, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, select_next_designated_target_event);
-	
+
 	set_event (DIK_NUMPAD0, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, select_previous_designated_target_event);
 
 	set_event (DIK_N, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_PNVS_level_event);

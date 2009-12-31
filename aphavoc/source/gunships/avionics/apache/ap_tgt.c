@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -72,12 +72,20 @@
 
 #define DEBUG_MODULE	0
 
+static target_aquistion_sources
+	acquisition_source;
+
+static vec3d
+	acquisition_source_relative_position;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void initialise_apache_target_acquisition_systems (void)
 {
+	acquisition_source = TARGET_ACQUISITION_SOURCE_FXD;
+
 	initialise_apache_radar ();
 
 	initialise_apache_eo ();
@@ -102,9 +110,47 @@ void deinitialise_apache_target_acquisition_systems (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+target_aquistion_sources get_apache_acquisition_source(void)
+{
+	return acquisition_source;
+}
+
+void select_apache_acquisition_source(target_aquistion_sources acq_src)
+{
+	acquisition_source = acq_src;
+}
+
+static const char* acq_src_abbreviations[] = {
+	"PHS",
+	"GHS",
+	"SKR",
+	"RFI",
+	"FCR",
+	"FXD",
+	"TADS",
+	"TXX"
+};
+
+const char* get_apache_acquisition_source_abreviation(void)
+{
+	if (acquisition_source < TARGET_ACQUISITION_SOURCE_WAYPOINT_TARGET_POINT)
+		return acq_src_abbreviations[acquisition_source];
+	else
+		return "";  // TODO
+}
+
+vec3d* get_acuisition_source_relative_position(void)
+{
+	return &acquisition_source_relative_position;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void deselect_apache_target_acquisition_system (target_acquisition_systems system)
 {
-	
+
 	switch (system)
 	{
 		////////////////////////////////////////
@@ -114,14 +160,14 @@ static void deselect_apache_target_acquisition_system (target_acquisition_system
 			// laser is on in all modes but OFF in automatic mode
 			if (!command_line_manual_laser_radar)
 				set_laser_is_active(TRUE);
-			
+
 			break;
 		}
 		////////////////////////////////////////
 		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
 		////////////////////////////////////////
 		{
-			if (!command_line_manual_laser_radar)
+			if (!command_line_manual_laser_radar && get_global_avionics_realism() != AVIONICS_DETAIL_REALISTIC)
 				deactivate_common_ground_radar ();
 
 			break;
@@ -130,7 +176,7 @@ static void deselect_apache_target_acquisition_system (target_acquisition_system
 		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
-			if (!command_line_manual_laser_radar)
+			if (!command_line_manual_laser_radar && get_global_avionics_realism() != AVIONICS_DETAIL_REALISTIC)
 				deactivate_common_air_radar ();
 
 			break;
@@ -209,7 +255,7 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			target_acquisition_system = system;
 
 			set_gunship_target (NULL);
-			
+
 			if (!command_line_manual_laser_radar)
 				set_laser_is_active(FALSE);
 
@@ -229,7 +275,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			{
 				target_acquisition_system = system;
 
-				deactivate_common_air_radar();
+				if (get_global_avionics_realism() != AVIONICS_DETAIL_REALISTIC)
+					deactivate_common_air_radar();
 
 				if (!command_line_manual_laser_radar)
 					activate_common_ground_radar ();
@@ -255,7 +302,8 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 			{
 				target_acquisition_system = system;
 
-				deactivate_common_air_radar();
+				if (get_global_avionics_realism() != AVIONICS_DETAIL_REALISTIC)
+					deactivate_common_air_radar();
 
 				if (!command_line_manual_laser_radar)
 					activate_common_air_radar ();
@@ -278,7 +326,7 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		////////////////////////////////////////
 		{
 			reset_mfd_mouse_buttons();
-			
+
 			if (!apache_damage.flir)
 			{
 				target_acquisition_system = system;
@@ -303,7 +351,7 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		////////////////////////////////////////
 		{
 			reset_mfd_mouse_buttons();
-			
+
 			if (!apache_damage.dtv)
 			{
 				target_acquisition_system = system;
@@ -328,7 +376,7 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 		////////////////////////////////////////
 		{
 			reset_mfd_mouse_buttons();
-			
+
 			if (!apache_damage.dvo)
 			{
 				target_acquisition_system = system;
@@ -386,13 +434,49 @@ void select_apache_target_acquisition_system (target_acquisition_systems system)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static void update_acquisition_source(void)
+{
+	switch (acquisition_source)
+	{
+	case TARGET_ACQUISITION_SOURCE_PHS:
+	case TARGET_ACQUISITION_SOURCE_GHS:
+	case TARGET_ACQUISITION_SOURCE_SKR:
+	case TARGET_ACQUISITION_SOURCE_RFI:
+	case TARGET_ACQUISITION_SOURCE_FCR:
+	case TARGET_ACQUISITION_SOURCE_FXD:
+		acquisition_source_relative_position.x = 0.0;
+		acquisition_source_relative_position.y = 0.0;
+		acquisition_source_relative_position.z = 1000.0;
+
+		multiply_matrix3x3_vec3d(&acquisition_source_relative_position, current_flight_dynamics->attitude, &acquisition_source_relative_position);
+
+		break;
+	case TARGET_ACQUISITION_SOURCE_TADS:
+		get_3d_unit_vector_from_heading_and_pitch(&acquisition_source_relative_position, eo_azimuth, eo_elevation);
+		multiply_matrix3x3_vec3d(&acquisition_source_relative_position, current_flight_dynamics->attitude, &acquisition_source_relative_position);
+
+		// multiply by 1000 to move focus point out some.  Minimizes problem of
+		// EO point of view being a few meters ahead of pilot's viewpoint
+		acquisition_source_relative_position.x *= 1000.0;
+		acquisition_source_relative_position.y *= 1000.0;
+		acquisition_source_relative_position.z *= 1000.0;
+
+		break;
+	case TARGET_ACQUISITION_SOURCE_WAYPOINT_TARGET_POINT:
+		acquisition_source_relative_position.x = 0.0;
+		acquisition_source_relative_position.y = 0.0;
+		acquisition_source_relative_position.z = 1000.0;
+
+		multiply_matrix3x3_vec3d(&acquisition_source_relative_position, current_flight_dynamics->attitude, &acquisition_source_relative_position);
+
+		break;
+	}
+}
+
 void update_apache_target_acquisition_system (void)
 {
-	if (ground_radar_is_active())
-		update_common_ground_radar(FALSE);
-	else if (air_radar_is_active())
-		update_common_air_radar();
-	
+	update_common_radar(FALSE);
+
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -515,14 +599,15 @@ void update_apache_target_acquisition_system (void)
 		// radar on/off
 		//
 
-		radar_on = FALSE;
+		radar_on = get_radar_active();
 
+/*
 		if (ground_radar_is_active() && ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 			radar_on = TRUE;
 
 		else if (air_radar_is_active() && air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 			radar_on = TRUE;
-
+*/
 		if (radar_on != get_local_entity_int_value (source, INT_TYPE_RADAR_ON))
 			set_client_server_entity_int_value (source, INT_TYPE_RADAR_ON, radar_on);
 
@@ -584,6 +669,9 @@ void update_apache_target_acquisition_system (void)
 			set_client_server_entity_int_value (source, INT_TYPE_LOS_TO_TARGET, los_to_target);
 		}
 	}
+
+	// acquisition source
+	update_acquisition_source();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -886,6 +974,17 @@ void set_apache_lock_target (int lock)
 
 void apache_target_acquisition_system_misc_function1 (void)
 {
+	/*
+	radar_params* radar = get_current_radar_params();
+
+	radar->sweep_mode = RADAR_SWEEP_MODE_SINGLE;
+	activate_common_radar();
+	*/
+	if (apache_damage.radar)
+		set_radar_active(FALSE);
+	else
+		toggle_single_scan_active();
+#if 0
 	switch (target_acquisition_system)
 	{
 		case TARGET_ACQUISITION_SYSTEM_OFF:
@@ -894,13 +993,10 @@ void apache_target_acquisition_system_misc_function1 (void)
 		case TARGET_ACQUISITION_SYSTEM_DTV:
 		case TARGET_ACQUISITION_SYSTEM_DVO:
 		case TARGET_ACQUISITION_SYSTEM_IHADSS:
+		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		{
-			if (apache_damage.radar)
-			{
-				set_ground_radar_is_active(FALSE);
-				set_air_radar_is_active(FALSE);
-			}
-			else if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
+/*
+			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
 			{
 				if (ground_radar_is_active())
 					ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
@@ -909,21 +1005,19 @@ void apache_target_acquisition_system_misc_function1 (void)
 			}
 			else
 			{
-				set_ground_radar_is_active(ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
-				
+				set_radar_mode(ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE ? RADAR_MODE_GTM : RADAR_MODE_NONE);
+
 				ground_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
-
+*/
 			break;
 		}
 		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
 		////////////////////////////////////////
 		{
 			if (apache_damage.radar)
 			{
-				set_ground_radar_is_active(FALSE);
-				set_air_radar_is_active(FALSE);
+				set_radar_mode(RADAR_MODE_NONE);
 			}
 			else if (air_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
 			{
@@ -934,14 +1028,15 @@ void apache_target_acquisition_system_misc_function1 (void)
 			}
 			else
 			{
-				set_air_radar_is_active(air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE);
-				
+				set_radar_mode(ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE ? RADAR_MODE_ATM : RADAR_MODE_NONE);
+
 				air_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
 			}
 
 			break;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -950,6 +1045,12 @@ void apache_target_acquisition_system_misc_function1 (void)
 
 void apache_target_acquisition_system_misc_function2 (void)
 {
+	if (apache_damage.radar)
+		set_radar_active(FALSE);
+	else
+		toggle_continuous_radar_active();
+
+/*
 	switch (target_acquisition_system)
 	{
 		////////////////////////////////////////
@@ -961,18 +1062,19 @@ void apache_target_acquisition_system_misc_function2 (void)
 		case TARGET_ACQUISITION_SYSTEM_IHADSS:
 		////////////////////////////////////////
 		{
+/*
 			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
 			{
 				if (!apache_damage.radar)
 				{
 					ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-					set_ground_radar_is_active(TRUE);
+//					set_radar_mode(RADAR_MODE_GTM);
 				}
 			}
 			else if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
 			{
 				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-				set_ground_radar_is_active(FALSE);
+//				set_radar_mode(RADAR_MODE_NONE);
 			}
 			else if (!apache_damage.radar)
 				toggle_ground_radar_active();
@@ -988,20 +1090,22 @@ void apache_target_acquisition_system_misc_function2 (void)
 				if (!apache_damage.radar)
 				{
 					air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-					set_air_radar_is_active(TRUE);
+					set_radar_mode(RADAR_MODE_ATM);
 				}
 			}
 			else if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_ACTIVE)
 			{
 				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_INACTIVE;
-				set_air_radar_is_active(FALSE);
+				set_radar_mode(RADAR_MODE_NONE);
 			}
 			else if (!apache_damage.radar)
 				toggle_air_radar_active();
 
 			break;
+
 		}
 	}
+	*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

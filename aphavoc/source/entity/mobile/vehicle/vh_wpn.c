@@ -422,6 +422,17 @@ void update_vehicle_weapon_fire (entity *en)
 	{
 		if (weapon_database[raw->selected_weapon].aiming_type != WEAPON_AIMING_TYPE_CALC_ANGLE_OF_PROJECTION)
 		{
+#if 0
+			vec3d
+				*source_position,
+				*target_position;
+
+			source_position = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
+			target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+			source_position->y -= 1.0;
+
+			if (!check_position_line_of_sight (en, target, source_position, target_position, MOBILE_LOS_CHECK_ALL))
+#endif
 			if (!check_entity_line_of_sight (en, target, (mobile_los_check_criteria) MOBILE_LOS_CHECK_ALL))
 			{
 				if (raw->weapon_burst_timer > 0.0)
@@ -432,6 +443,7 @@ void update_vehicle_weapon_fire (entity *en)
 				if (debug_flag)
 				{
 					debug_log ("VH_WPN: Not Firing - No Line Of Sight");
+//					debug_log ("VH_WPN: Not Firing - No Line Of Sight (was: %d)", check_entity_line_of_sight (en, target, MOBILE_LOS_CHECK_ALL));
 				}
 
 				return;

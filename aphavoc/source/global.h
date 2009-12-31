@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -167,7 +167,7 @@ enum HUD_COLOURS
 	HUD_COL_CYAN,
 	HUD_COL_BLUE,
 	HUD_COL_BLACK,
-    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"	
+    //060207 Mavericks hud colours mod.   "_L_=LIGHT", "_N_=NEON", "_D_=DARK"
         HUD_COL_ORANGE,
         HUD_COL_D_ORANGE,
         HUD_COL_L_YELLO,
@@ -308,7 +308,7 @@ typedef enum SESSION_WEATHER_SETTINGS session_weather_settings;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VJ 051011 add season summer/winter/desert button	
+//VJ 051011 add season summer/winter/desert button
 enum SESSION_SEASON_SETTINGS
 {
 
@@ -403,6 +403,27 @@ enum COCKPIT_DETAIL_LEVELS
 };
 
 typedef enum COCKPIT_DETAIL_LEVELS cockpit_detail_levels;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef enum {
+	AVIONICS_DETAIL_SIMPLE,
+	AVIONICS_DETAIL_ADVANCED,
+	AVIONICS_DETAIL_REALISTIC
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef enum {
+	COUNTER_MEASURES_MODE_SAFE,
+	COUNTER_MEASURES_MODE_MANUAL,
+	COUNTER_MEASURES_MODE_SEMI,
+	COUNTER_MEASURES_MODE_AUTO,
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,7 +531,7 @@ struct GLOBAL_OPTIONS_DATA
 		cpg_assist_type;
 
 	int
-		auto_counter_measures;
+		counter_measures_mode;
 
 	char
 		ip_address[128];
@@ -583,7 +604,7 @@ struct GLOBAL_OPTIONS_DATA
 		apache_havoc_installed,
 		ase_auto_page,
 		glass_cockpit,
-		simple_avionics,
+		realistic_avionics,  // 0 = simple, 1 = advanced, 2 = realistic
 		display_in_flight_intelligence_messages,
 		unscaled_displays;
 
@@ -867,9 +888,11 @@ extern global_options_data
 
 #define get_global_cpg_assist_type() (global_options.cpg_assist_type)
 
-#define set_global_auto_counter_measures(FLAG) (global_options.auto_counter_measures = (FLAG))
+#define set_global_auto_counter_measures(FLAG) (global_options.counter_measures_mode = ((FLAG) ? COUNTER_MEASURES_MODE_AUTO : COUNTER_MEASURES_MODE_MANUAL))
+#define get_global_auto_counter_measures() (global_options.counter_measures_mode == COUNTER_MEASURES_MODE_AUTO)
 
-#define get_global_auto_counter_measures() (global_options.auto_counter_measures)
+#define set_global_counter_measures_mode(MODE) (global_options.counter_measures_mode = (MODE))
+#define get_global_counter_measures_mode() (global_options.counter_measures_mode)
 
 #define set_global_ase_auto_page(FLAG) (global_options.ase_auto_page = (FLAG))
 
@@ -883,9 +906,12 @@ extern global_options_data
 
 #define get_global_cockpit_detail_level() (global_options.cockpit_detail_level)
 
-#define set_global_simple_avionics(FLAG) (global_options.simple_avionics = (FLAG))
+// historic defines, before variable was renamed realistic avionics and got three states.  These keep the old behaviour (and regard both advanced and realistic as "not simple")
+#define set_global_simple_avionics(FLAG) (global_options.realistic_avionics = !(FLAG))
+#define get_global_simple_avionics() (global_options.realistic_avionics == 0)
 
-#define get_global_simple_avionics() (global_options.simple_avionics)
+#define set_global_avionics_realism(FLAG) (global_options.realistic_avionics = (FLAG))
+#define get_global_avionics_realism() (global_options.realistic_avionics)
 
 #define set_global_display_in_flight_intelligence_messages(FLAG) (global_options.display_in_flight_intelligence_messages = (FLAG))
 
@@ -922,7 +948,7 @@ extern global_options_data
 #define set_global_session_free_flight_time_of_day(VALUE) (global_options.session_free_flight_time_of_day = (VALUE))
 #define get_global_session_free_flight_time_of_day() (global_options.session_free_flight_time_of_day)
 
-#define set_global_season(VALUE) (current_map_info.season = (VALUE))   //VJ 051227 changed from global_season 
+#define set_global_season(VALUE) (current_map_info.season = (VALUE))   //VJ 051227 changed from global_season
 #define get_global_season() (current_map_info.season)                  //VJ 051227 changed from global_season
 
 #define set_global_session_campaign_time_of_day(VALUE) (global_options.session_campaign_time_of_day = (VALUE))
@@ -1030,7 +1056,7 @@ extern int get_localisation_y_size (game_text_translation_type *list, int button
 
 typedef struct
 {
-	unsigned 
+	unsigned
 		arneh_ah64d_cockpit,
 		arneh_mi24v_cockpit;
 } installed_custom_3d_models;

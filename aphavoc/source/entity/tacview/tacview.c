@@ -174,7 +174,8 @@ void write_tacview_header(entity* pilot, entity* player_gunship)
 	if (longitude_offset == 0.0 && latitude_offset == 0.0)
 		debug_fatal("Current map has no longitude and latitude which is needed by tacview.  Add this information in mapinfo.txt as e.g. coordinate=10.0,20.1");
 
-	latitude_scale = 1.0 / (M1 + (M2 * cos(2 * rad(latitude_offset)) + (M3 * cos(4 * rad(latitude_offset)))));
+//	latitude_scale = 1.0 / (M1 + (M2 * cos(2 * rad(latitude_offset)) + (M3 * cos(4 * rad(latitude_offset)))));
+	latitude_scale = 1.0 / (M1 + (M2 * cos(2 * latitude_offset) + (M3 * cos(4 * latitude_offset))));
 
 	get_system_date(&day, &month, &year);
 	year += 2000;
@@ -692,7 +693,7 @@ void write_tacview_unit_update(entity* en, int moved, int rotated, int force)
 		vec3d
 			*pos = get_local_entity_vec3d_ptr(en, VEC3D_TYPE_POSITION);
 		float
-			latitude = (pos->z * latitude_scale),
+			latitude = deg(pos->z * latitude_scale),
 			abs_lat = fabs(latitude_offset + rad(latitude)),
 			longitude_length = (P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)),
 			longitude = (pos->x / longitude_length);
@@ -891,4 +892,34 @@ static int tacview_log_this_frame(entity* en)
 	}
 
 	return FALSE;
+}
+
+void get_latitude_longitude(vec3d* pos, double* latitude, double* longitude)
+{
+	double
+		lat_offset = get_current_map_latitude_offset(),
+		long_offset = get_current_map_longitude_offset(),
+		latitude_scale = 1.0 / (M1 + (M2 * cos(2 * lat_offset) + (M3 * cos(4 * lat_offset)))),
+		abs_lat,
+		longitude_scale;
+
+	*latitude = rad(pos->z * latitude_scale) + lat_offset;
+	abs_lat = fabs(lat_offset + *latitude);
+	longitude_scale = 1.0 / ((P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)));
+	*longitude = rad(pos->x * longitude_scale) + long_offset;
+}
+
+void get_position_from_latitude_longitude(double latitude, double longitude, vec3d* pos)
+{
+	double
+		lat_offset = get_current_map_latitude_offset(),
+		long_offset = get_current_map_longitude_offset(),
+		z_grid_length = (M1 + (M2 * cos(2 * lat_offset) + (M3 * cos(4 * lat_offset)))),
+		abs_lat,
+		x_grid_length;
+
+	pos->z = deg(latitude - lat_offset) * z_grid_length;
+	abs_lat = fabs(lat_offset + latitude);
+	x_grid_length = ((P1 * cos(abs_lat)) + (P2 * cos(3 * abs_lat)));
+	pos->x = deg(longitude - long_offset) * x_grid_length;
 }

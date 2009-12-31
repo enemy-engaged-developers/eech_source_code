@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -92,10 +92,10 @@ ui_object
 static const char
 	*option_boolean_text[2],
 	*option_cpg_text[3],
-	*option_avionics_text[2],
+	*option_avionics_text[3],
 	*option_difficulty_text[3],
 	*option_cpg_report_targets_text[2];
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,10 +128,10 @@ void notify_show_realism_page (void)
 	debug_filtered_log ("acm: %d text: %s", get_global_auto_counter_measures (), option_boolean_text [get_global_auto_counter_measures ()]);
 	#endif
 
-	set_ui_object_text (avionics_option_button, option_avionics_text [get_global_simple_avionics ()]);
+	set_ui_object_text (avionics_option_button, option_avionics_text [get_global_avionics_realism()]);
 
 	#if DEBUG_MODULE
-	debug_filtered_log ("avionics: %d text: %s", get_global_simple_avionics (), option_avionics_text [get_global_simple_avionics ()]);
+	debug_filtered_log ("avionics: %d text: %s", get_global_realistic_avionics (), option_avionics_text [get_global_realistic_avionics ()]);
 	#endif
 
 	set_ui_object_text (difficulty_option_button, option_difficulty_text [get_global_difficulty_level () - 1]);
@@ -181,8 +181,9 @@ void define_options_screen_realism_page_objects (void)
 	option_cpg_text [1] = get_trans ("Novice");
 	option_cpg_text [2] = get_trans ("Realistic");
 
-	option_avionics_text [0] = get_trans ("Realistic");
-	option_avionics_text [1] = get_trans ("Novice");
+	option_avionics_text [0] = get_trans ("Simple");
+	option_avionics_text [1] = get_trans ("Advanced");
+	option_avionics_text [2] = get_trans ("Realistic");
 
 	option_difficulty_text [0] = get_trans ("Hard");
 	option_difficulty_text [1] = get_trans ("Medium");
@@ -217,7 +218,7 @@ void define_options_screen_realism_page_objects (void)
 
 	// co_pilot_target_area
 
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    co_pilot_target_area = create_ui_object
@@ -231,7 +232,7 @@ void define_options_screen_realism_page_objects (void)
 									);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -263,7 +264,7 @@ void define_options_screen_realism_page_objects (void)
 	//co_pilot_ecm area
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    co_pilot_ecm_area = create_ui_object
@@ -277,7 +278,7 @@ void define_options_screen_realism_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -309,7 +310,7 @@ void define_options_screen_realism_page_objects (void)
 	//avionics area
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    avionics_area = create_ui_object
@@ -323,7 +324,7 @@ void define_options_screen_realism_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -355,7 +356,7 @@ void define_options_screen_realism_page_objects (void)
 	//difficulty area
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
    difficulty_area = create_ui_object
@@ -369,7 +370,7 @@ void define_options_screen_realism_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -401,7 +402,7 @@ void define_options_screen_realism_page_objects (void)
 	//cpg report targets area
 
 	i++;
-	x1 = 0.0; 
+	x1 = 0.0;
 	y1 = OPTION_TITLE_OFFSET_Y + (OPTION_AREA_OFFSET_Y * i);
 
     cpg_report_targets_area = create_ui_object
@@ -415,7 +416,7 @@ void define_options_screen_realism_page_objects (void)
 								);
 
 	x1 = OPTION_TITLE_OFFSET_X;
-	y1 = 0.0; 
+	y1 = 0.0;
 
 	title_change_array[i] = create_ui_object
 	(
@@ -451,7 +452,7 @@ void define_options_screen_realism_page_objects (void)
 	i = 0;
 
 	//Co-Pilot target ID
-	
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -470,7 +471,7 @@ void define_options_screen_realism_page_objects (void)
 		set_ui_object_virtual_x_size (change_array [i], OPTION_BOX_LARGE_WIDTH);
 		set_ui_object_texture_graphic (change_array [i], options_box_large);
 	}
-	
+
    co_pilot_target_option_button = create_ui_object
 	(
 		UI_TYPE_TEXT,
@@ -494,9 +495,9 @@ void define_options_screen_realism_page_objects (void)
 	preprocess_translation_object_size (change_array [i], co_pilot_target_option_button, option_cpg_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
 	// co_pilot_ecm
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -532,9 +533,9 @@ void define_options_screen_realism_page_objects (void)
 	preprocess_translation_object_size (change_array [i], co_pilot_ecm_option_button, option_boolean_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
 	// avionics
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -570,9 +571,9 @@ void define_options_screen_realism_page_objects (void)
 	preprocess_translation_object_size (change_array [i], avionics_option_button, option_avionics_text, 2, RESIZE_OPTION_CYCLE_BUTTON);
 
 	// difficulty setting
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -608,9 +609,9 @@ void define_options_screen_realism_page_objects (void)
 	preprocess_translation_object_size (change_array [i], difficulty_option_button, option_difficulty_text, 3, RESIZE_OPTION_CYCLE_BUTTON);
 
 	// cpg report target setting
-	
+
 	i++;
-		
+
 	change_array[i] = create_ui_object
 	(
 		UI_TYPE_AREA,
@@ -656,7 +657,7 @@ void notify_co_pilot_target_option_button ( ui_object *obj, void *arg )
 {
 	int
 		selection;
-		
+
 	selection = (get_global_cpg_assist_type () + 1) % NUM_CPG_ASSISTANCE_TYPES;
 
 	set_global_cpg_assist_type ((cpg_assist_types) selection);
@@ -695,12 +696,12 @@ void notify_co_pilot_ecm_option_button ( ui_object *obj, void *arg )
 void notify_avionics_option_button ( ui_object *obj, void *arg )
 {
 
-	set_global_simple_avionics (!get_global_simple_avionics ());
+	set_global_avionics_realism ((++get_global_avionics_realism()) % 3);
 
-	set_ui_object_text (obj, option_avionics_text [get_global_simple_avionics ()]);
+	set_ui_object_text (obj, option_avionics_text [get_global_avionics_realism()]);
 
 	#if DEBUG_MODULE
-	debug_filtered_log ("avionics: %d text: %s", get_global_simple_avionics (), option_avionics_text [get_global_simple_avionics ()]);
+	debug_filtered_log ("avionics: %d text: %s", get_global_realistic_avionics (), option_avionics_text [get_global_realistic_avionics ()]);
 	#endif
 
 	// don't leave text selected
@@ -720,12 +721,12 @@ void notify_difficulty_option_button ( ui_object *obj, void *arg )
 	selection = get_global_difficulty_level ();
 
 	selection--;
-	
+
 	if (selection < GAME_DIFFICULTY_HARD)
 	{
 		selection = GAME_DIFFICULTY_EASY;
 	}
-	
+
 	set_global_difficulty_level ((enum GAME_DIFFICULTY_SETTINGS) selection);
 
 	set_ui_object_text (obj, option_difficulty_text [selection - 1]);

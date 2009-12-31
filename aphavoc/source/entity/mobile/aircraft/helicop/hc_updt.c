@@ -68,6 +68,8 @@
 
 #include "entity/tacview/tacview.h"
 
+#include "gunships/dynamics/common/co_fuel.h"
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +232,7 @@ static void update_server (entity *en)
 					gunship_current_sector = (sector *) get_local_entity_data(sec);
 				}
 
-				update_current_flight_dynamics_fuel_weight ();
+				update_fuel_system();
 
 				update_current_flight_dynamics_flight_time ();
 
@@ -560,12 +562,8 @@ static void update_client (entity *en)
 					raw->invulnerable_timer -= get_delta_time ();
 				}
 
-				update_current_flight_dynamics_fuel_weight ();
 
-				if ((!fire_continuous_weapon) && (get_local_entity_sound_type_valid (en, weapon_database [raw->ac.selected_weapon].launch_sound_effect_sub_type)))
-				{
-					pause_client_server_continuous_weapon_sound_effect (en, raw->ac.selected_weapon);
-				}
+				update_fuel_system();
 
 				//helicopter_death_movement (en);
 				////////////////////////////////////////
@@ -653,9 +651,13 @@ static void update_client (entity *en)
 					update_aircraft_decoy_release (en);
 				}
 
+				if ((!fire_continuous_weapon || weapon_lock_type == WEAPON_LOCK_BURST_LIMIT) && (get_local_entity_sound_type_valid (en, weapon_database [raw->ac.selected_weapon].launch_sound_effect_sub_type)))
+				{
+					pause_client_server_continuous_weapon_sound_effect (en, raw->ac.selected_weapon);
+				}
+
 				//
 				////////////////////////////////////////
-
 				//
 				// Check if gunship has a task - if not then set gunship entity to NULL
 				//

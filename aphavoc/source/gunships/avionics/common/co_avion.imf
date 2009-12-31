@@ -80,6 +80,7 @@ currentdir = $(projectdir)\source\gunships\avionics\common
 
 c_object_files    += $+ &
                      $(currentdir)\co_tsd.obj &
+                     $(currentdir)\co_adf.obj &
                      $(currentdir)\co_avevn.obj &
                      $(currentdir)\co_dam.obj &
                      $(currentdir)\co_eo.obj &

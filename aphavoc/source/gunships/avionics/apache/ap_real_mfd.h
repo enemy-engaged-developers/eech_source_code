@@ -58,7 +58,7 @@
 // 	as expressly permitted by  this Agreement.
 //
 
-
+typedef struct APACHE_COORDINATE_POINTS apache_coordinate_points;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,8 +118,6 @@ extern int get_apache_tads_display_visible (void);
 
 extern void create_apache_pfz(int is_nfz);
 
-extern void set_radar_zoomed(int zoomed);
-
 extern void draw_apache_virtual_cockpit_ort_symbology(void);
 
 mfd_modes get_apache_current_mfd_mode(mfd_locations location);
@@ -132,8 +130,38 @@ int apache_mfd_has_more_sub_pages(mfd_locations location);
 
 void adjust_apache_pitch_ladder_datum_position(float adjustment);
 
+int get_apache_tsd_phase_is_atk(mfd_locations location);
+float get_apache_tsd_range(mfd_locations location);
+void set_apache_tsd_range(mfd_locations location, float range);
+
+void set_apache_tsd_phase_nav(mfd_locations location);
+void set_apache_tsd_phase_atk(mfd_locations location);
+
+unsigned get_apache_tsd_is_zoomed(mfd_locations location);
+void toggle_apache_tsd_zoom(mfd_locations location);
+
+unsigned get_apache_tsd_is_centered(mfd_locations location);
+void toggle_apache_tsd_is_centered(mfd_locations location);
+
+unsigned get_apache_tsd_frozen(mfd_locations location);
+void set_apache_tsd_frozen(mfd_locations location, int frozen);
+void toggle_apache_tsd_frozen(mfd_locations location);
+
+void set_apache_tsd_show_waypoint_review(mfd_locations location, apache_coordinate_points* wpt);
+unsigned get_apache_tsd_display_present_position_status(mfd_locations location);
+void toggle_apache_tsd_display_present_position_status(mfd_locations location);
+
+apache_coordinate_points*  get_apache_tsd_show_waypoint_review(mfd_locations location);
+void set_apache_tsd_show_waypoint_review(mfd_locations location, apache_coordinate_points* wpt);
+
+apache_coordinate_points* get_apache_clicked_point(mfd_locations location, float pointer_pos_x, float pointer_pos_y, unsigned waypoints_only);
+entity* get_apache_clicked_target(mfd_locations location, float pointer_pos_x, float pointer_pos_y);
+int get_apache_clicked_map_coordinate(mfd_locations location, float pointer_pos_x, float pointer_pos_y, vec3d* map_coordinate, float* range, float* scale);
+
+void draw_apache_radar_target_symbol(entity* target, float dx, float dy, int los_clear, int moving, rgb_colour target_symbol_colour, rgb_colour target_symbol_background_colour, rgb_colour bg_colour);
+
 // selects target under pointer on TSD, or if EO is active and no target under pointer, makes a point lock at position
-extern void apache_select_clicked_target();
+//extern void apache_select_clicked_target();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

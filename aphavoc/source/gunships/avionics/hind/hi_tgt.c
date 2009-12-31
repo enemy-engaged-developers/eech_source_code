@@ -388,32 +388,6 @@ void update_hind_target_acquisition_system (void)
 		target = get_local_entity_parent (source, LIST_TYPE_TARGET);
 
 		//
-		// radar on/off
-		//
-
-		radar_on = FALSE;
-
-		if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
-		{
-			if (ground_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
-		else if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_AIR_RADAR)
-		{
-			if (air_radar.sweep_mode != RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				radar_on = TRUE;
-			}
-		}
-
-		if (radar_on != get_local_entity_int_value (source, INT_TYPE_RADAR_ON))
-		{
-			set_client_server_entity_int_value (source, INT_TYPE_RADAR_ON, radar_on);
-		}
-
-		//
 		// laser on/off
 		//
 
@@ -758,63 +732,7 @@ void set_hind_lock_target (int lock)
 
 void hind_target_acquisition_system_misc_function1 (void)
 {
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-			else
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
-			}
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_CONTINUOUS)
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-			else
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_CONTINUOUS;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
-			break;
-		}
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -823,55 +741,7 @@ void hind_target_acquisition_system_misc_function1 (void)
 
 void hind_target_acquisition_system_misc_function2 (void)
 {
-	switch (target_acquisition_system)
-	{
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_OFF:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_GROUND_RADAR:
-		////////////////////////////////////////
-		{
-			if (ground_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				ground_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
 
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_AIR_RADAR:
-		////////////////////////////////////////
-		{
-			if (air_radar.sweep_mode == RADAR_SWEEP_MODE_SINGLE_INACTIVE)
-			{
-				air_radar.sweep_mode = RADAR_SWEEP_MODE_SINGLE_ACTIVE;
-			}
-
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_FLIR:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_LLLTV:
-		////////////////////////////////////////
-		{
-			break;
-		}
-		////////////////////////////////////////
-		case TARGET_ACQUISITION_SYSTEM_HMS:
-		////////////////////////////////////////
-		{
-			break;
-		}
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

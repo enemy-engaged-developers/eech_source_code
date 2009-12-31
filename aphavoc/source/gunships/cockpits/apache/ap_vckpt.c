@@ -1232,6 +1232,8 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
            	ui_display_text (buffer, 10, 120);
 		#endif
 
+           	draw_apache_keyboard_unit();
+
 			end_3d_scene ();
 		}
 	}

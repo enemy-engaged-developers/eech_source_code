@@ -1,62 +1,62 @@
-// 
+//
 // 	 Enemy Engaged RAH-66 Comanche Versus KA-52 Hokum
 // 	 Copyright (C) 2000 Empire Interactive (Europe) Ltd,
 // 	 677 High Road, North Finchley, London N12 0DA
-// 
+//
 // 	 Please see the document LICENSE.TXT for the full licence agreement
-// 
+//
 // 2. LICENCE
-//  2.1 	
-//  	Subject to the provisions of this Agreement we now grant to you the 
+//  2.1
+//  	Subject to the provisions of this Agreement we now grant to you the
 //  	following rights in respect of the Source Code:
-//   2.1.1 
-//   	the non-exclusive right to Exploit  the Source Code and Executable 
-//   	Code on any medium; and 
-//   2.1.2 
+//   2.1.1
+//   	the non-exclusive right to Exploit  the Source Code and Executable
+//   	Code on any medium; and
+//   2.1.2
 //   	the non-exclusive right to create and distribute Derivative Works.
-//  2.2 	
+//  2.2
 //  	Subject to the provisions of this Agreement we now grant you the
 // 	following rights in respect of the Object Code:
-//   2.2.1 
+//   2.2.1
 // 	the non-exclusive right to Exploit the Object Code on the same
 // 	terms and conditions set out in clause 3, provided that any
 // 	distribution is done so on the terms of this Agreement and is
 // 	accompanied by the Source Code and Executable Code (as
 // 	applicable).
-// 
+//
 // 3. GENERAL OBLIGATIONS
-//  3.1 
+//  3.1
 //  	In consideration of the licence granted in clause 2.1 you now agree:
-//   3.1.1 
+//   3.1.1
 // 	that when you distribute the Source Code or Executable Code or
 // 	any Derivative Works to Recipients you will also include the
 // 	terms of this Agreement;
-//   3.1.2 
+//   3.1.2
 // 	that when you make the Source Code, Executable Code or any
 // 	Derivative Works ("Materials") available to download, you will
 // 	ensure that Recipients must accept the terms of this Agreement
 // 	before being allowed to download such Materials;
-//   3.1.3 
+//   3.1.3
 // 	that by Exploiting the Source Code or Executable Code you may
 // 	not impose any further restrictions on a Recipient's subsequent
 // 	Exploitation of the Source Code or Executable Code other than
 // 	those contained in the terms and conditions of this Agreement;
-//   3.1.4 
+//   3.1.4
 // 	not (and not to allow any third party) to profit or make any
 // 	charge for the Source Code, or Executable Code, any
 // 	Exploitation of the Source Code or Executable Code, or for any
 // 	Derivative Works;
-//   3.1.5 
-// 	not to place any restrictions on the operability of the Source 
+//   3.1.5
+// 	not to place any restrictions on the operability of the Source
 // 	Code;
-//   3.1.6 
+//   3.1.6
 // 	to attach prominent notices to any Derivative Works stating
 // 	that you have changed the Source Code or Executable Code and to
 // 	include the details anddate of such change; and
-//   3.1.7 
+//   3.1.7
 //   	not to Exploit the Source Code or Executable Code otherwise than
 // 	as expressly permitted by  this Agreement.
-// 
+//
 
 
 
@@ -146,10 +146,10 @@ void initialise_view_events (void)
 	joystick_pov_up = FALSE;
 
 	joystick_pov_down = FALSE;
-	
+
 //VJ 030318 wideview mod
   	edit_wide_cockpit = FALSE;
-	set_global_wide_cockpit (FALSE);	
+	set_global_wide_cockpit (FALSE);
 
 //VJ 030511 TSD render mod, linked to eech.ini
 	tsd_render_mode = (tsd_render_modes) (command_line_tsd_render_mode + 1);
@@ -345,7 +345,7 @@ static void set_special2_view_mode (void)
 		{
 			//VJ 050301 add this to prevent crash when in 3D cockpit
 			if (command_line_3d_cockpit)
-				break;			
+				break;
 			if (view_mode != VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD)
 			{
 				set_view_mode (VIEW_MODE_COCKPIT_PANEL_SPECIAL_APACHE_RHS_MFD);
@@ -1047,14 +1047,14 @@ static void TSD_render_event (event *ev)
 	   	break;
 		case TSD_RENDER_CONTOUR_SHADED_RELIEF_MODE:
 	   	set_TSD_render_mode(TSD_RENDER_SHADED_RELIEF_MODE);
-	   	break;	   		   	
+	   	break;
 		case TSD_RENDER_SHADED_RELIEF_MODE:
 	   	set_TSD_render_mode(TSD_RENDER_CONTOUR_MODE);
-	   	break;	   		   	
-	   default:	
+	   	break;
+	   default:
 	      set_TSD_render_mode(TSD_RENDER_CONTOUR_MODE);
-	}      
-	command_line_tsd_render_mode = tsd_render_mode-1;	   
+	}
+	command_line_tsd_render_mode = tsd_render_mode-1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1081,7 +1081,7 @@ static void toggle_wideview_event (event *ev)
 		set_global_wide_cockpit(TRUE);
 		return;
 	}
-	
+
 	set_global_wide_cockpit (get_global_wide_cockpit () ^ 1);
    edit_wide_cockpit = FALSE;
    //VJ 050211 restore pitch when switching of wideview
@@ -1097,28 +1097,28 @@ static void toggle_wideview_event (event *ev)
 	{
 		if (wide_cockpit_nr == WIDEVIEW_APACHE_PILOT ||
 			 wide_cockpit_nr == WIDEVIEW_HAVOC_PILOT)
-		{	 
+		{
 			pilot_head_pitch = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 			pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
-		}	
-	}	
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//VJ wideview mod, date: 18-mar-03	
+//VJ wideview mod, date: 18-mar-03
 static void toggle_wideview_edit_event (event *ev)
 {
 //VJ 050126 save_wide no longer needed, this can toggle
 	if (get_global_wide_cockpit ())
 	{
 		if (edit_wide_cockpit)
-		   edit_wide_cockpit = FALSE;	
-		else   
-		   edit_wide_cockpit = TRUE;	
-	}	   
+		   edit_wide_cockpit = FALSE;
+		else
+		   edit_wide_cockpit = TRUE;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1333,7 +1333,7 @@ static void decrease_3d_resolutions_event (event *ev)
 		{
 			if (in_cockpit)
 			{
-//VJ				
+//VJ
 /*
 set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
              set_view_mode (get_nearest_fixed_cockpit_view (pilot_head_heading, pilot_head_pitch));
@@ -1353,7 +1353,7 @@ set_view_mode (VIEW_MODE_VIRTUAL_COCKPIT);
 				{
 					set_view_mode (get_view_mode ());
 				}
-//*/				
+//*/
 			}
 		}
 	}
@@ -1394,7 +1394,7 @@ static void increase_3d_resolutions_event (event *ev)
 				{
 					set_view_mode (get_view_mode ());
 				}
-				
+
 			}
 		}
 	}
@@ -1413,7 +1413,7 @@ static void increase_3d_resolutions_event (event *ev)
 static void next_side_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_next_side ();
@@ -1429,7 +1429,7 @@ static void next_side_event (event *ev)
 static void previous_side_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_previous_side_event ();
@@ -1445,9 +1445,9 @@ static void previous_side_event (event *ev)
 static void next_category_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
-	{	
+	{
 		select_view_menu_next_category ();
 
 		select_external_view ();
@@ -1461,7 +1461,7 @@ static void next_category_event (event *ev)
 static void previous_category_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_previous_category ();
@@ -1477,7 +1477,7 @@ static void previous_category_event (event *ev)
 static void next_type_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_next_type ();
@@ -1493,9 +1493,9 @@ static void next_type_event (event *ev)
 static void previous_type_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
-	{	
+	{
 		select_view_menu_previous_type ();
 
 		select_external_view ();
@@ -1509,7 +1509,7 @@ static void previous_type_event (event *ev)
 static void next_object_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_next_object ();
@@ -1525,7 +1525,7 @@ static void next_object_event (event *ev)
 static void previous_object_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_previous_object_event ();
@@ -1627,7 +1627,7 @@ static void players_padlock_event (event *ev)
 static void view_all_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_view_menu_view_all ();
@@ -1677,7 +1677,7 @@ static void view_available_gunships_event (event *ev)
 static void next_view_range_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_next_view_menu_range ();
@@ -1693,7 +1693,7 @@ static void next_view_range_event (event *ev)
 static void previous_view_range_event (event *ev)
 {
 	// Jabberwock 031009 Satellite view - keysites are not on menu
-	
+
 	if (get_local_entity_type(get_external_view_entity()) != ENTITY_TYPE_KEYSITE)
 	{
 		select_previous_view_menu_range ();
@@ -1716,7 +1716,7 @@ static void key_up_event (event *ev)
 			adjust_pitch_trim(ev);
 	}
 	else
-		move_view_position_forward_event(ev);		
+		move_view_position_forward_event(ev);
 }
 
 static void key_down_event (event *ev)
@@ -1729,7 +1729,7 @@ static void key_down_event (event *ev)
 			adjust_pitch_trim(ev);
 	}
 	else
-		move_view_position_backward_event(ev);		
+		move_view_position_backward_event(ev);
 }
 
 static void key_left_event (event *ev)
@@ -1742,7 +1742,7 @@ static void key_left_event (event *ev)
 			adjust_roll_trim(ev);
 	}
 	else
-		move_view_position_left_event(ev);		
+		move_view_position_left_event(ev);
 }
 
 static void key_right_event (event *ev)
@@ -1755,7 +1755,7 @@ static void key_right_event (event *ev)
 			adjust_roll_trim(ev);
 	}
 	else
-		move_view_position_right_event(ev);		
+		move_view_position_right_event(ev);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2252,7 +2252,7 @@ void set_view_mode_events (void)
 
 	set_event (MOUSE_LEFT_BUTTON, MODIFIER_NONE, BUTTON_STATE_EITHER, reset_mouse_event);
 	// Retro 030317 end
-	
+
 	set_event(DIK_D, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, TSD_render_event);
 	//VJ 020423 TSD render mod
 	set_event(DIK_D, MODIFIER_LEFT_ALT, KEY_STATE_DOWN, TSD_render_palette_event);
@@ -2356,11 +2356,12 @@ void set_gunship_view_mode_events (void)
 
 	if (!get_apache_havoc_gunship () || get_global_gunship_type () == GUNSHIP_TYPE_APACHE)
 		set_event (DIK_ESCAPE, MODIFIER_NONE, KEY_STATE_DOWN, switch_seat_position_event);
-		
+
 	set_event (DIK_0, MODIFIER_LEFT_SHIFT, KEY_STATE_DOWN, special_cockpit_toggle_event);
 
-//VJ wideview mod, date: 18-mar-03	
-	set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, toggle_wideview_event);
+//VJ wideview mod, date: 18-mar-03
+	if (get_global_gunship_type () != GUNSHIP_TYPE_APACHE)
+		set_event (DIK_BACKSLASH, MODIFIER_NONE, KEY_STATE_DOWN, toggle_wideview_event);
 	set_event (DIK_BACKSLASH, MODIFIER_LEFT_CONTROL, KEY_STATE_DOWN, toggle_wideview_edit_event);
 
 	if (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM)
