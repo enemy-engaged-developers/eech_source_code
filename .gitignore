@@ -1,0 +1,12 @@
+*.obj
+*.lib
+*.err
+.project
+.cproject
+.ilk
+project.lnk
+project.sym
+project.map
+project.sym
+project.exe
+wcc386.pch
