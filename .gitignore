@@ -1,11 +1,10 @@
 *.obj
-*.lib
+*.[Ll][Ii][Bb]
 *.err
 .project
 .cproject
 .ilk
 project.lnk
-project.sym
 project.map
 project.sym
 project.exe
