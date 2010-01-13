@@ -2140,11 +2140,11 @@ weapon_data
 		//
 		////////////////////////////////////////
 		{
-			"Hydra 70 M255",					  								// full_name
+			"Hydra 70 M247",					  								// full_name
 			"RKT(HE)",	 		 												// hud_name
 			"RKT(HE)",															// mfd_name
 			"M255",																// weapon_loading_list_name
-			"Hydra 70 M255",													// weapon_loading_name_text
+			"Hydra 70 M247",													// weapon_loading_name_text
 
 			OBJECT_3D_AH64D_HYDRA_MISSILE,	  							// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_NONE,										// guidance_type
