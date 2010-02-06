@@ -891,6 +891,9 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 
 	if ( active_screen->locked )
 	{
+		//
+		// Perform the blit using the CPU
+		//
 
 		int
 			x,
@@ -900,31 +903,41 @@ void set_block ( int x1, int y1, int x2, int y2, rgb_colour colour )
 		unsigned char
 			*ptr;
 
-		unsigned short int
-			col,
-			*line;
-
-		ASSERT ( active_screen->pixel_length <= 16 );
-
-		//
-		// Perform the blit using the CPU
-		//
-
-		col = get_packed_colour ( colour );
-
 		pitch = get_screen_pitch ( active_screen );
 
 		ptr = get_screen_data ( active_screen );
 
-		for ( y = y1; y <= y2; y++ )
+		if ( active_screen->pixel_length <= 16 )
 		{
+			unsigned short int
+				col,
+				*line;
 
-			line = ( unsigned short int * ) ( ptr + ( y * pitch ) );
+			col = get_packed_colour ( colour );
 
-			for ( x = x1; x <= x2; x++ )
+			for ( y = y1; y <= y2; y++ )
 			{
+				line = ( unsigned short int * ) ( ptr + ( y * pitch ) );
 
-				line[x] = col;
+				for ( x = x1; x <= x2; x++ )
+				{
+					line[x] = col;
+				}
+			}
+		}
+		else
+		{
+			unsigned long int
+				*line;
+
+			for ( y = y1; y <= y2; y++ )
+			{
+				line = ( unsigned long int * ) ( ptr + ( y * pitch ) ) + x1;
+
+				for ( x = x1; x <= x2; x++ )
+				{
+					*line++ = colour.colour;
+				}
 			}
 		}
 	}
