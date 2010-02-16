@@ -7613,46 +7613,26 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
 	set_mono_font_rel_position (x_adjust, 0.0);
 	print_mono_font_string (s_ptr);
-
-	// rocket salve
-	draw_2d_box(0.9, 0.45, 0.45, 0.2, FALSE, FALSE, MFD_COLOUR1);
-
-	set_2d_mono_font_position (0.67, 0.42);
-	s_ptr = "SALVO";
-
-	x_adjust = get_mono_font_string_width (s_ptr) * -0.5;
-	set_mono_font_rel_position (x_adjust, 0.0);
-	print_mono_font_string (s_ptr);
-
-	set_2d_mono_font_position (0.67, 0.31);
-	if (rocket_salvo_size == ROCKET_SALVO_SIZE_ALL)
-		sprintf(s, "ALL");
-	else
-		sprintf(s, "%2d", rocket_salvo_size);
-
-	x_adjust = get_mono_font_string_width (s) * -0.6;
-	set_mono_font_rel_position (x_adjust, 0.0);
-	print_mono_font_string (s);
-
+#endif
 	// weapon pylons
 	for (pylon = APACHE_LHS_INNER_PYLON; pylon <= APACHE_RHS_WING_TIP_MOUNT; pylon++)
 	{
 		float pylon_x, pylon_y;
 
-		pylon_y = -0.35;
+		pylon_y = -0.05 + debug_var_y * 0.05;
 		switch (pylon)
 		{
 		case APACHE_LHS_INNER_PYLON:
-			pylon_x = -0.42;
+			pylon_x = -0.39 + debug_var_x * 0.05;
 			break;
 		case APACHE_RHS_INNER_PYLON:
-			pylon_x = 0.42;
+			pylon_x = 0.39;
 			break;
 		case APACHE_LHS_OUTER_PYLON:
-			pylon_x = -0.74;
+			pylon_x = -0.62;
 			break;
 		case APACHE_RHS_OUTER_PYLON:
-			pylon_x = 0.74;
+			pylon_x = 0.62;
 			break;
 		case APACHE_LHS_WING_TIP_MOUNT:
 			pylon_x = -0.97;
@@ -7668,6 +7648,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 		{
 			if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
 			{
+#if 0
 				int i;
 				float last_offset;  // is last missile on the left or right side of pylon
 
@@ -7734,6 +7715,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 					set_mono_font_rel_position (x_adjust, 0.0);
 					print_mono_font_string (s);
 				}
+#endif
 			}
 			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255 ||
 					 weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
@@ -7741,31 +7723,17 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
 				rgb_colour text_colour = selected ? clear_mfd_colour : MFD_COLOUR1;
 
+				// draw pod (background)
+				draw_2d_box(pylon_x - 0.10, pylon_y + 0.25, pylon_x + 0.10, pylon_y - 0.25, TRUE, FALSE, selected ? MFD_COLOUR1 : clear_mfd_colour);
+				if (!selected)
+					draw_2d_box(pylon_x - 0.10, pylon_y + 0.25, pylon_x + 0.10, pylon_y - 0.25, FALSE, TRUE, MFD_COLOUR1);
+
 				set_mono_font_colour (text_colour);
 
-				// remove wing under pod
-				get_2d_float_screen_x_coordinate(pylon_x + 0.11, &x1);
-				get_2d_float_screen_x_coordinate(pylon_x - 0.11, &x2);
-
-				draw_line(x1, forward_wing, x2, forward_wing, clear_mfd_colour);
-				draw_line(x1, rear_wing, x2, rear_wing, clear_mfd_colour);
-
-				// draw rocket pod
-				get_2d_float_screen_coordinates (pylon_x - 0.11, pylon_y + 0.3, &x1, &y1);
-				get_2d_float_screen_coordinates (pylon_x + 0.11, pylon_y - 0.3, &x2, &y2);
-
-				if (selected)
-					set_block (x1, y1, x2, y2, MFD_COLOUR1);
-				else
-				{
-					draw_line (x1, y1, x2, y1, MFD_COLOUR1);
-					draw_line (x1, y1, x1, y2, MFD_COLOUR1);
-					draw_line (x1, y2, x2, y2, MFD_COLOUR1);
-					draw_line (x2, y1, x2, y2, MFD_COLOUR1);
-				}
-
-				set_mono_font_type (MONO_FONT_TYPE_7X12);
+#if 0
+//				set_mono_font_type (MONO_FONT_TYPE_7X12);
 				set_2d_mono_font_position (pylon_x, pylon_y);
+
 
 				if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255)
 					sprintf(s, "MP");
@@ -7775,15 +7743,18 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 				x_adjust = get_mono_font_string_width (s) * -0.4;
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
-
-				set_2d_mono_font_position (pylon_x, pylon_y - 0.1);
+#endif
+				set_2d_mono_font_position (pylon_x, pylon_y + 0.1);
 				sprintf(s, "%2d", number);
 				x_adjust = get_mono_font_string_width (s) * -0.4;
 				set_mono_font_rel_position (x_adjust, 0.0);
 				print_mono_font_string (s);
+
+				set_mono_font_colour (MFD_COLOUR1);
 			}
 			else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER)
 			{
+#if 0
 				int selected = (weapon_sub_type == selected_weapon) && !damaged;
 				int left_tip = pylon == APACHE_LHS_WING_TIP_MOUNT;
 				float tip;
@@ -7837,6 +7808,7 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 					else
 						draw_2d_mono_sprite(stinger_missile_data, pylon_x, pylon_y - 0.05, MFD_COLOUR1);
 				}
+#endif
 			}
 
 			// if damaged, draw X across pylon
@@ -7861,7 +7833,6 @@ static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 			}
 		}
 	}
-#endif
 
 	switch (mfd_mode)
 	{

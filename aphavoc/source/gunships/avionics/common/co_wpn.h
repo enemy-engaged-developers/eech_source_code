@@ -135,6 +135,8 @@ extern void increase_rocket_salvo_size (void);
 
 extern void decrease_rocket_salvo_size (void);
 
+extern unsigned get_rocket_salvo_size(void);
+
 extern void set_gunship_weapon (entity_sub_types weapon_sub_type);
 
 extern void play_common_cpg_radar_jammer_speech (int damaged);

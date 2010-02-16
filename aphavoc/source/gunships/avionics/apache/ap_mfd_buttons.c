@@ -92,6 +92,8 @@ static int change_radar_state(mfd_push_button_types page, mfd_button_labels btn)
 static int set_mfd_weapon_mode(mfd_push_button_types page, mfd_button_labels btn);
 static int set_burst_limit(mfd_push_button_types page, mfd_button_labels btn);
 static int button_toggle_gun_mode(mfd_push_button_types page, mfd_button_labels btn);
+static int set_rocket_salvo_size(mfd_push_button_types page, mfd_button_labels btn);
+static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn);
 
 static int select_tpm_sub_menu(mfd_push_button_types page, mfd_button_labels btn);
 static int select_tpm_prof_option(mfd_push_button_types page, mfd_button_labels btn);
@@ -281,6 +283,19 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"MODE",		"NORM",	FALSE, FALSE, FALSE, button_toggle_gun_mode },
 	{ NULL,	"MODE",		"FXD", 	FALSE, FALSE, FALSE, button_toggle_gun_mode },
 	{ NULL,	"RANGE",	NULL, 	FALSE, FALSE, FALSE, NULL },
+
+	{ NULL,	"QTY",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"1",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"2",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"4",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"8",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"12",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"24",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+	{ NULL,	"ALL",		NULL, 	FALSE, FALSE, FALSE, set_rocket_salvo_size },
+
+	{ rocket_pod_centre_zone, rocket_pod_centre_zone_mask, NULL, 	FALSE, FALSE, FALSE, select_rocket_zone },
+	{ rocket_pod_quad_zone, rocket_pod_quad_zone_mask, NULL, 	FALSE, FALSE, FALSE, select_rocket_zone },
+	{ rocket_pod_perimiter_zone, rocket_pod_perimiter_zone_mask, NULL, 	FALSE, FALSE, FALSE, select_rocket_zone },
 
 	{ NULL,	"ALL",		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"AUTO",		NULL, 	FALSE, FALSE, FALSE, NULL },
@@ -1177,6 +1192,51 @@ static int button_toggle_gun_mode(mfd_push_button_types page, mfd_button_labels 
 	return TRUE;
 }
 
+static int set_rocket_salvo_size(mfd_push_button_types page, mfd_button_labels btn)
+{
+	if (page == MFD_BUTTON_RKT_QTY)
+		set_apache_mfd_sub_mode(current_mfd_focus, 1);
+	else
+	{
+		switch (page)
+		{
+		case MFD_BUTTON_RKT_QTY_1:
+			rocket_salvo_size = 1;
+			break;
+		case MFD_BUTTON_RKT_QTY_2:
+			rocket_salvo_size = 2;
+			break;
+		case MFD_BUTTON_RKT_QTY_4:
+			rocket_salvo_size = 4;
+			break;
+		case MFD_BUTTON_RKT_QTY_8:
+			rocket_salvo_size = 8;
+			break;
+		case MFD_BUTTON_RKT_QTY_12:
+			rocket_salvo_size = 12;
+			break;
+		case MFD_BUTTON_RKT_QTY_24:
+			rocket_salvo_size = 24;
+			break;
+		case MFD_BUTTON_RKT_QTY_ALL:
+			rocket_salvo_size = 38;
+			break;
+		}
+
+		set_apache_mfd_sub_mode(current_mfd_focus, 0);
+	}
+
+	setup_apache_mfd_buttons(MFD_MODE_WEAPON_RKT, current_mfd_focus, TRUE);
+
+	return TRUE;
+}
+
+static int select_rocket_zone(mfd_push_button_types page, mfd_button_labels btn)
+{
+	return TRUE;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1733,10 +1793,221 @@ static void draw_menu_arrow(float width, float x, float y, rgb_colour fg_col, rg
 	draw_2d_half_thick_line(x - 0.5 * width, y, x + 0.45 * width, y, fg_col);
 }
 
+static void render_rocket_inventory(rgb_colour fg_col)
+{
+	char
+		buffer[64],
+		*inner_pylons_warhead = NULL,
+		*outer_pylons_warhead = NULL;
+
+
+	entity_sub_types
+		weapon_sub_type;
+
+	int
+		number,
+		damaged;
+
+	unsigned
+		left_inner_pylons_quantity = 0,
+		right_inner_pylons_quantity = 0,
+		left_outer_pylons_quantity = 0,
+		right_outer_pylons_quantity = 0;
+
+	// EECH is currently limited to only one type of rocket per pod.  Change this code
+	// if this limitation is removed
+	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
+		APACHE_LHS_INNER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
+		&weapon_sub_type, &number, &damaged))
+	{
+		unsigned check_right = TRUE;
+
+		if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255)  // really M247
+		{
+			inner_pylons_warhead = "PD";
+			if (!damaged)
+				left_inner_pylons_quantity += number;
+		}
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
+		{
+			inner_pylons_warhead = "MP";
+			if (!damaged)
+				left_inner_pylons_quantity += number;
+		}
+		else
+			check_right = FALSE;
+
+		if (check_right
+			&& get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
+			APACHE_RHS_INNER_PYLON, weapon_sub_type,
+			&weapon_sub_type, &number, &damaged))
+		{
+			if (!damaged)
+				right_inner_pylons_quantity += number;
+		}
+	}
+
+	if (get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
+		APACHE_LHS_OUTER_PYLON, ENTITY_SUB_TYPE_WEAPON_NO_WEAPON,
+		&weapon_sub_type, &number, &damaged))
+	{
+		unsigned check_right = TRUE;
+
+		if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255)  // really M247
+		{
+			outer_pylons_warhead = "PD";
+			if (!damaged)
+				left_outer_pylons_quantity += number;
+		}
+		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
+		{
+			outer_pylons_warhead = "MP";
+			if (!damaged)
+				left_outer_pylons_quantity += number;
+		}
+		else
+			check_right = FALSE;
+
+		if (check_right &&
+			get_local_entity_weapon_hardpoint_info (get_gunship_entity(),
+			APACHE_RHS_OUTER_PYLON, weapon_sub_type,
+			&weapon_sub_type, &number, &damaged))
+		{
+			if (!damaged)
+				right_outer_pylons_quantity += number;
+		}
+	}
+
+	// centre zone for combined for all pods
+	if (inner_pylons_warhead || outer_pylons_warhead)
+	{
+		number = 0;
+
+		if (left_inner_pylons_quantity >= 3)
+		{
+			number += 3;
+			left_inner_pylons_quantity -= 3;
+		}
+		else
+		{
+			number += left_inner_pylons_quantity;
+			left_inner_pylons_quantity = 0;
+		}
+
+		if (right_inner_pylons_quantity >= 3)
+		{
+			number += 3;
+			right_inner_pylons_quantity -= 3;
+		}
+		else
+		{
+			number += right_inner_pylons_quantity;
+			right_inner_pylons_quantity = 0;
+		}
+
+		if (left_outer_pylons_quantity >= 3)
+		{
+			number += 3;
+			left_outer_pylons_quantity -= 3;
+		}
+		else
+		{
+			number += left_outer_pylons_quantity;
+			left_outer_pylons_quantity = 0;
+		}
+
+		if (right_outer_pylons_quantity >= 3)
+		{
+			number += 3;
+			right_outer_pylons_quantity -= 3;
+		}
+		else
+		{
+			number += right_outer_pylons_quantity;
+			right_outer_pylons_quantity = 0;
+		}
+
+		sprintf(buffer, "%s %d", inner_pylons_warhead ? inner_pylons_warhead : outer_pylons_warhead, number);
+
+		set_2d_mono_font_position(-1.2, 0.0);
+		set_mono_font_rel_position (0.0, -18.0);
+		print_mono_font_string(buffer);
+	}
+
+	if (inner_pylons_warhead)
+	{
+		unsigned
+			left_qty = min(4, left_inner_pylons_quantity),
+			right_qty = min(4, right_inner_pylons_quantity);
+
+		// quad:
+		left_inner_pylons_quantity -= left_qty;
+		right_inner_pylons_quantity -= right_qty;
+
+		sprintf(buffer, "%s %d", inner_pylons_warhead, left_qty + right_qty);
+
+		set_2d_mono_font_position(-1.2, 0.3);
+		set_mono_font_rel_position (0.0, -18.0);
+		print_mono_font_string(buffer);
+
+		// perimiter
+		sprintf(buffer, "%s %d", inner_pylons_warhead, left_inner_pylons_quantity + right_inner_pylons_quantity);
+
+		set_2d_mono_font_position(-1.2, 0.6);
+		set_mono_font_rel_position (0.0, -18.0);
+		print_mono_font_string(buffer);
+	}
+
+	if (outer_pylons_warhead)
+	{
+		unsigned
+			left_qty = min(4, left_outer_pylons_quantity),
+			right_qty = min(4, right_outer_pylons_quantity);
+
+		// quad:
+		left_outer_pylons_quantity -= left_qty;
+		right_outer_pylons_quantity -= right_qty;
+
+		sprintf(buffer, "%s %d", outer_pylons_warhead, left_qty + right_qty);
+
+		set_2d_mono_font_position(-1.2, -0.3);
+		set_mono_font_rel_position (0.0, -18.0);
+		print_mono_font_string(buffer);
+
+		// perimiter
+		sprintf(buffer, "%s %d", outer_pylons_warhead, left_outer_pylons_quantity + right_outer_pylons_quantity);
+
+		set_2d_mono_font_position(-1.2, -0.6);
+		set_mono_font_rel_position (0.0, -18.0);
+		print_mono_font_string(buffer);
+	}
+
+
+	// line drawings
+	draw_2d_half_thick_line(-1.2,  0.9, -0.85, 0.9, fg_col);
+
+	draw_2d_half_thick_line(-0.85, 0.9, -0.85, 0.78, fg_col);
+	draw_2d_half_thick_line(-0.85, 0.37, -0.85, 0.25, fg_col);
+
+	draw_2d_half_thick_line(-0.95, 0.15, -0.85, 0.25, fg_col);
+	draw_2d_half_thick_line(-0.95, 0.15, -0.85, 0.055, fg_col);
+
+	draw_2d_half_thick_line(-0.85,-0.09, -0.85, 0.055, fg_col);
+	draw_2d_half_thick_line(-0.85,-0.57, -0.85, -0.65, fg_col);
+
+	draw_2d_half_thick_line(-1.2, -0.65, -0.85, -0.65, fg_col);
+
+	print_vertical_mono_font_string(-0.85, 0.6, "INBD", -0.5, TRUE);
+	print_vertical_mono_font_string(-0.85, -0.3, "OUTBD", -0.5, TRUE);
+}
+
 static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_colour fg_col, rgb_colour bg_col)
 {
 	mfd_push_button** handler = mfd_button_handlers[location];
 	unsigned sub_mode = get_apache_mfd_sub_mode(location);
+
+	if (location == MFD_LOCATION_PILOT_RHS)
+		debug_log("sub_mode: %d", sub_mode);
 
 	switch (mfd_mode)
 	{
@@ -2010,6 +2281,23 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			}
 
 			button_label_decorations[location][btn].boxed = 3;
+
+			break;
+		}
+
+	case MFD_MODE_WEAPON_RKT:
+		{
+			if (sub_mode == 1)
+			{
+				button_label_decorations[location][BTN_R2].line2[0] = 0;
+			}
+			else
+				if (rocket_salvo_size <= 24)
+					sprintf(button_label_decorations[location][BTN_R2].line2, "%d", rocket_salvo_size);
+				else
+					strcpy(button_label_decorations[location][BTN_R2].line2, "ALL");
+
+			render_rocket_inventory(fg_col);
 
 			break;
 		}
@@ -2406,8 +2694,6 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 			handler[BTN_B4] = &mfd_push_button_definitions[MFD_BUTTON_RKT];
 			handler[BTN_B5] = &mfd_push_button_definitions[MFD_BUTTON_MANRNG_INPUT];
 
-			button_label_decorations[location][BTN_R6].boxed = 2;
-
 			for (i=BTN_B1; i <= BTN_B5; i++)
 				button_label_decorations[location][i].boxed = 0;
 
@@ -2434,10 +2720,36 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 
 				break;
 			case MFD_MODE_WEAPON_RKT:
+				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_RKT_ZONE_PERIMITER];
+				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_RKT_ZONE_QUAD];
+				handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_RKT_ZONE_CTR];
+				handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_RKT_ZONE_QUAD];
+				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_RKT_ZONE_PERIMITER];
+
+				if (sub_mode == 1)
+				{
+					handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_1];
+					handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_2];
+					handler[BTN_R3] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_4];
+					handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_8];
+					handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_12];
+					handler[BTN_R6] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_24];
+					handler[BTN_B5] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY_ALL];
+
+					show_acquisition_source[location] = FALSE;
+					button_label_decorations[location][BTN_R6].line2[0] = 0;
+					button_label_decorations[location][BTN_R6].boxed = 0;
+				}
+				else
+					handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_RKT_QTY];
+
 				button_label_decorations[location][BTN_B4].boxed = 3;
 
 				break;
 			}
+
+			if (show_acquisition_source[location])
+				button_label_decorations[location][BTN_R6].boxed = 2;
 
 			break;
 		}
