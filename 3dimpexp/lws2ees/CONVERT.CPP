@@ -90,6 +90,8 @@ class Convert
   if (!root)
    error("No objects in scene");
   //print(root, 0);
+  sort_by_labels(root);
+  //print(root, 0);
   main_lods();
   set_lods(&main, root);
   clear(root);
@@ -252,7 +254,7 @@ class Convert
     cache[itor->index] = hierobj;
    }
 
-  while (deferred.size())
+  while (!deferred.empty())
    {
     bool modified = false;
     for (Deferred::iterator itor(deferred.begin()); itor != deferred.end(); )
@@ -261,7 +263,7 @@ class Convert
       {
        Cache::iterator found(cache.find(hierobj->object->index));
        if (found != cache.end())
-        error("Objects with duplicate index are found %s and %s ", hierobj->object->print_name.c_str(), found->second->object->print_name.c_str());
+        error("Objects with duplicate index are found %s and %s", hierobj->object->print_name.c_str(), found->second->object->print_name.c_str());
       }
       Cache::iterator found(cache.find(hierobj->object->motion.parent));
       if (found != cache.end())
@@ -300,9 +302,49 @@ class Convert
     cameras.push_back(cameradesc);
    }
 
-  if (distances.size() && *distances.begin() < 1E-2)
+  if (!distances.empty() && *distances.begin() < 1E-2)
    distances.erase(distances.begin());
   lods.insert(lods.end(), distances.begin(), distances.end());
+ }
+
+ void sort_by_labels(HierObj* hierobj)
+ {
+  if (hierobj != root && !hierobj->object->lods.lods.empty())
+	 {
+	  if (!hierobj->object->lods.lods.back().filename.empty())
+     warning("Last LOD for object %s is not NullObject", hierobj->object->print_name.c_str());
+	 }
+
+  {
+   std::set<std::string> labels;
+
+   for (HierObjs::iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
+   {
+    const std::string& label = (*itor)->object->search;
+    if (label.empty())
+     continue;
+
+    if (labels.find(label) != labels.end())
+     continue;
+
+    for (HierObjs::iterator i(itor); i != hierobj->hierobjs.end(); ++i)
+     {
+      HierObjs::iterator k(i);
+      for (HierObjs::iterator j(i); j != hierobj->hierobjs.end(); ++j)
+       {
+        if ((*j)->object->search == label && (*j)->object->priority < (*k)->object->priority)
+         k = j;
+       }
+      if (k != i)
+       std::swap(*k, *i);
+     }
+
+    labels.insert(label);
+   }
+  }
+
+  for (HierObjs::iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
+   sort_by_labels(*itor);
  }
 
  void main_lods(void)
@@ -370,7 +412,7 @@ class Convert
         if (subobj.lod_min <= subobj.lod_max)
          {
           total_subobjects++;
-          if (hierobj->object->search.size())
+          if (!hierobj->object->search.empty())
            {
             subobject->indices++;
             total_indices++;
@@ -387,7 +429,7 @@ class Convert
 
  void print(const HierObj* hierobj, int depth)
  {
-  printf("% *s%08lX (%s) '%s'", depth++, "", hierobj->object->index, hierobj->object->search.c_str(), hierobj->object->filename.c_str());
+  printf("% *s%s (%s)", 2 * depth++, "", hierobj->object->print_name.c_str(), hierobj->object->search.c_str());
   for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end(); ++lod)
    printf(" %f '%s'", lod->distance, lod->filename.c_str());
   printf("\n");
@@ -397,7 +439,7 @@ class Convert
 
  void print(const SubObject& subobject, int depth)
  {
-  printf("% *s%i %i (%s) '%s'\n", depth++, "", subobject.lod_min, subobject.lod_max, subobject.object ? subobject.object->search.c_str() : "", subobject.filename.c_str());
+  printf("% *s%i %i (%s) '%s'\n", 2 * depth++, "", subobject.lod_min, subobject.lod_max, subobject.object ? subobject.object->search.c_str() : "", subobject.filename.c_str());
   for (SubObjects::const_iterator itor(subobject.subobjects.begin()); itor != subobject.subobjects.end(); ++itor)
    print(*itor, depth);
  }
@@ -472,7 +514,7 @@ class Convert
   int offset = 0;
   for (SubObjects::const_iterator itor(subobject.subobjects.begin()); itor != subobject.subobjects.end(); ++itor, offset++)
    {
-    if (itor->object->search.size())
+    if (!itor->object->search.empty())
      {
       fw(itor->object->search.c_str());
       fw(offset);

@@ -98,7 +98,7 @@ struct PluginLod
 {
  void Print(void) const
  {
-  if (!lods.size())
+  if (lods.empty())
    return;
 
   printf("Plugin ObjReplacementHandler 1 LW_Level_Of_Detail\n");
@@ -182,7 +182,7 @@ struct Collision
 struct Object : GeneralObject
 {
  Object(void)
-  : layer(-1)
+  : layer(-1), priority(0)
  {
  }
 
@@ -196,13 +196,16 @@ struct Object : GeneralObject
    else
     printf("AddNullObject %lX NullObject\n", index);
   if (!search.empty())
-   printf("// LABEL=%s\n", search.c_str());
+   if (priority)
+    printf("// LABEL=%s#%i\n", search.c_str(), priority);
+   else
+    printf("// LABEL=%s\n", search.c_str());
   GeneralObject::Print("Object");
   h.Print("H");
   p.Print("P");
   b.Print("B");
   collision.Print();
-  if (dissolve.keys.size())
+  if (!dissolve.keys.empty())
    {
     printf("ObjectDissolve (envelope)\n");
     dissolve.Print();
@@ -222,15 +225,18 @@ struct Object : GeneralObject
     printf("0 0 0\n");
     printf("1\n");
     printf("0\n");
-    printf("\"%s\"\n", search.c_str());
+    if (priority)
+     printf("\"%s#%i\"\n", search.c_str(), priority);
+    else
+     printf("\"%s\"\n", search.c_str());
     printf("EndPlugin\n");
-
    }
  }
 
  int layer;
  std::string filename;
  std::string search;
+ int priority;
  Limits h, p, b;
  Collision collision;
 };
@@ -535,7 +541,15 @@ class LwsFile : public Lws
 
  void ProcessPlugin(void)
  {
-  if (!strcmp(str, "ObjReplacementHandler 1 LW_Level_Of_Detail"))
+ 	std::string type, name;
+
+ 	findkeyword();
+	type = keyword;
+ 	findkeyword();
+ 	findkeyword();
+	name = keyword;
+
+  if (type == "ObjReplacementHandler" && name == "LW_Level_Of_Detail")
    {
     if (!LastObject)
      error("Line %i: Plugin LOD without previous object", line);
@@ -551,24 +565,41 @@ class LwsFile : public Lws
       sscanf(str, "%f", &lod.distance);
       gets();
       if (str[0] && str[1])
-       lod.filename.assign(str + 1, strlen(str) - 2);
+       {
+        int length = strlen(str);
+        if (strcmp(str, "NullObject") && strcmp(str, "\"NullObject\""))
+         if (str[0] == '"' && str[length - 1] == '"')
+          lod.filename.assign(str + 1, length - 2);
+         else
+           error("Line %i: Unknown object reference in LODs list", line);
+       }
       LastObject->lods.lods.push_back(lod);
      }
     gets();
    }
   else
-  if (!strcmp(str, "CustomObjHandler 1 LW_ItemShape"))
+  if (type == "CustomObjHandler" && name == "LW_ItemShape")
    {
     for (int i = 0; i < 12; i++)
      gets();
     if (LastObject)
-     LastObject->search.assign(str + 1, strlen(str) - 2);
+     {
+      const char* pptr;
+      pptr = strchr(str + 1, '#');
+      if (pptr)
+       {
+        LastObject->priority = atoi(pptr + 1);
+        LastObject->search.assign(str + 1, pptr - str - 1);
+       }
+      else
+       LastObject->search.assign(str + 1, strlen(str) - 2);
+     }
     gets();
     if (strcmp(str, "EndPlugin"))
      gets();
    }
   else
-  if (!strcmp(str, "CustomObjHandler 1 FX_Collision"))
+  if (type == "CustomObjHandler" && name == "FX_Collision")
    {
     if (LastObject)
      LastObject->collision.collision = true;

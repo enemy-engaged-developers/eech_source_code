@@ -344,7 +344,7 @@ void sub_object_export(FILE* fp, sub_object* subo, int parent)
      if (subo->lods[i].index)
       fprintf(fp, "\"%s.LWO\"\n", translator(subo->lods[i].index));
      else
-      fprintf(fp, "NullObject\n");
+      fprintf(fp, "\"NullObject\"\n");
     }
 
    fprintf(fp, "EndPlugin\n");
@@ -439,7 +439,7 @@ void ExportScene(FILE* fp, const OBJECT_3D_SCENE_DATABASE_ENTRY* scene)
        if (ap->object_number)
         fprintf(fp, "\"%s.LWO\"\n", translator(ap->object_number));
        else
-        fprintf(fp, "NullObject\n");
+        fprintf(fp, "\"NullObject\"\n");
       }
      fprintf(fp, "EndPlugin\n");
     }
