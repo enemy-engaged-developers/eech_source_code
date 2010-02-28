@@ -1317,12 +1317,14 @@ void place_frontline_forces (entity *force, int force_size)
 		side,
 		enemy_side;
 
+	unsigned int
+		node2;
+
 	int
 		artillery_node,
 		secondary_node,
 		mlrs_flag,
 		node,
-		node2,
 		number;
 
 	vec3d

@@ -596,7 +596,7 @@ void process_events (void)
 			default:
 			{
 
-				debug_fatal ("EVENT: Error in process_events, unknown event %d", current_event.type);
+				//debug_fatal ("EVENT: Error in process_events, unknown event %d", current_event.type);
 
 				break;
 			}

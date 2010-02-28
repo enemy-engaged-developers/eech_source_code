@@ -178,7 +178,7 @@ void ui_object_manager (void)
 void ui_repaint (void)
 {
 
-	float
+	int
 		x,
 		y;
 

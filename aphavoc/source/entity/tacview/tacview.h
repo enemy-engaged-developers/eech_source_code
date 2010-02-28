@@ -33,6 +33,9 @@ void write_tacview_town_names(void);
 // Writes the tacview header needed each frame
 void write_tacview_frame_header(void);
 
+// Checks the tacview logfile size and returns TRUE if bigger than allowed
+int check_tacview_filesize(void);
+
 // Addes logging for a new unit
 void write_tacview_new_unit(entity* en);
 

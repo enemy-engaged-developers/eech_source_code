@@ -289,16 +289,6 @@ static void draw_backup_sight(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_weapon_mode_hud (int draw_on_virtual_cockpit_texture)
-{
-	display_target_information();
-	display_weapon_information();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void initialise_hind_hud (void)
 {
 	hud_env = create_2d_environment ();
@@ -372,170 +362,6 @@ void deinitialise_hind_hud (void)
 void draw_hind_hud_on_cockpit (int hud_enlarge)
 {
 
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void draw_hind_hud_on_texture (void)
-{
-	//
-	// set active 3D environment now else 2D clipping will be affected
-	//
-
-	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
-
-	set_3d_active_environment (main_3d_env);
-
-	////////////////////////////////////////
-	//
-	// set up HUD 2D environment
-	//
-	////////////////////////////////////////
-
-	set_2d_active_environment (hud_env);
-
-	//
-	// window
-	//
-
-	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
-
-	if (hud_display_model)
-	{
-		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
-		float head_offset_x = 0.0, head_offset_y = 0.0, head_offset_z = 0.0;
-
-		if (get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
-		{
-			if (custom_3d_models.arneh_mi24v_cockpit)
-				get_hind_3d_cockpit_hud_view_position(&head_offset_x, &head_offset_y, &head_offset_z);
-		}
-		else
-		{
-			head_offset_x = -getViewpointOffsetX(head_offset_x);
-			head_offset_y = -getViewpointOffsetY(head_offset_y);
-			head_offset_z = -getViewpointOffsetY(head_offset_z);
-
-			head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
-			head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].y;
-			head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].z;
-		}
-
-		{
-			// move texture UV coordinates to move and scale the texture
-			int i;
-			for (i=0; i<num_texture_coordinates; i++)
-			{
-				float
-					scale,
-					u = hud_texture_uv_coordinates[i].u,
-					v = hud_texture_uv_coordinates[i].v;
-
-				// scale hud to keep same absolute size no matter distance to hud
-				u -= 0.5;
-				v -= 0.5;
-
-				hud_distance = hud_position_z - head_offset_z;
-				scale = hud_position_z / hud_distance;
-
-				u *= scale;
-				v *= scale;
-
-				u += 0.5;
-				v += 0.5;
-
-				// then displace hud to keep it directly in front of pilot's position
-				u -= (scale) * head_offset_x / hud_width;
-				v += (scale) * (head_offset_y - hud_position_y) / hud_height;
-
-				hud_display_model->surface_texture_points[i].u = u;
-				hud_display_model->surface_texture_points[i].v = v;
-			}
-		}
-	}
-
-	//
-	// viewport
-	//
-
-	draw_large_hud = FALSE;
-
-	hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
-	hud_viewport_x_org = HUD_VIEWPORT_TEXTURE_X_ORG;
-	hud_viewport_y_org = HUD_VIEWPORT_TEXTURE_Y_ORG;
-
-	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
-	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
-
-	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
-
-	//
-	// get screen co-ords (vitural cockpit texture - scaling only works near screen centre)
-	//
-
-	hud_screen_x_min = full_screen_x_mid - ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
-	hud_screen_y_min = full_screen_y_mid - ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
-
-	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001;
-
-	hud_screen_x_scale = 640.0 / full_screen_width;
-	hud_screen_y_scale = 480.0 / full_screen_height;
-
-	////////////////////////////////////////
-	//
-	// draw HUD
-	//
-	////////////////////////////////////////
-
-	set_active_screen (hud_texture_screen);
-
-	if (lock_screen (hud_texture_screen))
-	{
-		rgb_colour
-			clear_hud_colour;
-
-		if (backup_sight_active)
-		{
-			set_rgb_colour (clear_hud_colour, backup_sight_colour.r, backup_sight_colour.g, backup_sight_colour.b, 0);
-		}
-		else
-		{
-			set_rgb_colour (clear_hud_colour, hud_colour.r, hud_colour.g, hud_colour.b, 0);
-		}
-
-		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-
-
-		if (electrical_system_active())
-			if (backup_sight_active)
-				draw_backup_sight();
-			else if (!hind_damage.head_up_display)
-			{
-				set_mono_font_colour (hud_colour);
-
-				draw_layout_grid ();
-
-				if (hud_mode == HUD_MODE_WEAPON)
-					draw_weapon_mode_hud (TRUE);
-			}
-
-		// last pixel must be transparent because it's repeated when texture doesn't fill entire polygon
-		draw_line(0, 0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-		draw_line(0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, 0, clear_hud_colour);
-		draw_line(0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-		draw_line(HUD_VIEWPORT_SMALL_SIZE - 1, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
-
-		flush_screen_texture_graphics (hud_texture_screen);
-
-		unlock_screen (hud_texture_screen);
-	}
-
-	set_active_screen (video_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -811,6 +637,180 @@ static void display_target_information (void)
 		set_mono_font_rel_position (-width * 0.5, 0.0);
 		print_mono_font_string (s);
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_weapon_mode_hud (int draw_on_virtual_cockpit_texture)
+{
+	display_target_information();
+	display_weapon_information();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void draw_hind_hud_on_texture (void)
+{
+	//
+	// set active 3D environment now else 2D clipping will be affected
+	//
+
+	set_main_3d_full_screen_params (DISPLAY_3D_TINT_CLEAR, DISPLAY_3D_LIGHT_LEVEL_HIGH, DISPLAY_3D_NOISE_LEVEL_NONE);
+
+	set_3d_active_environment (main_3d_env);
+
+	////////////////////////////////////////
+	//
+	// set up HUD 2D environment
+	//
+	////////////////////////////////////////
+
+	set_2d_active_environment (hud_env);
+
+	//
+	// window
+	//
+
+	set_2d_window (hud_env, HUD_WINDOW_X_MIN, HUD_WINDOW_Y_MIN, HUD_WINDOW_X_MAX, HUD_WINDOW_Y_MAX);
+
+	if (hud_display_model)
+	{
+		// move HUD coordinate system with head movements to simulate the collimation effect (focus on infinity)
+		float head_offset_x = 0.0, head_offset_y = 0.0, head_offset_z = 0.0;
+
+		if (get_view_mode() == VIEW_MODE_COCKPIT_PANEL_SPECIAL_HAVOC_HUD)
+		{
+			if (custom_3d_models.arneh_mi24v_cockpit)
+				get_hind_3d_cockpit_hud_view_position(&head_offset_x, &head_offset_y, &head_offset_z);
+		}
+		else
+		{
+			head_offset_x = -getViewpointOffsetX(head_offset_x);
+			head_offset_y = -getViewpointOffsetY(head_offset_y);
+			head_offset_z = -getViewpointOffsetY(head_offset_z);
+
+			head_offset_x += wide_cockpit_position[WIDEVIEW_HIND_PILOT].x;
+			head_offset_y += wide_cockpit_position[WIDEVIEW_HIND_PILOT].y;
+			head_offset_z += wide_cockpit_position[WIDEVIEW_HIND_PILOT].z;
+		}
+
+		{
+			// move texture UV coordinates to move and scale the texture
+			unsigned int i;
+			for (i=0; i<num_texture_coordinates; i++)
+			{
+				float
+					scale,
+					u = hud_texture_uv_coordinates[i].u,
+					v = hud_texture_uv_coordinates[i].v;
+
+				// scale hud to keep same absolute size no matter distance to hud
+				u -= 0.5;
+				v -= 0.5;
+
+				hud_distance = hud_position_z - head_offset_z;
+				scale = hud_position_z / hud_distance;
+
+				u *= scale;
+				v *= scale;
+
+				u += 0.5;
+				v += 0.5;
+
+				// then displace hud to keep it directly in front of pilot's position
+				u -= (scale) * head_offset_x / hud_width;
+				v += (scale) * (head_offset_y - hud_position_y) / hud_height;
+
+				hud_display_model->surface_texture_points[i].u = u;
+				hud_display_model->surface_texture_points[i].v = v;
+			}
+		}
+	}
+
+	//
+	// viewport
+	//
+
+	draw_large_hud = FALSE;
+
+	hud_viewport_size = HUD_VIEWPORT_SMALL_SIZE;
+	hud_viewport_x_org = HUD_VIEWPORT_TEXTURE_X_ORG;
+	hud_viewport_y_org = HUD_VIEWPORT_TEXTURE_Y_ORG;
+
+	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
+	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
+	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+
+	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
+
+	//
+	// get screen co-ords (vitural cockpit texture - scaling only works near screen centre)
+	//
+
+	hud_screen_x_min = full_screen_x_mid - ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
+	hud_screen_y_min = full_screen_y_mid - ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
+
+	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001;
+	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001;
+
+	hud_screen_x_scale = 640.0 / full_screen_width;
+	hud_screen_y_scale = 480.0 / full_screen_height;
+
+	////////////////////////////////////////
+	//
+	// draw HUD
+	//
+	////////////////////////////////////////
+
+	set_active_screen (hud_texture_screen);
+
+	if (lock_screen (hud_texture_screen))
+	{
+		rgb_colour
+			clear_hud_colour;
+
+		if (backup_sight_active)
+		{
+			set_rgb_colour (clear_hud_colour, backup_sight_colour.r, backup_sight_colour.g, backup_sight_colour.b, 0);
+		}
+		else
+		{
+			set_rgb_colour (clear_hud_colour, hud_colour.r, hud_colour.g, hud_colour.b, 0);
+		}
+
+		set_block (0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
+
+
+		if (electrical_system_active())
+			if (backup_sight_active)
+				draw_backup_sight();
+			else if (!hind_damage.head_up_display)
+			{
+				set_mono_font_colour (hud_colour);
+
+				draw_layout_grid ();
+
+				if (hud_mode == HUD_MODE_WEAPON)
+					draw_weapon_mode_hud (TRUE);
+			}
+
+		// last pixel must be transparent because it's repeated when texture doesn't fill entire polygon
+		draw_line(0, 0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
+		draw_line(0, 0, HUD_VIEWPORT_SMALL_SIZE - 1, 0, clear_hud_colour);
+		draw_line(0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
+		draw_line(HUD_VIEWPORT_SMALL_SIZE - 1, 0, HUD_VIEWPORT_SMALL_SIZE - 1, HUD_VIEWPORT_SMALL_SIZE - 1, clear_hud_colour);
+
+		flush_screen_texture_graphics (hud_texture_screen);
+
+		unlock_screen (hud_texture_screen);
+	}
+
+	set_active_screen (video_screen);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

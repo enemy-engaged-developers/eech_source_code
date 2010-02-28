@@ -113,6 +113,15 @@
 #pragma warning(disable:4103)
 #define snprintf sprintf_s
 #define strcasecmp _stricmp
+#define strnicmp _strnicmp
+#define stricmp _stricmp
+#define strcmpi _strcmpi
+#define strupr _strupr
+#define strdup _strdup
+#define unlink _unlink
+#define filelength _filelength
+#define itoa _itoa
+#define fileno _fileno
 #endif
 
 #ifdef __cplusplus

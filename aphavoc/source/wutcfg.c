@@ -92,7 +92,8 @@ char session_WUT_filename [128]	= "\0"; // Jabberwock 031115 WUT server side
 void get_values(char *q, float *v2, int *d2)
 {
 	  float v1;
-	  int j, d1;
+	  unsigned int j;
+	  int d1;
 	  
 	  for (j = 0; j < strlen(q); j++)
 		  if (q[j] == ',') q[j] = '.';
@@ -894,7 +895,7 @@ Whether or not the site type can be considered a potential campaign objective
 				if (strcmp(waypoint_database[i].full_name, ent) == 0 && !strcmp(ent,"Landed"))
 				{
 					 float v1=0, v2=0;
-					 int j;
+					 unsigned int j;
 					 char *q = buf1+83;
 
 					 for (j = 0; j < strlen(q); j++)

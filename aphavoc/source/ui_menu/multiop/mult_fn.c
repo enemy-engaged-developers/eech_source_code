@@ -606,7 +606,7 @@ void multiplayer_modem_dial_update_function ( void )
 	int
 		game_update_time;
 
-	static int
+	static unsigned int
 		update_ticks = 0;
 
 	game_update_time = TIME_1_SECOND;
@@ -756,7 +756,7 @@ void multiplayer_modem_answer_update_function ( void )
 	int
 		game_update_time;
 
-	static int
+	static unsigned int
 		update_ticks = 0;
 
 	game_update_time = TIME_1_SECOND;
@@ -816,7 +816,7 @@ void multiplayer_modem_connection_update_function ( void )
 	int
 		update_time;
 
-	static int
+	static unsigned int
 		update_ticks = 0;
 
 	update_time = TIME_1_SECOND;

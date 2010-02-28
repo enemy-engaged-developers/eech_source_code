@@ -1304,7 +1304,7 @@ int process_packet_list (send_types send_type, connection_list_type *connection,
 				(packet->packet->player_id == connection->connection_id))
 			{
 
-				if ((!closest_packet) || ((get_system_time () - closest_packet->received_time) < closest_time))
+				if ((!closest_packet) || ((get_system_time () - closest_packet->received_time) < (unsigned int)closest_time))
 				{
 
 					closest_packet = packet;

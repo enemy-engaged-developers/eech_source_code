@@ -49,6 +49,9 @@ static int
 static char
 	log_filename[256];
 
+static entity* main_en = NULL;
+static int runonce = FALSE;
+
 static void write_coordinates(entity* en);
 static void write_srtm3_grid(int latitude, int longitude);
 static void write_srtm3_terrain_elevation(void);
@@ -60,6 +63,8 @@ void start_tacview_logging(entity* gunship)
 {
 	entity* en;
 
+	main_en = gunship;
+	
 	open_tacview_log();
 	write_tacview_header(get_pilot_entity(), gunship);
 	write_tacview_frame_header();
@@ -244,7 +249,33 @@ void write_tacview_frame_header(void)
 		reopen_timer = 0;
 	}
 
-	fprintf(tacview_log_file, "#%.2f\n", time - tacview_starttime);
+	// Check filesize and start new log when necessary
+	if (check_tacview_filesize() && !runonce)
+	{
+		fclose(tacview_log_file);
+		tacview_log_file = NULL;
+		runonce = TRUE;
+		start_tacview_logging(main_en);
+		runonce = FALSE;
+	}
+	else
+	{
+		fprintf(tacview_log_file, "#%.2f\n", time - tacview_starttime);
+	}
+	
+}
+
+int check_tacview_filesize(void)
+{
+	
+	long size = filelength(fileno(tacview_log_file));
+	
+	if (size > 1073741824)
+	{
+		return TRUE;
+	}
+	
+	return FALSE;
 }
 
 void write_tacview_new_unit(entity* en)

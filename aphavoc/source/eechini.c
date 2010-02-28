@@ -114,7 +114,7 @@ static void get_float ( const struct config_option *option, char *value )
 
 static void set_string ( const struct config_option *option, const char *value )
 {
-	if ( value && *value && strlen ( value ) < option->flag_length )
+	if ( value && *value && strlen ( value ) < (unsigned int) option->flag_length )
 	{
 		strcpy ( option->str_value, value );
 	}
@@ -237,7 +237,7 @@ static void get_mfd_pos ( const struct config_option *option, char *value )
 
 static void set_sound_device ( const struct config_option *option, const char *value )
 {
-	if ( value && *value && strlen ( value ) < option->flag_length )
+	if ( value && *value && strlen ( value ) < (unsigned int) option->flag_length )
 	{
 		int
 			i;
@@ -297,7 +297,7 @@ static void get_autosave ( const struct config_option *option, char *value )
 
 static void set_wut ( const struct config_option *option, const char *value )
 {
-	if ( value && *value && strlen ( value ) < option->flag_length )
+	if ( value && *value && strlen ( value ) < (unsigned int) option->flag_length )
 	{
 		strcpy ( option->str_value, value );
 
@@ -309,7 +309,7 @@ static void set_wut ( const struct config_option *option, const char *value )
 
 static void set_ip_address ( const struct config_option *option, const char *value )
 {
-	if ( value && *value && strlen ( value ) < option->flag_length )
+	if ( value && *value && strlen ( value ) < (unsigned int) option->flag_length )
 	{
 		strcpy ( option->str_value, value );
 
@@ -410,7 +410,7 @@ static void set_cfloat ( const struct config_option *option, const char *value )
 
 static void set_cstring ( const struct config_option *option, const char *value )
 {
-	if ( value && *value && strlen ( value ) < option->flag_length )
+	if ( value && *value && strlen ( value ) < (unsigned int) option->flag_length )
 	{
 		strcpy ( option->str_value, value );
 	}

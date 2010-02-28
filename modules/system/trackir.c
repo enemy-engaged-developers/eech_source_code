@@ -92,7 +92,7 @@ static BOOL dllLoadedOK = FALSE;
 	// start the TrackIR. This will register the game with the NP software so that it can load the proper module
 	//
 
-void InitTrackIR()
+void _cdecl InitTrackIR()
 {
 	modTrackIR = LoadLibrary("TRACKIR.DLL");
 
@@ -151,7 +151,7 @@ void InitTrackIR()
 	// Unregisters the TIR with the NP software, and frees the DLL.. you really should not call any TIR functions after this !!
 	//
 
-void ExitTrackIR()
+void _cdecl ExitTrackIR()
 {
 	if (dllLoadedOK == FALSE)
 		return;
@@ -176,7 +176,7 @@ void ExitTrackIR()
 	// You can configure the time the TIR waits till it disables itself in case 3) above by calling the gpNP_SetTimeout() function
 	//
 
-int query_TIR_active()
+int _cdecl query_TIR_active()
 {
 	if (dllLoadedOK == FALSE)
 		return 0;
@@ -362,7 +362,7 @@ float TIR_GetZ()
 	// Compatibility function to work with 1.6.1W4 code.. deprecated with 6DOF
 	//
 
-int GetYaw()
+int _cdecl GetYaw()
 {
 	if (dllLoadedOK == FALSE)
 		return 0;
@@ -379,7 +379,7 @@ int GetYaw()
 	// Compatibility function to work with 1.6.1W4 code.. deprecated with 6DOF
 	//
 
-int GetPitch()
+int _cdecl GetPitch()
 {
 	if (dllLoadedOK == FALSE)
 		return 0;

@@ -461,7 +461,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 				// play sequence of sounds
 				//
 
-				int
+				unsigned int
 					sample_loop;
 
 				sound_sequence_information

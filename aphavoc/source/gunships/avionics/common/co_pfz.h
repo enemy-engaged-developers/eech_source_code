@@ -11,7 +11,7 @@ typedef struct
 } pfz;
 
 /// currently selected PFZ
-extern int current_pfz;
+extern unsigned int current_pfz;
 
 /// all pfz/nfzs lower in number are filled
 extern unsigned int next_free_pfz, next_free_nfz;

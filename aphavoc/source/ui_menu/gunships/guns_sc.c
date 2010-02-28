@@ -754,7 +754,7 @@ void update_gunships_screen_progress_indicator (void)
 	int
 		loop;
 
-	static int
+	static unsigned int
 		progress_timer = 0;
 
 	char

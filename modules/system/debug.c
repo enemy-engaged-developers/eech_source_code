@@ -501,7 +501,7 @@ long initialise_internal_debug_system ( void * data )
 
 void debug_log (const char *msg, ...)
 {
-#if 0
+#if 1
 	FILE
 		*fp;
 #endif
@@ -597,7 +597,7 @@ void debug_log (const char *msg, ...)
 			}
 		}
 
-#if 0
+#if 1
 		fp = fopen ( debug_log_file_name, "a" );
 
 		if ( fp )
@@ -615,7 +615,7 @@ void debug_log (const char *msg, ...)
 
 void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
-#if 0
+#if 1
 	FILE
 		*fp;
 #endif
@@ -709,7 +709,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 			}
 		}
 
-#if 0
+#if 1
 		fp = fopen ( debug_log_file_name, "a" );
 
 		if ( fp )
@@ -727,7 +727,7 @@ void debug_colour_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 
 void debug_filtered_log (const char *msg, ...)
 {
-#if 0
+#if 1
 	FILE
 		*fp;
 #endif
@@ -821,7 +821,7 @@ void debug_filtered_log (const char *msg, ...)
 			}
 		}
 
-#if 0
+#if 1
 		fp = fopen ( debug_filtered_log_file_name, "a" );
 
 		if ( fp )
@@ -839,7 +839,7 @@ void debug_filtered_log (const char *msg, ...)
 
 void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...)
 {
-#if 0
+#if 1
 	FILE
 		*fp;
 #endif
@@ -933,7 +933,7 @@ void debug_colour_filtered_log ( enum DEBUG_COLOURS colour, const char *msg, ...
 			}
 		}
 
-#if 0
+#if 1
 		fp = fopen ( debug_filtered_log_file_name, "a" );
 
 		if ( fp )

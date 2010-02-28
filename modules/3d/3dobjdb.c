@@ -1181,7 +1181,7 @@ static void initialise_custom_scenes(const char* directory)
 void debug_database_entry(object_3d_database_entry* db_entry, FILE* out, unsigned level)
 {
 	char indent[128];
-	int i, nsubs;
+	unsigned int i, nsubs;
 
 	for (i = 0; i < min(level * 2,127u); i++)
 		indent[i] = ' ';

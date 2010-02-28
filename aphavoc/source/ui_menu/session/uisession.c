@@ -1081,11 +1081,13 @@ void recursive_check_campaign_files (const char *directory, session_list_data_ty
 		*warzone_file,
 		*directory_listing;
 
-	int
+	unsigned int
 		i,
+		upper;
+
+	int
 		value,
 		valid_file,
-		upper,
 		season;
 
 	static char

@@ -399,7 +399,7 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 		weapon_min_range,
 		weapon_effective_range;
 
-	int
+	unsigned int
 		result;
 
 	object_3d_bounds
