@@ -461,12 +461,14 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 		*aliased_character,
 		*glyph_character;
 
+	unsigned int
+		number_of_screens,
+		count;
+
 	int
 		ithickness,
-		count,
 		found,
 		font_offset,
-		number_of_screens,
 		finished,
 		texture_width,
 		texture_height,
@@ -531,8 +533,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 	if ( file_exist ( UI_FONT_HEADER_FILE ) )
 	{
-
-		int
+		unsigned int
 			count,
 			number_of_fonts;
 

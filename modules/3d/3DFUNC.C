@@ -495,7 +495,7 @@ int f3d_enumerate_formats(HRESULT (CALLBACK *enumerate_texture_formats)(LPDDPIXE
 
 	ret = IDirect3DDevice7_EnumTextureFormats ( d3d_data.device, enumerate_texture_formats, context );
 
-	if ( context != DD_OK )
+	if ( ret != DD_OK )
 	{
 		debug_log ( "Error during texture format enumeration: %s", get_d3d_error_message ( ret ) );
 		return ( FALSE );

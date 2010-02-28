@@ -462,7 +462,7 @@ void latin1_to_utf8(const char* latin1_text, char* result, unsigned result_len, 
 	const char* tmp = latin1_text;
 	char* out = result;
 
-	for (tmp = latin1_text; *tmp && ((out - result) < (result_len - 2)); tmp++)
+	for (tmp = latin1_text; *tmp && ((out - result) < ((int)result_len - 2)); tmp++)
 	{
 		if (escape_tacview_control_chars && (*tmp == '=' || *tmp == ',' || *tmp == '\n'))
 		{

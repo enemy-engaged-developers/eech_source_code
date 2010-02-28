@@ -331,8 +331,10 @@ void read_road_route_data (void)
 static int read_road_route_node_data (char *name)
 {
 
+	unsigned int
+		loop;
+
 	int
-		loop,
 		value;
 
 	float
@@ -1064,7 +1066,7 @@ node_link_data *get_road_sub_route (int node1, int node2, int *count, node_link_
 int set_road_link_breaks (int node1, int node2, int count)
 {
 
-	int
+	unsigned int
 		loop;
 
 	ASSERT (road_nodes);
@@ -1118,7 +1120,7 @@ int set_road_link_breaks (int node1, int node2, int count)
 int get_road_link_breaks (int node1, int node2)
 {
 
-	int
+	unsigned int
 		loop2,
 		loop;
 

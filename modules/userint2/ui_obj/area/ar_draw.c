@@ -538,7 +538,7 @@ static void tool_tips_draw_area_ui_object (ui_object *obj)
 		font_types
 			old_font;
 
-		int
+		unsigned int
 			timer;
 
 		timer = get_ui_object_tool_tips_timer (obj);

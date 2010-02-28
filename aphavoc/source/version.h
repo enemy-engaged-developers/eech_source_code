@@ -86,7 +86,7 @@
 // used in:
 //Razorworks\eech-new\aphavoc\source\init.c
 //Razorworks\eech-new\aphavoc\source\comms\comm_man.c
-#define BUILD_TYPE	""
+#define BUILD_TYPE	"V2"
 
 // used in comms/comm_man.c to make sure client and server use same version
 #define VERSION_NUMBER_INT 11230

@@ -384,7 +384,7 @@ void initialise_undercarriage_database(void)
 	const char* filenames[NUM_GUNSHIP_TYPES+1];
 	unsigned gunship;
 
-	memset(filenames, 0, sizeof(filenames));
+	memset((void*)filenames, 0, sizeof(filenames));
 
 	filenames[GUNSHIP_TYPE_APACHE] = "ah-64-suspension.txt";
 	filenames[GUNSHIP_TYPE_AH64A] = "ah-64-suspension.txt";
@@ -476,7 +476,7 @@ int helicopter_has_undercarriage_modelling(void)
 
 int weight_on_wheels(void)
 {
-	int i;
+	unsigned int i;
 
 	if (command_line_dynamics_flight_model < 2)
 		return FALSE;

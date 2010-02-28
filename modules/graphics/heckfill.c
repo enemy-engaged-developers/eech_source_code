@@ -426,8 +426,8 @@ modify exact [ eax ebx ecx edx edi ];
 void solid_fill_horizontal_line ( unsigned short int *ptr, int colour, int count )
 {
 
-	int
-		i;
+//	int
+//		i;
 
 	for ( ; count > 0; count-- )
 	{

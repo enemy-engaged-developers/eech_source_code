@@ -712,7 +712,7 @@ static void draw_pfz(int pfz_number, int is_nfz, matrix3x3 rotation_matrix, floa
 
 static void draw_pfzs(void)
 {
-	int i;
+	unsigned int i;
 	matrix3x3 rotation_matrix;
 	float scale;
 

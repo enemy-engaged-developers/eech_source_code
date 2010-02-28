@@ -292,7 +292,7 @@ void generate_keyboard_events ( void )
 	DWORD
 		items;
 
-	int
+	unsigned int
 		count;
 
 	if ( direct_input_keyboard )
