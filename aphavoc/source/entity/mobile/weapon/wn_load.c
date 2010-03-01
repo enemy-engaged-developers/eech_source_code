@@ -655,14 +655,15 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->sub_object_depth1 = HIND_LHS_INNER_PYLON;
 	hardpoint_data->sub_object_depth2 = HIND_RHS_INNER_PYLON;
 
-	hardpoint_data->number_of_valid_weapon_types = 4;
+	hardpoint_data->number_of_valid_weapon_types = 5;
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_S8;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S5;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
-	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S13;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S5;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
+	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// OUTER HARDPOINT
 
@@ -677,15 +678,16 @@ void initialise_weapon_loading_gunship_database (void)
 	hardpoint_data->sub_object_depth1 = HIND_LHS_OUTER_PYLON;
 	hardpoint_data->sub_object_depth2 = HIND_RHS_OUTER_PYLON;
 
-	hardpoint_data->number_of_valid_weapon_types = 5;
+	hardpoint_data->number_of_valid_weapon_types = 6;
 
 	hardpoint_data->valid_weapon_types =(entity_sub_types *) safe_malloc (sizeof (entity_sub_types) * hardpoint_data->number_of_valid_weapon_types);
 
 	hardpoint_data->valid_weapon_types [0] = ENTITY_SUB_TYPE_WEAPON_S8;
-	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S5;
-	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
-	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL;
-	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
+	hardpoint_data->valid_weapon_types [1] = ENTITY_SUB_TYPE_WEAPON_S13;
+	hardpoint_data->valid_weapon_types [2] = ENTITY_SUB_TYPE_WEAPON_S5;
+	hardpoint_data->valid_weapon_types [3] = ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND;
+	hardpoint_data->valid_weapon_types [4] = ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL;
+	hardpoint_data->valid_weapon_types [5] = ENTITY_SUB_TYPE_WEAPON_NO_WEAPON;
 
 	// WINGTIP HARDPOINT
 

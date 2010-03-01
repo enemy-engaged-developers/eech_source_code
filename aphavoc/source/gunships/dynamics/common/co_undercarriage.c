@@ -511,16 +511,42 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 {
 	if (landing_gears[GUNSHIP_TYPE_HIND].num_gear_points >= 3)
 	{
+		object_3d_sub_object_search_data
+			search;
+
 		object_3d_sub_instance
-			*left_wheel = &inst3d->sub_objects[2].sub_objects[0].sub_objects[0],
-			*right_wheel = &inst3d->sub_objects[3].sub_objects[0].sub_objects[0],
-			*nose_wheel = &inst3d->sub_objects[15].sub_objects[1].sub_objects[0],
-			*nose_strut = &inst3d->sub_objects[15].sub_objects[0];
+			*left_wheel,
+			*right_wheel,
+			*nose_wheel,
+			*nose_strut;
 
 		float
 			uc_state = get_undercarriage_state(),
 			turn_angle = landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].turn_angle,
 			front_compression = min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[2].max_suspension_compression);
+
+		search.search_object = inst3d;
+		search.search_depth = 0;
+
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_LEFT_WHEEL;
+		if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			return;
+		left_wheel = search.result_sub_object;
+
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_RIGHT_WHEEL;
+		if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			return;
+		right_wheel = search.result_sub_object;
+
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_WHEEL;
+		if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			return;
+		nose_wheel = search.result_sub_object;
+
+		search.sub_object_index = OBJECT_3D_SUB_OBJECT_SUSPENSION_NOSE_STRUT;
+		if ( find_object_3d_sub_object ( &search ) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND )
+			return;
+		nose_strut = search.result_sub_object;
 
 		left_wheel->relative_pitch = (rad(-13.0) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[1].max_suspension_compression) * rad(70)) * uc_state;
 		right_wheel->relative_pitch = (rad(-13.0) + min(landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].suspension_compression, landing_gears[GUNSHIP_TYPE_HIND].gear_points[0].max_suspension_compression) * rad(70)) * uc_state;

@@ -490,12 +490,12 @@ aircraft_data
          OBJECT_3D_MI24_HIND,													// default_3d_shape
 			GUNSHIP_TYPE_HIND,													// gunship_type
 			ENTITY_FORCE_AIR,														// force
-			WEAPON_CONFIG_TYPE_MI24D_HIND_4,									// default_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// min_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_18,									// max_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_4,									// air_to_air_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// air_to_surface_weapon_config_type
-			WEAPON_CONFIG_TYPE_MI24D_HIND_1,									// scout_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// default_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// min_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// max_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// air_to_air_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// air_to_surface_weapon_config_type
+			WEAPON_CONFIG_TYPE_MI24D_HIND_47,									// scout_weapon_config_type
 			ENTITY_SUB_TYPE_WEAPON_9A642_12P7MM_ROUND,					// default_weapon_type
 			TARGET_SYMBOL_HELICOPTER,											// target_symbol_type
 			TARGET_PRIORITY_MEDIUM,												// target_priority_type
