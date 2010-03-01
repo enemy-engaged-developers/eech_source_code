@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-<title>EECH Community Release Version 1.12.1</title>
+<title>EECH Community Release Version 1.12.3</title>
 <style>
 <!--
 a {
@@ -60,7 +60,7 @@ h4 {
 <body class="Normal">
 <table width="800" border="1" cellpadding="8" cellspacing="0">
   <tr>
-    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.12.1</span></h1>
+    <td width="800" ><h1 class="style33 style39"><span lang=EN-GB><a name="top"></a>EECH Community Release Version 1.12.3</span></h1>
         <hr size=2 width="100%" align=center>
         <hr size=2 width="100%" align=center>
       <p>This file is a summary of the new features provided with this
@@ -74,7 +74,7 @@ h4 {
       </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by FireBird: June 19, 2009
+      italic;'>Last edited by FireBird: March 1, 2010
       </p>
 
 
@@ -92,20 +92,25 @@ h4 {
       </ul>
 
 
-      <h2>What's NEW in EECH 1.12.2?</h2>
+      <h2>What's NEW in EECH 1.12.3?</h2>
       <ul>
 	<dl>
 	  <dd>Features</dd>
 	  <dt>
-	  <li>Added control over variable weather (see Random weather
-	  parameters in EECH.INI)
-	  <li>No cockpit view for some helicopter has MFDs with adjustable
-	  size (Alt-F11)
+	  <li>Added OpenAL support. Multiple (5.1) speakers may produce surrounding sound.
+		<li>Improved loadout for Hind. Loadout is displayed correctly now (by dfang).
+		Hind may carry
+		<ul>
+			<li>Missiles (Sturm) on wingtip and outer pylons
+			<li>Rockets (S-5, S-8, S-13) on inner and outer pylons
+			<li>Gun pods (UPK) on inner and outer pylons
+		</ul>
 	  </dt>
 
 	  <dd>Bug fixes</dd>
 	  <dt>
-	<li>Fixed CTD with "flyable" A-10s and Harriers
+	<li>Turned on cgs (comms guaranteed send) by default
+	<li>Removed demand for slash for command-line arguments
 	  </dt>
       </ul>
 
@@ -575,7 +580,26 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 
 
       <h3><a name="history"></a>Version history</h3>
+      <h4>Fixes/features in 1.12.2?</h4>
+	<ul>
+	<dl>
+	  <dd>Features</dd>
+	  <dt>
+	  <li>Added control over variable weather (see Random weather
+	  parameters in EECH.INI)
+	  <li>No cockpit view for some helicopter has MFDs with adjustable
+	  size (Alt-F11)
+	  <li>Added two visual themes: one for Apache and one for Hind
+	  </dt>
+
+	  <dd>Bug fixes</dd>
+	  <dt>
+	<li>Fixed CTD with "flyable" A-10s and Harriers
+	  </dt>
+      </dl>
+		 </ul>
       <h4>Fixes/features in 1.12.1?</h4>
+	<ul>
 	<dl>
 	  <dd>Features</dd>
 	  <dt>
@@ -596,6 +620,7 @@ href="http://forums.frugalsworld.com/vbb/forumdisplay.php?s=fe2daac7867adaffe2ad
 	<li>Restored broken Alt-F3/F4 support.
 	  </dt>
 	</dl>
+ </ul>
       <h4>Fixes/features in 1.12?</h4>
       Note that some of these changes requires that you use the new
       GWUT file (gwut1120.csv.  If you're upgrading open eech.ini and

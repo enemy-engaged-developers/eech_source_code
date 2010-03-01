@@ -12,7 +12,7 @@ SetCompressor /SOLID lzma
 ;General
 
 	;define these variable
-	!define VERSION "1.12.2"
+	!define VERSION "1.12.3"
 
 	;Name and file
 	Name "EECH Dev release ${VERSION}"
@@ -388,6 +388,10 @@ Section "cohokum.exe" SectionExe
 	File audio\trcktick.pcm
 	File audio\undercar.pcm
 	File audio\v22.pcm
+
+	SetOutPath "$INSTDIR\cohokum\3ddata\OBJECTS\Mi-24 Hind"
+
+	File "3ddata\objects\Mi-24 Hind\MI24_HIND.EES"
 
 SectionEnd
 
