@@ -160,7 +160,7 @@ int
 	command_line_no_hardware_tnl								= TRUE,
 	command_line_no_dx9zbuffer_fix							= FALSE,
 	command_line_no_render_to_texture						= FALSE,
-	command_line_display_bpp									= 16,
+	command_line_display_bpp									= 32, // Casm 03MAR10 32 bits by default
 	command_line_persistent_smoke								= TRUE,
 	command_line_no_mission_complete_music					= FALSE,
 	command_line_mouse_look										= MOUSELOOK_OFF,	// Retro 030317, 27Nov2004
@@ -287,8 +287,7 @@ float
 	command_line_g_force_head_movment_modifier					= 0.0,
 	global_night_light_level					= 1.0,  // VJ 060916 light level setting at night
 	global_hud_size2												= 1.0,	// VJ 050126 hud mod: size
-	global_mfd_size								= 1.0,
-  command_line_external_sounds_volume			= 1.0; //ataribaby 28/12/2008 volume for external sounds when in cockpit
+	global_mfd_size								= 1.0;
 
 char
 	command_line_themes[128] = "", // Casm 21DEC07

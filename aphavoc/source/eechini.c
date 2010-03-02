@@ -72,9 +72,6 @@
 
 #define EECH_INI "EECH.INI"
 
-//VJ 060211 save hud info to eech.ini
-int hud_code[8][HUD_CODES_LAST];
-
 #define DEFAULT_GWUT_FILE "gwut1120.csv"
 
 // Casm 09JUN09 Advanced options processing BEGIN
@@ -209,6 +206,53 @@ static void get_hud_code ( const struct config_option *option, char *value )
 		{
 			char buf[128];
 			sprintf ( buf, "%s%d", j ? "," : "", hud_code[i][j] );
+			strcat ( value, buf );
+		}
+		strcat ( value, ";" );
+	}
+}
+
+static void set_canopy_amp ( const struct config_option *option, const char *value )
+{
+	int
+		i, j;
+	const char
+		*cur;
+
+	cur = value;
+	for ( i = 0; i < sizeof ( canopy_sound_amp ) / sizeof ( *canopy_sound_amp ) ; i++ )
+	{
+		for ( j = 0; j < sizeof ( *canopy_sound_amp ) / sizeof ( **canopy_sound_amp ) ; j++ )
+		{
+			const char
+				*next;
+			for ( next = cur + 1; isdigit ( *next ); next++ );
+			if ( *next == ';' )
+			{
+				cur = next + 1;
+				break;
+			}
+			if ( !sscanf ( cur, "%d", &canopy_sound_amp[i][j] ) || !*next )
+			{
+				return;
+			}
+			cur = next + 1;
+		}
+	}
+}
+
+static void get_canopy_amp ( const struct config_option *option, char *value )
+{
+	int
+		i, j;
+
+	*value = '\0';
+	for ( i = 0; i < sizeof ( canopy_sound_amp ) / sizeof ( *canopy_sound_amp ) ; i++ )
+	{
+		for ( j = 0; j < sizeof ( *canopy_sound_amp ) / sizeof ( **canopy_sound_amp ) ; j++ )
+		{
+			char buf[128];
+			sprintf ( buf, "%s%d", j ? "," : "", canopy_sound_amp[i][j] );
 			strcat ( value, buf );
 		}
 		strcat ( value, ";" );
@@ -567,7 +611,7 @@ static const struct config_option options[] =
 		INT(command_line_d3d_use_texture_management) },
 	{ "cg", "clean_graphics", "(clean graphics) re-installs graphics files (0 = off, 1 = on) (def = 0)",
 		SPECINT(command_line_clean_graphics, set_int, get_zero) },
-	{ "palette", "", "use textures.pal (if videocard supports it) (0 = off, 1 = on) (def = 1) (recommended = 0)",
+	{ "palette", "", "use textures.pal (if videocard supports it) (0 = off, 1 = on) (def = 0)",
 		INT(d3d_allow_paletted_textures) },
 	{ "eofullrange", "", "eo ranges near to max fog distance (and objects are drawn up to it) 1=yes 0=no",
 		INT(command_line_eo_full_range) },
@@ -861,8 +905,8 @@ static const struct config_option options[] =
 		SPECSTR(command_line_sound_device, set_sound_device, get_sound_device) },
 	{ "hdwrbuf", "", "hardware buffers to use for sound (0 = software only, n = number of hard buffers) (def = 0)",
 		INT(command_line_sound_hdwrbuf) },
-	{ "external_sounds_volume", "", "volume for external sounds when in cockpit (n = Volume, 1.0 = full, 0.0 = silent) (default = 1.0) (good realistic value = 0.4)",
-		FLOAT(command_line_external_sounds_volume) },
+	{ "canopy_sounds_amp", "", "canopy sounds amplifier controller",
+		SPEC(set_canopy_amp, get_canopy_amp) },
 	{ "ui_sounds_muted", "", "campaign UI mute (0 = normal UI sounds, 1 = UI sounds muted) (default = 0)",
 		INT(command_line_ui_sounds_muted) },
 	{ NULL, NULL, "",
@@ -1094,6 +1138,49 @@ static void initialize_radar_ranges(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Casm 03MAR10 Canopy sound amplification control
+
+void initialize_canopy_sound_amp ()
+{
+	memset ( canopy_sound_amp, 0, sizeof ( canopy_sound_amp ) );
+
+	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MIN] = 75;
+	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_TOP] = 20;
+	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MUL] = 375;
+
+	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MIN] = 50;
+	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_TOP] = 50;
+	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MIN] = 30;
+	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MIN] = 30;
+	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MIN] = 100;
+	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MIN] = 50;
+	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MIN] = 40;
+	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_TOP] = 60;
+	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MUL] = 100;
+
+	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MIN] = 50;
+	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_TOP] = 50;
+	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MUL] = 100;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialize_options ( void )
 {
 	int
@@ -1113,6 +1200,8 @@ void initialize_options ( void )
 		hud_code[i][HUD_CODES_SIZE] = 10;
 		hud_code[i][HUD_CODES_MFD] = 20;
 	}
+
+	initialize_canopy_sound_amp ();
 
 	strcpy(WUT_filename, DEFAULT_GWUT_FILE);
 

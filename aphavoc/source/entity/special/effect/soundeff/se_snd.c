@@ -128,8 +128,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		channel_volume,
 		minimum_sound_range,
 		reference_sound_range,
-		maximum_sound_range,
-		canopy_state_amp;
+		maximum_sound_range;
 
 	raw = (sound_effect *) get_local_entity_data (en);
 
@@ -326,6 +325,10 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 
 	if (in_cockpit)
 	{
+		// Casm 03MAR10 Canopy sound amplification control
+		csa_codes
+			csa_code;
+
 		// Casm 07DEC09
 		switch (raw->eff.sub_type)
 		{
@@ -334,20 +337,18 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 			//ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
 			if (parent == get_gunship_entity ())
 			{
-				v *= 1.5;
-				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.2) * 2.5;
+				csa_code = CSA_CODES_ROTOR_PLAYER;
 			}
 			else
 			{
-				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.5);
-				canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+				csa_code = CSA_CODES_ROTOR_EXTERNAL;
 			}
 			break;
 		//ataribaby 28/12/2008 lets guns rocks
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_GATLING_GUN: 
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_CHAIN_GUN:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_GUN_PODS:
-			canopy_state_amp = 0.4 + bound(canopy_door_state, 0.0, 0.6);
+			csa_code = CSA_CODES_GUNS;
 			break;
 		//ataribaby 28/12/2008 all external sound sources gets influenced by external_sounds_volume setting			
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_HEAVY_RAIN:
@@ -356,8 +357,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_LIGHT_WIND:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_JUNGLE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_AMBIENT_SEA:
-			canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.5);
-			canopy_state_amp *= command_line_external_sounds_volume + ((1.0 - command_line_external_sounds_volume) * (bound(canopy_door_state, 0.0, 0.1) * 10));
+			csa_code = CSA_CODES_ENV;
 			break;
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_WIND_DOWN1:
@@ -371,21 +371,21 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 			//ataribaby 28/12/2008 if in player heli then do it as internal otherwise as external sound from other helis 
 			if (parent == get_gunship_entity ())
 			{
-				canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+				csa_code = CSA_CODES_ENGINE_PLAYER;
 			}
 			else
 			{
-				canopy_state_amp = 0.3 + bound(canopy_door_state, 0.0, 0.7);
+				csa_code = CSA_CODES_ENGINE_EXTERNAL;
 			}
 			break;
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_MISC:
 			if (parent == get_gunship_entity ())
 			{
-				canopy_state_amp = 1.0 + bound(canopy_door_state, 0.0, 0.7);
+				csa_code = CSA_CODES_MISC_PLAYER;
 			}
 			else
 			{
-				canopy_state_amp = 0.5 + bound(canopy_door_state, 0.0, 0.7);
+				csa_code = CSA_CODES_MISC_EXTERNAL;
 			}
 			break;
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE:
@@ -399,11 +399,18 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE:
 		case ENTITY_SUB_TYPE_EFFECT_SOUND_WARNING_MESSAGE:
 		default:
-			canopy_state_amp = 1.0;
+			csa_code = CSA_CODES_LAST;
 			break;
 		}
 
-		v *= canopy_state_amp;
+		if (csa_code != CSA_CODES_LAST)
+		{
+			int
+				*values;
+
+			values = canopy_sound_amp[csa_code];
+			v *= values[CSA_VALUES_MIN] * 0.01 + bound((int)(canopy_door_state * 100), 0, values[CSA_VALUES_TOP]) * values[CSA_VALUES_MUL] * 0.0001;
+		}
 	}
 
 	if (ui_sounds_muted == 1)
