@@ -173,11 +173,14 @@ void f3d_zbuffer_clear(float value)
 	HRESULT
 		ret;
 
-	ret = IDirect3DDevice7_Clear ( d3d_data.device, 0, NULL, D3DCLEAR_ZBUFFER, 0, value, 0 );
-
-	if ( ret != DD_OK )
+	if ( d3d_data.device )
 	{
-		debug_log ( "Unable to clear zbuffer: %s", get_d3d_error_message ( ret ) );
+		ret = IDirect3DDevice7_Clear ( d3d_data.device, 0, NULL, D3DCLEAR_ZBUFFER, 0, value, 0 );
+
+		if ( ret != DD_OK )
+		{
+			debug_log ( "Unable to clear zbuffer: %s", get_d3d_error_message ( ret ) );
+		}
 	}
 }
 

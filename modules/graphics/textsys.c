@@ -81,7 +81,7 @@ int
 	compress_system_textures = FALSE,
 	d3d_use_evict_textures = TRUE,
 	d3d_allow_32bit_textures = TRUE,
-	d3d_allow_paletted_textures = TRUE,
+	d3d_allow_paletted_textures = FALSE, // Casm 03MAR10 Don't use paletted textures by default
 	d3d_paletted_textures_supported = FALSE;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

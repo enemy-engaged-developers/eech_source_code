@@ -66,6 +66,7 @@
 
 #include "graphics.h"
 #include "3d/3dfunc.h"
+#include "project.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +155,7 @@ int assess_graphic_device_resolutions ( void )
 
 	number_of_graphics_resolution_modes_available = 0;
 
-	switch ( application_video_colourdepth )
+	switch ( command_line_display_bpp )
 	{
 		case 16:
 		{
@@ -165,10 +166,13 @@ int assess_graphic_device_resolutions ( void )
 
 		case 32:
 		{
-			high_water_mark = 22;
-			low_water_mark = 32;
+			high_water_mark = 32;
+			low_water_mark = 24;
 			break;
 		}
+
+		default:
+			ASSERT ( FALSE );
 	}
 
 	if ( number_display_modes )
@@ -208,7 +212,7 @@ int assess_graphic_device_resolutions ( void )
 					height = display_modes[count].ddsd.dwHeight;
 					if ( supported_resolution ( width, height ) )
 					{
-						if ( f3d_test_video_resolution ( width, height, application_video_colourdepth ) )
+						if ( f3d_test_video_resolution ( width, height, command_line_display_bpp ) )
 						{
 							debug_log ( "Graphics mode: %d x %d enabled", width, height );
 							graphics_resolution_modes_available[number_of_graphics_resolution_modes_available].width = width;

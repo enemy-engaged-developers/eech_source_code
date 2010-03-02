@@ -188,8 +188,8 @@ struct direct_draw_data
 		windows_height,
 		windows_depth;
 
-	int
-		application_display_depth;
+	//int
+	//	application_display_depth;
 
 	int
 		ddraw_valid;
