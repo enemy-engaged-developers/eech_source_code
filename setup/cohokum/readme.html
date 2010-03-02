@@ -74,7 +74,7 @@ h4 {
       </p>
 
       <p align=right style='text-align:right; font-style:
-      italic;'>Last edited by FireBird: March 1, 2010
+      italic;'>Last edited by FireBird: March 3, 2010
       </p>
 
 
@@ -105,6 +105,26 @@ h4 {
 			<li>Rockets (S-5, S-8, S-13) on inner and outer pylons
 			<li>Gun pods (UPK) on inner and outer pylons
 		</ul>
+		<li>Canopy sounds amplification control.<br>
+		There are groups of sound effects
+		<ul>
+			<li>Rotor of player's helicopter
+			<li>Rotor of other helicopters
+			<li>Engine of player's helicopter
+			<li>Engine of other helicopters
+			<li>Misc of player's helicopter (gears, for example)
+			<li>Misc of other helicopters
+			<li>Guns
+			<li>Environmental sounds
+		</ul>
+		Each group has three numbers associated used to calculate sound effect volume amplification:<br>
+		amplification = first / 100 + bound(canopy_door_state, 0, second) * third / 10000,<where>
+		where
+		<ul>
+			<li>canopy_door_state varies from 0 (fully closed) to 100 (totally open)
+			<li>bound(x,y,z) produces y if x less than y, or z, if x greater than z, or x otherwise
+		 </ul>
+		 Check canopy_sounds_amp in Sounds section of EECH.INI
 	  </dt>
 
 	  <dd>Bug fixes</dd>
