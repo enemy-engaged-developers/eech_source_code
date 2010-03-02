@@ -45,6 +45,7 @@ static const ALCchar
 	*reported_default_device;
 
 #define MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS 256
+#define DEFAULT_CURRENT_SYSTEM_SOUND_EFFECTS 50
 static int
 	maximum_current_system_sound_effects;
 
@@ -88,10 +89,11 @@ int initialise_sound_system ( void )
 	sound_system_initialised = FALSE;
 	sound_system_paused = FALSE;
 
-	if ( command_line_sound_hdwrbuf > 0 && command_line_sound_hdwrbuf <= MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS )
-		maximum_current_system_sound_effects = command_line_sound_hdwrbuf;
-	else
-		maximum_current_system_sound_effects = MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS;
+	if ( command_line_sound_hdwrbuf <= 0 || command_line_sound_hdwrbuf > MAXIMUM_CURRENT_SYSTEM_SOUND_EFFECTS )
+	{
+		command_line_sound_hdwrbuf = DEFAULT_CURRENT_SYSTEM_SOUND_EFFECTS;
+	}
+	maximum_current_system_sound_effects = command_line_sound_hdwrbuf;
 
 	for ( count = 0; count < maximum_current_system_sound_effects; count++ )
 	{
@@ -144,8 +146,8 @@ int get_sound_system_devices ( const char **devices, const char **default_device
 		devices_ext_present = DEP_NO;
 		if ( alcIsExtensionPresent ( NULL, "ALC_ENUMERATION_EXT" ) == AL_TRUE )
 		{
-			reported_devices = alcGetString ( NULL, ALC_DEVICE_SPECIFIER );
-			reported_default_device = alcGetString ( NULL, ALC_DEFAULT_DEVICE_SPECIFIER );
+			reported_devices = alcGetString ( NULL, ALC_ALL_DEVICES_SPECIFIER );
+			reported_default_device = alcGetString ( NULL, ALC_DEFAULT_ALL_DEVICES_SPECIFIER );
 			if ( reported_devices && reported_default_device )
 			{
 				devices_ext_present = DEP_YES;
