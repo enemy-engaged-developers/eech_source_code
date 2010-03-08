@@ -136,6 +136,8 @@ class Convert
        continue;
       if (shadow)
        error("Duplicate shadow objects found: %s and %s", shadow->print_name.c_str(), itor->print_name.c_str());
+      if (!itor->lods.lods.empty())
+       warning("LODs are ignored for %s", itor->print_name.c_str());
       shadow = &*itor;
       continue;
      }
@@ -146,6 +148,8 @@ class Convert
        continue;
       if (collision)
        error("Duplicate collision objects found: %s and %s", collision->print_name.c_str(), itor->print_name.c_str());
+      if (!itor->lods.lods.empty())
+       warning("LODs are ignored for %s", itor->print_name.c_str());
       collision = &*itor;
       continue;
      }
@@ -154,6 +158,14 @@ class Convert
      {
       links.push_back(&*itor);
       continue;
+     }
+
+    if (!itor->lods.lods.empty())
+     {
+      if (itor->filename.empty())
+       error("Null object %s with LODs", itor->print_name.c_str());
+      if ((itor->lods.lods.size() > 1 || !itor->lods.lods.back().filename.empty()) && !itor->search.empty())
+       error("Object %s has both a label and LODs", itor->print_name.c_str());
      }
 
     {
