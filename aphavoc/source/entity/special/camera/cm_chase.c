@@ -259,11 +259,11 @@ void update_chase_camera (camera *raw)
 	// get camera attitude
 	//
 
-/*	if (get_local_entity_int_value (en, INT_TYPE_ALIVE) && raw->chase_camera_lock_rotate)
+	if (get_local_entity_int_value (en, INT_TYPE_ALIVE) && raw->chase_camera_lock_rotate)
 	{
 		combined_heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 	}
-	else */
+	else
 	{
 		combined_heading = 0.0;
 	}
