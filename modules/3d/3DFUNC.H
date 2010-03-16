@@ -28,6 +28,7 @@ int f3d_set_viewport(struct _D3DVIEWPORT7 *viewport);
 void f3d_vertex_create(struct _D3DVERTEXBUFFERDESC *desc, LPDIRECT3DVERTEXBUFFER7 *buffer);
 void f3d_vertex_release(LPDIRECT3DVERTEXBUFFER7 *buffer);
 int f3d_vertex_lock(LPDIRECT3DVERTEXBUFFER7 buffer, unsigned flags, void **ptr);
+void f3d_vertex_lock_strict(LPDIRECT3DVERTEXBUFFER7 buffer, unsigned flags, void **ptr);
 void f3d_vertex_unlock(LPDIRECT3DVERTEXBUFFER7 buffer);
 void f3d_vertex_optimize(LPDIRECT3DVERTEXBUFFER7 buffer);
 

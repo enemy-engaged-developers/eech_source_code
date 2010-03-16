@@ -456,11 +456,11 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 	next_vertex_buffer_index = 3;
 
-	f3d_vertex_lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
+	f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
 
-	f3d_vertex_lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
+	f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
 
-	f3d_vertex_lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
+	f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
 
 	for ( count = 1; count <= total_number_of_raw_3d_objects; count++ )
 	{
@@ -551,7 +551,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								if ( current_lightmap_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
-									f3d_vertex_lock ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
+									f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_lightmap_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &lightmap_vertices );
 								}
 								else
 								{
@@ -685,7 +685,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 								if ( current_textured_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 								{
-									f3d_vertex_lock ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
+									f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_textured_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &textured_vertices );
 								}
 								else
 								{
@@ -818,7 +818,7 @@ void initialise_3d_objects_in_d3d_old ( void )
 
 							if ( current_plain_vertex_buffer_index < total_number_of_objects_3d_vertex_buffers )
 							{
-								f3d_vertex_lock ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
+								f3d_vertex_lock_strict ( objects_3d_vertex_buffers[current_plain_vertex_buffer_index], DDLOCK_NOSYSLOCK | DDLOCK_WRITEONLY | DDLOCK_SURFACEMEMORYPTR, ( LPVOID * ) &plain_vertices );
 							}
 							else
 							{

@@ -118,11 +118,19 @@ int f3d_vertex_lock(LPDIRECT3DVERTEXBUFFER7 buffer, unsigned flags, void **ptr)
 
 	if ( FAILED ( ret ) )
 	{
-		debug_fatal ( "Unable to lock vertex buffer: %s", get_d3d_error_message ( ret ) );
+		debug_log ( "Unable to lock vertex buffer: %s", get_d3d_error_message ( ret ) );
 		return FALSE;
 	}
 
 	return TRUE;
+}
+
+void f3d_vertex_lock_strict(LPDIRECT3DVERTEXBUFFER7 buffer, unsigned flags, void **ptr)
+{
+	if ( !f3d_vertex_lock ( buffer, flags, ptr ) )
+	{
+		debug_fatal ( "Unable to lock vertex buffer" );
+	}
 }
 
 void f3d_vertex_unlock(LPDIRECT3DVERTEXBUFFER7 buffer)
