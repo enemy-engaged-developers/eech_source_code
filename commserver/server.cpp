@@ -27,13 +27,21 @@ int main(int argc, char* argv[])
 
 	for (;;)
 	{
-		char buf[1024];
+		char buf[16384];
 		memset(buf, 0, sizeof(buf));
-		if (comms.Receive(buf, sizeof(buf)) <= 0)
+		int res;
+		if ((res = comms.Receive(buf, sizeof(buf))) <= 0)
 		{
 			break;
 		}
-		cout << "Received [" << buf << "]" << endl;
+		buf[res] = 0;
+		{
+			time_t now = time(NULL);
+			char buf[1024];
+			strftime(buf, sizeof(buf), "%x %X", localtime(&now));
+			std::cout << buf;
+		}
+		cout << " Received [" << buf << "]" << endl;
 	}
 
 	return 0;
