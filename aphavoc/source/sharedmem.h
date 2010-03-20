@@ -17,6 +17,12 @@ typedef struct
 	float waypoint_bearing;	  // absolute bearing to waypoint in degrees
 } waypoint_data_t;
 
+/********* IMPORTANT ************************************************
+ * please increase this number when changing the layout of the data,
+ * it makes life so much easier for those using the data
+ *******************************************************************/
+#define SHARED_MEM_DATA_VERSION 2
+
 typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 {
 //	gunship_types
@@ -96,7 +102,7 @@ typedef struct	// all values are metric ! Distances in meters, speeds in m/s
 	weapon_load_data_t weapon_load[MAX_WEAPON_LOAD_DATA];
 } shared_memory_t;
 
-extern void* gPtrSharedMemory;
+extern shared_memory_t* gPtrSharedMemory;
 
 int Initialise_Shared_Memory(void);
 void DeInitialise_Shared_Memory(void);
