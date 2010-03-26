@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#define QUIET_ALREADY 1
+#include "Values.h"
 
-float getValue(int commandID);
+#define QUIET_ALREADY 1
 
 // return either HEAP MEMORY or 0
 char* executeCommand(const int commandID)
 {
 	char *response = new char[1024];
-	snprintf(response, 1024, "/%i\\%f", commandID, getValue(commandID));
+	snprintf(response, 1024, "/%i\\%s", commandID, GetValue(commandID).get_string());
 	return response;
 }
 

@@ -4,15 +4,14 @@
 #include <time.h>
 
 #include "TCP.h"
+#include "Values.h"
 
 int Initialise_Shared_Memory(void);
 void DeInitialise_Shared_Memory(void);
 
-float getValue(int commandID);
-
 const char resp[] = "Arn.Resp:";
 
-float old_values[1024];
+long old_values[1024];
 
 int index_to_command(int index)
 {
@@ -49,7 +48,8 @@ int main(int argc, char* argv[])
 
 	std::cout << "EECH CommClient " __DATE__ << std::endl;
 
-	for (int last_index = 0;;)
+	memset(old_values, 0xA5, sizeof(old_values));
+	for (;;)
 	{
 		try
 		{
@@ -66,18 +66,14 @@ int main(int argc, char* argv[])
 			{
 				char result[65536];
 				memcpy(result, resp, sizeof(resp));
-				for (int index = 1, command, total = 0; (command = index_to_command(index)) != 0; index++)
+				for (int index = 1, command; (command = index_to_command(index)) != 0; index++)
 				{
-					float value = getValue(command);
-					if (index > last_index || value != old_values[index])
+					long value = GetValue(command).get_long();
+					if (value != old_values[index])
 					{
-						sprintf(result + strlen(result), "%i=%.2f:", command, value);
+						sprintf(result + strlen(result), "%i=%li:", command, value);
 						old_values[index] = value;
-						if (++total > 50)
-							break;
 					}
-					if (index > last_index)
-						last_index = index;
 				}
 				if (result[sizeof(resp) - 1])
 				{
