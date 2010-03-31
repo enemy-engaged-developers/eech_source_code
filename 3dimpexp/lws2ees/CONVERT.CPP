@@ -35,6 +35,7 @@ class Convert
 
   const Object* object;
   HierObjs hierobjs;
+  size_t last_lod;
  };
 
  struct SubObject;
@@ -52,10 +53,10 @@ class Convert
  struct MainLod
  {
   MainLod(void) {}
-  MainLod(float dist) : distance(dist) {}
+  MainLod(int dist) : distance(dist) {}
 
   std::string filename;
-  float distance;
+  int distance;
  };
  typedef std::vector<MainLod> Lods;
 
@@ -93,6 +94,8 @@ class Convert
   sort_by_labels(root);
   //print(root, 0);
   main_lods();
+  //print_lods();
+  set_last_lods(root);
   set_lods(&main, root);
   clear(root);
   //print(main, 0);
@@ -119,7 +122,7 @@ class Convert
  void build_hierarchy(const Lws& lws)
  {
   typedef std::map<long, HierObj*> Cache;
-  typedef std::set<float> Distances;
+  typedef std::set<int> Distances;
   typedef std::list<HierObj*> Deferred;
 
   Cache cache;
@@ -162,6 +165,11 @@ class Convert
 
     if (!itor->lods.lods.empty())
      {
+      if ((int)itor->lods.lods[0].distance <= 0)
+        error("First LOD is too close for object %s", itor->print_name.c_str());
+      for (size_t i = 1; i < itor->lods.lods.size(); i++)
+       if ((int)itor->lods.lods[i - 1].distance >= (int)itor->lods.lods[i].distance)
+        error("Invalid distances for LODs %i and %i for object %s", i - 1, i, itor->print_name.c_str());
       if (itor->filename.empty())
        error("Null object %s with LODs", itor->print_name.c_str());
       if ((itor->lods.lods.size() > 1 || !itor->lods.lods.back().filename.empty()) && !itor->search.empty())
@@ -233,7 +241,7 @@ class Convert
     hierobj->object = &*itor;
 
     for (PluginLod::LODs::const_iterator itor(hierobj->object->lods.lods.begin()); itor != hierobj->object->lods.lods.end(); ++itor)
-     distances.insert(itor->distance);
+     distances.insert((int)itor->distance);
 
     if (itor->motion.parent)
      {
@@ -314,18 +322,25 @@ class Convert
     cameras.push_back(cameradesc);
    }
 
-  if (!distances.empty() && *distances.begin() < 1E-2)
+  if (!distances.empty() && !*distances.begin())
    distances.erase(distances.begin());
   lods.insert(lods.end(), distances.begin(), distances.end());
+ }
+
+ void print_lods(void)
+ {
+  for (size_t i = 0; i < lods.size(); i++)
+   printf(" %i: %i", i, lods[i].distance);
+  printf("\n");
  }
 
  void sort_by_labels(HierObj* hierobj)
  {
   if (hierobj != root && !hierobj->object->lods.lods.empty())
-	 {
-	  if (!hierobj->object->lods.lods.back().filename.empty())
+   {
+    if (!hierobj->object->lods.lods.back().filename.empty())
      warning("Last LOD for object %s is not NullObject", hierobj->object->print_name.c_str());
-	 }
+   }
 
   {
    std::set<std::string> labels;
@@ -371,7 +386,7 @@ class Convert
 
   for (Lods::iterator itor(lods.begin()); itor != lods.end(); ++itor)
    {
-    for (PluginLod::LODs::const_iterator lod(root->object->lods.lods.begin()); lod != root->object->lods.lods.end() && lod->distance <= itor->distance; ++lod)
+    for (PluginLod::LODs::const_iterator lod(root->object->lods.lods.begin()); lod != root->object->lods.lods.end() && (int)lod->distance <= itor->distance; ++lod)
      filename = lod->filename;
     itor->filename = filename;
    }
@@ -388,6 +403,33 @@ class Convert
    }
  }
 
+ void set_last_lods(HierObj* hierobj)
+ {
+  PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.end());
+  while (lod != hierobj->object->lods.lods.begin())
+   {
+    --lod;
+    if (!lod->filename.empty())
+     {
+      ++lod;
+      break;
+     }
+   }
+
+  if (lod == hierobj->object->lods.lods.end())
+   hierobj->last_lod = hierobj->object->filename.empty() ? 0 : lods.size();
+  else
+   for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
+    if (itor->distance == (int)lod->distance)
+     hierobj->last_lod = itor - lods.begin();
+
+  for (HierObjs::const_iterator itor(hierobj->hierobjs.begin()); itor != hierobj->hierobjs.end(); ++itor)
+   {
+    set_last_lods(*itor);
+    hierobj->last_lod = std::max(hierobj->last_lod, (*itor)->last_lod);
+   }
+ }
+
  void set_lods(SubObject* subobject, const HierObj* hierobj)
  {
   subobject->object = hierobj->object;
@@ -399,10 +441,11 @@ class Convert
 
     Lods slods = lods;
     slods.insert(slods.begin(), 0);
+    slods.erase(slods.begin() + hierobj->last_lod + 1, slods.end());
     std::string filename = hierobj->object->filename;
     for (Lods::iterator itor(slods.begin()); itor != slods.end(); ++itor)
      {
-      for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end() && lod->distance <= itor->distance; ++lod)
+      for (PluginLod::LODs::const_iterator lod(hierobj->object->lods.lods.begin()); lod != hierobj->object->lods.lods.end() && (int)lod->distance <= itor->distance; ++lod)
        filename = lod->filename;
       itor->filename = filename;
      }
@@ -411,7 +454,7 @@ class Convert
     while (cur != slods.end())
      {
       Lods::iterator next(cur);
-      for (++next; next != slods.end() && (subobject == &main || next->filename == cur->filename); ++next);
+      for (++next; next != slods.end() && next->filename == cur->filename; ++next);
 
       SubObject subobj;
       subobj.filename = cur->filename;
@@ -536,7 +579,7 @@ class Convert
 
  void save_subobject(const SubObject& subobject) const
  {
-  fw(subobject.object->filename.c_str());
+  fw(subobject.filename.c_str());
 
   fw(subobject.object->collision.collision);
   fw(subobject.lod_min + 1);
@@ -630,7 +673,7 @@ class Convert
   for (Lods::const_iterator itor(lods.begin()); itor != lods.end(); ++itor)
    {
     fw(itor->filename.c_str());
-    fw(itor->distance);
+    fw((float)itor->distance);
    }
 
 #if 1
