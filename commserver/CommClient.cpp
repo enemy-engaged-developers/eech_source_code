@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "TCP.h"
 
@@ -46,30 +47,52 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
+	std::cout << "EECH CommClient " __DATE__ << std::endl;
+
+	for (int last_index = 0;;)
 	{
-		TCPComms comms(argv[1], Port);
-
-		for (bool first = true;; first = false)
+		try
 		{
-			char result[65536];
-			memcpy(result, resp, sizeof(resp));
-			for (int index = 1, command; (command = index_to_command(index)) != 0; index++)
 			{
-				float value = getValue(command);
-				if (first || value != old_values[index])
-				{
-					sprintf(result + strlen(result), "%i=%f:", command, value);
-					old_values[index] = value;
-				}
+				time_t now = time(NULL);
+				char buf[1024];
+				strftime(buf, sizeof(buf), "%x %X Connecting... ", localtime(&now));
+				std::cout << buf << std::flush;
 			}
-			if (result[sizeof(resp) - 1])
-			{
-				strcat(result, "\r\n");
-				if (comms.Send(result) <= 0)
-					break;
-			}
+			TCPComms comms(argv[1], Port);
+			std::cout << "success" << std::endl;
 
-			Sleep(1000);
+			for (;;)
+			{
+				char result[65536];
+				memcpy(result, resp, sizeof(resp));
+				for (int index = 1, command, total = 0; (command = index_to_command(index)) != 0; index++)
+				{
+					float value = getValue(command);
+					if (index > last_index || value != old_values[index])
+					{
+						sprintf(result + strlen(result), "%i=%.2f:", command, value);
+						old_values[index] = value;
+						if (++total > 50)
+							break;
+					}
+					if (index > last_index)
+						last_index = index;
+				}
+				if (result[sizeof(resp) - 1])
+				{
+					strcat(result, "\r\n");
+					if (comms.Send(result) <= 0)
+						break;
+				}
+
+				Sleep(250);
+			}
+		}
+		catch (...)
+		{
+			std::cout << "failed" << std::endl;
+			break;
 		}
 	}
 

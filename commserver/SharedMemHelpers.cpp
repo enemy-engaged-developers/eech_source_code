@@ -10,7 +10,7 @@ int Initialise_Shared_Memory()
 {
 	gPtrSharedMemory = 0;
 
-	gHandleSharedMemory = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READONLY, 0, sizeof(shared_memory_t), "EECHSharedMemory");
+	gHandleSharedMemory = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(shared_memory_t), "EECHSharedMemory");
 
 	if (!gHandleSharedMemory)
 	{

@@ -45,10 +45,12 @@ int main(int argc, char* argv[])
 			char buffer[1024];
 			memset(buffer, 0, sizeof(buffer));
 
-			if (!comms.Receive(buffer, sizeof(buffer)))
+			int res;
+			if ((res = comms.Receive(buffer, sizeof(buffer))) <= 0)
 			{
 				break;
 			}
+			buffer[res] = 0;
 
 			if (debugLevel)
 			{
