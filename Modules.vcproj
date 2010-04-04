@@ -57,7 +57,6 @@
 				ProgramDataBaseFileName="$(OutDir)\$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
-				CallingConvention="2"
 				CompileAs="1"
 			/>
 			<Tool
