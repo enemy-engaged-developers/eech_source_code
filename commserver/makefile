@@ -14,8 +14,8 @@ targets = t1 t2 t3 t4
 
 targ_t1 = EECHCommServer.
 targ_t2 = EECHCommClient.
-targ_t3 = EECHCommTestClient.
-targ_t4 = EECHCommTestServer.
+targ_t3 = TestCommClient.
+targ_t4 = TestCommServer.
 
 objs_t1 = Values.obj SharedMemHelpers.obj dispatcher.obj UDP.obj CommServer.obj
 objs_t2 = Values.obj SharedMemHelpers.obj TCP.obj CommClient.obj

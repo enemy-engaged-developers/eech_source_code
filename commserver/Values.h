@@ -47,7 +47,7 @@ private:
 	{
 		integer = value;
 		floating = static_cast<double>(value);
-		sprintf(string, "%l", integer);
+		sprintf(string, "%li", integer);
 	}
 	void set(double value)
 	{

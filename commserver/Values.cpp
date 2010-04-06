@@ -23,6 +23,12 @@ enum GUNSHIP_TYPES	// stolen from global.h
 	NUM_GUNSHIP_TYPES
 };
 
+int heading(double value)
+{
+	int real = (int)floor(value * 180 / M_PI + 0.5);
+	return real < 0 ? real + 361 : real;
+}
+
 Value GetApacheSpecificData(int command)
 {
 	apache_lamp_flags lamp = pMem->cockpit_lamps.apache_lamps;
@@ -577,9 +583,9 @@ Value GetValue(int command)
 		case 36: break; // -1 - rotating left, +1 - rotating right
 		case 38: break; // angular speed
 		case 40: return pMem->barometric_altitude;
-		case 42: return pMem->heading * 180 / M_PI;
-		case 44: return pMem->waypoint_data.waypoint_bearing;
-		case 46: return pMem->roll * 180 / -M_PI;
+		case 42: return heading(pMem->heading);
+		case 44: return heading(pMem->waypoint_data.waypoint_bearing);
+		case 46: return -pMem->roll * 180 / M_PI;
 		case 48: return pMem->pitch * 180 / M_PI;
 		case 50: return pMem->fuel_weight;
 		case 52: return pMem->g_force;
@@ -613,7 +619,8 @@ Value GetValue(int command)
 		case GUNSHIP_TYPE_HIND: return GetHindSpecificData(command);
 		case GUNSHIP_TYPE_AH64A: return GetAH64ASpecificData(command);
 		case GUNSHIP_TYPE_KA50: return GetKa50SpecificData(command);
-		default: return GetDefaultSpecificData(command);
+		case NUM_GUNSHIP_TYPES: return GetDefaultSpecificData(command);
+		default: break;
 		}
 	}
 

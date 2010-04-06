@@ -268,11 +268,11 @@ void update_comanche_lamp_avionics (void)
 
 	////////////////////////////////////////
 
-	comanche_lamps.left_engine_ignition = !get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE) && current_flight_dynamics->left_engine_n1_rpm.value > 0.01;
+	comanche_lamps.left_engine_ignition = !get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE) && current_flight_dynamics->left_engine_rpm.value > 0.01;
 
-	comanche_lamps.apu_ignition = 1;
+	comanche_lamps.apu_ignition = current_flight_dynamics->apu_rpm.value > 0.01;
 
-	comanche_lamps.right_engine_ignition = !get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE) && current_flight_dynamics->right_engine_n1_rpm.value > 0.01;
+	comanche_lamps.right_engine_ignition = !get_dynamics_damage_type (DYNAMICS_DAMAGE_RIGHT_ENGINE) && current_flight_dynamics->right_engine_rpm.value > 0.01; 
 
 	comanche_lamps.left_engine_fire = get_dynamics_damage_type (DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE);
 

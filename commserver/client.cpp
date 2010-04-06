@@ -8,10 +8,7 @@ int main(int argc, char* argv[])
 
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " <host> <port>" << endl;
-		cout << "The program will query the first 30 lamps (ID 501 to 530) of comanche,havoc" << endl << "or hokum" << endl;
-		cout << "If EECH is not running all values will be 0" << endl;
-		cout << "If you are not flying one of these three helicopters the program will " << endl <<"ASSume you fly the hokum" << endl;
+		cout << "Usage: " << argv[0] << " <host> <port> [<command>]" << endl;
 		return 1;
 	}
 
@@ -23,27 +20,21 @@ int main(int argc, char* argv[])
 
 	UDPComms comms(argv[1], Port, Port + 1);
 
-#if 0
-	for (int i = 0; i < 30; i++)
-	{
-		char buf[1024];
-
-		sprintf(buf, "R/%i", 501+i);
-
-		int ret = comms.Send(buf);
-		memset(buf, 0, sizeof(buf));
-		ret = comms.Receive(buf, sizeof(buf));
-
-		cout << "Received [" << buf << "]" << endl;
-	}
-#else
 	for (;;)
 	{
 		char buf[1024];
 
-		cin >> buf;
-		if (!*buf)
-			break;
+		if (argc > 3)
+		{
+			strcpy(buf, argv[3]);
+			Sleep(1000);
+		}
+		else
+		{
+			cin >> buf;
+			if (!*buf)
+				break;
+		}
 
 		int ret = comms.Send(buf);
 		memset(buf, 0, sizeof(buf));
@@ -51,7 +42,6 @@ int main(int argc, char* argv[])
 
 		cout << "Received [" << buf << "]" << endl;
 	}
-#endif
 
 	return 0;
 }

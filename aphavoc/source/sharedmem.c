@@ -38,6 +38,7 @@ void DeInitialise_Shared_Memory(void)
 {
 	if (gPtrSharedMemory)
 	{
+		gPtrSharedMemory->version = - SHARED_MEM_DATA_VERSION;
 		UnmapViewOfFile(gPtrSharedMemory);
 		gPtrSharedMemory = NULL;
 	}
