@@ -4314,10 +4314,10 @@ weapon_data
 		////////////////////////////////////////
 		{
 			"BGM-71D TOW-2", 														// full_name
-			"?",																	// hud_name
-			"?",																	// mfd_name
-			"?",																	// weapon_loading_list_name
-			"?",																	// weapon_loading_name_text
+			"TOW-2",																// hud_name
+			"TOW-2",																// mfd_name
+			"BGM-71D TOW-2",														// weapon_loading_list_name
+			"BGM-71D TOW-2",														// weapon_loading_name_text
 
 			OBJECT_3D_TOW_MISSILE,											// default_3d_shape
 			WEAPON_GUIDANCE_TYPE_WIRE_GUIDED,							// guidance_type
