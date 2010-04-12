@@ -106,6 +106,8 @@ asm_object_files  += $+ &
 
 !include $(projectdir)\source\entity\special\landing\landing.imf
 
+!include $(projectdir)\source\entity\special\laser\laser.imf
+
 !include $(projectdir)\source\entity\special\pilot\pilot.imf
 
 !include $(projectdir)\source\entity\special\regen\regen.imf
