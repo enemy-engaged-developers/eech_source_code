@@ -507,8 +507,8 @@ static int response_to_guide_cover_position_reached (entity_messages message, en
 	play_client_server_wingman_message
 	(
 		aggressor,
-		0.8,
-		1.5,
+		0.8f,
+		1.5f,
 		SPEECH_CATEGORY_IN_POSITION,
 		silence_timer,
 		SPEECH_INTRODUCTION_ALWAYS,

@@ -1026,11 +1026,11 @@ void transform_3d_explosion_object ( object_3d *object, vec3d *pos, displacement
 	scaled_rotation[2][1] = rotation_3d[2][1] * active_3d_environment->screen_j_scale;
 	scaled_rotation[2][2] = rotation_3d[2][2];
 
-	x_factor = xmax / 32767.0;
-	y_factor = ymax / 32767.0;
-	z_factor = zmax / 32767.0;
+	x_factor = xmax / 32767.0f;
+	y_factor = ymax / 32767.0f;
+	z_factor = zmax / 32767.0f;
 
-	amplitude *= 2.0 / 255.0;
+	amplitude *= 2.0f / 255.0f;
 
 	for ( count = 0; count < number_of_points; count++ )
 	{

@@ -305,7 +305,7 @@ void play_avi ( const char *filename, int exit_key )
 				quad[0].i = 50;
 				quad[0].j = 50;
 				quad[0].z = 10;
-				quad[0].q = 0.1;
+				quad[0].q = 0.1f;
 				quad[0].u = 0;
 				quad[0].v = 0;
 				quad[0].next_vertex = &quad[1];
@@ -313,7 +313,7 @@ void play_avi ( const char *filename, int exit_key )
 				quad[1].i = 306;
 				quad[1].j = 50;
 				quad[1].z = 10;
-				quad[1].q = 0.1;
+				quad[1].q = 0.1f;
 				quad[1].u = 1;
 				quad[1].v = 0;
 				quad[1].next_vertex = &quad[2];
@@ -321,7 +321,7 @@ void play_avi ( const char *filename, int exit_key )
 				quad[2].i = 306;
 				quad[2].j = 306;
 				quad[2].z = 10;
-				quad[2].q = 0.1;
+				quad[2].q = 0.1f;
 				quad[2].u = 1;
 				quad[2].v = 1;
 				quad[2].next_vertex = &quad[3];
@@ -329,7 +329,7 @@ void play_avi ( const char *filename, int exit_key )
 				quad[3].i = 50;
 				quad[3].j = 306;
 				quad[3].z = 10;
-				quad[3].q = 0.1;
+				quad[3].q = 0.1f;
 				quad[3].u = 0;
 				quad[3].v = 1;
 				quad[3].next_vertex = NULL;

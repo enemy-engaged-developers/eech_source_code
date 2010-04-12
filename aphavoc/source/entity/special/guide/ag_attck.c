@@ -724,7 +724,7 @@ void set_attack_guide_approach_position (entity *en)
 
 	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
 
-	weapon_max_range = weapon_database [selected_weapon].max_range * 0.9;
+	weapon_max_range = weapon_database [selected_weapon].max_range * 0.9f;
 
 	weapon_min_range = weapon_database [selected_weapon].min_range;
 
@@ -881,7 +881,7 @@ void set_attack_guide_seek_cover_position (entity *en)
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, FALSE, 0.0);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0));
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0f));
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_WEAPON_VECTOR, FALSE, 0.0);
 
@@ -898,7 +898,7 @@ void set_attack_guide_seek_cover_position (entity *en)
 	play_client_server_wingman_message
 	(
 		aggressor,
-		0.6,
+		0.6f,
 		4.0,
 		SPEECH_CATEGORY_ATTACKING_TARGETS,
 		8.0,
@@ -975,13 +975,13 @@ void attack_guide_no_cover_found (entity *en)
 	// Reduce distance (spiral around target)
 	//
 
-	distance *= 0.8;
+	distance *= 0.8f;
 
 	//
 	// calculate guide position
 	//
 
-	rotate_2d_vector (&direction, rad (25.0));
+	rotate_2d_vector (&direction, rad (25.0f));
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);
@@ -998,7 +998,7 @@ void attack_guide_no_cover_found (entity *en)
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, FALSE, 0.0);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0));
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0f));
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_WEAPON_VECTOR, FALSE, 0.0);
 }
@@ -1030,7 +1030,7 @@ void set_attack_guide_fly_to_cover_position (entity *en)
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, FALSE, 0.0);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0));
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0f));
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_WEAPON_VECTOR, FALSE, 0.0);
 
@@ -1041,7 +1041,7 @@ void set_attack_guide_fly_to_cover_position (entity *en)
 	play_client_server_wingman_message
 	(
 		aggressor,
-		0.3,
+		0.3f,
 		3.0,
 		SPEECH_CATEGORY_ATTACKING_TARGETS,
 		5.0,
@@ -1095,7 +1095,7 @@ void set_attack_guide_take_cover_position (entity *en)
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, TRUE, 1.0);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0));
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0f));
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_WEAPON_VECTOR, FALSE, 0.0);
 }
@@ -1601,25 +1601,25 @@ void set_attack_guide_egress_position (entity *en)
 		{
 			case 0:
 			{
-				angle = rad (-20.0);
+				angle = rad (-20.0f);
 
 				break;
 			}
 			case 1:
 			{
-				angle = rad (45.0);
+				angle = rad (45.0f);
 
 				break;
 			}
 			case 2:
 			{
-				angle = rad (20.0);
+				angle = rad (20.0f);
 
 				break;
 			}
 			case 3:
 			{
-				angle = rad (-45.0);
+				angle = rad (-45.0f);
 
 				break;
 			}
@@ -1750,7 +1750,7 @@ void set_attack_guide_hasty_take_cover_position (entity *en)
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_ALTITUDE, TRUE, 1.0);
 
-	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0));
+	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_HEADING, TRUE, rad (5.0f));
 
 	set_client_server_guide_criteria_valid (en, GUIDE_CRITERIA_WEAPON_VECTOR, FALSE, 0.0);
 }

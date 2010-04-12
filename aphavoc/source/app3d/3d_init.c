@@ -148,7 +148,7 @@ void initialise_application_3d_system (void)
 	// Initialise Default Terrain Data
 	//
 
-	set_3d_terrain_detail_blend_parameters ( 0.7 );
+	set_3d_terrain_detail_blend_parameters ( 0.7f );
 //set_3d_terrain_detail_blend_parameters ( 0 );
 
 	//set_terrain_3d_sector_scan_radius ( 10 );
@@ -259,7 +259,7 @@ void initialise_application_3d_system (void)
 
 	set_3d_origin ( main_3d_env, full_screen_x_min + (full_screen_width / 2.0), full_screen_y_min + (full_screen_height / 2.0) );
 
-	set_3d_viewcone ( main_3d_env, full_screen_width, full_screen_height, rad ( 59.99 ), rad ( 46.82 ) );
+	set_3d_viewcone ( main_3d_env, full_screen_width, full_screen_height, rad ( 59.99f ), rad ( 46.82f ) );
 
 #if RECOGNITION_GUIDE
 	set_3d_view_distances ( main_3d_env, 10000.0, 100.0, 1.0, 0.0 );
@@ -296,41 +296,41 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( ambient_colour[7], 224, 224, 224, 0 );
 #endif
     //VJ060920 night light level mod
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[0], 0.75, SUN_RISE_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[1], 0.75, SUN_RISE_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[2], 0.75, MIDDAY_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[3], 0.75, SUN_SET_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[4], 0.75, SUN_SET_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75*light_level, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75*light_level, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[0], 0.75f, SUN_RISE_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[1], 0.75f, SUN_RISE_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[2], 0.75f, MIDDAY_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[3], 0.75f, SUN_SET_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[4], 0.75f, SUN_SET_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75f, TWILIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75f*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_DRY, ambient_colour[5], 0.75f*light_level, NIGHT_TIME );
 
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[6], 0.675, SUN_RISE_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[1], 0.675, SUN_RISE_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[2], 0.675, MIDDAY_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[3], 0.675, SUN_SET_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[7], 0.675, SUN_SET_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675*light_level, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675*light_level, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[6], 0.675f, SUN_RISE_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[1], 0.675f, SUN_RISE_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[2], 0.675f, MIDDAY_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[3], 0.675f, SUN_SET_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[7], 0.675f, SUN_SET_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675f, TWILIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675f*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, ambient_colour[5], 0.675f*light_level, NIGHT_TIME );
 
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[6], 0.525, SUN_RISE_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[1], 0.525, SUN_RISE_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[2], 0.525, MIDDAY_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[3], 0.525, SUN_SET_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[7], 0.525, SUN_SET_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525*light_level, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525*light_level, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[6], 0.525f, SUN_RISE_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[1], 0.525f, SUN_RISE_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[2], 0.525f, MIDDAY_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[3], 0.525f, SUN_SET_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[7], 0.525f, SUN_SET_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525f, TWILIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525f*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, ambient_colour[5], 0.525f*light_level, NIGHT_TIME );
 
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[6], 0.6, SUN_RISE_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[1], 0.6, SUN_RISE_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[2], 0.6, MIDDAY_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[3], 0.6, SUN_SET_START_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[7], 0.6, SUN_SET_END_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6, TWILIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6*light_level, MIDNIGHT_TIME );
-		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6*light_level, NIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[6], 0.6f, SUN_RISE_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[1], 0.6f, SUN_RISE_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[2], 0.6f, MIDDAY_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[3], 0.6f, SUN_SET_START_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[7], 0.6f, SUN_SET_END_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6f, TWILIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6f*light_level, MIDNIGHT_TIME );
+		add_3d_ambient_light_setting ( main_3d_env, WEATHERMODE_SNOW, ambient_colour[5], 0.6f*light_level, NIGHT_TIME );
 	}
 
 	//
@@ -358,41 +358,41 @@ void initialise_application_3d_system (void)
 		set_rgb_colour ( sun_light_colour[7], 56, 56, 56, 0 );		// 6am rain colour( 22% )
 		set_rgb_colour ( sun_light_colour[8], 51, 51, 51, 0 ); 		// 6pm rain colour ( 20% )
 
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[0], 1.0, sun_light_colour[0], 1.5, rad ( 70 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[1], 1.0, sun_light_colour[1], 1.5, rad ( 70 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[2], 1.0, sun_light_colour[2], 1.5, rad ( 70 ), rad ( 90 ), TRUE, MIDDAY_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[2], 1.0, sun_light_colour[3], 1.5, rad ( 70 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 2.0, 1.0, sun_colour[3], 1.0, sun_light_colour[4], 1.5, rad ( 70 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[5], 1.5, rad ( 70 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[6], 1.5, rad ( 70 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[6], 1.5, rad ( 70 ), rad ( 315 ), TRUE, NIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[0], 1.0, sun_light_colour[0], 1.5f, rad ( 70 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[1], 1.0, sun_light_colour[1], 1.5f, rad ( 70 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[2], 1.0, sun_light_colour[2], 1.5f, rad ( 70 ), rad ( 90 ), TRUE, MIDDAY_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 1.0, sun_colour[2], 1.0, sun_light_colour[3], 1.5f, rad ( 70 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 2.0, 1.0, sun_colour[3], 1.0, sun_light_colour[4], 1.5f, rad ( 70 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[5], 1.5f, rad ( 70 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[6], 1.5f, rad ( 70 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_DRY, 0.0, 0.0, sun_colour[3], 1.0, sun_light_colour[6], 1.5f, rad ( 70 ), rad ( 315 ), TRUE, NIGHT_TIME );
 
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6, sun_colour[0], 0.70, sun_light_colour[7], 1.35, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6, sun_colour[1], 0.70, sun_light_colour[1], 1.35, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6, sun_colour[2], 0.70, sun_light_colour[2], 1.35, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6, sun_colour[2], 0.70, sun_light_colour[3], 1.35, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 2.0, 0.6, sun_colour[2], 0.70, sun_light_colour[8], 1.35, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70, sun_light_colour[5], 1.35, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70, sun_light_colour[6], 1.35, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70, sun_light_colour[6], 1.35, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6f, sun_colour[0], 0.70f, sun_light_colour[7], 1.35f, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6f, sun_colour[1], 0.70f, sun_light_colour[1], 1.35f, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6f, sun_colour[2], 0.70f, sun_light_colour[2], 1.35f, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.6f, sun_colour[2], 0.70f, sun_light_colour[3], 1.35f, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 2.0, 0.6f, sun_colour[2], 0.70f, sun_light_colour[8], 1.35f, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70f, sun_light_colour[5], 1.35f, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70f, sun_light_colour[6], 1.35f, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 0.0, 0.0, sun_colour[2], 0.70f, sun_light_colour[6], 1.35f, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
 
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2, sun_colour[0], 0.05, sun_light_colour[7], 1.05, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2, sun_colour[1], 0.20, sun_light_colour[1], 1.05, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2, sun_colour[2], 0.20, sun_light_colour[2], 1.05, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2, sun_colour[2], 0.20, sun_light_colour[3], 1.05, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 2.0, 0.2, sun_colour[2], 0.05, sun_light_colour[8], 1.05, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20, sun_light_colour[5], 1.05, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20, sun_light_colour[6], 1.05, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20, sun_light_colour[6], 1.05, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2f, sun_colour[0], 0.05f, sun_light_colour[7], 1.05f, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2f, sun_colour[1], 0.20f, sun_light_colour[1], 1.05f, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2f, sun_colour[2], 0.20f, sun_light_colour[2], 1.05f, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.2f, sun_colour[2], 0.20f, sun_light_colour[3], 1.05f, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 2.0, 0.2f, sun_colour[2], 0.05f, sun_light_colour[8], 1.05f, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20f, sun_light_colour[5], 1.05f, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20f, sun_light_colour[6], 1.05f, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 0.0, 0.0, sun_colour[2], 0.20f, sun_light_colour[6], 1.05f, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
 
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3, sun_colour[0], 0.10, sun_light_colour[7], 1.20, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3, sun_colour[1], 0.10, sun_light_colour[1], 1.20, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3, sun_colour[2], 0.10, sun_light_colour[2], 1.20, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3, sun_colour[2], 0.10, sun_light_colour[3], 1.20, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 2.0, 0.3, sun_colour[2], 0.10, sun_light_colour[8], 1.20, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10, sun_light_colour[5], 1.20, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10, sun_light_colour[6], 1.20, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
-		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10, sun_light_colour[6], 1.20, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3f, sun_colour[0], 0.10f, sun_light_colour[7], 1.20f, rad ( 90 ), rad ( 0 ), TRUE, SUN_RISE_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3f, sun_colour[1], 0.10f, sun_light_colour[1], 1.20f, rad ( 90 ), rad ( 45 ), TRUE, SUN_RISE_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3f, sun_colour[2], 0.10f, sun_light_colour[2], 1.20f, rad ( 90 ), rad ( 90 ), TRUE, MIDDAY_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.3f, sun_colour[2], 0.10f, sun_light_colour[3], 1.20f, rad ( 90 ), rad ( 135 ), TRUE, SUN_SET_START_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 2.0, 0.3f, sun_colour[2], 0.10f, sun_light_colour[8], 1.20f, rad ( 90 ), rad ( 180 ), TRUE, SUN_SET_END_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10f, sun_light_colour[5], 1.20f, rad ( 90 ), rad ( 225 ), TRUE, TWILIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10f, sun_light_colour[6], 1.20f, rad ( 90 ), rad ( 270 ), FALSE, MIDNIGHT_TIME );
+		add_3d_sun_setting ( main_3d_env, WEATHERMODE_SNOW, 0.0, 0.0, sun_colour[2], 0.10f, sun_light_colour[6], 1.20f, rad ( 90 ), rad ( 315 ), TRUE, NIGHT_TIME );
 	}
 
 
@@ -425,32 +425,32 @@ void initialise_application_3d_system (void)
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
 		add_3d_moon_setting ( main_3d_env, WEATHERMODE_DRY, 1.0, 0.0, moon_colour[2], 1.0, moon_light_colour[2], light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70, moon_light_colour[0], 0.90, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[1], 0.70, moon_light_colour[1], 0.90*light_level, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70, moon_light_colour[2], 0.90*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70f, moon_light_colour[0], 0.90f, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70f, moon_light_colour[0], 0.90f, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70f, moon_light_colour[0], 0.90f, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70f, moon_light_colour[0], 0.90f, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[0], 0.70f, moon_light_colour[0], 0.90f, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[1], 0.70f, moon_light_colour[1], 0.90f*light_level, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70f, moon_light_colour[2], 0.90f*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_LIGHT_RAIN, 1.0, 0.0, moon_colour[2], 0.70f, moon_light_colour[2], 0.90f*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[1], 0.00, moon_light_colour[1], 0.70, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70f, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70f, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70f, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70f, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[0], 0.00, moon_light_colour[0], 0.70f, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[1], 0.00, moon_light_colour[1], 0.70f, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70f*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_HEAVY_RAIN, 1.0, 0.0, moon_colour[2], 0.00, moon_light_colour[2], 0.70f*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[1], 0.50, moon_light_colour[1], 0.80, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
-		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80f, rad ( 90 ), rad ( 180 ), FALSE, SUN_RISE_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80f, rad ( 90 ), rad ( 225 ), FALSE, SUN_RISE_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80f, rad ( 90 ), rad ( 270 ), FALSE, MIDDAY_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80f, rad ( 90 ), rad ( 315 ), FALSE, SUN_SET_START_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[0], 0.50, moon_light_colour[0], 0.80f, rad ( 90 ), rad ( 0 ), TRUE, SUN_SET_END_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[1], 0.50, moon_light_colour[1], 0.80f, rad ( 90 ), rad ( 45 ), TRUE, TWILIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80f*light_level, rad ( 90 ), rad ( 90 ), TRUE, MIDNIGHT_TIME );
+		add_3d_moon_setting ( main_3d_env, WEATHERMODE_SNOW, 1.0, 0.0, moon_colour[2], 0.50, moon_light_colour[2], 0.80f*light_level, rad ( 90 ), rad ( 135 ), TRUE, NIGHT_TIME );
 	}
 
 
@@ -688,7 +688,7 @@ void initialise_application_3d_system (void)
 
 	set_3d_origin ( main_3d_single_light_env, full_screen_x_min + (full_screen_width / 2.0), full_screen_y_min + (full_screen_height / 2.0) );
 
-	set_3d_viewcone ( main_3d_single_light_env, full_screen_width, full_screen_height, rad ( 59.99 ), rad ( 46.82 ) );
+	set_3d_viewcone ( main_3d_single_light_env, full_screen_width, full_screen_height, rad ( 59.99f ), rad ( 46.82f ) );
 
 	set_3d_view_distances ( main_3d_single_light_env, 10000.0, 1.0, 1.0, 0.0 );
 
@@ -837,8 +837,8 @@ void set_3d_detail_levels ( void )
 	switch ( level )
 	{
 
-		case 1: factor = 0.5; break;
-		case 2: factor = 0.7; break;
+		case 1: factor = 0.5f; break;
+		case 2: factor = 0.7f; break;
 		case 3: factor = 1.0; break;
 	}
 
@@ -853,8 +853,8 @@ void set_3d_detail_levels ( void )
 	switch ( level )
 	{
 
-		case 1: factor = 0.7; break;
-		case 2: factor = 0.85; break;
+		case 1: factor = 0.7f; break;
+		case 2: factor = 0.85f; break;
 		case 3: factor = 1.0; break;
 	}
 
@@ -1038,12 +1038,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.468;
-					ambient_light.blue = 0.4;
+					ambient_light.green = 0.468f;
+					ambient_light.blue = 0.4f;
 
 					main_light.red = 0.0;
-					main_light.green = 0.15;
-					main_light.blue = 0.12;
+					main_light.green = 0.15f;
+					main_light.blue = 0.12f;
 
 					break;
 				}
@@ -1052,12 +1052,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.574;
-					ambient_light.blue = 0.5;
+					ambient_light.green = 0.574f;
+					ambient_light.blue = 0.5f;
 
 					main_light.red = 0.0;
-					main_light.green = 0.2;
-					main_light.blue = 0.16;
+					main_light.green = 0.2f;
+					main_light.blue = 0.16f;
 
 					break;
 				}
@@ -1065,12 +1065,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.7;
-					ambient_light.blue = 0.6;
+					ambient_light.green = 0.7f;
+					ambient_light.blue = 0.6f;
 
 					main_light.red = 0.0;
-					main_light.green = 0.25;
-					main_light.blue = 0.2;
+					main_light.green = 0.25f;
+					main_light.blue = 0.2f;
 
 					break;
 				}
@@ -1122,13 +1122,13 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.25;
-					ambient_light.green = 0.25;
-					ambient_light.blue = 0.7;
+					ambient_light.red = 0.25f;
+					ambient_light.green = 0.25f;
+					ambient_light.blue = 0.7f;
 
 					main_light.red = 0.0;
 					main_light.green = 0.0;
-					main_light.blue = 0.2;
+					main_light.blue = 0.2f;
 
 					break;
 				}
@@ -1136,26 +1136,26 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.4;
-					ambient_light.green = 0.4;
-					ambient_light.blue = 0.8;
+					ambient_light.red = 0.4f;
+					ambient_light.green = 0.4f;
+					ambient_light.blue = 0.8f;
 
 					main_light.red = 0.0;
 					main_light.green = 0.0;
-					main_light.blue = 0.25;
+					main_light.blue = 0.25f;
 
 					break;
 				}
 
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
-					ambient_light.red = 0.6;
-					ambient_light.green = 0.6;
+					ambient_light.red = 0.6f;
+					ambient_light.green = 0.6f;
 					ambient_light.blue = 1.0;
 
-					main_light.red = 0.3;
-					main_light.green = 0.3;
-					main_light.blue = 0.4;
+					main_light.red = 0.3f;
+					main_light.green = 0.3f;
+					main_light.blue = 0.4f;
 
 					break;
 				}
@@ -1210,12 +1210,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.7;
-					ambient_light.green = 0.35;
+					ambient_light.red = 0.7f;
+					ambient_light.green = 0.35f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.24;
-					main_light.green = 0.12;
+					main_light.red = 0.24f;
+					main_light.green = 0.12f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1224,12 +1224,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.9;
-					ambient_light.green = 0.45;
+					ambient_light.red = 0.9f;
+					ambient_light.green = 0.45f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.32;
-					main_light.green = 0.16;
+					main_light.red = 0.32f;
+					main_light.green = 0.16f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1237,12 +1237,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
-					ambient_light.red = 1.1;
-					ambient_light.green = 0.55;
+					ambient_light.red = 1.1f;
+					ambient_light.green = 0.55f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.4;
-					main_light.green = 0.2;
+					main_light.red = 0.4f;
+					main_light.green = 0.2f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1254,13 +1254,13 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_VERY_HIGH:
 				{
 
-					ambient_light.red = 1.2;
+					ambient_light.red = 1.2f;
 					ambient_light.green = 1.0;
-					ambient_light.blue = 0.2;
+					ambient_light.blue = 0.2f;
 
-					main_light.red = 0.5;
-					main_light.green = 0.4;
-					main_light.blue = 0.2;
+					main_light.red = 0.5f;
+					main_light.green = 0.4f;
+					main_light.blue = 0.2f;
 					break;
 				}
 */
@@ -1316,11 +1316,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.48;
+					ambient_light.green = 0.48f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
-					main_light.green = 0.12;
+					main_light.green = 0.12f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1330,11 +1330,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.64;
+					ambient_light.green = 0.64f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
-					main_light.green = 0.16;
+					main_light.green = 0.16f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1344,11 +1344,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.8;
+					ambient_light.green = 0.8f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
-					main_light.green = 0.2;
+					main_light.green = 0.2f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1400,12 +1400,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.6;
-					ambient_light.green = 0.468 * 0.5;
+					ambient_light.red = 0.6f;
+					ambient_light.green = 0.468f * 0.5f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.15;
-					main_light.green = 0.12 * 0.5;
+					main_light.red = 0.15f;
+					main_light.green = 0.12f * 0.5f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1414,12 +1414,12 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.8;
-					ambient_light.green = 0.624 * 0.5;
+					ambient_light.red = 0.8f;
+					ambient_light.green = 0.624f * 0.5f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.2;
-					main_light.green = 0.16 * 0.5;
+					main_light.red = 0.2f;
+					main_light.green = 0.16f * 0.5f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1429,11 +1429,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 1.0;
-					ambient_light.green = 0.78 * 0.5;
+					ambient_light.green = 0.78f * 0.5f;
 					ambient_light.blue = 0.0;
 
-					main_light.red = 0.25;
-					main_light.green = 0.2 * 0.5;
+					main_light.red = 0.25f;
+					main_light.green = 0.2f * 0.5f;
 					main_light.blue = 0.0;
 
 					break;
@@ -1485,13 +1485,13 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_LOW:
 				{
 
-					ambient_light.red = 0.48;
-					ambient_light.green = 0.48;
-					ambient_light.blue = 0.48;
+					ambient_light.red = 0.48f;
+					ambient_light.green = 0.48f;
+					ambient_light.blue = 0.48f;
 
-					main_light.red = 0.12;
-					main_light.green = 0.12;
-					main_light.blue = 0.12;
+					main_light.red = 0.12f;
+					main_light.green = 0.12f;
+					main_light.blue = 0.12f;
 
 					break;
 				}
@@ -1499,13 +1499,13 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_MEDIUM:
 				{
 
-					ambient_light.red = 0.64;
-					ambient_light.green = 0.64;
-					ambient_light.blue = 0.64;
+					ambient_light.red = 0.64f;
+					ambient_light.green = 0.64f;
+					ambient_light.blue = 0.64f;
 
-					main_light.red = 0.16;
-					main_light.green = 0.16;
-					main_light.blue = 0.16;
+					main_light.red = 0.16f;
+					main_light.green = 0.16f;
+					main_light.blue = 0.16f;
 
 					break;
 				}
@@ -1513,13 +1513,13 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				case DISPLAY_3D_LIGHT_LEVEL_HIGH:
 				{
 
-					ambient_light.red = 0.8;
-					ambient_light.green = 0.8;
-					ambient_light.blue = 0.8;
+					ambient_light.red = 0.8f;
+					ambient_light.green = 0.8f;
+					ambient_light.blue = 0.8f;
 
-					main_light.red = 0.2;
-					main_light.green = 0.2;
-					main_light.blue = 0.2;
+					main_light.red = 0.2f;
+					main_light.green = 0.2f;
+					main_light.blue = 0.2f;
 
 					break;
 				}
@@ -1531,7 +1531,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.48;
+					ambient_light.green = 0.48f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
@@ -1545,7 +1545,7 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.64;
+					ambient_light.green = 0.64f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
@@ -1559,11 +1559,11 @@ void set_application_display_3d_mode (display_3d_tints tint, display_3d_light_le
 				{
 
 					ambient_light.red = 0.0;
-					ambient_light.green = 0.8;
+					ambient_light.green = 0.8f;
 					ambient_light.blue = 0.0;
 
 					main_light.red = 0.0;
-					main_light.green = 0.2;
+					main_light.green = 0.2f;
 					main_light.blue = 0.0;
 
 					break;

@@ -1684,7 +1684,7 @@ static int get_pilot_rest_anim_mode_body_animation (void)
 
 static float get_reset_pilot_rest_anim_delay (void)
 {
-	if (frand1 () < 0.2)
+	if (frand1 () < 0.2f)
 	{
 		return (0.0);
 	}
@@ -1758,7 +1758,7 @@ static pilot_rest_anim_modes get_random_pilot_rest_anim_mode (void)
 		// note: set previous_random_pilot_rest_anim_mode to PILOT_REST_ANIM_MODE_NONE to pass repetition check
 		//
 
-		#define DEAD_ZONE				((float) (0.1))
+		#define DEAD_ZONE				((float) (0.1f))
 		#define LEFT_THRESHOLD		((float) (0.5 - DEAD_ZONE))
 		#define RIGHT_THRESHOLD		((float) (0.5 + DEAD_ZONE))
 		#define UP_THRESHOLD			((float) (0.5 - DEAD_ZONE))
@@ -2996,7 +2996,7 @@ static void update_pilot_animation (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_ROLL	((float) (rad (10.0)))
+#define MAX_ROLL	((float) (rad (10.0f)))
 
 static void update_pilot_head_tilt_animation (void)
 {

@@ -81,9 +81,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 float
-	system_delta_time_average = 0.1,
-	system_delta_time = 0.1,
-	system_one_over_delta_time = 10.0;
+	system_delta_time_average = 0.1f,
+	system_delta_time = 0.1f,
+	system_one_over_delta_time = 10.0f;
 
 int
 	locked_frame_rate = FALSE;
@@ -107,8 +107,8 @@ static long
 #endif
 
 static float
-	locked_delta_time = 1.0 / 25.0,
-	locked_one_over_delta_time = 25.0;
+	locked_delta_time = 1.0f / 25.0f,
+	locked_one_over_delta_time = 25.0f;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,16 +123,16 @@ void reset_delta_time ( void )
 	for ( loop = 0; loop < DELTA_TIME_HISTORY_SIZE; loop ++ )
 	{
 
-		system_delta_time_history[loop] = 0.1;
+		system_delta_time_history[loop] = 0.1f;
 	}
 
 	system_delta_time_history_position = 0;
 
 	last_time_value = timeGetTime ();
 
-	system_delta_time = 0.1;
+	system_delta_time = 0.1f;
 
-	system_one_over_delta_time = 10.0;
+	system_one_over_delta_time = 10.0f;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,14 +164,14 @@ void set_delta_time ( void )
 		if ( system_delta_time == 0.0 )
 		{
 
-			system_delta_time = 0.001;	//1.0;
+			system_delta_time = 0.001f;	//1.0;
 
-			system_one_over_delta_time = 1000.0;	//1.0 / system_delta_time;
+			system_one_over_delta_time = 1000.0f;	//1.0 / system_delta_time;
 		}
 		else
 		{
 	
-			system_one_over_delta_time = 1.0 / system_delta_time;
+			system_one_over_delta_time = 1.0f / system_delta_time;
 		}
 
 		last_time_value = this_time_value;

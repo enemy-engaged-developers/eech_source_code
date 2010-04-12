@@ -206,10 +206,10 @@ void initialise_gunships_screen (void)
 	//////////////////////////////////////////////
 	// gunship buttons
 
-	x1 = 0.200;
-	y1 = 0.734;
-	x2 = 0.298;
-	y2 = 0.059;
+	x1 = 0.200f;
+	y1 = 0.734f;
+	x2 = 0.298f;
+	y2 = 0.059f;
 
    gunship_screen_button_title_area = create_ui_object
 									(
@@ -251,10 +251,10 @@ void initialise_gunships_screen (void)
 		UI_ATTR_END
 	);
 
-	x1 = 0.503;
-	y1 = 0.734;
-	x2 = 0.298;
-	y2 = 0.059;
+	x1 = 0.503f;
+	y1 = 0.734f;
+	x2 = 0.298f;
+	y2 = 0.059f;
 
    gunship_screen_button_area = create_ui_object
 								(
@@ -307,15 +307,15 @@ void initialise_gunships_screen (void)
 	//////////////////////////////////////////////
 	// side selected text
 
-	x1 = 0.440;
+	x1 = 0.440f;
 	y1 = OPTIONS_OK_BUTTON_POS_Y;
-	x2 = 0.25;
-	y2 = 0.059;
+	x2 = 0.25f;
+	y2 = 0.059f;
 
 	x1 = 0.0;
 	y1 = OPTIONS_OK_BUTTON_POS_Y;
 	x2 = 1.0;
-	y2 = 0.059;
+	y2 = 0.059f;
 
    side_selected_area = create_ui_object
 								(
@@ -335,10 +335,10 @@ void initialise_gunships_screen (void)
 	//////////////////////////////////////////////
 	// Gunship Render Area
 
-	x1 = 0.087;
-	y1 = 0.229;
-	x2 = 0.828;
-	y2 = 0.454;
+	x1 = 0.087f;
+	y1 = 0.229f;
+	x2 = 0.828f;
+	y2 = 0.454f;
 
 	gunships_area = create_ui_object
 							(
@@ -434,10 +434,10 @@ void initialise_gunships_screen (void)
 
 	set_text_option_backdrop_object (option_bdrop, gunship_screen_back_button);
 
-	x1 = 0.370;
-	y1 = 0.758;
-	x2 = 0.258;
-	y2 = 0.102;
+	x1 = 0.370f;
+	y1 = 0.758f;
+	x2 = 0.258f;
+	y2 = 0.102f;
 
 	gunship_screen_waiting_area = create_ui_object
 											(
@@ -449,10 +449,10 @@ void initialise_gunships_screen (void)
 												UI_ATTR_END
 											);
 
-	x1 = 0.328;
+	x1 = 0.328f;
 	y1 = OPTIONS_CANCEL_BUTTON_POS_Y;
-	x2 = 0.4;
-	y2 = 0.05;
+	x2 = 0.4f;
+	y2 = 0.05f;
 
 	gunship_screen_waiting_area_text = create_ui_object
 											(
@@ -858,7 +858,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 		*apache;
 
 	static float
-		heading = rad (180.0),
+		heading = rad (180.0f),
 		my_heading = 0,
 		pitch = rad (-14);
 
@@ -902,11 +902,11 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 
 //		set_3d_viewcone ( main_3d_env, obj_size_x, obj_size_y, rad ( 59.99 ), rad ( 46.82 ) );
 
-		set_3d_viewport ( main_3d_env, 0, 0, ( float ) application_video_width - 0.001, ( float ) application_video_height - 0.001 );
+		set_3d_viewport ( main_3d_env, 0, 0, ( float ) application_video_width - 0.001f, ( float ) application_video_height - 0.001f );
 
 		set_3d_origin ( main_3d_env, application_video_width /2, application_video_height/2 );
 
-		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99 ), rad (59.99) / full_screen_aspect_ratio );
+		set_3d_viewcone ( main_3d_env, application_video_width, application_video_height, rad ( 59.99f ), rad (59.99f) / full_screen_aspect_ratio );
 #if RECOGNITION_GUIDE
 		set_3d_view_distances ( main_3d_env, 10000.0, 100.0, 1.0, 0.0 );
 #else
@@ -991,7 +991,7 @@ void gunship_screen_render_gunship ( ui_object *obj, void *arg )
 	}
 	else
 	{
-		apache->vp.y = 2.2;
+		apache->vp.y = 2.2f;
 	}
 
 	apache->vp.z = 18;//12

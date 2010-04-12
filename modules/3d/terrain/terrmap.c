@@ -72,7 +72,7 @@
 
 #define MAX_3D_CLIP_COORDINATES 16
 
-#define CONTOUR_SHADING_FACTOR 0.05
+#define CONTOUR_SHADING_FACTOR 0.05f
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ rgb_colour
 	{
 		{ 240,190,130 },  // water colour
 
-		// Made with hue: 0.32 - 0.02, value: 0.40 - 0.60, saturation: 0.70 - 0.65
+		// Made with hue: 0.32 - 0.02f, value: 0.40 - 0.60, saturation: 0.70 - 0.65
 		{ 30, 102,  36},
 		{ 31, 103,  41},
 		{ 32, 105,  47},
@@ -171,7 +171,7 @@ rgb_colour
 
 	contour_paper_colours[1024] =
 	{
-		// made with hue: 0.32 - 0.04, value 0.6 - 0.7, saturation 0.3 - 0.2
+		// made with hue: 0.32 - 0.04f, value 0.6 - 0.7f, saturation 0.3 - 0.2
 		{ 240,190,130 },  // water colour
 		{108, 153, 114},
 		{109, 154, 118},
@@ -221,7 +221,7 @@ float
 	contour_heights[] =
 	{
 		-1000,
-		-0.0001,
+		-0.0001f,
 		10,
 		25,
 		50,
@@ -673,7 +673,7 @@ void draw_2d_terrain_map ( void )
 				result_3d_points->y = posz;
 
 				result_2d_points->z = 100;
-				result_2d_points->q = 0.01;
+				result_2d_points->q = 0.01f;
 
 				result_2d_points->i = ( ( posx * terrain_2d_map_screen_xscale ) + terrain_2d_map_screen_xcentre );
 				result_2d_points->j = ( ( posz * terrain_2d_map_screen_yscale ) + terrain_2d_map_screen_ycentre );
@@ -2378,9 +2378,9 @@ void draw_2d_shaded_terrain_contour_map ( void )
 
 	for ( count = 0; count < 9; count++ )
 	{
-		vertices[count].x = 0.0;
+		vertices[count].x = 0.0f;
 		vertices[count].z = 10;
-		vertices[count].q = 0.1;
+		vertices[count].q = 0.1f;
 	}
 
 	//
@@ -2747,11 +2747,11 @@ void render_contour_triangle_database ( int number_of_triangle_sets, contour_lak
 		{
 
 			vertices[0].z = 10;
-			vertices[0].q = 0.1;
+			vertices[0].q = 0.1f;
 			vertices[1].z = 10;
-			vertices[1].q = 0.1;
+			vertices[1].q = 0.1f;
 			vertices[2].z = 10;
-			vertices[2].q = 0.1;
+			vertices[2].q = 0.1f;
 		
 			for ( triangle = 0; triangle < lakes[count].number_of_triangles; triangle++ )
 			{
@@ -3746,9 +3746,9 @@ void draw_contour_line ( vertex *vertices, real_colour colour )
 	vertices[0].next_vertex = &vertices[1];
 	vertices[1].next_vertex = NULL;
 	vertices[0].z = 10;
-	vertices[0].q = 0.1;
+	vertices[0].q = 0.1f;
 	vertices[1].z = 10;
-	vertices[1].q = 0.1;
+	vertices[1].q = 0.1f;
 
 	outcode = vertices[0].outcode;
 	outcode2 = vertices[0].outcode;
@@ -3836,10 +3836,10 @@ void draw_thick_contour_line ( vertex *vertices, real_colour colour )
 	new_vertices[3].next_vertex = &new_vertices[2];
 	new_vertices[2].next_vertex = NULL;
 
-	new_vertices[0].z = 10; new_vertices[0].q = 0.1;
-	new_vertices[1].z = 10; new_vertices[1].q = 0.1;
-	new_vertices[2].z = 10; new_vertices[2].q = 0.1;
-	new_vertices[3].z = 10; new_vertices[3].q = 0.1;
+	new_vertices[0].z = 10; new_vertices[0].q = 0.1f;
+	new_vertices[1].z = 10; new_vertices[1].q = 0.1f;
+	new_vertices[2].z = 10; new_vertices[2].q = 0.1f;
+	new_vertices[3].z = 10; new_vertices[3].q = 0.1f;
 
 	outcode = new_vertices[0].outcode; outcode2 = new_vertices[0].outcode;
 	outcode |= new_vertices[1].outcode; outcode2 &= new_vertices[1].outcode;

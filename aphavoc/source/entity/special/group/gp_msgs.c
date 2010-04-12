@@ -580,7 +580,7 @@ static int response_to_ground_force_advance (entity_messages message, entity *re
 					ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 					SOUND_LOCALITY_RADIO,
 					0.0,
-					0.3,
+					0.3f,
 					20.0,
 					SPEECH_ORIGINATOR_GROUND_CONTROLLER,
 					SPEECH_CATEGORY_MOVING,
@@ -889,7 +889,7 @@ static int response_to_ground_force_retreat (entity_messages message, entity *re
 										ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 										SOUND_LOCALITY_RADIO,
 										0.0,
-										0.3,
+										0.3f,
 										20.0,
 										SPEECH_ORIGINATOR_GROUND_CONTROLLER,
 										SPEECH_CATEGORY_MOVING,
@@ -1113,7 +1113,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 							play_client_server_wingman_message
 							(
 								member,
-								0.7,
+								0.7f,
 								20.0,
 								SPEECH_CATEGORY_MISSION_RELATED, -1.0,
 								SPEECH_INTRODUCTION_ALWAYS,
@@ -1131,7 +1131,7 @@ static int response_to_task_completed (entity_messages message, entity *receiver
 								speech_index = SPEECH_CPG_MISSION_COMPLETED2;
 							}
 		
-							play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, speech_index);
+							play_client_server_cpg_message (receiver, 0.8f, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, speech_index);
 						}
 					}
 				}

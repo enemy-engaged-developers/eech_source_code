@@ -429,7 +429,7 @@ void add_turbulence(camera* cam, vec3d* position)
 {
 	float
 		velocity_factor,
-		zoom_factor = 0.1,
+		zoom_factor = 0.1f,
 		acceleration;
 
 	if (!command_line_wobbly_camera)

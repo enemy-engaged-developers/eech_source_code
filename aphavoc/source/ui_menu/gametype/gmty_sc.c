@@ -146,11 +146,11 @@ void initialise_game_type_screen (void)
 	// gametype buttons
 	//////////////////////////////////////////////
 
-	x = 0.464;
-	y = 0.304;
+	x = 0.464f;
+	y = 0.304f;
 
-	x_size = 0.227;
-	y_size = 0.036;
+	x_size = 0.227f;
+	y_size = 0.036f;
 
 	i = 0;
 
@@ -220,11 +220,11 @@ void initialise_game_type_screen (void)
 									);
 
 	
-	x = 0.606;
-	y = 0.398;
+	x = 0.606f;
+	y = 0.398f;
 
-	x_size = 0.202;
-	y_size = 0.036;
+	x_size = 0.202f;
+	y_size = 0.036f;
 
 	i++;
 
@@ -292,11 +292,11 @@ void initialise_game_type_screen (void)
 									);
 	
 	
-	x = 0.441;
-	y = 0.635;
+	x = 0.441f;
+	y = 0.635f;
 
-	x_size = 0.245;
-	y_size = 0.036;
+	x_size = 0.245f;
+	y_size = 0.036f;
 
 	i++;
 
@@ -345,11 +345,11 @@ void initialise_game_type_screen (void)
 	set_text_option_backdrop_object (option_bdrop, change_obj);
 
 	
-	x = 0.588;
-	y = 0.738;
+	x = 0.588f;
+	y = 0.738f;
 
-	x_size = 0.133;
-	y_size = 0.036;
+	x_size = 0.133f;
+	y_size = 0.036f;
 
 	i++;
 

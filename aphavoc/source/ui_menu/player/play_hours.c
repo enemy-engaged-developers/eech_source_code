@@ -301,7 +301,7 @@ void define_flight_hours_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Gunship Type List Object
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.0;
 	x2 = 0.600;
 	y2 = 1.0;
@@ -319,7 +319,7 @@ void define_flight_hours_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (gunship_type_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (gunship_type_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Missions List Object
@@ -342,7 +342,7 @@ void define_flight_hours_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (gunship_missions_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (gunship_missions_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Flight Hours List Object
@@ -365,7 +365,7 @@ void define_flight_hours_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (gunship_hours_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (gunship_hours_list, -0.2f);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

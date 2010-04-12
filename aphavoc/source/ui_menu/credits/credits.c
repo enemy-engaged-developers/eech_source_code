@@ -186,10 +186,10 @@ void initialise_credits_screen (void)
                UI_ATTR_END
             );
 
-	x1 = 0.068;
-	y1 = 0.298;
-	x2 = 0.180;
-	y2 = 0.040;
+	x1 = 0.068f;
+	y1 = 0.298f;
+	x2 = 0.180f;
+	y2 = 0.040f;
 
 
 	sprintf (string, "%s>>>", get_trans ("Credits Code"));
@@ -211,10 +211,10 @@ void initialise_credits_screen (void)
 
 	preprocess_translation_object_size (temp, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
-	x1 = 0.643;
-	y1 = 0.561;
-	x2 = 0.233;
-	y2 = 0.040;
+	x1 = 0.643f;
+	y1 = 0.561f;
+	x2 = 0.233f;
+	y2 = 0.040f;
 
 	sprintf (string, "<<<%s", get_trans ("Credits Graphics"));
 
@@ -235,10 +235,10 @@ void initialise_credits_screen (void)
 
 	preprocess_translation_object_size (temp, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
-	x1 = 0.268;
-	y1 = 0.779;
-	x2 = 0.176;
-	y2 = 0.040;
+	x1 = 0.268f;
+	y1 = 0.779f;
+	x2 = 0.176f;
+	y2 = 0.040f;
 
 	sprintf (string, "%s>>>", get_trans ("Credits Music"));
 

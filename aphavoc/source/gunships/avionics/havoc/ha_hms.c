@@ -75,12 +75,12 @@ void initialise_havoc_hms (void)
 	if (get_global_simple_avionics ())
 	{
 		hms_max_visual_range		= 5000.0;
-		hms_max_field_of_view	= rad (45.0);
+		hms_max_field_of_view	= rad (45.0f);
 	}
 	else
 	{
 		hms_max_visual_range		= 2500.0;
-		hms_max_field_of_view	= rad (45.0);
+		hms_max_field_of_view	= rad (45.0f);
 	}
 };
 
@@ -101,12 +101,12 @@ void update_havoc_hms (void)
 	if (get_global_simple_avionics ())
 	{
 		hms_max_visual_range		= 5000.0;
-		hms_max_field_of_view	= rad (45.0);
+		hms_max_field_of_view	= rad (45.0f);
 	}
 	else
 	{
 		hms_max_visual_range		= 2500.0;
-		hms_max_field_of_view	= rad (45.0);
+		hms_max_field_of_view	= rad (45.0f);
 	}
 
 	////////////////////////////////////////

@@ -311,7 +311,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -329,7 +329,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 1.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-30.0);
+			directional_light_pitch 				= rad (-30.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -347,7 +347,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -365,7 +365,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -383,7 +383,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 	directional_light_colour.blue			= 1.0;
 
 	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-30.0);
+	directional_light_pitch 				= rad (-30.0f);
 	directional_light_roll 					= rad (0.0);
 
 	#endif
@@ -572,7 +572,7 @@ void draw_ka50_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.3, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.3f, 1.0, 0.0);
 
 //VJ wideview mod, date: 18-mar-03	
 		if (get_global_wide_cockpit ()&&
@@ -747,7 +747,7 @@ void draw_ka50_internal_virtual_cockpit (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.3f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -922,7 +922,7 @@ void draw_ka50_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1058,7 +1058,7 @@ void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1149,7 +1149,7 @@ void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1186,7 +1186,7 @@ void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 //VJ wideview mod, date: 18-mar-03	
 				if (get_global_wide_cockpit ())
 				{
-				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
+				    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01f;
 				    vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 				}    
 				
@@ -1358,7 +1358,7 @@ void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 
@@ -1397,27 +1397,27 @@ void draw_ka50_external_virtual_cockpit (unsigned int flags, unsigned char *wipe
       }
 		if (check_key(DIK_NUMPAD6))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005f;
       }
 		if (check_key(DIK_NUMPAD4))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD8))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005f;
       }
 		if (check_key(DIK_NUMPAD2))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD1))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD3))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005f;
       }
 		if (check_key(DIK_NUMPAD0))
 		{

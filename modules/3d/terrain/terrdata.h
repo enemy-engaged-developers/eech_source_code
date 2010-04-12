@@ -81,8 +81,8 @@
 
 #define TERRAIN_3D_MIN_MAP_X	(0.0)
 #define TERRAIN_3D_MIN_MAP_Z	(0.0)
-#define TERRAIN_3D_MAX_MAP_X	((float) (TERRAIN_3D_SECTOR_X_MAX * TERRAIN_3D_SECTOR_SIDE_LENGTH) - 0.001)
-#define TERRAIN_3D_MAX_MAP_Z	((float) (TERRAIN_3D_SECTOR_Z_MAX * TERRAIN_3D_SECTOR_SIDE_LENGTH) - 0.001)
+#define TERRAIN_3D_MAX_MAP_X	((float) (TERRAIN_3D_SECTOR_X_MAX * TERRAIN_3D_SECTOR_SIDE_LENGTH) - 0.001f)
+#define TERRAIN_3D_MAX_MAP_Z	((float) (TERRAIN_3D_SECTOR_Z_MAX * TERRAIN_3D_SECTOR_SIDE_LENGTH) - 0.001f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@
 
 #define TERRAIN_3D_XZ_SCALE ( ( ( float ) ( TERRAIN_3D_SECTOR_SIDE_LENGTH + TERRAIN_3D_SECTOR_SIDE_LENGTH_ADJUSTMENT ) ) / 65536.0 )
 
-#define TERRAIN_3D_Y_SCALE ( 1.0 / 32767.0 )
+#define TERRAIN_3D_Y_SCALE ( ( float ) ( 1.0 / 32767.0 ) )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

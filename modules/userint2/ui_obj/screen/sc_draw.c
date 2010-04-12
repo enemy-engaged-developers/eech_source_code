@@ -202,9 +202,9 @@ static void draw_screen_ui_object (ui_object *obj)
 			
 					y_size = get_ui_object_y_size (obj);
 
-					x_size -= 0.001;
+					x_size -= 0.001f;
 
-					y_size -= 0.001;
+					y_size -= 0.001f;
 				
 					x2 = x1 + x_size;
 				

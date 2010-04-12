@@ -101,7 +101,7 @@ static void get_int ( const struct config_option *option, char *value )
 
 static void set_float ( const struct config_option *option, const char *value )
 {
-	*option->float_value = value ? atof ( value ) : 0.0;
+	*option->float_value = value ? (float)atof ( value ) : 0.0f;
 }
 
 static void get_float ( const struct config_option *option, char *value )
@@ -447,7 +447,7 @@ static void set_cint ( const struct config_option *option, const char *value )
 
 static void set_cfloat ( const struct config_option *option, const char *value )
 {
-	*option->float_value = value && *value ? atof ( value ) : atof ( option->description );
+	*option->float_value = value && *value ? (float)atof ( value ) : (float)atof ( option->description );
 
 	debug_log ( "ARG=%s RESPONSE=%3.1f", option->short_name, *option->float_value );
 }
@@ -469,13 +469,13 @@ static void set_cstring ( const struct config_option *option, const char *value 
 static void set_3dw ( const struct config_option *option, const char *value )
 {
 	set_cint ( option, value );
-	set_global_3d_visual_screen_width ( command_line_3d_visual_screen_width );
+	set_global_3d_visual_screen_width ( ( float ) command_line_3d_visual_screen_width );
 }
 
 static void set_3dh ( const struct config_option *option, const char *value )
 {
 	set_cint ( option, value );
-	set_global_3d_visual_screen_height ( command_line_3d_visual_screen_height );
+	set_global_3d_visual_screen_height ( ( float ) command_line_3d_visual_screen_height );
 }
 
 static void set_version_number ( const struct config_option *option, const char *value )
@@ -713,7 +713,7 @@ static const struct config_option options[] =
 		FLOAT(command_line_dynamics_retreating_blade_stall_effect) },
 	{ "drv", "dynamics_rudder_value", "rudder value, scaling factor for drag on tail rotation (default = 1.0)",
 		FLOAT(command_line_dynamics_rudder_value) },
-	{ "dra", "dynamics_rudder_acceleration", "rudder acceleration, scaling factor for tail rotation acceleration (default = 0.8)",
+	{ "dra", "dynamics_rudder_acceleration", "rudder acceleration, scaling factor for tail rotation acceleration (default = 0.8f)",
 		FLOAT(command_line_dynamics_rudder_acceleration) },
 	{ "drd", "dynamics_rotor_drag", "main rotor drag, scaling factor for drag caused by main rotor (default = 1.0)",
 		FLOAT(command_line_dynamics_main_rotor_drag) },
@@ -834,9 +834,9 @@ static const struct config_option options[] =
 		INT(command_line_nonlinear_pedals) },
 	{ "nonlinear-pedals", "", "use non-linear control for pedals (less sensitive around center) (0 = off, 1 = on) (def = 1)",
 		INT(command_line_nonlinear_cyclic) },
-	{ "nonlinear-collective-zone1", "", "non-linear control value for throttle (n = % throttle position joystick to represents  60% collective) (10% = 0.1) (0.0 = off (linear control), 1.0 = max) (def = 0.3)",
+	{ "nonlinear-collective-zone1", "", "non-linear control value for throttle (n = % throttle position joystick to represents  60% collective) (10% = 0.1f) (0.0 = off (linear control), 1.0 = max) (def = 0.3f)",
 		FLOAT(command_line_collective_zone_1_limit) },
-	{ "nonlinear-collective-zone2", "", "non-linear control value for throttle (n = % throttle position joystick to represents 100% collective) (10% = 0.1) (0.0 = off (linear control), 1.2 = max) (def = 0.7)",
+	{ "nonlinear-collective-zone2", "", "non-linear control value for throttle (n = % throttle position joystick to represents 100% collective) (10% = 0.1f) (0.0 = off (linear control), 1.2 = max) (def = 0.7f)",
 		FLOAT(command_line_collective_zone_2_limit) },
 	{ "nonlinear-collective-percentage-at-zone1", "", "collective percentage at zone1. Valid values are in range from 1.0 to 99.0, default is 60.0.",
 		FLOAT(command_line_collective_percentage_at_zone1) },
@@ -1034,23 +1034,23 @@ static void wide_cockpit_initialize(void)
 {
 	//VJ 050205 new wideview init settings
 		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].y = 0.105f;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].z = 0.180f;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_PILOT].p = 0;
 
 		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].x = 0;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105;
-		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z = 0.180;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].y = 0.105f;
+		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].z = 0.180f;
 		wide_cockpit_position[WIDEVIEW_COMANCHE_COPILOT].p = 0;
 
 		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].x = 0.0;
 		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].z = 0.200f;
 		wide_cockpit_position[WIDEVIEW_HOKUM_PILOT].p = 0.0;
 
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].x = 0.0;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].y = 0.0;
-		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200;
+		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].z = 0.200f;
 		wide_cockpit_position[WIDEVIEW_HOKUM_COPILOT].p = 0.0;
 //VJ 050210 defined in vm_data.h
 		wide_cockpit_position[WIDEVIEW_APACHE_PILOT].x = 0.0;

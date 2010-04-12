@@ -1332,19 +1332,19 @@ void ui_draw_texture_graphic (float x1, float y1, float x2, float y2, texture_gr
 			quad[3].v = graphic->textures[texture_index].vmax;
 	
 			quad[0].z = 10;
-			quad[0].q = 0.1;
+			quad[0].q = 0.1f;
 			quad[0].next_vertex = &quad[1];
 		
 			quad[1].z = 10;
-			quad[1].q = 0.1;
+			quad[1].q = 0.1f;
 			quad[1].next_vertex = &quad[2];
 		
 			quad[2].z = 10;
-			quad[2].q = 0.1;
+			quad[2].q = 0.1f;
 			quad[2].next_vertex = &quad[3];
 		
 			quad[3].z = 10;
-			quad[3].q = 0.1;
+			quad[3].q = 0.1f;
 			quad[3].next_vertex = NULL;
 
 			quad[0].outcode = generate_outcode ( quad[0].i, quad[0].j );

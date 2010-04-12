@@ -212,7 +212,7 @@ void build_supply_heat_map (void)
 
 							supplies = (get_local_entity_float_value (group, FLOAT_TYPE_FUEL_SUPPLY_LEVEL) +
 											get_local_entity_float_value (group, FLOAT_TYPE_AMMO_SUPPLY_LEVEL)) *
-											0.05;
+											0.05f;
 							
 							set_supply_heat_map_cargo_spot (en, x, z, (int) supplies);
 						}

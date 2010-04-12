@@ -155,7 +155,7 @@ unsigned short _control87(unsigned short val, unsigned short mask) {
 #endif
 
 /*                          0x1000  | 0x0000  | 0x0200 | 0x007F */
-unsigned short __8087cw = ( unsigned short ) IC_AFFINE | RC_CHOP | PC_53  | 0x007F;
+unsigned short __8087cw = ( unsigned short ) ( IC_AFFINE | RC_CHOP | PC_53  | 0x007F );
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,10 +188,18 @@ void convert_double_to_int ( double value, int *integer )
 unsigned short int get_fpu_control_word_value ( void )
 {
 
-	unsigned int
+	unsigned short int
 		value;
 
+	#ifdef _MSC_VER
+
+	value = asm_get_controlfp ();
+
+	#else
+
 	value = _control87 ( 0, 0 );
+
+	#endif
 
 	return ( value );
 }
@@ -203,7 +211,15 @@ unsigned short int get_fpu_control_word_value ( void )
 void set_fpu_control_word_value ( unsigned short int value )
 {
 
+	#ifdef _MSC_VER
+
+	asm_set_controlfp ( value, value );
+
+	#else
+
 	_control87 ( 0xffff, value );
+
+	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +228,9 @@ void set_fpu_control_word_value ( unsigned short int value )
 
 void set_fpu_mode_default ( void )
 {
+	unsigned int _87cw = 0x0e7f;
 
+	set_fpu_control_word_value ( _87cw );
 //	initialise_fpu ();
 }
 
@@ -317,7 +335,12 @@ void set_fpu_rounding_mode_down ( void )
 void set_fpu_rounding_mode_zero ( void )
 {
 
+	#ifdef _MSC_VER
+	//set_fpu_control_word_value ( RC_CHOP );
+	set_fpu_control_word_value ( 0x0c7f );
+	#else
 	_control87 ( RC_CHOP, MCW_RC );
+	#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -683,7 +683,7 @@ static void define_weapon_loading_button_object (ui_object *gunship_page, float 
 		rx,
 		ry;
 
-	rx = 0.18;
+	rx = 0.18f;
 	ry = 0.03;
 
 	ASSERT (!weapon_loading_button_list [gunship][hardpoint].valid);
@@ -773,7 +773,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Gunship Pages
 
-	x1 = 0.4;
+	x1 = 0.4f;
 	y1 = 0.0;
 	x2 = 1.0;
 	y2 = 1.0;
@@ -984,7 +984,7 @@ void define_campaign_screen_weapon_loading_page_objects (void)
 
 	x1 = 0.0;
 	y1 = 0.0;
-	x2 = 0.9;
+	x2 = 0.9f;
 	y2 = 1.0;
 
 	page_member_list = create_ui_object

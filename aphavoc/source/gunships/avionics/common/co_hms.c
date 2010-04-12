@@ -571,7 +571,7 @@ static entity *get_hms_boresight_target (void)
 
 	ASSERT (hms_max_visual_range > 0.0);
 
-	ASSERT ((hms_max_field_of_view > rad (0.0)) && (hms_max_field_of_view <= rad (90.0)));
+	ASSERT ((hms_max_field_of_view > rad (0.0)) && (hms_max_field_of_view <= rad (90.0f)));
 
 	hms_boresight_target = NULL;
 

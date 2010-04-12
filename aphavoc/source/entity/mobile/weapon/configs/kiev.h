@@ -82,14 +82,14 @@
 				TRUE,																// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (5.0),														// max_heading_limit
-				rad (45.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (5.0f),														// max_heading_limit
+				rad (45.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (60.0),														// max_pitch_limit
+				rad (60.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 			 								  	  			// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -104,14 +104,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),													// max_heading_limit
-				rad (45.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),													// max_heading_limit
+				rad (45.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (60.0),														// max_pitch_limit
+				rad (60.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 			 								  	  			// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -126,14 +126,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),													// max_heading_limit
-				rad (45.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),													// max_heading_limit
+				rad (45.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (60.0),														// max_pitch_limit
+				rad (60.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 			 								  	  			// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -148,14 +148,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-90.0),													// min_heading_limit
-				rad (90.0),		 												// max_heading_limit
-				rad (45.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-90.0f),													// min_heading_limit
+				rad (90.0f),		 												// max_heading_limit
+				rad (45.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (60.0),														// max_pitch_limit
+				rad (60.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 			 								  	  			// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -170,14 +170,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE6,
 				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
@@ -194,14 +194,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE5 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE6,
 				SHARE_WEAPON_PACKAGE5 +										// pitch_share_mask
@@ -218,14 +218,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE7 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE8,
 				SHARE_WEAPON_PACKAGE7 +										// pitch_share_mask
@@ -242,14 +242,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (135.0),	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (135.0f),	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE7 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE8,
 				SHARE_WEAPON_PACKAGE7 +										// pitch_share_mask
@@ -266,14 +266,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-135.0),													// min_heading_limit
-				rad (5.0),	 	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-135.0f),													// min_heading_limit
+				rad (5.0f),	 	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -288,14 +288,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-120.0),													// min_heading_limit
-				rad (5.0),	 	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-120.0f),													// min_heading_limit
+				rad (5.0f),	 	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -310,14 +310,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-75.0),													// min_heading_limit
-				rad (135.0),  	 												// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-75.0f),													// min_heading_limit
+				rad (135.0f),  	 												// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -332,14 +332,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-110.0),													// min_heading_limit
-				rad (110.0),													// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-110.0f),													// min_heading_limit
+				rad (110.0f),													// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -354,14 +354,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-75.0),													// min_heading_limit
-				rad (65.0),	  													// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-75.0f),													// min_heading_limit
+				rad (65.0f),	  													// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -376,14 +376,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-65.0),													// min_heading_limit
-				rad (75.0),	  													// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-65.0f),													// min_heading_limit
+				rad (75.0f),	  													// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -398,14 +398,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-95.0),													// min_heading_limit
-				rad (65.0),	  													// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-95.0f),													// min_heading_limit
+				rad (65.0f),	  													// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -420,14 +420,14 @@
 				FALSE,															// make_weapon_system_ready
 				TRUE,		 														// rotate
 				1,																	// salvo_size
-				rad (90.0),														// heading_rate
-				rad (-65.0),													// min_heading_limit
-				rad (95.0),	  													// max_heading_limit
-				rad (60.0),														// pitch_rate
+				rad (90.0f),														// heading_rate
+				rad (-65.0f),													// min_heading_limit
+				rad (95.0f),	  													// max_heading_limit
+				rad (60.0f),														// pitch_rate
 				rad (0.0),														// min_pitch_limit
-				rad (75.0),														// max_pitch_limit
+				rad (75.0f),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,																	// pitch_share_mask
 				MUZZLE_FLASH_MEDIUM_CALIBRE_STRAIGHT,					// muzzle_flash_type

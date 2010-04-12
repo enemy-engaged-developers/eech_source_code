@@ -77,8 +77,8 @@ static float
 	command_line_viewpoint_right_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25} },
 	command_line_viewpoint_up_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25} },
 	command_line_viewpoint_down_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25} },
-	command_line_viewpoint_fore_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {0.4, 0.4}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25} },
-	command_line_viewpoint_aft_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {-0.4, -0.4}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25} };
+	command_line_viewpoint_fore_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {0.4f, 0.4}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25}, {0.25, 0.25} },
+	command_line_viewpoint_aft_limit[NUM_GUNSHIP_TYPES][NUM_CREW_ROLES] =	{ {-0.4f, -0.4}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25}, {-0.25, -0.25} };
 
 static float getMaxLeft()
 {

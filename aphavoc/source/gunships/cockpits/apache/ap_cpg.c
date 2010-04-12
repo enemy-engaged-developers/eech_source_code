@@ -49,7 +49,7 @@ static head_looking_states
 
 static float get_reset_co_pilot_anim_delay (void)
 {
-	if (frand1 () < 0.2)
+	if (frand1 () < 0.2f)
 		return 0.0;
 
 	return (frand1 () * 3.0) + 2.0;
@@ -79,7 +79,7 @@ static int set_new_static_direction(float cur_heading, float cur_pitch)
 		multiplier = -1.0;
 		// fall through
 	case CPG_ANIM_STATE_MFD_LEFT:
-		requested_heading = -rad(5.0) * multiplier;
+		requested_heading = -rad(5.0f) * multiplier;
 		requested_pitch = rad(10.0);
 		break;
 	case CPG_ANIM_STATE_LOOK_RIGHT:
@@ -87,11 +87,11 @@ static int set_new_static_direction(float cur_heading, float cur_pitch)
 		// fall through
 	case CPG_ANIM_STATE_LOOK_LEFT:
 		requested_heading = (-rad(20.0) - (rad(60.0)) * frand1()) * multiplier;
-		requested_pitch = -rad(30.0) + (rad(50.0)) * frand1();
+		requested_pitch = -rad(30.0) + (rad(50.0f)) * frand1();
 		break;
 	case CPG_ANIM_STATE_LOOK_UP:
-		requested_heading = (-rad(20.0) + (rad(40.0)) * frand1());
-		requested_pitch = -rad(40.0) + (rad(50.0)) * frand1();
+		requested_heading = (-rad(20.0) + (rad(40.0f)) * frand1());
+		requested_pitch = -rad(40.0f) + (rad(50.0f)) * frand1();
 		break;
 	}
 

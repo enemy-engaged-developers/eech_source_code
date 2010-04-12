@@ -293,7 +293,7 @@ void initialise_free_flight_screen (void)
 
 	x1 = 0.257;
 	y1 = 0.303;
-	x2 = 0.74;
+	x2 = 0.74f;
 	y2 = 0.612;
 
 	free_flight_quit_campaign_area = create_ui_object
@@ -306,9 +306,9 @@ void initialise_free_flight_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.65;
-	x2 = 0.6;
+	x2 = 0.6f;
 	y2 = 1.0;
 
 	sprintf (string, "%s?", get_trans ("Quit Free Flight"));
@@ -327,9 +327,9 @@ void initialise_free_flight_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.6;
+	x1 = 0.6f;
 	y1 = 0.65;
-	x2 = 0.8;
+	x2 = 0.8f;
 	y2 = 1.0;
 
 	create_ui_object
@@ -349,7 +349,7 @@ void initialise_free_flight_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.8;
+	x1 = 0.8f;
 	y1 = 0.65;
 	x2 = 1.0;
 	y2 = 1.0;

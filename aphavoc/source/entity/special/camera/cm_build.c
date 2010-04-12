@@ -149,7 +149,7 @@ void reset_building_camera_values (entity *en)
 
 	raw->building_camera_heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 
-	raw->building_camera_heading += rad (180.0);
+	raw->building_camera_heading += rad (180.0f);
 
 	raw->building_camera_heading = wrap_angle (raw->building_camera_heading);
 
@@ -157,13 +157,13 @@ void reset_building_camera_values (entity *en)
 	// pitch
 	//
 
-	raw->building_camera_pitch = rad (-15.0);
+	raw->building_camera_pitch = rad (-15.0f);
 
 	//
 	// zoom
 	//
 
-	raw->building_camera_zoom = 0.333;
+	raw->building_camera_zoom = 0.333f;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

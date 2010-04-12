@@ -70,7 +70,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define DEBUG_MODULE 0
+#define DEBUG_MODULE 1
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,9 +144,9 @@ void reset_cinematic_camera (camera *raw)
 
 			raw->cinematic_camera_lifetime = (frand1 () * 2.0) + 2.0;
 
-			raw->cinematic_camera_heading = rad (45.0) * ((float) (rand16 () % 8));
+			raw->cinematic_camera_heading = rad (45.0f) * ((float) (rand16 () % 8));
 
-			raw->cinematic_camera_pitch = rad (-45.0) * ((float) (rand16 () % 2));
+			raw->cinematic_camera_pitch = rad (-45.0f) * ((float) (rand16 () % 2));
 
 			#if DEBUG_MODULE
 
@@ -423,7 +423,7 @@ void update_cinematic_camera_continued (camera *raw)
 
 			rel_camera_position.x = 0.0;
 			rel_camera_position.y = 0.0;
-			rel_camera_position.z = -(((z_max - z_min) * 0.1) + z_min);
+			rel_camera_position.z = -(((z_max - z_min) * 0.1f) + z_min);
 
 			multiply_matrix3x3_vec3d (&rel_camera_position, raw->attitude, &rel_camera_position);
 
@@ -453,6 +453,12 @@ void update_cinematic_camera_continued (camera *raw)
 
 			memcpy (raw->attitude, vp.attitude, sizeof (matrix3x3));
 
+			#if DEBUG_MODULE
+
+			//debug_log("CM_CINE: Position-x - %f, Position-y - %f, Position-z - %f", vp.position.x, vp.position.y, vp.position.z);
+			debug_log("CM_CINE: Heading - %f, Pitch - %f, Roll - %f", get_heading_from_attitude_matrix(vp.attitude), get_pitch_from_attitude_matrix(vp.attitude), get_roll_from_attitude_matrix(vp.attitude));
+
+			#endif
 			break;
 		}
 		////////////////////////////////////////
@@ -491,6 +497,7 @@ void update_cinematic_camera_continued (camera *raw)
 	//
 
 	get_local_entity_vec3d (en, VEC3D_TYPE_MOTION_VECTOR, &raw->motion_vector);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

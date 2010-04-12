@@ -259,7 +259,7 @@ void initialise_select_player_screen (void)
 						);
 
 	x1 = 0.04;
-	y1 = 0.1;
+	y1 = 0.1f;
 	x2 = 0.90;
 	y2 = 0.86;
 	

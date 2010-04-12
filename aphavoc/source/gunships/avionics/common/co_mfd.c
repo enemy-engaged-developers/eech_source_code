@@ -255,16 +255,16 @@ void update_pointer_position (void)
 	{
 		float dx, dy;
 
-		dx = get_mouse_move_delta_x() * 0.001;
-		dy = -get_mouse_move_delta_y() * 0.001;
+		dx = get_mouse_move_delta_x() * 0.001f;
+		dy = -get_mouse_move_delta_y() * 0.001f;
 
 		previous_mouse_update_flag = get_mouse_update_flag();
 
 		pointer_position_x += dx;
 		pointer_position_y += dy;
 
-		pointer_position_x = bound(pointer_position_x, -1.1, 1.1);
-		pointer_position_y = bound(pointer_position_y, -1.1, 1.1);		
+		pointer_position_x = bound(pointer_position_x, -1.1f, 1.1);
+		pointer_position_y = bound(pointer_position_y, -1.1f, 1.1);		
 	}
 }
 

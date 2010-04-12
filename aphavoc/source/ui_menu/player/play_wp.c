@@ -260,7 +260,7 @@ void define_weapon_log_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Weapon Type List Object
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.0;
 	x2 = 0.250;
 	y2 = 1.0;
@@ -278,7 +278,7 @@ void define_weapon_log_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (weapon_type_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (weapon_type_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Weapon Fired List Object
@@ -301,12 +301,12 @@ void define_weapon_log_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (weapon_fired_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (weapon_fired_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Weapon Hit List Object
 
-	x1 = 0.6;
+	x1 = 0.6f;
 	y1 = 0.0;
 	x2 = 0.240;
 	y2 = 1.0;
@@ -324,7 +324,7 @@ void define_weapon_log_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (weapon_hit_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (weapon_hit_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Weapon Eff List Object
@@ -348,7 +348,7 @@ void define_weapon_log_page_objects (void)
 					UI_ATTR_END
 				);
 
-	set_ui_list_spacing_proportional_to_font (weapon_eff_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (weapon_eff_list, -0.2f);
 
 }
 

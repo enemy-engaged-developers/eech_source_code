@@ -288,7 +288,7 @@ void animate_hind_external_wipers (object_3d_instance *inst3d)
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		search.result_sub_object->relative_roll = wiper_position * (rad (90.0) / MAX_WIPER_POSITION);
+		search.result_sub_object->relative_roll = wiper_position * (rad (90.0f) / MAX_WIPER_POSITION);
 	}
 
 	search.search_depth = 0;
@@ -297,7 +297,7 @@ void animate_hind_external_wipers (object_3d_instance *inst3d)
 
 	if (find_object_3d_sub_object (&search) == SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 	{
-		search.result_sub_object->relative_roll = (wiper_position * (rad (-100.0) / MAX_WIPER_POSITION)) + rad (5.0);
+		search.result_sub_object->relative_roll = (wiper_position * (rad (-100.0) / MAX_WIPER_POSITION)) + rad (5.0f);
 	}
 }
 

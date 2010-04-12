@@ -95,12 +95,12 @@ keysite_data
 			{													// Supply usage
 				0.0,											//    air/ground supply, ignore
 				0.0,											//    air/air supply, ignore
-				-0.2, 										// 	ammo
-				-0.4, 										// 	fuel
+				-0.2f, 										// 	ammo
+				-0.4f, 										// 	fuel
 			},
 
 			1.0,												// importance
-			0.3,												// minimum efficiency
+			0.3f,												// minimum efficiency
 			80.0 * KILOMETRE,								// importance radius
 			400.0 * KILOMETRE,							// air coverage radius
 			1000.0,											// recon distance
@@ -147,7 +147,7 @@ keysite_data
 			},
 
 			1.0,												// importance
-			0.3,												// minimum efficiency
+			0.3f,												// minimum efficiency
 			60.0 * KILOMETRE,								// importance radius
 			100.0 * KILOMETRE,							// air coverage radius
 			280.0,											// recon distance
@@ -194,7 +194,7 @@ keysite_data
 			},
 
 			0.5,												// importance
-			0.3,												// minimum efficiency
+			0.3f,												// minimum efficiency
 			40.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			300.0,											// recon distance
@@ -236,12 +236,12 @@ keysite_data
 			{													// Supply usage
 				0.0,											//    air/ground supply, ignore
 				0.0,											//    air/air supply, ignore
-				-0.05, 										// 	ammo
-				-0.03, 										// 	fuel
+				-0.05f, 										// 	ammo
+				-0.03f, 										// 	fuel
 			},
 
-			0.4,												// importance
-			0.3,												// minimum efficiency
+			0.4f,												// importance
+			0.3f,												// minimum efficiency
 			40.0 * KILOMETRE,								// importance radius
 			100.0 * KILOMETRE,							// air coverage radius
 			320.0,											// recon distance
@@ -283,12 +283,12 @@ keysite_data
 			{													// Supply usage
 				0.0,											//    air/ground supply, ignore
 				0.0,											//    air/air supply, ignore
-				-0.2,											// 	ammo
-				-0.2,											// 	fuel
+				-0.2f,											// 	ammo
+				-0.2f,											// 	fuel
 			},
 
-			0.8,												// importance
-			0.3,												// minimum efficiency
+			0.8f,												// importance
+			0.3f,												// minimum efficiency
 			30.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			450.0,											// recon distance
@@ -330,12 +330,12 @@ keysite_data
 			{													// Supply usage
 				0.0,											//    air/ground supply, ignore
 				0.0,											//    air/air supply, ignore
-				+0.2, 										// 	ammo
-				+0.2, 										// 	fuel
+				+0.2f, 										// 	ammo
+				+0.2f, 										// 	fuel
 			},
 
-			0.2,												// importance
-			0.3,												// minimum efficiency
+			0.2f,												// importance
+			0.3f,												// minimum efficiency
 			20.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			700.0,											// recon distance
@@ -381,8 +381,8 @@ keysite_data
 				-0.5, 										// 	fuel
 			},
 
-			0.3,												// importance
-			0.3,												// minimum efficiency
+			0.3f,												// importance
+			0.3f,												// minimum efficiency
 			30.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			400.0,											// recon distance
@@ -428,8 +428,8 @@ keysite_data
 				+1.0, 										// 	fuel
 			},
 
-			0.4,												// importance
-			0.3,												// minimum efficiency
+			0.4f,												// importance
+			0.3f,												// minimum efficiency
 			30.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			800.0,											// recon distance
@@ -475,8 +475,8 @@ keysite_data
 				0.0,	 										// 	fuel
 			},
 
-			0.5,												// importance
-			0.3,												// minimum efficiency
+			0.5f,												// importance
+			0.3f,												// minimum efficiency
 			30.0 * KILOMETRE,								// importance radius
 			0.0 * KILOMETRE,								// air coverage radius
 			250.0,											// recon distance

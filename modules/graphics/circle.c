@@ -1273,11 +1273,11 @@ void draw_filled_circle ( float x, float y, float radius, int steps, rgb_colour 
 		points[2].i = x1;
 		points[2].j = y1;
 
-		points[0].q = 0.1;
+		points[0].q = 0.1f;
 		points[0].z = 10;
-		points[1].q = 0.1;
+		points[1].q = 0.1f;
 		points[1].z = 10;
-		points[2].q = 0.1;
+		points[2].q = 0.1f;
 		points[2].z = 10;
 
 		points[0].next_vertex = &points[1];
@@ -1396,9 +1396,9 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 		points[1].i = x1;
 		points[1].j = y1;
 
-		points[0].q = 0.1;
+		points[0].q = 0.1f;
 		points[0].z = 10;
-		points[1].q = 0.1;
+		points[1].q = 0.1f;
 		points[1].z = 10;
 
 		points[0].next_vertex = &points[1];
@@ -1442,15 +1442,15 @@ void draw_outline_circle ( float x, float y, float radius, int steps, rgb_colour
 
 				vertices[0].sx = point1->i;
 				vertices[0].sy = point1->j;
-				vertices[0].rhw = 0.1;
-				vertices[0].sz = 0.1;
+				vertices[0].rhw = 0.1f;
+				vertices[0].sz = 0.1f;
 				vertices[0].color = col.colour;
 				vertices[0].specular = specular.colour;
 
 				vertices[1].sx = point2->i;
 				vertices[1].sy = point2->j;
-				vertices[1].rhw = 0.1;
-				vertices[1].sz = 0.1;
+				vertices[1].rhw = 0.1f;
+				vertices[1].sz = 0.1f;
 				vertices[1].color = col.colour;
 				vertices[1].specular = specular.colour;
 

@@ -1092,10 +1092,10 @@ void set_system_sound_effect_pitch ( system_sound_effect *effect, float pitch )
 	ASSERT ( effect );
 	ASSERT ( effect->sound_buffer );
 
-	if (pitch < 0.1)
-		pitch = 0.1;
+	if (pitch < 0.1f)
+		pitch = 0.1f;
 	else if (pitch > 4.0)
-		pitch = 4.0;
+		pitch = 4.0f;
 
 	effect->pitch = pitch;
 

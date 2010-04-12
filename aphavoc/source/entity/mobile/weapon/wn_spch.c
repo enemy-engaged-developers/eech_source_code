@@ -107,8 +107,8 @@ void play_entity_weapon_selected_speech (entity *en, entity_sub_types weapon_typ
 				side,
 				ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE,
 				SOUND_LOCALITY_RADIO,
-				0.4,		// delay
-				0.2,		// priority
+				0.4f,		// delay
+				0.2f,		// priority
 				1.5,		// expire time
 				SPEECH_ORIGINATOR_CO_PILOT,
 				SPEECH_CATEGORY_WEAPONS_SYSTEMS,
@@ -142,7 +142,7 @@ void play_entity_weapon_launched_speech (entity *en, entity_sub_types weapon_typ
 			play_client_server_cpg_message
 			(
 				en,
-				0.8,
+				0.8f,
 				2.0,
 				SPEECH_CATEGORY_FIRING,
 				8.0,

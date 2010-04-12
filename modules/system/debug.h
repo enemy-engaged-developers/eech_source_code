@@ -189,6 +189,8 @@ extern void debug_colour_watch4 ( enum DEBUG_COLOURS colour, const char *string,
 
 extern void update_debug_windows ( void );
 
+extern void debug_view ( const char *string, ... );
+
 #define BREAKOUT() DebugBreak();
 
 #else

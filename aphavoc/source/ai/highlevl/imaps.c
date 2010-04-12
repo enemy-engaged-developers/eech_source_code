@@ -358,7 +358,7 @@ void update_imap_sector_side (entity *en, int in_use)
 
 	if (max_val > 0.0)
 	{
-		constant = 0.3;
+		constant = 0.3f;
 
 		side = get_local_entity_int_value (en, INT_TYPE_SIDE);
 
@@ -1325,7 +1325,7 @@ static void output_sector_fog_of_war_influence_map (entity_sides side, const cha
 
 			ASSERT (sec);
 
-			val = (255.0 * get_sector_fog_of_war_value (sec, side)) / max_fog;
+			val = (255.0f * get_sector_fog_of_war_value (sec, side)) / max_fog;
 
 			convert_float_to_int (val, &fog);
 

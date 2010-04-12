@@ -164,7 +164,7 @@ void reset_weapon_camera (camera *raw)
 	raw->weapon_camera_direction.z = 0.0;
 
 	reset_offset(raw);
-	raw->chase_camera_zoom = 0.1;
+	raw->chase_camera_zoom = 0.1f;
 
 	//
 	// motion vector
@@ -227,7 +227,7 @@ void update_weapon_camera (camera *raw)
 
 		length = get_3d_vector_magnitude (&direction);
 
-		if (length > 0.001)
+		if (length > 0.001f)
 		{
 			if (length < 50.0)
 			{

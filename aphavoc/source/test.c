@@ -287,7 +287,7 @@ static float display_in_flight_debug_misc_info (float y)
 		{
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-			set_mono_font_colour (hud_colour);
+			//set_mono_font_colour (hud_colour);
 
 			y_add_on = get_mono_font_char_height ('0');
 
@@ -476,6 +476,84 @@ static float display_in_flight_debug_misc_info (float y)
 						y += y_add_on;
 					}
 				}
+			}
+			////////////////////////////////////////
+			//
+			// Maths info
+			//
+			////////////////////////////////////////
+			{
+				env_3d *cur_env = get_3d_active_environment();
+
+				unsigned short int control_word = get_fpu_control_word_value();
+
+				set_mono_font_position (0.0, y);
+
+				sprintf
+				(
+					s,
+					"%-20.20s: %x",
+					"8087 Control",
+					control_word
+				);
+
+				print_mono_font_string (s);
+
+				y += y_add_on;
+
+				if (cur_env)
+
+				{
+					set_mono_font_position (0.0, y);
+
+					sprintf
+					(
+						s,
+						"%-20.20s: (x = %.2f, y = %.2f, z = %.2f)",
+						"X-Vector",
+						cur_env->view->xv.x,
+						cur_env->view->xv.y,
+						cur_env->view->xv.y
+					);
+
+					print_mono_font_string (s);
+
+					y += y_add_on;
+
+					set_mono_font_position (0.0, y);
+
+					sprintf
+					(
+						s,
+						"%-20.20s: (x = %.2f, y = %.2f, z = %.2f)",
+						"Y-Vector",
+						cur_env->view->yv.x,
+						cur_env->view->yv.y,
+						cur_env->view->yv.y
+					);
+
+					print_mono_font_string (s);
+
+					y += y_add_on;
+
+					set_mono_font_position (0.0, y);
+
+					sprintf
+					(
+						s,
+						"%-20.20s: (x = %.2f, y = %.2f, z = %.2f)",
+						"Z-Vector",
+						cur_env->view->zv.x,
+						cur_env->view->zv.y,
+						cur_env->view->zv.y
+					);
+
+					print_mono_font_string (s);
+
+					y += y_add_on;
+
+				}
+
 			}
 			////////////////////////////////////////
 			//
@@ -714,7 +792,7 @@ static float display_in_flight_debug_keysite_info (float y)
 
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-		set_mono_font_colour (hud_colour);
+		//set_mono_font_colour (hud_colour);
 
 		////////////////////////////////////////
 
@@ -857,7 +935,7 @@ static float display_in_flight_debug_force_info (float y)
 
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-		set_mono_font_colour (hud_colour);
+		//set_mono_font_colour (hud_colour);
 
 		////////////////////////////////////////
 
@@ -1011,7 +1089,7 @@ static float display_in_flight_external_view_entity_debug_flight_info (float y)
 
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-		set_mono_font_colour (hud_colour);
+		//set_mono_font_colour (hud_colour);
 
 		////////////////////////////////////////
 
@@ -1438,7 +1516,7 @@ static float display_in_flight_external_view_entity_debug_task_info (float y)
 
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-			set_mono_font_colour (hud_colour);
+			//set_mono_font_colour (hud_colour);
 
 			//
 			// members
@@ -2618,7 +2696,7 @@ void flight_test (void)
 	position.z = 0.0;
 
 	time = 0.0;
-	delta_time = 0.01;
+	delta_time = 0.01f;
 
 	while (position.y >= 0.0)
 	{

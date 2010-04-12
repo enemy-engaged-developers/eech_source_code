@@ -117,8 +117,13 @@ void initialise_views (void)
 //VJ framerate 24-mar-03	
 	framerate = get_one_over_delta_time ();
 	timeframes = 0;
-	frames = 0;	
-	
+	frames = 0;
+/*
+// Executioner - Debug Info 09-apr-2010
+	unit_vector_x = 0;
+	unit_vector_y = 0;
+	unit_vector_z = 0;
+*/
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

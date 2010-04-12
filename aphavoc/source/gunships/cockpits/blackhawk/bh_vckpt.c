@@ -267,7 +267,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -285,7 +285,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 1.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
+			directional_light_pitch 				= rad (-40.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -303,7 +303,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -321,7 +321,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -339,7 +339,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 	directional_light_colour.blue			= 1.0;
 
 	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-40.0);
+	directional_light_pitch 				= rad (-40.0f);
 	directional_light_roll 					= rad (0.0);
 
 	#endif
@@ -388,7 +388,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 	directional_light_colour.blue		= 1.0;
 
 	directional_light_heading 			= rad (0.0);
-	directional_light_pitch 			= rad (-40.0);
+	directional_light_pitch 			= rad (-40.0f);
 	directional_light_roll 				= rad (0.0);
 
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
@@ -573,7 +573,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 		else
 		   clipx = 0;
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0+clipx, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0+clipx, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -664,7 +664,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -797,7 +797,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 		        if (get_global_wide_cockpit ())
 		        {				
                     vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.03;
-                    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
+                    vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01f;
                 }    
 				memcpy (&virtual_cockpit_instrument_needles_inst3d->vp, &vp, sizeof (viewpoint));
 
@@ -867,7 +867,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -904,7 +904,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 
@@ -928,7 +928,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 //VJ wideview mod, date: 18-mar-03, 050123
           	if (get_global_wide_cockpit ()){
                   vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.008;
-                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005;
+                  vp.z = wide_cockpit_position[wide_cockpit_nr].z+0.005f;
             }      
 
 				//
@@ -990,7 +990,7 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1070,27 +1070,27 @@ void draw_blackhawk_internal_virtual_cockpit (unsigned int flags)
       }
 		if (check_key(DIK_NUMPAD6))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005f; 
       }                                                      
 		if (check_key(DIK_NUMPAD4))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005f; 
       }                                                      
 		if (check_key(DIK_NUMPAD8))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005f; 
       }                                                      
 		if (check_key(DIK_NUMPAD2))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005f; 
       }                             
 		if (check_key(DIK_NUMPAD1))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005f; 
       }                                                      
 		if (check_key(DIK_NUMPAD3))                            
 		{                                                      
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005; 
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005f; 
       }                                                  
 		if (check_key(DIK_NUMPAD5))
 		{
@@ -1182,7 +1182,7 @@ void draw_blackhawk_external_virtual_cockpit (unsigned int flags, unsigned char 
 		set_3d_active_environment (main_3d_env);
 
 //VJ 050108 wideview x coord used to clip apache cockpit
-		set_3d_view_distances (main_3d_env, 10.0+clipx, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0+clipx, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1260,7 +1260,7 @@ void draw_blackhawk_external_virtual_cockpit (unsigned int flags, unsigned char 
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1285,7 +1285,7 @@ void draw_blackhawk_external_virtual_cockpit (unsigned int flags, unsigned char 
 
 //VJ wideview mod, date: 18-mar-03	
 				if (get_global_wide_cockpit ())
-                   vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01;
+                   vp.y = wide_cockpit_position[wide_cockpit_nr].y+0.01f;
 
 				memcpy (&virtual_cockpit_compass_inst3d->vp, &vp, sizeof (viewpoint));
 
@@ -1404,7 +1404,7 @@ void draw_blackhawk_external_virtual_cockpit (unsigned int flags, unsigned char 
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 

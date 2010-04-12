@@ -860,7 +860,7 @@ static struct PLAYER_DAMAGE_MODIFIER_TABLE
 } player_damage_modifier_table [] =
 	{
 		GAME_DIFFICULTY_EASY,		0.5,
-		GAME_DIFFICULTY_MEDIUM,		0.75,
+		GAME_DIFFICULTY_MEDIUM,		0.75f,
 		GAME_DIFFICULTY_HARD,		1.0,
 		(game_difficulty_settings) -1
 	};

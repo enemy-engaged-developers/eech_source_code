@@ -72,12 +72,12 @@
 
 		#define NUM_GRAIL_MISSILES			(4)
 
-		#define TURRET_HEADING_RATE 		(rad (60.0))
-		#define TURRET_MIN_HEADING_LIMIT	(rad (-50.0))
-		#define TURRET_MAX_HEADING_LIMIT	(rad (50.0))
-		#define LAUNCHER_PITCH_RATE		(rad (60.0))
-		#define LAUNCHER_MIN_PITCH_LIMIT	(rad (-65.0))
-		#define LAUNCHER_MAX_PITCH_LIMIT	(rad (30.0))
+		#define TURRET_HEADING_RATE 		(rad (60.0f))
+		#define TURRET_MIN_HEADING_LIMIT	(rad (-50.0f))
+		#define TURRET_MAX_HEADING_LIMIT	(rad (50.0f))
+		#define LAUNCHER_PITCH_RATE		(rad (60.0f))
+		#define LAUNCHER_MIN_PITCH_LIMIT	(rad (-65.0f))
+		#define LAUNCHER_MAX_PITCH_LIMIT	(rad (30.0f))
 
 		////////////////////////////////////////
 		//
@@ -102,7 +102,7 @@
 				LAUNCHER_MIN_PITCH_LIMIT,									// min_pitch_limit
 				LAUNCHER_MAX_PITCH_LIMIT,									// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,				 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type

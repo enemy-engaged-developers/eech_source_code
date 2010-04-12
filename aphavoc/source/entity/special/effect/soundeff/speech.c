@@ -1389,7 +1389,7 @@ int play_client_server_cpg_contact_message (entity *en, int target_speech_index,
 			ENTITY_SUB_TYPE_EFFECT_SOUND_CPG_MESSAGE,
 			SOUND_LOCALITY_RADIO,
 			0.0,
-			0.8,
+			0.8f,
 			2.0,
 			SPEECH_ORIGINATOR_CO_PILOT,
 			SPEECH_CATEGORY_TARGET_LOCK,
@@ -1597,18 +1597,18 @@ speech_heading_types get_speech_heading_type (entity *source, entity *target)
 
 	if (relative_bearing < 0.0)
 	{
-		relative_bearing += rad (360.0);
+		relative_bearing += rad (360.0f);
 	}
 
-	if (relative_bearing < rad (15.0))
+	if (relative_bearing < rad (15.0f))
 	{
 		type = SPEECH_HEADING_TWELVE_O_CLOCK;
 	}
-	else if (relative_bearing < rad (45.0))
+	else if (relative_bearing < rad (45.0f))
 	{
 		type = SPEECH_HEADING_ONE_O_CLOCK;
 	}
-	else if (relative_bearing < rad (75.0))
+	else if (relative_bearing < rad (75.0f))
 	{
 		type = SPEECH_HEADING_TWO_O_CLOCK;
 	}
@@ -1616,7 +1616,7 @@ speech_heading_types get_speech_heading_type (entity *source, entity *target)
 	{
 		type = SPEECH_HEADING_THREE_O_CLOCK;
 	}
-	else if (relative_bearing < rad (135.0))
+	else if (relative_bearing < rad (135.0f))
 	{
 		type = SPEECH_HEADING_FOUR_O_CLOCK;
 	}

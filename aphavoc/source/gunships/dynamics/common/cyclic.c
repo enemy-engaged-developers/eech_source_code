@@ -414,7 +414,7 @@ void update_cyclic_pressure_inputs (void)
 					{
 						if (fabs (current_flight_dynamics->input_data.cyclic_x.value) < 5.0)
 						{
-							current_flight_dynamics->input_data.cyclic_x.value *= 0.8;
+							current_flight_dynamics->input_data.cyclic_x.value *= 0.8f;
 						}
 					}
 				}
@@ -445,7 +445,7 @@ void update_cyclic_pressure_inputs (void)
 						if (fabs (current_flight_dynamics->input_data.cyclic_y.value) < 5.0)
 						{
 							debug_fatal ("CYCLIC: code with delta time");
-							current_flight_dynamics->input_data.cyclic_y.value *= 0.8;
+							current_flight_dynamics->input_data.cyclic_y.value *= 0.8f;
 						}
 					}
 				}
@@ -542,8 +542,8 @@ void update_cyclic_pressure_inputs (void)
 					current_flight_dynamics->input_data.cyclic_y.value += current_flight_dynamics->input_data.cyclic_y_trim.value;
 
 				/*
-				debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),
-					((float) fabs (200.0 * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH)) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
+				debug_log ("CYCLIC: x %f, y %f", ((float) fabs (200.0f * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_ROLL) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)),
+					((float) fabs (200.0f * get_joystick_axis(current_flight_dynamics->input_data.cyclic_joystick_device_index, JOYSTICK_DEFAULT_AXIS_PITCH)) / (JOYSTICK_AXIS_MAXIMUM - JOYSTICK_AXIS_MINIMUM)));
 				*/
 
 				{
@@ -679,7 +679,7 @@ void damage_hydraulics(int damaging)
 {
 	if (damaging)
 	{
-		hydraulic_pressure = 0.65 + (sfrand1() * 0.1);  // lose some hydraulics pressure immediately
+		hydraulic_pressure = 0.65 + (sfrand1() * 0.1f);  // lose some hydraulics pressure immediately
 		// lock cyclic in a random position
 		damaged_lock_x_pos = sfrand1() * 50.0;
 		damaged_lock_y_pos = 25.0 + sfrand1() * 50.0;
@@ -694,7 +694,7 @@ void damage_hydraulics(int damaging)
 
 void damage_primary_hydralics_only(void)
 {
-	hydraulic_pressure *= 0.75 + (sfrand1() * 0.1);  // lose some hydraulics pressure
+	hydraulic_pressure *= 0.75 + (sfrand1() * 0.1f);  // lose some hydraulics pressure
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

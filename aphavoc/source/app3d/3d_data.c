@@ -88,11 +88,11 @@ float
 	full_screen_y_min								= 0.0,
 	full_screen_x_mid								= FULL_SCREEN_WIDTH / 2.0,
 	full_screen_y_mid								= FULL_SCREEN_HEIGHT / 2.0,
-	full_screen_x_max								= FULL_SCREEN_WIDTH - 0.001,
-	full_screen_y_max								= FULL_SCREEN_HEIGHT - 0.001,
-	full_screen_aspect_ratio                        = 59.99 / 46.82,
-	full_screen_width_view_angle				= rad (59.99),
-	full_screen_height_view_angle				= rad (46.82);
+	full_screen_x_max								= FULL_SCREEN_WIDTH - 0.001f,
+	full_screen_y_max								= FULL_SCREEN_HEIGHT - 0.001f,
+	full_screen_aspect_ratio                        = 59.99f / 46.82f,
+	full_screen_width_view_angle				= rad (59.99f),
+	full_screen_height_view_angle				= rad (46.82f);
 
 int
 	int_full_screen_width						= FULL_SCREEN_WIDTH,
@@ -201,8 +201,8 @@ void set_3d_resolutions (float width, float height)
 	full_screen_y_min			= 0.0;
 	full_screen_x_mid	  		= width / 2.0;
 	full_screen_y_mid	  		= height / 2.0;
-	full_screen_x_max	  		= width - 0.001;
-	full_screen_y_max	  		= height - 0.001;
+	full_screen_x_max	  		= width - 0.001f;
+	full_screen_y_max	  		= height - 0.001f;
 
 	ix_640_480			  		= ((int) width - 640) / 2;
 	iy_640_480			  		= ((int) height - 480) / 2;

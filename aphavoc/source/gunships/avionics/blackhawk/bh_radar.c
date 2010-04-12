@@ -96,7 +96,7 @@ void initialise_blackhawk_radar (void)
 	ground_radar.scan_datum	  				= rad (0.0);
 	ground_radar.scan_arc_size	  			= BLACKHAWK_RADAR_SCAN_ARC_SIZE_90;
 	ground_radar.sweep_offset 				= rad (0.0);
-	ground_radar.sweep_rate		  			= rad (360.0) / 6.0;
+	ground_radar.sweep_rate		  			= rad (360.0f) / 6.0;
 	ground_radar.sweep_direction			= RADAR_SWEEP_CW;
 	ground_radar.max_target_track_range	= BLACKHAWK_RADAR_SCAN_RANGE_8000 + 2000.0;
 	ground_radar.show_allied_targets		= TRUE;
@@ -109,7 +109,7 @@ void initialise_blackhawk_radar (void)
 	air_radar.scan_datum	  		 			= rad (0.0);
 	air_radar.scan_arc_size	  				= BLACKHAWK_RADAR_SCAN_ARC_SIZE_360;
 	air_radar.sweep_offset	  				= rad (0.0);
-	air_radar.sweep_rate		  				= rad (360.0) / 6.0;
+	air_radar.sweep_rate		  				= rad (360.0f) / 6.0;
 	air_radar.sweep_direction 				= RADAR_SWEEP_CW;
 	air_radar.max_target_track_range		= BLACKHAWK_RADAR_SCAN_RANGE_8000 + 2000.0;
 	air_radar.show_allied_targets			= TRUE;
@@ -660,9 +660,9 @@ static void rotate_air_radar_scan_datum_left (void)
 
 	air_radar.sweep_offset += BLACKHAWK_AIR_RADAR_SCAN_DATUM_ROTATE_STEP;
 
-	if (air_radar.scan_datum < rad (-180.0))
+	if (air_radar.scan_datum < rad (-180.0f))
 	{
-		air_radar.scan_datum += rad (360.0);
+		air_radar.scan_datum += rad (360.0f);
 	}
 
 	limit_radar_sweep (&air_radar);
@@ -674,13 +674,13 @@ static void rotate_air_radar_scan_datum_left (void)
 
 static void fast_rotate_air_radar_scan_datum_left (void)
 {
-	air_radar.scan_datum -= rad (90.0);
+	air_radar.scan_datum -= rad (90.0f);
 
-	air_radar.sweep_offset += rad (90.0);
+	air_radar.sweep_offset += rad (90.0f);
 
-	if (air_radar.scan_datum < rad (-180.0))
+	if (air_radar.scan_datum < rad (-180.0f))
 	{
-		air_radar.scan_datum += rad (360.0);
+		air_radar.scan_datum += rad (360.0f);
 	}
 
 	limit_radar_sweep (&air_radar);
@@ -696,9 +696,9 @@ static void rotate_air_radar_scan_datum_right (void)
 
 	air_radar.sweep_offset -= BLACKHAWK_AIR_RADAR_SCAN_DATUM_ROTATE_STEP;
 
-	if (air_radar.scan_datum > rad (180.0))
+	if (air_radar.scan_datum > rad (180.0f))
 	{
-		air_radar.scan_datum -= rad (360.0);
+		air_radar.scan_datum -= rad (360.0f);
 	}
 
 	limit_radar_sweep (&air_radar);
@@ -710,13 +710,13 @@ static void rotate_air_radar_scan_datum_right (void)
 
 static void fast_rotate_air_radar_scan_datum_right (void)
 {
-	air_radar.scan_datum += rad (90.0);
+	air_radar.scan_datum += rad (90.0f);
 
-	air_radar.sweep_offset -= rad (90.0);
+	air_radar.sweep_offset -= rad (90.0f);
 
-	if (air_radar.scan_datum > rad (180.0))
+	if (air_radar.scan_datum > rad (180.0f))
 	{
-		air_radar.scan_datum -= rad (360.0);
+		air_radar.scan_datum -= rad (360.0f);
 	}
 
 	limit_radar_sweep (&air_radar);

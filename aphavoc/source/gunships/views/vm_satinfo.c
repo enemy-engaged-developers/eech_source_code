@@ -78,8 +78,8 @@
 
 #define SAT_WINDOW_X_MIN	(-1.0)
 #define SAT_WINDOW_Y_MIN	(-1.0)
-#define SAT_WINDOW_X_MAX	(0.999)
-#define SAT_WINDOW_Y_MAX	(0.999)
+#define SAT_WINDOW_X_MAX	(0.999f)
+#define SAT_WINDOW_Y_MAX	(0.999f)
 
 #define SAT_VIEWPORT_SIZE	(512)
 
@@ -132,7 +132,7 @@ static rgb_colour
 // adjust 2D environment for heading scale clipping
 //
 
-#define HDG_WIDTH_RATIO			(0.6)
+#define HDG_WIDTH_RATIO			(0.6f)
 
 #define HDG_WINDOW_X_MIN		(SAT_WINDOW_X_MIN * HDG_WIDTH_RATIO)
 #define HDG_WINDOW_Y_MIN		(SAT_WINDOW_Y_MIN)
@@ -148,14 +148,14 @@ static rgb_colour
 
 #define HDG_TICK_X_SPACING			(HDG_WIDTH_RATIO / 9.5)
 
-#define HDG_TICK_10_DEG_TOP		(HDG_WINDOW_Y_ORG - 0.015)
-#define HDG_TICK_10_DEG_BOTTOM	(HDG_TICK_10_DEG_TOP - 0.045)
+#define HDG_TICK_10_DEG_TOP		(HDG_WINDOW_Y_ORG - 0.015f)
+#define HDG_TICK_10_DEG_BOTTOM	(HDG_TICK_10_DEG_TOP - 0.045f)
 
 #define HDG_TICK_30_DEG_TOP		(HDG_WINDOW_Y_ORG)
-#define HDG_TICK_30_DEG_BOTTOM	(HDG_TICK_30_DEG_TOP - 0.075)
+#define HDG_TICK_30_DEG_BOTTOM	(HDG_TICK_30_DEG_TOP - 0.075f)
 
-#define HDG_TICK_DATUM_TOP			(HDG_TICK_30_DEG_BOTTOM - 0.010)
-#define HDG_TICK_DATUM_BOTTOM		(HDG_TICK_DATUM_TOP - 0.045)
+#define HDG_TICK_DATUM_TOP			(HDG_TICK_30_DEG_BOTTOM - 0.010f)
+#define HDG_TICK_DATUM_BOTTOM		(HDG_TICK_DATUM_TOP - 0.045f)
 
 //
 // character position adjust
@@ -170,7 +170,7 @@ static rgb_colour
 //
 
 #if 0
-#define HDG_CARAT_FSD	(HDG_WIDTH_RATIO - 0.05)
+#define HDG_CARAT_FSD	(HDG_WIDTH_RATIO - 0.05f)
 
 static char command_heading_carat[] =
 {
@@ -192,7 +192,7 @@ static char command_heading_carat[] =
 //
 
 #if 0
-#define RADAR_SWEEP_INDICATOR_FSD	(HDG_WIDTH_RATIO - 0.04)
+#define RADAR_SWEEP_INDICATOR_FSD	(HDG_WIDTH_RATIO - 0.04f)
 
 static char radar_sweep_indicator[] =
 {
@@ -215,7 +215,7 @@ static char radar_sweep_indicator[] =
 //
 
 #if 0
-#define BOB_UP_HDG_CARAT_FSD	(HDG_WIDTH_RATIO - 0.05)
+#define BOB_UP_HDG_CARAT_FSD	(HDG_WIDTH_RATIO - 0.05f)
 
 static char bob_up_command_heading_carat[] =
 {
@@ -306,12 +306,12 @@ static void draw_layout_grid (void)
 		x,
 		y;
 
-	for (x = SAT_WINDOW_X_MIN; x <= SAT_WINDOW_X_MAX; x += 0.1)
+	for (x = SAT_WINDOW_X_MIN; x <= SAT_WINDOW_X_MAX; x += 0.1f)
 	{
 		draw_2d_line (x, SAT_WINDOW_Y_MIN, x, SAT_WINDOW_Y_MAX, sys_col_red);
 	}
 
-	for (y = SAT_WINDOW_Y_MIN; y <= SAT_WINDOW_Y_MAX; y += 0.1)
+	for (y = SAT_WINDOW_Y_MIN; y <= SAT_WINDOW_Y_MAX; y += 0.1f)
 	{
 		draw_2d_line (SAT_WINDOW_X_MIN, y, SAT_WINDOW_X_MAX, y, sys_col_red);
 	}
@@ -323,10 +323,10 @@ static void draw_layout_grid (void)
 
 static void draw_sat_centre_datum (void)
 {
-	draw_2d_line (-3.10, +0.00, -0.05, +0.00, hud_colour);
-	draw_2d_line (+3.10, +0.00, +0.05, +0.00, hud_colour);
-	draw_2d_line (+0.00, -3.10, +0.00, -0.05, hud_colour);
-	draw_2d_line (+0.00, +3.10, +0.00, +0.05, hud_colour);
+	draw_2d_line (-3.10, +0.00, -0.05f, +0.00, hud_colour);
+	draw_2d_line (+3.10, +0.00, +0.05f, +0.00, hud_colour);
+	draw_2d_line (+0.00, -3.10, +0.00, -0.05f, hud_colour);
+	draw_2d_line (+0.00, +3.10, +0.00, +0.05f, hud_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -346,11 +346,11 @@ static void draw_bank_scale (void)
 
 	bank_scale_viewport_x_min = (sat_viewport_x_org - (SAT_VIEWPORT_SIZE * 0.5));
 
-	bank_scale_viewport_y_min = (sat_viewport_y_org - (SAT_VIEWPORT_SIZE * 0.5 * 0.8));
+	bank_scale_viewport_y_min = (sat_viewport_y_org - (SAT_VIEWPORT_SIZE * 0.5 * 0.8f));
 
-	bank_scale_viewport_x_max = (sat_viewport_x_org + (SAT_VIEWPORT_SIZE * 0.5) - 0.001);
+	bank_scale_viewport_x_max = (sat_viewport_x_org + (SAT_VIEWPORT_SIZE * 0.5) - 0.001f);
 
-	bank_scale_viewport_y_max = (sat_viewport_y_org - (SAT_VIEWPORT_SIZE * 0.5 * 0.5) - 0.001);
+	bank_scale_viewport_y_max = (sat_viewport_y_org - (SAT_VIEWPORT_SIZE * 0.5 * 0.5) - 0.001f);
 
 	set_2d_viewport (sat_env, bank_scale_viewport_x_min, bank_scale_viewport_y_min, bank_scale_viewport_x_max, bank_scale_viewport_y_max);
 
@@ -365,34 +365,34 @@ static void draw_bank_scale (void)
 	set_2d_instance_rotation (sat_env, roll);
 	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
 
-	set_2d_instance_rotation (sat_env, roll + rad (5.0));
+	set_2d_instance_rotation (sat_env, roll + rad (5.0f));
 	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (5.0));
-	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
-
-	set_2d_instance_rotation (sat_env, roll + rad (10.0));
-	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (10.0));
-	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
-
-	set_2d_instance_rotation (sat_env, roll + rad (15.0));
-	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (15.0));
+	set_2d_instance_rotation (sat_env, roll - rad (5.0f));
 	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
 
-	set_2d_instance_rotation (sat_env, roll + rad (20.0));
+	set_2d_instance_rotation (sat_env, roll + rad (10.0f));
 	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (20.0));
+	set_2d_instance_rotation (sat_env, roll - rad (10.0f));
 	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
 
-	set_2d_instance_rotation (sat_env, roll + rad (25.0));
+	set_2d_instance_rotation (sat_env, roll + rad (15.0f));
 	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (25.0));
+	set_2d_instance_rotation (sat_env, roll - rad (15.0f));
 	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
 
-	set_2d_instance_rotation (sat_env, roll + rad (30.0));
+	set_2d_instance_rotation (sat_env, roll + rad (20.0f));
 	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
-	set_2d_instance_rotation (sat_env, roll - rad (30.0));
+	set_2d_instance_rotation (sat_env, roll - rad (20.0f));
+	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
+
+	set_2d_instance_rotation (sat_env, roll + rad (25.0f));
+	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
+	set_2d_instance_rotation (sat_env, roll - rad (25.0f));
+	draw_2d_line (0.0, BANK_SCALE_MINOR_TICK_Y1, 0.0, BANK_SCALE_MINOR_TICK_Y2, hud_colour);
+
+	set_2d_instance_rotation (sat_env, roll + rad (30.0f));
+	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
+	set_2d_instance_rotation (sat_env, roll - rad (30.0f));
 	draw_2d_line (0.0, BANK_SCALE_MAJOR_TICK_Y1, 0.0, BANK_SCALE_MAJOR_TICK_Y2, hud_colour);
 
 	reset_2d_instance (sat_env);
@@ -549,13 +549,13 @@ static void draw_target_symbology (void)
 
 					if (get_local_entity_selected_weapon_to_target_offsets (source, &heading_offset, &pitch_offset))
 					{
-						heading_offset = bound (heading_offset, rad (-10.0), rad (10.0));
+						heading_offset = bound (heading_offset, rad (-10.0f), rad (10.0f));
 
-						heading_offset *= 0.7 / 0.17453293;	// rad (10.0)
+						heading_offset *= 0.7 / 0.17453293;	// rad (10.0f)
 
-						pitch_offset = bound (pitch_offset, rad (-5.0), rad (5.0));
+						pitch_offset = bound (pitch_offset, rad (-5.0f), rad (5.0f));
 
-						pitch_offset *= 0.35 / 0.08726646;	// rad (5.0)
+						pitch_offset *= 0.35 / 0.08726646;	// rad (5.0f)
 
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 						{
@@ -718,9 +718,9 @@ void draw_satellite_info (void)
 
 	sat_viewport_y_min = 0.0;
 
-	sat_viewport_x_max = SAT_VIEWPORT_SIZE - 0.001;
+	sat_viewport_x_max = SAT_VIEWPORT_SIZE - 0.001f;
 
-	sat_viewport_y_max = SAT_VIEWPORT_SIZE - 0.001;
+	sat_viewport_y_max = SAT_VIEWPORT_SIZE - 0.001f;
 
 	set_2d_viewport (sat_env, sat_viewport_x_min, sat_viewport_y_min, sat_viewport_x_max, sat_viewport_y_max);
 
@@ -744,8 +744,8 @@ void draw_satellite_info (void)
 		sat_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 1.0)) * full_screen_width);
 		sat_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 1.0)) * full_screen_height);
 
-		sat_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 1.0)) * full_screen_width) - 0.001;
-		sat_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 1.0)) * full_screen_height) - 0.001;
+		sat_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 1.0)) * full_screen_width) - 0.001f;
+		sat_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 1.0)) * full_screen_height) - 0.001f;
 
 		sat_screen_x_scale = 640.0 / full_screen_width;
 		sat_screen_y_scale = 480.0 / full_screen_height;

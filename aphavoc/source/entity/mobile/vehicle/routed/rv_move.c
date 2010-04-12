@@ -371,9 +371,9 @@ void routed_vehicle_movement (entity *en)
 
 		if (raw->vh.mob.tacview_logging)
 		{
-			if (fabs(get_roll_from_attitude_matrix(raw->vh.mob.attitude) - old_roll) > rad(0.001)
-				|| fabs(get_pitch_from_attitude_matrix(raw->vh.mob.attitude) - old_pitch) > rad(0.001)
-				|| fabs(heading - old_heading) > rad(0.001))
+			if (fabs(get_roll_from_attitude_matrix(raw->vh.mob.attitude) - old_roll) > rad(0.001f)
+				|| fabs(get_pitch_from_attitude_matrix(raw->vh.mob.attitude) - old_pitch) > rad(0.001f)
+				|| fabs(heading - old_heading) > rad(0.001f))
 			{
 				set_local_entity_int_value(en, INT_TYPE_ROTATED, TRUE);
 			}
@@ -439,7 +439,7 @@ void routed_vehicle_death_movement (entity *en)
 	terrain_elevation = get_3d_terrain_point_data_elevation (&raw->vh.terrain_info);
 
 	if ((get_terrain_type_class (get_3d_terrain_point_data_type (&raw->vh.terrain_info)) == TERRAIN_CLASS_WATER) ||
-			(pos->y > (terrain_elevation + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE) + 0.2)))
+			(pos->y > (terrain_elevation + get_local_entity_float_value (en, FLOAT_TYPE_CENTRE_OF_GRAVITY_TO_GROUND_DISTANCE) + 0.2f)))
 	{
 
 		routed_vehicle_falling_movement (en);

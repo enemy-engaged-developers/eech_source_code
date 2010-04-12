@@ -183,7 +183,7 @@ void update_drop_camera (camera *raw)
 	// prevent divide by zero
 	//
 
-	if (get_3d_vector_magnitude (&v) < 0.001)
+	if (get_3d_vector_magnitude (&v) < 0.001f)
 	{
 		v.x = 0.0;
 		v.y = 0.0;

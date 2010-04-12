@@ -950,9 +950,9 @@ static void toggle_unscaled_displays_event (event *ev)
 {
 	//set_global_unscaled_displays (get_global_unscaled_displays () ^ 1);
 	//VJ 050205, 050210, 060913 hud scaling mod
-	global_hud_size2 += 0.1;
+	global_hud_size2 += 0.1f;
 	if (global_hud_size2 > 1.41)
-		global_hud_size2 = 0.7;
+		global_hud_size2 = 0.7f;
 
 	//VJ 060211 hud_code: store hud info
 	hud_code[(int)get_global_gunship_type ()][2] = (int)(global_hud_size2*10)+1;
@@ -973,10 +973,10 @@ static void set_next_mfd_size_event (event *ev)
 		type = GUNSHIP_TYPE_AH64A;
 	}
 
-	global_mfd_size += 0.05;
+	global_mfd_size += 0.05f;
 	if (global_mfd_size >= 1.2)
 	{
-		global_mfd_size = 0.4;
+		global_mfd_size = 0.4f;
 	}
 
 	hud_code[(int)type][HUD_CODES_MFD] = ( int ) ( global_mfd_size * 20.0 );
@@ -1205,7 +1205,7 @@ static void hokum_pilot_view2_event (event *ev)
 {
 	ASSERT (get_global_gunship_type () == GUNSHIP_TYPE_HOKUM);
 
-	#define HEADING_OFFSET ((float) (rad (-10.1)))
+	#define HEADING_OFFSET ((float) (rad (-10.1f)))
 	#define PITCH_OFFSET ((float) (rad (-19.0)))
 
 	if (get_crew_role () == CREW_ROLE_PILOT)

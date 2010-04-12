@@ -84,11 +84,11 @@ void initialise_comanche_eo (void)
 	eo_sensor								= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth								= rad (0.0);
-	eo_min_azimuth							= rad (-120.0);
-	eo_max_azimuth							= rad (120.0);
+	eo_min_azimuth							= rad (-120.0f);
+	eo_max_azimuth							= rad (120.0f);
 	eo_elevation							= rad (0.0);
-	eo_min_elevation						= rad (-60.0);
-	eo_max_elevation						= rad (30.0);
+	eo_min_elevation						= rad (-60.0f);
+	eo_max_elevation						= rad (30.0f);
 	eo_max_visual_range					= 5000.0;
 	eo_ground_stabilised					= 0;
 
@@ -247,7 +247,7 @@ static void inc_eo_field_of_view (eo_params_dynamic_move *eo)
 		eo->field_of_view++;
 	}
 #else
-	eo->zoom += 0.2;
+	eo->zoom += 0.2f;
 
 	if (eo->zoom > 1.0)
 	{
@@ -285,7 +285,7 @@ static void dec_eo_field_of_view (eo_params_dynamic_move *eo)
 		eo->field_of_view--;
 	}
 #else
-	eo->zoom -= 0.2;
+	eo->zoom -= 0.2f;
 
 	if (eo->zoom < 0.0)
 	{
@@ -390,13 +390,13 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 		case EO_FOV_NARROW:
 		////////////////////////////////////////
 		{
-			fine_slew_rate = rad (0.05) * get_delta_time ();
+			fine_slew_rate = rad (0.05f) * get_delta_time ();
 
 			medium_slew_rate = rad (0.25) * get_delta_time ();
 
-			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+			mouse_slew_rate = rad (0.6f) * get_delta_time ();	// Jabberwock 030930
 			
-			coarse_slew_rate = rad (1.0) * get_delta_time ();
+			coarse_slew_rate = rad (1.0f) * get_delta_time ();
 
 			break;
 		}
@@ -410,7 +410,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 			
 			mouse_slew_rate = rad (6) * get_delta_time ();	// Jabberwock 030930
 
-			coarse_slew_rate = rad (10.0) * get_delta_time ();
+			coarse_slew_rate = rad (10.0f) * get_delta_time ();
 
 			break;
 		}
@@ -420,11 +420,11 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 		{
 			fine_slew_rate = rad (4.0) * get_delta_time ();
 
-			medium_slew_rate = rad (20.0) * get_delta_time ();
+			medium_slew_rate = rad (20.0f) * get_delta_time ();
 			
 			mouse_slew_rate = rad (48) * get_delta_time ();	// Jabberwock 030930
 
-			coarse_slew_rate = rad (80.0) * get_delta_time ();
+			coarse_slew_rate = rad (80.0f) * get_delta_time ();
 
 			break;
 		}
@@ -443,11 +443,11 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 
 		fine_slew_rate = rad (4.0) * exp_zoom_value * get_delta_time ();
 
-		medium_slew_rate = rad (20.0) * exp_zoom_value * get_delta_time ();
+		medium_slew_rate = rad (20.0f) * exp_zoom_value * get_delta_time ();
 		
 		mouse_slew_rate = rad (48.0) * exp_zoom_value * get_delta_time ();	// Jabberwock 030930
 
-		coarse_slew_rate = rad (80.0) * exp_zoom_value * get_delta_time ();
+		coarse_slew_rate = rad (80.0f) * exp_zoom_value * get_delta_time ();
 	}
 #endif
 
@@ -502,7 +502,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 					eo->field_of_view++;
 				}
 			#else
-				eo->zoom += 0.1;
+				eo->zoom += 0.1f;
 
 				if (eo->zoom > 1.0)
 				{
@@ -521,7 +521,7 @@ void update_comanche_eo (eo_params_dynamic_move *eo)
 					eo->field_of_view--;
 				}
 			#else
-				eo->zoom -= 0.1;
+				eo->zoom -= 0.1f;
 			
 				if (eo->zoom < 0.0)
 				{

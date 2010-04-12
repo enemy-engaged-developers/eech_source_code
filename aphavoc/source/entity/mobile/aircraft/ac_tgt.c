@@ -697,15 +697,15 @@ entity *get_aircraft_air_to_air_scan_group_targets (entity *source, int *target_
 						{
 							if (!get_local_entity_int_value (target, INT_TYPE_RADAR_ON))
 							{
-								adj_range *= 1.1;
+								adj_range *= 1.1f;
 							}
 							if (!get_local_entity_int_value (target, INT_TYPE_RADAR_JAMMER_ON))
 							{
-								adj_range *= 1.1;
+								adj_range *= 1.1f;
 							}
 							if (!get_local_entity_int_value (target, INT_TYPE_INFRA_RED_JAMMER_ON))
 							{
-								adj_range *= 1.1;
+								adj_range *= 1.1f;
 							}
 						}
 

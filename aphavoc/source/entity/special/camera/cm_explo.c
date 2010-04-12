@@ -108,7 +108,7 @@ void reset_weapon_explosion_camera_position (vec3d *position)
 
 	length = get_3d_vector_magnitude (&raw->weapon_camera_direction);
 
-	if (length > 0.001)
+	if (length > 0.001f)
 	{
 		uvec_direction = raw->weapon_camera_direction;
 	}

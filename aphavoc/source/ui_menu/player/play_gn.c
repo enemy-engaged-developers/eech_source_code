@@ -107,9 +107,9 @@ void rebuild_general_log_list (player_log_type *player_log, int side)
 	char
 		buf [100];
 
-		set_ui_list_spacing_proportional_to_font (general_log_text_list, -0.2);
+		set_ui_list_spacing_proportional_to_font (general_log_text_list, -0.2f);
 
-		set_ui_list_spacing_proportional_to_font (general_log_output_list, -0.2);
+		set_ui_list_spacing_proportional_to_font (general_log_output_list, -0.2f);
 
 		ui_object_destroy_list_items (general_log_text_list);
 
@@ -249,7 +249,7 @@ void define_general_log_page_objects (void)
 	x1 = 0.523;
 	y1 = 0.270;
 //	x2 = 0.271;
-	x2 = 0.4;
+	x2 = 0.4f;
 	y2 = 0.480;
 
 	log_page [LOG_PAGE_GENERAL] = create_ui_object

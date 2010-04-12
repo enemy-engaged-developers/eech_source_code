@@ -1289,7 +1289,7 @@ void render_cloud_polygon ( int number_of_points, cloud_3d_textured_reference *p
 					if ( vptr->sz >= 1.0 )
 					{
 
-						vptr->sz = 0.999;
+						vptr->sz = 0.999f;
 					}
 		
 					vptr++;

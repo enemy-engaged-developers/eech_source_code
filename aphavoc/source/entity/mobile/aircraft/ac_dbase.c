@@ -116,28 +116,28 @@ aircraft_data
 			VIEW_TYPE_AH64D_APACHE_LONGBOW,									// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.8313,																	// centre_of_gravity_to_ground_distance
-         2.96,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.8313f,																	// centre_of_gravity_to_ground_distance
+         2.96f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (110.0),								// cruise_velocity
+         knots_to_metres_per_second (110.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
-         7.5,																		// attack_altitude
-			rad (-21.3),															// destroyed_bank_offset
-			rad (2.0),																// destroyed_pitch_offset
-			rad (3.364),															// fuselage_angle
+         7.5f,																		// attack_altitude
+			rad (-21.3f),															// destroyed_bank_offset
+			rad (2.0f),																// destroyed_pitch_offset
+			rad (3.364f),															// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (90),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			14.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -150,7 +150,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			7.315,																	// main_rotor_radius
+			7.315f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -193,29 +193,29 @@ aircraft_data
 			VIEW_TYPE_MI28N_HAVOC_B,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.70,																		// centre_of_gravity_to_ground_distance
-         2.71,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.70f,																		// centre_of_gravity_to_ground_distance
+         2.71f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (110.0),								// cruise_velocity
+         knots_to_metres_per_second (110.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
-         7.5,																		// attack_altitude
-			rad (24.0),																// destroyed_bank_offset
-			rad (2.4),																// destroyed_pitch_offset
-			rad (6.6),																// fuselage_angle
+         7.5f,																		// attack_altitude
+			rad (24.0f),																// destroyed_bank_offset
+			rad (2.4f),																// destroyed_pitch_offset
+			rad (6.6f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (6.5),																// main_rotor_shaft_angle
+			rad (6.5f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (90),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			15.1,																		// power_output
+			6.0f * G,																	// g_max
+			15.1f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -227,7 +227,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			8.6,																	// main_rotor_radius
+			8.6f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -276,23 +276,23 @@ aircraft_data
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (100.0),								// cruise_velocity
+         knots_to_metres_per_second (100.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
          7.5,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-1.0),																// destroyed_pitch_offset
-			rad (2.4),																// fuselage_angle
+			rad (-1.0f),																// destroyed_pitch_offset
+			rad (2.4f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (100),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			14.3,																		// power_output
+			6.0f * G,																	// g_max
+			14.3f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -304,7 +304,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			5.95,																	// main_rotor_radius
+			5.95f,																	// main_rotor_radius
 
 			500,																		// initial_damage_level
 
@@ -347,28 +347,28 @@ aircraft_data
 			VIEW_TYPE_KA52_HOKUM_B,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         4.065,																	// centre_of_gravity_to_ground_distance
-         3.25,																		// centre_of_gravity_to_ground_distance_destroyed
+         4.065f,																	// centre_of_gravity_to_ground_distance
+         3.25f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (90.0),								// cruise_velocity
+         knots_to_metres_per_second (90.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
          7.5,																		// attack_altitude
 			rad (16.0),																// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (160),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			14.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -426,41 +426,41 @@ aircraft_data
 			VIEW_TYPE_UH60_BLACK_HAWK,						// view_type
 			MAP_ICON_HELICOPTER,							// map icon
 
-         3.5154,										// centre_of_gravity_to_ground_distance
-         3.35,											// centre_of_gravity_to_ground_distance_destroyed
+         3.5154f,										// centre_of_gravity_to_ground_distance
+         3.35f,											// centre_of_gravity_to_ground_distance_destroyed
          15.0,											// chase_view_min_distance
          100.0,	  										// chase_view_max_distance
 			0.5,									// chase_view_min_distance_test
          2.0 * KILOMETRE,									// chase_view_max_distance_test
-         knots_to_metres_per_second (85.0),							// cruise_velocity
+         knots_to_metres_per_second (85.0f),							// cruise_velocity
          24.0,											// cruise_altitude
          12.0,											// attack_altitude
 			0.0,									// destroyed_bank_offset
-			rad (6.9),								// destroyed_pitch_offset
-			rad (1.7),								// fuselage_angle
+			rad (6.9f),								// destroyed_pitch_offset
+			rad (1.7f),								// fuselage_angle
 			0.0,									// liftoff_velocity
-			rad (2.5),								// main_rotor_shaft_angle
+			rad (2.5f),								// main_rotor_shaft_angle
 			-1.0,									// main_rotor_direction
 			rad (-4.0),								// main_rotor_blade_droop_angle
 			0.0,									// propellor_direction
 			rad (80),								// max_turn_rate (deg / sec)
-			rad (180.0),								// max_roll
+			rad (180.0f),								// max_roll
 			1.0,									// max_vertical_turn_allowance
 			15.0,									// avoidance_radius
-			6.0 * G,								// g_max
-			12.6,									// power_output
+			6.0f * G,								// g_max
+			12.6f,									// power_output
 			-1.0,									// tail_rotor_direction
 			5000.0,									// recon_radius
 			10.0,									// target_scan_delay
 			0.0,									// air_scan_range
 			4000.0,		 							// surface_scan_range
-			0.8,									// potential_air_to_air_threat
+			0.8f,									// potential_air_to_air_threat
 			1.0,									// potential_air_to_surface_threat
 			10.0,									// Ammo_economy
 			1136.0,									// Fuel_default_weight
 			10.0,									// Fuel_economy
 			1.0,									// number_of_main_rotors
-			8.18,									// main_rotor_radius
+			8.18f,									// main_rotor_radius
 
 			650,								// initial_damage_level
 
@@ -505,41 +505,41 @@ aircraft_data
 			VIEW_TYPE_MI24D_HIND,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.94,		  																// centre_of_gravity_to_ground_distance
-         3.25,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.94f,		  																// centre_of_gravity_to_ground_distance
+         3.25f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (80.0),								// cruise_velocity
+         knots_to_metres_per_second (80.0f),								// cruise_velocity
          24.0,																		// cruise_altitude
          12.0,																		// attack_altitude
-			rad (14.4),																// destroyed_bank_offset
-			rad (4.6),																// destroyed_pitch_offset
-			rad (3.5),																// fuselage_angle
+			rad (14.4f),																// destroyed_bank_offset
+			rad (4.6f),																// destroyed_pitch_offset
+			rad (3.5f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (4.5),																// main_rotor_shaft_angle
+			rad (4.5f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (70),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			13.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
 			2000.0,																	// air_scan_range
 			4000.0,																	// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
+			0.8f,																		// potential_air_to_air_threat
 			1.0,																		// potential_air_to_surface_threat
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			8.65,																	// main_rotor_radius
+			8.65f,																	// main_rotor_radius
 
 			650,																		// initial_damage_level
 
@@ -582,28 +582,28 @@ aircraft_data
 			VIEW_TYPE_CH46E_SEA_KNIGHT,										// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-         4.5958,																	// centre_of_gravity_to_ground_distance
-         3.76,																		// centre_of_gravity_to_ground_distance_destroyed
+         4.5958f,																	// centre_of_gravity_to_ground_distance
+         3.76f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (70.0),								// cruise_velocity
+         knots_to_metres_per_second (70.0f),								// cruise_velocity
          40.0,																		// cruise_altitude
          40.0,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
-			rad (3.0),																// fuselage_angle
+			rad (3.0f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (60),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			11.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -616,7 +616,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			9.145,																	// main_rotor_radius
+			9.145f,																	// main_rotor_radius
 
 			750,																		// initial_damage_level
 
@@ -659,28 +659,28 @@ aircraft_data
 			VIEW_TYPE_KA29_HELIX_B,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.405,																	// centre_of_gravity_to_ground_distance
-         3.02,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.405f,																	// centre_of_gravity_to_ground_distance
+         3.02f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (75.0),								// cruise_velocity
+         knots_to_metres_per_second (75.0f),								// cruise_velocity
          25.0,																		// cruise_altitude
          20.0,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
-			rad (3.0828),															// fuselage_angle
+			rad (3.0828f),															// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),		  														// main_rotor_shaft_angle
+			rad (3.5f),		  														// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (160),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			11.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -693,7 +693,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			7.95,																	// main_rotor_radius
+			7.95f,																	// main_rotor_radius
 
 			750,																		// initial_damage_level
 
@@ -736,29 +736,29 @@ aircraft_data
 			VIEW_TYPE_CH3_JOLLY_GREEN_GIANT,									// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-         4.54,																		// centre_of_gravity_to_ground_distance
-         3.90,																		// centre_of_gravity_to_ground_distance_destroyed
+         4.54f,																		// centre_of_gravity_to_ground_distance
+         3.90f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (70.0),								// cruise_velocity
+         knots_to_metres_per_second (70.0f),								// cruise_velocity
          40.0,																		// cruise_altitude
          40.0,																		// attack_altitude
-			rad (9.5),																// destroyed_bank_offset
-			rad (-0.9),																// destroyed_pitch_offset
-			rad (1.90),																// fuselage_angle
+			rad (9.5f),																// destroyed_bank_offset
+			rad (-0.9f),																// destroyed_pitch_offset
+			rad (1.90f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.0),																// main_rotor_shaft_angle
+			rad (3.0f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (40),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			10.2,																		// power_output
+			6.0f * G,																	// g_max
+			10.2f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -770,7 +770,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			9.5,																	// main_rotor_radius
+			9.5f,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
@@ -813,29 +813,29 @@ aircraft_data
 			VIEW_TYPE_MI17_HIP,													// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-         4.30,																		// centre_of_gravity_to_ground_distance
+         4.30f,																		// centre_of_gravity_to_ground_distance
          4.00,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (75.0),								// cruise_velocity
+         knots_to_metres_per_second (75.0f),								// cruise_velocity
          40.0,																		// cruise_altitude
          40.0,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-7.2),																// destroyed_pitch_offset
-			rad (4.5),																// fuselage_angle
+			rad (-7.2f),																// destroyed_pitch_offset
+			rad (4.5f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (4.75),																// main_rotor_shaft_angle
+			rad (4.75f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (50),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			10.4,																		// power_output
+			6.0f * G,																	// g_max
+			10.4f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -847,7 +847,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			10.645,																	// main_rotor_radius
+			10.645f,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
@@ -891,28 +891,28 @@ aircraft_data
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
          5.0,																		// centre_of_gravity_to_ground_distance
-         4.22,																		// centre_of_gravity_to_ground_distance_destroyed
+         4.22f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (70.0),								// cruise_velocity
+         knots_to_metres_per_second (70.0f),								// cruise_velocity
          40.0,																		// cruise_altitude
          40.0,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
-			rad (3.0),																// fuselage_angle
+			rad (3.0f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
 			rad (-4.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (45),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			10.2,																		// power_output
+			6.0f * G,																	// g_max
+			10.2f,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -924,7 +924,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			2.0,																	// number_of_main_rotors
-			9.145,																	// main_rotor_radius
+			9.145f,																	// main_rotor_radius
 
 			800,																		// initial_damage_level
 
@@ -967,29 +967,29 @@ aircraft_data
 			VIEW_TYPE_MI6_HOOK,													// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-			6.81,																		// centre_of_gravity_to_ground_distance
+			6.81f,																		// centre_of_gravity_to_ground_distance
          6.00,																		// centre_of_gravity_to_ground_distance_destroyed
          25.0,																		// chase_view_min_distance
          125.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (70.0),								// cruise_velocity
+			knots_to_metres_per_second (70.0f),								// cruise_velocity
 			40.0,																		// cruise_altitude
 			40.0,																		// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-2.5),																// destroyed_pitch_offset
-			rad (1.5),																// fuselage_angle
+			rad (-2.5f),																// destroyed_pitch_offset
+			rad (1.5f),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (4.0),																// main_rotor_shaft_angle
+			rad (4.0f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (45),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			10.3,																		// power_output
+			6.0f * G,																	// g_max
+			10.3f,																		// power_output
 			1.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -1001,7 +1001,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			17.5,																	// main_rotor_radius
+			17.5f,																	// main_rotor_radius
 
 			1000,																		// initial_damage_level
 
@@ -1044,13 +1044,13 @@ aircraft_data
 			VIEW_TYPE_A10A_THUNDERBOLT,										// view_type
 			MAP_ICON_JET,															// map icon
 
-			2.05,																		// centre_of_gravity_to_ground_distance
-         0.45,																		// centre_of_gravity_to_ground_distance_destroyed
+			2.05f,																		// centre_of_gravity_to_ground_distance
+         0.45f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (300.0),								// cruise_velocity
+			knots_to_metres_per_second (300.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
@@ -1061,18 +1061,18 @@ aircraft_data
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
-			rad (180.0),															// max_turn_rate (deg / sec)
-			rad (120.0),															// max_roll
-			0.5,																		// max_vertical_turn_allowance
+			rad (180.0f),															// max_turn_rate (deg / sec)
+			rad (120.0f),															// max_roll
+			0.5f,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			7.0 * G,																	// g_max
+			7.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			6000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
 			3000.0,																	// air_scan_range
 			5000.0,																	// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
+			0.8f,																		// potential_air_to_air_threat
 			1.0,																		// potential_air_to_surface_threat
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
@@ -1121,35 +1121,35 @@ aircraft_data
 			VIEW_TYPE_SU25_FROGFOOT,											// view_type
 			MAP_ICON_JET,															// map icon
 
-			1.55,																		// centre_of_gravity_to_ground_distance
-         0.62,																		// centre_of_gravity_to_ground_distance_destroyed
+			1.55f,																		// centre_of_gravity_to_ground_distance
+         0.62f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (300.0),								// cruise_velocity
+			knots_to_metres_per_second (300.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
-			rad (-5.8),																// destroyed_bank_offset
+			rad (-5.8f),																// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
-			rad (3.2),																// fuselage_angle
+			rad (3.2f),																// fuselage_angle
 			knots_to_metres_per_second (120),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad(180),																// max_turn_rate (deg / sec)
-			rad (120.0),															// max_roll
-			0.5,																		// max_vertical_turn_allowance
+			rad (120.0f),															// max_roll
+			0.5f,																		// max_vertical_turn_allowance
 			12.0,																		// avoidance_radius
-			8.0 * G,																	// g_max
+			8.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			6000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
 			3000.0,																	// air_scan_range
 			5000.0,																	// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
+			0.8f,																		// potential_air_to_air_threat
 			1.0,																		// potential_air_to_surface_threat
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
@@ -1198,28 +1198,28 @@ aircraft_data
 			VIEW_TYPE_F16_FIGHTING_FALCON,									// view_type
 			MAP_ICON_JET,															// map icon
 
-			1.675,																	// centre_of_gravity_to_ground_distance
-         0.80,																		// centre_of_gravity_to_ground_distance_destroyed
+			1.675f,																	// centre_of_gravity_to_ground_distance
+         0.80f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (450.0),								// cruise_velocity
+			knots_to_metres_per_second (450.0f),								// cruise_velocity
 			900.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
-			rad (9.9),																// destroyed_bank_offset
-			rad (1.4),																// destroyed_pitch_offset
-			rad (2.0),																// fuselage_angle
+			rad (9.9f),																// destroyed_bank_offset
+			rad (1.4f),																// destroyed_pitch_offset
+			rad (2.0f),																// fuselage_angle
 			knots_to_metres_per_second (220),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			10.0,																		// avoidance_radius
-			10.0 * G,																// g_max
+			10.0f * G,																// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			10000.0,																	// recon_radius
@@ -1275,17 +1275,17 @@ aircraft_data
 			VIEW_TYPE_MIG29_FULCRUM,											// view_type
 			MAP_ICON_JET,															// map icon
 
-			1.5882,																	// centre_of_gravity_to_ground_distance
-         0.42,																		// centre_of_gravity_to_ground_distance_destroyed
+			1.5882f,																	// centre_of_gravity_to_ground_distance
+         0.42f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (450.0),								// cruise_velocity
+			knots_to_metres_per_second (450.0f),								// cruise_velocity
 			900.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-3.0),																// destroyed_pitch_offset
+			rad (-3.0f),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			knots_to_metres_per_second (220),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
@@ -1293,10 +1293,10 @@ aircraft_data
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			12.0,																		// avoidance_radius
-			10.0 * G,																// g_max
+			10.0f * G,																// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			10000.0,																	// recon_radius
@@ -1352,35 +1352,35 @@ aircraft_data
 			VIEW_TYPE_AV8B_HARRIER,												// view_type
 			MAP_ICON_JET,															// map icon
 
-			1.925,																	// centre_of_gravity_to_ground_distance
-         1.07,																		// centre_of_gravity_to_ground_distance_destroyed
+			1.925f,																	// centre_of_gravity_to_ground_distance
+         1.07f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (350.0),								// cruise_velocity
+			knots_to_metres_per_second (350.0f),								// cruise_velocity
 			800.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
-			rad (13.2),																// destroyed_bank_offset
-			rad (2.0),																// destroyed_pitch_offset
-			rad (0.6),																// fuselage_angle
+			rad (13.2f),																// destroyed_bank_offset
+			rad (2.0f),																// destroyed_pitch_offset
+			rad (0.6f),																// fuselage_angle
 			knots_to_metres_per_second (180),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (120.0),															// max_roll
-			0.5,																		// max_vertical_turn_allowance
-			9.5,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			rad (120.0f),															// max_roll
+			0.5f,																		// max_vertical_turn_allowance
+			9.5f,																		// avoidance_radius
+			6.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			6000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
 			3000.0,																	// air_scan_range
 			5000.0,																	// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
+			0.8f,																		// potential_air_to_air_threat
 			1.0,																		// potential_air_to_surface_threat
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
@@ -1429,35 +1429,35 @@ aircraft_data
 			VIEW_TYPE_YAK41_FREESTYLE,											// view_type
 			MAP_ICON_JET,															// map icon
 
-			2.45,																		// centre_of_gravity_to_ground_distance
-         1.25,																		// centre_of_gravity_to_ground_distance_destroyed
+			2.45f,																		// centre_of_gravity_to_ground_distance
+         1.25f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (350.0),								// cruise_velocity
+			knots_to_metres_per_second (350.0f),								// cruise_velocity
 			800.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (0.4),																// destroyed_pitch_offset
-			rad (-0.3),																// fuselage_angle
+			rad (0.4f),																// destroyed_pitch_offset
+			rad (-0.3f),																// fuselage_angle
 			knots_to_metres_per_second (180),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (120.0),															// max_roll
-			0.5,																		// max_vertical_turn_allowance
+			rad (120.0f),															// max_roll
+			0.5f,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			8.0 * G,																	// g_max
+			8.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			6000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
 			3000.0,																	// air_scan_range
 			5000.0,																	// surface_scan_range
-			0.8,																		// potential_air_to_air_threat
+			0.8f,																		// potential_air_to_air_threat
 			1.0,																		// potential_air_to_surface_threat
 			10.0,																		// Ammo_economy
 			1136.0,																	// Fuel_default_weight
@@ -1506,28 +1506,28 @@ aircraft_data
 			VIEW_TYPE_FA18_HORNET,												// view_type
 			MAP_ICON_JET,															// map icon
 
-			1.975,																	// centre_of_gravity_to_ground_distance
-         0.82,																		// centre_of_gravity_to_ground_distance_destroyed
+			1.975f,																	// centre_of_gravity_to_ground_distance
+         0.82f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (450.0),								// cruise_velocity
+			knots_to_metres_per_second (450.0f),								// cruise_velocity
 			1000.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-0.9),																// destroyed_pitch_offset
-			rad (0.6),																// fuselage_angle
+			rad (-0.9f),																// destroyed_pitch_offset
+			rad (0.6f),																// fuselage_angle
 			knots_to_metres_per_second (230),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			12.0,																		// avoidance_radius
-			10.0 * G,																// g_max
+			10.0f * G,																// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			10000.0,																	// recon_radius
@@ -1583,28 +1583,28 @@ aircraft_data
 			VIEW_TYPE_SU33_FLANKER,												// view_type
 			MAP_ICON_JET,															// map icon
 
-			2.8,																		// centre_of_gravity_to_ground_distance
+			2.8f,																		// centre_of_gravity_to_ground_distance
          1.00,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (450.0),								// cruise_velocity
+			knots_to_metres_per_second (450.0f),								// cruise_velocity
 			1000.0,																	// cruise_altitude
 			100.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
-			rad (-1.7),																// destroyed_pitch_offset
-			rad (-3.7),																// fuselage_angle
+			rad (-1.7f),																// destroyed_pitch_offset
+			rad (-3.7f),																// fuselage_angle
 			knots_to_metres_per_second (230),								// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			0.0,																		// main_rotor_direction
 			rad (0.0),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (180),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			10.0 * G,																// g_max
+			10.0f * G,																// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			10000.0,																	// recon_radius
@@ -1669,29 +1669,29 @@ aircraft_data
 			VIEW_TYPE_AH64A_APACHE,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.8313,																	// centre_of_gravity_to_ground_distance
-         3.1,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.8313f,																	// centre_of_gravity_to_ground_distance
+         3.1f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (110.0),								// cruise_velocity
+         knots_to_metres_per_second (110.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
          10.0,																		// attack_altitude
-			rad (26.0),																// destroyed_bank_offset
+			rad (26.0f),																// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
-			rad (3.364),															// fuselage_angle
+			rad (3.364f),															// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (200),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
-			13.6,																		// power_output
+			6.0f * G,																	// g_max
+			13.6f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -1703,7 +1703,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			7.315,																	// main_rotor_radius
+			7.315f,																	// main_rotor_radius
 
 			600,																		//DL initial_damage_level
 
@@ -1747,29 +1747,29 @@ aircraft_data
 			VIEW_TYPE_KA50_HOKUM,												// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         4.065,																	// centre_of_gravity_to_ground_distance
-         3.5,																		// centre_of_gravity_to_ground_distance_destroyed
+         4.065f,																	// centre_of_gravity_to_ground_distance
+         3.5f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (115.0),								// cruise_velocity
+         knots_to_metres_per_second (115.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
          10.0,																		// attack_altitude
-			rad (-16.0),		 													// destroyed_bank_offset
+			rad (-16.0f),		 													// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (240),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			8.0 * G,																	// g_max
-			14.5,																		// power_output
+			8.0f * G,																	// g_max
+			14.5f,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
 			10.0,																		// target_scan_delay
@@ -1781,7 +1781,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			7.25,																	// main_rotor_radius
+			7.25f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -1824,28 +1824,28 @@ aircraft_data
 			VIEW_TYPE_OH58D_KIOWA_WARRIOR,									// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         2.9,																		// centre_of_gravity_to_ground_distance
-         2.7,																		// centre_of_gravity_to_ground_distance_destroyed
+         2.9f,																		// centre_of_gravity_to_ground_distance
+         2.7f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (120.0),								// cruise_velocity
+         knots_to_metres_per_second (120.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
-         7.5,																		// attack_altitude
+         7.5f,																		// attack_altitude
 			rad (0.0),																// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (4.4),																// main_rotor_shaft_angle
+			rad (4.4f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (280),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			8.0 * G,																	// g_max
+			8.0f * G,																	// g_max
 			14.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -1858,7 +1858,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			5.08,																	// main_rotor_radius
+			5.08f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -1901,28 +1901,28 @@ aircraft_data
 			VIEW_TYPE_MV22_OSPREY,												// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-         3.373,																	// centre_of_gravity_to_ground_distance
-         2.5,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.373f,																	// centre_of_gravity_to_ground_distance
+         2.5f,																		// centre_of_gravity_to_ground_distance_destroyed
          18.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (280.0),								// cruise_velocity
+         knots_to_metres_per_second (280.0f),								// cruise_velocity
          100.0,																	// cruise_altitude
          100.0,																	// attack_altitude
-			rad (-12.0),															// destroyed_bank_offset
+			rad (-12.0f),															// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (100),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			14.0 * G,																// g_max
+			14.0f * G,																// g_max
 			14.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -1935,7 +1935,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			2.0,																	// number_of_main_rotors
-			12.885,																	// main_rotor_radius
+			12.885f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -1978,28 +1978,28 @@ aircraft_data
 			VIEW_TYPE_AH1T_SEACOBRA,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.75,																		// centre_of_gravity_to_ground_distance
-         3.4,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.75f,																		// centre_of_gravity_to_ground_distance
+         3.4f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (110.0),								// cruise_velocity
+         knots_to_metres_per_second (110.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
-         7.5,																		// attack_altitude
+         7.5f,																		// attack_altitude
 			rad (0.0),			 													// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-0.5),																// main_rotor_blade_droop_angle
+			rad (-0.5f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (200),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			14.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -2012,7 +2012,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			6.7,																	// main_rotor_radius
+			6.7f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -2055,28 +2055,28 @@ aircraft_data
 			VIEW_TYPE_AH1W_SUPERCOBRA,											// view_type
 			MAP_ICON_HELICOPTER,													// map icon
 
-         3.75,																		// centre_of_gravity_to_ground_distance
-         3.4,																		// centre_of_gravity_to_ground_distance_destroyed
+         3.75f,																		// centre_of_gravity_to_ground_distance
+         3.4f,																		// centre_of_gravity_to_ground_distance_destroyed
          15.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (110.0),								// cruise_velocity
+         knots_to_metres_per_second (110.0f),								// cruise_velocity
          15.0,																		// cruise_altitude
-         7.5,																		// attack_altitude
+         7.5f,																		// attack_altitude
 			rad (0.0),			 													// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
 			rad (0.0),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-0.5),																// main_rotor_blade_droop_angle
+			rad (-0.5f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (200),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			14.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			5000.0,																	// recon_radius
@@ -2089,7 +2089,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			7.315,																	// main_rotor_radius
+			7.315f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -2131,28 +2131,28 @@ aircraft_data
 			VIEW_TYPE_CH53E_SUPER_STALLION,									// view_type
 			MAP_ICON_TRANSPORT_HELICOPTER,									// map icon
 
-         5.228,																	// centre_of_gravity_to_ground_distance
-         4.25,																		// centre_of_gravity_to_ground_distance_destroyed
+         5.228f,																	// centre_of_gravity_to_ground_distance
+         4.25f,																		// centre_of_gravity_to_ground_distance_destroyed
          22.0,																		// chase_view_min_distance
          100.0,	  																// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-         knots_to_metres_per_second (85.0),								// cruise_velocity
+         knots_to_metres_per_second (85.0f),								// cruise_velocity
          50.0,																		// cruise_altitude
          50.0,																		// attack_altitude
-			rad (-8.0),				  												// destroyed_bank_offset
+			rad (-8.0f),				  												// destroyed_bank_offset
 			rad (0.0),																// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			0.0,																		// liftoff_velocity
-			rad (3.5),																// main_rotor_shaft_angle
+			rad (3.5f),																// main_rotor_shaft_angle
 			-1.0,																		// main_rotor_direction
-			rad (-4.0),																// main_rotor_blade_droop_angle
+			rad (-4.0f),																// main_rotor_blade_droop_angle
 			0.0,																		// propellor_direction
 			rad (160),																// max_turn_rate (deg / sec)
-			rad (180.0),															// max_roll
+			rad (180.0f),															// max_roll
 			1.0,																		// max_vertical_turn_allowance
 			15.0,																		// avoidance_radius
-			6.0 * G,																	// g_max
+			6.0f * G,																	// g_max
 			12.0,																		// power_output
 			-1.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -2165,7 +2165,7 @@ aircraft_data
 			1136.0,																	// Fuel_default_weight
 			10.0,																		// Fuel_economy
 			1.0,																	// number_of_main_rotors
-			12.08,																	// main_rotor_radius
+			12.08f,																	// main_rotor_radius
 
 			600,																		// initial_damage_level
 
@@ -2208,16 +2208,16 @@ aircraft_data
 			VIEW_TYPE_C17_GLOBEMASTER_III,									// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
 
-			6.075,																	// centre_of_gravity_to_ground_distance
+			6.075f,																	// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
          55.0,																		// chase_view_min_distance
          150.0,																	// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (240.0),								// cruise_velocity
+			knots_to_metres_per_second (240.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			700.0,																	// attack_altitude
-			rad (-7.0),																// destroyed_bank_offset
+			rad (-7.0f),																// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			knots_to_metres_per_second (100),								// liftoff_velocity
@@ -2226,10 +2226,10 @@ aircraft_data
 			rad (0.0),																// main_rotor_blade_droop_angle
 			-1.0,																		// propellor_direction
 			rad (40),																// max_turn_rate (deg / sec)
-			rad (40.0),																// max_roll
-			0.1,																		// max_vertical_turn_allowance
+			rad (40.0f),																// max_roll
+			0.1f,																		// max_vertical_turn_allowance
 			30.0,																		// avoidance_radius
-			3.0 * G,																	// g_max
+			3.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -2285,16 +2285,16 @@ aircraft_data
 			VIEW_TYPE_IL76MD_CANDID_B,											// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
 
-			6.55,																		// centre_of_gravity_to_ground_distance
+			6.55f,																		// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
          55.0,																		// chase_view_min_distance
          150.0,																	// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (240.0),								// cruise_velocity
+			knots_to_metres_per_second (240.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			700.0,																	// attack_altitude
-			rad (9.0),																// destroyed_bank_offset
+			rad (9.0f),																// destroyed_bank_offset
 			0.0,																		// destroyed_pitch_offset
 			rad (0.0),																// fuselage_angle
 			knots_to_metres_per_second (100),								// liftoff_velocity
@@ -2303,10 +2303,10 @@ aircraft_data
 			rad (0.0),																// main_rotor_blade_droop_angle
 			1.0,																		// propellor_direction
 			rad (40),																// max_turn_rate (deg / sec)
-			rad (40.0),																// max_roll
-			0.1,																		// max_vertical_turn_allowance
+			rad (40.0f),																// max_roll
+			0.1f,																		// max_vertical_turn_allowance
 			30.0,																		// avoidance_radius
-			3.0 * G,																	// g_max
+			3.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -2362,13 +2362,13 @@ aircraft_data
 			VIEW_TYPE_C130J_HERCULES_II,										// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
 
-			3.9,			  															// centre_of_gravity_to_ground_distance
-         2.8,																		// centre_of_gravity_to_ground_distance_destroyed
+			3.9f,			  															// centre_of_gravity_to_ground_distance
+         2.8f,																		// centre_of_gravity_to_ground_distance_destroyed
          45.0,																		// chase_view_min_distance
          150.0,																	// chase_view_max_distance
 			0.5,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (260.0),								// cruise_velocity
+			knots_to_metres_per_second (260.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			700.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
@@ -2380,10 +2380,10 @@ aircraft_data
 			rad (0.0),																// main_rotor_blade_droop_angle
 			-1.0,																		// propellor_direction
 			rad (60),																// max_turn_rate (deg / sec)
-			rad (60.0),																// max_roll
-			0.2,																		// max_vertical_turn_allowance
+			rad (60.0f),																// max_roll
+			0.2f,																		// max_vertical_turn_allowance
 			20.0,																		// avoidance_radius
-			4.0 * G,																	// g_max
+			4.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius
@@ -2439,13 +2439,13 @@ aircraft_data
 			VIEW_TYPE_AN12B_CUB,													// view_type
 			MAP_ICON_TRANSPORT_AIRCRAFT,										// map icon
 
-			6.5,			  															// centre_of_gravity_to_ground_distance
+			6.5f,			  															// centre_of_gravity_to_ground_distance
          5.0,																		// centre_of_gravity_to_ground_distance_destroyed
          40.0,																		// chase_view_min_distance
          150.0,																	// chase_view_max_distance
-			0.5,																		// chase_view_min_distance_test
+			0.5f,																		// chase_view_min_distance_test
          2.0 * KILOMETRE,														// chase_view_max_distance_test
-			knots_to_metres_per_second (260.0),								// cruise_velocity
+			knots_to_metres_per_second (260.0f),								// cruise_velocity
 			700.0,																	// cruise_altitude
 			700.0,																	// attack_altitude
 			0.0,																		// destroyed_bank_offset
@@ -2457,10 +2457,10 @@ aircraft_data
 			rad (0.0),																// main_rotor_blade_droop_angle
 			1.0,																		// propellor_direction
 			rad (50),																// max_turn_rate (deg / sec)
-			rad (50.0),																// max_roll
-			0.15,																		// max_vertical_turn_allowance
+			rad (50.0f),																// max_roll
+			0.15f,																		// max_vertical_turn_allowance
 			20.0,																		// avoidance_radius
-			4.0 * G,																	// g_max
+			4.0f * G,																	// g_max
 			20.0,																		// power_output
 			0.0,																		// tail_rotor_direction
 			3000.0,																	// recon_radius

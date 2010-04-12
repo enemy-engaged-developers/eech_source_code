@@ -327,7 +327,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 			theta = fabs (acos (theta));
 
-			if (theta > rad (1.0))
+			if (theta > rad (1.0f))
 			{
 				weapon_lock_type = WEAPON_LOCK_NO_BORESIGHT;
 

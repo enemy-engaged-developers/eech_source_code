@@ -67,7 +67,7 @@
 struct TGA_RGB_PACKED
 {
 
-	unsigned short int
+	unsigned  int
 		b: 5,
 		g: 5,
 		r: 5,

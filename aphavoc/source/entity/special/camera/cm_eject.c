@@ -274,7 +274,7 @@ void update_eject_camera (camera *raw)
 		// prevent divide by zero
 		//
 
-		if (get_3d_vector_magnitude (&v) < 0.001)
+		if (get_3d_vector_magnitude (&v) < 0.001f)
 		{
 			v.x = 0.0;
 			v.y = 0.0;
@@ -320,7 +320,7 @@ void update_eject_camera (camera *raw)
 
 		heading += rad (180);
 
-		get_3d_transformation_matrix (raw->attitude, heading, rad (-14.036), 0.0);
+		get_3d_transformation_matrix (raw->attitude, heading, rad (-14.036f), 0.0);
 
 		//
 		// get camera position
@@ -328,7 +328,7 @@ void update_eject_camera (camera *raw)
 
 		rel_camera_position.x = 0.0;
 		rel_camera_position.y = 0.0;
-		rel_camera_position.z = -4.123;
+		rel_camera_position.z = -4.123f;
 
 		multiply_matrix3x3_vec3d (&rel_camera_position, raw->attitude, &rel_camera_position);
 

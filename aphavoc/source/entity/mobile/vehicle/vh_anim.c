@@ -315,7 +315,7 @@ void update_vehicle_radar( entity *en )
 
 	raw = (vehicle *) get_local_entity_data( en );
 
-	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, 0.16666 );
+	update_entity_simple_keyframed_value( en, &raw->radar_rotation_state, 0.16666f );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -591,15 +591,15 @@ void draw_line ( float fx1, float fy1, float fx2, float fy2, rgb_colour colour )
 			
 				vertices[0].sx = point1->i;
 				vertices[0].sy = point1->j;
-				vertices[0].rhw = 0.1;//point1->q;
-				vertices[0].sz = 0.1;//( point1->q * zbuffer_factor ) + zbuffer_constant;
+				vertices[0].rhw = 0.1f;//point1->q;
+				vertices[0].sz = 0.1f;//( point1->q * zbuffer_factor ) + zbuffer_constant;
 				vertices[0].color = col.colour;	//*( ( D3DCOLOR * ) &colour );
 				vertices[0].specular = d3d_fog_intensity;
 			
 				vertices[1].sx = point2->i;
 				vertices[1].sy = point2->j;
-				vertices[1].rhw = 0.1;	//point2->q;
-				vertices[1].sz = 0.1;	//( point2->q * zbuffer_factor ) + zbuffer_constant;
+				vertices[1].rhw = 0.1f;	//point2->q;
+				vertices[1].sz = 0.1f;	//( point2->q * zbuffer_factor ) + zbuffer_constant;
 				vertices[1].color = col.colour;	//*( ( D3DCOLOR * ) &colour );
 				vertices[1].specular = d3d_fog_intensity;
 
@@ -672,10 +672,10 @@ void draw_thick_line ( float fx1, float fy1, float fx2, float fy2, rgb_colour co
 		vertices[3].next_vertex = &vertices[2];
 		vertices[2].next_vertex = NULL;
 	
-		vertices[0].z = 10; vertices[0].q = 0.1;
-		vertices[1].z = 10; vertices[1].q = 0.1;
-		vertices[2].z = 10; vertices[2].q = 0.1;
-		vertices[3].z = 10; vertices[3].q = 0.1;
+		vertices[0].z = 10; vertices[0].q = 0.1f;
+		vertices[1].z = 10; vertices[1].q = 0.1f;
+		vertices[2].z = 10; vertices[2].q = 0.1f;
+		vertices[3].z = 10; vertices[3].q = 0.1f;
 	
 		outcode = vertices[0].outcode; outcode2 = vertices[0].outcode;
 		outcode |= vertices[1].outcode; outcode2 &= vertices[1].outcode;

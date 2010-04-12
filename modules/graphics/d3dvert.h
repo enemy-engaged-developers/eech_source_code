@@ -68,31 +68,31 @@
 // If we need to artificially elevate polygons ( ZBias ), use this constant
 //
 
-#define POLYGON_ZDISTANCE_ELEVATED_BIAS ( 1.0 - 8.0 / 65535.0 )
+#define POLYGON_ZDISTANCE_ELEVATED_BIAS ( 1.0f - 8.0f / 65535.0f )
 
 //
 // If we need
 //
 
-#define POLYGON_ZDISTANCE_SHADOW_ELEVATED_BIAS ( 1.0 - 6.0 / 65535.0 )
+#define POLYGON_ZDISTANCE_SHADOW_ELEVATED_BIAS ( 1.0f - 6.0f / 65535.0f )
 
 //
 // Sometimes we don't need that much bias, so a minimal bias is required
 //
 
-#define POLYGON_ZDISTANCE_MINIMAL_ELEVATED_BIAS ( 1.0 - 1.0 / 65535.0 )
+#define POLYGON_ZDISTANCE_MINIMAL_ELEVATED_BIAS ( 1.0f - 1.0f / 65535.0f )
 
 //
 // Otherwise, the default bias is:
 //
 
-#define POLYGON_ZDISTANCE_NORMAL_BIAS ( 1.0 - 0.0 )
+#define POLYGON_ZDISTANCE_NORMAL_BIAS ( 1.0f - 0.0f )
 
 //
 // Sometimes we need to artificially lower polygons:
 //
 
-#define POLYGON_ZDISTANCE_LOWERED_BIAS ( 1.0 - -4.0 / 65535.0 )
+#define POLYGON_ZDISTANCE_LOWERED_BIAS ( 1.0f - -4.0f / 65535.0f )
 
 //
 // Again, sometimes we don't need to lower by that much, so minimal bias:

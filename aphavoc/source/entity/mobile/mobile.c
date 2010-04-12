@@ -966,7 +966,7 @@ void play_mobile_under_attack_speech (entity *en, entity *aggressor)
 				ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 				SOUND_LOCALITY_RADIO,
 				0.0,
-				0.7,
+				0.7f,
 				6.0,
 				get_wingman_speech_originator (en),
 				SPEECH_CATEGORY_UNDER_ATTACK,

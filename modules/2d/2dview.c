@@ -92,8 +92,8 @@ env_2d *create_2d_environment (void)
 
 	env->vp.x_min = 0.0;
 	env->vp.y_min = 0.0;
-	env->vp.x_max = 639.999;
-	env->vp.y_max = 479.999;
+	env->vp.x_max = 639.999f;
+	env->vp.y_max = 479.999f;
 
 	env->window_x_min = -1.0;
 	env->window_y_min = -1.0;

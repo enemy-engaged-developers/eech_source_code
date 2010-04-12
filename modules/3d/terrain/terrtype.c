@@ -1021,7 +1021,7 @@ void initialise_3d_custom_terrain_types( void )
    	if (index == terrain_texture_river_bank_detail ) set_terrain_type_textures ( TERRAIN_TYPE_RIVER_BANK, terrain_texture_river_bank_detail, terrain_texture_river_bank_colour_pass, 8.0, sld, sldd, sl, sldd, 255, 255, 255, terrain_surface_river_bank );
 
 		//VJ 051223 fixed forest side textures and scaling: index was wrong
-		sld = sl/2.4;
+		sld = sl/2.4f;
 		// forest sides need separate scaling
 		sldd = sld/4;
 		//scale top-side forest texture between top and side
@@ -1209,7 +1209,7 @@ void initialise_3d_thailand_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1375,7 +1375,7 @@ void initialise_3d_cuba_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1542,7 +1542,7 @@ void initialise_3d_georgia_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1708,7 +1708,7 @@ void initialise_3d_lebanon_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -1871,7 +1871,7 @@ void initialise_3d_yemen_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2036,7 +2036,7 @@ void initialise_3d_taiwan_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2412,7 +2412,7 @@ void initialise_noisemaps(void)
 		field_noise,
 		noisemap;
 
-	float gamma = 1.25, gamma2 = 1.4;
+	float gamma = 1.25f, gamma2 = 1.4f;
 
 #if 0
 	switch (get_global_season())
@@ -2716,7 +2716,7 @@ void initialise_3d_alaska_terrain_types ( void )
 		{
 
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2804,7 +2804,7 @@ void initialise_3d_aleut_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2893,7 +2893,7 @@ void initialise_3d_kuwait_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -2987,7 +2987,7 @@ void initialise_3d_grand_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,
@@ -3160,7 +3160,7 @@ void initialise_3d_custom_map_terrain_types ( void )
 		contour_heights[] =
 		{
 			-1000,
-			-0.0001,
+			-0.0001f,
 			250,
 			500,
 			750,

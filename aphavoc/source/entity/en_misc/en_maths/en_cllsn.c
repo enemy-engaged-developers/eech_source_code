@@ -1860,7 +1860,7 @@ int get_line_of_sight_collision_tree
 
 	source_range = get_2d_range (source_old_position, source_new_position);
 
-	if (source_range < 0.1)
+	if (source_range < 0.1f)
 	{
 		return (FALSE);
 	}

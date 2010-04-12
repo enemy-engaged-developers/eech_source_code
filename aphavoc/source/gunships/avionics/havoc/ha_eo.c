@@ -83,10 +83,10 @@ void initialise_havoc_eo (void)
 	eo_sensor							= TARGET_ACQUISITION_SYSTEM_FLIR;
 
 	eo_azimuth							= rad (0.0);
-	eo_min_azimuth						= rad (-110.0);
-	eo_max_azimuth						= rad (110.0);
+	eo_min_azimuth						= rad (-110.0f);
+	eo_max_azimuth						= rad (110.0f);
 	eo_elevation						= rad (0.0);
-	eo_min_elevation					= rad (-40.0);
+	eo_min_elevation					= rad (-40.0f);
 	eo_max_elevation					= rad (13.0);
 	eo_max_visual_range				= 5000.0,
 	eo_ground_stabilised					= 0;
@@ -280,13 +280,13 @@ void update_havoc_eo (eo_params *eo)
 		case EO_FOV_NARROW:
 		////////////////////////////////////////
 		{
-			fine_slew_rate = rad (0.05) * get_delta_time ();
+			fine_slew_rate = rad (0.05f) * get_delta_time ();
 
 			medium_slew_rate = rad (0.25) * get_delta_time ();
 
-			mouse_slew_rate = rad (0.6) * get_delta_time ();	// Jabberwock 030930
+			mouse_slew_rate = rad (0.6f) * get_delta_time ();	// Jabberwock 030930
 
-			coarse_slew_rate = rad (1.0) * get_delta_time ();
+			coarse_slew_rate = rad (1.0f) * get_delta_time ();
 
 			break;
 		}
@@ -300,7 +300,7 @@ void update_havoc_eo (eo_params *eo)
 
 			mouse_slew_rate = rad (6) * get_delta_time ();	// Jabberwock 030930
 
-			coarse_slew_rate = rad (10.0) * get_delta_time ();
+			coarse_slew_rate = rad (10.0f) * get_delta_time ();
 
 			break;
 		}
@@ -310,11 +310,11 @@ void update_havoc_eo (eo_params *eo)
 		{
 			fine_slew_rate = rad (4.0) * get_delta_time ();
 
-			medium_slew_rate = rad (20.0) * get_delta_time ();
+			medium_slew_rate = rad (20.0f) * get_delta_time ();
 
 			mouse_slew_rate = rad (48) * get_delta_time ();	// Jabberwock 030930
 
-			coarse_slew_rate = rad (80.0) * get_delta_time ();
+			coarse_slew_rate = rad (80.0f) * get_delta_time ();
 
 			break;
 		}

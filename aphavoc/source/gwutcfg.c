@@ -1147,7 +1147,7 @@ void DumpGWutInfo(const char *filename)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define IntValue(p)  atoi(strtok(NULL,","))
-#define FloatValue(p)   atof(strtok(NULL,","))
+#define FloatValue(p)   (float)atof(strtok(NULL,","))
 #define TESTDUMP(s) if(testdump){fprintf(fout,"%s\n",buf);fflush(fout);}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1408,18 +1408,18 @@ void ReadGWutInfo(const char *fname)
 		weapon_database[i].inhibit_time              = FloatValue(p);
 		weapon_database[i].burst_duration            = FloatValue(p);
 		weapon_database[i].rate_of_fire              = FloatValue(p);
-		weapon_database[i].inverse_rate_of_fire		 = (weapon_database[i].rate_of_fire > 0.0) ? (1.0 / weapon_database[i].rate_of_fire) : 0.01;
+		weapon_database[i].inverse_rate_of_fire		 = (weapon_database[i].rate_of_fire > 0.0) ? (1.0f / weapon_database[i].rate_of_fire) : 0.01f;
 		weapon_database[i].reload_time               = FloatValue(p);
 		weapon_database[i].max_launch_angle_error    = rad(FloatValue(p));
-		weapon_database[i].max_seeker_limit			 = cos(weapon_database[i].max_launch_angle_error + 0.25);
+		weapon_database[i].max_seeker_limit			 = ( float ) cos(weapon_database[i].max_launch_angle_error + 0.25);
 
 		// these values were introduced later, so might not exists in old GWUT files
 		p = strtok(NULL,",");
 		if (p)
 		{
-			float seeker_limit = atof(p);
+			float seeker_limit = ( float ) atof(p);
 			if (seeker_limit > 0.0)
-				weapon_database[i].max_seeker_limit		 = cos(rad(seeker_limit));
+				weapon_database[i].max_seeker_limit		 = ( float ) cos(rad(seeker_limit));
 			weapon_database[i].drag_factor			 = FloatValue(p);
 			weapon_database[i].spiral_flightpath	 = IntValue(p);
 		}
@@ -1504,7 +1504,7 @@ void ReadGWutInfo(const char *fname)
 		group_database[i].default_group_formation         = ( formation_types ) IntValue(p);
 		group_database[i].default_group_division          = IntValue(p);
 		group_database[i].maximum_groups_per_division     = IntValue(p);
-		group_database[i].rearming_time                   = IntValue(p);
+		group_database[i].rearming_time                   = FloatValue(p);
 		group_database[i].frontline_flag                  = IntValue(p);
 		group_database[i].local_only_group                = IntValue(p);
 		group_database[i].default_engage_enemy            = IntValue(p);
@@ -1543,7 +1543,7 @@ void ReadGWutInfo(const char *fname)
 		//skip full name
 
 		task_database[i].task_category                   = ( task_category_types ) IntValue(p);
-		task_database[i].task_priority                   = IntValue(p);
+		task_database[i].task_priority                   = FloatValue(p);
 		task_database[i].difficulty_rating               = IntValue(p);
 		task_database[i].task_default_target_class       = IntValue(p);
 		task_database[i].task_default_target_source      = IntValue(p);

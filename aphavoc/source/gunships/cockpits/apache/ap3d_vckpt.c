@@ -87,10 +87,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define BASE_DX  0
-#define BASE_DY  0.200
-#define BASE_DZ  0.200
+#define BASE_DY  0.200f
+#define BASE_DZ  0.200f
 
-#define _DY 0.03
+#define _DY 0.03f
 
 static int subnr;
 static float dx, dy, dz;
@@ -117,8 +117,8 @@ static rgb_alpha_masked_sprite_data
 
 #define LAMP1_WINDOW_X_MIN				(-1.0)
 #define LAMP1_WINDOW_Y_MIN				(-1.0)
-#define LAMP1_WINDOW_X_MAX				(0.999)
-#define LAMP1_WINDOW_Y_MAX				(0.999)
+#define LAMP1_WINDOW_X_MAX				(0.999f)
+#define LAMP1_WINDOW_Y_MAX				(0.999f)
 
 #define LAMP1_VIEWPORT_SMALL_SIZE		(128)
 #define LAMP1_VIEWPORT_LARGE_SIZE		(331)
@@ -279,7 +279,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -297,7 +297,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 1.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
+			directional_light_pitch 				= rad (-40.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -315,7 +315,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -333,7 +333,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -351,7 +351,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 	directional_light_colour.blue			= 1.0;
 
 	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-40.0);
+	directional_light_pitch 				= rad (-40.0f);
 	directional_light_roll 					= rad (0.0);
 
 	#endif
@@ -400,7 +400,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 	directional_light_colour.blue		= 1.0;
 
 	directional_light_heading 			= rad (0.0);
-	directional_light_pitch 			= rad (-40.0);
+	directional_light_pitch 			= rad (-40.0f);
 	directional_light_roll 				= rad (0.0);
 
 	set_3d_ambient_light (main_3d_single_light_env, &ambient_light_colour);
@@ -491,7 +491,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -622,7 +622,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -826,7 +826,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -863,7 +863,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 
@@ -885,9 +885,9 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 
 				if (flags & VIRTUAL_COCKPIT_UPFRONT_DISPLAY)
 				{
-					vp.y -= 0.01;
+					vp.y -= 0.01f;
 					memcpy (&virtual_cockpit_upfront_display_inst3d->vp, &vp, sizeof (viewpoint));
-					vp.y += 0.01;
+					vp.y += 0.01f;
 //					virtual_cockpit_upfront_display_inst3d->vp.position.y = dy;
 
 					insert_relative_object_into_3d_scene (OBJECT_3D_DRAW_TYPE_ZBUFFERED_OBJECT, &virtual_cockpit_upfront_display_inst3d->vp.position, virtual_cockpit_upfront_display_inst3d);
@@ -946,7 +946,7 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -998,8 +998,8 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
 			#endif
 //VJ#
 			vp.x = BASE_DX;
-			vp.y = BASE_DY - 0.086 - _DY;
-			vp.z = BASE_DZ-0.010;
+			vp.y = BASE_DY - 0.086f - _DY;
+			vp.z = BASE_DZ-0.010f;
 
 			memcpy (&virtual_cockpit_inst3d->vp, &vp, sizeof (viewpoint));
 
@@ -1079,27 +1079,27 @@ void draw_apache_internal_virtual_cockpit_3d (unsigned int flags)
       }
 		if (check_key(DIK_NUMPAD6))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].z += 0.01f;
       }
 		if (check_key(DIK_NUMPAD4))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.01f;
       }
 		if (check_key(DIK_NUMPAD8))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].y += 0.01f;
       }
 		if (check_key(DIK_NUMPAD2))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.01f;
       }
 		if (check_key(DIK_NUMPAD1))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.01f;
       }
 		if (check_key(DIK_NUMPAD3))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].x += 0.01f;
       }
   		if (check_key(DIK_NUMPAD5))
 		{
@@ -1182,7 +1182,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1199,7 +1199,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 		  vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 */
 			vp.x = BASE_DX;
-			vp.y = BASE_DY - 0.164;
+			vp.y = BASE_DY - 0.164f;
 			vp.z = BASE_DZ;
 
 		if (begin_3d_scene ())
@@ -1272,7 +1272,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1280,7 +1280,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 
 		vp.x = BASE_DX;
 		vp.y = BASE_DY;
-		vp.z = BASE_DZ-0.1;
+		vp.z = BASE_DZ-0.1f;
 /*
 		vp.x = BASE_DX+dx;
 		vp.y = BASE_DY+dy;
@@ -1321,8 +1321,8 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 			  vp.y = wide_cockpit_position[wide_cockpit_nr].y;
 			  vp.z = wide_cockpit_position[wide_cockpit_nr].z;
 			vp.x += 0.0;
-			vp.y += 0.22;
-			vp.z += 0.18;
+			vp.y += 0.22f;
+			vp.z += 0.18f;
 */
 
 
@@ -1402,7 +1402,7 @@ void draw_apache_external_virtual_cockpit_3d (unsigned int flags)
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 
@@ -1624,8 +1624,8 @@ void draw_apache_lamp_on_texture (void)
 	lamp1_viewport_y_org = LAMP1_VIEWPORT_TEXTURE_Y_ORG;
 	lamp1_viewport_x_min = lamp1_viewport_x_org - (lamp1_viewport_size * 0.5);
 	lamp1_viewport_y_min = lamp1_viewport_y_org - (lamp1_viewport_size * 0.5);
-	lamp1_viewport_x_max = lamp1_viewport_x_org + (lamp1_viewport_size * 0.5) - 0.001;
-	lamp1_viewport_y_max = lamp1_viewport_y_org + (lamp1_viewport_size * 0.5) - 0.001;
+	lamp1_viewport_x_max = lamp1_viewport_x_org + (lamp1_viewport_size * 0.5) - 0.001f;
+	lamp1_viewport_y_max = lamp1_viewport_y_org + (lamp1_viewport_size * 0.5) - 0.001f;
 	
 	set_2d_viewport (lamp1_env, lamp1_viewport_x_min, lamp1_viewport_y_min, lamp1_viewport_x_max, lamp1_viewport_y_max);
 

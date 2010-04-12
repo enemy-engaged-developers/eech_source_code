@@ -363,7 +363,7 @@ void fixed_wing_aim_correction (entity *en, vec3d *wp_vec, vec3d *vel)
 			//max_roll or equivalent should be in ac_dbase
 			max_roll = aircraft_database[raw->ac.mob.sub_type].max_turn_rate;
 
-			if (max_roll >= (rad (90.0)))
+			if (max_roll >= (rad (90.0f)))
 			{
 				//this is wrong if the plane is inverted - will it ever be the case
 				aim_vec.x = raw->ac.mob.yv.x;
@@ -598,7 +598,7 @@ void fixed_wing_set_velocity (entity *en, vec3d *acc, vec3d *velocity)
 	min_speed = max_speed = get_local_entity_float_value(en, FLOAT_TYPE_CRUISE_VELOCITY);
 
 	// arbitrary values - seem to work tho'. p'haps should be in a dbase somewhere?
-	min_speed *= 0.7;
+	min_speed *= 0.7f;
 
 	max_speed *= 2.0;
 
@@ -758,7 +758,7 @@ void fixed_wing_calc_attitude(entity *en, vec3d *acc, vec3d *vel)
 
 	max_roll = get_local_entity_float_value (en, FLOAT_TYPE_MAX_ROLL);
 
-	factor = max_roll * 0.01;
+	factor = max_roll * 0.01f;
 
 	if (fabs (change_in_heading) >= factor)
 	{
@@ -874,7 +874,7 @@ void fixed_wing_land_jet (entity *en, vec3d *new_pos)
 	}
 	else if (range < 1000.0)
 	{
-		factor = (1000.0 - range) * 0.001;
+		factor = (1000.0 - range) * 0.001f;
 
 		desired_pitch = AIRCRAFT_MAX_FLARE_ANGLE * factor;
 	}
@@ -1063,7 +1063,7 @@ void fixed_wing_taxi(entity *en, vec3d *current_pos, vec3d *dist, vec3d *new_pos
 
 		// calculate new attitude
 
-		delta_heading = bound (delta_heading, rad (-30.0), rad (30.0));// taxiing turn rate
+		delta_heading = bound (delta_heading, rad (-30.0f), rad (30.0f));// taxiing turn rate
 
 		new_heading = current_heading + (delta_heading * get_entity_movement_delta_time ());
 
@@ -1651,9 +1651,9 @@ void basic_fixed_wing_movement (entity *en)
 
 	if (raw->ac.mob.tacview_logging)
 	{
-		if (fabs(get_roll_from_attitude_matrix(raw->ac.mob.attitude) - old_roll) > rad(0.001)
-			|| fabs(get_pitch_from_attitude_matrix(raw->ac.mob.attitude) - old_pitch) > rad(0.001)
-			|| fabs(get_heading_from_attitude_matrix(raw->ac.mob.attitude) - old_heading) > rad(0.001))
+		if (fabs(get_roll_from_attitude_matrix(raw->ac.mob.attitude) - old_roll) > rad(0.001f)
+			|| fabs(get_pitch_from_attitude_matrix(raw->ac.mob.attitude) - old_pitch) > rad(0.001f)
+			|| fabs(get_heading_from_attitude_matrix(raw->ac.mob.attitude) - old_heading) > rad(0.001f))
 		{
 			set_local_entity_int_value(en, INT_TYPE_ROTATED, TRUE);
 		}
@@ -1803,7 +1803,7 @@ void basic_fixed_wing_movement (entity *en)
 
 			// calculate new attitude
 
-			delta_heading = bound (delta_heading, rad (-30.0), rad (30.0));// taxiing turn rate
+			delta_heading = bound (delta_heading, rad (-30.0f), rad (30.0f));// taxiing turn rate
 
 			new_heading = current_heading + (delta_heading * get_entity_movement_delta_time ());
 
@@ -2482,7 +2482,7 @@ void fixed_wing_crash_movement (entity *en)
 		velocity->z = 0.0;
 	}
 
-	if (face_normal->y < 0.3)
+	if (face_normal->y < 0.3f)
 	{
 		velocity->x += (G * face_normal->x * get_entity_movement_delta_time());
 		velocity->z += (G * face_normal->z * get_entity_movement_delta_time());

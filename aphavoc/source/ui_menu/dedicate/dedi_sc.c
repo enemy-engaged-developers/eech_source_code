@@ -195,8 +195,8 @@ void initialise_dedicated_server_screen (void)
 			
 		x1 = 0.125;
 		y1 = 0.175;
-		x2 = 0.6;
-		y2 = 0.6;
+		x2 = 0.6f;
+		y2 = 0.6f;
 
 		player_list_area = create_ui_object
 			(
@@ -213,8 +213,8 @@ void initialise_dedicated_server_screen (void)
 
 		// List Box
 
-		x1 = 0.05;
-		y1 = 0.05;
+		x1 = 0.05f;
+		y1 = 0.05f;
 		x2 = 0.95;
 		y2 = 0.95;
 

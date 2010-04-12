@@ -593,7 +593,7 @@ void full_initialise_game (void)
 
 				file_count ++;
 
-				percentage = (file_count / graphics_count_to_convert) * 100.0;
+				percentage = (file_count / graphics_count_to_convert) * 100.0f;
 
 				sprintf ( buffer, "%s...%s %.0f%%", get_trans ("Loading"), get_trans ("First Time Graphics Conversion"), percentage );
 
@@ -843,6 +843,12 @@ void full_initialise_game (void)
 	set_ui_object_text (initialising_text, buffer);
 
 	ui_force_update ();
+
+	#ifdef _MSC_VER
+
+	set_fpu_mode_default();
+
+	#endif
 
 	initialise_application_3d_system ();
 

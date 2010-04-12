@@ -144,7 +144,7 @@ void update_end_of_mission_camera (camera *raw)
 
 			heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 
-			pitch = rad (-90.0);
+			pitch = rad (-90.0f);
 		}
 		else
 		{
@@ -152,13 +152,13 @@ void update_end_of_mission_camera (camera *raw)
 			rel_camera_position.y = 0.0;
 			rel_camera_position.z = -15.0;
 
-			raw->end_of_mission_camera_heading += rad (30.0) * get_delta_time ();
+			raw->end_of_mission_camera_heading += rad (30.0f) * get_delta_time ();
 
 			raw->end_of_mission_camera_heading = wrap_angle (raw->end_of_mission_camera_heading);
 
 			heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING) + raw->end_of_mission_camera_heading;
 
-			pitch = rad (-30.0);
+			pitch = rad (-30.0f);
 		}
 	}
 	else
@@ -169,7 +169,7 @@ void update_end_of_mission_camera (camera *raw)
 
 		heading = get_local_entity_float_value (en, FLOAT_TYPE_HEADING);
 
-		pitch = rad (-90.0);
+		pitch = rad (-90.0f);
 	}
 
 	get_3d_transformation_matrix (raw->attitude, heading, pitch, 0.0);

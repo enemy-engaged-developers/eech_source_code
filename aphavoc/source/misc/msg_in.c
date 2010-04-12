@@ -1610,7 +1610,7 @@ void process_message_return_to_base (entity *en)
 	{
 		group_return_to_base (group);
 
-		play_client_server_radio_message_affirmative_response (group, SPEECH_WINGMAN_ROGER_RETURNING_TO_BASE, 0.2, 20.0);
+		play_client_server_radio_message_affirmative_response (group, SPEECH_WINGMAN_ROGER_RETURNING_TO_BASE, 0.2f, 20.0);
 	}
 }
 
@@ -1743,11 +1743,11 @@ void process_message_weapons_hold (entity *en, entity *wingman, int state, int p
 	{
 		if (state)
 		{
-			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_WEAPONS_HOLD, 0.6, 6.0);
+			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_WEAPONS_HOLD, 0.6f, 6.0);
 		}
 		else
 		{
-			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_WEAPONS_FREE, 0.6, 6.0);
+			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_WEAPONS_FREE, 0.6f, 6.0);
 		}
 	}
 
@@ -1799,11 +1799,11 @@ void process_message_hold_position (entity *en, entity *wingman)
 
 			set_client_server_entity_vec3d (wingman, VEC3D_TYPE_WAIT_POSITION, get_local_entity_vec3d_ptr (wingman, VEC3D_TYPE_POSITION));
 
-			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_MAINTAINING_POSITION, 0.6, 10.0);
+			play_client_server_radio_message_affirmative_response (wingman, SPEECH_WINGMAN_ROGER_MAINTAINING_POSITION, 0.6f, 10.0);
 		}
 		else
 		{
-			play_client_server_radio_message_negative_response (wingman, SPEECH_WINGMAN_UNABLE_TO_COMPLY, 0.6, 8.0);
+			play_client_server_radio_message_negative_response (wingman, SPEECH_WINGMAN_UNABLE_TO_COMPLY, 0.6f, 8.0);
 		}
 	}
 }
@@ -1925,7 +1925,7 @@ void process_message_change_formation (entity *en, entity *group, int new_format
 
 	set_client_server_entity_int_value (group, INT_TYPE_GROUP_FORMATION, new_formation);
 
-	play_client_server_radio_message_affirmative_response (group, SPEECH_WINGMAN_ROGER_MOVING_INTO_ORDERED_POSITION, 0.1, 5.0);
+	play_client_server_radio_message_affirmative_response (group, SPEECH_WINGMAN_ROGER_MOVING_INTO_ORDERED_POSITION, 0.1f, 5.0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

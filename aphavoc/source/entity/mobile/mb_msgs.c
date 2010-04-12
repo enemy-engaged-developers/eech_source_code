@@ -1966,7 +1966,7 @@ static int response_to_waypoint_recon_reached (entity_messages message, entity *
 	}
 	else
 	{
-		play_client_server_cpg_message (receiver, 0.8, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, SPEECH_CPG_TRANSMITTING_RECON);
+		play_client_server_cpg_message (receiver, 0.8f, 30.0, SPEECH_CATEGORY_MISSION_RELATED, -1.0, SPEECH_CPG_TRANSMITTING_RECON);
 	}
 
 	/////////////////////////////////////////////////////////////////

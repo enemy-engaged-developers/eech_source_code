@@ -320,7 +320,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 				play_client_server_wingman_message
 				(
 					victim,
-					0.8,
+					0.8f,
 					8.0,
 					SPEECH_CATEGORY_UNDER_ATTACK, 16.0,
 					aircraft_hit_victim_wingman_comments [val].introduction,
@@ -355,7 +355,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 					play_client_server_cpg_message
 					(
 						aggressor,
-						0.6,
+						0.6f,
 						5.0,
 						SPEECH_CATEGORY_ATTACKING_TARGETS, 15.0,
 						speech_index
@@ -382,7 +382,7 @@ void play_aircraft_shot_at_speech (entity *victim, entity *aggressor)
 					play_client_server_wingman_message
 					(
 						aggressor,
-						0.6,
+						0.6f,
 						5.0,
 						SPEECH_CATEGORY_ATTACKING_TARGETS, 16.0,
 						aircraft_hit_aggressor_wingman_comments [val].introduction,
@@ -490,7 +490,7 @@ void play_aircraft_destroyed_speech (entity *victim, entity *aggressor)
 				play_client_server_cpg_message
 				(
 					aggressor,
-					0.6,
+					0.6f,
 					5.0,
 					SPEECH_CATEGORY_DESTROYED_TARGETS, 8.0,
 					speech_index
@@ -504,7 +504,7 @@ void play_aircraft_destroyed_speech (entity *victim, entity *aggressor)
 				play_client_server_wingman_message
 				(
 					aggressor,
-					0.6,
+					0.6f,
 					5.0,
 					SPEECH_CATEGORY_DESTROYED_TARGETS, 8.0,
 					SPEECH_INTRODUCTION_SOMETIMES,

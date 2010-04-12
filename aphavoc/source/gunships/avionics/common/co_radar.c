@@ -246,9 +246,9 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 
 			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
-			if (radar->sweep_offset > rad (180.0))
+			if (radar->sweep_offset > rad (180.0f))
 			{
-				radar->sweep_offset -= rad (360.0);
+				radar->sweep_offset -= rad (360.0f);
 			}
 
 			*cw_sweep_end_offset = radar->sweep_offset;
@@ -271,9 +271,9 @@ static void update_radar_sweep (radar_params *radar, float *cw_sweep_start_offse
 
 			radar->sweep_offset += radar->sweep_rate * radar->sweep_direction * get_delta_time ();
 
-			if (radar->sweep_offset < rad (-180.0))
+			if (radar->sweep_offset < rad (-180.0f))
 			{
-				radar->sweep_offset += rad (360.0);
+				radar->sweep_offset += rad (360.0f);
 			}
 
 			*cw_sweep_start_offset = radar->sweep_offset;
@@ -1101,16 +1101,16 @@ static entity *get_best_ground_radar_target (void)
 
 					theta = target_bearing - source_heading;
 
-					if (theta > rad (180.0))
+					if (theta > rad (180.0f))
 					{
-						theta -= rad (360.0);
+						theta -= rad (360.0f);
 					}
-					else if (theta < rad (-180.0))
+					else if (theta < rad (-180.0f))
 					{
-						theta += rad (360.0);
+						theta += rad (360.0f);
 					}
 
-					if ((theta >= rad (-45.0)) && (theta <= rad (45.0)))
+					if ((theta >= rad (-45.0f)) && (theta <= rad (45.0f)))
 					{
 						////////////////////////////////////////
 						//
@@ -1132,13 +1132,13 @@ static entity *get_best_ground_radar_target (void)
 
 						theta = target_bearing - (source_heading + ground_radar.scan_datum);
 
-						if (theta > rad (180.0))
+						if (theta > rad (180.0f))
 						{
-							theta -= rad (360.0);
+							theta -= rad (360.0f);
 						}
-						else if (theta < rad (-180.0))
+						else if (theta < rad (-180.0f))
 						{
-							theta += rad (360.0);
+							theta += rad (360.0f);
 						}
 
 						theta = fabs (theta);
@@ -1166,7 +1166,7 @@ static entity *get_best_ground_radar_target (void)
 
 						theta = min (theta, rad (45.0f));
 
-						delta_score = 1.0 - (theta * (1.0 / rad (45.0)));
+						delta_score = 1.0 - (theta * (1.0 / rad (45.0f)));
 
 						score += delta_score;
 
@@ -1401,16 +1401,16 @@ static int get_selectable_ground_radar_target (entity *target)
 
 				theta = target_bearing - source_heading;
 
-				if (theta > rad (180.0))
+				if (theta > rad (180.0f))
 				{
-					theta -= rad (360.0);
+					theta -= rad (360.0f);
 				}
-				else if (theta < rad (-180.0))
+				else if (theta < rad (-180.0f))
 				{
-					theta += rad (360.0);
+					theta += rad (360.0f);
 				}
 
-				if ((theta >= rad (-45.0)) && (theta <= rad (45.0)))
+				if ((theta >= rad (-45.0f)) && (theta <= rad (45.0f)))
 				{
 					return (TRUE);
 				}
@@ -1601,24 +1601,24 @@ void update_common_ground_radar (int inactive_check)
 
 		cw_sweep_start_direction = heading + ground_radar.scan_datum + cw_sweep_start_offset;
 
-		if (cw_sweep_start_direction > rad (180.0))
+		if (cw_sweep_start_direction > rad (180.0f))
 		{
-			cw_sweep_start_direction -= rad (360.0);
+			cw_sweep_start_direction -= rad (360.0f);
 		}
-		else if (cw_sweep_start_direction < rad (-180.0))
+		else if (cw_sweep_start_direction < rad (-180.0f))
 		{
-			cw_sweep_start_direction += rad (360.0);
+			cw_sweep_start_direction += rad (360.0f);
 		}
 
 		cw_sweep_end_direction = heading + ground_radar.scan_datum + cw_sweep_end_offset;
 
-		if (cw_sweep_end_direction > rad (180.0))
+		if (cw_sweep_end_direction > rad (180.0f))
 		{
-			cw_sweep_end_direction -= rad (360.0);
+			cw_sweep_end_direction -= rad (360.0f);
 		}
-		else if (cw_sweep_end_direction < rad (-180.0))
+		else if (cw_sweep_end_direction < rad (-180.0f))
 		{
-			cw_sweep_end_direction += rad (360.0);
+			cw_sweep_end_direction += rad (360.0f);
 		}
 
 		////////////////////////////////////////
@@ -2166,13 +2166,13 @@ static entity *get_best_air_radar_target (void)
 					{
 						theta = target_bearing - source_heading;
 
-						if (theta > rad (180.0))
+						if (theta > rad (180.0f))
 						{
-							theta -= rad (360.0);
+							theta -= rad (360.0f);
 						}
-						else if (theta < rad (-180.0))
+						else if (theta < rad (-180.0f))
 						{
-							theta += rad (360.0);
+							theta += rad (360.0f);
 						}
 
 						theta = fabs (theta);
@@ -2183,13 +2183,13 @@ static entity *get_best_air_radar_target (void)
 					{
 						theta = target_bearing - (source_heading + air_radar.scan_datum);
 
-						if (theta > rad (180.0))
+						if (theta > rad (180.0f))
 						{
-							theta -= rad (360.0);
+							theta -= rad (360.0f);
 						}
-						else if (theta < rad (-180.0))
+						else if (theta < rad (-180.0f))
 						{
-							theta += rad (360.0);
+							theta += rad (360.0f);
 						}
 
 						theta = fabs (theta);
@@ -2216,7 +2216,7 @@ static entity *get_best_air_radar_target (void)
 					// SCORE: deviation from radar scan datum
 					//
 
-					delta_score = 1.0 - (theta * (1.0 / rad (180.0)));
+					delta_score = 1.0 - (theta * (1.0 / rad (180.0f)));
 
 					score += delta_score;
 
@@ -2230,33 +2230,33 @@ static entity *get_best_air_radar_target (void)
 					// SCORE: aspect (target facing player)
 					//
 
-					source_bearing = target_bearing + rad (180.0);
+					source_bearing = target_bearing + rad (180.0f);
 
-					if (source_bearing > rad (180.0))
+					if (source_bearing > rad (180.0f))
 					{
-						source_bearing -= rad (360.0);
+						source_bearing -= rad (360.0f);
 					}
-					else if (source_bearing < rad (-180.0))
+					else if (source_bearing < rad (-180.0f))
 					{
-						source_bearing += rad (360.0);
+						source_bearing += rad (360.0f);
 					}
 
 					target_heading = get_local_entity_float_value (target, FLOAT_TYPE_HEADING);
 
 					theta = source_bearing - target_heading;
 
-					if (theta > rad (180.0))
+					if (theta > rad (180.0f))
 					{
-						theta -= rad (360.0);
+						theta -= rad (360.0f);
 					}
-					else if (theta < rad (-180.0))
+					else if (theta < rad (-180.0f))
 					{
-						theta += rad (360.0);
+						theta += rad (360.0f);
 					}
 
 					theta = fabs (theta);
 
-					delta_score = 1.0 - (theta * (1.0 / rad (180.0)));
+					delta_score = 1.0 - (theta * (1.0 / rad (180.0f)));
 
 					score += delta_score;
 
@@ -2617,24 +2617,24 @@ void update_common_air_radar (void)
 
 		cw_sweep_start_direction = heading + air_radar.scan_datum + cw_sweep_start_offset;
 
-		if (cw_sweep_start_direction > rad (180.0))
+		if (cw_sweep_start_direction > rad (180.0f))
 		{
-			cw_sweep_start_direction -= rad (360.0);
+			cw_sweep_start_direction -= rad (360.0f);
 		}
-		else if (cw_sweep_start_direction < rad (-180.0))
+		else if (cw_sweep_start_direction < rad (-180.0f))
 		{
-			cw_sweep_start_direction += rad (360.0);
+			cw_sweep_start_direction += rad (360.0f);
 		}
 
 		cw_sweep_end_direction = heading + air_radar.scan_datum + cw_sweep_end_offset;
 
-		if (cw_sweep_end_direction > rad (180.0))
+		if (cw_sweep_end_direction > rad (180.0f))
 		{
-			cw_sweep_end_direction -= rad (360.0);
+			cw_sweep_end_direction -= rad (360.0f);
 		}
-		else if (cw_sweep_end_direction < rad (-180.0))
+		else if (cw_sweep_end_direction < rad (-180.0f))
 		{
-			cw_sweep_end_direction += rad (360.0);
+			cw_sweep_end_direction += rad (360.0f);
 		}
 
 		////////////////////////////////////////

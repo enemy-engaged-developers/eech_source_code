@@ -508,7 +508,7 @@ static unsigned char assess_cover_position (entity *en, entity *aggressor, entit
 
 	ASSERT (selected_weapon != ENTITY_SUB_TYPE_WEAPON_NO_WEAPON);
 	
-	weapon_max_range = weapon_database [selected_weapon].max_range * 0.9;
+	weapon_max_range = weapon_database [selected_weapon].max_range * 0.9f;
 
 	weapon_min_range = weapon_database [selected_weapon].min_range;
 
@@ -1402,8 +1402,8 @@ int update_guide_seek_cover_forest_search (entity *en)
 		average_point.x += point->x;
 		average_point.z += point->z;
 	
-		average_point.x *= 0.333333;
-		average_point.z *= 0.333333;
+		average_point.x *= 0.333333f;
+		average_point.z *= 0.333333f;
 		
 		//
 		// Find cover position

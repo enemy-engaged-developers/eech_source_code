@@ -165,7 +165,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 
 		if (main_rotor_rpm >= MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)
 		{
-			main_rotor_blade_coning_angle = ((main_rotor_rpm - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) / (100.0 - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)) * rad (10.0);
+			main_rotor_blade_coning_angle = ((main_rotor_rpm - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) / (100.0 - MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD)) * rad (10.0f);
 		}
 		else
 		{
@@ -204,7 +204,7 @@ void animate_helicopter_main_rotors (entity *en, int ignore_drawn_once, int anim
 	{
 		main_rotor_motion_blurred = FALSE;
 
-		main_rotor_delta_heading = rad (180.0) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
+		main_rotor_delta_heading = rad (180.0f) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
 
 		main_rotor_blade_droop_angle *= 1.0 - (main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD));
 	}
@@ -613,7 +613,7 @@ void animate_damaged_helicopter_main_rotors (entity *en, int ignore_drawn_once)
 
 	main_rotor_blade_droop_angle = get_local_entity_float_value (en, FLOAT_TYPE_MAIN_ROTOR_BLADE_DROOP_ANGLE);
 
-	main_rotor_delta_heading = rad (180.0) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
+	main_rotor_delta_heading = rad (180.0f) * main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * get_delta_time ();
 
 	main_rotor_blade_droop_angle *= 1.0 - (main_rotor_rpm * (1.0 / MAIN_ROTOR_RPM_MOTION_BLUR_THRESHOLD));
 
@@ -875,7 +875,7 @@ void animate_helicopter_tail_rotor (entity *en)
 	{
   		if (get_time_acceleration () != TIME_ACCELERATION_PAUSE)
 		{
-			tail_rotor_delta_pitch = rad (180.0) * tail_rotor_rpm * (1.0 / TAIL_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * tail_rotor_direction * get_delta_time ();
+			tail_rotor_delta_pitch = rad (180.0f) * tail_rotor_rpm * (1.0 / TAIL_ROTOR_RPM_MOTION_BLUR_THRESHOLD) * tail_rotor_direction * get_delta_time ();
 		}
 
 		//
@@ -934,7 +934,7 @@ void animate_helicopter_tail_rotor (entity *en)
 	{
   		if (get_time_acceleration () != TIME_ACCELERATION_PAUSE)
 		{
-			tail_rotor_delta_pitch = rad (180.0) * tail_rotor_direction * get_delta_time ();
+			tail_rotor_delta_pitch = rad (180.0f) * tail_rotor_direction * get_delta_time ();
 		}
 
 		//

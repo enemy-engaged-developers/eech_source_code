@@ -171,19 +171,19 @@ extern entity
 #define MAX_WEATHER_RADIUS	100000.0
 #define WEATHER_EXPANSION_RATE	100.0
 
-#define WEATHER_EFFECT_SPEED			knots_to_metres_per_second (360.0)
+#define WEATHER_EFFECT_SPEED			knots_to_metres_per_second (360.0f)
 
 #define MIN_WIND_RADIUS	8000.0
 #define MAX_WIND_RADIUS	128000.0
 #define WIND_EXPANSION_RATE	200.0
 
-#define WIND_EFFECT_SPEED				knots_to_metres_per_second (400.0)
+#define WIND_EFFECT_SPEED				knots_to_metres_per_second (400.0f)
 
 #define WIND_GUST_FREQUENCY	0.1
 
 // magnitude of 0 to 15 knots works well with smoke effects
-#define DEFAULT_MIN_WIND_SPEED		knots_to_metres_per_second (5.0)
-#define DEFAULT_MAX_WIND_SPEED		knots_to_metres_per_second (25.0)
+#define DEFAULT_MIN_WIND_SPEED		knots_to_metres_per_second (5.0f)
+#define DEFAULT_MAX_WIND_SPEED		knots_to_metres_per_second (25.0f)
 
 #define SESSION_RESYNC_FREQUENCY		ONE_MINUTE
 

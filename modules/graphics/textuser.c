@@ -4184,75 +4184,75 @@ static void initialize_known_coordinates(void)
 	switch (current_map_info.mapnr)
 	{
 	case 1:  // Thailand
-		current_map_info.latitude = rad(18.393);
-		current_map_info.longitude = rad(97.87);
+		current_map_info.latitude = rad(18.393f);
+		current_map_info.longitude = rad(97.87f);
 		break;
 	case 2:  // Cuba
-		current_map_info.latitude = rad(19.577);
-		current_map_info.longitude = rad(-78.628);
+		current_map_info.latitude = rad(19.577f);
+		current_map_info.longitude = rad(-78.628f);
 		break;
 	case 3:  // Georgia
-		current_map_info.latitude = rad(41.16);
-		current_map_info.longitude = rad(40.185);
+		current_map_info.latitude = rad(41.16f);
+		current_map_info.longitude = rad(40.185f);
 		break;
 	case 4:  // Taiwan
-		current_map_info.latitude = rad(21.96);
-		current_map_info.longitude = rad(119.75);
+		current_map_info.latitude = rad(21.96f);
+		current_map_info.longitude = rad(119.75f);
 		break;
 	case 5:  // Lebanon
-		current_map_info.latitude = rad(32.86);
-		current_map_info.longitude = rad(35.01);
+		current_map_info.latitude = rad(32.86f);
+		current_map_info.longitude = rad(35.01f);
 		break;
 	case 6:  // Yemen
-		current_map_info.latitude = rad(16.77);
-		current_map_info.longitude = rad(43.03);
+		current_map_info.latitude = rad(16.77f);
+		current_map_info.longitude = rad(43.03f);
 		break;
 	case 7:  // Alaska
-		current_map_info.latitude = rad(64.34);
-		current_map_info.longitude = rad(-167.13);
+		current_map_info.latitude = rad(64.34f);
+		current_map_info.longitude = rad(-167.13f);
 		break;
 	case 8:  // Aleutean islands
-		current_map_info.latitude = rad(51.25);
-		current_map_info.longitude = rad(-178.53);
+		current_map_info.latitude = rad(51.25f);
+		current_map_info.longitude = rad(-178.53f);
 		break;
 	case 9:  // Kuwait
-		current_map_info.latitude = rad(28.29);
-		current_map_info.longitude = rad(45.82);
+		current_map_info.latitude = rad(28.29f);
+		current_map_info.longitude = rad(45.82f);
 		break;
 	case 10: // Libya
-		current_map_info.latitude = rad(21.33);
-		current_map_info.longitude = rad(17.27);
+		current_map_info.latitude = rad(21.33f);
+		current_map_info.longitude = rad(17.27f);
 		break;
 	case 11: // Grand Canyon
-		current_map_info.latitude = rad(35.65);
-		current_map_info.longitude = rad(-114.04);
+		current_map_info.latitude = rad(35.65f);
+		current_map_info.longitude = rad(-114.04f);
 		break;
 	case 12: // Mars
 		// not on earth...
 		break;
 	case 13: // Alexander Archipelago
-		current_map_info.latitude = rad(54.44);
-		current_map_info.longitude = rad(-134.55);
+		current_map_info.latitude = rad(54.44f);
+		current_map_info.longitude = rad(-134.55f);
 		break;
 	case 14: // Skagway
-		current_map_info.latitude = rad(59.01);
-		current_map_info.longitude = rad(-137.055);
+		current_map_info.latitude = rad(59.01f);
+		current_map_info.longitude = rad(-137.055f);
 		break;
 	case 15: // Red Sea
-		current_map_info.latitude = rad(21.0);
-		current_map_info.longitude = rad(35.5);
+		current_map_info.latitude = rad(21.0f);
+		current_map_info.longitude = rad(35.5f);
 		break;
 	case 17: // Afognak
-		current_map_info.latitude = rad(55.99);
-		current_map_info.longitude = rad(-155.86);
+		current_map_info.latitude = rad(55.99f);
+		current_map_info.longitude = rad(-155.86f);
 		break;
 	case 18: // Puerto Rico
-		current_map_info.latitude = rad(17.55);
-		current_map_info.longitude = rad(-68.06);
+		current_map_info.latitude = rad(17.55f);
+		current_map_info.longitude = rad(-68.06f);
 		break;
 	case 31: // New Grand Canyon
-		current_map_info.latitude = rad(35.65);
-		current_map_info.longitude = rad(-114.04);
+		current_map_info.latitude = rad(35.65f);
+		current_map_info.longitude = rad(-114.04f);
 		break;
 	}
 }

@@ -361,7 +361,7 @@ task_completed_types assess_task_completeness (entity *en, task_terminated_types
 			// safe by simply repairing one structure...
 			//
 			
-			min_eff *= 0.8;
+			min_eff *= 0.8f;
 
 			if ((!get_local_entity_int_value (objective, INT_TYPE_IN_USE)) ||
 				(get_local_entity_float_value (objective, FLOAT_TYPE_EFFICIENCY) < min_eff))
@@ -1505,7 +1505,7 @@ const char *get_task_objective_string (entity *en)
 										||
 		(!get_local_entity_int_value (objective, INT_TYPE_HIDDEN_BY_FOG_OF_WAR))
 										||
-		((info == TASK_OBJECTIVE_INFO_FOG_OF_WAR_KNOWN) && (get_sector_fog_of_war_value (sector, side) > 0.1)))
+		((info == TASK_OBJECTIVE_INFO_FOG_OF_WAR_KNOWN) && (get_sector_fog_of_war_value (sector, side) > 0.1f)))
 	{
 		if (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE)
 		{
@@ -1591,7 +1591,7 @@ void get_task_objective_mfd_display_string (entity *en, char *s)
 										||
 		(!get_local_entity_int_value (objective, INT_TYPE_HIDDEN_BY_FOG_OF_WAR))
 										||
-		((info == TASK_OBJECTIVE_INFO_FOG_OF_WAR_KNOWN) && (get_sector_fog_of_war_value (sector, side) > 0.1)))
+		((info == TASK_OBJECTIVE_INFO_FOG_OF_WAR_KNOWN) && (get_sector_fog_of_war_value (sector, side) > 0.1f)))
 	{
 		if (get_local_entity_type (objective) == ENTITY_TYPE_KEYSITE)
 		{

@@ -111,11 +111,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,	  	 														// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.2902 + 2.3798),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.2902f + 2.3798f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			20.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			20.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -123,13 +123,13 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			4000.0,		  													// surface_scan_range
-			0.333,															// potential_surface_to_air_threat
+			0.333f,															// potential_surface_to_air_threat
 			1.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
 			1.0,																// armour_front
-			0.75,																// armour_side
-			0.5,																// armour_rear
+			0.75f,																// armour_side
+			0.5f,																// armour_rear
 
 			1500,																// initial_damage_level
 			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
@@ -173,11 +173,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.10 + 2.125),												// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.10f + 2.125f),												// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			20.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			20.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -185,13 +185,13 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			4000.0,															// surface_scan_range
-			0.333,  															// potential_surface_to_air_threat
+			0.333f,  															// potential_surface_to_air_threat
 			1.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
 			1.0,																// armour_front
-			0.75,																// armour_side
-			0.5,																// armour_rear
+			0.75f,																// armour_side
+			0.5f,																// armour_rear
 
 			1350,																// initial_damage_level
 			WARHEAD_EFFECTIVE_ARMOURED_VEHICLE,						// warhead_effective_class
@@ -235,11 +235,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.995 + 1.855),												// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.995f + 1.855f),												// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			3000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -247,11 +247,11 @@ vehicle_data
 			2000.0,															// air_scan_ceiling
 			4000.0,															// air_scan_range
 			4000.0,															// surface_scan_range
-			0.666,															// potential_surface_to_air_threat
+			0.666f,															// potential_surface_to_air_threat
 			1.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
-			0.75,																// armour_front
+			0.75f,																// armour_front
 			0.5,																// armour_side
 			0.5,																// armour_rear
 
@@ -297,11 +297,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.38 + 2.156),												// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.38f + 2.156f),												// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			3000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -309,7 +309,7 @@ vehicle_data
 			2000.0,															// air_scan_ceiling
 			4000.0,															// air_scan_range
 			4000.0,															// surface_scan_range
-			0.666, 															// potential_surface_to_air_threat
+			0.666f, 															// potential_surface_to_air_threat
 			1.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -359,11 +359,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.78 + 2.52),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.78f + 2.52f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -371,7 +371,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			5000.0,	  														// surface_scan_range
-			0.666,  															// potential_surface_to_air_threat
+			0.666f,  															// potential_surface_to_air_threat
 			1.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -421,11 +421,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.40 + 1.30),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.40f + 1.30f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -433,7 +433,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.333,															// potential_surface_to_air_threat
+			0.333f,															// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -483,11 +483,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,	  		  													// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.25 + 2.21),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.25f + 2.21f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -495,7 +495,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.333, 															// potential_surface_to_air_threat
+			0.333f, 															// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -545,11 +545,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,	  		  													// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.6275 + 1.4375),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.6275f + 1.4375f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -607,11 +607,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,	  			 												// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.40 + 1.65),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.40f + 1.65f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -619,7 +619,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.333,															// potential_surface_to_air_threat
+			0.333f,															// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -669,11 +669,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.0052 + 2.0148),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.0052f + 2.0148f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -681,11 +681,11 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.333,		 													// potential_surface_to_air_threat
+			0.333f,		 													// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
-			0.75,																// armour_front
+			0.75f,																// armour_front
 			0.5,																// armour_side
 			0.25,																// armour_rear
 
@@ -731,11 +731,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.10 + 2.125),												// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.10f + 2.125f),												// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -743,11 +743,11 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.333,															// potential_surface_to_air_threat
+			0.333f,															// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
-			0.75,																// armour_front
+			0.75f,																// armour_front
 			0.5,																// armour_side
 			0.25,																// armour_rear
 
@@ -793,11 +793,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.15 + 1.93),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.15f + 1.93f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -855,11 +855,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.46 + 2.50),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.46f + 2.50f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -917,11 +917,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.40 + 1.30),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.40f + 1.30f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			2000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -929,7 +929,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2500.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.666,															// potential_surface_to_air_threat
+			0.666f,															// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -979,11 +979,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.2832 + 2.5476),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.2832f + 2.5476f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			6000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1041,11 +1041,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.63 + 1.44),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.63f + 1.44f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			4000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1103,11 +1103,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.395 + 1.515),												// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.395f + 1.515f),												// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			4000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1165,11 +1165,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.7832 + 2.0776),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.7832f + 2.0776f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			3000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1227,11 +1227,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.6275 + 1.4375),											// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.6275f + 1.4375f),											// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1289,11 +1289,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(1.31 + 1.04),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(1.31f + 1.04f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1351,11 +1351,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.69 + 2.36),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.69f + 2.36f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1413,11 +1413,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.69 + 2.36),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.69f + 2.36f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1475,11 +1475,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.46 + 2.50),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.46f + 2.50f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1537,11 +1537,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(3.20 + 3.70),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(3.20f + 3.70f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1599,11 +1599,11 @@ vehicle_data
 			100.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			550.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (20.0),              	// cruise_velocity
-			(2.46 + 2.50),													// axle_length
+			knots_to_metres_per_second (20.0f),              	// cruise_velocity
+			(2.46f + 2.50f),													// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			7.0 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			7.0f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1661,11 +1661,11 @@ vehicle_data
 			1000.0,	  														// chase_view_max_distance
 			0.5,			  													// chase_view_min_distance_test
 			5100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (24.0),	            	// cruise_velocity
+			knots_to_metres_per_second (24.0f),	            	// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.02 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.02f * G, 														// g_max
 			20.0,																// power_output
 			8000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1673,7 +1673,7 @@ vehicle_data
 			5000.0,															// air_scan_ceiling
 			10000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.8,																// potential_surface_to_air_threat
+			0.8f,																// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -1723,11 +1723,11 @@ vehicle_data
 			1000.0,	  														// chase_view_max_distance
 			0.5,	  															// chase_view_min_distance_test
 			5100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (32.0),               	// cruise_velocity
+			knots_to_metres_per_second (32.0f),               	// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.02 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.02f * G, 														// g_max
 			20.0,																// power_output
 			8000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1735,7 +1735,7 @@ vehicle_data
 			5000.0,															// air_scan_ceiling
 			10000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.8,																// potential_surface_to_air_threat
+			0.8f,																// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -1785,11 +1785,11 @@ vehicle_data
 			750.0,	  														// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			5100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (29.0),						// cruise_velocity
+			knots_to_metres_per_second (29.0f),						// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.05 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.05f * G, 														// g_max
 			20.0,																// power_output
 			6000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1847,11 +1847,11 @@ vehicle_data
 			750.0,	  														// chase_view_max_distance
 			0.5,		 														// chase_view_min_distance_test
 			5100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (32.0),						// cruise_velocity
+			knots_to_metres_per_second (32.0f),						// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.05 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.05f * G, 														// g_max
 			20.0,																// power_output
 			6000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -1909,11 +1909,11 @@ vehicle_data
 			300.0,	  														// chase_view_max_distance
 			0.5,			  													// chase_view_min_distance_test
 			500.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (7.5),	            	// cruise_velocity
+			knots_to_metres_per_second (7.5f),	            	// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.1 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.1f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -1971,11 +1971,11 @@ vehicle_data
 			300.0,	  														// chase_view_max_distance
 			0.5,			  													// chase_view_min_distance_test
 			500.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (7.5),	            	// cruise_velocity
+			knots_to_metres_per_second (7.5f),	            	// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.1 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.1f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -2033,11 +2033,11 @@ vehicle_data
 			350.0,	  														// chase_view_max_distance
 			0.5,			  													// chase_view_min_distance_test
 			500.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (7.5),	            	// cruise_velocity
+			knots_to_metres_per_second (7.5f),	            	// cruise_velocity
 			(100),															// axle_length
 			2.0,																// max_acceleration
-			rad (5.0),														// max_turn_rate (rad / second)
-			0.1 * G, 														// g_max
+			rad (5.0f),														// max_turn_rate (rad / second)
+			0.1f * G, 														// g_max
 			20.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -2045,7 +2045,7 @@ vehicle_data
 			1000.0,															// air_scan_ceiling
 			2000.0,															// air_scan_range
 			0.0,																// surface_scan_range
-			0.666,	 														// potential_surface_to_air_threat
+			0.666f,	 														// potential_surface_to_air_threat
 			0.0,																// potential_surface_to_surface_threat
 			10.0,																// Ammo_economy
 			10.0,																// Fuel_economy
@@ -2095,11 +2095,11 @@ vehicle_data
 			10.0,	  		 													// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			100.0,	  														// chase_view_max_distance_test
-			0.8,   										  	         	// cruise_velocity
+			0.8f,   										  	         	// cruise_velocity
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			500.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -2157,11 +2157,11 @@ vehicle_data
 			10.0,	  		 													// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (5.0),     	         	// cruise_velocity
+			knots_to_metres_per_second (5.0f),     	         	// cruise_velocity
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -2223,7 +2223,7 @@ vehicle_data
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -2281,11 +2281,11 @@ vehicle_data
 			10.0,	  		 													// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			100.0,	  														// chase_view_max_distance_test
-			0.8,   										  	         	// cruise_velocity
+			0.8f,   										  	         	// cruise_velocity
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			500.0,															// recon_radius
 			0.0,																// target_scan_delay
@@ -2343,11 +2343,11 @@ vehicle_data
 			10.0,	  		 													// chase_view_max_distance
 			0.5,																// chase_view_min_distance_test
 			100.0,	  														// chase_view_max_distance_test
-			knots_to_metres_per_second (5.0),   	           	// cruise_velocity
+			knots_to_metres_per_second (5.0f),   	           	// cruise_velocity
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay
@@ -2409,7 +2409,7 @@ vehicle_data
 			0.0,						 										// axle_length
 			0.0,																// max_acceleration
 			rad (0.0),														// max_turn_rate (rad / second)
-			1.0 * G, 														// g_max
+			1.0f * G, 														// g_max
 			0.0,																// power_output
 			1000.0,															// recon_radius
 			15.0,																// target_scan_delay

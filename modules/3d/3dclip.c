@@ -861,15 +861,15 @@ void insert_z_near_coordinate ( vertex *point1, vertex *point2 )
 		clip_point = clip_point->next_vertex;
 	}
 
-	clip->x = point2->x + ( t * ( point2->x - point1->x ) );
-	clip->y = point2->y + ( t * ( point2->y - point1->y ) );
+	clip->x = point2->x + ( float ) ( t * ( point2->x - point1->x ) );
+	clip->y = point2->y + ( float ) ( t * ( point2->y - point1->y ) );
 
-	alpha = ( float ) int_alpha + ( t * ( float ) int_dalpha );
-	fog = ( float ) int_fog + ( t * ( float ) int_dfog );
-	specular = ( float ) int_specular + ( t * ( float ) int_dspecular );
-	red = ( float ) int_red + ( t * ( float ) int_dred );
-	green = ( float ) int_green + ( t * ( float ) int_dgreen );
-	blue = ( float ) int_blue + ( t * ( float ) int_dblue );
+	alpha = ( float ) int_alpha + ( float ) ( t * ( float ) int_dalpha );
+	fog = ( float ) int_fog + ( float ) ( t * ( float ) int_dfog );
+	specular = ( float ) int_specular + ( float ) ( t * ( float ) int_dspecular );
+	red = ( float ) int_red + ( float ) ( t * ( float ) int_dred );
+	green = ( float ) int_green + ( float ) ( t * ( float ) int_dgreen );
+	blue = ( float ) int_blue + ( float ) ( t * ( float ) int_dblue );
 
 	alpha += FLOAT_FLOAT_FACTOR;
 	fog += FLOAT_FLOAT_FACTOR;
@@ -892,8 +892,8 @@ void insert_z_near_coordinate ( vertex *point1, vertex *point2 )
 	clip->green = int_green;
 	clip->blue = int_blue;
 
-	clip->u = point2->u + ( t * ( point2->u - point1->u ) );
-	clip->v = point2->v + ( t * ( point2->v - point1->v ) );
+	clip->u = point2->u + ( float ) ( t * ( point2->u - point1->u ) );
+	clip->v = point2->v + ( float ) ( t * ( point2->v - point1->v ) );
 
 	clip->j = active_3d_environment->y_origin;
 
@@ -991,15 +991,15 @@ void insert_z_far_coordinate ( vertex *point1, vertex *point2 )
 		clip_point = clip_point->next_vertex;
 	}
 
-	clip->x = point2->x + ( t * ( point2->x - point1->x ) );
-	clip->y = point2->y + ( t * ( point2->y - point1->y ) );
+	clip->x = point2->x + ( float ) ( t * ( point2->x - point1->x ) );
+	clip->y = point2->y + ( float ) ( t * ( point2->y - point1->y ) );
 
-	alpha = ( float ) int_alpha + ( t * ( float ) int_dalpha );
-	fog = ( float ) int_fog + ( t * ( float ) int_dfog );
-	specular = ( float ) int_specular + ( t * ( float ) int_dspecular );
-	red = ( float ) int_red + ( t * ( float ) int_dred );
-	green = ( float ) int_green + ( t * ( float ) int_dgreen );
-	blue = ( float ) int_blue + ( t * ( float ) int_dblue );
+	alpha = ( float ) int_alpha + ( float ) ( t * ( float ) int_dalpha );
+	fog = ( float ) int_fog + ( float ) ( t * ( float ) int_dfog );
+	specular = ( float ) int_specular + ( float ) ( t * ( float ) int_dspecular );
+	red = ( float ) int_red + ( float ) ( t * ( float ) int_dred );
+	green = ( float ) int_green + ( float ) ( t * ( float ) int_dgreen );
+	blue = ( float ) int_blue + ( float ) ( t * ( float ) int_dblue );
 
 	alpha += FLOAT_FLOAT_FACTOR;
 	fog += FLOAT_FLOAT_FACTOR;
@@ -1022,8 +1022,8 @@ void insert_z_far_coordinate ( vertex *point1, vertex *point2 )
 	clip->green = int_green;
 	clip->blue = int_blue;
 
-	clip->u = point2->u + ( t * ( point2->u - point1->u ) );
-	clip->v = point2->v + ( t * ( point2->v - point1->v ) );
+	clip->u = point2->u + ( float ) ( t * ( point2->u - point1->u ) );
+	clip->v = point2->v + ( float ) ( t * ( point2->v - point1->v ) );
 
 	clip->j = active_3d_environment->y_origin;
 
@@ -1141,19 +1141,19 @@ void insert_z_near_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 		clip_point = clip_point->next_vertex;
 	}
 
-	clip->x = point2->x + ( t * ( point2->x - point1->x ) );
-	clip->y = point2->y + ( t * ( point2->y - point1->y ) );
+	clip->x = point2->x + ( float ) ( t * ( point2->x - point1->x ) );
+	clip->y = point2->y + ( float ) ( t * ( point2->y - point1->y ) );
 
-	fog = ( float ) int_fog + ( t * ( float ) int_dfog );
-	specular = ( float ) int_specular + ( t * ( float ) int_dspecular );
-	alpha = ( float ) int_alpha + ( t * ( float ) int_dalpha );
-	alpha2 = ( float ) int_alpha2 + ( t * ( float ) int_dalpha2 );
-	red = ( float ) int_red + ( t * ( float ) int_dred );
-	red2 = ( float ) int_red2 + ( t * ( float ) int_dred2 );
-	green = ( float ) int_green + ( t * ( float ) int_dgreen );
-	green2 = ( float ) int_green2 + ( t * ( float ) int_dgreen2 );
-	blue = ( float ) int_blue + ( t * ( float ) int_dblue );
-	blue2 = ( float ) int_blue2 + ( t * ( float ) int_dblue2 );
+	fog = ( float ) int_fog + ( float ) ( t * ( float ) int_dfog );
+	specular = ( float ) int_specular + ( float ) ( t * ( float ) int_dspecular );
+	alpha = ( float ) int_alpha + ( float ) ( t * ( float ) int_dalpha );
+	alpha2 = ( float ) int_alpha2 + ( float ) ( t * ( float ) int_dalpha2 );
+	red = ( float ) int_red + ( float ) ( t * ( float ) int_dred );
+	red2 = ( float ) int_red2 + ( float ) ( t * ( float ) int_dred2 );
+	green = ( float ) int_green + ( float ) ( t * ( float ) int_dgreen );
+	green2 = ( float ) int_green2 + ( float ) ( t * ( float ) int_dgreen2 );
+	blue = ( float ) int_blue + ( float ) ( t * ( float ) int_dblue );
+	blue2 = ( float ) int_blue2 + ( float ) ( t * ( float ) int_dblue2 );
 
 	fog += FLOAT_FLOAT_FACTOR;
 	specular += FLOAT_FLOAT_FACTOR;
@@ -1188,10 +1188,10 @@ void insert_z_near_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 	clip->blue = int_blue;
 	clip->blue2 = int_blue2;
 
-	clip->u = point2->u + ( t * ( point2->u - point1->u ) );
-	clip->v = point2->v + ( t * ( point2->v - point1->v ) );
-	clip->u2 = point2->u2 + ( t * ( point2->u2 - point1->u2 ) );
-	clip->v2 = point2->v2 + ( t * ( point2->v2 - point1->v2 ) );
+	clip->u = point2->u + ( float ) ( t * ( point2->u - point1->u ) );
+	clip->v = point2->v + ( float ) ( t * ( point2->v - point1->v ) );
+	clip->u2 = point2->u2 + ( float ) ( t * ( point2->u2 - point1->u2 ) );
+	clip->v2 = point2->v2 + ( float ) ( t * ( point2->v2 - point1->v2 ) );
 
 	clip->j = active_3d_environment->y_origin;
 
@@ -1309,19 +1309,19 @@ void insert_z_far_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 		clip_point = clip_point->next_vertex;
 	}
 
-	clip->x = point2->x + ( t * ( point2->x - point1->x ) );
-	clip->y = point2->y + ( t * ( point2->y - point1->y ) );
+	clip->x = point2->x + ( float ) ( t * ( point2->x - point1->x ) );
+	clip->y = point2->y + ( float ) ( t * ( point2->y - point1->y ) );
 
-	fog = ( float ) int_fog + ( t * ( float ) int_dfog );
-	specular = ( float ) int_specular + ( t * ( float ) int_dspecular );
-	alpha = ( float ) int_alpha + ( t * ( float ) int_dalpha );
-	alpha2 = ( float ) int_alpha2 + ( t * ( float ) int_dalpha2 );
-	red = ( float ) int_red + ( t * ( float ) int_dred );
-	red2 = ( float ) int_red2 + ( t * ( float ) int_dred2 );
-	green = ( float ) int_green + ( t * ( float ) int_dgreen );
-	green2 = ( float ) int_green2 + ( t * ( float ) int_dgreen2 );
-	blue = ( float ) int_blue + ( t * ( float ) int_dblue );
-	blue2 = ( float ) int_blue2 + ( t * ( float ) int_dblue2 );
+	fog = ( float ) int_fog + ( float ) ( t * ( float ) int_dfog );
+	specular = ( float ) int_specular + ( float ) ( t * ( float ) int_dspecular );
+	alpha = ( float ) int_alpha + ( float ) ( t * ( float ) int_dalpha );
+	alpha2 = ( float ) int_alpha2 + ( float ) ( t * ( float ) int_dalpha2 );
+	red = ( float ) int_red + ( float ) ( t * ( float ) int_dred );
+	red2 = ( float ) int_red2 + ( float ) ( t * ( float ) int_dred2 );
+	green = ( float ) int_green + ( float ) ( t * ( float ) int_dgreen );
+	green2 = ( float ) int_green2 + ( float ) ( t * ( float ) int_dgreen2 );
+	blue = ( float ) int_blue + ( float ) ( t * ( float ) int_dblue );
+	blue2 = ( float ) int_blue2 + ( float ) ( t * ( float ) int_dblue2 );
 
 	fog += FLOAT_FLOAT_FACTOR;
 	specular += FLOAT_FLOAT_FACTOR;
@@ -1356,10 +1356,10 @@ void insert_z_far_dual_texture_coordinate ( vertex *point1, vertex *point2 )
 	clip->blue = int_blue;
 	clip->blue2 = int_blue2;
 
-	clip->u = point2->u + ( t * ( point2->u - point1->u ) );
-	clip->v = point2->v + ( t * ( point2->v - point1->v ) );
-	clip->u2 = point2->u2 + ( t * ( point2->u2 - point1->u2 ) );
-	clip->v2 = point2->v2 + ( t * ( point2->v2 - point1->v2 ) );
+	clip->u = point2->u + ( float ) ( t * ( point2->u - point1->u ) );
+	clip->v = point2->v + ( float ) ( t * ( point2->v - point1->v ) );
+	clip->u2 = point2->u2 + ( float ) ( t * ( point2->u2 - point1->u2 ) );
+	clip->v2 = point2->v2 + ( float ) ( t * ( point2->v2 - point1->v2 ) );
 
 	clip->j = active_3d_environment->y_origin;
 
@@ -1422,32 +1422,32 @@ void insert_horizon_coordinate ( vertex *point1, vertex *point2 )
 
 	clip_3d_coord++;
 
-	clip->x = point2->x + ( t * ( point2->x - point1->x ) );
+	clip->x = point2->x + ( float ) ( t * ( point2->x - point1->x ) );
 
 	clip->y = 0;
 
-	clip->z = point2->z + ( t * ( point2->z - point1->z ) );
+	clip->z = point2->z + ( float ) ( t * ( point2->z - point1->z ) );
 
 	value1 = point1->red;
 	value2 = point2->red;
-	value = value2 + ( t * ( value2 - value1 ) );
+	value = value2 + ( float ) ( t * ( value2 - value1 ) );
 	asm_convert_float_to_int ( value, &int_value );
 	clip->red = int_value;
 
 	value1 = point1->green;
 	value2 = point2->green;
-	value = value2 + ( t * ( value2 - value1 ) );
+	value = value2 + ( float ) ( t * ( value2 - value1 ) );
 	asm_convert_float_to_int ( value, &int_value );
 	clip->green = int_value;
 
 	value1 = point1->blue;
 	value2 = point2->blue;
-	value = value2 + ( t * ( value2 - value1 ) );
+	value = value2 + ( float ) ( t * ( value2 - value1 ) );
 	asm_convert_float_to_int ( value, &int_value );
 	clip->blue = int_value;
 
-	clip->u = point2->u + ( t * ( point2->u - point1->u ) );
-	clip->v = point2->v + ( t * ( point2->v - point1->v ) );
+	clip->u = point2->u + ( float ) ( t * ( point2->u - point1->u ) );
+	clip->v = point2->v + ( float ) ( t * ( point2->v - point1->v ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

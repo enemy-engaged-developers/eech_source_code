@@ -749,7 +749,7 @@ void draw_view (void)
 			{
 				float old_angle = full_screen_width_view_angle;
 
-				full_screen_width_view_angle = rad(40.0);
+				full_screen_width_view_angle = rad(40.0f);
 				full_screen_height_view_angle = full_screen_width_view_angle / full_screen_aspect_ratio;
 
 				draw_virtual_cockpit_3d_hud_view ();
@@ -903,6 +903,13 @@ void draw_view (void)
 		if (command_line_framerate)
 			ShowFramerate();
 
+// Executioner - Debug Info - 09-apr-2010
+		#ifdef DEBUG
+
+		ShowDebugInfo();
+
+		#endif
+
 		end_3d_scene ();
 	}
 }
@@ -941,4 +948,17 @@ void ShowFramerate(void)
 		sprintf (buf, "%6.1f", framerate);
 	}
 	ui_display_text (buf, 10, 24);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Executioner - Debug Info - 09-apr-2010
+void ShowDebugInfo(void)
+{
+	char buf[80];
+
+	//sprintf (buf, "UV-x: %3.8f\nUV-y: %3.8f\nUV-z: %3.8f\n", unit_vector_x, unit_vector_y, unit_vector_z);
+
+	//ui_display_text (buf, 10, 80);
 }

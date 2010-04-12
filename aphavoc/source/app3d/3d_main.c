@@ -92,7 +92,7 @@ void set_main_3d_params
 	float height_view_angle
 )
 {
-	set_3d_viewport (main_3d_env, x, y, x + width - 0.001, y + height - 0.001);
+	set_3d_viewport (main_3d_env, x, y, x + width - 0.001, y + height - 0.001f);
 
 	set_3d_origin (main_3d_env, x + (width * 0.5), y + (height * 0.5));
 
@@ -106,7 +106,7 @@ void set_main_3d_params
 	// keep single light environment in sync (for Apache & Havoc virtual cockpits)
 	//
 
-	set_3d_viewport (main_3d_single_light_env, x, y, x + width - 0.001, y + height - 0.001);
+	set_3d_viewport (main_3d_single_light_env, x, y, x + width - 0.001, y + height - 0.001f);
 
 	set_3d_origin (main_3d_single_light_env, x + (width * 0.5), y + (height * 0.5));
 
@@ -200,7 +200,7 @@ void set_main_3d_inset_target_screen_params (void)
 		DISPLAY_3D_LIGHT_LEVEL_HIGH,
 		DISPLAY_3D_NOISE_LEVEL_NONE,
 		(full_screen_x_max - full_screen_x_min) * (1.0 - 0.25 - 0.025),
-		(full_screen_y_max - full_screen_y_min) * 0.025,
+		(full_screen_y_max - full_screen_y_min) * 0.025f,
 		(full_screen_x_max - full_screen_x_min) * 0.25,
 		(full_screen_y_max - full_screen_y_min) * 0.25,
 		full_screen_width_view_angle,
@@ -225,8 +225,8 @@ void set_crew_view_full_screen_params (void)
 		full_screen_y_min,
 		full_screen_width,
 		full_screen_height,
-		rad (59.99),
-		rad (46.82)
+		rad (59.99f),
+		rad (46.82f)
 	);
 }
 

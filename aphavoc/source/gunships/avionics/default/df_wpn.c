@@ -117,7 +117,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_M197_20MM_ROUND:
 			////////////////////////////////////////
 			{
-				duration = 0.2;
+				duration = 0.2f;
 
 				strength = 3.0;
 
@@ -127,7 +127,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
 			////////////////////////////////////////
 			{
-				duration = 0.6;
+				duration = 0.6f;
 
 				strength = 10.0;
 
@@ -149,7 +149,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
 			////////////////////////////////////////
 			{
-				duration = 0.7;
+				duration = 0.7f;
 
 				strength = 8.0;
 
@@ -161,7 +161,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_M2_12P7MM_ROUND:
 			////////////////////////////////////////
 			{
-				duration = 0.3;
+				duration = 0.3f;
 
 				strength = 2.0;
 
@@ -171,7 +171,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_IGLA_V:
 			////////////////////////////////////////
 			{
-				duration = 0.6;
+				duration = 0.6f;
 
 				strength = 7.5;
 
@@ -183,7 +183,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_VIKHR:
 			////////////////////////////////////////
 			{
-				duration = 0.7;
+				duration = 0.7f;
 
 				strength = 9.0;
 
@@ -203,7 +203,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_S8:
 			////////////////////////////////////////
 			{
-				duration = 0.4;
+				duration = 0.4f;
 
 				strength = 10.0;
 
@@ -223,7 +223,7 @@ static void apply_weapon_recoil_effect (entity *en, entity_sub_types selected_we
 			case ENTITY_SUB_TYPE_WEAPON_GSH23L_23MM_ROUND:
 			////////////////////////////////////////
 			{
-				duration = 0.1;
+				duration = 0.1f;
 
 				strength = 2.5;
 
@@ -297,8 +297,8 @@ void update_default_weapon_systems (void)
 	default_stinger_seeker_head_x_position += 0.125 * sin (seeker_head_theta2);
 	default_stinger_seeker_head_y_position += 0.125 * cos (seeker_head_theta2);
 
-	seeker_head_theta1 += rad (120.0) * get_delta_time ();
-	seeker_head_theta2 -= rad (180.0) * get_delta_time ();
+	seeker_head_theta1 += rad (120.0f) * get_delta_time ();
+	seeker_head_theta2 -= rad (180.0f) * get_delta_time ();
 
 	////////////////////////////////////////
 	//

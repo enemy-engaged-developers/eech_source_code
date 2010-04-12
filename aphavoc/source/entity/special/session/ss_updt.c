@@ -233,9 +233,9 @@ void update_lightning_effect (entity *en)
 			set_3d_active_environment (main_3d_env);
 		}
 		
-		add_3d_lightning_strike (LIGHTNING_TYPE_CLOUD_BURST, 0.3, raw->weather_position.x, raw->weather_position.z);
+		add_3d_lightning_strike (LIGHTNING_TYPE_CLOUD_BURST, 0.3f, raw->weather_position.x, raw->weather_position.z);
 
-		add_3d_lightning_strike (LIGHTNING_TYPE_FORKED_1, 0.3, raw->weather_position.x, raw->weather_position.z);
+		add_3d_lightning_strike (LIGHTNING_TYPE_FORKED_1, 0.3f, raw->weather_position.x, raw->weather_position.z);
 
 		if (current_3d_env)
 		{
@@ -721,7 +721,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
@@ -755,7 +755,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
 					if (in_cockpit)
@@ -787,7 +787,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 	
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
@@ -820,7 +820,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 	
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
@@ -853,7 +853,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 	
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 
@@ -886,7 +886,7 @@ void update_session_sound_effects (entity *en)
 						value -= (0.5 * get_delta_time ());
 					}
 	
-					value = bound (value, 0.0, 0.3);
+					value = bound (value, 0.0, 0.3f);
 
 					value *= bound(1.0 - (alt / SESSION_TERRAIN_SOUND_EFFECT_ZERO_VOLUME_ALTITUDE), 0.0, 1.0);
 

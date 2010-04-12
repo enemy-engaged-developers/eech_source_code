@@ -72,8 +72,8 @@
 
 #define DEBUG_MODULE 0
 
-#define FREE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0))
-#define FREE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0))
+#define FREE_CAMERA_ROTATE_UP_LIMIT	(rad (90.0f))
+#define FREE_CAMERA_ROTATE_DOWN_LIMIT	(rad (-90.0f))
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ void update_free_camera (camera *raw)
 		acceleration = -2.0 * raw->velocity.z;
 
 	raw->velocity.z = bound(raw->velocity.z + acceleration * get_delta_time(), -max_velocity, max_velocity);
-	if (raw->velocity.z > -0.1 && raw->velocity.z < 0.1)
+	if (raw->velocity.z > -0.1 && raw->velocity.z < 0.1f)
 		raw->velocity.z = 0.0;
 
 	// sideways
@@ -187,10 +187,10 @@ void update_free_camera (camera *raw)
 	else if (raw->velocity.x < 0.0 && raw->velocity.x > -1.0)
 		acceleration = 2.0;
 	else
-		acceleration = -2.0 * (raw->velocity.x - 0.1);
+		acceleration = -2.0 * (raw->velocity.x - 0.1f);
 
 	raw->velocity.x = bound(raw->velocity.x + acceleration * get_delta_time(), -max_velocity, max_velocity);
-	if (raw->velocity.x > -0.1 && raw->velocity.x < 0.1)
+	if (raw->velocity.x > -0.1 && raw->velocity.x < 0.1f)
 		raw->velocity.x = 0.0;
 
 	// up/down

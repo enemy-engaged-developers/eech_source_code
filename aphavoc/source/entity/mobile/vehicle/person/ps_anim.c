@@ -113,7 +113,7 @@ const person_animation_data
 
 		{
 			///////////// WALK ////////////
-			0.8,						//Velocity
+			0.8f,						//Velocity
 			0,							//start frame
 			44,						//end frame
 			1,							//repeat flag
@@ -122,11 +122,11 @@ const person_animation_data
 
 		{
 			///////////// RUN ////////////
-			2.7,						//Velocity
+			2.7f,						//Velocity
 			60,						//start frame
 			73,						//end frame
 			1,							//repeat flag
-			0.6,						//duration in sec.
+			0.6f,						//duration in sec.
 		},
 
 		{

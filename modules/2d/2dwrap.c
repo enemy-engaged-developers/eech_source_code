@@ -94,8 +94,8 @@ void set_2d_pixel (float x, float y, const rgb_colour col)
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
-	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	convert_float_to_int (xt, &xi);
 	convert_float_to_int (yt, &yi);
@@ -135,10 +135,10 @@ void draw_2d_line (float x1, float y1, float x2, float y2, const rgb_colour col)
 			(y2 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
-	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
-	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	if (clip_line (&x1t, &y1t, &x2t, &y2t))
 	{
@@ -178,10 +178,10 @@ void draw_2d_half_thick_line (float x1, float y1, float x2, float y2, const rgb_
 			(y2 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
-	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
-	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	if (clip_line (&x1t, &y1t, &x2t, &y2t))
 	{
@@ -231,13 +231,13 @@ void draw_2d_filled_triangle (float x1, float y1, float x2, float y2, float x3, 
 			(y3 * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
-	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	x3t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	x3t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
 
-	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
-	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
-	y3t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
+	y3t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	draw_software_plain_triangle ( x1t, y1t, x2t, y2t, x3t, y3t, col );
 }
@@ -264,8 +264,8 @@ void set_2d_mono_font_position (float x, float y)
 			(y * active_2d_environment->composite_transformation[1][1]) +
 			active_2d_environment->composite_transformation[2][1];
 
-	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	set_mono_font_position (x1t, y1t);
 }
@@ -396,8 +396,8 @@ void draw_2d_mono_sprite (const char *sprite_ptr, float x, float y, const rgb_co
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
-	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	draw_mono_sprite (sprite_ptr, xt, yt, colour);
 }
@@ -427,8 +427,8 @@ void draw_2d_circle (float x, float y, const float r, const rgb_colour col)
 
 	rt = r * active_2d_environment->window_scaling[0][0];
 
-	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	draw_circle (xt, yt, rt, col);
 }
@@ -458,8 +458,8 @@ void draw_2d_arc (const float x, const float y, const float r, unsigned int part
 
 	rt = r * active_2d_environment->window_scaling[0][0];
 
-	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	draw_arc (xt, yt, rt, part, col);
 }
@@ -496,11 +496,11 @@ void draw_2d_hatched_area (float x1, float y1, float x2, float y2, const rgb_col
 		  (y2 * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
-	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
+	x1t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	x2t += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
 
-	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
-	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	y1t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
+	y2t -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	x1t = bound (x1t, active_viewport.x_min, active_viewport.x_max);
 	y1t = bound (y1t, active_viewport.y_min, active_viewport.y_max);
@@ -534,8 +534,8 @@ void draw_2d_hatched_circle (float x, float y, const float r, const rgb_colour c
 		  (y * active_2d_environment->composite_transformation[1][1]) +
 		  active_2d_environment->composite_transformation[2][1];
 
-	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9;
-	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9;
+	xt += active_2d_environment->offset_x * active_2d_environment->window_scaling[0][0] * 0.9f;
+	yt -= active_2d_environment->offset_y * active_2d_environment->window_scaling[1][1] * 0.9f;
 
 	rt = r * active_2d_environment->window_scaling[0][0];
 

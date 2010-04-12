@@ -302,18 +302,18 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 	{
 		static float
 			direction_finder_value = rad (0.0),
-			flight_path_value = rad (90.0),
-			drift_value = rad (-20.0);
+			flight_path_value = rad (90.0f),
+			drift_value = rad (-20.0f);
 
 		//
 		// automatic direction finder
 		//
 
-		direction_finder_value += rad (5.0);
+		direction_finder_value += rad (5.0f);
 
-		if (direction_finder_value > rad (360.0))
+		if (direction_finder_value > rad (360.0f))
 		{
-			direction_finder_value -= rad (360.0);
+			direction_finder_value -= rad (360.0f);
 		}
 
 		direction_finder_needle_value = direction_finder_value;
@@ -322,11 +322,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// flight path
 		//
 
-		flight_path_value += rad (3.0);
+		flight_path_value += rad (3.0f);
 
-		if (flight_path_value > rad (360.0))
+		if (flight_path_value > rad (360.0f))
 		{
-			flight_path_value -= rad (360.0);
+			flight_path_value -= rad (360.0f);
 		}
 
 		flight_path_needle_value = flight_path_value;
@@ -335,11 +335,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// drift
 		//
 
-		drift_value += rad (1.0);
+		drift_value += rad (1.0f);
 
-		if (drift_value > rad (35.0))
+		if (drift_value > rad (35.0f))
 		{
-			drift_value = rad (-35.0);
+			drift_value = rad (-35.0f);
 		}
 
 		drift_needle_value = drift_value;
@@ -406,7 +406,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 				length1 = (v1.x * v1.x) + (v1.y * v1.y);
 
-				if (length1 > 0.001)
+				if (length1 > 0.001f)
 				{
 					length1 = sqrt (length1);
 
@@ -420,7 +420,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 					length2 = (v2.x * v2.x) + (v2.y * v2.y);
 
-					if (length2 > 0.001)
+					if (length2 > 0.001f)
 					{
 						length2 = sqrt (length2);
 
@@ -443,7 +443,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		}
 	}
 
-	drift_needle_value = bound (drift_needle_value, rad (-30.0), rad (30.0));
+	drift_needle_value = bound (drift_needle_value, rad (-30.0f), rad (30.0f));
 
 	*direction_finder = direction_finder_needle_value;
 
@@ -840,7 +840,7 @@ void draw_ka50_g_meter (cockpit_panels panel)
 		static float
 			value = -2.5;
 
-		value += 0.05;
+		value += 0.05f;
 
 		if (value > 4.5)
 		{
@@ -1453,7 +1453,7 @@ void draw_ka50_clock (cockpit_panels panel)
 			minute_value = 30.0,
 			second_value = 0.0;
 
-		hour_value += 0.1;
+		hour_value += 0.1f;
 
 		if (hour_value >= 12.0)
 		{
@@ -1814,7 +1814,7 @@ void draw_ka50_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel)
 
 		get_waypoint_display_position (en, wp, &wp_position);
 
-		distance_digital_value = get_2d_range (en_position, &wp_position) * 0.001;
+		distance_digital_value = get_2d_range (en_position, &wp_position) * 0.001f;
 	}
 
 	switch (panel)

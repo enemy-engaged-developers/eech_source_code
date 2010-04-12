@@ -123,7 +123,7 @@ static int response_to_collision (entity_messages message, entity *receiver, ent
 
 				random_seed = get_client_server_entity_random_number_seed (sender);
 
-				if (frand1x (&random_seed) > 0.8)
+				if (frand1x (&random_seed) > 0.8f)
 				{
 	
 					warhead_type = (weapon_warhead_types) get_local_entity_int_value (sender, INT_TYPE_WEAPON_WARHEAD_TYPE);

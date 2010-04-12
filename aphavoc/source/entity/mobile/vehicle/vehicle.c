@@ -220,7 +220,7 @@ void play_vehicle_shot_at_speech (entity *victim, entity *aggressor)
 				play_client_server_cpg_message
 				(
 					aggressor,
-					0.4,
+					0.4f,
 					3.0,
 					SPEECH_CATEGORY_ATTACKING_TARGETS,
 					12.0,
@@ -236,7 +236,7 @@ void play_vehicle_shot_at_speech (entity *victim, entity *aggressor)
 				play_client_server_wingman_message
 				(
 					aggressor,
-					0.4,
+					0.4f,
 					3.0,
 					SPEECH_CATEGORY_ATTACKING_TARGETS, 12.0,
 					SPEECH_INTRODUCTION_SOMETIMES,
@@ -350,7 +350,7 @@ void play_vehicle_destroyed_speech (entity *victim, entity *aggressor)
 				play_client_server_cpg_message
 				(
 					aggressor,
-					0.4,
+					0.4f,
 					3.0,
 					SPEECH_CATEGORY_ATTACKING_TARGETS, 10.0,
 					speech_index
@@ -375,7 +375,7 @@ void play_vehicle_destroyed_speech (entity *victim, entity *aggressor)
 				play_client_server_wingman_message
 				(
 					aggressor,
-					0.4,
+					0.4f,
 					3.0,
 					SPEECH_CATEGORY_ATTACKING_TARGETS, 10.0,
 					vehicle_destroyed_wingman_comments [val].introduction,

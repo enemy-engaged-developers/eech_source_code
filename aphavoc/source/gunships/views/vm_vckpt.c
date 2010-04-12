@@ -78,7 +78,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// #define ROTATE_RATE	(rad (135.0)) // Jabberwock 031016 - variable POV speed
+// #define ROTATE_RATE	(rad (135.0f)) // Jabberwock 031016 - variable POV speed
 
 //VJ 050208 gives the possibility to look behind you (since you can't turn your body)
 #define MAX_LOOK_ANGLE_LEFT_RIGHT1  135.0   //Comanche and Hokum
@@ -187,7 +187,7 @@ static float get_rotate_left_limit (void)
 		////////////////////////////////////////
 		{
 			// JB 030313 Fly any aircraft
-			//limit = rad (135.0);
+			//limit = rad (135.0f);
 			limit = rad (MAX_LOOK_ANGLE_LEFT_RIGHT2);
 
 			break;
@@ -286,7 +286,7 @@ static float get_rotate_right_limit (void)
 		////////////////////////////////////////
 		{
 			// JB 030313 Fly any aircraft
-			//limit = rad (-135.0);
+			//limit = rad (-135.0f);
 			limit = rad (-MAX_LOOK_ANGLE_LEFT_RIGHT2);
 
 			break;
@@ -721,7 +721,7 @@ void update_virtual_cockpit_view (void)
 		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
 		)
 	{
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05f;
 
    		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);
@@ -755,7 +755,7 @@ void update_virtual_cockpit_track_target_view (void)
 
 		get_pilot_head_heading_and_pitch_to_target (target);
 
-		frame_rotate_rate = rad (45.0) * get_delta_time ();
+		frame_rotate_rate = rad (45.0f) * get_delta_time ();
 
 		delta_heading = pilot_head_heading - old_heading;
 
@@ -771,7 +771,7 @@ void update_virtual_cockpit_track_target_view (void)
 	}
 	else
 	{
-		frame_rotate_rate = rad (45.0) * get_delta_time ();
+		frame_rotate_rate = rad (45.0f) * get_delta_time ();
 
 		delta_heading = bound (-pilot_head_heading, -frame_rotate_rate, frame_rotate_rate);
 
@@ -783,10 +783,10 @@ void update_virtual_cockpit_track_target_view (void)
 
 		if
 		(
-			(pilot_head_heading >= rad (-1.0)) &&
-			(pilot_head_heading <= rad (1.0)) &&
-			(pilot_head_pitch >= rad (-1.0)) &&
-			(pilot_head_pitch <= rad (1.0))
+			(pilot_head_heading >= rad (-1.0f)) &&
+			(pilot_head_heading <= rad (1.0f)) &&
+			(pilot_head_pitch >= rad (-1.0f)) &&
+			(pilot_head_pitch <= rad (1.0f))
 		)
 		{
 			set_view_mode (VIEW_MODE_COCKPIT_PANEL_LEVEL_AHEAD);
@@ -4234,7 +4234,7 @@ void update_virtual_cockpit_padlock_view (void)
 
 		get_pilot_head_heading_and_pitch_to_target (target);
 
-		frame_rotate_rate = rad (45.0) * get_delta_time ();
+		frame_rotate_rate = rad (45.0f) * get_delta_time ();
 
 		delta_heading = pilot_head_heading - old_heading;
 
@@ -4250,7 +4250,7 @@ void update_virtual_cockpit_padlock_view (void)
 	}
 	else
 	{
-		frame_rotate_rate = rad (45.0) * get_delta_time ();
+		frame_rotate_rate = rad (45.0f) * get_delta_time ();
 
 		delta_heading = bound (-pilot_head_heading, -frame_rotate_rate, frame_rotate_rate);
 
@@ -4262,10 +4262,10 @@ void update_virtual_cockpit_padlock_view (void)
 
 		if
 		(
-			(pilot_head_heading >= rad (-1.0)) &&
-			(pilot_head_heading <= rad (1.0)) &&
-			(pilot_head_pitch >= rad (-1.0)) &&
-			(pilot_head_pitch <= rad (1.0))
+			(pilot_head_heading >= rad (-1.0f)) &&
+			(pilot_head_heading <= rad (1.0f)) &&
+			(pilot_head_pitch >= rad (-1.0f)) &&
+			(pilot_head_pitch <= rad (1.0f))
 		)
 		{
 			//
@@ -4284,7 +4284,7 @@ void update_virtual_cockpit_padlock_view (void)
 		 get_global_gunship_type () != GUNSHIP_TYPE_HOKUM
 		)
 	{
-         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05;
+         float max_pitch = -0.271*pilot_head_heading*pilot_head_heading - 0.05f;
 
    		pilot_head_pitch = max (max_pitch, pilot_head_pitch);
 		//debug_log("heading: %f    pitch %f [%f]",pilot_head_heading,pilot_head_pitch,max_pitch);

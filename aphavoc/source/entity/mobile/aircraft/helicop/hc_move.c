@@ -297,9 +297,9 @@ void helicopter_movement (entity *en)
 	//
 	//
 
-	world_acceleration_vector.x = (wp_vec.x - raw->ac.mob.motion_vector.x) * 0.3;
-	world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.3;
-	world_acceleration_vector.z = (wp_vec.z - raw->ac.mob.motion_vector.z) * 0.3;
+	world_acceleration_vector.x = (wp_vec.x - raw->ac.mob.motion_vector.x) * 0.3f;
+	world_acceleration_vector.y = (wp_vec.y - raw->ac.mob.motion_vector.y) * 0.3f;
+	world_acceleration_vector.z = (wp_vec.z - raw->ac.mob.motion_vector.z) * 0.3f;
 
 	//
 	// Don't allow movement before rotors have spun up.
@@ -372,7 +372,7 @@ void helicopter_movement (entity *en)
 	// set velocity
 	speed = get_3d_vector_magnitude (&raw->ac.mob.motion_vector);
 	set_local_entity_float_value (en, FLOAT_TYPE_VELOCITY, speed);
-	if (fabs(speed) > 0.1)
+	if (fabs(speed) > 0.1f)
 		set_local_entity_int_value(en, INT_TYPE_MOVED, TRUE);
 
 	current_heading = get_heading_from_attitude_matrix (raw->ac.mob.attitude);
@@ -410,7 +410,7 @@ void helicopter_movement (entity *en)
 	new_pitch = current_pitch + (desired_pitch - current_pitch) * 0.5 * get_entity_movement_delta_time ();
 	new_roll = current_roll + (desired_roll - current_roll) * 0.5 * get_entity_movement_delta_time ();
 
-	if (fabs(new_pitch - current_pitch) > rad(0.1) || fabs(new_heading - current_heading) > rad(0.1) || fabs(new_roll - current_roll) > rad(0.1))
+	if (fabs(new_pitch - current_pitch) > rad(0.1f) || fabs(new_heading - current_heading) > rad(0.1f) || fabs(new_roll - current_roll) > rad(0.1f))
 		set_local_entity_int_value(en, INT_TYPE_ROTATED, TRUE);
 
 	get_3d_transformation_matrix (raw->ac.mob.attitude, new_heading, new_pitch, new_roll);
@@ -457,7 +457,7 @@ void helicopter_death_movement (entity *en)
 
 	spin_up_amount = ((1.0 / 3600) * raw->main_rotor_rpm * raw->main_rotor_rpm);
 
-	spin_up_amount = bound (spin_up_amount, 0.3, 1.0);
+	spin_up_amount = bound (spin_up_amount, 0.3f, 1.0);
 
 	delta_rpm *= spin_up_amount;
 
@@ -884,7 +884,7 @@ int helicopter_crash_movement (entity *en)
 
 	speed = normalise_any_3d_vector (velocity);
 
-	acc = max (speed * 0.65, 4.0);
+	acc = max (speed * 0.65f, 4.0);
 
 	speed -= (acc * get_entity_movement_delta_time ());
 
@@ -1472,7 +1472,7 @@ void helicopter_movement_calculate_rotor_rpm (entity *en, float lift)
 
 	spin_up_amount = ((1.0 / 3600) * raw->main_rotor_rpm * raw->main_rotor_rpm);
 
-	spin_up_amount = bound (spin_up_amount, 0.01, 1.0);
+	spin_up_amount = bound (spin_up_amount, 0.01f, 1.0);
 
 	delta_rpm *= spin_up_amount;
 
@@ -1864,7 +1864,7 @@ void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 		los_colour.a = 255.0;
 
 		// vertical line to wp
-		create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
+		create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001f);
 	}
 	#endif
 
@@ -1935,7 +1935,7 @@ void helicopter_adjust_waypoint_position_with_los (entity *en, vec3d *wp_pos)
 			los_colour.a = 255.0;
 
 			// vertical line to wp
-			create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001);
+			create_debug_3d_line (en_pos, wp_pos, los_colour, 0.001f);
 		}
 		#endif
 	}
@@ -1976,7 +1976,7 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 	flat_wp_pos.y = hc_pos->y;
 
 	// line to flat wp_pos
-	create_debug_3d_line (hc_pos, &flat_wp_pos, los_colour, 0.001);
+	create_debug_3d_line (hc_pos, &flat_wp_pos, los_colour, 0.001f);
 
 	los_colour.r = 0.0;
 	los_colour.g = 0.0;
@@ -1984,7 +1984,7 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 	los_colour.a = 255.0;
 
 	// vertical line to wp
-	create_debug_3d_line (&flat_wp_pos, wp_pos, los_colour, 0.001);
+	create_debug_3d_line (&flat_wp_pos, wp_pos, los_colour, 0.001f);
 
 	// create arrow at wp_pos
 	{
@@ -2006,7 +2006,7 @@ void debug_visuals (entity *en, vec3d *wp_pos)
 
 		get_matrix3x3_from_unit_vec3d_and_roll (vp.attitude, &temp_direction, 0.0);
 
-		create_debug_3d_object (&vp, OBJECT_3D_SPHERICAL_TEST, 0.001, 1.0);
+		create_debug_3d_object (&vp, OBJECT_3D_SPHERICAL_TEST, 0.001f, 1.0);
 	}
 }
 

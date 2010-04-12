@@ -136,7 +136,7 @@ void update_debriefing_camera (camera *raw)
 	// get camera attitude
 	//
 
-	get_3d_transformation_matrix (raw->attitude, get_local_entity_float_value (en, FLOAT_TYPE_HEADING) + rad (180.0), rad (-15.0), 0.0);
+	get_3d_transformation_matrix (raw->attitude, get_local_entity_float_value (en, FLOAT_TYPE_HEADING) + rad (180.0f), rad (-15.0f), 0.0);
 
 	//
 	// get camera position

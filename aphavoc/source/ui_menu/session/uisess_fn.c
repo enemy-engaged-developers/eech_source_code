@@ -111,7 +111,7 @@ void notify_session_screen (ui_object *obj, void *arg)
 
 		ui_object_destroy_list_items (session_info_list);
 
-		set_ui_list_spacing_proportional_to_font (session_info_list, -0.2);
+		set_ui_list_spacing_proportional_to_font (session_info_list, -0.2f);
 
 		#if DEBUG_MODULE
 	

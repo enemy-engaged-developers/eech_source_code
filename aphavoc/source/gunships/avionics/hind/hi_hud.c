@@ -86,8 +86,8 @@ static void display_weapon_information (void);
 
 #define HUD_WINDOW_X_MIN  				(-1.0)
 #define HUD_WINDOW_Y_MIN				(-1.0)
-#define HUD_WINDOW_X_MAX  				(0.999)
-#define HUD_WINDOW_Y_MAX 				(0.999)
+#define HUD_WINDOW_X_MAX  				(0.999f)
+#define HUD_WINDOW_Y_MAX 				(0.999f)
 
 #define HUD_VIEWPORT_LARGE_SIZE		(256)
 #define HUD_VIEWPORT_SMALL_SIZE		(256)
@@ -230,12 +230,12 @@ static void draw_layout_grid (void)
 
 	if (display_hud_layout_grid)
 	{
-		for (x = HUD_WINDOW_X_MIN; x <= HUD_WINDOW_X_MAX; x += 0.1)
+		for (x = HUD_WINDOW_X_MIN; x <= HUD_WINDOW_X_MAX; x += 0.1f)
 		{
 			draw_2d_line (x, HUD_WINDOW_Y_MIN, x, HUD_WINDOW_Y_MAX, sys_col_red);
 		}
 
-		for (y = HUD_WINDOW_Y_MIN; y <= HUD_WINDOW_Y_MAX; y += 0.1)
+		for (y = HUD_WINDOW_Y_MIN; y <= HUD_WINDOW_Y_MAX; y += 0.1f)
 		{
 			draw_2d_line (HUD_WINDOW_X_MIN, y, HUD_WINDOW_X_MAX, y, sys_col_red);
 		}
@@ -245,44 +245,44 @@ static void draw_layout_grid (void)
 static void draw_backup_sight(void)
 {
 	const float
-		nar_tick = 0.035,
-		wide_tick = 0.075;
+		nar_tick = 0.035f,
+		wide_tick = 0.075f;
 
 	set_2d_pixel(0.0, 0.0, backup_sight_colour);
-	draw_2d_circle(0.0, 0.0, 0.15, backup_sight_colour);
-	draw_2d_circle(0.0, 0.0, 0.4, backup_sight_colour);
+	draw_2d_circle(0.0, 0.0, 0.15f, backup_sight_colour);
+	draw_2d_circle(0.0, 0.0, 0.4f, backup_sight_colour);
 
-	draw_2d_line(0.0, 0.6, 0.0, 0.1, backup_sight_colour);
-	draw_2d_line(0.0, -0.1, 0.0, -1.0, backup_sight_colour);
-	draw_2d_line(0.8, 0.0, 0.1, 0.0, backup_sight_colour);
-	draw_2d_line(-0.8, 0.0, -0.1, 0.0, backup_sight_colour);
+	draw_2d_line(0.0, 0.6f, 0.0, 0.1f, backup_sight_colour);
+	draw_2d_line(0.0, -0.1f, 0.0, -1.0, backup_sight_colour);
+	draw_2d_line(0.8f, 0.0, 0.1f, 0.0, backup_sight_colour);
+	draw_2d_line(-0.8f, 0.0, -0.1f, 0.0, backup_sight_colour);
 
 	// horizontal tick marks
-	draw_2d_line(-wide_tick, 0.2, wide_tick, 0.2, backup_sight_colour);
-	draw_2d_line(-wide_tick, -0.2, wide_tick, -0.2, backup_sight_colour);
-	draw_2d_line(-wide_tick, -0.6, wide_tick, -0.6, backup_sight_colour);
-	draw_2d_line(-wide_tick, -0.8, wide_tick, -0.8, backup_sight_colour);
+	draw_2d_line(-wide_tick, 0.2f, wide_tick, 0.2f, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.2f, wide_tick, -0.2f, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.6f, wide_tick, -0.6f, backup_sight_colour);
+	draw_2d_line(-wide_tick, -0.8f, wide_tick, -0.8f, backup_sight_colour);
 
 	draw_2d_line(-nar_tick, 0.5, nar_tick, 0.5, backup_sight_colour);
-	draw_2d_line(-nar_tick, 0.3, nar_tick, 0.3, backup_sight_colour);
-	draw_2d_line(-nar_tick, -0.3, nar_tick, -0.3, backup_sight_colour);
+	draw_2d_line(-nar_tick, 0.3f, nar_tick, 0.3f, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.3f, nar_tick, -0.3f, backup_sight_colour);
 	draw_2d_line(-nar_tick, -0.5, nar_tick, -0.5, backup_sight_colour);
-	draw_2d_line(-nar_tick, -0.7, nar_tick, -0.7, backup_sight_colour);
-	draw_2d_line(-nar_tick, -0.9, nar_tick, -0.9, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.7f, nar_tick, -0.7f, backup_sight_colour);
+	draw_2d_line(-nar_tick, -0.9f, nar_tick, -0.9f, backup_sight_colour);
 
 	// vertical tick marks
-	draw_2d_line(-0.6, wide_tick, -0.6, -wide_tick, backup_sight_colour);
-	draw_2d_line(-0.2, wide_tick, -0.2, -wide_tick, backup_sight_colour);
-	draw_2d_line( 0.2, wide_tick,  0.2, -wide_tick, backup_sight_colour);
-	draw_2d_line( 0.6, wide_tick,  0.6, -wide_tick, backup_sight_colour);
+	draw_2d_line(-0.6f, wide_tick, -0.6f, -wide_tick, backup_sight_colour);
+	draw_2d_line(-0.2f, wide_tick, -0.2f, -wide_tick, backup_sight_colour);
+	draw_2d_line( 0.2f, wide_tick,  0.2f, -wide_tick, backup_sight_colour);
+	draw_2d_line( 0.6f, wide_tick,  0.6f, -wide_tick, backup_sight_colour);
 
-	draw_2d_line(-0.7, nar_tick, -0.7, -nar_tick, backup_sight_colour);
+	draw_2d_line(-0.7f, nar_tick, -0.7f, -nar_tick, backup_sight_colour);
 	draw_2d_line(-0.5, nar_tick, -0.5, -nar_tick, backup_sight_colour);
-	draw_2d_line(-0.3, nar_tick, -0.3, -nar_tick, backup_sight_colour);
+	draw_2d_line(-0.3f, nar_tick, -0.3f, -nar_tick, backup_sight_colour);
 
-	draw_2d_line( 0.7, nar_tick,  0.7, -nar_tick, backup_sight_colour);
+	draw_2d_line( 0.7f, nar_tick,  0.7f, -nar_tick, backup_sight_colour);
 	draw_2d_line( 0.5, nar_tick,  0.5, -nar_tick, backup_sight_colour);
-	draw_2d_line( 0.3, nar_tick,  0.3, -nar_tick, backup_sight_colour);
+	draw_2d_line( 0.3f, nar_tick,  0.3f, -nar_tick, backup_sight_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,7 +377,7 @@ void draw_external_hind_hud (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define GUN_PIPPER_MAX_RANGE                4000.0
-#define GUN_PIPPER_SIZE						(0.3)
+#define GUN_PIPPER_SIZE						(0.3f)
 #define GUN_PIPPER_SIZE2					(0.32)
 #define NUM_GUN_PIPPER_POINTS				(70)
 #define GUN_PIPPER_ANGULAR_STEP_SIZE	((8.0 / 12.0) * PI / NUM_GUN_PIPPER_POINTS)
@@ -423,8 +423,8 @@ static void initialise_hms_gun_pipper (void)
 static void draw_aim_marker(float x, float y, float range, float min_range)
 {
 	const float
-		tick_end = GUN_PIPPER_SIZE - 0.035,
-		start = 0.05,
+		tick_end = GUN_PIPPER_SIZE - 0.035f,
+		start = 0.05f,
 		end = 0.25;
 
 	// draw cross
@@ -508,7 +508,7 @@ static float get_ballistic_weapon_drop(entity_sub_types weapon_sub_type)
 
 	if (get_time_acceleration() != TIME_ACCELERATION_PAUSE)
 	{
-		if (pitch > (angle_of_drop + rad(0.05)) || height < 2.0)
+		if (pitch > (angle_of_drop + rad(0.05f)) || height < 2.0)
 			triangulated_range = MAX_RANGE;
 		else
 			triangulated_range = bound(height / tan(-pitch + angle_of_drop), 0.0, MAX_RANGE);
@@ -576,7 +576,7 @@ static void display_weapon_information (void)
 
 				get_eo_azimuth_and_elevation(&az, &el);
 				if (angles_to_hud_coordinates(az, el, &x, &y, TRUE))
-					draw_2d_circle(x, y, 0.15, hud_colour);
+					draw_2d_circle(x, y, 0.15f, hud_colour);
 			}
 		}
 		else
@@ -743,8 +743,8 @@ void draw_hind_hud_on_texture (void)
 
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001f;
+	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001f;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -755,8 +755,8 @@ void draw_hind_hud_on_texture (void)
 	hud_screen_x_min = full_screen_x_mid - ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width);
 	hud_screen_y_min = full_screen_y_mid - ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height);
 
-	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	hud_screen_x_max = full_screen_x_mid + ((HUD_VIEWPORT_SMALL_SIZE / (640.0 * 2.0)) * full_screen_width) - 0.001f;
+	hud_screen_y_max = full_screen_y_mid + ((HUD_VIEWPORT_SMALL_SIZE / (480.0 * 2.0)) * full_screen_height) - 0.001f;
 
 	hud_screen_x_scale = 640.0 / full_screen_width;
 	hud_screen_y_scale = 480.0 / full_screen_height;

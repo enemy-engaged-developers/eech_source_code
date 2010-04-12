@@ -707,7 +707,7 @@ static int get_co_pilot_viewpoint_virtual_cockpit (void)
 
 static float get_reset_co_pilot_anim_delay (void)
 {
-	if (frand1 () < 0.2)
+	if (frand1 () < 0.2f)
 	{
 		return (0.0);
 	}
@@ -1165,7 +1165,7 @@ static void update_co_pilot_animation (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define MAX_ROLL	((float) (rad (10.0)))
+#define MAX_ROLL	((float) (rad (10.0f)))
 
 static void update_co_pilot_head_tilt_animation (void)
 {

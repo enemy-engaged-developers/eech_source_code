@@ -627,7 +627,7 @@ void animate_fixed_wing_propellors( entity *en )
 	{
 		if (direction)
 		{
-			raw->propellor_rpm += 5.0 * get_delta_time ();
+			raw->propellor_rpm += 5.0f * get_delta_time ();
 
 			if (raw->propellor_rpm >= 40.0)
 			{
@@ -636,7 +636,7 @@ void animate_fixed_wing_propellors( entity *en )
 		}
 		else
 		{
-			raw->propellor_rpm -= 5.0 * get_delta_time ();
+			raw->propellor_rpm -= 5.0f * get_delta_time ();
 
 			if (raw->propellor_rpm <= 0.0)
 			{

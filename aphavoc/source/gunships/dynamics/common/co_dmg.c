@@ -97,8 +97,8 @@ dynamics_damage_type
 		{
 			"Main rotor",
 			DYNAMICS_DAMAGE_MAIN_ROTOR,
-			0.2,
-			0.8,
+			0.2f,
+			0.8f,
 			60.0 * ONE_SECOND,
 			TRUE,
 			FALSE,
@@ -106,7 +106,7 @@ dynamics_damage_type
 		{
 			"Tail rotor",
 			DYNAMICS_DAMAGE_TAIL_ROTOR,
-			0.3,
+			0.3f,
 			0.5,
 			50.0 * ONE_SECOND,
 			TRUE,
@@ -115,8 +115,8 @@ dynamics_damage_type
 		{
 			"Left engine",
 			DYNAMICS_DAMAGE_LEFT_ENGINE,
-			0.4,
-			0.1,
+			0.4f,
+			0.1f,
 			30.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
@@ -124,8 +124,8 @@ dynamics_damage_type
 		{
 			"Right engine",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE,
-			0.4,
-			0.1,
+			0.4f,
+			0.1f,
 			30.0 * ONE_SECOND,
 			TRUE,
 			TRUE,
@@ -133,8 +133,8 @@ dynamics_damage_type
 		{
 			"Left engine fire",
 			DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE,
-			0.6,
-			0.3,
+			0.6f,
+			0.3f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -142,8 +142,8 @@ dynamics_damage_type
 		{
 			"Right engine fire",
 			DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE,
-			0.6,
-			0.3,
+			0.6f,
+			0.3f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -151,8 +151,8 @@ dynamics_damage_type
 		{
 			"Low Hydraulics pressure",
 			DYNAMICS_DAMAGE_LOW_HYDRAULICS,
-			0.7,
-			0.3,
+			0.7f,
+			0.3f,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -160,8 +160,8 @@ dynamics_damage_type
 		{
 			"Stabiliser",
 			DYNAMICS_DAMAGE_STABILISER,
-			0.75,
-			0.3,
+			0.75f,
+			0.3f,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -169,8 +169,8 @@ dynamics_damage_type
 		{
 			"Fuel leak",
 			DYNAMICS_DAMAGE_FUEL_LEAK,
-			0.6,
-			0.1,
+			0.6f,
+			0.1f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -178,8 +178,8 @@ dynamics_damage_type
 		{
 			"Low oil pressure",
 			DYNAMICS_DAMAGE_LOW_OIL_PRESSURE,
-			0.8,
-			0.1,
+			0.8f,
+			0.1f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -187,8 +187,8 @@ dynamics_damage_type
 		{
 			"High oil pressure",
 			DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE,
-			0.9,
-			0.1,
+			0.9f,
+			0.1f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -196,8 +196,8 @@ dynamics_damage_type
 		{
 			"Avionics",
 			DYNAMICS_DAMAGE_AVIONICS,
-			0.7,
-			0.1,
+			0.7f,
+			0.1f,
 			20.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -214,8 +214,8 @@ dynamics_damage_type
 		{
 			"Undercarriage",
 			DYNAMICS_DAMAGE_UNDERCARRIAGE,
-			0.6,
-			0.1,
+			0.6f,
+			0.1f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -224,7 +224,7 @@ dynamics_damage_type
 			"APU",
 			DYNAMICS_DAMAGE_APU,
 			0.0,
-			0.1,
+			0.1f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -232,8 +232,8 @@ dynamics_damage_type
 		{
 			"Main rotor blade",
 			DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE,
-			0.1,
-			0.2,
+			0.1f,
+			0.2f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			FALSE,
@@ -241,8 +241,8 @@ dynamics_damage_type
 		{
 			"Secondary hydralics",
 			DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS,
-			0.05,
-			0.05,
+			0.05f,
+			0.05f,
 			10.0 * ONE_SECOND,
 			FALSE,
 			TRUE,
@@ -1285,7 +1285,7 @@ void update_dynamics_damage (void)
 					if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_LEFT_ENGINE)
 					{
 
-						current_flight_dynamics->left_engine_temp.value += 10.0 * get_delta_time ();
+						current_flight_dynamics->left_engine_temp.value += 10.0f * get_delta_time ();
 
 						if (current_flight_dynamics->left_engine_temp.value > current_flight_dynamics->left_engine_temp.max)
 						{
@@ -1308,7 +1308,7 @@ void update_dynamics_damage (void)
 					if (current_flight_dynamics->dynamics_damage & ~DYNAMICS_DAMAGE_RIGHT_ENGINE)
 					{
 
-						current_flight_dynamics->right_engine_temp.value += 10.0 * get_delta_time ();
+						current_flight_dynamics->right_engine_temp.value += 10.0f * get_delta_time ();
 
 						if (current_flight_dynamics->right_engine_temp.value > current_flight_dynamics->right_engine_temp.max)
 						{
@@ -1337,7 +1337,7 @@ void update_dynamics_damage (void)
 
 						current_flight_dynamics->centre_of_gravity.z -= current_flight_dynamics->pitch.value * get_model_delta_time ();
 
-						current_flight_dynamics->centre_of_gravity.z = bound (current_flight_dynamics->centre_of_gravity.z, -0.1, 0.1);
+						current_flight_dynamics->centre_of_gravity.z = bound (current_flight_dynamics->centre_of_gravity.z, -0.1f, 0.1f);
 
 						#if DEBUG_MODULE
 
@@ -1868,7 +1868,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_MAIN_ROTOR:
 				{
 
-					damage_level += 0.6;
+					damage_level += 0.6f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1881,7 +1881,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_TAIL_ROTOR:
 				{
 
-					damage_level += 0.8;
+					damage_level += 0.8f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1894,7 +1894,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.4f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1907,7 +1907,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE:
 				{
 
-					damage_level += 0.4;
+					damage_level += 0.4f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1920,7 +1920,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LEFT_ENGINE_FIRE:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.2f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1933,7 +1933,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_RIGHT_ENGINE_FIRE:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.2f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1946,7 +1946,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LOW_HYDRAULICS:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.2f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1959,7 +1959,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_SECONDARY_HYDRAULICS:
 				{
 
-					damage_level += 0.05;
+					damage_level += 0.05f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1972,7 +1972,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_STABILISER:
 				{
 
-					damage_level += 0.2;
+					damage_level += 0.2f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1985,7 +1985,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_FUEL_LEAK:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -1998,7 +1998,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_LOW_OIL_PRESSURE:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2011,7 +2011,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2024,7 +2024,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_AVIONICS:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2050,7 +2050,7 @@ void damage_entity_to_flight_model (entity *en)
 				case DYNAMICS_DAMAGE_UNDERCARRIAGE:
 				{
 
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2062,7 +2062,7 @@ void damage_entity_to_flight_model (entity *en)
 				}
 				case DYNAMICS_DAMAGE_APU:
 				{
-					damage_level += 0.1;
+					damage_level += 0.1f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2074,7 +2074,7 @@ void damage_entity_to_flight_model (entity *en)
 				}
 				case DYNAMICS_DAMAGE_MAIN_ROTOR_BLADE:
 				{
-					damage_level += 0.2;
+					damage_level += 0.2f;
 
 					#if DYNAMICS_DEBUG
 
@@ -2095,7 +2095,7 @@ void damage_entity_to_flight_model (entity *en)
 		this_damage = this_damage << 1;
 	}
 
-	damage_level = bound (damage_level, 0.0, 0.9);
+	damage_level = bound (damage_level, 0.0, 0.9f);
 
 	damage_level = 1.0 - damage_level;
 

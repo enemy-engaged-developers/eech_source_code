@@ -210,15 +210,15 @@ static void draw_local_3d_object (entity *en, float range)
 
 			lifetime_ratio = -raw->weapon_lifetime / total_cruise_time;
 
-			if (lifetime_ratio < 0.7)
+			if (lifetime_ratio < 0.7f)
 			{
 				chaff_index = OBJECT_3D_EFFECT_CHAFF_1;
 			}
-			else if (lifetime_ratio < 0.8)
+			else if (lifetime_ratio < 0.8f)
 			{
 				chaff_index = OBJECT_3D_EFFECT_CHAFF_2;
 			}
-			else if (lifetime_ratio < 0.9)
+			else if (lifetime_ratio < 0.9f)
 			{
 				chaff_index = OBJECT_3D_EFFECT_CHAFF_3;
 			}
@@ -249,9 +249,9 @@ static void draw_local_3d_object (entity *en, float range)
 
 				heading = 0.0;
 
-				pitch = lifetime_ratio * rad (360.0);
+				pitch = lifetime_ratio * rad (360.0f);
 
-				roll = lifetime_ratio * rad (360.0);
+				roll = lifetime_ratio * rad (360.0f);
 
 				if (sfrand1x (&seed) < 0.0)
 				{
@@ -289,7 +289,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			rate = (frand1x (&seed) * 0.25) + 0.25;
 
-			theta = (frand1x (&seed) + (raw->weapon_lifetime * -rate)) * rad (360.0);
+			theta = (frand1x (&seed) + (raw->weapon_lifetime * -rate)) * rad (360.0f);
 
 			inst3d = construct_temporary_3d_object (weapon_database[raw->mob.sub_type].default_3d_shape, FALSE);
 
@@ -346,7 +346,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 			rate = (frand1x (&seed) * 0.25) + 0.25;
 
-			theta = (frand1x (&seed) + (raw->weapon_lifetime * -rate)) * rad (360.0);
+			theta = (frand1x (&seed) + (raw->weapon_lifetime * -rate)) * rad (360.0f);
 
 			inst3d = construct_temporary_3d_object (weapon_database[raw->mob.sub_type].default_3d_shape, FALSE);
 
@@ -439,7 +439,7 @@ static void draw_local_3d_object (entity *en, float range)
 
 						pitch_ratio = min (lifetime, 3.0f) * (1.0 / 3.0);
 
-						delta_pitch = rad (90.0) - pitch;
+						delta_pitch = rad (90.0f) - pitch;
 
 						pitch += delta_pitch * pitch_ratio;
 
@@ -449,7 +449,7 @@ static void draw_local_3d_object (entity *en, float range)
 					}
 					case PARACHUTE_STATUS_OPEN1:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						parachute1 = TRUE;
 
@@ -459,7 +459,7 @@ static void draw_local_3d_object (entity *en, float range)
 					}
 					case PARACHUTE_STATUS_OPEN2:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						parachute2 = TRUE;
 
@@ -478,11 +478,11 @@ static void draw_local_3d_object (entity *en, float range)
 
 						t = fmod (lifetime, 7.0f) * PI2 / 7.0;
 
-						pitch = rad (90.0) + (sin (t) * rad (6.0));
+						pitch = rad (90.0f) + (sin (t) * rad (6.0));
 
 						t = fmod (lifetime, 5.0f) * PI2 / 5.0;
 
-						heading += sin (t) * rad (10.0);
+						heading += sin (t) * rad (10.0f);
 
 						parachute3 = TRUE;
 
@@ -639,13 +639,13 @@ static void draw_local_3d_object (entity *en, float range)
 				{
 					case PARACHUTE_STATUS_CLOSED:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						break;
 					}
 					case PARACHUTE_STATUS_OPEN1:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						parachute1 = TRUE;
 
@@ -653,7 +653,7 @@ static void draw_local_3d_object (entity *en, float range)
 					}
 					case PARACHUTE_STATUS_OPEN2:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						parachute2 = TRUE;
 
@@ -670,11 +670,11 @@ static void draw_local_3d_object (entity *en, float range)
 
 						t = fmod (lifetime, 7.0f) * PI2 / 7.0;
 
-						pitch = rad (90.0) + (sin (t) * rad (6.0));
+						pitch = rad (90.0f) + (sin (t) * rad (6.0));
 
 						t = fmod (lifetime, 5.0f) * PI2 / 5.0;
 
-						heading += sin (t) * rad (10.0);
+						heading += sin (t) * rad (10.0f);
 
 						parachute3 = TRUE;
 
@@ -682,7 +682,7 @@ static void draw_local_3d_object (entity *en, float range)
 					}
 					case PARACHUTE_STATUS_COLLAPSED:
 					{
-						pitch = rad (90.0);
+						pitch = rad (90.0f);
 
 						parachute_collapsed = TRUE;
 
@@ -846,7 +846,7 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN1:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime > 0.1f)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN2;
 
@@ -859,7 +859,7 @@ void update_weapon_ejector_seat_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN2:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime > 0.1f)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN3;
 
@@ -922,7 +922,7 @@ void update_weapon_crate_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN1:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime > 0.1f)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN2;
 
@@ -935,7 +935,7 @@ void update_weapon_crate_animation (weapon *raw)
 		case PARACHUTE_STATUS_OPEN2:
 		////////////////////////////////////////
 		{
-			if (lifetime > 0.1)
+			if (lifetime > 0.1f)
 			{
 				raw->parachute_status = PARACHUTE_STATUS_OPEN3;
 

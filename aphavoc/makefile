@@ -256,7 +256,7 @@ cc_args += /zq
 cc_args += /fp6
 cc_args += /fpi
 cc_args += /dWIN32
-cc_args += /ri
+#cc_args += /ri
 cc_args += /w4
 cc_args += /zld
 

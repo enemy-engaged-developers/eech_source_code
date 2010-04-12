@@ -95,7 +95,7 @@ float get_decoy_timer_start_value (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_CHAFF:
 		////////////////////////////////////////
 		{
-			timer = 0.1;
+			timer = 0.1f;
 
 			break;
 		}
@@ -103,7 +103,7 @@ float get_decoy_timer_start_value (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_FLARE:
 		////////////////////////////////////////
 		{
-			timer = 0.1;
+			timer = 0.1f;
 
 			break;
 		}
@@ -151,7 +151,7 @@ float get_decoy_timer_restart_value (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_CHAFF:
 		////////////////////////////////////////
 		{
-			timer = 0.4 + (frand1 () * 0.2);
+			timer = 0.4 + (frand1 () * 0.2f);
 
 			break;
 		}
@@ -159,7 +159,7 @@ float get_decoy_timer_restart_value (weapon_decoy_types type)
 		case WEAPON_DECOY_TYPE_FLARE:
 		////////////////////////////////////////
 		{
-			timer = 0.4 + (frand1 () * 0.2);
+			timer = 0.4 + (frand1 () * 0.2f);
 
 			break;
 		}
@@ -209,7 +209,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		{
 			#if 0
 
-			locked = frand1 () > 0.9;
+			locked = frand1 () > 0.9f;
 
 			#else
 
@@ -225,7 +225,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		{
 			#if 0
 
-			locked = frand1 () > 0.9;
+			locked = frand1 () > 0.9f;
 
 			#else
 
@@ -241,7 +241,7 @@ int get_weapon_locked_onto_decoy (weapon_decoy_types type)
 		{
 			#if 0
 
-			locked = frand1 () < 0.1;
+			locked = frand1 () < 0.1f;
 
 			#else
 

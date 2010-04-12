@@ -274,7 +274,7 @@ void initialise_misc_explosion_database()
 	explosion_info->trail_count 				=	1;
 
 	explosion_info->generator_lifetime		= 70.0;
-	explosion_info->frequency					= 0.33333;
+	explosion_info->frequency					= 0.33333f;
 	explosion_info->smoke_lifetime			= 30.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
@@ -498,7 +498,7 @@ void initialise_armour_piercing_explosion_database()
 
 	explosion_info->delay_max 					=	2.5;
 
-	explosion_info->lifetime_min 				=	3.2;
+	explosion_info->lifetime_min 				=	3.2f;
 	explosion_info->lifetime_max 				=	5.5;
 
 	explosion_info->scale_min 					=	3.0;
@@ -588,7 +588,7 @@ void initialise_high_explosive_explosion_database()
 
 	explosion_info->blast_hemisphere_only	=	TRUE;
 
-	explosion_info->delay_max 					=	0.4;
+	explosion_info->delay_max 					=	0.4f;
 
 	explosion_info->lifetime_min 				=	0.875;
 	explosion_info->lifetime_max 				=	0.875;
@@ -671,7 +671,7 @@ void initialise_high_explosive_explosion_database()
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_SMALL_EXPLOSION;
-	explosion_info->sound_volume 				= 0.8;
+	explosion_info->sound_volume 				= 0.8f;
 
 	////////////////////////////////////////
 	//
@@ -801,7 +801,7 @@ void initialise_high_explosive_explosion_database()
 
 	explosion_info->blast_hemisphere_only	=	TRUE;
 
-	explosion_info->delay_max 					=	0.3;
+	explosion_info->delay_max 					=	0.3f;
 
 	explosion_info->lifetime_min 				=	1.0;
 	explosion_info->lifetime_max 				=	1.0;
@@ -1363,7 +1363,7 @@ void initialise_water_explosion_database()
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_LARGE_WATER_SPLASH;
-	explosion_info->sound_volume 				= 0.7;
+	explosion_info->sound_volume 				= 0.7f;
 
 	////////////////////////////////////////
 	//
@@ -1492,7 +1492,7 @@ void initialise_object_dust_explosion_database()
 
 	explosion_info->delay_max 					=	0.75;
 
-	explosion_info->lifetime_min 				=	0.35;
+	explosion_info->lifetime_min 				=	0.35f;
 	explosion_info->lifetime_max 				=	1.0;
 
 	explosion_info->scale_min 					=	5.0;
@@ -1593,7 +1593,7 @@ void initialise_object_dust_explosion_database()
 	explosion_info->type 						= EXPLOSION_SOUND_EFFECT;
 
 	explosion_info->sound_type 				= SOUND_SAMPLE_INDEX_RUBBLE;
-	explosion_info->sound_volume 				= 0.65;
+	explosion_info->sound_volume 				= 0.65f;
 
 	//
 	// component 3
@@ -1608,11 +1608,11 @@ void initialise_object_dust_explosion_database()
 	explosion_info->trail_count 				=	1;
 
 	explosion_info->generator_lifetime		= 10.0;
-	explosion_info->frequency					= 0.6;
+	explosion_info->frequency					= 0.6f;
 	explosion_info->smoke_lifetime			= 30.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	////////////////////////////////////////
@@ -1730,7 +1730,7 @@ void initialise_object_dust_explosion_database()
 	explosion_info->smoke_lifetime			= 40.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -1824,7 +1824,7 @@ void initialise_object_explosive_explosion_database()
 
 	explosion_info->blast_hemisphere_only	=	TRUE;
 
-	explosion_info->delay_max 					=	0.4;
+	explosion_info->delay_max 					=	0.4f;
 
 	explosion_info->lifetime_min 				=	0.875;
 	explosion_info->lifetime_max 				=	0.875;
@@ -2008,7 +2008,7 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->smoke_lifetime			= 100.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.1;
+	explosion_info->initial_velocity.y		= 0.1f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -2027,11 +2027,11 @@ void initialise_object_explosive_explosion_database()
 		explosion_info->generator_lifetime		= 120.0;
 	else
 		explosion_info->generator_lifetime		= 5.0;
-	explosion_info->frequency					= 0.3;
+	explosion_info->frequency					= 0.3f;
 	explosion_info->smoke_lifetime			= 4.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -2050,11 +2050,11 @@ void initialise_object_explosive_explosion_database()
 		explosion_info->generator_lifetime		= 200.0;
 	else
 		explosion_info->generator_lifetime		= 5.0;
-	explosion_info->frequency					= 0.2;
+	explosion_info->frequency					= 0.2f;
 	explosion_info->smoke_lifetime			= 3.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -2251,7 +2251,7 @@ void initialise_object_explosive_explosion_database()
 	explosion_info->smoke_lifetime			= 200.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -2270,11 +2270,11 @@ void initialise_object_explosive_explosion_database()
 		explosion_info->generator_lifetime		= 120.0;
 	else
 		explosion_info->generator_lifetime		= 5.0;
-	explosion_info->frequency					= 0.3;
+	explosion_info->frequency					= 0.3f;
 	explosion_info->smoke_lifetime			= 4.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//
@@ -2293,11 +2293,11 @@ void initialise_object_explosive_explosion_database()
 		explosion_info->generator_lifetime		= 200.0;
 	else
 		explosion_info->generator_lifetime		= 10.0;
-	explosion_info->frequency					= 0.2;
+	explosion_info->frequency					= 0.2f;
 	explosion_info->smoke_lifetime			= 3.0;
 
 	explosion_info->initial_velocity.x		= 0.0;
-	explosion_info->initial_velocity.y		= 0.2;
+	explosion_info->initial_velocity.y		= 0.2f;
 	explosion_info->initial_velocity.z		= 0.0;
 
 	//

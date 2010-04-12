@@ -72,7 +72,7 @@
 
 #define GROUP_3D_VIEW_MEDIUM_DISTANCE_INCREMENT	1.25
 
-#define GROUP_3D_VIEW_MEDIUM_ANGLE_INCREMENT		rad (45.0)
+#define GROUP_3D_VIEW_MEDIUM_ANGLE_INCREMENT		rad (45.0f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ int show_group_page (entity *group, int force_update)
 
 	// reset group list width
 	set_ui_object_virtual_x_size (group_page_member_area, 0.368);
-	set_ui_object_virtual_x_size (group_page_member_list, 0.9);
+	set_ui_object_virtual_x_size (group_page_member_list, 0.9f);
 
 	ui_object_destroy_list_items (group_page_member_list);
 
@@ -290,7 +290,7 @@ int show_group_page (entity *group, int force_update)
 
 				// if player is in this group, resize group list width
 				set_ui_object_virtual_x_size (group_page_member_area, 0.570);
-				set_ui_object_virtual_x_size (group_page_member_list, 0.9);
+				set_ui_object_virtual_x_size (group_page_member_list, 0.9f);
 			}
 		}
 	
@@ -882,7 +882,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	ysize = 0.04;
 
-	yinc = 0.05;
+	yinc = 0.05f;
 
 	/////////////////////////////////////////////////////////////////
 	// Group Type Box
@@ -1155,7 +1155,7 @@ void define_campaign_screen_group_page_objects (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.730;
 	x2 = 0.468;
 	y2 = 0.955;
@@ -1175,7 +1175,7 @@ void define_campaign_screen_group_page_objects (void)
 
 	x1 = 0.0;
 	y1 = 0.0;
-	x2 = 0.9;
+	x2 = 0.9f;
 	y2 = 1.0;
 
 	group_page_member_list = create_ui_object
@@ -1301,7 +1301,7 @@ void define_campaign_screen_group_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// 3d Preview Area
 	
-	x1 = 0.01;
+	x1 = 0.01f;
 	y1 = 0.0;
 	x2 = 1.0;
 	y2 = 0.99;
@@ -1320,7 +1320,7 @@ void define_campaign_screen_group_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Map Area
 		
-	x1 = 0.01;
+	x1 = 0.01f;
 	y1 = 0.0;
 	x2 = 1.0;
 	y2 = 0.99;

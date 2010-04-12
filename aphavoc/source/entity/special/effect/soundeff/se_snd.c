@@ -430,7 +430,7 @@ static void play_local_sound (entity *en, viewpoint *vp, float range)
 	{
 		channel_volume = (float)(sound_channel_info [raw->sound_channel].volume);
 
-		v *= (channel_volume * 0.1);
+		v *= (channel_volume * 0.1f);
 	}
 
 	//

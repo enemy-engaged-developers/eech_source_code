@@ -294,7 +294,7 @@ void show_debriefing_page (entity *mission, int force_update, int force_final_de
 
 		page_map_dimensions.size = max ((max_pos.x - min_pos.x), (max_pos.z - min_pos.z));
 
-		page_map_dimensions.size *= 1.2;
+		page_map_dimensions.size *= 1.2f;
 
 		page_map_dimensions.size = max (page_map_dimensions.size, 4.0f * KILOMETRE);
 
@@ -647,7 +647,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 	
 	ysize = 0.04;
 
-	yinc = 0.05;
+	yinc = 0.05f;
 
 	/////////////////////////////////////////////////////////////////
 	// Task Result Box
@@ -745,7 +745,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 	set_common_slider_graphics (debriefing_page_kills_area);
 
 	x1 = 0.0;
-	x2 = 0.9;
+	x2 = 0.9f;
 
 	y1 = 0.0;
 	y2 = 1.0;
@@ -767,7 +767,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// debriefing text
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.746;
 	x2 = 0.99;
 	y2 = 0.94;
@@ -788,7 +788,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 	set_common_slider_graphics (debriefing_text_area);
 
 	x1 = 0.0;
-	x2 = 0.9;
+	x2 = 0.9f;
 	y1 = 0.0;
 	y2 = 1.0;
 
@@ -824,7 +824,7 @@ void define_campaign_screen_debriefing_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.01;
+	x1 = 0.01f;
 	y1 = 0.0;
 	x2 = 1.0;
 	y2 = 0.99;

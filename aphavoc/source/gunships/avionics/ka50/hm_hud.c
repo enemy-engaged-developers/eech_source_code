@@ -86,8 +86,8 @@ static void display_target_information (void);
 
 #define HUD_WINDOW_X_MIN  				(-1.0)
 #define HUD_WINDOW_Y_MIN				(-1.0)
-#define HUD_WINDOW_X_MAX  				(0.999)
-#define HUD_WINDOW_Y_MAX 				(0.999)
+#define HUD_WINDOW_X_MAX  				(0.999f)
+#define HUD_WINDOW_Y_MAX 				(0.999f)
 
 #define HUD_VIEWPORT_LARGE_SIZE		(256)
 #define HUD_VIEWPORT_SMALL_SIZE		(128)
@@ -263,9 +263,9 @@ static char small_hud_command_heading_carat[] =
 //
 ////////////////////////////////////////
 
-#define BANK_SCALE_TICK_START	(0.4)
+#define BANK_SCALE_TICK_START	(0.4f)
 #define BANK_SCALE_MAJOR_TICK	(BANK_SCALE_TICK_START + 0.150)
-#define BANK_SCALE_MINOR_TICK	(BANK_SCALE_TICK_START + 0.075)
+#define BANK_SCALE_MINOR_TICK	(BANK_SCALE_TICK_START + 0.075f)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,12 +345,12 @@ static void draw_layout_grid (void)
 
 	if (display_hud_layout_grid)
 	{
-		for (x = HUD_WINDOW_X_MIN; x <= HUD_WINDOW_X_MAX; x += 0.1)
+		for (x = HUD_WINDOW_X_MIN; x <= HUD_WINDOW_X_MAX; x += 0.1f)
 		{
 			draw_2d_line (x, HUD_WINDOW_Y_MIN, x, HUD_WINDOW_Y_MAX, sys_col_red);
 		}
 
-		for (y = HUD_WINDOW_Y_MIN; y <= HUD_WINDOW_Y_MAX; y += 0.1)
+		for (y = HUD_WINDOW_Y_MIN; y <= HUD_WINDOW_Y_MAX; y += 0.1f)
 		{
 			draw_2d_line (HUD_WINDOW_X_MIN, y, HUD_WINDOW_X_MAX, y, sys_col_red);
 		}
@@ -383,7 +383,7 @@ static void draw_pitch_scale (void)
 
 	mod_pitch_step_10 = fmod (pitch, 10.0f);
 
-	int_pitch_step_10 = ((int)(pitch * 0.1)) * 10;
+	int_pitch_step_10 = ((int)(pitch * 0.1f)) * 10;
 	int_pitch_step_10 -= 30;
 
 	y = - (30.0 + mod_pitch_step_10) * 0.04;
@@ -399,14 +399,14 @@ static void draw_pitch_scale (void)
 		// major tick every 10 degrees
 		//
 
-		if (y >= -0.6)
+		if (y >= -0.6f)
 		{
 			if (int_pitch_step_10 != 0)
 			{
 				int pnum;
 				
-				draw_line_func (-0.22, y, -0.07, y, hud_colour);
-				draw_line_func (0.07, y, 0.22, y, hud_colour);
+				draw_line_func (-0.22f, y, -0.07f, y, hud_colour);
+				draw_line_func (0.07f, y, 0.22f, y, hud_colour);
 				
 				if (draw_large_hud)
 					set_mono_font_type (MONO_FONT_TYPE_6X10);
@@ -435,8 +435,8 @@ static void draw_pitch_scale (void)
 		// minor tick every 5 degrees
 		//
 
-		if (y + 0.2 < 0.6 && y + 0.2 >= -0.6)
-			draw_line_func(-0.05, y + 0.2, 0.05, y + 0.2, hud_colour);
+		if (y + 0.2 < 0.6 && y + 0.2 >= -0.6f)
+			draw_line_func(-0.05f, y + 0.2f, 0.05f, y + 0.2f, hud_colour);
 
 
 		//
@@ -444,28 +444,28 @@ static void draw_pitch_scale (void)
 		//
 
 		int_pitch_step_10 += 10;
-		y += 0.4;
+		y += 0.4f;
 		
-		if (y > 0.6)
+		if (y > 0.6f)
 			break;
 	}
 	
 	// draw datum
 	set_2d_instance_rotation (hud_env, -roll);
 	
-	draw_line_func(-0.2, 0.0, -0.08, 0.0, hud_colour);
-	draw_line_func(-0.08, 0.0, -0.08, -0.04, hud_colour);
-	draw_line_func(-0.08, -0.04, -0.04, -0.08, hud_colour);
-	draw_line_func(-0.04, -0.08, 0.04, -0.08, hud_colour);
-	draw_line_func(0.08, -0.04, 0.04, -0.08, hud_colour);
-	draw_line_func(0.08, 0.0, 0.08, -0.04, hud_colour);
-	draw_line_func(0.2, 0.0, 0.08, 0.0, hud_colour);
+	draw_line_func(-0.2f, 0.0, -0.08f, 0.0, hud_colour);
+	draw_line_func(-0.08f, 0.0, -0.08f, -0.04f, hud_colour);
+	draw_line_func(-0.08f, -0.04f, -0.04f, -0.08f, hud_colour);
+	draw_line_func(-0.04f, -0.08f, 0.04f, -0.08f, hud_colour);
+	draw_line_func(0.08f, -0.04f, 0.04f, -0.08f, hud_colour);
+	draw_line_func(0.08f, 0.0, 0.08f, -0.04f, hud_colour);
+	draw_line_func(0.2f, 0.0, 0.08f, 0.0, hud_colour);
 	
 	reset_2d_instance (hud_env);
 	
 	// draw bank angle marks
-	draw_2d_line(0.35, 0.0, 0.45, 0.0, hud_colour);
-	draw_2d_line(-0.35, 0.0, -0.45, 0.0, hud_colour);
+	draw_2d_line(0.35f, 0.0, 0.45f, 0.0, hud_colour);
+	draw_2d_line(-0.35f, 0.0, -0.45f, 0.0, hud_colour);
 	
 	draw_2d_line(0.303, -0.175, 0.390, -0.225, hud_colour);
 	draw_2d_line(-0.303, -0.175, -0.390, -0.225, hud_colour);
@@ -510,7 +510,7 @@ static void draw_heading_scale (void)
 
 	mod_heading_step_10 = fmod (heading, 10.0f);
 
-	int_heading_step_10 = ((int) (heading * 0.1));
+	int_heading_step_10 = ((int) (heading * 0.1f));
 
 	int_heading_step_10 -= 2;
 
@@ -525,25 +525,25 @@ static void draw_heading_scale (void)
 	// draw heading scale line
 	//
 
-	draw_2d_line (-0.25, 0.85, 0.25, 0.85, hud_colour);
+	draw_2d_line (-0.25, 0.85f, 0.25, 0.85f, hud_colour);
 
 	//
 	// large and small HUD differences
 	//
 
-	get_2d_float_screen_coordinates (0.0, 0.85, &i, &j);
+	get_2d_float_screen_coordinates (0.0, 0.85f, &i, &j);
 
 	if (draw_large_hud)
 	{
 		set_mono_font_type (MONO_FONT_TYPE_7X12);
 
-		draw_2d_mono_sprite(large_hud_heading_carat, 0.0, 0.85, hud_colour);
+		draw_2d_mono_sprite(large_hud_heading_carat, 0.0, 0.85f, hud_colour);
 	}
 	else
 	{
 		set_mono_font_type (MONO_FONT_TYPE_5X7);
 
-		draw_2d_mono_sprite(small_hud_heading_carat, 0.0, 0.85, hud_colour);
+		draw_2d_mono_sprite(small_hud_heading_carat, 0.0, 0.85f, hud_colour);
 	}
 
 	//
@@ -557,14 +557,14 @@ static void draw_heading_scale (void)
 		//
 
 		if (x >= -0.25)
-			draw_2d_line (x, 0.9, x, 0.85, hud_colour);
+			draw_2d_line (x, 0.9f, x, 0.85f, hud_colour);
 
 		//
 		// minor tick every 5 degrees
 		//
 
 		if (x + 0.125 >= -0.25 && x + 0.125 < 0.25)
-			draw_2d_line (x + 0.125, 0.85, x + 0.125, 0.875, hud_colour);
+			draw_2d_line (x + 0.125, 0.85f, x + 0.125, 0.875, hud_colour);
 
 		//
 		// heading value ('0' displayed as '36')
@@ -579,7 +579,7 @@ static void draw_heading_scale (void)
 			sprintf (s, "36");
 		}
 
-		set_2d_mono_font_position (x, 0.9);
+		set_2d_mono_font_position (x, 0.9f);
 
 		width = get_mono_font_string_width (s);
 
@@ -647,17 +647,17 @@ static void draw_heading_scale (void)
 
 			command_heading = bearing - heading;
 
-			if (command_heading > rad (180.0))
-				command_heading -= rad (360.0);
-			else if (command_heading < rad (-180.0))
-				command_heading += rad (360.0);
+			if (command_heading > rad (180.0f))
+				command_heading -= rad (360.0f);
+			else if (command_heading < rad (-180.0f))
+				command_heading += rad (360.0f);
 
-			command_heading = bound (command_heading, rad (-90.0), rad (90.0));
+			command_heading = bound (command_heading, rad (-90.0f), rad (90.0f));
 
 			if (draw_large_hud)
-				draw_2d_mono_sprite (large_hud_command_heading_carat, command_heading * ((0.25 - 0.04) / rad (90.0)), 0.85, hud_colour);
+				draw_2d_mono_sprite (large_hud_command_heading_carat, command_heading * ((0.25 - 0.04f) / rad (90.0f)), 0.85f, hud_colour);
 			else
-				draw_2d_mono_sprite (small_hud_command_heading_carat, command_heading * ((0.25 - 0.04) / rad (90.0)), 0.85, hud_colour);
+				draw_2d_mono_sprite (small_hud_command_heading_carat, command_heading * ((0.25 - 0.04f) / rad (90.0f)), 0.85f, hud_colour);
 		}
 	}
 	//
@@ -706,16 +706,16 @@ static void draw_velocity_scale(float airspeed)
 {
 	float y_offset = bound(airspeed, 0.0, 500.0) * 0.0014;
 	
-	draw_2d_line(-0.55, 0.1, -0.55, 0.8, hud_colour);
+	draw_2d_line(-0.55f, 0.1f, -0.55f, 0.8f, hud_colour);
 	
-	draw_2d_line(-0.55, 0.1, -0.575, 0.1, hud_colour);
-	draw_2d_line(-0.55, 0.24, -0.575, 0.24, hud_colour);
-	draw_2d_line(-0.55, 0.38, -0.575, 0.38, hud_colour);
-	draw_2d_line(-0.55, 0.52, -0.575, 0.52, hud_colour);
-	draw_2d_line(-0.55, 0.66, -0.575, 0.66, hud_colour);
-	draw_2d_line(-0.55, 0.80, -0.575, 0.80, hud_colour);
+	draw_2d_line(-0.55f, 0.1f, -0.575, 0.1f, hud_colour);
+	draw_2d_line(-0.55f, 0.24f, -0.575, 0.24f, hud_colour);
+	draw_2d_line(-0.55f, 0.38f, -0.575, 0.38f, hud_colour);
+	draw_2d_line(-0.55f, 0.52, -0.575, 0.52, hud_colour);
+	draw_2d_line(-0.55f, 0.66, -0.575, 0.66, hud_colour);
+	draw_2d_line(-0.55f, 0.80, -0.575, 0.80, hud_colour);
 
-	draw_2d_line(-0.55, 0.54, -0.525, 0.54, hud_colour);
+	draw_2d_line(-0.55f, 0.54, -0.525f, 0.54, hud_colour);
 
 	if (draw_large_hud)
 	{
@@ -728,14 +728,14 @@ static void draw_velocity_scale(float airspeed)
 		set_mono_font_rel_position (-5.0, -1.0);
 	}
 
-	set_2d_mono_font_position(-0.75, 0.8);
+	set_2d_mono_font_position(-0.75f, 0.8f);
 
 	print_mono_font_string("500");
 	
 	if (draw_large_hud)
-		draw_2d_mono_sprite(large_left_carat, -0.55, 0.1 + y_offset, hud_colour);
+		draw_2d_mono_sprite(large_left_carat, -0.55f, 0.1 + y_offset, hud_colour);
 	else
-		draw_2d_mono_sprite(small_left_carat, -0.55, 0.1 + y_offset, hud_colour);
+		draw_2d_mono_sprite(small_left_carat, -0.55f, 0.1 + y_offset, hud_colour);
 }
 
 static void display_true_airspeed (void)
@@ -757,7 +757,7 @@ static void display_true_airspeed (void)
 		if (draw_large_hud)
 		{
 			set_mono_font_type (MONO_FONT_TYPE_8X14);
-			set_2d_mono_font_position (-0.9, 0.95);
+			set_2d_mono_font_position (-0.9f, 0.95f);
 			set_mono_font_rel_position (5.0, -4.0);
 	
 			if (true_airspeed >= 0.0)
@@ -766,14 +766,14 @@ static void display_true_airspeed (void)
 				print_mono_font_string("-");
 	
 			set_mono_font_type (MONO_FONT_TYPE_10X16);
-			set_2d_mono_font_position (-0.8, 0.95);
+			set_2d_mono_font_position (-0.8f, 0.95f);
 			set_mono_font_rel_position (0.0, -4.0);
 			print_mono_font_string (s);
 		}
 		else
 		{
 			set_mono_font_type (MONO_FONT_TYPE_5X7);
-			set_2d_mono_font_position (-0.9, 0.9);
+			set_2d_mono_font_position (-0.9f, 0.9f);
 			set_mono_font_rel_position (3.0, -4.0);
 	
 			if (true_airspeed >= 0.0)
@@ -782,7 +782,7 @@ static void display_true_airspeed (void)
 				print_mono_font_string("-");
 	
 			set_mono_font_type (MONO_FONT_TYPE_6X10);
-			set_2d_mono_font_position (-0.75, 0.9);
+			set_2d_mono_font_position (-0.75f, 0.9f);
 			set_mono_font_rel_position (0.0, -5.0);
 			print_mono_font_string (s);
 		}
@@ -800,35 +800,35 @@ static void display_true_airspeed (void)
 
 static void display_g_scale(void)
 {
-	float y_offset = bound(current_flight_dynamics->g_force.value * 0.1, -0.1, 0.35);
+	float y_offset = bound(current_flight_dynamics->g_force.value * 0.1f, -0.1f, 0.35f);
 
-	draw_2d_line(-0.7, -0.2, -0.7, -0.65, hud_colour);
+	draw_2d_line(-0.7f, -0.2f, -0.7f, -0.65f, hud_colour);
 
-	draw_2d_line(-0.7, -0.25, -0.725, -0.25, hud_colour);
-	draw_2d_line(-0.7, -0.55, -0.725, -0.55, hud_colour);
-	draw_2d_line(-0.7, -0.65, -0.725, -0.65, hud_colour);
+	draw_2d_line(-0.7f, -0.25, -0.725, -0.25, hud_colour);
+	draw_2d_line(-0.7f, -0.55f, -0.725, -0.55f, hud_colour);
+	draw_2d_line(-0.7f, -0.65f, -0.725, -0.65f, hud_colour);
 	
 	if (draw_large_hud)
 		set_mono_font_type(MONO_FONT_TYPE_6X10);
 	else
 		set_mono_font_type(MONO_FONT_TYPE_3X6);
 
-	set_2d_mono_font_position(-0.78, -0.25);
+	set_2d_mono_font_position(-0.78f, -0.25);
 	set_mono_font_rel_position (0.0, -3.0);
 	print_mono_font_string("3");
 	
-	set_2d_mono_font_position(-0.78, -0.55);
+	set_2d_mono_font_position(-0.78f, -0.55f);
 	set_mono_font_rel_position (0.0, -3.0);
 	print_mono_font_string("0");
 
-	set_2d_mono_font_position(-0.78, -0.65);
+	set_2d_mono_font_position(-0.78f, -0.65);
 	set_mono_font_rel_position (0.0, -3.0);
 	print_mono_font_string("1");
 
 	if (draw_large_hud)
-		draw_2d_mono_sprite(large_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+		draw_2d_mono_sprite(large_left_carat, -0.7f, -0.55 + y_offset, hud_colour);
 	else
-		draw_2d_mono_sprite(small_left_carat, -0.7, -0.55 + y_offset, hud_colour);
+		draw_2d_mono_sprite(small_left_carat, -0.7f, -0.55 + y_offset, hud_colour);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -842,7 +842,7 @@ static void display_vertical_velocity(void)
 	
 	sprintf (s, "%02d", abs((int)vv));;
 
-	set_2d_mono_font_position (0.6, -0.07);
+	set_2d_mono_font_position (0.6f, -0.07);
 	if (draw_large_hud)
 	{
 		set_mono_font_type (MONO_FONT_TYPE_8X14);
@@ -859,7 +859,7 @@ static void display_vertical_velocity(void)
 	else
 		print_mono_font_string("-");
 
-	set_2d_mono_font_position (0.7, -0.07);
+	set_2d_mono_font_position (0.7f, -0.07);
 	if (draw_large_hud)
 	{
 		set_mono_font_type (MONO_FONT_TYPE_10X16);
@@ -876,40 +876,40 @@ static void display_vertical_velocity(void)
 	// draw the scale
 	if (hud_mode != HUD_MODE_WEAPON)
 	{
-		float y_offset = vv * 0.01;
+		float y_offset = vv * 0.01f;
 		
-		draw_2d_line(0.7, -0.2, 0.7, -0.8, hud_colour);
+		draw_2d_line(0.7f, -0.2f, 0.7f, -0.8f, hud_colour);
 
 		// the vertical tick marks
-		draw_2d_line(0.7, -0.2, 0.725, -0.2, hud_colour);
-		draw_2d_line(0.7, -0.3, 0.725, -0.3, hud_colour);
-		draw_2d_line(0.7, -0.4, 0.725, -0.4, hud_colour);
-		draw_2d_line(0.7, -0.5, 0.75, -0.5, hud_colour);
-		draw_2d_line(0.7, -0.6, 0.725, -0.6, hud_colour);
-		draw_2d_line(0.7, -0.7, 0.725, -0.7, hud_colour);
-		draw_2d_line(0.7, -0.8, 0.725, -0.8, hud_colour);
+		draw_2d_line(0.7f, -0.2f, 0.725, -0.2f, hud_colour);
+		draw_2d_line(0.7f, -0.3f, 0.725, -0.3f, hud_colour);
+		draw_2d_line(0.7f, -0.4f, 0.725, -0.4f, hud_colour);
+		draw_2d_line(0.7f, -0.5, 0.75f, -0.5, hud_colour);
+		draw_2d_line(0.7f, -0.6f, 0.725, -0.6f, hud_colour);
+		draw_2d_line(0.7f, -0.7f, 0.725, -0.7f, hud_colour);
+		draw_2d_line(0.7f, -0.8f, 0.725, -0.8f, hud_colour);
 		
 		if (draw_large_hud)
 			set_mono_font_type(MONO_FONT_TYPE_6X10);
 		else
 			set_mono_font_type(MONO_FONT_TYPE_3X6);
 			
-		set_2d_mono_font_position(0.75, -0.2);
+		set_2d_mono_font_position(0.75f, -0.2f);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("30");
 		
-		set_2d_mono_font_position(0.75, -0.5);
+		set_2d_mono_font_position(0.75f, -0.5);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("0");
 
-		set_2d_mono_font_position(0.75, -0.8);
+		set_2d_mono_font_position(0.75f, -0.8f);
 		set_mono_font_rel_position (0.0, -3.0);
 		print_mono_font_string("30");
 
 		if (draw_large_hud)
-			draw_2d_mono_sprite(large_right_carat, 0.7, -0.5 + bound(y_offset, -0.3, 0.3), hud_colour);
+			draw_2d_mono_sprite(large_right_carat, 0.7f, -0.5 + bound(y_offset, -0.3f, 0.3f), hud_colour);
 		else
-			draw_2d_mono_sprite(small_right_carat, 0.7, -0.5 + bound(y_offset, -0.3, 0.3), hud_colour);
+			draw_2d_mono_sprite(small_right_carat, 0.7f, -0.5 + bound(y_offset, -0.3f, 0.3f), hud_colour);
 	}
 }
 
@@ -921,30 +921,30 @@ static void draw_altitude_scale(float altitude)
 {
 	float y_offset = altitude * 0.016;
 	
-	draw_2d_line(0.55, 0.0, 0.55, 0.8, hud_colour);
+	draw_2d_line(0.55f, 0.0, 0.55f, 0.8f, hud_colour);
 	
 	// the vertical tick marks
-	draw_2d_line(0.525, 0.0, 0.575, 0.0, hud_colour);
-	draw_2d_line(0.55, 0.16, 0.575, 0.16, hud_colour);
-	draw_2d_line(0.55, 0.32, 0.575, 0.32, hud_colour);
-	draw_2d_line(0.55, 0.48, 0.575, 0.48, hud_colour);
-	draw_2d_line(0.55, 0.64, 0.575, 0.64, hud_colour);
-	draw_2d_line(0.55, 0.80, 0.575, 0.80, hud_colour);
+	draw_2d_line(0.525f, 0.0, 0.575, 0.0, hud_colour);
+	draw_2d_line(0.55f, 0.16f, 0.575, 0.16f, hud_colour);
+	draw_2d_line(0.55f, 0.32, 0.575, 0.32, hud_colour);
+	draw_2d_line(0.55f, 0.48, 0.575, 0.48, hud_colour);
+	draw_2d_line(0.55f, 0.64f, 0.575, 0.64f, hud_colour);
+	draw_2d_line(0.55f, 0.80, 0.575, 0.80, hud_colour);
 	
 	if (draw_large_hud)
 		set_mono_font_type(MONO_FONT_TYPE_6X10);
 	else
 		set_mono_font_type(MONO_FONT_TYPE_5X7);
 
-	set_2d_mono_font_position(0.6, 0.8);
+	set_2d_mono_font_position(0.6f, 0.8f);
 	set_mono_font_rel_position (0.0, -2.0);
 	print_mono_font_string("50");
 
 
 	if (draw_large_hud)
-		draw_2d_mono_sprite(large_right_carat, 0.55, y_offset, hud_colour);
+		draw_2d_mono_sprite(large_right_carat, 0.55f, y_offset, hud_colour);
 	else
-		draw_2d_mono_sprite(small_right_carat, 0.55, y_offset, hud_colour);
+		draw_2d_mono_sprite(small_right_carat, 0.55f, y_offset, hud_colour);
 }
 
 static void display_altitude (void)
@@ -963,12 +963,12 @@ static void display_altitude (void)
 		if (draw_large_hud)
 		{
 			set_mono_font_type (MONO_FONT_TYPE_7X12);
-			set_2d_mono_font_position (0.87, 0.95);			
+			set_2d_mono_font_position (0.87, 0.95f);			
 		}
 		else
 		{
 			set_mono_font_type (MONO_FONT_TYPE_5X7);
-			set_2d_mono_font_position (0.9, 0.95);
+			set_2d_mono_font_position (0.9f, 0.95f);
 		}
 
 		print_mono_font_string("R");
@@ -981,13 +981,13 @@ static void display_altitude (void)
 	if (draw_large_hud)
 	{
 		set_mono_font_type (MONO_FONT_TYPE_10X16);
-		set_2d_mono_font_position (0.8, 0.95);
+		set_2d_mono_font_position (0.8f, 0.95f);
 		set_mono_font_rel_position (-25.0, -4.0);
 	}
 	else
 	{
 		set_mono_font_type (MONO_FONT_TYPE_6X10);
-		set_2d_mono_font_position (0.8, 0.9);
+		set_2d_mono_font_position (0.8f, 0.9f);
 		set_mono_font_rel_position (-15.0, -5.0);
 	}
 
@@ -1048,7 +1048,7 @@ static void display_waypoint_information (void)
 			set_mono_font_type (MONO_FONT_TYPE_6X7);
 		}
 
-		set_2d_mono_font_position (0.0, -0.8);
+		set_2d_mono_font_position (0.0, -0.8f);
 
 		width = get_mono_font_string_width (s);
 
@@ -1161,8 +1161,8 @@ void draw_ka50_hud_on_cockpit (int hud_enlarge)
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
 
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001f;
+	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001f;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1173,8 +1173,8 @@ void draw_ka50_hud_on_cockpit (int hud_enlarge)
 	hud_screen_x_min = 0.0;
 	hud_screen_y_min = 0.0;
 
-	hud_screen_x_max = hud_viewport_size - 0.001;
-	hud_screen_y_max = hud_viewport_size - 0.001;
+	hud_screen_x_max = hud_viewport_size - 0.001f;
+	hud_screen_y_max = hud_viewport_size - 0.001f;
 
 	hud_screen_x_scale = 1.0;
 	hud_screen_y_scale = 1.0;
@@ -1263,8 +1263,8 @@ void draw_ka50_hud_on_texture (void)
 
 	hud_viewport_x_min = hud_viewport_x_org - (hud_viewport_size * 0.5);
 	hud_viewport_y_min = hud_viewport_y_org - (hud_viewport_size * 0.5);
-	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001;
-	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001;
+	hud_viewport_x_max = hud_viewport_x_org + (hud_viewport_size * 0.5) - 0.001f;
+	hud_viewport_y_max = hud_viewport_y_org + (hud_viewport_size * 0.5) - 0.001f;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1275,8 +1275,8 @@ void draw_ka50_hud_on_texture (void)
 	hud_screen_x_min = full_screen_x_mid - ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width);
 	hud_screen_y_min = full_screen_y_mid - ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height);
 
-	hud_screen_x_max = full_screen_x_mid + ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width) - 0.001;
-	hud_screen_y_max = full_screen_y_mid + ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height) - 0.001;
+	hud_screen_x_max = full_screen_x_mid + ((hud_viewport_size / (640.0 * 2.0)) * full_screen_width) - 0.001f;
+	hud_screen_y_max = full_screen_y_mid + ((hud_viewport_size / (480.0 * 2.0)) * full_screen_height) - 0.001f;
 
 	hud_screen_x_scale = 640.0 / full_screen_width;
 	hud_screen_y_scale = 480.0 / full_screen_height;
@@ -1390,8 +1390,8 @@ void draw_external_ka50_hud (void)
 	hud_viewport_x_min = 0.0;
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = hud_viewport_size - 0.001;
-	hud_viewport_y_max = hud_viewport_size - 0.001;
+	hud_viewport_x_max = hud_viewport_size - 0.001f;
+	hud_viewport_y_max = hud_viewport_size - 0.001f;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -1415,8 +1415,8 @@ void draw_external_ka50_hud (void)
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001f;
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001f;
 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;
@@ -1581,16 +1581,16 @@ static void draw_hms_centre_datum (void)
 {
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_HMS)
 	{
-		draw_2d_circle(0.0, 0.0, 0.3, hud_colour);
+		draw_2d_circle(0.0, 0.0, 0.3f, hud_colour);
 		
 		if (weapon_lock_type != WEAPON_LOCK_NO_TARGET)
-			draw_2d_circle(0.0, 0.0, 0.35, hud_colour);
+			draw_2d_circle(0.0, 0.0, 0.35f, hud_colour);
 		if (weapon_lock_type == WEAPON_LOCK_VALID)
 		{
-			draw_2d_line(0.3, 0.0, 0.4, 0.0, hud_colour);	
-			draw_2d_line(0.0, 0.3, 0.0, 0.4, hud_colour);	
-			draw_2d_line(-0.3, 0.0, -0.4, 0.0, hud_colour);	
-			draw_2d_line(0.0, -0.3, 0.0, -0.4, hud_colour);	
+			draw_2d_line(0.3f, 0.0, 0.4f, 0.0, hud_colour);	
+			draw_2d_line(0.0, 0.3f, 0.0, 0.4f, hud_colour);	
+			draw_2d_line(-0.3f, 0.0, -0.4f, 0.0, hud_colour);	
+			draw_2d_line(0.0, -0.3f, 0.0, -0.4f, hud_colour);	
 		}
 	}
 }
@@ -1668,15 +1668,15 @@ static void draw_gun_pipper (float x, float y, float range, float weapon_min_ran
 
 	set_2d_instance_position (hud_env, x, y);
 
-	draw_2d_line (0.0, 0.15, 0.0, 0.12, hud_colour);
+	draw_2d_line (0.0, 0.15f, 0.0, 0.12, hud_colour);
 
 	theta = weapon_max_range / max_range * -PI2;
 	set_2d_instance_rotation (hud_env, theta);
-	draw_2d_line (0.0, 0.15, 0.0, 0.12, hud_colour);
+	draw_2d_line (0.0, 0.15f, 0.0, 0.12, hud_colour);
 
 	theta = weapon_min_range / max_range * -PI2;
 	set_2d_instance_rotation (hud_env, theta);
-	draw_2d_line (0.0, 0.15, 0.0, 0.12, hud_colour);
+	draw_2d_line (0.0, 0.15f, 0.0, 0.12, hud_colour);
 
 	draw_2d_circle(0.0, 0.0, 0.12, hud_colour);
 
@@ -1779,8 +1779,8 @@ static void draw_target_marker (void)
 
 					clip_2d_point_to_hud_extent (&x, &y);
 
-					draw_2d_line (x - 0.05, y, x + 0.05, y, hud_colour);
-					draw_2d_line (x, y - 0.05, x, y + 0.05, hud_colour);
+					draw_2d_line (x - 0.05f, y, x + 0.05f, y, hud_colour);
+					draw_2d_line (x, y - 0.05f, x, y + 0.05f, hud_colour);
 				}
 			}
 		}
@@ -1821,7 +1821,7 @@ static void display_weapon_information (void)
 			draw_2d_line(left_limit, upper_limit, right_limit, upper_limit, hud_colour);
 			
 			set_mono_font_type (MONO_FONT_TYPE_6X10);
-			set_2d_mono_font_position (-0.9, -0.7);
+			set_2d_mono_font_position (-0.9f, -0.7f);
 			set_mono_font_rel_position (0.0, 0.0);
 			if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_2A42_30MM_HE_ROUND)
 				weapon_type = "HE %03d";
@@ -1834,7 +1834,7 @@ static void display_weapon_information (void)
 
 			if (flight_time > 0.01)
 			{
-				flight_time = bound (flight_time, 0.0, 99.9);
+				flight_time = bound (flight_time, 0.0, 99.9f);
 				sprintf (s, "%02.0f", flight_time);
 				set_2d_mono_font_position (-0.5, -0.65);
 				set_mono_font_rel_position (1.0, 0.0);
@@ -1872,7 +1872,7 @@ static void display_weapon_information (void)
 			y -= cos(roll) * drop_hud_distance;
 			x += sin(roll) * drop_hud_distance;
 
-			draw_2d_circle(x, y, 0.1, hud_colour);
+			draw_2d_circle(x, y, 0.1f, hud_colour);
 			set_2d_pixel(x, y, hud_colour); 
 		}
 
@@ -1881,7 +1881,7 @@ static void display_weapon_information (void)
 		else
 			set_mono_font_type (MONO_FONT_TYPE_3X6);
 
-		set_2d_mono_font_position (-0.9, -0.1);
+		set_2d_mono_font_position (-0.9f, -0.1f);
 		set_mono_font_rel_position (0.0, 0.0);
 		sprintf(s, weapon_type, count);
 		print_mono_font_string (s);
@@ -1895,7 +1895,7 @@ static void display_weapon_information (void)
 			}else{
 				sprintf (s, "Salvo:%d", rocket_salvo_size);
 			}
-			set_2d_mono_font_position (-0.9, -0.2);
+			set_2d_mono_font_position (-0.9f, -0.2f);
 			set_mono_font_rel_position (0.0, 0.0);
 			print_mono_font_string (s);
 		}
@@ -1941,7 +1941,7 @@ static void display_target_information (void)
 
 		if (target_range > 0.0)
 		{
-			sprintf (buffer, "%2.1f", target_range * 0.001);
+			sprintf (buffer, "%2.1f", target_range * 0.001f);
 			set_2d_mono_font_position (0.0, -0.65);
 			width = get_mono_font_string_width (buffer);
 			set_mono_font_rel_position (-width * 0.5, 0.0);
@@ -2017,8 +2017,8 @@ static void display_target_information (void)
 	width = get_mono_font_string_width (s);
 
 	// make place for salvo info by GCsDriver
-	//	set_2d_mono_font_position (-0.9, -0.2);
-		set_2d_mono_font_position (-0.9, -0.3);
+	//	set_2d_mono_font_position (-0.9f, -0.2f);
+		set_2d_mono_font_position (-0.9f, -0.3f);
 	// end salvo info by GCsDriver
 
 	set_mono_font_rel_position (0.0, 0.0);
@@ -2028,14 +2028,14 @@ static void display_target_information (void)
 	// laser and radar indicators
 	if (laser_is_active())
 	{
-		set_2d_mono_font_position (-0.8, 0.2);
+		set_2d_mono_font_position (-0.8f, 0.2f);
 		set_mono_font_rel_position (0.0, 0.0);
 		print_mono_font_string("L");
 	}
 
 	if (get_local_entity_int_value(source, INT_TYPE_RADAR_ON))
 	{
-		set_2d_mono_font_position (-0.8, 0.1);
+		set_2d_mono_font_position (-0.8f, 0.1f);
 		set_mono_font_rel_position (0.0, 0.0);
 		print_mono_font_string("R");
 	}
@@ -2128,11 +2128,11 @@ void draw_ka50_hms (void)
 					pitch_offset = -pitch_offset;
 				}
 
-				if ((heading_offset < rad (25.0)) && (pitch_offset < rad (25.0)))
+				if ((heading_offset < rad (25.0f)) && (pitch_offset < rad (25.0f)))
 				{
 					max_offset = max (heading_offset, pitch_offset);
 
-					alpha = (int) (max_offset * (200.0 / rad (25.0))) + 55;
+					alpha = (int) (max_offset * (200.0 / rad (25.0f))) + 55;
 
 					alpha = bound (alpha, 0, 255);
 				}
@@ -2175,9 +2175,9 @@ void draw_ka50_hms (void)
 
 	hud_viewport_y_min = 0.0;
 
-	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_x_max = HUD_VIEWPORT_LARGE_SIZE - 0.001f;
 
-	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001;
+	hud_viewport_y_max = HUD_VIEWPORT_LARGE_SIZE - 0.001f;
 
 	set_2d_viewport (hud_env, hud_viewport_x_min, hud_viewport_y_min, hud_viewport_x_max, hud_viewport_y_max);
 
@@ -2201,8 +2201,8 @@ void draw_ka50_hms (void)
 		hud_screen_x_min = full_screen_x_mid - ((256.0 / (640.0 * 2.0)) * full_screen_width);
 		hud_screen_y_min = full_screen_y_mid - ((256.0 / (480.0 * 2.0)) * full_screen_height);
 
-		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001;
-		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001;
+		hud_screen_x_max = full_screen_x_mid + ((256.0 / (640.0 * 2.0)) * full_screen_width) - 0.001f;
+		hud_screen_y_max = full_screen_y_mid + ((256.0 / (480.0 * 2.0)) * full_screen_height) - 0.001f;
 
 		hud_screen_x_scale = 640.0 / full_screen_width;
 		hud_screen_y_scale = 480.0 / full_screen_height;

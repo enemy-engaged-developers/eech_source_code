@@ -107,7 +107,7 @@ int
 	#endif
 
 	command_line_cdrom_drive_letter							= FALSE,
-	command_line_entity_update_frame_rate					= 2.0,
+	command_line_entity_update_frame_rate					= 2,
 	command_line_hardware_render								= FALSE,
 	command_line_no_sound										= FALSE,
 	command_line_sound_hdwrbuf									= 0,
@@ -129,7 +129,7 @@ int
 	command_line_comms_packet_rerequest_limit				= 10,
 	command_line_comms_connection_receive_size			= (210 * 1024),
 	command_line_comms_data_record_size						= (210 * 1024),
-	command_line_comms_timeout									= (15.0),
+	command_line_comms_timeout									= (15),
 	command_line_comms_pack_buffer_size						= (210 * 1024),
 	command_line_comms_initial_sleep_time					= 500,
 	command_line_comms_guaranteed_send						= TRUE,
@@ -265,14 +265,14 @@ int
 float
 	command_line_dynamics_retreating_blade_stall_effect= 1.0,
 	command_line_dynamics_rudder_value						= 1.0,
-	command_line_dynamics_rudder_acceleration				= 0.8,
+	command_line_dynamics_rudder_acceleration				= 0.8f,
 	command_line_dynamics_main_rotor_drag					= 1.0,
 	command_line_dynamics_main_rotor_lift					= 1.0,
 	command_line_dynamics_tail_rotor_drag					= 1.0,
 	command_line_dynamics_cyclic_dead_zone					= 0.0,
 	command_line_dynamics_yaw_altitude_loss 				= 5.0,
-	command_line_collective_zone_1_limit					= 0.3,		// arneh 2007-01-14
-	command_line_collective_zone_2_limit					= 0.7,		// arneh 2007-01-14
+	command_line_collective_zone_1_limit					= 0.3f,		// arneh 2007-01-14
+	command_line_collective_zone_2_limit					= 0.7f,		// arneh 2007-01-14
 	command_line_collective_percentage_at_zone1					= 60.0,		// GCsDriver  08-12-2007
 	command_line_aitool_grid_pitch 							= 0.0,
 	command_line_comms_resend_timeout						= 2.0,

@@ -109,7 +109,7 @@ void initialise_loading_screen (void)
 
 	x1 = 0.620;
 	y1 = 0.138;
-	x2 = 0.2;
+	x2 = 0.2f;
 	y2 = 0.0625;
 	
 	loading_text = create_ui_object

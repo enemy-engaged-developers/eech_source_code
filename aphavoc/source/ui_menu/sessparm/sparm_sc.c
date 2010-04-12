@@ -1791,7 +1791,7 @@ void process_sessparm_boolean_objects (ui_object *title_box_obj, ui_object *titl
 		set_ui_object_virtual_x_size (title_box_obj, (1.0 - new_size - SETUP_BOX_GAP_WIDTH));
 
 		// not definite yet...
-		set_ui_object_x_end (title_text_obj, (1.0 - new_size - SETUP_BOX_GAP_WIDTH - 0.05));
+		set_ui_object_x_end (title_text_obj, (1.0 - new_size - SETUP_BOX_GAP_WIDTH - 0.05f));
 	}
 }
 

@@ -1674,7 +1674,7 @@ void read_population_airfield_placements ( FILE *fp )
 
 			current_airport_inst3d->vp.position.x = x;
 	//VJ 060107 zbuffer fix for disappearing runways, simply elevate them above ground level by 0.05 m
-			current_airport_inst3d->vp.position.y = y+0.05;
+			current_airport_inst3d->vp.position.y = y+0.05f;
 			current_airport_inst3d->vp.position.z = z;
 	
 			current_airport_inst3d->object_has_shadow = FALSE;
@@ -3000,7 +3000,7 @@ void insert_airport_helicopter_routes ( vec3d *position, object_3d_database_entr
 // and add 10 cm to the elevation to ensure the aircraft touch the ground when landing, 
 // this seems to trigger a change of status
 		waypoint_world_pos.y = max(waypoint_world_pos.y,get_3d_terrain_point_data (waypoint_world_pos.x,waypoint_world_pos.z, NULL ));		
-		waypoint_world_pos.y += 0.1;
+		waypoint_world_pos.y += 0.1f;
 //VJ FARP bug, date: 18-mar-03, end
 
 		inhangar_flags = get_waypoint_inhangar_bits ( &route_waypoint_positions[current_route_waypoint_offset], current_airport_inst3d );

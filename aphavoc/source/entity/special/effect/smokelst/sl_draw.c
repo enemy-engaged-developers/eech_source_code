@@ -791,9 +791,9 @@ void get_smoke_sprite_display_values( smoke_list *raw, int index, float lifetime
 
 	// adjust downwash for ambient light, so that it won't "glow" in the dark
 	get_3d_ambient_light_level(&red_lightlevel, &green_lightlevel, &blue_lightlevel);
-	red_lightlevel = bound(red_lightlevel * 2.5, 0.1, 1.0);
-	green_lightlevel = bound(green_lightlevel * 2.5, 0.1, 1.0);
-	blue_lightlevel = bound(blue_lightlevel * 2.5, 0.1, 1.0);
+	red_lightlevel = bound(red_lightlevel * 2.5, 0.1f, 1.0);
+	green_lightlevel = bound(green_lightlevel * 2.5, 0.1f, 1.0);
+	blue_lightlevel = bound(blue_lightlevel * 2.5, 0.1f, 1.0);
 
 	if ( lifescale < smoke_info->colour_change_1 )
 	{

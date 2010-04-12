@@ -769,7 +769,7 @@ void initialise_campaign_screen (void)
 
 	x1 = 0.257;
 	y1 = 0.427;
-	x2 = 0.74;
+	x2 = 0.74f;
 	y2 = 0.498;
 
 	campaign_quit_mission_area = create_ui_object
@@ -782,9 +782,9 @@ void initialise_campaign_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.0;
-	x2 = 0.6;
+	x2 = 0.6f;
 	y2 = 1.0;
 
 	sprintf (string, "%s?", get_trans ("QUIT MISSION"));
@@ -803,7 +803,7 @@ void initialise_campaign_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.9;
+	x1 = 0.9f;
 	y1 = 0.0;
 	x2 = 0.95;
 	y2 = 1.0;
@@ -831,11 +831,11 @@ void initialise_campaign_screen (void)
 
 	x1 = get_ui_object_x_end (temp);
 
-	x2 = get_ui_object_x_end (temp) - 0.05;
+	x2 = get_ui_object_x_end (temp) - 0.05f;
 
-//	x1 = 0.6;
+//	x1 = 0.6f;
 	y1 = 0.0;
-//	x2 = 0.88;
+//	x2 = 0.88f;
 	y2 = 1.0;
 
 	temp = create_ui_object
@@ -866,7 +866,7 @@ void initialise_campaign_screen (void)
 
 	x1 = 0.257;
 	y1 = 0.303;
-	x2 = 0.74;
+	x2 = 0.74f;
 	y2 = 0.612;
 
 	campaign_quit_campaign_area = create_ui_object
@@ -879,9 +879,9 @@ void initialise_campaign_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.1;
+	x1 = 0.1f;
 	y1 = 0.65;
-	x2 = 0.6;
+	x2 = 0.6f;
 	y2 = 1.0;
 
 	sprintf (string, "%s?", get_trans ("Quit Campaign"));
@@ -900,7 +900,7 @@ void initialise_campaign_screen (void)
 			UI_ATTR_END
 		);
 
-	x1 = 0.9;
+	x1 = 0.9f;
 	y1 = 0.65;
 	x2 = 0.95;
 	y2 = 1.0;
@@ -928,11 +928,11 @@ void initialise_campaign_screen (void)
 
 	x1 = get_ui_object_x_end (temp);
 
-	x2 = get_ui_object_x_end (temp) - 0.05;
+	x2 = get_ui_object_x_end (temp) - 0.05f;
 
-//	x1 = 0.6;
+//	x1 = 0.6f;
 	y1 = 0.65;
-//	x2 = 0.88;
+//	x2 = 0.88f;
 	y2 = 1.0;
 
 	temp = create_ui_object

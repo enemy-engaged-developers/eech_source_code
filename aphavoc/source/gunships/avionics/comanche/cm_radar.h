@@ -82,13 +82,13 @@ extern float  	COMANCHE_RADAR_SCAN_RANGE_500,
 					COMANCHE_RADAR_SCAN_RANGE_8000;
 
 #define COMANCHE_RADAR_SCAN_ARC_SIZE_360					(RADAR_SCAN_ARC_SIZE_360)
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_180					((float) rad (180.0))
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_90					((float) rad (90.0))
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_60					((float) rad (60.0))
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_45					((float) rad (45.0))
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_30					((float) rad (30.0))
-#define COMANCHE_RADAR_SCAN_ARC_SIZE_15					((float) rad (15.0))
-#define COMANCHE_RADAR_SCAN_ARC_SEGMENT_SIZE				((float) rad (5.0))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_180					((float) rad (180.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_90					((float) rad (90.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_60					((float) rad (60.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_45					((float) rad (45.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_30					((float) rad (30.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SIZE_15					((float) rad (15.0f))
+#define COMANCHE_RADAR_SCAN_ARC_SEGMENT_SIZE				((float) rad (5.0f))
 
 #define COMANCHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP	((float) COMANCHE_RADAR_SCAN_ARC_SIZE_15 * 0.5)
 

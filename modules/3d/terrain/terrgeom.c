@@ -1002,7 +1002,7 @@ void draw_3d_terrain_tree_object ( scene_slot_drawing_list *slot )
 
 			dissolve = old_dissolve;
 
-			dissolve *= 0.650;
+			dissolve *= 0.650f;
 
 			convert_float_to_int ( dissolve, &idissolve );
 
@@ -2555,9 +2555,9 @@ void draw_3d_terrain_3d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 			g = colours[colour_index].green;
 			b = colours[colour_index].blue;
 
-			r *= 0.3;
-			g *= 0.59;
-			b *= 0.11;
+			r *= 0.3f;
+			g *= 0.59f;
+			b *= 0.11f;
 
 			grey = r * 0.3 + g * 0.59 + b * 0.11;
 	
@@ -3081,9 +3081,9 @@ void draw_3d_terrain_2d_clipped_bw_sector ( scene_slot_drawing_list *slot )
 		g = colours[colour_index].green;
 		b = colours[colour_index].blue;
 
-		r *= 0.3;
-		g *= 0.59;
-		b *= 0.11;
+		r *= 0.3f;
+		g *= 0.59f;
+		b *= 0.11f;
 
 		grey = r * 0.3 + g * 0.59 + b * 0.11;
 
@@ -3544,9 +3544,9 @@ void draw_3d_terrain_unclipped_bw_sector ( scene_slot_drawing_list *slot )
 		g = colours[colour_index].green;
 		b = colours[colour_index].blue;
 
-		r *= 0.3;
-		g *= 0.59;
-		b *= 0.11;
+		r *= 0.3f;
+		g *= 0.59f;
+		b *= 0.11f;
 
 		grey = r * 0.3 + g * 0.59 + b * 0.11;
 

@@ -280,7 +280,7 @@ void define_options_screen_ingame_sound_page_objects (void)
 		//
 		
 		x1 = OPTION_TITLE_OFFSET_X;
-		x2 = x1 + 0.4;
+		x2 = x1 + 0.4f;
 
 		text_area = create_ui_object
 		(
@@ -331,7 +331,7 @@ void define_options_screen_ingame_sound_page_objects (void)
 			UI_TYPE_AREA,
 			UI_ATTR_PARENT (volume_area),
 			UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
-			UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+			UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 			UI_ATTR_TEXT ("-"),
 			UI_ATTR_ITEM_NUMBER (loop),
 			UI_ATTR_FUNCTION (decrease_channel_volume),
@@ -349,8 +349,8 @@ void define_options_screen_ingame_sound_page_objects (void)
 		(
 			UI_TYPE_AREA,
 			UI_ATTR_PARENT (volume_area),
-			UI_ATTR_VIRTUAL_POSITION (0.67, 0.0),
-			UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+			UI_ATTR_VIRTUAL_POSITION (0.67f, 0.0),
+			UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 			UI_ATTR_TEXT ("+"),
 			UI_ATTR_ITEM_NUMBER (loop),
 			UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
@@ -368,7 +368,7 @@ void define_options_screen_ingame_sound_page_objects (void)
 		(
 			UI_TYPE_AREA,
 			UI_ATTR_PARENT (volume_area),
-			UI_ATTR_VIRTUAL_POSITION (0.33, 0.0),
+			UI_ATTR_VIRTUAL_POSITION (0.33f, 0.0),
 			UI_ATTR_VIRTUAL_SIZE (0.34, 1.0),
 			UI_ATTR_TEXT (""),
 			UI_ATTR_ITEM_NUMBER (loop),

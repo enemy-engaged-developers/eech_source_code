@@ -1100,7 +1100,7 @@ extern char psd_theme[];
 #ifndef strcmpi
 #define strcmpi _strcmpi
 #endif
-#ifndef strlcpy
-#define strlcpy strcpy_s
-#endif
+//#ifndef strlcpy
+//#define strlcpy strcpy_s
+//#endif
 #endif // _MSC_VER

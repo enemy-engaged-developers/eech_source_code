@@ -97,11 +97,11 @@ static void update_propellors (entity *en)
 	{
 		if (get_local_entity_int_value (en, INT_TYPE_LANDED))
 		{
-			raw->propellor_rpm -= 5.0 * get_delta_time ();
+			raw->propellor_rpm -= 5.0f * get_delta_time ();
 		}
 		else
 		{
-			raw->propellor_rpm += 5.0 * get_delta_time ();
+			raw->propellor_rpm += 5.0f * get_delta_time ();
 		}
 	}
 

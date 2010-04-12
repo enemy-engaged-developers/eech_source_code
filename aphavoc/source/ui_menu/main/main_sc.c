@@ -275,8 +275,8 @@ void initialise_main_screen (void)
 		(
 			UI_TYPE_AREA,
 			UI_ATTR_PARENT (main_screen),
-			UI_ATTR_VIRTUAL_POSITION (0.05, 0.4),
-			UI_ATTR_VIRTUAL_SIZE (0.9, 0.3),
+			UI_ATTR_VIRTUAL_POSITION (0.05f, 0.4f),
+			UI_ATTR_VIRTUAL_SIZE (0.9f, 0.3f),
 			UI_ATTR_FONT_TYPE (UI_FONT_THICK_ITALIC_ARIAL_18),
          UI_ATTR_FONT_COLOUR_END (ui_screen_title_text_colour.r, ui_screen_title_text_colour.g, ui_screen_title_text_colour.b, 255),
 			UI_ATTR_DRAWABLE (FALSE),

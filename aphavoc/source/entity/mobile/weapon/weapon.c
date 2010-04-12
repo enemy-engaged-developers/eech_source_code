@@ -481,7 +481,7 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 												length,
 												dz;
 
-											roll = ((float) package_status[found_package].number * rad (360.0)) / (float) weapon_config_database[config_type][found_package].number;
+											roll = ((float) package_status[found_package].number * rad (360.0f)) / (float) weapon_config_database[config_type][found_package].number;
 
 											get_3d_transformation_matrix (m1, 0.0, 0.0, roll);
 
@@ -489,34 +489,34 @@ void detach_local_entity_weapon (entity *launcher, entity_sub_types weapon_sub_t
 
 											memcpy (vp->attitude, m2, sizeof (matrix3x3));
 
-											vp->x += vp->xv.x * 0.1;
-											vp->y += vp->xv.y * 0.1;
-											vp->z += vp->xv.z * 0.1;
+											vp->x += vp->xv.x * 0.1f;
+											vp->y += vp->xv.y * 0.1f;
+											vp->z += vp->xv.z * 0.1f;
 
 											switch (weapon_sub_type)
 											{
 												case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
 												case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
 												{
-													length = 1.44;	// weapon length
+													length = 1.44f;	// weapon length
 
 													break;
 												}
 												case ENTITY_SUB_TYPE_WEAPON_S8:
 												{
-													length = 1.65;	// weapon length
+													length = 1.65f;	// weapon length
 
 													break;
 												}
 												case ENTITY_SUB_TYPE_WEAPON_S13:
 												{
-													length = 3.03;	// weapon length
+													length = 3.03f;	// weapon length
 
 													break;
 												}
 											}
 
-											dz = (length * 0.6) + (frand1 () * length * 0.5);
+											dz = (length * 0.6f) + (frand1 () * length * 0.5);
 
 											vp->x += vp->zv.x * dz;
 											vp->y += vp->zv.y * dz;
@@ -707,7 +707,7 @@ static void get_intercept_point (vec3d *pitch_device_position, float weapon_velo
 
 	target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
 
-	if ((weapon_velocity > 0.001) && (target_true_velocity > 0.001))
+	if ((weapon_velocity > 0.001f) && (target_true_velocity > 0.001f))
 	{
 		if (target_true_velocity < weapon_velocity)
 		{
@@ -806,7 +806,7 @@ static int get_ballistic_intercept_point_and_angle_of_projection
 
 		target_true_velocity = get_local_entity_vec3d_magnitude (target, VEC3D_TYPE_MOTION_VECTOR);
 
-		if (target_true_velocity > 0.001)
+		if (target_true_velocity > 0.001f)
 		{
 			//
 			// moving target
@@ -981,7 +981,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 	else
 		range = get_2d_range (pitch_device_position, intercept_point);
 
-	if (range < 0.001)
+	if (range < 0.001f)
 		return FALSE;
 
 	//
@@ -999,7 +999,7 @@ static int get_lead_and_ballistic_intercept_point_and_angle_of_projection
 		debug_log("Aiming at target moving at %.1f m/s", target_true_velocity);
 		#endif
 
-		if (target_true_velocity > 0.1)
+		if (target_true_velocity > 0.1f)
 		{
 			//
 			// moving target
@@ -1768,17 +1768,17 @@ void update_entity_weapon_systems (entity *source)
 
 						if
 						(
-							(weapon_config_database[config_type][package].min_heading_limit == (float) rad (-180.0)) &&
-							(weapon_config_database[config_type][package].max_heading_limit == (float) rad (180.0))
+							(weapon_config_database[config_type][package].min_heading_limit == (float) rad (-180.0f)) &&
+							(weapon_config_database[config_type][package].max_heading_limit == (float) rad (180.0f))
 						)
 						{
-							if (delta_heading_offset > rad (180.0))
+							if (delta_heading_offset > rad (180.0f))
 							{
-								delta_heading_offset -= rad (360.0);
+								delta_heading_offset -= rad (360.0f);
 							}
-							else if (delta_heading_offset < rad (-180.0))
+							else if (delta_heading_offset < rad (-180.0f))
 							{
-								delta_heading_offset += rad (360.0);
+								delta_heading_offset += rad (360.0f);
 							}
 						}
 
@@ -1788,11 +1788,11 @@ void update_entity_weapon_systems (entity *source)
 
 						new_heading_offset = package_status[package].weapon_system_heading + delta_heading_offset;
 
-						if (new_heading_offset > rad (180.0))
+						if (new_heading_offset > rad (180.0f))
 						{
 							new_heading_offset -= rad (360);
 						}
-						else if (new_heading_offset < rad (-180.0))
+						else if (new_heading_offset < rad (-180.0f))
 						{
 							new_heading_offset += rad (360);
 						}
@@ -2999,29 +2999,29 @@ void suppress_ineffective_ship_weapons (entity *source)
 
 						if (heading < 0.0)
 						{
-							heading += rad (360.0);
+							heading += rad (360.0f);
 						}
 
 						min_heading = heading + weapon_config_database[config_type][package].min_heading_limit;
 
 						if (min_heading < 0.0)
 						{
-							min_heading += rad (360.0);
+							min_heading += rad (360.0f);
 						}
-						else if (min_heading > rad (360.0))
+						else if (min_heading > rad (360.0f))
 						{
-							min_heading -= rad (360.0);
+							min_heading -= rad (360.0f);
 						}
 
 						max_heading = heading + weapon_config_database[config_type][package].max_heading_limit;
 
 						if (max_heading < 0.0)
 						{
-							max_heading += rad (360.0);
+							max_heading += rad (360.0f);
 						}
-						else if (max_heading > rad (360.0))
+						else if (max_heading > rad (360.0f))
 						{
-							max_heading -= rad (360.0);
+							max_heading -= rad (360.0f);
 						}
 
 						dx = target_position.x - vp.x;
@@ -3031,21 +3031,21 @@ void suppress_ineffective_ship_weapons (entity *source)
 
 						if (bearing < 0.0)
 						{
-							bearing += rad (360.0);
+							bearing += rad (360.0f);
 						}
 
 						normalised_max_heading = max_heading - min_heading;
 
 						if (normalised_max_heading < 0.0)
 						{
-							normalised_max_heading += rad (360.0);
+							normalised_max_heading += rad (360.0f);
 						}
 
 						normalised_bearing = bearing - min_heading;
 
 						if (normalised_bearing < 0.0)
 						{
-							normalised_bearing += rad (360.0);
+							normalised_bearing += rad (360.0f);
 						}
 
 						if (normalised_bearing <= normalised_max_heading)

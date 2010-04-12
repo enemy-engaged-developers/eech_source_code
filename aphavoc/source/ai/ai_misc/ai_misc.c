@@ -94,7 +94,7 @@ entity *get_closest_waypoint (entity *task, vec3d *pos, float min_range, float *
 		*closest_waypoint = NULL,
 		*current_waypoint;
 
-	best_range = 99999999;
+	best_range = 99999999.0f;
 
 	current_waypoint = get_local_entity_first_child (task, LIST_TYPE_WAYPOINT);
 
@@ -132,7 +132,7 @@ entity *get_closest_waypoint (entity *task, vec3d *pos, float min_range, float *
 
 			#if LANDING_DEBUG
 
-			debug_log ("AI_MISC: found waypoint %d (type %d) range %f", current_keysite, entity_sub_type_waypoint_names [get_local_entity_int_value (current_waypoint, INT_TYPE_ENTITY_SUB_TYPE)], range);
+			debug_log ("AI_MISC: found waypoint %d (type %d) range %f", current_waypoint, entity_sub_type_waypoint_names [get_local_entity_int_value (current_waypoint, INT_TYPE_ENTITY_SUB_TYPE)], range);
 
 			#endif
 		}
@@ -178,7 +178,7 @@ entity *get_closest_halfway_waypoint (entity *task, vec3d *pos, float min_range,
 		*waypoint1,
 		*waypoint2;
 
-	best_range = 99999999;
+	best_range = 99999999.0f;
 
 	waypoint1 = get_local_entity_first_child (task, LIST_TYPE_WAYPOINT);
 	waypoint2 = get_local_entity_child_succ (waypoint1, LIST_TYPE_WAYPOINT);
@@ -253,7 +253,7 @@ entity *get_closest_free_landing_site (entity_sub_types sub_type, entity *force,
 		*current_keysite,
 		*current_landing;
 
-	best_range = 99999999;
+	best_range = 99999999.0f;
 
 	current_keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 
@@ -399,7 +399,7 @@ entity *get_closest_free_landing_site (entity_sub_types sub_type, entity *force,
 				*current_keysite,
 				*current_landing;
 		
-			best_range = 99999999;
+			best_range = 99999999.0f;
 		
 			current_keysite = get_local_entity_first_child (force, LIST_TYPE_KEYSITE_FORCE);
 		
@@ -492,7 +492,7 @@ int get_closest_road_node (vec3d *pos, float error)
 		
 	ASSERT (road_node_positions);
 
-	best_range = 99999999;
+	best_range = 99999999.0f;
 
 	for (loop = 0; loop < total_number_of_road_nodes; loop ++)
 	{
@@ -520,7 +520,7 @@ int get_closest_road_node (vec3d *pos, float error)
 
 	#if LANDING_DEBUG >= 3
 
-	debug_log ("ROAD ROUTE: closest node to %f, %f is node %d at %f, %f", x, z, best_node, road_node_positions [best_node].x, road_node_positions [best_node].z);
+	debug_log ("ROAD ROUTE: closest node to %f, %f is node %d at %f, %f", pos->x, pos->z, best_node, road_node_positions [best_node].x, road_node_positions [best_node].z);
 
 	#endif
 
@@ -546,7 +546,7 @@ int get_closest_side_road_node (entity_sides side, vec3d *pos, float error)
 		
 	ASSERT (road_node_positions);
 
-	best_range = 99999999;
+	best_range = 99999999.0f;
 
 	for (loop = 0; loop < total_number_of_road_nodes; loop ++)
 	{
@@ -578,7 +578,7 @@ int get_closest_side_road_node (entity_sides side, vec3d *pos, float error)
 
 	#if LANDING_DEBUG >= 3
 
-	debug_log ("ROAD ROUTE: closest node to %f, %f is node %d at %f, %f", x, z, best_node, road_node_positions [best_node].x, road_node_positions [best_node].z);
+	debug_log ("ROAD ROUTE: closest node to %f, %f is node %d at %f, %f", pos->x, pos->z, best_node, road_node_positions [best_node].x, road_node_positions [best_node].z);
 
 	#endif
 

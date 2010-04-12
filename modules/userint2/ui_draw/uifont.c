@@ -341,11 +341,11 @@ void initialise_ui_font (void)
 
 // original font scale factors
 
-	arial_factor_x = 0.4;
+	arial_factor_x = 0.4f;
 
-	arial_factor_y = 0.6;
+	arial_factor_y = 0.6f;
 
-	impact_factor_y = 0.6;
+	impact_factor_y = 0.6f;
 
 // resolution factor
 
@@ -359,35 +359,35 @@ void initialise_ui_font (void)
 
 	impact_factor_y = res_factor_y / impact_factor_y;
 
-	unscalable_factor = 1.0 / 0.6;
+	unscalable_factor = 1.0f / 0.6f;
 
 	y_size = (int) round (7 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ARIAL_10, "Arial", 0, y_size, 0.4, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_ARIAL_10, "Arial", 0, y_size, 0.4f, FALSE, TRUE );
 
 	y_size = (int) round (8 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ARIAL_14, "Arial", 0, y_size, 0.4, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_ARIAL_14, "Arial", 0, y_size, 0.4f, FALSE, TRUE );
 
 	y_size = (int) round (8 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ITALIC_ARIAL_14, "Arial", 0, y_size, 0.4, TRUE, TRUE );
+	load_windows_ui_font ( UI_FONT_ITALIC_ARIAL_14, "Arial", 0, y_size, 0.4f, TRUE, TRUE );
 
 	y_size = (int) round (8.5 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ARIAL_16, "Arial", 0, y_size, 0.4, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_ARIAL_16, "Arial", 0, y_size, 0.4f, FALSE, TRUE );
 
 	y_size = (int) round (8.5 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ITALIC_ARIAL_16, "Arial", 0, y_size, 0.4, TRUE, TRUE );
+	load_windows_ui_font ( UI_FONT_ITALIC_ARIAL_16, "Arial", 0, y_size, 0.4f, TRUE, TRUE );
 
 	y_size = (int) round (11 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_ARIAL_18, "Arial", 0, y_size, 0.6, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_ARIAL_18, "Arial", 0, y_size, 0.6f, FALSE, TRUE );
 
 	y_size = (int) round (11 * arial_factor_y);
 
-	load_windows_ui_font ( UI_FONT_THICK_ARIAL_18, "Arial", 0, y_size, 1.0, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_THICK_ARIAL_18, "Arial", 0, y_size, 1.0f, FALSE, TRUE );
 
 	y_size = (int) round (11 * arial_factor_y);
 
@@ -419,15 +419,15 @@ void initialise_ui_font (void)
 
 #if ( ( RUSSIAN_VERSION ) || ( POLISH_VERSION ) )
 	// russian - use arial
-	load_windows_ui_font ( UI_FONT_IMPACT_22, "Arial", 0.0, y_size, 0.9, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_IMPACT_22, "Arial", 0.0, y_size, 0.9f, FALSE, TRUE );
 #else
 	// normal title typeface
-	load_windows_ui_font ( UI_FONT_IMPACT_22, "SteelAb", 0.0, y_size, 0.9, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_IMPACT_22, "SteelAb", 0.0, y_size, 0.9f, FALSE, TRUE );
 #endif
 
 	y_size = (int) round (8.2 * unscalable_factor);
 
-	load_windows_ui_font ( UI_FONT_UNSCALABLE_10, "Arial", 0, y_size, 0.4, FALSE, TRUE );
+	load_windows_ui_font ( UI_FONT_UNSCALABLE_10, "Arial", 0, y_size, 0.4f, FALSE, TRUE );
 
 	//
 	// Set the current font to default
@@ -833,7 +833,7 @@ void load_windows_ui_font ( font_types font, const char *type_name, int width, i
 
 						fval = *ptr++;
 
-						fval *= 255.0 / 65.0;
+						fval *= 255.0f / 65.0f;
 
 						convert_float_to_int ( fval, &ival );
 
@@ -1501,22 +1501,22 @@ float ui_display_text (const char *text, float x, float y)
 
 				quad[0].u = character->u1;
 				quad[0].v = character->v1;
-				quad[0].q = 0.1;
+				quad[0].q = 0.1f;
 				quad[0].z = 100;
 
 				quad[1].u = character->u2;
 				quad[1].v = character->v1;
-				quad[1].q = 0.1;
+				quad[1].q = 0.1f;
 				quad[1].z = 100;
 
 				quad[2].u = character->u2;
 				quad[2].v = character->v2;
-				quad[2].q = 0.1;
+				quad[2].q = 0.1f;
 				quad[2].z = 100;
 
 				quad[3].u = character->u1;
 				quad[3].v = character->v2;
-				quad[3].q = 0.1;
+				quad[3].q = 0.1f;
 				quad[3].z = 100;
 
 				if ( current_font->font_dropshadow )

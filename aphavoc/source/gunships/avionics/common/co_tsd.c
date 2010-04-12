@@ -442,7 +442,7 @@ set_rgb_colour(terrain_colour[2][62],98,59,27,255);
 set_rgb_colour(terrain_colour[2][63],90,59,27,255);
 set_rgb_colour(terrain_colour[2][64],90,59,27,255);
 
-// Made with hue: 0.32 - 0.02, value: 0.40 - 0.60, saturation: 0.50 - 0.45
+// Made with hue: 0.32 - 0.02f, value: 0.40 - 0.60, saturation: 0.50 - 0.45
 set_rgb_colour(terrain_colour[3][ 0],100,150,240,255);
 set_rgb_colour(terrain_colour[3][ 1], 55,102, 51,255);
 set_rgb_colour(terrain_colour[3][ 2], 58,103, 51,255);
@@ -509,7 +509,7 @@ set_rgb_colour(terrain_colour[3][62],248,248,248,255);
 set_rgb_colour(terrain_colour[3][63],251,251,251,255);
 set_rgb_colour(terrain_colour[3][64],255,255,255,255);
 
-		// Made with hue: 0.32 - 0.02, value: 0.85 - 0.80, saturation: 0.10 - 0.15
+		// Made with hue: 0.32 - 0.02f, value: 0.85 - 0.80, saturation: 0.10 - 0.15
 set_rgb_colour(paper_colour[ 0],150,200,240,255);
 set_rgb_colour(paper_colour[ 1],196,216,195,255);
 set_rgb_colour(paper_colour[ 2],197,216,194,255);

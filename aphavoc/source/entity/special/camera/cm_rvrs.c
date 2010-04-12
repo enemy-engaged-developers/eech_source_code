@@ -176,7 +176,7 @@ void set_reverse_tactical_camera_values (entity *source, entity *target)
 
 		ASSERT (z_min < z_max);
 
-		radius = ((z_max - z_min) * 0.05) + z_min;
+		radius = ((z_max - z_min) * 0.05f) + z_min;
 	}
 
 	get_local_entity_target_point (source, &source_position);

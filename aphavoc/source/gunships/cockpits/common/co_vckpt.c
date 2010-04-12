@@ -111,15 +111,15 @@ void initialise_common_virtual_cockpit (void)
 	initialise_common_virtual_cockpit_wiper_and_rain_effect ();
 	
 	memset(gunship_periscope_position, 0, sizeof(gunship_periscope_position));
-	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].x = -0.05;
-	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].x =  0.05;
-	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].y = -0.05;
-	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].y =  0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].x = -0.05f;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].x =  0.05f;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].y = -0.05f;
+	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].y =  0.05f;
 	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][0].z = 0.275;
 	gunship_periscope_position[GUNSHIP_TYPE_HOKUM][1].z = 1.00;
 
-	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].x = -0.05;
-	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].x =  0.05;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].x = -0.05f;
+	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].x =  0.05f;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].y = -0.080;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][1].y = -0.020;
 	gunship_periscope_position[GUNSHIP_TYPE_APACHE][0].z = 0.175;
@@ -352,8 +352,8 @@ void draw_virtual_cockpit_periscope_mask (int x_min, int x_max, int monoccular)
 
 	if (monoccular)
 	{
-		x_texture_limit = 0.6;
-		y_texture_limit = 0.15;
+		x_texture_limit = 0.6f;
+		y_texture_limit = 0.15f;
 	}
 
 	set_3d_active_environment (main_3d_env);

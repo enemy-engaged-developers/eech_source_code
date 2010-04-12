@@ -934,7 +934,7 @@ void set_3d_terrain_detail_blend_factors ( void )
 
 	terrain_3d_alpha_constant = terrain_3d_alpha_distance - terrain_3d_alpha_start;
 
-	terrain_3d_alpha_factor = ( ( 255.0 / terrain_3d_alpha_distance ) * 1.0 );
+	terrain_3d_alpha_factor = ( float ) ( ( 255.0 / terrain_3d_alpha_distance ) * 1.0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1555,9 +1555,9 @@ float get_terrain_3d_tree_scale ( terrain_3d_tree_data *tree )
 		scale;
 
 	scale = tree->height;
-	scale *= ( ( 25 - 6 ) / 127.0 );
+	scale *= ( ( 25 - 6 ) / 127.0f );
 	scale += 6;
-	scale *= 1.10;
+	scale *= 1.10f;
 
 	return ( scale );
 }
@@ -1720,8 +1720,8 @@ void get_terrain_3d_type_triangles_in_sector ( float x, float z, terrain_types t
 	get_terrain_3d_sector ( x, z, &x_sec, &z_sec );
 
 	sector = &terrain_sectors[z_sec][x_sec];
-	sector_x_offset = x_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH + ( TERRAIN_3D_SECTOR_SIDE_LENGTH / 2 );
-	sector_z_offset = z_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH + ( TERRAIN_3D_SECTOR_SIDE_LENGTH / 2 );
+	sector_x_offset = x_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH + ( TERRAIN_3D_SECTOR_SIDE_LENGTH / 2.0f );
+	sector_z_offset = z_sec * TERRAIN_3D_SECTOR_SIDE_LENGTH + ( TERRAIN_3D_SECTOR_SIDE_LENGTH / 2.0f );
 
 	points_xz = sector->points_xz;
 	points_y = sector->points_y;

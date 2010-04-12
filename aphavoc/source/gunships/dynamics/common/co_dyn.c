@@ -120,7 +120,7 @@ void clear_trim_control (event *ev)
 				centre_pedal_trim = -56.0;
 			break;
 		case GUNSHIP_TYPE_AH64A:
-			centre_trim = 3.2;
+			centre_trim = 3.2f;
 			if (!get_current_dynamics_options(DYNAMICS_OPTIONS_CROSS_COUPLING))
 				centre_pedal_trim = -53.0;
 			break;
@@ -366,7 +366,7 @@ void update_common_attitude_dynamics (void)
 	rotor_direction.y = 1.0;
 	rotor_direction.z = 0.0;
 
-	get_3d_transformation_heading_pitch_matrix(rotor_attitude, main_rotor_roll_angle_value, rad(5.0) - main_rotor_pitch_angle_value);
+	get_3d_transformation_heading_pitch_matrix(rotor_attitude, main_rotor_roll_angle_value, rad(5.0f) - main_rotor_pitch_angle_value);
 	multiply_transpose_matrix3x3_vec3d(&rotor_direction, rotor_attitude, &rotor_direction);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -665,7 +665,7 @@ void update_common_attitude_dynamics (void)
 
 			// arneh - this force seems too strong, impossible to decend faster than
 			// about 7-8 m/s by default with forward speed. So reduce it a little
-			force *= 0.9;
+			force *= 0.9f;
 			add_dynamic_force ("Transitional lift", force, 0.0, &position, &rotor_direction, FALSE);
 		}
 #endif
@@ -1129,7 +1129,7 @@ void update_common_attitude_dynamics (void)
 			Fmax;
 
 		// ball park figures
-		drag = 0.4;
+		drag = 0.4f;
 
 		Fmax = 0.0;
 		// arneh 20060813 - reduce drag in sideway flight - compensated by reduced lift.
@@ -1232,7 +1232,7 @@ void update_common_attitude_dynamics (void)
 			float
 				tuning_value;
 
-			tuning_value = 0.1;
+			tuning_value = 0.1f;
 
 			position.x = 0.0;
 			position.y = 0.0;
@@ -1254,7 +1254,7 @@ void update_common_attitude_dynamics (void)
 
 			front_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - front_g_e_force) * get_model_delta_time ();
 
-			front_g_e_force = bound (front_g_e_force, 0.0, 0.05);
+			front_g_e_force = bound (front_g_e_force, 0.0, 0.05f);
 
 			if (front_g_e_force > 0.0)
 			{
@@ -1289,7 +1289,7 @@ void update_common_attitude_dynamics (void)
 		{
 
 			float
-				tuning_value = 0.1;
+				tuning_value = 0.1f;
 
 			position.x = 0.0;
 			position.y = 0.0;
@@ -1311,7 +1311,7 @@ void update_common_attitude_dynamics (void)
 
 			back_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - back_g_e_force) * get_model_delta_time ();
 
-			back_g_e_force = bound (back_g_e_force, 0.0, 0.05);
+			back_g_e_force = bound (back_g_e_force, 0.0, 0.05f);
 
 			if (back_g_e_force > 0.0)
 			{
@@ -1345,7 +1345,7 @@ void update_common_attitude_dynamics (void)
 		{
 
 			float
-				tuning_value = 0.1;
+				tuning_value = 0.1f;
 
 			position.x = rotor_radius;
 			position.y = 0.0;
@@ -1367,7 +1367,7 @@ void update_common_attitude_dynamics (void)
 
 			left_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - left_g_e_force) * get_model_delta_time ();
 
-			left_g_e_force = bound (left_g_e_force, 0.0, 0.05);
+			left_g_e_force = bound (left_g_e_force, 0.0, 0.05f);
 
 			if (left_g_e_force > 0.0)
 			{
@@ -1401,7 +1401,7 @@ void update_common_attitude_dynamics (void)
 		{
 
 			float
-				tuning_value = 0.1;
+				tuning_value = 0.1f;
 
 			position.x = -rotor_radius;
 			position.y = 0.0;
@@ -1423,7 +1423,7 @@ void update_common_attitude_dynamics (void)
 
 			right_g_e_force += ((0.05 - ((altitude * altitude) / (20.0 * current_flight_dynamics->main_rotor_diameter.value * current_flight_dynamics->main_rotor_diameter.value))) - right_g_e_force) * get_model_delta_time ();
 
-			right_g_e_force = bound (right_g_e_force, 0.0, 0.05);
+			right_g_e_force = bound (right_g_e_force, 0.0, 0.05f);
 
 			if (right_g_e_force > 0.0)
 			{
@@ -1460,7 +1460,7 @@ void update_common_attitude_dynamics (void)
 		(!(current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_MAIN_ROTOR)))
 	{
 		float air_over_rotor = -fabs(main_rotor_induced_air_value) - model_motion_vector.y;
-		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6;
+		float vibration_limit = -fabs(main_rotor_induced_air_value) - model_motion_vector.y * 0.6f;
 		float velocity_factor = max (((current_flight_dynamics->main_rotor_induced_vortex_air_flow.min -
 					   fabs (model_motion_vector.z)) / current_flight_dynamics->main_rotor_induced_vortex_air_flow.min), 0.0f);
 
@@ -1513,7 +1513,7 @@ void update_common_attitude_dynamics (void)
 
 		force += (desired_force - force) * get_model_delta_time ();
 
-		if ((fabs (force - desired_force) < 0.001))
+		if ((fabs (force - desired_force) < 0.001f))
 		{
 
 			desired_force = frand1 () * get_model_delta_time ();
@@ -1542,7 +1542,7 @@ void update_common_attitude_dynamics (void)
 		direction.y += current_flight_dynamics->model_acceleration_vector.y * get_model_delta_time ();
 		direction.z += current_flight_dynamics->model_acceleration_vector.z * get_model_delta_time ();
 
-		force = 3.0 * get_3d_vector_magnitude(&direction);// / get_model_delta_time ();
+		force = 3.0f * get_3d_vector_magnitude(&direction);// / get_model_delta_time ();
 
 		invert_3d_vector (&direction);
 
@@ -1593,17 +1593,17 @@ void update_common_attitude_dynamics (void)
 		float load = get_load_on_wheels();
 		debug_log("load: %.2f, x: %.3f, y: %.3f", load, current_flight_dynamics->world_motion_vector.x, current_flight_dynamics->world_motion_vector.z);
 
-		if (fabs(current_flight_dynamics->world_motion_vector.x) < 0.2)
+		if (fabs(current_flight_dynamics->world_motion_vector.x) < 0.2f)
 			if (current_flight_dynamics->world_motion_vector.x > 0)
-				current_flight_dynamics->world_motion_vector.x -= min(2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= min(2.0f * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
 			else
-				current_flight_dynamics->world_motion_vector.x -= max(-2.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
+				current_flight_dynamics->world_motion_vector.x -= max(-2.0f * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.x );
 
-		if (fabs(current_flight_dynamics->world_motion_vector.z) < 0.2)
+		if (fabs(current_flight_dynamics->world_motion_vector.z) < 0.2f)
 			if (current_flight_dynamics->world_motion_vector.z > 0)
-				current_flight_dynamics->world_motion_vector.z -= min(1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= min(1.0f * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
 			else
-				current_flight_dynamics->world_motion_vector.z -= max(-1.0 * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
+				current_flight_dynamics->world_motion_vector.z -= max(-1.0f * get_model_delta_time () * load, current_flight_dynamics->world_motion_vector.z);
 	}
 */
 	// arneh - add vibration if rotor damaged

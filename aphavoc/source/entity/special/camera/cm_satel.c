@@ -227,7 +227,7 @@ void update_satellite_camera (camera *raw)
 		adjust_view_zoom_in_key = FALSE;
 	}
 
-	heading = 0.1;
+	heading = 0.1f;
 	
 	pitch = -1.5;
 	

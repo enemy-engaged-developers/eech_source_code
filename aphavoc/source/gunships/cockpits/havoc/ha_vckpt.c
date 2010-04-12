@@ -320,7 +320,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -338,7 +338,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 1.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-30.0);
+			directional_light_pitch 				= rad (-30.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -356,7 +356,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -374,7 +374,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -392,7 +392,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 	directional_light_colour.blue			= 1.0;
 
 	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-30.0);
+	directional_light_pitch 				= rad (-30.0f);
 	directional_light_roll 					= rad (0.0);
 
 	#endif
@@ -605,7 +605,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.3, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.3f, 1.0, 0.0);
 
 //VJ wideview mod, date: 18-mar-03
 		if (get_global_wide_cockpit ()&&
@@ -781,7 +781,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.3, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.3f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -956,7 +956,7 @@ void draw_havoc_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1073,27 +1073,27 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
       }
 		if (check_key(DIK_NUMPAD6))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005f;
       }
 		if (check_key(DIK_NUMPAD4))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD8))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005f;
       }
 		if (check_key(DIK_NUMPAD2))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD1))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005f;
       }
 		if (check_key(DIK_NUMPAD3))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005f;
       }
 		if (check_key(DIK_NUMPAD0))
 		{
@@ -1158,8 +1158,8 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
       random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
       random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
     }
-    x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-    y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
+    x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
+    y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
     
     vp_position.x -= x_head_g_movement;
 		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
@@ -1185,7 +1185,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 	{
 		set_3d_active_environment (main_3d_env);
 
-		set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1276,7 +1276,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1478,7 +1478,7 @@ void draw_havoc_external_virtual_cockpit (unsigned int flags, unsigned char *wip
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 

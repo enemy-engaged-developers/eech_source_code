@@ -162,7 +162,7 @@ static entity
 
 #define VIEW_MENU_FONT			(UI_FONT_ARIAL_16)
 
-#define VIEW_MENU_Y_MIN			((float) 0.075)
+#define VIEW_MENU_Y_MIN			((float) 0.075f)
 #define VIEW_MENU_Y_MAX			((float) 0.85)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

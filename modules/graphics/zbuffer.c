@@ -104,13 +104,13 @@ void set_zbuffer_parameters ( float zmin, float zmax, float scaled_zmin, float s
 		if ( scaled_zmin == 1.0 )
 		{
 
-			scaled_zmin = 0.9999;
+			scaled_zmin = 0.9999f;
 		}
 
 		if ( scaled_zmax == 1.0 )
 		{
 
-			scaled_zmax = 0.9999;
+			scaled_zmax = 0.9999f;
 		}
 	}
 

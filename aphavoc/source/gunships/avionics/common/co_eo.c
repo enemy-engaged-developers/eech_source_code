@@ -82,7 +82,7 @@
 
 #define TERRAIN_LOS_MARKER_LARGE_STEP_3D_OBJECT	(OBJECT_3D_INTERCEPT_POINT_RED)
 
-#define MAX_GUN_SHAKE_DEFLECTION  rad(0.1)
+#define MAX_GUN_SHAKE_DEFLECTION  rad(0.1f)
 
 #define POINT_LOCK   0x01
 #define TARGET_LOCK  0x02
@@ -1402,7 +1402,7 @@ static void slew_eo(float elevation, float azimuth)
 		 frame_delta_eo_elevation;
 
 
-	float frame_slew_rate = rad (60.0) * get_delta_time ();
+	float frame_slew_rate = rad (60.0f) * get_delta_time ();
 
 	viewpoint
 		vp;
@@ -1443,10 +1443,10 @@ static void slew_eo(float elevation, float azimuth)
 	{
 		if
 		(
-			(delta_eo_azimuth >= rad (-5.0)) &&
-			(delta_eo_azimuth <= rad (5.0)) &&
-			(delta_eo_elevation >= rad (-5.0)) &&
-			(delta_eo_elevation <= rad (5.0))
+			(delta_eo_azimuth >= rad (-5.0f)) &&
+			(delta_eo_azimuth <= rad (5.0f)) &&
+			(delta_eo_elevation >= rad (-5.0f)) &&
+			(delta_eo_elevation <= rad (5.0f))
 		)
 		{
 			eo_on_target = TRUE;
@@ -2532,17 +2532,17 @@ static void co_pilot_perform_eo_scan(void)
 
 		cw_sweep_start_direction = heading + cw_sweep_start_offset;
 
-		if (cw_sweep_start_direction > rad (180.0))
-			cw_sweep_start_direction -= rad (360.0);
-		else if (cw_sweep_start_direction < rad (-180.0))
-			cw_sweep_start_direction += rad (360.0);
+		if (cw_sweep_start_direction > rad (180.0f))
+			cw_sweep_start_direction -= rad (360.0f);
+		else if (cw_sweep_start_direction < rad (-180.0f))
+			cw_sweep_start_direction += rad (360.0f);
 
 		cw_sweep_end_direction = heading + cw_sweep_end_offset;
 
-		if (cw_sweep_end_direction > rad (180.0))
-			cw_sweep_end_direction -= rad (360.0);
-		else if (cw_sweep_end_direction < rad (-180.0))
-			cw_sweep_end_direction += rad (360.0);
+		if (cw_sweep_end_direction > rad (180.0f))
+			cw_sweep_end_direction -= rad (360.0f);
+		else if (cw_sweep_end_direction < rad (-180.0f))
+			cw_sweep_end_direction += rad (360.0f);
 
 		////////////////////////////////////////
 		//

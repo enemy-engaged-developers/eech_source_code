@@ -442,7 +442,7 @@ static void light_signal_strength_lamps(float range, float max_range)
 	ASSERT(max_range > 0.0);
 	if (max_range > 0.0)
 	{
-		range_ratio = 0.99 - bound(range/(max_range * 1.5), 0.0, 0.99);
+		range_ratio = 0.99 - bound(range/(max_range * 1.5), 0.0, 0.99f);
 		segment = (int)(range_ratio * 15);
 	}
 	else
@@ -691,13 +691,13 @@ static void update_threat_warning_display (void)
 				threat_bearing = atan2 (dx, dz);
 				theta = threat_bearing - source_heading;
 
-				if (theta > rad (180.0))
+				if (theta > rad (180.0f))
 				{
-					theta -= rad (360.0);
+					theta -= rad (360.0f);
 				}
-				else if (theta < rad (-180.0))
+				else if (theta < rad (-180.0f))
 				{
-					theta += rad (360.0);
+					theta += rad (360.0f);
 				}
 
 				//

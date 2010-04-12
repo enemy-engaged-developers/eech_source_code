@@ -1992,7 +1992,7 @@ entity *create_troop_movement_defend_task (entity_sides side, vec3d *start_pos, 
 		*new_task;
 
 	mid2_pos = *mid_pos;
-	mid2_pos.x += 0.1;
+	mid2_pos.x += 0.1f;
 
 	new_task = create_task (ENTITY_SUB_TYPE_TASK_TROOP_MOVEMENT_INSERT_DEFEND,
 										side,
@@ -2366,7 +2366,7 @@ float get_estimated_task_duration (entity *task_en)
 		*/
 	}
 
-	time = range / knots_to_metres_per_second (60.0); // average speed
+	time = range / knots_to_metres_per_second (60.0f); // average speed
 
 	return time;
 }

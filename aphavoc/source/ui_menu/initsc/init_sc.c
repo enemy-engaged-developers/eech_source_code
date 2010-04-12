@@ -115,7 +115,7 @@ void initialise_init_screen (void)
 
 	x1 = 0.425;
 	y1 = 0.951;
-	x2 = 0.3;
+	x2 = 0.3f;
 	y2 = 0.0625;
 	
 	initialising_text = create_ui_object
@@ -154,7 +154,7 @@ void initialise_init_screen (void)
 
 	x1 = 0.80;
 	y1 = 0.951;
-	x2 = 0.3;
+	x2 = 0.3f;
 	y2 = 0.0625;
 	
 	version_text = create_ui_object
@@ -173,8 +173,8 @@ void initialise_init_screen (void)
 
 //VJ 030807 added wut file name display for startup screen
 	x1 = 0.800;
-	y1 = 0.88;
-	x2 = 0.3;
+	y1 = 0.88f;
+	x2 = 0.3f;
 	y2 = 0.0625;
 	
 	WUT_text = create_ui_object
@@ -193,7 +193,7 @@ void initialise_init_screen (void)
 
 	x1 = 0.02;
 	y1 = 0.951;
-	x2 = 0.3;
+	x2 = 0.3f;
 	y2 = 0.0625;
 
 	buf[0] = 255;

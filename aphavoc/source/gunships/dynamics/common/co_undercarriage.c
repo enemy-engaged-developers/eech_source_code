@@ -204,7 +204,7 @@ static void update_suspension(void)
 			terrain_elevation = get_3d_terrain_elevation(point->world_position.x, point->world_position.z);
 			spring_compression = (terrain_elevation - point->world_position.y);
 
-			if (spring_compression > 0.55)
+			if (spring_compression > 0.55f)
 			{
 				point->damaged = TRUE;
 				//point->suspension_compression = 0.0;
@@ -233,7 +233,7 @@ static void update_suspension(void)
 
 				point->suspension_compression = spring_compression;
 
-				if (point->can_turn && fabs(point->velocity.x) > 0.1)
+				if (point->can_turn && fabs(point->velocity.x) > 0.1f)
 				{
 					float
 						max_turn_rate = rad(180) * get_model_delta_time() * (min(fabs(point->velocity.z) + fabs(point->velocity.x), 2.0f)) * 0.5,
@@ -241,7 +241,7 @@ static void update_suspension(void)
 						new_angle;
 
 
-					if (fabs(point->velocity.z) > 0.05)
+					if (fabs(point->velocity.z) > 0.05f)
 					{
 						new_angle = atan(point->velocity.x / fabs(point->velocity.z));
 						if (point->velocity.z < 0.0)
@@ -356,7 +356,7 @@ static void apply_suspension_forces(void)
 						max_force_change = get_model_delta_time() * 20.0;
 
 					if (point->has_brakes && current_flight_dynamics->wheel_brake)
-						max_force = min(wheel_load * 1.0, 1.0 * G);  // depends on load on wheel
+						max_force = min(wheel_load * 1.0, 1.0f * G);  // depends on load on wheel
 					else
 						max_force = min(wheel_load * 0.025f, G);  // general rolling resistance
 
@@ -553,8 +553,8 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 
 		nose_strut->relative_position.z = (-0.15 + front_compression * 0.85) * uc_state;
 
-		nose_wheel->relative_position.y = sin(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
-		nose_wheel->relative_position.z = cos(rad(60)) * (-0.15 + front_compression * 0.8) * uc_state;
+		nose_wheel->relative_position.y = sin(rad(60)) * (-0.15 + front_compression * 0.8f) * uc_state;
+		nose_wheel->relative_position.z = cos(rad(60)) * (-0.15 + front_compression * 0.8f) * uc_state;
 
 		nose_wheel->relative_pitch = (rad(-15) + front_compression * rad(70)) * uc_state;
 
@@ -562,7 +562,7 @@ void animate_hind_suspension(object_3d_instance* inst3d)
 		nose_wheel->relative_roll = sin(nose_wheel->relative_heading) * rad(40);
 		nose_wheel->relative_pitch += rad(-30) + cos(nose_wheel->relative_heading) * rad(30);
 
-		nose_wheel->relative_position.z += cos(nose_wheel->relative_heading) * 0.05 - 0.05;
+		nose_wheel->relative_position.z += cos(nose_wheel->relative_heading) * 0.05 - 0.05f;
 	}
 }
 

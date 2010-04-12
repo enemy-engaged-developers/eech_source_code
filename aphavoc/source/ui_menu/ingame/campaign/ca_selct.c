@@ -1550,8 +1550,8 @@ void define_campaign_screen_selection_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Currently selected mission 
 
-	x1 = 0.2;
-	x2 = 0.2;
+	x1 = 0.2f;
+	x2 = 0.2f;
 
 	y1 = 0.5;
 	y2 = 1.0;
@@ -1574,7 +1574,7 @@ void define_campaign_screen_selection_objects (void)
 
 	process_ingame_text_object_size (mission_title_area, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 
-//	x1 = 0.22;
+//	x1 = 0.22f;
 	x2 = 0.5;
 
 	y1 = 0.5;
@@ -1679,7 +1679,7 @@ void define_campaign_screen_selection_objects (void)
 	// Currently selected member
 
 	x1 = 0.09;
-	x2 = 0.3;
+	x2 = 0.3f;
 
 	y1 = 0.0;
 	y2 = 0.5;
@@ -2005,14 +2005,14 @@ void resize_select_ui_objects (ui_object *left_obj, ui_object *right_obj)
 		if (left_obj) // TG added
 		{
 
-			set_ui_object_x_end (left_obj, get_ui_object_x_end (right_obj) - 0.1);
+			set_ui_object_x_end (left_obj, get_ui_object_x_end (right_obj) - 0.1f);
 		}
 	}
 
 	if (left_obj) // TG added
 	{
 	
-		set_ui_object_virtual_x_size (left_obj, 0.1);
+		set_ui_object_virtual_x_size (left_obj, 0.1f);
 	
 		process_ingame_text_object_size (left_obj, NULL, NULL, 0, RESIZE_OPTION_FIXED_BUTTON);
 	}

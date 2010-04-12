@@ -464,7 +464,7 @@ void set_attack_guide_move_circle_position (entity *en)
 	// calculate guide position 
 	//
 
-	rotate_2d_vector (&direction, rad (10.0));
+	rotate_2d_vector (&direction, rad (10.0f));
 
 	position.x = target_pos->x + (direction.x * distance);
 	position.z = target_pos->z + (direction.y * distance);

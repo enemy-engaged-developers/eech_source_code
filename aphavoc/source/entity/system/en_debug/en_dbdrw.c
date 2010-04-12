@@ -196,7 +196,7 @@ debug_3d_object *create_vectored_debug_3d_object (vec3d *position, vec3d *vector
 
 	ASSERT (lifetime >= 0.0);
 
-	if (get_3d_vector_magnitude (vector) > 0.001)
+	if (get_3d_vector_magnitude (vector) > 0.001f)
 	{
 		vp.position = *position;
 

@@ -121,7 +121,7 @@ route_biasing_database_type
 			5000.0,		// min route range
 			3.0,			// route deviation size
 			8.0,			// num route samples
-			0.94,			// optimise tolerance
+			0.94f,			// optimise tolerance
 		},
 		//MOVEMENT_TYPE_AIR,
 		{
@@ -131,7 +131,7 @@ route_biasing_database_type
 			5000.0,		// min route range
 			3.0,			// route deviation size
 			8.0,			// num route samples
-			0.94,			// optimise tolerance
+			0.94f,			// optimise tolerance
 		},
 		//MOVEMENT_TYPE_GROUND,
 		{
@@ -141,17 +141,17 @@ route_biasing_database_type
 			5000.0,		// min route range
 			3.0,			// route deviation size
 			8.0,			// num route samples
-			0.94,			// optimise tolerance
+			0.94f,			// optimise tolerance
 		},
 		//MOVEMENT_TYPE_SEA,
 		{
 			9999.0,		// elevation bias
-			0.1,			// range bias
+			0.1f,			// range bias
 			1.0,			// side bias
 			5000.0,		// min route range
 			2.0,			// route deviation size
 			6.0,			// num route samples
-			0.94,			// optimise tolerance
+			0.94f,			// optimise tolerance
 		},
 		//MOVEMENT_TYPE_ALL,
 		{
@@ -161,7 +161,7 @@ route_biasing_database_type
 			5000.0,		// min route range
 			3.0,			// route deviation size
 			8.0,			// num route samples
-			0.94,			// optimise tolerance
+			0.94f,			// optimise tolerance
 		}
 	};
 

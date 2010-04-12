@@ -480,7 +480,7 @@ void create_client_server_entity_weapon (entity *launcher, entity_sub_types weap
 					{
 						if (current_time < *last_shot)
 							return;
-						elapsed_time = (current_time - *last_shot) * 0.001;
+						elapsed_time = (current_time - *last_shot) * 0.001f;
 					}
 					else
 						elapsed_time = get_delta_time();

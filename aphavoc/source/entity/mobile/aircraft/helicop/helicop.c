@@ -1495,7 +1495,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 	{
 		looping_pitch = 1.0; //Disabled since it simply doesn't sound right. Someday, someone should figure out a nice way of doing it.
 
-//		looping_pitch = (1.0 - looping_pitch); //this would go from 0.1 to 0.3, so we need further tweaks
+//		looping_pitch = (1.0 - looping_pitch); //this would go from 0.1 to 0.3f, so we need further tweaks
 //		looping_pitch = looping_pitch / 12.0; //make the pitch changes less drastic
 //		looping_pitch = 0.95 + looping_pitch;
 	}
@@ -1526,8 +1526,8 @@ void update_local_helicopter_rotor_sounds (entity *en)
 
 		// sound for left turbine:
 		left_turbine_pitch = lrpm / 100.0;
-		left_turbine_pitch = bound (left_turbine_pitch, 0.0, 1.6)+0.6;
-		left_turbine_amp = 0.2 + bound((lrpm - 20.0) * 0.01, 0.0, 0.4);
+		left_turbine_pitch = bound (left_turbine_pitch, 0.0, 1.6)+0.6f;
+		left_turbine_amp = 0.2 + bound((lrpm - 20.0) * 0.01f, 0.0, 0.4f);
 
 		if (lrpm > 1)
 			resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE1);
@@ -1538,8 +1538,8 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		{
 			// sound for right turbine:
 			right_turbine_pitch = rrpm / 100.0;
-			right_turbine_pitch = bound (right_turbine_pitch, 0.0, 1.6)+0.6;
-			right_turbine_amp = 0.2 + bound((rrpm - 40.0) * 0.02, 0.0, 0.4);
+			right_turbine_pitch = bound (right_turbine_pitch, 0.0, 1.6)+0.6f;
+			right_turbine_amp = 0.2 + bound((rrpm - 40.0) * 0.02f, 0.0, 0.4f);
 
 			if (rrpm > 1)
 				resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2);
@@ -1549,14 +1549,14 @@ void update_local_helicopter_rotor_sounds (entity *en)
 		else
 		{
 			pause_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_ROTOR_TURBINE2, 0.0);
-			left_turbine_amp *= 1.2;  // if only one sound is used for both engines, compensate by making it louder
+			left_turbine_amp *= 1.2f;  // if only one sound is used for both engines, compensate by making it louder
 		}
 
 		// sound for APU:
 		if (apu_rpm > 0.0)
 		{
-			apu_pitch = bound(apu_rpm * 0.02, 0.0, 2.0) + 0.2;
-			apu_amp = bound(apu_rpm * 0.01, 0.0, 0.25);
+			apu_pitch = bound(apu_rpm * 0.02f, 0.0, 2.0) + 0.2f;
+			apu_amp = bound(apu_rpm * 0.01f, 0.0, 0.25f);
 			resume_local_entity_sound_type (en, ENTITY_SUB_TYPE_EFFECT_SOUND_APU_TURBINE);
 		}
 		else
@@ -1564,7 +1564,7 @@ void update_local_helicopter_rotor_sounds (entity *en)
 	}
 	else
 	{
-		left_turbine_pitch = right_turbine_pitch = 1.3;
+		left_turbine_pitch = right_turbine_pitch = 1.3f;
 		left_turbine_amp = right_turbine_amp = 1.0;
 		apu_pitch = 1.0;
 		apu_amp = 0.0;

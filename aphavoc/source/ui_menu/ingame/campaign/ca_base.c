@@ -557,8 +557,8 @@ void define_campaign_screen_base_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Title
 			
-	x1 = 0.044;
-	y1 = 0.089;
+	x1 = 0.044f;
+	y1 = 0.089f;
 
 	base_page_title = create_ui_object
 		(
@@ -570,16 +570,16 @@ void define_campaign_screen_base_page_objects (void)
 			UI_ATTR_END
 		);
 
-	ysize = 0.06;
+	ysize = 0.06f;
 
-	y1 = 0.237;
-	y2 = 0.31;
+	y1 = 0.237f;
+	y2 = 0.31f;
 
 	/////////////////////////////////////////////////////////////////
 	// Base Type Box
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Type"));
 			
@@ -596,7 +596,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_type_box = create_ui_object
@@ -618,8 +618,8 @@ void define_campaign_screen_base_page_objects (void)
 	y1 += ysize;
 	y2 += ysize;
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Sector"));
 			
@@ -636,7 +636,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_sector_box = create_ui_object
@@ -658,8 +658,8 @@ void define_campaign_screen_base_page_objects (void)
 	y1 += ysize;
 	y2 += ysize;
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Status"));
 			
@@ -676,7 +676,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_status_box = create_ui_object
@@ -697,8 +697,8 @@ void define_campaign_screen_base_page_objects (void)
 	y1 += ysize;
 	y2 += ysize;
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Efficiency"));
 			
@@ -715,7 +715,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_efficiency_box = create_ui_object
@@ -737,8 +737,8 @@ void define_campaign_screen_base_page_objects (void)
 	y1 += ysize;
 	y2 += ysize;
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Ammo"));
 			
@@ -755,7 +755,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_ammo_box = create_ui_object
@@ -777,8 +777,8 @@ void define_campaign_screen_base_page_objects (void)
 	y1 += ysize;
 	y2 += ysize;
 
-	x1 = 0.18;
-	x2 = 0.2;
+	x1 = 0.18f;
+	x2 = 0.2f;
 
 	sprintf (output, "%s :", get_trans ("Fuel"));
 			
@@ -795,7 +795,7 @@ void define_campaign_screen_base_page_objects (void)
 				UI_ATTR_END
 			);
 
-	x1 = 0.2;
+	x1 = 0.2f;
 	x2 = 0.5;
 
 	base_page_fuel_box = create_ui_object
@@ -817,7 +817,7 @@ void define_campaign_screen_base_page_objects (void)
 	x1 = 0.5;
 	y1 = 0.0;
 	x2 = 1.0;
-	y2 = 0.67;
+	y2 = 0.67f;
 
 	page_map_view_area = create_ui_object
 			(
@@ -833,9 +833,9 @@ void define_campaign_screen_base_page_objects (void)
 	// 2D MAP / 3D VIEW toggles
 
 	x1 = 0.5;
-	y1 = 0.67;
+	y1 = 0.67f;
 	x2 = 1.0;
-	y2 = 0.71;
+	y2 = 0.71f;
 
 	page_map_view_mode_area = create_ui_object
 			(
@@ -851,7 +851,7 @@ void define_campaign_screen_base_page_objects (void)
 
 	x1 = 0.0;
 	y1 = 0.0;
-	x2 = 0.33;
+	x2 = 0.33f;
 	y2 = 1.0;
 
 	page_map_toggle = create_ui_object
@@ -873,9 +873,9 @@ void define_campaign_screen_base_page_objects (void)
 
 	// 3d view toggle
 
-	x1 = 0.33;
+	x1 = 0.33f;
 	y1 = 0.0;
-	x2 = 0.66;
+	x2 = 0.66f;
 	y2 = 1.0;
 
 	page_3d_toggle = create_ui_object
@@ -898,10 +898,10 @@ void define_campaign_screen_base_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// 3d Preview Area
 		
-	x1 = 0.01;
+	x1 = 0.01f;
 	y1 = 0.0;
 	x2 = 1.0;
-	y2 = 0.99;
+	y2 = 0.99f;
 
 	page_3d_area = create_ui_object
 		(
@@ -917,10 +917,10 @@ void define_campaign_screen_base_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// Map Area
 		
-	x1 = 0.01;
+	x1 = 0.01f;
 	y1 = 0.0;
 	x2 = 1.0;
-	y2 = 0.99;
+	y2 = 0.99f;
 
 	page_map_area = create_ui_object
 		(
@@ -933,10 +933,10 @@ void define_campaign_screen_base_page_objects (void)
 
 	#ifdef DEBUG
 
-	x1 = 0.1;
-	y1 = 0.8;
-	x2 = 0.4;
-	y2 = 0.9;
+	x1 = 0.1f;
+	y1 = 0.8f;
+	x2 = 0.4f;
+	y2 = 0.9f;
 
 	create_ui_object
 			(
@@ -954,10 +954,10 @@ void define_campaign_screen_base_page_objects (void)
 	/////////////////////////////////////////////////////////////////
 	// "Divider" graphics
 
-	x1 = 0.022;
-	y1 = 0.206;
-	x2 = 0.475;
-	y2 = 0.229;
+	x1 = 0.022f;
+	y1 = 0.206f;
+	x2 = 0.475f;
+	y2 = 0.229f;
 
 	create_ui_object
 			(
@@ -971,10 +971,10 @@ void define_campaign_screen_base_page_objects (void)
 
 	////////////////////////////////////
 
-	x1 = 0.022;
-	y1 = 0.649;
-	x2 = 0.475;
-	y2 = 0.672;
+	x1 = 0.022f;
+	y1 = 0.649f;
+	x2 = 0.475f;
+	y2 = 0.672f;
 
 	create_ui_object
 			(

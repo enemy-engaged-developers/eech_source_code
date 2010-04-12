@@ -110,7 +110,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          1 * KILOMETRE,                           			// Action Radius
          1 * KILOMETRE,                           			// Reached Radius
-         0.7,  									       			// Velocity
+         0.7f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -424,7 +424,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,                                    			// Action Radius
          100,                                    			// Reached Radius
-         0.6,  									      			// Velocity
+         0.6f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -434,7 +434,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,                                    			// Action Radius
          40,                                    			// Reached Radius
-         0.6,  									       			// Velocity
+         0.6f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -586,7 +586,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,	                                   			// Action Radius
          100,	                                   			// Reached Radius
-         0.6,  									      			// Velocity
+         0.6f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -596,7 +596,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,	                                   			// Action Radius
          40,	                                   			// Reached Radius
-         0.6,  									       			// Velocity
+         0.6f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -694,7 +694,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,                                    			// Action Radius
          100,                                    			// Reached Radius
-         0.8,  										       		// Velocity
+         0.8f,  										       		// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -704,7 +704,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,                                    			// Action Radius
          40,                                    			// Reached Radius
-         0.8,  									       			// Velocity
+         0.8f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -856,7 +856,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          2,	                                    			// Action Radius
          2,	                                    			// Reached Radius
-         0.04,  									       			// Velocity
+         0.04f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -866,7 +866,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          2,	                                    			// Action Radius
          2,	                                    			// Reached Radius
-         0.1,  									       			// Velocity
+         0.1f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -910,7 +910,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          25,                                    			// Action Radius
          25,                                    			// Reached Radius
-         0.4,  									      			// Velocity
+         0.4f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -974,7 +974,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,                                    			// Action Radius
          15,                                    			// Reached Radius
-         0.6,  									       			// Velocity
+         0.6f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1072,7 +1072,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,	                                   			// Action Radius
          100,	                                   			// Reached Radius
-         0.6,  									      			// Velocity
+         0.6f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1082,7 +1082,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,	                                   			// Action Radius
          40,	                                   			// Reached Radius
-         0.6,  									       			// Velocity
+         0.6f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1126,7 +1126,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,	                                   			// Action Radius
          100,	                                   			// Reached Radius
-         0.6,  									      			// Velocity
+         0.6f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1136,7 +1136,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,	                                   			// Action Radius
          40,	                                   			// Reached Radius
-         0.6,  									       			// Velocity
+         0.6f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1180,7 +1180,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          100,                                    			// Action Radius
          100,                                    			// Reached Radius
-         0.7,  									      			// Velocity
+         0.7f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1190,7 +1190,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          15,                                    			// Action Radius
          15,                                    			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1288,7 +1288,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          400,                                    			// Action Radius
          400,                                    			// Reached Radius
-         0.6,  									      			// Velocity
+         0.6f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			TRUE,															// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1396,7 +1396,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          3,                                    				// Action Radius
          3,                                    				// Reached Radius
-         0.06,  									    				// Velocity
+         0.06f,  									    				// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1504,7 +1504,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          150,                                    			// Action Radius
          150,                                    			// Reached Radius
-         0.8,  									      			// Velocity
+         0.8f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1514,7 +1514,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          40,                                    			// Action Radius
          40,                                    			// Reached Radius
-         0.8,  									      			// Velocity
+         0.8f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1558,7 +1558,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          150,                                    			// Action Radius
          150,                                    			// Reached Radius
-         0.75,  									      			// Velocity
+         0.75f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_VIRTUAL,									// Position type
@@ -1612,7 +1612,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          10,                                    			// Action Radius
          10,                                    			// Reached Radius
-         0.04,  									       			// Velocity
+         0.04f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1622,7 +1622,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          10,	                                   			// Action Radius
          10,	                                   			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1666,7 +1666,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          30,                                    			// Action Radius
          30,                                    			// Reached Radius
-         0.4,  									      			// Velocity
+         0.4f,  									      			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1730,7 +1730,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          1,	                                    			// Action Radius
          1,	                                    			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1784,7 +1784,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          1,	                                    			// Action Radius
          1,	                                    			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -1838,7 +1838,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          5,	                                    			// Action Radius
          5,	                                    			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			TRUE,															// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type
@@ -2054,7 +2054,7 @@ waypoint_data
 			0 * KILOMETRE, 											// Minimum previous waypoint distance
          1,	                                    			// Action Radius
          1,	                                    			// Reached Radius
-         0.2,  									       			// Velocity
+         0.2f,  									       			// Velocity
 			FALSE,														// Criteria Last To Reach
 			FALSE,														// Criteria Transmit Recon
 			POSITION_TYPE_ABSOLUTE,									// Position type

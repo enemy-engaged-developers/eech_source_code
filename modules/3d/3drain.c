@@ -174,7 +174,7 @@ void initialise_3d_rain ( float start_time, vec3d *start_position )
 
 	time_rain_last_updated = start_time;
 
-	snow_particle_radius = 0.3;
+	snow_particle_radius = 0.3f;
 
 	//
 	// Set the number of raindrops allowed per weathermode.
@@ -454,9 +454,9 @@ void update_3d_rain ( env_3d *env, float time, matrix3x3 view_attitude )
 		// Put artificial streaking in there ( game paused )
 		//
 
-		rain_streak_displacement.x = rain_3d_wind_direction.x * rain_3d_wind_speed * 0.05;
+		rain_streak_displacement.x = rain_3d_wind_direction.x * rain_3d_wind_speed * 0.05f;
 		rain_streak_displacement.y = rain_3d_wind_direction.y * rain_3d_wind_speed * 0.05 + ( rain_3d_speed * 0.05 );
-		rain_streak_displacement.z = rain_3d_wind_direction.z * rain_3d_wind_speed * 0.05;
+		rain_streak_displacement.z = rain_3d_wind_direction.z * rain_3d_wind_speed * 0.05f;
 	
 		displacement_magnitude = get_3d_vector_magnitude ( &rain_streak_displacement );
 	

@@ -150,7 +150,7 @@ static entity *find_matching_entity (camera *raw, entity_forces force, entity_si
 
 				view_interest_level = bound (view_interest_level, 0.0, DEFAULT_VIEW_INTEREST_LEVEL);
 
-				view_interest_level *= (2.0 / DEFAULT_VIEW_INTEREST_LEVEL);
+				view_interest_level *= (2.0f / DEFAULT_VIEW_INTEREST_LEVEL);
 
 				this_score += view_interest_level;
 
@@ -206,11 +206,11 @@ static entity *get_best_view_entity (camera *raw)
 
 	x = frand1 ();
 
-	if (x <= 0.6)
+	if (x <= 0.6f)
 	{
 		force = ENTITY_FORCE_AIR;
 	}
-	else if (x <= 0.9)
+	else if (x <= 0.9f)
 	{
 		force = ENTITY_FORCE_GROUND;
 	}

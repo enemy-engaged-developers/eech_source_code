@@ -78,19 +78,19 @@
 		#define NUM_TOW_MISSILES	  					  		(2)
 		#define NUM_SMOKE_GRENADE_ROUNDS				  		(8)
 
-		#define MAIN_GUN_TURRET_HEADING_RATE 		 		(rad (90.0))
-		#define MAIN_GUN_TURRET_MIN_HEADING_LIMIT	  		(rad (-180.0))
-		#define MAIN_GUN_TURRET_MAX_HEADING_LIMIT	  		(rad (180.0))
-		#define MAIN_GUN_BARREL_PITCH_RATE		  	  		(rad (45.0))
-		#define MAIN_GUN_BARREL_MIN_PITCH_LIMIT  	  		(rad (-10.0))
-		#define MAIN_GUN_BARREL_MAX_PITCH_LIMIT  	  		(rad (60.0))
+		#define MAIN_GUN_TURRET_HEADING_RATE 		 		(rad (90.0f))
+		#define MAIN_GUN_TURRET_MIN_HEADING_LIMIT	  		(rad (-180.0f))
+		#define MAIN_GUN_TURRET_MAX_HEADING_LIMIT	  		(rad (180.0f))
+		#define MAIN_GUN_BARREL_PITCH_RATE		  	  		(rad (45.0f))
+		#define MAIN_GUN_BARREL_MIN_PITCH_LIMIT  	  		(rad (-10.0f))
+		#define MAIN_GUN_BARREL_MAX_PITCH_LIMIT  	  		(rad (60.0f))
 
 		#define TOW_LAUNCHER_TURRET_HEADING_RATE 	  		(MAIN_GUN_TURRET_HEADING_RATE)
 		#define TOW_LAUNCHER_TURRET_MIN_HEADING_LIMIT	(MAIN_GUN_TURRET_MIN_HEADING_LIMIT)
 		#define TOW_LAUNCHER_TURRET_MAX_HEADING_LIMIT	(MAIN_GUN_TURRET_MAX_HEADING_LIMIT)
-		#define TOW_LAUNCHER_BARREL_PITCH_RATE				(rad (45.0))
+		#define TOW_LAUNCHER_BARREL_PITCH_RATE				(rad (45.0f))
 		#define TOW_LAUNCHER_BARREL_MIN_PITCH_LIMIT		(rad (0.0))
-		#define TOW_LAUNCHER_BARREL_MAX_PITCH_LIMIT		(rad (45.0))
+		#define TOW_LAUNCHER_BARREL_MAX_PITCH_LIMIT		(rad (45.0f))
 
 		////////////////////////////////////////
 		//
@@ -115,7 +115,7 @@
 				MAIN_GUN_BARREL_MIN_PITCH_LIMIT,							// min_pitch_limit
 				MAIN_GUN_BARREL_MAX_PITCH_LIMIT,							// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +		  								// heading_share_mask
 				SHARE_WEAPON_PACKAGE2,
 				0,		 	 														// pitch_share_mask
@@ -138,7 +138,7 @@
 				TOW_LAUNCHER_BARREL_MIN_PITCH_LIMIT,					// min_pitch_limit
 				TOW_LAUNCHER_BARREL_MAX_PITCH_LIMIT,					// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +		  								// heading_share_mask
 				SHARE_WEAPON_PACKAGE2,
 				0,		 	 														// pitch_share_mask
@@ -161,7 +161,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				0,																	// heading_share_mask
 				0,				 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,										// muzzle_flash_type

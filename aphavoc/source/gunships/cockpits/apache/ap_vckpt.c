@@ -220,18 +220,18 @@ void initialise_apache_virtual_cockpit (void)
 	// pilot limits
 	head_limits[0][0].x = -0.25;
 	head_limits[0][1].x =  0.25;
-	head_limits[0][0].y = -0.3;
-	head_limits[0][1].y =  0.3;
+	head_limits[0][0].y = -0.3f;
+	head_limits[0][1].y =  0.3f;
 	head_limits[0][0].z = -0.10;
 	head_limits[0][1].z =  0.50;
 
 	// co-pilot limits
-	head_limits[1][0].x = -0.2;
-	head_limits[1][1].x =  0.2;
-	head_limits[1][0].y = -0.2;
-	head_limits[1][1].y =  0.2;
-	head_limits[1][0].z = -0.05;
-	head_limits[1][1].z =  0.3;
+	head_limits[1][0].x = -0.2f;
+	head_limits[1][1].x =  0.2f;
+	head_limits[1][0].y = -0.2f;
+	head_limits[1][1].y =  0.2f;
+	head_limits[1][0].z = -0.05f;
+	head_limits[1][1].z =  0.3f;
 #endif
 
 	if (custom_3d_models.arneh_ah64d_cockpit)  // move instruments to where they are in this cockpit
@@ -260,7 +260,7 @@ void initialise_apache_virtual_cockpit (void)
 			if (find_object_3d_sub_object (&search) != SUB_OBJECT_SEARCH_RESULT_OBJECT_FOUND)
 				debug_fatal ("Failed to locate display viewpoint in virtual cockpit");
 
-			search.result_sub_object->relative_position.y -= 0.05;
+			search.result_sub_object->relative_position.y -= 0.05f;
 		}
 
 	}
@@ -423,7 +423,7 @@ int apache_pnvs_active(void)
 		return TRUE;
 
 	// night vision isn't activated until the PNVS turret has slewed within 5 degrees of pilots head heading
-	pnvs_in_position = pnvs_heading > -pilot_head_heading - rad(5.0);
+	pnvs_in_position = pnvs_heading > -pilot_head_heading - rad(5.0f);
 
 	return pnvs_in_position;
 }
@@ -465,7 +465,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -483,7 +483,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 1.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
+			directional_light_pitch 				= rad (-40.0f);
 			directional_light_roll 					= rad (0.0);
 
 			directional_light_pitch 				= rad (0.0);
@@ -503,7 +503,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -521,7 +521,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 			directional_light_colour.blue			= 0.0;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -539,7 +539,7 @@ static void set_cockpit_lighting (matrix3x3 attitude)
 	directional_light_colour.blue			= 1.0;
 
 	directional_light_heading 				= rad (0.0);
-	directional_light_pitch 				= rad (-40.0);
+	directional_light_pitch 				= rad (-40.0f);
 	directional_light_roll 					= rad (0.0);
 
 	#endif
@@ -579,9 +579,9 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 		directional_light_pitch,
 		directional_light_roll;
 
-	directional_light_colour.red		= 0.3;
-	directional_light_colour.green	= 0.3;
-	directional_light_colour.blue		= 0.3;
+	directional_light_colour.red		= 0.3f;
+	directional_light_colour.green	= 0.3f;
+	directional_light_colour.blue		= 0.3f;
 
 	directional_light_heading 			= rad (0.0);
 	directional_light_pitch 			= rad (0.0);
@@ -598,7 +598,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			ambient_light_colour.blue		  		= 0.70;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -612,7 +612,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			ambient_light_colour.blue		  		= 0.85;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-40.0);
+			directional_light_pitch 				= rad (-40.0f);
 			directional_light_roll 					= rad (0.0);
 
 			directional_light_pitch 				= rad (0.0);
@@ -628,7 +628,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			ambient_light_colour.blue		  		= 0.50;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -642,7 +642,7 @@ static void set_cockpit_white_lighting (matrix3x3 attitude)
 			ambient_light_colour.blue		  		= 0.55;
 
 			directional_light_heading 				= rad (0.0);
-			directional_light_pitch 				= rad (-15.0);
+			directional_light_pitch 				= rad (-15.0f);
 			directional_light_roll 					= rad (0.0);
 
 			break;
@@ -830,8 +830,8 @@ static void get_apache_crew_viewpoint (viewpoint *crew_viewpoint)
       random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
       random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
     }
-    x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-    y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
+    x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
+    y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
 
     head_object->relative_position.x -= x_head_g_movement;
 		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
@@ -1002,7 +1002,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1248,7 +1248,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1466,7 +1466,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 
@@ -1503,7 +1503,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 			{
 				set_3d_active_environment (main_3d_env);
 
-				set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+				set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 				realise_3d_clip_extents (main_3d_env);
 
@@ -1527,7 +1527,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 					vp_current_position = vp_position;
 
 					vp_current_position.y += 0.008;
-					vp_current_position.z += 0.005;
+					vp_current_position.z += 0.005f;
 
 					multiply_matrix3x3_vec3d(&vp_world_position, head_rotation, &vp_current_position);
 
@@ -1596,7 +1596,7 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -1667,32 +1667,32 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		if (check_key(DIK_NUMPAD7))
 		{
 		system_sleep(20);
-			  dy+= 0.001;
+			  dy+= 0.001f;
 		}
 		if (check_key(DIK_NUMPAD9))
 		{
 		system_sleep(20);
-			  dy-= 0.001;
+			  dy-= 0.001f;
 		}
 		if (check_key(DIK_NUMPADSLASH))
 		{
 		system_sleep(20);
-			  dx+= 0.001;
+			  dx+= 0.001f;
 		}
 		if (check_key(DIK_NUMPADSTAR))
 		{
 		system_sleep(20);
-			  dx-= 0.001;
+			  dx-= 0.001f;
 		}
 		if (check_key(DIK_NUMPADMINUS))
 		{
 		system_sleep(20);
-			  dz+= 0.001;
+			  dz+= 0.001f;
 		}
 		if (check_key(DIK_NUMPADPLUS))
 		{
 		system_sleep(20);
-			  dz-= 0.001;
+			  dz-= 0.001f;
 		}
 #endif
 	if (edit_wide_cockpit)
@@ -1709,37 +1709,37 @@ void draw_apache_internal_virtual_cockpit (unsigned int flags)
 		}
 		if (check_key(DIK_NUMPAD6))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].z += 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].z > head_limits[is_copilot][1].z)
             	wide_cockpit_position[wide_cockpit_nr].z = head_limits[is_copilot][1].z;
 		}
 		if (check_key(DIK_NUMPAD4))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].z < head_limits[is_copilot][0].z)
             	wide_cockpit_position[wide_cockpit_nr].z = head_limits[is_copilot][0].z;
 		}
 		if (check_key(DIK_NUMPAD8))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].y += 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].y > head_limits[is_copilot][1].y)
             	wide_cockpit_position[wide_cockpit_nr].y = head_limits[is_copilot][1].y;
 		}
 		if (check_key(DIK_NUMPAD2))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].y < head_limits[is_copilot][0].y)
             	wide_cockpit_position[wide_cockpit_nr].y = head_limits[is_copilot][0].y;
 		}
 		if (check_key(DIK_NUMPAD1))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.01;
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].x < head_limits[is_copilot][0].x)
             	wide_cockpit_position[wide_cockpit_nr].x = head_limits[is_copilot][0].x;
 		}
 		if (check_key(DIK_NUMPAD3))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.01;
+            wide_cockpit_position[wide_cockpit_nr].x += 0.01f;
             if (wide_cockpit_position[wide_cockpit_nr].x > head_limits[is_copilot][1].x)
             	wide_cockpit_position[wide_cockpit_nr].x = head_limits[is_copilot][1].x;
 		}
@@ -1869,7 +1869,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 		set_3d_active_environment (main_3d_env);
 
 //VJ 050108 wideview x coord used to clip apache cockpit
-		set_3d_view_distances (main_3d_env, 10.0+clipx, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_env, 10.0+clipx, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_env);
 
@@ -1958,7 +1958,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 
 		set_3d_active_environment (main_3d_single_light_env);
 
-		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1, 1.0, 0.0);
+		set_3d_view_distances (main_3d_single_light_env, 10.0, 0.1f, 1.0, 0.0);
 
 		realise_3d_clip_extents (main_3d_single_light_env);
 
@@ -2114,7 +2114,7 @@ void draw_apache_external_virtual_cockpit (unsigned int flags, unsigned char *wi
 		{
 			set_3d_active_environment (main_3d_env);
 
-			set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+			set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 			realise_3d_clip_extents (main_3d_env);
 

@@ -2425,11 +2425,11 @@ void set_up_tnl_hardware ( void )
 			view_width_angle,
 			view_height_angle;
 
-		near_plane = 1.0;
-		far_plane = 10000.0;
+		near_plane = 1.0f;
+		far_plane = 10000.0f;
 
-		view_width_angle = rad ( 59.99 );
-		view_height_angle = rad ( 46.82 );
+		view_width_angle = rad ( 59.99f );
+		view_height_angle = rad ( 46.82f );
 
 		if ( active_3d_environment )
 		{
@@ -2475,8 +2475,8 @@ void set_up_tnl_hardware ( void )
 		viewdata.dwX = active_3d_environment->clip_xmin;
 		viewdata.dwY = active_3d_environment->clip_ymin;
 
-		viewdata.dwWidth = active_3d_environment->clip_xmax - active_3d_environment->clip_xmin + 0.01;
-		viewdata.dwHeight = active_3d_environment->clip_ymax - active_3d_environment->clip_ymin + 0.01;
+		viewdata.dwWidth = active_3d_environment->clip_xmax - active_3d_environment->clip_xmin + 0.01f;
+		viewdata.dwHeight = active_3d_environment->clip_ymax - active_3d_environment->clip_ymin + 0.01f;
 		
 		viewdata.dvMinZ = 0.0;	//active_3d_environment->zbuffer_z_maximum_value;
 		viewdata.dvMaxZ = 1.0;	//active_3d_environment->zbuffer_z_minimum_value;

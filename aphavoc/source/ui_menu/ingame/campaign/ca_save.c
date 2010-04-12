@@ -588,7 +588,7 @@ void define_campaign_screen_save_page_objects (void)
 	// Filename Input
 
 	x1 = 0.04;
-	y1 = 0.18;
+	y1 = 0.18f;
 	x2 = 1.0;
 	y2 = 1.0;
 

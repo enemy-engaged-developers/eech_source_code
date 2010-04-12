@@ -721,7 +721,7 @@ void draw_hokum_virtual_cockpit (void)
 	// draw 3D scene
 	//
 
-	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);
+	set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);
 
 	realise_3d_clip_extents (main_3d_env);
 
@@ -772,7 +772,7 @@ void draw_hokum_virtual_cockpit (void)
 		   if (wide_cockpit_nr == WIDEVIEW_HOKUM_COPILOT)
 	   		co_pilot_head_pitch_datum = rad ( wide_cockpit_position[wide_cockpit_nr].p );
 
-		  	set_3d_view_distances (main_3d_env, 10.0, 0.1, 1.0, 0.0);    	
+		  	set_3d_view_distances (main_3d_env, 10.0, 0.1f, 1.0, 0.0);    	
 		}
 		
 		//ataribaby 27/12/2008 new head g-force movement and vibration from main rotor
@@ -786,8 +786,8 @@ void draw_hokum_virtual_cockpit (void)
         random_vibration_x = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;       
         random_vibration_y = (frand1() * (current_flight_dynamics->main_rotor_rpm.value * 0.00002)) * command_line_g_force_head_movment_modifier;
       }
-      x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
-      y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05);
+      x_head_g_movement = move_by_rate(x_head_g_movement, random_vibration_x + (bound(current_flight_dynamics->model_acceleration_vector.x * ONE_OVER_G, -3.0, 3.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
+      y_head_g_movement = move_by_rate(y_head_g_movement, random_vibration_y + (bound(current_flight_dynamics->g_force.value - 1.0, -1.5, 5.0) * 0.025 * command_line_g_force_head_movment_modifier), 0.05f);
       
       virtual_cockpit_inst3d->vp.x -= x_head_g_movement;
   		//if (!current_flight_dynamics->auto_hover)   // arneh - auto hover has some weird dynamics which cause lots of g-forces, so disable head movement when auto hover is enabled
@@ -808,7 +808,7 @@ void draw_hokum_virtual_cockpit (void)
 				// active night vision system
 				//
 
-				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0), rad (0.0));
+				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0f), rad (0.0));
 
 				multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
 
@@ -875,7 +875,7 @@ void draw_hokum_virtual_cockpit (void)
 				// active night vision system
 				//
 
-				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0), rad (0.0));
+				get_3d_transformation_matrix (m1, rad (0.0), rad (135.0f), rad (0.0));
 
 				multiply_matrix3x3_matrix3x3 (m2, m1, virtual_cockpit_inst3d->vp.attitude);
 
@@ -950,27 +950,27 @@ void draw_hokum_virtual_cockpit (void)
       }
 		if (check_key(DIK_NUMPAD6))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z += 0.005f;
       }  
 		if (check_key(DIK_NUMPAD4))
 		{
-            wide_cockpit_position[wide_cockpit_nr].z -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].z -= 0.005f;
       }  
 		if (check_key(DIK_NUMPAD8))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y -= 0.005f;
       }  
 		if (check_key(DIK_NUMPAD2))
 		{
-            wide_cockpit_position[wide_cockpit_nr].y += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].y += 0.005f;
       }  
    		if (check_key(DIK_NUMPAD3))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x += 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x += 0.005f;
       }  
 		if (check_key(DIK_NUMPAD1))
 		{
-            wide_cockpit_position[wide_cockpit_nr].x -= 0.005;
+            wide_cockpit_position[wide_cockpit_nr].x -= 0.005f;
       }  
 //VJ 050131 update on wideview mod, much better movement
 		if (check_key(DIK_NUMPAD0))

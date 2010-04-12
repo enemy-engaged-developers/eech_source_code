@@ -263,7 +263,7 @@ void set_page_3d_viewpoint (vec3d *pos)
 
 	ASSERT (pos);
 	
-	get_3d_unit_vector_from_heading_and_pitch (&vec, rad (180.0), rad (45.0));
+	get_3d_unit_vector_from_heading_and_pitch (&vec, rad (180.0f), rad (45.0f));
 
 	page_vp.x = pos->x + (page_3d_distance * vec.x);
 	page_vp.y = pos->y + (page_3d_distance * vec.y);
@@ -370,7 +370,7 @@ void define_campaign_screen_log_page_objects (void)
 				UI_ATTR_END
 			);
 
-	set_ui_list_spacing_proportional_to_font (message_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (message_list, -0.2f);
 
 	/////////////////////////////////////////////////////////////////
 	// Map / View Area

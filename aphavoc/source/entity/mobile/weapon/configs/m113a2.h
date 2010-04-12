@@ -72,12 +72,12 @@
 
 		#define NUM_MACHINE_GUN_ROUNDS					(2000)
 
-		#define MACHINE_GUN_TURRET_HEADING_RATE 		(rad (90.0))
-		#define MACHINE_GUN_TURRET_MIN_HEADING_LIMIT	(rad (-180.0))
-		#define MACHINE_GUN_TURRET_MAX_HEADING_LIMIT	(rad (180.0))
-		#define MACHINE_GUN_BARREL_PITCH_RATE			(rad (45.0))
+		#define MACHINE_GUN_TURRET_HEADING_RATE 		(rad (90.0f))
+		#define MACHINE_GUN_TURRET_MIN_HEADING_LIMIT	(rad (-180.0f))
+		#define MACHINE_GUN_TURRET_MAX_HEADING_LIMIT	(rad (180.0f))
+		#define MACHINE_GUN_BARREL_PITCH_RATE			(rad (45.0f))
 		#define MACHINE_GUN_BARREL_MIN_PITCH_LIMIT	(rad (0.0))
-		#define MACHINE_GUN_BARREL_MAX_PITCH_LIMIT	(rad (45.0))
+		#define MACHINE_GUN_BARREL_MAX_PITCH_LIMIT	(rad (45.0f))
 
 		////////////////////////////////////////
 		//
@@ -102,7 +102,7 @@
 				MACHINE_GUN_BARREL_MIN_PITCH_LIMIT,						// min_pitch_limit
 				MACHINE_GUN_BARREL_MAX_PITCH_LIMIT,						// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),		  			// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),		  			// rotate_inhibit_velocity
 				0,		 											 				// heading_share_mask
 				0,		 		 									  				// pitch_share_mask
 				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,					// muzzle_flash_type

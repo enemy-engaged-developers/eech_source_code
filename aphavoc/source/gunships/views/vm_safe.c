@@ -164,7 +164,7 @@ void draw_safe_3d_view (void)
 
 	main_vp.position = position;
 
-	get_3d_transformation_matrix (main_vp.attitude, atan2 (dx, dz), rad (-10.0), 0.0);
+	get_3d_transformation_matrix (main_vp.attitude, atan2 (dx, dz), rad (-10.0f), 0.0);
 
    //
    // draw 3D scene

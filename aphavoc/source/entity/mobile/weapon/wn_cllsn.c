@@ -420,11 +420,11 @@ float get_local_entity_armour_thickness (entity *target, entity *weapon)
 
 		theta = acos (cos_theta);
 
-		if (theta <= rad (45.0))
+		if (theta <= rad (45.0f))
 		{
 			armour_thickness = vehicle_database[sub_type].armour_front;
 		}
-		else if (theta <= rad (135.0))
+		else if (theta <= rad (135.0f))
 		{
 			armour_thickness = vehicle_database[sub_type].armour_side;
 		}

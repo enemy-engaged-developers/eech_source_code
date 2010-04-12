@@ -110,8 +110,8 @@ static void display_messages (float x_org, float y_org)
 
 	x_min = x_org;
 	y_min = y_org;
-	x_max = x_org + VIEWPORT_WIDTH - 0.001;
-	y_max = y_org + VIEWPORT_WIDTH - 0.001;
+	x_max = x_org + VIEWPORT_WIDTH - 0.001f;
+	y_max = y_org + VIEWPORT_WIDTH - 0.001f;
 
 	set_viewport (x_min, y_min, x_max, y_max);
 

@@ -1246,7 +1246,7 @@ void generate_environment_coordinates ( int object_index, object_short_3d_point 
 	normalise_any_3d_vector ( &ray );
 	
 	denominator = get_inverse_square_root ( ray.z + 1 );
-	denominator *= ( 1 / ( 1.4142135623730904880 * 2 ) );
+	denominator *= ( 1 / ( 1.4142135623730904880f * 2 ) );
 	
 	*u = 0.5 + ( ray.x * denominator );
 	*v = 0.5 + ( ray.y * denominator );

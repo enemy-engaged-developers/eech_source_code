@@ -303,7 +303,7 @@ void update_aircraft_rudder( entity *en )
 
 	raw = (aircraft *) get_local_entity_data( en );
 
-	update_entity_simple_keyframed_value( en, &raw->rudder_state, 0.16666 );
+	update_entity_simple_keyframed_value( en, &raw->rudder_state, 0.16666f );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -93,7 +93,7 @@ static void update_rotors (entity *en)
 
 	if (!get_local_entity_parent (en, LIST_TYPE_FOLLOWER))
 	{
-		raw->main_rotor_rpm -= 5.0 * get_delta_time ();
+		raw->main_rotor_rpm -= 5.0f * get_delta_time ();
 
 		raw->main_rotor_rpm = bound (raw->main_rotor_rpm, 0.0, 100.0);
 

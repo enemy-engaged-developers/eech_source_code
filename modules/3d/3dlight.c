@@ -89,7 +89,7 @@ light_3d_source
 
 		{ 0, 0, 0 },
 
-		0.1, 0.1, 0.1, 0.1,
+		0.1f, 0.1f, 0.1f, 0.1f,
 
 		1,
 		LIGHT_3D_TYPE_INVALID,
@@ -423,13 +423,13 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 	green = colour.green;
 	blue = colour.blue;
 
-	red /= 255.0;
-	green /= 255.0;
-	blue /= 255.0;
+	red /= 255.0f;
+	green /= 255.0f;
+	blue /= 255.0f;
 
-	red *= 1.8666;
-	green *= 1.8666;
-	blue *= 1.8666;
+	red *= 1.8666f;
+	green *= 1.8666f;
+	blue *= 1.8666f;
 
 	if (active_3d_environment->render_filter != RENDER_CLEAR )
 	{
@@ -437,7 +437,7 @@ void copy_and_recolour_current_3d_lights ( struct REAL_COLOUR colour )
 		float
 			grey;
 
-		grey = red * 0.3 + green * 0.59 + blue + 0.11;
+		grey = red * 0.3f + green * 0.59f + blue + 0.11f;
 	
 		//
 		// Save the current ambient light

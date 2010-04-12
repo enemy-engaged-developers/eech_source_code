@@ -164,11 +164,11 @@ void reset_fly_by_camera (camera *raw)
 
 			if (near_to_ground)
 			{
-				theta = rad (5.0) + (frand1 () * rad (75.0));
+				theta = rad (5.0f) + (frand1 () * rad (75.0f));
 			}
 			else
 			{
-				theta = rad (5.0) + (frand1 () * rad (170.0));
+				theta = rad (5.0f) + (frand1 () * rad (170.0));
 			}
 
 			duration = 2.0 + (frand1 () * 6.0);
@@ -179,7 +179,7 @@ void reset_fly_by_camera (camera *raw)
 		case ENTITY_FORCE_GROUND:
 		////////////////////////////////////////
 		{
-			theta = rad (30.0) + (frand1 () * rad (50.0));
+			theta = rad (30.0f) + (frand1 () * rad (50.0f));
 
 			duration = 4.0 + (frand1 () * 4.0);
 
@@ -189,7 +189,7 @@ void reset_fly_by_camera (camera *raw)
 		case ENTITY_FORCE_SEA:
 		////////////////////////////////////////
 		{
-			theta = rad (60.0) + (frand1 () * rad (20.0));
+			theta = rad (60.0f) + (frand1 () * rad (20.0f));
 
 			duration = 6.0 + (frand1 () * 4.0);
 
@@ -220,7 +220,7 @@ void reset_fly_by_camera (camera *raw)
 
 	if (velocity < 1.0)
 	{
-		heading = sfrand1 () * rad (180.0);
+		heading = sfrand1 () * rad (180.0f);
 
 		mvec.x = sin (heading);
 		mvec.y = 0.0;
@@ -384,7 +384,7 @@ void update_fly_by_camera_continued (camera *raw)
 		// prevent divide by zero
 		//
 
-		if (get_3d_vector_magnitude (&v) < 0.001)
+		if (get_3d_vector_magnitude (&v) < 0.001f)
 		{
 			v.x = 0.0;
 			v.y = 0.0;

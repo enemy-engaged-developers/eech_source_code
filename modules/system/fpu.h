@@ -207,4 +207,30 @@ extern void set_fpu_precision_mode_extended ( void );
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+__inline unsigned short int asm_set_controlfp ( unsigned short int value, unsigned short int mask )
+{
+	unsigned short int result = value & mask;
+
+	__asm
+	{
+		fclex
+		fldcw DWORD PTR [result]
+		fstcw DWORD PTR [result]
+	}
+
+	return result;
+}
+
+__inline unsigned short int asm_get_controlfp ( )
+{
+	unsigned short int result = 0x0000;
+
+	__asm
+	{
+		fstcw [result]
+	}
+
+	return result;
+}
+
 #endif /*APHAVOC_ASM_FPU_H*/

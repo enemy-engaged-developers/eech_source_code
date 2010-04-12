@@ -455,7 +455,7 @@ entity *regen_update (entity *en)
 					*transport_task,
 					*transport_landing;
 
-				best_range = 999999999.0;
+				best_range = 999999999.0f;
 
 				transport_landing = get_local_entity_landing_entity (keysite, ENTITY_SUB_TYPE_LANDING_FIXED_WING_TRANSPORT);
 

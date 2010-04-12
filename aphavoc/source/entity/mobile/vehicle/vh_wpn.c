@@ -199,7 +199,7 @@ void update_vehicle_weapon_fire (entity *en)
 
 			seed = get_client_server_entity_random_number_seed (en);
 
-			raw->target_fire_timer *= (1.0 + (0.333 * sfrand1x (&seed)));
+			raw->target_fire_timer *= (1.0 + (0.333f * sfrand1x (&seed)));
 
 			if ((target) && (get_local_entity_int_value (target, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI))
 			{
@@ -209,15 +209,15 @@ void update_vehicle_weapon_fire (entity *en)
 
 				if (get_local_entity_int_value (target, INT_TYPE_RADAR_ON))
 				{
-					raw->target_fire_timer *= 0.85;
+					raw->target_fire_timer *= 0.85f;
 				}
 				if (get_local_entity_int_value (target, INT_TYPE_RADAR_JAMMER_ON))
 				{
-					raw->target_fire_timer *= 0.85;
+					raw->target_fire_timer *= 0.85f;
 				}
 				if (get_local_entity_int_value (target, INT_TYPE_INFRA_RED_JAMMER_ON))
 				{
-					raw->target_fire_timer *= 0.85;
+					raw->target_fire_timer *= 0.85f;
 				}
 
 				//
@@ -636,7 +636,7 @@ void update_vehicle_decoy_release (entity *en)
 	//
 	////////////////////////////////////////
 
-	if (get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY) > 0.1)
+	if (get_local_entity_float_value (en, FLOAT_TYPE_VELOCITY) > 0.1f)
 	{
 		return;
 	}
@@ -717,9 +717,9 @@ static struct FIRE_TIMER_DIFFICULTY_TABLE
 
 } fire_timer_difficulty_table [] =
 	{
-		GAME_DIFFICULTY_HARD,		0.66,
+		GAME_DIFFICULTY_HARD,		0.66f,
 		GAME_DIFFICULTY_MEDIUM,		1.0,
-		GAME_DIFFICULTY_EASY,		1.33,
+		GAME_DIFFICULTY_EASY,		1.33f,
 		(game_difficulty_settings) -1
 	};
 

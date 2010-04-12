@@ -141,18 +141,18 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 	{
 		static float
 			direction_finder_value = rad (0.0),
-			flight_path_value = rad (90.0),
-			drift_value = rad (-20.0);
+			flight_path_value = rad (90.0f),
+			drift_value = rad (-20.0f);
 
 		//
 		// automatic direction finder
 		//
 
-		direction_finder_value += rad (5.0);
+		direction_finder_value += rad (5.0f);
 
-		if (direction_finder_value > rad (360.0))
+		if (direction_finder_value > rad (360.0f))
 		{
-			direction_finder_value -= rad (360.0);
+			direction_finder_value -= rad (360.0f);
 		}
 
 		direction_finder_needle_value = direction_finder_value;
@@ -161,11 +161,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// flight path
 		//
 
-		flight_path_value += rad (3.0);
+		flight_path_value += rad (3.0f);
 
-		if (flight_path_value > rad (360.0))
+		if (flight_path_value > rad (360.0f))
 		{
-			flight_path_value -= rad (360.0);
+			flight_path_value -= rad (360.0f);
 		}
 
 		flight_path_needle_value = flight_path_value;
@@ -174,11 +174,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// drift
 		//
 
-		drift_value += rad (1.0);
+		drift_value += rad (1.0f);
 
-		if (drift_value > rad (35.0))
+		if (drift_value > rad (35.0f))
 		{
-			drift_value = rad (-35.0);
+			drift_value = rad (-35.0f);
 		}
 
 		drift_needle_value = drift_value;
@@ -245,7 +245,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 				length1 = (v1.x * v1.x) + (v1.y * v1.y);
 
-				if (length1 > 0.001)
+				if (length1 > 0.001f)
 				{
 					length1 = sqrt (length1);
 
@@ -259,7 +259,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 					length2 = (v2.x * v2.x) + (v2.y * v2.y);
 
-					if (length2 > 0.001)
+					if (length2 > 0.001f)
 					{
 						length2 = sqrt (length2);
 
@@ -282,7 +282,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		}
 	}
 
-	drift_needle_value = bound (drift_needle_value, rad (-30.0), rad (30.0));
+	drift_needle_value = bound (drift_needle_value, rad (-30.0f), rad (30.0f));
 
 	*direction_finder = direction_finder_needle_value;
 
@@ -365,7 +365,7 @@ float get_mi24_pitch_ladder_dispacement(void)
 {
 	float pitch = current_flight_dynamics->pitch.value;
 
-	return deg(-pitch) * 0.001;
+	return deg(-pitch) * 0.001f;
 }
 
 void get_mi24_hover_indicator_speed(float* longitudinal, float* sideways)
@@ -424,13 +424,13 @@ float get_mi24_apu_rpm_needle_value(void)
 
 void get_mi24_engine_select_switch_value(float* current_val)
 {
-	float val = rad(5.0);
+	float val = rad(5.0f);
 	float max_step = SWITCH_MOVEMENT_RATE * get_delta_time();
 
 	if (current_flight_dynamics->left_engine_starter_active)
-		val = rad(50.0);
+		val = rad(50.0f);
 	else if (current_flight_dynamics->right_engine_starter_active)
-		val = -rad(40.0);
+		val = -rad(40.0f);
 
 	*current_val += bound(val - *current_val, -max_step, max_step);
 }
@@ -636,7 +636,7 @@ void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_
 		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LOW_OIL_PRESSURE) != 0)
 			lpres = 0.5;
 		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE) != 0)
-			lpres = 1.2;
+			lpres = 1.2f;
 		else
 			lpres = 1.0;
 
@@ -645,13 +645,13 @@ void update_mi24_engine_gauges(float* left_temp, float* right_temp, float* left_
 		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_LOW_OIL_PRESSURE) != 0)
 			rpres = 0.5;
 		else if ((current_flight_dynamics->dynamics_damage & DYNAMICS_DAMAGE_HIGH_OIL_PRESSURE) != 0)
-			rpres = 1.2;
+			rpres = 1.2f;
 		else
 			rpres = 1.0;
 	}
 	else
 		lpres = rpres = 0.0;
 
-	*left_pressure += bound((rad(-150) + rad(100) * lpres) - *left_pressure, -max_pressure_movement*0.9, max_pressure_movement);
-	*right_pressure += bound((rad(-150) + rad(100) * rpres) - *right_pressure, -max_pressure_movement, max_pressure_movement*0.9);
+	*left_pressure += bound((rad(-150) + rad(100) * lpres) - *left_pressure, -max_pressure_movement*0.9f, max_pressure_movement);
+	*right_pressure += bound((rad(-150) + rad(100) * rpres) - *right_pressure, -max_pressure_movement, max_pressure_movement*0.9f);
 }

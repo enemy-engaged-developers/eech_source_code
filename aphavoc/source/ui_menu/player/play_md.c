@@ -210,7 +210,7 @@ player_medal_info
 								{"graphics\\ui\\cohokum\\1StServ.psd",		"",	0.749, 0.366, 0.132, 0.406}, //MEDAL_MASTER_AVIATOR
 								{"graphics\\ui\\cohokum\\OrdGlory.psd",	"",	0.371, 0.441, 0.173, 0.458}, //MEDAL_PURPLE_HEART
 								{"graphics\\ui\\cohokum\\RdBanner.psd",	"",	0.527, 0.386, 0.136, 0.415}, //MEDAL_AIR_MEDAL
-								{"graphics\\ui\\cohokum\\Lenin.psd",		"",	0.200, 0.411, 0.186, 0.468}, //MEDAL_FLYING_CROSS
+								{"graphics\\ui\\cohokum\\Lenin.psd",		"",	0.200f, 0.411, 0.186, 0.468}, //MEDAL_FLYING_CROSS
 								{"graphics\\ui\\cohokum\\OrdServ.psd",		"",	0.008, 0.434, 0.220, 0.298}, //MEDAL_SILVER_STAR
 								{"graphics\\ui\\cohokum\\OrdVic2.psd",		"",	0.040, 0.096, 0.298, 0.405}, //MEDAL_DISTINGUISHED_SERVICE
 								{"graphics\\ui\\cohokum\\GldStar2.psd",	"",	0.344, 0.000, 0.266, 0.579}, //MEDAL_MEDAL_OF_HONOUR

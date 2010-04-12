@@ -436,9 +436,9 @@ real_colour light_smoke_colour ( real_colour colour, int additive )
 		g = colour.green;
 		b = colour.blue;
 
-		r *= ambient_3d_light.colour.red * 1.866666;		//2.8;
-		g *= ambient_3d_light.colour.green * 1.866666;	//2.8;
-		b *= ambient_3d_light.colour.blue * 1.866666;	//2.8;
+		r *= ambient_3d_light.colour.red * 1.866666;		//2.8f;
+		g *= ambient_3d_light.colour.green * 1.866666;	//2.8f;
+		b *= ambient_3d_light.colour.blue * 1.866666;	//2.8f;
 
 		asm_convert_float_to_int ( r, &ir );
 		asm_convert_float_to_int ( g, &ig );

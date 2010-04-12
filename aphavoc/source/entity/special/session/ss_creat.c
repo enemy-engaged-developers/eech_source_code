@@ -158,17 +158,17 @@ static entity *create_local (entity_types type, int index, char *pargs)
 		raw->weather_position.y = 0.0;
 		raw->weather_position.z = MID_MAP_Z;
 
-		raw->weather_velocity.x = knots_to_metres_per_second (300.0);
+		raw->weather_velocity.x = knots_to_metres_per_second (300.0f);
 		raw->weather_velocity.y = 0.0;
-		raw->weather_velocity.z = -knots_to_metres_per_second (100.0);
+		raw->weather_velocity.z = -knots_to_metres_per_second (100.0f);
 
 		raw->wind_effect_position.x = 0.0;
 		raw->wind_effect_position.y = 0.0;
 		raw->wind_effect_position.z = 0.0;
 
-		raw->wind_effect_velocity.x = knots_to_metres_per_second (240.0);
+		raw->wind_effect_velocity.x = knots_to_metres_per_second (240.0f);
 		raw->wind_effect_velocity.y = 0.0;
-		raw->wind_effect_velocity.z = knots_to_metres_per_second (350.0);
+		raw->wind_effect_velocity.z = knots_to_metres_per_second (350.0f);
 
 		raw->lightning_timer = ONE_MINUTE;
 

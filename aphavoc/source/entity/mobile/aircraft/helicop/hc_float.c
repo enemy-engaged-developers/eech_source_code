@@ -325,7 +325,7 @@ static float get_local_float_value (entity *en, float_types type)
 
 					if (get_local_entity_undercarriage_state (en) == AIRCRAFT_UNDERCARRIAGE_UP)
 					{
-						value -= NO_RADAR_STEALTH_FACTOR * 0.35;
+						value -= NO_RADAR_STEALTH_FACTOR * 0.35f;
 					}
 				}
 			}

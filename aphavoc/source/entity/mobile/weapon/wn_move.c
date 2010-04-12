@@ -193,7 +193,7 @@ static void get_intercept_point (entity *weapon_entity, entity *target, vec3d *i
 	// catch possible divide by zero (slow weapon or target)
 	//
 
-	if ((weapon_velocity > 0.001) && (target_true_velocity > 0.001))
+	if ((weapon_velocity > 0.001f) && (target_true_velocity > 0.001f))
 	{
 		if (target_true_velocity < weapon_velocity)
 		{
@@ -367,7 +367,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						else
 						{
 						// initial climb of 30%
-							float new_aim_y = weapon_position->y + range * 0.3;
+							float new_aim_y = weapon_position->y + range * 0.3f;
 							intercept_point->y = max(new_aim_y, intercept_point->y);
 						}
 						break;
@@ -400,10 +400,10 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						raw->missile_phase = MISSILE_FINAL_PHASE;
 						break;
 					}
-					else if (dive_ratio > -0.55)
+					else if (dive_ratio > -0.55f)
 					{
 						// third phase dive at 20%
-						float new_aim_y = weapon_position->y + range * -0.2;
+						float new_aim_y = weapon_position->y + range * -0.2f;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
 
 						break;
@@ -430,7 +430,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 					if (dive_ratio > -0.15)
 					{
 						// intial phase climb at 7%
-						float new_aim_y = weapon_position->y + range * 0.07;
+						float new_aim_y = weapon_position->y + range * 0.07f;
 						intercept_point->y = max(new_aim_y, intercept_point->y);
 
 						break;
@@ -444,7 +444,7 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 						break;
 					}
 
-					if (dive_ratio > -0.3)
+					if (dive_ratio > -0.3f)
 					{
 						// second phase dive at 3%
 						float new_aim_y = weapon_position->y + range * -0.03;
@@ -569,12 +569,12 @@ static void move_guided_weapon (entity *en, vec3d *new_position, vec3d *intercep
 
 	// arneh - make vikhrs spiral
 	if (weapon_database[raw->mob.sub_type].spiral_flightpath && raw->weapon_lifetime > 0.0
-		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2)
+		&& (raw->weapon_lifetime - weapon_database[raw->mob.sub_type].burn_time) < -0.2f)
 	{
 		matrix3x3 spiral_matrix, tmp;
 
-		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
-		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4;
+		float heading = rad(cos(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4f;
+		float pitch = -rad(sin(raw->weapon_lifetime * 8.0)) * raw->weapon_lifetime * 0.4f;
 
 		get_3d_transformation_matrix (spiral_matrix, heading, pitch, 0.0);
 
@@ -680,7 +680,7 @@ static void move_unguided_weapon (weapon* raw, vec3d *new_position, float delta_
 		// arneh - simulate drag as decelleration
 		float
 			 // adjust velocity in steps to avoid difference because of different delta times (i.e. different behaviour drag depending on frame rate)
-			adjusted_velocity = (int)(raw->mob.velocity * 0.1) * 10;
+			adjusted_velocity = (int)(raw->mob.velocity * 0.1f) * 10;
 
 		acceleration = -0.001 * weapon_database[raw->mob.sub_type].drag_factor * adjusted_velocity * adjusted_velocity;
 
@@ -1402,9 +1402,9 @@ void weapon_movement (entity *en)
 	{
 		if (high_precision_collision)
 		{
-			dx = (new_position.x - old_position.x) * 0.1;
-			dy = (new_position.y - old_position.y) * 0.1;
-			dz = (new_position.z - old_position.z) * 0.1;
+			dx = (new_position.x - old_position.x) * 0.1f;
+			dy = (new_position.y - old_position.y) * 0.1f;
+			dz = (new_position.z - old_position.z) * 0.1f;
 
 			test_point = old_position;
 
@@ -1611,7 +1611,7 @@ void calculate_projectory(weapon* wpn, FILE* output)
 
 	// initialize all the other pitches
 	pitch_index = 1;
-	pitch = rad(-90.0 + PITCH_STEP);
+	pitch = rad(-90.0f + PITCH_STEP);
 	while (pitch_index < (TOTAL_PITCH_INDICES - 1))
 	{
 		float
@@ -1621,14 +1621,14 @@ void calculate_projectory(weapon* wpn, FILE* output)
 			time = 0.0,
 			pitch_ratio,
 			max_range,
-			delta_time = 0.02;
+			delta_time = 0.02f;
 
 		int
 			last_write_range = 0,
 			range_mark = 0;
 
 
-		ASSERT(get_floor_pitch_index(pitch + rad(0.1), &dummy) == pitch_index);
+		ASSERT(get_floor_pitch_index(pitch + rad(0.1f), &dummy) == pitch_index);
 
 		data[pitch_index] = (ballistics_data *) safe_malloc(sizeof(ballistics_data) * num_range_values);
 
@@ -1665,9 +1665,9 @@ void calculate_projectory(weapon* wpn, FILE* output)
 			// increase delta_time when projectile slows down a lot so as to ease amount of calculations a little
 			if (wpn->mob.velocity < 150.0)
 			{
-				delta_time = 0.04;
+				delta_time = 0.04f;
 				if (wpn->mob.velocity < 75.0)
-					delta_time = 0.1;
+					delta_time = 0.1f;
 
 				if (wpn->mob.velocity < 20.0)
 					break;
@@ -1829,14 +1829,14 @@ int get_ballistic_pitch_deflection(entity_sub_types wpn_type, float range, float
 
 	ASSERT(range >= 0.0);
 
-	if (range <= 0.1)
+	if (range <= 0.1f)
 	{
 		*aiming_pitch = straight_pitch;
 		*time_of_flight = 0.0;
 		return TRUE;
 	}
 
-	range = bound(range, 0.01, weapon_database[wpn_type].max_range);
+	range = bound(range, 0.01f, weapon_database[wpn_type].max_range);
 	range_index = (int)(range / RANGE_STEP);
 	range_error = range - (range_index * RANGE_STEP);
 	range_delta = 1.0 - (range_error / RANGE_STEP);   // normalize to [0..1]

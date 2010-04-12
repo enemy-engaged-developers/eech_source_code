@@ -81,19 +81,19 @@
 		#define NUM_GUN_ROUNDS							(1904 / 4)
 		#define NUM_GRISON_MISSILES					(8 / 2)
 
-		#define GUN_TURRET_HEADING_RATE				(rad (90.0))
-		#define GUN_TURRET_MIN_HEADING_LIMIT		(rad (-180.0))
-		#define GUN_TURRET_MAX_HEADING_LIMIT		(rad (180.0))
-		#define GUN_BARREL_PITCH_RATE					(rad (45.0))
+		#define GUN_TURRET_HEADING_RATE				(rad (90.0f))
+		#define GUN_TURRET_MIN_HEADING_LIMIT		(rad (-180.0f))
+		#define GUN_TURRET_MAX_HEADING_LIMIT		(rad (180.0f))
+		#define GUN_BARREL_PITCH_RATE					(rad (45.0f))
 		#define GUN_BARREL_MIN_PITCH_LIMIT			(rad (0.0))
-		#define GUN_BARREL_MAX_PITCH_LIMIT			(rad (60.0))
+		#define GUN_BARREL_MAX_PITCH_LIMIT			(rad (60.0f))
 
 		#define GRISON_LAUNCHER_HEADING_RATE		(GUN_TURRET_HEADING_RATE)
 		#define GRISON_LAUNCHER_MIN_HEADING_LIMIT	(GUN_TURRET_MIN_HEADING_LIMIT)
 		#define GRISON_LAUNCHER_MAX_HEADING_LIMIT	(GUN_TURRET_MAX_HEADING_LIMIT)
-		#define GRISON_LAUNCHER_PITCH_RATE			(rad (45.0))
+		#define GRISON_LAUNCHER_PITCH_RATE			(rad (45.0f))
 		#define GRISON_LAUNCHER_MIN_PITCH_LIMIT	(rad (0.0))
-		#define GRISON_LAUNCHER_MAX_PITCH_LIMIT	(rad (60.0))
+		#define GRISON_LAUNCHER_MAX_PITCH_LIMIT	(rad (60.0f))
 
 		////////////////////////////////////////
 		//
@@ -118,7 +118,7 @@
 				GUN_BARREL_MIN_PITCH_LIMIT,								// min_pitch_limit
 				GUN_BARREL_MAX_PITCH_LIMIT,								// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +
@@ -148,7 +148,7 @@
 				GUN_BARREL_MIN_PITCH_LIMIT,								// min_pitch_limit
 				GUN_BARREL_MAX_PITCH_LIMIT,								// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +
@@ -178,7 +178,7 @@
 				GUN_BARREL_MIN_PITCH_LIMIT,								// min_pitch_limit
 				GUN_BARREL_MAX_PITCH_LIMIT,								// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +
@@ -208,7 +208,7 @@
 				GUN_BARREL_MIN_PITCH_LIMIT,								// min_pitch_limit
 				GUN_BARREL_MAX_PITCH_LIMIT,								// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +
@@ -238,7 +238,7 @@
 				GRISON_LAUNCHER_MIN_PITCH_LIMIT,							// min_pitch_limit
 				GRISON_LAUNCHER_MAX_PITCH_LIMIT,							// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +
@@ -265,7 +265,7 @@
 				GRISON_LAUNCHER_MIN_PITCH_LIMIT,							// min_pitch_limit
 				GRISON_LAUNCHER_MAX_PITCH_LIMIT,		 					// max_pitch_limit
 				rad (0.0),														// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),					// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),					// rotate_inhibit_velocity
 				SHARE_WEAPON_PACKAGE1 +										// heading_share_mask
 				SHARE_WEAPON_PACKAGE2 +
 				SHARE_WEAPON_PACKAGE3 +

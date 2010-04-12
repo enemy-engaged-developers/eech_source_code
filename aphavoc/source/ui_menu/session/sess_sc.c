@@ -167,9 +167,9 @@ void initialise_session_screen (void)
 			);
 
 	x1 = 0.02;
-	y1 = 0.05;
+	y1 = 0.05f;
 	x2 = 0.96;
-	y2 = 0.9;
+	y2 = 0.9f;
 
 	session_briefing_area = create_ui_object
 										(
@@ -220,7 +220,7 @@ void initialise_session_screen (void)
 						);
 
 	x1 = 0.02;
-	y1 = 0.1;
+	y1 = 0.1f;
 	x2 = 0.96;
 	y2 = 0.86;
 	
@@ -260,12 +260,12 @@ void initialise_session_screen (void)
 							UI_ATTR_END
 						);
 
-	set_ui_list_spacing_proportional_to_font (session_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (session_list, -0.2f);
 
 	///////////////////////////////////////////////
 	// Rename Button
 
-	x1 = 0.05;
+	x1 = 0.05f;
 	y1 = 0.029;
 	x2 = 0.45;
 	y2 = 0.038;

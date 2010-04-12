@@ -1591,7 +1591,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (joylook_x_area),
-		UI_ATTR_VIRTUAL_POSITION (0.8, 0),	// FIXME - no absolute coding !
+		UI_ATTR_VIRTUAL_POSITION (0.8f, 0),	// FIXME - no absolute coding !
 		UI_ATTR_VIRTUAL_SIZE (OPTION_BOX_SMALL_WIDTH, OPTION_BOX_HEIGHT),
 		UI_ATTR_COLOUR_START ( 255, 255, 255, 0 ),
 		UI_ATTR_COLOUR_END ( 255, 255, 255, 255 ),
@@ -2254,7 +2254,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (joylook_sensitivity_area),
 		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 		UI_ATTR_TEXT ("-"),
 		UI_ATTR_FUNCTION (notify_joylook_sensitivity_down_button),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
@@ -2271,8 +2271,8 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (joylook_sensitivity_area),
-		UI_ATTR_VIRTUAL_POSITION (0.67, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_VIRTUAL_POSITION (0.67f, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 		UI_ATTR_TEXT ("+"),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
 	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
@@ -2289,7 +2289,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (joylook_sensitivity_area),
-		UI_ATTR_VIRTUAL_POSITION (0.33, 0.0),
+		UI_ATTR_VIRTUAL_POSITION (0.33f, 0.0),
 		UI_ATTR_VIRTUAL_SIZE (0.34, 1.0),
 		UI_ATTR_TEXT (""),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
@@ -2332,7 +2332,7 @@ void define_options_screen_controller_page_objects (void)
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (mouselook_sensitivity_area),
 		UI_ATTR_VIRTUAL_POSITION (0.0, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 		UI_ATTR_TEXT ("-"),
 		UI_ATTR_FUNCTION (notify_mouselook_sensitivity_down_button),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
@@ -2349,8 +2349,8 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (mouselook_sensitivity_area),
-		UI_ATTR_VIRTUAL_POSITION (0.67, 0.0),
-		UI_ATTR_VIRTUAL_SIZE (0.33, 1.0),
+		UI_ATTR_VIRTUAL_POSITION (0.67f, 0.0),
+		UI_ATTR_VIRTUAL_SIZE (0.33f, 1.0),
 		UI_ATTR_TEXT ("+"),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),
 	    UI_ATTR_FONT_COLOUR_START (ui_option_text_default_colour.r, ui_option_text_default_colour.g, ui_option_text_default_colour.b, 0),
@@ -2367,7 +2367,7 @@ void define_options_screen_controller_page_objects (void)
 	(
 		UI_TYPE_AREA,
 		UI_ATTR_PARENT (mouselook_sensitivity_area),
-		UI_ATTR_VIRTUAL_POSITION (0.33, 0.0),
+		UI_ATTR_VIRTUAL_POSITION (0.33f, 0.0),
 		UI_ATTR_VIRTUAL_SIZE (0.34, 1.0),
 		UI_ATTR_TEXT (""),
 		UI_ATTR_FONT_TYPE (/*UI_FONT_THICK_ARIAL_18*/UI_FONT_ARIAL_14),

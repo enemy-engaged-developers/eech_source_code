@@ -163,12 +163,12 @@ typedef struct MAP_SIDE_BAND_TYPE map_side_band_type;
 const map_side_band_type
 	map_side_band_data [] =
 	{
-		{0.0,		0.35,		1.0,	0.0},
-		{0.35,	0.45,		0.8,	0.2},
-		{0.45,	0.5,		0.6,	0.4},
-		{0.5,		0.55,		0.4,	0.6},
-		{0.55,	0.65,		0.2,	0.8},
-		{0.65,	1.0,		0.0,	1.0},
+		{0.0,		0.35f,		1.0,	0.0},
+		{0.35f,	0.45f,		0.8f,	0.2},
+		{0.45f,	0.5,		0.6f,	0.4},
+		{0.5,		0.55f,		0.4f,	0.6},
+		{0.55f,	0.65f,		0.2f,	0.8},
+		{0.65f,	1.0,		0.0,	1.0},
 		{-1,	-1,	-1,	-1}
 	};
 
@@ -461,7 +461,7 @@ void draw_2d_map (ui_object *obj, void *arg)
 	set_2d_terrain_map_dimensions (
               x - width/2, z + height/2,
               x + width/2, z - height/2,
-              x1, y1, (x1 + x_size) - 0.01, (y1 + y_size) - 0.01 );
+              x1, y1, (x1 + x_size) - 0.01f, (y1 + y_size) - 0.01 );
 
 	terrain_2d_map_contour_lines_drawn = TRUE;
 
@@ -4068,7 +4068,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[0].j = y1;
 				quad[0].u = u1;
 				quad[0].v = v1;
-				quad[0].q = 0.1;
+				quad[0].q = 0.1f;
 				quad[0].z = 100;
 				quad[0].next_vertex = &quad[1];
 
@@ -4076,7 +4076,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[1].j = y1;
 				quad[1].u = u2;
 				quad[1].v = v1;
-				quad[1].q = 0.1;
+				quad[1].q = 0.1f;
 				quad[1].z = 100;
 				quad[1].next_vertex = &quad[2];
 
@@ -4084,7 +4084,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[2].j = y2;
 				quad[2].u = u2;
 				quad[2].v = v2;
-				quad[2].q = 0.1;
+				quad[2].q = 0.1f;
 				quad[2].z = 100;
 				quad[2].next_vertex = &quad[3];
 
@@ -4092,7 +4092,7 @@ void draw_2d_terrain_texture_overlays (ui_object *obj, float x, float z, float w
 				quad[3].j = y2;
 				quad[3].u = u1;
 				quad[3].v = v2;
-				quad[3].q = 0.1;
+				quad[3].q = 0.1f;
 				quad[3].z = 100;
 				quad[3].next_vertex = NULL;
 
@@ -4207,7 +4207,7 @@ static void create_fog_of_war_texture_overlay (void)
 
 			tx = min (x, (MAP_OVERLAY_TEXTURE_SIZE - 1));
 
-			val = 255.0 * get_imap_value (IMAP_BASE_DISTANCE, side, sx, sz);
+			val = 255.0f * get_imap_value (IMAP_BASE_DISTANCE, side, sx, sz);
 
 			convert_float_to_int (val, &fog);
 
@@ -4773,7 +4773,7 @@ void map_draw_track_entity (ui_object *obj, entity *en)
 
 	ASSERT (en);
 
-	if (flash_timer < 0.6)
+	if (flash_timer < 0.6f)
 	{
 		get_2d_terrain_map_world_dimensions (&wxmin, &wzmin, &wxmax, &wzmax);
 
@@ -4865,7 +4865,7 @@ void shift_current_map_up_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.2;
+		d = map_dimensions->size * 0.2f;
 
 		map_dimensions->z += d;
 
@@ -4896,7 +4896,7 @@ void shift_current_map_down_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.2;
+		d = map_dimensions->size * 0.2f;
 
 		map_dimensions->z -= d;
 
@@ -4927,7 +4927,7 @@ void shift_current_map_left_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.2;
+		d = map_dimensions->size * 0.2f;
 
 		map_dimensions->x -= d;
 
@@ -4958,7 +4958,7 @@ void shift_current_map_right_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.2;
+		d = map_dimensions->size * 0.2f;
 
 		map_dimensions->x += d;
 
@@ -4987,7 +4987,7 @@ void fine_current_map_up_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.01;
+		d = map_dimensions->size * 0.01f;
 
 		map_dimensions->z += d;
 
@@ -5014,7 +5014,7 @@ void fine_current_map_down_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.01;
+		d = map_dimensions->size * 0.01f;
 
 		map_dimensions->z -= d;
 
@@ -5041,7 +5041,7 @@ void fine_current_map_left_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.01;
+		d = map_dimensions->size * 0.01f;
 
 		map_dimensions->x -= d;
 
@@ -5068,7 +5068,7 @@ void fine_current_map_right_event (event *ev)
 
 		ASSERT (map_dimensions);
 
-		d = map_dimensions->size * 0.01;
+		d = map_dimensions->size * 0.01f;
 
 		map_dimensions->x += d;
 

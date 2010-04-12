@@ -85,8 +85,8 @@ void initialise_collective(void)
 		non_linear_collective = TRUE;
 		
 		// some sanity checking of the values. have to be in range <0.0, 1.0], and zone2 must be above zone1
-		command_line_collective_zone_1_limit = bound(command_line_collective_zone_1_limit, 0.0, 0.99);
-		command_line_collective_zone_2_limit = bound(command_line_collective_zone_2_limit, command_line_collective_zone_1_limit + 0.01, 1.0);
+		command_line_collective_zone_1_limit = bound(command_line_collective_zone_1_limit, 0.0, 0.99f);
+		command_line_collective_zone_2_limit = bound(command_line_collective_zone_2_limit, command_line_collective_zone_1_limit + 0.01f, 1.0);
 		// GCsDriver 08-12-2007
 		command_line_collective_percentage_at_zone1 = bound(command_line_collective_percentage_at_zone1, 1.0, 99.0);
 		
@@ -178,14 +178,14 @@ void update_collective_pressure_inputs (void)
 		
 				current_flight_dynamics->input_data.collective_pressure.value = min (0.0f, current_flight_dynamics->input_data.collective_pressure.value);
 		
-				current_flight_dynamics->input_data.collective_pressure.value -= 5.0 * get_delta_time ();
+				current_flight_dynamics->input_data.collective_pressure.value -= 5.0f * get_delta_time ();
 			}
 			else if (current_flight_dynamics->input_data.collective_input_pressure & COLLECTIVE_PRESSURE_FORWARD)
 			{
 		
 				current_flight_dynamics->input_data.collective_pressure.value = max (0.0f, current_flight_dynamics->input_data.collective_pressure.value);
 		
-				current_flight_dynamics->input_data.collective_pressure.value += 5.0 * get_delta_time ();
+				current_flight_dynamics->input_data.collective_pressure.value += 5.0f * get_delta_time ();
 			}
 			else
 			{

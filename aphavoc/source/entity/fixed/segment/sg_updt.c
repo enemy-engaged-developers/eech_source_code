@@ -127,7 +127,7 @@ static void update_server (entity *en)
 	
 		pos = get_local_entity_vec3d_ptr (en, VEC3D_TYPE_POSITION);
 	
-		pos->y -= ( 10.0 * get_delta_time() );
+		pos->y -= ( 10.0f * get_delta_time() );
 	
 		memset (&terrain_info, 0, sizeof (terrain_3d_point_data));
 	

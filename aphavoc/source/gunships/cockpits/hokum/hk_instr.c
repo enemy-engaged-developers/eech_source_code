@@ -183,7 +183,7 @@ void draw_hokum_virtual_cockpit_instruments (void)
 
 		airspeed = bound (airspeed, -50.0, 450.0);
 
-		airspeed *= rad (-180.0) / 400.0;
+		airspeed *= rad (-180.0f) / 400.0;
 
 		search.result_sub_object->relative_roll = airspeed;
 	}
@@ -207,7 +207,7 @@ void draw_hokum_virtual_cockpit_instruments (void)
 
 		slip = bound (slip, -100.0, 100.0);
 
-		slip *= rad (45.0) / 100.0;
+		slip *= rad (45.0f) / 100.0;
 
 		search.result_sub_object->relative_roll = slip;
 	}
@@ -275,15 +275,15 @@ void draw_hokum_virtual_cockpit_instruments (void)
 
 		if (vertical_speed < -100.0)
 		{
-			vertical_speed = rad (90.0) + ((vertical_speed + 100.0) * rad (-90.0) / 200.0);
+			vertical_speed = rad (90.0f) + ((vertical_speed + 100.0) * rad (-90.0f) / 200.0);
 		}
 		else if (vertical_speed > 100.0)
 		{
-			vertical_speed = rad (-90.0) + ((vertical_speed - 100.0) * rad (-90.0) / 200.0);
+			vertical_speed = rad (-90.0f) + ((vertical_speed - 100.0) * rad (-90.0f) / 200.0);
 		}
 	  	else
 		{
-			vertical_speed *= rad (-90.0) / 100.0;
+			vertical_speed *= rad (-90.0f) / 100.0;
 		}
 
 		search.result_sub_object->relative_roll = vertical_speed;

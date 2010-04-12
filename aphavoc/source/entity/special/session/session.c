@@ -102,11 +102,11 @@ static float
 	wind_gust_modulation_amounts [WIND_GUSTING_SAMPLE_POINTS] =
 	{
 		 0.25,
-		-0.05,
+		-0.05f,
 		-0.25,
-		 0.05,
-		-0.01,
-		 0.15
+		 0.05f,
+		-0.01f,
+		 0.15f
 	};
 
 static float get_wind_gusting_modulation_value (float wind_gusting_value);

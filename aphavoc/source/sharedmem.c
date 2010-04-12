@@ -144,6 +144,27 @@ void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	if (gPtrSharedMemory == 0)
 		return;
 
+	#ifdef _MSC_VER
+	if (l1)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.upfront_display[0], MAX_UFD_STRINGLEN, l1 );
+	}
+
+	if (l2)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.upfront_display[1], MAX_UFD_STRINGLEN, l2);
+	}
+
+	if (l3)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.upfront_display[2], MAX_UFD_STRINGLEN, l3);
+	}
+
+	if (l4)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.upfront_display[3], MAX_UFD_STRINGLEN, l4);
+	}
+	#else
 	if (l1)
 	{
 		strlcpy(gPtrSharedMemory->cockpit_strings.upfront_display[0], l1, MAX_UFD_STRINGLEN);
@@ -163,6 +184,7 @@ void update_upfront_display_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	{
 		strlcpy(gPtrSharedMemory->cockpit_strings.upfront_display[3], l4, MAX_UFD_STRINGLEN);
 	}
+	#endif
 }
 
 void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4)
@@ -170,6 +192,27 @@ void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	if (gPtrSharedMemory == 0)
 		return;
 
+	#ifdef _MSC_VER
+	if (l1)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.ekran_display[0], MAX_EKRAN_STRINGLEN, l1);
+	}
+
+	if (l2)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.ekran_display[1], MAX_EKRAN_STRINGLEN, l2);
+	}
+
+	if (l3)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.ekran_display[2], MAX_EKRAN_STRINGLEN, l3);
+	}
+
+	if (l4)
+	{
+		strcpy_s(gPtrSharedMemory->cockpit_strings.ekran_display[3], MAX_EKRAN_STRINGLEN, l4);
+	}
+	#else
 	if (l1)
 	{
 		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[0], l1, MAX_EKRAN_STRINGLEN);
@@ -189,6 +232,7 @@ void update_ekran_shared_mem(char *l1, char *l2, char *l3, char *l4)
 	{
 		strlcpy(gPtrSharedMemory->cockpit_strings.ekran_display[3], l4, MAX_EKRAN_STRINGLEN);
 	}
+	#endif
 }
 
 void update_dynamics_shared_mem ()
@@ -256,7 +300,7 @@ void update_waypoint_shared_mem()
 		dx = waypoint_position.x - gunship_position->x;
 		dz = waypoint_position.z - gunship_position->z;
 
-		bearing = deg(atan2(dx, dz));
+		bearing = (float)deg(atan2(dx, dz));
 		if (bearing < 0.0)
 			bearing += 360.0;
 

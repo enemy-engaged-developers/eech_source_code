@@ -141,15 +141,15 @@ void draw_apache_virtual_cockpit_wiper (viewpoint *vp)
 	ASSERT (vp);
 
 #if 0
-	debug_log("x: %.3f,  y: %.3f,  z: %.3f", debug_var_x * 0.01, debug_var_y * 0.01, debug_var_z * 0.01);
+	debug_log("x: %.3f,  y: %.3f,  z: %.3f", debug_var_x * 0.01f, debug_var_y * 0.01f, debug_var_z * 0.01);
 
-	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.x = -0.415 + debug_var_x * 0.01;
-	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.y = -0.170 + debug_var_y * 0.01;
-	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.z =  1.865 + debug_var_z * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.x = -0.415 + debug_var_x * 0.01f;
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.y = -0.170 + debug_var_y * 0.01f;
+	virtual_cockpit_wiper_inst3d->sub_objects[0].relative_position.z =  1.865 + debug_var_z * 0.01f;
 
-	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.x =  0.365 + debug_var_x * 0.01;
-	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.y = -0.490 + debug_var_y * 0.01;
-	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.z =  2.190 + debug_var_z * 0.01;
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.x =  0.365 + debug_var_x * 0.01f;
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.y = -0.490 + debug_var_y * 0.01f;
+	virtual_cockpit_wiper_inst3d->sub_objects[1].relative_position.z =  2.190 + debug_var_z * 0.01f;
 #endif
 
 	//

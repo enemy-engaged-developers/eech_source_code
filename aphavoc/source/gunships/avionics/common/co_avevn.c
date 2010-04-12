@@ -764,7 +764,7 @@ static void inc_debug_var_x(event* ev)
 
 static void inc_debug_var_x_fine(event* ev)
 {
-	debug_var_x += 0.1;
+	debug_var_x += 0.1f;
 }
 static void dec_debug_var_x(event* ev)
 {
@@ -772,7 +772,7 @@ static void dec_debug_var_x(event* ev)
 }
 static void dec_debug_var_x_fine(event* ev)
 {
-	debug_var_x -= 0.1;
+	debug_var_x -= 0.1f;
 }
 
 static void inc_debug_var_y(event* ev)
@@ -782,7 +782,7 @@ static void inc_debug_var_y(event* ev)
 
 static void inc_debug_var_y_fine(event* ev)
 {
-	debug_var_y += 0.1;
+	debug_var_y += 0.1f;
 }
 static void dec_debug_var_y(event* ev)
 {
@@ -790,7 +790,7 @@ static void dec_debug_var_y(event* ev)
 }
 static void dec_debug_var_y_fine(event* ev)
 {
-	debug_var_y -= 0.1;
+	debug_var_y -= 0.1f;
 }
 
 static void inc_debug_var_z(event* ev)
@@ -800,7 +800,7 @@ static void inc_debug_var_z(event* ev)
 
 static void inc_debug_var_z_fine(event* ev)
 {
-	debug_var_z += 0.1;
+	debug_var_z += 0.1f;
 }
 static void dec_debug_var_z(event* ev)
 {
@@ -808,7 +808,7 @@ static void dec_debug_var_z(event* ev)
 }
 static void dec_debug_var_z_fine(event* ev)
 {
-	debug_var_z -= 0.1;
+	debug_var_z -= 0.1f;
 }
 #endif // DEBUG
 

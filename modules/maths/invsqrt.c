@@ -98,7 +98,7 @@ void initialise_inverse_square_root_table ( void )
 		
 		fi.i = ( ( EXP_BIAS-1 ) << EXP_POS ) | ( f << LOOKUP_POS );
 		
-		fo.f = 1.0 / sqrt ( fi.f );
+		fo.f = 1.0f / sqrt ( fi.f );
 		
 		*h++ = ( ( fo.i + ( 1 << ( SEED_POS - 2 ) ) ) >> SEED_POS ) & 0xFF;
 	}

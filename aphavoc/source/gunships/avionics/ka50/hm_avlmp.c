@@ -699,13 +699,13 @@ static void update_threat_warning_display (void)
 
 				theta = threat_bearing - source_heading;
 
-				if (theta > rad (180.0))
+				if (theta > rad (180.0f))
 				{
-					theta -= rad (360.0);
+					theta -= rad (360.0f);
 				}
-				else if (theta < rad (-180.0))
+				else if (theta < rad (-180.0f))
 				{
-					theta += rad (360.0);
+					theta += rad (360.0f);
 				}
 
 				//

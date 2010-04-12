@@ -527,7 +527,7 @@ void create_advance_and_retreat_tasks (void)
 								rating = 0.0;
 			
 								// close to enemy base
-								rating += (2.0 * get_imap_value (IMAP_BASE_DISTANCE, get_enemy_side (side), x, z));
+								rating += (2.0f * get_imap_value (IMAP_BASE_DISTANCE, get_enemy_side (side), x, z));
 		
 								if (rating > best_rating)
 								{
@@ -676,7 +676,7 @@ void create_bai_tasks (void)
 								rating += 3.0 * (base_distance_rating);
 	
 								// friendly territory
-								rating += 2.0 * get_local_sector_side_ratio (x, z, this_side);
+								rating += 2.0f * get_local_sector_side_ratio (x, z, this_side);
 	
 								max_rating = 7.0;
 	
@@ -916,7 +916,7 @@ void create_cas_tasks (void)
 								rating += 3.0 * (base_distance_rating);
 	
 								// friendly territory
-								rating += 2.0 * get_local_sector_side_ratio (x, z, this_side);
+								rating += 2.0f * get_local_sector_side_ratio (x, z, this_side);
 	
 								max_rating = 6.0;
 	
@@ -1114,13 +1114,13 @@ void create_keysite_strike_tasks (void)
 							rating += (1.0 * (1.0 - get_imap_value (IMAP_AIR_DEFENCE, side, x, z)));
 	
 							// close to friendly base
-							rating += (4.0 * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
+							rating += (4.0f * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
 
 							// low efficiency 
 							rating += (2.0 * (1.0 - get_local_entity_float_value (keysite, FLOAT_TYPE_EFFICIENCY)));
 
 							// friendly territory
-							rating += 2.0 * get_local_sector_side_ratio (x, z, this_side);
+							rating += 2.0f * get_local_sector_side_ratio (x, z, this_side);
 
 							max_rating = 9.0;
 
@@ -1369,10 +1369,10 @@ void create_oca_strike_tasks (void)
 							rating += (1.0 * (1.0 - get_imap_value (IMAP_AIR_DEFENCE, side, x, z)));
 	
 							// close to friendly base
-							rating += (4.0 * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
+							rating += (4.0f * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
 
 							// friendly territory
-							rating += (2.0 * get_local_sector_side_ratio (x, z, this_side));
+							rating += (2.0f * get_local_sector_side_ratio (x, z, this_side));
 
 							max_rating = 7.0;
 
@@ -1555,10 +1555,10 @@ void create_oca_sweep_tasks (void)
 							rating += (1.0 * (1.0 - get_imap_value (IMAP_AIR_DEFENCE, side, x, z)));
 	
 							// close to friendly base
-							rating += (4.0 * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
+							rating += (4.0f * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
 
 							// friendly territory
-							rating += (2.0 * get_local_sector_side_ratio (x, z, this_side));
+							rating += (2.0f * get_local_sector_side_ratio (x, z, this_side));
 
 							max_rating = 7.0;
 
@@ -1749,13 +1749,13 @@ void create_troop_insertion_tasks (void)
 								rating += (1.0 * (1.0 - get_imap_value (IMAP_AIR_DEFENCE, side, x, z)));
 		
 								// close to friendly base
-								rating += (3.0 * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
+								rating += (3.0f * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
 		
 								// low efficiency 
 								rating += (3.0 * (1.0 - get_local_entity_float_value (keysite, FLOAT_TYPE_EFFICIENCY)));
 
 								// friendly territory
-								rating += 2.0 * get_local_sector_side_ratio (x, z, this_side);
+								rating += 2.0f * get_local_sector_side_ratio (x, z, this_side);
 
 								max_rating = 9.0;
 	
@@ -1970,10 +1970,10 @@ void create_sead_tasks (void)
 //							rating += (1.0 * (1.0 - get_imap_value (IMAP_AIR_DEFENCE, side, x, z)));
 
 							// close to friendly base
-							rating += (4.0 * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
+							rating += (4.0f * get_imap_value (IMAP_BASE_DISTANCE, this_side, x, z));
 
 							// friendly territory
-							rating += (3.0 * get_local_sector_side_ratio (x, z, this_side));
+							rating += (3.0f * get_local_sector_side_ratio (x, z, this_side));
 
 //							max_rating = 10.0;
 							max_rating = 7.0;

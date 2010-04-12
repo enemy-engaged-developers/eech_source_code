@@ -454,7 +454,7 @@ void ship_vehicle_movement (entity *en)
 
 #define SHIP_SINK_RATE	0.06
 
-#define SHIP_SINK_DELTA_PITCH_RATE	rad(0.1)
+#define SHIP_SINK_DELTA_PITCH_RATE	rad(0.1f)
 #define SHIP_SINK_DELTA_ROLL_RATE	rad(0.5)
 
 void ship_vehicle_death_movement (entity *en)

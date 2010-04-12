@@ -993,27 +993,27 @@ void set_dynamics_entity_values (entity *en)
 
 	damage_percentage = (float) get_local_entity_int_value (en, INT_TYPE_DAMAGE_LEVEL) / get_local_entity_int_value (en, INT_TYPE_INITIAL_DAMAGE_LEVEL);
 
-	if (damage_percentage > 0.8)
+	if (damage_percentage > 0.8f)
 	{
 
 		dynamics_damage_model (DYNAMICS_DAMAGE_NONE, FALSE);
 	}
-	else if (damage_percentage > 0.7)
+	else if (damage_percentage > 0.7f)
 	{
 
 		dynamics_damage_model (DYNAMICS_DAMAGE_LEFT_ENGINE, FALSE);
 	}
-	else if (damage_percentage > 0.4)
+	else if (damage_percentage > 0.4f)
 	{
 
 		dynamics_damage_model (DYNAMICS_DAMAGE_RIGHT_ENGINE, FALSE);
 	}
-	else if (damage_percentage > 0.3)
+	else if (damage_percentage > 0.3f)
 	{
 
 		dynamics_damage_model (DYNAMICS_DAMAGE_LOW_HYDRAULICS, FALSE);
 	}
-	else if (damage_percentage > 0.2)
+	else if (damage_percentage > 0.2f)
 	{
 
 		dynamics_damage_model (DYNAMICS_DAMAGE_STABILISER, FALSE);
@@ -1615,7 +1615,7 @@ void move_cog (void *ev)
 		case DIK_J:
 		{
 
-			current_flight_dynamics->centre_of_gravity.x += 0.001;
+			current_flight_dynamics->centre_of_gravity.x += 0.001f;
 
 			break;
 		}
@@ -1623,7 +1623,7 @@ void move_cog (void *ev)
 		case	DIK_L:
 		{
 
-			current_flight_dynamics->centre_of_gravity.x -= 0.001;
+			current_flight_dynamics->centre_of_gravity.x -= 0.001f;
 
 			break;
 		}
@@ -1631,7 +1631,7 @@ void move_cog (void *ev)
 		case	DIK_K:
 		{
 
-			current_flight_dynamics->centre_of_gravity.z -= 0.001;
+			current_flight_dynamics->centre_of_gravity.z -= 0.001f;
 
 			break;
 		}
@@ -1639,7 +1639,7 @@ void move_cog (void *ev)
 		case	DIK_I:
 		{
 
-			current_flight_dynamics->centre_of_gravity.z += 0.001;
+			current_flight_dynamics->centre_of_gravity.z += 0.001f;
 
 			break;
 		}
@@ -1647,7 +1647,7 @@ void move_cog (void *ev)
 		case	DIK_U:
 		{
 
-			current_flight_dynamics->centre_of_gravity.y += 0.001;
+			current_flight_dynamics->centre_of_gravity.y += 0.001f;
 
 			break;
 		}
@@ -1655,7 +1655,7 @@ void move_cog (void *ev)
 		case	DIK_O:
 		{
 
-			current_flight_dynamics->centre_of_gravity.y -= 0.001;
+			current_flight_dynamics->centre_of_gravity.y -= 0.001f;
 
 			break;
 		}
@@ -2086,7 +2086,7 @@ void flight_dynamics_toggle_auto_hover (event *ev)
 	else
 	{
 
-		if (current_flight_dynamics->velocity_z.value < knots_to_metres_per_second (20.0))
+		if (current_flight_dynamics->velocity_z.value < knots_to_metres_per_second (20.0f))
 		{
 
 			if (ev->modifier == MODIFIER_LEFT_SHIFT)
@@ -3231,7 +3231,7 @@ int valid_dynamics_autos_on (dynamics_hover_hold_types type)
 				else if (get_global_simple_avionics ())
 				{
 				}
-				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0))
+				else if (current_flight_dynamics->velocity_z.value > knots_to_metres_per_second (20.0f))
 				{
 
 					if (!speech)
@@ -3633,14 +3633,14 @@ void update_engine_temperature_dynamics (int engine_number)
 	{
 		engine_temp->min = 35.0;
 		if (current_flight_dynamics->dynamics_damage & engine_fire)
-			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -30.0, 200.0);
+			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03f, -30.0, 200.0);
 		else
-			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03, -10.0, 200.0);
+			engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.03f, -10.0, 200.0);
 	}
 	else if (n1_rpm->max == 20.0)  // no ignition, under APU power
 	{
 		engine_temp->min = 45.0;
-		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.20, -20.0, 200.0);
+		engine_temp->delta = bound((engine_temp->min - engine_temp->value) * 0.20f, -20.0, 200.0);
 	}
 	else  // ignition
 	{
@@ -3770,7 +3770,7 @@ void update_engine_rpm_dynamics (int engine_number)
 		float n1_power_ratio = (n1_rpm->value - current_flight_dynamics->engine_idle_rpm + 5.0) / (100.0 - current_flight_dynamics->engine_idle_rpm + 5.0);  // might be negative
 		float n1_surplus;
 
-		torque_ratio = (0.8 * engine_torque->value / engine_torque->max) + 0.2;
+		torque_ratio = (0.8 * engine_torque->value / engine_torque->max) + 0.2f;
 		surplus_energy = n1_power_ratio - torque_ratio;
 
 		n1_surplus = ((max(n1_rpm->value - 25.0, 0.0) * 1.33) - n2_rpm->value);
@@ -3827,7 +3827,7 @@ void update_engine_rpm_dynamics (int engine_number)
 			n1_rpm->delta = bound(delta, -3.0, 0.0);
 		else
 		{
-			float apu_contribution = 2.0 * current_flight_dynamics->apu_rpm.value * 0.01;
+			float apu_contribution = 2.0 * current_flight_dynamics->apu_rpm.value * 0.01f;
 
 			if (n1_rpm->max < current_flight_dynamics->engine_idle_rpm)  // only APU
 				n1_rpm->delta = min(apu_contribution, delta);

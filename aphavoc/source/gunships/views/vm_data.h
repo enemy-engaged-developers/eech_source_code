@@ -217,13 +217,13 @@ enum WIDEVIEW_NRS
 typedef enum WIDEVIEW_NRS wideview_nrs;
 
 #define BASE_X_APACHE  0.0
-#define BASE_Y_APACHE  0.05
-#define BASE_Z_APACHE  0.20
+#define BASE_Y_APACHE  0.05f
+#define BASE_Z_APACHE  0.20f
 #define BASE_P_APACHE  -7.0
 
 #define BASE_X_HAVOC  0.0 
-#define BASE_Y_HAVOC  0.05
-#define BASE_Z_HAVOC  0.20
+#define BASE_Y_HAVOC  0.05f
+#define BASE_Z_HAVOC  0.20f
 #define BASE_P_HAVOC  -5.0
 
 extern cockpit_position current_custom_cockpit_viewpoint;				// Retro 6Feb2005
@@ -248,6 +248,15 @@ enum TSD_RENDER_MODES
 	TSD_RENDER_SHADED_RELIEF_MODE
 };
 
+/*
+// Executioner Debug Info 09042010
+float
+	unit_vector_x;
+float
+	unit_vector_y;
+float
+	unit_vector_z;
+*/
 typedef enum TSD_RENDER_MODES tsd_render_modes;
 extern tsd_render_modes tsd_render_mode;
 

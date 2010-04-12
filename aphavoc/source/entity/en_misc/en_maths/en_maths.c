@@ -107,7 +107,7 @@ float get_local_entity_target_bearing (entity *source, entity *target, float *ra
 
 	if (bearing < 0.0)
 	{
-		bearing += rad (360.0);
+		bearing += rad (360.0f);
 	}
 
 	return (bearing);
@@ -147,13 +147,13 @@ float get_local_entity_target_relative_bearing (entity *source, entity *target)
 
 	relative_bearing = bearing - heading;
 
-	if (relative_bearing > rad (180.0))
+	if (relative_bearing > rad (180.0f))
 	{
-		relative_bearing -= rad (360.0);
+		relative_bearing -= rad (360.0f);
 	}
-	else if (relative_bearing < rad (-180.0))
+	else if (relative_bearing < rad (-180.0f))
 	{
-		relative_bearing += rad (360.0);
+		relative_bearing += rad (360.0f);
 	}
 
 	return (relative_bearing);

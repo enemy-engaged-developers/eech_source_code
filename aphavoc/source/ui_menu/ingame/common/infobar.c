@@ -803,7 +803,7 @@ void define_info_bar_objects (ui_object *parent)
 
 	#ifdef DEBUG
 
-	x1 = 0.9;
+	x1 = 0.9f;
 	x2 = 1.0;
 
 	create_ui_object
@@ -844,8 +844,8 @@ void define_info_bar_objects (ui_object *parent)
 			UI_ATTR_END
 		);
 
-	x1 = 0.01;
-	x2 = 0.9;
+	x1 = 0.01f;
+	x2 = 0.9f;
 
 	y1 = 0.0;
 	y2 = 0.5;
@@ -869,8 +869,8 @@ void define_info_bar_objects (ui_object *parent)
 
 	/////////////////////////////////////////////////////////////////
 
-	x1 = 0.01;
-	x2 = 0.9;
+	x1 = 0.01f;
+	x2 = 0.9f;
 
 	y1 = 0.5;
 	y2 = 1.0;

@@ -359,7 +359,7 @@ void vehicle_target_scan (entity *en)
 						ENTITY_SUB_TYPE_EFFECT_SOUND_RADIO_MESSAGE,
 						SOUND_LOCALITY_RADIO,
 						0.0,
-						0.8,
+						0.8f,
 						40.0,
 						SPEECH_ORIGINATOR_GROUND_CONTROLLER,
 						SPEECH_CATEGORY_SIGHTED_TARGETS,
@@ -636,15 +636,15 @@ entity *get_vehicle_surface_to_air_scan_group_targets (entity *source, int *targ
 							{
 								if (!get_local_entity_int_value (target, INT_TYPE_RADAR_ON))
 								{
-									adj_range *= 1.1;
+									adj_range *= 1.1f;
 								}
 								if (!get_local_entity_int_value (target, INT_TYPE_RADAR_JAMMER_ON))
 								{
-									adj_range *= 1.1;
+									adj_range *= 1.1f;
 								}
 								if (!get_local_entity_int_value (target, INT_TYPE_INFRA_RED_JAMMER_ON))
 								{
-									adj_range *= 1.1;
+									adj_range *= 1.1f;
 								}
 							}
 

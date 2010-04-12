@@ -346,7 +346,7 @@ static void get_clock_hand_values (float *hours, float *minutes, float *seconds)
 			minute_value = 30.0,
 			second_value = 0.0;
 
-		hour_value += 0.1;
+		hour_value += 0.1f;
 
 		if (hour_value >= 12.0)
 		{
@@ -905,7 +905,7 @@ float get_ah64a_virtual_cockpit_adi_slip_indicator_needle_value (void)
 
 	slip_needle_value = get_adi_slip_indicator_needle_value ();
 
-	slip_needle_value *= rad (30.0) / 30.0;
+	slip_needle_value *= rad (30.0f) / 30.0f;
 
 	return (slip_needle_value);
 }
@@ -931,13 +931,13 @@ float get_ah64a_virtual_cockpit_airspeed_indicator_needle_value (void)
 	{
 		fraction = airspeed_needle_value * (1.0 / 50.0);
 
-		roll = fraction * rad (60.0);
+		roll = fraction * rad (60.0f);
 	}
 	else if (airspeed_needle_value <= 100.0)
 	{
 		fraction = (airspeed_needle_value - 50.0) * (1.0 / 50.0);
 
-		roll = (fraction * (rad (150.0) - rad (60.0))) + rad (60.0);
+		roll = (fraction * (rad (150.0) - rad (60.0f))) + rad (60.0f);
 	}
 	else if (airspeed_needle_value <= 150.0)
 	{
@@ -972,7 +972,7 @@ float get_ah64a_virtual_cockpit_barometric_altimeter_needle_value (void)
 
 	altimeter_needle_value = get_barometric_altimeter_needle_value ();
 
-	altimeter_needle_value *= -PI2 / 1000.0;
+	altimeter_needle_value *= -PI2 / 1000.0f;
 
 	return (altimeter_needle_value);
 }

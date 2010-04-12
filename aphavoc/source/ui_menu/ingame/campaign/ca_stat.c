@@ -889,7 +889,7 @@ void define_campaign_screen_stats_page_objects (void)
 	// Balance Of Power
 
 	x1 = 0.5;
-	y1 = 0.15;
+	y1 = 0.15f;
 	x2 = 0.99;
 	y2 = 0.69;
 
@@ -1057,7 +1057,7 @@ void define_campaign_screen_stats_page_objects (void)
 			UI_ATTR_END
 		);
 
-	set_ui_list_spacing_proportional_to_font (page_objective_name_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (page_objective_name_list, -0.2f);
 
 	x1 = 0.5;
 	y1 = 0.0;
@@ -1076,7 +1076,7 @@ void define_campaign_screen_stats_page_objects (void)
 			UI_ATTR_END
 		);
 
-	set_ui_list_spacing_proportional_to_font (page_objective_status_list, -0.2);
+	set_ui_list_spacing_proportional_to_font (page_objective_status_list, -0.2f);
 
 	x1 = 0.062;
 	y1 = 0.710;
@@ -1099,7 +1099,7 @@ void define_campaign_screen_stats_page_objects (void)
 	set_common_slider_graphics (page_objective_description_area);
 
 	x1 = 0.0;
-	x2 = 0.9;
+	x2 = 0.9f;
 	y1 = 0.0;
 	y2 = 1.0;
 

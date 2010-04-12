@@ -712,7 +712,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	10.0;
-	smoke_list_info->frequency 				=	0.05;
+	smoke_list_info->frequency 				=	0.05f;
 	smoke_list_info->smoke_lifetime 			=	4.0;
 
 	//
@@ -732,8 +732,8 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	10.0;
-	smoke_list_info->frequency 				=	0.05;
-	smoke_list_info->smoke_lifetime 			=	0.6;
+	smoke_list_info->frequency 				=	0.05f;
+	smoke_list_info->smoke_lifetime 			=	0.6f;
 
 	//
 	// component 2
@@ -752,7 +752,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->blue 						=	255;
 	smoke_list_info->alpha 						=	255;
 
-	smoke_list_info->animation_frequency 	=	0.1;
+	smoke_list_info->animation_frequency 	=	0.1f;
 
 	smoke_list_info->lifetime 					=	1.5;
 
@@ -813,7 +813,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	8.0;
-	smoke_list_info->frequency 				=	0.05;
+	smoke_list_info->frequency 				=	0.05f;
 	smoke_list_info->smoke_lifetime 			=	3.0;
 
 	//
@@ -833,8 +833,8 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	8.0;
-	smoke_list_info->frequency 				=	0.05;
-	smoke_list_info->smoke_lifetime 			=	1.2;
+	smoke_list_info->frequency 				=	0.05f;
+	smoke_list_info->smoke_lifetime 			=	1.2f;
 
 	//
 	// component 2
@@ -853,7 +853,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->blue 						=	255;
 	smoke_list_info->alpha 						=	255;
 
-	smoke_list_info->animation_frequency 	=	0.1;
+	smoke_list_info->animation_frequency 	=	0.1f;
 
 	smoke_list_info->lifetime 					=	5.0;
 
@@ -942,7 +942,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	60.0;
-	smoke_list_info->frequency 				=	0.2;
+	smoke_list_info->frequency 				=	0.2f;
 	smoke_list_info->smoke_lifetime 			=	4.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -970,7 +970,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.1;
+	smoke_list_info->frequency 				=	0.1f;
 	smoke_list_info->smoke_lifetime 			=	0.75;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1054,7 +1054,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->frequency 				=	0.06f;
 	smoke_list_info->smoke_lifetime 			=	2.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1082,7 +1082,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->frequency 				=	0.06f;
 	smoke_list_info->smoke_lifetime 			=	2.0;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1110,7 +1110,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.06;
+	smoke_list_info->frequency 				=	0.06f;
 	smoke_list_info->smoke_lifetime 			=	2.5;
 
 	//
@@ -1130,7 +1130,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	TRUE;
 
 	smoke_list_info->generator_lifetime 	=	INFINITE_SMOKE_OFF;
-	smoke_list_info->frequency 				=	0.05;
+	smoke_list_info->frequency 				=	0.05f;
 	smoke_list_info->smoke_lifetime 			=	0.55;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1158,7 +1158,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.02;
+	smoke_list_info->frequency 				=	0.02f;
 	smoke_list_info->smoke_lifetime 			=	2.5;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1186,7 +1186,7 @@ void initialise_meta_smoke_list_database()
 	smoke_list_info->infinite 					=	FALSE;
 
 	smoke_list_info->generator_lifetime 	=	1.0;
-	smoke_list_info->frequency 				=	0.04;
+	smoke_list_info->frequency 				=	0.04f;
 	smoke_list_info->smoke_lifetime 			=	4.5;
 }
 

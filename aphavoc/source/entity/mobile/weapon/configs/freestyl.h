@@ -109,7 +109,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -131,7 +131,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -153,7 +153,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_SMALL_CALIBRE_STRAIGHT,					// muzzle_flash_type
@@ -175,7 +175,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -197,7 +197,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -219,7 +219,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type
@@ -241,7 +241,7 @@
 				rad (0.0),														// min_pitch_limit
 				rad (0.0),														// max_pitch_limit
 				rad (0.0),												 		// muzzle_rotate_rate
-				knots_to_metres_per_second (10000.0),			  		// rotate_inhibit_velocity
+				knots_to_metres_per_second (10000.0f),			  		// rotate_inhibit_velocity
 				0,		 															// heading_share_mask
 				0,		 		 													// pitch_share_mask
 				MUZZLE_FLASH_INVALID,							 			// muzzle_flash_type

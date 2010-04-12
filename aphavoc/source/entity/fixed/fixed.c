@@ -123,14 +123,14 @@ void play_building_destroyed_speech (entity *building, entity *aggressor)
 
 		if (get_local_entity_int_value (aggressor, INT_TYPE_PLAYER) != ENTITY_PLAYER_AI)
 		{
-			play_client_server_cpg_message (aggressor, 0.4, 4.0, SPEECH_CATEGORY_DESTROYED_TARGETS, 18.0, speech_index);
+			play_client_server_cpg_message (aggressor, 0.4f, 4.0, SPEECH_CATEGORY_DESTROYED_TARGETS, 18.0, speech_index);
 		}
 		else
 		{
 			play_client_server_wingman_message
 			(
 				aggressor,
-				0.4,
+				0.4f,
 				4.0,
 				SPEECH_CATEGORY_DESTROYED_TARGETS, 18.0,
 				SPEECH_INTRODUCTION_SOMETIMES,

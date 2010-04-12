@@ -354,18 +354,18 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 	{
 		static float
 			direction_finder_value = rad (0.0),
-			flight_path_value = rad (90.0),
-			drift_value = rad (-20.0);
+			flight_path_value = rad (90.0f),
+			drift_value = rad (-20.0f);
 
 		//
 		// automatic direction finder
 		//
 
-		direction_finder_value += rad (5.0);
+		direction_finder_value += rad (5.0f);
 
-		if (direction_finder_value > rad (360.0))
+		if (direction_finder_value > rad (360.0f))
 		{
-			direction_finder_value -= rad (360.0);
+			direction_finder_value -= rad (360.0f);
 		}
 
 		direction_finder_needle_value = direction_finder_value;
@@ -374,11 +374,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// flight path
 		//
 
-		flight_path_value += rad (3.0);
+		flight_path_value += rad (3.0f);
 
-		if (flight_path_value > rad (360.0))
+		if (flight_path_value > rad (360.0f))
 		{
-			flight_path_value -= rad (360.0);
+			flight_path_value -= rad (360.0f);
 		}
 
 		flight_path_needle_value = flight_path_value;
@@ -387,11 +387,11 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		// drift
 		//
 
-		drift_value += rad (1.0);
+		drift_value += rad (1.0f);
 
-		if (drift_value > rad (35.0))
+		if (drift_value > rad (35.0f))
 		{
-			drift_value = rad (-35.0);
+			drift_value = rad (-35.0f);
 		}
 
 		drift_needle_value = drift_value;
@@ -458,7 +458,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 				length1 = (v1.x * v1.x) + (v1.y * v1.y);
 
-				if (length1 > 0.001)
+				if (length1 > 0.001f)
 				{
 					length1 = sqrt (length1);
 
@@ -472,7 +472,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 
 					length2 = (v2.x * v2.x) + (v2.y * v2.y);
 
-					if (length2 > 0.001)
+					if (length2 > 0.001f)
 					{
 						length2 = sqrt (length2);
 
@@ -495,7 +495,7 @@ static void get_hsi_needle_values (float *direction_finder, float *flight_path, 
 		}
 	}
 
-	drift_needle_value = bound (drift_needle_value, rad (-30.0), rad (30.0));
+	drift_needle_value = bound (drift_needle_value, rad (-30.0f), rad (30.0f));
 
 	*direction_finder = direction_finder_needle_value;
 
@@ -892,7 +892,7 @@ void draw_havoc_g_meter (cockpit_panels panel)
 		static float
 			value = -2.5;
 
-		value += 0.05;
+		value += 0.05f;
 
 		if (value > 4.5)
 		{
@@ -1505,7 +1505,7 @@ void draw_havoc_clock (cockpit_panels panel)
 			minute_value = 30.0,
 			second_value = 0.0;
 
-		hour_value += 0.1;
+		hour_value += 0.1f;
 
 		if (hour_value >= 12.0)
 		{
@@ -1866,7 +1866,7 @@ void draw_havoc_fixed_cockpit_hsi_waypoint_distance_digits (cockpit_panels panel
 
 		get_waypoint_display_position (en, wp, &wp_position);
 
-		distance_digital_value = get_2d_range (en_position, &wp_position) * 0.001;
+		distance_digital_value = get_2d_range (en_position, &wp_position) * 0.001f;
 	}
 
 	switch (panel)
@@ -2335,7 +2335,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Vertical speed indicator */
 			value = metres_per_minute (current_flight_dynamics->world_velocity_y.value);
 			value = bound (value, -300.0, 300.0);
-			value *= rad (180.0) / 300.0;
+			value *= rad (180.0f) / 300.0f;
 		    centre_x = 251 * width / 512;
 	    	centre_y = 315 * height / 512;
 			dot_x = centre_x - cos (value) * 40 * width / 512;
@@ -2344,7 +2344,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 	
 			/* Barometric altimeter long arrow */
 			value = fmod (current_flight_dynamics->barometric_altitude.value, 1000.0f);
-			value *= rad (360.0) / 1000.0;
+			value *= rad (360.0f) / 1000.0f;
 		    centre_x = 126 * width / 512;
 	    	centre_y = 318 * height / 512;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
@@ -2353,7 +2353,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 	
 			/* Barometric altimeter short arrow */
 			value = fmod (current_flight_dynamics->barometric_altitude.value, 10000.0f);
-			value *= rad (360.0) / 10000.0;
+			value *= rad (360.0f) / 10000.0f;
 		    centre_x = 126 * width / 512;
 	    	centre_y = 318 * height / 512;
 			dot_x = centre_x + sin (value) * 20 * width / 512;
@@ -2363,7 +2363,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Airspeed */
 			value = kilometres_per_hour (current_flight_dynamics->indicated_airspeed.value);
 			value = bound (value, -50.0, 450.0);
-			value *= rad (180.0) / 400.0;
+			value *= rad (180.0f) / 400.0f;
 		    centre_x = 282 * width / 512;
 	    	centre_y = 146 * height / 512;
 			dot_x = centre_x - cos (value) * 40 * width / 512;
@@ -2373,7 +2373,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Slip */
 			value = kilometres_per_hour (current_flight_dynamics->indicated_slip.value);
 			value = bound (value, -100.0, 100.0);
-			value *= rad (45.0) / 100.0;
+			value *= rad (45.0f) / 100.0f;
 		    centre_x = 282 * width / 512;
 	    	centre_y = 146 * height / 512;
 			dot_x = centre_x + sin (value) * 20 * width / 512;
@@ -2384,7 +2384,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->left_engine_rpm.value;
 			value = bound (value, 0.0, 110.0);
 			value += 20.0;
-			value *= rad (360.0) / 120.0;
+			value *= rad (360.0f) / 120.0;
 		    centre_x = 157 * width / 512;
 	    	centre_y = 146 * height / 512;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
@@ -2395,7 +2395,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->right_engine_rpm.value;
 			value = bound (value, 0.0, 110.0);
 			value += 20.0;
-			value *= rad (360.0) / 120.0;
+			value *= rad (360.0f) / 120.0;
 		    centre_x = 157 * width / 512;
 	    	centre_y = 146 * height / 512;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
@@ -2406,7 +2406,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->main_rotor_rpm.value;
 			value = bound (value, 0.0, 110.0);
 			value += 20.0;
-			value *= rad (360.0) / 120.0;
+			value *= rad (360.0f) / 120.0;
 		    centre_x = 157 * width / 512;
 	    	centre_y = 146 * height / 512;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
@@ -2433,7 +2433,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* G meter */
 			value = current_flight_dynamics->g_force.value;
 			value = bound (value, -2.0, 4.0);
-			value *= rad (360.0) / 7.0;
+			value *= rad (360.0f) / 7.0f;
 		    centre_x = 209 * width / 512;
 	    	centre_y = 194 * height / 512;
 			dot_x = centre_x + sin (value) * 35 * width / 512;
@@ -2444,9 +2444,9 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->radar_altitude.value;
 			value = bound (value, 0.0, 300.0);
 			if (value < 100.0)
-				value *= rad (360.0) / 160.0;
+				value *= rad (360.0f) / 160.0;
 			else
-				value = value * rad (180.0) / 400.0 + rad (180.0);
+				value = value * rad (180.0f) / 400.0 + rad (180.0f);
 		    centre_x = 182 * width / 512;
 	    	centre_y = 366 * height / 512;
 			dot_x = centre_x + sin (value) * 50 * width / 512;
@@ -2471,7 +2471,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Left engine torque */
 			value = current_flight_dynamics->left_engine_torque.value;
 			value = bound (value, 0.0, 110.0);
-			value *= 170.0 / 100.0;
+			value *= 170.0 / 100.0f;
 		    centre_x = 22 * width / 512;
 	    	centre_y = 466 * height / 512;
 		    dot_x = centre_x;
@@ -2481,7 +2481,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Right engine torque */
 			value = current_flight_dynamics->right_engine_torque.value;
 			value = bound (value, 0.0, 110.0);
-			value *= 170.0 / 100.0;
+			value *= 170.0 / 100.0f;
 		    centre_x = 66 * width / 512;
 	    	centre_y = 466 * height / 512;
 		    dot_x = centre_x;
@@ -2492,11 +2492,11 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->left_engine_n1_rpm.value;
 			value = bound (value, 0.0, 110.0);
 			lower_value = bound(value, 0.0, 60.0);
-			lower_value *= 0.725;
+			lower_value *= 0.725f;
 			middle_value = bound(value - 60.0, 0.0, 40.0);
-			middle_value *= 3.2;
+			middle_value *= 3.2f;
 			upper_value = bound(value - 100.0, 0.0, 100.0);
-			upper_value *= 0.302;
+			upper_value *= 0.302f;
 			value = lower_value + middle_value + upper_value;
 		    centre_x = 142 * width / 512;
 	    	centre_y = 475 * height / 512;
@@ -2508,11 +2508,11 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->right_engine_n1_rpm.value;
 			value = bound (value, 0.0, 110.0);
 			lower_value = bound(value, 0.0, 60.0);
-			lower_value *= 0.725;
+			lower_value *= 0.725f;
 			middle_value = bound(value - 60.0, 0.0, 40.0);
-			middle_value *= 3.2;
+			middle_value *= 3.2f;
 			upper_value = bound(value - 100.0, 0.0, 100.0);
-			upper_value *= 0.302;
+			upper_value *= 0.302f;
 			value = lower_value + middle_value + upper_value;
 		    centre_x = 186 * width / 512;
 	    	centre_y = 475 * height / 512;
@@ -2524,9 +2524,9 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->left_engine_temp.value;
 			value = bound (value, 0.0, 1000.0);
 			lower_value = bound(value, 0.0, 600.0);
-			lower_value *= 0.11;
+			lower_value *= 0.11f;
 			upper_value = bound(value - 600.0, 0.0, 400.0);
-			upper_value *= 0.32;
+			upper_value *= 0.32f;
 			value = lower_value + upper_value;
 		    centre_x = 135 * width / 512;
 	    	centre_y = 475 * height / 512;
@@ -2538,9 +2538,9 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = current_flight_dynamics->right_engine_temp.value;
 			value = bound (value, 0.0, 1000.0);
 			lower_value = bound(value, 0.0, 600.0);
-			lower_value *= 0.11;
+			lower_value *= 0.11f;
 			upper_value = bound(value - 600.0, 0.0, 400.0);
-			upper_value *= 0.32;
+			upper_value *= 0.32f;
 			value = lower_value + upper_value;
 		    centre_x = 193 * width / 512;
 	    	centre_y = 475 * height / 512;
@@ -2664,21 +2664,21 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			value = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
 			get_analogue_clock_values (value, &hour_hand_value, &minute_hand_value, &second_hand_value);
 			/* Hour */
-			value = hour_hand_value * rad (360.0) / 12.0;
+			value = hour_hand_value * rad (360.0f) / 12.0;
 		    centre_x = 77 * width / 512;
 	    	centre_y = 119 * height / 256;
 			dot_x = centre_x + sin (value) * 20 * width / 512;
 			dot_y = centre_y - cos (value) * 30 * height / 256;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 128, height / 64, white_needle_colour);
 			/* Minute */
-			value = minute_hand_value * rad (360.0) / 60.0;
+			value = minute_hand_value * rad (360.0f) / 60.0;
 		    centre_x = 77 * width / 512;
 	    	centre_y = 119 * height / 256;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
 			dot_y = centre_y - cos (value) * 60 * height / 256;
 			draw_arrow (centre_x, centre_y, dot_x, dot_y, width / 256, height / 128, white_needle_colour);
 			/* Second */
-			value = second_hand_value * rad (360.0) / 60.0;
+			value = second_hand_value * rad (360.0f) / 60.0;
 		    centre_x = 77 * width / 512;
 	    	centre_y = 119 * height / 256;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
@@ -2688,7 +2688,7 @@ void draw_havoc_virtual_cockpit_instruments_on_texture (void)
 			/* Fuel */
 			value = current_flight_dynamics->fuel_weight.value;
 			value = bound (value, 0.0, 1600.0);
-			value = (value - 750.0) * rad (360.0) / 2000.0;
+			value = (value - 750.0) * rad (360.0f) / 2000.0;
 		    centre_x = 432 * width / 512;
 	    	centre_y = 118 * height / 256;
 			dot_x = centre_x + sin (value) * 40 * width / 512;
