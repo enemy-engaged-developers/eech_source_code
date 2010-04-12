@@ -249,16 +249,23 @@ cc_args += /ze
 cc_args += /e10
 cc_args += /ei
 cc_args += /zp4
-#cc_args += /fh
+
 cc_args += /6r
 cc_args += /zw
 cc_args += /zq
 cc_args += /fp6
 cc_args += /fpi
 cc_args += /dWIN32
-cc_args += /ri
-cc_args += /w4
-cc_args += /zld
+#cc_args += /ri
+cc_args += /wx
+#cc_args += /zld
+#cc_args += /ep
+#cc_args += /ee
+
+# runtime sample profiling
+#cc_args += /et
+
+cc_args += /fh
 
 asm_args += /c
 asm_args += /W3
@@ -353,6 +360,8 @@ cc_args += -O2
 !else
 
 cc_args += /oneatx /oh /ol+ /ob
+# new optimizations:
+cc_args += /ok /or
 
 !endif
 
