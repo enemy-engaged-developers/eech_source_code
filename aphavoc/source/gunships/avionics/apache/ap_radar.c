@@ -101,6 +101,7 @@ void initialise_apache_radar (void)
 	ground_radar.sweep_rate		  			= rad (360.0) / 6.0;
 	ground_radar.sweep_direction			= RADAR_SWEEP_CW;
 	ground_radar.elevation					= rad (-3.0);
+	ground_radar.elevation_mode				= RADAR_ELEVATION_AUTO;
 	ground_radar.bar						= 0;
 	ground_radar.bar_scan					= 2;
 	ground_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_8000 + 2000.0;
@@ -117,6 +118,7 @@ void initialise_apache_radar (void)
 	air_radar.sweep_rate		  			= rad (360.0) / 6.0;
 	air_radar.sweep_direction 				= RADAR_SWEEP_CW;
 	air_radar.elevation						= rad (0.0);
+	air_radar.elevation_mode				= RADAR_ELEVATION_AUTO;
 	air_radar.bar							= 0;
 	air_radar.bar_scan						= 1;
 	air_radar.max_target_track_range		= APACHE_RADAR_SCAN_RANGE_8000 + 2000.0;
@@ -127,13 +129,13 @@ void initialise_apache_radar (void)
 	air_radar.sweep_mode					= RADAR_SWEEP_MODE_CONTINUOUS;
 
 	tpm_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_TPM;
-//	tpm_radar.scan_range		  			= APACHE_RADAR_SCAN_RANGE_8000;
 	tpm_radar.scan_datum	  				= rad (0.0);
 	tpm_radar.scan_arc_size	  			= APACHE_RADAR_SCAN_ARC_SIZE_180;
 	tpm_radar.sweep_offset 				= rad (0.0);
 	tpm_radar.sweep_rate		  			= rad (360.0) / 6.0;
 	tpm_radar.sweep_direction			= RADAR_SWEEP_CW;
 	tpm_radar.elevation					= 0.0;
+	tpm_radar.elevation_mode			= RADAR_ELEVATION_FAR;
 	tpm_radar.bar						= 0;
 	tpm_radar.bar_scan					= 2;
 	tpm_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_TPM;
@@ -150,6 +152,7 @@ void initialise_apache_radar (void)
 	zoomed_radar.sweep_rate		  		= rad (360.0) / 20.0;
 	zoomed_radar.sweep_direction			= RADAR_SWEEP_CW;
 	zoomed_radar.elevation					= 0.0;
+	zoomed_radar.elevation_mode				= RADAR_ELEVATION_MANUAL;
 	zoomed_radar.bar						= 0;
 	zoomed_radar.bar_scan					= 1;
 	zoomed_radar.max_target_track_range	= APACHE_RADAR_SCAN_RANGE_8000;

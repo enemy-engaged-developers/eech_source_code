@@ -13,6 +13,7 @@
 #include "ap_coordinate_point.h"
 
 #include "../common/co_adf.h"
+#include "../common/co_radar.h"
 #include "../../dynamics/common/co_fuel.h"
 #include "entity/tacview/tacview.h"
 
@@ -84,6 +85,7 @@ static int pan_radar_scan(mfd_push_button_types page, mfd_button_labels btn);
 static int radar_function(mfd_push_button_types page, mfd_button_labels btn);
 static int select_radar_next_target_to_shoot(mfd_push_button_types page, mfd_button_labels btn);
 static int toggle_auto_scan_pan(mfd_push_button_types page, mfd_button_labels btn);
+static int select_radar_elevation(mfd_push_button_types page, mfd_button_labels btn);
 
 static int set_terrain_sensivity_sub_page(mfd_push_button_types page, mfd_button_labels btn);
 static int select_terrain_sensivity_option(mfd_push_button_types page, mfd_button_labels btn);
@@ -226,9 +228,15 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"C SCP",	NULL, 	FALSE, FALSE, TRUE, radar_function },
 	{ NULL,	"NTS",		NULL, 	FALSE, TRUE, FALSE, select_radar_next_target_to_shoot },
 	{ NULL,	"TGT",		NULL, 	FALSE, TRUE, FALSE, NULL },
-	{ NULL,	"ELEV",		"AUTO",	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"ELEV",		NULL,	FALSE, FALSE, FALSE, select_radar_elevation },
 	{ NULL,	"ZOOM",		NULL, 	FALSE, TRUE, FALSE, zoom_display },
 	{ NULL,	"RF",		"HO", 	FALSE, FALSE, FALSE, NULL },
+
+	{ left_arrow, left_arrow_mask, left_arrow_background, FALSE, FALSE, FALSE, pan_radar_scan },
+	{ right_arrow, right_arrow_mask, right_arrow_background, FALSE, FALSE, FALSE, pan_radar_scan },
+	// TODO: background sprite
+	{ up_arrow, up_arrow_mask, NULL, FALSE, FALSE, FALSE, pan_radar_scan },
+	{ down_arrow, down_arrow_mask, NULL, FALSE, FALSE, FALSE, pan_radar_scan },
 
 	{ NULL,	"PROF",		NULL, 	FALSE, FALSE, FALSE, select_tpm_sub_menu },
 	{ NULL,	"GEOM",		NULL, 	FALSE, FALSE, FALSE, select_tpm_prof_option },
@@ -313,8 +321,6 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"SET", 		NULL, 	FALSE, FALSE, FALSE, NULL },
 	{ NULL,	"-W-", 		NULL, 	FALSE, FALSE, TRUE, toggle_datum_adjust },
 
-	{ left_arrow, left_arrow_mask, left_arrow_background, FALSE, FALSE, FALSE, pan_radar_scan },
-	{ right_arrow, right_arrow_mask, right_arrow_background, FALSE, FALSE, FALSE, pan_radar_scan },
 	{ up_arrow, up_arrow_mask, NULL, FALSE, FALSE, FALSE, adjust_pitch_datum },
 	{ down_arrow, down_arrow_mask, NULL, FALSE, FALSE, FALSE, adjust_pitch_datum },
 
@@ -1333,8 +1339,8 @@ static int toggle_datum_adjust(mfd_push_button_types page, mfd_button_labels btn
 	else
 	{
 		mfd_push_button** handler = mfd_button_handlers[current_mfd_focus];
-		handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_UP_ARROW];
-		handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_DOWN_ARROW];
+		handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_PITCH_DATUM_UP];
+		handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_PITCH_DATUM_DOWN];
 //		button_label_decorations[BTN_L5].boxed = TRUE;
 	}
 
@@ -1345,7 +1351,7 @@ static int adjust_pitch_datum(mfd_push_button_types page, mfd_button_labels btn)
 {
 	float adjust = 0.01;
 
-	if (page == MFD_BUTTON_DOWN_ARROW)
+	if (page == MFD_BUTTON_PITCH_DATUM_DOWN)
 		adjust = -adjust;
 
 	adjust_apache_pitch_ladder_datum_position(adjust);
@@ -1450,10 +1456,33 @@ static int zoom_display(mfd_push_button_types page, mfd_button_labels btn)
 
 static int pan_radar_scan(mfd_push_button_types page, mfd_button_labels btn)
 {
-	if (page == MFD_BUTTON_LEFT_ARROW)
+	if (page == MFD_BUTTON_RADAR_SCAN_LEFT)
 		rotate_radar_scan_datum(-APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
-	else
+	else if (page == MFD_BUTTON_RADAR_SCAN_RIGHT)
 		rotate_radar_scan_datum(APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
+	else
+	{
+		float amount = APACHE_RADAR_SCAN_PITCH_ADJUST_STEP;
+		if (page == MFD_BUTTON_RADAR_SCAN_DOWN)
+			amount = -amount;
+
+		pan_radar_elevation(amount);
+	}
+
+	return TRUE;
+}
+
+static int select_radar_elevation(mfd_push_button_types page, mfd_button_labels btn)
+{
+	if (get_apache_mfd_sub_mode(current_mfd_focus) == 7)
+	{
+		radar_elevations elev = 5 - (btn - BTN_L1);
+		set_radar_elevation_mode(elev);
+
+		set_apache_mfd_sub_mode(current_mfd_focus, 0);
+	}
+	else
+		set_apache_mfd_sub_mode(current_mfd_focus, 7);
 
 	return TRUE;
 }
@@ -2001,13 +2030,12 @@ static void render_rocket_inventory(rgb_colour fg_col)
 	print_vertical_mono_font_string(-0.85, -0.3, "OUTBD", -0.5, TRUE);
 }
 
+// Setup which happens each frame as opposed to setup_apache_mfd_buttons, which only
+// happens each time mode changes.  Add here labels which may change from frame to frame
 static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_colour fg_col, rgb_colour bg_col)
 {
 	mfd_push_button** handler = mfd_button_handlers[location];
 	unsigned sub_mode = get_apache_mfd_sub_mode(location);
-
-	if (location == MFD_LOCATION_PILOT_RHS)
-		debug_log("sub_mode: %d", sub_mode);
 
 	switch (mfd_mode)
 	{
@@ -2130,8 +2158,21 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 	case MFD_MODE_GROUND_RADAR:
 	case MFD_MODE_AIR_RADAR:
 		{
+			/*
+			 * sub pages:
+			 * 0 main page
+			 * 1 util page
+			 * 2 util terrain sensitity
+			 * 3
+			 * 4 TPM profile
+			 * 5 TPM lines
+			 * 6 TPM clearance
+			 * 7 elevation
+			 */
 			int sub_mode = get_apache_mfd_sub_mode(location);
 			int is_util_page = sub_mode >= 1 && sub_mode <= 3;
+			radar_modes radar_mode = get_radar_mode();
+
 			clear_buttons(location, TRUE);
 
 			handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_C_SCP];
@@ -2178,7 +2219,7 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 						sprintf(button_label_decorations[location][BTN_R5].line2, "%d", sensivity);
 				}
 			}
-			else if (get_radar_mode() == RADAR_MODE_TPM)
+			else if (radar_mode == RADAR_MODE_TPM)
 			{
 				if (sub_mode == 0)
 				{
@@ -2231,19 +2272,44 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			else
 			{
 				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_NTS];
-				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_LEFT_ARROW];
+				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_RADAR_SCAN_LEFT];
 				handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_TGT];
-				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_ELEV_AUTO];
 
 				handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_ZOOM];
-				handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_RIGHT_ARROW];
+				handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_RADAR_SCAN_RIGHT];
 				handler[BTN_R4] = &mfd_push_button_definitions[MFD_BUTTON_RF_HO];
 				handler[BTN_R6] = &mfd_push_button_definitions[MFD_BUTTON_ACQ_SRC];
 				show_acquisition_source[location] = TRUE;
 
+				if (radar_mode == RADAR_MODE_ATM)
+				{
+					handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_RADAR_SCAN_UP];
+					handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_RADAR_SCAN_DOWN];
+				}
+				else
+				{
+					if (sub_mode == 7)
+					{
+						int i;
+						for (i = 0; i < 5; i++)
+						{
+							mfd_button_labels btn = BTN_L1 + i;
+							const char* elev = radar_elevation_mode_names[5 - i];
+
+							handler[btn] = &mfd_push_button_definitions[MFD_BUTTON_ELEV];
+							strcpy(button_label_decorations[location][btn].line1, elev);
+						}
+					}
+					else
+					{
+						handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_ELEV];
+						strcpy(button_label_decorations[location][BTN_L5].line2, get_radar_elevation_mode_name());
+						button_label_decorations[location][BTN_L5].boxed = 2;
+					}
+				}
+
 				button_label_decorations[location][BTN_R1].boxed = get_radar_zoomed() ? 3 : 0;
 				// TODO:
-				button_label_decorations[location][BTN_L5].boxed = 2;
 				button_label_decorations[location][BTN_R6].boxed = get_radar_auto_pan_scan_datum() ? 1 : 2;
 			}
 

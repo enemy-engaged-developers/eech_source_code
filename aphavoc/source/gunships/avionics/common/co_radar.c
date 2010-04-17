@@ -153,14 +153,26 @@ static unsigned
 	fcr_powered,
 	rfi_powered,
 	mma_pinned,
-	tpm_near_mode,
 	auto_pan_scan_datum,
 	rfi_show_hostile_only,
 	radar_zoomed,
 	radar_active,
 	radar_terrain_sensivity;  // 0 = Auto sensivity
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const char* radar_elevation_mode_names[] = {
+	"MAN",
+	"AUTO",
+	"BELOW",
+	"NEAR",
+	"FAR",
+	"ABOVE"
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +286,6 @@ void initialise_common_radar (void)
 	set_tpm_profile_mode(RADAR_TPM_PROFILE_ARITH);
 	num_tpm_profile_lines = 4;
 	tpm_clearance_height = feet_to_metres(200.0);
-	tpm_near_mode = FALSE;
 
 	radar_terrain_sensivity = 0;
 	auto_pan_scan_datum = FALSE;
@@ -444,6 +455,21 @@ void pan_radar_elevation(float amount)
 	radar->elevation += amount;
 }
 
+void set_radar_elevation_mode(radar_elevations mode)
+{
+	get_current_radar_params()->elevation_mode = mode;
+}
+
+radar_elevations get_radar_elevation_mode(void)
+{
+	return get_current_radar_params()->elevation_mode;
+}
+
+const char* get_radar_elevation_mode_name(void)
+{
+	return radar_elevation_mode_names[get_current_radar_params()->elevation_mode];
+}
+
 void toggle_radar_auto_pan_scan_datum(void)
 {
 	auto_pan_scan_datum = !auto_pan_scan_datum;
@@ -578,12 +604,12 @@ float get_tpm_clearance_height(void)
 
 void toggle_radar_tpm_far_near_mode(void)
 {
-	tpm_near_mode = !tpm_near_mode;
+	tpm_radar.elevation_mode = (tpm_radar.elevation_mode == RADAR_ELEVATION_NEAR) ? RADAR_ELEVATION_FAR : RADAR_ELEVATION_FAR;
 }
 
 unsigned get_radar_tpm_near_mode(void)
 {
-	return tpm_near_mode;
+	return tpm_radar.elevation_mode == RADAR_ELEVATION_NEAR;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3030,7 +3056,7 @@ void update_common_radar (int inactive_check)
 	if (get_global_avionics_realism() == AVIONICS_DETAIL_REALISTIC)
 	{
 		if (radar_mode == RADAR_MODE_TPM)
-			radar->elevation = tpm_near_mode ? atan(rad(-3.0)) : 0.0;
+			radar->elevation = (radar->elevation_mode == RADAR_ELEVATION_NEAR) ? atan(rad(-3.0)) : 0.0;
 		else if (auto_pan_scan_datum)
 		{
 			unsigned do_pan = FALSE;
@@ -3090,6 +3116,29 @@ void update_common_radar (int inactive_check)
 			{
 				rotate_radar_scan_datum(scan_to - radar->scan_datum);
 				pan_radar_elevation(elevation_to - radar->elevation);
+			}
+		}
+		else
+		{
+			switch (radar->elevation_mode)
+			{
+			case RADAR_ELEVATION_AUTO:
+				// TODO
+			case RADAR_ELEVATION_MANUAL:
+				// let pilot control elevation angle manually, don't override
+				break;
+			case RADAR_ELEVATION_BELOW:
+				radar->elevation = atan(rad(-6.0));
+				break;
+			case RADAR_ELEVATION_NEAR:
+				radar->elevation = atan(rad(-3.0));
+				break;
+			case RADAR_ELEVATION_FAR:
+				radar->elevation = atan(rad(0.0));
+				break;
+			case RADAR_ELEVATION_ABOVE:
+				radar->elevation = atan(rad(3.0));
+				break;
 			}
 		}
 	}

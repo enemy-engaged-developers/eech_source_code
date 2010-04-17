@@ -1694,6 +1694,22 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void draw_radar_elevation_scale(radar_params* radar)
+{
+	const float top = -0.8, bottom = -1.1;
+	float relative_elev = (radar->elevation - MIN_RADAR_ELEVATION_ANGLE) / (MAX_RADAR_ELEVATION_ANGLE - MIN_RADAR_ELEVATION_ANGLE);
+	float elev_y = relative_elev * (top - bottom) + bottom;
+	float y_step = (bottom - top) / 8.0, y;
+
+	draw_2d_half_thick_line(-1.15, top, -1.1, top, MFD_COLOUR1);
+	draw_2d_half_thick_line(-1.15, bottom, -1.1, bottom, MFD_COLOUR1);
+
+	for (y = top + y_step; y > bottom + 0.001; y += y_step)
+		draw_2d_half_thick_line(-1.15, y, -1.13, y, MFD_COLOUR1);
+
+	draw_2d_mono_sprite(small_left_carret, -1.13, elev_y, MFD_COLOUR1);
+}
+
 static void draw_ground_radar_mfd (int sub_mode)
 {
 	float
@@ -1851,6 +1867,8 @@ static void draw_ground_radar_mfd (int sub_mode)
 
 	display_radar_scan_range (ground_radar.scan_range, TRUE);
 
+	draw_radar_elevation_scale(radar);
+
 	////////////////////////////////////////
 	//
 	// draw heading scale
@@ -1971,21 +1989,7 @@ static void draw_ground_radar_mfd (int sub_mode)
 
 	set_2d_viewport (mfd_env, mfd_viewport_x_min, mfd_viewport_y_min, mfd_viewport_x_max, mfd_viewport_y_max);
 
-	// antenna elevation
-	{
-		const float top = -0.75, bottom = -1.1;
-		float relative_elev = (radar->elevation - MIN_RADAR_ELEVATION_ANGLE) / (MAX_RADAR_ELEVATION_ANGLE - MIN_RADAR_ELEVATION_ANGLE);
-		float elev_y = relative_elev * (top - bottom) + bottom;
-		float y_step = (bottom - top) / 8.0, y;
 
-		draw_2d_half_thick_line(-1.15, top, -1.1, top, MFD_COLOUR1);
-		draw_2d_half_thick_line(-1.15, bottom, -1.1, bottom, MFD_COLOUR1);
-
-		for (y = top + y_step; y > bottom + 0.001; y += y_step)
-			draw_2d_half_thick_line(-1.15, y, -1.13, y, MFD_COLOUR1);
-
-		draw_2d_mono_sprite(small_left_carret, -1.13, elev_y, MFD_COLOUR1);
-	}
 
 	////////////////////////////////////////
 	//
@@ -2195,6 +2199,8 @@ static void draw_air_radar_mfd (void)
 	draw_2d_circle (0.0, 0.0, RADIUS * 0.25, MFD_COLOUR4);
 	draw_2d_circle (0.0, 0.0, RADIUS * 0.50, MFD_COLOUR4);
 	draw_2d_circle (0.0, 0.0, RADIUS * 0.75, MFD_COLOUR4);
+
+	draw_radar_elevation_scale(&air_radar);
 
 	//
 	// scan limits
