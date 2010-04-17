@@ -465,7 +465,8 @@ void update_apache_ground_radar (void)
 
 	while (single_target_acquisition_system_steer_left_key)
 	{
-		rotate_radar_scan_datum(-APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
+		float amount = -APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
+		rotate_radar_scan_datum(amount);
 		single_target_acquisition_system_steer_left_key--;
 	}
 
@@ -480,7 +481,8 @@ void update_apache_ground_radar (void)
 
 	while (single_target_acquisition_system_steer_right_key)
 	{
-		rotate_radar_scan_datum(APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
+		float amount = APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
+		rotate_radar_scan_datum(amount);
 		single_target_acquisition_system_steer_right_key--;
 	}
 
