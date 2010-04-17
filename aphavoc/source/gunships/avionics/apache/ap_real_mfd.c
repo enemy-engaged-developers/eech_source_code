@@ -280,11 +280,6 @@ static float
 static int
 	tsd_draw_threat_line_status;
 
-#define TADS_LASE_FLASH_RATE  (0.5)
-
-static float
-	tads_lase_flash_timer;
-
 static int
 	tads_display_lase_status;
 
@@ -639,7 +634,7 @@ void create_apache_pfz(int is_nfz)
 ////////////////////////////////////////
 
 //static void draw_box(float x1_c, float y1_c, float x2_c, float y2_c, int filled, rgb_colour colour);
-static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour);
+//static void draw_bordered_box(float x1_c, float y1_c, float x2_c, float y2_c, rgb_colour fill_colour, rgb_colour border_colour);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -708,7 +703,6 @@ void initialise_apache_mfd (void)
 	next_free_pfz = 0;
 	next_free_nfz = 0;
 
-	tads_lase_flash_timer = TADS_LASE_FLASH_RATE;
 	tads_display_lase_status = FALSE;
 
 	tsd_threat_line_flash_timer = TSD_THREAT_LINE_FLASH_RATE;
@@ -1011,9 +1005,10 @@ static void draw_damaged_mfd (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_heading_scale (float heading, float pos_y)
+static void draw_heading_scale(int is_tads, float pos_y)
 {
 	float
+		heading = get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING),
 		heading_width_ratio,
 		heading_tick_x_spacing,
 		x_adjust_single,
@@ -1082,33 +1077,45 @@ static void draw_heading_scale (float heading, float pos_y)
 	// draw command heading carat
 	//
 
-	if (!apache_damage.navigation_computer)
 	{
-		entity
-			*wp;
+		float
+			bearing = 0.0f,
+			command_heading = 0.0f;
 
-		wp = get_local_entity_current_waypoint (get_gunship_entity ());
-
-		if (wp)
+		if (is_tads)
 		{
-			vec3d
-				*gunship_position,
-				waypoint_position;
+			float elevation;
+			get_eo_azimuth_and_elevation(&command_heading, &elevation);
+		}
+		else if (!apache_damage.navigation_computer)
+		{
+			entity
+				*wp;
 
-			float
-				dx,
-				dz,
-				bearing,
-				command_heading;
+			wp = get_local_entity_current_waypoint (get_gunship_entity ());
 
-			gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
+			if (wp)
+			{
+				vec3d
+					*gunship_position,
+					waypoint_position;
 
-			get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+				float
+					dx,
+					dz,
+					bearing,
+					command_heading;
 
-			dx = waypoint_position.x - gunship_position->x;
-			dz = waypoint_position.z - gunship_position->z;
+				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
-			bearing = atan2 (dx, dz);
+				get_waypoint_display_position (get_gunship_entity (), wp, &waypoint_position);
+
+				dx = waypoint_position.x - gunship_position->x;
+				dz = waypoint_position.z - gunship_position->z;
+
+				bearing = atan2 (dx, dz);
+
+			}
 
 			command_heading = bearing - heading;
 
@@ -1116,11 +1123,10 @@ static void draw_heading_scale (float heading, float pos_y)
 				command_heading -= rad (360.0);
 			else if (command_heading < rad (-180.0))
 				command_heading += rad (360.0);
-
-			command_heading = bound (command_heading, rad (-90.0), rad (90.0));
-
-			draw_2d_mono_sprite (command_heading_carat, (deg(command_heading) * heading_tick_x_spacing * 0.1), tick_datum_top, MFD_COLOUR1);
 		}
+
+		command_heading = bound (command_heading, rad (-90.0), rad (90.0));
+		draw_2d_mono_sprite (command_heading_carat, (deg(command_heading) * heading_tick_x_spacing * 0.1), tick_datum_top, MFD_COLOUR1);
 	}
 
 	//
@@ -1875,7 +1881,7 @@ static void draw_ground_radar_mfd (int sub_mode)
 	//
 	////////////////////////////////////////
 
-	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), 1.05);
+	draw_heading_scale(FALSE, 1.05);
 
 	////////////////////////////////////////
 	//
@@ -1904,11 +1910,13 @@ static void draw_ground_radar_mfd (int sub_mode)
 
 		if (radar_mode != RADAR_MODE_TPM)
 		{
+			float arc_size = APACHE_RADAR_SCAN_ARC_SIZE_90;
+
 			draw_2d_half_thick_line (-0.075, 0.075, -radius * ONE_OVER_ROOT2, radius * ONE_OVER_ROOT2, MFD_COLOUR4);
 
 			draw_2d_half_thick_line (0.075, 0.075, radius * ONE_OVER_ROOT2, radius * ONE_OVER_ROOT2, MFD_COLOUR4);
 
-			draw_radar_arc (APACHE_RADAR_SCAN_ARC_SIZE_90, radius, MFD_COLOUR4);
+			draw_radar_arc(arc_size, radius, MFD_COLOUR4);
 		}
 		else
 		{
@@ -2786,36 +2794,11 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_systems system)
+static float get_sensor_fov_angle(eo_fov_levels level, target_acquisition_systems system)
 {
-	float
-		fov;
+	float fov = 1.0;
 
-	display_3d_light_levels
-		light_level;
-
-	display_3d_noise_levels
-		noise_level;
-
-	vec3d
-		*position;
-
-	weathermodes
-		weather_mode;
-
-	day_segment_types
-		day_segment_type;
-
-	int
-		tint;
-
-	ASSERT (eo);
-
-	ASSERT (eo_3d_texture_screen);
-
-	ASSERT (d3d_can_render_to_texture);
-
-	switch (eo->field_of_view)
+	switch (level)
 	{
 		case EO_FOV_ZOOM:
 		{
@@ -2855,11 +2838,50 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 		}
 		default:
 		{
-			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+			debug_fatal ("Invalid field of view = %d", level);
 
 			break;
 		}
 	}
+
+	return fov;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_systems system)
+{
+	float
+		fov;
+
+	display_3d_light_levels
+		light_level;
+
+	display_3d_noise_levels
+		noise_level;
+
+	vec3d
+		*position;
+
+	weathermodes
+		weather_mode;
+
+	day_segment_types
+		day_segment_type;
+
+	int
+		tint;
+
+	ASSERT (eo);
+
+	ASSERT (eo_3d_texture_screen);
+
+	ASSERT (d3d_can_render_to_texture);
+
+	fov = get_sensor_fov_angle(eo->field_of_view, system);
+
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
 	weather_mode = get_simple_session_weather_at_point (position);
@@ -3066,13 +3088,11 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 		set_rgb_colour (bg_colour, 0, 40, 0, 255);
 
-//		draw_bordered_box(-0.98, y_pos, -0.35, y_pos - 0.2, bg_colour, MFD_COLOUR1);
-//		draw_bordered_box(0.98, y_pos, 0.35, y_pos - 0.2, bg_colour, MFD_COLOUR1);
 		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, TRUE, FALSE, bg_colour);
 		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, TRUE, FALSE, bg_colour);
 	}
 
-	if (fill_boxes == 1)
+	if (fill_boxes >= 1)
 	{
 		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, FALSE, TRUE, MFD_COLOUR1);
 		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, FALSE, TRUE, MFD_COLOUR1);
@@ -3113,6 +3133,11 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 		set_mono_font_rel_position (0, 0);
 		print_mono_font_string (buffer);
 
+		if (altitude <= feet(get_low_altitude_warning_limit()))
+			set_mono_font_colour(MFD_COLOUR_RED);
+		else if (altitude >= feet(get_high_altitude_warning_limit()))
+			set_mono_font_colour(MFD_COLOUR_YELLOW);
+
 		if (altitude < 1500.0)
 		{
 			sprintf(buffer, "%4d", altitude);
@@ -3120,6 +3145,8 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 			set_mono_font_rel_position (0, 0);
 			print_mono_font_string (buffer);
 		}
+
+		set_mono_font_colour(MFD_COLOUR1);
 	}
 
 	// lower left box:
@@ -3283,16 +3310,14 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	set_mono_font_colour (MFD_COLOUR1);
 
-	set_mono_font_type (MONO_FONT_TYPE_7X12);
+	set_mono_font_type (MONO_FONT_TYPE_12X20);
 
 	//
 	// sensor type
 	//
 
 	y_adjust = 5.0;
-
-	set_2d_mono_font_position (-0.85, 1.0);
-
+	set_2d_mono_font_position (-0.9, 0.7);
 	set_mono_font_rel_position (1.0, y_adjust);
 
 	switch (system)
@@ -3317,7 +3342,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		}
 		default:
 		{
-			print_mono_font_string ("XXX");
+			ASSERT(FALSE);
 
 			break;
 		}
@@ -3335,96 +3360,17 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		return;
 	}
 
-	if (eo_low_light)
-	{
-		set_2d_mono_font_position (-0.8, 0.9);
-
-		set_mono_font_rel_position (1.0, 2.0);
-
-		print_mono_font_string ("LO LIGHT");
-	}
-
-	//
-	// field of view
-	//
-
-	switch (eo->field_of_view)
-	{
-		case EO_FOV_ZOOM:
-			s = "ZOOM";
-			break;
-		case EO_FOV_NARROW:
-			s = "NAR";
-			break;
-		case EO_FOV_MEDIUM:
-			s = "MED";
-			break;
-		case EO_FOV_WIDE:
-			s = "WIDE";
-			break;
-		default:
-			s = "XXX";
-			break;
-	}
-
-	width = get_mono_font_string_width (s);
-
-	y_adjust = 5.0;
-
-	set_2d_mono_font_position (0.85, 1.0);
-
-	set_mono_font_rel_position (-width, y_adjust);
-
-	print_mono_font_string (s);
-
 	//
 	// locked
 	//
 
 	if (eo_is_locked())
 	{
+		// TODO: some clever way of showing locked...
 		width = get_mono_font_string_width ("LOCKED");
 		set_2d_mono_font_position (0.0, -0.6);
 		set_mono_font_rel_position (-width * 0.5, 0);
-		print_mono_font_string ("LOCKED");
-	}
-
-	if (laser_is_active())
-	{
-		tads_lase_flash_timer -= get_delta_time();
-
-		if (tads_lase_flash_timer < 0.0)
-		{
-			tads_lase_flash_timer = TADS_LASE_FLASH_RATE;
-
-			tads_display_lase_status ^= 1;
-		}
-
-		if (tads_display_lase_status)
-		{
-			set_2d_mono_font_position (0.2, -0.25);
-			set_mono_font_rel_position (0, 0);
-			print_mono_font_string ("L");
-		}
-	}
-
-// added ground stabi by GCsDriver  08-12-2007
-	//
-	// 030418 loke
-	// draw an indication if ground stablisation is enabled
-	//
-
-	if (eo_ground_stabilised)
-	{
-		y_adjust = -38.0;
-
-		width = get_mono_font_string_width ("S");
-
-		set_2d_mono_font_position (1.0, -1.0);
-
-		set_mono_font_rel_position (-width, y_adjust);
-
-		print_mono_font_string ("S");
+//		print_mono_font_string ("LOCKED");
 	}
 
 	draw_high_action_display (target, scaled_3d ? 0 : 2);
@@ -3435,7 +3381,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	//
 	////////////////////////////////////////
 
-	draw_heading_scale (get_heading_from_attitude_matrix (eo_vp.attitude), 0.9375);
+	draw_heading_scale(TRUE, 0.85);
 
 	////////////////////////////////////////
 	//
@@ -3448,16 +3394,40 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	//
 
 	{
-		draw_2d_line (-0.200, 0.0, -0.050, 0.0, MFD_COLOUR1);
-		draw_2d_line (0.050, 0.0, 0.20, 0.0, MFD_COLOUR1);
-		draw_2d_line (0.0, -0.200, 0.0, -0.050, MFD_COLOUR1);
-		draw_2d_line (0.0, 0.050, 0.0, 0.20, MFD_COLOUR1);
+		// TODO flash with malfunction
+		draw_2d_half_thick_line (-0.13, 0.0, -0.030, 0.0, MFD_COLOUR1);
+		draw_2d_half_thick_line (0.030, 0.0, 0.13, 0.0, MFD_COLOUR1);
+		draw_2d_half_thick_line (0.0, -0.130, 0.0, -0.030, MFD_COLOUR1);
+		draw_2d_half_thick_line (0.0, 0.030, 0.0, 0.13, MFD_COLOUR1);
 	}
 
 	//
-	// target gates
+	// FOV gates
 	//
 
+	if (eo->field_of_view > EO_FOV_ZOOM)
+	{
+		float
+			fov = get_sensor_fov_angle(eo->field_of_view, system),
+			fov_next = get_sensor_fov_angle(eo->field_of_view - 1, system),
+			ratio = 1.2 * fov_next / fov,
+			line_length = ratio * 0.3;
+
+		draw_2d_half_thick_line(ratio, ratio, ratio - line_length, ratio, MFD_COLOUR1);
+		draw_2d_half_thick_line(ratio, ratio, ratio, ratio - line_length, MFD_COLOUR1);
+
+		draw_2d_half_thick_line(-ratio, ratio, -ratio + line_length, ratio, MFD_COLOUR1);
+		draw_2d_half_thick_line(-ratio, ratio, -ratio, ratio - line_length, MFD_COLOUR1);
+
+		draw_2d_half_thick_line(-ratio, -ratio, -ratio + line_length, -ratio, MFD_COLOUR1);
+		draw_2d_half_thick_line(-ratio, -ratio, -ratio, -ratio + line_length, MFD_COLOUR1);
+
+		draw_2d_half_thick_line(ratio, -ratio, ratio - line_length, -ratio, MFD_COLOUR1);
+		draw_2d_half_thick_line(ratio, -ratio, ratio, -ratio + line_length, MFD_COLOUR1);
+	}
+
+	// TODO: find clever way of showing which target will be locked
+#if 0
 	if (target)
 	{
 		if (valid_3d)
@@ -3501,6 +3471,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 			main_vp = tmp;
 		}
 	}
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10106,7 +10077,7 @@ static void draw_flight_display_mfd (void)
 
 	draw_sideslip();
 
-	draw_heading_scale (get_local_entity_float_value (get_gunship_entity (), FLOAT_TYPE_HEADING), 0.9375);
+	draw_heading_scale(FALSE, 0.9375);
 
 	display_true_airspeed ();
 

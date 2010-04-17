@@ -91,6 +91,8 @@ static int set_terrain_sensivity_sub_page(mfd_push_button_types page, mfd_button
 static int select_terrain_sensivity_option(mfd_push_button_types page, mfd_button_labels btn);
 static int change_radar_state(mfd_push_button_types page, mfd_button_labels btn);
 
+static int select_tads_zoom(mfd_push_button_types page, mfd_button_labels btn);
+
 static int set_mfd_weapon_mode(mfd_push_button_types page, mfd_button_labels btn);
 static int set_burst_limit(mfd_push_button_types page, mfd_button_labels btn);
 static int button_toggle_gun_mode(mfd_push_button_types page, mfd_button_labels btn);
@@ -150,9 +152,10 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"ENG", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"CHECK",	NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"FLT", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
-	{ NULL,	"FUEL", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
+	{ NULL,	"FUEL", 	NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"ADF", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 	{ NULL,	"WPN", 		NULL, 	TRUE, FALSE, FALSE, select_menu_page },
+	{ NULL,	"TADS", 	NULL, 	TRUE, FALSE, FALSE, select_menu_page },
 
 	// page buttons
 	{ NULL,	"PG", 		"1", 	FALSE, FALSE, FALSE, set_new_sub_page_number },
@@ -272,6 +275,13 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"4",		NULL, 	FALSE, FALSE, FALSE, select_terrain_sensivity_option },
 	{ NULL,	"5",		NULL, 	FALSE, FALSE, FALSE, select_terrain_sensivity_option },
 	{ NULL,	"6",		NULL, 	FALSE, FALSE, FALSE, select_terrain_sensivity_option },
+
+	// TADS page
+	{ NULL,	"W",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
+	{ NULL,	"M",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
+	{ NULL,	"N",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
+	{ NULL,	"Z",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
+	{ NULL,	"FXD",		NULL, 	FALSE, FALSE, FALSE, NULL },
 
 	// weapon page
 	{ NULL,	"TRAIN",	NULL, 	FALSE, FALSE, FALSE, NULL },
@@ -1456,10 +1466,15 @@ static int zoom_display(mfd_push_button_types page, mfd_button_labels btn)
 
 static int pan_radar_scan(mfd_push_button_types page, mfd_button_labels btn)
 {
-	if (page == MFD_BUTTON_RADAR_SCAN_LEFT)
-		rotate_radar_scan_datum(-APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
-	else if (page == MFD_BUTTON_RADAR_SCAN_RIGHT)
-		rotate_radar_scan_datum(APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP);
+	if (page == MFD_BUTTON_RADAR_SCAN_LEFT || page == MFD_BUTTON_RADAR_SCAN_RIGHT)
+	{
+		float amount = APACHE_GROUND_RADAR_SCAN_DATUM_ROTATE_STEP;
+
+		if (page == MFD_BUTTON_RADAR_SCAN_LEFT)
+			amount = -amount;
+
+		rotate_radar_scan_datum(amount);
+	}
 	else
 	{
 		float amount = APACHE_RADAR_SCAN_PITCH_ADJUST_STEP;
@@ -1618,6 +1633,14 @@ static int toggle_tpm_far_near_mode(mfd_push_button_types page, mfd_button_label
 	return TRUE;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int select_tads_zoom(mfd_push_button_types page, mfd_button_labels btn)
+{
+	return TRUE;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2637,6 +2660,22 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 	case MFD_MODE_AIR_RADAR:
 
 		break;
+	case MFD_MODE_FLIR:
+	case MFD_MODE_DTV:
+		{
+			mfd_button_labels btn = BTN_L1;
+
+			handler[BTN_T6] = &mfd_push_button_definitions[MFD_BUTTON_MENU_TADS];
+			button_label_decorations[location][BTN_T6].boxed = 3;
+
+			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_W];
+			if (mfd_mode == MFD_MODE_FLIR)
+				handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_M];
+			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_N];
+			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_Z];
+
+			break;
+		}
 	case MFD_MODE_TSD:
 		{
 			handler[BTN_T1] = &mfd_push_button_definitions[MFD_BUTTON_RPT];
