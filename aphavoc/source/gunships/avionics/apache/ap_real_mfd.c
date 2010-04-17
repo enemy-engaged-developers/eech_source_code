@@ -3426,22 +3426,15 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		draw_2d_half_thick_line(ratio, -ratio, ratio, -ratio + line_length, MFD_COLOUR1);
 	}
 
-	// TODO: find clever way of showing which target will be locked
-#if 0
-	if (target)
+	if (target && eo_is_locked())
 	{
 		if (valid_3d)
 		{
 			tmp = main_vp;
-
 			main_vp = eo_vp;
 
 			get_local_entity_target_point (target, &target_point);
-
 			visibility = get_position_3d_screen_coordinates (&target_point, &i, &j);
-
-			//debug_log("i: %d, j: %d", i, j);
-//			debug_log("i: %.2f, i: %.2f", i, j);
 
 			if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 			{
@@ -3456,22 +3449,19 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 				get_2d_world_position (i, j, &x, &y);
 
-//				debug_log("x: %.2f, y: %.2f", x, y);
-
-				draw_2d_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
-				draw_2d_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
-				draw_2d_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
-				draw_2d_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
-				draw_2d_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR1);
-				draw_2d_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR1);
-				draw_2d_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR1);
-				draw_2d_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR1);
 			}
 
 			main_vp = tmp;
 		}
 	}
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
