@@ -60,6 +60,12 @@
 
 typedef struct APACHE_COORDINATE_POINTS apache_coordinate_points;
 
+typedef enum {
+	TADS_DIGITAL_ZOOM_WIDE,
+	TADS_DIGITAL_ZOOM_NORMAL,
+	TADS_DIGITAL_ZOOM_ZOOM,
+} tads_digital_zoom_levels;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,6 +159,9 @@ void toggle_apache_tsd_display_present_position_status(mfd_locations location);
 
 apache_coordinate_points*  get_apache_tsd_show_waypoint_review(mfd_locations location);
 void set_apache_tsd_show_waypoint_review(mfd_locations location, apache_coordinate_points* wpt);
+
+tads_digital_zoom_levels get_tads_digital_zoom_level(void);
+void set_tads_digital_zoom_level(tads_digital_zoom_levels zoom);
 
 apache_coordinate_points* get_apache_clicked_point(mfd_locations location, float pointer_pos_x, float pointer_pos_y, unsigned waypoints_only);
 entity* get_apache_clicked_target(mfd_locations location, float pointer_pos_x, float pointer_pos_y);

@@ -278,10 +278,9 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 
 	// TADS page
 	{ NULL,	"W",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
-	{ NULL,	"M",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
 	{ NULL,	"N",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
 	{ NULL,	"Z",		NULL, 	FALSE, FALSE, FALSE, select_tads_zoom },
-	{ NULL,	"FXD",		NULL, 	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"()",		NULL, 	FALSE, FALSE, FALSE, NULL },
 
 	// weapon page
 	{ NULL,	"TRAIN",	NULL, 	FALSE, FALSE, FALSE, NULL },
@@ -1639,6 +1638,10 @@ static int toggle_tpm_far_near_mode(mfd_push_button_types page, mfd_button_label
 
 static int select_tads_zoom(mfd_push_button_types page, mfd_button_labels btn)
 {
+	tads_digital_zoom_levels zoom = btn - BTN_L1;
+
+	set_tads_digital_zoom_level(zoom);
+
 	return TRUE;
 }
 
@@ -2178,6 +2181,19 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 
 			break;
 		}
+	case MFD_MODE_FLIR:
+	case MFD_MODE_DTV:
+		{
+			mfd_button_labels btn, selected_btn = BTN_L1 + get_tads_digital_zoom_level();
+
+			for (btn = BTN_L1; btn <= BTN_L3; btn++)
+				if (btn == selected_btn)
+					button_label_decorations[location][btn].boxed = 3;
+				else
+					button_label_decorations[location][btn].boxed = 0;
+
+			break;
+		}
 	case MFD_MODE_GROUND_RADAR:
 	case MFD_MODE_AIR_RADAR:
 		{
@@ -2663,16 +2679,13 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 	case MFD_MODE_FLIR:
 	case MFD_MODE_DTV:
 		{
-			mfd_button_labels btn = BTN_L1;
-
 			handler[BTN_T6] = &mfd_push_button_definitions[MFD_BUTTON_MENU_TADS];
 			button_label_decorations[location][BTN_T6].boxed = 3;
 
-			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_W];
-			if (mfd_mode == MFD_MODE_FLIR)
-				handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_M];
-			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_N];
-			handler[btn++] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_Z];
+			handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_W];
+			handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_N];
+			handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_TADS_ZOOM_Z];
+			handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_TADS_SHARPNESS];
 
 			break;
 		}

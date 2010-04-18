@@ -79,6 +79,18 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+float tads_digital_zoom_fov[] = {
+	0.95,
+	0.75,
+	0.50
+};
+
+static tads_digital_zoom_levels tads_digital_zoom_level;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void copy_export_mfd(screen* export_left, screen* export_right);
 
 static mfd_modes
@@ -703,7 +715,7 @@ void initialise_apache_mfd (void)
 	next_free_pfz = 0;
 	next_free_nfz = 0;
 
-	tads_display_lase_status = FALSE;
+	tads_digital_zoom_level = TADS_DIGITAL_ZOOM_NORMAL;
 
 	tsd_threat_line_flash_timer = TSD_THREAT_LINE_FLASH_RATE;
 	tsd_draw_threat_line_status = 0;
@@ -2584,13 +2596,27 @@ static display_3d_noise_levels
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+tads_digital_zoom_levels get_tads_digital_zoom_level(void)
+{
+	return tads_digital_zoom_level;
+}
+
+void set_tads_digital_zoom_level(tads_digital_zoom_levels zoom)
+{
+	tads_digital_zoom_level = zoom;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define ONE_OVER_SQRT2 0.707106
 
-static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
+static float get_eo_sensor_fov(eo_fov_levels fov_level, target_acquisition_systems system, BOOL is_ort)
 {
 	float fov = 10.0;
 
-	switch (eo->field_of_view)
+	switch (fov_level)
 	{
 		case EO_FOV_ZOOM:
 		{
@@ -2630,11 +2656,14 @@ static float get_eo_sensor_fov(eo_params *eo, target_acquisition_systems system)
 		}
 		default:
 		{
-			debug_fatal ("Invalid field of view = %d", eo->field_of_view);
+			debug_fatal ("Invalid field of view = %d", fov_level);
 
 			break;
 		}
 	}
+
+	if (!is_ort)
+		fov *= tads_digital_zoom_fov[tads_digital_zoom_level];
 
 	return fov;
 }
@@ -2760,7 +2789,7 @@ void draw_apache_virtual_cockpit_ort_view (int x_min, int x_max)
 
 	if (!damaged)
 	{
-		fov = rad(get_eo_sensor_fov(eo, system));
+		fov = rad(get_eo_sensor_fov(eo->field_of_view, system, TRUE));
 
 		set_eo_view_params(system, x_min, full_screen_y_min, x_max, full_screen_y_max, fov, fov);
 
@@ -2794,63 +2823,6 @@ static void draw_3d_eo_display (eo_params *eo, target_acquisition_systems system
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static float get_sensor_fov_angle(eo_fov_levels level, target_acquisition_systems system)
-{
-	float fov = 1.0;
-
-	switch (level)
-	{
-		case EO_FOV_ZOOM:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 1.6;
-			else  // DTV
-				fov = 0.45;
-
-			break;
-		}
-		case EO_FOV_NARROW:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 3.6;
-			else  // DTV
-				fov = 0.9;
-
-			break;
-		}
-		case EO_FOV_MEDIUM:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 10.1;
-			else  // DTV or DVO
-				fov = 4.0;
-
-			break;
-		}
-		case EO_FOV_WIDE:
-		{
-			if (system == TARGET_ACQUISITION_SYSTEM_FLIR)
-				fov = 50.0;
-			else  // DVO
-				fov = 18.0;
-
-			break;
-		}
-		default:
-		{
-			debug_fatal ("Invalid field of view = %d", level);
-
-			break;
-		}
-	}
-
-	return fov;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_systems system)
 {
 	float
@@ -2880,7 +2852,7 @@ static void draw_3d_eo_display_on_texture (eo_params *eo, target_acquisition_sys
 
 	ASSERT (d3d_can_render_to_texture);
 
-	fov = get_sensor_fov_angle(eo->field_of_view, system);
+	fov = get_eo_sensor_fov(eo->field_of_view, system, FALSE);
 
 	position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -3270,7 +3242,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d, int scaled_3d)
+static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d, int scaled_3d, int is_ort)
 {
 	const char
 		*s;
@@ -3408,8 +3380,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	if (eo->field_of_view > EO_FOV_ZOOM)
 	{
 		float
-			fov = get_sensor_fov_angle(eo->field_of_view, system),
-			fov_next = get_sensor_fov_angle(eo->field_of_view - 1, system),
+			fov = get_eo_sensor_fov(eo->field_of_view, system, is_ort),
+			fov_next = get_eo_sensor_fov(eo->field_of_view - 1, system, is_ort),
 			ratio = 1.2 * fov_next / fov,
 			line_length = ratio * 0.3;
 
@@ -3449,14 +3421,14 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 				get_2d_world_position (i, j, &x, &y);
 
-				draw_2d_half_thick_line (x - 0.20, y + 0.20, x - 0.15, y + 0.20, MFD_COLOUR1);
-				draw_2d_half_thick_line (x + 0.20, y + 0.20, x + 0.15, y + 0.20, MFD_COLOUR1);
-				draw_2d_half_thick_line (x - 0.20, y - 0.20, x - 0.15, y - 0.20, MFD_COLOUR1);
-				draw_2d_half_thick_line (x + 0.20, y - 0.20, x + 0.15, y - 0.20, MFD_COLOUR1);
-				draw_2d_half_thick_line (x - 0.20, y + 0.20, x - 0.20, y + 0.15, MFD_COLOUR1);
-				draw_2d_half_thick_line (x - 0.20, y - 0.20, x - 0.20, y - 0.15, MFD_COLOUR1);
-				draw_2d_half_thick_line (x + 0.20, y + 0.20, x + 0.20, y + 0.15, MFD_COLOUR1);
-				draw_2d_half_thick_line (x + 0.20, y - 0.20, x + 0.20, y - 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.25, y + 0.15, x - 0.20, y + 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.25, y + 0.15, x + 0.20, y + 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.25, y - 0.15, x - 0.20, y - 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.25, y - 0.15, x + 0.20, y - 0.15, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.25, y + 0.15, x - 0.25, y + 0.10, MFD_COLOUR1);
+				draw_2d_half_thick_line (x - 0.25, y - 0.15, x - 0.25, y - 0.10, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.25, y + 0.15, x + 0.25, y + 0.10, MFD_COLOUR1);
+				draw_2d_half_thick_line (x + 0.25, y - 0.15, x + 0.25, y - 0.10, MFD_COLOUR1);
 			}
 
 			main_vp = tmp;
@@ -3486,9 +3458,9 @@ static void draw_3d_flir_mfd (mfd_locations location)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_flir_mfd (int valid_3d, int scaled_3d)
+static void draw_2d_flir_mfd (int valid_3d, int scaled_3d, int is_ort)
 {
-	draw_2d_eo_display (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR, apache_damage.flir, valid_3d, scaled_3d);
+	draw_2d_eo_display (&apache_flir, TARGET_ACQUISITION_SYSTEM_FLIR, apache_damage.flir, valid_3d, scaled_3d, is_ort);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3513,9 +3485,9 @@ static void draw_3d_dtv_mfd (mfd_locations location)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_dtv_mfd (int valid_3d, int scaled_3d)
+static void draw_2d_dtv_mfd (int valid_3d, int scaled_3d, int is_ort)
 {
-	draw_2d_eo_display (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV, apache_damage.dtv, valid_3d, scaled_3d);
+	draw_2d_eo_display (&apache_dtv, TARGET_ACQUISITION_SYSTEM_DTV, apache_damage.dtv, valid_3d, scaled_3d, is_ort);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3540,9 +3512,10 @@ static void draw_3d_dvo_mfd (mfd_locations location)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_2d_dvo_mfd (int valid_3d, int scaled_3d)
+static void draw_2d_dvo_mfd (int valid_3d, int scaled_3d, int is_ort)
 {
-	draw_2d_eo_display (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO, apache_damage.dvo, valid_3d, scaled_3d);
+	ASSERT(is_ort);  // DVO only viewable through ORT
+	draw_2d_eo_display (&apache_dvo, TARGET_ACQUISITION_SYSTEM_DVO, apache_damage.dvo, valid_3d, scaled_3d, is_ort);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10341,10 +10314,10 @@ static void draw_apache_ort_symbology(int dummy)
 	switch (eo_sensor)
 	{
 	case TARGET_ACQUISITION_SYSTEM_FLIR:
-		draw_2d_flir_mfd(TRUE, TRUE);
+		draw_2d_flir_mfd(TRUE, TRUE, TRUE);
 		break;
 	case TARGET_ACQUISITION_SYSTEM_DTV:
-		draw_2d_dtv_mfd(TRUE, TRUE);
+		draw_2d_dtv_mfd(TRUE, TRUE, TRUE);
 		break;
 	case TARGET_ACQUISITION_SYSTEM_DVO:
 		{
@@ -10891,16 +10864,18 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 
 				if (lock_screen (eo_3d_texture_screen))
 				{
+					int is_ort = location == MFD_LOCATION_ORT;
+
 					draw_layout_grid ();
 
 					if (*mfd_mode == MFD_MODE_FLIR)
-						draw_2d_flir_mfd (TRUE, FALSE);
+						draw_2d_flir_mfd (TRUE, FALSE, is_ort);
 					else if (*mfd_mode == MFD_MODE_DTV)
-						draw_2d_dtv_mfd (TRUE, FALSE);
+						draw_2d_dtv_mfd (TRUE, FALSE, is_ort);
 					else
-						draw_2d_dvo_mfd (TRUE, FALSE);
+						draw_2d_dvo_mfd (TRUE, FALSE, is_ort);
 
-					if (location < MFD_LOCATION_ORT)
+					if (!is_ort)
 						render_apache_mfd_buttons(*mfd_mode, location, MFD_COLOUR1, MFD_COLOUR5, clear_mfd_colour, FALSE);
 
 					flush_screen_texture_graphics (eo_3d_texture_screen);
@@ -10926,11 +10901,11 @@ void draw_apache_mfd_on_texture (mfd_locations location)
 					draw_layout_grid ();
 
 					if (*mfd_mode == MFD_MODE_FLIR)
-						draw_2d_flir_mfd (FALSE, FALSE);
+						draw_2d_flir_mfd (FALSE, FALSE, FALSE);
 					else if (*mfd_mode == MFD_MODE_DTV)
-						draw_2d_dtv_mfd (FALSE, FALSE);
+						draw_2d_dtv_mfd (FALSE, FALSE, FALSE);
 					else
-						draw_2d_dvo_mfd (FALSE, FALSE);
+						draw_2d_dvo_mfd (FALSE, FALSE, FALSE);
 
 					render_apache_mfd_buttons(*mfd_mode, location, MFD_COLOUR1, MFD_COLOUR5, clear_mfd_colour, FALSE);
 
@@ -11602,11 +11577,11 @@ void draw_overlaid_apache_mfd (float x_org, float y_org, float size, mfd_locatio
 				draw_layout_grid ();
 
 				if (*mfd_mode == MFD_MODE_FLIR)
-					draw_2d_flir_mfd (TRUE, TRUE);
+					draw_2d_flir_mfd (TRUE, TRUE, FALSE);
 				else if (*mfd_mode == MFD_MODE_DTV)
-					draw_2d_dtv_mfd (TRUE, TRUE);
+					draw_2d_dtv_mfd (TRUE, TRUE, FALSE);
 				else
-					draw_2d_dvo_mfd (TRUE, TRUE);
+					draw_2d_dvo_mfd (TRUE, TRUE, FALSE);
 
 				flush_screen_texture_graphics (mfd_texture_screen);
 				unlock_screen (mfd_texture_screen);
