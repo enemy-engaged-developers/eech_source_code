@@ -3332,19 +3332,6 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		return;
 	}
 
-	//
-	// locked
-	//
-
-	if (eo_is_locked())
-	{
-		// TODO: some clever way of showing locked...
-		width = get_mono_font_string_width ("LOCKED");
-		set_2d_mono_font_position (0.0, -0.6);
-		set_mono_font_rel_position (-width * 0.5, 0);
-//		print_mono_font_string ("LOCKED");
-	}
-
 	draw_high_action_display (target, scaled_3d ? 0 : 2);
 
 	////////////////////////////////////////
@@ -3353,7 +3340,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	//
 	////////////////////////////////////////
 
-	draw_heading_scale(TRUE, 0.85);
+	draw_heading_scale(TRUE, 0.9);
 
 	////////////////////////////////////////
 	//
@@ -3372,6 +3359,11 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		draw_2d_half_thick_line (0.0, -0.130, 0.0, -0.030, MFD_COLOUR1);
 		draw_2d_half_thick_line (0.0, 0.030, 0.0, 0.13, MFD_COLOUR1);
 	}
+
+	tmp = main_vp;
+	main_vp = eo_vp;
+	draw_apache_acquisition_source_symbology(&eo_vp, MFD_COLOUR1, 0.16, rad(get_eo_sensor_fov(eo->field_of_view, system, is_ort) * 0.25));
+	main_vp = tmp;
 
 	//
 	// FOV gates

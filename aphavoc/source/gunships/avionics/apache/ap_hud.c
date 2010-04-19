@@ -2075,7 +2075,7 @@ static void draw_airborne_target_computed_intercept_point (float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // returns TRUE if position is visible
-static int get_hud_coordinate_for_position(vec3d* absolute_position, float* i, float* j)
+static int get_hud_coordinate_for_position(vec3d* absolute_position, float* i, float* j, int is_hud)
 {
 	object_3d_visibility
 		visibility;
@@ -2085,12 +2085,11 @@ static int get_hud_coordinate_for_position(vec3d* absolute_position, float* i, f
 	if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
 	{
 		float x, y;
-//				debug_log("i: %.2f, j: %.2f", i, j);
-		transform_hud_screen_co_ords_to_hud_texture_co_ords(i, j);
-		//debug_log("x: %.2f, y: %.2f", i, j);
+
+		if (is_hud)
+			transform_hud_screen_co_ords_to_hud_texture_co_ords(i, j);
 
 		get_2d_world_position (*i, *j, &x, &y);
-//				debug_log("target x: %.2f, target y: %.2f", target_x, target_y);
 
 		*i = x;
 		*j = y;
@@ -2107,7 +2106,7 @@ static int get_hud_coordinate_for_position(vec3d* absolute_position, float* i, f
 
 #define CUE_FLASH_INTERVAL (1.0)
 
-static void draw_acquisition_source_symbology(void)
+void draw_apache_acquisition_source_symbology(viewpoint* vp, rgb_colour colour, float position, float cue_dot_limit)
 {
 	static float cue_flash_timer = CUE_FLASH_INTERVAL;
 
@@ -2124,38 +2123,38 @@ static void draw_acquisition_source_symbology(void)
 
 	if (cue_flash_timer > CUE_FLASH_INTERVAL * 0.5)
 	{
-		multiply_transpose_matrix3x3_vec3d(&head_relative_position, main_vp.attitude, relative_position);
+		multiply_transpose_matrix3x3_vec3d(&head_relative_position, vp->attitude, relative_position);
 		normalise_3d_vector(&head_relative_position);
 		get_heading_and_pitch_from_3d_unit_vector(&head_relative_position, &offset_heading, &offset_pitch);
 
-		if (offset_heading < rad(-4.0))
-			draw_2d_mono_sprite(cue_dot, -0.125, 0.0, hud_colour);
-		else if (offset_heading > rad(4.0))
-			draw_2d_mono_sprite(cue_dot, 0.125, 0.0, hud_colour);
+		if (offset_heading < -cue_dot_limit)
+			draw_2d_mono_sprite(cue_dot, -position, 0.0, colour);
+		else if (offset_heading > cue_dot_limit)
+			draw_2d_mono_sprite(cue_dot, position, 0.0, colour);
 
-		if (offset_pitch < rad(-4.0))
-			draw_2d_mono_sprite(cue_dot, 0.0, -0.125, hud_colour);
-		else if (offset_pitch > rad(4.0))
-			draw_2d_mono_sprite(cue_dot, 0.0, 0.125, hud_colour);
+		if (offset_pitch < -cue_dot_limit)
+			draw_2d_mono_sprite(cue_dot, 0.0, -position, colour);
+		else if (offset_pitch > cue_dot_limit)
+			draw_2d_mono_sprite(cue_dot, 0.0, position, colour);
 	}
 
-	absolute_position.x = main_vp.x + relative_position->x;
-	absolute_position.y = main_vp.y + relative_position->y;
-	absolute_position.z = main_vp.z + relative_position->z;
+	absolute_position.x = vp->x + relative_position->x;
+	absolute_position.y = vp->y + relative_position->y;
+	absolute_position.z = vp->z + relative_position->z;
 
-	if (get_hud_coordinate_for_position(&absolute_position, &i, &j))
+	if (get_hud_coordinate_for_position(&absolute_position, &i, &j, vp != &eo_vp))
 	{
 		if (i > -0.7 && i < 0.7 && j > -0.7 && j < 0.7)
 		{
-			draw_2d_half_thick_line(i, j + 0.03, i, j + 0.06, hud_colour);
-			draw_2d_half_thick_line(i, j + 0.07, i, j + 0.10, hud_colour);
-			draw_2d_half_thick_line(i, j - 0.03, i, j - 0.06, hud_colour);
-			draw_2d_half_thick_line(i, j - 0.07, i, j - 0.10, hud_colour);
+			draw_2d_half_thick_line(i, j + 0.03, i, j + 0.06, colour);
+			draw_2d_half_thick_line(i, j + 0.07, i, j + 0.10, colour);
+			draw_2d_half_thick_line(i, j - 0.03, i, j - 0.06, colour);
+			draw_2d_half_thick_line(i, j - 0.07, i, j - 0.10, colour);
 
-			draw_2d_half_thick_line(i + 0.03, j, i + 0.06, j, hud_colour);
-			draw_2d_half_thick_line(i + 0.07, j, i + 0.10, j, hud_colour);
-			draw_2d_half_thick_line(i - 0.03, j, i - 0.06, j, hud_colour);
-			draw_2d_half_thick_line(i - 0.07, j, i - 0.10, j, hud_colour);
+			draw_2d_half_thick_line(i + 0.03, j, i + 0.06, j, colour);
+			draw_2d_half_thick_line(i + 0.07, j, i + 0.10, j, colour);
+			draw_2d_half_thick_line(i - 0.03, j, i - 0.06, j, colour);
+			draw_2d_half_thick_line(i - 0.07, j, i - 0.10, j, colour);
 		}
 	}
 
@@ -2175,8 +2174,8 @@ void draw_hud_profile_lines(vec2d* prev_relative_point, vec2d* relative_point, v
 	if (!prev_abs_pos || line >= get_tpm_profile_lines())
 		return;
 
-	if (get_hud_coordinate_for_position(prev_abs_pos, &x1, &y1))
-		if (get_hud_coordinate_for_position(abs_pos, &x2, &y2))
+	if (get_hud_coordinate_for_position(prev_abs_pos, &x1, &y1, TRUE))
+		if (get_hud_coordinate_for_position(abs_pos, &x2, &y2, TRUE))
 			if (x2 > x1)
 				draw_2d_line(x1, y1, x2, y2, hud_colour);
 }
@@ -2206,7 +2205,7 @@ static void draw_c_scope_symbology(void)
 		else
 			position = contacts->last_position;
 
-		if (get_hud_coordinate_for_position(&position, &x, &y))
+		if (get_hud_coordinate_for_position(&position, &x, &y, TRUE))
 		{
 			// air targets have their position at the top, so move it down
 //			if (get_local_entity_int_value (contacts->en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_TYPE_HELICOPTER)
@@ -2273,7 +2272,7 @@ static void draw_target_symbology (void)
 			else
 				target_position = *tracking_point;
 
-			target_visible = get_hud_coordinate_for_position(&target_position, &target_x, &target_y);
+			target_visible = get_hud_coordinate_for_position(&target_position, &target_x, &target_y, TRUE);
 			if (target_visible)
 			{
 				clip_2d_point_to_hud_extent (&target_x, &target_y);
@@ -2312,7 +2311,7 @@ static void draw_target_symbology (void)
 					{
 						get_target_intercept_point (source, target, selected_weapon_type, &intercept_point);
 
-						if (get_hud_coordinate_for_position(&intercept_point, &i, &j))
+						if (get_hud_coordinate_for_position(&intercept_point, &i, &j, TRUE))
 						{
 							clip_2d_point_to_hud_extent (&i, &j);
 							draw_airborne_target_computed_intercept_point(i, j);
@@ -2988,7 +2987,7 @@ static void draw_hud (int dummy)
 	if (c_scope_enabled)
 		draw_c_scope_symbology();
 
-	draw_acquisition_source_symbology();
+	draw_apache_acquisition_source_symbology(&main_vp, hud_colour, 0.125, rad(4.0));
 //	display_target_information ();
 	display_weapon_information ();
 	draw_field_of_view_and_regard_boxes ();
