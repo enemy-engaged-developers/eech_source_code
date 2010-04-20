@@ -2488,7 +2488,7 @@ void draw_terrain_radar_returns(vec3d* origin, float centre_y, float scale)
 
 void update_radar_target(entity* target, vec3d* absolute_position, vec3d* relative_position)
 {
-	if (use_separate_radar_target_list() && debug_var_x <= 0)
+	if (use_separate_radar_target_list())
 	{
 		int index = get_local_entity_int_value(target, INT_TYPE_GUNSHIP_RADAR_TARGET_INDEX);
 
@@ -2499,7 +2499,11 @@ void update_radar_target(entity* target, vec3d* absolute_position, vec3d* relati
 		radar_contacts[index].last_position = *absolute_position;
 		radar_contacts[index].display_position.x = relative_position->x;
 		radar_contacts[index].display_position.y = relative_position->z;
-		get_local_entity_vec3d(target, VEC3D_TYPE_MOTION_VECTOR, &radar_contacts[index].velocity);
+
+		if (vec3d_eq(radar_contacts[index].last_position, radar_contacts[index].previous_position))
+			radar_contacts[index].velocity.x = radar_contacts[index].velocity.y = radar_contacts[index].velocity.z = 0.0;
+		else
+			get_local_entity_vec3d(target, VEC3D_TYPE_MOTION_VECTOR, &radar_contacts[index].velocity);
 
 		radar_contacts[index].age = 0;
 		radar_contacts[index].last_contact = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);

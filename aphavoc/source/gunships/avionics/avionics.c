@@ -116,6 +116,8 @@ void initialise_avionics (void)
 
 			initialise_common_night_vision_system ();
 
+			initialise_apache_hud_mfd_common();
+
 			initialise_apache_hud ();
 
 			initialise_apache_mfd ();
@@ -530,6 +532,8 @@ void deinitialise_avionics (void)
 			pop_event (set_common_avionics_events);
 
 			save_gunship_avionics_damage ();
+
+			deinitialise_apache_hud_mfd_common();
 
 			deinitialise_common_hud ();
 

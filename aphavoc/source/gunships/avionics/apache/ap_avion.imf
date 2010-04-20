@@ -87,6 +87,7 @@ c_object_files		+=	$+ &
 #							$(currentdir)\ap_front.obj &
 							$(currentdir)\ap_hms.obj &
 							$(currentdir)\ap_hud.obj &
+							$(currentdir)\ap_hud_mfd_common.obj &
 							$(currentdir)\ap_keyboard_unit.obj &
 							$(currentdir)\ap_mfd_buttons.obj &
 							$(currentdir)\ap_real_mfd.obj &

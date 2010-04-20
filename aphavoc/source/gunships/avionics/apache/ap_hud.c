@@ -68,6 +68,7 @@
 
 #include "ap_hud_sprites.h"
 #include "ap_coordinate_point.h"
+#include "ap_hud_mfd_common.h"
 
 #include "../../dynamics/common/co_undercarriage.h"
 
@@ -134,23 +135,6 @@ static screen
 
 static rgb_colour
 	clear_hud_colour;
-
-static int
-	c_scope_enabled;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int get_apache_c_scope_enabled()
-{
-	return c_scope_enabled;
-}
-
-void toggle_apache_c_scope()
-{
-	c_scope_enabled = !c_scope_enabled;
-}
 
 ////////////////////////////////////////
 //
@@ -350,7 +334,7 @@ static void clip_2d_point_to_hud_extent (float *x, float *y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void transform_hud_screen_co_ords_to_hud_texture_co_ords (float *i, float *j)
+void transform_apache_hud_screen_co_ords_to_hud_texture_co_ords (float *i, float *j)
 {
 	ASSERT (i);
 	ASSERT (j);
@@ -365,7 +349,7 @@ static void transform_hud_screen_co_ords_to_hud_texture_co_ords (float *i, float
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 static void draw_layout_grid (void)
 {
 	float
@@ -385,7 +369,7 @@ static void draw_layout_grid (void)
 		}
 	}
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2074,99 +2058,6 @@ static void draw_airborne_target_computed_intercept_point (float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// returns TRUE if position is visible
-static int get_hud_coordinate_for_position(vec3d* absolute_position, float* i, float* j, int is_hud)
-{
-	object_3d_visibility
-		visibility;
-
-	visibility = get_position_3d_screen_coordinates(absolute_position, i, j);
-
-	if ((visibility == OBJECT_3D_COMPLETELY_VISIBLE) || (visibility == OBJECT_3D_PARTIALLY_VISIBLE))
-	{
-		float x, y;
-
-		if (is_hud)
-			transform_hud_screen_co_ords_to_hud_texture_co_ords(i, j);
-
-		get_2d_world_position (*i, *j, &x, &y);
-
-		*i = x;
-		*j = y;
-
-		return TRUE;
-	}
-	else
-		return FALSE;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define CUE_FLASH_INTERVAL (1.0)
-
-void draw_apache_acquisition_source_symbology(viewpoint* vp, rgb_colour colour, float position, float cue_dot_limit)
-{
-	static float cue_flash_timer = CUE_FLASH_INTERVAL;
-
-	float
-		offset_heading,
-		offset_pitch,
-		i,
-		j;
-
-	vec3d
-		absolute_position,
-		head_relative_position,
-		*relative_position = get_acuisition_source_relative_position();
-
-	if (cue_flash_timer > CUE_FLASH_INTERVAL * 0.5)
-	{
-		multiply_transpose_matrix3x3_vec3d(&head_relative_position, vp->attitude, relative_position);
-		normalise_3d_vector(&head_relative_position);
-		get_heading_and_pitch_from_3d_unit_vector(&head_relative_position, &offset_heading, &offset_pitch);
-
-		if (offset_heading < -cue_dot_limit)
-			draw_2d_mono_sprite(cue_dot, -position, 0.0, colour);
-		else if (offset_heading > cue_dot_limit)
-			draw_2d_mono_sprite(cue_dot, position, 0.0, colour);
-
-		if (offset_pitch < -cue_dot_limit)
-			draw_2d_mono_sprite(cue_dot, 0.0, -position, colour);
-		else if (offset_pitch > cue_dot_limit)
-			draw_2d_mono_sprite(cue_dot, 0.0, position, colour);
-	}
-
-	absolute_position.x = vp->x + relative_position->x;
-	absolute_position.y = vp->y + relative_position->y;
-	absolute_position.z = vp->z + relative_position->z;
-
-	if (get_hud_coordinate_for_position(&absolute_position, &i, &j, vp != &eo_vp))
-	{
-		if (i > -0.7 && i < 0.7 && j > -0.7 && j < 0.7)
-		{
-			draw_2d_half_thick_line(i, j + 0.03, i, j + 0.06, colour);
-			draw_2d_half_thick_line(i, j + 0.07, i, j + 0.10, colour);
-			draw_2d_half_thick_line(i, j - 0.03, i, j - 0.06, colour);
-			draw_2d_half_thick_line(i, j - 0.07, i, j - 0.10, colour);
-
-			draw_2d_half_thick_line(i + 0.03, j, i + 0.06, j, colour);
-			draw_2d_half_thick_line(i + 0.07, j, i + 0.10, j, colour);
-			draw_2d_half_thick_line(i - 0.03, j, i - 0.06, j, colour);
-			draw_2d_half_thick_line(i - 0.07, j, i - 0.10, j, colour);
-		}
-	}
-
-	cue_flash_timer -= get_delta_time();
-	if (cue_flash_timer < 0.0)
-		cue_flash_timer += CUE_FLASH_INTERVAL;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void draw_hud_profile_lines(vec2d* prev_relative_point, vec2d* relative_point, vec3d* prev_abs_pos, vec3d* abs_pos, unsigned line)
 {
 	float x1, x2, y1, y2;
@@ -2174,48 +2065,10 @@ void draw_hud_profile_lines(vec2d* prev_relative_point, vec2d* relative_point, v
 	if (!prev_abs_pos || line >= get_tpm_profile_lines())
 		return;
 
-	if (get_hud_coordinate_for_position(prev_abs_pos, &x1, &y1, TRUE))
-		if (get_hud_coordinate_for_position(abs_pos, &x2, &y2, TRUE))
+	if (get_apache_texture_coordinate_for_position(prev_abs_pos, &x1, &y1, TRUE))
+		if (get_apache_texture_coordinate_for_position(abs_pos, &x2, &y2, TRUE))
 			if (x2 > x1)
 				draw_2d_line(x1, y1, x2, y2, hud_colour);
-}
-
-static void draw_c_scope_symbology(void)
-{
-	unsigned ncontacts;
-	radar_contact* contacts = get_radar_contacts(&ncontacts);
-	float current_time = get_local_entity_float_value (get_session_entity (), FLOAT_TYPE_TIME_OF_DAY);
-
-	for (contacts = get_radar_contacts(&ncontacts);
-		 ncontacts;
-		 ncontacts--, contacts++)
-	{
-		float x, y;
-		vec3d position;
-		int moving = fabs(contacts->velocity.x) > 1.0 || fabs(contacts->velocity.y) > 0.1 || fabs(contacts->velocity.z > 1.0);
-
-		if (moving)
-		{
-			float delta_time = current_time - contacts->last_contact;
-			// assume contact continues in same direction
-			position.x = contacts->last_position.x + contacts->velocity.x * delta_time;
-			position.y = contacts->last_position.y + contacts->velocity.y * delta_time;
-			position.z = contacts->last_position.z + contacts->velocity.z * delta_time;
-		}
-		else
-			position = contacts->last_position;
-
-		if (get_hud_coordinate_for_position(&position, &x, &y, TRUE))
-		{
-			// air targets have their position at the top, so move it down
-//			if (get_local_entity_int_value (contacts->en, INT_TYPE_ENTITY_SUB_TYPE) == ENTITY_TYPE_HELICOPTER)
-				y -= 0.02;
-
-			draw_apache_radar_target_symbol(contacts->en, x, y, contacts->age < 2, moving, hud_colour, clear_hud_colour, clear_hud_colour);
-		}
-	}
-
-	for_all_profile_lines(draw_hud_profile_lines);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2272,7 +2125,7 @@ static void draw_target_symbology (void)
 			else
 				target_position = *tracking_point;
 
-			target_visible = get_hud_coordinate_for_position(&target_position, &target_x, &target_y, TRUE);
+			target_visible = get_apache_texture_coordinate_for_position(&target_position, &target_x, &target_y, TRUE);
 			if (target_visible)
 			{
 				clip_2d_point_to_hud_extent (&target_x, &target_y);
@@ -2311,7 +2164,7 @@ static void draw_target_symbology (void)
 					{
 						get_target_intercept_point (source, target, selected_weapon_type, &intercept_point);
 
-						if (get_hud_coordinate_for_position(&intercept_point, &i, &j, TRUE))
+						if (get_apache_texture_coordinate_for_position(&intercept_point, &i, &j, TRUE))
 						{
 							clip_2d_point_to_hud_extent (&i, &j);
 							draw_airborne_target_computed_intercept_point(i, j);
@@ -2984,8 +2837,11 @@ static void draw_hud (int dummy)
 	display_waypoint_information(hud_colour, -1.0, -0.4);
 
 	draw_target_symbology();
-	if (c_scope_enabled)
-		draw_c_scope_symbology();
+	if (get_apache_c_scope_enabled())
+	{
+		draw_c_scope_symbology(TRUE, hud_colour, clear_hud_colour);
+		for_all_profile_lines(draw_hud_profile_lines);
+	}
 
 	draw_apache_acquisition_source_symbology(&main_vp, hud_colour, 0.125, rad(4.0));
 //	display_target_information ();
@@ -3016,7 +2872,6 @@ void initialise_apache_hud (void)
 	hud_env = create_2d_environment ();
 
 	hud_texture_screen = create_system_texture_screen (HUD_VIEWPORT_SIZE, HUD_VIEWPORT_SIZE, HUD_TEXTURE_INDEX, TEXTURE_TYPE_SINGLEALPHA);
-	c_scope_enabled = FALSE;
 
 	clear_hud_colour.r = 255;
 	clear_hud_colour.g = 255;
@@ -3580,13 +3435,3 @@ void draw_apache_hud (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int get_apache_display_radar_altitude(void)
-{
-	float radar_altitude = feet (current_flight_dynamics->radar_altitude.value);
-
-	if (radar_altitude <= 50.0)
-		return (int)(radar_altitude + 0.5);
-	else
-		return 10 * (int)((radar_altitude + 5.0) / 10.0);
-}

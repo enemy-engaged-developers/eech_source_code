@@ -70,13 +70,7 @@ extern void deinitialise_apache_hud (void);
 
 extern void draw_apache_hud (void);
 
-// radar altitude in 1 foot increments below 50 feet, 10 feet increments above
-int get_apache_display_radar_altitude(void);
-
-int get_apache_c_scope_enabled();
-void toggle_apache_c_scope();
-
-void draw_apache_acquisition_source_symbology(viewpoint* vp, rgb_colour colour, float position, float cue_dot_limit);
+void transform_apache_hud_screen_co_ords_to_hud_texture_co_ords (float *i, float *j);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

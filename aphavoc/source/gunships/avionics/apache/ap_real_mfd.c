@@ -70,6 +70,7 @@
 #include "ap_checklists.h"
 #include "ap_mfd_sprites.h"
 #include "ap_coordinate_point.h"
+#include "ap_hud_mfd_common.h"
 
 #include "../common/co_adf.h"
 #include "../../dynamics/common/co_fuel.h"
@@ -291,9 +292,6 @@ static float
 
 static int
 	tsd_draw_threat_line_status;
-
-static int
-	tads_display_lase_status;
 
 #define ASE_THREAT_LINE_FLASH_RATE	(0.1)
 
@@ -1115,8 +1113,7 @@ static void draw_heading_scale(int is_tads, float pos_y)
 				float
 					dx,
 					dz,
-					bearing,
-					command_heading;
+					bearing;
 
 				gunship_position = get_local_entity_vec3d_ptr (get_gunship_entity (), VEC3D_TYPE_POSITION);
 
@@ -1712,7 +1709,7 @@ static void draw_ground_radar_clutter (entity *target, vec3d *source_position, f
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_radar_elevation_scale(radar_params* radar)
+static void draw_radar_elevation_scale(radar_params* radar)
 {
 	const float top = -0.8, bottom = -1.1;
 	float relative_elev = (radar->elevation - MIN_RADAR_ELEVATION_ANGLE) / (MAX_RADAR_ELEVATION_ANGLE - MIN_RADAR_ELEVATION_ANGLE);
@@ -3244,11 +3241,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system, int damaged, int valid_3d, int scaled_3d, int is_ort)
 {
-	const char
-		*s;
-
 	float
-		width,
 		y_adjust,
 		i,
 		j,
@@ -3363,6 +3356,8 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 	tmp = main_vp;
 	main_vp = eo_vp;
 	draw_apache_acquisition_source_symbology(&eo_vp, MFD_COLOUR1, 0.16, rad(get_eo_sensor_fov(eo->field_of_view, system, is_ort) * 0.25));
+	if (get_apache_c_scope_enabled())
+		draw_c_scope_symbology(FALSE, MFD_COLOUR1, MFD_CLEAR_COLOUR);
 	main_vp = tmp;
 
 	//
@@ -7269,7 +7264,7 @@ static void draw_fuel_page_mfd(void)
 static void draw_weapon_display_mfd (mfd_locations location, mfd_modes mfd_mode)
 {
 	float x1, x2, x3, x4, y1, y2, y3;
-	float forward_wing, rear_wing, wing_tip_left, wing_tip_right;
+//	float forward_wing, rear_wing, wing_tip_left, wing_tip_right;
 	char s[80];
 	const char *s_ptr;
 	float x_adjust;

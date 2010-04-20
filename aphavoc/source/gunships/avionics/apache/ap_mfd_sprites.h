@@ -145,7 +145,7 @@ static const char off_indicator_mask[] =
 // WEAPONS
 //
 ////////////////////////////////////////
-
+#if 0
 static char
 	hellfire_missile_data[] =
 	{
@@ -321,7 +321,7 @@ static char
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 		0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,
 	};
-
+#endif
 static char
 	large_tsd_ase_aircraft_datum[] =
 	{
@@ -476,6 +476,7 @@ static char
 		1,1,1,0,0,0,0,0,0,0,1,1,1,
 	};
 
+#if 0
 static char
 	roll_caret[] =
 	{
@@ -495,8 +496,9 @@ static char
 		0,1,1,1,1,1,1,1,1,1,1,1,0,
 		0,1,1,1,1,1,1,1,1,1,1,1,0,
 	};
+#endif
 
-static mfd_modes get_mfd_mode_for_eo_sensor (void);
+//static mfd_modes get_mfd_mode_for_eo_sensor (void);
 
 static char
 	large_display_moving_target_symbol[] =
