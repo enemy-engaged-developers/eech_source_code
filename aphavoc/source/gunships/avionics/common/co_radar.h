@@ -271,6 +271,8 @@ unsigned get_radar_zoomed(void);
 void set_radar_zoomed(unsigned zoomed);
 
 void rotate_radar_scan_datum(float amount);
+unsigned radar_can_pan_left(void);
+unsigned radar_can_pan_right(void);
 
 unsigned get_radar_terrain_sensivity();
 void set_radar_terrain_sensivity(unsigned sensivity);

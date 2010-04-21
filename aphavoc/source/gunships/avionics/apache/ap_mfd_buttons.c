@@ -11,6 +11,7 @@
 #include "ap_mfd_button_sprites.h"
 #include "ap_keyboard_unit.h"
 #include "ap_coordinate_point.h"
+#include "ap_hud_mfd_common.h"
 
 #include "../common/co_adf.h"
 #include "../common/co_radar.h"
@@ -2348,6 +2349,8 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 				}
 
 				button_label_decorations[location][BTN_R1].boxed = get_radar_zoomed() ? 3 : 0;
+				button_label_decorations[location][BTN_L2].barriered = !radar_can_pan_left();
+				button_label_decorations[location][BTN_R2].barriered = !radar_can_pan_right();
 				// TODO:
 				button_label_decorations[location][BTN_R6].boxed = get_radar_auto_pan_scan_datum() ? 1 : 2;
 			}
@@ -3183,30 +3186,29 @@ void render_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, rgb_c
 								upper_y - height - margin,
 								FALSE, TRUE, fg_col);
 				}
-
-				if (button_label_decorations[location][btn].barriered)
-				{
-					switch (row)
-					{
-					case BTN_T1:
-						draw_2d_box(x - 0.1, 1.2, x + 0.1, 1.17, TRUE, FALSE, fg_col);
-						break;
-					case BTN_L1:
-						draw_2d_box(-1.2, y + 0.1, -1.17, y - 0.1, TRUE, FALSE, fg_col);
-						break;
-					case BTN_R1:
-						draw_2d_box(1.2, y + 0.1, 1.17, y - 0.1, TRUE, FALSE, fg_col);
-						break;
-					case BTN_B1:
-						draw_2d_box(x - 0.1, -1.2, x + 0.1, -1.17, TRUE, FALSE, fg_col);
-						break;
-					default:
-						ASSERT(FALSE);
-						break;
-					}
-				}
 			}
 
+			if (button_label_decorations[location][btn].barriered)
+			{
+				switch (row)
+				{
+				case BTN_T1:
+					draw_2d_box(x - 0.1, 1.2, x + 0.1, 1.17, TRUE, FALSE, fg_col);
+					break;
+				case BTN_L1:
+					draw_2d_box(-1.2, y + 0.1, -1.17, y - 0.1, TRUE, FALSE, fg_col);
+					break;
+				case BTN_R1:
+					draw_2d_box(1.2, y + 0.1, 1.17, y - 0.1, TRUE, FALSE, fg_col);
+					break;
+				case BTN_B1:
+					draw_2d_box(x - 0.1, -1.2, x + 0.1, -1.17, TRUE, FALSE, fg_col);
+					break;
+				default:
+					ASSERT(FALSE);
+					break;
+				}
+			}
 		}
 
 		if (btn <= BTN_T6 || btn >= BTN_M)

@@ -480,6 +480,30 @@ unsigned get_radar_auto_pan_scan_datum(void)
 	return auto_pan_scan_datum;
 }
 
+unsigned radar_can_pan_left(void)
+{
+	radar_params* radar = get_current_radar_params();
+	if (radar->scan_arc_size == RADAR_SCAN_ARC_SIZE_360)
+		return FALSE;
+
+	if (radar == &air_radar)
+		return TRUE;
+
+	return (radar->scan_datum - radar->scan_arc_size * 0.5)  >  GROUND_RADAR_MIN_SCAN_ANGLE;
+}
+
+unsigned radar_can_pan_right(void)
+{
+	radar_params* radar = get_current_radar_params();
+	if (radar->scan_arc_size == RADAR_SCAN_ARC_SIZE_360)
+		return FALSE;
+
+	if (radar == &air_radar)
+		return TRUE;
+
+	return (radar->scan_datum + radar->scan_arc_size * 0.5)  <  GROUND_RADAR_MAX_SCAN_ANGLE;
+}
+
 unsigned get_fcr_powered(void)
 {
 	return fcr_powered;
