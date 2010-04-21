@@ -1136,6 +1136,9 @@ static void draw_heading_scale(int is_tads, float pos_y)
 
 		command_heading = bound (command_heading, rad (-90.0), rad (90.0));
 		draw_2d_mono_sprite (command_heading_carat, (deg(command_heading) * heading_tick_x_spacing * 0.1), tick_datum_top, MFD_COLOUR1);
+
+		get_opposite_crew_head_vector(&command_heading, &bearing);
+		draw_2d_mono_sprite(crew_sensor_heading_carat, (deg(command_heading) * heading_tick_x_spacing * 0.1), tick_datum_top, MFD_COLOUR1);
 	}
 
 	//

@@ -33,6 +33,8 @@ typedef enum {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static float
+	head_heading,
+	head_pitch,
 	time_until_state_change,
 	current_movement_rate_heading,
 	current_movement_rate_pitch,
@@ -265,10 +267,10 @@ void animate_co_pilot_head(object_3d_instance* cockpit_inst3d)
 
 	// update head rotation
 	delta = bound(requested_heading - helmet_inst->relative_heading, -current_movement_rate_heading, current_movement_rate_heading) * get_delta_time();
-	helmet_inst->relative_heading = bound(helmet_inst->relative_heading + delta, -MAX_TURN_ANGLE, MAX_TURN_ANGLE);
+	head_heading = helmet_inst->relative_heading = bound(helmet_inst->relative_heading + delta, -MAX_TURN_ANGLE, MAX_TURN_ANGLE);
 
 	delta = bound(requested_pitch - helmet_inst->relative_pitch, -current_movement_rate_pitch, current_movement_rate_pitch) * get_delta_time();
-	helmet_inst->relative_pitch = bound(helmet_inst->relative_pitch + delta, MIN_PITCH, MAX_PITCH);
+	head_pitch = helmet_inst->relative_pitch = bound(helmet_inst->relative_pitch + delta, MIN_PITCH, MAX_PITCH);
 
 	// update torso bending
 	diff = requested_bend - torso_inst->relative_pitch;
@@ -287,6 +289,16 @@ void animate_co_pilot_head(object_3d_instance* cockpit_inst3d)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void get_opposite_crew_head_vector(float* heading, float* pitch)
+{
+	*heading = head_heading;
+	*pitch = head_pitch;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initialise_co_pilot_head_animations(void)
 {
 	looking_state = CPG_ANIM_STATE_REST;
@@ -299,4 +311,6 @@ void initialise_co_pilot_head_animations(void)
 	requested_heading = 0.0;
 	requested_pitch = 5.0;
 	requested_bend = 0.0;
+
+	head_heading = head_pitch = 0.0;
 }
