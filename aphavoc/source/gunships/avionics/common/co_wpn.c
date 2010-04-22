@@ -277,6 +277,14 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 		if (get_local_entity_int_value (source, INT_TYPE_WEAPON_AND_TARGET_VECTORS_VALID))
 		{
+			float
+				max_launch_angle = weapon_database[selected_weapon_type].max_launch_angle_error;
+
+			// LOBL mode has smaller angle
+			if (weapon_database[selected_weapon_type].hellfire_flight_profile)
+				if (!get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+					max_launch_angle *= 0.3;
+
 			weapon_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_VECTOR);
 
 			weapon_to_target_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_TO_TARGET_VECTOR);
@@ -285,7 +293,7 @@ void update_weapon_lock_type (target_acquisition_systems system)
 
 			theta = fabs (acos (theta));
 
-			if (theta > weapon_database[selected_weapon_type].max_launch_angle_error)
+			if (theta > max_launch_angle)
 			{
 				weapon_lock_type = WEAPON_LOCK_SEEKER_LIMIT;
 

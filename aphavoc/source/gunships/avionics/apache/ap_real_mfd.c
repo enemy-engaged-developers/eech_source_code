@@ -1284,7 +1284,7 @@ static void draw_heading_scale(int is_tads, float pos_y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 static void draw_field_of_regard_and_view_boxes (void)
 {
 	float
@@ -1310,7 +1310,7 @@ static void draw_field_of_regard_and_view_boxes (void)
 
 	draw_2d_box(x - 0.04, y - 0.03, x + 0.04, y + 0.03, FALSE, TRUE, MFD_COLOUR1);
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1902,7 +1902,7 @@ static void draw_ground_radar_mfd (int sub_mode)
 	////////////////////////////////////////
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-	draw_high_action_display(target, 1);
+	draw_apache_high_action_display(RENDER_TARGET_FCR, MFD_COLOUR1);
 
 	////////////////////////////////////////
 	//
@@ -3040,7 +3040,7 @@ static void draw_overlaid_3d_eo_display (eo_params *eo, target_acquisition_syste
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 static void draw_high_action_display (entity* target, int fill_boxes)
 {
 	const char* s;
@@ -3237,7 +3237,7 @@ static void draw_high_action_display (entity* target, int fill_boxes)
 
 	draw_field_of_regard_and_view_boxes ();
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3328,7 +3328,7 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		return;
 	}
 
-	draw_high_action_display (target, scaled_3d ? 0 : 2);
+	draw_apache_high_action_display(RENDER_TARGET_TADS, MFD_COLOUR1);
 
 	////////////////////////////////////////
 	//
@@ -3388,6 +3388,66 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 		draw_2d_half_thick_line(ratio, -ratio, ratio, -ratio + line_length, MFD_COLOUR1);
 	}
 
+	// weapon targeting info
+	if (target)
+	{
+		float
+			offset_x,
+			offset_y,
+			heading_offset,
+			pitch_offset;
+
+		if (get_local_entity_selected_weapon_to_target_offsets(source, &heading_offset, &pitch_offset))
+		{
+			entity_sub_types selected_weapon_type = get_local_entity_int_value (source, INT_TYPE_SELECTED_WEAPON);
+
+			float
+				scale = 0.55 / weapon_database[ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE].max_launch_angle_error;
+
+			if (selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255 || selected_weapon_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261)
+				scale = 1.0 / rad(10.0);
+
+			offset_x = bound(heading_offset * scale, -1.1, 1.1);
+			offset_y = bound(pitch_offset * scale, -1.1, 1.1);;
+
+			switch (selected_weapon_type)
+			{
+				case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
+				case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
+				{
+					if (weapon_lock_type == WEAPON_LOCK_VALID)
+						draw_solid_i_beam(offset_x, offset_y, MFD_COLOUR1);
+					else
+						draw_dashed_i_beam(offset_x, offset_y, MFD_COLOUR1);
+					break;
+				}
+				////////////////////////////////////////
+				case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
+				case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+				////////////////////////////////////////
+				{
+					if (!get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+					{
+						if (weapon_lock_type == WEAPON_LOCK_VALID)
+							draw_hellfire_lobl_solid_target_marker(offset_x, offset_y, MFD_COLOUR1);
+						else
+							draw_hellfire_lobl_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1);
+					}
+					else
+					{
+						if (weapon_lock_type == WEAPON_LOCK_VALID)
+							draw_hellfire_loal_solid_target_marker(offset_x, offset_y, MFD_COLOUR1);
+						else
+							draw_hellfire_loal_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1);
+					}
+
+					break;
+				}
+			}
+		}
+	}
+
+	// IAT tracking gates
 	if (target && eo_is_locked())
 	{
 		if (valid_3d)

@@ -1785,49 +1785,6 @@ static void draw_target_marker (float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void draw_dashed_i_beam (float x, float y)
-{
-	draw_2d_half_thick_line (x - 0.1000 + 0.0125, y + 0.2, x - 0.0500 - 0.0125, y + 0.2, hud_colour);
-	draw_2d_half_thick_line (x - 0.0500 + 0.0125, y + 0.2, x - 0.0000 - 0.0125, y + 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x + 0.1000 - 0.0125, y + 0.2, x + 0.0500 + 0.0125, y + 0.2, hud_colour);
-	draw_2d_half_thick_line (x + 0.0500 - 0.0125, y + 0.2, x + 0.0000 + 0.0125, y + 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x, y + 0.2000 - 0.0125, x, y + 0.1500 + 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y + 0.1500 - 0.0125, x, y + 0.1000 + 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y + 0.1000 - 0.0125, x, y + 0.0500 + 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y + 0.0500 - 0.0125, x, y + 0.0000 + 0.0125, hud_colour);
-
-	draw_2d_half_thick_line (x, y - 0.2000 + 0.0125, x, y - 0.1500 - 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y - 0.1500 + 0.0125, x, y - 0.1000 - 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y - 0.1000 + 0.0125, x, y - 0.0500 - 0.0125, hud_colour);
-	draw_2d_half_thick_line (x, y - 0.0500 + 0.0125, x, y - 0.0000 - 0.0125, hud_colour);
-
-	draw_2d_half_thick_line (x - 0.1000 + 0.0125, y - 0.2, x - 0.0500 - 0.0125, y - 0.2, hud_colour);
-	draw_2d_half_thick_line (x - 0.0500 + 0.0125, y - 0.2, x - 0.0000 - 0.0125, y - 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x + 0.1000 - 0.0125, y - 0.2, x + 0.0500 + 0.0125, y - 0.2, hud_colour);
-	draw_2d_half_thick_line (x + 0.0500 - 0.0125, y - 0.2, x + 0.0000 + 0.0125, y - 0.2, hud_colour);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static void draw_solid_i_beam (float x, float y)
-{
-	draw_2d_half_thick_line (x - 0.1000 + 0.0125, y + 0.2, x - 0.0000 - 0.0125, y + 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x + 0.1000 - 0.0125, y + 0.2, x + 0.0000 + 0.0125, y + 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x, y + 0.2000 - 0.0125, x, y + 0.1000 + 0.0125, hud_colour);
-
-	draw_2d_half_thick_line (x, y - 0.2000 + 0.0125, x, y - 0.1000 - 0.0125, hud_colour);
-
-	draw_2d_half_thick_line (x - 0.1000 + 0.0125, y - 0.2, x - 0.0000 - 0.0125, y - 0.2, hud_colour);
-
-	draw_2d_half_thick_line (x + 0.1000 - 0.0125, y - 0.2, x + 0.0000 + 0.0125, y - 0.2, hud_colour);
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1943,7 +1900,7 @@ static void draw_solid_gun_target_marker (float x, float y)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0
 static void draw_hellfire_lobl_dashed_target_marker (float x, float y)
 {
 	draw_2d_half_thick_line (x - 0.15000, y + 0.15000, x - 0.13125, y + 0.15000, hud_colour);
@@ -2043,7 +2000,7 @@ static void draw_hellfire_loal_solid_target_marker (float x, float y)
 	draw_2d_half_thick_line (x + 0.7, y - 0.7, x - 0.7, y - 0.7, hud_colour);
 	draw_2d_half_thick_line (x - 0.7, y - 0.7, x - 0.7, y + 0.7, hud_colour);
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2183,11 +2140,11 @@ static void draw_target_symbology (void)
 
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 						{
-							draw_solid_i_beam (heading_offset, pitch_offset);
+							draw_solid_i_beam (heading_offset, pitch_offset, hud_colour);
 						}
 						else
 						{
-							draw_dashed_i_beam (heading_offset, pitch_offset);
+							draw_dashed_i_beam (heading_offset, pitch_offset, hud_colour);
 						}
 					}
 					else
@@ -2213,11 +2170,11 @@ static void draw_target_symbology (void)
 					{
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 						{
-							draw_hellfire_lobl_solid_target_marker (target_x, target_y);
+							draw_hellfire_lobl_solid_target_marker (target_x, target_y, hud_colour);
 						}
 						else
 						{
-							draw_hellfire_lobl_dashed_target_marker (target_x, target_y);
+							draw_hellfire_lobl_dashed_target_marker (target_x, target_y, hud_colour);
 						}
 					}
 				}
@@ -2227,16 +2184,16 @@ static void draw_target_symbology (void)
 					{
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 						{
-							draw_hellfire_loal_solid_target_marker (target_x, target_y);
+							draw_hellfire_loal_solid_target_marker (target_x, target_y, hud_colour);
 						}
 						else
 						{
-							draw_hellfire_loal_dashed_target_marker (target_x, target_y);
+							draw_hellfire_loal_dashed_target_marker (target_x, target_y, hud_colour);
 						}
 					}
 					else
 					{
-						draw_hellfire_loal_dashed_target_marker (0.0, 0.0);
+						draw_hellfire_loal_dashed_target_marker (0.0, 0.0, hud_colour);
 					}
 				}
 
@@ -2266,7 +2223,7 @@ static void draw_target_symbology (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // see section 4.28 in AH-64A manual
-
+#if 0
 static void draw_high_action_display(void)
 {
 	const char
@@ -2573,6 +2530,29 @@ static void draw_field_of_view_and_regard_boxes (void)
 	draw_2d_half_thick_line (x - 0.0400, y - 0.0250, x - 0.0400, y + 0.0250, hud_colour);
 	draw_2d_half_thick_line (x + 0.0400, y - 0.0250, x + 0.0400, y + 0.0250, hud_colour);
 }
+#endif
+
+static void draw_slip_ball(void)
+{
+	float slip;
+
+	if (weight_on_wheels())
+	{
+		slip = bound(current_flight_dynamics->roll.value, rad(-3.0), rad(3.0));
+		slip *= 0.1 / rad(3.0);
+	}
+	else
+	{
+		slip = bound(current_flight_dynamics->velocity_x.value, -10.0, 10.0);
+		slip *= 0.01;
+	}
+
+	// slip indicator
+	//draw_2d_circle(slip, -0.6400, 0.0350, hud_colour);
+	draw_2d_mono_sprite(slip_ball, slip, -0.6350, hud_colour);
+	draw_2d_half_thick_line (0.0350, -0.6650,  0.0350, -0.6050, hud_colour);
+	draw_2d_half_thick_line (-0.0350, -0.6650, -0.0350, -0.6050, hud_colour);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2828,6 +2808,7 @@ static void draw_hud (int dummy)
 {
 	draw_hud_centre_datum ();
 	draw_heading_scale ();
+	draw_slip_ball();
 
 	display_true_airspeed ();
 	display_engine_torque ();
@@ -2846,7 +2827,8 @@ static void draw_hud (int dummy)
 	draw_apache_acquisition_source_symbology(&main_vp, hud_colour, 0.125, rad(4.0));
 //	display_target_information ();
 	display_weapon_information ();
-	draw_field_of_view_and_regard_boxes ();
+	draw_apache_high_action_display(RENDER_TARGET_HUD, hud_colour);
+//	draw_field_of_view_and_regard_boxes ();
 
 	if (hud_mode == HUD_MODE_BOB_UP)
 		draw_bob_up_overlay ();
