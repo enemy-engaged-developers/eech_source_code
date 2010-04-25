@@ -6,7 +6,7 @@
 
 .EXTENSIONS: .exe .obj .cpp
 
-all :
+all : .SYMBOLIC
 
 # BEGIN USER
 

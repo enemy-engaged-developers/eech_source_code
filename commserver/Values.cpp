@@ -25,8 +25,10 @@ enum GUNSHIP_TYPES	// stolen from global.h
 
 int heading(double value)
 {
-	int real = (int)floor(value * 180 / M_PI + 0.5);
-	return real < 0 ? real + 361 : real;
+	int val = (int)(value * 1000);
+	if (val < 0)
+		val += 6295;
+	return val * 0.05729578;
 }
 
 Value GetApacheSpecificData(int command)
