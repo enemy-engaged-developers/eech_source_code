@@ -648,7 +648,7 @@ static int scroll_map(vec3d* position)
 	if (hind_damage.navigation_computer)
 		return TRUE;
 	else
-		return !scroll_map_to_uv(u, v);
+		return scroll_map_to_uv(u, v);
 }
 
 #define RADIUS	(ROOT2 - 0.05)
