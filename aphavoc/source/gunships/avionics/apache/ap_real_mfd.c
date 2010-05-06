@@ -3350,10 +3350,10 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 
 	{
 		// TODO flash with malfunction
-		draw_2d_half_thick_line (-0.13, 0.0, -0.030, 0.0, MFD_COLOUR1);
-		draw_2d_half_thick_line (0.030, 0.0, 0.13, 0.0, MFD_COLOUR1);
-		draw_2d_half_thick_line (0.0, -0.130, 0.0, -0.030, MFD_COLOUR1);
-		draw_2d_half_thick_line (0.0, 0.030, 0.0, 0.13, MFD_COLOUR1);
+		draw_2d_line (-0.25, 0.0, -0.050, 0.0, MFD_COLOUR1);
+		draw_2d_line (0.050, 0.0, 0.25, 0.0, MFD_COLOUR1);
+		draw_2d_line (0.0, -0.20, 0.0, -0.050, MFD_COLOUR1);
+		draw_2d_line (0.0, 0.050, 0.0, 0.2, MFD_COLOUR1);
 	}
 
 	tmp = main_vp;
@@ -3431,14 +3431,14 @@ static void draw_2d_eo_display (eo_params *eo, target_acquisition_systems system
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 							draw_hellfire_lobl_solid_target_marker(offset_x, offset_y, MFD_COLOUR1);
 						else
-							draw_hellfire_lobl_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1);
+							draw_hellfire_lobl_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1, &MFD_COLOUR6);
 					}
 					else
 					{
 						if (weapon_lock_type == WEAPON_LOCK_VALID)
 							draw_hellfire_loal_solid_target_marker(offset_x, offset_y, MFD_COLOUR1);
 						else
-							draw_hellfire_loal_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1);
+							draw_hellfire_loal_dashed_target_marker(offset_x, offset_y, MFD_COLOUR1, &MFD_COLOUR6);
 					}
 
 					break;

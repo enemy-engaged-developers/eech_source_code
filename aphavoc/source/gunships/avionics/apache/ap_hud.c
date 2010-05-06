@@ -2174,7 +2174,7 @@ static void draw_target_symbology (void)
 						}
 						else
 						{
-							draw_hellfire_lobl_dashed_target_marker (target_x, target_y, hud_colour);
+							draw_hellfire_lobl_dashed_target_marker (target_x, target_y, hud_colour, NULL);
 						}
 					}
 				}
@@ -2188,12 +2188,12 @@ static void draw_target_symbology (void)
 						}
 						else
 						{
-							draw_hellfire_loal_dashed_target_marker (target_x, target_y, hud_colour);
+							draw_hellfire_loal_dashed_target_marker (target_x, target_y, hud_colour, NULL);
 						}
 					}
 					else
 					{
-						draw_hellfire_loal_dashed_target_marker (0.0, 0.0, hud_colour);
+						draw_hellfire_loal_dashed_target_marker (0.0, 0.0, hud_colour, NULL);
 					}
 				}
 

@@ -178,7 +178,7 @@ int get_apache_display_radar_altitude(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colour)
+void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
 {
 	draw_2d_half_thick_line (x - 0.15000, y + 0.15000, x - 0.13125, y + 0.15000, colour);
 	draw_2d_half_thick_line (x - 0.09375, y + 0.15000, x - 0.05626, y + 0.15000, colour);
@@ -203,6 +203,29 @@ void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colou
 	draw_2d_half_thick_line (x - 0.15000, y - 0.01875, x - 0.15000, y + 0.01875, colour);
 	draw_2d_half_thick_line (x - 0.15000, y + 0.05625, x - 0.15000, y + 0.09375, colour);
 	draw_2d_half_thick_line (x - 0.15000, y + 0.13125, x - 0.15000, y + 0.15000, colour);
+
+	if (bg_colour)
+	{
+		draw_2d_half_thick_line (x - 0.09375, y + 0.15000, x - 0.13125, y + 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x - 0.01875, y + 0.15000, x - 0.05626, y + 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x + 0.05625, y + 0.15000, x + 0.01875, y + 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x + 0.13125, y + 0.15000, x + 0.09375, y + 0.15000, *bg_colour);
+
+		draw_2d_half_thick_line (x - 0.09375, y - 0.15000, x - 0.13125, y - 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x - 0.01875, y - 0.15000, x - 0.05626, y - 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x + 0.05625, y - 0.15000, x + 0.01875, y - 0.15000, *bg_colour);
+		draw_2d_half_thick_line (x + 0.13125, y - 0.15000, x + 0.09375, y - 0.15000, *bg_colour);
+
+		draw_2d_half_thick_line (x + 0.15000, y - 0.09375, x + 0.15000, y - 0.13125, *bg_colour);
+		draw_2d_half_thick_line (x + 0.15000, y - 0.01875, x + 0.15000, y - 0.05626, *bg_colour);
+		draw_2d_half_thick_line (x + 0.15000, y + 0.05625, x + 0.15000, y + 0.01875, *bg_colour);
+		draw_2d_half_thick_line (x + 0.15000, y + 0.13125, x + 0.15000, y + 0.09375, *bg_colour);
+
+		draw_2d_half_thick_line (x - 0.15000, y - 0.09375, x - 0.15000, y - 0.13125, *bg_colour);
+		draw_2d_half_thick_line (x - 0.15000, y - 0.01875, x - 0.15000, y - 0.05626, *bg_colour);
+		draw_2d_half_thick_line (x - 0.15000, y + 0.05625, x - 0.15000, y + 0.01875, *bg_colour);
+		draw_2d_half_thick_line (x - 0.15000, y + 0.13125, x - 0.15000, y + 0.09375, *bg_colour);
+	}
 }
 
 void draw_hellfire_lobl_solid_target_marker (float x, float y, rgb_colour colour)
@@ -217,7 +240,7 @@ void draw_hellfire_lobl_solid_target_marker (float x, float y, rgb_colour colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colour)
+void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
 {
 	draw_2d_half_thick_line (x - 0.55, y + 0.55, x - 0.45, y + 0.55, colour);
 	draw_2d_half_thick_line (x - 0.35, y + 0.55, x - 0.25, y + 0.55, colour);
@@ -246,6 +269,33 @@ void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colou
 	draw_2d_half_thick_line (x - 0.55, y + 0.05, x - 0.55, y + 0.15, colour);
 	draw_2d_half_thick_line (x - 0.55, y + 0.25, x - 0.55, y + 0.35, colour);
 	draw_2d_half_thick_line (x - 0.55, y + 0.45, x - 0.55, y + 0.55, colour);
+
+	if (bg_colour)
+	{
+		draw_2d_half_thick_line (x - 0.35, y + 0.55, x - 0.45, y + 0.55, *bg_colour);
+		draw_2d_half_thick_line (x - 0.15, y + 0.55, x - 0.25, y + 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.05, y + 0.55, x - 0.05, y + 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.25, y + 0.55, x + 0.15, y + 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.45, y + 0.55, x + 0.35, y + 0.55, *bg_colour);
+
+		draw_2d_half_thick_line (x - 0.35, y - 0.55, x - 0.45, y - 0.55, *bg_colour);
+		draw_2d_half_thick_line (x - 0.15, y - 0.55, x - 0.25, y - 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.05, y - 0.55, x - 0.05, y - 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.25, y - 0.55, x + 0.15, y - 0.55, *bg_colour);
+		draw_2d_half_thick_line (x + 0.45, y - 0.55, x + 0.35, y - 0.55, *bg_colour);
+
+		draw_2d_half_thick_line (x + 0.55, y - 0.35, x + 0.55, y - 0.45, *bg_colour);
+		draw_2d_half_thick_line (x + 0.55, y - 0.15, x + 0.55, y - 0.25, *bg_colour);
+		draw_2d_half_thick_line (x + 0.55, y + 0.05, x + 0.55, y - 0.05, *bg_colour);
+		draw_2d_half_thick_line (x + 0.55, y + 0.25, x + 0.55, y + 0.15, *bg_colour);
+		draw_2d_half_thick_line (x + 0.55, y + 0.45, x + 0.55, y + 0.35, *bg_colour);
+
+		draw_2d_half_thick_line (x - 0.55, y - 0.35, x - 0.55, y - 0.45, *bg_colour);
+		draw_2d_half_thick_line (x - 0.55, y - 0.15, x - 0.55, y - 0.25, *bg_colour);
+		draw_2d_half_thick_line (x - 0.55, y + 0.05, x - 0.55, y - 0.05, *bg_colour);
+		draw_2d_half_thick_line (x - 0.55, y + 0.25, x - 0.55, y + 0.15, *bg_colour);
+		draw_2d_half_thick_line (x - 0.55, y + 0.45, x - 0.55, y + 0.35, *bg_colour);
+	}
 }
 
 void draw_hellfire_loal_solid_target_marker (float x, float y, rgb_colour colour)
@@ -346,20 +396,65 @@ static void draw_field_of_regard_and_view_boxes (avionics_render_target render_t
 	draw_2d_mono_sprite(cue_dot, x, y, colour);
 }
 
+static const char* get_weapon_status(char* buffer, unsigned buffer_len)
+{
+	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
+
+	switch (selected_weapon)
+	{
+	case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
+		{
+			int number = get_local_entity_weapon_count (get_gunship_entity (), selected_weapon);
+			if (apache_damage.gun_jammed)
+				return "GUN FAIL";
+
+			snprintf(buffer, buffer_len, "ROUNDS%4d", number);
+			return buffer;
+		}
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
+	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
+		return "ROCKETS";
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
+	case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		{
+			float flight_time;
+
+			flight_time = get_missile_flight_time();
+			if (flight_time <= 0.0)  // no missiles in flight
+				return "MSL";
+
+			snprintf(buffer, buffer_len, "TOF=%d", (int)(flight_time + 0.5));
+			return buffer;
+		}
+		break;
+	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
+		return "ATA";
+		break;
+	}
+
+	return "";
+}
+
 void draw_apache_high_action_display(avionics_render_target render_target, rgb_colour colour)
 {
-#if 0
+#define LASER_FLASH_RATE  (1.0f)
+	static float laser_flash_timer = LASER_FLASH_RATE;
+
 	const char* s;
 	char buffer[200];
-	float y_pos = -0.97;
+	float y_pos = (render_target == RENDER_TARGET_HUD) ? -0.65 : -0.97;
 
+	entity* target;
 	rangefinding_system rangefinder = get_range_finder();
 
 	float target_range = get_range_to_target();
 	int x_adjust, width;
 
-	set_mono_font_type (MONO_FONT_TYPE_8X14);
+	set_mono_font_type (MONO_FONT_TYPE_10X16);
 
+#if 0
 	if (fill_boxes == 2)
 	{
 		rgb_colour bg_colour;
@@ -369,8 +464,8 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, TRUE, FALSE, bg_colour);
 		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, TRUE, FALSE, bg_colour);
 	}
-
-	if (fill_boxes >= 1)
+#endif
+	if (render_target == RENDER_TARGET_FCR)
 	{
 		draw_2d_box(-0.98, y_pos, -0.35, y_pos - 0.2, FALSE, TRUE, colour);
 		draw_2d_box(0.98, y_pos, 0.35, y_pos - 0.2, FALSE, TRUE, colour);
@@ -383,7 +478,6 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	//
 
 	s = get_target_display_name (target, buffer, TRUE);
-
 	if (s)
 	{
 		width = get_mono_font_string_width (s);
@@ -393,6 +487,7 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	}
 
 	// airspeed and altitude
+	if (render_target != RENDER_TARGET_HUD)
 	{
 		int airspeed = (int)knots(current_flight_dynamics->velocity_z.value);
 		int altitude = get_apache_display_radar_altitude();
@@ -401,12 +496,12 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 		set_2d_mono_font_position (-0.7, y_pos + 0.08);
 		set_mono_font_rel_position (0, 0);
 		print_mono_font_string (buffer);
-
+#if 0
 		if (altitude <= feet(get_low_altitude_warning_limit()))
 			set_mono_font_colour(MFD_COLOUR_RED);
 		else if (altitude >= feet(get_high_altitude_warning_limit()))
 			set_mono_font_colour(MFD_COLOUR_YELLOW);
-
+#endif
 		if (altitude < 1500.0)
 		{
 			sprintf(buffer, "%4d", altitude);
@@ -419,9 +514,10 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	}
 
 	// lower left box:
-	// rang finder    range
+	// range finder    range
 	// targeting status
 
+	// TODO write ranges above 10km without range source
 	switch (rangefinder)
 	{
 	case RANGEFINDER_FCR:
@@ -429,8 +525,23 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 		sprintf(buffer, "R%.1f", target_range * 0.001);
 		break;
 	case RANGEFINDER_LASER:
+		laser_flash_timer -= get_delta_time();
+		if (laser_flash_timer < 0.0)
+			laser_flash_timer = LASER_FLASH_RATE;
+		else if (laser_flash_timer > LASER_FLASH_RATE * 0.5)
+		{
+			s = "TADS";
+			sprintf(buffer, "*%04.0f", target_range);
+			break;
+		}
+		// fallthrough
+	case RANGEFINDER_LASER_PULSE:
 		s = "TADS";
-		sprintf(buffer, "L%04.0f", target_range);
+		sprintf(buffer, "%04.0f", target_range);
+		break;
+	case RANGEFINDER_COORDINATE:
+		s = "TADS";  // TODO, should say TXX, WXX etc.
+		sprintf(buffer, "%.1f", target_range);
 		break;
 	case RANGEFINDER_TRIANGULATION:
 		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
@@ -443,6 +554,14 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 		else
 			sprintf(buffer, "AX.X");
 
+		break;
+	case RANGEFINDER_MANUAL:
+		if (target_acquisition_system != TARGET_ACQUISITION_SYSTEM_OFF)
+			s = "TADS";
+		else
+			s = "NONE";
+
+		sprintf(buffer, "M%.1f", target_range * 0.001);
 		break;
 	}
 
@@ -500,7 +619,7 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 			break;
 	}
 
-	set_2d_mono_font_position (-0.95, y_pos - 0.03);
+	set_2d_mono_font_position (-0.95, y_pos - 0.07 + debug_var_y * 0.01);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 10);
 	print_mono_font_string (s);
@@ -511,9 +630,9 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 
 	s = get_weapon_status(buffer, sizeof(buffer));
 
-	set_2d_mono_font_position (0.37, y_pos - 0.03);
+	set_2d_mono_font_position (0.37, y_pos - 0.07);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
-	set_mono_font_rel_position (x_adjust, 0);
+	set_mono_font_rel_position (x_adjust, 10);
 	print_mono_font_string (s);
 
 	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
@@ -523,7 +642,7 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 
 	set_2d_mono_font_position (0.37, y_pos - 0.03);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
-	set_mono_font_rel_position (x_adjust, 9);
+	set_mono_font_rel_position (x_adjust, 0);
 	print_mono_font_string (s);
 
 	////////////////////////////////////////
@@ -531,7 +650,7 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	// draw field of regard and view boxes
 	//
 	////////////////////////////////////////
-#endif
+
 	draw_field_of_regard_and_view_boxes(render_target, colour);
 }
 

@@ -10770,47 +10770,6 @@ static const char* get_sight_status(void)
 		return "SLAVE TG";
 }
 
-static const char* get_weapon_status(char* buffer, unsigned buffer_len)
-{
-	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
-
-	switch (selected_weapon)
-	{
-	case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
-		{
-			int number = get_local_entity_weapon_count (get_gunship_entity (), selected_weapon);
-			if (apache_damage.gun_jammed)
-				return "GUN FAIL";
-
-			snprintf(buffer, buffer_len, "RNDS%4d", number);
-			return buffer;
-		}
-		break;
-	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
-	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
-		return "ROCKETS";
-		break;
-	case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
-	case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
-		{
-			float flight_time;
-
-			flight_time = get_missile_flight_time();
-			if (flight_time <= 0.0)  // no missiles in flight
-				return "MSL";
-
-			snprintf(buffer, buffer_len, "TOF=%d", (int)(flight_time + 0.5));
-			return buffer;
-		}
-		break;
-	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
-		return "ATA";
-		break;
-	}
-
-	return "";
-}
-
 static const char* get_tracker_status(void)
 {
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR

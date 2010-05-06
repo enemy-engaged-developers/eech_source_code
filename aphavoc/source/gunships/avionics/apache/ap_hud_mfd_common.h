@@ -32,9 +32,9 @@ void deinitialise_apache_hud_mfd_common(void);
 void draw_apache_high_action_display(avionics_render_target, rgb_colour colour);
 
 void draw_hellfire_loal_solid_target_marker(float x, float y, rgb_colour colour);
-void draw_hellfire_loal_dashed_target_marker(float x, float y, rgb_colour colour);
+void draw_hellfire_loal_dashed_target_marker(float x, float y, rgb_colour colour, rgb_colour* bg_colour);
 void draw_hellfire_lobl_solid_target_marker(float x, float y, rgb_colour colour);
-void draw_hellfire_lobl_dashed_target_marker(float x, float y, rgb_colour colour);
+void draw_hellfire_lobl_dashed_target_marker(float x, float y, rgb_colour colour, rgb_colour* bg_colour);
 
 void draw_dashed_i_beam(float x, float y, rgb_colour colour);
 void draw_solid_i_beam(float x, float y, rgb_colour colour);
