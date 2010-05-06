@@ -3459,41 +3459,17 @@ void restore_default_textures ( void )
 		debug_log("Texture override +++ restore screen (%d) : %s",count,system_texture_override_names[count].name);
 #endif
 
-		if ( system_textures[count]->palette )
-		{
-			f3d_surface_palette ( system_textures[count]->surface, NULL );
-			system_textures[count]->palette = NULL;
-		}
-		release_texture_surface ( &system_textures[count]->surface );
+		f3d_texture_release ( system_texture_info[count].texture_screen );
 
 	// restore pointer to original textures
 		system_textures[ count ] = backup_system_textures[ count ];
 		system_texture_info[ count ] = backup_system_texture_info[ count ];
-
-	}
-
-	//VJ 060120 release all texture loaded after the default system textures (water etc)
-	if (current_map_info.last_texture > number_of_system_textures)
-	{
-
-		for ( count = number_of_system_textures+1; count < current_map_info.last_texture; count++)
-		{
-
-	#if DEBUG_MODULE
-			debug_log("Additional texture release (%d-%d) ",count);
-	#endif
-
-			if (system_textures[count]->surface)
-				release_texture_surface ( &system_textures[count]->surface );
-
-		}
 	}
 
 	clear_texture_override_names();
 
 	//VJ 051225 reset map data
 	initialise_custom_map_info();
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3653,6 +3629,7 @@ void load_texture_override ( void )
 		//VJ 050821 check if it worked
 		if (override_screen)
 		{
+			override_screen->do_not_destroy = FALSE;
 			// now we set the pointer in the system textxures array to point to this
 			// screen rather than the original screen
 			system_textures[count] = override_screen;
@@ -3773,7 +3750,7 @@ void load_texture_water( void )
 	//rivertextures are put behind last texture in system_texture_info array
 	// order is river, sea, reservoir (0, 1, 2)
 
-	placenr = number_of_system_textures ;
+	placenr = number_of_system_textures;
 
 	////// load textures
 

@@ -726,6 +726,9 @@ void process_game_initialisation_phases (void)
 
 				#endif
 
+				// Casm 07MAY2010 Unloading custom map textures here too
+				restore_default_textures ();
+
 				break;
 			}
 		}

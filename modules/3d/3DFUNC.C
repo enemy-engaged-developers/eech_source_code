@@ -654,11 +654,7 @@ int f3d_texture_release(screen *texture)
 
 	if ( !texture->clone_screen )
 	{
-		if ( texture->surface )
-		{
-			ddraw_destroy_surface ( texture->surface );
-			texture->surface = NULL;
-		}
+		f3d_surface_release ( &texture->surface );
 		texture->palette = NULL;
 	}
 

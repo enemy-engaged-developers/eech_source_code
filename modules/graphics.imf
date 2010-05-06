@@ -119,7 +119,6 @@ c_module_object_files	+=	$+ &
 									$(currentdir)\textsys.obj &
 									$(currentdir)\textscrn.obj &
 									$(currentdir)\textuser.obj &
-									$(currentdir)\textures.obj &
 									$(currentdir)\viewport.obj &
 									$(currentdir)\rle.obj &
 									$(currentdir)\rgb.obj &
