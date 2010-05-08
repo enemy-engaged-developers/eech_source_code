@@ -280,10 +280,10 @@ void update_weapon_lock_type (target_acquisition_systems system)
 			float
 				max_launch_angle = weapon_database[selected_weapon_type].max_launch_angle_error;
 
-			// LOBL mode has smaller angle
+			// LOAL mode has smaller angle
 			if (weapon_database[selected_weapon_type].hellfire_flight_profile)
-				if (!get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
-					max_launch_angle *= 0.3;
+				if (get_local_entity_int_value (source, INT_TYPE_LOCK_ON_AFTER_LAUNCH))
+					max_launch_angle *= 0.375;
 
 			weapon_vector = get_local_entity_vec3d_ptr (source, VEC3D_TYPE_WEAPON_VECTOR);
 
@@ -830,7 +830,7 @@ float get_weapon_drop(entity_sub_types wpn_type)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float get_missile_flight_time (void)
+float get_missile_flight_time (float* elapsed)
 {
 	entity_sub_types
 		weapon_sub_type;
@@ -854,7 +854,7 @@ float get_missile_flight_time (void)
 	en = get_gunship_entity ();
 
 	//
-	// find first launched Hellfire with a target (first found on list)
+	// find first launched weapon with a target (first found on list)
 	//
 
 	weapon = get_local_entity_first_child (en, LIST_TYPE_LAUNCHED_WEAPON);
@@ -870,6 +870,8 @@ float get_missile_flight_time (void)
 		{
 		case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 		case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
+		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
+		case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
 		case ENTITY_SUB_TYPE_WEAPON_ATAKA:
 		case ENTITY_SUB_TYPE_WEAPON_VIKHR:
 		case ENTITY_SUB_TYPE_WEAPON_AT6_SPIRAL:
@@ -889,6 +891,12 @@ float get_missile_flight_time (void)
 			target_position = get_eo_tracking_point();
 			if (!target_position && target)
 				target_position = get_local_entity_vec3d_ptr (target, VEC3D_TYPE_POSITION);
+
+			if (elapsed)
+			{
+				float start_time = weapon_database[weapon_sub_type].burn_time;
+				*elapsed = start_time - get_local_entity_float_value(weapon, FLOAT_TYPE_WEAPON_LIFETIME);
+			}
 
 			if (target_position)
 			{

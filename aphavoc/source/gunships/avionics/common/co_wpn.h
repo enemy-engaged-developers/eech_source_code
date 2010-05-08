@@ -153,7 +153,7 @@ extern float get_weapon_drop(entity_sub_types wpn_type);
 
 extern void lase_range_for_ballistics_sight(void);
 
-extern float get_missile_flight_time (void);
+extern float get_missile_flight_time (float* elapsed);
 
 void get_requested_gunship_cannon_vector(int has_target, float* required_heading_offset, float* required_pitch_offset, entity_sub_types selected_weapon, viewpoint* vp);
 
