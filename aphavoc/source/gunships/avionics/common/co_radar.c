@@ -3028,7 +3028,7 @@ void update_common_radar (int inactive_check)
 
 
 // TODO: check if we should only do this for some acquisition systems
-//	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
+	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_GROUND_RADAR)
 	{
 		////////////////////////////////////////
 		//

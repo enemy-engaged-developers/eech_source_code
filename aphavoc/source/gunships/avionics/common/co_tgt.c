@@ -636,7 +636,7 @@ const char *get_target_display_name (entity *target, char *buffer, int large_dis
 		allied;
 
 	const char
-		*target_name;
+		*target_name = NULL;
 
 	ASSERT (buffer);
 
@@ -646,8 +646,6 @@ const char *get_target_display_name (entity *target, char *buffer, int large_dis
 		case CPG_ASSIST_TYPE_NONE:
 		////////////////////////////////////////
 		{
-			target_name = NULL;
-
 			break;
 		}
 		////////////////////////////////////////
@@ -730,10 +728,6 @@ const char *get_target_display_name (entity *target, char *buffer, int large_dis
 						}
 					}
 				}
-				else
-				{
-					target_name = "NO TARGET";
-				}
 			}
 			else
 			{
@@ -754,10 +748,6 @@ const char *get_target_display_name (entity *target, char *buffer, int large_dis
 							target_name = get_local_entity_string (target, STRING_TYPE_SHORT_DISPLAY_NAME);
 						}
 					}
-				}
-				else
-				{
-					target_name = "NO TARGET";
 				}
 			}
 

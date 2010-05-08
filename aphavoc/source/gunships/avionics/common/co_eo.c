@@ -109,6 +109,7 @@ target_acquisition_systems
 	eo_sensor;
 
 float
+	manual_range,
 	eo_azimuth,
 	eo_requested_azimuth,
 	eo_min_azimuth,
@@ -2067,6 +2068,9 @@ float get_range_to_target(void)
 {
 	rangefinding_system rangefinder = get_range_finder();
 	entity* target = get_local_entity_parent(get_gunship_entity(), LIST_TYPE_TARGET);
+
+	if (rangefinder == RANGEFINDER_MANUAL)
+		return manual_range;
 
 	if (target || eo_is_tracking_point())
 	{
