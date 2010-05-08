@@ -2462,7 +2462,7 @@ static void display_weapon_information (void)
 		}
 		else if (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_ATAKA)
 		{
-			float flight_time = get_missile_flight_time ();
+			float flight_time = get_missile_flight_time (NULL);
 
 			if (flight_time > 0.01)
 			{
