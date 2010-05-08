@@ -108,7 +108,6 @@ static int
 
 static void draw_high_action_display (entity* target, int fill_boxes);
 static void display_waypoint_information (rgb_colour box_colour, float x_pos, float y_pos);
-static const char* get_weapon_status(char* buffer, unsigned buffer_len);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10284,6 +10283,7 @@ static const char* get_sight_status(void)
 		return "SLAVE TG";
 }
 
+#if 0
 static const char* get_weapon_status(char* buffer, unsigned buffer_len)
 {
 	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
@@ -10324,7 +10324,7 @@ static const char* get_weapon_status(char* buffer, unsigned buffer_len)
 
 	return "";
 }
-
+#endif
 static const char* get_tracker_status(void)
 {
 	if (target_acquisition_system == TARGET_ACQUISITION_SYSTEM_FLIR
@@ -10411,11 +10411,12 @@ static void draw_apache_tads_alnum_display(int dummy)
 		set_mono_font_rel_position(0, 0);
 		print_mono_font_string(s);
 
+#if 0  // TODO
 		// weapon status
 		s = get_weapon_status(buffer, sizeof(buffer));
 		set_2d_mono_font_position(0.0, y);
 		print_mono_font_string(s);
-
+#endif
 		y -= line_height;
 
 		// tracker status

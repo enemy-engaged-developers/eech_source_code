@@ -11,6 +11,20 @@
 #include "ap_hud_mfd_common_sprites.h"
 #include "ap_hud.h"
 
+
+
+// should correspond with the values in entity/mobile/weapon/configs/apache.h
+#define CANNON_TURRET_MIN_HEADING_LIMIT	(rad (-86.0))
+#define CANNON_TURRET_MAX_HEADING_LIMIT	(rad (86.0))
+#define CANNON_BARREL_MIN_PITCH_LIMIT		(rad (-60.0))
+#define CANNON_BARREL_MAX_PITCH_LIMIT		(rad (11.0))
+
+#define HYDRA_POD_MIN_PITCH_LIMIT			(rad (-15.0))
+#define HYDRA_POD_MAX_PITCH_LIMIT			(rad (4.9))
+
+#define HYDRA_POD_ROTATE_INHIBIT_VELOCITY	(knots_to_metres_per_second (100.0))
+
+
 static int
 	c_scope_enabled;
 
@@ -178,7 +192,7 @@ int get_apache_display_radar_altitude(void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
+void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
 {
 	draw_2d_half_thick_line (x - 0.15000, y + 0.15000, x - 0.13125, y + 0.15000, colour);
 	draw_2d_half_thick_line (x - 0.09375, y + 0.15000, x - 0.05626, y + 0.15000, colour);
@@ -228,7 +242,7 @@ void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colou
 	}
 }
 
-void draw_hellfire_lobl_solid_target_marker (float x, float y, rgb_colour colour)
+void draw_hellfire_loal_solid_target_marker (float x, float y, rgb_colour colour)
 {
 	draw_2d_half_thick_line (x - 0.15, y + 0.15, x + 0.15, y + 0.15, colour);
 	draw_2d_half_thick_line (x + 0.15, y + 0.15, x + 0.15, y - 0.15, colour);
@@ -240,7 +254,7 @@ void draw_hellfire_lobl_solid_target_marker (float x, float y, rgb_colour colour
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
+void draw_hellfire_lobl_dashed_target_marker (float x, float y, rgb_colour colour, rgb_colour* bg_colour)
 {
 	draw_2d_half_thick_line (x - 0.55, y + 0.55, x - 0.45, y + 0.55, colour);
 	draw_2d_half_thick_line (x - 0.35, y + 0.55, x - 0.25, y + 0.55, colour);
@@ -298,7 +312,7 @@ void draw_hellfire_loal_dashed_target_marker (float x, float y, rgb_colour colou
 	}
 }
 
-void draw_hellfire_loal_solid_target_marker (float x, float y, rgb_colour colour)
+void draw_hellfire_lobl_solid_target_marker (float x, float y, rgb_colour colour)
 {
 	draw_2d_half_thick_line (x - 0.55, y + 0.55, x + 0.55, y + 0.55, colour);
 	draw_2d_half_thick_line (x + 0.55, y + 0.55, x + 0.55, y - 0.55, colour);
@@ -396,41 +410,128 @@ static void draw_field_of_regard_and_view_boxes (avionics_render_target render_t
 	draw_2d_mono_sprite(cue_dot, x, y, colour);
 }
 
-static const char* get_weapon_status(char* buffer, unsigned buffer_len)
+static const char* get_weapon_status(avionics_render_target render_target, char* buffer, unsigned buffer_len, char* inhibition_buffer, unsigned inhibition_buffer_len)
 {
 	int selected_weapon = get_local_entity_int_value(get_gunship_entity(), INT_TYPE_SELECTED_WEAPON);
+
+	*inhibition_buffer = 0;
+
+	if (render_target == RENDER_TARGET_TADS)
+	{
+		if (eo_azimuth == eo_min_azimuth || eo_azimuth == eo_max_azimuth)
+			strncpy(inhibition_buffer, "YAW LIMIT", inhibition_buffer_len);
+		else if (eo_elevation == eo_min_elevation || eo_elevation == eo_max_elevation)
+			strncpy(inhibition_buffer, "ELEV LIMIT", inhibition_buffer_len);
+	}
 
 	switch (selected_weapon)
 	{
 	case ENTITY_SUB_TYPE_WEAPON_M230_30MM_ROUND:
 		{
 			int number = get_local_entity_weapon_count (get_gunship_entity (), selected_weapon);
-			if (apache_damage.gun_jammed)
-				return "GUN FAIL";
 
-			snprintf(buffer, buffer_len, "ROUNDS%4d", number);
+			float
+				gun_heading = get_local_entity_float_value (get_gunship_entity(), FLOAT_TYPE_PLAYER_WEAPON_HEADING),
+				gun_pitch = get_local_entity_float_value(get_gunship_entity(), FLOAT_TYPE_PLAYER_WEAPON_PITCH);
+
+			if (apache_damage.gun_jammed)
+				strncpy(inhibition_buffer, "GUN FAIL", inhibition_buffer_len);
+			else if (gun_heading == CANNON_TURRET_MIN_HEADING_LIMIT
+					 || gun_heading == CANNON_TURRET_MAX_HEADING_LIMIT
+					 || gun_pitch == CANNON_BARREL_MIN_PITCH_LIMIT
+					 || gun_pitch == CANNON_BARREL_MAX_PITCH_LIMIT)
+			{
+				return "LIMITS";
+			}
+
+			snprintf(buffer, buffer_len, "ROUNDS %4d", number);
 			return buffer;
 		}
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261:
 	case ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255:
+		if (get_local_entity_float_value(get_gunship_entity(), FLOAT_TYPE_VELOCITY) >= HYDRA_POD_ROTATE_INHIBIT_VELOCITY)
+			return "RKT-F-S";
+
 		return "ROCKETS";
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE:
 	case ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II:
 		{
-			float flight_time;
+			float flight_time, elapsed;
 
-			flight_time = get_missile_flight_time();
-			if (flight_time <= 0.0)  // no missiles in flight
-				return "MSL";
+			flight_time = get_missile_flight_time(&elapsed);
+			if (flight_time > 0.0)  // missiles in flight
+			{
+				if (elapsed <= 2.0)  // TODO should actually show when trigger is pressed, but before missile is launched
+					return "MSL LAUNCH";
 
-			snprintf(buffer, buffer_len, "TOF=%d", (int)(flight_time + 0.5));
-			return buffer;
+				if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II && flight_time <= 8.0 && !laser_is_active())
+					return "LASE 1 TRGT";  // TODO number should increase
+
+				// TODO should not depend on missile being in the air, use separate timer
+				if (elapsed < 8.0)
+					strncpy(inhibition_buffer, "MSL NOT RDY", inhibition_buffer_len);
+				else if (elapsed >= 8.0 && elapsed <= 10.0)
+					return "FIRE MSLS";
+
+				snprintf(buffer, buffer_len, "HF TOF=%02d", (int)(flight_time + 0.5));
+				return buffer;
+			}
+
+			switch (weapon_lock_type)
+			{
+				case WEAPON_LOCK_SEEKER_LIMIT:
+					strncpy(inhibition_buffer, "SKR LIMIT", inhibition_buffer_len);
+				case WEAPON_LOCK_NO_ACQUIRE:
+				case WEAPON_LOCK_NO_TARGET:
+				case WEAPON_LOCK_INVALID_TARGET:
+				case WEAPON_LOCK_NO_BORESIGHT:
+					if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
+						return "NO ACQUIRE";
+				case WEAPON_LOCK_NO_LOS:
+					return "MAN DIR";  // TODO more LOAL modes and firing modes
+				case WEAPON_LOCK_NO_WEAPON:
+					return "";
+				case WEAPON_LOCK_MIN_RANGE:
+				case WEAPON_LOCK_MAX_RANGE:
+				case WEAPON_LOCK_VALID:
+				case WEAPON_LOCK_BURST_LIMIT:
+					if (selected_weapon == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE)
+						return "RF MSL TRK";
+					else
+						return "PRI CHAN TRK";  // ALT CHAN TRK and 2 CHAN TRK
+				default:
+					debug_fatal ("Invalid weapon lock type = %d", weapon_lock_type);
+					break;
+			}
+
 		}
 		break;
 	case ENTITY_SUB_TYPE_WEAPON_AIM92_STINGER:
 		return "ATA";
+		break;
+	default:
+		switch (weapon_lock_type)
+		{
+		case WEAPON_LOCK_NO_WEAPON:
+			return "WEAPON?";
+		case WEAPON_LOCK_NO_ACQUIRE:
+		case WEAPON_LOCK_NO_TARGET:
+		case WEAPON_LOCK_INVALID_TARGET:
+		case WEAPON_LOCK_SEEKER_LIMIT:
+		case WEAPON_LOCK_NO_BORESIGHT:
+		case WEAPON_LOCK_NO_LOS:
+		case WEAPON_LOCK_MIN_RANGE:
+		case WEAPON_LOCK_MAX_RANGE:
+		case WEAPON_LOCK_VALID:
+		case WEAPON_LOCK_BURST_LIMIT:
+			return "";
+		default:
+			debug_fatal ("Invalid weapon lock type = %d", weapon_lock_type);
+			break;
+		}
+
 		break;
 	}
 
@@ -443,8 +544,8 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	static float laser_flash_timer = LASER_FLASH_RATE;
 
 	const char* s;
-	char buffer[200];
-	float y_pos = (render_target == RENDER_TARGET_HUD) ? -0.65 : -0.97;
+	char buffer[20], buffer2[20];
+	float y_pos = (render_target == RENDER_TARGET_HUD) ? -0.7 : -0.97;
 
 	entity* target;
 	rangefinding_system rangefinder = get_range_finder();
@@ -472,19 +573,6 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	}
 
 	target = get_local_entity_parent (get_gunship_entity (), LIST_TYPE_TARGET);
-
-	//
-	// target name
-	//
-
-	s = get_target_display_name (target, buffer, TRUE);
-	if (s)
-	{
-		width = get_mono_font_string_width (s);
-		set_2d_mono_font_position (0.0, y_pos + 0.1);
-		set_mono_font_rel_position (-width * 0.5, 0);
-		print_mono_font_string (s);
-	}
 
 	// airspeed and altitude
 	if (render_target != RENDER_TARGET_HUD)
@@ -576,7 +664,7 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	print_mono_font_string (buffer);
 
 	// targeting status
-
+#if 0
 	switch (weapon_lock_type)
 	{
 		case WEAPON_LOCK_NO_ACQUIRE:
@@ -623,27 +711,48 @@ void draw_apache_high_action_display(avionics_render_target render_target, rgb_c
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 10);
 	print_mono_font_string (s);
+#endif
 
 	// lower right box:
-	// weapon type
-	// launch mode
 
-	s = get_weapon_status(buffer, sizeof(buffer));
+	// ACQ SRC
+
+	s = get_apache_acquisition_source_abreviation();
+
+	set_2d_mono_font_position (0.85, y_pos - 0.03);
+	x_adjust = get_mono_font_string_width (s) * -1.0;
+	set_mono_font_rel_position (x_adjust, 0);
+	print_mono_font_string (s);
+
+	// weapon status
+
+	s = get_weapon_status(render_target, buffer, sizeof(buffer), buffer2, sizeof(buffer2));
 
 	set_2d_mono_font_position (0.37, y_pos - 0.07);
 	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
 	set_mono_font_rel_position (x_adjust, 10);
 	print_mono_font_string (s);
 
-	if (get_local_entity_int_value (get_gunship_entity (), INT_TYPE_LOCK_ON_AFTER_LAUNCH))
-		s = "LOAL-HI";
-	else
-		s = "LOBL";
+	//
+	// centre:
+	// weapon inhibition (or target name if enabled)
+	//
 
-	set_2d_mono_font_position (0.37, y_pos - 0.03);
-	x_adjust = 0; //get_mono_font_string_width (s) * -0.5;
-	set_mono_font_rel_position (x_adjust, 0);
-	print_mono_font_string (s);
+	if (*buffer2)
+		s = buffer2;
+	else
+		s = get_target_display_name (target, buffer, TRUE);
+
+	if (s)
+	{
+		width = get_mono_font_string_width (s);
+		if (render_target == RENDER_TARGET_HUD)
+			set_2d_mono_font_position (0.0, y_pos + 0.15);
+		else
+			set_2d_mono_font_position (0.0, y_pos + 0.1);
+		set_mono_font_rel_position (-width * 0.5, 0);
+		print_mono_font_string (s);
+	}
 
 	////////////////////////////////////////
 	//

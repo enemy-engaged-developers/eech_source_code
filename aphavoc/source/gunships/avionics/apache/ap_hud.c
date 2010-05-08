@@ -1666,6 +1666,7 @@ static void display_waypoint_information (void)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static void display_weapon_information (void)
 {
 	char
@@ -1706,6 +1707,7 @@ static void display_weapon_information (void)
 
 		if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114L_LONGBOW_HELLFIRE) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_AGM114K_HELLFIRE_II))
 		{
+#if 0
 			set_2d_mono_font_position (0.35, -0.8);
 
 			set_mono_font_rel_position (1.0, 0.0);
@@ -1719,7 +1721,7 @@ static void display_weapon_information (void)
 				print_mono_font_string ("LOAL-HI");
 			}
 
-			flight_time = get_missile_flight_time ();
+			flight_time = get_missile_flight_time (NULL);
 
 			if (flight_time > 0.01)
 			{
@@ -1733,6 +1735,7 @@ static void display_weapon_information (void)
 
 				print_mono_font_string (s);
 			}
+#endif
 		}
 		else if ((weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M255) || (weapon_sub_type == ENTITY_SUB_TYPE_WEAPON_HYDRA70_M261))
 		{
@@ -1753,6 +1756,7 @@ static void display_weapon_information (void)
 		}
 	}
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2815,7 +2819,9 @@ static void draw_hud (int dummy)
 
 	draw_rate_of_climb_scale ();
 
-	display_waypoint_information(hud_colour, -1.0, -0.4);
+	if (get_local_entity_int_value (get_pilot_entity (), INT_TYPE_CREW_ROLE) == CREW_ROLE_PILOT)
+		// Only pilot has weapon information on HUD
+		display_waypoint_information(hud_colour, -1.0, -0.4);
 
 	draw_target_symbology();
 	if (get_apache_c_scope_enabled())
@@ -2826,7 +2832,7 @@ static void draw_hud (int dummy)
 
 	draw_apache_acquisition_source_symbology(&main_vp, hud_colour, 0.125, rad(4.0));
 //	display_target_information ();
-	display_weapon_information ();
+//	display_weapon_information ();
 	draw_apache_high_action_display(RENDER_TARGET_HUD, hud_colour);
 //	draw_field_of_view_and_regard_boxes ();
 
