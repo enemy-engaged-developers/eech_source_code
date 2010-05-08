@@ -1604,9 +1604,6 @@ void update_entity_weapon_systems (entity *source)
 
 								// player controlled weapons vector is in gunship code
 								get_requested_gunship_cannon_vector(target != NULL, &required_heading_offset, &required_pitch_offset, selected_weapon, &vp);
-
-								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
-								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
 							}
 							else
 							{
@@ -1631,6 +1628,11 @@ void update_entity_weapon_systems (entity *source)
 								weapon_config_database[config_type][package].max_pitch_limit
 							);
 
+							if (get_local_entity_int_value (source, INT_TYPE_PLAYER) == ENTITY_PLAYER_LOCAL) // Jabberwock 050128 Bug removed!
+							{
+								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_HEADING, required_heading_offset);
+								set_client_server_entity_float_value (source, FLOAT_TYPE_PLAYER_WEAPON_PITCH, required_pitch_offset);
+							}
 						}
 					// 050320 Jabberwock ends
 					}
