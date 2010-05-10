@@ -165,6 +165,8 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",i);
 		fprintf(fout,"%s,",aircraft_database[i].full_name);
 		fprintf(fout,"%d,",aircraft_database[i].force);
+		/*  Don't write weapons configs, the numbers have changed, so will be wrong in GWUT file! */
+#if 0
 		fprintf(fout,"%d,",aircraft_database[i].default_weapon_config_type);
 		fprintf(fout,"%d,",aircraft_database[i].min_weapon_config_type);
 		fprintf(fout,"%d,",aircraft_database[i].max_weapon_config_type);
@@ -172,6 +174,9 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%d,",aircraft_database[i].air_to_surface_weapon_config_type);
 		fprintf(fout,"%d,",aircraft_database[i].scout_weapon_config_type);
 		fprintf(fout,"%d,",aircraft_database[i].default_weapon_type);
+#else
+		fprintf(fout,",,,,,,,");
+#endif
 		fprintf(fout,"%d,",aircraft_database[i].target_symbol_type);
 		fprintf(fout,"%d,",aircraft_database[i].target_priority_type);
 		fprintf(fout,"%d,",aircraft_database[i].force_info_catagory);
@@ -285,10 +290,15 @@ void DumpGWutInfo(const char *filename)
 			default: fprintf(fout,"%s,",vehicle_database[i].full_name);
 		}
 		fprintf(fout,"%d,",vehicle_database[i].force);
+		/*  Don't write weapons configs, the numbers have changed, so will be wrong in GWUT file! */
+#if 0
 		fprintf(fout,"%d,",vehicle_database[i].default_weapon_config_type);
 		fprintf(fout,"%d,",vehicle_database[i].min_weapon_config_type);
 		fprintf(fout,"%d,",vehicle_database[i].max_weapon_config_type);
 		fprintf(fout,"%d,",vehicle_database[i].default_weapon_type);
+#else
+		fprintf(fout,",,,,");
+#endif
 		fprintf(fout,"%d,",vehicle_database[i].target_type);
 		fprintf(fout,"%d,",vehicle_database[i].target_symbol_type);
 		fprintf(fout,"%d,",vehicle_database[i].target_priority_type);
@@ -444,9 +454,9 @@ void DumpGWutInfo(const char *filename)
 		fprintf(fout,"%g,",weapon_database[i].burst_duration);// seconds
 		fprintf(fout,"%g,",weapon_database[i].rate_of_fire);// rounds/minute
 		fprintf(fout,"%g,",weapon_database[i].reload_time);// seconds
-		fprintf(fout,"%g",deg(weapon_database[i].max_launch_angle_error));
-		fprintf(fout,"%g",deg(acos(weapon_database[i].max_seeker_limit)));
-		fprintf(fout,"%g",weapon_database[i].drag_factor);
+		fprintf(fout,"%g,",deg(weapon_database[i].max_launch_angle_error));
+		fprintf(fout,"%g,",deg(acos(weapon_database[i].max_seeker_limit)));
+		fprintf(fout,"%g,",weapon_database[i].drag_factor);
 		fprintf(fout,"%d",weapon_database[i].spiral_flightpath);
 		fputs("\n", fout);
 	}
@@ -565,7 +575,7 @@ void DumpGWutInfo(const char *filename)
 			if (i == 19) fprintf(fout,"%s %s,",group_database[i].full_name,"(static)");
 			if (i == 20) fprintf(fout,"%s %s,",group_database[i].full_name,"(group)");
 			if (i == 21) fprintf(fout,"%s %s,",group_database[i].full_name,"(patrol)");
-		}	
+		}
 		else
 			fprintf(fout,"%s,",group_database[i].full_name);
 		fprintf(fout,"%d,",group_database[i].group_category);
@@ -872,7 +882,10 @@ void DumpGWutInfo(const char *filename)
 	if (WRITE_HEADER) {
 	fprintf(fout, "Aircraft \\ Vehicle,min weapon config,max weapon config,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,");
 	fprintf(fout, "weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo,weapon,ammo\n");
-	}						
+	}
+/* Don't write weapons configs, they are not in sync with the implementation, and
+ * were very little flexible in any case */
+#if 0
 	for (i = 0; i < NUM_ENTITY_SUB_TYPE_AIRCRAFT; i++)
 	{
 		//for each aircraft i
@@ -903,7 +916,7 @@ void DumpGWutInfo(const char *filename)
 					{
 						int m;
 						int wtype = (int)weapon_config_database[j][k].sub_type;
-						
+
 						if ((i < 6 || i == 20 || i == 21) &&
 							(int)weapon_config_database[j][k].sub_type >= 30 &&
 							(int)weapon_config_database[j][k].sub_type < 50)
@@ -913,14 +926,14 @@ void DumpGWutInfo(const char *filename)
 //ha,bh 0=1 2=3
 //co 0=1 5=8 6=9 7=10
 //ho 1=2 3=4
-		 
+
 							if (i == 0 || i == 1 || i == 4 || i == 5 || i == 20)
 							{
 								if (hd == 0) hd = 1;
 								if (hd == 2) hd = 3;
 								if (hd == 4) hd = 5;
 							}
-							if (i == 2) 
+							if (i == 2)
 							{
 								if (hd == 0) hd = 1;
 								if (hd == 5) hd = 8;
@@ -936,7 +949,7 @@ void DumpGWutInfo(const char *filename)
 							wtype += 100*hd;
 							// add pod weapon number
 						}
-						
+
 						for (m = 0; m < 48; m++)
 							if (w[m] == wtype)
 								Found = 1;
@@ -987,7 +1000,7 @@ void DumpGWutInfo(const char *filename)
 						for (m = 0; m < 32; m++)
 							if (w[m] == (int)weapon_config_database[j][k].sub_type)
 								Found = 1;
-								
+
 						// check is it is not found yet and add it
 						if (!Found && l < 32)
 						{
@@ -1004,6 +1017,7 @@ void DumpGWutInfo(const char *filename)
 			fprintf(fout,"\n");
 		}
 	}
+#endif
 
 	//RADAR
 	fprintf(fout,"[RADAR]\n");
@@ -1153,7 +1167,7 @@ void DumpGWutInfo(const char *filename)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 // VJ040229 Function to read the entire GWUT file
 // VJ 040321 corrected ammo bugs, include pylon number
 void ReadGWutInfo(const char *fname)
@@ -1171,10 +1185,10 @@ void ReadGWutInfo(const char *fname)
 	{
 		fout = fopen("dumpgwut.txt","w");
 		fprintf(fout,"Dumping file: %s\n",fname);
-	}	
+	}
 /*
 //VJ 040322 moved to the function parse_WUT_file
-	
+
 	if (!file_exist(fname))
 	{
 		debug_fatal("WUT filename error",fname);
@@ -1188,10 +1202,10 @@ void ReadGWutInfo(const char *fname)
 		return;
 	}
 
-	fscanf(f,"%[^\n]\n",buf);	
+	fscanf(f,"%[^\n]\n",buf);
 	// read file header
 	TESTDUMP(buf);
-			
+
 	if (!strstr(buf,CURRENT_HEADER))
 	{
 		debug_fatal("GWUT file %s has the wrong header: %s",fname,buf);
@@ -1201,7 +1215,7 @@ void ReadGWutInfo(const char *fname)
 	fscanf(f,"%[^\n]\n",buf);
 	 //skip [AIRCRAFT] string
 	TESTDUMP(buf);
-	 
+
 	if (READ_HEADER)
 		fscanf(f,"%[^\n]\n",buf);
 	TESTDUMP(buf);
@@ -1254,7 +1268,7 @@ void ReadGWutInfo(const char *fname)
 		aircraft_database[i].avoidance_radius                              = FloatValue(p);
 		aircraft_database[i].g_max                                         = FloatValue(p);
 		aircraft_database[i].power_output                                  = FloatValue(p);
-		aircraft_database[i].tail_rotor_direction                          = FloatValue(p);
+		aircraft_database[i].tail_rotor_direction                          = rad (FloatValue(p));
 		aircraft_database[i].recon_radius                                  = FloatValue(p);
 		aircraft_database[i].target_scan_delay                             = FloatValue(p);
 		aircraft_database[i].air_scan_range                                = FloatValue(p);
@@ -1270,7 +1284,7 @@ void ReadGWutInfo(const char *fname)
 		aircraft_database[i].explosive_quality                             = IntValue(p);
 		aircraft_database[i].explosive_power                               = IntValue(p);
 		aircraft_database[i].offensive_capability                          = IntValue(p);
-//VJ 010604 skip player controlable because of FAA setting in eech.ini, k acts as dummy		
+//VJ 010604 skip player controlable because of FAA setting in eech.ini, k acts as dummy
 		k = IntValue(p);
 //		aircraft_database[i].player_controllable                           = IntValue(p);
 		aircraft_database[i].points_value                                  = IntValue(p);
@@ -1343,7 +1357,7 @@ void ReadGWutInfo(const char *fname)
 
 		fscanf(f,"%[^\n]\n",buf);
 		TESTDUMP(buf);
-	
+
 	}
 
 	//read WEAPONS
@@ -1669,13 +1683,13 @@ void ReadGWutInfo(const char *fname)
 	TESTDUMP(buf);
 
 	while (!(strcmp(buf,"[AMMO]")==0) && !(strcmp(buf,"[End of GWUT file]")==0))
-	{		
+	{
 		p = strtok(buf,",");
 		i = atoi(p);
 		//get entity number
 		p = strtok(NULL,",");
 		//skip full name
-		
+
 		guide_database[i].evade_fire                 = IntValue(p);
 		guide_database[i].follow_formation           = IntValue(p);
 		guide_database[i].position_type              = IntValue(p);
@@ -1768,11 +1782,11 @@ void ReadGWutInfo(const char *fname)
 							L2 = (int)floor(wtype/100);
 							if (anr == 0 || anr == 1 || anr == 4 || anr == 5 || anr == 20)
 							{
-								if (L2 == 1) L1 = 0; 
-								if (L2 == 3) L1 = 2; 
-								if (L2 == 5) L1 = 4; 
+								if (L2 == 1) L1 = 0;
+								if (L2 == 3) L1 = 2;
+								if (L2 == 5) L1 = 4;
 							}
-							if (anr == 2) 
+							if (anr == 2)
 							{
 								if (L2 == 1) L1 = 0;
 								if (L2 == 8) L1 = 5;
@@ -1788,7 +1802,7 @@ void ReadGWutInfo(const char *fname)
 							if (testdump)
 							fprintf(fout,"anr %d pack nr %d L1 %d L2 %d wtype %d w[k]%d \n",anr,i,L1,L2,wtype,w[k]);
 						}
-						
+
 						if (weapon_config_database[i][j].sub_type == wtype) //w[k])
 						{
 							if (L1 < 0)
@@ -1796,9 +1810,9 @@ void ReadGWutInfo(const char *fname)
 							else
 							{
 							if (weapon_config_database[i][j].heading_depth == L1 || weapon_config_database[i][j].heading_depth == L1)
-								weapon_config_database[i][j].number = a[k];	
-							}	
-							
+								weapon_config_database[i][j].number = a[k];
+							}
+
 							if (testdump)
 		                fprintf(fout,"%d %d %d %d \n",i,j,weapon_config_database[i][j].sub_type,weapon_config_database[i][j].number);
 						}
