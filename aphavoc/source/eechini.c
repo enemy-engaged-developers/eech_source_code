@@ -1144,36 +1144,36 @@ void initialize_canopy_sound_amp ()
 {
 	memset ( canopy_sound_amp, 0, sizeof ( canopy_sound_amp ) );
 
-	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MIN] = 75;
-	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_TOP] = 20;
+	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MIN] = 450;
+	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_TOP] = 50;
 	canopy_sound_amp[CSA_CODES_ROTOR_PLAYER][CSA_VALUES_MUL] = 375;
 
-	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MIN] = 50;
-	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_TOP] = 50;
+	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MIN] = 80;
+	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_TOP] = 20;
 	canopy_sound_amp[CSA_CODES_ROTOR_EXTERNAL][CSA_VALUES_MUL] = 100;
 
-	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MIN] = 30;
-	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MIN] = 230;
+	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_TOP] = 50;
 	canopy_sound_amp[CSA_CODES_ENGINE_PLAYER][CSA_VALUES_MUL] = 100;
 
-	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MIN] = 30;
-	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MIN] = 200;
+	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_TOP] = 50;
 	canopy_sound_amp[CSA_CODES_ENGINE_EXTERNAL][CSA_VALUES_MUL] = 100;
 
-	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MIN] = 100;
-	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_TOP] = 70;
+	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MIN] = 180;
+	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_TOP] = 50;
 	canopy_sound_amp[CSA_CODES_MISC_PLAYER][CSA_VALUES_MUL] = 100;
 
 	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MIN] = 50;
 	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_TOP] = 70;
 	canopy_sound_amp[CSA_CODES_MISC_EXTERNAL][CSA_VALUES_MUL] = 100;
 
-	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MIN] = 40;
-	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_TOP] = 60;
+	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MIN] = 120;
+	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_TOP] = 30;
 	canopy_sound_amp[CSA_CODES_GUNS][CSA_VALUES_MUL] = 100;
 
-	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MIN] = 50;
-	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_TOP] = 50;
+	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MIN] = 70;
+	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_TOP] = 30;
 	canopy_sound_amp[CSA_CODES_ENV][CSA_VALUES_MUL] = 100;
 }
 
