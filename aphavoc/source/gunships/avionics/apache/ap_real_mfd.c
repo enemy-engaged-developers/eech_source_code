@@ -7106,70 +7106,78 @@ static void draw_fuel_page_mfd(void)
 	float fuel_flow1, fuel_flow2;
 	float internal_fuel, total_fuel;
 	float endurance;
+	rgb_colour colour = MFD_COLOUR1;
 
 	draw_helicopter_diagram(TRUE);
 
+	if (forward_fuel_tank_low_fuel())
+		colour = MFD_COLOUR_YELLOW;
+
 	// forward tank
-	draw_2d_box(-0.20, 0.8, 0.20, 0.6, FALSE, TRUE, MFD_COLOUR1);
+	draw_2d_box(-0.20, 0.8, 0.20, 0.6, FALSE, TRUE, colour);
 
 	set_mono_font_type (MONO_FONT_TYPE_14X21);
-	set_mono_font_colour(MFD_COLOUR1);
+	set_mono_font_colour(colour);
 
 	sprintf(buffer, "%3.0f0", kilograms_to_pounds(get_fuel_quantity(FUEL_TANK_FWD)) * 0.1);
-	//sprintf(buffer, "%4.0f", kilograms_to_pounds(get_fuel_quantity(FUEL_TANK_FWD)));
 	set_2d_mono_font_position(-0.14, 0.7);
 	set_mono_font_rel_position (0.0, -10.0);
 	print_mono_font_string(buffer);
 
-//	debug_log("x: %.0f, y: %.0f", debug_var_x, debug_var_y);
+	if (aft_fuel_tank_low_fuel())
+		colour = MFD_COLOUR_YELLOW;
+	else
+		colour = MFD_COLOUR1;
+	set_mono_font_colour(colour);
 
 	// aft tank
-	draw_2d_box(-0.15, -0.01, 0.15, -0.35, FALSE, TRUE, MFD_COLOUR1);
+	draw_2d_box(-0.15, -0.01, 0.15, -0.35, FALSE, TRUE, colour);
 
 	sprintf(buffer, "%3.0f0", kilograms_to_pounds(get_fuel_quantity(FUEL_TANK_AFT)) * 0.1);
-	//sprintf(buffer, "%4.0f", kilograms_to_pounds(get_fuel_quantity(FUEL_TANK_AFT)));
 	set_2d_mono_font_position(-0.14, -0.2);
 	set_mono_font_rel_position (0.0, -10.0);
 	print_mono_font_string(buffer);
 
-	if (!get_auto_fuel_transfer() && get_fuel_transfer(FUEL_TANK_AFT) == FUEL_TANK_FWD)
-	{
-		draw_2d_mono_sprite(fuel_transfer_fwd_open_mask, 0.0, 0.38, MFD_COLOUR5);
-		draw_2d_mono_sprite(fuel_transfer_fwd_open, 0.0, 0.38, MFD_COLOUR1);
-	}
-	else
-	{
-		draw_2d_mono_sprite(fuel_transfer_fwd_closed_mask, 0.0, 0.38, MFD_COLOUR5);
-		draw_2d_mono_sprite(fuel_transfer_fwd_closed, 0.0, 0.38, MFD_COLOUR1);
-	}
-
-	if (!get_auto_fuel_transfer() && get_fuel_transfer(FUEL_TANK_FWD) == FUEL_TANK_AFT)
-	{
-		draw_2d_mono_sprite(fuel_transfer_aft_open_mask, 0.0, 0.22, MFD_COLOUR5);
-		draw_2d_mono_sprite(fuel_transfer_aft_open, 0.0, 0.22, MFD_COLOUR1);
-	}
-	else
-	{
-		draw_2d_mono_sprite(fuel_transfer_aft_closed_mask, 0.0, 0.22, MFD_COLOUR5);
-		draw_2d_mono_sprite(fuel_transfer_aft_closed, 0.0, 0.22, MFD_COLOUR1);
-	}
-
 	set_mono_font_type (MONO_FONT_TYPE_12X20);
-	s = "XFER";
-	set_2d_mono_font_position(0.0, 0.3);
-	set_mono_font_rel_position(-0.5 * get_mono_font_string_width(s), -8.0);
-	print_mono_font_string(s);
+	set_mono_font_colour(MFD_COLOUR1);
 
 	// transfer box
 	if (!get_auto_fuel_transfer())
 	{
-		draw_2d_half_thick_line(-1.2, 0.60, -0.9, 0.60, MFD_COLOUR1);
-		draw_2d_half_thick_line(-1.2, -0.30, -0.9, -0.30, MFD_COLOUR1);
+		s = "XFER";
+		set_2d_mono_font_position(0.0, 0.3);
+		set_mono_font_rel_position(-0.5 * get_mono_font_string_width(s), -8.0);
+		print_mono_font_string(s);
 
-		print_vertical_mono_font_string(-0.9, 0.52, "TRANSFER", -0.5, FALSE);
+		if (get_fuel_transfer(FUEL_TANK_AFT) == FUEL_TANK_FWD)
+		{
+			draw_2d_mono_sprite(fuel_transfer_fwd_open_mask, 0.0, 0.38, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_fwd_open, 0.0, 0.38, MFD_COLOUR1);
+		}
+		else
+		{
+			draw_2d_mono_sprite(fuel_transfer_fwd_closed_mask, 0.0, 0.38, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_fwd_closed, 0.0, 0.38, MFD_COLOUR1);
+		}
 
-		draw_2d_half_thick_line(-0.9, 0.6, -0.9, 0.52, MFD_COLOUR1);
-		draw_2d_half_thick_line(-0.9, -0.3, -0.9, -0.22, MFD_COLOUR1);
+		if (get_fuel_transfer(FUEL_TANK_FWD) == FUEL_TANK_AFT)
+		{
+			draw_2d_mono_sprite(fuel_transfer_aft_open_mask, 0.0, 0.22, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_aft_open, 0.0, 0.22, MFD_COLOUR1);
+		}
+		else
+		{
+			draw_2d_mono_sprite(fuel_transfer_aft_closed_mask, 0.0, 0.22, MFD_COLOUR5);
+			draw_2d_mono_sprite(fuel_transfer_aft_closed, 0.0, 0.22, MFD_COLOUR1);
+		}
+
+		draw_2d_half_thick_line(-1.2, 0.90, -0.9, 0.90, MFD_COLOUR1);
+		draw_2d_half_thick_line(-1.2, 0.0, -0.9, 0.0, MFD_COLOUR1);
+
+		print_vertical_mono_font_string(-0.9, 0.82, "TRANSFER", -0.5, FALSE);
+
+		draw_2d_half_thick_line(-0.9, 0.9, -0.9, 0.82, MFD_COLOUR1);
+		draw_2d_half_thick_line(-0.9, -0.0, -0.9, 0.08, MFD_COLOUR1);
 	}
 
 	// crossfeed box
@@ -7309,14 +7317,14 @@ static void draw_fuel_page_mfd(void)
 
 	set_mono_font_type (MONO_FONT_TYPE_14X21);
 
-	if (fuel_flow1 > 0.0 || fuel_flow2 > 0.0)
+	if (fuel_flow1 > 0.04 || fuel_flow2 > 0.04)
+	{
 		endurance = internal_fuel / (fuel_flow1 + fuel_flow2);
-	else
-		endurance = 0.0;
-	sprintf(buffer, "%.0f:%02.0f", floor(endurance/3600.0), fmod(floor(endurance / 60.0), 60.0));
-	set_2d_mono_font_position(0.9, -0.82);
-	set_mono_font_rel_position(-get_mono_font_string_width(buffer), -12.0);
-	print_mono_font_string(buffer);
+		sprintf(buffer, "%.0f:%02.0f", floor(endurance/3600.0), fmod(floor(endurance / 60.0), 60.0));
+		set_2d_mono_font_position(0.9, -0.82);
+		set_mono_font_rel_position(-get_mono_font_string_width(buffer), -12.0);
+		print_mono_font_string(buffer);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

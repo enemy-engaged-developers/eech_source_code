@@ -2146,27 +2146,27 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			button_label_decorations[location][BTN_R2].boxed = get_fuel_booster_pump_status() ? 3 : 0;
 
 			// fuel transfer
-			for (btn = BTN_L2; btn <= BTN_L4; btn++)
+			for (btn = BTN_L1; btn <= BTN_L3; btn++)
 				button_label_decorations[location][btn].boxed = 0;
 
 			if (!get_auto_fuel_transfer())
 			{
 				if (get_fuel_transfer(FUEL_TANK_AFT) == FUEL_TANK_FWD)
-					button_label_decorations[location][BTN_L2].boxed = 3;
+					button_label_decorations[location][BTN_L1].boxed = 3;
 				else if (get_fuel_transfer(FUEL_TANK_FWD) == FUEL_TANK_AFT)
-					button_label_decorations[location][BTN_L4].boxed = 3;
-				else
 					button_label_decorations[location][BTN_L3].boxed = 3;
+				else
+					button_label_decorations[location][BTN_L2].boxed = 3;
 
-				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_FWD];
-				handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_OFF];
-				handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_AFT];
-				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_XFER_MAN];
+				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_FWD];
+				handler[BTN_L2] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_OFF];
+				handler[BTN_L3] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_AFT];
+				handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_XFER_MAN];
 			}
 			else
 			{
-				handler[BTN_L2] = handler[BTN_L3] = handler[BTN_L4] = NULL;
-				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_XFER_AUTO];
+				handler[BTN_L1] = handler[BTN_L2] = handler[BTN_L3] = NULL;
+				handler[BTN_L4] = &mfd_push_button_definitions[MFD_BUTTON_FUEL_TRANS_XFER_AUTO];
 			}
 
 			// cross feed
@@ -2804,7 +2804,7 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 			handler[BTN_T5] = &mfd_push_button_definitions[MFD_BUTTON_COORD];
 			handler[BTN_T6] = &mfd_push_button_definitions[MFD_BUTTON_UTIL];
 
-			handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_LRFD_LAST];
+			handler[BTN_R5] = &mfd_push_button_definitions[MFD_BUTTON_LRFD_FIRST];
 			handler[BTN_R6] = &mfd_push_button_definitions[MFD_BUTTON_ACQ_SRC];
 			show_acquisition_source[location] = TRUE;
 
@@ -2927,7 +2927,7 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 		handler[BTN_M] = &mfd_push_button_definitions[MFD_BUTTON_MENU_FUEL];
 		handler[BTN_B5] = &mfd_push_button_definitions[MFD_BUTTON_CL];
 
-		button_label_decorations[location][BTN_L5].boxed = 2;
+		button_label_decorations[location][BTN_L4].boxed = 2;
 		button_label_decorations[location][BTN_R6].boxed = 2;
 		break;
 	case MFD_MODE_CHECKLIST:
