@@ -48,4 +48,7 @@ fuel_tank_positions get_fuel_transfer(fuel_tank_positions from_tank);
 int get_fuel_booster_pump_status(void);
 void set_fuel_booster_pump_status(int turn_on);
 
+int aft_fuel_tank_low_fuel(void);
+int forward_fuel_tank_low_fuel(void);
+
 #endif /* CO_FUEL_H_ */

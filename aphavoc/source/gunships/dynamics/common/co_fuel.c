@@ -23,12 +23,25 @@ static fuel_tank_positions fuel_transfer[NUM_FUEL_TANKS];  // index by from tank
 
 static int auto_fuel_transfer;
 static int fuel_booster_pump_on;
+static int low_fuel_fwd, low_fuel_aft;
 
 static int has_low_fuel_warned[NUM_FUEL_TANKS];
+
+int aft_fuel_tank_low_fuel(void)
+{
+	return low_fuel_aft;
+}
+
+int forward_fuel_tank_low_fuel(void)
+{
+	return low_fuel_fwd;
+}
 
 void initialise_fuel_system(void)
 {
 	fuel_tank_positions tank;
+
+	low_fuel_fwd = low_fuel_aft = FALSE;
 
 	feeding_tank[0] = FUEL_TANK_FWD;
 	feeding_tank[1] = FUEL_TANK_FWD;
@@ -68,11 +81,10 @@ void initialise_fuel_system(void)
 void update_fuel_system(void)
 {
 	int engine_no;
-	int low_fuel_fwd, low_fuel_aft;
 	fuel_tank_positions tank;
 
 	// engine consumtion
-	for (engine_no = 1; engine_no <= 2; engine_no++)
+	for (engine_no = 0; engine_no <= 2; engine_no++)
 	{
 		float fuel_flow = get_fuel_flow(engine_no);
 
@@ -89,6 +101,7 @@ void update_fuel_system(void)
 
 	low_fuel_fwd = fuel_quantity[FUEL_TANK_FWD] < low_fuel_warning[FUEL_TANK_FWD];
 	low_fuel_aft = fuel_quantity[FUEL_TANK_AFT] < low_fuel_warning[FUEL_TANK_AFT];
+
 	// low fuel warning
 	if (low_fuel_fwd || low_fuel_aft)
 	{
@@ -159,7 +172,7 @@ void update_fuel_system(void)
 			fuel_quantity[to_tank] += transfer_amount;
 
 			if (fuel_quantity[to_tank] > low_fuel_warning[to_tank])
-				low_fuel_warning[to_tank] = FALSE;
+				has_low_fuel_warned[to_tank] = FALSE;
 		}
 	}
 }
@@ -167,7 +180,7 @@ void update_fuel_system(void)
 float get_fuel_flow(unsigned engine_no)
 {
 	const float fuel_usage_factor = 0.5 / 85.0;
-	const float apu_fuel_usage_factor = 1.0 / 2000.0;
+	const float apu_fuel_usage_factor = fuel_usage_factor * 0.117;  // Taken from Apache where APU uses 135 punds/hr
 	float fuel_flow = current_flight_dynamics->fuel_weight.delta;
 
 	// arneh - adjust for engine RPM.  Adjusted to 1 at 85% N1 RPM on both engines
@@ -211,17 +224,16 @@ void refuel_helicopter(float amount)
 {
 	fuel_tank_positions tank;
 
-	return;
 	ASSERT(amount >= 0.0);
 
 	for (tank = FUEL_TANK_FWD; tank < NUM_FUEL_TANKS; tank++)
 	{
-		if (amount > fuel_tank_capacity[tank])
-			amount = fuel_tank_capacity[tank];
+		if (amount + fuel_quantity[tank] > fuel_tank_capacity[tank])
+			amount = fuel_tank_capacity[tank] - fuel_quantity[tank];
 		fuel_quantity[tank] += amount;
 
 		if (fuel_quantity[tank] > low_fuel_warning[tank])
-			low_fuel_warning[tank] = FALSE;
+			has_low_fuel_warned[tank] = FALSE;
 	}
 }
 
