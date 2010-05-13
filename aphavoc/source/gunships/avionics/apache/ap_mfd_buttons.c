@@ -292,6 +292,8 @@ static mfd_push_button mfd_push_button_definitions[NUM_PUSHBUTTON_TYPES] = {
 	{ NULL,	"ATA",		NULL, 	FALSE, FALSE, FALSE, set_mfd_weapon_mode },
 	{ NULL,	"RKT",		NULL, 	FALSE, FALSE, FALSE, set_mfd_weapon_mode },
 	{ NULL,	"MANRNG>",	"", 	FALSE, FALSE, FALSE, NULL },
+	{ NULL,	"BORESIGHT",NULL, 	TRUE, FALSE, FALSE, NULL },
+	{ NULL,	"GRAYSCALE",NULL, 	FALSE, FALSE, FALSE, NULL },
 
 	{ NULL,	"10",		NULL, 	FALSE, FALSE, FALSE, set_burst_limit },
 	{ NULL,	"20",		NULL, 	FALSE, FALSE, FALSE, set_burst_limit },
@@ -2366,6 +2368,7 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 				button_label_decorations[location][btn].boxed = 0;
 
 			handler[BTN_R2] = &mfd_push_button_definitions[mode];
+			button_label_decorations[location][BTN_R2].boxed = 2;
 
 			switch (get_gun_burst_size())
 			{
@@ -2397,13 +2400,20 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 		{
 			if (sub_mode == 1)
 			{
+				unsigned btn;
+
 				button_label_decorations[location][BTN_R2].line2[0] = 0;
+				for (btn = BTN_R1; btn <= BTN_R5; btn++)
+					button_label_decorations[location][btn].boxed = 0;
 			}
 			else
+			{
 				if (rocket_salvo_size <= 24)
 					sprintf(button_label_decorations[location][BTN_R2].line2, "%d", rocket_salvo_size);
 				else
 					strcpy(button_label_decorations[location][BTN_R2].line2, "ALL");
+				button_label_decorations[location][BTN_R2].boxed = 2;
+			}
 
 			render_rocket_inventory(fg_col);
 
@@ -2418,9 +2428,15 @@ static void render_mode_specfic_buttons(mfd_modes mfd_mode, mfd_locations locati
 			int btn;
 
 			for (btn = BTN_R1; btn <= BTN_R6; btn++)
-				button_label_decorations[location][BTN_R6].boxed = 0;
+			{
+				button_label_decorations[location][btn].boxed = 0;
+				button_label_decorations[location][btn].line2[0] = 0;
+			}
 			button_label_decorations[location][BTN_B4].boxed = 0;
+			button_label_decorations[location][BTN_B4].line2[0] = 0;
 			button_label_decorations[location][BTN_B5].boxed = 0;
+			button_label_decorations[location][BTN_B5].line2[0] = 0;
+
 
 			handler[BTN_R1] = &mfd_push_button_definitions[MFD_BUTTON_ACQ_PHS];
 			handler[BTN_R2] = &mfd_push_button_definitions[MFD_BUTTON_ACQ_GHS];
@@ -2821,6 +2837,8 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 			switch (mfd_mode)
 			{
 			case MFD_MODE_WEAPON:
+				handler[BTN_L5] = &mfd_push_button_definitions[MFD_BUTTON_BORESIGHT];
+				handler[BTN_L6] = &mfd_push_button_definitions[MFD_BUTTON_GRAYSCALE];
 				break;
 			case MFD_MODE_WEAPON_GUN:
 				handler[BTN_L1] = &mfd_push_button_definitions[MFD_BUTTON_GUN_BURST_10];
@@ -2871,6 +2889,8 @@ void setup_apache_mfd_buttons(mfd_modes mfd_mode, mfd_locations location, int is
 
 			if (show_acquisition_source[location])
 				button_label_decorations[location][BTN_R6].boxed = 2;
+			if (handler[BTN_R5] == &mfd_push_button_definitions[MFD_BUTTON_LRFD_FIRST])
+				button_label_decorations[location][BTN_R5].boxed = 2;
 
 			break;
 		}
